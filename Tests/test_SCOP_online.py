@@ -13,6 +13,7 @@ requires_internet.check()
 
 from Bio import SCOP
 
+
 class ScopSearch(unittest.TestCase):
     """SCOP search tests."""
     def test_search(self):

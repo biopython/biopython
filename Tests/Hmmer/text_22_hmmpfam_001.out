@@ -1,0 +1,50 @@
+hmmpfam - search one or more sequences against HMM database
+HMMER 2.2g (August 2001)
+Copyright (C) 1992-2001 HHMI/Washington University School of Medicine
+Freely distributed under the GNU General Public License (GPL)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+HMM file:                 Pfam
+Sequence file:            L77119.faa
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query sequence: gi|1522636|gb|AAC37060.1|
+Accession:      [none]
+Description:    M. jannaschii predicted coding region MJECS02 [Methanococcus jannaschii]
+
+Scores for sequence family classification (score includes all domains):
+Model       Description                                 Score    E-value  N 
+--------    -----------                                 -----    ------- ---
+Methylase_M Type I restriction modification system, M  -105.2     0.0022   1
+
+Parsed for domains:
+Model       Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------    ------- ----- -----    ----- -----      -----  -------
+Methylase_M   1/1     280   481 ..     1   279 []  -105.2   0.0022
+
+Alignments of top-scoring domains:
+Methylase_M: domain 1 of 1, from 280 to 481: score -105.2, E = 0.0022
+                   *->lrnELentLWavADkLRGsmDaseYKdyVLGLlFlKYiSdkFlerri
+                       ++EL+++  av+   R              L+F K++ dk      
+  gi|1522636   280    NTSELDKKKFAVLLMNR--------------LIFIKFLEDK------ 306  
+
+                   eieerktdtesepsldyakledqyeqlededlekedfyqkkGvFilPsql
+                   +i+         p +   + +++y   ++   ++ ++y ++      + l
+  gi|1522636   307 GIV---------PRDLLRRTYEDY---KKSNVLI-NYYDAY-L----KPL 338  
+
+                   FwdfikeaeknkldedigtdldkifseledqialgypaSeedfkGlfpdl
+                   F++++   e ++  ++++ + +    ++      + +       Glf ++
+  gi|1522636   339 FYEVLNTPEDER--KENIRT-NPYYKDIPYL---N-G-------GLFRSN 374  
+
+                   dfnsnkLgskaqarnetLtelidlfselelgtPmHNG.dfeelgikDlfG
+                   ++  ++ +s+   +ne ++e+i+ +++ +++     G++ +el   D++G
+  gi|1522636   375 NV--PNELSFTIKDNEIIGEVINFLERYKFTLSTSEGsEEVELNP-DILG 421  
+
+                   DaYEYLLgkFAeneGKsGGeFYTPqeVSkLiaeiLtigqpsegdfsIYDP
+                    +YE L+   Ae   K+ G +YTP e++  ia+ + i+  ++        
+  gi|1522636   422 YVYEKLINILAEKGQKGLGAYYTPDEITSYIAKNT-IEPIVVE------- 463  
+
+                   AcGSGSLllqaskflgehdgkrnaisyYGQEsn<-*
+                             +++ ++    k+n+i +    s+   
+  gi|1522636   464 ---------RFKEIIK--NWKINDINF----ST    481  
+
+//

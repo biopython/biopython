@@ -10,6 +10,7 @@
 This is used by sequences which contain a finite number of similar words.
 """
 
+
 class Alphabet(object):
     size = None     # default to no fixed size for words
     letters = None  # default to no fixed alphabet
@@ -66,6 +67,7 @@ class Alphabet(object):
 
 generic_alphabet = Alphabet()
 
+
 class SingleLetterAlphabet(Alphabet):
     size = 1
     letters = None   # string of all letters in the alphabet
@@ -74,16 +76,20 @@ single_letter_alphabet = SingleLetterAlphabet()
 
 ########### Protein
 
+
 class ProteinAlphabet(SingleLetterAlphabet):
     pass
 
 generic_protein = ProteinAlphabet()
 
 ########### DNA
+
+
 class NucleotideAlphabet(SingleLetterAlphabet):
     pass
 
 generic_nucleotide = NucleotideAlphabet()
+
 
 class DNAAlphabet(NucleotideAlphabet):
     pass
@@ -93,17 +99,18 @@ generic_dna = DNAAlphabet()
 
 ########### RNA
 
+
 class RNAAlphabet(NucleotideAlphabet):
     pass
 
 generic_rna = RNAAlphabet()
 
-
-
 ########### Other per-sequence encodings
+
 
 class SecondaryStructure(SingleLetterAlphabet):
     letters = "HSTC"
+
 
 class ThreeLetterProtein(Alphabet):
     size = 3
@@ -112,10 +119,11 @@ class ThreeLetterProtein(Alphabet):
         "Lys", "Leu", "Met", "Asn", "Pro", "Gln", "Arg", "Ser", "Thr",
         "Sec", "Val", "Trp", "Xaa", "Tyr", "Glx",
         ]
-        
+
 ###### Non per-sequence modifications
 
 # (These are Decorator classes)
+
 
 class AlphabetEncoder(object):
     def __init__(self, alphabet, new_letters):
@@ -125,6 +133,7 @@ class AlphabetEncoder(object):
             self.letters = alphabet.letters + new_letters
         else:
             self.letters = None
+
     def __getattr__(self, key):
         if key[:2] == "__" and key[-2:] == "__":
             raise AttributeError(key)
@@ -149,7 +158,7 @@ class AlphabetEncoder(object):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
         return AlphabetEncoder(self.alphabet._lower(), self.new_letters.lower())
 
-    
+
 class Gapped(AlphabetEncoder):
     def __init__(self, alphabet, gap_char = "-"):
         AlphabetEncoder.__init__(self, alphabet, gap_char)
@@ -173,12 +182,12 @@ class Gapped(AlphabetEncoder):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
         return Gapped(self.alphabet._lower(), self.gap_char.lower())
 
-            
+
 class HasStopCodon(AlphabetEncoder):
     def __init__(self, alphabet, stop_symbol = "*"):
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
         self.stop_symbol = stop_symbol
-        
+
     def __cmp__(self, other):
         x = cmp(self.alphabet, other.alphabet)
         if x == 0:
@@ -213,6 +222,7 @@ def _get_base_alphabet(alphabet):
            "Invalid alphabet found, %s" % repr(a)
     return a
 
+
 def _ungap(alphabet):
     """Returns the alphabet without any gap encoder (PRIVATE)."""
     #TODO - Handle via method of the objects?
@@ -226,7 +236,8 @@ def _ungap(alphabet):
         return AlphabetEncoder(_ungap(alphabet.alphabet), letters=alphabet.letters)
     else:
         raise NotImplementedError
-    
+
+
 def _consensus_base_alphabet(alphabets):
     """Returns a common but often generic base alphabet object (PRIVATE).
 
@@ -261,6 +272,7 @@ def _consensus_base_alphabet(alphabets):
         return generic_alphabet
     return common
 
+
 def _consensus_alphabet(alphabets):
     """Returns a common but often generic alphabet object (PRIVATE).
 
@@ -281,7 +293,7 @@ def _consensus_alphabet(alphabets):
     SingleLetterAlphabet()
     >>> _consensus_alphabet([single_letter_alphabet, generic_protein])
     SingleLetterAlphabet()
-    
+
     This is aware of Gapped and HasStopCodon and new letters added by
     other AlphabetEncoders.  This WILL raise an exception if more than
     one gap character or stop symbol is present.
@@ -337,6 +349,7 @@ def _consensus_alphabet(alphabets):
         alpha = HasStopCodon(alpha, stop_symbol=stop)
     return alpha
 
+
 def _check_type_compatible(alphabets):
     """Returns True except for DNA+RNA or Nucleotide+Protein (PRIVATE).
 
@@ -357,18 +370,23 @@ def _check_type_compatible(alphabets):
         if isinstance(a, DNAAlphabet):
             dna = True
             nucl = True
-            if rna or protein : return False
+            if rna or protein:
+                return False
         elif isinstance(a, RNAAlphabet):
             rna = True
             nucl = True
-            if dna or protein : return False
+            if dna or protein:
+                return False
         elif isinstance(a, NucleotideAlphabet):
             nucl = True
-            if protein : return False
+            if protein:
+                return False
         elif isinstance(a, ProteinAlphabet):
             protein = True
-            if nucl : return False
+            if nucl:
+                return False
     return True
+
 
 def _verify_alphabet(sequence):
     """Check all letters in sequence are in the alphabet (PRIVATE).
@@ -400,4 +418,3 @@ def _verify_alphabet(sequence):
         if letter not in letters:
             return False
     return True
-

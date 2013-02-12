@@ -11,6 +11,7 @@ import random
 # local modules
 from Abstract import AbstractSelection
 
+
 class TournamentSelection(AbstractSelection):
     """Implement tournament style selection.
     """
@@ -30,7 +31,7 @@ class TournamentSelection(AbstractSelection):
 
         if num_competitors < 2:
             raise ValueError("Must have at least 2 competitors!")
-        
+
         self._num_competitors = num_competitors
 
     def select(self, population):
@@ -55,7 +56,7 @@ class TournamentSelection(AbstractSelection):
                     new_org = random.choice(population)
                     if new_org not in competitors:
                         competitors.append(new_org)
-                                    
+
                 # sort the competitors by fitness, this will put them
                 # from lowest to highest
                 competitors.sort(key = lambda org: org.fitness)
@@ -72,4 +73,3 @@ class TournamentSelection(AbstractSelection):
             new_population.extend([new_org_1, new_org_2])
 
         return new_population
-                

@@ -74,8 +74,8 @@ def rotaxis2m(theta, vector):
     Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
 
-    Example: 
-    
+    Example:
+
         >>> m=rotaxis(pi, Vector(1,0,0))
         >>> rotated_vector=any_vector.left_multiply(m)
 
@@ -111,6 +111,7 @@ def rotaxis2m(theta, vector):
 
 rotaxis=rotaxis2m
 
+
 def refmat(p,q):
     """
     Return a (left multiplying) matrix that mirrors p onto q.
@@ -121,7 +122,7 @@ def refmat(p,q):
         >>> print q, qq # q and qq should be the same
 
     @type p,q: L{Vector}
-    @return: The mirror operation, a 3x3 Numeric array. 
+    @return: The mirror operation, a 3x3 Numeric array.
     """
     p.normalize()
     q.normalize()
@@ -134,6 +135,7 @@ def refmat(p,q):
     i=numpy.identity(3)
     ref=i-2*numpy.dot(b, numpy.transpose(b))
     return ref
+
 
 def rotmat(p,q):
     """
@@ -155,6 +157,7 @@ def rotmat(p,q):
     rot=numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot
 
+
 def calc_angle(v1, v2, v3):
     """
     Calculate the angle between 3 vectors
@@ -162,13 +165,14 @@ def calc_angle(v1, v2, v3):
 
     @param v1, v2, v3: the tree points that define the angle
     @type v1, v2, v3: L{Vector}
-    
+
     @return: angle
     @rtype: float
     """
     v1=v1-v2
     v3=v3-v2
     return v1.angle(v3)
+
 
 def calc_dihedral(v1, v2, v3, v4):
     """
@@ -194,6 +198,7 @@ def calc_dihedral(v1, v2, v3, v4):
         # dihedral=pi
         pass
     return angle
+
 
 class Vector(object):
     "3D vector"
@@ -313,70 +318,70 @@ class Vector(object):
 
 if __name__=="__main__":
 
-        from numpy.random import random
+    from numpy.random import random
 
-        v1=Vector(0,0,1)
-        v2=Vector(0,0,0)
-        v3=Vector(0,1,0)
-        v4=Vector(1,1,0)
+    v1=Vector(0,0,1)
+    v2=Vector(0,0,0)
+    v3=Vector(0,1,0)
+    v4=Vector(1,1,0)
 
-        v4.normalize()
+    v4.normalize()
 
-        print v4
+    print v4
 
-        print calc_angle(v1, v2, v3)
-        dih=calc_dihedral(v1, v2, v3, v4)
-        # Test dihedral sign
-        assert(dih>0)
-        print "DIHEDRAL ", dih
+    print calc_angle(v1, v2, v3)
+    dih=calc_dihedral(v1, v2, v3, v4)
+    # Test dihedral sign
+    assert(dih>0)
+    print "DIHEDRAL ", dih
 
-        ref=refmat(v1, v3)
-        rot=rotmat(v1, v3)
+    ref=refmat(v1, v3)
+    rot=rotmat(v1, v3)
 
-        print v3
-        print v1.left_multiply(ref)
-        print v1.left_multiply(rot)
-        print v1.right_multiply(numpy.transpose(rot))
+    print v3
+    print v1.left_multiply(ref)
+    print v1.left_multiply(rot)
+    print v1.right_multiply(numpy.transpose(rot))
 
-        # -
-        print v1-v2
-        print v1-1
-        print v1+(1,2,3)
-        # +
-        print v1+v2
-        print v1+3
-        print v1-(1,2,3)
-        # *
-        print v1*v2
-        # /
-        print v1/2
-        print v1/(1,2,3)
-        # **
-        print v1**v2
-        print v1**2
-        print v1**(1,2,3)
-        # norm
-        print v1.norm()
-        # norm squared
-        print v1.normsq()
-        # setitem
-        v1[2]=10
-        print v1
-        # getitem
-        print v1[2]
+    # -
+    print v1-v2
+    print v1-1
+    print v1+(1,2,3)
+    # +
+    print v1+v2
+    print v1+3
+    print v1-(1,2,3)
+    # *
+    print v1*v2
+    # /
+    print v1/2
+    print v1/(1,2,3)
+    # **
+    print v1**v2
+    print v1**2
+    print v1**(1,2,3)
+    # norm
+    print v1.norm()
+    # norm squared
+    print v1.normsq()
+    # setitem
+    v1[2]=10
+    print v1
+    # getitem
+    print v1[2]
 
-        print numpy.array(v1)
+    print numpy.array(v1)
 
-        print "ROT"
+    print "ROT"
 
-        angle=random()*numpy.pi
-        axis=Vector(random(3)-random(3))
-        axis.normalize()
+    angle=random()*numpy.pi
+    axis=Vector(random(3)-random(3))
+    axis.normalize()
 
-        m=rotaxis(angle, axis)
+    m=rotaxis(angle, axis)
 
-        cangle, caxis=m2rotaxis(m)
+    cangle, caxis=m2rotaxis(m)
 
-        print angle-cangle
-        print axis-caxis
-        print
+    print angle-cangle
+    print axis-caxis
+    print

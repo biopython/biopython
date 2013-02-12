@@ -5,7 +5,8 @@
 
 __version__ = "$Revision: 1.6 $"
 
-import doctest, unittest
+import doctest
+import unittest
 import random
 import sys
 
@@ -14,6 +15,7 @@ if 'requires_wise' in sys.modules:
 import requires_wise
 
 from Bio.Wise import psw
+
 
 class TestPSW(unittest.TestCase):
     def test_Alignment_normal(self):
@@ -70,7 +72,6 @@ class TestPSW(unittest.TestCase):
         ac = psw.AlignmentColumn(psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
         self.assertRaises(AssertionError, ac.append, psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
 
-
     def test_ColumnUnit(self):
         self.assertEqual(repr(psw.ColumnUnit(0, 33, "SEQUENCE")),
                          "ColumnUnit(unit=0, column=33, SEQUENCE)")
@@ -86,10 +87,12 @@ class TestPSW(unittest.TestCase):
 #    def test_align(self):
 #        self.assertEqual(repr(psw.align(("Wise/human_114_g01_exons.fna_01", "Wise/human_114_g02_exons.fna_01"), "introns.bla", 23, 5, quiet=True)), self.PARSED)
 
+
 def run_tests(argv):
     test_suite = testing_suite()
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
     runner.run(test_suite)
+
 
 def testing_suite():
     """Generate the suite of tests.
@@ -99,7 +102,7 @@ def testing_suite():
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 'test_'
     tests = [TestPSW]
-    
+
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
         unittest_suite.addTest(cur_suite)

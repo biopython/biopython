@@ -1,0 +1,4 @@
+# TBLASTN 2.2.26+
+# Query: random_s00
+# Database: db/minirefseq_mrna
+# BLAST processed 1 queries

@@ -6,6 +6,7 @@ for taking care of the transition from one generation to the next.
 # standard modules
 import sys
 
+
 class SteadyStateEvolver(object):
     """Evolve a population in place.
 
@@ -14,7 +15,8 @@ class SteadyStateEvolver(object):
     """
     def __init__(self):
         raise NotImplementedError("Need to code this.")
-        
+
+
 class GenerationEvolver(object):
     """Evolve a population from generation to generation.
 
@@ -67,5 +69,5 @@ class GenerationEvolver(object):
                 for org in self._population:
                     print org
                 sys.exit()
-            
+
         return self._population

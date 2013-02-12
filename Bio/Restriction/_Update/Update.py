@@ -20,7 +20,7 @@ from Bio.Restriction.RanaConfig import *
 
 
 class RebaseUpdate(FancyURLopener):
-    
+
     def __init__(self, e_mail='', ftpproxy=''):
         """RebaseUpdate([e_mail[, ftpproxy]]) -> new RebaseUpdate instance.
 
@@ -65,7 +65,8 @@ class RebaseUpdate(FancyURLopener):
         t = time.gmtime()
         year = str(t.tm_year)[-1]
         month = str(t.tm_mon)
-        if len(month) == 1 : month = '0'+month
+        if len(month) == 1:
+            month = '0' + month
         return year+month
 
     def update(self, *files):
@@ -74,7 +75,8 @@ class RebaseUpdate(FancyURLopener):
         return [x.replace('###', self.localtime()) for x in files]
 
     def __del__(self):
-        if hasattr(self, 'tmpcache') : self.close()
+        if hasattr(self, 'tmpcache'):
+            self.close()
         #
         #   self.tmpcache is created by URLopener.__init__ method.
         #
@@ -87,6 +89,7 @@ class FtpNameError(ValueError):
         print " In order to connect to %s ftp server, you must provide a name.\
         \n Please edit Bio.Restriction.RanaConfig\n" % which_server
         sys.exit()
+
 
 class FtpPasswordError(ValueError):
 
@@ -108,7 +111,6 @@ class ConnectionError(IOError):
         \n Use the --proxy switch to enter the address of your proxy\
         \n' % which_server
         sys.exit()
-        
 
 
 __all__ = ['RebaseUpdate', 'FtpNameError', 'FtpPasswordError']

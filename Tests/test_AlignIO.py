@@ -30,10 +30,10 @@ test_files = [
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
     ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
     ("clustal", 2, 1, 'Clustalw/odd_consensus.aln'),
-    ("clustal",20, 1, 'Clustalw/protein.aln'), #Used in the tutorial
-    ("clustal",20, 1, 'Clustalw/promals3d.aln'), #Nonstandard header
+    ("clustal",20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
+    ("clustal",20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
 #Following examples are also used in test_GFF.py
-    ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
+    ("fasta", 3, 1, 'GFF/multi.fna'),  # Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py
     ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
     ("nexus", 2, 1, 'Nexus/codonposset.nex'),
@@ -68,11 +68,13 @@ test_files = [
     ("pir", 2, 1,  'NBRF/clustalw.pir'),
     ]
 
+
 def str_summary(text, max_len=40):
     if len(text) <= max_len:
         return text
     else:
         return text[:max_len-4] + "..." + text[-3:]
+
 
 def alignment_summary(alignment, index="  ", vertical_threshold=5):
     """Returns a concise summary of an Alignment object as a string."""
@@ -82,18 +84,18 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
     if rec_count < vertical_threshold:
         #Show each sequence row horizontally
         for record in alignment:
-            answer.append("%s%s %s" \
+            answer.append("%s%s %s"
             % (index,str_summary(str(record.seq)),record.id))
     else:
         #Show each sequence row vertically
         for i in range(min(5,alignment_len)):
-            answer.append(index + str_summary(alignment[:,i]) \
+            answer.append(index + str_summary(alignment[:,i])
                                 + " alignment column %i" % i)
         if alignment_len > 5:
             i = alignment_len - 1
-            answer.append(index + str_summary("|" * rec_count) \
+            answer.append(index + str_summary("|" * rec_count)
                                 + " ...")
-            answer.append(index + str_summary(alignment[:,i]) \
+            answer.append(index + str_summary(alignment[:,i])
                                 + " alignment column %i" % i)
     return "\n".join(answer)
 
@@ -130,14 +132,14 @@ def check_simple_write_read(alignments, indent=" "):
             handle.flush()
             handle.seek(0)
             try:
-                alignments2 = list(AlignIO.parse(handle=handle, format=format, \
+                alignments2 = list(AlignIO.parse(handle=handle, format=format,
                                                  seq_count=records_per_alignment))
             except ValueError, e:
                 #This is BAD.  We can't read our own output.
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError("%s\n\n%s\n\n%s" \
+                raise ValueError("%s\n\n%s\n\n%s"
                                   % (str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 
@@ -152,7 +154,7 @@ def check_simple_write_read(alignments, indent=" "):
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError("%s\n\n%s\n\n%s" \
+                raise ValueError("%s\n\n%s\n\n%s"
                                   % (str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 
@@ -161,6 +163,7 @@ def check_simple_write_read(alignments, indent=" "):
             handle = StringIO()
             SeqIO.write(alignments[0], handle, format)
             assert handle.getvalue() == alignments[0].format(format)
+
 
 def simple_alignment_comparison(alignments, alignments2, format):
     assert len(alignments) == len(alignments2)
@@ -195,6 +198,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
                        "'%s' vs '%s'" % (r1.id, r2.id)
     return True
 
+
 #Check Phylip files reject duplicate identifiers.
 def check_phylip_reject_duplicate():
     """
@@ -219,16 +223,16 @@ check_phylip_reject_duplicate()
 
 #Check parsers can cope with an empty file
 for t_format in AlignIO._FormatToIterator:
-     handle = StringIO()
-     alignments = list(AlignIO.parse(handle, t_format))
-     assert len(alignments) == 0
+    handle = StringIO()
+    alignments = list(AlignIO.parse(handle, t_format))
+    assert len(alignments) == 0
 
 #Check writers can cope with no alignments
 for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
-     handle = StringIO()
-     assert 0 == AlignIO.write([], handle, t_format), \
-            "Writing no alignments to %s format should work!" \
-            % t_format
+    handle = StringIO()
+    assert 0 == AlignIO.write([], handle, t_format), \
+           "Writing no alignments to %s format should work!" \
+           % t_format
 
 #Check writers reject non-alignments
 list_of_records = list(AlignIO.read(open("Clustalw/opuntia.aln"),"clustal"))
@@ -250,8 +254,8 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    alignments  = list(AlignIO.parse(handle=open(t_filename,"r"), format=t_format))
-    assert len(alignments)  == t_count, \
+    alignments = list(AlignIO.parse(handle=open(t_filename,"r"), format=t_format))
+    assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
         assert len(alignment) == t_per, \

@@ -23,6 +23,8 @@ from Bio.SubsMat import FreqTable
 # for 4-letter nucleotide alphabets
 Protein20Random = 0.05
 Nucleotide4Random = 0.25
+
+
 class SummaryInfo(object):
     """Calculate summary info about the alignment.
 
@@ -165,7 +167,7 @@ class SummaryInfo(object):
             consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
-          
+
     def _guess_consensus_alphabet(self, ambiguous):
         """Pick an (ungapped) alphabet for an alignment consesus sequence.
 
@@ -179,10 +181,10 @@ class SummaryInfo(object):
         #Now check its compatible with all the rest of the sequences
         for record in self.alignment:
             #Get the (un-gapped version of) the sequence's alphabet
-            alt =  Alphabet._get_base_alphabet(record.seq.alphabet)
+            alt = Alphabet._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__):
-                raise ValueError \
-                ("Alignment contains a sequence with an incompatible alphabet.")
+                raise ValueError("Alignment contains a sequence with \
+                                an incompatible alphabet.")
 
         #Check the ambiguous character we are going to use in the consensus
         #is in the alphabet's list of valid letters (if defined).
@@ -210,7 +212,7 @@ class SummaryInfo(object):
 
     def replacement_dictionary(self, skip_chars = []):
         """Generate a replacement dictionary to plug into a substitution matrix
-        
+
         This should look at an alignment, and be able to generate the number
         of substitutions of different residues for each other in the
         aligned object.
@@ -291,7 +293,7 @@ class SummaryInfo(object):
                     # add info about the replacement to the dictionary,
                     # modified by the sequence weights
                     start_dict[(residue1, residue2)] += weight1 * weight2
-                                         
+
                 # if we get a key error, then we've got a problem with alphabets
                 except KeyError:
                     raise ValueError("Residues %s, %s not found in alphabet %s"
@@ -300,12 +302,11 @@ class SummaryInfo(object):
 
         return start_dict
 
-
     def _get_all_letters(self):
         """Returns a string containing the expected letters in the alignment."""
         all_letters = self.alignment._alphabet.letters
         if all_letters is None \
-        or (isinstance(self.alignment._alphabet, Alphabet.Gapped) \
+        or (isinstance(self.alignment._alphabet, Alphabet.Gapped)
         and all_letters == self.alignment._alphabet.gap_char):
             #We are dealing with a generic alphabet class where the
             #letters are not defined!  We must build a list of the
@@ -321,7 +322,7 @@ class SummaryInfo(object):
         return all_letters
 
     def _get_base_replacements(self, skip_items = []):
-        """Get a zeroed dictonary of all possible letter combinations.
+        """Get a zeroed dictionary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
         It then creates a dictionary with all possible combinations of these
@@ -346,12 +347,11 @@ class SummaryInfo(object):
         # now create the dictionary
         for first_letter in all_letters:
             for second_letter in all_letters:
-                if (first_letter not in skip_items and
-                    second_letter not in skip_items):
+                if first_letter not in skip_items and \
+                   second_letter not in skip_items:
                     base_dictionary[(first_letter, second_letter)] = 0
 
         return base_dictionary, skip_items
-
 
     def pos_specific_score_matrix(self, axis_seq = None,
                                   chars_to_ignore = []):
@@ -382,7 +382,7 @@ class SummaryInfo(object):
         # if we have a gap char, add it to stuff to ignore
         if isinstance(self.alignment._alphabet, Alphabet.Gapped):
             chars_to_ignore.append(self.alignment._alphabet.gap_char)
-        
+
         for char in chars_to_ignore:
             all_letters = all_letters.replace(char, '')
 
@@ -403,7 +403,7 @@ class SummaryInfo(object):
                 # should not add new residues
                 except IndexError:
                     this_residue = None
-                    
+
                 if this_residue and this_residue not in chars_to_ignore:
                     weight = record.annotations.get('weight', 1.0)
                     try:
@@ -417,9 +417,8 @@ class SummaryInfo(object):
             pssm_info.append((left_seq[residue_num],
                               score_dict))
 
-
         return PSSM(pssm_info)
-                    
+
     def _get_base_letters(self, letters):
         """Create a zeroed dictionary with all of the specified letters.
         """
@@ -460,11 +459,11 @@ class SummaryInfo(object):
         # if no end was specified, then we default to the end of the sequence
         if end is None:
             end = len(self.alignment._records[0].seq)
-        
+
         if start < 0 or end > len(self.alignment._records[0].seq):
-            raise ValueError \
-                  ("Start (%s) and end (%s) are not in the range %s to %s"
-                   % (start, end, 0, len(self.alignment._records[0].seq)))
+            raise ValueError("Start (%s) and end (%s) are not in the \
+                    range %s to %s"
+                    % (start, end, 0, len(self.alignment._records[0].seq)))
         # determine random expected frequencies, if necessary
         random_expected = None
         if not e_freq_table:
@@ -481,7 +480,6 @@ class SummaryInfo(object):
             del base_alpha
         elif not isinstance(e_freq_table, FreqTable.FreqTable):
             raise ValueError("e_freq_table should be a FreqTable object")
-            
 
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
@@ -533,7 +531,7 @@ class SummaryInfo(object):
                     weight = record.annotations.get('weight',1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
-            # getting a key error means we've got a problem with the alphabet 
+            # getting a key error means we've got a problem with the alphabet
             except KeyError:
                 raise ValueError("Residue %s not found in alphabet %s"
                                  % (record.seq[residue_num],
@@ -550,7 +548,7 @@ class SummaryInfo(object):
                 freq_info[letter] = freq_info[letter] / total_count
 
         return freq_info
-            
+
     def _get_column_info_content(self, obs_freq, e_freq_table, log_base,
                                  random_expected):
         """Calculate the information content for a column.
@@ -567,8 +565,8 @@ class SummaryInfo(object):
         except AttributeError:
             #The alphabet doesn't declare a gap - there could be none
             #in the sequence... or just a vague alphabet.
-            gap_char = "-" #Safe?
-            
+            gap_char = "-"  # Safe?
+
         if e_freq_table:
             if not isinstance(e_freq_table, FreqTable.FreqTable):
                 raise ValueError("e_freq_table should be a FreqTable object")
@@ -576,10 +574,10 @@ class SummaryInfo(object):
             for key in obs_freq:
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
-                                     "do not match observed %s" \
+                                     "do not match observed %s"
                                      % (e_freq_table.keys(),
                                         obs_freq.keys() - [gap_char]))
-        
+
         total_info = 0.0
 
         for letter in obs_freq:
@@ -595,13 +593,14 @@ class SummaryInfo(object):
             # if the observed frequency is zero, we don't add any info to the
             # total information content
             if inner_log > 0:
-                letter_info = (obs_freq[letter] * 
+                letter_info = (obs_freq[letter] *
                                math.log(inner_log) / math.log(log_base))
                 total_info += letter_info
-        return total_info 
+        return total_info
 
     def get_column(self,col):
         return self.alignment.get_column(col)
+
 
 class PSSM(object):
     """Represent a position specific score matrix.
@@ -650,7 +649,7 @@ class PSSM(object):
         out = " "
         all_residues = self.pssm[0][1].keys()
         all_residues.sort()
-        
+
         # first print out the top header
         for res in all_residues:
             out += "   %s" % res
@@ -699,7 +698,7 @@ if __name__ == "__main__":
     for record in alignment:
         print str(record.seq)
     print "="*alignment.get_alignment_length()
-    
+
     summary = SummaryInfo(alignment)
     consensus = summary.dumb_consensus(ambiguous="N")
     print consensus
@@ -734,5 +733,4 @@ if __name__ == "__main__":
 
     print s.information_content(chars_to_ignore=['-', '*'])
 
-    
     print "Done"

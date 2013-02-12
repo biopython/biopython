@@ -16,7 +16,8 @@ import itertools
 import random
 import re
 
-from Bio.Phylo import _sugar
+from Bio import _utils
+
 
 # General tree-traversal algorithms
 
@@ -28,6 +29,7 @@ def _level_traverse(root, get_children):
         yield v
         Q.extend(get_children(v))
 
+
 def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children)."""
     def dfs(elem):
@@ -37,6 +39,7 @@ def _preorder_traverse(root, get_children):
                 yield u
     for elem in dfs(root):
         yield elem
+
 
 def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent)."""
@@ -74,16 +77,19 @@ def _identity_matcher(target):
         return (node is target)
     return match
 
+
 def _class_matcher(target_cls):
     """Match a node if it's an instance of the given class."""
     def match(node):
         return isinstance(node, target_cls)
     return match
 
+
 def _string_matcher(target):
     def match(node):
         return unicode(node) == target
     return match
+
 
 def _attribute_matcher(kwargs):
     """Match a node by specified attribute values.
@@ -127,6 +133,7 @@ def _attribute_matcher(kwargs):
         return True
     return match
 
+
 def _function_matcher(matcher_func):
     """Safer attribute lookup -- returns False instead of raising an error."""
     def match(node):
@@ -135,6 +142,7 @@ def _function_matcher(matcher_func):
         except (LookupError, AttributeError, ValueError, TypeError):
             return False
     return match
+
 
 def _object_matcher(obj):
     """Retrieve a matcher function by passing an arbitrary object.
@@ -217,7 +225,8 @@ class TreeElement(object):
         """Show this object's constructor with its primitive arguments."""
         def pair_as_kwarg_string(key, val):
             if isinstance(val, basestring):
-                return "%s='%s'" % (key, _sugar.trim_str(unicode(val)))
+                return "%s='%s'" % (key, _utils.trim_str(unicode(val), 60,
+                    u'...'))
             return "%s=%s" % (key, val)
         return u'%s(%s)' % (self.__class__.__name__,
                             ', '.join(pair_as_kwarg_string(key, val)
@@ -352,6 +361,7 @@ class TreeMixin(object):
         # Only one path will work -- ignore weights and visits
         path = []
         match = _combine_matchers(target, kwargs, True)
+
         def check_in_path(v):
             if match(v):
                 path.append(v)
@@ -363,6 +373,7 @@ class TreeMixin(object):
                     path.append(v)
                     return True
             return False
+
         if not check_in_path(self.root):
             return None
         return path[-2::-1]
@@ -415,7 +426,7 @@ class TreeMixin(object):
 
     def count_terminals(self):
         """Counts the number of terminal (leaf) nodes within this tree."""
-        return _sugar.iterlen(self.find_clades(terminal=True))
+        return _utils.iterlen(self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
@@ -435,11 +446,13 @@ class TreeMixin(object):
         else:
             depth_of = lambda c: c.branch_length or 0
         depths = {}
+
         def update_depths(node, curr_depth):
             depths[node] = curr_depth
             for child in node.clades:
                 new_depth = curr_depth + depth_of(child)
                 update_depths(child, new_depth)
+
         update_depths(self.root, self.root.branch_length or 0)
         return depths
 
@@ -925,6 +938,7 @@ class Tree(TreeElement, TreeMixin):
         """
         TAB = '    '
         textlines = []
+
         def print_tree(obj, indent):
             """Recursively serialize sub-elements.
 
@@ -940,6 +954,7 @@ class Tree(TreeElement, TreeMixin):
                     for elem in child:
                         if isinstance(elem, TreeElement):
                             print_tree(elem, indent)
+
         print_tree(self, 0)
         return '\n'.join(textlines)
 
@@ -1009,7 +1024,7 @@ class Clade(TreeElement, TreeMixin):
 
     def __str__(self):
         if self.name:
-            return _sugar.trim_str(self.name, maxlen=40)
+            return _utils.trim_str(self.name, 40, '...')
         return self.__class__.__name__
 
     # Syntax sugar for setting the branch color
@@ -1106,8 +1121,10 @@ class BranchColor(object):
                 hexstr.startswith('#') and
                 len(hexstr) == 7
                 ), "need a 24-bit hexadecimal string, e.g. #000000"
+
         def unpack(cc):
             return int('0x'+cc, base=16)
+
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
         return cls(*map(unpack, RGB))
 
@@ -1152,4 +1169,3 @@ class BranchColor(object):
     def __str__(self):
         """Show the color's RGB values."""
         return "(%d, %d, %d)" % (self.red, self.green, self.blue)
-

@@ -18,7 +18,7 @@ os.environ['LANG'] = 'C'
 
 phyml_exe = None
 if sys.platform=="win32":
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Testing PhyML on Windows not supported yet")
 else:
     import commands
@@ -27,12 +27,13 @@ else:
         phyml_exe = "phyml"
 
 if not phyml_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install PhyML 3.0 if you want to use the Bio.Phylo.Applications wrapper.")
 
 
 # Example Phylip file with 4 aligned protein sequences
 EX_PHYLIP = 'Phylip/interlaced2.phy'
+
 
 class AppTests(unittest.TestCase):
     """Tests for application wrappers."""

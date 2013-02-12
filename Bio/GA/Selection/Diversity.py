@@ -14,6 +14,7 @@ from Bio.Seq import MutableSeq
 from Abstract import AbstractSelection
 from Tournament import TournamentSelection
 
+
 class DiversitySelection(AbstractSelection):
     """Implement diversity selection.
 
@@ -70,7 +71,7 @@ class DiversitySelection(AbstractSelection):
             new_org.recalculate_fitness()
 
         return new_org
-    
+
     def select(self, population):
         """Perform selection on the current population, encouraging diversity.
         """
@@ -94,5 +95,3 @@ class DiversitySelection(AbstractSelection):
         # return the new population, which should have the same number
         # of individuals we started with.
         return new_population[:len(population)]
-            
-    

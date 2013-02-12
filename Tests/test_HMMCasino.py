@@ -37,12 +37,15 @@ from Bio.HMM import Utilities
 # regression testing
 VERBOSE = 0
 
+
 # -- set up our alphabets
 class DiceRollAlphabet(Alphabet.Alphabet):
     letters = ['1', '2', '3', '4', '5', '6']
 
+
 class DiceTypeAlphabet(Alphabet.Alphabet):
     letters = ['F', 'L']
+
 
 # -- useful functions
 def _loaded_dice_roll(chance_num, cur_state):
@@ -76,6 +79,7 @@ def _loaded_dice_roll(chance_num, cur_state):
             return '6'
     else:
         raise ValueError("Unexpected cur_state %s" % cur_state)
+
 
 def generate_rolls(num_rolls):
     """Generate a bunch of rolls corresponding to the casino probabilities.
@@ -111,7 +115,7 @@ def generate_rolls(num_rolls):
                 cur_state = 'F'
 
     return roll_seq.toseq(), state_seq.toseq()
-    
+
 # -- build a MarkovModel
 mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
                                             DiceRollAlphabet())
@@ -198,4 +202,3 @@ predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
 if VERBOSE:
     print "Prediction probability:", prob
     Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
-

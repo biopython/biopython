@@ -45,6 +45,7 @@ _entry_db_fields = {}
 _entry_db_formats = {}
 _convert_formats = []
 
+
 def _get_fields(url):
     """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
     handle = _open(url)
@@ -52,18 +53,23 @@ def _get_fields(url):
     handle.close()
     return fields
 
+
 def _get_entry_dbs():
     return _get_fields(_BASE_URL + "/entry")
+
 
 def _get_entry_fields(db):
     return _get_fields(_BASE_URL + "/entry/%s?fields" % db)
 
+
 def _get_entry_formats(db):
     return _get_fields(_BASE_URL + "/entry/%s?formats" % db)
 
+
 def _get_convert_formats():
-    return [pair.split(".") for pair in \
+    return [pair.split(".") for pair in
             _get_fields(_BASE_URL + "/convert/")]
+
 
 def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
@@ -105,7 +111,7 @@ def entry(db, id, format=None, field=None):
             _entry_db_fields[db] = fields
         if field not in fields:
             raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "field '%s' for database '%s'. Only: %s" \
+                             "field '%s' for database '%s'. Only: %s"
                              % (field, db, ", ".join(sorted(fields))))
     if format:
         try:
@@ -115,7 +121,7 @@ def entry(db, id, format=None, field=None):
             _entry_db_formats[db] = formats
         if format not in formats:
             raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "format '%s' for database '%s'. Only: %s" \
+                             "format '%s' for database '%s'. Only: %s"
                              % (format, db, ", ".join(sorted(formats))))
 
     if isinstance(id, list):
@@ -126,6 +132,7 @@ def entry(db, id, format=None, field=None):
     if format:
         url += "." + format
     return _open(url)
+
 
 def search_count(db, query):
     """TogoWS search count (returns an integer).
@@ -146,11 +153,12 @@ def search_count(db, query):
         import warnings
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
-    handle = _open(_BASE_URL + "/search/%s/%s/count" \
+    handle = _open(_BASE_URL + "/search/%s/%s/count"
                    % (db, urllib.quote(query)))
     count = int(handle.read().strip())
     handle.close()
     return count
+
 
 def search_iter(db, query, limit=None, batch=100):
     """TogoWS search iteratating over the results (generator function).
@@ -177,24 +185,25 @@ def search_iter(db, query, limit=None, batch=100):
     remain = count
     if limit is not None:
         remain = min(remain, limit)
-    offset = 1 #They don't use zero based counting
-    prev_ids = [] #Just cache the last batch for error checking
+    offset = 1  # They don't use zero based counting
+    prev_ids = []  # Just cache the last batch for error checking
     while remain:
         batch = min(batch, remain)
         #print "%r left, asking for %r" % (remain, batch)
         ids = search(db, query, offset, batch).read().strip().split()
-        assert len(ids)==batch, "Got %i, expected %i" % (len(ids), batch)
+        assert len(ids) == batch, "Got %i, expected %i" % (len(ids), batch)
         #print "offset %i, %s ... %s" % (offset, ids[0], ids[-1])
         if ids == prev_ids:
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
             if identifier in prev_ids:
-                raise RuntimeError("Result %s was in previous batch" \
+                raise RuntimeError("Result %s was in previous batch"
                                    % identifier)
             yield identifier
         offset += batch
         remain -= batch
         prev_ids = ids
+
 
 def search(db, query, offset=None, limit=None, format=None):
     """TogoWS search (returns a handle).
@@ -258,16 +267,17 @@ def search(db, query, offset=None, limit=None, format=None):
     #print url
     return _open(url)
 
+
 def convert(data, in_format, out_format):
     """TogoWS convert (returns a handle).
-    
+
     data - string or handle containing input record(s)
     in_format - string describing the input file format (e.g. "genbank")
     out_format - string describing the requested output format (e.g. "fasta")
 
     For a list of supported conversions (e.g. "genbank" to "fasta"), see
     http://togows.dbcls.jp/convert/
-    
+
     Note that Biopython has built in support for conversion of sequence and
     alignnent file formats (functions Bio.SeqIO.convert and Bio.AlignIO.convert)
     """
@@ -281,10 +291,11 @@ def convert(data, in_format, out_format):
     #TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
         #Handle
-        return _open(url, post={"data":data.read()})
+        return _open(url, post={"data": data.read()})
     else:
         #String
-        return _open(url, post={"data":data})
+        return _open(url, post={"data": data})
+
 
 def _open(url, post=None):
     """Helper function to build the URL and open a handle to it (PRIVATE).
@@ -294,7 +305,7 @@ def _open(url, post=None):
     In the absense of clear guidelines, this function enforces a limit of
     "up to three queries per second" to avoid abusing the TogoWS servers.
     """
-    delay = 0.333333333 #one third of a second
+    delay = 0.333333333  # one third of a second
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:

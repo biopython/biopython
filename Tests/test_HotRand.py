@@ -2,8 +2,11 @@
 """Tests HotRand.
 """
 # standard library
-import sys
 import unittest
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+warnings.simplefilter('ignore', BiopythonDeprecationWarning)
 
 # local stuff
 import requires_internet
@@ -23,6 +26,7 @@ def are_items_in_range( a, high, low ):
             print 'a[ %d ] is %d' % ( j , a[ j ] )
             return 0
     return 1
+
 
 # --- the actual test classes
 

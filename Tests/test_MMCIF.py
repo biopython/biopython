@@ -9,14 +9,12 @@
 
 """Unit tests for the MMCIF portion of the Bio.PDB module."""
 
-import os
-import tempfile
 import unittest
 import warnings
 
 try:
     import numpy
-    from numpy import dot #Missing on PyPy's micronumpy
+    from numpy import dot  # Missing on PyPy's micronumpy
     del dot
 except ImportError:
     from Bio import MissingPythonDependencyError
@@ -35,6 +33,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser
+
 
 class ParseReal(unittest.TestCase):
     """Testing with real CIF file(s)."""
@@ -116,7 +115,7 @@ class ParseReal(unittest.TestCase):
                 self.assertTrue(isinstance(s, Seq))
                 self.assertEqual(s.alphabet, generic_protein)
                 #Here non-standard MSE are shown as M
-                self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", 
+                self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
                                  str(s))
                 #==========================================================
                 #Now try strict version with only standard amino acids

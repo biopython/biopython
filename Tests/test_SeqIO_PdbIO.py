@@ -4,8 +4,21 @@
 # as part of this package.
 
 import unittest
+import warnings
+
+try:
+    import numpy
+    from numpy import dot  # Missing on PyPy's micronumpy
+    del dot
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use PDB formats with SeqIO.")
 
 from Bio import SeqIO
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+
+warnings.simplefilter('ignore', PDBConstructionWarning)
 
 
 class TestPdbSeqres(unittest.TestCase):
@@ -41,8 +54,47 @@ class TestPdbSeqres(unittest.TestCase):
         chains = list(SeqIO.parse('PDB/1MOT.pdb', 'pdb-seqres'))
         self.assertEqual(len(chains), 0)
 
-        
+
+class TestPdbAtom(unittest.TestCase):
+    def test_atom_parse(self):
+        """Parse a multi-chain PDB by ATOM entries.
+
+        Reference:
+        http://www.rcsb.org/pdb/files/fasta.txt?structureIdList=2BEG
+        """
+        chains = list(SeqIO.parse('PDB/2BEG.pdb', 'pdb-atom'))
+        self.assertEqual(len(chains), 5)
+        actual_seq = 'LVFFAEDVGSNKGAIIGLMVGGVVIA'
+        for chain, chn_id in zip(chains, 'ABCDE'):
+            self.assertEqual(chain.id, '2BEG:' + chn_id)
+            self.assertEqual(chain.annotations['chain'], chn_id)
+            self.assertEqual(str(chain.seq), actual_seq)
+
+    def test_atom_read(self):
+        """Read a single-chain PDB by ATOM entries.
+
+        Reference:
+        http://www.rcsb.org/pdb/files/fasta.txt?structureIdList=1A8O
+        """
+        chain = SeqIO.read('PDB/1A8O.pdb', 'pdb-atom')
+        self.assertEqual(chain.id, '1A8O:A')
+        self.assertEqual(chain.annotations['chain'], 'A')
+        self.assertEqual(str(chain.seq),
+                         'MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL'
+                         'KALGPGATLEEMMTACQG')
+        chain = SeqIO.read('PDB/a_structure.pdb', 'pdb-atom')
+        self.assertEqual(chain.id, '????:A')
+        self.assertEqual(chain.annotations['chain'], 'A')
+        self.assertEqual(str(chain.seq), 'E')
+
+    def test_atom_noheader(self):
+        """Parse a PDB with no HEADER line."""
+        warnings.simplefilter('ignore', UserWarning)
+        chains = list(SeqIO.parse('PDB/1MOT.pdb', 'pdb-atom'))
+        self.assertEqual(len(chains), 1)
+        self.assertEqual(str(chains[0].seq), 'APARVGLGITTVLTMTTQSSGSRASLPK')
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-

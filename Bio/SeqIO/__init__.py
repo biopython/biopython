@@ -348,6 +348,7 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "imgt": InsdcIO.ImgtIterator,
                      "ig": IgIO.IgIterator,
                      "swiss": SwissIO.SwissIterator,
+                     "pdb-atom": PdbIO.PdbAtomIterator,
                      "pdb-seqres": PdbIO.PdbSeqresIterator,
                      "phd": PhdIO.PhdIterator,
                      "ace": AceIO.AceIterator,
@@ -450,7 +451,7 @@ def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
      - handle   - handle to the file, or the filename as a string
-                  (note older verions of Biopython only took a handle).
+                  (note older versions of Biopython only took a handle).
      - format   - lower case string describing the file format.
      - alphabet - optional Alphabet object, useful when the sequence type
                   cannot be automatically inferred from the file itself
@@ -560,7 +561,7 @@ def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
      - handle   - handle to the file, or the filename as a string
-                  (note older verions of Biopython only took a handle).
+                  (note older versions of Biopython only took a handle).
      - format   - string describing the file format.
      - alphabet - optional Alphabet object, useful when the sequence type
                   cannot be automatically inferred from the file itself
@@ -626,7 +627,7 @@ def to_dict(sequences, key_function=None):
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
 
-    If key_function is ommitted then record.id is used, on the assumption
+    If key_function is omitted then record.id is used, on the assumption
     that the records objects returned are SeqRecords with a unique id.
 
     If there are duplicate keys, an error is raised.
@@ -716,7 +717,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> print records["EAS54_6_R1_2_1_540_792"].seq
     TTGGCAGGCCAAGGCCGATGGATCA
 
-    Note that this psuedo dictionary will not support all the methods of a
+    Note that this pseudo dictionary will not support all the methods of a
     true Python dictionary, for example values() is not defined since this
     would require loading all of the records into memory at once.
 
@@ -746,7 +747,7 @@ def index(filename, format, alphabet=None, key_function=None):
 
     As with the to_dict() function, by default the id string of each record
     is used as the key. You can specify a callback function to transform
-    this (the record identifier string) into your prefered key. For example:
+    this (the record identifier string) into your preferred key. For example:
 
     >>> from Bio import SeqIO
     >>> def make_tuple(identifier):
@@ -795,8 +796,16 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index  # Lazy import
-    return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
+    from _index import _FormatToRandomAccess # Lazy import
+    from Bio.File import _IndexedSeqFileDict
+    try:
+        proxy_class = _FormatToRandomAccess[format]
+    except KeyError:
+        raise ValueError("Unsupported format %r" % format)
+    repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
+        % (filename, format, alphabet, key_function)
+    return _IndexedSeqFileDict(proxy_class(filename, format, alphabet),
+                               key_function, repr, "SeqRecord")
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
@@ -865,9 +874,21 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index  # Lazy import
-    return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
-                                          alphabet, key_function)
+    from _index import _FormatToRandomAccess  # Lazy import
+    from Bio.File import _SQLiteManySeqFilesDict
+    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
+               % (index_filename, filenames, format, alphabet, key_function)
+
+    def proxy_factory(format, filename=None):
+        """Given a filename returns proxy object, else boolean if format OK."""
+        if filename:
+            return _FormatToRandomAccess[format](filename, format, alphabet)
+        else:
+            return format in _FormatToRandomAccess
+
+    return _SQLiteManySeqFilesDict(index_filename, filenames,
+                                   proxy_factory, format,
+                                   key_function, repr)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
@@ -922,31 +943,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-def _test():
-    """Run the Bio.SeqIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    #Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

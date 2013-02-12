@@ -12,13 +12,15 @@ import os
 import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
+from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
-                           BeforePosition, AfterPosition, OneOfPosition, \
-                           WithinPosition
+from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
+from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, \
+                           OneOfPosition,  WithinPosition
 from StringIO import StringIO
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
+
 
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format="gb", out_formats=["gb", "embl", "imgt"]):
@@ -32,13 +34,14 @@ def write_read(filename, in_format="gb", out_formats=["gb", "embl", "imgt"]):
         gb_records2 = list(SeqIO.parse(handle,out_format))
         compare_records(gb_records, gb_records2)
 
+
 def compare_record(old, new, expect_minor_diffs=False):
     #Note the name matching is a bit fuzzy
     if not expect_minor_diffs \
     and old.id != new.id and old.name != new.name \
     and (old.id not in new.id) and (new.id not in old.id) \
     and (old.id.replace(" ","_") != new.id.replace(" ","_")):
-        raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
+        raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
                          % (old.id, old.name, new.id, new.name))
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
@@ -59,7 +62,7 @@ def compare_record(old, new, expect_minor_diffs=False):
     #Just insist on at least one word in common:
     if (old.description or new.description) \
     and not set(old.description.split()).intersection(new.description.split()):
-        raise ValueError("%s versus %s" \
+        raise ValueError("%s versus %s"
                          % (repr(old.description), repr(new.description)))
     #This only checks common annotation
     #Would a white list be easier?
@@ -72,7 +75,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         if key == "comment":
             #Ignore whitespace
             if old.annotations[key].split() != new.annotations[key].split():
-                raise ValueError("Annotation mis-match for comment:\n%s\n%s" \
+                raise ValueError("Annotation mis-match for comment:\n%s\n%s"
                                 % (old.annotations[key], new.annotations[key]))
             continue
         if key == "references":
@@ -94,9 +97,10 @@ def compare_record(old, new, expect_minor_diffs=False):
                 assert r1.pubmed_id == r2.pubmed_id
             continue
         if repr(old.annotations[key]) != repr(new.annotations[key]):
-            raise ValueError("Annotation mis-match for %s:\n%s\n%s" \
+            raise ValueError("Annotation mis-match for %s:\n%s\n%s"
                              % (key, old.annotations[key], new.annotations[key]))
     return True
+
 
 def compare_records(old_list, new_list, expect_minor_diffs=False):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
@@ -107,15 +111,16 @@ def compare_records(old_list, new_list, expect_minor_diffs=False):
             return False
     return True
 
+
 def compare_feature(old, new, ignore_sub_features=False):
     """Check two SeqFeatures agree."""
     if old.type != new.type:
         raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
     if old.location.nofuzzy_start != new.location.nofuzzy_start \
     or old.location.nofuzzy_end != new.location.nofuzzy_end:
-        raise ValueError("%s versus %s:\n%s\nvs:\n%s" \
+        raise ValueError("%s versus %s:\n%s\nvs:\n%s"
                          % (old.location, new.location, repr(old), repr(new)))
-    if old.strand != new.strand:
+    if old.strand is not None and old.strand != new.strand:
         raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.ref != new.ref:
         raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
@@ -125,16 +130,17 @@ def compare_feature(old, new, ignore_sub_features=False):
         raise ValueError("Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.location.start != new.location.start \
     or str(old.location.start) != str(new.location.start):
-        raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
+        raise ValueError("Start %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.start, new.location.start, repr(old), repr(new)))
     if old.location.end != new.location.end \
     or str(old.location.end) != str(new.location.end):
-        raise ValueError("End %s versus %s:\n%s\nvs:\n%s" \
+        raise ValueError("End %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.end, new.location.end, repr(old), repr(new)))
     if not ignore_sub_features:
-        if len(old.sub_features) != len(new.sub_features):
+        #Using private variable to avoid deprecation warnings,
+        if len(old._sub_features) != len(new._sub_features):
             raise ValueError("Different sub features")
-        for a,b in zip(old.sub_features, new.sub_features):
+        for a,b in zip(old._sub_features, new._sub_features):
             if not compare_feature(a,b):
                 return False
     #This only checks key shared qualifiers
@@ -145,9 +151,10 @@ def compare_feature(old, new, ignore_sub_features=False):
             #EMBL and GenBank files are use different references/notes/etc
             continue
         if old.qualifiers[key] != new.qualifiers[key]:
-            raise ValueError("Qualifier mis-match for %s:\n%s\n%s" \
+            raise ValueError("Qualifier mis-match for %s:\n%s\n%s"
                              % (key, old.qualifiers[key], new.qualifiers[key]))
     return True
+
 
 def compare_features(old_list, new_list, ignore_sub_features=False):
     """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
@@ -159,24 +166,24 @@ def compare_features(old_list, new_list, ignore_sub_features=False):
             return False
     return True
 
+
 def make_join_feature(f_list, ftype="misc_feature"):
-    #NOTE - Does NOT reorder the sub-features (which you may
-    #want to do for reverse strand features...)
+    #NOTE - Does NOT reorder the sub-features
     if len(set(f.strand for f in f_list))==1:
         strand = f_list[0].strand
     else:
         strand = None
     for f in f_list:
         f.type=ftype
-        f.location_operator="join"
-    jf = SeqFeature(FeatureLocation(f_list[0].location.start,
-                                    f_list[-1].location.end,
-                                    strand),
-                    type=ftype, location_operator="join")
-    assert jf.location.strand == strand
-    assert jf.strand == strand
-    jf.sub_features = f_list
-    return jf
+    if strand == -1:
+        #All reverse strand.
+        #Historical accident from GenBank parser means sub_features reversed
+        c_loc = CompoundLocation([f.location for f in f_list[::-1]])
+    else:
+        #All forward, or mixed strand
+        c_loc = CompoundLocation([f.location for f in f_list])
+    return SeqFeature(c_loc, ftype, sub_features = f_list)
+    #TODO - Don't use sub-features at all in this test
 
 #Prepare a single GenBank record with one feature with a %s place holder for
 #the feature location
@@ -197,6 +204,7 @@ gbk_template = gbk_template.replace('     exon            618..756\n'
 assert len(gbk_template)==4445
 assert gbk_template.count("%") == 1, gbk_template
 
+
 class SeqFeatureExtractionWritingReading(unittest.TestCase):
     """Tests for SeqFeature sequence extract method, writing, and reading."""
 
@@ -208,7 +216,8 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertTrue(isinstance(new, Seq))
         self.assertEqual(str(new), answer_str)
 
-        if not feature.sub_features:
+        #Using private variable to avoid deprecation warning
+        if not feature._sub_features:
             new = parent_seq[feature.location.start:feature.location.end]
             if feature.strand == -1:
                 new = reverse_complement(new)
@@ -219,13 +228,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertEqual(new, answer_str)
 
         new = feature.extract(parent_seq.tomutable())
-        self.assertTrue(isinstance(new, Seq)) #Not MutableSeq!
+        self.assertTrue(isinstance(new, Seq))  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
         self.assertTrue(isinstance(new, UnknownSeq))
         self.assertEqual(len(new), len(answer_str))
-        
+
         if _insdc_feature_location_string(feature, 1326) != location_str:
             #This is to avoid issues with the N^1 between feature which only
             #makes sense at the end of the sequence
@@ -244,19 +253,19 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         #Checking the strand is tricky - on parsing a GenBank file
         #strand +1 is assumed, but our constructed features for the
         #unit test have mostly defaulted to strand None.
-        self.assertEqual(len(feature.sub_features), len(new_f.sub_features))
-        for f1, f2 in zip(feature.sub_features, new_f.sub_features):
+        self.assertEqual(len(feature._sub_features), len(new_f._sub_features))
+        for f1, f2 in zip(feature._sub_features, new_f._sub_features):
             f1.type = "misc_feature" #hack as may not be misc_feature
             if f1.strand is None:
-                f1.strand = f2.strand #hack as described above
+                f1.strand = f2.strand  # hack as described above
             self.assertEqual(f1.strand, f2.strand)
             self.assertTrue(compare_feature(f1,f2))
-        feature.type = "misc_feature" #hack as may not be misc_feature
+        feature.type = "misc_feature"  # hack as may not be misc_feature
         if not feature.strand:
-            feature.strand = new_f.strand #hack as above
+            feature.strand = new_f.strand  # hack as above
         self.assertEqual(feature.strand, new_f.strand)
         self.assertTrue(compare_feature(feature, new_f))
-        
+
         #Some feature method tests
         parent = "ACGT"*250
         s = feature.extract(parent)
@@ -267,8 +276,11 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                          set(i for i in range(1000) if i in feature))
         if feature.strand == +1:
             self.assertEqual(s, "".join(parent[i] for i in feature))
+        if len(feature):
+            self.assertEqual(feature.location.start, min(feature.location))
+            self.assertEqual(feature.location.end, max(feature.location)+1)
+        self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
             
-
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)"""
         s = Seq("GAUCRYWSMKHBVDN", generic_rna)
@@ -320,7 +332,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f.location.strand, +1)
         self.check(s, f, "YWSMK", "6..10")
-        
+
     def test_simple_dna_strand_minus(self):
         """Feature on DNA (simple, strand -1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
@@ -453,17 +465,19 @@ class SeqFeatureCreation(unittest.TestCase):
                 qualifiers={"test": ["a test"]})
         self.assertEqual(f.qualifiers["test"], ["a test"])
 
+
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
         self.record = SeqRecord(Seq("ACGT"*100, generic_dna),
                                 id="Test", name="Test", description="Test")
+
     def write_read_check(self, format):
         handle = StringIO()
         SeqIO.write([self.record], handle, format)
         handle.seek(0)
         record2 = SeqIO.read(handle, format)
         compare_record(self.record, record2)
-    
+
     def write_read_checks(self, formats=["gb", "embl", "imgt"]):
         for f in formats:
             self.write_read_check(f)
@@ -481,7 +495,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(81..90)")
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
+
         f = SeqFeature(FeatureLocation(30,40), strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(31..40)")
@@ -492,7 +506,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)), \
+        f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "51..60")
@@ -552,7 +566,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(join(21..35,41..50))")
         self.assertEqual(_insdc_feature_location_string(f._flip(100),100),
                          "complement(join(61..75,81..90))")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, -1)
         self.assertEqual(f._flip(100).strand, -1)
         f1 = SeqFeature(FeatureLocation(110,120), strand=+1)
@@ -563,7 +577,7 @@ class FeatureWriting(unittest.TestCase):
                          "join(111..120,126..140,146..150)")
         self.assertEqual(_insdc_feature_location_string(f._flip(150),150),
                          "complement(join(1..5,11..25,31..40))")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand,-1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
@@ -574,7 +588,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(join(211..220,226..240))")
         self.assertEqual(_insdc_feature_location_string(f._flip(300),300),
                          "join(61..75,81..90)")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
@@ -586,7 +600,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(join(311..320,326..340,346..350))")
         self.assertEqual(_insdc_feature_location_string(f._flip(350),350),
                          "join(1..5,11..25,31..40)")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
@@ -604,10 +618,10 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(100),100),
                          "complement(join(<61..75,81..>90))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, -1)
         self.assertEqual(f._flip(100).strand, -1)
-        
+
         f1 = SeqFeature(FeatureLocation(OneOfPosition(107, [ExactPosition(107),
                                                             ExactPosition(110)]),
                                         120),
@@ -621,11 +635,11 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(200),200),
                          "complement(join((41.51)..55,61..75,81..one-of(90,93)))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand,-1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
+
         f1 = SeqFeature(FeatureLocation(BeforePosition(210),220), strand=-1)
         f2 = SeqFeature(FeatureLocation(225,WithinPosition(244, left=240, right=244)), strand=-1)
         f = make_join_feature([f1,f2], "gene")
@@ -635,11 +649,11 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(300),300),
                          "join((57.61)..75,81..>90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         f1 = SeqFeature(FeatureLocation(AfterPosition(310),320), strand=-1)
         #Note - is one-of(340,337) allowed or should it be one-of(337,340)?
         f2 = SeqFeature(FeatureLocation(325,OneOfPosition(340, [ExactPosition(340),
@@ -653,17 +667,17 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(400),400),
                          "join((46.51)..55,one-of(64,61)..75,81..<90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         self.write_read_checks()
 
     def test_before(self):
         """Features: write/read simple before locations."""
         s = "N"*200
-        f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
+        f = SeqFeature(FeatureLocation(BeforePosition(5),10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "<6..10")
@@ -673,8 +687,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)), \
+
+        f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "<16..<20")
@@ -684,8 +698,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(25,BeforePosition(30)), \
+
+        f = SeqFeature(FeatureLocation(25,BeforePosition(30)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..<30")
@@ -695,8 +709,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(BeforePosition(35),40), \
+
+        f = SeqFeature(FeatureLocation(BeforePosition(35),40),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(<36..40)")
@@ -706,8 +720,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)), \
+
+        f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(<46..<50)")
@@ -717,8 +731,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(55,BeforePosition(60)), \
+
+        f = SeqFeature(FeatureLocation(55,BeforePosition(60)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..<60)")
@@ -728,13 +742,13 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         self.write_read_checks()
-        
+
     def test_after(self):
         """Features: write/read simple after locations."""
         s = "N" * 200
-        f = SeqFeature(FeatureLocation(AfterPosition(5),10), \
+        f = SeqFeature(FeatureLocation(AfterPosition(5),10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          ">6..10")
@@ -745,7 +759,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)), \
+        f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          ">16..>20")
@@ -756,7 +770,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(25,AfterPosition(30)), \
+        f = SeqFeature(FeatureLocation(25,AfterPosition(30)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..>30")
@@ -767,7 +781,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(AfterPosition(35),40), \
+        f = SeqFeature(FeatureLocation(AfterPosition(35),40),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(>36..40)")
@@ -778,7 +792,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)), \
+        f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(>46..>50)")
@@ -789,7 +803,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(55,AfterPosition(60)), \
+        f = SeqFeature(FeatureLocation(55,AfterPosition(60)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..>60)")
@@ -815,7 +829,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
+
         start = OneOfPosition(10, [ExactPosition(x) for x in [10,13,16]])
         end = OneOfPosition(50, [ExactPosition(x) for x in [41,44,50]])
         f = SeqFeature(FeatureLocation(start,end), strand=+1, type="gene")
@@ -827,7 +841,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
+
         end = OneOfPosition(33, [ExactPosition(x) for x in [30,33]])
         f = SeqFeature(FeatureLocation(27,end), strand=+1, type="gene")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -838,7 +852,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
+
         start = OneOfPosition(36, [ExactPosition(x) for x in [36,40]])
         f = SeqFeature(FeatureLocation(start,46), strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -849,7 +863,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         start = OneOfPosition(45, [ExactPosition(x) for x in [45,60]])
         end = OneOfPosition(90, [ExactPosition(x) for x in [70,90]])
         f = SeqFeature(FeatureLocation(start,end), strand=-1, type="CDS")
@@ -861,7 +875,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         end = OneOfPosition(63, [ExactPosition(x) for x in [60,63]])
         f = SeqFeature(FeatureLocation(55,end), strand=-1, type="tRNA")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -872,13 +886,13 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         self.write_read_checks()
 
     def test_within(self):
         """Features: write/read simple within locations."""
         s = "N" * 100
-        f = SeqFeature(FeatureLocation(WithinPosition(2, left=2, right=8),10), \
+        f = SeqFeature(FeatureLocation(WithinPosition(2, left=2, right=8),10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "(3.9)..10")
@@ -888,9 +902,9 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
+
         f = SeqFeature(FeatureLocation(WithinPosition(12, left=12, right=18),
-                                       WithinPosition(28, left=20, right=28)), \
+                                       WithinPosition(28, left=20, right=28)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "(13.19)..(20.28)")
@@ -900,8 +914,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(25,WithinPosition(33, left=30, right=33)), \
+
+        f = SeqFeature(FeatureLocation(25,WithinPosition(33, left=30, right=33)),
                        strand=+1, type="misc_feature")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..(30.33)")
@@ -911,8 +925,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, +1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(WithinPosition(35, left=35, right=39),40), \
+
+        f = SeqFeature(FeatureLocation(WithinPosition(35, left=35, right=39),40),
                        strand=-1, type="rRNA")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement((36.40)..40)")
@@ -921,9 +935,9 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         f = SeqFeature(FeatureLocation(WithinPosition(45, left=45, right=47),
-                                       WithinPosition(53, left=50, right=53)), \
+                                       WithinPosition(53, left=50, right=53)),
                        strand=-1, type="repeat_region")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement((46.48)..(50.53))")
@@ -933,8 +947,8 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
-        f = SeqFeature(FeatureLocation(55,WithinPosition(65, left=60, right=65)), \
+
+        f = SeqFeature(FeatureLocation(55,WithinPosition(65, left=60, right=65)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..(60.65))")
@@ -944,17 +958,18 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f.strand, -1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
-        
+
         self.write_read_checks()
-        
+
+
 class NC_000932(unittest.TestCase):
     #This includes an evil dual strand gene
     basename = "NC_000932"
-    emblname = None # "AP000423" has different annotation (e.g. more CDS)
+    emblname = None  # "AP000423" has different annotation (e.g. more CDS)
     table = 11
-    skip_trans_test = ["gi|7525080|ref|NP_051037.1|", #dual-strand
-                       "gi|7525057|ref|NP_051038.1|", #dual-strand
-                       "gi|90110725|ref|NP_051109.2|", #Invalid annotation? No start codon
+    skip_trans_test = ["gi|7525080|ref|NP_051037.1|",  # dual-strand
+                       "gi|7525057|ref|NP_051038.1|",  # dual-strand
+                       "gi|90110725|ref|NP_051109.2|",  # Invalid annotation? No start codon
                        ]
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
     #TODO - neat way to change the docstrings...
@@ -982,13 +997,18 @@ class NC_000932(unittest.TestCase):
             #Get the nucleotides and translate them
             nuc = f.extract(gb_record.seq)
             self.assertEqual(len(nuc), len(f))
-            pro = nuc.translate(table=self.table, cds=True)
-            #print r.id, nuc, pro, r.seq
-            #print f
+            try:
+                pro = nuc.translate(table=self.table, cds=True)
+            except TranslationError, e:
+                print e
+                print r.id, nuc, self.table
+                print f
+                raise
             if pro[-1] == "*":
                 self.assertEqual(str(pro)[:-1], str(r.seq))
             else:
                 self.assertEqual(str(pro), str(r.seq))
+
 
 class NC_005816(NC_000932):
     basename = "NC_005816"
@@ -1005,9 +1025,9 @@ class NC_005816(NC_000932):
         if len(embl_record.features) < len(gb_record.features):
             #Used to match, but I've update the GenBank files
             #which now has lots of misc_feature entries not in EMBL
-            embl_record.features = [f for f in embl_record.features \
+            embl_record.features = [f for f in embl_record.features
                                     if f.type != "misc_feature"]
-            gb_record.features = [f for f in gb_record.features \
+            gb_record.features = [f for f in gb_record.features
                                   if f.type != "misc_feature"]
         return compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
@@ -1024,11 +1044,11 @@ class NC_005816(NC_000932):
             and (str(translation) != str(faa.seq)+"*"):
                 t = SeqRecord(translation, id="Translation",
                               description="Table %s" % self.table)
-                raise ValueError("FAA vs FNA translation problem:\n%s\n%s\n%s\n" \
+                raise ValueError("FAA vs FNA translation problem:\n%s\n%s\n%s\n"
                                  % (fna.format("fasta"),
                                     t.format("fasta"),
                                     faa.format("fasta")))
-    
+
     def test_Genome(self):
         #"""Checking GenBank sequence vs FASTA fna file."""
         gb_record = SeqIO.read(open(self.gb_filename),"genbank")
@@ -1039,9 +1059,9 @@ class NC_005816(NC_000932):
         embl_record = SeqIO.read(open(self.embl_filename),"embl")
         if len(embl_record.features) < len(gb_record.features):
             #Hack since now out of sync for NC_005816
-            embl_record.features = [f for f in embl_record.features \
+            embl_record.features = [f for f in embl_record.features
                                     if f.type != "misc_feature"]
-            gb_record.features = [f for f in gb_record.features \
+            gb_record.features = [f for f in gb_record.features
                                   if f.type != "misc_feature"]
         compare_record(gb_record, embl_record, expect_minor_diffs=True)
 

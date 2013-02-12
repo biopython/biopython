@@ -7,9 +7,9 @@
 import unittest
 import sys
 if sys.version_info[0] == 3:
-   maketrans = str.maketrans
+    maketrans = str.maketrans
 else:
-   from string import maketrans
+    from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
@@ -44,7 +44,7 @@ special_table = CodonTable(forward_table={
 Chilodonella_uncinata_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q', 
+    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',
     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
     'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
     'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
@@ -61,8 +61,9 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
     start_codons = [ 'ATG'],
     stop_codons = ['TAA' ])
 
+
 class StringMethodTests(unittest.TestCase):
-    _examples = [ \
+    _examples = [
         Seq("ACGTGGGGT", generic_protein),
         Seq("ACGTGGGGT", generic_nucleotide),
         Seq("ACGTGGGGT", generic_dna),
@@ -92,7 +93,6 @@ class StringMethodTests(unittest.TestCase):
             _examples.append(seq.tomutable())
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999]
 
-
     def _test_method(self, method_name, pre_comp_function=None, start_end=False):
         """Check this method matches the plain string's method."""
         self.assertTrue(isinstance(method_name, str))
@@ -114,7 +114,7 @@ class StringMethodTests(unittest.TestCase):
                     i = pre_comp_function(i)
                     j = pre_comp_function(j)
                 if i != j:
-                    raise ValueError("%s.%s(%s) = %i, not %i" \
+                    raise ValueError("%s.%s(%s) = %i, not %i"
                                      % (repr(example1),
                                         method_name,
                                         repr(str2),
@@ -128,7 +128,7 @@ class StringMethodTests(unittest.TestCase):
                         i = pre_comp_function(i)
                         j = pre_comp_function(j)
                     if i != j:
-                        raise ValueError("%s.%s(%s) = %i, not %i" \
+                        raise ValueError("%s.%s(%s) = %i, not %i"
                                          % (repr(example1),
                                             method_name,
                                             repr(example2),
@@ -146,14 +146,14 @@ class StringMethodTests(unittest.TestCase):
                             i = pre_comp_function(i)
                             j = pre_comp_function(j)
                         if i != j:
-                            raise ValueError("%s.%s(%s, %i) = %i, not %i" \
+                            raise ValueError("%s.%s(%s, %i) = %i, not %i"
                                              % (repr(example1),
                                                 method_name,
                                                 repr(str2),
                                                 start,
                                                 i,
                                                 j))
-                        
+
                         for end in self._start_end_values:
                             i = getattr(example1,method_name)(str2, start, end)
                             j = getattr(str1,method_name)(str2, start, end)
@@ -161,7 +161,7 @@ class StringMethodTests(unittest.TestCase):
                                 i = pre_comp_function(i)
                                 j = pre_comp_function(j)
                             if i != j:
-                                raise ValueError("%s.%s(%s, %i, %i) = %i, not %i" \
+                                raise ValueError("%s.%s(%s, %i, %i) = %i, not %i"
                                                  % (repr(example1),
                                                     method_name,
                                                     repr(str2),
@@ -191,24 +191,24 @@ class StringMethodTests(unittest.TestCase):
         except TypeError:
             #Base string only supports this on Python 2.5+, skip this
             return
-        
+
         #Now check with a tuple of sub sequences
         for example1 in self._examples:
             if not hasattr(example1, "startswith"):
                 #e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start+2] for start \
+            subs = tuple([example1[start:start+2] for start
                           in range(0, len(example1)-2,3)])
             subs_str = tuple([str(s) for s in subs])
 
             self.assertEqual(str(example1).startswith(subs_str),
                              example1.startswith(subs))
             self.assertEqual(str(example1).startswith(subs_str),
-                             example1.startswith(subs_str)) #strings!
+                             example1.startswith(subs_str))  # strings!
             self.assertEqual(str(example1).startswith(subs_str,3),
                              example1.startswith(subs,3))
             self.assertEqual(str(example1).startswith(subs_str,2,6),
-                             example1.startswith(subs,2,6))        
+                             example1.startswith(subs,2,6))
 
     def test_str_endswith(self):
         """Check matches the python string endswith method."""
@@ -225,14 +225,14 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "endswith"):
                 #e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start+2] for start \
+            subs = tuple([example1[start:start+2] for start
                           in range(0, len(example1)-2,3)])
             subs_str = tuple([str(s) for s in subs])
 
             self.assertEqual(str(example1).endswith(subs_str),
                              example1.endswith(subs))
             self.assertEqual(str(example1).startswith(subs_str),
-                             example1.startswith(subs_str)) #strings!
+                             example1.startswith(subs_str))  # strings!
             self.assertEqual(str(example1).endswith(subs_str,3),
                              example1.endswith(subs,3))
             self.assertEqual(str(example1).endswith(subs_str,2,6),
@@ -273,14 +273,16 @@ class StringMethodTests(unittest.TestCase):
     def test_str_upper(self):
         """Check matches the python string upper method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             str1 = str(example1)
             self.assertEqual(str(example1.upper()), str1.upper())
 
     def test_str_upper(self):
         """Check matches the python string lower method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             str1 = str(example1)
             self.assertEqual(str(example1.lower()), str1.lower())
 
@@ -299,11 +301,11 @@ class StringMethodTests(unittest.TestCase):
                         if step == 0:
                             try:
                                 print example1[i:j:step]
-                                self._assert(False) #Should fail!
+                                self._assert(False)  # Should fail!
                             except ValueError:
                                 pass
                         else:
-                            self.assertEqual(str(example1[i:j:step]), \
+                            self.assertEqual(str(example1[i:j:step]),
                                              str1[i:j:step])
 
     def test_tostring(self):
@@ -315,7 +317,8 @@ class StringMethodTests(unittest.TestCase):
     def test_tomutable(self):
         """Check obj.tomutable() method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             mut = example1.tomutable()
             self.assertTrue(isinstance(mut, MutableSeq))
             self.assertEqual(str(mut), str(example1))
@@ -337,7 +340,8 @@ class StringMethodTests(unittest.TestCase):
         """Check obj.complement() method."""
         mapping = ""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             try :
                 comp = example1.complement()
             except ValueError, e:
@@ -359,12 +363,13 @@ class StringMethodTests(unittest.TestCase):
                 raise ValueError(example1)
             self.assertEqual(str1.translate(mapping), str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
-                
+
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
         mapping = ""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             try :
                 comp = example1.reverse_complement()
             except ValueError, e:
@@ -391,41 +396,49 @@ class StringMethodTests(unittest.TestCase):
             """Check obj.transcribe() method."""
             mapping = ""
             for example1 in self._examples:
-                if isinstance(example1, MutableSeq) : continue
+                if isinstance(example1, MutableSeq):
+                    continue
                 try :
                     tran = example1.transcribe()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be transcribed!" : continue
-                    if str(e) == "RNA cannot be transcribed!" : continue
+                    if str(e) == "Proteins cannot be transcribed!":
+                        continue
+                    if str(e) == "RNA cannot be transcribed!":
+                        continue
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
-                self.assertEqual(tran.alphabet, generic_rna) #based on limited examples             
+                self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
 
     def test_the_back_transcription(self):
             """Check obj.back_transcribe() method."""
             mapping = ""
             for example1 in self._examples:
-                if isinstance(example1, MutableSeq) : continue
+                if isinstance(example1, MutableSeq):
+                    continue
                 try :
                     tran = example1.back_transcribe()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be back transcribed!" : continue
-                    if str(e) == "DNA cannot be back transcribed!" : continue
+                    if str(e) == "Proteins cannot be back transcribed!":
+                        continue
+                    if str(e) == "DNA cannot be back transcribed!":
+                        continue
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
-                self.assertEqual(tran.alphabet, generic_dna) #based on limited examples             
+                self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
 
     def test_the_translate(self):
             """Check obj.translate() method."""
             mapping = ""
             for example1 in self._examples:
-                if isinstance(example1, MutableSeq) : continue
+                if isinstance(example1, MutableSeq):
+                    continue
                 try :
                     tran = example1.translate()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be translated!" : continue
+                    if str(e) == "Proteins cannot be translated!":
+                        continue
                     raise e
                 #This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:
@@ -475,7 +488,6 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(Seq("tan").translate()), "X")
         self.assertEqual(str(Seq("nnn").translate()), "X")
 
-
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
@@ -497,16 +509,16 @@ class StringMethodTests(unittest.TestCase):
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
-                        values = set([str(Seq(a+b+c).translate()) \
-                                      for a in ambig_values[c1] \
-                                      for b in ambig_values[c2] \
+                        values = set([str(Seq(a+b+c).translate())
+                                      for a in ambig_values[c1]
+                                      for b in ambig_values[c2]
                                       for c in ambig_values[c3]])
                         t = str(Seq(c1+c2+c3).translate())
                         if t=="*":
                             self.assertEqual(values, set("*"))
                         elif t=="X":
-                            self.assertTrue(len(values) > 1, \
-                                "translate('%s') = '%s' not '%s'" \
+                            self.assertTrue(len(values) > 1,
+                                "translate('%s') = '%s' not '%s'"
                                 % (c1+c2+c3, t, ",".join(values)))
                         elif t=="Z":
                             self.assertEqual(values, set("EQ"))

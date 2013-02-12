@@ -186,8 +186,38 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             _insdc_feature_position_string(location.end)
 
 
+def _insdc_location_string(location, rec_length):
+    """Build a GenBank/EMBL location from a (Compound) FeatureLocation (PRIVATE).
+
+    There is a choice of how to show joins on the reverse complement strand,
+    GenBank used "complement(join(1,10),(20,100))" while EMBL used to use
+    "join(complement(20,100),complement(1,10))" instead (but appears to have
+    now adopted the GenBank convention). Notice that the order of the entries
+    is reversed! This function therefore uses the first form. In this situation
+    we expect the CompoundFeatureLocation and its parts to all be marked as
+    strand == -1, and to be in the order 19:100 then 0:10.
+    """
+    try:
+        parts = location.parts
+        #CompoundFeatureLocation
+        if location.strand == -1:
+            #Special case, put complement outside the join/order/... and reverse order
+            return "complement(%s(%s))" % (location.operator,
+                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length) \
+                            for p in parts[::-1]))
+        else:
+            return "%s(%s)" % (location.operator,
+                   ",".join(_insdc_location_string(p, rec_length) for p in parts))
+    except AttributeError:
+        #Simple FeatureLocation
+        loc = _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
+        if location.strand == -1:
+            return "complement(%s)" % loc
+        else:
+            return loc
+
 def _insdc_feature_location_string(feature, rec_length):
-    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE).
+    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE, OBSOLETE).
 
     There is a choice of how to show joins on the reverse complement strand,
     GenBank used "complement(join(1,10),(20,100))" while EMBL used to use
@@ -203,12 +233,12 @@ def _insdc_feature_location_string(feature, rec_length):
     which is further complicated by a splice:
     join(complement(69611..69724),139856..140087,140625..140650)
 
-    For mixed this mixed strand feature, the parent SeqFeature should have
+    For this mixed strand feature, the parent SeqFeature should have
     no strand (either 0 or None) while the child features should have either
     strand +1 or -1 as appropriate, and be listed in the order given here.
     """
-
-    if not feature.sub_features:
+    #Using private variable to avoid deprecation warning
+    if not feature._sub_features:
         #Non-recursive.
         #assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
@@ -220,14 +250,14 @@ def _insdc_feature_location_string(feature, rec_length):
         return location
     # As noted above, treat reverse complement strand features carefully:
     if feature.strand == -1:
-        for f in feature.sub_features:
+        for f in feature._sub_features:
             if f.strand != -1:
                 raise ValueError("Inconsistent strands: %r for parent, %r for child"
                                  % (feature.strand, f.strand))
         return "complement(%s(%s))" \
                % (feature.location_operator,
                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f.location, rec_length)
-                           for f in feature.sub_features))
+                           for f in feature._sub_features))
     #if feature.strand == +1:
     #    for f in feature.sub_features:
     #        assert f.strand == +1
@@ -235,7 +265,7 @@ def _insdc_feature_location_string(feature, rec_length):
     assert feature.location_operator != ""
     return  "%s(%s)" % (feature.location_operator,
                         ",".join([_insdc_feature_location_string(f, rec_length)
-                                  for f in feature.sub_features]))
+                                  for f in feature._sub_features]))
 
 
 class _InsdcWriter(SequentialSequenceWriter):
@@ -303,10 +333,10 @@ class _InsdcWriter(SequentialSequenceWriter):
     def _write_feature(self, feature, record_length):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
-        location = _insdc_feature_location_string(feature, record_length)
-        f_type = feature.type.replace(" ", "_")
+        location = _insdc_location_string(feature.location, record_length)
+        f_type = feature.type.replace(" ","_")
         line = (self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT] \
-            + self._wrap_location(location) + "\n"
+               + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
         for key, values in feature.qualifiers.iteritems():
@@ -317,7 +347,7 @@ class _InsdcWriter(SequentialSequenceWriter):
                 #String, int, etc
                 self._write_feature_qualifier(key, values)
             else:
-                #e.g. a /psuedo entry
+                #e.g. a /pseudo entry
                 self._write_feature_qualifier(key)
 
     def _get_annotation_str(self, record, key, default=".", just_first=False):
@@ -374,7 +404,6 @@ class _InsdcWriter(SequentialSequenceWriter):
         if isinstance(contig, list) or isinstance(contig, tuple):
             contig = "".join(contig)
         contig = self.clean(contig)
-        i = 0
         answer = []
         while contig:
             if len(contig) > max_len:
@@ -398,12 +427,14 @@ class GenBankWriter(_InsdcWriter):
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             import warnings
-            warnings.warn("Annotation %r too long for %s line" % (text, tag))
+            from Bio import BiopythonWarning
+            warnings.warn("Annotation %r too long for %r line" % (text, tag),
+                          BiopythonWarning)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
                                       text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
-        """Used in the the 'header' of each GenBank record."""
+        """Used in the 'header' of each GenBank record."""
         #TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)

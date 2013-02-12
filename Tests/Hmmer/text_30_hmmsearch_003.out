@@ -1,0 +1,88 @@
+# hmmsearch :: search profile(s) against a sequence database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query HMM file:                  h01.hmm
+# target sequence database:        /home/bow/db/hmmer/uniprot_sprot.fasta
+# output directed to file:         hmmer_cases/text_hmmsearch_spc_noali.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmsearch_spc_noali.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmsearch_spc_noali.out
+# show alignments in output:       no
+# sequence reporting threshold:    score >= 480
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       Pkinase  [M=260]
+Accession:   PF00069.17
+Description: Protein kinase domain
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence              Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------              -----------
+   8.4e-147  492.3   0.0    1.1e-72  249.3   0.0    2.1  2  sp|Q9WUT3|KS6A2_MOUSE Ribosomal protein S6 kinase alpha-2 OS
+   2.7e-146  490.7   0.0    8.7e-73  249.7   0.0    2.1  2  sp|Q63531|KS6A1_RAT   Ribosomal protein S6 kinase alpha-1 OS
+   2.2e-145  487.7   0.0    4.6e-72  247.4   0.0    2.1  2  sp|Q15418|KS6A1_HUMAN Ribosomal protein S6 kinase alpha-1 OS
+   2.5e-145  487.5   0.0    7.5e-72  246.7   0.0    2.1  2  sp|P18652|KS6AA_CHICK Ribosomal protein S6 kinase 2 alpha OS
+   2.4e-144  484.2   0.0    2.4e-70  241.7   0.0    2.1  2  sp|Q15349|KS6A2_HUMAN Ribosomal protein S6 kinase alpha-2 OS
+     5e-144  483.2   0.0    3.9e-70  241.0   0.0    2.2  2  sp|P51812|KS6A3_HUMAN Ribosomal protein S6 kinase alpha-3 OS
+     5e-144  483.2   0.0    3.9e-70  241.0   0.0    2.2  2  sp|P18654|KS6A3_MOUSE Ribosomal protein S6 kinase alpha-3 OS
+
+
+Domain annotation for each sequence:
+>> sp|Q9WUT3|KS6A2_MOUSE  Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  241.2   0.0   4.6e-75   3.5e-70       1     260 []      59     318 ..      59     318 .. 0.95
+   2 !  249.3   0.0   1.5e-77   1.1e-72       1     260 []     415     672 ..     415     672 .. 0.97
+
+>> sp|Q63531|KS6A1_RAT  Ribosomal protein S6 kinase alpha-1 OS=Rattus norvegicus GN=Rps6ka1 PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  239.2   0.0   1.9e-74   1.4e-69       1     258 [.      62     319 ..      62     321 .. 0.94
+   2 !  249.7   0.0   1.1e-77   8.7e-73       2     260 .]     419     675 ..     418     675 .. 0.97
+
+>> sp|Q15418|KS6A1_HUMAN  Ribosomal protein S6 kinase alpha-1 OS=Homo sapiens GN=RPS6KA1 PE=1 SV=2
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  238.6   0.0   2.9e-74   2.2e-69       1     258 [.      62     319 ..      62     321 .. 0.94
+   2 !  247.4   0.0     6e-77   4.6e-72       1     260 []     418     675 ..     418     675 .. 0.97
+
+>> sp|P18652|KS6AA_CHICK  Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  239.0   0.0   2.1e-74   1.6e-69       1     259 [.      80     338 ..      80     339 .. 0.95
+   2 !  246.7   0.0   9.8e-77   7.5e-72       1     260 []     435     692 ..     435     692 .. 0.97
+
+>> sp|Q15349|KS6A2_HUMAN  Ribosomal protein S6 kinase alpha-2 OS=Homo sapiens GN=RPS6KA2 PE=1 SV=2
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  241.7   0.0   3.2e-75   2.4e-70       1     260 []      59     318 ..      59     318 .. 0.95
+   2 !  240.7   0.0   6.4e-75   4.9e-70       1     260 []     415     672 ..     415     672 .. 0.97
+
+>> sp|P51812|KS6A3_HUMAN  Ribosomal protein S6 kinase alpha-3 OS=Homo sapiens GN=RPS6KA3 PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  240.3   0.0   8.7e-75   6.6e-70       1     260 []      68     327 ..      68     327 .. 0.95
+   2 !  241.0   0.0   5.1e-75   3.9e-70       1     260 []     422     679 ..     422     679 .. 0.97
+
+>> sp|P18654|KS6A3_MOUSE  Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  240.3   0.0   8.7e-75   6.6e-70       1     260 []      68     327 ..      68     327 .. 0.95
+   2 !  241.0   0.0   5.1e-75   3.9e-70       1     260 []     422     679 ..     422     679 .. 0.97
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (260 nodes)
+Target sequences:                     535698  (190107059 residues)
+Passed MSV filter:                     21115  (0.0394159); expected 10714.0 (0.02)
+Passed bias filter:                    15859  (0.0296044); expected 10714.0 (0.02)
+Passed Vit filter:                      4968  (0.00927388); expected 535.7 (0.001)
+Passed Fwd filter:                      3953  (0.00737916); expected 5.4 (1e-05)
+Initial search space (Z):             535698  [actual number of targets]
+Domain search space  (domZ):               7  [number of targets reported over threshold]
+# CPU time: 39.12u 0.35s 00:00:39.47 Elapsed: 00:00:10.79
+# Mc/sec: 4580.89
+//

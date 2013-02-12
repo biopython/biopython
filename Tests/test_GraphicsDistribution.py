@@ -19,7 +19,7 @@ try:
     import reportlab as r
     del r
 except:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
 # local stuff
@@ -39,6 +39,7 @@ def random_distribution(min = -5.0, max = 5.0, total_items = 50):
 
     return all_info
 
+
 class BarChartTest(unittest.TestCase):
     """Test display of BarChart distributions on a page.
     """
@@ -47,7 +48,7 @@ class BarChartTest(unittest.TestCase):
         self.multi_page = os.path.join(os.getcwd(), "Graphics", "multi_bar.pdf")
 
         self.num_multi = 5
-    
+
     def test_simple_page(self):
         """Test displaying a page with single distribution.
         """
@@ -67,7 +68,7 @@ class BarChartTest(unittest.TestCase):
         dist_page = DistributionPage()
 
         dist_page.number_of_columns = 3
-        
+
         for multi in range(self.num_multi):
             dist_info = []
             new_info = random_distribution()

@@ -12,6 +12,7 @@ test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
 test_KEGG_Compound_files = ["compound.sample", "compound.irregular"]
 test_KEGG_Map_files      = ["map00950.rea"]
 
+
 def t_KEGG_Enzyme(testfiles):
     """Tests Bio.KEGG.Enzyme functionality."""
     for file in testfiles:
@@ -23,6 +24,7 @@ def t_KEGG_Enzyme(testfiles):
         print "\n"
         fh.close()
 
+
 def t_KEGG_Compound(testfiles):
     """Tests Bio.KEGG.Compound functionality."""
     for file in testfiles:
@@ -33,6 +35,7 @@ def t_KEGG_Compound(testfiles):
             print record
         print "\n"
         fh.close()
+
 
 def t_KEGG_Map(testfiles):
     """Tests Bio.KEGG.Map functionality."""

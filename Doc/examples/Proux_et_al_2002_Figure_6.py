@@ -36,12 +36,12 @@ records = dict((rec.name, rec) for rec in [A_rec, B_rec, C_rec])
 #or some other classification:
 
 A_colors = [red]*5 + [grey]*7 + [orange]*2 + [grey]*2 + [orange] + [grey]*11 + [green]*4 \
-         + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
-         + [grey, lightblue] + [purple]*2 + [grey]
+            + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
+            + [grey, lightblue] + [purple]*2 + [grey]
 B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [green]*5 \
-         + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
+            + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
 C_colors = [grey]*30 + [green]*5 + [brown]*4 + [blue]*2 + [grey, blue] + [lightblue]*2 \
-         + [grey]*5
+            + [grey]*5
 
 #Here we hard code a list of cross-links with percentage identity scores, based
 #on a manual inspection of the target image (there could be mistakes here).
@@ -74,17 +74,17 @@ A_vs_B = [
     (19, "Tuc2009_46", "orf52"),
     (77, "Tuc2009_48", "orf54"),
     (91, "Tuc2009_49", "orf55"),
-    (95, "Tuc2009_52", "orf60"), 
+    (95, "Tuc2009_52", "orf60"),
 ]
 
-#bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)  
+#bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
 B_vs_C = [
     (42, "orf39", "lin2581"),
     (31, "orf40", "lin2580"),
-    (49, "orf41", "lin2579"), #terL
-    (54, "orf42", "lin2578"), #portal
-    (55, "orf43", "lin2577"), #protease
-    (33, "orf44", "lin2576"), #mhp
+    (49, "orf41", "lin2579"),  # terL
+    (54, "orf42", "lin2578"),  # portal
+    (55, "orf43", "lin2577"),  # protease
+    (33, "orf44", "lin2576"),  # mhp
     (51, "orf46", "lin2575"),
     (33, "orf47", "lin2574"),
     (40, "orf48", "lin2573"),
@@ -96,6 +96,7 @@ B_vs_C = [
     (28, "orf54", "lin2566"),
 ]
 
+
 def get_feature(features, id, tags=["locus_tag", "gene"]):
     """Search list of SeqFeature objects for an identifier under the given tags."""
     for f in features:
@@ -103,7 +104,7 @@ def get_feature(features, id, tags=["locus_tag", "gene"]):
             #tag may not be present in this feature
             for x in f.qualifiers.get(key, []):
                 if x == id:
-                     return f
+                    return f
     raise KeyError(id)
 
 gd_diagram = GenomeDiagram.Diagram(name)
@@ -136,7 +137,7 @@ for X, Y, X_vs_Y in [("NC_002703", "AF323668", A_vs_B),
         F_x = set_X.add_feature(SeqFeature(FeatureLocation(f_x.location.start, f_x.location.end, strand=0)),
                                 color=color, border=border)
         f_y = get_feature(features_Y, y)
-        F_y = set_Y.add_feature(SeqFeature(FeatureLocation(f_y.location.start,f_y.location.end, strand=0)),
+        F_y = set_Y.add_feature(SeqFeature(FeatureLocation(f_y.location.start, f_y.location.end, strand=0)),
                                 color=color, border=border)
         gd_diagram.cross_track_links.append(CrossLink(F_x, F_y, color, border))
 
@@ -151,10 +152,10 @@ for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_col
             continue
         gd_feature_set.add_feature(feature, sigil="BIGARROW",
                                    color=gene_colors[i], label=True,
-                                   name = str(i+1),
+                                   name=str(i+1),
                                    label_position="start",
-                                   label_size = 6, label_angle=0)
-        i+=1
+                                   label_size=6, label_angle=0)
+        i += 1
 
 gd_diagram.draw(format="linear", pagesize='A4', fragments=1,
                 start=0, end=max_len)

@@ -5,6 +5,7 @@
 # as part of this package.
 """Approximate calculation of appropriate thresholds for motif finding
 """
+import math,random
 
 class ScoreDistribution(object):
     """ Class representing approximate score distribution for a given motif.

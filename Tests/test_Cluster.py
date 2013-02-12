@@ -16,8 +16,9 @@ try:
     import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(\
+    raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Cluster")
+
 
 class TestCluster(unittest.TestCase):
 
@@ -44,7 +45,6 @@ class TestCluster(unittest.TestCase):
         data = [ 100, 19, 3, 1.5, 1.4, 1, 1, 1]
         self.assertAlmostEqual(mean(data), 15.988, places=3)
         self.assertAlmostEqual(median(data), 1.45, places=3)
-      
 
     def test_matrix_parse(self):
         if TestCluster.module=='Bio.Cluster':
@@ -66,26 +66,26 @@ class TestCluster(unittest.TestCase):
                              [ 5.1, 5.5 ],
                              [ 5.0, 5.5 ],
                              [ 5.1, 5.2 ]])
-      
+
         # Another normal matrix, no errors; written as a list
-        data2 =  [[  1.1, 2.2, 3.3, 4.4, 5.5 ], 
-                  [  3.1, 3.2, 1.3, 2.4, 1.5 ], 
-                  [  4.1, 2.2, 0.3, 5.4, 0.5 ], 
+        data2 = [ [  1.1, 2.2, 3.3, 4.4, 5.5 ],
+                  [  3.1, 3.2, 1.3, 2.4, 1.5 ],
+                  [  4.1, 2.2, 0.3, 5.4, 0.5 ],
                   [ 12.1, 2.0, 0.0, 5.0, 0.0 ]]
-      
+
         # Ragged matrix
-        data3 =  [[ 91.1, 92.2, 93.3, 94.4, 95.5], 
-                  [ 93.1, 93.2, 91.3, 92.4 ], 
-                  [ 94.1, 92.2, 90.3 ], 
+        data3 = [ [ 91.1, 92.2, 93.3, 94.4, 95.5],
+                  [ 93.1, 93.2, 91.3, 92.4 ],
+                  [ 94.1, 92.2, 90.3 ],
                   [ 12.1, 92.0, 90.0, 95.0, 90.0 ]]
-      
+
         # Matrix with bad cells
-        data4 =  [ [ 7.1, 7.2, 7.3, 7.4, 7.5, ],
-                   [ 7.1, 7.2, 7.3, 7.4, 'snoopy' ], 
-                   [ 7.1, 7.2, 7.3, None, None]] 
+        data4 = [  [ 7.1, 7.2, 7.3, 7.4, 7.5, ],
+                   [ 7.1, 7.2, 7.3, 7.4, 'snoopy' ],
+                   [ 7.1, 7.2, 7.3, None, None]]
 
         # Matrix with a bad row
-        data5 =  [ [ 23.1, 23.2, 23.3, 23.4, 23.5], 
+        data5 = [  [ 23.1, 23.2, 23.3, 23.4, 23.5],
                    None,
                    [ 23.1, 23.0, 23.0, 23.0, 23.0]]
 
@@ -94,7 +94,7 @@ class TestCluster(unittest.TestCase):
         data7 = {'a': [[2.3,1.2],[3.3,5.6]]}
         data8 = []
         data9 = [None]
-      
+
         try:
             treecluster(data1)
         except:
@@ -122,15 +122,15 @@ class TestCluster(unittest.TestCase):
         nclusters = 3
         # First data set
         weight = numpy.array([1,1,1,1,1])
-        data   = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                              [ 3.1, 3.2, 1.3, 2.4, 1.5], 
-                              [ 4.1, 2.2, 0.3, 5.4, 0.5], 
-                              [12.1, 2.0, 0.0, 5.0, 0.0]]) 
-        mask =  numpy.array([[ 1, 1, 1, 1, 1], 
-                             [ 1, 1, 1, 1, 1], 
-                             [ 1, 1, 1, 1, 1], 
-                             [ 1, 1, 1, 1, 1]], int) 
-      
+        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
+                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
+                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
+                            [12.1, 2.0, 0.0, 5.0, 0.0]])
+        mask = numpy.array([[ 1, 1, 1, 1, 1],
+                             [ 1, 1, 1, 1, 1],
+                             [ 1, 1, 1, 1, 1],
+                             [ 1, 1, 1, 1, 1]], int)
+
         clusterid, error, nfound = kcluster(data, nclusters=nclusters,
                                             mask=mask, weight=weight,
                                             transpose=0, npass=100,
@@ -141,7 +141,7 @@ class TestCluster(unittest.TestCase):
         mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
         for i in range(len(clusterid)):
             self.assertEqual(clusterid[i], mapping[correct[i]])
-      
+
         # Second data set
         weight = numpy.array([1,1])
         data = numpy.array([[ 1.1, 1.2 ],
@@ -189,14 +189,14 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = numpy.array([ 1,1,1,1,1 ])
-        data   = numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5, ], 
-                              [  3.1, 3.2, 1.3, 2.4, 1.5, ], 
-                              [  4.1, 2.2, 0.3, 5.4, 0.5, ], 
-                              [ 12.1, 2.0, 0.0, 5.0, 0.0, ]])
-        mask   = numpy.array([[ 1, 1, 1, 1, 1], 
-                              [ 1, 1, 1, 1, 1], 
-                              [ 1, 1, 1, 1, 1], 
-                              [ 1, 1, 1, 1, 1]], int)
+        data = numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5, ],
+                            [  3.1, 3.2, 1.3, 2.4, 1.5, ],
+                            [  4.1, 2.2, 0.3, 5.4, 0.5, ],
+                            [ 12.1, 2.0, 0.0, 5.0, 0.0, ]])
+        mask = numpy.array([[ 1, 1, 1, 1, 1],
+                            [ 1, 1, 1, 1, 1],
+                            [ 1, 1, 1, 1, 1],
+                            [ 1, 1, 1, 1, 1]], int)
 
         # Cluster assignments
         c1 = [0]
@@ -205,20 +205,20 @@ class TestCluster(unittest.TestCase):
 
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c2, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 6.650, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 32.508, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c2, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 15.118, places=3)
 
         # Second data set
-        weight =  numpy.array([ 1,1 ])
-        data   =  numpy.array([[ 1.1, 1.2 ],
+        weight = numpy.array([ 1,1 ])
+        data = numpy.array([[ 1.1, 1.2 ],
                          [ 1.4, 1.3 ],
                          [ 1.1, 1.5 ],
                          [ 2.0, 1.5 ],
@@ -252,17 +252,16 @@ class TestCluster(unittest.TestCase):
 
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c2, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 5.833, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 3.298, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c2, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 0.360, places=3)
-
 
     def test_treecluster(self):
         if TestCluster.module=='Bio.Cluster':
@@ -271,16 +270,16 @@ class TestCluster(unittest.TestCase):
             from Pycluster import treecluster
 
         # First data set
-        weight1 =  [ 1,1,1,1,1 ]
-        data1   =  numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5], 
-                                [  3.1, 3.2, 1.3, 2.4, 1.5], 
-                                [  4.1, 2.2, 0.3, 5.4, 0.5], 
+        weight1 = [ 1,1,1,1,1 ]
+        data1 = numpy.array([   [  1.1, 2.2, 3.3, 4.4, 5.5],
+                                [  3.1, 3.2, 1.3, 2.4, 1.5],
+                                [  4.1, 2.2, 0.3, 5.4, 0.5],
                                 [ 12.1, 2.0, 0.0, 5.0, 0.0]])
-        mask1 = numpy.array([[ 1, 1, 1, 1, 1], 
-                             [ 1, 1, 1, 1, 1], 
-                             [ 1, 1, 1, 1, 1], 
+        mask1 = numpy.array([[ 1, 1, 1, 1, 1],
+                             [ 1, 1, 1, 1, 1],
+                             [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1]], int)
-      
+
         # test first data set
         # Pairwise average-linkage clustering"
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
@@ -337,9 +336,9 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(tree[2].left, 3)
         self.assertEqual(tree[2].right, -2)
         self.assertAlmostEqual(tree[2].distance, 32.508, places=3)
-      
+
         # Second data set
-        weight2 =  [ 1,1 ]
+        weight2 = [ 1,1 ]
         data2 = numpy.array([[ 0.8223, 0.9295 ],
                              [ 1.4365, 1.3223 ],
                              [ 1.1623, 1.5364 ],
@@ -366,7 +365,7 @@ class TestCluster(unittest.TestCase):
                              [ 1, 1 ],
                              [ 1, 1 ],
                              [ 1, 1 ]], int)
-      
+
         # Test second data set
         # Pairwise average-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
@@ -408,7 +407,7 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(tree[11].left, -11)
         self.assertEqual(tree[11].right, -10)
         self.assertAlmostEqual(tree[11].distance, 12.741, places=3)
-      
+
         # Pairwise single-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='s', dist='e')
@@ -449,7 +448,7 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(tree[11].left, 6)
         self.assertEqual(tree[11].right, -11)
         self.assertAlmostEqual(tree[11].distance, 3.535, places=3)
-      
+
         # Pairwise centroid-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='c', dist='e')
@@ -490,7 +489,7 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(tree[11].left, -10)
         self.assertEqual(tree[11].right, -11)
         self.assertAlmostEqual(tree[11].distance, 11.536, places=3)
-      
+
         # Pairwise maximum-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='m', dist='e')
@@ -540,13 +539,13 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = [ 1,1,1,1,1 ]
-        data = numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5], 
-                            [  3.1, 3.2, 1.3, 2.4, 1.5], 
-                            [  4.1, 2.2, 0.3, 5.4, 0.5], 
+        data = numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5],
+                            [  3.1, 3.2, 1.3, 2.4, 1.5],
+                            [  4.1, 2.2, 0.3, 5.4, 0.5],
                             [ 12.1, 2.0, 0.0, 5.0, 0.0]])
-        mask = numpy.array([[ 1, 1, 1, 1, 1], 
-                            [ 1, 1, 1, 1, 1], 
-                            [ 1, 1, 1, 1, 1], 
+        mask = numpy.array([[ 1, 1, 1, 1, 1],
+                            [ 1, 1, 1, 1, 1],
+                            [ 1, 1, 1, 1, 1],
                             [ 1, 1, 1, 1, 1]], int)
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight,
@@ -556,7 +555,7 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(len(clusterid[0]), 2)
 
         # Second data set
-        weight =  [ 1,1 ]
+        weight = [ 1,1 ]
         data = numpy.array([[ 1.1, 1.2 ],
                             [ 1.4, 1.3 ],
                             [ 1.1, 1.5 ],
@@ -693,7 +692,7 @@ class TestCluster(unittest.TestCase):
                             [ 5.1, 5.2 ],
                            ])
 
-        mean, coordinates, pc, eigenvalues =  pca(data)
+        mean, coordinates, pc, eigenvalues = pca(data)
         self.assertAlmostEqual(mean[0], 3.5461538461538464)
         self.assertAlmostEqual(mean[1], 3.5307692307692311)
         self.assertAlmostEqual(coordinates[0,0],  2.0323189722653883)
@@ -733,7 +732,7 @@ class TestCluster(unittest.TestCase):
                             [ 1.3, 6.5, 2.2, 5.7, 6.2, 9.1],
                             [ 3.2, 7.2, 3.2, 7.4, 7.3, 8.9],
                             [ 4.2, 5.2, 9.2, 4.4, 6.3, 7.2]])
-        mean, coordinates, pc, eigenvalues =  pca(data)
+        mean, coordinates, pc, eigenvalues = pca(data)
         self.assertAlmostEqual(mean[0], 2.7500)
         self.assertAlmostEqual(mean[1], 5.8500)
         self.assertAlmostEqual(mean[2], 3.9500)

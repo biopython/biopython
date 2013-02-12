@@ -45,6 +45,7 @@ test_data = """
   Region #:     2
   XY Location:  2434_1658"""
 
+
 class TestUAN(unittest.TestCase):
     def setUp(self):
         self.records = [record for record in SeqIO.parse('Roche/E3MFGYR02_random_10_reads.sff', 'sff')]
@@ -63,12 +64,15 @@ class TestUAN(unittest.TestCase):
             elif 'XY' in line:
                 x, y = map(int, fields[-1].split('_'))
                 self.test_annotations[current_name]["coords"] = (x, y)
+
     def test_time(self):
         for record in self.records:
             self.assertEqual(record.annotations["time"], self.test_annotations[record.name]["time"])
+
     def test_region(self):
         for record in self.records:
             self.assertEqual(record.annotations["region"], self.test_annotations[record.name]["region"])
+
     def test_coords(self):
         for record in self.records:
             self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])

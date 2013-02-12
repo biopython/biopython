@@ -12,8 +12,8 @@ import optparse
 from Bio.Restriction._Update.RestrictionCompiler import DictionaryBuilder
 
 
-def standalone() :
-    parser = optparse.OptionParser() 
+def standalone():
+    parser = optparse.OptionParser()
     add = parser.add_option
 
     add('-i', '--install',
@@ -37,12 +37,12 @@ def standalone() :
     options, args = parser.parse_args()
     return options, args
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     options, args = standalone()
     Builder = DictionaryBuilder(options.rebase_password, options.ftp_proxy)
     Builder.build_dict()
-    if options.i :
+    if options.i:
         Builder.install_dict()
-    else :
+    else:
         Builder.no_install()
     sys.exit()

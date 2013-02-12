@@ -1,0 +1,27 @@
+# TBLASTN 2.2.26+
+# Query: random_s00
+# Database: db/minirefseq_mrna
+# 0 hits found
+# TBLASTN 2.2.26+
+# Query: gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+# Database: db/minirefseq_mrna
+# Fields: evalue, bit score, query id, subject id
+# 3 hits found
+1e-05	34.7	gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|
+1e-04	31.6	gi|16080617|ref|NP_391444.1|	gi|72012412|ref|XM_777959.1|
+1e-04	31.6	gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|
+# TBLASTN 2.2.26+
+# Query: gi|11464971:4-101 pleckstrin [Mus musculus]
+# Database: db/minirefseq_mrna
+# Fields: evalue, bit score, query id, subject id
+# 9 hits found
+2e-67	 199	gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|
+4e-05	32.7	gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|
+2e-67	 202	gi|11464971:4-101	gi|301779869|ref|XM_002925302.1|
+3e-09	45.1	gi|11464971:4-101	gi|301779869|ref|XM_002925302.1|
+4e-67	 202	gi|11464971:4-101	gi|296223671|ref|XM_002757683.1|
+3e-09	45.1	gi|11464971:4-101	gi|296223671|ref|XM_002757683.1|
+2e-66	 202	gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|
+1e-09	46.6	gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|
+1.7	19.6	gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|
+# BLAST processed 3 queries

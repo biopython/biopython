@@ -13,6 +13,7 @@ from Bio.PopGen.Async import Async
 
 import thread
 
+
 class Local(Async):
     '''Execution on Local machine.
     '''
@@ -63,4 +64,3 @@ class Local(Async):
             self.done[id] = ret_code, output_files
         self.cores_used -= 1
         self.access_ds.release()
-  

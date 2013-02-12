@@ -8,6 +8,7 @@ check.
 # standard library
 import random
 
+
 class AmbiguousRepair(object):
     """Perform repair to reduce the number of Ambiguous genes in a genome.
 
@@ -39,7 +40,7 @@ class AmbiguousRepair(object):
         """Perform a repair to remove excess ambiguous genes.
         """
         new_org = organism.copy()
-        
+
         # start getting rid of ambiguous items
         while 1:
             # first find all of the ambigous items
@@ -56,4 +57,3 @@ class AmbiguousRepair(object):
             new_org.genome[to_change] = new_gene
 
         return new_org
-            

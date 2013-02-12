@@ -1,6 +1,7 @@
 """Base selection class from which all Selectors should derive.
 """
 
+
 class AbstractSelection(object):
     """Base class for Selector classes.
 
@@ -38,7 +39,7 @@ class AbstractSelection(object):
 
         If a repair class is available, then the rearranged genomes will
         be repaired to make them feasible.
-        
+
         The newly created individuals are returned.
         """
         # first crossover the two organisms

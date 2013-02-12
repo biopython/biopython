@@ -23,6 +23,7 @@ Functions:
 """
 from Bio.PopGen.GenePop import get_indiv
 
+
 def read(fname):
     """Parses a file containing a GenePop file.
 
@@ -62,9 +63,9 @@ class FileRecord(object):
 
     """
     def __init__(self, fname):
-        self.comment_line    = ""
-        self.loci_list       = []
-        self.fname           = fname
+        self.comment_line = ""
+        self.loci_list = []
+        self.fname = fname
         self.start_read()
 
     def __str__(self):
@@ -74,7 +75,7 @@ class FileRecord(object):
            Marker length will be 3.
         """
         marker_len = 3
-        rep  = [self.comment_line + '\n']
+        rep = [self.comment_line + '\n']
         rep.append('\n'.join(self.loci_list) + '\n')
         current_pop = self.current_pop
         current_ind = self.current_ind
@@ -84,9 +85,9 @@ class FileRecord(object):
         more = True
         while more:
             res = self.get_individual()
-            if res == True:
+            if res is True:
                 rep.append('Pop\n')
-            elif res == False:
+            elif res is False:
                 more = False
             else:
                 name, markers = res
@@ -95,7 +96,7 @@ class FileRecord(object):
                 for marker in markers:
                     rep.append(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<marker_len:
@@ -104,7 +105,6 @@ class FileRecord(object):
                 rep.append('\n')
         self.seek_position(current_pop, current_ind)
         return "".join(rep)
-
 
     def start_read(self):
         """Starts parsing a file containing a GenePop file.
@@ -203,7 +203,7 @@ class FileRecord(object):
                 old_rec.skip_population()
                 curr_pop += 1
             else:
-                if l_parser == True:
+                if l_parser is True:
                     curr_pop += 1
                     start_pop = True
                 else:
@@ -215,7 +215,7 @@ class FileRecord(object):
                     for marker in markers:
                         f.write(' ')
                         for al in marker:
-                            if al == None:
+                            if al is None:
                                 al = '0'
                             aStr = str(al)
                             while len(aStr)<3:
@@ -242,7 +242,7 @@ class FileRecord(object):
         l_parser = old_rec.get_individual()
         f.write("POP\n")
         while l_parser:
-            if l_parser == True:
+            if l_parser is True:
                 f.write("POP\n")
             else:
                 name, markers = l_parser
@@ -255,7 +255,7 @@ class FileRecord(object):
                     marker_pos += 1
                     f.write(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<3:
@@ -287,7 +287,7 @@ class FileRecord(object):
         l_parser = old_rec.get_individual()
         f.write("POP\n")
         while l_parser:
-            if l_parser == True:
+            if l_parser is True:
                 f.write("POP\n")
             else:
                 name, markers = l_parser
@@ -300,7 +300,7 @@ class FileRecord(object):
                     marker_pos += 1
                     f.write(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<3:
@@ -337,4 +337,3 @@ class FileRecord(object):
         self.remove_loci_by_position(positions, fname)
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
-

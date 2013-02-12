@@ -20,19 +20,19 @@ Here is an overview of the flat file format that this parser deals with:
        GENE         Gene symbol
        CYTOBAND     Cytological band
        EXPRESS      Tissues of origin for ESTs in cluster
-       RESTR_EXPR   Single tissue or development stage contributes 
+       RESTR_EXPR   Single tissue or development stage contributes
                     more than half the total EST frequency for this gene.
-       GNM_TERMINUS genomic confirmation of presence of a 3' terminus; 
-                    T if a non-templated polyA tail is found among 
+       GNM_TERMINUS genomic confirmation of presence of a 3' terminus;
+                    T if a non-templated polyA tail is found among
                     a cluster's sequences; else
                     I if templated As are found in genomic sequence or
-                    S if a canonical polyA signal is found on 
+                    S if a canonical polyA signal is found on
                       the genomic sequence
        GENE_ID      Entrez gene identifier associated with at least one
-                    sequence in this cluster; 
-                    to be used instead of LocusLink.  
+                    sequence in this cluster;
+                    to be used instead of LocusLink.
        LOCUSLINK    LocusLink identifier associated with at least one
-                    sequence in this cluster;  
+                    sequence in this cluster;
                     deprecated in favor of GENE_ID
        HOMOL        Homology;
        CHROMOSOME   Chromosome.  For plants, CHROMOSOME refers to mapping
@@ -60,7 +60,7 @@ Here is an overview of the flat file format that this parser deals with:
                          non-ESTs)
             CLONE=       Clone identifier (used for ESTs only)
             END=         End (5'/3') of clone insert read (used for
-                         ESTs only) 
+                         ESTs only)
             LID=         Library ID; see Hs.lib.info for library name
                          and tissue
             MGC=         5' CDS-completeness indicator; if present, the
@@ -70,7 +70,7 @@ Here is an overview of the flat file format that this parser deals with:
                          otherwise the value is an indicator of the
                          reliability of the test indicating CDS
                          completeness; higher values indicate more
-                         reliable CDS-completeness predictions. 
+                         reliable CDS-completeness predictions.
            SEQTYPE=      Description of the nucleotide sequence.
                          Possible values are mRNA, EST and HTC.
            TRACE=        The Trace ID of the EST sequence, as provided by
@@ -88,22 +88,22 @@ class SequenceLine(object):
     NID=         Unique nucleotide sequence identifier (gi)
     PID=         Unique protein sequence identifier (used for non-ESTs)
     CLONE=       Clone identifier (used for ESTs only)
-    END=         End (5'/3') of clone insert read (used for ESTs only) 
+    END=         End (5'/3') of clone insert read (used for ESTs only)
     LID=         Library ID; see Hs.lib.info for library name and tissue
-    MGC=         5' CDS-completeness indicator; if present, 
-                 the clone associated with this sequence  
+    MGC=         5' CDS-completeness indicator; if present,
+                 the clone associated with this sequence
                  is believed CDS-complete. A value greater than 511
                  is the gi of the CDS-complete mRNA matched by the EST,
                  otherwise the value is an indicator of the reliability
                  of the test indicating CDS completeness;
                  higher values indicate more reliable CDS-completeness
-                 predictions. 
+                 predictions.
     SEQTYPE=     Description of the nucleotide sequence. Possible values
                  are mRNA, EST and HTC.
     TRACE=       The Trace ID of the EST sequence, as provided by NCBI
                  Trace Archive
     """
-    
+
     def __init__(self,text=None):
         self.acc = ''
         self.nid = ''
@@ -116,12 +116,12 @@ class SequenceLine(object):
         self.mgc = ''
         self.seqtype = ''
         self.trace = ''
-        if not text==None:
+        if text is not None:
             self.text=text
             self._init_from_text(text)
 
     def _init_from_text(self,text):
-        parts = text.split('; ');
+        parts = text.split('; ')
         for part in parts:
             key, val = part.split("=")
             if key=='CLONE':
@@ -132,7 +132,7 @@ class SequenceLine(object):
 
     def __repr__(self):
         return self.text
-        
+
 
 class ProtsimLine(object):
     """Store the information for one PROTSIM line from a Unigene file
@@ -153,20 +153,20 @@ class ProtsimLine(object):
         self.protid = ''
         self.pct = ''
         self.aln = ''
-        if not text==None:
+        if text is not None:
             self.text=text
             self._init_from_text(text)
 
     def _init_from_text(self,text):
-        parts = text.split('; ');
-        
+        parts = text.split('; ')
+
         for part in parts:
             key, val = part.split("=")
             setattr(self,key.lower(),val)
 
     def __repr__(self):
         return self.text
-        
+
 
 class STSLine(object):
     """Store the information for one STS line from a Unigene file
@@ -182,26 +182,26 @@ class STSLine(object):
     def __init__(self,text=None):
         self.acc = ''
         self.unists = ''
-        if not text==None:
+        if text is not None:
             self.text=text
             self._init_from_text(text)
 
     def _init_from_text(self,text):
-        parts = text.split(' ');
-        
+        parts = text.split(' ')
+
         for part in parts:
             key, val = part.split("=")
             setattr(self,key.lower(),val)
 
     def __repr__(self):
         return self.text
-        
+
 
 class Record(object):
     """Store a Unigene record
 
     Here is what is stored:
-    
+
         self.ID           = ''  # ID line
         self.species      = ''  # Hs, Bt, etc.
         self.title        = ''  # TITLE line
@@ -245,6 +245,7 @@ class Record(object):
     def __repr__(self):
         return "<%s> %s %s\n%s" % (self.__class__.__name__,
                           self.ID, self.symbol, self.title)
+
 
 def parse(handle):
     while True:

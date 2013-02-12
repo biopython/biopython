@@ -9,13 +9,14 @@ import random
 # local stuff
 from Bio.GA.Organism import Organism
 
+
 class SafeFitnessCrossover(object):
     """Perform crossovers, but do not allow decreases in organism fitness.
 
     This doesn't actually do any crossover work, but instead relies on
     another class to do the crossover and just checks that newly created
     organisms do not have less fitness. This is useful for cases where
-    crossovers can 
+    crossovers can
     """
     def __init__(self, actual_crossover, accept_less = 0.0):
         """Initialize to do safe crossovers.

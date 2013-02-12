@@ -48,8 +48,8 @@ _FRAGMENT_FILE="lib_%s_z_%s.txt"
 
 def _read_fragments(size, length, dir="."):
     """
-    Read a fragment spec file (available from 
-    U{http://csb.stanford.edu/rachel/fragments/} 
+    Read a fragment spec file (available from
+    U{http://csb.stanford.edu/rachel/fragments/}
     and return a list of Fragment objects.
 
     @param size: number of fragments in the library
@@ -298,7 +298,8 @@ class FragmentMapper(object):
         @type res: L{Residue}
         """
         import warnings
-        warnings.warn("has_key is obsolete; use 'res in object' instead", PendingDeprecationWarning)
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("has_key is deprecated; use 'res in object' instead", BiopythonDeprecationWarning)
         return (res in self)
 
     def __contains__(self, res):
@@ -328,7 +329,6 @@ if __name__=="__main__":
     m=s[0]
     fm=FragmentMapper(m, 10, 5, "levitt_data")
 
-
     for r in Selection.unfold_entities(m, "R"):
 
         print r,
@@ -336,4 +336,3 @@ if __name__=="__main__":
             print fm[r]
         else:
             print
-

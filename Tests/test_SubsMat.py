@@ -51,7 +51,7 @@ for key in keys:
     s += counts[key]
 f.write("Total sum %.2f should be 1.0\n" % (s))
 lo_mat_prot = \
-SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1) #,ftab_prot
+SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1)  # ,ftab_prot
 f.write("\nLog odds matrix\n")
 f.write("\nLog odds half matrix\n")
 # Was %.1f. Let us see if this is OK
@@ -82,4 +82,3 @@ except ImportError:
     #test into two, and have one raise MissingExternalDependencyError cheat:
     f.write("BLOSUM30 & BLOSUM90 0.88\n")
     f.write("BLOSUM90 & BLOSUM30 0.88\n")
-    

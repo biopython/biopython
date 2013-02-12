@@ -27,7 +27,7 @@ os.environ['LANG'] = 'C'
 
 exes_wanted = ["water", "needle", "seqret", "transeq", "seqmatchall",
                "embossversion"]
-exes = dict() #Dictionary mapping from names to exe locations
+exes = dict()  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
     #Windows default installation path is C:\mEMBOSS which contains the exes.
@@ -49,8 +49,9 @@ if sys.platform!="win32":
     del name
 
 if len(exes) < len(exes_wanted):
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install EMBOSS if you want to use Bio.Emboss.")
+
 
 def get_emboss_version():
     """Returns a tuple of three ints, e.g. (6,1,0)"""
@@ -62,9 +63,9 @@ def get_emboss_version():
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
-    child.stdout.close() #This is both stdout and stderr
+    child.stdout.close()  # This is both stdout and stderr
     del child
-    assert stderr is None #Send to stdout instead
+    assert stderr is None  # Send to stdout instead
     for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
             pass
@@ -79,18 +80,18 @@ def get_emboss_version():
         else:
             #Either we can't understand the output, or this is really
             #an error message not caught earlier (e.g. not in English)
-            raise MissingExternalDependencyError(\
-                "Install EMBOSS if you want to use Bio.Emboss (%s)." \
+            raise MissingExternalDependencyError(
+                "Install EMBOSS if you want to use Bio.Emboss (%s)."
                 % line)
-            
+
 #To avoid confusing known errors from old versions of EMBOSS ...
 emboss_version = get_emboss_version()
 if emboss_version < (6,1,0):
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Test requires EMBOSS 6.1.0 patch 3 or later.")
-    
 
 #################################################################
+
 
 #Top level function as this makes it easier to use for debugging:
 def emboss_convert(filename, old_format, new_format):
@@ -101,7 +102,7 @@ def emboss_convert(filename, old_format, new_format):
                               sequence = filename,
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               stdout = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -114,6 +115,7 @@ def emboss_convert(filename, old_format, new_format):
     child.stderr.close()
     return child.stdout
 
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_piped_SeqIO_convert(records, old_format, new_format):
     """Run seqret, returns records (as a generator)."""
@@ -122,7 +124,7 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     cline = SeqretCommandline(exes["seqret"],
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               filter = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -134,11 +136,12 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     SeqIO.write(records, child.stdin, old_format)
     child.stdin.close()
     child.stderr.close()
-    #TODO - Is there a nice way to return an interator AND
+    #TODO - Is there a nice way to return an iterator AND
     #automatically close the handle?
     records = list(SeqIO.parse(child.stdout, new_format))
     child.stdout.close()
     return records
+
 
 #Top level function as this makes it easier to use for debugging:
 def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
@@ -148,7 +151,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     cline = SeqretCommandline(exes["seqret"],
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               filter = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -166,8 +169,8 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
         raise
     child.stdin.close()
     child.stderr.close()
-    #TODO - Is there a nice way to return an interator AND
-    #automatically close the handle? 
+    #TODO - Is there a nice way to return an iterator AND
+    #automatically close the handle?
     try:
         aligns = list(AlignIO.parse(child.stdout, new_format))
     except Exception, err:
@@ -188,7 +191,7 @@ def compare_records(old_list, new_list):
         if old.id != new.id and old.name != new.name \
         and (old.id not in new.id) and (new.id not in old.id) \
         and (old.id.replace(" ","_") != new.id.replace(" ","_")):
-            raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
+            raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
                              % (old.id, old.name, new.id, new.name))
         if len(old.seq) != len(new.seq):
             raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
@@ -198,15 +201,16 @@ def compare_records(old_list, new_list):
             if len(old.seq) < 200:
                 raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
             else:
-                raise ValueError("'%s...%s' vs '%s...%s'" \
+                raise ValueError("'%s...%s' vs '%s...%s'"
                                  % (old.seq[:60], old.seq[-10:],
                                     new.seq[:60], new.seq[-10:]))
         if old.features and new.features \
         and len(old.features) != len(new.features):
-            raise ValueError("%i vs %i features" \
+            raise ValueError("%i vs %i features"
                              % (len(old.features, len(new.features))))
         #TODO - check annotation
     return True
+
 
 #Top level function as this makes it easier to use for debugging:
 def compare_alignments(old_list, new_list):
@@ -215,10 +219,11 @@ def compare_alignments(old_list, new_list):
         raise ValueError("%i vs %i alignments" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list):
         if len(old) != len(new):
-            raise ValueError("Alignment with %i vs %i records" \
+            raise ValueError("Alignment with %i vs %i records"
                              % (len(old), len(new)))
         compare_records(old,new)
     return True
+
 
 class SeqRetSeqIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
@@ -240,9 +245,9 @@ class SeqRetSeqIOTests(unittest.TestCase):
             try:
                 self.assertTrue(compare_records(records, new_records))
             except ValueError, err:
-                raise ValueError("Disagree on file %s %s in %s format: %s" \
+                raise ValueError("Disagree on file %s %s in %s format: %s"
                                  % (in_format, in_filename, temp_format, err))
-            
+
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
                               skip_formats=[]):
         """Can Bio.SeqIO read seqret's conversion of the file?"""
@@ -258,7 +263,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
             try:
                 self.assertTrue(compare_records(old_records, new_records))
             except ValueError, err:
-                raise ValueError("Disagree on %s file %s in %s format: %s" \
+                raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
     def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
@@ -273,21 +278,21 @@ class SeqRetSeqIOTests(unittest.TestCase):
         """SeqIO agrees with EMBOSS' Abi to FASTQ conversion."""
         #This lets use check the id, sequence, and quality scores
         for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
-             old = SeqIO.read(filename, "abi")
-             handle = emboss_convert(filename, "abi", "fastq-sanger")
-             new = SeqIO.read(handle, "fastq-sanger")
-             handle.close()
-             if emboss_version == (6,4,0) and new.id == "EMBOSS_001":
-                 #Avoid bug in EMBOSS 6.4.0 (patch forthcoming)
-                 pass
-             else:
-                 self.assertEqual(old.id, new.id)
-             self.assertEqual(str(old.seq), str(new.seq))
-             if emboss_version < (6,3,0) and new.letter_annotations["phred_quality"] == [1]*len(old):
-                 #Apparent bug in EMBOSS 6.2.0.1 on Windows           
-                 pass
-             else:
-                 self.assertEqual(old.letter_annotations, new.letter_annotations)
+            old = SeqIO.read(filename, "abi")
+            handle = emboss_convert(filename, "abi", "fastq-sanger")
+            new = SeqIO.read(handle, "fastq-sanger")
+            handle.close()
+            if emboss_version == (6,4,0) and new.id == "EMBOSS_001":
+                #Avoid bug in EMBOSS 6.4.0 (patch forthcoming)
+                pass
+            else:
+                self.assertEqual(old.id, new.id)
+            self.assertEqual(str(old.seq), str(new.seq))
+            if emboss_version < (6,3,0) and new.letter_annotations["phred_quality"] == [1]*len(old):
+                #Apparent bug in EMBOSS 6.2.0.1 on Windows
+                pass
+            else:
+                self.assertEqual(old.letter_annotations, new.letter_annotations)
 
     def test_genbank(self):
         """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
@@ -322,12 +327,14 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #Skip GenBank, EMBOSS 6.0.1 on Windows won't output proteins as GenBank
         self.check_SeqIO_with_EMBOSS("NBRF/DMB_prot.pir", "pir",
                                skip_formats=["embl","genbank"])
+
     def test_clustalw(self):
         """SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
         self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",
                                    skip_formats=["embl","genbank"])
         self.check_SeqIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal",
                                    skip_formats=["embl","genbank"])
+
 
 class SeqRetAlignIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
@@ -351,13 +358,13 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 new_aligns = list(AlignIO.parse(handle, new_format))
             except:
                 handle.close()
-                raise ValueError("Can't parse %s file %s in %s format." \
+                raise ValueError("Can't parse %s file %s in %s format."
                                  % (old_format, filename, new_format))
             handle.close()
             try:
                 self.assertTrue(compare_alignments(old_aligns, new_aligns))
             except ValueError, err:
-                raise ValueError("Disagree on %s file %s in %s format: %s" \
+                raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
     def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
@@ -387,7 +394,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
             try:
                 self.assertTrue(compare_alignments(old_aligns, new_aligns))
             except ValueError, err:
-                raise ValueError("Disagree on file %s %s in %s format: %s" \
+                raise ValueError("Disagree on file %s %s in %s format: %s"
                                  % (in_format, in_filename, temp_format, err))
 
     def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
@@ -397,13 +404,13 @@ class SeqRetAlignIOTests(unittest.TestCase):
                                    alphabet)
         #Check Bio.AlignIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_AlignIO(filename, old_format, skip_formats)
-        
+
     def test_align_clustalw(self):
         """AlignIO & EMBOSS reading each other's conversions of a ClustalW file."""
         self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/odd_consensus.aln", "clustal",
-                               skip_formats=["nexus"]) #TODO - why not nexus?
+                               skip_formats=["nexus"])  # TODO - why not nexus?
         self.check_AlignIO_with_EMBOSS("Clustalw/protein.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
@@ -417,13 +424,13 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_AlignIO_with_EMBOSS("Phylip/interlaced2.phy", "phylip")
         self.check_AlignIO_with_EMBOSS("Phylip/random.phy", "phylip")
 
-        
+
 class PairwiseAlignmentTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
 
     def tearDown(self):
         clean_up()
-        
+
     def pairwise_alignment_check(self, query_seq,
                                  targets, alignments,
                                  local=True):
@@ -437,18 +444,18 @@ class PairwiseAlignmentTests(unittest.TestCase):
             #self.assertEqual(target.id, alignment[1].id) #too strict
             if alignment[1].id not in target.id \
             and alignment[1].id not in target.name:
-                raise AssertionError("%s vs %s or %s" \
+                raise AssertionError("%s vs %s or %s"
                                      % (alignment[1].id , target.id, target.name))
             if local:
                 #Local alignment
-                self.assertTrue(str(alignment[0].seq).replace("-","") \
+                self.assertTrue(str(alignment[0].seq).replace("-","")
                              in query_seq)
-                self.assertTrue(str(alignment[1].seq).replace("-","").upper() \
+                self.assertTrue(str(alignment[1].seq).replace("-","").upper()
                              in str(target.seq).upper())
             else:
                 #Global alignment
                 self.assertEqual(str(query_seq), str(alignment[0].seq).replace("-",""))
-                self.assertEqual(str(target.seq).upper(), \
+                self.assertEqual(str(target.seq).upper(),
                                  str(alignment[1].seq).replace("-","").upper())
         return True
 
@@ -484,8 +491,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
         #Clean up,
-        os.remove(cline.outfile)            
-        
+        os.remove(cline.outfile)
+
     def test_water_piped(self):
         """water with asis trick, output piped to stdout."""
         cline = WaterCommandline(cmd=exes["water"],
@@ -495,9 +502,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapextend=0.5,
                                  auto=True, filter=True)
         self.assertEqual(str(cline),
-                         exes["water"] + " -auto -filter" \
-                         + " -asequence=asis:ACCCGGGCGCGGT" \
-                         + " -bsequence=asis:ACCCGAGCGCGGT" \
+                         exes["water"] + " -auto -filter"
+                         + " -asequence=asis:ACCCGGGCGCGGT"
+                         + " -bsequence=asis:ACCCGAGCGCGGT"
                          + " -gapopen=10 -gapextend=0.5")
         #Run the tool,
         child = subprocess.Popen(str(cline),
@@ -555,9 +562,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapextend=0.5,
                                  auto=True, filter=True)
         self.assertEqual(str(cline),
-                         exes["needle"] + " -auto -filter" \
-                         + " -asequence=asis:ACCCGGGCGCGGT" \
-                         + " -bsequence=asis:ACCCGAGCGCGGT" \
+                         exes["needle"] + " -auto -filter"
+                         + " -asequence=asis:ACCCGGGCGCGGT"
+                         + " -bsequence=asis:ACCCGAGCGCGGT"
                          + " -gapopen=10 -gapextend=0.5")
         #Run the tool,
         child = subprocess.Popen(str(cline),
@@ -659,7 +666,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                       local=True)
         #Clean up,
         os.remove(out_file)
-        
+
     def test_needle_piped2(self):
         """needle with asis trick, and nucleotide FASTA file, output piped to stdout."""
         #TODO - Support needle in Bio.Emboss.Applications
@@ -669,8 +676,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline = exes["needle"]
         cline += " -asequence asis:" + query
         cline += " -bsequence Fasta/f002"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        cline += " -auto"  # no prompting
+        cline += " -filter"  # use stdout
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -717,7 +724,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertTrue(not cline.filter)
         self.assertEqual(cline.outfile, None)
         self.assertRaises(ValueError, str, cline)
-   
+
     def test_seqtmatchall_piped(self):
         """seqmatchall with pair output piped to stdout."""
         cline = SeqmatchallCommandline(cmd=exes["seqmatchall"],
@@ -725,7 +732,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                        aformat="pair", wordsize=9,
                                        auto=True, stdout=True)
         self.assertEqual(str(cline),
-                         exes["seqmatchall"] + " -auto -stdout" \
+                         exes["seqmatchall"] + " -auto -stdout"
                          + " -sequence=Fasta/f002"
                          + " -wordsize=9 -aformat=pair")
         #Run the tool,
@@ -745,7 +752,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(0, child.wait())
         child.stdout.close()
         child.stderr.close()
-        
+
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None):
     """Call transeq, returns protein sequence as string."""
@@ -768,8 +776,8 @@ def emboss_translate(sequence, table=None, frame=None):
         SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
         cline += " -sequence %s" % filename
 
-    cline += " -auto" #no prompting
-    cline += " -filter" #use stdout
+    cline += " -auto"  # no prompting
+    cline += " -filter"  # use stdout
     if table is not None:
         cline += " -table %s" % str(table)
     if frame is not None:
@@ -791,7 +799,7 @@ def emboss_translate(sequence, table=None, frame=None):
 
     if 0 != child.wait():
         raise ValueError(str(cline))
-    
+
     if filename:
         os.remove(filename)
         if not record.id.startswith("Test"):
@@ -800,6 +808,7 @@ def emboss_translate(sequence, table=None, frame=None):
         if not record.id.startswith("asis"):
             raise ValueError(str(cline))
     return str(record.seq)
+
 
 #Top level function as this makes it easier to use for debugging:
 def check_translation(sequence, translation, table=None):
@@ -814,12 +823,13 @@ def check_translation(sequence, translation, table=None):
         for i, amino in enumerate(translation):
             codon = sequence[i*3:i*3+3]
             if amino != str(codon.translate(t)):
-                raise ValueError("%s -> %s not %s (table %s)" \
+                raise ValueError("%s -> %s not %s (table %s)"
                          % (codon, amino, codon.translate(t), t))
         #Shouldn't reach this line:
-        raise ValueError("%s -> %s (table %s)" \
+        raise ValueError("%s -> %s (table %s)"
                          % (sequence, translation, t))
     return True
+
 
 class TranslationTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
@@ -853,7 +863,7 @@ class TranslationTests(unittest.TestCase):
                     #
                     Seq("ACGGGGGGGGTAAGTGGTGTGTGTGTAGT", generic_dna),
                     ]
-        
+
         for sequence in examples:
             #EMBOSS treats spare residues differently... avoid this issue
             if len(sequence) % 3 != 0:
@@ -875,13 +885,13 @@ class TranslationTests(unittest.TestCase):
         return True
 
     def translate_all_codons(self, letters):
-        sequence = Seq("".join([c1+c3+c3 \
-                       for c1 in letters \
-                       for c2 in letters \
+        sequence = Seq("".join([c1+c3+c3
+                       for c1 in letters
+                       for c2 in letters
                        for c3 in letters]),
                        generic_nucleotide)
         self.check(sequence)
-        
+
     #def test_all_ambig_dna_codons(self):
     #    """transeq vs Bio.Seq on ambiguous DNA codons (inc. alt tables)."""
     #    self.translate_all_codons(ambiguous_dna_letters)
@@ -897,7 +907,8 @@ class TranslationTests(unittest.TestCase):
     def test_mixed_unambig_rna_codons(self):
         """transeq vs Bio.Seq on unambiguous DNA/RNA codons (inc. alt tables)."""
         self.translate_all_codons("ATUCGatucg")
-        
+
+
 def clean_up():
     """Fallback clean up method to remove temp files."""
     for filename in os.listdir("Emboss"):

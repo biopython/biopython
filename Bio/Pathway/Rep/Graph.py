@@ -5,6 +5,7 @@
 
 # get set abstraction for graph representation
 
+
 class Graph(object):
     """A directed graph abstraction with labeled edges."""
 
@@ -33,10 +34,10 @@ class Graph(object):
         keys = self._adjacency_list.keys()
         keys.sort()
         for key in keys:
-            values = [(x,self._edge_map[(key,x)]) \
+            values = [(x,self._edge_map[(key,x)])
                       for x in self._adjacency_list[key].list()]
             values.sort()
-            s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
+            s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
         return s + ">"
 
     def __str__(self):
@@ -73,7 +74,7 @@ class Graph(object):
         """Returns a list of (child, label) pairs for parent."""
         if parent not in self._adjacency_list:
             raise ValueError("Unknown <parent> node: " + str(parent))
-        return [(x, self._edge_map[(parent,x)]) \
+        return [(x, self._edge_map[(parent,x)])
                 for x in sorted(self._adjacency_list[parent])]
 
     def children(self, parent):
@@ -117,11 +118,11 @@ class Graph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list.keys():
-            self._adjacency_list[n] = set(x for x in self._adjacency_list[n] \
+            self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x is not node)
         # remove all refering pairs in label map
         for label in self._label_map.keys():
-            lm = set(x for x in self._label_map[label] \
+            lm = set(x for x in self._label_map[label]
                      if (x[0] is not node) and (x[1] is not node))
             # remove the entry completely if the label is now unused
             if lm:
@@ -132,11 +133,8 @@ class Graph(object):
         for edge in self._edge_map.keys():
             if edge[0] is node or edge[1] is node:
                 del self._edge_map[edge]
-        
+
     def remove_edge(self, parent, child, label):
         """Removes edge. -- NOT IMPLEMENTED"""
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
-
-
-

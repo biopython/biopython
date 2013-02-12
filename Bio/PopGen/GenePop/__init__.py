@@ -31,7 +31,7 @@ def get_indiv(line):
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
     markers = [marker for marker in markers if marker!='']
-    if len(markers[0]) in [2, 4]: #2 digits per allele
+    if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
         marker_len = 3
@@ -39,10 +39,11 @@ def get_indiv(line):
         allele_list = [(int_no_zero(marker[0:marker_len]),
                        int_no_zero(marker[marker_len:]))
                    for marker in markers]
-    except ValueError: #Haploid
+    except ValueError:  # Haploid
         allele_list = [(int_no_zero(marker[0:marker_len]),)
                    for marker in markers]
     return indiv_name, allele_list, marker_len
+
 
 def read(handle):
     """Parses a handle containing a GenePop file.
@@ -92,16 +93,16 @@ class Record(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).    
-    
+    marker_len         The marker length (2 or 3 digit code per allele).
+
     comment_line       Comment line.
 
     loci_list          List of loci names.
 
     pop_list           List of population names.
-    
+
     populations        List of population data.
-    
+
     In most genepop files, the population name is not trustable.
     It is strongly recommended that populations are referred by index.
 
@@ -118,14 +119,13 @@ class Record(object):
         ]
     ]
 
-    
     """
     def __init__(self):
-        self.marker_len      = 0
-        self.comment_line    = ""
-        self.loci_list       = []
-        self.pop_list        = []
-        self.populations     = []
+        self.marker_len = 0
+        self.comment_line = ""
+        self.loci_list = []
+        self.pop_list = []
+        self.populations = []
 
     def __str__(self):
         """Returns (reconstructs) a GenePop textual representation.
@@ -141,7 +141,7 @@ class Record(object):
                 for marker in markers:
                     rep.append(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<self.marker_len:
@@ -192,12 +192,11 @@ class Record(object):
             gp_loci[gp_pop.loci_list[0]] = gp_pop
         return gp_loci
 
-
     def remove_population(self, pos):
         """Removes a population (by position).
         """
         del self.populations[pos]
-    
+
     def remove_locus_by_position(self, pos):
         """Removes a locus by position.
         """
@@ -216,5 +215,3 @@ class Record(object):
                 return
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
-    
-

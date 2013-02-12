@@ -9,21 +9,22 @@
 
 from reportlab.lib import colors
 
+
 class CrossLink(object):
     """Hold information for drawing a cross link between features.
     """
     def __init__(self, featureA, featureB,
                  color=colors.lightgreen, border=None, flip=False):
         """Create a new cross link.
-        
+
         Arguments featureA and featureB should GenomeDiagram feature objects,
         or 3-tuples (track object, start, end), and currently must be on
         different tracks.
-        
+
         The color and border arguments should be ReportLab colour objects, or
         for border use a boolean False for no border, otherwise it defaults to
         the same as the main colour.
-        
+
         The flip argument draws an inverted cross link, useful for showing a
         mapping where one sequence has been reversed. It is conventional to
         also use a different colour (e.g. red for simple links, blue for any
@@ -51,7 +52,7 @@ class CrossLink(object):
         except AttributeError:
             track, start, end = self.featureA
             return end
-    
+
     def _trackA(self, tracks):
         try:
             track, start, end = self.featureA
@@ -80,7 +81,7 @@ class CrossLink(object):
         except AttributeError:
             track, start, end = self.featureB
             return end
-    
+
     def _trackB(self, tracks):
         try:
             track, start, end = self.featureB

@@ -34,6 +34,7 @@ from reportlab.lib import colors
 from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
 
+
 class Track(object):
     """ Track
 
@@ -70,7 +71,7 @@ class Track(object):
         o name      String describing the track
 
         o hide      Boolean, 0 if the track is not to be drawn
-        
+
         o start, end    Integers (or None) specifying start/end to draw just
                         a partial track.
 
@@ -124,7 +125,7 @@ class Track(object):
 
         o scale_largetick_labels    Boolean describing whether position labels
                                     should be written over large ticks
-                                    
+
         o scale_smalltick_labels    Boolean describing whether position labels
                                     should be written over small ticks
 
@@ -202,12 +203,12 @@ class Track(object):
 
             o scale_largetick_labels    Boolean describing whether position labels
                                         should be written over large ticks
-                                        
+
             o scale_smalltick_labels    Boolean describing whether position labels
                                         should be written over small ticks
 
             o name          String to help identify the track
-            
+
             o height        Relative height to draw the track
 
             o axis_labels       Boolean describing whether the value labels should
@@ -255,7 +256,6 @@ class Track(object):
         self.scale_largetick_labels = scale_largetick_labels
         self.scale_smalltick_labels = scale_smalltick_labels
         self.axis_labels = axis_labels
-        
 
     def add_set(self, set):
         """ add_set(self, set)
@@ -269,7 +269,6 @@ class Track(object):
         self._sets[self._next_id] = set # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
 
-
     def new_set(self, type='feature', **args):
         """ new_set(self, type='feature') -> FeatureSet or GraphSet
 
@@ -278,16 +277,15 @@ class Track(object):
         """
         type_dict = {'feature': FeatureSet,
                      'graph': GraphSet
-                     }        
+                     }
         set = type_dict[type]()
         for key in args:
-            setattr(set, key, args[key])        
+            setattr(set, key, args[key])
         set.id = self._next_id          # Assign unique id to set
         set.parent = self               # Make set's parent this track
         self._sets[self._next_id] = set # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
         return set
-
 
     def del_set(self, set_id):
         """ del_set(self, set_id)
@@ -298,7 +296,6 @@ class Track(object):
         """
         del self._sets[set_id]
 
-
     def get_sets(self):
         """ get_sets(self) -> FeatureSet or GraphSet
 
@@ -306,14 +303,12 @@ class Track(object):
         """
         return self._sets.values()
 
-
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return the ids of all sets contained in this track
         """
         return self._sets.keys()
-
 
     def range(self):
         """ range(self) -> (int, int)
@@ -338,7 +333,6 @@ class Track(object):
         else:
             high = None
         return low, high  # Return lowest and highest values
-    
 
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""
@@ -355,8 +349,7 @@ class Track(object):
             outstr.append("%d sets" % len(self._sets))
             for key in self._sets:
                 outstr.append("set: %s" % self._sets[key])
-            return "\n".join(outstr)      
-
+            return "\n".join(outstr)
 
     def __getitem__(self, key):
         """ __getitem__(self, key) -> int
@@ -367,7 +360,6 @@ class Track(object):
         """
         return self._sets[key]
 
-
     def __str__(self):
         """ __str__(self) -> ""
 
@@ -376,7 +368,6 @@ class Track(object):
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d sets" % len(self._sets))
         return "\n".join(outstr)
-    
 
 
 ################################################################################
@@ -390,7 +381,7 @@ if __name__ == '__main__':
     from _FeatureSet import FeatureSet
     from _GraphSet import GraphSet
     from random import normalvariate
-    
+
     genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
     gdfs1 = FeatureSet(0, 'Nanoarchaeum equitans CDS - CDS')
@@ -411,7 +402,7 @@ if __name__ == '__main__':
     gdgs = GraphSet(2, 'test data')
     gdgs.add_graph(graphdata, 'Test Data')
     gdt.add_set(gdgs)
-    
+
     print gdt.get_ids()
     sets = gdt.get_sets()
     for set in sets:

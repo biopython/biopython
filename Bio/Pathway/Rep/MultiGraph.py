@@ -5,6 +5,7 @@
 
 # get set abstraction for graph representation
 
+
 #TODO - Subclass graph?
 class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
@@ -32,7 +33,7 @@ class MultiGraph(object):
         keys = sorted(self._adjacency_list.keys())
         for key in keys:
             values = sorted(self._adjacency_list[key])
-            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
+            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
         return s + ">"
 
     def __str__(self):
@@ -110,11 +111,11 @@ class MultiGraph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list:
-            self._adjacency_list[n] = set(x for x in self._adjacency_list[n] \
+            self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x[0] is not node)
         # remove all refering pairs in label map
         for label in self._label_map.keys():
-            lm = set(x for x in self._label_map[label] \
+            lm = set(x for x in self._label_map[label]
                      if (x[0] is not node) and (x[1] is not node))
             # remove the entry completely if the label is now unused
             if lm:
@@ -128,6 +129,7 @@ class MultiGraph(object):
         raise NotImplementedError("remove_edge is not yet implemented")
 
 # auxilliary graph functions
+
 
 def df_search(graph, root = None):
     """Depth first search of g.
@@ -153,7 +155,8 @@ def df_search(graph, root = None):
             search.append(node)
             seen[node] = 1
             current = graph.children(node) + current
-    return search   
+    return search
+
 
 def bf_search(graph, root = None):
     """Breadth first search of g.
@@ -180,4 +183,3 @@ def bf_search(graph, root = None):
             seen[node] = 1
             current.extend(graph.children(node))
     return search
-

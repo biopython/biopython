@@ -13,7 +13,6 @@ from StringIO import *
 from Bio.SCOP import *
 
 
-
 class ScopTests(unittest.TestCase):
 
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
@@ -37,12 +36,11 @@ class ScopTests(unittest.TestCase):
         return True
 
     def testParse(self):
-  
         f = open("./SCOP/dir.cla.scop.txt_test")
         try:
             cla = f.read()
             f.close()
-            
+
             f = open("./SCOP/dir.des.scop.txt_test")
             des = f.read()
             f.close()
@@ -60,7 +58,7 @@ class ScopTests(unittest.TestCase):
                     cla_out.getvalue().rstrip().split('\n'))
         for expected_line, line in lines:
             self.assertTrue(self._compare_cla_lines(expected_line, line))
-        
+
         des_out = StringIO()
         scop.write_des(des_out)
         self.assertEqual(des_out.getvalue(), des)
@@ -76,13 +74,10 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(len(domains), 14)
         self.assertEqual(domains[4].sunid, 14988)
 
-
         dom = scop.getNodeBySunid(-111)
         self.assertEqual(dom, None)
         dom = scop.getDomainBySid("no such domain")
         self.assertEqual(dom, None)
-                
-
 
     def testSccsOrder(self):
         self.assertEqual(cmp_sccs("a.1.1.1", "a.1.1.1"), 0)
@@ -105,8 +100,6 @@ class ScopTests(unittest.TestCase):
         s2="d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
         self.assertEqual(s2, str(parse_domain(s2)))
 
-
-
         #Genetic domains (See Astral release notes)
         s3="g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s3, str(parse_domain(s3)))
@@ -121,20 +114,20 @@ class ScopTests(unittest.TestCase):
         self.assertRaises(ValueError, parse_domain, "Totally wrong")
 
     def testConstructFromDirectory(self):
-        scop = Scop (dir_path="SCOP", version="test")
+        scop = Scop(dir_path="SCOP", version="test")
         self.assertTrue(isinstance(scop, Scop))
-         
+
         domain = scop.getDomainBySid("d1hbia_")
         self.assertEqual(domain.sunid, 14996)
-         
+
     def testGetAscendent(self):
-        scop = Scop (dir_path="SCOP", version="test")
+        scop = Scop(dir_path="SCOP", version="test")
         domain = scop.getDomainBySid("d1hbia_")
 
         # get the fold
         fold = domain.getAscendent('cf')
         self.assertEqual(fold.sunid, 46457)
-        
+
         #get the superfamily
         sf = domain.getAscendent('superfamily')
         self.assertEqual(sf.sunid, 46458)
@@ -147,10 +140,9 @@ class ScopTests(unittest.TestCase):
         px2 = sf.getAscendent('px')
         self.assertEqual(px2, None)
 
-
     def test_get_descendents(self):
         """Test getDescendents method"""
-        scop = Scop (dir_path="SCOP", version="test")
+        scop = Scop(dir_path="SCOP", version="test")
         fold = scop.getNodeBySunid(46457)
 
         # get px descendents
@@ -158,7 +150,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(len(domains), 14)
         for d in domains:
             self.assertEqual(d.type, 'px')
-            
+
         sfs = fold.getDescendents('superfamily')
         self.assertEqual(len(sfs), 1)
         for d in sfs:
@@ -167,8 +159,6 @@ class ScopTests(unittest.TestCase):
         # cl has no cl descendent
         cl = fold.getDescendents('cl')
         self.assertEqual(cl, [])
-        
-        
 
 
 if __name__=='__main__':

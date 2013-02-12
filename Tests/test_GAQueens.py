@@ -18,9 +18,7 @@ When called as part of the Biopython unit test suite, 5 queens are used.
 """
 # standard library
 import sys
-import math
 import random
-import copy
 import time
 import unittest
 
@@ -95,6 +93,7 @@ def display_board(genome):
 
     print '+-' + '--'*len(genome) + '+'
 
+
 def queens_solved(organisms):
     """Determine if we have solved the problem.
 
@@ -108,7 +107,8 @@ def queens_solved(organisms):
 
     # if we got here we didn't do it
     return 0
-     
+
+
 def queens_fitness(genome):
     """Calculate the fitness of an organization of queens on the chessboard.
 
@@ -130,7 +130,7 @@ def queens_fitness(genome):
                 # get the row for the two queens we are comparing
                 check_queen_row = int(genome[check_queen_col])
                 other_queen_row = int(genome[other_queen_col])
-                
+
                 # a queen is attacked if it is in a row with another queen
                 if check_queen_row == other_queen_row:
                     is_attacked = 1
@@ -146,6 +146,7 @@ def queens_fitness(genome):
 
     return fitness
 
+
 class QueensAlphabet(Alphabet.Alphabet):
     def __init__(self, num_queens):
         """Initialize with the number of queens we are calculating for.
@@ -153,6 +154,7 @@ class QueensAlphabet(Alphabet.Alphabet):
         # set up the letters for the alphabet
         assert 0 < num_queens <= 9
         self.letters = "".join(str(i) for i in range(num_queens))
+
 
 # --- Problem specific crossover, mutation and repair operations
 class QueensRepair:
@@ -233,7 +235,8 @@ class QueensRepair:
                 organism.genome[duplicated_pos] = new_item
 
         return organism
-        
+
+
 class QueensCrossover:
     """Crossover operation to help in solving the N-Queens problem.
 
@@ -269,7 +272,7 @@ class QueensCrossover:
         """
         new_org_1 = org_1.copy()
         new_org_2 = org_2.copy()
-        
+
         # determine if we have a crossover
         crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
@@ -281,7 +284,7 @@ class QueensCrossover:
 
             assert len(best_1) + len(best_2) == len(rest_1) + len(rest_2), \
                    "Did not preserve genome length!"
-            
+
             new_org_1.genome = best_1 + best_2
             new_org_2.genome = rest_1 + rest_2
 
@@ -307,14 +310,14 @@ class QueensCrossover:
         """
         first_region = max(len(genome) / 2, self._max_crossover_size)
         second_region = len(genome) - first_region
-        
+
         if make_best_larger:
             region_size = max(first_region, second_region)
         else:
             region_size = min(first_region, second_region)
 
         # loop through all of the segments and find the best fitness segment
-        
+
         # represent best_fitness as a three tuple with the coordinates of
         # the start and end as the first two elements, and the fitness of
         # the region as the last element. Start with a value that
@@ -328,12 +331,12 @@ class QueensCrossover:
                 best_fitness = [start_index, start_index + region_size,
                                 region_fitness]
 
-        # get the the two regions and return 'em
+        # get the two regions and return 'em
         best_region = genome[best_fitness[0]:best_fitness[1]]
         rest_region = genome[0:best_fitness[0]] + genome[best_fitness[1]:]
 
         return best_region, rest_region
-            
+
 
 class QueensMutation:
     """Mutation operation to help in the N-Queens problem.
@@ -375,7 +378,7 @@ class QueensMutation:
                 # if there are no choices left, we are stuck going for random
                 if len(gene_choices) == 0:
                     gene_choices = list(new_org.genome.alphabet.letters)
-                
+
                 # get a new letter with the left-over choices
                 new_letter = random.choice(gene_choices)
                 new_org.genome[gene_index] = new_letter
@@ -383,6 +386,7 @@ class QueensMutation:
         return new_org
 
 num_queens = 5
+
 
 #Class defined for use via run_tests.py
 class QueensTest(unittest.TestCase):

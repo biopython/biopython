@@ -13,6 +13,7 @@ try:
 except ImportError:
     #This was added in Python 2.6, fallback for Python 2.5:
     from math import sin, cos
+
     def rect(r, phi):
         return r * (cos(phi) + sin(phi)*1j)
 
@@ -29,6 +30,7 @@ except ImportError:
 # Biopython Bio.Graphics.ColorSpiral
 from Bio.Graphics.ColorSpiral import ColorSpiral, get_colors, get_color_dict
 
+
 class SpiralTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed on HSV spiral."""
     def setUp(self):
@@ -42,14 +44,14 @@ class SpiralTest(unittest.TestCase):
         """Get set of eight colours, no jitter, using ColorSpiral."""
         cs = ColorSpiral(a = 4, b = 0.33, jitter = 0)
         colours = list(cs.get_colors(8))
-        cstr = ["(%.2f, %.2f, %.2f)" % (r, g, b) \
+        cstr = ["(%.2f, %.2f, %.2f)" % (r, g, b)
                     for r, g, b in colours]
         expected = \
-            ['(0.64, 0.74, 0.81)', '(0.68, 0.52, 0.76)', '(0.72, 0.41, 0.55)', 
-             '(0.68, 0.39, 0.31)', '(0.63, 0.54, 0.22)', '(0.48, 0.59, 0.13)', 
+            ['(0.64, 0.74, 0.81)', '(0.68, 0.52, 0.76)', '(0.72, 0.41, 0.55)',
+             '(0.68, 0.39, 0.31)', '(0.63, 0.54, 0.22)', '(0.48, 0.59, 0.13)',
              '(0.24, 0.54, 0.06)', '(0.01, 0.50, -0.00)']
         self.assertEqual(cstr, expected)
-        
+
     def test_colorspiral(self):
         """Get set of 16 colours, no jitter, using ColorSpiral."""
         cs = ColorSpiral(a = 4, b = 0.33, jitter = 0)
@@ -60,7 +62,7 @@ class SpiralTest(unittest.TestCase):
             h, s, v = colorsys.rgb_to_hsv(r, g, b)
             coords = rect(s * A4[0] * 0.45, h * 2 * pi)
             x, y = self.x_0 + coords.real, self.y_0 + coords.imag
-            self.c.ellipse(x - radius, y - radius, x + radius, y + radius, 
+            self.c.ellipse(x - radius, y - radius, x + radius, y + radius,
                            stroke = 0, fill = 1)
         self.finish()
 
@@ -101,13 +103,12 @@ class DictTest(unittest.TestCase):
         """get_color_dict() for classes A-D, no jitter."""
         classes = ['A', 'B', 'C', 'D']
         colors = get_color_dict(classes, jitter=0)
-        cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b) \
+        cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b)
                     for c, (r, g, b) in colors.items()]
-        expected = ['A: (0.52, 0.76, 0.69)', 'C: (0.59, 0.13, 0.47)', 
+        expected = ['A: (0.52, 0.76, 0.69)', 'C: (0.59, 0.13, 0.47)',
                     'B: (0.40, 0.31, 0.68)', 'D: (0.50, 0.00, 0.00)']
         self.assertEqual(cstr, expected)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner = runner)
-        

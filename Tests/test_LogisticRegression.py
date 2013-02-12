@@ -8,14 +8,13 @@
 
 try:
     import numpy
-    from numpy import linalg #missing in PyPy's micronumpy
+    from numpy import linalg  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.LogisticRegression.")
 
 import unittest
-import sys
 from Bio import LogisticRegression
 
 
@@ -54,6 +53,7 @@ ys = [1,
       0,
       0,
       0]
+
 
 class TestLogisticRegression(unittest.TestCase):
 

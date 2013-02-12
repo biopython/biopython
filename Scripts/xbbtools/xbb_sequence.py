@@ -13,9 +13,5 @@ class xbb_sequence(Sequence):
     def __init__(self):
         ""
 
-
-
 if __name__ == '__main__':
     test = xbb_sequence()
-    
-    

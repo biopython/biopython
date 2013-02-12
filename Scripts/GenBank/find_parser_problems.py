@@ -19,15 +19,15 @@ if len(sys.argv) != 2:
     print "Usage ./find_parser_problems <GenBank file to parse>"
     sys.exit()
 
-feature_parser = GenBank.FeatureParser(debug_level = 0)
+feature_parser = GenBank.FeatureParser(debug_level=0)
 parser = GenBank.ErrorParser(feature_parser)
 
 handle = open(sys.argv[1], 'r')
-iterator = GenBank.Iterator(handle, parser, has_header = 1)
+iterator = GenBank.Iterator(handle, parser, has_header=1)
 
 while 1:
     have_record = 0
-    
+
     while have_record == 0:
         try:
             cur_record = iterator.next()
@@ -40,7 +40,7 @@ while 1:
         break
 
     print "Successfully parsed record", cur_record.id
-    
+
     if verbose:
         print "***Record"
         print "Seq:", cur_record.seq
@@ -51,8 +51,5 @@ while 1:
         print "Feaures"
         for feature in cur_record.features:
             print feature
-                
+
 handle.close()
-    
-
-

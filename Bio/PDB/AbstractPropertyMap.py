@@ -6,6 +6,7 @@
 """Class that maps (chain_id, residue_id) to a residue property."""
 
 
+
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
         self.property_dict=property_dict
@@ -23,10 +24,10 @@ class AbstractPropertyMap(object):
             ...     res, prop = apmap[(chain_id, res_id)]
 
         @param chain_id: chain id
-        @type chain_id: char 
+        @type chain_id: char
 
         @param res_id: residue id
-        @type res_id: char 
+        @type res_id: char
         """
         translated_id = self._translate_id(id)
         return (translated_id in self.property_dict)
@@ -36,12 +37,12 @@ class AbstractPropertyMap(object):
         Return property for a residue.
 
         @param chain_id: chain id
-        @type chain_id: char 
+        @type chain_id: char
 
         @param res_id: residue id
-        @type res_id: int or (char, int, char) 
+        @type res_id: int or (char, int, char)
 
-        @return: some residue property 
+        @return: some residue property
         @rtype: anything (can be a tuple)
         """
         translated_id=self._translate_id(key)
@@ -72,13 +73,14 @@ class AbstractPropertyMap(object):
             ...     res, prop = apmap[(chain_id, res_id)]
 
         @param chain_id: chain id
-        @type chain_id: char 
+        @type chain_id: char
 
         @param res_id: residue id
-        @type res_id: char 
+        @type res_id: char
         """
         import warnings
-        warnings.warn("This function is obsolete; use 'id in mapping' instead", PendingDeprecationWarning)
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("This function is deprecated; use 'id in mapping' instead", BiopythonDeprecationWarning)
         return (id in self)
 
     def keys(self):
@@ -86,13 +88,13 @@ class AbstractPropertyMap(object):
         Return the list of residues.
 
         @return: list of residues for which the property was calculated
-        @rtype: [(chain_id, res_id), (chain_id, res_id),...] 
+        @rtype: [(chain_id, res_id), (chain_id, res_id),...]
         """
         return self.property_keys
 
     def __iter__(self):
         """
-        Iterate over the (entity, property) list. Handy alternative to 
+        Iterate over the (entity, property) list. Handy alternative to
         the dictionary-like access.
 
         Example:
@@ -107,7 +109,7 @@ class AbstractPropertyMap(object):
 
 class AbstractResiduePropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
-        AbstractPropertyMap.__init__(self, property_dict, property_keys, 
+        AbstractPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 
     def _translate_id(self, ent_id):
@@ -119,7 +121,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
 class AbstractAtomPropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
-        AbstractPropertyMap.__init__(self, property_dict, property_keys, 
+        AbstractPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 
     def _translate_id(self, ent_id):
@@ -131,4 +133,3 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
         if isinstance(res_id, int):
             ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
         return ent_id
-

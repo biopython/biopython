@@ -1,0 +1,429 @@
+Command line: [exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence
+         Model: ungapped:codon
+     Raw score: 2151
+   Query range: 1228 -> 1
+  Target range: 1318047 -> 1319274
+
+    1228 : ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTATTTTG :    1174
+           ThrGlyAlaVal***ProGluHisSerValSerArgGluLeu***LeuLeuPheCy
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ThrGlyAlaVal***ProGluHisSerValSerArgGluLeu***LeuLeuPheCy
+ 1318048 : ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTATTTTG : 1318102
+
+    1173 : CAGTCATCTGTACATTTTGCCTTGATTATTAATTCGCTGCATAAATCATCTATGTC :    1117
+           sSerHisLeuTyrIleLeuPro***LeuLeuIleArgCysIleAsnHisLeuCysP
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           sSerHisLeuTyrIleLeuPro***LeuLeuIleArgCysIleAsnHisLeuCysP
+ 1318103 : CAGTCATCTGTACATTTTGCCTTGATTATTAATTCGCTGCATAAATCATCTATGTC : 1318159
+
+    1116 : CAACGATGAATATTTTGGTAGGGAGGAGATCTCTTCGAGAATGTGGTAGCAAGACG :    1063
+           roThrMetAsnIleLeuValGlyArgArgSerLeuArgGluCysGlySerLysThr
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           roThrMetAsnIleLeuValGlyArgArgSerLeuArgGluCysGlySerLysThr
+ 1318160 : CAACGATGAATATTTTGGTAGGGAGGAGATCTCTTCGAGAATGTGGTAGCAAGACG : 1318213
+
+    1062 : CTTTTCCATTCGATATGGCGCTGCTAATGTGTTCAATTGCTTCAGATTGGGTTCGA :    1006
+           LeuPheHisSerIleTrpArgCys***CysValGlnLeuLeuGlnIleGlyPheGl
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           LeuPheHisSerIleTrpArgCys***CysValGlnLeuLeuGlnIleGlyPheGl
+ 1318214 : CTTTTCCATTCGATATGGCGCTGCTAATGTGTTCAATTGCTTCAGATTGGGTTCGA : 1318270
+
+    1005 : ATTGTTTTAGTATGAGAAGCAGCCACCGGAAGCACCGAAGCTAGAGATTTCTGATT :     949
+           uLeuPhe***TyrGluLysGlnProProGluAlaProLysLeuGluIleSerAspS
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           uLeuPhe***TyrGluLysGlnProProGluAlaProLysLeuGluIleSerAspS
+ 1318271 : ATTGTTTTAGTATGAGAAGCAGCCACCGGAAGCACCGAAGCTAGAGATTTCTGATT : 1318327
+
+     948 : CAACAGGTGGCTTGTTATTAAGTCGCATTTGATCTCCTTATTTGAACATGGTTTGG :     895
+           erThrGlyGlyLeuLeuLeuSerArgIle***SerProTyrLeuAsnMetValTrp
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           erThrGlyGlyLeuLeuLeuSerArgIle***SerProTyrLeuAsnMetValTrp
+ 1318328 : CAACAGGTGGCTTGTTATTAAGTCGCATTTGATCTCCTTATTTGAACATGGTTTGG : 1318381
+
+     894 : TCCCGATACACTTGCGGTTGCAAATATTATTACACTGGCTCCCTACAGCAAGGGGA :     838
+           SerArgTyrThrCysGlyCysLysTyrTyrTyrThrGlySerLeuGlnGlnGlyGl
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           SerArgTyrThrCysGlyCysLysTyrTyrTyrThrGlySerLeuGlnGlnGlyGl
+ 1318382 : TCCCGATACACTTGCGGTTGCAAATATTATTACACTGGCTCCCTACAGCAAGGGGA : 1318438
+
+     837 : AGCACGCTGGGGAATAAAGTATCATCTTCTGTCTCGTATGGAAGATACTTTTGGTC :     781
+           uAlaArgTrpGlyIleLysTyrHisLeuLeuSerArgMetGluAspThrPheGlyG
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           uAlaArgTrpGlyIleLysTyrHisLeuLeuSerArgMetGluAspThrPheGlyG
+ 1318439 : AGCACGCTGGGGAATAAAGTATCATCTTCTGTCTCGTATGGAAGATACTTTTGGTC : 1318495
+
+     780 : AATTTCACATTGACATGCTGACGTATCTATTTTTTCAGCGGTCAGGCGTTCAGAGT :     727
+           lnPheHisIleAspMetLeuThrTyrLeuPhePheGlnArgSerGlyValGlnSer
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lnPheHisIleAspMetLeuThrTyrLeuPhePheGlnArgSerGlyValGlnSer
+ 1318496 : AATTTCACATTGACATGCTGACGTATCTATTTTTTCAGCGGTCAGGCGTTCAGAGT : 1318549
+
+     726 : GCTGAGGAAAGTAGTTATGAATGTCGTAATCTAAAGCTTCTAGACCAGTCTGTCTA :     670
+           AlaGluGluSerSerTyrGluCysArgAsnLeuLysLeuLeuAspGlnSerValTy
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           AlaGluGluSerSerTyrGluCysArgAsnLeuLysLeuLeuAspGlnSerValTy
+ 1318550 : GCTGAGGAAAGTAGTTATGAATGTCGTAATCTAAAGCTTCTAGACCAGTCTGTCTA : 1318606
+
+     669 : TCATTGGAGACAAGATCGAGACTGAAATCTGGCATTTCACTACCATTAATACTTTC :     613
+           rHisTrpArgGlnAspArgAsp***AsnLeuAlaPheHisTyrHis***TyrPheA
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rHisTrpArgGlnAspArgAsp***AsnLeuAlaPheHisTyrHis***TyrPheA
+ 1318607 : TCATTGGAGACAAGATCGAGACTGAAATCTGGCATTTCACTACCATTAATACTTTC : 1318663
+
+     612 : GTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCACGAATTGG :     559
+           rgHisArgTrp***ArgHisLeuPheAspPheArgGlyGluAsnProThrAsnTrp
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rgHisArgTrp***ArgHisLeuPheAspPheArgGlyGluAsnProThrAsnTrp
+ 1318664 : GTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCACGAATTGG : 1318717
+
+     558 : TTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTGA :     502
+           LeuAsnTrpGluArgSerMetSerLeuCysSerThr***LeuSerHisSerLeuGl
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           LeuAsnTrpGluArgSerMetSerLeuCysSerThr***LeuSerHisSerLeuGl
+ 1318718 : TTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTGA : 1318774
+
+     501 : GTGTGCGGCTGTACTTCTATACTTGTGTTCACAGTCATGTTTTCATCTGAATTAGG :     445
+           uCysAlaAlaValLeuLeuTyrLeuCysSerGlnSerCysPheHisLeuAsn***A
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           uCysAlaAlaValLeuLeuTyrLeuCysSerGlnSerCysPheHisLeuAsn***A
+ 1318775 : GTGTGCGGCTGTACTTCTATACTTGTGTTCACAGTCATGTTTTCATCTGAATTAGG : 1318831
+
+     444 : CGATGGCAATTCCTTTGCAGCCTTGCTAACTGCTGTACTTGTTCCTTTTTCGTTTT :     391
+           laMetAlaIleProLeuGlnProCys***LeuLeuTyrLeuPheLeuPheArgPhe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           laMetAlaIleProLeuGlnProCys***LeuLeuTyrLeuPheLeuPheArgPhe
+ 1318832 : CGATGGCAATTCCTTTGCAGCCTTGCTAACTGCTGTACTTGTTCCTTTTTCGTTTT : 1318885
+
+     390 : CCCTTTTCTGTTGTTCTTGCAGATCATCGAGGAAGGCTAATATTCTTTCATCATCA :     334
+           ProPheSerValValLeuAlaAspHisArgGlyArgLeuIlePhePheHisHisGl
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ProPheSerValValLeuAlaAspHisArgGlyArgLeuIlePhePheHisHisGl
+ 1318886 : CCCTTTTCTGTTGTTCTTGCAGATCATCGAGGAAGGCTAATATTCTTTCATCATCA : 1318942
+
+     333 : GAATTCTTAGCTCTATATTTTGTAATTTCCGACAGTAAACTTTTTAAAGAACATAG :     277
+           nAsnSer***LeuTyrIleLeu***PheProThrValAsnPheLeuLysAsnIleV
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           nAsnSer***LeuTyrIleLeu***PheProThrValAsnPheLeuLysAsnIleV
+ 1318943 : GAATTCTTAGCTCTATATTTTGTAATTTCCGACAGTAAACTTTTTAAAGAACATAG : 1318999
+
+     276 : TAAAAAGTCCGTGGTAGTCTTATTCTGCGCATCTTTCTGTTCTAGTAACTCTACCC :     223
+           alLysSerProTrp***SerTyrSerAlaHisLeuSerValLeuValThrLeuPro
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           alLysSerProTrp***SerTyrSerAlaHisLeuSerValLeuValThrLeuPro
+ 1319000 : TAAAAAGTCCGTGGTAGTCTTATTCTGCGCATCTTTCTGTTCTAGTAACTCTACCC : 1319053
+
+     222 : TCTCTTGCAAACTCTTCATTTTGGCTTCTTTCCTATCTCGGAACGCTCGTTGAGCT :     166
+           SerLeuAlaAsnSerSerPheTrpLeuLeuSerTyrLeuGlyThrLeuValGluLe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           SerLeuAlaAsnSerSerPheTrpLeuLeuSerTyrLeuGlyThrLeuValGluLe
+ 1319054 : TCTCTTGCAAACTCTTCATTTTGGCTTCTTTCCTATCTCGGAACGCTCGTTGAGCT : 1319110
+
+     165 : GCCCTATTCTGGGCAGTCCTCCTACTCTTAGCTTCAGAGTCAATCCTTTTTCTGCC :     109
+           uProTyrSerGlyGlnSerSerTyrSer***LeuGlnSerGlnSerPhePheCysL
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           uProTyrSerGlyGlnSerSerTyrSer***LeuGlnSerGlnSerPhePheCysL
+ 1319111 : GCCCTATTCTGGGCAGTCCTCCTACTCTTAGCTTCAGAGTCAATCCTTTTTCTGCC : 1319167
+
+     108 : TGGTCTGCCCACCTTCCTCTTAGGTGTTCCATCTTTATTTAGCAACATTTGCTTCT :      55
+           euValCysProProSerSer***ValPheHisLeuTyrLeuAlaThrPheAlaSer
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           euValCysProProSerSer***ValPheHisLeuTyrLeuAlaThrPheAlaSer
+ 1319168 : TGGTCTGCCCACCTTCCTCTTAGGTGTTCCATCTTTATTTAGCAACATTTGCTTCT : 1319221
+
+      54 : TCATGTCACCTGCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA :       2
+           SerCysHisLeuLeuAsnIlePheAlaAspLeuSerGluGlyTyrCysPro
+           |||||||||||||||||||||||||||||||||||||||||||||||||||
+           SerCysHisLeuLeuAsnIlePheAlaAspLeuSerGluGlyTyrCysPro
+ 1319222 : TCATGTCACCTGCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA : 1319274
+
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]
+         Model: ungapped:codon
+     Raw score: 2106
+   Query range: 0 -> 1230
+  Target range: 1319275 -> 1318045
+
+       1 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAA :      55
+           MetGlyAsnIleLeuArgLysGlyGlnGlnIleTyrLeuAlaGlyAspMetLysLy
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           MetGlyAsnIleLeuArgLysGlyGlnGlnIleTyrLeuAlaGlyAspMetLysLy
+ 1319275 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAA : 1319221
+
+      56 : GCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCA :     112
+           sGlnMetLeuLeuAsnLysAspGlyThrProLysArgLysValGlyArgProGlyA
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           sGlnMetLeuLeuAsnLysAspGlyThrProLysArgLysValGlyArgProGlyA
+ 1319220 : GCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCA : 1319164
+
+     113 : GAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCT :     166
+           rgLysArgIleAspSerGluAlaLysSerArgArgThrAlaGlnAsnArgAlaAla
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rgLysArgIleAspSerGluAlaLysSerArgArgThrAlaGlnAsnArgAlaAla
+ 1319163 : GAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCT : 1319110
+
+     167 : CAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGT :     223
+           GlnArgAlaPheArgAspArgLysGluAlaLysMetLysSerLeuGlnGluArgVa
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GlnArgAlaPheArgAspArgLysGluAlaLysMetLysSerLeuGlnGluArgVa
+ 1319109 : CAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGT : 1319053
+
+     224 : AGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTAT :     280
+           lGluLeuLeuGluGlnLysAspAlaGlnAsnLysThrThrThrAspPheLeuLeuC
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lGluLeuLeuGluGlnLysAspAlaGlnAsnLysThrThrThrAspPheLeuLeuC
+ 1319052 : AGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTAT : 1318996
+
+     281 : GTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGAT :     334
+           ysSerLeuLysSerLeuLeuSerGluIleThrLysTyrArgAlaLysAsnSerAsp
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ysSerLeuLysSerLeuLeuSerGluIleThrLysTyrArgAlaLysAsnSerAsp
+ 1318995 : GTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGAT : 1318942
+
+     335 : GATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAA :     391
+           AspGluArgIleLeuAlaPheLeuAspAspLeuGlnGluGlnGlnLysArgGluAs
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           AspGluArgIleLeuAlaPheLeuAspAspLeuGlnGluGlnGlnLysArgGluAs
+ 1318941 : GATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAA : 1318885
+
+     392 : CGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTA :     448
+           nGluLysGlyThrSerThrAlaValSerLysAlaAlaLysGluLeuProSerProA
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           nGluLysGlyThrSerThrAlaValSerLysAlaAlaLysGluLeuProSerProA
+ 1318884 : CGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTA : 1318828
+
+     449 : ATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAA :     502
+           snSerAspGluAsnMetThrValAsnThrSerIleGluValGlnProHisThrGln
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           snSerAspGluAsnMetThrValAsnThrSerIleGluValGlnProHisThrGln
+ 1318827 : ATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAA : 1318774
+
+     503 : GAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAA :     559
+           GluAsnGluLysValMetTrpAsnIleGlySerTrpAsnAlaProSerLeuThrAs
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GluAsnGluLysValMetTrpAsnIleGlySerTrpAsnAlaProSerLeuThrAs
+ 1318773 : GAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAA : 1318717
+
+     560 : TTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAA :     616
+           nSerTrpAspSerProProGlyAsnArgThrGlyAlaValThrIleGlyAspGluS
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           nSerTrpAspSerProProGlyAsnArgThrGlyAlaValThrIleGlyAspGluS
+ 1318716 : TTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAA : 1318660
+
+     617 : GTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGA :     670
+           erIleAsnGlySerGluMetProAspPheSerLeuAspLeuValSerAsnAspArg
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           erIleAsnGlySerGluMetProAspPheSerLeuAspLeuValSerAsnAspArg
+ 1318659 : GTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGA : 1318606
+
+     671 : CAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTC :     727
+           GlnThrGlyLeuGluAlaLeuAspTyrAspIleHisAsnTyrPheProGlnHisSe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GlnThrGlyLeuGluAlaLeuAspTyrAspIleHisAsnTyrPheProGlnHisSe
+ 1318605 : CAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTC : 1318549
+
+     728 : TGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACC :     784
+           rGluArgLeuThrAlaGluLysIleAspThrSerAlaCysGlnCysGluIleAspG
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rGluArgLeuThrAlaGluLysIleAspThrSerAlaCysGlnCysGluIleAspG
+ 1318548 : TGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACC : 1318492
+
+     785 : AAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCC :     838
+           lnLysTyrLeuProTyrGluThrGluAspAspThrLeuPheProSerValLeuPro
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lnLysTyrLeuProTyrGluThrGluAspAspThrLeuPheProSerValLeuPro
+ 1318491 : AAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCC : 1318438
+
+     839 : CTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAA :     895
+           LeuAlaValGlySerGlnCysAsnAsnIleCysAsnArgLysCysIleGlyThrLy
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           LeuAlaValGlySerGlnCysAsnAsnIleCysAsnArgLysCysIleGlyThrLy
+ 1318437 : CTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAA : 1318381
+
+     896 : ACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATC :     952
+           sProCysSerAsnLysGluIleLysCysAspLeuIleThrSerHisLeuLeuAsnG
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           sProCysSerAsnLysGluIleLysCysAspLeuIleThrSerHisLeuLeuAsnG
+ 1318380 : ACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATC : 1318324
+
+     953 : AGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGA :    1006
+           lnLysSerLeuAlaSerValLeuProValAlaAlaSerHisThrLysThrIleArg
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lnLysSerLeuAlaSerValLeuProValAlaAlaSerHisThrLysThrIleArg
+ 1318323 : AGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGA : 1318270
+
+    1007 : ACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTC :    1063
+           ThrGlnSerGluAlaIleGluHisIleSerSerAlaIleSerAsnGlyLysAlaSe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ThrGlnSerGluAlaIleGluHisIleSerSerAlaIleSerAsnGlyLysAlaSe
+ 1318269 : ACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTC : 1318213
+
+    1064 : TTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACA :    1120
+           rCysTyrHisIleLeuGluGluIleSerSerLeuProLysTyrSerSerLeuAspI
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rCysTyrHisIleLeuGluGluIleSerSerLeuProLysTyrSerSerLeuAspI
+ 1318212 : TTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACA : 1318156
+
+    1121 : TAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAA :    1174
+           leAspAspLeuCysSerGluLeuIleIleLysAlaLysCysThrAspAspCysLys
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           leAspAspLeuCysSerGluLeuIleIleLysAlaLysCysThrAspAspCysLys
+ 1318155 : TAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAA : 1318102
+
+    1175 : ATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG :    1230
+           IleValValLysAlaArgAspLeuGlnSerAlaLeuValArgGlnLeuLeu***
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           IleValValLysAlaArgAspLeuGlnSerAlaLeuValArgGlnLeuLeu***
+ 1318101 : ATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG : 1318046
+
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence
+         Model: ungapped:codon
+     Raw score: 2072
+   Query range: 1230 -> 0
+  Target range: 1318045 -> 1319275
+
+    1230 : CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTATTT :    1176
+           LeuGlnGluLeuSerAsnGlnSerThrLeu***ValAlaSerPheAspTyrTyrPh
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           LeuGlnGluLeuSerAsnGlnSerThrLeu***ValAlaSerPheAspTyrTyrPh
+ 1318046 : CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTATTT : 1318100
+
+    1175 : TGCAGTCATCTGTACATTTTGCCTTGATTATTAATTCGCTGCATAAATCATCTATG :    1119
+           eAlaValIleCysThrPheCysLeuAspTyr***PheAlaAla***IleIleTyrV
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           eAlaValIleCysThrPheCysLeuAspTyr***PheAlaAla***IleIleTyrV
+ 1318101 : TGCAGTCATCTGTACATTTTGCCTTGATTATTAATTCGCTGCATAAATCATCTATG : 1318157
+
+    1118 : TCCAACGATGAATATTTTGGTAGGGAGGAGATCTCTTCGAGAATGTGGTAGCAAGA :    1065
+           alGlnArg***IlePheTrp***GlyGlyAspLeuPheGluAsnValValAlaArg
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           alGlnArg***IlePheTrp***GlyGlyAspLeuPheGluAsnValValAlaArg
+ 1318158 : TCCAACGATGAATATTTTGGTAGGGAGGAGATCTCTTCGAGAATGTGGTAGCAAGA : 1318211
+
+    1064 : CGCTTTTCCATTCGATATGGCGCTGCTAATGTGTTCAATTGCTTCAGATTGGGTTC :    1008
+           ArgPheSerIleArgTyrGlyAlaAlaAsnValPheAsnCysPheArgLeuGlySe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ArgPheSerIleArgTyrGlyAlaAlaAsnValPheAsnCysPheArgLeuGlySe
+ 1318212 : CGCTTTTCCATTCGATATGGCGCTGCTAATGTGTTCAATTGCTTCAGATTGGGTTC : 1318268
+
+    1007 : GAATTGTTTTAGTATGAGAAGCAGCCACCGGAAGCACCGAAGCTAGAGATTTCTGA :     951
+           rAsnCysPheSerMetArgSerSerHisArgLysHisArgSer***ArgPheLeuI
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rAsnCysPheSerMetArgSerSerHisArgLysHisArgSer***ArgPheLeuI
+ 1318269 : GAATTGTTTTAGTATGAGAAGCAGCCACCGGAAGCACCGAAGCTAGAGATTTCTGA : 1318325
+
+     950 : TTCAACAGGTGGCTTGTTATTAAGTCGCATTTGATCTCCTTATTTGAACATGGTTT :     897
+           leGlnGlnValAlaCysTyr***ValAlaPheAspLeuLeuIle***ThrTrpPhe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           leGlnGlnValAlaCysTyr***ValAlaPheAspLeuLeuIle***ThrTrpPhe
+ 1318326 : TTCAACAGGTGGCTTGTTATTAAGTCGCATTTGATCTCCTTATTTGAACATGGTTT : 1318379
+
+     896 : GGTCCCGATACACTTGCGGTTGCAAATATTATTACACTGGCTCCCTACAGCAAGGG :     840
+           GlyProAspThrLeuAlaValAlaAsnIleIleThrLeuAlaProTyrSerLysGl
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GlyProAspThrLeuAlaValAlaAsnIleIleThrLeuAlaProTyrSerLysGl
+ 1318380 : GGTCCCGATACACTTGCGGTTGCAAATATTATTACACTGGCTCCCTACAGCAAGGG : 1318436
+
+     839 : GAAGCACGCTGGGGAATAAAGTATCATCTTCTGTCTCGTATGGAAGATACTTTTGG :     783
+           yLysHisAlaGlyGlu***SerIleIlePheCysLeuValTrpLysIleLeuLeuV
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           yLysHisAlaGlyGlu***SerIleIlePheCysLeuValTrpLysIleLeuLeuV
+ 1318437 : GAAGCACGCTGGGGAATAAAGTATCATCTTCTGTCTCGTATGGAAGATACTTTTGG : 1318493
+
+     782 : TCAATTTCACATTGACATGCTGACGTATCTATTTTTTCAGCGGTCAGGCGTTCAGA :     729
+           alAsnPheThrLeuThrCys***ArgIleTyrPhePheSerGlyGlnAlaPheArg
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           alAsnPheThrLeuThrCys***ArgIleTyrPhePheSerGlyGlnAlaPheArg
+ 1318494 : TCAATTTCACATTGACATGCTGACGTATCTATTTTTTCAGCGGTCAGGCGTTCAGA : 1318547
+
+     728 : GTGCTGAGGAAAGTAGTTATGAATGTCGTAATCTAAAGCTTCTAGACCAGTCTGTC :     672
+           ValLeuArgLysValValMetAsnValValIle***SerPhe***ThrSerLeuSe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ValLeuArgLysValValMetAsnValValIle***SerPhe***ThrSerLeuSe
+ 1318548 : GTGCTGAGGAAAGTAGTTATGAATGTCGTAATCTAAAGCTTCTAGACCAGTCTGTC : 1318604
+
+     671 : TATCATTGGAGACAAGATCGAGACTGAAATCTGGCATTTCACTACCATTAATACTT :     615
+           rIleIleGlyAspLysIleGluThrGluIleTrpHisPheThrThrIleAsnThrP
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rIleIleGlyAspLysIleGluThrGluIleTrpHisPheThrThrIleAsnThrP
+ 1318605 : TATCATTGGAGACAAGATCGAGACTGAAATCTGGCATTTCACTACCATTAATACTT : 1318661
+
+     614 : TCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCACGAATT :     561
+           heValThrAspGlyAsnGlyThrCysSerIleSerGlyGlyArgIleProArgIle
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           heValThrAspGlyAsnGlyThrCysSerIleSerGlyGlyArgIleProArgIle
+ 1318662 : TCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCACGAATT : 1318715
+
+     560 : GGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTT :     504
+           Gly***ThrGlySerValPro***AlaTyrValProHisAsnPheLeuIleLeuLe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           Gly***ThrGlySerValPro***AlaTyrValProHisAsnPheLeuIleLeuLe
+ 1318716 : GGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTT : 1318772
+
+     503 : GAGTGTGCGGCTGTACTTCTATACTTGTGTTCACAGTCATGTTTTCATCTGAATTA :     447
+           uSerValArgLeuTyrPheTyrThrCysValHisSerHisValPheIle***IleA
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           uSerValArgLeuTyrPheTyrThrCysValHisSerHisValPheIle***IleA
+ 1318773 : GAGTGTGCGGCTGTACTTCTATACTTGTGTTCACAGTCATGTTTTCATCTGAATTA : 1318829
+
+     446 : GGCGATGGCAATTCCTTTGCAGCCTTGCTAACTGCTGTACTTGTTCCTTTTTCGTT :     393
+           rgArgTrpGlnPheLeuCysSerLeuAlaAsnCysCysThrCysSerPhePheVal
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rgArgTrpGlnPheLeuCysSerLeuAlaAsnCysCysThrCysSerPhePheVal
+ 1318830 : GGCGATGGCAATTCCTTTGCAGCCTTGCTAACTGCTGTACTTGTTCCTTTTTCGTT : 1318883
+
+     392 : TTCCCTTTTCTGTTGTTCTTGCAGATCATCGAGGAAGGCTAATATTCTTTCATCAT :     336
+           PheProPheLeuLeuPheLeuGlnIleIleGluGluGly***TyrSerPheIleIl
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           PheProPheLeuLeuPheLeuGlnIleIleGluGluGly***TyrSerPheIleIl
+ 1318884 : TTCCCTTTTCTGTTGTTCTTGCAGATCATCGAGGAAGGCTAATATTCTTTCATCAT : 1318940
+
+     335 : CAGAATTCTTAGCTCTATATTTTGTAATTTCCGACAGTAAACTTTTTAAAGAACAT :     279
+           eArgIleLeuSerSerIlePheCysAsnPheArgGln***ThrPhe***ArgThr*
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           eArgIleLeuSerSerIlePheCysAsnPheArgGln***ThrPhe***ArgThr*
+ 1318941 : CAGAATTCTTAGCTCTATATTTTGTAATTTCCGACAGTAAACTTTTTAAAGAACAT : 1318997
+
+     278 : AGTAAAAAGTCCGTGGTAGTCTTATTCTGCGCATCTTTCTGTTCTAGTAACTCTAC :     225
+           *****LysValArgGlySerLeuIleLeuArgIlePheLeuPhe******LeuTyr
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           *****LysValArgGlySerLeuIleLeuArgIlePheLeuPhe******LeuTyr
+ 1318998 : AGTAAAAAGTCCGTGGTAGTCTTATTCTGCGCATCTTTCTGTTCTAGTAACTCTAC : 1319051
+
+     224 : CCTCTCTTGCAAACTCTTCATTTTGGCTTCTTTCCTATCTCGGAACGCTCGTTGAG :     168
+           ProLeuLeuGlnThrLeuHisPheGlyPhePheProIleSerGluArgSerLeuSe
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ProLeuLeuGlnThrLeuHisPheGlyPhePheProIleSerGluArgSerLeuSe
+ 1319052 : CCTCTCTTGCAAACTCTTCATTTTGGCTTCTTTCCTATCTCGGAACGCTCGTTGAG : 1319108
+
+     167 : CTGCCCTATTCTGGGCAGTCCTCCTACTCTTAGCTTCAGAGTCAATCCTTTTTCTG :     111
+           rCysProIleLeuGlySerProProThrLeuSerPheArgValAsnProPheSerA
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rCysProIleLeuGlySerProProThrLeuSerPheArgValAsnProPheSerA
+ 1319109 : CTGCCCTATTCTGGGCAGTCCTCCTACTCTTAGCTTCAGAGTCAATCCTTTTTCTG : 1319165
+
+     110 : CCTGGTCTGCCCACCTTCCTCTTAGGTGTTCCATCTTTATTTAGCAACATTTGCTT :      57
+           laTrpSerAlaHisLeuProLeuArgCysSerIlePheIle***GlnHisLeuLeu
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           laTrpSerAlaHisLeuProLeuArgCysSerIlePheIle***GlnHisLeuLeu
+ 1319166 : CCTGGTCTGCCCACCTTCCTCTTAGGTGTTCCATCTTTATTTAGCAACATTTGCTT : 1319219
+
+      56 : CTTCATGTCACCTGCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT :       1
+           LeuHisValThrCys***IleTyrLeuLeuThrPheProLysAspIleAlaHis
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           LeuHisValThrCys***IleTyrLeuLeuThrPheProLysAspIleAlaHis
+ 1319220 : CTTCATGTCACCTGCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT : 1319275
+
+-- completed exonerate analysis

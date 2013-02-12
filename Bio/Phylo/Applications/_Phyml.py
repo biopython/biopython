@@ -58,7 +58,7 @@ class PhymlCommandline(AbstractCommandline):
 
             _Switch(['-p', '--pars', 'pars'],
                 """Use a minimum parsimony starting tree.
-                
+
                 This option is taken into account when the '-u' option is absent
                 and when tree topology modifications are to be done.
                 """
@@ -67,7 +67,7 @@ class PhymlCommandline(AbstractCommandline):
             _Option(['-b', '--bootstrap', 'bootstrap'],
                 """Number of bootstrap replicates, if value is > 0.
 
-                Otherwise: 
+                Otherwise:
 
                  0: neither approximate likelihood ratio test nor bootstrap
                     values are computed.
@@ -113,7 +113,7 @@ class PhymlCommandline(AbstractCommandline):
 
                 -f e, m, or "fA fC fG fT"
 
-                e : Empirical frequencies, determined as follows : 
+                e : Empirical frequencies, determined as follows :
 
                     - Nucleotide sequences: (Empirical) the equilibrium base
                       frequencies are estimated by counting the occurence of the
@@ -122,10 +122,10 @@ class PhymlCommandline(AbstractCommandline):
                       amino-acid frequencies are estimated by counting the
                       occurence of the different amino-acids in the alignment.
 
-                m : ML/model-based frequencies, determined as follows : 
+                m : ML/model-based frequencies, determined as follows :
 
                     - Nucleotide sequences: (ML) the equilibrium base
-                      frequencies are estimated using maximum likelihood 
+                      frequencies are estimated using maximum likelihood
                     - Amino-acid sequences: (Model) the equilibrium amino-acid
                       frequencies are estimated using the frequencies defined by
                       the substitution model.
@@ -199,7 +199,7 @@ class PhymlCommandline(AbstractCommandline):
                 tlr : tree topology (t), branch length (l) and
                       rate parameters (r) are optimised.
                 tl  : tree topology and branch length are optimised.
-                lr  : branch length and rate parameters are optimised. 
+                lr  : branch length and rate parameters are optimised.
                 l   : branch length are optimised.
                 r   : rate parameters are optimised.
                 n   : no parameter is optimised.
@@ -255,4 +255,3 @@ class PhymlCommandline(AbstractCommandline):
                 ),
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
-

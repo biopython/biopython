@@ -11,8 +11,7 @@ import sys
 import optparse
 from Bio.Restriction._Update.Update import *
 
-        
-if __name__ == '__main__' :
+if __name__ == '__main__':
     parser = optparse.OptionParser()
     add = parser.add_option
 
@@ -27,9 +26,9 @@ if __name__ == '__main__' :
         dest    = 'ftp_proxy',
         default = '',
         help    = "set the proxy to be used by the ftp connection.")
-    
+
     (option, args) = parser.parse_args()
-    
+
     Getfiles = RebaseUpdate(option.rebase_password, option.ftp_proxy)
     Getfiles.openRebase()
     Getfiles.getfiles()

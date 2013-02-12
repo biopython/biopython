@@ -94,7 +94,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.SeqIO and include the following:
 
- - clustal   - Ouput from Clustal W or X, see also the module Bio.Clustalw
+ - clustal   - Output from Clustal W or X, see also the module Bio.Clustalw
                which can be used to run the command line tool from Biopython.
  - emboss    - EMBOSS tools' "pairs" and "simple" alignment formats.
  - fasta     - The generic sequence file format where each record starts with
@@ -123,7 +123,7 @@ same length.
 # For using with statement in Python 2.5 or Jython
 from __future__ import with_statement
 
-__docformat__ = "epytext en" #not just plaintext
+__docformat__ = "epytext en"  # not just plaintext
 
 #TODO
 # - define policy on reading aligned sequences with gaps in
@@ -154,26 +154,27 @@ import FastaIO
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
-_FormatToIterator = {#"fasta" is done via Bio.SeqIO
-                     "clustal" : ClustalIO.ClustalIterator,
-                     "emboss" : EmbossIO.EmbossIterator,
-                     "fasta-m10" : FastaIO.FastaM10Iterator,
-                     "nexus" : NexusIO.NexusIterator,
-                     "phylip" : PhylipIO.PhylipIterator,
-                     "phylip-sequential" : PhylipIO.SequentialPhylipIterator,
-                     "phylip-relaxed" : PhylipIO.RelaxedPhylipIterator,
-                     "stockholm" : StockholmIO.StockholmIterator,
+_FormatToIterator = {  # "fasta" is done via Bio.SeqIO
+                     "clustal": ClustalIO.ClustalIterator,
+                     "emboss": EmbossIO.EmbossIterator,
+                     "fasta-m10": FastaIO.FastaM10Iterator,
+                     "nexus": NexusIO.NexusIterator,
+                     "phylip": PhylipIO.PhylipIterator,
+                     "phylip-sequential": PhylipIO.SequentialPhylipIterator,
+                     "phylip-relaxed": PhylipIO.RelaxedPhylipIterator,
+                     "stockholm": StockholmIO.StockholmIterator,
                      }
 
-_FormatToWriter = {#"fasta" is done via Bio.SeqIO
-                   #"emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "nexus" : NexusIO.NexusWriter,
-                   "phylip" : PhylipIO.PhylipWriter,
-                   "phylip-sequential" : PhylipIO.SequentialPhylipWriter,
-                   "phylip-relaxed" : PhylipIO.RelaxedPhylipWriter,
-                   "stockholm" : StockholmIO.StockholmWriter,
-                   "clustal" : ClustalIO.ClustalWriter,
+_FormatToWriter = {  # "fasta" is done via Bio.SeqIO
+                     # "emboss" : EmbossIO.EmbossWriter, (unfinished)
+                   "nexus": NexusIO.NexusWriter,
+                   "phylip": PhylipIO.PhylipWriter,
+                   "phylip-sequential": PhylipIO.SequentialPhylipWriter,
+                   "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
+                   "stockholm": StockholmIO.StockholmWriter,
+                   "clustal": ClustalIO.ClustalWriter,
                    }
+
 
 def write(alignments, handle, format):
     """Write complete set of alignments to a file.
@@ -201,7 +202,7 @@ def write(alignments, handle, format):
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(alignments, Alignment):
-        #This raised an exception in older version of Biopython
+        #This raised an exception in older versions of Biopython
         alignments = [alignments]
 
     with as_handle(handle, 'w') as fp:
@@ -210,17 +211,17 @@ def write(alignments, handle, format):
             writer_class = _FormatToWriter[format]
             count = writer_class(fp).write_file(alignments)
         elif format in SeqIO._FormatToWriter:
-            #Exploit the existing SeqIO parser to the dirty work!
+            #Exploit the existing SeqIO parser to do the dirty work!
             #TODO - Can we make one call to SeqIO.write() and count the alignments?
             count = 0
             for alignment in alignments:
                 if not isinstance(alignment, Alignment):
-                    raise TypeError(\
+                    raise TypeError(
                         "Expect a list or iterator of Alignment objects.")
                 SeqIO.write(alignment, fp, format)
                 count += 1
         elif format in _FormatToIterator or format in SeqIO._FormatToIterator:
-            raise ValueError("Reading format '%s' is supported, but not writing" \
+            raise ValueError("Reading format '%s' is supported, but not writing"
                              % format)
         else:
             raise ValueError("Unknown format '%s'" % format)
@@ -230,6 +231,7 @@ def write(alignments, handle, format):
            % (format, repr(count))
 
     return count
+
 
 #This is a generator function!
 def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
@@ -270,6 +272,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
             yield MultipleSeqAlignment(records, alphabet)
     raise StopIteration
 
+
 def _force_alphabet(alignment_iterator, alphabet):
     """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
     #Assume the alphabet argument has been pre-validated
@@ -277,25 +280,26 @@ def _force_alphabet(alignment_iterator, alphabet):
     for align in alignment_iterator:
         if not isinstance(_get_base_alphabet(align._alphabet),
                           given_base_class):
-            raise ValueError("Specified alphabet %s clashes with "\
-                             "that determined from the file, %s" \
+            raise ValueError("Specified alphabet %s clashes with "
+                             "that determined from the file, %s"
                              % (repr(alphabet), repr(align._alphabet)))
         for record in align:
             if not isinstance(_get_base_alphabet(record.seq.alphabet),
                               given_base_class):
-                raise ValueError("Specified alphabet %s clashes with "\
-                                 "that determined from the file, %s" \
+                raise ValueError("Specified alphabet %s clashes with "
+                                 "that determined from the file, %s"
                            % (repr(alphabet), repr(record.seq.alphabet)))
             record.seq.alphabet = alphabet
         align._alphabet = alphabet
         yield align
+
 
 def parse(handle, format, seq_count=None, alphabet=None):
     """Iterate over an alignment file as MultipleSeqAlignment objects.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
-                   (note older verions of Biopython only took a handle).
+                   (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
      - alphabet  - optional Alphabet object, useful when the sequence type
                    cannot be automatically inferred from the file itself
@@ -333,7 +337,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
     if seq_count is not None and not isinstance(seq_count, int):
@@ -343,7 +347,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
-            if alphabet is None :
+            if alphabet is None:
                 i = iterator_generator(fp, seq_count)
             else:
                 try:
@@ -366,12 +370,13 @@ def parse(handle, format, seq_count=None, alphabet=None):
         for a in i:
             yield a
 
+
 def read(handle, format, seq_count=None, alphabet=None):
     """Turns an alignment file into a single MultipleSeqAlignment object.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
-                   (note older verions of Biopython only took a handle).
+                   (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
      - alphabet  - optional Alphabet object, useful when the sequence type
                    cannot be automatically inferred from the file itself
@@ -427,8 +432,9 @@ def read(handle, format, seq_count=None, alphabet=None):
     if second is not None:
         raise ValueError("More than one record found in handle")
     if seq_count:
-        assert len(first)==seq_count
+        assert len(first) == seq_count
     return first
+
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two alignment files, returns number of alignments.
@@ -456,30 +462,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 
     return count
 
-def _test():
-    """Run the Bio.AlignIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
 
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

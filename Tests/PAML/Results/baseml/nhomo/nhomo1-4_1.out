@@ -1,5 +1,5 @@
 
-seed used = 1024367529
+seed used = 1105670833
 
 BASEML (in paml version 4.1, August 2008)  Alignments/alignment.phylip  F81 dGamma (ncatG=5)
 Frequencies..
@@ -29,20 +29,19 @@ Macaca_mul         0.0092  0.0139  0.0139  0.0092
 TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
 lnL(ntime:  7  np: 11):   -326.287788   +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
-  0.00000  0.00000  0.00000  0.00452  0.00453  0.00000  0.00908  0.20317  0.16768  0.36813 999.00000
+  0.00000  0.00000  0.00000  0.00452  0.00453  0.00000  0.00908  0.20316  0.16769  0.36814 999.00000
 
 tree length =   0.01814
 
 (((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.004525): 0.000000, Gorilla_go: 0.004526): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009081);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004524): 0.000000, Gorilla_go: 0.004526): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009080);
 
 Detailed output identifying parameters
 
 base frequency parameters
-  0.20317  0.16768  0.36813  0.26102
+  0.20316  0.16769  0.36814  0.26100
 alpha (gamma, K=5) = 999.00000
 rate:   0.95611  0.98294  0.99967  1.01660  1.04468
 freq:   0.20000  0.20000  0.20000  0.20000  0.20000
 
-check convergence..

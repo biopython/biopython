@@ -24,7 +24,7 @@ def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     """get_prodoc_entry(id,
     cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry') -> handle
 
-    Get a handle to a PRODOC entry at ExPASy in HTML format. 
+    Get a handle to a PRODOC entry at ExPASy in HTML format.
 
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this line:
@@ -33,6 +33,7 @@ def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     # Open a handle to ExPASy.
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
+
 
 def get_prosite_entry(id,
                       cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry'):
@@ -48,6 +49,7 @@ def get_prosite_entry(id,
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
 
+
 def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
     """get_prosite_raw(id,
                        cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl')
@@ -60,6 +62,7 @@ def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
 
+
 def get_sprot_raw(id):
     """Get a handle to a raw SwissProt entry at ExPASy.
 
@@ -67,6 +70,7 @@ def get_sprot_raw(id):
     (as per the http://www.expasy.ch/expasy_urls.html documentation).
     """
     return urllib.urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
+
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
                      cgi='http://www.expasy.ch/cgi-bin/sprot-search-ful'):
@@ -76,7 +80,7 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
     Search SwissProt by full text.
 
     """
-    variables = {'SEARCH' : text}
+    variables = {'SEARCH': text}
     if make_wild:
         variables['makeWild'] = 'on'
     if swissprot:
@@ -88,6 +92,7 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
     handle = urllib.urlopen(fullcgi)
     return handle
 
+
 def sprot_search_de(text, swissprot=1, trembl=None,
                     cgi='http://www.expasy.ch/cgi-bin/sprot-search-de'):
     """sprot_search_de(text, swissprot=1, trembl=None,
@@ -97,7 +102,7 @@ def sprot_search_de(text, swissprot=1, trembl=None,
     organelle.
 
     """
-    variables = {'SEARCH' : text}
+    variables = {'SEARCH': text}
     if swissprot:
         variables['S'] = 'on'
     if trembl:

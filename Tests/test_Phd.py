@@ -7,6 +7,7 @@ import unittest
 from Bio import SeqIO
 from Bio.Sequencing import Phd
 
+
 class PhdTestOne(unittest.TestCase):
     def setUp(self):
         self.handle = open("Phd/phd1")
@@ -216,6 +217,7 @@ class PhdTestOne(unittest.TestCase):
         # Make sure that no further records are found
         self.assertRaises(StopIteration, records.next)
 
+
 class PhdTestTwo(unittest.TestCase):
     def setUp(self):
         self.handle = open("Phd/phd2")
@@ -245,7 +247,8 @@ class PhdTestTwo(unittest.TestCase):
                          "@ML4924R\nactttggtcg\n+\nFFFHHLRPNK\n")
         # Make sure that no further records are found
         self.assertRaises(StopIteration, records.next)
-        
+
+
 class PhdTest454(unittest.TestCase):
     def setUp(self):
         self.handle = open("Phd/phd_454")
@@ -284,6 +287,7 @@ class PhdTest454(unittest.TestCase):
                          "eeeeeeeeee\n")
         # Make sure that no further records are found
         self.assertRaises(StopIteration, records.next)
+
 
 class PhdTestSolexa(unittest.TestCase):
     def setUp(self):
@@ -358,9 +362,8 @@ class PhdTestSolexa(unittest.TestCase):
                          "+\n"
                          "^^^^^^^^^^^^^^^^^^^^^^^^^^P^\\VVVNOOEJOJE\n")
         # Make sure that no further records are found
-        self.assertRaises(StopIteration, records.next)        
+        self.assertRaises(StopIteration, records.next)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-

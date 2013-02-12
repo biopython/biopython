@@ -18,12 +18,13 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+
 class EmbossWriter(SequentialAlignmentWriter):
     """Emboss alignment writer (WORK IN PROGRESS).
 
     Writes a simplfied version of the EMBOSS pairs/simple file format.
     A lot of the information their tools record in their headers is not
-    available and is ommitted.
+    available and is omitted.
     """
 
     def write_header(self):
@@ -40,7 +41,7 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle = self.handle
         handle.write("#---------------------------------------\n")
         handle.write("#---------------------------------------\n")
-        
+
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
         handle = self.handle
@@ -57,13 +58,14 @@ class EmbossWriter(SequentialAlignmentWriter):
         #...
         assert False
 
+
 class EmbossIterator(AlignmentIterator):
     """Emboss alignment iterator.
 
     For reading the (pairwise) alignments from EMBOSS tools in what they
     call the "pairs" and "simple" formats.
     """
-    
+
     def next(self):
 
         handle = self.handle
@@ -73,7 +75,7 @@ class EmbossIterator(AlignmentIterator):
             #the previous alignment.
             line = self._header
             del self._header
-        except AttributeError:      
+        except AttributeError:
             line = handle.readline()
         if not line:
             raise StopIteration
@@ -88,12 +90,11 @@ class EmbossIterator(AlignmentIterator):
         ids = []
         seqs = []
 
-
         while line[0] == "#":
             #Read in the rest of this alignment header,
             #try and discover the number of records expected
             #and their length
-            parts = line[1:].split(":",1)
+            parts = line[1:].split(":", 1)
             key = parts[0].lower().strip()
             if key == "aligned_sequences":
                 number_of_seqs = int(parts[1].strip())
@@ -101,7 +102,7 @@ class EmbossIterator(AlignmentIterator):
                 # Should now expect the record identifiers...
                 for i in range(number_of_seqs):
                     line = handle.readline()
-                    parts = line[1:].strip().split(":",1)
+                    parts = line[1:].strip().split(":", 1)
                     assert i+1 == int(parts[0].strip())
                     ids.append(parts[1].strip())
                 assert len(ids) == number_of_seqs
@@ -118,7 +119,7 @@ class EmbossIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         seqs = ["" for id in ids]
@@ -135,25 +136,25 @@ class EmbossIterator(AlignmentIterator):
                     #(an aligned seq is broken up into multiple lines)
                     id, start = id_start
                     seq, end = seq_end
-                    if start==end:
+                    if start == end:
                         #Special case, either a single letter is present,
                         #or no letters at all.
-                        if seq.replace("-","") == "":
+                        if seq.replace("-", "") == "":
                             start = int(start)
                             end = int(end)
                         else:
                             start = int(start) - 1
                             end = int(end)
                     else:
-                        assert seq.replace("-","") != ""
-                        start = int(start)-1 #python counting
+                        assert seq.replace("-", "") != ""
+                        start = int(start) - 1  # python counting
                         end = int(end)
 
                     #The identifier is truncated...
                     assert 0 <= index and index < number_of_seqs, \
                            "Expected index %i in range [0,%i)" \
                            % (index, number_of_seqs)
-                    assert id==ids[index] or id == ids[index][:len(id)]
+                    assert id == ids[index] or id == ids[index][:len(id)]
 
                     if len(seq_starts) == index:
                         #Record the start
@@ -161,19 +162,19 @@ class EmbossIterator(AlignmentIterator):
 
                     #Check the start...
                     if start == end:
-                        assert seq.replace("-","") == "", line
+                        assert seq.replace("-", "") == "", line
                     else:
                         assert start - seq_starts[index] == len(seqs[index].replace("-","")), \
                         "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
                             % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
                                start, line)
-                    
+
                     seqs[index] += seq
 
                     #Check the end ...
-                    assert end == seq_starts[index] + len(seqs[index].replace("-","")), \
+                    assert end == seq_starts[index] + len(seqs[index].replace("-", "")), \
                         "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s" \
-                            % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
+                            % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
                                seq_starts[index], end, line)
 
                     index += 1
@@ -201,7 +202,7 @@ class EmbossIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != len(ids):
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (len(ids), self.records_per_alignment))
 
         records = []
@@ -214,7 +215,7 @@ class EmbossIterator(AlignmentIterator):
                 raise ValueError("Error parsing alignment - sequences of "
                                  "different length? You could be using an "
                                  "old version of EMBOSS.")
-            records.append(SeqRecord(Seq(seq, self.alphabet), \
+            records.append(SeqRecord(Seq(seq, self.alphabet),
                                      id=id, description=id))
         return MultipleSeqAlignment(records, self.alphabet)
 
@@ -272,7 +273,7 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 #---------------------------------------
 
 """
-    
+
     #http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
     pair_example = \
 """########################################
@@ -585,15 +586,15 @@ asis             311 -----------------    311
     assert len(alignments[0]) == 2
     assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235"]
-    
+
     alignments = list(EmbossIterator(StringIO(simple_example)))
-    assert len(alignments) == 1    
+    assert len(alignments) == 1
     assert len(alignments[0]) == 4
     assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
 
     alignments = list(EmbossIterator(StringIO(pair_example + simple_example)))
-    assert len(alignments) == 2    
+    assert len(alignments) == 2
     assert len(alignments[0]) == 2
     assert len(alignments[1]) == 4
     assert [r.id for r in alignments[0]] \
@@ -609,11 +610,10 @@ asis             311 -----------------    311
     assert [r.id for r in alignments[4]] \
            == ["ref_rec", "gi|94970041|receiver"]
 
-
     alignments = list(EmbossIterator(StringIO(pair_example3)))
     assert len(alignments) == 1
     assert len(alignments[0]) == 2
     assert [r.id for r in alignments[0]] \
-           == ["asis","asis"]
+           == ["asis", "asis"]
 
     print "Done"

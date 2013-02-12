@@ -4,15 +4,16 @@
 # as part of this package.
 """Collection of modules for dealing with biological data in Python.
 
-The Biopython Project is an international association of developers 
+The Biopython Project is an international association of developers
 of freely available Python tools for computational molecular biology.
 
 http://biopython.org
 """
 
-__docformat__ = "epytext en" #not just plaintext
+__docformat__ = "epytext en"  # not just plaintext
 
-__version__ = "1.60+"
+__version__ = "1.61+"
+
 
 class MissingExternalDependencyError(Exception):
     """Missing an external dependency.
@@ -21,6 +22,7 @@ class MissingExternalDependencyError(Exception):
     tests to allow skipping tests with missing external dependencies.
     """
     pass
+
 
 class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     """Missing an external python dependency (subclass of ImportError).
@@ -32,9 +34,10 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     """
     pass
 
+
 class BiopythonWarning(Warning):
     """Biopython warning.
-    
+
     Biopython should use this warning (or subclasses of it), making it easy to
     silence all our warning messages should you wish to:
 
@@ -46,9 +49,10 @@ class BiopythonWarning(Warning):
     """
     pass
 
+
 class BiopythonParserWarning(BiopythonWarning):
     """Biopython parser warning.
-    
+
     Some in-valid data files cannot be parsed and will trigger an exception.
     Where a reasonable interpretation is possible, Biopython will issue this
     warning to indicate a potential problem. To silence these warnings, use:
@@ -61,9 +65,10 @@ class BiopythonParserWarning(BiopythonWarning):
     """
     pass
 
+
 class BiopythonDeprecationWarning(BiopythonWarning):
     """Biopython deprecation warning.
-    
+
     Biopython uses this warning instead of the built in DeprecationWarning
     since those are ignored by default since Python 2.7.
 
@@ -76,5 +81,27 @@ class BiopythonDeprecationWarning(BiopythonWarning):
     Code marked as deprecated is likely to be removed in a future version
     of Biopython. To avoid removal of this code, please contact the Biopython
     developers by sending an email to biopython-dev@biopython.org.
+    """
+    pass
+
+
+class BiopythonExperimentalWarning(BiopythonWarning):
+    """Biopython experimental code warning.
+
+    Biopython uses this warning for experimental code ('alpha' or 'beta'
+    level code) which is released as part of the standard releases to mark
+    sub-modules or functions for early adopters to test & give feedback..
+
+    Code issuing this warning is likely to change (or even be removed) in
+    a subsequent release of Biopython. Such code should NOT be used for
+    production/stable code. It should only be used if:
+
+     - You are running the latest release of Biopython, or ideally the
+       latest code from our repository.
+     - You are subscribed to the biopython-dev mailing list to provide
+       feedback on this code, and to be alterted to changes to it.
+
+    If all goes well, experimental code would be promoted to stable in
+    a subsequence release, and this warning removed from it.
     """
     pass

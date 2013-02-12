@@ -7,6 +7,7 @@ hidden layers and the output layer).
 import math
 import random
 
+
 def logistic_function(value):
     """Transform the value with the logistic function.
 
@@ -14,6 +15,7 @@ def logistic_function(value):
     that makes sense.
     """
     return 1.0 / (1.0 + math.exp(-value))
+
 
 class AbstractLayer(object):
     """Abstract base class for all layers.
@@ -52,8 +54,9 @@ class AbstractLayer(object):
         """
         if (this_node, next_node) not in self.weights:
             raise ValueError("Invalid node values passed.")
-        
+
         self.weights[(this_node, next_node)] = value
+
 
 class InputLayer(AbstractLayer):
     def __init__(self, num_nodes, next_layer):
@@ -108,14 +111,14 @@ class InputLayer(AbstractLayer):
         for input_num in range(len(inputs)):
             self.values[input_num + 1] = inputs[input_num]
 
-        # propogate the update to the next layer
+        # propagate the update to the next layer
         self._next_layer.update(self)
 
     def backpropagate(self, outputs, learning_rate, momentum):
         """Recalculate all weights based on the last round of prediction.
 
         Arguments:
-        
+
         o learning_rate -- The learning rate of the network
 
         o momentum - The amount of weight to place on the previous weight
@@ -123,10 +126,10 @@ class InputLayer(AbstractLayer):
 
         o outputs - The output info we are using to calculate error.
         """
-        # first backpropogate to the next layers
+        # first backpropagate to the next layers
         next_errors = self._next_layer.backpropagate(outputs, learning_rate,
                                                      momentum)
-        
+
         for this_node in self.nodes:
             for next_node in self._next_layer.nodes:
                 error_deriv = (next_errors[next_node] *
@@ -141,8 +144,9 @@ class InputLayer(AbstractLayer):
                 # remember the weight change for next time
                 self.weight_changes[(this_node, next_node)] = delta
 
+
 class HiddenLayer(AbstractLayer):
-    def __init__(self, num_nodes, next_layer, activation = logistic_function):
+    def __init__(self, num_nodes, next_layer, activation=logistic_function):
         """Initialize a hidden layer.
 
         Arguments:
@@ -181,7 +185,7 @@ class HiddenLayer(AbstractLayer):
                 self.values[node] = 1
             else:
                 self.values[node] = 0
-        
+
     def update(self, previous_layer):
         """Update the values of nodes from the previous layer info.
 
@@ -199,7 +203,7 @@ class HiddenLayer(AbstractLayer):
 
             self.values[update_node] = self._activation(sum)
 
-        # propogate the update to the next layer
+        # propagate the update to the next layer
         self._next_layer.update(self)
 
     def backpropagate(self, outputs, learning_rate, momentum):
@@ -215,7 +219,7 @@ class HiddenLayer(AbstractLayer):
         o outputs - The output values we are using to see how good our
         network is at predicting things.
         """
-        # first backpropogate to the next layers
+        # first backpropagate to the next layers
         next_errors = self._next_layer.backpropagate(outputs, learning_rate,
                                                      momentum)
 
@@ -237,7 +241,7 @@ class HiddenLayer(AbstractLayer):
         # --- calculate error terms
         errors = {}
         for error_node in self.nodes:
-            # get the error info propogated from the next layer
+            # get the error info propagated from the next layer
             previous_error = 0.0
             for next_node in self._next_layer.nodes:
                 previous_error += (next_errors[next_node] *
@@ -251,9 +255,10 @@ class HiddenLayer(AbstractLayer):
             errors[error_node] = previous_error * corr_factor
 
         return errors
-                
+
+
 class OutputLayer(AbstractLayer):
-    def __init__(self, num_nodes, activation = logistic_function):
+    def __init__(self, num_nodes, activation=logistic_function):
         """Initialize the Output Layer.
 
         Arguments:
@@ -277,7 +282,7 @@ class OutputLayer(AbstractLayer):
 
         Arguments:
 
-        o previous_layer -- The hidden layer preceeding this.
+        o previous_layer -- The hidden layer preceding this.
         """
         # update all of the nodes in this layer
         for update_node in self.nodes:
@@ -288,7 +293,7 @@ class OutputLayer(AbstractLayer):
                         previous_layer.weights[(node, update_node)])
 
             self.values[update_node] = self._activation(sum)
-    
+
     def backpropagate(self, outputs, learning_rate, momentum):
         """Calculate the backpropagation error at a given node.
 

@@ -5,9 +5,10 @@
 """Command line wrapper for the multiple alignment program DIALIGN2-2.
 """
 
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
+
 
 class DialignCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program DIALIGN2-2.
@@ -27,7 +28,7 @@ class DialignCommandline(AbstractCommandline):
 
     You would typically run the command line with dialign_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
-    
+
     Citation:
 
     B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
@@ -178,9 +179,10 @@ class DialignCommandline(AbstractCommandline):
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing modules doctests..."
+    print "Running modules doctests..."
     import doctest
     doctest.testmod()
     print "Done"

@@ -17,10 +17,11 @@ except ValueError:
             return float(text)
         except ValueError:
             if text.lower()=="nan":
-                import struct 
+                import struct
                 return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
             else:
                 raise
+
 
 def parse_basics(lines, results):
     """Parse the basic information that should be present in most codeml output files.
@@ -82,7 +83,8 @@ def parse_basics(lines, results):
         if "ln Lmax" in line and len(line_floats) > 0:
             results["lnL max"] = line_floats[0]
     return (results, multi_models, multi_genes)
- 
+
+
 def parse_nssites(lines, results, multi_models, multi_genes):
     """Determine which NSsites models are present and parse them.
     """
@@ -93,7 +95,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
     siteclass_model = results.get("site-class model")
     if not multi_models:
     # If there's only one model in the results, find out
-    # which one it is and then parse it. 
+    # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
         current_model = {"one-ratio" : 0,
@@ -148,8 +150,8 @@ def parse_nssites(lines, results, multi_models, multi_genes):
         # model to parse.
             model_results = parse_model(lines[model_start:], model_results)
             ns_sites[current_model] = model_results
-    # Only add the ns_sites dict to the results if we really have results. 
-    # Model M0 is added by default in some cases, so if it exists, make sure 
+    # Only add the ns_sites dict to the results if we really have results.
+    # Model M0 is added by default in some cases, so if it exists, make sure
     # it's not empty
     if len(ns_sites) == 1:
         m0 = ns_sites.get(0)
@@ -158,6 +160,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
     elif len(ns_sites) > 1:
         results["NSsites"] = ns_sites
     return results
+
 
 def parse_model(lines, results):
     """Parse an individual NSsites model's results.
@@ -170,7 +173,7 @@ def parse_model(lines, results):
     num_params = None
     tree_re = re.compile("\(\(+")
     branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
-    model_params_re = re.compile("([a-z]\d?)=\s+(\d+\.\d+)")
+    model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -200,7 +203,7 @@ def parse_model(lines, results):
         # the parameter format.
         # Example match:
         # "SEs for parameters:
-        # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000 
+        # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000
         elif "SEs for parameters:" in line:
             SEs_flag = True
         elif SEs_flag and len(line_floats) == num_params:
@@ -276,7 +279,7 @@ def parse_model(lines, results):
             site_classes = parameters.get("site classes")
             site_classes = parse_siteclass_omegas(line, site_classes)
             parameters["site classes"] = site_classes
-        # Find the omega values corresponding to a branch type from  
+        # Find the omega values corresponding to a branch type from
         # the clade model C for each site class
         # Example match:
         # "branch type 0:    0.31022   1.00000   0.00000"
@@ -285,7 +288,7 @@ def parse_model(lines, results):
             if branch_type:
                 site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
-                site_classes = parse_clademodelc(branch_type_no, line_floats, 
+                site_classes = parse_clademodelc(branch_type_no, line_floats,
                         site_classes)
                 parameters["site classes"] = site_classes
         # Find the omega values of the foreground branch for each site
@@ -339,6 +342,7 @@ def parse_model(lines, results):
         results["parameters"] = parameters
     return results
 
+
 def parse_siteclass_proportions(line_floats):
     """For models which have multiple site classes, find the proportion of the alignment assigned to each class.
     """
@@ -347,6 +351,7 @@ def parse_siteclass_proportions(line_floats):
         for n in range(len(line_floats)):
             site_classes[n] = {"proportion" : line_floats[n]}
     return site_classes
+
 
 def parse_siteclass_omegas(line, site_classes):
     """For models which have multiple site classes, find the omega estimated for each class.
@@ -363,6 +368,7 @@ def parse_siteclass_omegas(line, site_classes):
         site_classes[n]["omega"] = line_floats[n]
     return site_classes
 
+
 def parse_clademodelc(branch_type_no, line_floats, site_classes):
     """Parse results specific to the clade model C.
     """
@@ -373,6 +379,7 @@ def parse_clademodelc(branch_type_no, line_floats, site_classes):
             site_classes[n]["branch types"] = {}
         site_classes[n]["branch types"][branch_type_no] = line_floats[n]
     return site_classes
+
 
 def parse_branch_site_a(foreground, line_floats, site_classes):
     """Parse results specific to the branch site A model.
@@ -389,6 +396,7 @@ def parse_branch_site_a(foreground, line_floats, site_classes):
             site_classes[n]["branch types"]["background"] =\
                     line_floats[n]
     return site_classes
+
 
 def parse_pairwise(lines, results):
     """Parse results from pairwise comparisons.
@@ -429,6 +437,7 @@ def parse_pairwise(lines, results):
         results["pairwise"] = pairwise
     return results
 
+
 def parse_distances(lines, results):
     """Parse amino acid sequence distance results.
     """
@@ -451,7 +460,7 @@ def parse_distances(lines, results):
             raw_aa_distances_flag = False
         # Parse AA distances (raw or ML), in a lower diagonal matrix
         matrix_row_res = matrix_row_re.match(line)
-        if matrix_row_res and (raw_aa_distances_flag or \
+        if matrix_row_res and (raw_aa_distances_flag or
                 ml_aa_distances_flag):
             seq_name = matrix_row_res.group(1).strip()
             if seq_name not in sequences:

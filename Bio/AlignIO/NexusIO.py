@@ -14,7 +14,7 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from Bio.SeqRecord import SeqRecord  
+from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentWriter
@@ -22,7 +22,8 @@ from Bio import Alphabet
 
 #You can get a couple of example files here:
 #http://www.molecularevolution.org/resources/fileformats/
-    
+
+
 #This is a generator function!
 def NexusIterator(handle, seq_count=None):
     """Returns SeqRecord objects from a Nexus file.
@@ -43,18 +44,19 @@ def NexusIterator(handle, seq_count=None):
     #Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
     #The original names and the modified names are kept in these two lists:
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
-    
+
     if seq_count and seq_count != len(n.unaltered_taxlabels):
-        raise ValueError("Found %i sequences, but seq_count=%i" \
+        raise ValueError("Found %i sequences, but seq_count=%i"
                % (len(n.unaltered_taxlabels), seq_count))
 
     #ToDo - Can we extract any annotation too?
-    records = (SeqRecord(n.matrix[new_name], id=new_name, \
-                         name=old_name, description="") \
-               for old_name, new_name \
-               in zip (n.unaltered_taxlabels, n.taxlabels))
+    records = (SeqRecord(n.matrix[new_name], id=new_name,
+                         name=old_name, description="")
+               for old_name, new_name
+               in zip(n.unaltered_taxlabels, n.taxlabels))
     #All done
     yield MultipleSeqAlignment(records, n.alphabet)
+
 
 class NexusWriter(AlignmentWriter):
     """Nexus alignment writer.
@@ -71,7 +73,7 @@ class NexusWriter(AlignmentWriter):
         alignments - A list or iterator returning MultipleSeqAlignment objects.
                      This should hold ONE and only one alignment.
         """
-        align_iter = iter(alignments) #Could have been a list
+        align_iter = iter(alignments)  # Could have been a list
         try:
             first_alignment = align_iter.next()
         except StopIteration:
@@ -79,7 +81,7 @@ class NexusWriter(AlignmentWriter):
         if first_alignment is None:
             #Nothing to write!
             return 0
-        
+
         #Check there is only one alignment...
         try:
             second_alignment = align_iter.next()
@@ -90,7 +92,7 @@ class NexusWriter(AlignmentWriter):
 
         #Good.  Actually write the single alignment,
         self.write_alignment(first_alignment)
-        return 1 #we only support writing one alignment!
+        return 1  # we only support writing one alignment!
 
     def write_alignment(self, alignment):
         #Creates an empty Nexus object, adds the sequences,
@@ -107,7 +109,7 @@ class NexusWriter(AlignmentWriter):
         for record in alignment:
             n.add_sequence(record.id, str(record.seq))
         n.write_nexus_data(self.handle)
-    
+
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
 
@@ -189,7 +191,7 @@ if __name__ == "__main__":
     print "Done"
     print
     print "Writing..."
-    
+
     handle = StringIO()
     NexusWriter(handle).write_file([a])
     handle.seek(0)
@@ -197,7 +199,7 @@ if __name__ == "__main__":
 
     handle = StringIO()
     try:
-        NexusWriter(handle).write_file([a,a])
+        NexusWriter(handle).write_file([a, a])
         assert False, "Should have rejected more than one alignment!"
     except ValueError:
         pass

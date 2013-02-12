@@ -14,6 +14,7 @@ read             Reads one Medline record
 parse            Allows you to iterate over a bunch of Medline records
 """
 
+
 class Record(dict):
     """A dictionary holding information from a Medline record.
     All data are stored under the mnemonic appearing in the Medline
@@ -126,7 +127,7 @@ def parse(handle):
     record = Record()
     finished = False
     while not finished:
-        if line[:6]=="      ": # continuation line
+        if line[:6] == "      ":  # continuation line
             record[key].append(line[6:])
         elif line:
             key = line[:4].rstrip()
@@ -149,8 +150,9 @@ def parse(handle):
             yield record
         record = Record()
 
+
 def read(handle):
-    """Read a single Medline records from the handle.
+    """Read a single Medline record from the handle.
 
     The handle is either is a Medline file, a file-like object, or a list
     of lines describing a Medline record.

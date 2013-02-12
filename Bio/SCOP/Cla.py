@@ -11,13 +11,11 @@ The file format is described in the scop
 "release notes.":http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
 The latest CLA file can be found
 "elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
-  
+
 "Release 1.73": http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.cla.scop.txt_1.73
 (July 2008)
 
 """
-
-
 
 import Residues
 
@@ -41,24 +39,24 @@ class Record(object):
     """
     def __init__(self, line=None):
         self.sid = ''
-        self.residues = None 
+        self.residues = None
         self.sccs = ''
         self.sunid =''
         self.hierarchy = {}
         if line:
             self._process(line)
-        
+
     def _process(self, line):
         line = line.rstrip()         # no trailing whitespace
         columns = line.split('\t')   # separate the tab-delineated cols
         if len(columns) != 6:
             raise ValueError("I don't understand the format of %s" % line)
-        
+
         self.sid, pdbid, residues, self.sccs, self.sunid, hierarchy = columns
         self.residues = Residues.Residues(residues)
         self.residues.pdbid = pdbid
         self.sunid = int(self.sunid)
-        
+
         for ht in hierarchy.split(","):
             key, value = ht.split('=')
             self.hierarchy[key] = int(value)
@@ -96,7 +94,7 @@ class Index(dict):
     def __init__(self, filename):
         """
         Arguments:
-        
+
           filename  -- The file to index
         """
         dict.__init__(self)
@@ -106,19 +104,20 @@ class Index(dict):
             position = 0
             while True:
                 line = f.readline()
-                if not line: break
+                if not line:
+                    break
                 if line.startswith('#'):
                     continue
                 record = Record(line)
                 key = record.sid
-                if key != None:
+                if key is not None:
                     self[key] = position
                 position = f.tell()
         finally:
             f.close()
 
     def __getitem__(self, key):
-        """ Return an item from the indexed file. """
+        """Return an item from the indexed file."""
         position = dict.__getitem__(self,key)
 
         f = open(self.filename, "rU")

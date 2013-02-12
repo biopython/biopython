@@ -17,4 +17,3 @@ for id in ids:
 
     print "classification:", record.organism_classification
     print
-

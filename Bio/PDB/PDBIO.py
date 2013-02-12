@@ -62,11 +62,11 @@ class PDBIO(object):
         @type use_model_flag: int
         """
         self.use_model_flag=use_model_flag
-    
+
     # private mathods
 
-    def _get_atom_line(self, atom, hetfield, segid, atom_number, resname, 
-        resseq, icode, chain_id, charge="  "):
+    def _get_atom_line(self, atom, hetfield, segid, atom_number, resname,
+                       resseq, icode, chain_id, charge="  "):
         """Returns an ATOM PDB string (PRIVATE)."""
         if hetfield!=" ":
             record_type="HETATM"
@@ -97,10 +97,10 @@ class PDBIO(object):
     def save(self, file, select=Select(), write_end=0):
         """
         @param file: output file
-        @type file: string or filehandle 
+        @type file: string or filehandle
 
         @param select: selects which entities will be written.
-        @type select: 
+        @type select:
             select hould have the following methods:
                 - accept_model(model)
                 - accept_chain(chain)
@@ -127,7 +127,7 @@ class PDBIO(object):
         for model in self.structure.get_list():
             if not select.accept_model(model):
                 continue
-            # necessary for ENDMDL 
+            # necessary for ENDMDL
             # do not write ENDMDL if no residues were written
             # for this model
             model_residues_written=0
@@ -138,7 +138,7 @@ class PDBIO(object):
                 if not select.accept_chain(chain):
                     continue
                 chain_id=chain.get_id()
-                # necessary for TER 
+                # necessary for TER
                 # do not write TER if no residues were written
                 # for this chain
                 chain_residues_written=0
@@ -146,7 +146,7 @@ class PDBIO(object):
                     if not select.accept_residue(residue):
                         continue
                     hetfield, resseq, icode=residue.get_id()
-                    resname=residue.get_resname()  
+                    resname=residue.get_resname()
                     segid=residue.get_segid()
                     for atom in residue.get_unpacked_list():
                         if select.accept_atom(atom):
@@ -166,7 +166,7 @@ class PDBIO(object):
             fp.close()
 
 if __name__=="__main__":
-    
+
     from Bio.PDB.PDBParser import PDBParser
 
     import sys
@@ -188,7 +188,3 @@ if __name__=="__main__":
     io.set_structure(s2)
     io.save(fp, write_end=1)
     fp.close()
-
-
-
-

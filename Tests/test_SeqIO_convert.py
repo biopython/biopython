@@ -4,7 +4,6 @@
 # as part of this package.
 
 """Unit tests for Bio.SeqIO.convert(...) function."""
-import os
 import unittest
 import warnings
 from Bio.Seq import UnknownSeq
@@ -14,6 +13,7 @@ from Bio.SeqIO._convert import _converter as converter_dict
 from StringIO import StringIO
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
+
 #TODO - share this with the QualityIO tests...
 def truncation_expected(format):
     if format in ["fastq-solexa", "fastq-illumina"]:
@@ -22,6 +22,7 @@ def truncation_expected(format):
         return 93
     else:
         return None
+
 
 #Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
@@ -38,7 +39,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     #Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle, out_format, alphabet))
     compare_records(records, records2, qual_truncate)
-    #Finally, use the convert fuction, and check that agrees:
+    #Finally, use the convert function, and check that agrees:
     handle2 = StringIO()
     if qual_truncate:
         warnings.simplefilter('ignore', UserWarning)
@@ -47,6 +48,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
         warnings.filters.pop()
     #We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
+
 
 def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     qual_truncate = truncation_expected(out_format)
@@ -78,10 +80,11 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
                "Different failures, parse/write:\n%s\nconvert:\n%s" \
                % (err1, err2)
     #print err
-    
+
+
 #TODO - move this to a shared test module...
 def compare_record(old, new, truncate=None):
-    """Quality aware SeqRecord comparision.
+    """Quality aware SeqRecord comparison.
 
     This will check the mapping between Solexa and PHRED scores.
     It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
@@ -91,7 +94,7 @@ def compare_record(old, new, truncate=None):
     if old.description != new.description \
     and (old.id+" "+old.description).strip() != new.description \
     and new.description != "<unknown description>" \
-    and new.description != "" : #e.g. tab format
+    and new.description != "":  # e.g. tab format
         raise ValueError("'%s' vs '%s' " % (old.description, new.description))
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
@@ -122,7 +125,7 @@ def compare_record(old, new, truncate=None):
     and "solexa_quality" in new.letter_annotations:
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
-        converted = [round(QualityIO.solexa_quality_from_phred(q)) \
+        converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
             converted = [min(q,truncate) for q in converted]
@@ -136,7 +139,7 @@ def compare_record(old, new, truncate=None):
     and "phred_quality" in new.letter_annotations:
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
-        converted = [round(QualityIO.phred_quality_from_solexa(q)) \
+        converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
             converted = [min(q,truncate) for q in converted]
@@ -147,6 +150,7 @@ def compare_record(old, new, truncate=None):
             raise ValueError("Mismatch in solexa_quality vs phred_quality")
     return True
 
+
 def compare_records(old_list, new_list, truncate_qual=None):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list):
@@ -156,10 +160,12 @@ def compare_records(old_list, new_list, truncate_qual=None):
             return False
     return True
 
+
 class ConvertTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, in_format, out_format, alphabet):
         check_convert(filename, in_format, out_format, alphabet)
+
     def failure_check(self, filename, in_format, out_format, alphabet):
         check_convert_fails(filename, in_format, out_format, alphabet)
 
@@ -178,12 +184,15 @@ tests = [
     ]
 for filename, format, alphabet in tests:
     for (in_format, out_format) in converter_dict:
-        if in_format != format : continue
+        if in_format != format:
+            continue
+
         def funct(fn,fmt1, fmt2, alpha):
             f = lambda x : x.simple_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
-        setattr(ConvertTests, "test_%s_%s_to_%s" \
+
+        setattr(ConvertTests, "test_%s_%s_to_%s"
                 % (filename.replace("/","_").replace(".","_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
         del funct
@@ -215,17 +224,20 @@ tests = [
     ]
 for filename, format, alphabet in tests:
     for (in_format, out_format) in converter_dict:
-        if in_format != format : continue
+        if in_format != format:
+            continue
         if in_format in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"] \
         and out_format in ["fasta", "tab"] and filename.startswith("Quality/error_qual_"):
             #TODO? These conversions don't check for bad characters in the quality,
             #and in order to pass this strict test they should.
             continue
+
         def funct(fn,fmt1, fmt2, alpha):
             f = lambda x : x.failure_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
-        setattr(ConvertTests, "test_%s_%s_to_%s" \
+
+        setattr(ConvertTests, "test_%s_%s_to_%s"
                 % (filename.replace("/","_").replace(".","_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
     del funct

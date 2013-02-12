@@ -30,7 +30,7 @@ try:
     # Skip the test if reportlab is not installed
     from reportlab.graphics import renderPM
 except:
-    raise MissingPythonDependencyError(\
+    raise MissingPythonDependencyError(
         "Install ReportLab's renderPM module if you want to create "
         "bitmaps with Bio.Graphics.")
 try:
@@ -38,7 +38,7 @@ try:
     import Image as i
     del i
 except:
-    raise MissingPythonDependencyError(\
+    raise MissingPythonDependencyError(
         "Install PIL (Python Imaging Library) if you want to create "
         "bitmaps with Bio.Graphics.")
 
@@ -50,6 +50,7 @@ from Bio.Graphics.Comparative import ComparativeScatterPlot
 # We're not really using the unittest framework, because we need to
 # raise the dependency error BEFORE the invidual tests in order that
 # this be skipped by run_tests.py
+
 
 def real_test():
     min_two_d_lists = 1
@@ -72,7 +73,7 @@ def real_test():
             y_point = random.randrange(min_point_num, max_point_num)
             cur_list.append((x_point, y_point))
         plot_info.append(cur_list)
-    
+
     compare_plot = ComparativeScatterPlot("png")
     compare_plot.display_info = plot_info
 
@@ -93,17 +94,18 @@ def real_test():
         if str(err).startswith("Can't setFont(") :
             #TODO - can we raise the error BEFORE the unit test function
             #is run? That way it can be skipped in run_tests.py
-            raise MissingExternalDependencyError(\
+            raise MissingExternalDependencyError(
                 "Check the fonts needed by ReportLab if you want "
                 "bitmaps from Bio.Graphics\n" + str(err))
         else :
             raise err
-    
+
     return True
 
 #Run the actual test BEFORE the unittest stuff gets called
 real_test()
-               
+
+
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""
     def test_simple_scatter_plot(self):

@@ -35,6 +35,7 @@ del expat
 
 from Bio import Entrez
 
+
 class GeneralTests(unittest.TestCase):
     '''General tests for Bio.Entrez'''
     def test_closed_handle(self):
@@ -803,6 +804,7 @@ class EInfoTest(unittest.TestCase):
         self.assertRaises(Parser.CorruptedXMLError, Entrez.read, handle)
         handle.close()
 
+
 class ESearchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESearch
     '''
@@ -837,7 +839,7 @@ class ESearchTest(unittest.TestCase):
         '''
         # Search in PubMed for the term cancer for the entrez date from
         # the last 60 days and retrieve the first 100 IDs and translations
-        # using the history parameter. 
+        # using the history parameter.
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pubmed", term="cancer", reldate=60,
         #                        datetype="edat", retmax=100, usehistory="y")
@@ -1261,6 +1263,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(len(record['WarningList']["OutputMessage"]), 1)
         self.assertEqual(record['WarningList']["OutputMessage"][0], "No items found.")
 
+
 class EPostTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EPost
     '''
@@ -1389,7 +1392,7 @@ class ESummaryTest(unittest.TestCase):
     def test_journals(self):
         '''Test parsing XML returned by ESummary from the Journals database
         '''
-        # In Journals display records for journal IDs 27731,439,735,905 
+        # In Journals display records for journal IDs 27731,439,735,905
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="journals", id="27731,439,735,905")
         handle = open('Entrez/esummary2.xml', "rb")
@@ -1592,7 +1595,7 @@ class ESummaryTest(unittest.TestCase):
         '''Test parsing XML returned by ESummary from the Taxonomy database
         '''
         # In Taxonomy display records for TAXIDs 9913 and 30521 in
-        # xml retrieval mode 
+        # xml retrieval mode
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="taxonomy", id=["9913","30521"],
         #                         retmode="xml")
@@ -1633,7 +1636,7 @@ class ESummaryTest(unittest.TestCase):
         '''Test parsing XML returned by ESummary from the UniSTS database
         '''
         # In UniSTS display records for IDs 254085 and 254086 in xml
-        # retrieval mode 
+        # retrieval mode
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="unists", id=["254085","254086"],
         #                         retmode="xml")
@@ -3166,7 +3169,6 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdUrlList"][0]["ObjUrl"][0]["Provider"]["Url"], "http://highwire.stanford.edu")
         self.assertEqual(record[0]["IdUrlList"][0]["ObjUrl"][0]["Provider"]["IconUrl"], "http://highwire.stanford.edu/icons/externalservices/pubmed/highwirepress.jpg")
 
-
     def test_pubmed4(self):
         '''Test parsing pubmed links returned by ELink (fourth test)
         '''
@@ -3402,7 +3404,6 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["MenuTag"], "LinkOut")
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["HtmlTag"], "LinkOut")
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["Priority"], "255")
-
 
     def test_pubmed6(self):
         '''Test parsing pubmed links returned by ELink (sixth test)
@@ -3747,6 +3748,7 @@ class EGQueryTest(unittest.TestCase):
         self.assertEqual(record["eGQueryResult"][34]["Count"], "0")
         self.assertEqual(record["eGQueryResult"][34]["Status"], "Term or Database is not found")
 
+
 class ESpellTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESpell
     '''
@@ -3972,7 +3974,6 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(len(record[1]["PubmedData"]["ArticleIdList"]), 1)
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0], "9997")
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0].attributes["IdType"], "pubmed")
-
 
     def test_pubmed2(self):
         '''Test parsing XML returned by EFetch, PubMed database (second test)

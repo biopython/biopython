@@ -74,14 +74,14 @@ sequence:
 \begin{verbatim}
 >>> m.length
 5
->>> m.consensus()
+>>> m.consensus
 Seq('TATAA', IUPACUnambiguousDNA())
 \end{verbatim}
 In case of DNA motifs, we can also get a reverse complement of a motif:
 \begin{verbatim}
 >>> m.reverse_complement()
 <Bio.Motif.Motif.Motif object at 0xb39890>
->>> m.reverse_complement().consensus()
+>>> m.reverse_complement().consensus
 Seq('TTATA', IUPACUnambiguousDNA())
 >>> m.reverse_complement().instances  
 [Seq('TTATA', IUPACUnambiguousDNA()), 
@@ -293,8 +293,8 @@ We can do the same with the reverse complement (to find instances on the complem
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=5.0):
-...     print pos,score
+>>> for position, score in m.search(test_seq,threshold=5.0):
+...     print position, score
 ... 
 10 8.44065060871
 -12 7.06213898545
@@ -316,7 +316,7 @@ approximation with a given precision to keep computation cost manageable:
 \begin{verbatim}
 >>> sd = Motif.score_distribution(m,precision=10**4)
 \end{verbatim}
-The sd object can be used to determine a number of different thresholds.
+The \verb+sd+ object can be used to determine a number of different thresholds.
 
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
 \begin{verbatim}
@@ -345,8 +345,9 @@ For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=sd.threshold_balanced(1000)):
-...     print pos,score
+>>> threshold=sd.threshold_balanced(1000)
+>>> for position, score in m.search(test_seq, threshold=threshold):
+...     print position, score
 ... 
 10 8.44065060871
 15 8.44065060871
@@ -384,7 +385,7 @@ which is similar to our test motif \verb|m|:
 \begin{verbatim}
 >>> ubx=Motif.read(open("Ubx.pfm"),"jaspar-pfm")
 <Bio.Motif.Motif.Motif object at 0xc29b90>
->>> ubx.consensus()
+>>> ubx.consensus
 Seq('TAAT', IUPACUnambiguousDNA())
 \end{verbatim}
 
@@ -466,7 +467,7 @@ Motif objects (with instances), they also provide some extra
 functionality, by adding additional information about the instances. 
 
 \begin{verbatim}
->>> motifsM[0].consensus()
+>>> motifsM[0].consensus
 Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
 >>> motifsM[0].instances[0].pvalue
@@ -493,7 +494,7 @@ with the following code:
 
 Again, your motifs behave as they should:
 \begin{verbatim}
->>> motifsA[0].consensus()
+>>> motifsA[0].consensus
 Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
@@ -501,7 +502,7 @@ In fact you can even see, that AlignAce found a very similar motif as
 MEME, it is just a longer version of a reverse complement of MEME
 motif:
 \begin{verbatim}
->>> motifsM[0].reverse_complement().consensus()
+>>> motifsM[0].reverse_complement().consensus
 Seq('TACGATTGAG', IUPACUnambiguousDNA())
 \end{verbatim}
 

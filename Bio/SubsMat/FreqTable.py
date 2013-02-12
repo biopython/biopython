@@ -8,7 +8,7 @@ FREQ = 2
 # Methods to read a letter frequency or a letter count file:
 # Example files for a DNA alphabet:
 #
-# A count file (whitespace seperated):
+# A count file (whitespace separated):
 #
 # A  50
 # C  37
@@ -21,7 +21,7 @@ FREQ = 2
 # C 0.2202
 # G 0.1369
 # T 0.3452
-# 
+#
 # Functions:
 #   read_count(f): read a count file from stream f. Then convert to
 #   frequencies
@@ -44,10 +44,12 @@ FREQ = 2
 #   >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
 #   >>> ftab = FreqTable.read_count(open('myDNACountFile'))
 #
-#  
+#
 ##################################################################
+
+
 class FreqTable(dict):
-    
+
     def _freq_from_count(self):
         total = float(sum(self.count.values()))
         for i, v in self.count.iteritems():
@@ -59,7 +61,7 @@ class FreqTable(dict):
             s += i
         return s
 
-    def __init__(self,in_dict,dict_type,alphabet=None):
+    def __init__(self, in_dict, dict_type, alphabet=None):
         self.alphabet = alphabet
         if dict_type == COUNT:
             self.count = in_dict
@@ -73,18 +75,19 @@ class FreqTable(dict):
             self.alphabet = Alphabet.Alphabet()
             self.alphabet.letters = self._alphabet_from_input()
 
+
 def read_count(f):
     count = {}
     for line in f:
         key, value = line.strip().split()
         count[key] = int(value)
-    freq_table = FreqTable(count,COUNT)
+    freq_table = FreqTable(count, COUNT)
     return freq_table
+
 
 def read_freq(f):
     freq_dict = {}
     for line in f:
         key, value = line.strip().split()
-        freq_dict[key] = float(value) 
-    return FreqTable(freq_dict,FREQ)
-
+        freq_dict[key] = float(value)
+    return FreqTable(freq_dict, FREQ)

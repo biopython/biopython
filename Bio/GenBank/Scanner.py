@@ -31,6 +31,7 @@ import re
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
+from Bio import BiopythonParserWarning
 
 
 class InsdcScanner(object):
@@ -456,9 +457,12 @@ class InsdcScanner(object):
             record = self.parse(handle, do_features)
             if record is None:
                 break
-            assert record.id is not None
-            assert record.name != "<unknown name>"
-            assert record.description != "<unknown description>"
+            if record.id is None:
+                raise ValueError("Failed to parse the record's ID. Invalid ID line?")
+            if record.name == "<unknown name>":
+                raise ValueError("Failed to parse the record's name. Invalid ID line?")
+            if record.description == "<unknown description>":
+                raise ValueError("Failed to parse the record's description")
             yield record
 
     def parse_cds_features(self, handle,
@@ -929,10 +933,12 @@ class GenBankScanner(InsdcScanner):
         line = self.line
         while True:
             if not line:
-                raise ValueError("Premature end of file in sequence data")
+                warnings.warn("Premature end of file in sequence data", BiopythonParserWarning)
+                line = '//'
+                break
             line = line.rstrip()
             if not line:
-                warnings.warn("Blank line in sequence data")
+                warnings.warn("Blank line in sequence data", BiopythonParserWarning)
                 line = self.handle.readline()
                 continue
             if line == '//':
@@ -940,7 +946,12 @@ class GenBankScanner(InsdcScanner):
             if line.startswith('CONTIG'):
                 break
             if len(line) > 9 and line[9:10] != ' ':
-                raise ValueError("Sequence line mal-formed, '%s'" % line)
+                # Some broken programs indent the sequence by one space too many
+                # so try to get rid of that and test again.
+                warnings.warn("Invalid indentation for sequence line", BiopythonParserWarning)
+                line = line[1:]
+                if len(line) > 9 and line[9:10] != ' ':
+                    raise ValueError("Sequence line mal-formed, '%s'" % line)
             seq_lines.append(line[10:])  # remove spaces later
             line = self.handle.readline()
 
@@ -1145,7 +1156,7 @@ class GenBankScanner(InsdcScanner):
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
         elif len(line.split()) >= 4 and line.split()[-1] in ["aa", "bp"]:
-            #Cope with psuedo-GenBank files like this:
+            #Cope with pseudo-GenBank files like this:
             #   "LOCUS       RNA5 complete       1718 bp"
             #Treat everything between LOCUS and the size as the identifier.
             warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
@@ -1257,7 +1268,7 @@ class GenBankScanner(InsdcScanner):
                     #species names (as more and more strains and sub strains get
                     #sequenced) the oragnism name can now get wrapped onto multiple
                     #lines.  The NCBI say we have to recognise the lineage line by
-                    #the presense of semi-colon delimited entries.  In the long term,
+                    #the presence of semi-colon delimited entries.  In the long term,
                     #they are considering adding a new keyword (e.g. LINEAGE).
                     #See Bug 2591 for details.
                     organism_data = data

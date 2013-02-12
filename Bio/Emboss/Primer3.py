@@ -19,6 +19,7 @@ function to iterate over the retsults.
 
 # --- primer3
 
+
 class Record(object):
     """Represent information from a primer3 run finding primers.
 
@@ -31,6 +32,7 @@ class Record(object):
     def __init__(self):
         self.comments = ""
         self.primers = []
+
 
 class Primers(object):
     """A primer set designed by Primer3.
@@ -139,7 +141,10 @@ def parse(handle):
             primer.internal_length = int(words[3])
             primer.internal_tm = float(words[4])
             primer.internal_gc = float(words[5])
-            primer.internal_seq = words[6]
+            try:
+                primer.internal_seq = words[6]
+            except IndexError: # eprimer3 reports oligo without sequence
+                primer.internal_seq = ''
         try:
             line = handle.next()
         except StopIteration:

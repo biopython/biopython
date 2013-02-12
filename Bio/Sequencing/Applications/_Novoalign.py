@@ -7,6 +7,7 @@
 import types
 from Bio.Application import _Option, AbstractCommandline
 
+
 class NovoalignCommandline(AbstractCommandline):
     """Command line wrapper for novoalign by Novocraft.
 
@@ -20,7 +21,7 @@ class NovoalignCommandline(AbstractCommandline):
     >>> print novoalign_cline
     novoalign -d some_db -f some_seq.txt
 
-    As will all the Biopython application wrappers, you can also add or
+    As with all the Biopython application wrappers, you can also add or
     change options after creating the object:
 
     >>> novoalign_cline.format = 'PRBnSEQ'
@@ -36,11 +37,11 @@ class NovoalignCommandline(AbstractCommandline):
     Last checked against version: 2.05.04
     """
     def __init__(self, cmd="novoalign", **kwargs):
-        
+
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']
-        
+
         self.parameters = \
            [
             _Option(["-d", "database"],
@@ -52,11 +53,11 @@ class NovoalignCommandline(AbstractCommandline):
                     filename=True,
                     equate=False),
             _Option(["-F", "format"],
-                    "Format of read files.\n\nAllowed values: %s" \
+                    "Format of read files.\n\nAllowed values: %s"
                     % ", ".join(READ_FORMAT),
                     checker_function=lambda x: x in READ_FORMAT,
                     equate=False),
-            
+
             # Alignment scoring options
             _Option(["-t", "threshold"],
                     "Threshold for alignment score",
@@ -75,7 +76,7 @@ class NovoalignCommandline(AbstractCommandline):
                     "Default: no penalty",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Quality control and read filtering
             _Option(["-l", "good_bases"],
                     "Minimum number of good quality bases [default: log(N_g, 4) + 5]",
@@ -85,7 +86,7 @@ class NovoalignCommandline(AbstractCommandline):
                     "Homopolymer read filter [default: 20; disable: negative value]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Read preprocessing options
             _Option(["-a", "adapter3"],
                     "Strips a 3' adapter sequence prior to alignment.\n\n"
@@ -108,7 +109,7 @@ class NovoalignCommandline(AbstractCommandline):
                     equate=False),
             # Reporting options
             _Option(["-o", "report"],
-                    "Specifies the report format.\n\nAllowed values: %s\nDefault: Native" \
+                    "Specifies the report format.\n\nAllowed values: %s\nDefault: Native"
                     % ", ".join(REPORT_FORMAT),
                     checker_function=lambda x: x in REPORT_FORMAT,
                     equate=False),
@@ -124,7 +125,7 @@ class NovoalignCommandline(AbstractCommandline):
             _Option(["-r", "r_method"],
                     "Methods to report reads with multiple matches.\n\n"
                     "Allowed values: %s\n"
-                    "'All' and 'Exhaustive' accept limits." \
+                    "'All' and 'Exhaustive' accept limits."
                     % ", ".join(REPEAT_METHOD),
                     checker_function=lambda x: x.split()[0] in REPEAT_METHOD,
                     equate=False),
@@ -147,19 +148,19 @@ class NovoalignCommandline(AbstractCommandline):
                     "Structural variation penalty [default: 70]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # miRNA mode
             _Option(["-m", "miRNA"],
                     "Sets miRNA mode and optionally sets a value for the region scanned [default: off]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Multithreading
             _Option(["-c", "cores"],
                     "Number of threads, disabled on free versions [default: number of cores]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Quality calibrations
             _Option(["-k", "read_cal"],
                     "Read quality calibration from file (mismatch counts)",
@@ -172,9 +173,10 @@ class NovoalignCommandline(AbstractCommandline):
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing Novoalign doctests..."
+    print "Running Novoalign doctests..."
     import doctest
     doctest.testmod()
     print "Done"

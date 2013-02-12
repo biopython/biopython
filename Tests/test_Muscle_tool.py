@@ -29,7 +29,7 @@ if sys.platform=="win32":
     #a Muscle directory with the muscle.exe file plus a readme etc,
     #which the user could put anywhere.  We'll try a few sensible
     #locations under Program Files... and then the full path.
-    likely_dirs = ["", #Current dir
+    likely_dirs = ["",  # Current dir
                    prog_files,
                    os.path.join(prog_files,"Muscle3.6"),
                    os.path.join(prog_files,"Muscle3.7"),
@@ -41,7 +41,8 @@ if sys.platform=="win32":
             if os.path.isfile(os.path.join(folder, "muscle.exe")):
                 muscle_exe = os.path.join(folder, "muscle.exe")
                 break
-        if muscle_exe : break
+        if muscle_exe:
+            break
 else:
     import commands
     output = commands.getoutput("muscle -version")
@@ -52,18 +53,19 @@ else:
         muscle_exe = "muscle"
 
 if not muscle_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install MUSCLE if you want to use the Bio.Align.Applications wrapper.")
 
 #################################################################
 
+
 class MuscleApplication(unittest.TestCase):
-    
+
     def setUp(self):
-        self.infile1  = "Fasta/f002"
-        self.infile2  = "Fasta/fa01"
-        self.infile3  = "Fasta/f001"
-        self.outfile1 = "Fasta/temp align out1.fa" #with spaces!
+        self.infile1 = "Fasta/f002"
+        self.infile2 = "Fasta/fa01"
+        self.infile3 = "Fasta/f001"
+        self.outfile1 = "Fasta/temp align out1.fa"  # with spaces!
         self.outfile2 = "Fasta/temp_align_out2.fa"
         self.outfile3 = "Fasta/temp_align_out3.fa"
         self.outfile4 = "Fasta/temp_align_out4.fa"
@@ -83,7 +85,7 @@ class MuscleApplication(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
-        self.assertEqual(str(cmdline), muscle_exe \
+        self.assertEqual(str(cmdline), muscle_exe
                          + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -93,14 +95,14 @@ class MuscleApplication(unittest.TestCase):
     def test_Muscle_with_options(self):
         """Round-trip through app with a switch and valued option"""
         cmdline = MuscleCommandline(muscle_exe)
-        cmdline.set_parameter("input", self.infile1) #"input" is alias for "in"
+        cmdline.set_parameter("input", self.infile1)  # "input" is alias for "in"
         cmdline.set_parameter("out", self.outfile2)
         #Use property:
         cmdline.objscore = "sp"
         cmdline.noanchors = True
-        self.assertEqual(str(cmdline), muscle_exe +\
-                         " -in Fasta/f002" + \
-                         " -out Fasta/temp_align_out2.fa" + \
+        self.assertEqual(str(cmdline), muscle_exe +
+                         " -in Fasta/f002" +
+                         " -out Fasta/temp_align_out2.fa" +
                          " -objscore sp -noanchors")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -115,8 +117,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline.set_parameter("profile", True)
         cmdline.set_parameter("in1", self.infile2)
         cmdline.set_parameter("in2", self.infile3)
-        self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out3.fa" + \
+        self.assertEqual(str(cmdline), muscle_exe +
+                         " -out Fasta/temp_align_out3.fa" +
                          " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -131,9 +133,9 @@ class MuscleApplication(unittest.TestCase):
                                     in1=self.infile2, in2=self.infile3,
                                     profile=True, stable=True,
                                     cluster1="neighborjoining")
-        self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out4.fa" + \
-                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" + \
+        self.assertEqual(str(cmdline), muscle_exe +
+                         " -out Fasta/temp_align_out4.fa" +
+                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" +
                          " -cluster1 neighborjoining -stable")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         """
@@ -146,6 +148,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertTrue("ERROR" not in stderr.read())
         self.assertEqual(str(result._cl), str(cmdline))
         """
+
 
 class SimpleAlignTest(unittest.TestCase):
     """Simple MUSCLE tests"""
@@ -183,7 +186,7 @@ class SimpleAlignTest(unittest.TestCase):
         records.sort(key = lambda rec: rec.id)
         #Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file, clw = True)
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
                          " -in Fasta/f002 -clw")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
@@ -193,7 +196,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         #Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
-        align.sort() #by record.id
+        align.sort()  # by record.id
         self.assertTrue(child.stderr.read().strip().startswith("MUSCLE"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
@@ -215,8 +218,8 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("in", input_file)
         #Use clustal output (with a CLUSTAL header)
-        cmdline.set_parameter("clwstrict", True) #Default None treated as False!
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
+        cmdline.set_parameter("clwstrict", True)  # Default None treated as False!
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
                          " -in Fasta/f002 -clwstrict")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
@@ -249,15 +252,15 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("in", temp_large_fasta_file)
         #Use fast options
         cmdline.set_parameter("maxiters", 1)
-        cmdline.set_parameter("diags", True) #Default None treated as False!
+        cmdline.set_parameter("diags", True)  # Default None treated as False!
         #Use clustal output
-        cmdline.set_parameter("clwstrict", True) #Default None treated as False!
+        cmdline.set_parameter("clwstrict", True)  # Default None treated as False!
         #Shoudn't need this, but just to make sure it is accepted
         cmdline.set_parameter("maxhours", 0.1)
         #No progress reports to stderr
-        cmdline.set_parameter("quiet", True) #Default None treated as False!
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
-                         " -in temp_cw_prot.fasta -diags -maxhours 0.1" + \
+        cmdline.set_parameter("quiet", True)  # Default None treated as False!
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
+                         " -in temp_cw_prot.fasta -diags -maxhours 0.1" +
                          " -maxiters 1 -clwstrict -quiet")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
@@ -323,8 +326,8 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
                                     clw=True, htmlout = output_html,
                                     clwstrictout = output_clwstrict)
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
-                         " -in Fasta/f002 -clw -htmlout temp_f002.html" +\
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
+                         " -in Fasta/f002 -clw -htmlout temp_f002.html" +
                          " -clwstrictout temp_f002.clw")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),

@@ -1,0 +1,16 @@
+#                                                                            --- full sequence --- -------------- this domain -------------   hmm coord   ali coord   env coord
+# target name        accession   tlen query name           accession   qlen   E-value  score  bias   #  of  c-Evalue  i-Evalue  score  bias  from    to  from    to  from    to  acc description of target
+#------------------- ---------- ----- -------------------- ---------- ----- --------- ------ ----- --- --- --------- --------- ------ ----- ----- ----- ----- ----- ----- ----- ---- ---------------------
+Globin               PF00042.17   108 gi|4885477|ref|NP_005359.1| -            154     6e-21   74.6   0.3   1   1   6.7e-25   9.2e-21   74.0   0.2     1   107     7   112     7   113 0.97 Globin
+Ig_3                 PF13927.1     75 gi|126362951:116-221 -            106   1.4e-09   38.2   0.4   1   1     3e-13   2.1e-09   37.6   0.3     1    73     9    84     9    88 0.94 Immunoglobulin domain
+Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.5e-05   23.7   0.1   1   1   6.2e-09   4.3e-05   23.4   0.1     1    80     9   104     9   104 0.71 Immunoglobulin domain
+Xpo1                 PF08389.7    148 gi|22748937|ref|NP_065801.1| -           1204   7.8e-34  116.6   7.8   1   2   1.6e-37   1.1e-33  116.1   3.4     2   148   110   271   109   271 0.98 Exportin 1-like protein
+Xpo1                 PF08389.7    148 gi|22748937|ref|NP_065801.1| -           1204   7.8e-34  116.6   7.8   2   2      0.35   2.4e+03   -1.8   0.0   112   139   499   525   496   529 0.86 Exportin 1-like protein
+IBN_N                PF03810.14    77 gi|22748937|ref|NP_065801.1| -           1204    0.0039   16.9   0.0   1   2   4.8e-06     0.033   14.0   0.0     4    75    36    98    33   100 0.87 Importin-beta N-terminal domain
+IBN_N                PF03810.14    77 gi|22748937|ref|NP_065801.1| -           1204    0.0039   16.9   0.0   2   2       1.2     8e+03   -3.3   0.0    57    75   168   186   165   187 0.85 Importin-beta N-terminal domain
+Pou                  PF00157.12    75 gi|125490392|ref|NP_038661.2| -            352     7e-37  124.8   0.5   1   1     5e-40   1.4e-36  123.9   0.3     3    75   133   205   131   205 0.97 Pou domain - N-terminal to homeobox domain
+Homeobox             PF00046.24    57 gi|125490392|ref|NP_038661.2| -            352   2.1e-18   65.5   1.1   1   1   1.5e-21   4.1e-18   64.6   0.7     1    57   224   280   224   280 0.98 Homeobox domain
+HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -            352     0.012   15.6   0.0   1   2   5.7e-05      0.16   12.0   0.0     1    35   141   181   141   184 0.96 Helix-turn-helix domain
+HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -            352     0.012   15.6   0.0   2   2      0.19   5.2e+02    0.8   0.0    39    62   245   268   243   270 0.86 Helix-turn-helix domain
+Homeobox_KN          PF05920.6     40 gi|125490392|ref|NP_038661.2| -            352     0.039   13.5   0.0   1   1   3.5e-05     0.095   12.3   0.0     7    39   244   276   241   277 0.91 Homeobox KN domain
+DUF521               PF04412.8    400 gi|125490392|ref|NP_038661.2| -            352      0.14   10.5   0.1   1   1   9.4e-05      0.26    9.6   0.1   273   334   221   280   197   294 0.77 Protein of unknown function (DUF521)

@@ -11,7 +11,7 @@
 Usage:
 =====
 
-    >>> from Rana.fts import fts    # 
+    >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.
     >>> from Bio.Seq import Seq     # Use your prefer method here.
     >>> pbr = fts(pBR322)           #
@@ -32,28 +32,28 @@ Usage:
 
      Enzymes which do not cut pBR322.
 
-    AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI      
-    AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI     
-    Asp718I   AspA2I    AsuII     AvaIII    AvrII     AxyI      BaeI      BbrPI     
-    BbvCI     BclI      BcuI      BfrBI     BfrI      BglII     BlnI      BlpI      
-    BmgBI     BmgI      BplI      Bpu1102I  Bpu14I    BsaXI     Bse21I    BsePI     
-    BseRI     BshTI     BsiWI     Bsp119I   Bsp120I   Bsp1407I  Bsp1720I  Bsp19I    
-    BspT104I  BspTI     BsrGI     BssHI     BssHII    Bst98I    BstAUI    BstBI     
-    BstEII    BstPI     BstSNI    BstXI     Bsu36I    BtrI      CciNI     CelII     
-    Cfr42I    Cfr9I     CpoI      Csp45I    CspAI     CspCI     CspI      DraIII    
-    DrdII     Ecl136II  Eco105I   Eco147I   Eco72I    Eco81I    Eco91I    EcoICRI   
-    EcoO65I   EcoRI     EcoT22I   EspI      FalI      FbaI      FseI      FunII     
-    HpaI      KpnI      Ksp22I    KspAI     KspI      MabI      MfeI      MluI      
-    Mph1103I  MspCI     MssI      MunI      NcoI      NotI      NsiI      NspV      
-    OliI      PacI      PaeR7I    PasI      PauI      PceI      Pfl23II   PinAI     
-    PmaCI     PmeI      PmlI      Ppu10I    PsiI      Psp124BI  PspAI     PspCI     
-    PspEI     PspLI     PspOMI    PspXI     PsrI      RleAI     Rsr2I     RsrII     
-    SacI      SacII     SanDI     SauI      SbfI      SciI      SdaI      SexAI     
-    SfiI      Sfr274I   Sfr303I   SfuI      SgfI      SgrBI     SlaI      SmaI      
-    SmiI      SnaBI     SpeI      SplI      SrfI      Sse232I   Sse8387I  Sse8647I  
-    SseBI     SspBI     SstI      StuI      SunI      SwaI      TliI      UthSI     
-    Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI     
-    Zsp2I     
+    AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
+    AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI
+    Asp718I   AspA2I    AsuII     AvaIII    AvrII     AxyI      BaeI      BbrPI
+    BbvCI     BclI      BcuI      BfrBI     BfrI      BglII     BlnI      BlpI
+    BmgBI     BmgI      BplI      Bpu1102I  Bpu14I    BsaXI     Bse21I    BsePI
+    BseRI     BshTI     BsiWI     Bsp119I   Bsp120I   Bsp1407I  Bsp1720I  Bsp19I
+    BspT104I  BspTI     BsrGI     BssHI     BssHII    Bst98I    BstAUI    BstBI
+    BstEII    BstPI     BstSNI    BstXI     Bsu36I    BtrI      CciNI     CelII
+    Cfr42I    Cfr9I     CpoI      Csp45I    CspAI     CspCI     CspI      DraIII
+    DrdII     Ecl136II  Eco105I   Eco147I   Eco72I    Eco81I    Eco91I    EcoICRI
+    EcoO65I   EcoRI     EcoT22I   EspI      FalI      FbaI      FseI      FunII
+    HpaI      KpnI      Ksp22I    KspAI     KspI      MabI      MfeI      MluI
+    Mph1103I  MspCI     MssI      MunI      NcoI      NotI      NsiI      NspV
+    OliI      PacI      PaeR7I    PasI      PauI      PceI      Pfl23II   PinAI
+    PmaCI     PmeI      PmlI      Ppu10I    PsiI      Psp124BI  PspAI     PspCI
+    PspEI     PspLI     PspOMI    PspXI     PsrI      RleAI     Rsr2I     RsrII
+    SacI      SacII     SanDI     SauI      SbfI      SciI      SdaI      SexAI
+    SfiI      Sfr274I   Sfr303I   SfuI      SgfI      SgrBI     SlaI      SmaI
+    SmiI      SnaBI     SpeI      SplI      SrfI      Sse232I   Sse8387I  Sse8647I
+    SseBI     SspBI     SstI      StuI      SunI      SwaI      TliI      UthSI
+    Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
+    Zsp2I
 
     >>>
     """
@@ -111,7 +111,7 @@ from Bio.Restriction.Restriction import *
 #   For the user the results is transparent:
 #   from Bio.Restriction import * works as before.
 #
-        
+
 ###
 ###   The restriction enzyme classes are created dynamically when the module is
 ###   imported. Here is the magic which allow the creation of the
@@ -189,7 +189,7 @@ from Bio.Restriction.Restriction import *
 ###   (Defined,Palindromic...). It is still possible to request them specifically
 ###
 ###   also delete the variable that are no longer needed.
-###   
+###
 ###
 ##__all__=['Analysis', 'RestrictionBatch','AllEnzymes','CommOnly','NonComm']+names
 ##del k, x, enzymes, TYPE, bases, names

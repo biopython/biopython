@@ -3,10 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import sys
 import unittest
 
 from Bio import Medline
+
 
 class TestMedline(unittest.TestCase):
 
@@ -183,4 +183,3 @@ class TestMedline(unittest.TestCase):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-

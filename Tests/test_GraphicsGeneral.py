@@ -28,7 +28,7 @@ try:
     import reportlab as r
     del r
 except:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
 # the stuff we're testing
@@ -69,7 +69,7 @@ class ComparativeTest(unittest.TestCase):
 
             plot_info.append(cur_list)
         return plot_info
-                
+
     def test_simple_scatter_plot(self):
         """Test creation of a simple ScatterPlot.
         """

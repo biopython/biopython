@@ -23,7 +23,7 @@ be used directly.
 # preserved on the Python side. So a subelement of a subelement of an element
 # is a value in a dictionary that is stored in a list which is a value in
 # some other dictionary (or a value in a list which itself belongs to a list
-# which is a value in a dictionary, and so on). Attributes encountered in 
+# which is a value in a dictionary, and so on). Attributes encountered in
 # the XML are stored as a dictionary in a member .attributes of each element,
 # and the tag name is saved in a member .tag.
 #
@@ -44,6 +44,7 @@ from xml.parsers import expat
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
 
+
 class IntegerElement(int):
     def __repr__(self):
         text = int.__repr__(self)
@@ -52,6 +53,7 @@ class IntegerElement(int):
         except AttributeError:
             return text
         return "IntegerElement(%s, attributes=%s)" % (text, repr(attributes))
+
 
 class StringElement(str):
     def __repr__(self):
@@ -62,6 +64,7 @@ class StringElement(str):
             return text
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
+
 class UnicodeElement(unicode):
     def __repr__(self):
         text = unicode.__repr__(self)
@@ -70,6 +73,7 @@ class UnicodeElement(unicode):
         except AttributeError:
             return text
         return "UnicodeElement(%s, attributes=%s)" % (text, repr(attributes))
+
 
 class ListElement(list):
     def __repr__(self):
@@ -80,6 +84,7 @@ class ListElement(list):
             return text
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
 
+
 class DictionaryElement(dict):
     def __repr__(self):
         text = dict.__repr__(self)
@@ -88,6 +93,7 @@ class DictionaryElement(dict):
         except AttributeError:
             return text
         return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
+
 
 # A StructureElement is like a dictionary, but some of its keys can have
 # multiple values associated with it. These values are stored in a list
@@ -98,11 +104,13 @@ class StructureElement(dict):
         for key in keys:
             dict.__setitem__(self, key, [])
         self.listkeys = keys
+
     def __setitem__(self, key, value):
         if key in self.listkeys:
             self[key].append(value)
         else:
             dict.__setitem__(self, key, value)
+
     def __repr__(self):
         text = dict.__repr__(self)
         try:
@@ -115,6 +123,7 @@ class StructureElement(dict):
 class NotXMLError(ValueError):
     def __init__(self, message):
         self.msg = message
+
     def __str__(self):
         return "Failed to parse the XML data (%s). Please make sure that the input data are in XML format." % self.msg
 
@@ -122,6 +131,7 @@ class NotXMLError(ValueError):
 class CorruptedXMLError(ValueError):
     def __init__(self, message):
         self.msg = message
+
     def __str__(self):
         return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.msg
 
@@ -130,6 +140,7 @@ class ValidationError(ValueError):
     """Validating parsers raise this error if the parser finds a tag in the XML that is not defined in the DTD. Non-validating parsers do not raise this error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating parsers by default (see those functions for more information)"""
     def __init__(self, name):
         self.name = name
+
     def __str__(self):
         return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False." % self.name
 
@@ -161,6 +172,10 @@ class DataHandler(object):
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results"""
+        # HACK: remove Bio._py3k handle conversion, since the Entrez XML parser
+        # expects binary data
+        if handle.__class__.__name__ == 'EvilHandleHack':
+            handle = handle._handle
         if hasattr(handle, "closed") and handle.closed:
             #Should avoid a possible Segmentation Fault, see:
             #http://bugs.python.org/issue4877
@@ -219,7 +234,7 @@ class DataHandler(object):
                 return
 
             try:
-                self.parser.Parse(text, False)        
+                self.parser.Parse(text, False)
             except expat.ExpatError, e:
                 if self.parser.StartElementHandler:
                     # We saw the initial <!xml declaration, so we can be sure
@@ -396,9 +411,10 @@ class DataHandler(object):
         # The 'count' function is called recursively to make sure all the
         # children in this model are counted. Error keys are ignored;
         # they raise an exception in Python.
+
         def count(model):
             quantifier, name, children = model[1:]
-            if name==None:
+            if name is None:
                 if quantifier in (expat.model.XML_CQUANT_PLUS,
                                   expat.model.XML_CQUANT_REP):
                     for child in children:

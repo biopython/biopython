@@ -25,19 +25,22 @@ import sys
 import os
 import shutil
 
+
 def is_pypy():
     import platform
     try:
-        if platform.python_implementation()=='PyPy':
+        if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
         #New in Python 2.6, not in Jython yet either
         pass
     return False
 
+
 def is_ironpython():
     return sys.platform == "cli"
     #TODO - Use platform as in Pypy test?
+
 
 def get_yes_or_no(question, default):
     if default:
@@ -60,11 +63,13 @@ def get_yes_or_no(question, default):
         print ("Please answer y or n.")
     return response[0] == 'y'
 
-# Make sure I have the right Python version.
+# Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 5):
-    print ("Biopython requires Python 2.5 or better (but not Python 3 " \
-          + "yet).  Python %d.%d detected" % sys.version_info[:2])
+    print("Biopython requires Python 2.5 or better (but not Python 3 "
+          "yet).  Python %d.%d detected" % sys.version_info[:2])
     sys.exit(-1)
+elif sys.version_info[:2] == (2, 5):
+    print("WARNING - Biopython is dropping support for Python 2.5 after this release")
 elif sys.version_info[0] == 3:
     print("WARNING - Biopython does not yet officially support Python 3")
     import do2to3
@@ -72,7 +77,7 @@ elif sys.version_info[0] == 3:
     if "clean" in sys.argv:
         if os.path.isdir(python3_source):
             shutil.rmtree(python3_source)
-        del python3_source #so we don't try to change to it below
+        del python3_source  # so we don't try to change to it below
     else:
         if not os.path.isdir("build"):
             os.mkdir("build")
@@ -96,6 +101,8 @@ except ImportError:
     _SETUPTOOLS = False
 
 _CHECKED = None
+
+
 def check_dependencies_once():
     # Call check_dependencies, but cache the result for subsequent
     # calls.
@@ -104,13 +111,14 @@ def check_dependencies_once():
         _CHECKED = check_dependencies()
     return _CHECKED
 
+
 def get_install_requires():
     install_requires = []
     # skip this with distutils (otherwise get a warning)
     if not _SETUPTOOLS:
         return []
     # skip this with jython and pypy and ironpython
-    if os.name=="java" or is_pypy() or is_ironpython():
+    if os.name == "java" or is_pypy() or is_ironpython():
         return []
     # check for easy_install and pip
     is_automated = False
@@ -120,19 +128,22 @@ def get_install_requires():
     except ValueError:
         dist_dir_i = None
     if dist_dir_i is not None:
-        dist_dir = sys.argv[dist_dir_i+1]
+        dist_dir = sys.argv[dist_dir_i + 1]
         if "egg-dist-tmp" in dist_dir:
             is_automated = True
     # pip -- calls from python directly with "-c"
     if sys.argv in [["-c", "develop", "--no-deps"],
                     ["--no-deps", "-c", "develop"],
-                    ["-c", "egg_info"]]:
+                    ["-c", "egg_info"]] \
+                    or "pip-egg-info" in sys.argv:
         is_automated = True
     if is_automated:
         global _CHECKED
-        if _CHECKED is None: _CHECKED = True
+        if _CHECKED is None:
+            _CHECKED = True
         install_requires.append("numpy >= 1.5.1")
     return install_requires
+
 
 def check_dependencies():
     """Return whether the installation should continue."""
@@ -145,14 +156,15 @@ def check_dependencies():
     # forced an installation, should we also ignore dependencies?
 
     # We only check for NumPy, as this is a compile time dependency
-    if is_Numpy_installed() : return True
+    if is_Numpy_installed():
+        return True
 
-    if os.name=='java':
-        return True #NumPy is not avaliable for Jython (for now)
+    if os.name == 'java':
+        return True  # NumPy is not avaliable for Jython (for now)
     if is_pypy():
-        return True #Full NumPy not available for PyPy (for now)
+        return True  # Full NumPy not available for PyPy (for now)
     if is_ironpython():
-        return True #We're ignoring NumPy under IronPython (for now)
+        return True  # We're ignoring NumPy under IronPython (for now)
 
     print ("""
 Numerical Python (NumPy) is not installed.
@@ -166,10 +178,11 @@ You can find NumPy at http://numpy.scipy.org
 """)
     # exit automatically if running as part of some script
     # (e.g. PyPM, ActiveState's Python Package Manager)
-    if not sys.stdout.isatty() :
+    if not sys.stdout.isatty():
         sys.exit(-1)
     # We can ask the user
     return get_yes_or_no("Do you want to continue this installation?", False)
+
 
 class install_biopython(install):
     """Override the standard install to check for dependencies.
@@ -189,6 +202,7 @@ class install_biopython(install):
     boolean_options = install.boolean_options + [
         'single-version-externally-managed',
     ]
+
     def initialize_options(self):
         install.initialize_options(self)
         self.single_version_externally_managed = None
@@ -197,6 +211,7 @@ class install_biopython(install):
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
+
 
 class build_py_biopython(build_py):
     def run(self):
@@ -224,7 +239,7 @@ class test_biopython(Command):
     python setup.py build
     python setup.py install
     python setup.py test
-    
+
     """
     description = "Automatically run the test suite for Biopython."
     user_options = []
@@ -241,11 +256,12 @@ class test_biopython(Command):
         # change to the test dir and run the tests
         os.chdir("Tests")
         sys.path.insert(0, '')
-        import run_tests   
+        import run_tests
         run_tests.main([])
 
         # change back to the current directory
         os.chdir(this_dir)
+
 
 def can_import(module_name):
     """can_import(module_name) -> module or None"""
@@ -253,6 +269,7 @@ def can_import(module_name):
         return __import__(module_name)
     except ImportError:
         return None
+
 
 def is_Numpy_installed():
     if is_pypy():
@@ -295,6 +312,8 @@ PACKAGES = [
     'Bio.Motif',
     'Bio.Motif.Parsers',
     'Bio.Motif.Applications',
+    'Bio.motifs',
+    'Bio.motifs.applications',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
@@ -312,6 +331,11 @@ PACKAGES = [
     'Bio.Restriction',
     'Bio.Restriction._Update',
     'Bio.SCOP',
+    'Bio.SearchIO',
+    'Bio.SearchIO._model',
+    'Bio.SearchIO.BlastIO',
+    'Bio.SearchIO.HmmerIO',
+    'Bio.SearchIO.ExonerateIO',
     'Bio.SeqIO',
     'Bio.SeqUtils',
     'Bio.Sequencing',
@@ -338,7 +362,7 @@ NUMPY_PACKAGES = [
     'Bio.KDTree',
 ]
 
-if os.name == 'java' :
+if os.name == 'java':
     # Jython doesn't support C extensions
     EXTENSIONS = []
 elif is_pypy() or is_ironpython():
@@ -355,7 +379,7 @@ elif sys.version_info[0] == 3:
               ['Bio/Nexus/cnexus.c']
               ),
     ]
-else :
+else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c'],
@@ -397,6 +421,11 @@ if is_Numpy_installed():
                   ["Bio/Motif/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
+    EXTENSIONS.append(
+        Extension('Bio.motifs._pwm',
+                  ["Bio/motifs/_pwm.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
 
 
 #We now define the Biopython version number in Bio/__init__.py
@@ -420,22 +449,22 @@ os.chdir(src_path)
 sys.path.insert(0, src_path)
 
 setup_args = {
-    "name" : 'biopython',
-    "version" : __version__,
-    "author" : 'The Biopython Consortium',
-    "author_email" : 'biopython@biopython.org',
-    "url" : 'http://www.biopython.org/',
-    "description" : 'Freely available tools for computational molecular biology.',
-    "download_url" : 'http://biopython.org/DIST/',
-    "cmdclass" : {
-        "install" : install_biopython,
-        "build_py" : build_py_biopython,
-        "build_ext" : build_ext_biopython,
-        "test" : test_biopython,
+    "name": 'biopython',
+    "version": __version__,
+    "author": 'The Biopython Consortium',
+    "author_email": 'biopython@biopython.org',
+    "url": 'http://www.biopython.org/',
+    "description": 'Freely available tools for computational molecular biology.',
+    "download_url": 'http://biopython.org/DIST/',
+    "cmdclass": {
+        "install": install_biopython,
+        "build_py": build_py_biopython,
+        "build_ext": build_ext_biopython,
+        "test": test_biopython,
         },
-    "packages" : PACKAGES,
-    "ext_modules" : EXTENSIONS,
-    "package_data" : {
+    "packages": PACKAGES,
+    "ext_modules": EXTENSIONS,
+    "package_data": {
         'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
         'Bio.PopGen': ['SimCoal/data/*.par'],
          },

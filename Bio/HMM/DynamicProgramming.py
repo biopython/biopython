@@ -4,13 +4,14 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
+
 class AbstractDPAlgorithms(object):
-    """An abstract class to calculate forward and backward probabiliies.
+    """An abstract class to calculate forward and backward probabilities.
 
     This class should not be instantiated directly, but should be used
     through a derived class which implements proper scaling of variables.
 
-    This class is just meant to encapsulate the basic foward and backward
+    This class is just meant to encapsulate the basic forward and backward
     algorithms, and allow derived classes to deal with the problems of
     multiplying probabilities.
 
@@ -23,7 +24,7 @@ class AbstractDPAlgorithms(object):
     step using some technique to prevent underflow errors.
     """
     def __init__(self, markov_model, sequence):
-        """Initialize to calculate foward and backward probabilities.
+        """Initialize to calculate forward and backward probabilities.
 
         Arguments:
 
@@ -34,7 +35,7 @@ class AbstractDPAlgorithms(object):
         self._mm = markov_model
         self._seq = sequence
 
-    def _foward_recursion(self, cur_state, sequence_pos, forward_vars):
+    def _forward_recursion(self, cur_state, sequence_pos, forward_vars):
         """Calculate the forward recursion value.
         """
         raise NotImplementedError("Subclasses must implement")
@@ -42,12 +43,12 @@ class AbstractDPAlgorithms(object):
     def forward_algorithm(self):
         """Calculate sequence probability using the forward algorithm.
 
-        This implements the foward algorithm, as described on p57-58 of
+        This implements the forward algorithm, as described on p57-58 of
         Durbin et al.
 
         Returns:
 
-        o A dictionary containing the foward variables. This has keys of the
+        o A dictionary containing the forward variables. This has keys of the
         form (state letter, position in the training sequence), and values
         containing the calculated forward variable.
 
@@ -55,7 +56,7 @@ class AbstractDPAlgorithms(object):
         """
         # all of the different letters that the state path can be in
         state_letters = self._seq.states.alphabet.letters
-        
+
         # -- initialize the algorithm
         #
         # NOTE: My index numbers are one less than what is given in Durbin
@@ -63,7 +64,7 @@ class AbstractDPAlgorithms(object):
         # (Length - 1) not 1 to Length, like in Durbin et al.
         #
         forward_var = {}
-        # f_{0}(0) = 1 
+        # f_{0}(0) = 1
         forward_var[(state_letters[0], -1)] = 1
         # f_{k}(0) = 0, for k > 0
         for k in range(1, len(state_letters)):
@@ -82,7 +83,7 @@ class AbstractDPAlgorithms(object):
 
                 if forward_value is not None:
                     forward_var[(main_state, i)] = forward_value
-                
+
         # -- termination step - calculate the probability of the sequence
         first_state = state_letters[0]
         seq_prob = 0
@@ -118,7 +119,7 @@ class AbstractDPAlgorithms(object):
         """
         # all of the different letters that the state path can be in
         state_letters = self._seq.states.alphabet.letters
-        
+
         # -- initialize the algorithm
         #
         # NOTE: My index numbers are one less than what is given in Durbin
@@ -126,7 +127,7 @@ class AbstractDPAlgorithms(object):
         # (Length - 1) not 1 to Length, like in Durbin et al.
         #
         backward_var = {}
-        
+
         first_letter = state_letters[0]
         # b_{k}(L) = a_{k0} for all k
         for state in state_letters:
@@ -153,7 +154,8 @@ class AbstractDPAlgorithms(object):
         # get sequence probabilities using the forward algorithm
 
         return backward_var
-        
+
+
 class ScaledDPAlgorithms(AbstractDPAlgorithms):
     """Implement forward and backward algorithms using a rescaling approach.
 
@@ -161,7 +163,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
     manageable numerical interval during calculations. This approach is
     described in Durbin et al. on p 78.
 
-    This approach is a little more straightfoward then log transformation
+    This approach is a little more straightforward then log transformation
     but may still give underflow errors for some types of models. In these
     cases, the LogDPAlgorithms class should be used.
     """
@@ -244,13 +246,13 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # divide by the scaling value
         scale_emission_prob = (float(cur_emission_prob) /
                                float(self._s_values[sequence_pos]))
-        
+
         # loop over all of the possible states at the position
         state_pos_sum = 0
         have_transition = 0
         for second_state in self._mm.transitions_from(cur_state):
             have_transition = 1
-            
+
             # get the previous forward_var values
             # f_{k}(i - 1)
             prev_forward = forward_vars[(second_state, sequence_pos - 1)]
@@ -312,7 +314,8 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # and return None
         else:
             return None
-            
+
+
 class LogDPAlgorithms(AbstractDPAlgorithms):
     """Implement forward and backward algorithms using a log approach.
 
@@ -323,6 +326,3 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
     """
     def __init__(self, markov_model, sequence):
         raise NotImplementedError("Haven't coded this yet...")
-
-        
-    

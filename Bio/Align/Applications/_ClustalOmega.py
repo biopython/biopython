@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2011 by Andreas Wilm. All rights reserved.
 # Based on ClustalW wrapper copyright 2009 by Cymon J. Cox.
 #
@@ -11,6 +12,7 @@
 """
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
+
 
 class ClustalOmegaCommandline(AbstractCommandline):
     """Command line wrapper for clustal omega
@@ -32,13 +34,13 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     Citation:
 
-    Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R,
-    McWilliam H, Remmert R, Soding J, Thompson JD Higgins DG
+    Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
+    McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).
     Fast, scalable generation of high-quality protein multiple
     sequence alignments using Clustal Omega.
-    Molecular Systems Biology 2011; accepted. 
+    Molecular Systems Biology 7:539 doi:10.1038/msb.2011.75
 
-    Last checked against versions: 1.0.3
+    Last checked against versions: 1.1.0
     """
     def __init__(self, cmd="clustalo", **kwargs):
         # order parameters in the same order as clustalo --help
@@ -46,15 +48,15 @@ class ClustalOmegaCommandline(AbstractCommandline):
             [
             # Sequence Input
             _Option(["-i", "--in", "--infile", "infile"],
-                    "Multiple sequence input",
+                    "Multiple sequence input file",
                     filename=True,
                     equate=False),
-            _Switch(["--dealign", "dealign"],
-                    "Dealign input sequences"),
             _Option(["--hmm-in", "HMM input", "hmm_input"],
                     "HMM input files",
                     filename=True,
                     equate=False),
+            _Switch(["--dealign", "dealign"],
+                    "Dealign input sequences"),
             _Option(["--profile1", "--p1", "profile1"],
                     "Pre-aligned multiple sequence file (aligned columns will be kept fix).",
                     filename=True,
@@ -63,6 +65,25 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     "Pre-aligned multiple sequence file (aligned columns will be kept fix).",
                     filename=True,
                     equate=False),
+            _Option(["-t", "--seqtype", "seqtype"],
+                    "{Protein, RNA, DNA} Force a sequence type (default: auto).",
+                    equate=False,
+                    checker_function=lambda x: x in ["protein", "rna", "dna",
+                                                     "Protein", "RNA", "DNA",
+                                                     "PROTEIN"]),
+            _Option(["--infmt", "infmt"],
+                    """Forced sequence input file format (default: auto)
+
+                    Allowed values: a2m, fa[sta], clu[stal], msf, phy[lip], selex, st[ockholm], vie[nna]
+                    """,
+                    equate=False,
+                    checker_function=lambda x: x in ["a2m", "fa", "fasta",
+                                                     "clu", "clustal",
+                                                     "msf",
+                                                     "phy", "phylip",
+                                                     "selex",
+                                                     "st", "stockholm",
+                                                     "vie", "vienna"]),
 
             # Clustering
             _Option(["--distmat-in", "distmat_in"],
@@ -96,10 +117,10 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     " a2m=fa[sta],clu[stal],msf,phy[lip],selex,st[ockholm],vie[nna]"
                     " (default: fasta).",
                     equate=False,
-                    checker_function=lambda x: x in ["a2m", "fa", "fasta", 
-                                                     "clu", "clustal", 
+                    checker_function=lambda x: x in ["a2m", "fa", "fasta",
+                                                     "clu", "clustal",
                                                      "msf",
-                                                     "phy", "phylip", 
+                                                     "phy", "phylip",
                                                      "selex",
                                                      "st", "stockholm",
                                                      "vie", "vienna"]),
@@ -153,9 +174,10 @@ class ClustalOmegaCommandline(AbstractCommandline):
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing ClustalW doctests..."
+    print "Running ClustalOmega doctests..."
     import doctest
     doctest.testmod()
     print "Done"

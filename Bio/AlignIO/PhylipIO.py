@@ -39,16 +39,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
-try:
-    any
-except NameError:
-    #Hack for Python 2.4
-    def any(iterable):
-        for element in iterable:
-            if element:
-               return True
-        return False
-
 _PHYLIP_ID_WIDTH = 10
 
 
@@ -70,7 +60,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         """
         handle = self.handle
 
-        if len(alignment)==0:
+        if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
         for record in alignment:
@@ -82,6 +72,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         # Check for repeated identifiers...
         # Apply this test *after* cleaning the identifiers
         names = []
+        seqs = []
         for record in alignment:
             """
             Quoting the PHYLIP version 3.6 documentation:
@@ -103,15 +94,21 @@ class PhylipWriter(SequentialAlignmentWriter):
             #Either remove the banned characters, or map them to something
             #else like an underscore "_" or pipe "|" character...
             for char in "[](),":
-                name = name.replace(char,"")
+                name = name.replace(char, "")
             for char in ":;":
-                name = name.replace(char,"|")
+                name = name.replace(char, "|")
             name = name[:id_width]
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation" \
+                                 "possibly due to truncation"
                                  % (name, record.id))
             names.append(name)
+            sequence = str(record.seq)
+            if "." in sequence:
+                # Do this check here (once per record, not once per block)
+                raise ValueError("PHYLIP format no longer allows dots in "
+                                 "sequence")
+            seqs.append(sequence)
 
         # From experimentation, the use of tabs is not understood by the
         # EMBOSS suite.  The nature of the expected white space is not
@@ -119,10 +116,10 @@ class PhylipWriter(SequentialAlignmentWriter):
         # format, separated by blanks".  We'll use spaces to keep EMBOSS
         # happy.
         handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
-        block=0
+        block = 0
         while True:
-            for name, record in zip(names, alignment):
-                if block==0:
+            for name, sequence in zip(names, seqs):
+                if block == 0:
                     #Write name (truncated/padded to id_width characters)
                     #Now truncate and right pad to expected length.
                     handle.write(name[:id_width].ljust(id_width))
@@ -130,22 +127,21 @@ class PhylipWriter(SequentialAlignmentWriter):
                     #write indent
                     handle.write(" " * id_width)
                 #Write five chunks of ten letters per line...
-                sequence = str(record.seq)
-                if "." in sequence:
-                    raise ValueError("PHYLIP format no longer allows dots in "
-                                     "sequence")
-                for chunk in range(0,5):
+                for chunk in range(0, 5):
                     i = block*50 + chunk*10
                     seq_segment = sequence[i:i+10]
                     #TODO - Force any gaps to be '-' character?  Look at the
                     #alphabet...
                     #TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
-                    if i+10 > length_of_seqs : break
+                    if i+10 > length_of_seqs:
+                        break
                 handle.write("\n")
-            block=block+1
-            if block*50 > length_of_seqs : break
+            block = block+1
+            if block*50 > length_of_seqs:
+                break
             handle.write("\n")
+
 
 class PhylipIterator(AlignmentIterator):
     """Reads a Phylip alignment file returning a MultipleSeqAlignment iterator.
@@ -166,14 +162,14 @@ class PhylipIterator(AlignmentIterator):
     def _is_header(self, line):
         line = line.strip()
         parts = filter(None, line.split())
-        if len(parts)!=2:
-            return False # First line should have two integers
+        if len(parts) != 2:
+            return False  # First line should have two integers
         try:
             number_of_seqs = int(parts[0])
             length_of_seqs = int(parts[1])
             return True
         except ValueError:
-            return False # First line should have two integers
+            return False  # First line should have two integers
 
     def _split_id(self, line):
         """
@@ -204,7 +200,7 @@ class PhylipIterator(AlignmentIterator):
             raise StopIteration
         line = line.strip()
         parts = filter(None, line.split())
-        if len(parts)!=2:
+        if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
             number_of_seqs = int(parts[0])
@@ -216,7 +212,7 @@ class PhylipIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         ids = []
@@ -233,13 +229,15 @@ class PhylipIterator(AlignmentIterator):
             seqs.append([s])
 
         #Look for further blocks
-        line=""
+        line = ""
         while True:
             #Skip any blank lines between blocks...
-            while ""==line.strip():
+            while "" == line.strip():
                 line = handle.readline()
-                if not line : break #end of file
-            if not line : break #end of file
+                if not line:
+                    break  # end of file
+            if not line:
+                break  # end of file
 
             if self._is_header(line):
                 #Looks like the start of a concatenated alignment
@@ -248,19 +246,21 @@ class PhylipIterator(AlignmentIterator):
 
             #print "New block..."
             for i in xrange(number_of_seqs):
-                s = line.strip().replace(" ","")
+                s = line.strip().replace(" ", "")
                 if "." in s:
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
                 seqs[i].append(s)
                 line = handle.readline()
                 if (not line) and i+1 < number_of_seqs:
                     raise ValueError("End of file mid-block")
-            if not line : break #end of file
+            if not line:
+                break  # end of file
 
-        records = (SeqRecord(Seq("".join(s), self.alphabet), \
-                             id=i, name=i, description=i) \
-                   for (i,s) in zip(ids, seqs))
+        records = (SeqRecord(Seq("".join(s), self.alphabet),
+                             id=i, name=i, description=i)
+                   for (i, s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
+
 
 # Relaxed Phylip
 class RelaxedPhylipWriter(PhylipWriter):
@@ -315,7 +315,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
     def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
         handle = self.handle
 
-        if len(alignment)==0:
+        if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
         for record in alignment:
@@ -332,13 +332,13 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             #Either remove the banned characters, or map them to something
             #else like an underscore "_" or pipe "|" character...
             for char in "[](),":
-                name = name.replace(char,"")
+                name = name.replace(char, "")
             for char in ":;":
-                name = name.replace(char,"|")
+                name = name.replace(char, "|")
             name = name[:id_width]
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation" \
+                                 "possibly due to truncation"
                                  % (name, record.id))
             names.append(name)
 
@@ -358,7 +358,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             # notes in the SequentialPhylipIterator docstring
             handle.write(sequence)
             handle.write("\n")
-        
+
 
 class SequentialPhylipIterator(PhylipIterator):
     """
@@ -385,7 +385,7 @@ class SequentialPhylipIterator(PhylipIterator):
             raise StopIteration
         line = line.strip()
         parts = filter(None, line.split())
-        if len(parts)!=2:
+        if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
             number_of_seqs = int(parts[0])
@@ -397,7 +397,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         ids = []
@@ -418,7 +418,7 @@ class SequentialPhylipIterator(PhylipIterator):
                     continue
                 s = "".join([s, line.strip().replace(" ", "")])
                 if len(s) > length_of_seqs:
-                    raise ValueError("Found a record of length %i, should be %i" \
+                    raise ValueError("Found a record of length %i, should be %i"
                             % (len(s), length_of_seqs))
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -432,16 +432,16 @@ class SequentialPhylipIterator(PhylipIterator):
                 self._header = line
                 break
 
-        records = (SeqRecord(Seq(s, self.alphabet), \
-                             id=i, name=i, description=i) \
-                   for (i,s) in zip(ids, seqs))
+        records = (SeqRecord(Seq(s, self.alphabet),
+                             id=i, name=i, description=i)
+                   for (i, s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
-        
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     print "Running short mini-test"
 
-    phylip_text="""     8    286
+    phylip_text = """     8    286
 V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG
 B_subtilis MKMKKWTVLV VAALLAVLSA CG-------- ----NGNSSS KEDDNVLHVG
 B_subtilis MKKALLALFM VVSIAALAAC GAGNDNQSKD NAKDGDLWAS IKKKGVLTVG
@@ -499,24 +499,24 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
 
     from cStringIO import StringIO
     handle = StringIO(phylip_text)
-    count=0
+    count = 0
     for alignment in PhylipIterator(handle):
         for record in alignment:
-            count=count+1
+            count = count+1
             print record.id
             #print str(record.seq)
     assert count == 8
 
-    expected="""mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
+    expected = """mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
     fdidlakelc krintqctfv enpldalips lkakkidaim sslsitekrq qeiaftdkly
     aadsrlvvak nsdiqptves lkgkrvgvlq gttqetfgne hwapkgieiv syqgqdniys
     dltagridaafqdevaaseg flkqpvgkdy kfggpsvkde klfgvgtgmg lrkednelre
-    alnkafaemradgtyeklak kyfdfdvygg""".replace(" ","").replace("\n","").upper()
-    assert str(record.seq).replace("-","") == expected
+    alnkafaemradgtyeklak kyfdfdvygg""".replace(" ", "").replace("\n", "").upper()
+    assert str(record.seq).replace("-", "") == expected
 
     #From here:
     #http://atgc.lirmm.fr/phyml/usersguide.html
-    phylip_text2="""5 60
+    phylip_text2 = """5 60
 Tax1        CCATCTCACGGTCGGTACGATACACCTGCTTTTGGCAG
 Tax2        CCATCTCACGGTCAGTAAGATACACCTGCTTTTGGCGG
 Tax3        CCATCTCCCGCTCAGTAAGATACCCCTGCTGTTGGCGG
@@ -529,7 +529,7 @@ GAAATCGTCAATATTAAAAGGT
 GAAATGGTCAATCTTAAAAGGT
 GAAATGGTCAATATTAAAAGGT"""
 
-    phylip_text3="""5 60
+    phylip_text3 = """5 60
 Tax1        CCATCTCACGGTCGGTACGATACACCTGCTTTTGGCAGGAAATGGTCAATATTACAAGGT
 Tax2        CCATCTCACGGTCAGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAACATTAAAAGAT
 Tax3        CCATCTCCCGCTCAGTAAGATACCCCTGCTGTTGGCGGGAAATCGTCAATATTAAAAGGT
@@ -539,23 +539,23 @@ Tax5        CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT"""
     handle = StringIO(phylip_text2)
     list2 = list(PhylipIterator(handle))
     handle.close()
-    assert len(list2)==1
-    assert len(list2[0])==5
+    assert len(list2) == 1
+    assert len(list2[0]) == 5
 
     handle = StringIO(phylip_text3)
     list3 = list(PhylipIterator(handle))
     handle.close()
-    assert len(list3)==1
-    assert len(list3[0])==5
+    assert len(list3) == 1
+    assert len(list3[0]) == 5
 
-    for i in range(0,5):
+    for i in range(0, 5):
         list2[0][i].id == list3[0][i].id
         str(list2[0][i].seq) == str(list3[0][i].seq)
 
     #From here:
     #http://evolution.genetics.washington.edu/phylip/doc/sequence.html
     #Note the lack of any white space between names 2 and 3 and their seqs.
-    phylip_text4="""  5    42
+    phylip_text4 = """  5    42
 Turkey    AAGCTNGGGC ATTTCAGGGT
 Salmo gairAAGCCTTGGC AGTGCAGGGT
 H. SapiensACCGGTTGGC CGTTCAGGGT
@@ -570,7 +570,7 @@ AAACCATTGC CGGTACGCTT AA"""
 
     #From here:
     #http://evolution.genetics.washington.edu/phylip/doc/sequence.html
-    phylip_text5="""  5    42
+    phylip_text5 = """  5    42
 Turkey    AAGCTNGGGC ATTTCAGGGT
 GAGCCCGGGC AATACAGGGT AT
 Salmo gairAAGCCTTGGC AGTGCAGGGT
@@ -582,7 +582,7 @@ AAACCGAGGC CGGGACACTC AT
 Gorilla   AAACCCTTGC CGGTACGCTT
 AAACCATTGC CGGTACGCTT AA"""
 
-    phylip_text5a="""  5    42
+    phylip_text5a = """  5    42
 Turkey    AAGCTNGGGC ATTTCAGGGT GAGCCCGGGC AATACAGGGT AT
 Salmo gairAAGCCTTGGC AGTGCAGGGT GAGCCGTGGC CGGGCACGGT AT
 H. SapiensACCGGTTGGC CGTTCAGGGT ACAGGTTGGC CGTTCAGGGT AA
@@ -592,14 +592,14 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     handle = StringIO(phylip_text4)
     list4 = list(PhylipIterator(handle))
     handle.close()
-    assert len(list4)==1
-    assert len(list4[0])==5
+    assert len(list4) == 1
+    assert len(list4[0]) == 5
 
     handle = StringIO(phylip_text5)
     try:
         list5 = list(PhylipIterator(handle))
-        assert len(list5)==1
-        assert len(list5[0])==5
+        assert len(list5) == 1
+        assert len(list5[0]) == 5
         print "That should have failed..."
     except ValueError:
         print "Evil multiline non-interlaced example failed as expected"
@@ -608,8 +608,8 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     handle = StringIO(phylip_text5a)
     list5 = list(PhylipIterator(handle))
     handle.close()
-    assert len(list5)==1
-    assert len(list4[0])==5
+    assert len(list5) == 1
+    assert len(list4[0]) == 5
 
     print "Concatenation"
     handle = StringIO(phylip_text4 + "\n" + phylip_text4)
@@ -626,7 +626,7 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     handle.seek(0)
     list6 = list(PhylipIterator(handle))
     assert len(list5) == len(list6)
-    for a1,a2 in zip(list5, list6):
+    for a1, a2 in zip(list5, list6):
         assert len(a1) == len(a2)
         for r1, r2 in zip(a1, a2):
             assert r1.id == r2.id

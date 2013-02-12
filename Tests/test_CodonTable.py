@@ -6,7 +6,7 @@
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import ambiguous_generic_by_id, ambiguous_generic_by_name
 from Bio.Data.CodonTable import ambiguous_rna_by_id, ambiguous_dna_by_id
-from Bio.Data.CodonTable import unambiguous_rna_by_id, unambiguous_dna_by_id
+from Bio.Data.CodonTable import unambiguous_rna_by_id
 from Bio.Data.CodonTable import list_ambiguous_codons, TranslationError
 
 #Check the extension of stop codons to include well defined ambiguous ones
@@ -22,11 +22,11 @@ for n in ambiguous_generic_by_id.keys():
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
     if n != 23 :
-        assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X" #F or L
+        assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X"  # F or L
 
     assert ambiguous_dna_by_id[n].forward_table["GTT"] == "V"
     if n != 23 :
-        assert ambiguous_dna_by_id[n].forward_table["TTN"] == "X" #F or L
+        assert ambiguous_dna_by_id[n].forward_table["TTN"] == "X"  # F or L
     assert ambiguous_dna_by_id[n].forward_table["GTN"] == "V"
 
     if n != 23 :
@@ -35,14 +35,14 @@ for n in ambiguous_generic_by_id.keys():
     assert ambiguous_generic_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_generic_by_id[n].forward_table["GUN"] == "V"
     if n != 23 :
-        assert ambiguous_generic_by_id[n].forward_table["UUN"] == "X" #F or L
+        assert ambiguous_generic_by_id[n].forward_table["UUN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["GTT"] == "V"
     if n != 23 :
-        assert ambiguous_generic_by_id[n].forward_table["TTN"] == "X" #F or L
+        assert ambiguous_generic_by_id[n].forward_table["TTN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["GTN"] == "V"
     #And finally something evil, an RNA-DNA mixture:
     if n != 23 :
-        assert ambiguous_generic_by_id[n].forward_table["UTN"] == "X" #F or L
+        assert ambiguous_generic_by_id[n].forward_table["UTN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["UTU"] == "F"
 
     #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons

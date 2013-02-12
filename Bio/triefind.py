@@ -14,6 +14,7 @@ find_words    Find keys in a trie matching whole words in a string.
 import string
 import re
 
+
 def match(string, trie):
     """match(string, trie) -> longest key or None
 
@@ -30,6 +31,7 @@ def match(string, trie):
             longest = substr
     return longest
 
+
 def match_all(string, trie):
     """match_all(string, trie) -> list of keys
 
@@ -45,6 +47,7 @@ def match_all(string, trie):
         if trie.has_key(substr):
             matches.append(substr)
     return matches
+
 
 def find(string, trie):
     """find(string, trie) -> list of tuples (key, start, end)
@@ -64,6 +67,7 @@ def find(string, trie):
 
 DEFAULT_BOUNDARY_CHARS = string.punctuation + string.whitespace
 
+
 def find_words(string, trie):
     """find_words(string, trie) -> list of tuples (key, start, end)
 
@@ -72,7 +76,7 @@ def find_words(string, trie):
 
     """
     _boundary_re = re.compile(r"[%s]+" % re.escape(DEFAULT_BOUNDARY_CHARS))
-        
+
     results = []
     start = 0     # index of word boundary
     while start < len(string):

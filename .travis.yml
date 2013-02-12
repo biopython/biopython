@@ -15,32 +15,34 @@ python:
   - "2.6"
   - "2.7"
   - "3.2"
+  - "3.3"
   - "jython2.5"
-  - "pypy1.8"
-  - "pypy1.9"
+  - "pypy"
 
-install:
+before_install:
   - "export PYTHON_EXE=python"
   - "export JYTHON_URL='http://downloads.sourceforge.net/project/jython/jython/2.5.2/jython_installer-2.5.2.jar?r=http%3A%2F%2Fwww.jython.org%2Fdownloads.html&ts=1338089844&use_mirror=iweb'"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython | tail -n 2; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.8' ]]; then wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.8-linux.tar.bz2 -O pypy.tar.bz2; tar -xvjf pypy.tar.bz2 | tail -n 2; export PYTHON_EXE=$PWD/pypy-1.8/bin/pypy; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.9' ]]; then wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.9-linux.tar.bz2 -O pypy.tar.bz2; tar -xvjf pypy.tar.bz2 | tail -n 2; export PYTHON_EXE=$PWD/pypy-1.9/bin/pypy; fi"
-  - "/usr/bin/yes | $PYTHON_EXE setup.py install 2>&1 | tail -n 2"
+  - "sudo apt-get install clustalw clustalo | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then export PG=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.8' ]]; then export PG=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.9' ]]; then export PG=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
   - "if [[ $PG == 'yes' ]]; then pip install psycopg2 --use-mirrors 2>&1 | tail -n 2; fi"
 #Installing mysql-python does not work under Python 3.2
   - "export MSQL=$PG"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'python3.2' ]]; then export MSQL=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export MSQL=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
 
+install:
+  - "/usr/bin/yes | $PYTHON_EXE setup.py install 2>&1 | tail -n 2"
+
 before_script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd build/py3.2/Tests; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION != '3.2' ]]; then cd Tests; fi"
+  - cd Tests
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd ../build/py3.2/Tests; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then cd ../build/py3.3/Tests; fi"
 
 script:
   - $PYTHON_EXE run_tests.py --offline
@@ -48,3 +50,9 @@ script:
 #The email defaults are too talkative while we're getting Travis working nicely.
 notifications:
   email: false
+
+#The trick we were using to install Jython seems to have been broken by a
+#TravisCI build change in Jan 2013:
+matrix:
+  allow_failures:
+    - python: "jython2.5"

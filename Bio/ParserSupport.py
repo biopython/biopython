@@ -11,7 +11,6 @@ Classes:
 AbstractParser         Base class for parsers.
 AbstractConsumer       Base class of all Consumers.
 TaggingConsumer        Consumer that tags output with its event.  For debugging
-SGMLStrippingConsumer  Consumer that strips SGML tags from output.
 EventGenerator         Generate Biopython Events from Martel XML output
                        (note that Martel is now DEPRECATED)
 
@@ -32,7 +31,6 @@ warnings.warn("The module Bio.ParserSupport is now obsolete, and will be depreca
 
 
 import sys
-import traceback
 try:
     from types import InstanceType
 except ImportError:
@@ -52,6 +50,7 @@ except ImportError:
                      "This causes problems with some ParserSupport modules\n")
     xml_support = 0
 
+
 class AbstractParser(object):
     """Base class for other parsers.
 
@@ -70,23 +69,27 @@ class AbstractParser(object):
             h.close()
         return retval
 
+
 class AbstractConsumer(object):
     """Base class for other Consumers.
 
     Derive Consumers from this class and implement appropriate
     methods for each event that you want to receive.
-    
+
     """
     def _unhandled_section(self):
         pass
+
     def _unhandled(self, data):
         pass
+
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':
             method = self._unhandled_section
         else:
             method = self._unhandled
         return method
+
 
 class TaggingConsumer(AbstractConsumer):
     """A Consumer that tags the data stream with the event and
@@ -129,38 +132,6 @@ class TaggingConsumer(AbstractConsumer):
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
 
-class SGMLStrippingConsumer(object):
-    """A consumer that strips off SGML tags.
-
-    This is meant to be used as a decorator for other consumers.
-
-    """
-    def __init__(self, consumer):
-        import Bio
-        warnings.warn("SGMLStrippingConsumer is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
-        if type(consumer) is not InstanceType:
-            raise ValueError("consumer should be an instance")
-        self._consumer = consumer
-        self._prev_attr = None
-        self._stripper = File.SGMLStripper()
-
-    def _apply_clean_data(self, data):
-        clean = self._stripper.strip(data)
-        self._prev_attr(clean)
-
-    def __getattr__(self, name):
-        if name in ['_prev_attr', '_stripper']:
-            return getattr(self, name)
-        attr = getattr(self._consumer, name)
-        # If this is not a method, then return it as is.
-        if type(attr) is not MethodType:
-            return attr
-        # If it's a section method, then return it.
-        if name[:6] == 'start_' or name[:4] == 'end_':
-            return attr
-        # Otherwise, it's an info event, and return my method.
-        self._prev_attr = attr
-        return self._apply_clean_data
 
 # onle use the Event Generator if XML handling is okay
 if xml_support:
@@ -180,7 +151,7 @@ if xml_support:
 
             Arguments:
             o consumer - The consumer that we'll send Biopython events to.
-            
+
             o interest_tags - A listing of all the tags we are interested in.
 
             o callback_finalizer - A function to deal with the collected
@@ -195,7 +166,7 @@ if xml_support:
             In this case the list of information would be:
 
             ['Spam', 'More Spam']
-            
+
             This list of lines will be passed to the callback finalizer if
             it is present. Otherwise the consumer will be called with the
             list of content information.
@@ -259,7 +230,7 @@ if xml_support:
                 # reset our information and flags
                 self._cur_content = []
                 self._collect_characters = 0
-                
+
                 # if we are at a new tag, pass on the info from the last tag
                 if self._previous_tag and self._previous_tag != name:
                     self._make_callback(self._previous_tag)
@@ -280,7 +251,7 @@ if xml_support:
             # otherwise pass back the entire list of information
             else:
                 info_to_pass = self.info[name]
-            
+
             callback_function(info_to_pass)
 
             # reset the information for the tag
@@ -293,6 +264,7 @@ if xml_support:
             """
             if self._previous_tag:
                 self._make_callback(self._previous_tag)
+
 
 def read_and_call(uhandle, method, **keywds):
     """read_and_call(uhandle, method[, start][, end][, contains][, blank][, has_re])
@@ -315,6 +287,7 @@ def read_and_call(uhandle, method, **keywds):
         raise ValueError(errmsg)
     method(line)
 
+
 def read_and_call_while(uhandle, method, **keywds):
     """read_and_call_while(uhandle, method[, start][, end][, contains][, blank][, has_re]) -> number of lines
 
@@ -322,7 +295,7 @@ def read_and_call_while(uhandle, method, **keywds):
     some condition is true.  Returns the number of lines that were read.
 
     See the docstring for read_and_call for a description of the parameters.
-    
+
     """
     nlines = 0
     while 1:
@@ -335,15 +308,16 @@ def read_and_call_while(uhandle, method, **keywds):
         nlines = nlines + 1
     return nlines
 
+
 def read_and_call_until(uhandle, method, **keywds):
-    """read_and_call_until(uhandle, method, 
+    """read_and_call_until(uhandle, method,
     start=None, end=None, contains=None, blank=None) -> number of lines
 
     Read a line from uhandle and pass it to the method until
     some condition is true.  Returns the number of lines that were read.
 
     See the docstring for read_and_call for a description of the parameters.
-    
+
     """
     nlines = 0
     while 1:
@@ -355,6 +329,7 @@ def read_and_call_until(uhandle, method, **keywds):
         method(line)
         nlines = nlines + 1
     return nlines
+
 
 def attempt_read_and_call(uhandle, method, **keywds):
     """attempt_read_and_call(uhandle, method, **keywds) -> boolean
@@ -374,6 +349,7 @@ def attempt_read_and_call(uhandle, method, **keywds):
     else:
         uhandle.saveline(line)
     return passed
+
 
 def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                       has_re=None):
@@ -399,6 +375,7 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                 has_re.pattern, line)
     return None
 
+
 def is_blank_line(line, allow_spaces=0):
     """is_blank_line(line, allow_spaces=0) -> boolean
 
@@ -414,6 +391,7 @@ def is_blank_line(line, allow_spaces=0):
         return line.rstrip() == ''
     return line[0] == '\n' or line[0] == '\r'
 
+
 def safe_readline(handle):
     """safe_readline(handle) -> line
 
@@ -426,12 +404,13 @@ def safe_readline(handle):
         raise ValueError("Unexpected end of stream.")
     return line
 
+
 def safe_peekline(handle):
     """safe_peekline(handle) -> line
 
     Peek at the next line in an UndoHandle and return it.  If there are no
     more lines to peek, I will raise a ValueError.
-    
+
     """
     line = handle.peekline()
     if not line:

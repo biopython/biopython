@@ -47,21 +47,21 @@ def run2to3(filenames):
             if e != 0:
                 sys.stderr = stderr
                 sys.stderr.write(handle.getvalue())
-                os.remove(filename) #Don't want a half edited file!
-                raise RuntimeError("Error %i from 2to3 on %s" \
+                os.remove(filename)  # Don't want a half edited file!
+                raise RuntimeError("Error %i from 2to3 on %s"
                                    % (e, filename))
             #And again for any doctests,
             e = lib2to3.main.main("lib2to3.fixes", args + ["-d", filename])
             if e != 0:
                 sys.stderr = stderr
                 sys.stderr.write(handle.getvalue())
-                os.remove(filename) #Don't want a half edited file!
-                raise RuntimeError("Error %i from 2to3 (doctests) on %s" \
+                os.remove(filename)  # Don't want a half edited file!
+                raise RuntimeError("Error %i from 2to3 (doctests) on %s"
                                    % (e, filename))
     except KeyboardInterrupt:
         sys.stderr = stderr
         sys.stderr.write("Interrupted during %s\n" % filename)
-        os.remove(filename) #Don't want a half edited file!
+        os.remove(filename)  # Don't want a half edited file!
         for filename in filenames:
             if os.path.isfile(filename):
                 #Don't want uncoverted files left behind:
@@ -99,7 +99,8 @@ def do_update(py2folder, py3folder, verbose=False):
     #so that 2to3 can detect local imports successfully.
     to_convert = []
     for dirpath, dirnames, filenames in os.walk(py2folder):
-        if verbose: print("Processing %s" % dirpath)
+        if verbose:
+            print("Processing %s" % dirpath)
         relpath = os.path.relpath(dirpath, py2folder)
         #This is just to give cleaner filenames
         if relpath[:2] == "/.":
@@ -115,7 +116,7 @@ def do_update(py2folder, py3folder, verbose=False):
                 #Ignore hidden files
                 continue
             elif f.endswith("~") or f.endswith(".bak") \
-            or f.endswith(".swp"):
+                    or f.endswith(".swp"):
                 #Ignore backup files
                 continue
             elif f.endswith(".pyc") or f.endswith("$py.class"):
@@ -129,28 +130,31 @@ def do_update(py2folder, py3folder, verbose=False):
             #Compare modified times down to milliseconds only. In theory
             #might able to use times down to microseconds (10^-6), but
             #that doesn't work on this Windows machine I'm testing on.
-            if os.path.isfile(new) \
-            and round(os.stat(new).st_mtime*1000) >= \
-                round(os.stat(old).st_mtime*1000):
-                if verbose: print("Current: %s" % new)
+            if os.path.isfile(new) and\
+               round(os.stat(new).st_mtime * 1000) >= \
+               round(os.stat(old).st_mtime * 1000):
+                if verbose:
+                    print("Current: %s" % new)
                 continue
             #Python, C code, data files, etc - copy with date stamp etc
             shutil.copy2(old, new)
-            assert abs(os.stat(old).st_mtime-os.stat(new).st_mtime)<0.0001, \
+            assert abs(os.stat(old).st_mtime - os.stat(new).st_mtime) < 0.0001, \
                    "Modified time not copied! %0.8f vs %0.8f, diff %f" \
                    % (os.stat(old).st_mtime, os.stat(new).st_mtime,
-                      abs(os.stat(old).st_mtime-os.stat(new).st_mtime))
+                      abs(os.stat(old).st_mtime - os.stat(new).st_mtime))
             if f.endswith(".py"):
                 #Also run 2to3 on it
                 to_convert.append(new)
-                if verbose: print("Will convert %s" % new)
+                if verbose:
+                    print("Will convert %s" % new)
             else:
-                if verbose: print("Updated %s" % new)
+                if verbose:
+                    print("Updated %s" % new)
     if to_convert:
         print("Have %i python files to convert" % len(to_convert))
         run2to3(to_convert)
 
-            
+
 def main(python2_source, python3_source,
          children=["Bio", "BioSQL", "Tests", "Scripts", "Doc"]):
     #Note want to use different folders for Python 3.1, 3.2, etc
@@ -165,7 +169,7 @@ def main(python2_source, python3_source,
         do_update(os.path.join(python2_source, child),
                   os.path.join(python3_source, child))
     print("Python 2to3 processing done.")
-              
+
 if __name__ == "__main__":
     python2_source = "."
     python3_source = "build/py%i.%i" % sys.version_info[:2]

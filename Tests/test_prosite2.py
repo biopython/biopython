@@ -10,6 +10,7 @@ import unittest
 
 from Bio.ExPASy import Prosite
 
+
 class TestPrositeRead(unittest.TestCase):
 
     def test_read4(self):
@@ -775,7 +776,6 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.pdb_structs[5], "1SLM")
         self.assertEqual(record.pdb_structs[6], "1SU3")
         self.assertEqual(record.pdb_structs[7], "1UC1")
-
 
 
 if __name__ == "__main__":

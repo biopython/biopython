@@ -7,6 +7,7 @@ import unittest
 import os.path
 from Bio.SwissProt import KeyWList
 
+
 class KeyWListTest(unittest.TestCase):
 
     def test_parse(self):

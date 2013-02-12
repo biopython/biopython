@@ -19,9 +19,9 @@ for path in os.environ['PATH'].split(os.pathsep):
             if filename.startswith('Genepop'):
                 found = True
     except os.error:
-        pass #Path doesn't exist - correct to pass
+        pass  # Path doesn't exist - correct to pass
 if not found:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install GenePop if you want to use Bio.PopGen.GenePop.")
 
 
@@ -67,7 +67,6 @@ class AppTest(unittest.TestCase):
         assert (mean_sample_size, mean_priv_alleles, mig10, mig25, mig50, mig_corrected) == \
                (28.0, 0.016129, 52.5578, 15.3006, 8.94583, 13.6612)
 
-
     def test_fst_all(self):
         """Test genepop execution on all fst.
         """
@@ -86,7 +85,7 @@ class AppTest(unittest.TestCase):
         litr = list(itr)
         assert not type(allFst) == int
         assert len(litr) == 37
-        assert litr[36][0] == "Locus37" 
+        assert litr[36][0] == "Locus37"
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

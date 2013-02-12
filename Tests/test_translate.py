@@ -115,4 +115,3 @@ stop_protein = dna.translate('SGC1', to_stop=True)
 print str(stop_protein)
 
 # XXX (Backwards with ambiguity code is unfinished!)
-

@@ -17,6 +17,7 @@ import gzip
 # biopython
 from Bio import GenBank
 
+
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
 
@@ -44,9 +45,10 @@ def do_comparison(good_record, test_record):
         assert test_line == good_line, \
                "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
                (good_line, test_line)
-    
+
+
 def write_format(file):
-    record_parser = GenBank.RecordParser(debug_level = 2)
+    record_parser = GenBank.RecordParser(debug_level=2)
 
     print "Testing GenBank writing for %s..." % os.path.basename(file)
     # be able to handle gzipped files
@@ -59,11 +61,11 @@ def write_format(file):
 
     iterator = GenBank.Iterator(cur_handle, record_parser)
     compare_iterator = GenBank.Iterator(compare_handle)
-        
+
     while 1:
         cur_record = iterator.next()
         compare_record = compare_iterator.next()
-            
+
         if cur_record is None or compare_record is None:
             break
 
@@ -84,4 +86,4 @@ if __name__ == "__main__":
         print __doc__
         sys.exit()
 
-    write_format(sys.argv[1])  
+    write_format(sys.argv[1])

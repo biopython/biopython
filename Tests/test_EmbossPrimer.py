@@ -2,7 +2,6 @@
 """Tests for Primer-based programs in the Emboss suite.
 """
 # standard library
-import sys
 import os
 import unittest
 
@@ -18,6 +17,7 @@ class Primer3ParseTest(unittest.TestCase):
            os.path.join("Emboss", "cds_reverse.primer3"),
            os.path.join("Emboss", "short.primer3"),
            os.path.join("Emboss", "internal_oligo.primer3"),
+           os.path.join("Emboss", "no_oligo.primer3"),
            ]
 
     def test_simple_parse(self):
@@ -137,7 +137,6 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(targets[15].primers[4].forward_seq,
                          "TATCGCAACCACTGAGCAAG")
 
-
     def test_mutli_record_full(self):
         """Test parsing multiple primer sets (NirK full)"""
         h = open(os.path.join("Emboss", "NirK_full.primer3"))
@@ -216,6 +215,7 @@ class PrimersearchParseTest(unittest.TestCase):
           "0 mismatches\n"
           "\tTCACATTCCCAAATGTAGATCG hits reverse strand at [114] with "
           "0 mismatches")
+
 
 class PrimerSearchInputTest(unittest.TestCase):
     """Test creating input files for primersearch.

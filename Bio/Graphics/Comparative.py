@@ -17,6 +17,7 @@ from reportlab.graphics.charts.markers import *
 
 from Bio.Graphics import _write
 
+
 class ComparativeScatterPlot(object):
     """Display a scatter-type plot comparing two different kinds of info.
 
@@ -45,7 +46,7 @@ class ComparativeScatterPlot(object):
         # the information we'll be writing
         self.display_info = []
 
-        # inital colors and shapes used for drawing points
+        # initial colors and shapes used for drawing points
         self.color_choices = [colors.red, colors.green, colors.blue,
                               colors.yellow, colors.orange, colors.black]
         self.shape_choices = [makeFilledCircle, makeEmptySquare,
@@ -112,7 +113,7 @@ class ComparativeScatterPlot(object):
         scatter_plot.yValueAxis.valueStep = (y_max - y_min) / 10.0
 
         self._set_colors_and_shapes(scatter_plot, self.display_info)
-        
+
         cur_drawing.add(scatter_plot)
 
     def _set_colors_and_shapes(self, scatter_plot, display_info):

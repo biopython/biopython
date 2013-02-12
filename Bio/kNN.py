@@ -10,7 +10,7 @@ a new observation based the classes in its surrounding neighborhood.
 
 Glossary:
 distance   The distance between two points in the feature space.
-weight     The importance given to each point for classification. 
+weight     The importance given to each point for classification.
 
 
 Classes:
@@ -29,6 +29,7 @@ equal_weight    Every example is given a weight of 1.
 
 import numpy
 
+
 class kNN(object):
     """Holds information necessary to do nearest neighbors classification.
 
@@ -46,20 +47,21 @@ class kNN(object):
         self.ys = []
         self.k = None
 
+
 def equal_weight(x, y):
     """equal_weight(x, y) -> 1"""
     # everything gets 1 vote
     return 1
 
+
 def train(xs, ys, k, typecode=None):
     """train(xs, ys, k) -> kNN
-    
+
     Train a k nearest neighbors classifier on a training set.  xs is a
     list of observations and ys is a list of the class assignments.
     Thus, xs and ys should contain the same number of elements.  k is
     the number of neighbors that should be examined when doing the
     classification.
-    
     """
     knn = kNN()
     knn.classes = set(ys)
@@ -67,6 +69,7 @@ def train(xs, ys, k, typecode=None):
     knn.ys = ys
     knn.k = k
     return knn
+
 
 def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     """calculate(knn, x[, weight_fn][, distance_fn]) -> weight dict
@@ -78,7 +81,6 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     distance between them.  If distance_fn is None (the default), the
     Euclidean distance is used.  Returns a dictionary of the class to
     the weight given to the class.
-    
     """
     x = numpy.asarray(x)
 
@@ -94,7 +96,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
         # function about twice as fast.
         for i in range(len(knn.xs)):
             temp[:] = x - knn.xs[i]
-            dist = numpy.sqrt(numpy.dot(temp,temp))
+            dist = numpy.sqrt(numpy.dot(temp, temp))
             order.append((dist, i))
     order.sort()
 
@@ -107,6 +109,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
         weights[klass] = weights[klass] + weight_fn(x, knn.xs[i])
 
     return weights
+
 
 def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
     """classify(knn, x[, weight_fn][, distance_fn]) -> class

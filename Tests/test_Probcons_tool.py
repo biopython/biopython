@@ -7,7 +7,6 @@
 import sys
 import os
 import unittest
-import subprocess
 from cStringIO import StringIO
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
 from Bio.Align.Applications import ProbconsCommandline
@@ -25,8 +24,9 @@ else:
         probcons_exe = "probcons"
 
 if not probcons_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install PROBCONS if you want to use the Bio.Align.Applications wrapper.")
+
 
 class ProbconsApplication(unittest.TestCase):
 
@@ -52,7 +52,7 @@ class ProbconsApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
- 
+
     def test_Probcons_alignment_clustalw(self):
         """Round-trip through app and read clustalw alignment from stdout
         """

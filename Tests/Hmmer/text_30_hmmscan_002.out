@@ -1,0 +1,39 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             s00.fasta
+# target HMM database:             /home/bow/db/hmmer/Pfam-A.hmm
+# output directed to file:         hmmer_cases/text_hmmscan_s00.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmscan_s00.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmscan_s00.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       random_s00  [L=32]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+
+   [No hits detected that satisfy reporting thresholds]
+
+
+Domain annotation for each model (and alignments):
+
+   [No targets detected that satisfy reporting thresholds]
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (32 residues)
+Target model(s):                       13672  (2396357 nodes)
+Passed MSV filter:                       338  (0.0247221); expected 273.4 (0.02)
+Passed bias filter:                       87  (0.00636337); expected 273.4 (0.02)
+Passed Vit filter:                        23  (0.00168227); expected 13.7 (0.001)
+Passed Fwd filter:                        14  (0.00102399); expected 0.1 (1e-05)
+Initial search space (Z):              13672  [actual number of targets]
+Domain search space  (domZ):               0  [number of targets reported over threshold]
+# CPU time: 0.22u 0.09s 00:00:00.31 Elapsed: 00:00:00.19
+# Mc/sec: 403.60
+//

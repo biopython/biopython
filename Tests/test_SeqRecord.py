@@ -16,6 +16,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
+
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
     def test_annotations(self):
@@ -60,6 +61,7 @@ class SeqRecordCreation(unittest.TestCase):
         except (TypeError, ValueError), e:
             pass
 
+
 class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
 
@@ -80,7 +82,8 @@ class SeqRecordMethods(unittest.TestCase):
         """Simple slices using different start/end values"""
         for start in range(-30,30)+[None] :
             for end in range(-30,30)+[None] :
-                if start is None and end is None : continue
+                if start is None and end is None:
+                    continue
                 rec = self.record[start:end]
                 seq = self.record.seq[start:end]
                 seq_str = str(self.record.seq)[start:end]
@@ -146,7 +149,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
             self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-            self.assertEqual(rec.features[0].location.nofuzzy_end, 26) #not +3
+            self.assertEqual(rec.features[0].location.nofuzzy_end, 26)  # not +3
 
     def test_add_seqrecord(self):
         """Simple left addition of SeqRecord from genbank file."""
@@ -165,7 +168,7 @@ class SeqRecordMethods(unittest.TestCase):
                          len(self.record.features) + len(other.features))
         self.assertEqual(rec.features[0].type, "source")
         self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-        self.assertEqual(rec.features[0].location.nofuzzy_end, len(self.record)) #not +3
+        self.assertEqual(rec.features[0].location.nofuzzy_end, len(self.record))  # not +3
         i = len(self.record.features)
         self.assertEqual(rec.features[i].type, "source")
         self.assertEqual(rec.features[i].location.nofuzzy_start, len(self.record))
@@ -187,7 +190,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.features[0].type, "source")
             self.assertEqual(rec.features[0].location.nofuzzy_start, 3)
             self.assertEqual(rec.features[0].location.nofuzzy_end, 26+3)
-            
+
     def test_slice_add_simple(self):
         """Simple slice and add"""
         for cut in range(27) :
@@ -215,7 +218,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.annotations, {}) # May change this...
             self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
-            
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

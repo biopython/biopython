@@ -19,8 +19,6 @@ read             Parses a FDist record (file) into a Record object.
 """
 
 
-
-
 def read(handle):
     """Parses FDist data into a Record object.
 
@@ -51,27 +49,26 @@ class Record(object):
     Members:
     data_org    Data organization (0 pops by rows, 1 alleles by rows).
                 The Record will behave as if data was 0 (converting if needed)
-    
+
     num_pops       Number of populations
-    
+
     num_loci       Number of loci
-    
+
     loci_data      Loci data
-    
+
     loci_data is a list, where each element represents a locus. Each element
     is a tuple, the first element is the number of alleles, the second
     element a list. Each element of the list is the count of each allele
     per population.
-    
     """
     def __init__(self):
         self.data_org    = 0
         self.num_pops    = 0
         self.num_loci    = 0
         self.loci_data   = []
-        
+
     def __str__(self):
-        rep  = ['0\n'] #We only export in 0 format, even if originally was 1
+        rep  = ['0\n']  # We only export in 0 format, even if originally was 1
         rep.append(str(self.num_pops) + '\n')
         rep.append(str(self.num_loci) + '\n')
         rep.append('\n')
@@ -84,4 +81,3 @@ class Record(object):
                 rep.append('\n')
             rep.append('\n')
         return "".join(rep)
-    

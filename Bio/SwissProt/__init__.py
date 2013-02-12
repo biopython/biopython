@@ -23,6 +23,7 @@ parse              Read multiple SwissProt records
 
 from Bio._py3k import _as_string
 
+
 class Record(object):
     """Holds information from a SwissProt record.
 
@@ -56,19 +57,19 @@ class Record(object):
 
     seqinfo           tuple of (length, molecular weight, CRC32 value)
     sequence          The sequence.
-    
+
     """
     def __init__(self):
         self.entry_name = None
         self.data_class = None
         self.molecule_type = None
         self.sequence_length = None
-        
+
         self.accessions = []
         self.created = None
         self.sequence_update = None
         self.annotation_update = None
-        
+
         self.description = []
         self.gene_name = ''
         self.organism = []
@@ -82,7 +83,7 @@ class Record(object):
         self.cross_references = []
         self.keywords = []
         self.features = []
-        
+
         self.seqinfo = None
         self.sequence = ''
 
@@ -92,13 +93,13 @@ class Reference(object):
 
     Members:
     number      Number of reference in an entry.
-    positions   Describes extent of work.  list of strings.
+    positions   Describes extent of work.  List of strings.
     comments    Comments.  List of (token, text).
-    references  References.  List of (dbname, identifier)
+    references  References.  List of (dbname, identifier).
     authors     The authors of the work.
     title       Title of the work.
     location    A citation for the work.
-    
+
     """
     def __init__(self):
         self.number = None
@@ -128,7 +129,7 @@ def read(handle):
         raise ValueError("More than one SwissProt record found")
     return record
 
- 
+
 # Everything below is considered private
 
 
@@ -143,7 +144,7 @@ def _read(handle):
         if unread:
             value = unread + " " + value
             unread = ""
-        if key=='**':
+        if key == '**':
             #See Bug 2353, some files from the EBI have extra lines
             #starting "**" (two asterisks/stars).  They appear
             #to be unofficial automated annotations. e.g.
@@ -151,95 +152,95 @@ def _read(handle):
             #**   #################    INTERNAL SECTION    ##################
             #**HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
-        elif key=='ID':
+        elif key == 'ID':
             record = Record()
             _read_id(record, line)
             _sequence_lines = []
-        elif key=='AC':
+        elif key == 'AC':
             accessions = [word for word in value.rstrip(";").split("; ")]
             record.accessions.extend(accessions)
-        elif key=='DT':
+        elif key == 'DT':
             _read_dt(record, line)
-        elif key=='DE':
+        elif key == 'DE':
             record.description.append(value.strip())
-        elif key=='GN':
+        elif key == 'GN':
             if record.gene_name:
                 record.gene_name += " "
             record.gene_name += value
-        elif key=='OS':
+        elif key == 'OS':
             record.organism.append(value)
-        elif key=='OG':
+        elif key == 'OG':
             record.organelle += line[5:]
-        elif key=='OC':
+        elif key == 'OC':
             cols = [col for col in value.rstrip(";.").split("; ")]
             record.organism_classification.extend(cols)
-        elif key=='OX':
+        elif key == 'OX':
             _read_ox(record, line)
-        elif key=='OH':
+        elif key == 'OH':
             _read_oh(record, line)
-        elif key=='RN':
+        elif key == 'RN':
             reference = Reference()
             _read_rn(reference, value)
             record.references.append(reference)
-        elif key=='RP':
+        elif key == 'RP':
             assert record.references, "RP: missing RN"
             record.references[-1].positions.append(value)
-        elif key=='RC':
+        elif key == 'RC':
             assert record.references, "RC: missing RN"
             reference = record.references[-1]
             unread = _read_rc(reference, value)
-        elif key=='RX':
+        elif key == 'RX':
             assert record.references, "RX: missing RN"
             reference = record.references[-1]
             _read_rx(reference, value)
-        elif key=='RL':
+        elif key == 'RL':
             assert record.references, "RL: missing RN"
             reference = record.references[-1]
             reference.location.append(value)
         # In UniProt release 1.12 of 6/21/04, there is a new RG
         # (Reference Group) line, which references a group instead of
         # an author.  Each block must have at least 1 RA or RG line.
-        elif key=='RA':
+        elif key == 'RA':
             assert record.references, "RA: missing RN"
             reference = record.references[-1]
             reference.authors.append(value)
-        elif key=='RG':
+        elif key == 'RG':
             assert record.references, "RG: missing RN"
             reference = record.references[-1]
             reference.authors.append(value)
-        elif key=="RT":
+        elif key == "RT":
             assert record.references, "RT: missing RN"
             reference = record.references[-1]
             reference.title.append(value)
-        elif key=='CC':
+        elif key == 'CC':
             _read_cc(record, line)
-        elif key=='DR':
+        elif key == 'DR':
             _read_dr(record, value)
-        elif key=='PE':
+        elif key == 'PE':
             #TODO - Record this information?
             pass
-        elif key=='KW':
+        elif key == 'KW':
             cols = value.rstrip(";.").split('; ')
             record.keywords.extend(cols)
-        elif key=='FT':
+        elif key == 'FT':
             _read_ft(record, line)
-        elif key=='SQ':
+        elif key == 'SQ':
             cols = value.split()
             assert len(cols) == 7, "I don't understand SQ line %s" % line
             # Do more checking here?
             record.seqinfo = int(cols[1]), int(cols[3]), cols[5]
-        elif key=='  ':
+        elif key == '  ':
             _sequence_lines.append(value.replace(" ", "").rstrip())
-        elif key=='//':
+        elif key == '//':
             # Join multiline data into one string
             record.description = " ".join(record.description)
             record.organism = " ".join(record.organism)
-            record.organelle   = record.organelle.rstrip()
+            record.organelle = record.organelle.rstrip()
             for reference in record.references:
                 reference.authors = " ".join(reference.authors).rstrip(";")
                 reference.title = " ".join(reference.title).rstrip(";")
                 if reference.title.startswith('"') and reference.title.endswith('"'):
-                    reference.title = reference.title[1:-1] #remove quotes
+                    reference.title = reference.title[1:-1]  # remove quotes
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
@@ -267,16 +268,16 @@ def _read_id(record, line):
         record.molecule_type = None
         record.sequence_length = int(cols[2])
     else:
-        raise ValueError("ID line has unrecognised format:\n"+line)
+        raise ValueError("ID line has unrecognised format:\n" + line)
     # check if the data class is one of the allowed values
     allowed = ('STANDARD', 'PRELIMINARY', 'IPI', 'Reviewed', 'Unreviewed')
     if record.data_class not in allowed:
-        raise ValueError("Unrecognized data class %s in line\n%s" % \
+        raise ValueError("Unrecognized data class %s in line\n%s" %
               (record.data_class, line))
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, 'PRT'):
-        raise ValueError("Unrecognized molecule type %s in line\n%s" % \
+        raise ValueError("Unrecognized molecule type %s in line\n%s" %
               (record.molecule_type, line))
 
 
@@ -362,7 +363,7 @@ def _read_dt(record, line):
 
         # Re-use the historical property names, even though
         # the meaning has changed slighty:
-        if "INTEGRATED"  in uprline:
+        if "INTEGRATED" in uprline:
             record.created = date, version
         elif 'SEQUENCE VERSION' in uprline:
             record.sequence_update = date, version
@@ -397,7 +398,7 @@ def _read_oh(record, line):
     # Line type OH (Organism Host) for viral hosts
     assert line[5:].startswith("NCBI_TaxID="), "Unexpected %s" % line
     line = line[16:].rstrip()
-    assert line[-1]=="." and line.count(";")==1, line
+    assert line[-1] == "." and line.count(";") == 1, line
     taxid, name = line[:-1].split(";")
     record.host_taxonomy_id.append(taxid.strip())
     record.host_organism.append(name.strip())
@@ -410,7 +411,7 @@ def _read_rn(reference, rn):
 
 def _read_rc(reference, value):
     cols = value.split(';')
-    if value[-1]==';':
+    if value[-1] == ';':
         unread = ""
     else:
         cols, unread = cols[:-1], cols[-1]
@@ -419,7 +420,7 @@ def _read_rc(reference, value):
             return
         # The token is everything before the first '=' character.
         i = col.find("=")
-        if i>=0:
+        if i >= 0:
             token, text = col[:i], col[i+1:]
             comment = token.lstrip(), text
             reference.comments.append(comment)
@@ -439,7 +440,7 @@ def _read_rx(reference, value):
     # have extraneous information in the RX line.  Check for
     # this and chop it out of the line.
     # (noticed by katel@worldpath.net)
-    value = value.replace(' [NCBI, ExPASy, Israel, Japan]','')
+    value = value.replace(' [NCBI, ExPASy, Israel, Japan]', '')
 
     # RX lines can also be used of the form
     # RX   PubMed=9603189;
@@ -474,11 +475,12 @@ def _read_rx(reference, value):
         warnings.warn("Possibly corrupt RX line %r" % value,
                       BiopythonParserWarning)
 
+
 def _read_cc(record, line):
     key, value = line[5:8], line[9:].rstrip()
-    if key=='-!-':   # Make a new comment
+    if key == '-!-':   # Make a new comment
         record.comments.append(value)
-    elif key=='   ': # add to the previous comment
+    elif key == '   ':  # add to the previous comment
         if not record.comments:
             # TCMO_STRGA in Release 37 has comment with no topic
             record.comments.append(value)
@@ -507,15 +509,15 @@ def _read_ft(record, line):
     except ValueError:
         to_res = line[16:22].lstrip()
     #if there is a feature_id (FTId), store it away
-    if line[29:35]==r"/FTId=":
+    if line[29:35] == r"/FTId=":
         ft_id = line[35:70].rstrip()[:-1]
         description = ""
     else:
-        ft_id =""
+        ft_id = ""
         description = line[29:70].rstrip()
     if not name:  # is continuation of last one
         assert not from_res and not to_res
-        name, from_res, to_res, old_description,old_ft_id = record.features[-1]
+        name, from_res, to_res, old_description, old_ft_id = record.features[-1]
         del record.features[-1]
         description = ("%s %s" % (old_description, description)).strip()
 
@@ -541,7 +543,7 @@ def _read_ft(record, line):
                 second_seq = second_seq.replace(" ", "")
                 # reassemble the description
                 description = first_seq + " -> " + second_seq + extra_info
-    record.features.append((name, from_res, to_res, description,ft_id))
+    record.features.append((name, from_res, to_res, description, ft_id))
 
 
 if __name__ == "__main__":
@@ -554,7 +556,7 @@ if __name__ == "__main__":
         print "Missing test file %s" % example_filename
     else:
         #Try parsing it!
-        
+
         handle = open(example_filename)
         records = parse(handle)
         for record in records:

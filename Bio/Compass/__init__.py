@@ -23,6 +23,7 @@ Record        One result of a COMPASS file
 """
 import re
 
+
 def read(handle):
     record = None
     try:
@@ -54,6 +55,7 @@ def read(handle):
         except StopIteration:
             raise ValueError("Unexpected end of stream.")
     return record
+
 
 def parse(handle):
     record = None
@@ -93,10 +95,11 @@ def parse(handle):
             yield record
             break
 
+
 class Record(object):
     """
     Hold information from one compass hit.
-    Ali1 one is the query, Ali2 the hit.
+    Ali1 is the query, Ali2 the hit.
     """
 
     def __init__(self):
@@ -119,14 +122,13 @@ class Record(object):
         self.hit_aln=''
         self.positives=''
 
-
     def query_coverage(self):
-        """Return the length of the query covered in alignment"""
+        """Return the length of the query covered in the alignment."""
         s = self.query_aln.replace("=", "")
         return len(s)
 
     def hit_coverage(self):
-        """Return the length of the hit covered in the alignment"""
+        """Return the length of the hit covered in the alignment."""
         s = self.hit_aln.replace("=", "")
         return len(s)
 
@@ -142,22 +144,25 @@ __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
            "positive_alignment": re.compile("^.{15}(.+)"),
           }
 
+
 def __read_names(record, line):
     """
     Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
           ------query-----        -------hit-------------
-    """        
+    """
     if not "Ali1:" in line:
         raise ValueError("Line does not contain 'Ali1:':\n%s" % line)
     m = __regex["names"].search(line)
     record.query = m.group(1)
     record.hit = m.group(2)
 
-def __read_threshold(record,line):
+
+def __read_threshold(record, line):
     if not line.startswith("Threshold"):
         raise ValueError("Line does not start with 'Threshold':\n%s" % line)
     m = __regex["threshold"].search(line)
     record.gap_threshold = float(m.group(1))
+
 
 def __read_lengths(record, line):
     if not line.startswith("length1="):
@@ -168,6 +173,7 @@ def __read_lengths(record, line):
     record.hit_length = int(m.group(3))
     record.hit_filtered_length = float(m.group(4))
 
+
 def __read_profilewidth(record, line):
     if not "Nseqs1" in line:
         raise ValueError("Line does not contain 'Nseqs1':\n%s" % line)
@@ -176,6 +182,7 @@ def __read_profilewidth(record, line):
     record.query_neffseqs = float(m.group(2))
     record.hit_nseqs = int(m.group(3))
     record.hit_neffseqs = float(m.group(4))
+
 
 def __read_scores(record, line):
     if not line.startswith("Smith-Waterman"):
@@ -188,23 +195,26 @@ def __read_scores(record, line):
         record.sw_score = 0
         record.evalue = -1.0
 
+
 def __read_query_alignment(record, line):
     m = __regex["start"].search(line)
     if m:
         record.query_start = int(m.group(1))
     m = __regex["align"].match(line)
-    assert m!=None, "invalid match"
+    assert m is not None, "invalid match"
     record.query_aln += m.group(1)
+
 
 def __read_positive_alignment(record, line):
     m = __regex["positive_alignment"].match(line)
-    assert m!=None, "invalid match"
+    assert m is not None, "invalid match"
     record.positives += m.group(1)
+
 
 def __read_hit_alignment(record, line):
     m = __regex["start"].search(line)
     if m:
         record.hit_start = int(m.group(1))
     m = __regex["align"].match(line)
-    assert m!=None, "invalid match"
+    assert m is not None, "invalid match"
     record.hit_aln += m.group(1)

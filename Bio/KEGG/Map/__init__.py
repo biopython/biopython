@@ -31,18 +31,18 @@ def parse(handle):
         for compound in compounds:
             compound = compound.strip()
             try:
-               number, compound = compound.split()
-               number = -int(number)
+                number, compound = compound.split()
+                number = -int(number)
             except ValueError:
-               number = -1
+                number = -1
             reactants[compound] = number
         compounds = after.split(" + ")
         for compound in compounds:
             compound = compound.strip()
             try:
-               number, compound = compound.split()
-               number = int(number)
+                number, compound = compound.split()
+                number = int(number)
             except ValueError:
-               number = +1
+                number = +1
             reactants[compound] = number
         yield Reaction(reactants, catalysts, True, data)

@@ -4,17 +4,24 @@
 # standard library
 import os
 import cStringIO
+import warnings
+
+from Bio import BiopythonParserWarning
 
 # GenBank stuff to test
 from Bio import GenBank
 from Bio.GenBank import utils
+
+#TODO - Test we get the warnings we expect on the bad input files
+warnings.simplefilter('ignore', BiopythonParserWarning)
 
 gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
               'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
-              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb']
+              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb',
+              'no_end_marker.gb', 'wrong_sequence_indent.gb']
 
 # We only test writing on a subset of the examples:
 write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
@@ -48,10 +55,10 @@ for parser in all_parsers:
         if not os.path.isfile(filename):
             print "Missing test input file: %s" % filename
             continue
-        
+
         handle = open(filename, 'r')
         iterator = GenBank.Iterator(handle, parser)
-        
+
         while 1:
             cur_record = iterator.next()
 
@@ -76,7 +83,7 @@ for parser in all_parsers:
                     else:
                         print "References*"
                         for reference in cur_record.annotations[ann_key]:
-                            print str(reference) 
+                            print str(reference)
                 print "Feaures"
                 for feature in cur_record.features:
                     print feature
@@ -97,15 +104,16 @@ for parser in all_parsers:
                     print "num qualifiers:", len(feature.qualifiers)
                     for qualifier in feature.qualifiers:
                         print "key:", qualifier.key, "value:", qualifier.value
-                         
+
         handle.close()
-        
+
 #The dictionaries code has been deprecated
 #print "Testing dictionaries..."
 #...
 
 # test writing GenBank format
 print "Testing writing GenBank format..."
+
 
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
@@ -131,7 +139,8 @@ def do_comparison(good_record, test_record):
         assert test_normalized == good_normalized, \
                "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
                (good_line, test_line)
-    
+
+
 def t_write_format():
     record_parser = GenBank.RecordParser(debug_level = 0)
 
@@ -139,14 +148,14 @@ def t_write_format():
         print "Testing GenBank writing for %s..." % os.path.basename(file)
         cur_handle = open(os.path.join("GenBank", file), "r")
         compare_handle = open(os.path.join("GenBank", file), "r")
-        
+
         iterator = GenBank.Iterator(cur_handle, record_parser)
         compare_iterator = GenBank.Iterator(compare_handle)
-        
+
         while 1:
             cur_record = iterator.next()
             compare_record = compare_iterator.next()
-            
+
             if cur_record is None or compare_record is None:
                 break
 
@@ -160,16 +169,17 @@ def t_write_format():
 
 t_write_format()
 
+
 def t_cleaning_features():
     """Test the ability to clean up feature values.
     """
-    parser = GenBank.FeatureParser(feature_cleaner = \
+    parser = GenBank.FeatureParser(feature_cleaner =
                                    utils.FeatureValueCleaner())
     handle = open(os.path.join("GenBank", "arab1.gb"))
     iterator = GenBank.Iterator(handle, parser)
 
     first_record = iterator.next()
-    
+
     # test for cleaning of translation
     translation_feature = first_record.features[1]
     test_trans = translation_feature.qualifiers["translation"][0]
@@ -182,6 +192,7 @@ def t_cleaning_features():
 
 print "Testing feature cleaning..."
 t_cleaning_features()
+
 
 def t_ensembl_locus():
     line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
@@ -213,5 +224,6 @@ def t_ensembl_locus():
     assert c._expected_size == 1219964, c._expected_size
 
     print "Done"
+
 print "Testing EnsEMBL LOCUS lines..."
 t_ensembl_locus()

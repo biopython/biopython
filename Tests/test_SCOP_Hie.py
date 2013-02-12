@@ -11,8 +11,6 @@ import unittest
 from Bio.SCOP import Hie
 
 
-
-
 class HieTests(unittest.TestCase):
 
     def setUp(self):
@@ -21,7 +19,7 @@ class HieTests(unittest.TestCase):
     def testParse(self):
         """Test if all records in a HIE file are being read"""
         f = open(self.filename)
-        try: 
+        try:
             count = 0
             for record in Hie.parse(f):
                 count +=1
@@ -32,13 +30,13 @@ class HieTests(unittest.TestCase):
     def testStr(self):
         """Test if we can convert each record to a string correctly"""
         f = open(self.filename)
-        try: 
+        try:
             for line in f:
                 record = Hie.Record(line)
                 #End of line is platform dependent. Strip it off
                 self.assertEqual(str(record).rstrip(), line.rstrip())
         finally:
-            f.close()        
+            f.close()
 
     def testError(self):
         """Test if a corrupt record raises the appropriate exception"""

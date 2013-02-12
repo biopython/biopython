@@ -1,0 +1,92 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             s03.fasta
+# target HMM database:             /home/bow/db/hmmer/Pfam-A.hmm
+# output directed to file:         hmmer_cases/text_hmmscan_s03.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmscan_s03.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmscan_s03.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       gi|22748937|ref|NP_065801.1|  [L=1204]
+Description: exportin-5 [Homo sapiens]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+    7.8e-34  116.6   7.8    1.1e-33  116.1   3.4    2.8  2  Xpo1     Exportin 1-like protein
+     0.0039   16.9   0.0      0.033   14.0   0.0    2.7  2  IBN_N    Importin-beta N-terminal domain
+
+
+Domain annotation for each model (and alignments):
+>> Xpo1  Exportin 1-like protein
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  116.1   3.4   1.6e-37   1.1e-33       2     148 .]     110     271 ..     109     271 .. 0.98
+   2 ?   -1.8   0.0      0.35   2.4e+03     112     139 ..     499     525 ..     496     529 .. 0.86
+
+  Alignments for each domain:
+  == domain 1    score: 116.1 bits;  conditional E-value: 1.6e-37
+                                   HHHHHHHHHHHHHHHHHHTTTTSTTHHHHHHHHHHG-HHHHHHHHHHHHHHHHHHCCS-TTTS-CCCHHHHHHHCHHHHHH CS
+                          Xpo1   2 kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqk 82 
+                                   +++++ l+++++e++++e+p++Wp+++ +l  l++++++++el++ iL++l+e++++f  ++l  +rr++++++l++++++
+  gi|22748937|ref|NP_065801.1| 110 NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMER 188
+                                   89******************************************************99..79******************* PP
+
+                                   HHHHHHHHHC-TT-..................HHHHHHHHHHHHHHCTTS-CHHCHCS...HHHHHCHHCCSCCCHHHHHH CS
+                          Xpo1  83 ilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAve 146
+                                   i+++ll+ l+++v+k+               ++++  a+L++l+ +++w+++++i +++  ll++l+ lLn++el+  A+e
+  gi|22748937|ref|NP_065801.1| 189 IFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAE 269
+                                   **************99*****************************************8889******************** PP
+
+                                   HH CS
+                          Xpo1 147 cL 148
+                                   cL
+  gi|22748937|ref|NP_065801.1| 270 CL 271
+                                   *8 PP
+
+  == domain 2    score: -1.8 bits;  conditional E-value: 0.35
+                                   HHCTTS-CHHCHCS.HHHHHCHHCCSCC CS
+                          Xpo1 112 swvswidiglivnspllsllfqlLndpe 139
+                                   s+v+w  ++l+++s +++ +f+ Ln++e
+  gi|22748937|ref|NP_065801.1| 499 SFVQWEAMTLFLES-VITQMFRTLNREE 525
+                                   899*********98.8888899998776 PP
+
+>> IBN_N  Importin-beta N-terminal domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   14.0   0.0   4.8e-06     0.033       4      75 ..      36      98 ..      33     100 .. 0.87
+   2 ?   -3.3   0.0       1.2     8e+03      57      75 ..     168     186 ..     165     187 .. 0.85
+
+  Alignments for each domain:
+  == domain 1    score: 14.0 bits;  conditional E-value: 4.8e-06
+                                  HHHHHHHSCTHHHHHHHHHHHTTTSTHHHHHHHHHHHHHHHHHSCCHHHHHHHHCS-HHHHHHHHHHHHHHH CS
+                         IBN_N  4 qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll 75
+                                   ++++++  P ++++ l+++ +k+    vR++++++L++ ++ +W+         ++  ek +++n++ +l+
+  gi|22748937|ref|NP_065801.1| 36 FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI 98
+                                  56788886699*********.6555899******************........999999****99999887 PP
+
+  == domain 2    score: -3.3 bits;  conditional E-value: 1.2
+                                   HCS-HHHHHHHHHHHHHHH CS
+                         IBN_N  57 qqlpeeekelIrnnllnll 75 
+                                   q+lp++ + +I ++l + +
+  gi|22748937|ref|NP_065801.1| 168 QTLPPQRRRDIQQTLTQNM 186
+                                   6899*******99998865 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (1204 residues)
+Target model(s):                       13672  (2396357 nodes)
+Passed MSV filter:                       520  (0.0380339); expected 273.4 (0.02)
+Passed bias filter:                      319  (0.0233324); expected 273.4 (0.02)
+Passed Vit filter:                        23  (0.00168227); expected 13.7 (0.001)
+Passed Fwd filter:                         2  (0.000146284); expected 0.1 (1e-05)
+Initial search space (Z):              13672  [actual number of targets]
+Domain search space  (domZ):               2  [number of targets reported over threshold]
+# CPU time: 1.09u 0.19s 00:00:01.28 Elapsed: 00:00:00.40
+# Mc/sec: 7213.03
+//

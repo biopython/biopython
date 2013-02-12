@@ -11,10 +11,11 @@ from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
+
 def title_to_ids(title):
     """Function to convert a title into the id, name, and description.
 
-    This is just a quick-n-dirty implementation, and is definately not meant
+    This is just a quick-n-dirty implementation, and is definetely not meant
     to handle every FASTA title line case.
     """
     # first split the id information from the description
@@ -38,6 +39,7 @@ def title_to_ids(title):
 
     return id, name, descr
 
+
 def read_single_with_titles(filename, alphabet):
     global title_to_ids
     iterator = FastaIterator(open(filename), alphabet, title_to_ids)
@@ -49,6 +51,7 @@ def read_single_with_titles(filename, alphabet):
     assert record is not None and second is None
     return record
 
+
 def read_title_and_seq(filename):
     """Crude parser that gets the first record from a FASTA file."""
     handle = open(filename)
@@ -56,7 +59,8 @@ def read_title_and_seq(filename):
     assert title.startswith(">")
     seq = ""
     for line in handle:
-        if line.startswith(">") : break
+        if line.startswith(">"):
+            break
         seq += line.strip()
     handle.close()
     return title[1:], seq
@@ -66,7 +70,7 @@ class TitleFunctions(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, alphabet):
         """Basic test for parsing single record FASTA files."""
-        title, seq = read_title_and_seq(filename) #crude parser
+        title, seq = read_title_and_seq(filename)  # crude parser
         #First check using Bio.SeqIO.FastaIO directly with title function,
         record = read_single_with_titles(filename, alphabet)
         idn, name, descr = title_to_ids(title)
@@ -125,37 +129,45 @@ multi_amino_files = ['Fasta/f002', 'Fasta/fa01']
 
 for filename in single_nucleic_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.simple_check(fn, generic_nucleotide)
         f.__doc__ = "Checking nucleotide file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_nuc_%s"%name, funct(filename))
     del funct
 
 for filename in multi_dna_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.multi_check(fn, generic_dna)
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_mutli_dna_%s"%name, funct(filename))
     del funct
 
 for filename in single_amino_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.simple_check(fn, generic_nucleotide)
         f.__doc__ = "Checking protein file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_pro_%s"%name, funct(filename))
     del funct
 
 for filename in multi_amino_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.multi_check(fn, generic_dna)
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_mutli_pro_%s"%name, funct(filename))
     del funct
 

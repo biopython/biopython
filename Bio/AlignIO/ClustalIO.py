@@ -15,6 +15,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+
 class ClustalWriter(SequentialAlignmentWriter):
     """Clustalw alignment writer."""
     def write_alignment(self, alignment):
@@ -23,7 +24,7 @@ class ClustalWriter(SequentialAlignmentWriter):
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:
-            #This doubles as a check for an alignment object    
+            #This doubles as a check for an alignment object
             raise ValueError("Non-empty sequences are required")
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
@@ -39,7 +40,7 @@ class ClustalWriter(SequentialAlignmentWriter):
         else:
             #e.g. 1.81 or 1.83
             output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
-        
+
         cur_char = 0
         max_length = len(alignment[0])
 
@@ -62,7 +63,7 @@ class ClustalWriter(SequentialAlignmentWriter):
                 #Make sure we don't get any spaces in the record
                 #identifier when output in the file by replacing
                 #them with underscores:
-                line = record.id[0:30].replace(" ","_").ljust(36)
+                line = record.id[0:30].replace(" ", "_").ljust(36)
                 line += str(record.seq[cur_char:(cur_char + show_num)])
                 output += line + "\n"
 
@@ -78,6 +79,7 @@ class ClustalWriter(SequentialAlignmentWriter):
         # Want a trailing blank new line in case the output is concatenated
         self.handle.write(output + "\n")
 
+
 class ClustalIterator(AlignmentIterator):
     """Clustalw alignment iterator."""
 
@@ -88,22 +90,22 @@ class ClustalIterator(AlignmentIterator):
             #the previous alignment.
             line = self._header
             del self._header
-        except AttributeError:      
+        except AttributeError:
             line = handle.readline()
         if not line:
             raise StopIteration
 
         #Whitelisted headers we know about
-        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE']
+        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS']
         if line.strip().split()[0] not in known_headers:
-            raise ValueError("%s is not a known CLUSTAL header: %s" % \
+            raise ValueError("%s is not a known CLUSTAL header: %s" %
                              (line.strip().split()[0],
                               ", ".join(known_headers)))
 
         # find the clustal version in the header line
         version = None
         for word in line.split():
-            if word[0]=='(' and word[-1]==')':
+            if word[0] == '(' and word[-1] == ')':
                 word = word[1:-1]
             if word[0] in '0123456789':
                 version = word
@@ -120,7 +122,7 @@ class ClustalIterator(AlignmentIterator):
         ids = []
         seqs = []
         consensus = ""
-        seq_cols = None #: Used to extract the consensus
+        seq_cols = None  # Used to extract the consensus
 
         #Use the first block to get the sequence identifiers
         while True:
@@ -150,7 +152,7 @@ class ClustalIterator(AlignmentIterator):
                         letters = int(fields[2])
                     except ValueError:
                         raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
-                    if len(fields[1].replace("-","")) != letters:
+                    if len(fields[1].replace("-", "")) != letters:
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
             elif line[0] == " ":
                 #Sequence consensus line...
@@ -168,7 +170,8 @@ class ClustalIterator(AlignmentIterator):
                 #No consensus
                 break
             line = handle.readline()
-            if not line : break #end of file
+            if not line:
+                break  # end of file
 
         assert line.strip() == ""
         assert seq_cols is not None
@@ -187,10 +190,12 @@ class ClustalIterator(AlignmentIterator):
             #previous block.
             while (not line) or line.strip() == "":
                 line = handle.readline()
-                if not line : break # end of file
-            if not line : break # end of file
+                if not line:
+                    break # end of file
+            if not line:
+                break # end of file
 
-            if line.split(None,1)[0] in known_headers:
+            if line.split(None, 1)[0] in known_headers:
                 #Found concatenated alignment.
                 done = True
                 self._header = line
@@ -199,14 +204,14 @@ class ClustalIterator(AlignmentIterator):
             for i in range(len(ids)):
                 assert line[0] != " ", "Unexpected line:\n%s" % repr(line)
                 fields = line.rstrip().split()
-                
+
                 #We expect there to be two fields, there can be an optional
                 #"sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
                     raise ValueError("Could not parse line:\n%s" % repr(line))
 
                 if fields[0] != ids[i]:
-                    raise ValueError("Identifiers out of order? Got '%s' but expected '%s'" \
+                    raise ValueError("Identifiers out of order? Got '%s' but expected '%s'"
                                       % (fields[0], ids[i]))
 
                 if fields[1] != line[seq_cols]:
@@ -226,7 +231,7 @@ class ClustalIterator(AlignmentIterator):
                         letters = int(fields[2])
                     except ValueError:
                         raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
-                    if len(seqs[i].replace("-","")) != letters:
+                    if len(seqs[i].replace("-", "")) != letters:
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
 
                 #Read in the next line
@@ -241,7 +246,6 @@ class ClustalIterator(AlignmentIterator):
                 assert not line[seq_cols.stop:].strip()
                 #Read in the next line
                 line = handle.readline()
-            
 
         assert len(ids) == len(seqs)
         if len(seqs) == 0 or len(seqs[0]) == 0:
@@ -249,11 +253,11 @@ class ClustalIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != len(ids):
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (len(ids), self.records_per_alignment))
 
-        records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i) \
-                   for (i,s) in zip(ids, seqs)) 
+        records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i)
+                   for (i, s) in zip(ids, seqs))
         alignment = MultipleSeqAlignment(records, self.alphabet)
         #TODO - Handle alignment annotation better, for now
         #mimic the old parser in Bio.Clustalw
@@ -266,7 +270,7 @@ class ClustalIterator(AlignmentIterator):
                    % (alignment_length, len(consensus), consensus)
             alignment._star_info = consensus
         return alignment
-    
+
 if __name__ == "__main__":
     print "Running a quick self-test"
 
@@ -295,8 +299,7 @@ gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRL
 gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRA 210
 gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
                                     *. .:: : .
-                                     
-"""                 
+"""
 
     #This example is a truncated version of the dataset used here:
     #http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
@@ -381,7 +384,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     handle = StringIO()
     ClustalWriter(handle).write_file(alignments)
     handle.seek(0)
-    for i,a in enumerate(ClustalIterator(handle)):
+    for i, a in enumerate(ClustalIterator(handle)):
         assert a.get_alignment_length() == alignments[i].get_alignment_length()
     handle.seek(0)
 
@@ -390,7 +393,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     handle = StringIO()
     ClustalWriter(handle).write_file([alignment])
     handle.seek(0)
-    for i,a in enumerate(ClustalIterator(handle)):
+    for i, a in enumerate(ClustalIterator(handle)):
         assert a.get_alignment_length() == alignment.get_alignment_length()
         assert len(a) == 1
 

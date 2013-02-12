@@ -37,12 +37,14 @@ except ImportError:
             return posixpath.curdir.replace(posixpath.sep, os.path.sep)
         return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
 
+
 class PamlError(EnvironmentError):
     """paml has failed. Run with verbose = True to view the error
 message"""
 
+
 class Paml(object):
-    
+
     def __init__(self, alignment = None, working_dir = None,
                 out_file = None):
         if working_dir is None:
@@ -54,63 +56,63 @@ class Paml(object):
                 raise IOError("The specified alignment file does not exist.")
         self.alignment = alignment
         self.out_file = out_file
-        
+
     def write_ctl_file(self):
         pass
-        
+
     def read_ctl_file(self):
         pass
-        
+
     def print_options(self):
         """Print out all of the options and their current settings."""
         for option in self._options.items():
             print "%s = %s" % (option[0], option[1])
- 
+
     def set_options(self, **kwargs):
-        """Set the value of an option. 
-        
-        This function abstracts the options dict to prevent the user from 
+        """Set the value of an option.
+
+        This function abstracts the options dict to prevent the user from
         adding options that do not exist or mispelling options.
         """
         for option, value in kwargs.items():
-            if not self._options.has_key(option):
+            if not option in self._options:
                 raise KeyError("Invalid option: " + option)
             else:
                 self._options[option] = value
-        
+
     def get_option(self, option):
         """Return the value of an option."""
-        if not self._options.has_key(option):
+        if not option in self._options:
             raise KeyError("Invalid option: " + option)
         else:
             return self._options.get(option)
-    
+
     def get_all_options(self):
-        """Return the values of all the options."""        
+        """Return the values of all the options."""
         return self._options.items()
-        
+
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.
-        
+
         paml requires that all paths specified in the control file be
-        relative to the directory from which it is called rather than 
+        relative to the directory from which it is called rather than
         absolute paths.
         """
         if self.working_dir is not None:
             self._rel_working_dir = _relpath(self.working_dir)
         if self.alignment is not None:
-            self._rel_alignment = _relpath(self.alignment, 
+            self._rel_alignment = _relpath(self.alignment,
                 self.working_dir)
         if self.out_file is not None:
             self._rel_out_file = _relpath(self.out_file, self.working_dir)
-        
+
     def run(self, ctl_file, verbose, command):
-        """Run a paml program using the current configuration and then parse the results. 
-        
+        """Run a paml program using the current configuration and then parse the results.
+
         Return a process signal so the user can determine if
         the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either 
-        absolute or relative paths, despite the fact that paml 
+        indicates a failure). The arguments may be passed as either
+        absolute or relative paths, despite the fact that paml
         requires relative paths.
         """
         if self.alignment is None:
@@ -148,10 +150,10 @@ class Paml(object):
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
-            raise PamlError( \
-            "%s has failed (return code %i). Run with verbose = True to view error message" \
+            raise PamlError(
+            "%s has failed (return code %i). Run with verbose = True to view error message"
             % (command, result_code))
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError("The %s process was killed (return code %i)." \
+            raise EnvironmentError("The %s process was killed (return code %i)."
                   % (command, result_code))

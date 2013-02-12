@@ -2,7 +2,7 @@ from Bio.Seq import translate, transcribe, back_transcribe
 import wx
 
 ID_APPLY = 101
-ID_CLEAR  = 102
+ID_CLEAR = 102
 ID_EXIT = 103
 ID_CLOSE = 104
 ID_ABOUT = 105
@@ -162,20 +162,20 @@ class SeqPanel(wx.Panel):
         self.dest_text.Clear()
 
     def translate(self, codon_table):
-        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
         print seq
         self.dest_text.Clear()
         self.dest_text.SetValue(translate(seq, table=codon_table,
                                           to_stop=True))
-        
+
     def transcribe(self):
-        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
         print seq
         self.dest_text.Clear()
         self.dest_text.SetValue(transcribe(seq))
-                                
+
     def back_transcribe(self):
-        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
         print seq
         self.dest_text.Clear()
         self.dest_text.SetValue(back_transcribe(seq))
@@ -195,7 +195,7 @@ class SeqFrame(wx.Frame):
         menu.Append(ID_EXIT, "E&xit", "Terminate the program")
 
         menuBar = wx.MenuBar()
-        menuBar.Append(menu, "&File");
+        menuBar.Append(menu, "&File")
         self.SetMenuBar(menuBar)
 
         params_panel = ParamsPanel(self, -1)

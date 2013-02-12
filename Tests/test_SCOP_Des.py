@@ -11,7 +11,6 @@ import unittest
 from Bio.SCOP import Des
 
 
-
 class DesTests(unittest.TestCase):
 
     def setUp(self):
@@ -20,7 +19,7 @@ class DesTests(unittest.TestCase):
     def testParse(self):
         """Test if all records in a DES file are being read"""
         f = open(self.filename)
-        try: 
+        try:
             count = 0
             records = Des.parse(f)
             for record in records:
@@ -28,17 +27,17 @@ class DesTests(unittest.TestCase):
             self.assertEqual(count, 20)
         finally:
             f.close()
-    
+
     def testStr(self):
         """Test if we can convert each record to a string correctly"""
         f = open(self.filename)
-        try: 
+        try:
             for line in f:
                 record = Des.Record(line)
                 #End of line is platform dependent. Strip it off
                 self.assertEqual(str(record).rstrip(), line.rstrip())
         finally:
-            f.close()        
+            f.close()
 
     def testError(self):
         """Test if a corrupt record raises the appropriate exception"""
@@ -56,7 +55,6 @@ class DesTests(unittest.TestCase):
         self.assertEqual(record.sccs, recFields[2])
         self.assertEqual(record.name, recFields[3])
         self.assertEqual(record.description, recFields[4])
-
 
 
 if __name__=='__main__':

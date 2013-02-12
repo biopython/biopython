@@ -34,6 +34,7 @@ from reportlab.lib import colors
 
 from _Graph import GraphData
 
+
 class GraphSet(object):
     """ GraphSet
 
@@ -80,7 +81,6 @@ class GraphSet(object):
         self._graphs = {}       # Holds graphs, keyed by unique id
         self.name = name        # Holds description of graph
 
-
     def new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen, linewidth=1, center=None,
                   colour=None, altcolour=None, centre=None):
@@ -101,7 +101,7 @@ class GraphSet(object):
             o altcolor  colors.Color describing the color to draw 'low' (some
                         styles) data (overridden by backwards compatible argument
                         with UK spelling, colour).
-            
+
             o linewidth     Float describing linewidth for graph
 
             o center        Float setting the value at which the x-axis
@@ -122,10 +122,9 @@ class GraphSet(object):
         id = self._next_id                              # get id number
         graph = GraphData(id, data, name, style, color, altcolor, center)
         graph.linewidth = linewidth
-        self._graphs[id] =  graph                       # add graph data
+        self._graphs[id] = graph                        # add graph data
         self._next_id += 1                              # increment next id
         return graph
-
 
     def del_graph(self, graph_id):
         """ del_graph(self, graph_id)
@@ -135,7 +134,6 @@ class GraphSet(object):
             Remove a graph from the set, indicated by its id
         """
         del self._graphs[graph_id]
-
 
     def get_graphs(self):
         """ get_graphs(self) -> [Graph, Graph, ...]
@@ -147,14 +145,12 @@ class GraphSet(object):
         ids.sort()
         return [self._graphs[id] for id in ids]
 
-
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return a list of all ids for the graph set
         """
         return self._graphs.keys()
-
 
     def range(self):
         """ range(self) -> (int, int)
@@ -167,7 +163,6 @@ class GraphSet(object):
             lows.append(low)
             highs.append(high)
         return (min(lows), max(highs))
-
 
     def data_quartiles(self):
         """ data_quartiles(self) -> (float, float, float, float, float)
@@ -182,7 +177,6 @@ class GraphSet(object):
         datalen = len(data)
         return(data[0], data[datalen/4], data[datalen/2],
                data[3*datalen/4], data[-1])
-
 
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""
@@ -201,7 +195,6 @@ class GraphSet(object):
                 outstr.append("%s" % self._graphs[key])
             return "\n".join(outstr)
 
-
     def __len__(self):
         """ __len__(self) -> int
 
@@ -209,14 +202,12 @@ class GraphSet(object):
         """
         return len(self._graphs)
 
-
     def __getitem__(self, key):
         """ __getitem__(self, key) -> Graph
 
             Return a graph, keyed by id
         """
         return self._graphs[key]
-
 
     def __str__(self):
         """ __str__(self) -> ""
@@ -235,7 +226,7 @@ class GraphSet(object):
 
 if __name__ == '__main__':
 
-    # Test code    
+    # Test code
     gdgs = GraphSet(0, 'test data')
 
     testdata1 = [(1, 10), (5, 15), (10, 20), (20, 40)]

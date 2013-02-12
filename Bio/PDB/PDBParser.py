@@ -47,7 +47,7 @@ class PDBParser(object):
         o structure_builder - an optional user implemented StructureBuilder class.
 
         o QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
-        the SMCRA data will be supressed. If false (DEFAULT), they will be shown.
+        the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
         These warnings might be indicative of problems in the PDB file!
         """
         if structure_builder is not None:
@@ -181,7 +181,7 @@ class PDBParser(object):
                     z = float(line[46:54])
                 except:
                     # Should we allow parsing to continue in permissive mode?
-                    # If so, what coordindates should we default to?  Easier to abort!
+                    # If so, what coordinates should we default to?  Easier to abort!
                     raise PDBConstructionException("Invalid or missing coordinate(s) at line %i."
                                                    % global_line_counter)
                 coord = numpy.array((x, y, z), "f")

@@ -3,13 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""handles true random numbers supplied from the the web server of fourmilab. Based on atmospheric noise.  The motivation is to support biosimulations that rely on random numbers.
+"""handles true random numbers supplied from the web server of
+   fourmilab. Based on atmospheric noise.  The motivation is to
+   support biosimulations that rely on random numbers.
 """
 
 import urllib
 from Bio import BiopythonDeprecationWarning
 import warnings
 warnings.warn("The HotRand module is deprecated and likely to be removed in a future release of Biopython. Please use an alternative RNG.", BiopythonDeprecationWarning)
+
 
 def byte_concat( text ):
     val = 0
@@ -20,12 +23,13 @@ def byte_concat( text ):
 
     return val
 
+
 class HotCache(object):
 
     def __init__( self  ):
 #        self.url = 'http://www.fourmilab.ch/cgi-bin/uncgi/Hotbits?num=5000&min=1&max=6&col=1'
         self.url = 'http://www.random.org/cgi-bin/randbyte?'
-        self.query = { 'nbytes' : 128, 'fmt' : 'h' }
+        self.query = { 'nbytes': 128, 'fmt': 'h' }
         self.fill_hot_cache()
 
     def fill_hot_cache( self ):
@@ -48,7 +52,6 @@ class HotCache(object):
         return byte_concat( hexdigits )
 
 
-
 class HotRandom(object):
 
     def __init__( self ):
@@ -64,11 +67,8 @@ class HotRandom(object):
 
 if( __name__ == '__main__' ):
     hot_random = HotRandom()
-    for j in range ( 0, 130 ):
+    for j in range( 0, 130 ):
         print hot_random.hot_rand( 25 )
     nums = [ '0000', 'abcd', '1234', '5555', '4321', 'aaaa', 'ffff' ]
     for num in nums:
         print hex_convert( num )
-
-
-

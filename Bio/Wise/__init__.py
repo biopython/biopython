@@ -7,7 +7,7 @@
 # some of the models in the Wise2 package by Ewan Birney available from:
 # ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
 # http://www.ebi.ac.uk/Wise2/
-# 
+#
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
@@ -63,12 +63,13 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
 
     return cmdline_str
 
+
 def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):
     """
     Returns a filehandle
     """
     assert len(pair) == 2
-    
+
     output_file = tempfile.NamedTemporaryFile(mode='r')
     input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
 
@@ -109,8 +110,9 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
             raise OSError("%s returned %s" % (" ".join(cmdline), status))
-    
+
     return output_file
+
 
 def all_pairs(singles):
     """
@@ -128,8 +130,10 @@ def all_pairs(singles):
 
     return pairs
 
+
 def main():
     pass
+
 
 def _test(*args, **keywds):
     import doctest

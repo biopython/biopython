@@ -4,18 +4,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import warnings
-warnings.warn("The module Bio.Motif.Parsers.MEME is now obsolete, "
-              "and will be deprecated and removed in a future "
-              "release of Biopython. To parse MEME output files, "
-              "please use the parser in Bio.Motif.MEME instead."
-              "Note that there are some (minor) differences between " 
-              "new parser in Bio.Motif.MEME and the old parser "
-              "in Bio.Motif.Parsers.MEME.",
-              PendingDeprecationWarning)
-
 from Bio.Alphabet import IUPAC
 from Bio import Seq
+import re
+from math import sqrt
+import sys
 from Bio.Motif import Motif
 
 

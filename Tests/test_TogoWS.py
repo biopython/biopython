@@ -5,9 +5,7 @@
 
 """Testing Bio.TogoWS online code.
 """
-import sys
 import unittest
-import urllib
 from StringIO import StringIO
 
 import requires_internet
@@ -22,6 +20,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio import Medline
 
 #####################################################################
+
 
 class TogoFields(unittest.TestCase):
     def test_invalid_database(self):
@@ -114,7 +113,7 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
-    
+
     def test_pubmed_16381885_title(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")"""
         handle = TogoWS.entry("pubmed", "16381885", field="title")
@@ -122,7 +121,7 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
-    
+
     def test_pubmed_16381885_au(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="au")"""
         #Gives one name per line (i.e. \n separated), no dots
@@ -174,7 +173,7 @@ class TogoEntry(unittest.TestCase):
                                             'Katayama T', 'Araki M',
                                             'Hirakawa M'])
         self.assertEqual(records[1]["TI"],
-             'DDBJ launches a new archive database with analytical tools ' + \
+             'DDBJ launches a new archive database with analytical tools ' +
              'for next-generation sequence data.')
         self.assertEqual(records[1]["AU"], ['Kaminuma E', 'Mashima J',
                                             'Kodama Y', 'Gojobori T',
@@ -205,10 +204,17 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "invalid_db", "invalid_id")
 
-    def test_nucleotide_genbank(self):
-        """Bio.TogoWS.entry("nucleotide", "X52960")"""
-        handle = TogoWS.entry("nucleotide", "X52960") #Returns "genbank" format
-        record  = SeqIO.read(handle, "gb")
+    def test_ddbj_genbank_length(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="length")
+        data = handle.read().strip()  #ignore trailing \n
+        handle.close()
+        self.assertEqual(data, "248")
+
+    def test_ddbj_genbank(self):
+        """Bio.TogoWS.entry("ddbj", "X52960")"""
+        handle = TogoWS.entry("ddbj", "X52960")  #Returns "genbank" format
+        record = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
         self.assertEqual(record.name, "X52960")
@@ -218,52 +224,52 @@ class TogoEntry(unittest.TestCase):
     def test_nucleotide_genbank_length(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="length")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="length")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "248")
 
     def test_nucleotide_genbank_seq(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="seq")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="seq")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(seguid(data), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
     def test_nucleotide_genbank_definition(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="definition")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="definition")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1 (CbVd) RNA.")
 
     def test_nucleotide_genbank_accession(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="accession")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="accession")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960")
 
     def test_nucleotide_genbank_accession(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="version")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="version")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "1")
 
     def test_nucleotide_genbank_acc_version(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="acc_version")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="acc_version")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960.1")
 
     def test_nucleotide_genbank_organism(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="organism")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="organism")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1")
-        
+
     def test_ddbj_genbank_invalid_field(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="invalid_for_testing")"""
         self.assertRaises(ValueError, TogoWS.entry,
@@ -274,12 +280,12 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "nucleotide", "X52960", format="invalid_for_testing")
 
-    #def test_ddbj_gff3(self):
-    #    """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
-    #    handle = TogoWS.entry("ddbj", "X52960", format="gff")
-    #    data = handle.read()
-    #    handle.close()
-    #    self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
+    def test_ddbj_gff3(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
+        handle = TogoWS.entry("ddbj", "X52960", format="gff")
+        data = handle.read()
+        handle.close()
+        self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
 
     def test_genbank_gff3(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
@@ -299,14 +305,14 @@ class TogoEntry(unittest.TestCase):
     def test_embl_AM905444_seq(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
         handle = TogoWS.entry("embl", "AM905444", field="seq")
-        data = handle.read().strip() #ignore any trailing \n
+        data = handle.read().strip()  # ignore any trailing \n
         handle.close()
         self.assertEqual(seguid(data), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
     def test_embl_AM905444_definition(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="definition")"""
         handle = TogoWS.entry("embl", "AM905444", field="definition")
-        data = handle.read().strip() #ignore any trailing \n
+        data = handle.read().strip()  # ignore any trailing \n
         handle.close()
         self.assertEqual(data, "Herbaspirillum seropedicae locus tag HS193.0074 for porin")
 
@@ -321,9 +327,9 @@ class TogoEntry(unittest.TestCase):
         self.assertEqual(len(record), 1164)
         self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
-    def test_nucleotide_fasta(self):
-        """Bio.TogoWS.entry("nucleotide", "X52960", "fasta")"""
-        handle = TogoWS.entry("nucleotide", "X52960", "fasta")
+    def test_ddbj_fasta(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
+        handle = TogoWS.entry("ddbj", "X52960", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("X52960" in record.id, record.id)
@@ -335,7 +341,7 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])"""
         #Returns "swiss" format:
         handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])
-        record1, record2  = SeqIO.parse(handle, "swiss")
+        record1, record2 = SeqIO.parse(handle, "swiss")
         handle.close()
 
         self.assertEqual(record1.id, "P02763")
@@ -351,7 +357,7 @@ class TogoEntry(unittest.TestCase):
     def test_nucleotide_fasta(self):
         """Bio.TogoWS.entry("nucleotide", "6273291", "fasta")"""
         handle = TogoWS.entry("nucleotide", "6273291", "fasta")
-        record  = SeqIO.read(handle, "fasta")
+        record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("6273291" in record.id, record.id)
         self.assert_("6273291" in record.name, record.name)
@@ -361,7 +367,7 @@ class TogoEntry(unittest.TestCase):
     def test_protein_fasta(self):
         """Bio.TogoWS.entry("protein", "16130152", "fasta")"""
         handle = TogoWS.entry("protein", "16130152", "fasta")
-        record  = SeqIO.read(handle, "fasta")
+        record = SeqIO.read(handle, "fasta")
         handle.close()
         #Could use assertIn but requires Python 2.7+
         self.assert_("16130152" in record.id, record.id)
@@ -369,6 +375,7 @@ class TogoEntry(unittest.TestCase):
         self.assert_("porin protein" in record.description, record.description)
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
+
 
 class TogoSearch(unittest.TestCase):
     """Search tests."""
@@ -409,12 +416,13 @@ class TogoSearch(unittest.TestCase):
 
     def test_pubmed_search_bioruby(self):
         """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
-        self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
+        self.check("pubmed", "BioRuby", ["22994508", "22399473",
+                                         "20739307", "20015970", "14693808"])
 
     def test_pubmed_search_porin(self):
         """Bio.TogoWS.search_iter("pubmed", "human porin") etc
 
-        Count was 339 at time of writing, this was choosen to
+        Count was 357 at time of writing, this was choosen to
         be larger than the default chunk size for iteration,
         but still not too big to download the full list.
         """
@@ -423,33 +431,33 @@ class TogoSearch(unittest.TestCase):
     def test_pdb_search_porin(self):
         """Bio.TogoWS.search_iter("pdb", "porin") etc
 
-        Count was about 130 at time of writing.
+        Count was about 161 at time of writing.
         """
         self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_embl_search_porin(self):
         """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
 
-        Count was about 255 at time of writing.
+        Count was about 297 at time of writing.
         """
         self.check("embl", "human pore", limit=200)
 
     def test_uniprot_search_lung_cancer(self):
-        """Bio.TogoWS.search_iter("uniprot", "lung+cancer", limit=150) etc
+        """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc
 
-        Search count was 1327 at time of writing, a bit large to
+        Search count was 211 at time of writing, a bit large to
         download all the results in a unit test. Want to use a limit
         larger than the batch size (100) to ensure at least two
         batches.
         """
-        self.check("uniprot", "lung+cancer", limit=150)
+        self.check("uniprot", "terminal+lung+cancer", limit=150)
 
     def check(self, database, search_term, expected_matches=[], limit=None):
         if expected_matches and limit:
             raise ValueError("Bad test - TogoWS makes no promises about order")
         search_count = TogoWS.search_count(database, search_term)
         if expected_matches and search_count < len(expected_matches):
-            raise ValueError("Only %i matches, expected at least %i" \
+            raise ValueError("Only %i matches, expected at least %i"
                              % (search_count, len(expected_matches)))
         if search_count > 5000 and not limit:
             print "%i results, skipping" % search_count
@@ -496,5 +504,3 @@ class TogoConvert(unittest.TestCase):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-
-    

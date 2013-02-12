@@ -6,12 +6,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Represent a Sequence Record, a sequence with annotation."""
-__docformat__ = "epytext en" #Simple markup to show doctests nicely
+__docformat__ = "epytext en"  # Simple markup to show doctests nicely
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
+
 
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
@@ -44,7 +45,7 @@ class _RestrictedDict(dict):
     In order that the SeqRecord (and other objects using this class) can be
     pickled, for example for use in the multiprocessing library, we need to
     be able to pickle the restricted dictionary objects.
-    
+
     Using the default protocol, which is 0 on Python 2.x,
 
     >>> import pickle
@@ -72,7 +73,7 @@ class _RestrictedDict(dict):
     def __setitem__(self, key, value):
         #The check hasattr(self, "_length") is to cope with pickle protocol 2
         #I couldn't seem to avoid this with __getstate__ and __setstate__
-        if not hasattr(value,"__len__") or not hasattr(value,"__getitem__") \
+        if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
         or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
                             "strings) of length %i." % self._length)
@@ -96,7 +97,7 @@ class SeqRecord(object):
      - description - Additional text (string)
      - dbxrefs     - List of database cross references (list of strings)
      - features    - Any (sub)features defined (list of SeqFeature objects)
-     - annotations - Further information about the whole sequence (dictionary)
+     - annotations - Further information about the whole sequence (dictionary).
                      Most entries are strings, or lists of strings.
      - letter_annotations - Per letter/symbol annotation (restricted
                      dictionary). This holds Python sequences (lists, strings
@@ -142,7 +143,7 @@ class SeqRecord(object):
     MKQHKAMIVAIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
     >>> print record.seq
     MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
-    
+
     """
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>", dbxrefs = None,
@@ -174,7 +175,7 @@ class SeqRecord(object):
         then using the UnknownSeq object from Bio.Seq is appropriate.
 
         You can create a 'blank' SeqRecord object, and then populate the
-        attributes later.  
+        attributes later.
         """
         if id is not None and not isinstance(id, basestring):
             #Lots of existing code uses id=None... this may be a bad idea.
@@ -194,7 +195,7 @@ class SeqRecord(object):
         elif not isinstance(dbxrefs, list):
             raise TypeError("dbxrefs argument should be a list (of strings)")
         self.dbxrefs = dbxrefs
-        
+
         # annotations about the whole sequence
         if annotations is None:
             annotations = {}
@@ -218,7 +219,7 @@ class SeqRecord(object):
             #turn this into a _RestrictedDict and thus ensure all the values
             #in the dict are the right length
             self.letter_annotations = letter_annotations
-        
+
         # annotations about parts of the sequence
         if features is None:
             features = []
@@ -238,8 +239,8 @@ class SeqRecord(object):
             #e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
         self._per_letter_annotations.update(value)
-    letter_annotations = property( \
-        fget=lambda self : self._per_letter_annotations,
+    letter_annotations = property(
+        fget=lambda self: self._per_letter_annotations,
         fset=_set_per_letter_annotations,
         doc="""Dictionary of per-letter-annotation for the sequence.
 
@@ -302,7 +303,7 @@ class SeqRecord(object):
             #e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
 
-    seq = property(fget=lambda self : self._seq,
+    seq = property(fget=lambda self: self._seq,
                    fset=_set_seq,
                    doc="The sequence itself, as a Seq or MutableSeq object.")
 
@@ -430,13 +431,13 @@ class SeqRecord(object):
             #TODO - The desription may no longer apply.
             #It would be safer to change it to something
             #generic like "edited" or the default value.
-            
+
             #Don't copy the annotation dict and dbxefs list,
             #they may not apply to a subsequence.
             #answer.annotations = dict(self.annotations.iteritems())
             #answer.dbxrefs = self.dbxrefs[:]
             #TODO - Review this in light of adding SeqRecord objects?
-            
+
             #TODO - Cope with strides by generating ambiguous locations?
             start, stop, step = index.indices(parent_length)
             if step == 1:
@@ -468,7 +469,7 @@ class SeqRecord(object):
         For example, using Bio.SeqIO to read in a protein FASTA file:
 
         >>> from Bio import SeqIO
-        >>> record = SeqIO.read(open("Fasta/loveliesbleeding.pro"),"fasta")
+        >>> record = SeqIO.read("Fasta/loveliesbleeding.pro", "fasta")
         >>> for amino in record:
         ...     print amino
         ...     if amino == "L": break
@@ -490,12 +491,12 @@ class SeqRecord(object):
         L
         >>> print record.seq[3]
         L
-        
+
         Note that this does not facilitate iteration together with any
         per-letter-annotation.  However, you can achieve that using the
         python zip function on the record (or its sequence) and the relevant
         per-letter-annotation:
-        
+
         >>> from Bio import SeqIO
         >>> rec = SeqIO.read(open("Quality/solexa_faked.fastq", "rU"),
         ...                  "fastq-solexa")
@@ -523,7 +524,7 @@ class SeqRecord(object):
         e.g.
 
         >>> from Bio import SeqIO
-        >>> record = SeqIO.read(open("Fasta/sweetpea.nu"), "fasta")
+        >>> record = SeqIO.read("Fasta/sweetpea.nu", "fasta")
         >>> "GAATTC" in record
         False
         >>> "AAA" in record
@@ -546,9 +547,8 @@ class SeqRecord(object):
         True
 
         See also the Seq object's __contains__ method.
-        """        
+        """
         return char in self.seq
-
 
     def __str__(self):
         """A human readable summary of the record and its annotation (string).
@@ -590,13 +590,13 @@ class SeqRecord(object):
         if self.description:
             lines.append("Description: %s" % self.description)
         if self.dbxrefs:
-            lines.append("Database cross-references: " \
+            lines.append("Database cross-references: "
                          + ", ".join(self.dbxrefs))
         lines.append("Number of features: %i" % len(self.features))
         for a in self.annotations:
             lines.append("/%s=%s" % (a, str(self.annotations[a])))
         if self.letter_annotations:
-            lines.append("Per letter annotation for: " \
+            lines.append("Per letter annotation for: "
                          + ", ".join(self.letter_annotations.keys()))
         #Don't want to include the entire sequence,
         #and showing the alphabet is useful:
@@ -662,7 +662,7 @@ class SeqRecord(object):
         in this example a blank line is shown.  If you look at the string
         representation you can see there is a trailing new line (shown as
         slash n) which is important when writing to a file or if
-        concatenating mutliple sequence strings together.
+        concatenating multiple sequence strings together.
 
         Note that this method will NOT work on every possible file format
         supported by Bio.SeqIO (e.g. some are for multiple sequences only).
@@ -681,7 +681,7 @@ class SeqRecord(object):
         """
         if not format_spec:
             #Follow python convention and default to using __str__
-            return str(self)    
+            return str(self)
         from Bio import SeqIO
         if format_spec in SeqIO._BinaryFormats:
             #Return bytes on Python 3
@@ -705,7 +705,7 @@ class SeqRecord(object):
         For example, using Bio.SeqIO to read in a FASTA nucleotide file:
 
         >>> from Bio import SeqIO
-        >>> record = SeqIO.read(open("Fasta/sweetpea.nu"),"fasta")
+        >>> record = SeqIO.read("Fasta/sweetpea.nu", "fasta")
         >>> len(record)
         309
         >>> len(record.seq)
@@ -751,7 +751,7 @@ class SeqRecord(object):
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNNACT
         >>> print new.letter_annotations.keys()
         []
-        
+
         The new record will attempt to combine the annotation, but for any
         ambiguities (e.g. different names) it defaults to omitting that
         annotation.
@@ -780,7 +780,7 @@ class SeqRecord(object):
 
         When we add the left and right SeqRecord objects, their annotation
         is all consistent, so it is all conserved in the new SeqRecord:
-        
+
         >>> new.id == left.id == right.id == plasmid.id
         True
         >>> new.name == left.name == right.name == plasmid.name
@@ -829,15 +829,15 @@ class SeqRecord(object):
             answer.name = self.name
         if self.description == other.description:
             answer.description = self.description
-        for k,v in self.annotations.iteritems():
+        for k, v in self.annotations.iteritems():
             if k in other.annotations and other.annotations[k] == v:
                 answer.annotations[k] = v
         #Can append matching per-letter-annotation
-        for k,v in self.letter_annotations.iteritems():
+        for k, v in self.letter_annotations.iteritems():
             if k in other.letter_annotations:
                 answer.letter_annotations[k] = v + other.letter_annotations[k]
         return answer
-        
+
     def __radd__(self, other):
         """Add another sequence or string to this sequence (from the left).
 
@@ -892,7 +892,7 @@ class SeqRecord(object):
         <BLANKLINE>
 
         Naturally, there is a matching lower method:
-        
+
         >>> print record.lower().format("fastq")
         @Test Made up for this example
         acgtacgt
@@ -1075,7 +1075,7 @@ class SeqRecord(object):
         >>> print rc.id, rc.seq
         Test ACGA
         """
-        from Bio.Seq import MutableSeq #Lazy to avoid circular imports
+        from Bio.Seq import MutableSeq  # Lazy to avoid circular imports
         if isinstance(self.seq, MutableSeq):
             #Currently the MutableSeq reverse complement is in situ
             answer = SeqRecord(self.seq.toseq().reverse_complement())
@@ -1109,7 +1109,7 @@ class SeqRecord(object):
             #so we need to resort in case of overlapping features.
             #NOTE - In the common case of gene before CDS (and similar) with
             #the exact same locations, this will still maintain gene before CDS
-            answer.features.sort(key=lambda x : x.location.start.position)
+            answer.features.sort(key=lambda x: x.location.start.position)
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:
@@ -1123,30 +1123,7 @@ class SeqRecord(object):
                 answer._per_letter_annotations[key] = value[::-1]
         return answer
 
-def _test():
-    """Run the Bio.SeqRecord module's doctests (PRIVATE).
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..","Tests")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
 
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

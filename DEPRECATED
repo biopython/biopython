@@ -12,6 +12,19 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Python 2.5
+==========
+Still supported, but has triggered a warning since Release 1.61.
+
+Bio.SeqFeature
+==============
+With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
+attribute sub_features was deprecated.
+
+Bio.SeqIO.Interfaces
+====================
+Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
+
 Bio.HotRand
 ===========
 Obsolete file Bio/HotRand.py was deprecated in Release 1.61, consider using
@@ -23,7 +36,8 @@ Long obsolete file Bio/Search.py was deprecated in Release 1.61.
 
 Bio.Pathway.Rep.HashSet
 =======================
-Deprecated in Release 1.59, use Python's built in set module.
+Deprecated in Release 1.59, removed in Release 1.62. Use Python's built in
+set object.
 
 Bio.SeqFeature.WithinPosition and OneOfPosition
 ===============================================
@@ -55,7 +69,7 @@ and removed in Release 1.59.
 Bio.Parsers and Bio.Parsers.spark
 =================================
 This module was a copy of John Aycock's SPARK parser included with Biopython
-soley for use in Bio.GenBank.LocationParser. Declared obsolete in Release
+solely for use in Bio.GenBank.LocationParser. Declared obsolete in Release
 1.55, deprecated in Release 1.56, and removed in Release 1.59.
 
 Bio.Restriction.DNAUtils and check_bases
@@ -69,7 +83,8 @@ Bio.Blast.NCBIStandalone
 ========================
 The three functions for calling the "legacy" NCBI BLAST command line tools
 blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
-1.53, please use the BLAST+ wrappers in Bio.Blast.Applications instead.
+1.53, and deprecated in Release 1.61. Please use the BLAST+ wrappers in
+Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
 which was declared obsolete in Release 1.54. For some time now, both the NCBI
@@ -79,8 +94,9 @@ Bio.Blast.Applications
 ======================
 NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
 BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
-1.53, having been replaced with wrappers for the new NCBI BLAST+ tools (e.g.
-NcbiblastpCommandline and NcbipsiblastCommandline).
+1.53 and deprecated in Release 1.61, having been replaced with wrappers for
+the new NCBI BLAST+ tools (e.g.  NcbiblastpCommandline and
+NcbipsiblastCommandline).
 
 Bio.Clustalw
 ============
@@ -135,7 +151,8 @@ Bio.File
 ========
 Bio.File.SGMLHandle was declared obsolete in Release 1.50, deprecated in
 Release 1.52, and removed in Release 1.56. Bio.File.SGMLStripper was deprecated
-in Release 1.57. Bio.File.StringHandle was deprecated in Release 1.59.
+in Release 1.57, removed in Release 1.61. Bio.File.StringHandle was deprecated
+in Release 1.59, removed in Release 1.61.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
@@ -163,6 +180,7 @@ Direct use of the Seq object (and MutableSeq object) .data property is
 deprecated.  As of Release 1.49, writing to the Seq object's .data property
 triggered a warning, and this property was made read only in Release 1.53. In
 Release 1.55 final, accessing the .data property gives a DeprecationWarning.
+The Seq object's .data property was removed in Release 1.61.
 
 Bio.Transcribe and Bio.Translate
 ================================
@@ -394,9 +412,13 @@ Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, and
 removed in Release 1.58. Instead just use the string's slice method with
 a step of minus one.
 
-Funtions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
+Functions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
 quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
 in Release 1.58.
+
+Function quick_FASTA_reader was declared obsolete in Release 1.61. Use
+function list(SimpleFastaParser(handle)) in Bio.SeqIO.FastaIO instead
+(but ideally convert your code to using an iterator approach).
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
@@ -416,7 +438,7 @@ Use Bio.SeqUtils instead.
 Bio.SVM
 =======
 Deprecated as of Release 1.30, removed in Release 1.42.
-The Support Vector Machine code in Biopython has been superceeded by a 
+The Support Vector Machine code in Biopython has been superseded by a 
 more robust (and maintained) SVM library, which includes a python
 interface. We recommend using LIBSVM:
 
@@ -491,7 +513,8 @@ UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
 and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
-The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59.
+The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59,
+and deprecated in Release 1.61.
 
 Bio.SubsMat
 ===========
@@ -507,4 +530,6 @@ method get_seq_by_num were deprecated in Release 1.57.
 Bio.ParserSupport
 =================
 Bio.ParserSupport was declared obsolete in Release 1.59.
-Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59.
+
+Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
+removed in Release 1.61.

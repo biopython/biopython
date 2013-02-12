@@ -5,8 +5,9 @@
 # - Let user specify a sequence file to BLAST on the net.
 # - Script should help debug connection to NCBI website.
 
-import os, sys
+import os
 import re
+import sys
 import getopt
 import traceback
 
@@ -33,6 +34,7 @@ OPTIONS:
 
 """ % sys.argv[0]
 
+
 class DebuggingConsumer:
     def __init__(self, decorated=None):
         self.linenum = 0
@@ -40,11 +42,14 @@ class DebuggingConsumer:
             decorated = ParserSupport.AbstractConsumer()
         self.decorated = decorated
         self._prev_attr = None
+
     def _decorated_section(self):
         getattr(self.decorated, self._prev_attr)()
+
     def _decorated(self, data):
         getattr(self.decorated, self._prev_attr)(data)
         self.linenum += 1
+
     def __getattr__(self, attr):
         self._prev_attr = attr
         if attr.startswith('start_') or attr.startswith('end_'):
@@ -52,8 +57,10 @@ class DebuggingConsumer:
         else:
             return self._decorated
 
+
 def chomp(line):
     return re.sub(r"[\r\n]*$", "", line)
+
 
 def choose_parser(outfile):
     data = open(outfile).read()
@@ -64,13 +71,14 @@ def choose_parser(outfile):
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
 
+
 def test_blast_output(outfile):
     # Try to auto-detect the format
     if 1:
         print "No parser specified.  I'll try to choose one for you based"
         print "on the format of the output file."
         print
-        
+
         parser_class = choose_parser(outfile)
         print "It looks like you have given output that should be parsed"
         print "with %s.%s.  If I'm wrong, you can select the correct parser" %\
@@ -147,7 +155,7 @@ def test_blast_output(outfile):
         return 3
     print "It's caused by line %d:" % consumer.linenum
     lines = open(outfile).readlines()
-    start, end = consumer.linenum-CONTEXT, consumer.linenum+CONTEXT+1
+    start, end = consumer.linenum - CONTEXT, consumer.linenum + CONTEXT + 1
     if start < 0:
         start = 0
     if end > len(lines):
@@ -159,7 +167,7 @@ def test_blast_output(outfile):
             prefix = '*'
         else:
             prefix = ' '
-        
+
         s = "%s%*d %s" % (prefix, ndigits, linenum, line)
         s = s[:80]
         print s
@@ -181,15 +189,15 @@ def test_blast_output(outfile):
         else:
             print "OK, let's see what the scanner's doing!"
             print
-            print "*"*20 + " BEGIN SCANNER TRACE " + "*"*20
+            print "*" * 20 + " BEGIN SCANNER TRACE " + "*" * 20
             try:
                 parser_class()._scanner.feed(
                     open(outfile), ParserSupport.TaggingConsumer())
             except etype, x:
                 pass
-            print "*"*20 + " END SCANNER TRACE " + "*"*20
+            print "*" * 20 + " END SCANNER TRACE " + "*" * 20
         print
-            
+
     elif class_found == consumer_class:
         print "Problems in %s can be caused by two things:" % \
               class_found.__name__
@@ -203,7 +211,7 @@ def test_blast_output(outfile):
         print s
         print "If so, debug %s.%s.  Otherwise, debug %s." % \
               (class_found.__name__, err_function, scanner_class.__name__)
-    
+
 
 VERBOSITY = 0
 if __name__ == '__main__':
@@ -242,4 +250,3 @@ if __name__ == '__main__':
         print >>sys.stderr, "-p and -n not implemented yet"
         sys.exit(-1)
     test_blast_output(TESTFILE)
-        

@@ -20,6 +20,7 @@ Record     Holds ENZYME data.
 
 """
 
+
 def parse(handle):
     """Parse ENZYME records.
 
@@ -33,6 +34,7 @@ def parse(handle):
         if not record:
             break
         yield record
+
 
 def read(handle):
     """Read one ENZYME record.
@@ -77,18 +79,18 @@ Each record contains the following keys:
         self["CC"] = []   # one comment per line
         self["PR"] = []
         self["DR"] = []
-    
+
     def __repr__(self):
         if self["ID"]:
             if self["DE"]:
-                return "%s (%s, %s)" % (self.__class__.__name__, 
+                return "%s (%s, %s)" % (self.__class__.__name__,
                                         self["ID"], self["DE"])
             else:
-                return "%s (%s)" % (self.__class__.__name__, 
+                return "%s (%s)" % (self.__class__.__name__,
                                        self["ID"])
         else:
             return "%s ( )" % (self.__class__.__name__)
-            
+
     def __str__(self):
         output = "ID: " + self["ID"]
         output += " DE: " + self["DE"]
@@ -101,6 +103,7 @@ Each record contains the following keys:
         return output
 
 # Everything below is private
+
 
 def __read(handle):
     record = None

@@ -7,7 +7,8 @@
 # database, and if it finds them then do some standalone blast searches
 # using Bio.Blast.NCBIStandalone to call the command line tool.
 
-import os, sys
+import os
+import sys
 import subprocess
 import unittest
 
@@ -31,7 +32,8 @@ else :
     likely_dirs = os.environ.get("PATH", "").split(":")
 
 for folder in likely_dirs:
-    if not os.path.isdir(folder): continue
+    if not os.path.isdir(folder):
+        continue
     for name in wanted :
         if sys.platform=="win32":
             exe_name = os.path.join(folder, name+".exe")
@@ -73,8 +75,8 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
-        self.assertEqual(str(cline), exe_names["blastp"] \
-                         + " -query Fasta/rose.pro -evalue 1" \
+        self.assertEqual(str(cline), exe_names["blastp"]
+                         + " -query Fasta/rose.pro -evalue 1"
                          + " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
@@ -91,10 +93,10 @@ class Pairwise(unittest.TestCase):
             pass
         else:
             self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
-        
+
         #TODO - Parse it? I think we'd need to update this obsole code :(
         #records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
-        #                                       NCBIStandalone.BlastParser()))   
+        #                                       NCBIStandalone.BlastParser()))
 
     def test_blastn(self):
         """Pairwise BLASTN search"""
@@ -103,8 +105,8 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
-        self.assertEqual(str(cline), exe_names["blastn"] \
-                         + " -query GenBank/NC_005816.ffn -evalue 0.000001" \
+        self.assertEqual(str(cline), exe_names["blastn"]
+                         + " -query GenBank/NC_005816.ffn -evalue 0.000001"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
@@ -126,8 +128,8 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
-        self.assertEqual(str(cline), exe_names["tblastn"] \
-                         + " -query GenBank/NC_005816.faa -evalue 1e-6" \
+        self.assertEqual(str(cline), exe_names["tblastn"]
+                         + " -query GenBank/NC_005816.faa -evalue 1e-6"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
@@ -142,16 +144,16 @@ class Pairwise(unittest.TestCase):
         self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
         #TODO - Parse it?
 
-   
+
 class CheckCompleteArgList(unittest.TestCase):
     def check(self, exe_name, wrapper) :
         global exe_names
         exe = exe_names[exe_name]
         cline = wrapper(exe, h=True)
 
-        names = set(parameter.names[0] \
+        names = set(parameter.names[0]
                     for parameter in cline.parameters)
-        
+
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -163,15 +165,17 @@ class CheckCompleteArgList(unittest.TestCase):
         names_in_tool = set()
         while stdoutdata :
             index = stdoutdata.find("[")
-            if index == -1 : break
+            if index == -1:
+                break
             stdoutdata = stdoutdata[index+1:]
             index = stdoutdata.find("]")
             assert index != -1
             name = stdoutdata[:index]
-            if " " in name : name = name.split(None,1)[0]
+            if " " in name:
+                name = name.split(None,1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index+1:]
-                
+
         extra = names.difference(names_in_tool)
         missing = names_in_tool.difference(names)
         if "-soft_masking" in missing :
@@ -223,12 +227,19 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
+        if exe_name=="blastx":
+            #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
+            extra = extra.difference(["-comp_based_stats",
+                                      "-use_sw_tback"])
+        if exe_name in ["blastx", "tblastn"]:
+            #Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
+            extra = extra.difference(["-frame_shift_penalty"])
 
         if extra or missing:
             import warnings
             warnings.warn("NCBI BLAST+ %s and Biopython out sync. Please "
                           "update Biopython, or report this issue if you are "
-                          "already using the latest version. (Exta args: %s; "
+                          "already using the latest version. (Extra args: %s; "
                           "Missing: %s)" % (exe_name,
                           ",".join(sorted(extra)),
                           ",".join(sorted(missing))))
@@ -243,7 +254,7 @@ class CheckCompleteArgList(unittest.TestCase):
     def test_blastx(self):
         """Check all blastx arguments are supported"""
         self.check("blastx", Applications.NcbiblastxCommandline)
-        
+
     def test_blastp(self):
         """Check all blastp arguments are supported"""
         self.check("blastp", Applications.NcbiblastpCommandline)
@@ -255,11 +266,11 @@ class CheckCompleteArgList(unittest.TestCase):
     def test_tblastx(self):
         """Check all tblastx arguments are supported"""
         self.check("tblastx", Applications.NcbitblastxCommandline)
-        
+
     def test_tblastn(self):
         """Check all tblastn arguments are supported"""
         self.check("tblastn", Applications.NcbitblastnCommandline)
-        
+
     def test_psiblast(self):
         """Check all psiblast arguments are supported"""
         self.check("psiblast", Applications.NcbipsiblastCommandline)

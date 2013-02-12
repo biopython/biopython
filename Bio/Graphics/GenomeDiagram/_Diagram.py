@@ -29,21 +29,16 @@
 # IMPORTS
 
 # ReportLab
-from reportlab.graphics import renderPS, renderPDF, renderSVG
 try:
     from reportlab.graphics import renderPM
 except ImportError:
     #This is an optional part of ReportLab, so may not be installed.
     renderPM=None
-from reportlab.lib import pagesizes
 
 # GenomeDiagram
 from _LinearDrawer import LinearDrawer
 from _CircularDrawer import CircularDrawer
 from _Track import Track
-
-# Builtins
-import sys
 
 from Bio.Graphics import _write
 
@@ -52,6 +47,7 @@ from Bio.Graphics import _write
 
 #------------------------------------------------------------
 # Diagram
+
 
 class Diagram(object):
     """ Diagram
@@ -62,7 +58,7 @@ class Diagram(object):
 
         o name         String, identifier for the diagram
 
-        o tracks       List of Track objects comprising the diagram 
+        o tracks       List of Track objects comprising the diagram
 
         o format       String, format of the diagram (circular/linear)
 
@@ -70,22 +66,22 @@ class Diagram(object):
 
         o orientation  String, the page orientation (landscape/portrait)
 
-        o x            Float, the proportion of the page to take up with even 
+        o x            Float, the proportion of the page to take up with even
                               X margins
 
-        o y            Float, the proportion of the page to take up with even 
+        o y            Float, the proportion of the page to take up with even
                               Y margins
 
-        o xl           Float, the proportion of the page to take up with the 
+        o xl           Float, the proportion of the page to take up with the
                               left X margin
 
-        o xr           Float, the proportion of the page to take up with the 
+        o xr           Float, the proportion of the page to take up with the
                               right X margin
 
-        o yt           Float, the proportion of the page to take up with the 
+        o yt           Float, the proportion of the page to take up with the
                               top Y margin
 
-        o yb           Float, the proportion of the page to take up with the 
+        o yb           Float, the proportion of the page to take up with the
                               bottom Y margin
 
         o circle_core  Float, the proportion of the available radius to leave
@@ -100,14 +96,14 @@ class Diagram(object):
         o fragments    Int, for a linear diagram, the number of equal divisions
                                 into which the sequence is divided
 
-        o fragment_size Float, the proportion of the space available to each 
+        o fragment_size Float, the proportion of the space available to each
                                    fragment that should be used in drawing
 
-        o track_size   Float, the proportion of the space available to each 
+        o track_size   Float, the proportion of the space available to each
                                   track that should be used in drawing
 
-        o circular     Boolean, True if the genome/sequence to be drawn is, in 
-                                reality, circular.  
+        o circular     Boolean, True if the genome/sequence to be drawn is, in
+                                reality, circular.
 
         Methods:
 
@@ -148,10 +144,10 @@ class Diagram(object):
         o __str__(self) Returns a formatted string describing the diagram
 
     """
-    def __init__(self, name=None, format='circular', pagesize='A3', 
-         orientation='landscape', x=0.05, y=0.05, xl=None, 
-         xr=None, yt=None, yb=None, start=None, end=None, 
-         tracklines=False, fragments=10, fragment_size=0.9, 
+    def __init__(self, name=None, format='circular', pagesize='A3',
+         orientation='landscape', x=0.05, y=0.05, xl=None,
+         xr=None, yt=None, yb=None, start=None, end=None,
+         tracklines=False, fragments=10, fragment_size=0.9,
          track_size=0.75, circular=True, circle_core=0.0):
         """ __init__(self, name=None)
 
@@ -192,13 +188,13 @@ class Diagram(object):
 
             o end       Int, the position to stop drawing the diagram at
 
-            o tracklines    Boolean flag to show (or not) lines delineating 
+            o tracklines    Boolean flag to show (or not) lines delineating
                         tracks on the diagram
 
             o fragments Int, for linear diagrams, the number of sections into
                         which to break the sequence being drawn
 
-            o fragment_size     Float (0->1), for linear diagrams, describing 
+            o fragment_size     Float (0->1), for linear diagrams, describing
                                 the proportion of space in a fragment to take
                                 up with tracks
 
@@ -207,7 +203,6 @@ class Diagram(object):
 
             o circular  Boolean flag to indicate whether the sequence being
                         drawn is circular
-                        
 
         """
         self.tracks = {}   # Holds all Track objects, keyed by level
@@ -245,7 +240,7 @@ class Diagram(object):
         for track in self.tracks.values():
             if hasattr(track, attr):          # If the feature has the attribute
                 if getattr(track, attr) != value:
-                    setattr(track, attr, value)   # set it to the passed value     
+                    setattr(track, attr, value)   # set it to the passed value
 
     def draw(self, format=None, pagesize=None, orientation=None,
              x=None, y=None, xl=None, xr=None, yt=None, yb=None,
@@ -254,29 +249,29 @@ class Diagram(object):
              circle_core=None, cross_track_links=None):
         """Draw the diagram, with passed parameters overriding existing attributes.
         """
-        # Pass the parameters to the drawer objects that will build the 
-        # diagrams.  At the moment, we detect overrides with an or in the 
-        # Instantiation arguments, but I suspect there's a neater way to do 
+        # Pass the parameters to the drawer objects that will build the
+        # diagrams.  At the moment, we detect overrides with an or in the
+        # Instantiation arguments, but I suspect there's a neater way to do
         # this.
         if format == 'linear':
-            drawer = LinearDrawer(self, pagesize or self.pagesize, 
-                                  orientation or self.orientation, 
-                                  x or self.x, y or self.y, xl or self.xl, 
-                                  xr or self.xr, yt or self.yt, 
-                                  yb or self.yb, start or self.start, 
-                                  end or self.end, 
+            drawer = LinearDrawer(self, pagesize or self.pagesize,
+                                  orientation or self.orientation,
+                                  x or self.x, y or self.y, xl or self.xl,
+                                  xr or self.xr, yt or self.yt,
+                                  yb or self.yb, start or self.start,
+                                  end or self.end,
                                   tracklines or self.tracklines,
-                                  fragments or self.fragments, 
-                                  fragment_size or self.fragment_size, 
+                                  fragments or self.fragments,
+                                  fragment_size or self.fragment_size,
                                   track_size or self.track_size,
                                   cross_track_links or self.cross_track_links)
         else:
-            drawer = CircularDrawer(self, pagesize or self.pagesize, 
-                                    orientation or self.orientation, 
-                                    x or self.x, y or self.y, xl or self.xl, 
-                                    xr or self.xr, yt or self.yt, 
-                                    yb or self.yb, start or self.start, 
-                                    end or self.end, 
+            drawer = CircularDrawer(self, pagesize or self.pagesize,
+                                    orientation or self.orientation,
+                                    x or self.x, y or self.y, xl or self.xl,
+                                    xr or self.xr, yt or self.yt,
+                                    yb or self.yb, start or self.start,
+                                    end or self.end,
                                     tracklines or self.tracklines,
                                     track_size or self.track_size,
                                     circular or self.circular,
@@ -284,7 +279,7 @@ class Diagram(object):
                                     cross_track_links or self.cross_track_links)
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
-        
+
     def write(self, filename='test1.ps', output='PS', dpi=72):
         """ write(self, filename='test1.ps', output='PS', dpi=72)
 
@@ -304,7 +299,7 @@ class Diagram(object):
             No return value.
         """
         return _write(self.drawing, filename, output, dpi=dpi)
-        
+
     def write_to_string(self, output='PS', dpi=72):
         """ write(self, output='PS')
 
@@ -349,7 +344,6 @@ class Diagram(object):
                     self.tracks[val+1] = self.tracks[val] # ...increment by 1
             self.tracks[track_level] = track   # And put the new track in
         self.tracks[track_level].track_level = track_level
-                
 
     def new_track(self, track_level, **args):
         """ new_track(self, track_level) -> Track
@@ -369,14 +363,13 @@ class Diagram(object):
             occupied_levels = self.get_levels() # Get list of occupied levels...
             occupied_levels.sort()              # ...sort it...
             occupied_levels.reverse()           # ...reverse (highest first)...
-            for val in occupied_levels:     
+            for val in occupied_levels:
                 if val >= track_level:        # Track value >= that to be added
                     self.tracks[val+1] = self.tracks[val] # ..increment by 1
             self.tracks[track_level] = newtrack   # And put the new track in
         self.tracks[track_level].track_level = track_level
         return newtrack
 
-            
     def del_track(self, track_level):
         """ del_track(self, track_level)
 
@@ -386,14 +379,12 @@ class Diagram(object):
         """
         del self.tracks[track_level]
 
-
     def get_tracks(self):
         """ get_tracks(self) -> list
 
             Returns a list of the tracks contained in the diagram
         """
         return self.tracks.values()
-
 
     def move_track(self, from_level, to_level):
         """ move_track(self, from_level, to_level)
@@ -409,7 +400,6 @@ class Diagram(object):
         del self.tracks[from_level]
         self.add_track(aux, to_level)
 
-
     def renumber_tracks(self, low=1, step=1):
         """ renumber_tracks(self, low=1, step=1)
 
@@ -421,11 +411,11 @@ class Diagram(object):
             value (low)
         """
         track = low                 # Start numbering from here
-        levels = self.get_levels()  # 
+        levels = self.get_levels()
 
         conversion = {}             # Holds new set of levels
         for level in levels:        # Starting at low...
-            conversion[track] = self.tracks[level] # Add old tracks to new set
+            conversion[track] = self.tracks[level]  # Add old tracks to new set
             conversion[track].track_level = track
             track += step                           # step interval
         self.tracks = conversion   # Replace old set of levels with new set
@@ -439,18 +429,16 @@ class Diagram(object):
         levels.sort()
         return levels
 
-
     def get_drawn_levels(self):
         """ get_drawn_levels(self) -> [int, int, ...]
 
             Return a sorted list of levels occupied by tracks that are not
             explicitly hidden
         """
-        drawn_levels = [key for key in self.tracks.keys() if \
+        drawn_levels = [key for key in self.tracks.keys() if
                         not self.tracks[key].hide] # get list of shown levels
         drawn_levels.sort()
         return drawn_levels
-
 
     def range(self):
         """ range(self) -> (int, int)
@@ -484,5 +472,4 @@ class Diagram(object):
         for level in self.get_levels():
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))
         outstr = '\n'.join(outstr)
-        return outstr       
-
+        return outstr

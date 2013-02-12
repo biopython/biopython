@@ -11,14 +11,16 @@ import random
 # biopython
 from Bio.Seq import MutableSeq
 
+
 def _gen_random_array(n):
     """ Return an array of n random numbers, where the elements of the array sum
     to 1.0"""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
     normalizedRandArray = [x/total for x in randArray]
-    
+
     return normalizedRandArray
+
 
 def _calculate_emissions(emission_probs):
     """Calculate which symbols can be emitted in each state
@@ -33,6 +35,7 @@ def _calculate_emissions(emission_probs):
             emissions[state] = [symbol]
 
     return emissions
+
 
 def _calculate_from_transitions(trans_probs):
     """Calculate which 'from transitions' are allowed for each state
@@ -52,6 +55,7 @@ def _calculate_from_transitions(trans_probs):
 
     return transitions
 
+
 def _calculate_to_transitions(trans_probs):
     """Calculate which 'to transitions' are allowed for each state
 
@@ -70,6 +74,7 @@ def _calculate_to_transitions(trans_probs):
 
     return transitions
 
+
 class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
 
@@ -82,7 +87,7 @@ class MarkovModelBuilder(object):
     """
     # the default pseudo counts to use
     DEFAULT_PSEUDO = 1
-    
+
     def __init__(self, state_alphabet, emission_alphabet):
         """Initialize a builder to create Markov Models.
 
@@ -90,7 +95,7 @@ class MarkovModelBuilder(object):
 
         o state_alphabet -- An alphabet containing all of the letters that
         can appear in the states
-       
+
         o emission_alphabet -- An alphabet containing all of the letters for
         states that can be emitted by the HMM.
         """
@@ -141,7 +146,7 @@ class MarkovModelBuilder(object):
                 all_counts[(first_state, second_state)] = self.DEFAULT_PSEUDO
 
         return all_counts
-                
+
     def get_markov_model(self):
         """Return the markov model corresponding with the current parameters.
 
@@ -159,7 +164,7 @@ class MarkovModelBuilder(object):
         emission_prob = copy.deepcopy(self.emission_prob)
         transition_pseudo = copy.deepcopy(self.transition_pseudo)
         emission_pseudo = copy.deepcopy(self.emission_pseudo)
-        
+
         return HiddenMarkovModel(initial_prob, transition_prob, emission_prob,
                                  transition_pseudo, emission_pseudo)
 
@@ -238,7 +243,6 @@ class MarkovModelBuilder(object):
         for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
 
-
     def set_random_initial_probabilities(self):
         """Set all initial state probabilities to a randomly generated distribution.
         Returns the dictionary containing the initial probabilities.
@@ -256,7 +260,7 @@ class MarkovModelBuilder(object):
 
         if not self.transition_prob:
             raise Exception("No transitions have been allowed yet. " +
-                            "Allow some or all transitions by calling " + 
+                            "Allow some or all transitions by calling " +
                             "allow_transition or allow_all_transitions first.")
 
         transitions_from = _calculate_from_transitions(self.transition_prob)
@@ -285,7 +289,6 @@ class MarkovModelBuilder(object):
 
         return self.emission_prob
 
-        
     def set_random_probabilities(self):
         """Set all probabilities to randomly generated numbers.
 
@@ -342,8 +345,8 @@ class MarkovModelBuilder(object):
                    "State %s was not found in the sequence alphabet" % state
 
         # ensure that the states are not already set
-        if ((from_state, to_state) not in self.transition_prob and 
-            (from_state, to_state) not in self.transition_pseudo):
+        if (from_state, to_state) not in self.transition_prob and \
+           (from_state, to_state) not in self.transition_pseudo:
             # set the initial probability
             if probability is None:
                 probability = 0
@@ -352,7 +355,7 @@ class MarkovModelBuilder(object):
             # set the initial pseudocounts
             if pseudocount is None:
                 pseudcount = self.DEFAULT_PSEUDO
-            self.transition_pseudo[(from_state, to_state)] = pseudocount 
+            self.transition_pseudo[(from_state, to_state)] = pseudocount
         else:
             raise KeyError("Transition from %s to %s is already allowed."
                            % (from_state, to_state))
@@ -432,6 +435,7 @@ class MarkovModelBuilder(object):
             raise KeyError("Emission of %s from %s is not allowed."
                            % (emission_state, seq_state))
 
+
 class HiddenMarkovModel(object):
     """Represent a hidden markov model that can be used for state estimation.
     """
@@ -463,7 +467,7 @@ class HiddenMarkovModel(object):
 
         self._transition_pseudo = transition_pseudo
         self._emission_pseudo = emission_pseudo
-        
+
         self.transition_prob = transition_prob
         self.emission_prob = emission_prob
 
@@ -479,7 +483,6 @@ class HiddenMarkovModel(object):
         self._transitions_to = \
            _calculate_to_transitions(self.transition_prob)
 
-
     def get_blank_transitions(self):
         """Get the default transitions for the model.
 
@@ -492,7 +495,7 @@ class HiddenMarkovModel(object):
 
     def get_blank_emissions(self):
         """Get the starting default emmissions for each sequence.
-        
+
         This returns a dictionary of the default emmissions for each
         letter. The dictionary is structured with keys as
         (seq_letter, emmission_letter) and values as the starting number
@@ -592,7 +595,7 @@ class HiddenMarkovModel(object):
                         if possible_state_probs[state] == max_prob:
                             pred_state_seq[(i - 1, cur_state)] = state
                             break
-                    
+
         # --- termination
         # calculate the probability of the state path
         # loop over all states
@@ -610,10 +613,10 @@ class HiddenMarkovModel(object):
                 last_state = state
 
         assert last_state != '', "Didn't find the last state to trace from!"
-                
+
         # --- traceback
         traceback_seq = MutableSeq('', state_alphabet)
-        
+
         loop_seq = range(1, len(sequence))
         loop_seq.reverse()
 
@@ -655,4 +658,3 @@ class HiddenMarkovModel(object):
                 log_prob[key] = neg_inf
 
         return log_prob
-    

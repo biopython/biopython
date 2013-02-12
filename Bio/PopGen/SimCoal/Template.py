@@ -21,7 +21,7 @@ def exec_template(template):
         match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
         #match = patt.matcher(String(executed_template))
     return executed_template
-    
+
 
 def process_para(in_string, out_file_prefix, para_list, curr_values):
     if (para_list == []):
@@ -30,14 +30,14 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
         #f_name += '_' + str(total_size)
         for tup in curr_values:
             name, val = tup
-            f_name += '_' + str(val) 
+            f_name += '_' + str(val)
             #reg = re.compile('\?' + name, re.MULTILINE)
             #template = re.sub(reg, str(val), template)
             template = template.replace('?'+name, str(val))
         f = open(f_name + '.par', 'w')
         #executed_template = template
         executed_template = exec_template(template)
-        clean_template =  executed_template.replace('\r\n','\n').replace('\n\n','\n')
+        clean_template = executed_template.replace('\r\n','\n').replace('\n\n','\n')
         f.write(clean_template)
         f.close()
         return [f_name]
@@ -58,19 +58,22 @@ def dupe(motif, times):
         ret_str += motif + '\r\n'
     return ret_str
 
+
 def get_xy_from_matrix(x_max, y_max, pos):
     y = (pos-1) / x_max
     x = (pos-1) % x_max
     return x, y
 
+
 def get_step_2d(x_max, y_max, x, y, mig):
     my_x,    my_y    = get_xy_from_matrix(x_max, y_max, y)
     other_x, other_y = get_xy_from_matrix(x_max, y_max, x)
-        
+
     if (my_x-other_x)**2 + (my_y-other_y)**2 == 1:
         return str(mig) + ' '
     else:
         return '0 '
+
 
 def generate_ssm2d_mat(x_max, y_max, mig):
     mig_mat = ''
@@ -79,6 +82,7 @@ def generate_ssm2d_mat(x_max, y_max, mig):
             mig_mat += get_step_2d(x_max, y_max, x, y, mig)
         mig_mat += "\r\n"
     return mig_mat
+
 
 def generate_island_mat(total_size, mig):
     mig_mat = ''
@@ -91,6 +95,7 @@ def generate_island_mat(total_size, mig):
         mig_mat += "\r\n"
     return mig_mat
 
+
 def generate_null_mat(total_size):
     null_mat = ''
     for x in range(1, total_size + 1):
@@ -99,6 +104,7 @@ def generate_null_mat(total_size):
         null_mat += '\r\n'
     return null_mat
 
+
 def generate_join_events(t, total_size, join_size, orig_size):
     events = ''
     for i in range(1, total_size-1):
@@ -106,13 +112,16 @@ def generate_join_events(t, total_size, join_size, orig_size):
     events += str(t) + ' ' + str(total_size-1) + ' 0 1 ' + str(1.0*total_size*join_size/orig_size) + ' 0 1\r\n'
     return events
 
+
 def no_processor(in_string):
     return in_string
+
 
 def process_text(in_string, out_file_prefix, para_list, curr_values,
                  specific_processor):
     text = specific_processor(in_string)
     return process_para(text, out_file_prefix, para_list, [])
+
 
 #def prepare_dir():
 #    try:
@@ -123,11 +132,11 @@ def process_text(in_string, out_file_prefix, para_list, curr_values,
 #        mkdir(sep.join([Config.dataDir, 'SimCoal', 'runs']))
 #    except OSError:
 #        pass #Its ok if already exists
-    
+
 
 #sep is because of jython
 def generate_model(par_stream, out_prefix, params,
-    specific_processor = no_processor, out_dir = '.'):
+                   specific_processor = no_processor, out_dir = '.'):
     #prepare_dir()
     text = par_stream.read()
     out_file_prefix = sep.join([out_dir, out_prefix])
@@ -137,15 +146,15 @@ def generate_model(par_stream, out_prefix, params,
 def get_demography_template(stream, model, tp_dir = None):
     '''
         Gets a demograpy template.
- 
+
         Most probably this model needs to be sent to GenCases.
- 
+
         stream - Writable stream.
         param  - Template file.
         tp_dir - Directory where to find the template, if None
                  use an internal template
     '''
-    if tp_dir == None:
+    if tp_dir is None:
         #Internal Template
         f = open(sep.join([builtin_tpl_dir, model + '.par']), 'r')
     else:
@@ -157,6 +166,7 @@ def get_demography_template(stream, model, tp_dir = None):
         l = f.readline()
     f.close()
 
+
 def _gen_loci(stream, loci):
     stream.write('//Number of contiguous linkage blocks in chromosome\n')
     stream.write(str(len(loci)) + '\n')
@@ -165,6 +175,7 @@ def _gen_loci(stream, loci):
         stream.write(' '.join([locus[0]] +
             map(lambda x: str(x), list(locus[1])
         )) + '\n')
+
 
 def get_chr_template(stream, chrs):
     '''
@@ -195,6 +206,7 @@ def get_chr_template(stream, chrs):
             for i in range(repeats):
                 _gen_loci(stream, loci)
 
+
 def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=None):
     '''
        Writes a complete SimCoal2 template file.
@@ -215,5 +227,3 @@ def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=No
     par_stream = open(out_dir + sep + 'tmp.par', 'r')
     generate_model(par_stream, model, params, out_dir = out_dir)
     par_stream.close()
-
-

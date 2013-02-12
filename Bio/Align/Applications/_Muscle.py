@@ -5,9 +5,10 @@
 """Command line wrapper for the multiple alignment program MUSCLE.
 """
 
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
+
 
 class MuscleCommandline(AbstractCommandline):
     r"""Command line wrapper for the multiple alignment program MUSCLE.
@@ -226,7 +227,7 @@ class MuscleCommandline(AbstractCommandline):
                     "Objective score used by tree dependent refinement",
                     checker_function=lambda x: x in OBJECTIVE_SCORES,
                     equate=False),
-            #root1           pseudo               psuedo             Method used to root
+            #root1           pseudo               pseudo             Method used to root
             _Option(["-root1", "root1"],
                     "Method used to root tree in iteration 1",
                     checker_function=lambda x: x in TREE_ROOT_METHODS,
@@ -463,9 +464,10 @@ class MuscleCommandline(AbstractCommandline):
            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing MUSCLE doctests..."
+    print "Running MUSCLE doctests..."
     import doctest
     doctest.testmod()
     print "Done"

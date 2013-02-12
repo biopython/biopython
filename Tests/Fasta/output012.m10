@@ -1,0 +1,339 @@
+# fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_s02.fasta mrnalib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: mrna_s02.fasta
+  1>>>gi|156718121:2361-2376 Bos taurus nucleoporin 43kDa (NU - 16 nt
+Library: mrnalib.fasta
+   178611 residues in   250 sequences
+
+Statistics:  Expectation_n fit: rho(ln(x))= 7.9681+/- 0.014; mu= -10.9438+/- 0.902
+ mean_var=29.7386+/- 9.846, 0's: 0 Z-trim(80.0): 6  B-trim: 0 in 0/16
+ Lambda= 0.235187
+ statistics sampled from 176 (177) to 176 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ ktup: 1, E-join: 0.25 (0.978), E-opt: 0.05 (0.472), width:  16
+ Scan time:  0.060
+
+The best scores are:                                      opt bits E(250)
+gi|77681427|ref|NM_001016495.2| Xenopus (Silur ( 554) [f]   57 21.0     1.4
+gi|53749657|ref|NM_182940.2| Danio rerio hemog ( 564) [f]   57 21.0     1.4
+gi|158508631|ref|NM_030206.4| Mus musculus cyt (2331) [f]   62 20.9     1.5
+gi|296217287|ref|XM_002754912.1| PREDICTED: Ca ( 627) [f]   57 20.8     1.5
+gi|332211540|ref|XM_003254828.1| PREDICTED: No ( 640) [r]   57 20.8     1.5
+gi|147903656|ref|NM_001086277.1| Xenopus laevi ( 677) [f]   57 20.8     1.6
+gi|380013536|ref|XM_003690762.1| PREDICTED: Ap ( 707) [r]   57 20.7     1.7
+gi|332211538|ref|XM_003254827.1| PREDICTED: No ( 713) [r]   57 20.7     1.7
+
+>>>gi|156718121:2361-2376, 16 nt vs mrnalib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_s02.fasta mrnalib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: +5/-4 (5:-4)
+; pg_open-ext: -12 -4
+; pg_ktup: 1
+; pg_join_E(): 0.25 (0.978)
+; pg_optcut_E(): 0.05 (0.472)
+; mp_extrap: 60000 176
+; mp_stats:  Expectation_n fit: rho(ln(x))= 7.9681+/- 0.014; mu= -10.9438+/- 0.902  mean_var=29.7386+/- 9.846, 0's: 0 Z-trim(80.0): 6  B-trim: 0 in 0/16  Lambda= 0.235187
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4  ktup: 1, E-join: 0.25 (0.978), E-opt: 0.05 (0.472), width:  16
+>>gi|77681427|ref|NM_001016495.2| Xenopus (Silurana) tropicalis hemoglobin, epsilon 1 (hbe1), mRNA
+; fa_frame: f
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 88.1
+; fa_bits: 21.0
+; fa_expect:    1.4
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 2
+; al_stop: 16
+; al_display_start: 1
+-----------------------------GAAGAAGGAAAAAAAA
+>gi|77681427|ref|NM_001016495.2| ..
+; sq_len: 554
+; sq_offset: 1
+; sq_type: D
+; al_start: 530
+; al_stop: 544
+; al_display_start: 500
+ATTAATCAATGCCCTGTTTGTTATGCAATAAAGAATAAAAAAAAAAAAAA
+AAAAA
+>>gi|53749657|ref|NM_182940.2| Danio rerio hemoglobin alpha embryonic-1 (hbae1), mRNA
+; fa_frame: f
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 87.9
+; fa_bits: 21.0
+; fa_expect:    1.4
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 2
+; al_stop: 16
+; al_display_start: 1
+-----------------------------GAAGAAGGAAAAAAAA
+>gi|53749657|ref|NM_182940.2| ..
+; sq_len: 564
+; sq_offset: 1
+; sq_type: D
+; al_start: 532
+; al_stop: 546
+; al_display_start: 502
+TGAGACAATAAATTATGATGAAAAACATTAAAGAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAA
+>>gi|158508631|ref|NM_030206.4| Mus musculus cytoglobin (Cygb), mRNA
+; fa_frame: f
+; fa_initn:  62
+; fa_init1:  62
+; fa_opt:  62
+; fa_z-score: 76.3
+; fa_bits: 20.9
+; fa_expect:    1.5
+; bs_ident: 0.875
+; bs_sim: 0.875
+; bs_overlap: 16
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 1
+; al_stop: 16
+; al_display_start: 1
+------------------------------GAAGAAGGAAAAAAAA
+>gi|158508631|ref|NM_030206.4| ..
+; sq_len: 2331
+; sq_offset: 1
+; sq_type: D
+; al_start: 1782
+; al_stop: 1797
+; al_display_start: 1752
+GGGCTACACAGGAAGACCTCGGGTCAAACGGAAGAAAAAAAAAAAACATA
+AAGATCTGGCTCCCCTCTCCTCTCCTCCCCTCCCCTCCCCTCCCCAAGGG
+TTTGCCTGACTGGCTTGTCC
+>>gi|296217287|ref|XM_002754912.1| PREDICTED: Callithrix jacchus hemoglobin subunit gamma-like (LOC100389093), mRNA
+; fa_frame: f
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 86.3
+; fa_bits: 20.8
+; fa_expect:    1.5
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 1
+; al_stop: 15
+; al_display_start: 1
+------------------------------GAAGAAGGAAAAAAAA
+>gi|296217287|ref|XM_002754912.1| ..
+; sq_len: 627
+; sq_offset: 1
+; sq_type: D
+; al_start: 132
+; al_stop: 146
+; al_display_start: 102
+ACTGCACAGGGCCTCACTGGAACTAGAGAAGAAGAAGGTAAAACAGGCTG
+ACAAAAGAATTCCTGCTCCTAGTCCAGACACCATGAGTAATTTCACAGCT
+GAGGACAAGGCTGCTATCAC
+>>gi|332211540|ref|XM_003254828.1| PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 2 (LOC100582529), mRNA
+; fa_frame: r
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 86.0
+; fa_bits: 20.8
+; fa_expect:    1.5
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 16
+; al_stop: 2
+; al_display_start: 16
+------------------------------TTTTTTTTCCTTCTTC
+>gi|332211540|ref|XM_003254828.1| ..
+; sq_len: 640
+; sq_offset: 1
+; sq_type: D
+; al_start: 590
+; al_stop: 604
+; al_display_start: 560
+TAAGAGATCACACATGATTTTCTTCAGCTCTTTTTTTTACATCTTTTTAA
+ATATATGAGCCACAAAGGGTTTTATGTTGAG
+>>gi|147903656|ref|NM_001086277.1| Xenopus laevis hemoglobin, alpha 2 (hba2), mRNA
+; fa_frame: f
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 85.2
+; fa_bits: 20.8
+; fa_expect:    1.6
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 2
+; al_stop: 16
+; al_display_start: 1
+-----------------------------GAAGAAGGAAAAAAAA
+>gi|147903656|ref|NM_001086277.1| ..
+; sq_len: 677
+; sq_offset: 1
+; sq_type: D
+; al_start: 643
+; al_stop: 657
+; al_display_start: 613
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAA
+AAAAAAAAAAAAAAA
+>>gi|380013536|ref|XM_003690762.1| PREDICTED: Apis florea globin-like (LOC100870092), mRNA
+; fa_frame: r
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 84.6
+; fa_bits: 20.7
+; fa_expect:    1.7
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 16
+; al_stop: 2
+; al_display_start: 16
+------TTTTTTTTCCTTCTTC
+>gi|380013536|ref|XM_003690762.1| ..
+; sq_len: 707
+; sq_offset: 1
+; sq_type: D
+; al_start: 7
+; al_stop: 21
+; al_display_start: 1
+TTTTTCTTTTTTTTTTTTCTTTTCTTCCTTTCTTCCTTCCTTTTCTTTTT
+TTTTTTTCTT
+>--
+; fa_frame: r
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 84.6
+; fa_bits: 20.7
+; fa_expect:    1.7
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 16
+; al_stop: 2
+; al_display_start: 16
+------------------------------TTTTTTTTCCTTCTTC
+>gi|380013536|ref|XM_003690762.1| ..
+; sq_len: 707
+; sq_offset: 1
+; sq_type: D
+; al_start: 46
+; al_stop: 60
+; al_display_start: 16
+TTTCTTTTCTTCCTTTCTTCCTTCCTTTTCTTTTTTTTTTTTCTTTTGCC
+CAACGCCCGTTTTCGCAACGGACGAGGAGCGATGGGAACGTTTCTACGTT
+TCCTCGGGATTTCGTCATCG
+>--
+; fa_frame: r
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 84.6
+; fa_bits: 20.7
+; fa_expect:    1.7
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 15
+; al_stop: 1
+; al_display_start: 16
+-----------------------------TTTTTTTTCCTTCTTC
+>gi|380013536|ref|XM_003690762.1| ..
+; sq_len: 707
+; sq_offset: 1
+; sq_type: D
+; al_start: 645
+; al_stop: 659
+; al_display_start: 615
+AACGGGACGAGTTAGTTTATCCGTCATTTCTTTTTTTCCTCCTCCCTTCC
+CCTCCCCCCCCCTTCTTTAATTTAGTCACTTAAGAATTGCTTC
+>>gi|332211538|ref|XM_003254827.1| PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 1 (LOC100582529), mRNA
+; fa_frame: r
+; fa_initn:  57
+; fa_init1:  57
+; fa_opt:  57
+; fa_z-score: 84.5
+; fa_bits: 20.7
+; fa_expect:    1.7
+; bs_ident: 0.867
+; bs_sim: 0.867
+; bs_overlap: 15
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 16
+; al_stop: 2
+; al_display_start: 16
+------------------------------TTTTTTTTCCTTCTTC
+>gi|332211538|ref|XM_003254827.1| ..
+; sq_len: 713
+; sq_offset: 1
+; sq_type: D
+; al_start: 663
+; al_stop: 677
+; al_display_start: 633
+TAAGAGATCACACATGATTTTCTTCAGCTCTTTTTTTTACATCTTTTTAA
+ATATATGAGCCACAAAGGGTTTTATGTTGAG
+
+>>><<<
+>>>///
+
+16 residues in 1 query   sequences
+178611 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:58 2012 done: Tue May  8 01:06:58 2012
+ Total Scan time:  0.060 Total Display time:  0.000
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

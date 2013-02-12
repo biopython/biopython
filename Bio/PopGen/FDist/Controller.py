@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-
 """
 This module allows to control fdist.
 
@@ -24,19 +22,22 @@ if sys.version_info[0] == 3:
 else:
     maxint = sys.maxint
 
+
 def my_float(f):
     #Because of Jython, mostly
-    if f=="-nan": f="nan"
+    if f=="-nan":
+        f="nan"
     return float(f)
+
 
 class FDistController(object):
     def __init__(self, fdist_dir = '', ext = None):
         """Initializes the controller.
-        
+
         fdist_dir is the directory where fdist2 is.
-        ext is the extension of binaries (.exe on windows, 
+        ext is the extension of binaries (.exe on windows,
           none on Unix)
-        
+
         """
         self.tmp_idx = 0
         self.fdist_dir = fdist_dir
@@ -45,7 +46,7 @@ class FDistController(object):
             py_ext = '.exe'
         else:
             py_ext = ''
-        if ext == None:
+        if ext is None:
             self.ext = py_ext
         else:
             self.ext = ext
@@ -71,9 +72,9 @@ class FDistController(object):
         return strftime("%H%M%S") + str(int(clock()*100)) + str(randint(0,1000)) + str(self.tmp_idx)
 
     def run_datacal(self, data_dir='.', version=1,
-        crit_freq = 0.99, p = 0.5, beta= (0.25, 0.25)):
+                    crit_freq = 0.99, p = 0.5, beta= (0.25, 0.25)):
         """Executes datacal.
-        
+
            data_dir - Where the data is found.
         """
         in_name = self._get_temp_file()
@@ -103,7 +104,7 @@ class FDistController(object):
             sample_line = f.readline().rstrip().split(' ')
             sample = int(sample_line[9])
             F_line = f.readline().rstrip().split(' ')
-            F, obs = my_float(F_line[5]), int (F_line[8])
+            F, obs = my_float(F_line[5]), int(F_line[8])
         f.close()
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
@@ -120,22 +121,22 @@ class FDistController(object):
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
-            inf.write(str(randint(-maxint+1,maxint-1)) + '\n') 
+            inf.write(str(randint(-maxint+1,maxint-1)) + '\n')
         inf.write('8\n')
         inf.close()
-    
+
     def run_fdist(self, npops, nsamples, fst, sample_size,
-        mut = 0, num_sims = 50000, data_dir='.',
-        is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
-        max_freq = 0.99):
+                  mut = 0, num_sims = 50000, data_dir='.',
+                  is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
+                  max_freq = 0.99):
         """Executes (d)fdist.
-        
+
         Parameters:
         npops - Number of populations
         nsamples - Number of populations sampled
         fst - expected Fst
         sample_size - Sample size per population
-                For dfdist: if zero a sample size file has to be provided 
+                For dfdist: if zero a sample size file has to be provided
         mut - 1=Stepwise, 0=Infinite allele
         num_sims - number of simulations
         data_dir - Where the data is found
@@ -146,7 +147,7 @@ class FDistController(object):
 
         Returns:
         fst - Average Fst
-        
+
         Important Note: This can take quite a while to run!
         """
         if fst >= 0.9:
@@ -192,19 +193,19 @@ class FDistController(object):
         lines = f.readlines()
         f.close()
         for line in lines:
-          if line.startswith('average Fst'):
-            fst = my_float(line.rstrip().split(' ')[-1])
+            if line.startswith('average Fst'):
+                fst = my_float(line.rstrip().split(' ')[-1])
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
         return fst
 
     def run_fdist_force_fst(self, npops, nsamples, fst, sample_size,
-        mut = 0, num_sims = 50000, data_dir='.',
-        try_runs = 5000, limit=0.001,
-        is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
-        max_freq = 0.99):
+                            mut = 0, num_sims = 50000, data_dir='.',
+                            try_runs = 5000, limit=0.001,is_dominant = False,
+                            theta = 0.06, beta = (0.25, 0.25),
+                            max_freq = 0.99):
         """Executes fdist trying to force Fst.
-        
+
         Parameters:
         try_runs - Number of simulations on the part trying to get
                    Fst correct
@@ -269,7 +270,7 @@ class FDistController(object):
             cplot_name = "cplot"
         else:
             cplot_name = "cplot2"
-        os.system('cd ' + data_dir + ' && '  +
+        os.system('cd ' + data_dir + ' && ' +
             self._get_path(cplot_name) + ' < ' + in_name + ' > ' + out_name)
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
@@ -287,7 +288,7 @@ class FDistController(object):
             return []
         f.close()
         return conf_lines
-        
+
     def run_pv(self, out_file='probs.dat', data_dir='.',
                version = 1, smooth=0.04):
         """Executes pv.
@@ -315,4 +316,3 @@ class FDistController(object):
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
         return result
-

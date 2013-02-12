@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+  <entry dataset="Swiss-Prot" created="2004-05-10" modified="2012-11-28" version="74">
+    <accession>O44185</accession>
+    <name>FLP13_CAEEL</name>
+    <protein>
+      <recommendedName>
+        <fullName>FMRFamide-like neuropeptides 13</fullName>
+      </recommendedName>
+      <component>
+        <recommendedName>
+          <fullName>SDRPTRAMDSPLIRF-amide</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>AMDSPLIRF-amide</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>AADGAPLIRF-amide 1</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>APEASPFIRF-amide 1</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>AADGAPLIRF-amide 2</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>APEASPFIRF-amide 2</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>ASPSAPLIRF-amide</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>SPSAVPLIRF-amide</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>SAAAPLIRF-amide</fullName>
+        </recommendedName>
+      </component>
+      <component>
+        <recommendedName>
+          <fullName>ASSAPLIRF-amide</fullName>
+        </recommendedName>
+      </component>
+    </protein>
+    <gene>
+      <name type="primary">flp-13</name>
+      <name type="ORF">F33D4.3</name>
+    </gene>
+    <organism>
+      <name type="scientific">Caenorhabditis elegans</name>
+      <dbReference type="NCBI Taxonomy" id="6239"/>
+      <lineage>
+        <taxon>Eukaryota</taxon>
+        <taxon>Metazoa</taxon>
+        <taxon>Ecdysozoa</taxon>
+        <taxon>Nematoda</taxon>
+        <taxon>Chromadorea</taxon>
+        <taxon>Rhabditida</taxon>
+        <taxon>Rhabditoidea</taxon>
+        <taxon>Rhabditidae</taxon>
+        <taxon>Peloderinae</taxon>
+        <taxon>Caenorhabditis</taxon>
+      </lineage>
+    </organism>
+    <reference key="1">
+      <citation type="journal article" date="1998" name="Brain Res. Mol. Brain Res." volume="58" first="103" last="111">
+        <title>FMRFamide-related gene family in the nematode, Caenorhabditis elegans.</title>
+        <authorList>
+          <person name="Nelson L.S."/>
+          <person name="Kim K."/>
+          <person name="Memmott J.E."/>
+          <person name="Li C."/>
+        </authorList>
+        <dbReference type="MEDLINE" id="98352130"/>
+        <dbReference type="PubMed" id="9685599"/>
+        <dbReference type="DOI" id="10.1016/S0169-328X(98)00106-5"/>
+      </citation>
+      <scope>NUCLEOTIDE SEQUENCE [MRNA]</scope>
+      <scope>DEVELOPMENTAL STAGE</scope>
+      <source>
+        <strain>Bristol N2</strain>
+      </source>
+    </reference>
+    <reference key="2">
+      <citation type="journal article" date="1998" name="Science" volume="282" first="2012" last="2018">
+        <title>Genome sequence of the nematode C. elegans: a platform for investigating biology.</title>
+        <authorList>
+          <consortium name="The C. elegans sequencing consortium"/>
+        </authorList>
+        <dbReference type="MEDLINE" id="99069613"/>
+        <dbReference type="PubMed" id="9851916"/>
+        <dbReference type="DOI" id="10.1126/science.282.5396.2012"/>
+      </citation>
+      <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+      <source>
+        <strain>Bristol N2</strain>
+      </source>
+    </reference>
+    <reference key="3">
+      <citation type="journal article" date="2005" name="Biochem. Biophys. Res. Commun." volume="335" first="76" last="86">
+        <title>Discovering neuropeptides in Caenorhabditis elegans by two dimensional liquid chromatography and mass spectrometry.</title>
+        <authorList>
+          <person name="Husson S.J."/>
+          <person name="Clynen E."/>
+          <person name="Baggerman G."/>
+          <person name="De Loof A."/>
+          <person name="Schoofs L."/>
+        </authorList>
+        <dbReference type="PubMed" id="16061202"/>
+        <dbReference type="DOI" id="10.1016/j.bbrc.2005.07.044"/>
+      </citation>
+      <scope>PROTEIN SEQUENCE OF 52-60; 64-73; 76-85; 89-98; 101-110; 114-123; 126-135 AND 138-146</scope>
+      <scope>AMIDATION AT PHE-60; PHE-73; PHE-85; PHE-98; PHE-110; PHE-123; PHE-135 AND PHE-146</scope>
+      <source>
+        <strain>Bristol N2</strain>
+      </source>
+    </reference>
+    <reference key="4">
+      <citation type="journal article" date="2001" name="Biochem. Biophys. Res. Commun." volume="286" first="1170" last="1176">
+        <title>Isolation and preliminary biological assessment of AADGAPLIRFamide and SVPGVLRFamide from Caenorhabditis elegans.</title>
+        <authorList>
+          <person name="Marks N.J."/>
+          <person name="Shaw C."/>
+          <person name="Halton D.W."/>
+          <person name="Thompson D.P."/>
+          <person name="Geary T.G."/>
+          <person name="Li C."/>
+          <person name="Maule A.G."/>
+        </authorList>
+        <dbReference type="MEDLINE" id="21418823"/>
+        <dbReference type="PubMed" id="11527423"/>
+        <dbReference type="DOI" id="10.1006/bbrc.2001.5524"/>
+      </citation>
+      <scope>PROTEIN SEQUENCE OF 64-73 AND 89-98</scope>
+      <scope>FUNCTION</scope>
+      <scope>MASS SPECTROMETRY</scope>
+      <scope>AMIDATION AT PHE-73 AND PHE-98</scope>
+    </reference>
+    <reference key="5">
+      <citation type="journal article" date="1997" name="Biochem. Biophys. Res. Commun." volume="231" first="591" last="595">
+        <title>APEASPFIRFamide, a novel FMRFamide-related decapeptide from Caenorhabditis elegans: structure and myoactivity.</title>
+        <authorList>
+          <person name="Marks N.J."/>
+          <person name="Maule A.G."/>
+          <person name="Geary T.G."/>
+          <person name="Thompson D.P."/>
+          <person name="Davis J.P."/>
+          <person name="Halton D.W."/>
+          <person name="Verhaert P."/>
+          <person name="Shaw C."/>
+        </authorList>
+        <dbReference type="PubMed" id="9070852"/>
+        <dbReference type="DOI" id="10.1006/bbrc.1997.6155"/>
+      </citation>
+      <scope>PROTEIN SEQUENCE OF 76-85 AND 101-110</scope>
+      <scope>FUNCTION</scope>
+      <scope>MASS SPECTROMETRY</scope>
+      <scope>AMIDATION AT PHE-85 AND PHE-110</scope>
+    </reference>
+    <reference key="6">
+      <citation type="journal article" date="2004" name="J. Comp. Neurol." volume="475" first="540" last="550">
+        <title>Expression and regulation of an FMRFamide-related neuropeptide gene family in Caenorhabditis elegans.</title>
+        <authorList>
+          <person name="Kim K."/>
+          <person name="Li C."/>
+        </authorList>
+        <dbReference type="PubMed" id="15236235"/>
+        <dbReference type="DOI" id="10.1002/cne.20189"/>
+      </citation>
+      <scope>TISSUE SPECIFICITY</scope>
+      <scope>DEVELOPMENTAL STAGE</scope>
+    </reference>
+    <reference key="7">
+      <citation type="journal article" date="2005" name="J. Neurobiol." volume="65" first="304" last="319">
+        <title>Role of a FMRFamide-like family of neuropeptides in the pharyngeal nervous system of Caenorhabditis elegans.</title>
+        <authorList>
+          <person name="Papaioannou S."/>
+          <person name="Marsden D."/>
+          <person name="Franks C.J."/>
+          <person name="Walker R.J."/>
+          <person name="Holden-Dye L."/>
+        </authorList>
+        <dbReference type="PubMed" id="16187307"/>
+        <dbReference type="DOI" id="10.1002/neu.20201"/>
+      </citation>
+      <scope>FUNCTION</scope>
+    </reference>
+    <comment type="function">
+      <text evidence="1 2 3">FMRFamides and FMRFamide-like peptides are neuropeptides. AADGAPLIRF-amide and APEASPFIRF-amide inhibit muscle tension in somatic muscle. APEASPFIRF-amide is a potent inhibitor of the activity of dissected pharyngeal myogenic muscle system.</text>
+    </comment>
+    <comment type="subcellular location">
+      <subcellularLocation>
+        <location>Secreted</location>
+      </subcellularLocation>
+    </comment>
+    <comment type="tissue specificity">
+      <text evidence="4">Each flp gene is expressed in a distinct set of neurons. Flp-13 is expressed in the ASE sensory neurons, the DD motor neurons, the 15, M3 and M5 cholinergic pharyngeal motoneurons, and the ASG, ASK and BAG neurons.</text>
+    </comment>
+    <comment type="developmental stage">
+      <text evidence="4 5">Expressed from the comma stage of embryogenesis, during all larval stages, and in low levels in adults.</text>
+    </comment>
+    <comment type="mass spectrometry" mass="1032" method="MALDI" evidence="1">
+      <location>
+        <begin position="64"/>
+        <end position="73"/>
+      </location>
+      <location>
+        <begin position="89"/>
+        <end position="98"/>
+      </location>
+      <text>The measured mass is that of either AADGAPLIRF-amide 1 or AADGAPLIRF-amide 2.</text>
+    </comment>
+    <comment type="mass spectrometry" mass="1133.7" method="MALDI" evidence="2">
+      <location>
+        <begin position="76"/>
+        <end position="85"/>
+      </location>
+      <location>
+        <begin position="101"/>
+        <end position="110"/>
+      </location>
+    </comment>
+    <comment type="similarity">
+      <text>Belongs to the FARP (FMRFamide related peptide) family.</text>
+    </comment>
+    <!-- These elements were obtained from accession Q00955 -->
+    <comment type="catalytic activity">
+      <text>ATP + acetyl-CoA + HCO(3)(-) = ADP + phosphate + malonyl-CoA.</text>
+    </comment>
+    <comment type="catalytic activity">
+      <text>ATP + biotin-[carboxyl-carrier-protein] + CO(2) = ADP + phosphate + carboxy-biotin-[carboxyl-carrier-protein].</text>
+    </comment>
+    <comment type="cofactor">
+      <text>Biotin (By similarity).</text>
+    </comment>
+    <comment type="cofactor">
+      <text>Binds 2 manganese ions per subunit (By similarity).</text>
+    </comment>
+    <comment type="enzyme regulation">
+      <text evidence="6">By phosphorylation. The catalytic activity is inhibited by soraphen A, a polyketide isolated from the myxobacterium Sorangium cellulosum and a potent inhibitor of fungal growth.</text>
+    </comment>
+    <comment type="pathway">
+      <text>Lipid metabolism; malonyl-CoA biosynthesis; malonyl-CoA from acetyl-CoA: step 1/1.</text>
+    </comment>
+    <comment type="subunit">
+      <text evidence="7 8 9">Homodimer.</text>
+    </comment>
+    <comment type="induction">
+      <text evidence="6 11 12 13">Repressed in presence of fatty acids. Repressed 3-fold by lipid precursors, inositol and choline, and also controlled by regulatory factors INO2, INO4 and OPI1.</text>
+    </comment>
+    <comment type="miscellaneous">
+      <text>Present with 20200 molecules/cell in log phase SD medium.</text>
+    </comment>
+    <!-- These elements were obtained from accession Q8W1X2 -->
+    <comment type="biophysicochemical properties">
+      <kinetics>
+        <KM>98 uM for ATP</KM>
+        <KM>688 uM for pyridoxal</KM>
+        <Vmax>1.604 mmol/min/mg enzyme</Vmax>
+      </kinetics>
+      <phDependence>Optimum pH is 6.0. Active from pH 4.5 to 10.5.</phDependence>
+    </comment>
+    <comment type="alternative products">
+      <event type="alternative splicing"/>
+      <isoform>
+        <id>Q8W1X2-1</id>
+        <name>1</name>
+        <sequence type="displayed"/>
+      </isoform>
+      <isoform>
+        <id>Q8W1X2-2</id>
+        <name>2</name>
+        <sequence type="described" ref="VSP_004654"/>
+        <note>No experimental confirmation available.</note>
+      </isoform>
+    </comment>
+    <!-- These elements were obtained from accession Q9BZZ5 -->
+    <comment type="domain">
+      <text>Two regions, an N-terminal (aa 96-107) and a C-terminal (aa 274-311) are required for binding FGF2.</text>
+    </comment>
+    <comment type="PTM">
+      <text>Acetylation at Lys-251 impairs antiapoptotic function.</text>
+    </comment>
+    <comment type="sequence caution">
+      <conflict type="erroneous initiation">
+        <sequence resource="EMBL-CDS" id="AAB86528" version="1"/>
+      </conflict>
+      <text>Translation N-terminally shortened.</text>
+    </comment>
+    <comment type="sequence caution">
+      <conflict type="frameshift">
+        <sequence resource="EMBL-CDS" id="AAB86528" version="1"/>
+      </conflict>
+    </comment>
+    <comment type="online information" name="NIEHS-SNPs">
+      <link uri="http://egp.gs.washington.edu/data/api5/"/>
+    </comment>
+    <!-- These elements were obtained from accession P28355 -->
+    <comment type="RNA editing">
+      <location>
+        <position position="156"/>
+      </location>
+      <location>
+        <position position="158"/>
+      </location>
+      <location>
+        <position position="160"/>
+      </location>
+      <text evidence="4">Partially edited. RNA editing generates receptor isoforms that differ in their ability to interact with the phospholipase C signaling cascade in a transfected cell line, suggesting that this RNA processing event may contribute to the modulation of serotonergic neurotransmission in the central nervous system.</text>
+    </comment>
+    <comment type="polymorphism">
+      <text>Position 23 is polymorphic; the frequencies in unrelated Caucasians are 0.87 for Cys and 0.13 for Ser.</text>
+    </comment>
+    <!-- These elements were obtained from accession Q01718 -->
+    <comment type="disease">
+      <text evidence="2 3 4 5 6">Defects in MC2R are the cause of glucocorticoid deficiency type 1 (GCCD1) [MIM:202200]; also known as familial glucocorticoid deficiency type 1 (FGD1). GCCD1 is an autosomal recessive disorder due to congenital insensitivity or resistance to adrenocorticotropin (ACTH). It is characterized by progressive primary adrenal insufficiency, without mineralocorticoid deficiency.</text>
+    </comment>
+    <!-- These elements were obtained from accession P11911 -->
+    <comment type="disruption phenotype">
+      <text evidence="8">Mice display impaired B-cell development which does not progress pass the progenitor stage.</text>
+    </comment>
+    <!-- These elements were obtained from accession Q06811 -->
+    <comment type="allergen">
+      <text>Causes an allergic reaction in human.</text>
+    </comment>
+    <!-- These elements were obtained from accession P55902 -->
+    <comment type="toxic dose">
+      <text evidence="1">LD(50) is 50 ug/kg in mouse by intracerebroventricular injection and 600 ng/g in Blatella germanica.</text>
+    </comment>
+    <!-- These elements were obtained from accession P42212 -->
+    <comment type="biotechnology">
+      <text evidence="1">Green fluorescent protein has been engineered to produce a vast number of variously colored mutants, fusion proteins, and biosensors. Fluorescent proteins and its mutated allelic forms, blue, cyan and yellow have become a useful and ubiquitous tool for making chimeric proteins, where they function as a fluorescent protein tag. Typically they tolerate N- and C-terminal fusion to a broad variety of proteins. They have been expressed in most known cell types and are used as a noninvasive fluorescent marker in living cells and organisms. They enable a wide range of applications where they have functioned as a cell lineage tracer, reporter of gene expression, or as a measure of protein-protein interactions.</text>
+    </comment>
+    <comment type="biotechnology">
+      <text evidence="1">Can also be used as a molecular thermometer, allowing accurate temperature measurements in fluids. The measurement process relies on the detection of the blinking of GFP using fluorescence correlation spectroscopy.</text>
+    </comment>
+    <!-- These elements were obtained from accession O14543 -->
+    <comment type="pharmaceutical">
+      <text>Could be used as a possible therapeutic agent for treating rheumatoid arthritis.</text>
+    </comment>
+    <!-- These elements were obtained from accession P40939 -->
+    <comment type="interaction">
+      <interactant intactId="EBI-356720"/>
+      <interactant intactId="EBI-746969">
+        <id>Q9H0R8</id>
+        <label>GABARAPL1</label>
+      </interactant>
+      <organismsDiffer>false</organismsDiffer>
+      <experiments>4</experiments>
+    </comment>
+    <comment type="interaction">
+      <interactant intactId="EBI-356720"/>
+      <interactant intactId="EBI-720116">
+        <id>P60520</id>
+        <label>GABARAPL2</label>
+      </interactant>
+      <organismsDiffer>false</organismsDiffer>
+      <experiments>3</experiments>
+    </comment>
+    <!-- These elements were obtained from accession A6NMY6 -->
+    <comment type="caution">
+      <text>Could be the product of a pseudogene. The existence of a transcript at this locus is supported by only one sequence submission (PubMed:2174397).</text>
+    </comment>
+    <dbReference type="EMBL" id="AF042400">
+      <property type="protein sequence ID" value="AAC08951.1"/>
+      <property type="molecule type" value="mRNA"/>
+    </dbReference>
+    <dbReference type="EMBL" id="FO080445">
+      <property type="protein sequence ID" value="CCD63768.1"/>
+      <property type="molecule type" value="Genomic_DNA"/>
+    </dbReference>
+    <dbReference type="PIR" id="T32553">
+      <property type="entry name" value="T32553"/>
+    </dbReference>
+    <dbReference type="RefSeq" id="NP_501255.1">
+      <property type="nucleotide sequence ID" value="NM_068854.1"/>
+    </dbReference>
+    <dbReference type="UniGene" id="Cel.58"/>
+    <dbReference type="ProteinModelPortal" id="O44185"/>
+    <dbReference type="STRING" id="O44185"/>
+    <dbReference type="EnsemblMetazoa" id="F33D4.3">
+      <property type="protein sequence ID" value="F33D4.3"/>
+      <property type="gene ID" value="F33D4.3"/>
+    </dbReference>
+    <dbReference type="GeneID" id="177547"/>
+    <dbReference type="KEGG" id="cel:CELE_F33D4.3"/>
+    <dbReference type="UCSC" id="F33D4.3">
+      <property type="organism name" value="c. elegans"/>
+    </dbReference>
+    <dbReference type="CTD" id="177547"/>
+    <dbReference type="WormBase" id="F33D4.3">
+      <property type="protein sequence ID" value="CE17033"/>
+      <property type="gene ID" value="WBGene00001456"/>
+      <property type="gene designation" value="flp-13"/>
+    </dbReference>
+    <dbReference type="eggNOG" id="NOG70956"/>
+    <dbReference type="GeneTree" id="ENSGT00570000079955"/>
+    <dbReference type="HOGENOM" id="HOG000018010"/>
+    <dbReference type="InParanoid" id="O44185"/>
+    <dbReference type="OMA" id="VAIQAFD"/>
+    <dbReference type="NextBio" id="897310"/>
+    <dbReference type="ArrayExpress" id="O44185"/>
+    <dbReference type="GO" id="GO:0005576">
+      <property type="term" value="C:extracellular region"/>
+      <property type="evidence" value="IC:UniProtKB"/>
+    </dbReference>
+    <dbReference type="GO" id="GO:0007218">
+      <property type="term" value="P:neuropeptide signaling pathway"/>
+      <property type="evidence" value="IDA:UniProtKB"/>
+    </dbReference>
+    <dbReference type="InterPro" id="IPR002544">
+      <property type="entry name" value="FMRFamid-related_peptide-like"/>
+    </dbReference>
+    <dbReference type="Pfam" id="PF01581">
+      <property type="entry name" value="FARP"/>
+      <property type="match status" value="9"/>
+    </dbReference>
+    <proteinExistence type="evidence at protein level"/>
+    <keyword id="KW-0027">Amidation</keyword>
+    <keyword id="KW-0165">Cleavage on pair of basic residues</keyword>
+    <keyword id="KW-0181">Complete proteome</keyword>
+    <keyword id="KW-0903">Direct protein sequencing</keyword>
+    <keyword id="KW-0527">Neuropeptide</keyword>
+    <keyword id="KW-1185">Reference proteome</keyword>
+    <keyword id="KW-0677">Repeat</keyword>
+    <keyword id="KW-0964">Secreted</keyword>
+    <keyword id="KW-0732">Signal</keyword>
+    <feature type="signal peptide" status="potential">
+      <location>
+        <begin position="1"/>
+        <end position="17"/>
+      </location>
+    </feature>
+    <feature type="propeptide" status="potential" id="PRO_0000009556" evidence="7">
+      <location>
+        <begin position="18"/>
+        <end position="43"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="SDRPTRAMDSPLIRF-amide" status="potential" id="PRO_0000248047" evidence="5">
+      <location>
+        <begin position="46"/>
+        <end position="60"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="AMDSPLIRF-amide" id="PRO_0000311849" evidence="6">
+      <location>
+        <begin position="52"/>
+        <end position="60"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="AADGAPLIRF-amide 1" id="PRO_0000009557" evidence="1 6">
+      <location>
+        <begin position="64"/>
+        <end position="73"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="APEASPFIRF-amide 1" id="PRO_0000009558" evidence="2 6">
+      <location>
+        <begin position="76"/>
+        <end position="85"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="AADGAPLIRF-amide 2" id="PRO_0000009559" evidence="1 6">
+      <location>
+        <begin position="89"/>
+        <end position="98"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="APEASPFIRF-amide 2" id="PRO_0000248048" evidence="2 6">
+      <location>
+        <begin position="101"/>
+        <end position="110"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="ASPSAPLIRF-amide" id="PRO_0000248049" evidence="6">
+      <location>
+        <begin position="114"/>
+        <end position="123"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="SPSAVPLIRF-amide" id="PRO_0000248050" evidence="6">
+      <location>
+        <begin position="126"/>
+        <end position="135"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="SAAAPLIRF-amide" id="PRO_0000248051" evidence="6">
+      <location>
+        <begin position="138"/>
+        <end position="146"/>
+      </location>
+    </feature>
+    <feature type="peptide" description="ASSAPLIRF-amide" status="potential" id="PRO_0000248052" evidence="5">
+      <location>
+        <begin position="149"/>
+        <end position="157"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="6">
+      <location>
+        <position position="60"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="1 6">
+      <location>
+        <position position="73"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="2 6">
+      <location>
+        <position position="85"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="1 6">
+      <location>
+        <position position="98"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="2 6">
+      <location>
+        <position position="110"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="6">
+      <location>
+        <position position="123"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="6">
+      <location>
+        <position position="135"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" evidence="6">
+      <location>
+        <position position="146"/>
+      </location>
+    </feature>
+    <feature type="modified residue" description="Phenylalanine amide" status="potential" evidence="5">
+      <location>
+        <position position="157"/>
+      </location>
+    </feature>
+    <evidence key="1" type="ECO:0000006">
+      <source>
+        <dbReference type="PubMed" id="11527423"/>
+      </source>
+    </evidence>
+    <evidence key="2" type="ECO:0000006">
+      <source>
+        <dbReference type="PubMed" id="9070852"/>
+      </source>
+    </evidence>
+    <evidence key="3" type="ECO:0000006">
+      <source>
+        <dbReference type="PubMed" id="16187307"/>
+      </source>
+    </evidence>
+    <evidence key="4" type="ECO:0000006">
+      <source>
+        <dbReference type="PubMed" id="15236235"/>
+      </source>
+    </evidence>
+    <evidence key="5" type="ECO:0000006">
+      <source>
+        <dbReference type="PubMed" id="9685599"/>
+      </source>
+    </evidence>
+    <evidence key="6" type="ECO:0000006">
+      <source>
+        <dbReference type="PubMed" id="16061202"/>
+      </source>
+    </evidence>
+    <evidence key="7" type="ECO:0000001"/>
+    <sequence length="160" mass="17736" checksum="BE4C24E9B85FCD11" modified="1998-06-01" version="1" precursor="true">
+MMTSLLTISMFVVAIQAFDSSEIRMLDEQYDTKNPFFQFLENSKRSDRPTRAMDSPLIRF
+GKRAADGAPLIRFGRAPEASPFIRFGKRAADGAPLIRFGRAPEASPFIRFGKRASPSAPL
+IRFGRSPSAVPLIRFGRSAAAPLIRFGRASSAPLIRFGRK
+</sequence>
+  </entry>
+  <copyright>
+    Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+    Distributed under the Creative Commons Attribution-NoDerivs License
+  </copyright>
+</uniprot>

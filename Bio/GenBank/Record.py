@@ -10,6 +10,7 @@ o Qualifier - Qualifiers on a Feature.
 # local stuff
 import Bio.GenBank
 
+
 def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     """Write a line of GenBank info that can wrap over multiple lines.
 
@@ -44,7 +45,7 @@ def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
         while cur_pos < len(information):
             info_parts.append(information[cur_pos: cur_pos + info_length])
             cur_pos += info_length
-            
+
     # first get the information string split up by line
     output_parts = []
     cur_part = ""
@@ -70,8 +71,9 @@ def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     for output_part in output_parts[1:]:
         output_info += " " * indent + output_part + "\n"
 
-    return output_info            
-        
+    return output_info
+
+
 def _indent_genbank(information, indent):
     """Write out information with the specified indent.
 
@@ -89,6 +91,7 @@ def _indent_genbank(information, indent):
         output_info += " " * indent + info_part + "\n"
 
     return output_info
+
 
 class Record(object):
     """Hold GenBank information in a format similar to the original record.
@@ -152,7 +155,7 @@ class Record(object):
                               str(GB_FEATURE_INDENT -
                                   GB_FEATURE_INTERNAL_INDENT) + "s"
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
-    
+
     def __init__(self):
         self.locus = ''
         self.size = ''
@@ -224,7 +227,7 @@ class Record(object):
         output += self._contig_line()
         output += "//"
         return output
-            
+
     def _locus_line(self):
         """Provide the output string for the LOCUS line.
         """
@@ -241,7 +244,7 @@ class Record(object):
         # treat circular types differently, since they'll have long residue
         # types
         if "circular" in self.residue_type:
-             output += "%17s" % self.residue_type
+            output += "%17s" % self.residue_type
         # second case: ss-DNA types of records
         elif "-" in self.residue_type:
             output += "%7s" % self.residue_type
@@ -279,7 +282,7 @@ class Record(object):
             output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
         else:
             output = ""
-        
+
         return output
 
     def _version_line(self):
@@ -334,14 +337,14 @@ class Record(object):
         """
         output = ""
         if len(self.keywords) >= 0:
-            output +=  Record.BASE_FORMAT % "KEYWORDS"
+            output += Record.BASE_FORMAT % "KEYWORDS"
             keyword_info = ""
             for keyword in self.keywords:
                 keyword_info += "%s; " % keyword
             # replace the ; at the end with a period
             keyword_info = keyword_info[:-2]
             keyword_info += "."
-            
+
             output += _wrapped_genbank(keyword_info,
                                        Record.GB_BASE_INDENT)
 
@@ -372,7 +375,7 @@ class Record(object):
         output = Record.BASE_FORMAT % "SOURCE"
         output += _wrapped_genbank(self.source, Record.GB_BASE_INDENT)
         return output
-    
+
     def _organism_line(self):
         """Output for ORGANISM line with taxonomy info.
         """
@@ -389,7 +392,7 @@ class Record(object):
         output += _wrapped_genbank(taxonomy_info, Record.GB_BASE_INDENT)
 
         return output
-            
+
     def _comment_line(self):
         """Output for the COMMENT lines.
         """
@@ -467,7 +470,7 @@ class Record(object):
                     # stop looping if we are out of sequence
                     if end_pos > len(self.sequence):
                         break
-                
+
                 output += "\n"
                 cur_seq_pos += 60
         return output
@@ -485,7 +488,7 @@ class Record(object):
                     output += Record.BASE_FORMAT % "WGS_SCAFLD"
                     output += self.wgs_scafld
             return output
-        
+
     def _contig_line(self):
         """Output for CONTIG location information from RefSeq.
         """
@@ -495,7 +498,7 @@ class Record(object):
             output += _wrapped_genbank(self.contig,
                                        Record.GB_BASE_INDENT, split_char = ',')
         return output
-        
+
 
 class Reference(object):
     """Hold information from a GenBank reference.
@@ -504,7 +507,7 @@ class Reference(object):
     o number - The number of the reference in the listing of references.
     o bases - The bases in the sequence the reference refers to.
     o authors - String with all of the authors.
-    o consrtm - Consortium the authors belong to. 
+    o consrtm - Consortium the authors belong to.
     o title - The title of the reference.
     o journal - Information about the journal where the reference appeared.
     o medline_id - The medline id for the reference.
@@ -531,7 +534,7 @@ class Reference(object):
         output += self._medline_line()
         output += self._pubmed_line()
         output += self._remark_line()
-        
+
         return output
 
     def _reference_line(self):
@@ -592,7 +595,7 @@ class Reference(object):
             output += Record.INTERNAL_FORMAT % "MEDLINE"
             output += self.medline_id + "\n"
         return output
-    
+
     def _pubmed_line(self):
         """Output for PUBMED information.
         """
@@ -601,7 +604,7 @@ class Reference(object):
             output += Record.OTHER_INTERNAL_FORMAT % "PUBMED"
             output += self.pubmed_id + "\n"
         return output
-    
+
     def _remark_line(self):
         """Output for REMARK information.
         """
@@ -610,7 +613,8 @@ class Reference(object):
             output += Record.INTERNAL_FORMAT % "REMARK"
             output += _wrapped_genbank(self.remark, Record.GB_BASE_INDENT)
         return output
-    
+
+
 class Feature(object):
     """Hold information about a Feature in the Feature Table of GenBank record.
 
@@ -630,17 +634,18 @@ class Feature(object):
                                    split_char = ',')
         for qualifier in self.qualifiers:
             output += " " * Record.GB_FEATURE_INDENT
-            
+
             # determine whether we can wrap on spaces
             space_wrap = 1
             for no_space_key in \
-                Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
+                    Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
                 if no_space_key in qualifier.key:
                     space_wrap = 0
-            
+
             output += _wrapped_genbank(qualifier.key + qualifier.value,
                                        Record.GB_FEATURE_INDENT, space_wrap)
         return output
+
 
 class Qualifier(object):
     """Hold information about a qualifier in a GenBank feature.

@@ -5,9 +5,10 @@
 """Command line wrapper for the multiple alignment program PROBCONS.
 """
 
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
+
 
 class ProbconsCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program PROBCONS.
@@ -44,14 +45,14 @@ class ProbconsCommandline(AbstractCommandline):
         from StringIO import StringIO
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "clustalw")
-    
+
     Citations:
 
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
     PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
-    Genome Research 15: 330-340. 
+    Genome Research 15: 330-340.
 
-    Last checked agains version: 1.12
+    Last checked against version: 1.12
     """
     def __init__(self, cmd="probcons", **kwargs):
         self.parameters = \
@@ -100,16 +101,17 @@ class ProbconsCommandline(AbstractCommandline):
                     "order (default: off)"),
             #Input file name
             _Argument(["input"],
-                      "Input file name. Must be multiple FASTA alignment "+ \
+                      "Input file name. Must be multiple FASTA alignment "+
                       "(MFA) format",
                       filename=True,
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing modules doctests..."
+    print "Running modules doctests..."
     import doctest
     doctest.testmod()
     print "Done"

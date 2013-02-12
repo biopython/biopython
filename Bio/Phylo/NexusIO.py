@@ -37,6 +37,7 @@ def parse(handle):
     eventually change Nexus to use the new NewickIO parser directly.)
     """
     nex = Nexus.Nexus(handle)
+
     # NB: Once Nexus.Trees is modified to use Tree.Newick objects, do this:
     # return iter(nex.trees)
     # Until then, convert the Nexus.Trees.Tree object hierarchy:
@@ -53,6 +54,7 @@ def parse(handle):
         newroot = node2clade(nxtree, nxtree.node(nxtree.root))
         yield Newick.Tree(root=newroot, rooted=nxtree.rooted, name=nxtree.name,
                           weight=nxtree.weight)
+
 
 def write(obj, handle, **kwargs):
     """Write a new Nexus file containing the given trees.

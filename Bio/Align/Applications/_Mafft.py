@@ -5,10 +5,11 @@
 """Command line wrapper for the multiple alignment programme MAFFT.
 """
 
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
+
 
 class MafftCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program MAFFT.
@@ -191,16 +192,16 @@ class MafftCommandline(AbstractCommandline):
             _Switch(["--groupsize", "groupsize"],
                     "Do not make alignment larger than number sequences. "
                     "Default: the number of input sequences"),
-            #Adjust direction according to the first sequence 
+            #Adjust direction according to the first sequence
             #Mafft V6 beta function
             _Switch(["--adjustdirection", "adjustdirection"],
                     "Adjust direction according to the first sequence. "
                     "Default off."),
-            #Adjust direction according to the first sequence 
+            #Adjust direction according to the first sequence
             #for highly diverged data; very slow
             #Mafft V6 beta function
             _Switch(["--adjustdirectionaccurately", "adjustdirectionaccurately"],
-                    "Adjust direction according to the first sequence," 
+                    "Adjust direction according to the first sequence,"
                     "for highly diverged data; very slow"
                     "Default off."),
             #**** Parameter ****
@@ -326,7 +327,7 @@ class MafftCommandline(AbstractCommandline):
                     equate=False),
             #The old solution of also defining extra parameters with
             #["--seed", "seed1"] etc worked, but clashes with the recent
-            #code in the base class to look for duplicate paramters and raise
+            #code in the base class to look for duplicate parameters and raise
             #an error.  Perhaps that check should be ignored here, or maybe
             #we can handle this more elegantly...
             #TODO - Create an _OptionList parameter which allows a list to be
@@ -346,30 +347,7 @@ class MafftCommandline(AbstractCommandline):
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-def _test():
-    """Run the module's doctests (PRIVATE).
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    #TODO - Remove os.path checks on input filenames?
-    import doctest
-    if os.path.isdir(os.path.join("..","Tests")):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests")) :
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
 
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

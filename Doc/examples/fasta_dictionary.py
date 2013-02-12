@@ -7,13 +7,14 @@
 from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 
+
 def get_accession_num(seq_record):
     accession_atoms = seq_record.id.split('|')
     gb_name = accession_atoms[3]
     # strip the version info before returning
     return gb_name[:-2]
 
-rec_iterator = SeqIO.parse("ls_orchid.fasta","fasta", generic_dna)
+rec_iterator = SeqIO.parse("ls_orchid.fasta", "fasta", generic_dna)
 orchid_dict = SeqIO.to_dict(rec_iterator, get_accession_num)
 
 for id_num in orchid_dict:
@@ -31,13 +32,14 @@ for id_num in orchid_dict:
 from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 
+
 def get_accession_num(record_id):
     accession_atoms = record_id.split('|')
     gb_name = accession_atoms[3]
     # strip the version info before returning
     return gb_name[:-2]
 
-orchid_dict = SeqIO.index("ls_orchid.fasta","fasta", generic_dna)
+orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta", generic_dna)
 
 for id_num in orchid_dict:
     print 'id number:', id_num

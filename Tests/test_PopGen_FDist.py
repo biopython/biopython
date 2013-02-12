@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import commands
 import os
 import shutil
 import tempfile
@@ -24,9 +23,9 @@ for path in os.environ['PATH'].split(os.pathsep):
                 if file == f or file.lower() == f.lower()+".exe":
                     wanted[f] = file
     except os.error:
-        pass #Path doesn't exist - correct to pass
+        pass  # Path doesn't exist - correct to pass
 if len(wanted) != 4:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install fdist2, datacal, pv and cplot if you want to use FDist2 with Bio.PopGen.FDist.")
 del wanted
 

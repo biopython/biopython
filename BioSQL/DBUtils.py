@@ -10,14 +10,17 @@
 
 _dbutils = {}
 
+
 class Generic_dbutils:
     """Default database utilities."""
     def __init__(self):
         pass
 
     def tname(self, table):
-        if table != 'biosequence': return table
-        else: return 'bioentry'
+        if table != 'biosequence':
+            return table
+        else:
+            return 'bioentry'
 
     def last_id(self, cursor, table):
         # XXX: Unsafe without transactions isolation
@@ -26,13 +29,13 @@ class Generic_dbutils:
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
-    
+
     def execute(self, cursor, sql, args=None):
         """Just execute an sql command.
         """
         cursor.execute(sql, args or ())
 
-    def autocommit(self, conn, y = 1):
+    def autocommit(self, conn, y=1):
         # Let's hope it was not really needed
         pass
 
@@ -58,7 +61,7 @@ class Mysql_dbutils(Generic_dbutils):
             #Google suggests this is the new way,
             #same fix also suggested by Eric Gibert:
             return cursor.lastrowid
-        
+
 _dbutils["MySQLdb"] = Mysql_dbutils
 
 
@@ -70,7 +73,7 @@ class _PostgreSQL_dbutils(Generic_dbutils):
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
-        
+
     def last_id(self, cursor, table):
         table = self.tname(table)
         sql = r"select currval('%s_pk_seq')" % table
@@ -78,9 +81,10 @@ class _PostgreSQL_dbutils(Generic_dbutils):
         rv = cursor.fetchone()
         return rv[0]
 
+
 class Psycopg2_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Psycopg2 (PostgreSQL)."""
-    def autocommit(self, conn, y = True):
+    def autocommit(self, conn, y=True):
         if y:
             conn.set_isolation_level(0)
         else:
@@ -91,7 +95,7 @@ _dbutils["psycopg2"] = Psycopg2_dbutils
 
 class Pgdb_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Pgdb (aka PyGreSQL, for PostgreSQL)."""
-    def autocommit(self, conn, y = True):
+    def autocommit(self, conn, y=True):
         raise NotImplementedError("pgdb does not support this!")
 
 _dbutils["pgdb"] = Pgdb_dbutils

@@ -4,9 +4,10 @@
 
 from Bio import SeqIO
 
+
 def extract_organisms(file_to_parse, format):
     all_species = []
-    for cur_record in SeqIO.parse(open(file_to_parse), format) :
+    for cur_record in SeqIO.parse(open(file_to_parse), format):
         # extract the info from the description
         new_species = cur_record.description.split()[1]
 
@@ -29,6 +30,7 @@ if __name__ == "__main__":
 
 from Bio import Fasta
 
+
 def extract_organisms(file_to_parse):
     # set up the parser and iterator
     parser = Fasta.RecordParser()
@@ -42,7 +44,7 @@ def extract_organisms(file_to_parse):
 
         if cur_record is None:
             break
-        
+
         # extract the info from the title
         new_species = cur_record.title.split()[1]
 
@@ -57,4 +59,3 @@ if __name__ == "__main__":
     all_species = extract_organisms("ls_orchid.fasta")
     print "number of species:", len(all_species)
     print 'species names:', all_species
-    

@@ -13,11 +13,12 @@ new genome 2 --   a b c D E F
 # standard modules
 from GeneralPoint import TwoCrossover
 
+
 class SinglePointCrossover(TwoCrossover):
     """Perform point crossover between genomes at some defined rate.
 
-    This performs a crossover between two genomes at some defined 
-    frequency.  Length of genome is preserved, as the crossover 
+    This performs a crossover between two genomes at some defined
+    frequency.  Length of genome is preserved, as the crossover
     point is the same for either genome.
     """
     def __init__(self, crossover_prob = .1):

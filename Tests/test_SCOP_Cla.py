@@ -13,8 +13,6 @@ import unittest
 from Bio.SCOP import Cla
 
 
-
-
 class ClaTests(unittest.TestCase):
 
     def setUp(self):
@@ -23,7 +21,7 @@ class ClaTests(unittest.TestCase):
     def testParse(self):
         """Test if all records in a CLA file are being read"""
         f=open(self.filename)
-        try: 
+        try:
             count = 0
             records = Cla.parse(f)
             for record in records:
@@ -31,11 +29,11 @@ class ClaTests(unittest.TestCase):
             self.assertEqual(count, 14)
         finally:
             f.close()
-    
+
     def testStr(self):
         """Test if we can convert each record to a string correctly"""
         f = open(self.filename)
-        try: 
+        try:
             for line in f:
                 record = Cla.Record(line)
                 # The SCOP Classification file format which can be found at
@@ -55,7 +53,7 @@ class ClaTests(unittest.TestCase):
                 for key, actual_value in actual_hierarchy.iteritems():
                     self.assertEqual(actual_value, expected_hierarchy[key])
         finally:
-            f.close()        
+            f.close()
 
     def testError(self):
         """Test if a corrupt record raises the appropriate exception"""
@@ -83,13 +81,12 @@ class ClaTests(unittest.TestCase):
     def testIndex(self):
         """Test CLA file indexing"""
         index = Cla.Index(self.filename)
-        
+
         self.assertEqual(len(index), 14)
         self.assertTrue('d4hbia_' in index)
 
         rec = index['d1hbia_']
         self.assertEqual(rec.sunid, 14996)
-
 
 
 if __name__=='__main__':

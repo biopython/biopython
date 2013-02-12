@@ -4,18 +4,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-import warnings
-warnings.warn("The module Bio.Motif.Parsers.MAST is now obsolete, "
-              "and will be deprecated and removed in a future "
-              "release of Biopython. To parse MAST output files, "
-              "please use the parser in Bio.Motif.MAST instead."
-              "Note that there are some (minor) differences between "
-              "new parser in Bio.Motif.MAST and the old parser "
-              "in Bio.Motif.Parsers.MAST.",
-              PendingDeprecationWarning)
-
-
 from Bio.Alphabet import IUPAC
 from Bio.Motif.Parsers.MEME import MEMEMotif
 

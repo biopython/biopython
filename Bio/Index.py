@@ -19,13 +19,14 @@ import array
 import cPickle
 import shelve
 
+
 class _ShelveIndex(dict):
     """An index file wrapped around shelve.
 
     """
     # Without a good dbm module installed, this is pretty slow and
     # generates large files.  When generating an index on a FASTA-
-    # formatted file with 82000 sequences (37Mb), the 
+    # formatted file with 82000 sequences (37Mb), the
     # index 'dat' file is 42Mb and 'dir' file is 8Mb.
 
     __version = 2
@@ -56,12 +57,13 @@ class _ShelveIndex(dict):
             if version is None:
                 raise IOError("Unrecognized index format")
             elif version != self.__version:
-                raise IOError("Version %s doesn't match my version %s" \
+                raise IOError("Version %s doesn't match my version %s"
                               % (version, self.__version))
-            
+
     def __del__(self):
-        if self.__dict__.has_key('data'):
+        if 'data' in self.__dict__:
             self.data.close()
+
 
 class _InMemoryIndex(dict):
     """This creates an in-memory index file.
@@ -71,7 +73,7 @@ class _InMemoryIndex(dict):
     # version
     # key value
     # [...]
-    
+
     __version = 3
     __version_key = '__version'
 
@@ -79,7 +81,7 @@ class _InMemoryIndex(dict):
         self._indexname = indexname
         dict.__init__(self)
         self.__changed = 0     # the index hasn't changed
-        
+
         # Remove the database if truncate is true.
         if truncate and os.path.exists(indexname):
             os.unlink(indexname)
@@ -90,7 +92,7 @@ class _InMemoryIndex(dict):
             handle = open(indexname)
             version = self._toobj(handle.readline().rstrip())
             if version != self.__version:
-                raise IOError("Version %s doesn't match my version %s" \
+                raise IOError("Version %s doesn't match my version %s"
                               % (version, self.__version))
             for line in handle:
                 key, value = line.split()
@@ -101,16 +103,19 @@ class _InMemoryIndex(dict):
     def update(self, dict):
         self.__changed = 1
         dict.update(self, dict)
+
     def __setitem__(self, key, value):
         self.__changed = 1
         dict.__setitem__(self, key, value)
+
     def __delitem__(self, key):
         self.__changed = 1
         dict.__delitem__(self, key)
+
     def clear(self):
         self.__changed = 1
         dict.clear(self)
-            
+
     def __del__(self):
         if self.__changed:
             handle = open(self._indexname, 'w')
@@ -125,7 +130,7 @@ class _InMemoryIndex(dict):
         # a file that uses whitespace as delimiters.  Thus, I'm
         # going to pickle the object, and then convert each character of
         # the string to its ASCII integer value.  Then, I'm going to convert
-        # the integers into strings and join them together with commas. 
+        # the integers into strings and join them together with commas.
         # It's not the most efficient way of storing things, but it's
         # relatively fast.
         s = cPickle.dumps(obj)

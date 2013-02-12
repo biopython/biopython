@@ -10,7 +10,7 @@ from Bio.Nexus import Nexus, Trees
 class NexusTest1(unittest.TestCase):
     def setUp(self):
         self.testfile_dir = "Nexus"
-        self.handle = open(os.path.join(self.testfile_dir, 
+        self.handle = open(os.path.join(self.testfile_dir,
             "test_Nexus_input.nex"))
 
     def tearDown(self):
@@ -114,7 +114,7 @@ class NexusTest1(unittest.TestCase):
              "two":   [8, 9, 10, 11, 12, 13, 14, 15],
             })
         self.assertEqual(n.taxpartitions.keys(), ['taxpart'])
-        self.assertEqual(n.taxpartitions['taxpart'], 
+        self.assertEqual(n.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
                            't2 the name'],
@@ -209,14 +209,14 @@ class NexusTest1(unittest.TestCase):
         self.assertEqual(nf2.interleave, False)
         self.assertEqual(nf2.missing, "?")
         self.assertEqual(nf2.gap, "-")
-        self.assertEqual(nf2.taxlabels, ["t1", 
-                                         "t2 the name", 
-                                         "isn'that [a] strange name?", 
-                                         "one should be punished, for (that)!", 
-                                         "t5", 
-                                         "t6", 
-                                         "t7", 
-                                         "t8", 
+        self.assertEqual(nf2.taxlabels, ["t1",
+                                         "t2 the name",
+                                         "isn'that [a] strange name?",
+                                         "one should be punished, for (that)!",
+                                         "t5",
+                                         "t6",
+                                         "t7",
+                                         "t8",
                                          "t9"])
         self.assertEqual(nf2.charlabels, {0: "a",
                                           1: "b",
@@ -303,7 +303,6 @@ usertype matrix_test stepmatrix=5
 ;
 """)
 
-
     def test_TreeTest1(self):
         """Test Tree module."""
         n=Nexus.Nexus(self.handle)
@@ -324,7 +323,7 @@ usertype matrix_test stepmatrix=5
                 sys.stdout.reset()
                 output = sys.stdout.read()
         finally:
-            sys.stdout = stdout 
+            sys.stdout = stdout
         expected = """\
   #                            taxon            prev            succ    brlen blen (sum)  support              comment
   1    'isn''that [a] strange name?'               2              []   100.00     119.84    10.00                    -

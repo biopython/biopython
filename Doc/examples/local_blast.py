@@ -30,7 +30,7 @@ while 1:
 
     if b_record is None:
         break
-    
+
     E_VALUE_THRESH = 0.04
     for alignment in b_record.alignments:
         for hsp in alignment.hsps:
@@ -44,9 +44,7 @@ while 1:
                     dots = '...'
                 else:
                     dots = ''
-                
+
                 print hsp.query[0:75] + dots
                 print hsp.match[0:75] + dots
                 print hsp.sbjct[0:75] + dots
-
-

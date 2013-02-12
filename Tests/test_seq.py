@@ -12,9 +12,9 @@ from Bio.Data.CodonTable import TranslationError
 
 
 if sys.version_info[0] == 3:
-   array_indicator = "u"
+    array_indicator = "u"
 else:
-   array_indicator = "c"
+    array_indicator = "c"
 
 print
 print "Testing Seq"
@@ -76,7 +76,7 @@ for test_seq in [string_seq]:
 
     print test_seq[0]
     print repr(test_seq[1:5])
-    
+
     test_seq[1:3] = "GAT"
     print "Set slice with string:", repr(test_seq)
     test_seq[1:3] = test_seq[5:7]
@@ -115,7 +115,6 @@ for test_seq in [string_seq]:
     print "Reversed Seq:", repr(test_seq)
 
     print "Reverse using -1 stride:", repr(test_seq[::-1])
-    
 
     test_seq.extend("GAT")
     test_seq.extend(MutableSeq("TTT", IUPAC.ambiguous_dna))
@@ -128,7 +127,7 @@ for test_seq in [string_seq]:
     print repr(test_seq[0::3])
     print repr(test_seq[1::3])
     print repr(test_seq[2::3])
-    
+
     print "Setting wobble codon to N (set slice with stride 3):"
     test_seq[2::3] = "N" * len(test_seq[2::3])
     print repr(test_seq)
@@ -222,7 +221,8 @@ print
 print "Testing Seq string methods"
 print "=========================="
 for a in dna + rna + nuc + protein:
-    if not isinstance(a, Seq.Seq) : continue
+    if not isinstance(a, Seq.Seq):
+        continue
     assert str(a.strip()) == str(a).strip()
     assert str(a.lstrip()) == str(a).lstrip()
     assert str(a.rstrip()) == str(a).rstrip()
@@ -248,9 +248,9 @@ for a in dna + rna + nuc + protein:
         print str(a.strip(b))
         assert False, "Alphabet should have clashed!"
     except TypeError:
-        pass #Good!
-            
-    for chars in  test_chars:
+        pass  # Good!
+
+    for chars in test_chars:
         str_chars = str(chars)
         assert str(a.strip(chars)) == str(a).strip(str_chars)
         assert str(a.lstrip(chars)) == str(a).lstrip(str_chars)
@@ -282,14 +282,16 @@ print "=============================="
 assert "-" not in ambiguous_dna_values
 assert "?" not in ambiguous_dna_values
 
+
 def complement(sequence):
     #TODO - Add a complement function to Bio/Seq.py?
     #There is already a complement method on the Seq and MutableSeq objects.
     return Seq.reverse_complement(sequence)[::-1]
 
+
 def sorted_dict(d):
     """A sorted repr of a dictionary."""
-    return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v)) \
+    return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v))
                               for k,v in sorted(d.iteritems()))
 
 print
@@ -300,12 +302,12 @@ for ambig_char, values in sorted(ambiguous_dna_values.iteritems()):
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
     assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
-    
+
 print
 print "RNA Ambiguity mapping:", sorted_dict(ambiguous_rna_values)
 print "RNA Complement mapping:", sorted_dict(ambiguous_rna_complement)
 for ambig_char, values in sorted(ambiguous_rna_values.iteritems()):
-    compl_values = complement(values).replace("T","U") #need to help as no alphabet
+    compl_values = complement(values).replace("T","U")  # need to help as no alphabet
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char])
     assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
@@ -340,17 +342,17 @@ test_seqs = [s,t,u,
              #Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
              #Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
              #Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
-             #Seq.Seq("AWGAARCKG", Alphabet.generic_dna), 
-             Seq.Seq("AUGAAACUG", Alphabet.generic_rna), 
-             Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna), 
+             #Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
+             Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+             Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
              Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
-             Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna), 
-             Seq.Seq("AUGAAACUG", Alphabet.generic_rna), 
+             Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
+             Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
              Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna,"=")),
              Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
              Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
              Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
-             Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide), #U and T
+             Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide),  # U and T
              Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
              Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
              Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein)]
@@ -370,7 +372,6 @@ for nucleotide_seq in test_seqs:
             assert not isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet)
         if "T" in str(nucleotide_seq).upper():
             assert not isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
-            
 
 print
 print "Transcribe DNA into RNA"
@@ -398,7 +399,8 @@ for s in protein_seqs:
         assert False, "Transcription shouldn't work on a protein!"
     except ValueError:
         pass
-    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    if not isinstance(s, Seq.Seq):
+        continue  # Only Seq has this method
     try:
         print s.transcribe()
         assert False, "Transcription shouldn't work on a protein!"
@@ -424,20 +426,21 @@ for nucleotide_seq in test_seqs:
             assert repr(expected) == repr(nucleotide_seq.back_transcribe())
         except ValueError:
             assert expected is None
-            
+
 for s in protein_seqs:
     try:
         print Seq.back_transcribe(s)
         assert False, "Back transcription shouldn't work on a protein!"
     except ValueError:
         pass
-    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    if not isinstance(s, Seq.Seq):
+        continue  # Only Seq has this method
     try:
         print s.back_transcribe()
         assert False, "Back transcription shouldn't work on a protein!"
     except ValueError:
         pass
-        
+
 print
 print "Reverse Complement"
 print "=================="
@@ -476,7 +479,7 @@ for s in protein_seqs:
         assert False, "Reverse complement shouldn't work on a protein!"
     except ValueError:
         pass
-   
+
 print
 print "Translating"
 print "==========="
@@ -515,7 +518,8 @@ for s in protein_seqs:
         assert False, "Translation shouldn't work on a protein!"
     except ValueError:
         pass
-    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    if not isinstance(s, Seq.Seq):
+        continue  # Only Seq has this method
     try:
         print s.translate()
         assert False, "Translation shouldn't work on a protein!"
@@ -532,11 +536,11 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table=1))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table="SGC0"))
     assert "**W**" == str(Seq.translate(nucleotide_seq, table=2))
-    assert "**WRR" == str(Seq.translate(nucleotide_seq, \
+    assert "**WRR" == str(Seq.translate(nucleotide_seq,
                                         table='Yeast Mitochondrial'))
     assert "**WSS" == str(Seq.translate(nucleotide_seq, table=5))
     assert "**WSS" == str(Seq.translate(nucleotide_seq, table=9))
-    assert "**CRR" == str(Seq.translate(nucleotide_seq, \
+    assert "**CRR" == str(Seq.translate(nucleotide_seq,
                                         table='Euplotid Nuclear'))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table=11))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
@@ -575,9 +579,9 @@ ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
 for c1 in ambig:
     for c2 in ambig:
         for c3 in ambig:
-            values = set([Seq.translate(a+b+c, table=1) \
-                          for a in ambiguous_dna_values[c1] \
-                          for b in ambiguous_dna_values[c2] \
+            values = set([Seq.translate(a+b+c, table=1)
+                          for a in ambiguous_dna_values[c1]
+                          for b in ambiguous_dna_values[c2]
                           for c in ambiguous_dna_values[c3]])
             t = Seq.translate(c1+c2+c3)
             if t=="*":
@@ -612,7 +616,7 @@ for nucleotide_seq in test_seqs:
         except ValueError, e:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , str(e))
-        
+
 print
 print "Seq's .reverse_complement() method"
 print "=================================="

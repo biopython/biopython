@@ -32,9 +32,11 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
+
 
 def gzip_open(filename, format):
     #At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
@@ -43,7 +45,7 @@ def gzip_open(filename, format):
     if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
         return gzip.open(filename)
     handle = gzip.open(filename)
-    data = handle.read() #bytes!
+    data = handle.read()  # bytes!
     handle.close()
     return StringIO(_bytes_to_string(data))
 
@@ -103,7 +105,7 @@ class IndexDictTests(unittest.TestCase):
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict._proxy._handle.close() #TODO - Better solution
+        rec_dict._proxy._handle.close()  # TODO - Better solution
         del rec_dict
 
         if not sqlite3:
@@ -135,7 +137,7 @@ class IndexDictTests(unittest.TestCase):
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload it...
@@ -143,17 +145,17 @@ class IndexDictTests(unittest.TestCase):
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
         os.remove(index_tmp)
-    
+
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
@@ -166,7 +168,7 @@ class IndexDictTests(unittest.TestCase):
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict._proxy._handle.close() #TODO - Better solution
+        rec_dict._proxy._handle.close()  # TODO - Better solution
         del rec_dict
 
         if not sqlite3:
@@ -194,7 +196,7 @@ class IndexDictTests(unittest.TestCase):
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload it...
@@ -202,7 +204,7 @@ class IndexDictTests(unittest.TestCase):
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
@@ -210,11 +212,11 @@ class IndexDictTests(unittest.TestCase):
                                   key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
         os.remove(index_tmp)
         #Done
-    
+
     def check_dict_methods(self, rec_dict, keys, ids):
         self.assertEqual(set(keys), set(rec_dict.keys()))
         #This is redundant, I just want to make sure len works:
@@ -270,14 +272,14 @@ class IndexDictTests(unittest.TestCase):
             raw_file = h.read()
             h.close()
             h = gzip_open(filename, format)
-            id_list = [rec.id.lower() for rec in \
+            id_list = [rec.id.lower() for rec in
                        SeqIO.parse(h, format, alphabet)]
             h.close()
         else:
             h = open(filename, "rb")
             raw_file = h.read()
             h.close()
-            id_list = [rec.id.lower() for rec in \
+            id_list = [rec.id.lower() for rec in
                        SeqIO.parse(filename, format, alphabet)]
         rec_dict = SeqIO.index(filename, format, alphabet,
                                key_function = lambda x : x.lower())
@@ -329,7 +331,7 @@ class IndexDictTests(unittest.TestCase):
             else:
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
-        rec_dict._proxy._handle.close() #TODO - Better solution
+        rec_dict._proxy._handle.close()  # TODO - Better solution
         del rec_dict
 
     if sqlite3:
@@ -363,7 +365,7 @@ tests = [
     ("EMBL/epo_prt_selection.embl", "embl", None),
     ("EMBL/U87107.embl", "embl", None),
     ("EMBL/TRBG361.embl", "embl", None),
-    ("EMBL/A04195.imgt", "embl", None), #Not a proper EMBL file, an IMGT file
+    ("EMBL/A04195.imgt", "embl", None),  # Not a proper EMBL file, an IMGT file
     ("EMBL/A04195.imgt", "imgt", None),
     ("GenBank/NC_000932.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.faa", "fasta", generic_protein),
@@ -412,7 +414,7 @@ for filename, format, alphabet in tests:
             f = lambda x : x.simple_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
-        setattr(IndexDictTests, "test_%s_%s_simple" \
+        setattr(IndexDictTests, "test_%s_%s_simple"
                     % (format, filename.replace("/","_").replace(".","_")),
                 funct(filename, format, alphabet, comp))
         del funct
@@ -421,7 +423,7 @@ for filename, format, alphabet in tests:
             f = lambda x : x.key_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
-        setattr(IndexDictTests, "test_%s_%s_keyf" \
+        setattr(IndexDictTests, "test_%s_%s_keyf"
                     % (format, filename.replace("/","_").replace(".","_")),
                 funct(filename, format, alphabet, comp))
         del funct
@@ -430,7 +432,7 @@ for filename, format, alphabet in tests:
             f = lambda x : x.get_raw_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
-        setattr(IndexDictTests, "test_%s_%s_get_raw" \
+        setattr(IndexDictTests, "test_%s_%s_get_raw"
                     % (format, filename.replace("/","_").replace(".","_")),
                 funct(filename, format, alphabet, comp))
         del funct

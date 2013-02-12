@@ -136,12 +136,15 @@ unambiguous_rna_weights = {
 }
 unambiguous_rna_weight_ranges = _make_ranges(unambiguous_rna_weights)
 
+
 def _make_ambiguous_ranges(mydict, weight_table):
     range_d = {}
     avg_d = {}
     for letter, values in mydict.iteritems():
         #Following line is a quick hack to skip undefined weights for U and O
-        if len(values)==1 and values[0] not in weight_table : continue
+        if len(values) == 1 and values[0] not in weight_table:
+            continue
+
         weights = map(weight_table.get, values)
         range_d[letter] = (min(weights), max(weights))
         total_w = 0.0
@@ -183,6 +186,29 @@ protein_weights = {
     "Y": 181.19
     }
 
+monoisotopic_protein_weights = {
+    "A": 89.05,
+    "C": 121.02,
+    "D": 133.04,
+    "E": 147.05,
+    "F": 165.08,
+    "G": 75.03,
+    "H": 155.07,
+    "I": 131.09,
+    "K": 146.11,
+    "L": 131.09,
+    "M": 149.05,
+    "N": 132.05,
+    "P": 115.06,
+    "Q": 146.07,
+    "R": 174.11,
+    "S": 105.04,
+    "T": 119.06,
+    "V": 117.08,
+    "W": 204.09,
+    "Y": 181.07,
+    }
+
 extended_protein_values = {
     "A": "A",
     "B": "ND",
@@ -213,7 +239,7 @@ extended_protein_values = {
     "Y": "Y",
     "Z": "QE",
 }
-    
+
 protein_weight_ranges = _make_ranges(protein_weights)
 
 extended_protein_weight_ranges, avg_extended_protein_weights = \
@@ -258,7 +284,7 @@ atom_weights = {
     'Ge' :  72.64,
     'As' :  74.92160,
     'Se' :  78.96,
-    'Br' :  79.904,   
+    'Br' :  79.904,
     'Kr' :  83.80,
     'Rb' :  85.4678,
     'Sr' :  87.62,
@@ -332,5 +358,5 @@ atom_weights = {
     'Sg' : 266.12,
     'Bh' : 264.12,
     'Hs' : 269.13,
-    'Mt' : 268.14,    
+    'Mt' : 268.14,
 }

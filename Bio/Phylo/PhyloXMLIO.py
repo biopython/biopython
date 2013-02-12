@@ -22,16 +22,16 @@ import sys
 
 from Bio.Phylo import PhyloXML as PX
 
-if (3, 0, 0) <= sys.version_info[:3] <= (3, 1, 3):
-    # Workaround for cElementTree regression in python 3.0--3.1.3
-    # See http://bugs.python.org/issue9257
-    from xml.etree import ElementTree
-else:
-    try:
-        from xml.etree import cElementTree as ElementTree
-    except ImportError:
-        # Alternative Python implementation, perhaps?
+#For speed try to use cElementTree rather than ElementTree
+try:
+    if (3, 0) <= sys.version_info[:2] <= (3, 1):
+        # Workaround for bug in python 3.0 and 3.1,
+        # see http://bugs.python.org/issue9257
         from xml.etree import ElementTree as ElementTree
+    else:
+        from xml.etree import cElementTree as ElementTree
+except ImportError:
+    from xml.etree import ElementTree as ElementTree
 
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
@@ -77,6 +77,7 @@ def read(file):
     """
     return Parser(file).read()
 
+
 def parse(file):
     """Iterate over the phylogenetic trees in a phyloXML file.
 
@@ -86,6 +87,7 @@ def parse(file):
     :returns: a generator of `Bio.Phylo.PhyloXML.Phylogeny` objects.
     """
     return Parser(file).parse()
+
 
 def write(obj, file, encoding='utf-8', indent=True):
     """Write a phyloXML file.
@@ -132,6 +134,7 @@ def _local(tag):
         return tag[tag.index('}')+1:]
     return tag
 
+
 def _split_namespace(tag):
     """Split a tag into namespace and local tag strings."""
     try:
@@ -139,9 +142,11 @@ def _split_namespace(tag):
     except:
         return ('', tag)
 
+
 def _ns(tag, namespace=NAMESPACES['phy']):
     """Format an XML tag with the given namespace."""
     return '{%s}%s' % (namespace, tag)
+
 
 def _get_child_as(parent, tag, construct):
     """Find a child node by tag, and pass it through a constructor.
@@ -152,6 +157,7 @@ def _get_child_as(parent, tag, construct):
     if child is not None:
         return construct(child)
 
+
 def _get_child_text(parent, tag, construct=unicode):
     """Find a child node by tag; pass its text through a constructor.
 
@@ -161,22 +167,25 @@ def _get_child_text(parent, tag, construct=unicode):
     if child is not None and child.text:
         return construct(child.text)
 
+
 def _get_children_as(parent, tag, construct):
     """Find child nodes by tag; pass each through a constructor.
 
     Returns an empty list if no matching child is found.
     """
-    return [construct(child) for child in 
+    return [construct(child) for child in
             parent.findall(_ns(tag))]
+
 
 def _get_children_text(parent, tag, construct=unicode):
     """Find child nodes by tag; pass each node's text through a constructor.
 
     Returns an empty list if no matching child is found.
     """
-    return [construct(child.text) for child in 
+    return [construct(child.text) for child in
             parent.findall(_ns(tag))
             if child.text]
+
 
 def _indent(elem, level=0):
     """Add line breaks and indentation to ElementTree in-place.
@@ -204,12 +213,14 @@ def _indent(elem, level=0):
 # INPUT
 # ---------------------------------------------------------
 
+
 def _str2bool(text):
     if text == 'true':
         return True
     if text == 'false':
         return False
     raise ValueError('String could not be converted to boolean: ' + text)
+
 
 def _dict_str2bool(dct, keys):
     out = dct.copy()
@@ -218,6 +229,7 @@ def _dict_str2bool(dct, keys):
             out[key] = _str2bool(out[key])
     return out
 
+
 def _int(text):
     if text is not None:
         try:
@@ -225,12 +237,14 @@ def _int(text):
         except Exception:
             return None
 
+
 def _float(text):
     if text is not None:
         try:
             return float(text)
         except Exception:
             return None
+
 
 def _collapse_wspace(text):
     """Replace all spans of whitespace with a single space character.
@@ -241,6 +255,7 @@ def _collapse_wspace(text):
     """
     if text is not None:
         return ' '.join(text.split())
+
 
 # NB: Not currently used
 def _replace_wspace(text):
@@ -430,7 +445,7 @@ class Parser(object):
                     setattr(sequence, tag, getattr(self, tag)(elem))
                 elif tag == 'annotation':
                     sequence.annotations.append(self.annotation(elem))
-                elif tag == 'name': 
+                elif tag == 'name':
                     sequence.name = _collapse_wspace(elem.text)
                 elif tag in ('symbol', 'location'):
                     setattr(sequence, tag, elem.text)
@@ -589,7 +604,6 @@ class Parser(object):
         return PX.Uri(elem.text.strip(),
                 desc=_collapse_wspace(elem.get('desc')),
                 type=elem.get('type'))
-
 
 
 # ---------------------------------------------------------
@@ -856,4 +870,3 @@ class Writer(object):
     symbol = _handle_simple('symbol')
     synonym = _handle_simple('synonym')
     type = _handle_simple('type')
-

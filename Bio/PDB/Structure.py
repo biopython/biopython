@@ -1,7 +1,7 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package.  
+# as part of this package.
 
 """The structure class, representing a macromolecular structure."""
 
@@ -27,7 +27,7 @@ class Structure(Entity):
         """Sort models.
 
         This sorting function sorts the Model instances in the Structure instance.
-        The sorting is done based on the model id, which is a simple int that 
+        The sorting is done based on the model id, which is a simple int that
         reflects the order of the models in the PDB file.
 
         Arguments:
@@ -35,7 +35,7 @@ class Structure(Entity):
         """
         return cmp(m1.get_id(), m2.get_id())
 
-    # Public 
+    # Public
 
     def get_chains(self):
         for m in self:
@@ -51,5 +51,3 @@ class Structure(Entity):
         for r in self.get_residues():
             for a in r:
                 yield a
-        
-

@@ -1,7 +1,7 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package.  
+# as part of this package.
 
 """Chain class, used in Structure objects."""
 
@@ -19,7 +19,7 @@ class Chain(Entity):
         """Sort function for residues in a chain
 
         Residues are first sorted according to their hetatm records.
-        Protein and nucleic acid residues first, hetatm residues next, 
+        Protein and nucleic acid residues first, hetatm residues next,
         and waters last. Within each group, the residues are sorted according
         to their resseq's (sequence identifiers). Finally, residues with the
         same resseq's are sorted according to icode.
@@ -37,28 +37,28 @@ class Chain(Entity):
 
     def _translate_id(self, id):
         """
-        A residue id is normally a tuple (hetero flag, sequence identifier, 
-        insertion code). Since for most residues the hetero flag and the 
-        insertion code are blank (i.e. " "), you can just use the sequence 
+        A residue id is normally a tuple (hetero flag, sequence identifier,
+        insertion code). Since for most residues the hetero flag and the
+        insertion code are blank (i.e. " "), you can just use the sequence
         identifier to index a residue in a chain. The _translate_id method
         translates the sequence identifier to the (" ", sequence identifier,
-        " ") tuple. 
+        " ") tuple.
 
         Arguments:
-        o id - int, residue resseq 
+        o id - int, residue resseq
         """
         if isinstance(id, int):
             id=(' ', id, ' ')
         return id
-            
-    # Special methods   
+
+    # Special methods
 
     def __getitem__(self, id):
         """Return the residue with given id.
 
-        The id of a residue is (hetero flag, sequence identifier, insertion code). 
+        The id of a residue is (hetero flag, sequence identifier, insertion code).
         If id is an int, it is translated to (" ", id, " ") by the _translate_id
-        method. 
+        method.
 
         Arguments:
         o id - (string, int, string) or int
@@ -92,7 +92,7 @@ class Chain(Entity):
         """Return a list of undisordered residues.
 
         Some Residue objects hide several disordered residues
-        (DisorderedResidue objects). This method unpacks them, 
+        (DisorderedResidue objects). This method unpacks them,
         ie. it returns a list of simple Residue objects.
         """
         unpacked_list=[]
@@ -117,7 +117,6 @@ class Chain(Entity):
         id=self._translate_id(id)
         return Entity.has_id(self, id)
 
-
     # Public
 
     def get_residues(self):
@@ -128,4 +127,3 @@ class Chain(Entity):
         for r in self:
             for a in r:
                 yield a
-

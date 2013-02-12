@@ -49,6 +49,7 @@ import re
 #------------------------------------------------------------
 # FeatureSet
 
+
 class FeatureSet(object):
     """ FeatureSet
 
@@ -67,10 +68,10 @@ class FeatureSet(object):
                         passed value in all features in the set
 
         o get_features(self)    Returns a list of Features from the set
-    
+
         o get_ids(self)     Returns a list of unique ids for features in the set
 
-        o range(self)       Returns the range of bases covered by features in 
+        o range(self)       Returns the range of bases covered by features in
                             the set
 
         o to_string(self, verbose=0)    Returns a string describing the set
@@ -100,7 +101,6 @@ class FeatureSet(object):
         self.features = {}     # Holds features, keyed by ID
         self.name = name        # String describing the set
 
-
     def add_feature(self, feature, **kwargs):
         """ add_feature(self, feature, **args)
 
@@ -108,7 +108,6 @@ class FeatureSet(object):
 
             o **kwargs      Keyword arguments for Feature.  Named attributes
                             of the Feature
-                                                        
 
             Add a Bio.SeqFeature object to the diagram (will be stored
             internally in a Feature wrapper
@@ -138,7 +137,6 @@ class FeatureSet(object):
         """
         del self.features[feature_id]
 
-
     def set_all_features(self, attr, value):
         """ set_all_features(self, attr, value)
 
@@ -152,7 +150,7 @@ class FeatureSet(object):
         changed = 0
         for feature in self.features.values():
             # If the feature has the attribute, and the value should change
-            if hasattr(feature, attr):    
+            if hasattr(feature, attr):
                 if getattr(feature, attr) != value:
                     setattr(feature, attr, value) # set it to the passed value
 
@@ -160,7 +158,6 @@ class FeatureSet(object):
         #As a quick hack, make "colour" set both "colour" and "color".
         #if attr=="colour":
         #    self.set_all_feature("color",value)
-
 
     def get_features(self, attribute=None, value=None, comparator=None):
         """ get_features(self, attribute=None, value=None, comparator=None) ->
@@ -172,7 +169,7 @@ class FeatureSet(object):
 
             o comparator       String, how to compare the Feature attribute to the
                                passed value
-            
+
             If no attribute or value is given, return a list of all features in the
             feature set.  If both an attribute and value are given, then depending
             on the comparator, then a list of all features in the FeatureSet
@@ -188,27 +185,25 @@ class FeatureSet(object):
         # If no comparator is specified, return all features where the attribute
         # value matches that passed
         if comparator is None:
-            return [feature for feature in self.features.values() if\
+            return [feature for feature in self.features.values() if
                     getattr(feature, attribute) == value]
         # If the comparator is 'not', return all features where the attribute
         # value does not match that passed
         elif comparator == 'not':
-            return [feature for feature in self.features.values() if\
+            return [feature for feature in self.features.values() if
                     getattr(feature, attribute) != value]
         # If the comparator is 'startswith', return all features where the attribute
         # value does not match that passed
         elif comparator == 'startswith':
-            return [feature for feature in self.features.values() if\
+            return [feature for feature in self.features.values() if
                     getattr(feature, attribute).startswith(value)]
         # If the comparator is 'like', use a regular expression search to identify
         # features
         elif comparator == 'like':
-            return [feature for feature in self.features.values() if\
+            return [feature for feature in self.features.values() if
                     re.search(value, getattr(feature, attribute))]
         # As a final option, just return an empty list
         return []
-
-
 
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
@@ -216,7 +211,6 @@ class FeatureSet(object):
             Return a list of all ids for the feature set
         """
         return self.features.keys()
-
 
     def range(self):
         """ range(self)
@@ -228,15 +222,14 @@ class FeatureSet(object):
             for start, end in feature.locations:
                 lows.append(start)
                 highs.append(end)
-        if len(lows) != 0 and len(highs) != 0:      # Default in case there is 
+        if len(lows) != 0 and len(highs) != 0:      # Default in case there is
             return (min(lows), max(highs))          # nothing in the set
         return 0, 0
-
 
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""
 
-            o verbose       Boolean indicating whether a short or complete 
+            o verbose       Boolean indicating whether a short or complete
                             account of the set is required
 
             Returns a formatted string with information about the set
@@ -257,7 +250,6 @@ class FeatureSet(object):
         """
         return len(self.features)
 
-
     def __getitem__(self, key):
         """ __getitem__(self, key) -> Feature
 
@@ -265,13 +257,12 @@ class FeatureSet(object):
         """
         return self.features[key]
 
-
     def __str__(self):
         """ __str__(self) -> ""
 
             Returns a formatted string with information about the feature set
         """
-        outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name, 
+        outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name,
                                               len(self.features))]
         return "\n".join(outstr)
 
@@ -281,7 +272,7 @@ class FeatureSet(object):
 
 if __name__ == '__main__':
     from Bio import SeqIO
-    
+
     genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
     # Test code
@@ -297,5 +288,4 @@ if __name__ == '__main__':
     #print gdfs.get_features()
     #for feature in gdfs.get_features():
     #    print feature.id, feature.start, feature.end
-    #print gdfs[500]   
-    
+    #print gdfs[500]

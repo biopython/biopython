@@ -1,9 +1,8 @@
-from Bio import FSSP, Align
+from Bio import FSSP
 from Bio.FSSP import FSSPTools
 import sys
 import os
 import cPickle
-import time
 
 test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
@@ -45,10 +44,9 @@ ks = sum_newnames.keys()
 ks.sort()
 for key in ks:
     f.write("%s : %s\n" % (key, sum_newnames[key]))
-    
+
 dict = align_newnames['0P168'].pos_align_dict
 ks = dict.keys()
 ks.sort()
 for key in ks:
     f.write("%s : %s\n" % (key, dict[key]))
-

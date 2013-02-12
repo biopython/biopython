@@ -1,0 +1,56 @@
+
+seed used = 1105670833
+
+BASEML (in paml version 4.1, August 2008)  Alignments/alignment.phylip  TN93 dGamma (ncatG=5)
+nparK:   3  K:   5
+
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.2027 0.1622 0.3694 0.2658
+Pan_troglo                     0.1982 0.1667 0.3694 0.2658
+Gorilla_go                     0.2072 0.1577 0.3694 0.2658
+Pongo_pygm                     0.2027 0.1622 0.3694 0.2658
+Macaca_mul                     0.1937 0.1667 0.3739 0.2658
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.200901 0.163063 0.370270 0.265766
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances: TN93 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo         0.0047(999.0000)
+Gorilla_go         0.0047(999.0000)  0.0097(999.0000)
+Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
+Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 29):   -320.887909   +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+  0.00000  0.00000  0.00000  0.00453  0.00455  0.00000  0.00921 21.54083  0.00001  0.99968  0.99952  0.99946  1.00102  0.15871  0.16779  0.19103  0.25008  0.16093  0.16960  0.19159  0.24631  0.16610  0.17374  0.19274  0.23775  0.17682  0.18208  0.19454  0.22097
+
+tree length =   0.01829
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004535): 0.000000, Gorilla_go: 0.004545): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009207);
+
+Detailed output identifying parameters
+
+Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
+ 21.54083  0.00001
+
+rate:  0.99968  0.99952  0.99946  1.00102  1.00032
+freq:  0.20000  0.20000  0.20000  0.20000  0.20000
+transition probabilities between rate categories:
+  0.15871  0.16779  0.19103  0.25008  0.23238
+  0.16093  0.16960  0.19159  0.24631  0.23157
+  0.16610  0.17374  0.19274  0.23775  0.22967
+  0.17682  0.18208  0.19454  0.22097  0.22559
+  0.33744  0.30679  0.23010  0.04488  0.08079
+
+check convergence..

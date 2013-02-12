@@ -1,0 +1,8 @@
+psLayout version 3
+
+match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
+     	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+15	0	0	0	0	0	0	0	-	blat_1	87	41	56	chr9	141213431	38245112	38245127	1	15,	31,	38245112,	cctgaacagggtaaa,	cctgaacagggtaaa,
+22	0	0	0	1	3	1	4	-	blat_1	87	42	67	chr11	135006516	59018929	59018955	2	6,16,	20,29,	59018929,59018939,	tatagt,ctcctgaacagggtaa,	tatagt,ctcctgaacagggtaa,
+15	0	0	0	0	0	0	0	-	blat_1	87	39	54	chr11	135006516	132496048	132496063	1	15,	33,	132496048,	tgaacagggtaaaat,	tgaacagggtaaaat,

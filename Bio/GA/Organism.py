@@ -1,12 +1,13 @@
 """Deal with an Organism in a Genetic Algorithm population.
 """
 # standard modules
-import sys #for Python 3 hack
+import sys  # for Python 3 hack
 import random
 import array
 
 # Sequence objects from Biopython
 from Bio.Seq import MutableSeq
+
 
 def function_population(new_genome, num_organisms, fitness_calculator):
     """Generate a population given a function to create genomes
@@ -19,7 +20,7 @@ def function_population(new_genome, num_organisms, fitness_calculator):
 
     o num_organisms - The number of individuals we want in the population.
 
-    o fitness_calculator -- A funtion that will calculate the fitness
+    o fitness_calculator -- A function that will calculate the fitness
     of the organism when given the organisms genome.
     """
     all_orgs = []
@@ -29,6 +30,7 @@ def function_population(new_genome, num_organisms, fitness_calculator):
         all_orgs.append(Organism(cur_genome, fitness_calculator))
 
     return all_orgs
+
 
 def random_population(genome_alphabet, genome_size, num_organisms,
                       fitness_calculator):
@@ -44,7 +46,7 @@ def random_population(genome_alphabet, genome_size, num_organisms,
 
     o num_organism -- The number of organisms we want in the population.
 
-    o fitness_calculator -- A funtion that will calculate the fitness
+    o fitness_calculator -- A function that will calculate the fitness
     of the organism when given the organisms genome.
     """
     all_orgs = []
@@ -53,17 +55,17 @@ def random_population(genome_alphabet, genome_size, num_organisms,
     letter_rand = random.Random()
 
     # figure out what type of characters are in the alphabet
-    if type(genome_alphabet.letters[0]) == type("A"):
+    if isinstance(genome_alphabet.letters[0], str):
         if sys.version_info[0] == 3:
-            alphabet_type = "u" #Use unicode string on Python 3
+            alphabet_type = "u"  # Use unicode string on Python 3
         else:
-            alphabet_type = "c" #Use byte string on Python 2
-    elif type(genome_alphabet.letters[0]) == type(1):
+            alphabet_type = "c"  # Use byte string on Python 2
+    elif isinstance(genome_alphabet.letters[0], int):
         alphabet_type = "i"
-    elif type(genome_alphabet.letters[0]) == type(1.0):
+    elif isinstance(genome_alphabet.letters[0], float):
         alphabet_type = "d"
     else:
-        raise ValueError(\
+        raise ValueError(
             "Alphabet type is unsupported: %s" % genome_alphabet.letters)
 
     for org_num in range(num_organisms):
@@ -78,6 +80,7 @@ def random_population(genome_alphabet, genome_size, num_organisms,
         all_orgs.append(Organism(new_genome, fitness_calculator))
 
     return all_orgs
+
 
 class Organism(object):
     """Represent a single individual in a population.
@@ -102,7 +105,7 @@ class Organism(object):
         o genome -- A MutableSeq object representing the sequence of the
         genome.
 
-        o fitness_calculator -- A funtion that will calculate the fitness
+        o fitness_calculator -- A function that will calculate the fitness
         of the organism when given the organisms genome.
 
         o start_fitness - the starting fitness corresponding with the
@@ -110,7 +113,7 @@ class Organism(object):
         using fitness_calculator.
         """
         assert isinstance(genome, MutableSeq), "Genome must be a MutableSeq"
-        
+
         self.genome = genome
         self._fitness_calc = fitness_calculator
 

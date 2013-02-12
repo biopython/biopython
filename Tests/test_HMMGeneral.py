@@ -17,16 +17,19 @@ from Bio.HMM import MarkovModel
 from Bio.HMM import DynamicProgramming
 from Bio.HMM import Trainer
 
+
 # create some simple alphabets
 class NumberAlphabet(Alphabet.Alphabet):
     """Numbers as the states of the model.
     """
     letters = ['1', '2']
 
+
 class LetterAlphabet(Alphabet.Alphabet):
     """Letters as the emissions of the model.
     """
     letters = ['A', 'B']
+
 
 # -- helper functions
 def test_assertion(name, result, expected):
@@ -34,7 +37,8 @@ def test_assertion(name, result, expected):
     """
     assert result == expected, "Expected %s, got %s for %s" \
            % (expected, result, name)
-    
+
+
 class MarkovModelBuilderTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
@@ -62,7 +66,6 @@ class MarkovModelBuilderTest(unittest.TestCase):
         test_assertion("Emission pseudo", self.mm_builder.emission_pseudo,
                            expected_emission_pseudo)
 
-
     def test_allow_all_transitions(self):
         """Testing allow_all_transitions.
         """
@@ -76,10 +79,9 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         test_assertion("Probabilities", self.mm_builder.transition_prob,
                        expected_prob)
-        
+
         test_assertion("Pseudo counts",  self.mm_builder.transition_pseudo,
                        expected_pseudo)
-
 
     def test_set_initial_probabilities(self):
         self.mm_builder.set_initial_probabilities({})
@@ -132,6 +134,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
                        len(self.mm_builder._state_alphabet.letters))
         # To test this more thoroughly, perhaps mock random.random() and
         # verify that it's being called as expected?
+
 
 class HiddenMarkovModelTest(unittest.TestCase):
     def setUp(self):
@@ -237,7 +240,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         prob_initial = [0.4, 0.6]
         self.mm_builder.set_initial_probabilities(
                 {'1': prob_initial[0], '2': prob_initial[1]})
-        
+
         # set transition probabilities
         prob_transition = [[0.35, 0.65], [0.45, 0.55]]
         self.mm_builder.allow_transition('1', '1', prob_transition[0][0])
@@ -339,8 +342,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # the most probable path must be from state 1 to state 2
         test_assertion("most probable path", str(seq), '12')
 
-        # The probability of that path is the probability of starting in 
-        # state 1, then emitting an A, then transitioning 1 -> 2, then 
+        # The probability of that path is the probability of starting in
+        # state 1, then emitting an A, then transitioning 1 -> 2, then
         # emitting a B.
         # Note that probabilities are converted into log space.
         expected_prob = math.log(prob_1_initial)\
@@ -349,6 +352,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         + math.log(prob_2_B)
         test_assertion("log probability of most probable path",
                        prob, expected_prob)
+
 
 class ScaledDPAlgorithmsTest(unittest.TestCase):
     def setUp(self):
@@ -367,7 +371,7 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
 
         # finally set up the DP
         self.dp = DynamicProgramming.ScaledDPAlgorithms(mm, training_seq)
-        
+
     def test_calculate_s_value(self):
         """Testing the calculation of s values.
         """
@@ -377,12 +381,13 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
 
         # print s_value
 
+
 class AbstractTrainerTest(unittest.TestCase):
     def setUp(self):
         # set up a bogus HMM and our trainer
         hmm = MarkovModel.HiddenMarkovModel({}, {}, {}, {}, {})
         self.test_trainer = Trainer.AbstractTrainer(hmm)
-    
+
     def test_ml_estimator(self):
         """Test the maximum likelihood estimator for simple cases.
         """

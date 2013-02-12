@@ -22,6 +22,7 @@ Classes:
 Record                Holds Prosite data.
 """
 
+
 def parse(handle):
     """Parse Prosite records.
 
@@ -34,6 +35,7 @@ def parse(handle):
         if not record:
             break
         yield record
+
 
 def read(handle):
     """Read one Prosite record.
@@ -50,6 +52,7 @@ def read(handle):
         raise ValueError("More than one Prosite record found")
     return record
 
+
 class Record(object):
     """Holds information from a Prosite record.
 
@@ -61,7 +64,7 @@ class Record(object):
     data_update    Date the 'primary' data was last updated.
     info_update    Date data other than 'primary' data was last updated.
     pdoc           ID of the PROSITE DOCumentation.
-    
+
     description    Free-format description.
     pattern        The PROSITE pattern.  See docs.
     matrix         List of strings that describes a matrix entry.
@@ -110,7 +113,7 @@ class Record(object):
         self.data_update = ''
         self.info_update = ''
         self.pdoc = ''
-    
+
         self.description = ''
         self.pattern = ''
         self.matrix = []
@@ -152,7 +155,7 @@ def __read(handle):
             record = Record()
             cols = value.split("; ")
             if len(cols) != 2:
-                raise ValueError("I don't understand identification line\n%s" \
+                raise ValueError("I don't understand identification line\n%s"
                          % line)
             record.name = cols[0]
             record.type = cols[1].rstrip('.')    # don't want '.'
@@ -194,7 +197,7 @@ def __read(handle):
                 elif qual in ['/TOTAL', '/POSITIVE', '/UNKNOWN', '/FALSE_POS']:
                     m = re.match(r'(\d+)\((\d+)\)', data)
                     if not m:
-                        raise Exception("Broken data %s in comment line\n%s" \
+                        raise Exception("Broken data %s in comment line\n%s"
                                         % (repr(data), line))
                     hits = tuple(map(int, m.groups()))
                     if(qual == "/TOTAL"):
@@ -206,7 +209,7 @@ def __read(handle):
                     elif(qual == "/FALSE_POS"):
                         record.nr_false_pos = hits
                 else:
-                    raise ValueError("Unknown qual %s in comment line\n%s" \
+                    raise ValueError("Unknown qual %s in comment line\n%s"
                                      % (repr(qual), line))
         elif keyword=='CC':
             #Expect CC lines like this:
@@ -247,7 +250,7 @@ def __read(handle):
                 elif qual == '/VERSION':
                     record.cc_version = data
                 else:
-                    raise ValueError("Unknown qual %s in comment line\n%s" \
+                    raise ValueError("Unknown qual %s in comment line\n%s"
                                      % (repr(qual), line))
         elif keyword=='DR':
             refs = value.split(";")

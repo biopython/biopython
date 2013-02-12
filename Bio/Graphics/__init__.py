@@ -4,7 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 ################################################################################
-"""Bio.Graphics offsers several graphical ouputs, all using ReportLab."""
+"""Bio.Graphics offers several graphical outputs, all using ReportLab."""
 
 # Check if ReportLab is installed.
 try:
@@ -12,16 +12,17 @@ try:
     del r
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError( \
+    raise MissingPythonDependencyError(
         "Please install ReportLab if you want "
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.org/downloads.html")
+
 
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
 # and the API quirks consistently.
 def _write(drawing, output_file, format, dpi=72):
-    """Helper function to standize output to files (PRIVATE).
+    """Helper function to standardize output to files (PRIVATE).
 
     Writes the provided drawing out to a file in a prescribed format.
 
@@ -61,7 +62,7 @@ def _write(drawing, output_file, format, dpi=72):
         #an attribute error...
         drawmethod = formatdict[format.upper()] # select drawing method
     except (KeyError,AttributeError):
-        raise ValueError("Output format should be one of %s" \
+        raise ValueError("Output format should be one of %s"
                          % ", ".join(formatdict))
 
     if drawmethod is None:

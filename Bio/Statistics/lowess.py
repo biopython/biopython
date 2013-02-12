@@ -30,7 +30,8 @@ except ImportError, x:
     # Use the median function in NumPy if Bio.Cluster is not available
     from numpy import median
 
-def lowess(x, y, f=2./3., iter=3):
+
+def lowess(x, y, f=2. / 3., iter=3):
     """lowess(x, y, f=2./3., iter=3) -> yest
 
     Lowess smoother: Robust locally weighted regression.
@@ -63,33 +64,34 @@ def lowess(x, y, f=2./3., iter=3):
     [4.85, ..., 84.98]
     """
     n = len(x)
-    r = int(numpy.ceil(f*n))
-    h = [numpy.sort(abs(x-x[i]))[r] for i in range(n)]
-    w = numpy.clip(abs(([x]-numpy.transpose([x]))/h),0.0,1.0)
-    w = 1-w*w*w
-    w = w*w*w
+    r = int(numpy.ceil(f * n))
+    h = [numpy.sort(abs(x - x[i]))[r] for i in range(n)]
+    w = numpy.clip(abs(([x] - numpy.transpose([x])) / h), 0.0, 1.0)
+    w = 1 - w * w * w
+    w = w * w * w
     yest = numpy.zeros(n)
     delta = numpy.ones(n)
     for iteration in range(iter):
         for i in xrange(n):
-            weights = delta * w[:,i]
+            weights = delta * w[:, i]
             weights_mul_x = weights * x
-            b1 = numpy.dot(weights,y)
-            b2 = numpy.dot(weights_mul_x,y)
+            b1 = numpy.dot(weights, y)
+            b2 = numpy.dot(weights_mul_x, y)
             A11 = sum(weights)
             A12 = sum(weights_mul_x)
             A21 = A12
-            A22 = numpy.dot(weights_mul_x,x)
-            determinant = A11*A22 - A12*A21
-            beta1 = (A22*b1-A12*b2) / determinant
-            beta2 = (A11*b2-A21*b1) / determinant
-            yest[i] = beta1 + beta2*x[i]
-        residuals = y-yest
+            A22 = numpy.dot(weights_mul_x, x)
+            determinant = A11 * A22 - A12 * A21
+            beta1 = (A22 * b1 - A12 * b2) / determinant
+            beta2 = (A11 * b2 - A21 * b1) / determinant
+            yest[i] = beta1 + beta2 * x[i]
+        residuals = y - yest
         s = median(abs(residuals))
-        delta[:] = numpy.clip(residuals/(6*s),-1,1)
-        delta[:] = 1-delta*delta
-        delta[:] = delta*delta
+        delta[:] = numpy.clip(residuals / (6 * s), -1, 1)
+        delta[:] = 1 - delta * delta
+        delta[:] = delta * delta
     return yest
+
 
 def _test():
     """Run the Bio.Statistics.lowess module's doctests."""

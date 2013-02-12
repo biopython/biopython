@@ -16,7 +16,6 @@ recursive-include Bio *.c      # Include all .c files.
 recursive-include Bio *.h      # Include headers to compile .c files.
 recursive-include Doc *.tex    # Include relevant documentation.
 recursive-include Doc *.pdf
-recursive-include Doc *.txt
 recursive-include Doc *.py
 recursive-include Doc *.html
 recursive-include Doc *.fasta

@@ -1,0 +1,144 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             ../sco_all_prots.fa
+# target HMM database:             ../biodata/Pfam-A.hmm
+# output directed to file:         ../sco_hmmscan.hsr
+# number of worker threads:        2
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       SCO3574  [L=354]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model         Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------      -----------
+    1.4e-19   70.2   0.6    4.9e-18   65.1   0.4    2.2  1  Abhydrolase_1 alpha/beta hydrolase fold
+    4.1e-07   29.4   0.0      1e-06   28.1   0.0    1.7  2  Hydrolase_4   Putative lysophospholipase
+  ------ inclusion threshold ------
+      0.017   13.3   0.0      0.032   12.4   0.0    1.4  1  AXE1          Acetyl xylan esterase (AXE1)
+      0.054   12.5   0.3       0.13   11.3   0.1    1.7  2  Esterase      Putative esterase
+      0.071   12.3   0.2        0.1   11.8   0.2    1.2  1  Abhydrolase_3 alpha/beta hydrolase fold
+
+
+Domain annotation for each model (and alignments):
+>> Abhydrolase_1  alpha/beta hydrolase fold
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   65.1   0.4   2.1e-21   4.9e-18       1     230 [.      77     346 ..      77     347 .. 0.87
+
+  Alignments for each domain:
+  == domain 1    score: 65.1 bits;  conditional E-value: 2.1e-21
+                    SEEEEEESCTTT--S.C...SGGGGGSHHHHHHHHHHHHHHSTSSSEEEEE-CT--HHHHHHHHHSGGGEEEEEEESBSS................ CS
+  Abhydrolase_1   1 fdviglDlrGvgySs.paggpelphyttddlakdleavldalglkkltlvGhSmGGmialayaaeypdrvkamvllgtva................ 79 
+                    f+ ++lD rG+g+Ss p      + y++ dl++d  av++alg  ++++vGh++G+ ia++ a+  pd ++a+ ll+ ++                
+        SCO3574  77 FRAVALDVRGYGRSSrP---DAVEAYRMLDLVADNVAVVEALGESSAVVVGHDWGANIAAHSALLRPDVFRAVGLLSVPYtppggprpseafagms 169
+                    7889***********67...999************************************************************************* PP
+
+                    ..............................HHHSCCSCCTTCHHHHHHHHHHHHHHHHHHHHHHHHCCCCHHHHHHHHHHCHHCCHCHHHHHHHHH CS
+  Abhydrolase_1  80 ..............................svlsdglssdvlnrgstltlladnvagrlskgikplqgdasvqaqsllrpqvtdflkrfdansyir 145
+                                                  + + +gl +++ +  +t +   d+ +  ++ +   ++ +++    s +r    + l++ d++ y+ 
+        SCO3574 170 dpagpfagqefyvsyfqepgraeaeiepdvRGWLAGLYAALSA--GTMPGPQDPDPH-FVAPGGRMRDRFP----SAGRL--PSWLTEEDLDVYAG 256
+                    **************99999999998865554444444444444..566777777777.7788888888888....77777..8999********** PP
+
+                    TEHHHHHHHCEH..HCHHHHHHHHHCCHHHTTTSCEEEEEETTTSSSHH..HHHHH.HHHHSTTEEEEEETTHHCTHHHHSHHHHHHHHH CS
+  Abhydrolase_1 146 egetraldgkll..aalgrdlvwdvtetlstilvptlvisgtdDplvpy..kasek.laelipksqlvvidgpgHlafldkpdeinkliv 230
+                    e+e+++l+g l+   ++ rd+ +   +   +i++p+l ++g  D  +++  +a+e+    l + s  +++dg+gH+++ ++p+e n+l++
+        SCO3574 257 EFERTGLTGALNryRNMDRDWADLAAHEGAPITQPSLFLGGALDASTTWlsDAIEAyPVTLPGLSASHLLDGCGHWLQQERPEETNRLLT 346
+                    ******************************************99955542245555347777779**********************987 PP
+
+>> Hydrolase_4  Putative lysophospholipase
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   28.1   0.0   4.3e-10     1e-06      17      75 ..      50     109 ..      40     113 .. 0.82
+   2 ?   -3.5   0.0       3.3   7.8e+03      38      48 ..     245     255 ..     242     276 .. 0.78
+
+  Alignments for each domain:
+  == domain 1    score: 28.1 bits;  conditional E-value: 4.3e-10
+  Hydrolase_4  17 aavvlvhglaEhsgrYqelaedLaaqGyavyayDhrGhGkseg.ergyvpsfddyvdDla 75 
+                   +v+lvhg+ E+   + +   +Laa+G++ +a+D rG G+s +    ++ ++ d+v D  
+      SCO3574  50 PLVLLVHGFPESWYSWRHQLPALAAAGFRAVALDVRGYGRSSRpDAVEAYRMLDLVADNV 109
+                  579**************************************8624556777777777755 PP
+
+  == domain 2    score: -3.5 bits;  conditional E-value: 3.3
+  Hydrolase_4  38 dLaaqGyavya 48 
+                  +L++++++vya
+      SCO3574 245 WLTEEDLDVYA 255
+                  57888888887 PP
+
+>> AXE1  Acetyl xylan esterase (AXE1)
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.4   0.0   1.4e-05     0.032      80     124 ..      46      91 ..      38     103 .. 0.85
+
+  Alignments for each domain:
+  == domain 1    score: 12.4 bits;  conditional E-value: 1.4e-05
+              ---B-EEEB----------HHHHH.HHHH---EEE--------..S CS
+     AXE1  80 eeklPalvefhGYegssgdwhdkl.kyaaaGyavvamdvRGqgges 124
+              ++  P+++  hG+ +s  +w  +l + aaaG+  va+dvRG g +s
+  SCO3574  46 QGSGPLVLLVHGFPESWYSWRHQLpALAAAGFRAVALDVRGYGRSS 91 
+              6789************9999999956899************99554 PP
+
+>> Esterase  Putative esterase
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   -2.3   0.0      0.78   1.9e+03      31     247 ..      56      71 ..      44      88 .. 0.66
+   2 ?   11.3   0.1   5.5e-05      0.13     103     150 ..     102     152 ..      98     190 .. 0.77
+
+  Alignments for each domain:
+  == domain 1    score: -2.3 bits;  conditional E-value: 0.78
+               ------TCHHHHHCHHHHHHHH...EEEEEESSE----S-TTSBTTS-....BB--SCCCCCCHBHHHHTHHHHHHHHHHSEECCE.EEEE--THHHHHHH CS
+  Esterase  31 DGltgwdqntrakelleslaaegeiaeviivvipaggessfysdwdlgarfyenategpgaeayetfltqeLlplldanfrtnpdgdravvGqSmGGlgAL 131
+               +G+                                                                                                  
+   SCO3574  56 HGF-------------------------------------------------------------------------------------------------- 58 
+               443.................................................................................................. PP
+
+               HHHHC-TTT-SEEEEES----CTCSH---TTCCHHHCT-HHHHHCGTCTTT-EEEEEEEE----CCCCTTHHHHHHHHHCHHCTCCCCEEEEE-TT--SSH CS
+  Esterase 132 ilalkhpdrFgsvssfSpivnpsnamWgpeekeawqegdpvllakelsasnkrlriyldvGtseddlgeqlsveilevlarnrelkeqlaargveghdhvy 232
+                                                                                                                    
+   SCO3574   - -----------------------------------------------------------------------------------------------------   -
+               ..................................................................................................... PP
+
+               H---STTTHHHHHHH CS
+  Esterase 233 dGghdweyWraqLia 247
+               +   +w  Wr+qL+a
+   SCO3574  59 P--ESWYSWRHQLPA 71 
+               3..455556666554 PP
+
+  == domain 2    score: 11.3 bits;  conditional E-value: 5.5e-05
+               HHHHHHHHSE.ECCE...EEEE--THHHHHHHHHHHC-TTT-SEEEEES-- CS
+  Esterase 103 lplldanfrt.npdgd..ravvGqSmGGlgALilalkhpdrFgsvssfSpi 150
+               l+l+++n  + ++ g+   +vvG+  G+ +A + al +pd F  v+ +S +
+   SCO3574 102 LDLVADNVAVvEALGEssAVVVGHDWGANIAAHSALLRPDVFRAVGLLSVP 152
+               55555555441333446689*****************************33 PP
+
+>> Abhydrolase_3  alpha/beta hydrolase fold
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   11.8   0.2   4.3e-05       0.1      28      95 ..      75     142 ..      61     196 .. 0.78
+
+  Alignments for each domain:
+  == domain 1    score: 11.8 bits;  conditional E-value: 4.3e-05
+                    HTSEEEEEE---TTTT-TTHHHHHHHHHHHHHHHTCC.CHTCCCCEEEEE-------HHHHHHHHHHH- CS
+  Abhydrolase_3  28 lgavvvsvdYrlAPehrfPaavedalaalrwlaeqaw.elgadpsrivvaGdSaGGnLaaavalrardr 95 
+                    +g ++v+ d r    +  P ave a+++l  +a++ +    +  s+ vv+G+  G+n+aa+ al   d 
+        SCO3574  75 AGFRAVALDVRGYGRSSRPDAVE-AYRMLDLVADNVAvVEALGESSAVVVGHDWGANIAAHSALLRPDV 142
+                    55566666666666666677775.788888999998866667789*****************9877664 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (354 residues)
+Target model(s):                       11912  (2158902 nodes)
+Passed MSV filter:                       170  (0.0142713); expected 238.2 (0.02)
+Passed bias filter:                      157  (0.01318); expected 238.2 (0.02)
+Passed Vit filter:                        31  (0.00260242); expected 11.9 (0.001)
+Passed Fwd filter:                         5  (0.000419745); expected 0.1 (1e-05)
+Initial search space (Z):              11912  [actual number of targets]
+Domain search space  (domZ):               5  [number of targets reported over threshold]
+# CPU time: 0.25u 0.18s 00:00:00.43 Elapsed: 00:00:00.24
+# Mc/sec: 3184.38
+//
+

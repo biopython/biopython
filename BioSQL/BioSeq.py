@@ -21,6 +21,7 @@ from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
+
 class DBSeq(Seq):  # This implements the biopython Seq interface
     def __init__(self, primary_id, adaptor, alphabet, start, length):
         """Create a new DBSeq object referring to a BioSQL entry.
@@ -36,8 +37,8 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
 
     def __len__(self):
         return self._length
-    
-    def __getitem__(self, index) :                 # Seq API requirement
+
+    def __getitem__(self, index):                 # Seq API requirement
         #Note since Python 2.0, __getslice__ is deprecated
         #and __getitem__ is used instead.
         #See http://docs.python.org/ref/sequence-methods.html
@@ -49,7 +50,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
                     raise IndexError(i)
                 i = i + self._length
             elif i >= self._length:
-                raise IndexError(i)            
+                raise IndexError(i)
             return self.adaptor.get_subseq_as_string(self.primary_id,
                                                      self.start + i,
                                                      self.start + i + 1)
@@ -96,7 +97,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
                                                      self.start + i,
                                                      self.start + j)
             return Seq(full[::index.step], self.alphabet)
-        
+
     def tostring(self):
         """Returns the full sequence as a python string.
 
@@ -105,6 +106,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,
                                                  self.start + self._length)
+
     def __str__(self):
         """Returns the full sequence as a python string."""
         return self.adaptor.get_subseq_as_string(self.primary_id,
@@ -135,10 +137,11 @@ def _retrieve_seq(adaptor, primary_id):
     #but length will be populated.  This means length(seq)
     #will return None.
     seqs = adaptor.execute_and_fetchall(
-        "SELECT alphabet, length, length(seq) FROM biosequence" \
+        "SELECT alphabet, length, length(seq) FROM biosequence"
         " WHERE bioentry_id = %s", (primary_id,))
-    if not seqs : return
-    assert len(seqs) == 1        
+    if not seqs:
+        return
+    assert len(seqs) == 1
     moltype, given_length, length = seqs[0]
 
     try:
@@ -149,7 +152,7 @@ def _retrieve_seq(adaptor, primary_id):
     except TypeError:
         assert length is None
         seqs = adaptor.execute_and_fetchall(
-            "SELECT alphabet, length, seq FROM biosequence" \
+            "SELECT alphabet, length, seq FROM biosequence"
             " WHERE bioentry_id = %s", (primary_id,))
         assert len(seqs) == 1
         moltype, given_length, seq = seqs[0]
@@ -158,8 +161,8 @@ def _retrieve_seq(adaptor, primary_id):
         have_seq = False
         del seq
     del given_length
-        
-    moltype = moltype.lower() #might be upper case in database
+
+    moltype = moltype.lower()  # might be upper case in database
     #We have no way of knowing if these sequences will use IUPAC
     #alphabets, and we certainly can't assume they are unambiguous!
     if moltype == "dna":
@@ -180,13 +183,14 @@ def _retrieve_seq(adaptor, primary_id):
     else:
         return UnknownSeq(length, alphabet)
 
+
 def _retrieve_dbxrefs(adaptor, primary_id):
     """Retrieve the database cross references for the sequence."""
     _dbxrefs = []
     dbxrefs = adaptor.execute_and_fetchall(
-        "SELECT dbname, accession, version" \
-        " FROM bioentry_dbxref join dbxref using (dbxref_id)" \
-        " WHERE bioentry_id = %s" \
+        "SELECT dbname, accession, version"
+        " FROM bioentry_dbxref join dbxref using (dbxref_id)"
+        " WHERE bioentry_id = %s"
         " ORDER BY rank", (primary_id,))
     for dbname, accession, version in dbxrefs:
         if version and version != "0":
@@ -195,6 +199,7 @@ def _retrieve_dbxrefs(adaptor, primary_id):
             v = accession
         _dbxrefs.append("%s:%s" % (dbname, v))
     return _dbxrefs
+
 
 def _retrieve_features(adaptor, primary_id):
     sql = "SELECT seqfeature_id, type.name, rank" \
@@ -206,27 +211,27 @@ def _retrieve_features(adaptor, primary_id):
     for seqfeature_id, seqfeature_type, seqfeature_rank in results:
         # Get qualifiers [except for db_xref which is stored separately]
         qvs = adaptor.execute_and_fetchall(
-            "SELECT name, value" \
-            " FROM seqfeature_qualifier_value  join term using (term_id)" \
-            " WHERE seqfeature_id = %s" \
+            "SELECT name, value"
+            " FROM seqfeature_qualifier_value  join term using (term_id)"
+            " WHERE seqfeature_id = %s"
             " ORDER BY rank", (seqfeature_id,))
         qualifiers = {}
         for qv_name, qv_value in qvs:
             qualifiers.setdefault(qv_name, []).append(qv_value)
         # Get db_xrefs [special case of qualifiers]
         qvs = adaptor.execute_and_fetchall(
-            "SELECT dbxref.dbname, dbxref.accession" \
-            " FROM dbxref join seqfeature_dbxref using (dbxref_id)" \
-            " WHERE seqfeature_dbxref.seqfeature_id = %s" \
+            "SELECT dbxref.dbname, dbxref.accession"
+            " FROM dbxref join seqfeature_dbxref using (dbxref_id)"
+            " WHERE seqfeature_dbxref.seqfeature_id = %s"
             " ORDER BY rank", (seqfeature_id,))
         for qv_name, qv_value in qvs:
             value = "%s:%s" % (qv_name, qv_value)
             qualifiers.setdefault("db_xref", []).append(value)
         # Get locations
         results = adaptor.execute_and_fetchall(
-            "SELECT location_id, start_pos, end_pos, strand" \
-            " FROM location" \
-            " WHERE seqfeature_id = %s" \
+            "SELECT location_id, start_pos, end_pos, strand"
+            " FROM location"
+            " WHERE seqfeature_id = %s"
             " ORDER BY rank", (seqfeature_id,))
         locations = []
         # convert to Python standard form
@@ -241,17 +246,19 @@ def _retrieve_features(adaptor, primary_id):
             if strand == 0:
                 strand = None
             if strand not in (+1, -1, None):
-                raise ValueError("Invalid strand %s found in database for " \
+                raise ValueError("Invalid strand %s found in database for "
                                  "seqfeature_id %s" % (strand, seqfeature_id))
             if end < start:
                 import warnings
-                warnings.warn("Inverted location start/end (%i and %i) for " \
-                              "seqfeature_id %s" % (start, end, seqfeature_id))
-            locations.append( (location_id, start, end, strand) )
+                from Bio import BiopythonWarning
+                warnings.warn("Inverted location start/end (%i and %i) for "
+                              "seqfeature_id %s" % (start, end, seqfeature_id),
+                              BiopythonWarning)
+            locations.append((location_id, start, end, strand))
         # Get possible remote reference information
         remote_results = adaptor.execute_and_fetchall(
-            "SELECT location_id, dbname, accession, version" \
-            " FROM location join dbxref using (dbxref_id)" \
+            "SELECT location_id, dbname, accession, version"
+            " FROM location join dbxref using (dbxref_id)"
             " WHERE seqfeature_id = %s", (seqfeature_id,))
         lookup = {}
         for location_id, dbname, accession, version in remote_results:
@@ -264,9 +271,9 @@ def _retrieve_features(adaptor, primary_id):
             if dbname == "":
                 dbname = None
             lookup[location_id] = (dbname, v)
-        
-        feature = SeqFeature.SeqFeature(type = seqfeature_type)
-        feature._seqfeature_id = seqfeature_id #Store the key as a private property
+
+        feature = SeqFeature.SeqFeature(type=seqfeature_type)
+        feature._seqfeature_id = seqfeature_id  # Store the key as a private property
         feature.qualifiers = qualifiers
         if len(locations) == 0:
             pass
@@ -282,54 +289,50 @@ def _retrieve_features(adaptor, primary_id):
             feature.ref_db = dbname
             feature.ref = version
         else:
-            assert feature.sub_features == []
+            sub_features = feature.sub_features
+            assert sub_features == []
             for location in locations:
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
                 subfeature = SeqFeature.SeqFeature()
                 subfeature.type = seqfeature_type
-                subfeature.location_operator = \
-                    _retrieve_location_qualifier_value(adaptor, location_id)
-                #TODO - See Bug 2677 - we don't yet record location_operator,
-                #so for consistency with older versions of Biopython default
-                #to assuming its a join.
-                if not subfeature.location_operator:
-                    subfeature.location_operator = "join"
                 subfeature.location = SeqFeature.FeatureLocation(start, end)
+                #subfeature.location_operator = \
+                #    _retrieve_location_qualifier_value(adaptor, location_id)
                 subfeature.strand = strand
                 subfeature.ref_db = dbname
                 subfeature.ref = version
-                feature.sub_features.append(subfeature)
-            # Assuming that the feature loc.op is the same as the sub_feature
-            # loc.op:
-            feature.location_operator = \
-                feature.sub_features[0].location_operator
+                sub_features.append(subfeature)
             # Locations are in order, but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            start = locations[0][1]
-            end = locations[-1][2]
-            feature.location = SeqFeature.FeatureLocation(start, end)
-            # To get the parent strand (as done when parsing GenBank files),
-            # need to consider evil mixed strand examples like this,
-            # join(complement(69611..69724),139856..140087,140625..140650)
-            strands = set(sf.strand for sf in feature.sub_features)
-            if len(strands) == 1:
-                feature.strand = feature.sub_features[0].strand
+            strands = set(sf.strand for sf in sub_features)
+            if len(strands)==1 and -1 in strands:
+                #Evil hack time for backwards compatibility
+                #TODO - Check if BioPerl and (old) Biopython did the same,
+                #we may have an existing incompatibility lurking here...
+                locs = [f.location for f in sub_features[::-1]]
             else:
-                feature.strand = None # i.e. mixed strands
-
+                #All forward, or mixed strands
+                locs = [f.location for f in sub_features]
+            feature.location = SeqFeature.CompoundLocation(locs, seqfeature_type)
+            #TODO - See Bug 2677 - we don't yet record location_operator,
+            #so for consistency with older versions of Biopython default
+            #to assuming its a join.
+            feature.location_operator = "join"
         seq_feature_list.append(feature)
 
     return seq_feature_list
 
+
 def _retrieve_location_qualifier_value(adaptor, location_id):
     value = adaptor.execute_and_fetch_col0(
-        "SELECT value FROM location_qualifier_value" \
+        "SELECT value FROM location_qualifier_value"
         " WHERE location_id = %s", (location_id,))
     try:
-        return value[0] 
+        return value[0]
     except IndexError:
         return ""
+
 
 def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}
@@ -348,49 +351,58 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
         str_anns[key] = val
     return str_anns
 
+
 def _make_unicode_into_string(text):
     if isinstance(text, unicode):
         return str(text)
-    else :
+    else:
         return text
+
 
 def _retrieve_qualifier_value(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
-        "SELECT name, value" \
-        " FROM bioentry_qualifier_value JOIN term USING (term_id)" \
-        " WHERE bioentry_id = %s" \
+        "SELECT name, value"
+        " FROM bioentry_qualifier_value JOIN term USING (term_id)"
+        " WHERE bioentry_id = %s"
         " ORDER BY rank", (primary_id,))
     qualifiers = {}
     for name, value in qvs:
-        if name == "keyword": name = "keywords"
+        if name == "keyword":
+            name = "keywords"
         #See handling of "date" in Loader.py
-        elif name == "date_changed": name = "date"
-        elif name == "secondary_accession": name = "accessions"
+        elif name == "date_changed":
+            name = "date"
+        elif name == "secondary_accession":
+            name = "accessions"
         qualifiers.setdefault(name, []).append(value)
     return qualifiers
 
+
 def _retrieve_reference(adaptor, primary_id):
     # XXX dbxref_qualifier_value
- 
+
     refs = adaptor.execute_and_fetchall(
-        "SELECT start_pos, end_pos, " \
-        " location, title, authors," \
-        " dbname, accession" \
-        " FROM bioentry_reference" \
-        " JOIN reference USING (reference_id)" \
-        " LEFT JOIN dbxref USING (dbxref_id)" \
-        " WHERE bioentry_id = %s" \
+        "SELECT start_pos, end_pos, "
+        " location, title, authors,"
+        " dbname, accession"
+        " FROM bioentry_reference"
+        " JOIN reference USING (reference_id)"
+        " LEFT JOIN dbxref USING (dbxref_id)"
+        " WHERE bioentry_id = %s"
         " ORDER BY rank", (primary_id,))
     references = []
     for start, end, location, title, authors, dbname, accession in refs:
         reference = SeqFeature.Reference()
         #If the start/end are missing, reference.location is an empty list
         if (start is not None) or (end is not None):
-            if start is not None: start -= 1 #python counting
+            if start is not None:
+                start -= 1  # python counting
             reference.location = [SeqFeature.FeatureLocation(start, end)]
         #Don't replace the default "" with None.
-        if authors : reference.authors = authors
-        if title : reference.title = title
+        if authors:
+            reference.authors = authors
+        if title:
+            reference.title = title
         reference.journal = location
         if dbname == 'PUBMED':
             reference.pubmed_id = accession
@@ -402,15 +414,16 @@ def _retrieve_reference(adaptor, primary_id):
     else:
         return {}
 
+
 def _retrieve_taxon(adaptor, primary_id, taxon_id):
     a = {}
     common_names = adaptor.execute_and_fetch_col0(
-        "SELECT name FROM taxon_name WHERE taxon_id = %s" \
+        "SELECT name FROM taxon_name WHERE taxon_id = %s"
         " AND name_class = 'genbank common name'", (taxon_id,))
     if common_names:
         a['source'] = common_names[0]
     scientific_names = adaptor.execute_and_fetch_col0(
-        "SELECT name FROM taxon_name WHERE taxon_id = %s" \
+        "SELECT name FROM taxon_name WHERE taxon_id = %s"
         " AND name_class = 'scientific name'", (taxon_id,))
     if scientific_names:
         a['organism'] = scientific_names[0]
@@ -427,14 +440,14 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
     #relies on the taxon table's parent_taxon_id field only (ignoring the
     #optional left/right values).  This means that it has to make a
     #separate SQL query for each entry in the lineage, but it does still
-    #appear to be *much* faster.  See Bug 2494. 
+    #appear to be *much* faster.  See Bug 2494.
     taxonomy = []
     while taxon_id:
         name, rank, parent_taxon_id = adaptor.execute_one(
-        "SELECT taxon_name.name, taxon.node_rank, taxon.parent_taxon_id" \
-        " FROM taxon, taxon_name" \
-        " WHERE taxon.taxon_id=taxon_name.taxon_id" \
-        " AND taxon_name.name_class='scientific name'" \
+        "SELECT taxon_name.name, taxon.node_rank, taxon.parent_taxon_id"
+        " FROM taxon, taxon_name"
+        " WHERE taxon.taxon_id=taxon_name.taxon_id"
+        " AND taxon_name.name_class='scientific name'"
         " AND taxon.taxon_id = %s", (taxon_id,))
         if taxon_id == parent_taxon_id:
             # If the taxon table has been populated by the BioSQL script
@@ -452,10 +465,11 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
         a['taxonomy'] = taxonomy
     return a
 
+
 def _retrieve_comment(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
-        "SELECT comment_text FROM comment" \
-        " WHERE bioentry_id=%s" \
+        "SELECT comment_text FROM comment"
+        " WHERE bioentry_id=%s"
         " ORDER BY rank", (primary_id,))
     comments = [comm[0] for comm in qvs]
     #Don't want to add an empty list...
@@ -463,6 +477,7 @@ def _retrieve_comment(adaptor, primary_id):
         return {"comment": comments}
     else:
         return {}
+
 
 class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the biopython SeqRecord object.
@@ -475,9 +490,9 @@ class DBSeqRecord(SeqRecord):
         (self._biodatabase_id, self._taxon_id, self.name,
          accession, version, self._identifier,
          self._division, self.description) = self._adaptor.execute_one(
-            "SELECT biodatabase_id, taxon_id, name, accession, version," \
-            " identifier, division, description" \
-            " FROM bioentry" \
+            "SELECT biodatabase_id, taxon_id, name, accession, version,"
+            " identifier, division, description"
+            " FROM bioentry"
             " WHERE bioentry_id = %s", (self._primary_id,))
         if version and version != "0":
             self.id = "%s.%s" % (accession, version)
@@ -497,16 +512,24 @@ class DBSeqRecord(SeqRecord):
         if not hasattr(self, "_seq"):
             self._seq = _retrieve_seq(self._adaptor, self._primary_id)
         return self._seq
-    def __set_seq(self, seq): self._seq = seq
-    def __del_seq(self):      del self._seq
+
+    def __set_seq(self, seq):
+        self._seq = seq
+
+    def __del_seq(self):
+        del self._seq
     seq = property(__get_seq, __set_seq, __del_seq, "Seq object")
 
     def __get_dbxrefs(self):
-        if not hasattr(self,"_dbxrefs"):
+        if not hasattr(self, "_dbxrefs"):
             self._dbxrefs = _retrieve_dbxrefs(self._adaptor, self._primary_id)
         return self._dbxrefs
-    def __set_dbxrefs(self, dbxrefs): self._dbxrefs = dbxrefs
-    def __del_dbxrefs(self):      del self._dbxrefs
+
+    def __set_dbxrefs(self, dbxrefs):
+        self._dbxrefs = dbxrefs
+
+    def __del_dbxrefs(self):
+        del self._dbxrefs
     dbxrefs = property(__get_dbxrefs, __set_dbxrefs, __del_dbxrefs,
                        "Database cross references")
 
@@ -515,8 +538,12 @@ class DBSeqRecord(SeqRecord):
             self._features = _retrieve_features(self._adaptor,
                                                 self._primary_id)
         return self._features
-    def __set_features(self, features): self._features = features
-    def __del_features(self):      del self._features
+
+    def __set_features(self, features):
+        self._features = features
+
+    def __del_features(self):
+        del self._features
     features = property(__get_features, __set_features, __del_features,
                         "Features")
 
@@ -530,7 +557,11 @@ class DBSeqRecord(SeqRecord):
             if self._division:
                 self._annotations["data_file_division"] = self._division
         return self._annotations
-    def __set_annotations(self, annotations): self._annotations = annotations
-    def __del_annotations(self): del self._annotations
+
+    def __set_annotations(self, annotations):
+        self._annotations = annotations
+
+    def __del_annotations(self):
+        del self._annotations
     annotations = property(__get_annotations, __set_annotations,
                            __del_annotations, "Annotations")

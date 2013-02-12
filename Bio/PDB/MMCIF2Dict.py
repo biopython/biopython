@@ -15,7 +15,7 @@ class MMCIF2Dict(dict):
     NAME=1
     LOOP=2
     DATA=3
-    SEMICOLONS=4    
+    SEMICOLONS=4
     DOUBLEQUOTED=5
     QUOTED=6
     SIMPLE=7
@@ -27,12 +27,12 @@ class MMCIF2Dict(dict):
         dict.__init__(self, **self._make_mmcif_dict())
         MMCIFlex.close_file()
 
-    def _make_mmcif_dict(self): 
+    def _make_mmcif_dict(self):
         """
         Loop through PLY token (type, value) pairs, return a dict.
 
         """
-        # this dict will contain the name/data pairs 
+        # this dict will contain the name/data pairs
         mmcif_dict = {}
         # entry for garbage
         mmcif_dict[None] = []
@@ -63,9 +63,9 @@ class MMCIF2Dict(dict):
                         # create  a list for each name encountered in loop
                         new_list=mmcif_dict[value]=[]
                         temp_list.append(new_list)
-                        token, value=get_token()  
+                        token, value=get_token()
                         # print token, value
-                    loop_flag=0         
+                    loop_flag=0
                     # nr of data items parsed
                     data_counter=0
                     # corresponding data name
@@ -76,25 +76,25 @@ class MMCIF2Dict(dict):
                         pos=data_counter%nr_fields
                         data_counter=data_counter+1
                         temp_list[pos].append(value)
-                        token, value=get_token()  
+                        token, value=get_token()
                         # print token, value
                     if pos!=nr_fields-1:
                         warnings.warn("ERROR: broken name-data pair "
                                       "(data missing)!", RuntimeWarning)
                     # The last token was not used, so
-                    # don't set token to None! (this means the 
+                    # don't set token to None! (this means the
                     # last parsed token goes through the loop again)
-                else:   
+                else:
                     # simple name-data pair (no loop)
                     # so next token should be the data
-                    next_token, data=get_token()  
+                    next_token, data=get_token()
                     # print token, value
                     mmcif_dict[value]=data
                     if next_token<4:
                         warnings.warn("ERROR: broken name-data pair "
                                       "(name-non data pair)!", RuntimeWarning)
                         # print token, value
-                    else:   
+                    else:
                         # get next token
                         token=None
             elif token==LOOP:
@@ -113,7 +113,7 @@ class MMCIF2Dict(dict):
                 mmcif_dict[None].append(value)
                 # get next token
                 token=None
-            if token==None:
+            if token is None:
                 token, value=get_token()
                 # print token, value
         return mmcif_dict
@@ -126,14 +126,14 @@ if __name__=="__main__":
     if len(sys.argv)!=2:
         print "Usage: python MMCIF2Dict filename."
 
-    filename=sys.argv[1]    
+    filename=sys.argv[1]
 
     mmcif_dict = MMCIF2Dict(filename)
 
     entry = ""
     print "Now type a key ('q' to end, 'k' for a list of all keys):"
     while(entry != "q"):
-        entry = raw_input("MMCIF dictionary key ==> ")    
+        entry = raw_input("MMCIF dictionary key ==> ")
         if entry == "q":
             sys.exit()
         if entry == "k":
@@ -142,11 +142,10 @@ if __name__=="__main__":
             continue
         try:
             value=mmcif_dict[entry]
-            if type(value)==type([]):
+            if isinstance(value, list):
                 for item in value:
                     print item
             else:
                 print value
         except KeyError:
             print "No such key found."
-

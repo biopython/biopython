@@ -22,6 +22,7 @@ except ImportError:
 
 from Bio._py3k import _as_string, _as_bytes
 
+
 def qblast(program, database, sequence,
            auto_format=None,composition_based_statistics=None,
            db_genetic_code=None,endpoints=None,entrez_query='(none)',
@@ -58,10 +59,11 @@ def qblast(program, database, sequence,
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
+    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
 
     """
-    import urllib, urllib2
+    import urllib
+    import urllib2
     import time
 
     assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
@@ -121,7 +123,7 @@ def qblast(program, database, sequence,
     handle = urllib2.urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
-    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007	
+    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
         ('ALIGNMENTS',alignments),
@@ -175,6 +177,7 @@ def qblast(program, database, sequence,
             break
 
     return StringIO(results)
+
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
@@ -241,7 +244,5 @@ def _parse_qblast_ref_page(handle):
     try:
         return rid, int(rtoe)
     except ValueError:
-        raise ValueError("A non-integer RTOE found in " \
+        raise ValueError("A non-integer RTOE found in "
                          +"the 'please wait' page, %s" % repr(rtoe))
-
- 

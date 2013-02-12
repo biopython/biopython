@@ -7,15 +7,17 @@
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
-import math
+import math,random
 
 class Motif(object):
     """
     A class representing sequence motifs.
     """
     def __init__(self,alphabet=IUPAC.unambiguous_dna):
-        self.instances = None
-        self.counts = None
+        self.instances = []
+        self.has_instances=False
+        self.counts = {}
+        self.has_counts=False
         self.mask = []
         self._pwm_is_current = False
         self._pwm = []
@@ -28,24 +30,6 @@ class Motif(object):
         self.beta=1.0
         self.info=None
         self.name=""
-
-    @property
-    def has_instances(self):
-        """Legacy property, check if m.instances is None instead (DEPRECATED)."""
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("Instead of 'm.has_instances' use 'm.instances is not None'",
-                      BiopythonDeprecationWarning)
-        return self.instances is not None
-
-    @property
-    def has_counts(self):
-        """Legacy property, check if m.counts is None instead (DEPRECATED)."""
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("Instead of 'm.has_counts' use 'm.counts is not None'",
-                      BiopythonDeprecationWarning)
-        return self.counts is not None
 
     def _check_length(self, len):
         if self.length==None:
@@ -66,15 +50,14 @@ class Motif(object):
         """
         self._check_alphabet(instance.alphabet)
         self._check_length(len(instance))
-        if self.counts!=None:
+        if self.has_counts:
             for i in range(self.length):
                 let=instance[i]
                 self.counts[let][i]+=1
 
-        if self.instances!=None or self.counts==None:
-            if self.instances==None:
-                self.instances = []
+        if self.has_instances or not self.has_counts:
             self.instances.append(instance)
+            self.has_instances=True
             
         self._pwm_is_current = False
         self._log_odds_is_current = False
@@ -115,11 +98,11 @@ class Motif(object):
                     dict[letter]=self.beta*self.background[letter]
                 else:
                     dict[letter]=0.0
-            if self.counts!=None:
+            if self.has_counts:
                 #taking the raw counts
                 for letter in self.alphabet.letters:
                     dict[letter]+=self.counts[letter][i]
-            elif self.instances!=None:
+            elif self.has_instances:
                 #counting the occurences of letters in instances
                 for seq in self.instances:
                     #dict[seq[i]]=dict[seq[i]]+1
@@ -186,11 +169,11 @@ class Motif(object):
         """
         a generator function, returning found positions of instances of the motif in a given sequence
         """
-        if self.instances==None:
+        if not self.has_instances:
             raise ValueError ("This motif has no instances")
         for pos in xrange(0,len(sequence)-self.length+1):
             for instance in self.instances:
-                if str(instance) == str(sequence[pos:pos+self.length]):
+                if instance.tostring()==sequence[pos:pos+self.length].tostring():
                     yield(pos,instance)
                     break # no other instance will fit (we don't want to return multiple hits)
 
@@ -221,16 +204,15 @@ class Motif(object):
         if both:
             rc = self.reverse_complement()
             
-        sequence=sequence.upper()
-        n = len(sequence)
-        for pos in xrange(0,n-self.length+1):
+        sequence=sequence.tostring().upper()
+        for pos in xrange(0,len(sequence)-self.length+1):
             score = self.score_hit(sequence,pos,normalized,masked)
             if score > threshold:
                 yield (pos,score)
             if both:
                 rev_score = rc.score_hit(sequence,pos,normalized,masked)
                 if rev_score > threshold:
-                    yield (pos-n,rev_score)
+                    yield (-pos,rev_score)
 
     def dist_pearson(self, motif, masked = 0):
         """
@@ -379,19 +361,18 @@ class Motif(object):
     def __str__(self,masked=False):
         """ string representation of a motif.
         """
-        string = ""
-        if self.instances!=None:
-            for inst in self.instances:
-                string += str(inst) + "\n"
+        str = ""
+        for inst in self.instances:
+            str = str + inst.tostring() + "\n"
 
         if masked:
             for i in xrange(self.length):
                 if self.mask[i]:
-                    string += "*"
+                    str = str + "*"
                 else:
-                    string += " "
-            string += "\n"
-        return string
+                    str = str + " "
+            str = str + "\n"
+        return str
 
     def __len__(self):
         """return the length of a motif
@@ -416,24 +397,24 @@ class Motif(object):
         """
         FASTA representation of motif
         """
-        if self.instances==None:
+        if not self.has_instances:
             self.make_instances_from_counts()
-        string = ""
+        str = ""
         for i,inst in enumerate(self.instances):
-            string += ">instance%d\n"%i + str(inst) + "\n"
+            str = str + ">instance%d\n"%i + inst.tostring() + "\n"
             
-        return string
+        return str       
 
     def reverse_complement(self):
         """
         Gives the reverse complement of the motif
         """
         res = Motif()
-        if self.instances!=None:
+        if self.has_instances:
             for i in self.instances:
                 res.add_instance(i.reverse_complement())
         else: # has counts
-            res.counts={}
+            res.has_counts=True
             res.counts["A"]=self.counts["T"][:]
             res.counts["T"]=self.counts["A"][:]
             res.counts["G"]=self.counts["C"][:]
@@ -460,6 +441,7 @@ class Motif(object):
         """
 
         self.counts = {}
+        self.has_counts=True
         if letters==None:
             letters=self.alphabet.letters
         self.length=0
@@ -481,6 +463,7 @@ class Motif(object):
         if letters==None:
             letters=self.alphabet.letters
         self.counts = {}
+        self.has_counts=True
 
         for i in letters:
             ln = stream.readline().strip().split()
@@ -512,6 +495,7 @@ class Motif(object):
         alpha="".join(self.alphabet.letters)
         #col[i] is a column taken from aligned motif instances
         col=[]
+        self.has_instances=True
         self.instances=[]
         s = sum(map(lambda nuc: self.counts[nuc][0],self.alphabet.letters))
         for i in range(self.length):
@@ -541,6 +525,7 @@ class Motif(object):
         counts={}
         for a in self.alphabet.letters:
             counts[a]=[]
+        self.has_counts=True
         s = len(self.instances)
         for i in range(self.length):
             ci = dict((a,0) for a in self.alphabet.letters)
@@ -698,7 +683,7 @@ class Motif(object):
         for a in self.alphabet.letters:
             res+=" %s"%a
         res+="\n"
-        if self.counts==None:
+        if not self.has_counts:
             self.make_counts_from_instances()
         for i in range(self.length):
             if i<9:
@@ -739,7 +724,7 @@ class Motif(object):
                 res+="\t".join([str(mat[i][a]) for i in range(self.length)])
                 res+="\n"
         else: #output counts
-            if self.counts==None:
+            if not self.has_counts:
                 self.make_counts_from_instances()
             mat=self.counts
             for a in letters:
@@ -787,7 +772,7 @@ class Motif(object):
         if seq.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA sequences")
 
-        seq = str(seq)
+        seq = seq.tostring()
 
         # check if the fast C code can be used
         try:

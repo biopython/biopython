@@ -13,6 +13,7 @@ from Bio.Seq import Seq
 # local stuff
 from Pattern import PatternRepository
 
+
 class SignatureFinder(object):
     """Find Signatures in a group of sequence records.
 
@@ -20,7 +21,7 @@ class SignatureFinder(object):
     two motifs separated by a gap. We need something a lot smarter than
     this to find more complicated signatures.
     """
-    def __init__(self, alphabet_strict = 1):
+    def __init__(self, alphabet_strict=1):
         """Initialize a finder to get signatures.
 
         Arguments:
@@ -110,6 +111,7 @@ class SignatureFinder(object):
 
         return sig_dict
 
+
 class SignatureCoder(object):
     """Convert a Sequence into its signature representatives.
 
@@ -170,7 +172,7 @@ class SignatureCoder(object):
         # otherwise just return an empty list
         if len(self._signatures) == 0:
             return []
-        
+
         # initialize a dictionary to hold the signature counts
         sequence_sigs = {}
         for sig in self._signatures:
@@ -180,7 +182,7 @@ class SignatureCoder(object):
         all_first_sigs = []
         for sig_start, sig_end in self._signatures:
             all_first_sigs.append(sig_start)
-        
+
         # count all of the signatures we are looking for in the sequence
         sig_size = len(self._signatures[0][0])
         smallest_sig_size = sig_size * 2
@@ -203,7 +205,7 @@ class SignatureCoder(object):
         max_count = max(sequence_sigs.values())
 
         # as long as we have some signatures present, normalize them
-        # otherwise we'll just return 0 for everything 
+        # otherwise we'll just return 0 for everything
         if max_count > 0:
             for sig in sequence_sigs:
                 sequence_sigs[sig] = (float(sequence_sigs[sig] - min_count)
@@ -215,4 +217,3 @@ class SignatureCoder(object):
             sig_amounts.append(sequence_sigs[sig])
 
         return sig_amounts
-        

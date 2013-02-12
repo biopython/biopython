@@ -29,7 +29,7 @@ def main():
     output = Layer.OutputLayer(1)
     hidden = Layer.HiddenLayer(3, output)
     input = Layer.InputLayer(2, hidden)
-    
+
     network = BasicNetwork(input, hidden, output)
 
     print "Training the network..."
@@ -45,6 +45,7 @@ def main():
         prediction = network.predict(example.inputs)
         if VERBOSE:
             print "%s;%s=> %s" % (example.inputs, example.outputs, prediction)
+
 
 def stopping_criteria(num_iterations, validation_error, training_error):
     """Define when to stop iterating.

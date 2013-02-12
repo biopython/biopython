@@ -50,6 +50,18 @@ System Requirements
   functionality, you will not need to install this package.  You can install
   it later if needed.
 
+- matplotlib, see http://matplotlib.org/ (optional)
+  The Bio.Phylo uses this package to plot phylogenetic trees. As with
+  ReportLab, you can install this at any time to enable the plotting
+  functionality.
+
+- networkx, see http://networkx.lanl.gov/ (optional) and
+  pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
+  http://code.google.com/p/pydot/ (optional)
+  These packages are used for certain niche functions in Bio.Phylo.
+  Again, they are only needed to enable these functions and can be installed
+  later if needed.
+
 - psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
   These packages are used by BioSQL to access a PostgreSQL database.
@@ -118,6 +130,20 @@ at https://github.com/biopython/biopython
 Until late September 2009, Biopython source code was kept in CVS running
 on the OBF servers. These will remain online for a while as "read only"
 static backups of everything up to and including Biopython 1.52.
+
+
+Experimental code
+=================
+
+Biopython 1.61 introduced a new warning, Bio.BiopythonExperimentalWarning,
+which will be used to mark any experimental code included in the otherwise
+stable Biopython releases. Such 'beta' level code is ready for wider
+testing, but still likely to change, and should only be tried by early
+adopters in order to give feedback via the biopython-dev mailing list.
+
+We'd expect such experimental code to reach stable status within one or two
+releases, at which point our normal policies about trying to preserve
+backwards compatibility would apply.
 
 
 Bugs

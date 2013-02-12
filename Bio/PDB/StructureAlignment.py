@@ -20,14 +20,12 @@ class StructureAlignment(object):
     """
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
         """
-        fasta_align --- Alignment object 
+        fasta_align --- Alignment object
         m1, m2 --- two models
         si, sj --- the sequences in the Alignment object that
                 correspond to the structures
         """
         l=fasta_align.get_alignment_length()
-        s1=fasta_align.get_seq_by_num(si)
-        s2=fasta_align.get_seq_by_num(sj)
         # Get the residues in the models
         rl1=Selection.unfold_entities(m1, 'R')
         rl2=Selection.unfold_entities(m2, 'R')
@@ -85,7 +83,7 @@ class StructureAlignment(object):
 
     def get_maps(self):
         """
-        Return two dictionaries that map a residue in one structure to 
+        Return two dictionaries that map a residue in one structure to
         the equivealent residue in the other structure.
         """
         return self.map12, self.map21
@@ -132,4 +130,3 @@ if __name__=="__main__":
     # Print aligned pairs (r is None if gap)
     for (r1,r2) in al.get_iterator():
         print r1, r2
-

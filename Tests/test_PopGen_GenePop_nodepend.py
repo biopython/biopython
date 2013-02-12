@@ -16,10 +16,10 @@ class RecordTest(unittest.TestCase):
         """
 
         r = GenePop.Record()
-        assert type(r.marker_len)   == int
-        assert type(r.comment_line) == str
-        assert type(r.loci_list)    == list
-        assert type(r.populations)  == list
+        assert isinstance(r.marker_len, int)
+        assert isinstance(r.comment_line, str)
+        assert isinstance(r.loci_list, list)
+        assert isinstance(r.populations, list)
 
 
 class ParserTest(unittest.TestCase):
@@ -97,15 +97,15 @@ class FileParserTest(unittest.TestCase):
             assert isinstance(rec, FileParser.FileRecord)
             assert len(rec.loci_list) == self.num_loci[index]
             for skip in range(self.pops_indivs[index][0]):
-                if rec.skip_population() == False:
+                if rec.skip_population() is False:
                     raise Error("Not enough populations")
-            if rec.skip_population() == True:
+            if rec.skip_population() is True:
                     raise Error("Too much populations")
             for i in range(self.pops_indivs[index][0]):
                 continue
                 assert len(rec.populations[i]) == \
                            self.pops_indivs[index][1][i]
-            rec._handle.close() #TODO - Needs a proper fix
+            rec._handle.close()  # TODO - Needs a proper fix
 
     def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files
@@ -118,6 +118,7 @@ class FileParserTest(unittest.TestCase):
             pass
         f.close()
 
+
 class UtilsTest(unittest.TestCase):
     def setUp(self):
         #All files have to have at least 3 loci and 2 pops
@@ -125,7 +126,6 @@ class UtilsTest(unittest.TestCase):
         self.handles = []
         for filename in files:
             self.handles.append(open(os.path.join("PopGen", filename)))
-
 
     def tearDown(self):
         for handle in self.handles:

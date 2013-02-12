@@ -12,10 +12,9 @@ Goals:
     Make sure that all retrieval is working as expected.
     Make sure we can parse the latest XML format being used by the NCBI.
 """
-import sys
 import requires_internet
 requires_internet.check()
-from Bio import MissingExternalDependencyError 
+from Bio import MissingExternalDependencyError
 from urllib2 import HTTPError
 
 #We want to test these:
@@ -32,7 +31,7 @@ from Bio.Blast import NCBIXML
 # - expectation value threshold
 # - Entrez filter string (or None)
 # - list of hit identifiers expected to be found (or None if expect 0)
-tests = [ \
+tests = [
     #Simple protein blast filtered for rat only, using protein GI:160837788
     #the actin related protein 2/3 complex, subunit 1B [Mus musculus]
     ("blastp", "nr", "160837788", 0.001,
@@ -60,15 +59,15 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests:
     try:
         if program=="blastn":
             #Check the megablast parameter is accepted
-            handle = NCBIWWW.qblast(program, database, query, \
-                                    alignments=10, descriptions=10, \
-                                    hitlist_size=10, \
+            handle = NCBIWWW.qblast(program, database, query,
+                                    alignments=10, descriptions=10,
+                                    hitlist_size=10,
                                     entrez_query=entrez_filter,
                                     expect=e_value, megablast="FALSE")
         else:
-            handle = NCBIWWW.qblast(program, database, query, \
-                                    alignments=10, descriptions=10, \
-                                    hitlist_size=10, \
+            handle = NCBIWWW.qblast(program, database, query,
+                                    alignments=10, descriptions=10,
+                                    hitlist_size=10,
                                     entrez_query=entrez_filter,
                                     expect=e_value)
     except HTTPError:

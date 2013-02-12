@@ -28,10 +28,12 @@ def parse(handle):
     record = None
     for line in handle:
         line = line.strip('\n').strip('\r')
-        if not line: continue # Ignore empty lines
+        if not line:
+            continue # Ignore empty lines
         c = line[0]
         if c=='^':
-            if record: yield record
+            if record:
+                yield record
             record = Record.Record()
             record.entity_type, record.entity_id = _read_key_value(line)
         elif c=='!':

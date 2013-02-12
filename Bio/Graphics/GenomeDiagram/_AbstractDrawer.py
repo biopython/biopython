@@ -27,7 +27,7 @@
 
     o intermediate_points - Method that returns a list of values intermediate
                             between the points in a passed dataset
-    
+
     For drawing capabilities, this module uses reportlab to draw and write
     the diagram:
 
@@ -45,6 +45,7 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import *
 
 from math import pi
+
 
 ################################################################################
 # METHODS
@@ -100,6 +101,7 @@ def _stroke_and_fill_colors(color, border):
 
     return strokecolor, color
 
+
 def draw_box(point1, point2,
              color=colors.lightgreen, border=None, colour=None,
              **kwargs):
@@ -108,14 +110,14 @@ def draw_box(point1, point2,
 
         o point1, point2 Co-ordinates for opposite corners of the box
                          (x,y tuples)
-        
+
         o color /colour       The color for the box
                               (colour takes priority over color)
-                              
+
         o border              Border color for the box
 
         Returns a closed path object, beginning at (x1,y1) going round
-        the four points in order, and filling with the passed color.            
+        the four points in order, and filling with the passed color.
     """
     x1, y1 = point1
     x2, y2 = point2
@@ -133,6 +135,7 @@ def draw_box(point1, point2,
                    fillColor=color,
                    strokewidth=0,
                    **kwargs)
+
 
 def draw_cut_corner_box(point1, point2, corner=0.5,
                         color=colors.lightgreen, border=None, **kwargs):
@@ -161,9 +164,10 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
                     x1+corner, y1],
                    strokeColor=strokecolor,
                    strokeWidth=1,
-                   strokeLineJoin=1, #1=round
+                   strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
+
 
 def draw_polygon(list_of_points,
                  color=colors.lightgreen, border=None, colour=None,
@@ -172,11 +176,11 @@ def draw_polygon(list_of_points,
               colour=colors.lightgreen)
 
         o list_of_point = list of (x,y) tuples for the corner coordinates
-        
+
         o colour              The colour for the box
 
         Returns a closed path object, beginning at (x1,y1) going round
-        the four points in order, and filling with the passed colour.          
+        the four points in order, and filling with the passed colour.
     """
     #Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
@@ -208,7 +212,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     """
     x1, y1 = point1
     x2, y2 = point2
-    
+
     if shaft_height_ratio < 0 or 1 < shaft_height_ratio:
         raise ValueError("Arrow shaft height ratio should be in range 0 to 1")
     if head_length_ratio < 0:
@@ -231,7 +235,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     elif orientation == 'left':
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
     else:
-        raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
+        raise ValueError("Invalid orientation %s, should be 'left' or 'right'"
                          % repr(orientation))
 
     # We define boxheight and boxwidth accordingly, and calculate the shaft
@@ -242,8 +246,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     shaftheight = boxheight*shaft_height_ratio
     headlength = min(abs(boxheight)*head_length_ratio, abs(boxwidth))
     if boxwidth < 0:
-        headlength *= -1 #reverse it
-
+        headlength *= -1  # reverse it
 
     shafttop = 0.5*(boxheight+shaftheight)
     shaftbase = boxheight-shafttop
@@ -260,9 +263,10 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                    #strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
                    #default is mitre/miter which can stick out too much:
-                   strokeLineJoin=1, #1=round
+                   strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
+
 
 def angle2trig(theta):
     """ angle2trig(angle)
@@ -312,6 +316,7 @@ def intermediate_points(start, end, graph_data):
 ################################################################################
 # CLASSES
 ################################################################################
+
 
 class AbstractDrawer(object):
     """ AbstractDrawer
@@ -365,7 +370,7 @@ class AbstractDrawer(object):
         o end           Int, base to stop drawing at
 
         o length        Size of sequence to be drawn
-        
+
         o cross_track_links List of tuples each with four entries (track A,
                             feature A, track B, feature B) to be linked.
     """
@@ -411,7 +416,7 @@ class AbstractDrawer(object):
             o end       Int, the position to stop drawing the diagram at
 
             o tracklines    Boolean flag to show (or not) lines delineating tracks
-                            on the diagram            
+                            on the diagram
 
             o cross_track_links List of tuples each with four entries (track A,
                                 feature A, track B, feature B) to be linked.
@@ -421,30 +426,26 @@ class AbstractDrawer(object):
         # Perform 'administrative' tasks of setting up the page
         self.set_page_size(pagesize, orientation)   # Set drawing size
         self.set_margins(x, y, xl, xr, yt, yb)      # Set page margins
-        self.set_bounds(start, end) # Set limits on what will be drawn
+        self.set_bounds(start, end)  # Set limits on what will be drawn
         self.tracklines = tracklines    # Set flags
         if cross_track_links is None:
             cross_track_links = []
         else:
             self.cross_track_links = cross_track_links
-        
-    def _set_xcentre(self, value):
-        import warnings
-        import Bio
-        warnings.warn("The _set_xcentre method and .xcentre attribute are deprecated; please use the .xcenter attribute instead", Bio.BiopythonDeprecationWarning)
-        self.xcenter = value
-    xcentre = property(fget = lambda self : self.xcenter,
-                       fset = _set_xcentre,
-                       doc="Backwards compatible alias for xcenter (DEPRECATED)")
 
-    def _set_ycentre(self, value):
-        import warnings
-        import Bio
-        warnings.warn("The _set_ycentre method and .xcentre attribute are deprecated; please use the .ycenter attribute instead", Bio.BiopythonDeprecationWarning)
-        self.ycenter = value
-    ycentre = property(fget = lambda self : self.ycenter,
-                       fset = _set_ycentre,
-                       doc="Backwards compatible alias for ycenter (DEPRECATED)")
+    @property
+    def xcentre(self):
+        """Backwards compatible alias for xcenter (DEPRECATED)"""
+        warnings.warn("The .xcentre attribute is deprecated, use .xcenter instead",
+                      Bio.BiopythonDeprecationWarning)
+        return self.xcenter
+
+    @property
+    def ycentre(self):
+        """Backwards compatible alias for ycenter (DEPRECATED)"""
+        warnings.warn("The .ycentre attribute is deprecated, use .ycenter instead",
+                      Bio.BiopythonDeprecationWarning)
+        return self.ycenter
 
     def set_page_size(self, pagesize, orientation):
         """ set_page_size(self, pagesize, orientation)
@@ -457,9 +458,9 @@ class AbstractDrawer(object):
 
             Set the size of the drawing
         """
-        if type(pagesize) == type('a'):     # A string, so translate
+        if isinstance(pagesize, str):     # A string, so translate
             pagesize = page_sizes(pagesize)
-        elif type(pagesize) == type((1,2)): # A tuple, so don't translate
+        elif isinstance(pagesize, tuple): # A tuple, so don't translate
             pagesize = pagesize
         else:
             raise ValueError("Page size %s not recognised" % pagesize)
@@ -472,7 +473,6 @@ class AbstractDrawer(object):
             self.pagesize = (longside, shortside)
         else:
             self.pagesize = (shortside, longside)
-
 
     def set_margins(self, x, y, xl, xr, yt, yb):
         """ set_margins(self, x, y, xl, xr, yt, yb)
@@ -498,7 +498,7 @@ class AbstractDrawer(object):
         xmargin_r = xr or x
         ymargin_top = yt or y
         ymargin_btm = yb or y
-        
+
         # Set page limits, center and height/width
         self.x0, self.y0 = self.pagesize[0]*xmargin_l, self.pagesize[1]*ymargin_btm
         self.xlim, self.ylim = self.pagesize[0]*(1-xmargin_r), self.pagesize[1]*(1-ymargin_top)
@@ -506,7 +506,6 @@ class AbstractDrawer(object):
         self.pageheight = self.ylim-self.y0
         self.xcenter, self.ycenter = self.x0+self.pagewidth/2., self.y0+self.pageheight/2.
 
-            
     def set_bounds(self, start, end):
         """ set_bounds(self, start, end)
 
@@ -521,14 +520,13 @@ class AbstractDrawer(object):
         if start is not None and end is not None and start > end:
             start, end = end, start
 
-        if start is None or start < 0:  # Check validity of passed args and 
+        if start is None or start < 0:  # Check validity of passed args and
             start = 0   # default to 0
         if end is None or end < 0:
             end = high + 1  # default to track range top limit
-        
+
         self.start, self.end = int(start), int(end)
         self.length = self.end - self.start + 1
-
 
     def is_in_bounds(self, value):
         """ is_in_bounds(self, value)
@@ -541,15 +539,14 @@ class AbstractDrawer(object):
             return 1
         return 0
 
-
     def __len__(self):
         """ __len__(self)
 
             Returns the length of the region to be drawn
         """
         return self.length
-        
-    def _current_track_start_end(self):        
+
+    def _current_track_start_end(self):
         track = self._parent[self.current_track_level]
         if track.start is None:
             start = self.start

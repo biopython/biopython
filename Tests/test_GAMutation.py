@@ -20,11 +20,13 @@ class TestAlphabet(SingleLetterAlphabet):
     """
     letters = ["1", "2", "3"]
 
+
 def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     seq_genome = genome.toseq()
     return int(str(seq_genome))
+
 
 class MutationHelper:
     """Mixin class which provides useful functions for testing mutations.
@@ -61,6 +63,7 @@ class MutationHelper:
             new_org = mutator.mutate(self.organism)
             assert new_org == self.organism, "Unexpected mutation found"
 
+
 class ConversionTest(unittest.TestCase, MutationHelper):
     """Test mutation which just converts one gene in the chromosome.
     """
@@ -89,6 +92,7 @@ class ConversionTest(unittest.TestCase, MutationHelper):
         mutator = ConversionMutation(mutation_rate = 0.0)
         self._never_mutate(mutator)
 
+
 class SinglePositionTest(unittest.TestCase, MutationHelper):
     """Test mutations at a single position in a genome.
     """
@@ -114,6 +118,7 @@ class SinglePositionTest(unittest.TestCase, MutationHelper):
         mutator = SinglePositionMutation(mutation_rate = 0.0)
         self._never_mutate(mutator)
 
+
 class TestMutator:
     """Provide basic mutator ability.
     """
@@ -123,9 +128,9 @@ class TestMutator:
     def mutate(self, org):
         org_genome_seq = org.genome.toseq()
         old_org_genome = str(org_genome_seq)
-        
+
         new_org = org.copy()
-        
+
         if self.type == "same":
             return new_org
         elif self.type == "lower":
@@ -139,6 +144,7 @@ class TestMutator:
         else:
             raise ValueError("Got type %s" % self.type)
 
+
 class SafeFitnessTest(unittest.TestCase):
     """Test mutation which does not allow decreases in fitness.
     """
@@ -149,7 +155,7 @@ class SafeFitnessTest(unittest.TestCase):
 
         self.test_mutator = TestMutator()
 
-    def test_keep_higher(self): 
+    def test_keep_higher(self):
         """Make sure we always keep the higher fitness.
         """
         mutator = SafeFitnessMutation(self.test_mutator)

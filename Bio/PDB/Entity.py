@@ -1,7 +1,7 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package.  
+# as part of this package.
 
 from copy import copy
 
@@ -24,10 +24,10 @@ class Entity(object):
         self.parent=None
         self.child_list=[]
         self.child_dict={}
-        # Dictionary that keeps addictional properties
+        # Dictionary that keeps additional properties
         self.xtra={}
-    
-    # Special methods   
+
+    # Special methods
 
     def __len__(self):
         "Return the number of children."
@@ -50,7 +50,7 @@ class Entity(object):
         for child in self.child_list:
             yield child
 
-    # Public methods    
+    # Public methods
 
     def get_level(self):
         """Return level in hierarchy.
@@ -73,7 +73,7 @@ class Entity(object):
 
     def detach_child(self, id):
         "Remove a child."
-        child=self.child_dict[id] 
+        child=self.child_dict[id]
         child.detach_parent()
         del self.child_dict[id]
         self.child_list.remove(child)
@@ -82,21 +82,21 @@ class Entity(object):
         "Add a child to the Entity."
         entity_id=entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException( \
+            raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list.append(entity)
         self.child_dict[entity_id]=entity
-    
+
     def insert(self, pos, entity):
         "Add a child to the Entity at a specified position."
         entity_id=entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException( \
+            raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list[pos:pos] = [entity]
-        self.child_dict[entity_id]=entity        
+        self.child_dict[entity_id]=entity
 
     def get_iterator(self):
         "Return iterator over children."
@@ -135,13 +135,13 @@ class Entity(object):
         Chain with id "A"
         Residue with id (" ", 10, "A")
 
-        The Residue id indicates that the residue is not a hetero-residue 
-        (or a water) beacuse it has a blank hetero field, that its sequence 
+        The Residue id indicates that the residue is not a hetero-residue
+        (or a water) beacuse it has a blank hetero field, that its sequence
         identifier is 10 and its insertion code "A".
         """
-        if self.full_id==None:
+        if self.full_id is None:
             entity_id=self.get_id()
-            l=[entity_id]   
+            l=[entity_id]
             parent=self.get_parent()
             while not (parent is None):
                 entity_id=parent.get_id()
@@ -182,12 +182,13 @@ class Entity(object):
             shallow.add(child.copy())
         return shallow
 
+
 class DisorderedEntityWrapper(object):
     """
     This class is a simple wrapper class that groups a number of equivalent
-    Entities and forwards all method calls to one of them (the currently selected 
+    Entities and forwards all method calls to one of them (the currently selected
     object). DisorderedResidue and DisorderedAtom are subclasses of this class.
-    
+
     E.g.: A DisorderedAtom object contains a number of Atom objects,
     where each Atom object represents a specific position of a disordered
     atom in the structure.
@@ -196,7 +197,7 @@ class DisorderedEntityWrapper(object):
         self.id=id
         self.child_dict={}
         self.selected_child=None
-        self.parent=None    
+        self.parent=None
 
     # Special methods
 
@@ -234,7 +235,7 @@ class DisorderedEntityWrapper(object):
         """Subtraction with another object."""
         return self.selected_child - other
 
-    # Public methods    
+    # Public methods
 
     def get_id(self):
         "Return the id."
@@ -266,7 +267,7 @@ class DisorderedEntityWrapper(object):
         Uncaught method calls are forwarded to the selected child object.
         """
         self.selected_child=self.child_dict[id]
-    
+
     def disordered_add(self, child):
         "This is implemented by DisorderedAtom and DisorderedResidue."
         raise NotImplementedError
@@ -283,13 +284,13 @@ class DisorderedEntityWrapper(object):
         # sort id list alphabetically
         l.sort()
         return l
-        
+
     def disordered_get(self, id=None):
         """Get the child object associated with id.
 
         If id is None, the currently selected child is returned.
         """
-        if id==None:
+        if id is None:
             return self.selected_child
         return self.child_dict[id]
 

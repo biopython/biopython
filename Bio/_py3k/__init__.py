@@ -21,10 +21,9 @@ if sys.version_info[0] >= 3:
         #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_decode(s)[0]
 
-
     def _as_bytes(s):
         """Turn byte string or unicode string into a bytes string.
-        
+
         The Python 2 version returns a (byte) string.
         """
         if isinstance(s, bytes):
@@ -33,7 +32,6 @@ if sys.version_info[0] >= 3:
         #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_encode(s)[0]
 
-    
     _as_string = _as_unicode
 
     def _is_int_or_long(i):
@@ -44,6 +42,7 @@ if sys.version_info[0] >= 3:
         return isinstance(i, int)
 
     import io
+
     def _binary_to_string_handle(handle):
         """Treat a binary (bytes) handle like a text (unicode) handle."""
         #See also http://bugs.python.org/issue5628
@@ -55,19 +54,26 @@ if sys.version_info[0] >= 3:
         class EvilHandleHack(object):
             def __init__(self, handle):
                 self._handle = handle
+
             def read(self, length=None):
                 return _as_string(self._handle.read(length))
+
             def readline(self):
                 return _as_string(self._handle.readline())
+
             def __iter__(self):
                 for line in self._handle:
                     yield _as_string(line)
+
             def close(self):
                 return self._handle.close()
+
             def seek(self, pos):
                 return self._handle.seek(pos)
+
             def tell(self):
-                return self._handle.tell(pos)
+                return self._handle.tell()
+
         return EvilHandleHack(handle)
 
     #On Python 3, can depend on OrderedDict being present:
@@ -85,11 +91,11 @@ else:
         if isinstance(s, unicode):
             return s
         return s.decode()
-    
+
     def _as_bytes(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""
         return str(s)
-    
+
     _as_string = _as_bytes
 
     def _is_int_or_long(i):

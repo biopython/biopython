@@ -20,10 +20,11 @@ class RecordTest(unittest.TestCase):
         """
 
         r = FDist.Record()
-        assert type(r.data_org)  == int
-        assert type(r.num_pops)  == int
-        assert type(r.num_loci)  == int
-        assert type(r.loci_data) == list
+        assert isinstance(r.data_org, int)
+        assert isinstance(r.num_pops, int)
+        assert isinstance(r.num_loci, int)
+        assert isinstance(r.loci_data, list)
+
 
 class ParserTest(unittest.TestCase):
     def setUp(self):
@@ -57,7 +58,7 @@ class ParserTest(unittest.TestCase):
             handle = self.handles[index]
             rec = FDist.read(handle)
             assert isinstance(rec, FDist.Record)
-            assert rec.data_org == 0 #We don't support any other
+            assert rec.data_org == 0  # We don't support any other
             assert rec.num_pops, rec.num_loci == self.pops_loci[index]
             for i in range(len(self.num_markers[index])):
                 assert rec.loci_data[i][0] == \
@@ -67,6 +68,7 @@ class ParserTest(unittest.TestCase):
                 for test in my_test_pos:
                     locus, pop, pos, value = test
                     assert(rec.loci_data[locus][1][pop][pos] == value)
+
 
 class ConversionTest(unittest.TestCase):
     def setUp(self):
@@ -95,7 +97,7 @@ class ConversionTest(unittest.TestCase):
             fd_rec = convert_genepop_to_fdist(gp_rec)
             assert(fd_rec.num_loci == 3)
             assert(fd_rec.num_pops == 3)
-            gp_rec._handle.close() #TODO - Needs a proper fix
+            gp_rec._handle.close()  # TODO - Needs a proper fix
 
     def tearDown(self):
         for handle in self.handles:

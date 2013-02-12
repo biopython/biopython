@@ -1,7 +1,7 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package.  
+# as part of this package.
 
 """Consumer class that builds a Structure object.
 
@@ -15,7 +15,7 @@ from Bio.PDB.Structure import Structure
 from Bio.PDB.Model import Model
 from Bio.PDB.Chain import Chain
 from Bio.PDB.Residue import Residue, DisorderedResidue
-from Bio.PDB.Atom import Atom, DisorderedAtom 
+from Bio.PDB.Atom import Atom, DisorderedAtom
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -46,9 +46,9 @@ class StructureBuilder(object):
 
     def set_line_counter(self, line_counter):
         """
-        The line counter keeps track of the line in the PDB file that 
+        The line counter keeps track of the line in the PDB file that
         is being parsed.
-        
+
         Arguments:
         o line_counter - int
         """
@@ -64,7 +64,7 @@ class StructureBuilder(object):
 
     def init_model(self, model_id, serial_num = None):
         """Initiate a new Model object with given id.
-        
+
         Arguments:
         o id - int
         o serial_num - int
@@ -89,7 +89,7 @@ class StructureBuilder(object):
 
     def init_seg(self, segid):
         """Flag a change in segid.
-        
+
         Arguments:
         o segid - string
         """
@@ -101,7 +101,7 @@ class StructureBuilder(object):
 
         Arguments:
         o resname - string, e.g. "ASN"
-        o field - hetero flag, "W" for waters, "H" for 
+        o field - hetero flag, "W" for waters, "H" for
             hetero residues, otherwise blank.
         o resseq - int, sequence identifier
         o icode - string, insertion code
@@ -109,8 +109,8 @@ class StructureBuilder(object):
         if field!=" ":
             if field=="H":
                 # The hetero field consists of H_ + the residue name (e.g. H_FUC)
-                field="H_"+resname 
-        res_id=(field, resseq, icode) 
+                field="H_"+resname
+        res_id=(field, resseq, icode)
         if field==" ":
             if self.chain.has_id(res_id):
                 # There already is a residue with the id (field, resseq, icode).
@@ -122,7 +122,7 @@ class StructureBuilder(object):
                 duplicate_residue=self.chain[res_id]
                 if duplicate_residue.is_disordered()==2:
                     # The residue in the chain is a DisorderedResidue object.
-                    # So just add the last Residue object. 
+                    # So just add the last Residue object.
                     if duplicate_residue.disordered_has_id(resname):
                         # The residue was already made
                         self.residue=duplicate_residue
@@ -138,12 +138,12 @@ class StructureBuilder(object):
                     # Make a new DisorderedResidue object and put all
                     # the Residue objects with the id (field, resseq, icode) in it.
                     # These residues each should have non-blank altlocs for all their atoms.
-                    # If not, the PDB file probably contains an error. 
+                    # If not, the PDB file probably contains an error.
                     if not self._is_completely_disordered(duplicate_residue):
                         # if this exception is ignored, a residue will be missing
                         self.residue=None
-                        raise PDBConstructionException(\
-                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')" \
+                        raise PDBConstructionException(
+                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
                             % (resname, field, resseq, icode))
                     self.chain.detach_child(res_id)
                     new_residue=Residue(res_id, resname, self.segid)
@@ -176,11 +176,11 @@ class StructureBuilder(object):
         # the construction of the residue
         if residue is None:
             return
-        # First check if this atom is already present in the residue. 
-        # If it is, it might be due to the fact that the two atoms have atom 
+        # First check if this atom is already present in the residue.
+        # If it is, it might be due to the fact that the two atoms have atom
         # names that differ only in spaces (e.g. "CA.." and ".CA.",
         # where the dots are spaces). If that is so, use all spaces
-        # in the atom name of the current atom. 
+        # in the atom name of the current atom.
         if residue.has_id(name):
                 duplicate_atom=residue[name]
                 # atom name with spaces of duplicate atom
@@ -201,12 +201,12 @@ class StructureBuilder(object):
                 # Residue already contains this atom
                 duplicate_atom=residue[name]
                 if duplicate_atom.is_disordered()==2:
-                    duplicate_atom.disordered_add(atom)     
+                    duplicate_atom.disordered_add(atom)
                 else:
                     # This is an error in the PDB file:
                     # a disordered atom is found with a blank altloc
-                    # Detach the duplicate atom, and put it in a 
-                    # DisorderedAtom object together with the current 
+                    # Detach the duplicate atom, and put it in a
+                    # DisorderedAtom object together with the current
                     # atom.
                     residue.detach_child(name)
                     disordered_atom=DisorderedAtom(name)
@@ -223,11 +223,11 @@ class StructureBuilder(object):
                 # so we create a new one.
                 disordered_atom=DisorderedAtom(name)
                 residue.add(disordered_atom)
-                # Add the real atom to the disordered atom, and the 
+                # Add the real atom to the disordered atom, and the
                 # disordered atom to the residue
                 disordered_atom.disordered_add(atom)
                 residue.flag_disordered()
-        else:   
+        else:
             # The atom is not disordered
             residue.add(atom)
 
@@ -253,5 +253,3 @@ class StructureBuilder(object):
 
     def set_symmetry(self, spacegroup, cell):
         pass
-
-

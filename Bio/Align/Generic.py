@@ -12,12 +12,13 @@ specific to a particular program or format.
 Classes:
  - Alignment
 """
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 # biopython
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
+
 
 class Alignment(object):
     """Represent a set of alignments (DEPRECATED).
@@ -52,7 +53,7 @@ class Alignment(object):
         import warnings
         import Bio
         warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-        if not (isinstance(alphabet, Alphabet.Alphabet) \
+        if not (isinstance(alphabet, Alphabet.Alphabet)
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
         self._alphabet = alphabet
@@ -92,7 +93,7 @@ class Alignment(object):
         See also the alignment's format method.
         """
         rows = len(self._records)
-        lines = ["%s alignment with %i rows and %i columns" \
+        lines = ["%s alignment with %i rows and %i columns"
                  % (str(self._alphabet), rows, self.get_alignment_length())]
         if rows <= 20:
             lines.extend([self._str_line(rec) for rec in self._records])
@@ -161,7 +162,6 @@ class Alignment(object):
         #See also the SeqRecord class and its format() method using Bio.SeqIO
         return self.__format__(format)
 
-
     def __format__(self, format_spec):
         """Returns the alignment as a string in the specified file format.
 
@@ -177,7 +177,7 @@ class Alignment(object):
             return handle.getvalue()
         else:
             #Follow python convention and default to using __str__
-            return str(self)    
+            return str(self)
 
     def get_all_seqs(self):
         """Return all of the sequences involved in the alignment (DEPRECATED).
@@ -217,7 +217,7 @@ class Alignment(object):
         Gamma
         ACTGCTAGATAG
         """
-        return iter(self._records) 
+        return iter(self._records)
 
     def get_seq_by_num(self, number):
         """Retrieve a sequence by row number (DEPRECATED).
@@ -248,7 +248,7 @@ class Alignment(object):
         list of SeqRecord objects.
         """
         return len(self._records)
-    
+
     def get_alignment_length(self):
         """Return the maximum length of the alignment.
 
@@ -269,7 +269,7 @@ class Alignment(object):
 
         >>> len(align)
         3
-        
+
         """
         max_length = 0
 
@@ -329,7 +329,7 @@ class Alignment(object):
         new_record.annotations['weight'] = weight
 
         self._records.append(new_record)
-        
+
     def get_column(self,col):
         """Returns a string containing a given column.
 
@@ -364,7 +364,7 @@ class Alignment(object):
         >>> align.add_sequence("Gamma",  "ACTGCTAGATAG")
         >>> align.add_sequence("Delta",  "ACTGCTTGCTAG")
         >>> align.add_sequence("Epsilon","ACTGCTTGATAG")
-        
+
         You can access a row of the alignment as a SeqRecord using an integer
         index (think of the alignment as a list of SeqRecord objects here):
 
@@ -422,10 +422,11 @@ class Alignment(object):
             sub_align._records = self._records[index]
             return sub_align
         elif len(index)==2:
-            raise TypeError("Row and Column indexing is not currently supported,"\
+            raise TypeError("Row and Column indexing is not currently supported,"
                             +"but may be in future.")
         else:
             raise TypeError("Invalid index type.")
+
 
 def _test():
     """Run the Bio.Align.Generic module's doctests."""

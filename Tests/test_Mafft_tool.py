@@ -28,8 +28,9 @@ else:
     if "not found" not in output and "MAFFT" in output:
         mafft_exe = "mafft"
 if not mafft_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install MAFFT if you want to use the Bio.Align.Applications wrapper.")
+
 
 def check_mafft_version(mafft_exe):
     child = subprocess.Popen("%s --help" % mafft_exe,
@@ -62,10 +63,11 @@ def check_mafft_version(mafft_exe):
 #This also checks it actually runs!
 check_mafft_version(mafft_exe)
 
+
 class MafftApplication(unittest.TestCase):
 
     def setUp(self):
-        self.infile1  = "Fasta/f002"
+        self.infile1 = "Fasta/f002"
 
     def tearDown(self):
         if os.path.isfile("Fasta/f002.tree"):
@@ -126,10 +128,10 @@ class MafftApplication(unittest.TestCase):
         cmdline.set_parameter("--treeout", True)
         cmdline.set_parameter("nuc", True)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        self.assertEqual(str(cmdline), mafft_exe \
-                         + " --localpair --weighti 4.2 --retree 5 " \
-                         + "--maxiterate 200 --nofft --op 2.04 --ep 0.51" \
-                         + " --lop 0.233 --lep 0.2 --reorder --treeout" \
+        self.assertEqual(str(cmdline), mafft_exe
+                         + " --localpair --weighti 4.2 --retree 5 "
+                         + "--maxiterate 200 --nofft --op 2.04 --ep 0.51"
+                         + " --lop 0.233 --lep 0.2 --reorder --treeout"
                          + " --nuc Fasta/f002")
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))

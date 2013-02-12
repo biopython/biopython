@@ -76,6 +76,7 @@ all_chr_info = {"I" : chr1_info,
                 "III" : chr3_info,
                 "IV" : chr4_info}
 
+
 def load_chromosome(chr_name):
     """Load a chromosome and all of its segments.
     """
@@ -114,6 +115,7 @@ num_possible_segments = 500
 color_prob = .3
 id_prob = .025
 
+
 def get_random_id():
     """Generate a random id number.
     """
@@ -123,6 +125,7 @@ def get_random_id():
         id += letter
 
     return id
+
 
 def load_random_chromosome(chr_name):
     """Generate a chromosome with random information about it.
@@ -139,7 +142,7 @@ def load_random_chromosome(chr_name):
         # otherwise, they are just regular segments
         else:
             cur_segment = BasicChromosome.ChromosomeSegment()
-            
+
         color_chance = random.random()
         if color_chance <= color_prob:
             fill_color = random.choice(color_choices)
@@ -151,7 +154,7 @@ def load_random_chromosome(chr_name):
             cur_segment.label = id
 
         cur_chromosome.add(cur_segment)
-        
+
     return cur_chromosome, num_segments
 
 
@@ -173,7 +176,6 @@ class OrganismGraphicTest(unittest.TestCase):
 
         pdf_organism.draw(self.test_file, "Test organism")
 
-
     def _simple_organism(self, filename, format):
         """Output a simple organism to given format."""
         test_organism = BasicChromosome.Organism(format)
@@ -184,7 +186,7 @@ class OrganismGraphicTest(unittest.TestCase):
             cur_chromosome = load_chromosome(chr_name)
             test_organism.add(cur_chromosome)
         test_organism.draw(test_file, "Test organism")
-        
+
     def test_simple_organism_ps(self):
         """Output a simple organism to a postscript file.
         """
@@ -199,7 +201,7 @@ class OrganismGraphicTest(unittest.TestCase):
         """Output a simple organism to an SVG file.
         """
         self._simple_organism("organism.svg", "svg")
-     
+
     def test_random_organism(self):
         """Generate an organism with random chromosome info.
         """
@@ -208,7 +210,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         all_segs = []
         all_chrs = []
-        
+
         num_chrs = random.randrange(1, 15)
         for chr_name in range(num_chrs):
             cur_chromosome, num_segs = load_random_chromosome(str(chr_name))
@@ -234,7 +236,7 @@ class OrganismGraphicTest(unittest.TestCase):
         save_stdout = sys.stdout
         new_stdout = cStringIO.StringIO()
         sys.stdout = new_stdout
-        
+
         test_widget.dumpProperties()
 
         properties = new_stdout.getvalue()
@@ -244,12 +246,12 @@ class OrganismGraphicTest(unittest.TestCase):
                "Unexpected results from dumpProperties: \n %s" % properties)
 
         properties = test_widget.getProperties()
-        self.assertEqual(properties["label_size"], 6, 
+        self.assertEqual(properties["label_size"], 6,
                "Unexpected results from getProperties: %s" % properties)
 
         test_widget.setProperties({"start_x_position" : 12})
         self.assertEqual(test_widget.start_x_position, 12,
-               "setProperties doesn't seem to work right: %s" \
+               "setProperties doesn't seem to work right: %s"
                % test_widget.start_x_position)
 
 
@@ -268,7 +270,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                    ("Chr IV", "NC_003075", 18585042, f4, colors.orange),
                    ("Chr V", "NC_003076", 26992728, f5, colors.purple)]
         max_length = max([row[2] for row in entries])
- 
+
         chr_diagram = BasicChromosome.Organism()
         for name, acc, length, features, color in entries:
             if False:
@@ -283,8 +285,8 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 features = [f for f in record.features if f.type=="tRNA"]
                 print name
                 #Strip of the first three chars, AT# where # is the chr
-                print [(int(f.location.start), int(f.location.end), \
-                        f.strand, f.qualifiers['locus_tag'][0][3:]) \
+                print [(int(f.location.start), int(f.location.end),
+                        f.strand, f.qualifiers['locus_tag'][0][3:])
                        for f in features]
                 #Output was copy and pasted to the script, see above.
                 #Continue test using SeqFeature objects!
@@ -292,7 +294,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 for i,f in enumerate(features):
                     f.qualifiers['color'] = [str(i % 16)]
             else:
-                features = [(start,end,strand,label,color) \
+                features = [(start,end,strand,label,color)
                             for (start,end,strand,label) in features]
             #I haven't found a nice source of data for real Arabidopsis
             #cytobands, so these three are made up at random!
@@ -337,7 +339,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             chr_diagram.add(cur_chromosome)
         chr_diagram.draw("Graphics/tRNA_chrom.pdf", "Arabidopsis thaliana tRNA")
 
-        
+
 class ChromosomeCountTest(unittest.TestCase):
     """Test the display representation for simple counts on a chromosome.
     """
@@ -409,17 +411,17 @@ class ChromosomeCountTest(unittest.TestCase):
         """
         test_count_num = 1
         test_count_value = 5
-        
+
         test_label_num = 3
         test_label_value = "BigBird"
-        
+
         self.count_display.add_count(self.names[test_count_num],
                                      test_count_value)
         self.count_display.add_label(self.names[test_label_num],
                                      test_label_value)
 
         seg_info = self.count_display.get_segment_info()
-        
+
         assert seg_info[test_count_num][0] == test_count_value, \
                "Did not set and retrieve counts correctly."
         assert seg_info[test_label_num][1] == test_label_value, \

@@ -9,8 +9,30 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 ===================================================================
+ 
+(In progress, not released yet) Biopython 1.62
 
-(In progress, not released yet) Biopython 1.61
+Please note that this could be our last release to support Python 2.5.
+
+The handling of joins and related complex features in Genbank/EMBL files has
+been changed with the introduction of a CompoundLocation object. Previously
+a SeqFeature for something like a multi-exon CDS would have a child SeqFeature
+(under the sub_features attribute) for each exon. The sub_features property
+will still be populated for now, but is deprecated and will in future be
+removed. Please consult the examples in the help (docstrings) and Tutorial.
+
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Ben Morris (first contribution)
+Peter Cock
+Petra Kubincová (first contribution)
+
+===================================================================
+
+5 February 2013: Biopython 1.61 released.
 
 GenomeDiagram has three new sigils (shapes to illustrate features). OCTO shows
 an octagonal shape, like the existing BOX sigil but with the corners cut off.
@@ -23,27 +45,76 @@ New module Bio.Graphics.ColorSpiral can generate colors along a spiral path
 through HSV color space. This can be used to make arbitrary 'rainbow' scales,
 for example to color features or cross-links on a GenomeDiagram figure.
 
+The Bio.SeqIO module now supports reading sequences from PDB files in two
+different ways. The "pdb-atom" format determines the sequence as it appears in
+the structure based on the atom coordinate section of the file (via Bio.PDB,
+so NumPy is currently required for this). Alternatively, you can use the
+"pdb-seqres" format to read the complete protein sequence as it is listed in
+the PDB header, if available.
+
+The Bio.SeqUtils module how has a seq1 function to turn a sequence using three
+letter amino acid codes into one using the more common one letter codes. This
+acts as the inverse of the existing seq3 function.
+
+The multiple-sequence-alignment object used by Bio.AlignIO etc now supports
+an annotation dictionary. Additional support for per-column annotation is
+planned, with addition and splicing to work like that for the SeqRecord
+per-letter annotation.
+
+A new warning, Bio.BiopythonExperimentalWarning, has been introduced. This
+marks any experimental code included in the otherwise stable release. Such
+'beta' level code is ready for wider testing, but still likely to change and
+should only be tried by early adopters to give feedback via the biopython-dev
+mailing list. We'd expect such experimental code to reach stable status in
+one or two releases time, at which point our normal policies about trying to
+preserve backwards compatibility would apply. See also the README file.
+
+This release also includes Bow's Google Summer of Code work writing a unified
+parsing framework for NCBI BLAST (assorted formats including tabular and XML),
+HMMER, BLAT, and other sequence searching tools. This is currently available
+with the new BiopythonExperimentalWarning to indicate that this is still
+somewhat experimental. We're bundling it with the main release to get more
+public feedback, but with the big warning that the API is likely to change.
+In fact, even the current name of Bio.SearchIO may change since unless you
+are familiar with BioPerl its purpose isn't immediately clear.
+
+The Bio.Motif module has been updated and reorganized. To allow for a clean
+deprecation of the old code, the new motif code is stored in a new module
+Bio.motifs, and a PendingDeprecationWarning was added to Bio.Motif.
+
 Additionally there have been other minor bug fixes and more unit tests.
+
+Finally, we are phasing out support for Python 2.5. We will continue support
+for at least one further release (Biopython 1.62). This could be extended
+given feedback from our users (or if the Jython 2.7 release is delayed, since
+the current stable release Jython 2.5 implemented Python 2.5 only). Focusing
+on Python 2.6 and 2.7 only will make writing Python 3 compatible code easier.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Brandon Invergo
+Bryan Lunt (first contribution)
+Christian Brueffer (first contribution)
 David Cain
+Eric Talevich
 Grace Yeo (first contribution)
+Jeffrey Chang
 Jingping Li (first contribution)
 Kai Blin (first contribution)
 Leighton Pritchard
 Lenna Peterson
 Lucas Sinclair (first contribution)
+Michiel de Hoon
 Nick Semenkovich (first contribution)
 Peter Cock
 Robert Ernst (first contribution)
 Tiago Antao
+Wibowo 'Bow' Arindrarto
 
 ===================================================================
 
-25 June 2012: Biopython 1.60
+25 June 2012: Biopython 1.60 released.
 
 New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
 Zip Format), a variant of GZIP with efficient random access, most commonly
@@ -89,7 +160,7 @@ Wibowo Arindrarto
 
 ===================================================================
 
-24 February 2012: Biopython 1.59
+24 February 2012: Biopython 1.59 released.
 
 Please note that this release will *not* work on Python 2.4 (while the recent
 releases have worked despite us not officially supporting this).
@@ -157,7 +228,7 @@ Peter Cock
 
 ===================================================================
 
-18 August 2011: Biopython 1.58
+18 August 2011: Biopython 1.58 released.
 
 A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
 Likelihood) package of programs, supporting codeml, baseml and yn00 as well
@@ -176,12 +247,12 @@ would only return alignments for the first query sequence.
 
 The Bio.AlignIO "phylip" parser and writer now treat a dot/period in the
 sequence as an error, in line with the official PHYLIP specification. Older
-verions of our code didn't do anything special with this character. Also,
+versions of our code didn't do anything special with this character. Also,
 support for "phylip-relaxed" has been added which allows longer record names
 as used in RAxML and PHYML.
 
 Of potential interest to anyone subclassing Biopython objects, any remaining
-"old syle" Python classes have been switched to "new style" classes. This
+"old style" Python classes have been switched to "new style" classes. This
 allows things like defining properties.
 
 Bio.HMM's Viterbi algorithm now expects the initial probabilities explicitly.
@@ -208,7 +279,7 @@ Wibowo Arindrarto (first contribution)
 
 ===================================================================
 
-2 April 2011: Biopython 1.57
+2 April 2011: Biopython 1.57 released.
 
 Bio.SeqIO now includes an index_db() function which extends the existing
 indexing functionality to allow indexing many files, and more importantly
@@ -218,7 +289,7 @@ memory in a Python dictionary.
 Bio.Blast.Applications now includes a wrapper for the BLAST+ blast_formatter
 tool from NCBI BLAST 2.2.24+ or later. This release of BLAST+ added the
 ability to run the BLAST tools and save the output as ASN.1 format, and then
-convert this to any other supported BLAST ouput format (plain text, tabular,
+convert this to any other supported BLAST output format (plain text, tabular,
 XML, or HTML) with the blast_formatter tool. The wrappers were also updated
 to include new arguments added in BLAST 2.2.25+ such as -db_hard_mask.
 
@@ -241,7 +312,7 @@ their element type and IUPAC mass. (The new features that use these
 attributes won't be included in Biopython until the next release, though, so
 stay tuned.)
 
-The nodetype hierachy in the Bio.SCOP.Cla.Record class is now a dictionary
+The nodetype hierarchy in the Bio.SCOP.Cla.Record class is now a dictionary
 (previously it was a list of key,value tuples) to better match the standard.
 
 Many thanks to the Biopython developers and community for making this release
@@ -279,16 +350,16 @@ Bio.SeqIO can now read, write and index IMGT files. These are a variant of
 the EMBL sequence text file format with longer feature indentation.
 
 Bio.SeqIO now supports protein EMBL files (used in the EMBL patents database
-file epo_prt.dat) - perviously we only expected nucleotide EMBL files.
+file epo_prt.dat) - previously we only expected nucleotide EMBL files.
 
 The Bio.Seq translation methods and function will now accept an arbitrary
 CodonTable object (for those of you working on very unusual organisms).
 
 The SeqFeature object now supports len(feature) giving the length consistent
 with the existing extract method. Also, it now supports iteration giving the
-coordindate (with respect to the parent sequence) of each letter within the
+coordinate (with respect to the parent sequence) of each letter within the
 feature (in frame aware order), and "in" which allows you to check if a
-(parent based) coordindate is within the feature location.
+(parent based) coordinate is within the feature location.
 
 Bio.Entrez will now try to download any missing NCBI DTD files and cache them
 in the user's home directory.
@@ -420,7 +491,7 @@ needed for our NCBI Entrez Utilities XML parser.
 
 The parse, read and write functions in Bio.SeqIO and Bio.AlignIO will now
 accept filenames as well as handles. This follows a general shift from
-from other Python libraries, and does make usage a little simpler. Also
+other Python libraries, and does make usage a little simpler. Also
 the write functions will now accept a single SeqRecord or alignment.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
@@ -553,7 +624,7 @@ optimisations (e.g. FASTQ to FASTA, and interconverting FASTQ variants).
 New function Bio.SeqIO.index() allows indexing of most sequence file formats
 (but not alignment file formats), allowing dictionary like random access to
 all the entries in the file as SeqRecord objects, keyed on the record id.
-This is epecially useful for very large sequencing files, where all the
+This is especially useful for very large sequencing files, where all the
 records cannot be held in memory at once. This supplements the more flexible
 but memory demanding Bio.SeqIO.to_dict() function.
 
@@ -1202,7 +1273,7 @@ Dec 17, 2002: Biopython 1.10
   pairwise2 replaces fastpairwise and pairwise
   removed deprecated Sequence.py package
   minor bug fix in File.SGMLStripper
-  added Scripts/debug/debug_blast_parser.py to diagnoze blast parsing errors
+  added Scripts/debug/debug_blast_parser.py to diagnose blast parsing errors
   IPI supported by SwissProt/SProt.py parser
   large speedup for kmeans
   new registry framework for generic access to databases and parsers

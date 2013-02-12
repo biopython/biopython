@@ -39,6 +39,7 @@ import doctest
 import distutils.util
 import gc
 
+
 def is_pypy():
     import platform
     try:
@@ -48,6 +49,7 @@ def is_pypy():
         #New in Python 2.6, not in Jython yet either
         pass
     return False
+
 
 def is_numpy():
     if is_pypy():
@@ -83,10 +85,26 @@ DOCTEST_MODULES = [
                    "Bio.KEGG.Compound",
                    "Bio.KEGG.Enzyme",
                    "Bio.Motif",
+                   "Bio.Motif.Applications._AlignAce",
+                   "Bio.Motif.Applications._XXmotif",
+                   "Bio.motifs",
+                   "Bio.motifs.applications._alignace",
+                   "Bio.motifs.applications._xxmotif",
                    "Bio.pairwise2",
                    "Bio.Phylo.Applications._Raxml",
+                   "Bio.SearchIO",
+                   "Bio.SearchIO._model",
+                   "Bio.SearchIO._model.query",
+                   "Bio.SearchIO._model.hit",
+                   "Bio.SearchIO._model.hsp",
+                   "Bio.SearchIO.BlastIO",
+                   "Bio.SearchIO.HmmerIO",
+                   "Bio.SearchIO.FastaIO",
+                   "Bio.SearchIO.BlatIO",
+                   "Bio.SearchIO.ExonerateIO",
                    "Bio.Seq",
                    "Bio.SeqIO",
+                   "Bio.SeqIO.FastaIO",
                    "Bio.SeqIO.AceIO",
                    "Bio.SeqIO.PhdIO",
                    "Bio.SeqIO.QualityIO",
@@ -113,12 +131,20 @@ try:
 except ImportError:
     #Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
+    DOCTEST_MODULES.remove("Bio.SearchIO")
 
 #Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
 
-system_lang = os.environ.get('LANG', 'C') #Cache this
+#HACK: Since Python2.5 under Windows have slightly different str(float) output,
+#we're removing doctests that may fail because of this
+if sys.platform == "win32" and sys.version_info < (2,6):
+    DOCTEST_MODULES.remove("Bio.SearchIO._model.hit")
+    DOCTEST_MODULES.remove("Bio.SearchIO._model.hsp")
+
+system_lang = os.environ.get('LANG', 'C')  # Cache this
+
 
 def main(argv):
     """Run tests, return number of failures (integer)."""
@@ -143,7 +169,7 @@ def main(argv):
     # HOWEVER, we do not want to change the default encoding which is
     # rather important on Python 3 with unicode.
     #lang = os.environ['LANG']
-    
+
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
@@ -241,7 +267,7 @@ class ComparisonTestCase(unittest.TestCase):
 
         if expected_test != self.name:
             expected.close()
-            raise ValueError("\nOutput:   %s\nExpected: %s" \
+            raise ValueError("\nOutput:   %s\nExpected: %s"
                   % (self.name, expected_test))
 
         # now loop through the output and compare it to the expected file
@@ -268,7 +294,7 @@ class ComparisonTestCase(unittest.TestCase):
             # otherwise make sure the two lines are the same
             elif expected_line != output_line:
                 expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s" \
+                raise ValueError("\nOutput  : %s\nExpected: %s"
                       % (repr(output_line), repr(expected_line)))
         expected.close()
 
@@ -349,7 +375,7 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("%s docstring test ... " % name)
                 #Can't use fromlist=name.split(".") until python 2.5+
                 module = __import__(name, None, None, name.split("."))
-                suite = doctest.DocTestSuite(module)
+                suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
             if cur_dir != os.path.abspath("."):

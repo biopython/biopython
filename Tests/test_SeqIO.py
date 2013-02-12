@@ -5,6 +5,7 @@
 
 import os
 
+from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -20,13 +21,12 @@ except ImportError:
     BytesIO = StringIO
 
 import warnings
-def send_warnings_to_stdout(message, category, filename, lineno,
-                                file=None, line=None):
-    #TODO - Have Biopython DataLossWarning?
-    if category in [UserWarning]:
-        print "%s - %s" % (category.__name__, message)
-warnings.showwarning = send_warnings_to_stdout
 
+# TODO - Convert this to using unittest, and check desired warnings
+# are issued. Used to do that by capturing warnings to stdout and
+# verifying via the print-and-compare check. However, there was some
+# frustrating cross-platform inconsistency I couldn't resolve.
+warnings.simplefilter('ignore', BiopythonWarning)
 
 protein_alphas = [Alphabet.generic_protein]
 dna_alphas = [Alphabet.generic_dna]
@@ -50,8 +50,8 @@ for format in sorted(SeqIO._FormatToWriter):
 for format in sorted(AlignIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
         test_write_read_alignment_formats.append(format)
-test_write_read_alignment_formats.remove("gb") #an alias for genbank
-test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
+test_write_read_alignment_formats.remove("gb")  # an alias for genbank
+test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -59,7 +59,7 @@ test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
 # - string:  relative filename
 # - integer: number of sequences
 
-test_files = [ \
+test_files = [
     ("sff",    False, 'Roche/E3MFGYR02_random_10_reads.sff', 10),
 #Following examples are also used in test_Clustalw.py
     ("clustal",True,  'Clustalw/cw02.aln', 2),
@@ -80,22 +80,22 @@ test_files = [ \
     ("fasta",  False, 'Fasta/rose.pro', 1),
     ("fasta",  False, 'Fasta/rosemary.pro', 1),
 #Following examples are also used in test_BioSQL_SeqIO.py
-    ("fasta",  False, 'Fasta/f001', 1), #Protein
-    ("fasta",  False, 'Fasta/f002', 3), #DNA
-    #("fasta", False, 'Fasta/f003', 2), #Protein with comments
-    ("fasta",  False, 'Fasta/fa01', 2), #Protein with gaps
+    ("fasta",  False, 'Fasta/f001', 1),  # Protein
+    ("fasta",  False, 'Fasta/f002', 3),  # DNA
+    #("fasta", False, 'Fasta/f003', 2),  # Protein with comments
+    ("fasta",  False, 'Fasta/fa01', 2),  # Protein with gaps
 #Following are also used in test_SeqIO_features.py, see also NC_005816.gb
     ("fasta",  False, 'GenBank/NC_005816.fna', 1),
     ("fasta",  False, 'GenBank/NC_005816.ffn', 10),
     ("fasta",  False, 'GenBank/NC_005816.faa', 10),
     ("fasta",  False, 'GenBank/NC_000932.faa', 85),
-    ("tab",  False, 'GenBank/NC_005816.tsv', 10), # FASTA -> Tabbed
+    ("tab",  False, 'GenBank/NC_005816.tsv', 10),  # FASTA -> Tabbed
 #Following examples are also used in test_GFF.py
-    ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
-    ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
-    ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
+    ("fasta",  False, 'GFF/NC_001802.fna', 1),  # upper case
+    ("fasta",  False, 'GFF/NC_001802lc.fna', 1),  # lower case
+    ("fasta",  True,  'GFF/multi.fna', 3),  # Trivial nucleotide alignment
 #Following example is also used in test_registry.py
-    ("fasta",  False, 'Registry/seqs.fasta', 2), #contains blank line
+    ("fasta",  False, 'Registry/seqs.fasta', 2),  # contains blank line
 #Following example is also used in test_Nexus.py
     ("nexus",  True,  'Nexus/test_Nexus_input.nex', 9),
 #Following examples are also used in test_SwissProt.py
@@ -128,17 +128,17 @@ test_files = [ \
     ("genbank",False, 'GenBank/iro.gb', 1),
     ("genbank",False, 'GenBank/pri1.gb', 1),
     ("genbank",False, 'GenBank/arab1.gb', 1),
-    ("genbank",False, 'GenBank/protein_refseq.gb', 1), #Old version
-    ("genbank",False, 'GenBank/protein_refseq2.gb', 1), #Revised version
+    ("genbank",False, 'GenBank/protein_refseq.gb', 1),  # Old version
+    ("genbank",False, 'GenBank/protein_refseq2.gb', 1),  # Revised version
     ("genbank",False, 'GenBank/extra_keywords.gb', 1),
     ("genbank",False, 'GenBank/one_of.gb', 1),
-    ("genbank",False, 'GenBank/NT_019265.gb', 1), #contig, no sequence
+    ("genbank",False, 'GenBank/NT_019265.gb', 1),  # contig, no sequence
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
-    ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
+    ("genbank",False, 'GenBank/NC_005816.gb', 1),  # See also AE017046.embl
     ("genbank",False, 'GenBank/NC_000932.gb', 1),
-    ("genbank",False, 'GenBank/pBAD30.gb', 1), #Odd LOCUS line from Vector NTI
+    ("genbank",False, 'GenBank/pBAD30.gb', 1),  # Odd LOCUS line from Vector NTI
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
@@ -146,17 +146,17 @@ test_files = [ \
 #Following files are also used in test_GFF.py
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
 #Following files are currently only used here or in test_SeqIO_index.py:
-    ("embl",   False, 'EMBL/epo_prt_selection.embl', 9), #proteins
+    ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
-    ("embl",   False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
-    ("embl",   False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
-    ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
-    ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
-    ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
-    ("embl",   False, 'EMBL/location_wrap.embl', 1), #wrapped locations and unspecified type
-    ("embl",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
-    ("imgt",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
+    ("embl",   False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
+    ("embl",   False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
+    ("embl",   False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
+    ("embl",   False, 'EMBL/AE017046.embl', 1),  # See also NC_005816.gb
+    ("embl",   False, 'EMBL/Human_contigs.embl', 2),  # contigs, no sequences
+    ("embl",   False, 'EMBL/location_wrap.embl', 1),  # wrapped locations and unspecified type
+    ("embl",   False, 'EMBL/A04195.imgt', 1),  # features over indented for EMBL
+    ("imgt",   False, 'EMBL/A04195.imgt', 1),  # features over indented for EMBL
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 6),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,
@@ -214,6 +214,7 @@ test_files = [ \
     ("abi", False, 'Abi/3730.ab1', 1),
     ]
 
+
 class ForwardOnlyHandle(object):
     """Mimic a network handle without seek and tell methods etc."""
     def __init__(self, handle):
@@ -233,6 +234,7 @@ class ForwardOnlyHandle(object):
 
     def close(self):
         return self._handle.close()
+
 
 def compare_record(record_one, record_two):
     """This is meant to be a strict comparison for exact agreement..."""
@@ -257,12 +259,13 @@ def compare_record(record_one, record_two):
     elif str(record_one.seq) != str(record_two.seq):
         return False
     #TODO - check features and annotation (see code for BioSQL tests)
-    for key in set(record_one.letter_annotations).intersection( \
+    for key in set(record_one.letter_annotations).intersection(
                    record_two.letter_annotations):
         if record_one.letter_annotations[key] != \
            record_two.letter_annotations[key]:
             return False
     return True
+
 
 def record_summary(record, indent=" "):
     """Returns a concise summary of a SeqRecord object as a string"""
@@ -280,11 +283,13 @@ def record_summary(record, indent=" "):
         answer += "', length=%i" % (len(record.seq))
     return answer
 
+
 def col_summary(col_text):
     if len(col_text) < 65:
         return col_text
     else:
         return col_text[:60] + "..." + col_text[-5:]
+
 
 def alignment_summary(alignment, index=" "):
     """Returns a concise summary of an Alignment object as a string"""
@@ -292,13 +297,13 @@ def alignment_summary(alignment, index=" "):
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     for i in range(min(5,alignment_len)):
-        answer.append(index + col_summary(alignment.get_column(i)) \
+        answer.append(index + col_summary(alignment.get_column(i))
                             + " alignment column %i" % i)
     if alignment_len > 5:
         i = alignment_len - 1
-        answer.append(index + col_summary("|" * rec_count) \
+        answer.append(index + col_summary("|" * rec_count)
                             + " ...")
-        answer.append(index + col_summary(alignment.get_column(i)) \
+        answer.append(index + col_summary(alignment.get_column(i))
                             + " alignment column %i" % i)
     return "\n".join(answer)
 
@@ -309,9 +314,9 @@ def check_simple_write_read(records, indent=" "):
         if format not in possible_unknown_seq_formats \
         and isinstance(records[0].seq, UnknownSeq) \
         and len(records[0].seq) > 100:
-           #Skipping for speed.  Some of the unknown sequences are
-           #rather long, and it seems a bit pointless to record them.
-           continue
+            #Skipping for speed.  Some of the unknown sequences are
+            #rather long, and it seems a bit pointless to record them.
+            continue
         print indent+"Checking can write/read as '%s' format" % format
 
         #Going to write to a handle...
@@ -355,7 +360,7 @@ def check_simple_write_read(records, indent=" "):
             #I want to see the output when called from the test harness,
             #run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            raise ValueError("%s\n\n%s\n\n%s" \
+            raise ValueError("%s\n\n%s\n\n%s"
                               % (str(e), repr(handle.read()), repr(records)))
 
         assert len(records2) == t_count
@@ -411,7 +416,8 @@ def check_simple_write_read(records, indent=" "):
 
 #Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator:
-    if t_format in SeqIO._BinaryFormats or t_format=="uniprot-xml":
+    if t_format in SeqIO._BinaryFormats or \
+       t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom"):
         #Not allowed empty SFF files.
         continue
     handle = StringIO()
@@ -429,9 +435,9 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     #Try as an iterator using handle
     h = open(t_filename,mode)
-    records  = list(SeqIO.parse(handle=h, format=t_format))
+    records = list(SeqIO.parse(handle=h, format=t_format))
     h.close()
-    assert len(records)  == t_count, \
+    assert len(records) == t_count, \
          "Found %i records but expected %i" % (len(records), t_count)
 
     #Try using the iterator with a for loop, and a filename not handle
@@ -517,7 +523,6 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
                 "Bad cross reference in dbxrefs: %s" % repr(ref)
         assert len(record.dbxrefs) == len(record.dbxrefs), \
                "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
-
 
         #Check the lists obtained by the different methods agree
         assert compare_record(record, records2[i])
@@ -605,7 +610,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         print "Testing reading %s format file %s as an alignment" \
               % (t_format, t_filename)
 
-        alignment = MultipleSeqAlignment(SeqIO.parse( \
+        alignment = MultipleSeqAlignment(SeqIO.parse(
                     handle=t_filename, format=t_format))
         assert len(alignment) == t_count
 

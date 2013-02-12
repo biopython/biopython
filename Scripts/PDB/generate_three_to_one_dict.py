@@ -7,7 +7,7 @@
 
 """
 Download and parse PDB Chemical Component Dictionary,
-then write out dict for to_one_letter_code. 
+then write out dict for to_one_letter_code.
 """
 
 import gzip
@@ -35,7 +35,7 @@ with open(gzname, 'wb') as gzh:
 
 # size as of 13 April 2012
 if os.path.getsize(gzname) < 29944258:
-    warnings.warn("ERROR: Downloaded file is too small", 
+    warnings.warn("ERROR: Downloaded file is too small",
                   RuntimeWarning)
 
 fh = gzip.open(gzname, 'rb')
@@ -58,7 +58,7 @@ three_to_one_buf_noq = []  # only those with non-'?' one-letter codes
 current_line = 'to_one_letter_code = {'
 current_line_noq = 'to_one_letter_code = {'
 
-found_one   = False  # found one-letter code
+found_one = False    # found one-letter code
 found_three = False  # found three-letter code
 
 counter = 0
@@ -67,16 +67,15 @@ counter_noq = 0
 line = fh.readline()
 
 while line:
-    
     if line.startswith('_chem_comp.one_letter_code'):
         one = line.strip().split()[-1]
         found_one = True
     if line.startswith('_chem_comp.three_letter_code'):
-        three = '%-3s' % (line.strip().split()[-1],) # make it three-letter
+        three = '%-3s' % (line.strip().split()[-1],)  # make it three-letter
         found_three = True
 
     if found_one and found_three:
-        if counter%5 == 0:
+        if counter % 5 == 0:
             three_to_one_buf.append('%s\n' % (current_line,))
             current_line = '    '
 
@@ -84,8 +83,8 @@ while line:
         counter += 1
 
         if one != '?':
-            if counter_noq%5 == 0:
-                three_to_one_buf_noq.append('%s\n'% (current_line_noq,))
+            if counter_noq % 5 == 0:
+                three_to_one_buf_noq.append('%s\n' % (current_line_noq,))
                 current_line_noq = '    '
 
             current_line_noq = '%s\'%s\':\'%s\',' % (current_line_noq, three, one)
@@ -93,12 +92,11 @@ while line:
 
         found_one = False
         found_three = False
-            
 
     line = fh.readline()
 
 if len(current_line) < 5:
-    three_to_one_buf[-1] = three_to_one_buf[:-1] # remove the last comma
+    three_to_one_buf[-1] = three_to_one_buf[:-1]  # remove the last comma
     three_to_one_buf.append('}')
 else:
     three_to_one_buf.append('%s }' % (current_line[:-1]))

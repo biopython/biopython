@@ -8,7 +8,7 @@
 See Also
 --------
 Official specification:
-   http://phyloxml.org/ 
+   http://phyloxml.org/
 Journal article:
     Han and Zmasek (2009), doi:10.1186/1471-2105-10-356
 """
@@ -111,7 +111,7 @@ class Other(PhyloElement):
             attributes on the XML node
         value : string
             text contained directly within this XML node
-        children : list 
+        children : list
             child nodes, if any (also `Other` instances)
     """
     def __init__(self, tag, namespace=None, attributes=None, value=None,
@@ -151,7 +151,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             Confidence objects for this tree
         clade_relations : list
             CladeRelation objects
-        sequence_relations : list 
+        sequence_relations : list
             SequenceRelation objects
         properties : list
             Property objects
@@ -469,7 +469,7 @@ class Annotation(PhyloElement):
     """
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
 
-    def __init__(self, 
+    def __init__(self,
             # Attributes
             ref=None, source=None, evidence=None, type=None,
             # Child nodes
@@ -489,7 +489,7 @@ class Annotation(PhyloElement):
 
 class BinaryCharacters(PhyloElement):
     """The names and/or counts of binary characters present, gained, and lost
-    at the root of a clade. 
+    at the root of a clade.
     """
     def __init__(self,
             # Attributes
@@ -506,7 +506,6 @@ class BinaryCharacters(PhyloElement):
         self.lost=lost or []
         self.present=present or []
         self.absent=absent or []
-
 
 
 class CladeRelation(PhyloElement):
@@ -692,7 +691,7 @@ class Date(PhyloElement):
         maximum : float
             upper bound on the date value
     """
-    def __init__(self, value=None, unit=None, desc=None, 
+    def __init__(self, value=None, unit=None, desc=None,
             minimum=None, maximum=None):
         self.value = value
         self.unit = unit
@@ -1014,7 +1013,7 @@ class Sequence(PhyloElement):
                  'protein': Alphabet.generic_protein}
     re_symbol = re.compile(r'\S{1,10}')
 
-    def __init__(self, 
+    def __init__(self,
             # Attributes
             type=None, id_ref=None, id_source=None,
             # Child nodes
@@ -1041,7 +1040,7 @@ class Sequence(PhyloElement):
     @classmethod
     def from_seqrecord(cls, record, is_aligned=None):
         """Create a new PhyloXML Sequence from a SeqRecord object."""
-        if is_aligned == None:
+        if is_aligned is None:
             is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
         params = {
                 'accession': Accession(record.id, ''),
@@ -1090,7 +1089,7 @@ class Sequence(PhyloElement):
 
     def to_seqrecord(self):
         """Create a SeqRecord object from this Sequence instance.
-        
+
         The seqrecord.annotations dictionary is packed like so::
 
             { # Sequence attributes with no SeqRecord equivalent:
@@ -1174,7 +1173,7 @@ class SequenceRelation(PhyloElement):
     """Express a typed relationship between two sequences.
 
     For example, this could be used to describe an orthology (in which case
-    attribute 'type' is 'orthology'). 
+    attribute 'type' is 'orthology').
 
     :Parameters:
         id_ref_0 : Id
@@ -1242,7 +1241,7 @@ class Taxonomy(PhyloElement):
         'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
         'unknown', 'other'))
 
-    def __init__(self, 
+    def __init__(self,
             # Attributes
             id_source=None,
             # Child nodes

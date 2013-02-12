@@ -11,6 +11,7 @@ import copy
 # local modules
 from Abstract import AbstractSelection
 
+
 class RouletteWheelSelection(AbstractSelection):
     """Roulette wheel selection proportional to individuals fitness.
 
@@ -50,7 +51,7 @@ class RouletteWheelSelection(AbstractSelection):
         prob_wheel = self._set_up_wheel(population)
         probs = prob_wheel.keys()
         probs.sort()
-        
+
         # now create the new population with the same size as the original
         new_population = []
 
@@ -77,7 +78,7 @@ class RouletteWheelSelection(AbstractSelection):
             # do mutation and crossover to get the new organisms
             new_org_1, new_org_2 = self.mutate_and_crossover(chosen_org_1,
                                                              chosen_org_2)
-            
+
             new_population.extend([new_org_1, new_org_2])
 
         return new_population
@@ -89,7 +90,7 @@ class RouletteWheelSelection(AbstractSelection):
         selecting based on random numbers.
 
         Returns:
-        
+
         o A dictionary where the keys are the 'high' value that an
         individual will be selected. The low value is determined by
         the previous key in a sorted list of keys. For instance, if we

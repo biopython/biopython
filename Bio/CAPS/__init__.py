@@ -14,6 +14,7 @@ http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=8
 Copyright Jonathan Taylor 2005
 """
 
+
 class DifferentialCutsite(object):
     """A differential cutsite is a location in an alignment where an enzyme cuts
     at least one sequence and also cannot cut at least one other sequence.
@@ -34,21 +35,23 @@ class DifferentialCutsite(object):
         Each member (as listed in the class description) should be included as a
         keyword.
         """
-        
+
         self.start = int(kwds["start"])
         self.enzyme = kwds["enzyme"]
         self.cuts_in = kwds["cuts_in"]
         self.blocked_in = kwds["blocked_in"]
 
+
 class AlignmentHasDifferentLengthsError(Exception):
     pass
+
 
 class CAPSMap(object):
     """A map of an alignment showing all possible dcuts.
 
     Members:
     alignment  The alignment that is mapped.
-    dcuts      A list of possible CAPS markers in the form of 
+    dcuts      A list of possible CAPS markers in the form of
                          DifferentialCutsites.
     """
 
@@ -74,7 +77,7 @@ class CAPSMap(object):
 
         # look for dcuts
         self._digest()
-    
+
     def _digest_with(self, enzyme):
         cuts = {}
         all = []
@@ -90,7 +93,7 @@ class CAPSMap(object):
 
         # we sort the all list and remove duplicates
         all.sort()
-        
+
         last = -999
         new = []
         for cut in all:

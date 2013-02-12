@@ -14,6 +14,7 @@
 # Code written by Jeffrey Chang to access SCOP over the internet, which
 # was previously in Bio.WWW.SCOP, has now been merged into this module.
 
+
 """ SCOP: Structural Classification of Proteins.
 
 The SCOP database aims to provide a manually constructed classification of
@@ -35,7 +36,7 @@ identifier (sid).
 
 nodeCodeDict  -- A mapping between known 2 letter node codes and a longer
                   description. The known node types are 'cl' (class), 'cf'
-                  (fold), 'sf' (superfamily), 'fa' (family), 'dm' (domain), 
+                  (fold), 'sf' (superfamily), 'fa' (family), 'dm' (domain),
                   'sp' (species), 'px' (domain). Additional node types may
                   be added in the future.
 
@@ -65,7 +66,7 @@ nodeCodeDict = { 'cl':'class', 'cf':'fold', 'sf':'superfamily',
 _nodetype_to_code= { 'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
                      'family': 'fa', 'protein': 'dm', 'species': 'sp', 'domain': 'px'}
 
-nodeCodeOrder = [ 'ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px' ] 
+nodeCodeOrder = [ 'ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px' ]
 
 astralBibIds = [10,20,25,30,35,40,50,70,90,95,100]
 
@@ -93,13 +94,14 @@ except NameError:
         functionality, you could use the expression (a > b) -  (a < b)
         as the equivalent for cmp(a, b)
         """
-        return (a > b) -  (a < b)
+        return (a > b) - (a < b)
+
 
 def cmp_sccs(sccs1, sccs2):
     """Order SCOP concise classification strings (sccs).
 
     a.4.5.1 < a.4.5.11 < b.1.1.1
-    
+
     A sccs (e.g. a.4.5.11) compactly represents a domain's classification.
     The letter represents the class, and the numbers are the fold,
     superfamily, and family, respectively.
@@ -109,7 +111,8 @@ def cmp_sccs(sccs1, sccs2):
     s1 = sccs1.split(".")
     s2 = sccs2.split(".")
 
-    if s1[0] != s2[0]: return _cmp(s1[0], s2[0])
+    if s1[0] != s2[0]:
+        return _cmp(s1[0], s2[0])
 
     s1 = list(map(int, s1[1:]))
     s2 = list(map(int, s2[1:]))
@@ -118,6 +121,7 @@ def cmp_sccs(sccs1, sccs2):
 
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
+
 
 def parse_domain(str):
     """Convert an ASTRAL header string into a Scop domain.
@@ -134,7 +138,8 @@ def parse_domain(str):
     """
 
     m = _domain_re.match(str)
-    if (not m) : raise ValueError("Domain: "+ str)
+    if (not m):
+        raise ValueError("Domain: "+ str)
 
     dom = Domain()
     dom.sid = m.group(1)
@@ -146,6 +151,7 @@ def parse_domain(str):
 
     return dom
 
+
 def _open_scop_file(scop_dir_path, version, filetype):
     filename = "dir.%s.scop.txt_%s" % (filetype,version)
     handle = open(os.path.join( scop_dir_path, filename))
@@ -155,7 +161,7 @@ def _open_scop_file(scop_dir_path, version, filetype):
 class Scop(object):
     """The entire SCOP hierarchy.
 
-    root -- The root node of the hierarchy 
+    root -- The root node of the hierarchy
     """
     def __init__(self, cla_handle=None, des_handle=None, hie_handle=None,
                  dir_path=None, db_handle=None, version=None):
@@ -170,38 +176,37 @@ class Scop(object):
         If a MySQLdb database handle is given, the tree will be built as needed,
         minimising construction times.  To build the SQL database to the methods
         write_xxx_sql to create the tables.
-        
+
         """
         self._sidDict = {}
         self._sunidDict = {}
 
-        if cla_handle==des_handle==hie_handle==dir_path==db_handle==None: return 
+        if all(h is None for h in [cla_handle, des_handle, hie_handle, dir_path, db_handle]):
+            return
 
         if dir_path is None and db_handle is None:
-            if cla_handle == None or des_handle==None or hie_handle==None:
+            if cla_handle is None or des_handle is None or hie_handle is None:
                 raise RuntimeError("Need CLA, DES and HIE files to build SCOP")
 
         sunidDict = {}
 
         self.db_handle = db_handle
         try:
-            
             if db_handle:
                 # do nothing if we have a db handle, we'll do it all on the fly
                 pass
-            
             else:
-                # open SCOP parseable files 
+                # open SCOP parseable files
                 if dir_path:
                     if not version:
                         raise RuntimeError("Need SCOP version to find parsable files in directory")
                     if cla_handle or des_handle or hie_handle:
                         raise RuntimeError("Cannot specify SCOP directory and specific files")
-                
+
                     cla_handle = _open_scop_file( dir_path, version, 'cla')
                     des_handle = _open_scop_file( dir_path, version, 'des')
                     hie_handle = _open_scop_file( dir_path, version, 'hie')
-                
+
                 root = Node()
                 domains = []
                 root.sunid=0
@@ -217,36 +222,35 @@ class Scop(object):
                         n = Domain()
                         n.sid = record.name
                         domains.append(n)
-                    else : 
+                    else :
                         n = Node()
                     n.sunid = record.sunid
                     n.type = record.nodetype
                     n.sccs = record.sccs
                     n.description = record.description
-                    
+
                     sunidDict[n.sunid] = n
- 
+
                 # Glue all of the Nodes together using the HIE file
                 records = Hie.parse(hie_handle)
                 for record in records:
                     if record.sunid not in sunidDict:
                         print record.sunid
-                        
+
                     n = sunidDict[record.sunid]
-    
+
                     if record.parent != '' : # Not root node
-    
+
                         if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
-                                       
+
                         n.parent = sunidDict[record.parent]
-                
+
                     for c in record.children:
                         if c not in sunidDict:
                             raise ValueError("Incomplete data?")
                         n.children.append(sunidDict[c])
 
-                        
                 # Fill in the gaps with information from the CLA file
                 sidDict = {}
                 records = Cla.parse(cla_handle)
@@ -265,14 +269,15 @@ class Scop(object):
         finally:
             if dir_path:
                 # If we opened the files, we close the files
-                if cla_handle : cla_handle.close()
-                if des_handle : des_handle.close()
-                if hie_handle : hie_handle.close()
-                                    
+                if cla_handle:
+                    cla_handle.close()
+                if des_handle:
+                    des_handle.close()
+                if hie_handle:
+                    hie_handle.close()
 
     def getRoot(self):
         return self.getNodeBySunid(0)
-
 
     def getDomainBySid(self, sid):
         """Return a domain from its sid"""
@@ -285,7 +290,6 @@ class Scop(object):
         else:
             return None
 
-
     def getNodeBySunid(self, sunid):
         """Return a node from its sunid"""
         if sunid in self._sunidDict:
@@ -297,15 +301,12 @@ class Scop(object):
         else:
             return None
 
-    
     def getDomains(self):
         """Returns an ordered tuple of all SCOP Domains"""
         if self.db_handle:
             return self.getRoot().getDescendents('px')
         else:
             return self._domains
-
-
 
     def write_hie(self, handle):
         """Build an HIE SCOP parsable file from this object"""
@@ -315,9 +316,8 @@ class Scop(object):
         for n in nodes:
             handle.write(str(n.toHieRecord()))
 
-
     def write_des(self, handle):
-        """Build a DES SCOP parsable file from this object""" 
+        """Build a DES SCOP parsable file from this object"""
         nodes = self._sunidDict.values()
         # Origional SCOP file is not ordered?
         nodes.sort(key = lambda n: n.sunid)
@@ -325,22 +325,21 @@ class Scop(object):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
-
     def write_cla(self, handle):
-        """Build a CLA SCOP parsable file from this object"""                
+        """Build a CLA SCOP parsable file from this object"""
         nodes = self._sidDict.values()
         # We order nodes to ease comparison with original file
         nodes.sort(key = lambda n: n.sunid)
         for n in nodes:
             handle.write(str(n.toClaRecord()))
 
-
     def getDomainFromSQL(self, sunid=None, sid=None):
         """Load a node from the SQL backend using sunid or sid"""
-        if sunid==sid==None: return None
+        if sunid is None and sid is None:
+            return None
 
         cur = self.db_handle.cursor()
-        
+
         if sid:
             cur.execute("SELECT sunid FROM cla WHERE sid=%s", sid)
             res = cur.fetchone()
@@ -353,7 +352,7 @@ class Scop(object):
 
         if data is not None:
             n = None
-            
+
             #determine if Node or Domain
             if data[1] != "px":
                 n = Node(scop=self)
@@ -363,18 +362,16 @@ class Scop(object):
                 for c in cur.fetchall():
                     children.append(c[0])
                 n.children = children
-                
-                
             else:
                 n = Domain(scop=self)
                 cur.execute("select sid, residues, pdbid from cla where sunid=%s",
                                sunid)
-                
+
                 [n.sid,n.residues,pdbid] = cur.fetchone()
                 n.residues = Residues.Residues(n.residues)
                 n.residues.pdbid=pdbid
                 self._sidDict[n.sid] = n
-                
+
             [n.sunid,n.type,n.sccs,n.description] = data
 
             if data[1] != 'ro':
@@ -384,11 +381,11 @@ class Scop(object):
             n.sunid = int(n.sunid)
 
             self._sunidDict[n.sunid] = n
-        
 
     def getAscendentFromSQL(self, node, type):
         """Get ascendents using SQL backend"""
-        if nodeCodeOrder.index(type) >= nodeCodeOrder.index(node.type): return None
+        if nodeCodeOrder.index(type) >= nodeCodeOrder.index(node.type):
+            return None
 
         cur = self.db_handle.cursor()
         cur.execute("SELECT "+type+" from cla WHERE "+node.type+"=%s", (node.sunid))
@@ -398,16 +395,15 @@ class Scop(object):
         else:
             return None
 
-                            
     def getDescendentsFromSQL(self, node, type):
         """Get descendents of a node using the database backend.  This avoids
         repeated iteration of SQL calls and is therefore much quicker than
         repeatedly calling node.getChildren().
         """
-        if nodeCodeOrder.index(type) <= nodeCodeOrder.index(node.type): return []
+        if nodeCodeOrder.index(type) <= nodeCodeOrder.index(node.type):
+            return []
 
         des_list = []
-        
 
         # SQL cla table knows nothing about 'ro'
         if node.type == 'ro':
@@ -415,10 +411,9 @@ class Scop(object):
                 for d in self.getDescendentsFromSQL(c,type):
                     des_list.append(d)
             return des_list
-        
+
         cur = self.db_handle.cursor()
-        
-        
+
         if type != 'px':
             cur.execute("SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM \
             cla,des WHERE cla."+node.type+"=%s AND cla."+type+"=des.sunid", (node.sunid))
@@ -432,14 +427,13 @@ class Scop(object):
 
                     cur.execute("SELECT parent FROM hie WHERE child=%s", n.sunid)
                     n.parent = cur.fetchone()[0]
-                                    
+
                     cur.execute("SELECT child FROM hie WHERE parent=%s", n.sunid)
                     children = []
                     for c in cur.fetchall():
                         children.append(c[0])
                     n.children = children
-                    
-                    
+
                 des_list.append( self._sunidDict[int(d[0])] )
 
         else:
@@ -460,14 +454,10 @@ class Scop(object):
                     n.sunid = int(n.sunid)
                     self._sunidDict[n.sunid] = n
                     self._sidDict[n.sid] = n
-                    
-                    
+
                 des_list.append( self._sunidDict[int(d[0])] )
 
         return des_list
-        
-                
-        
 
     def write_hie_sql(self, handle):
         """Write HIE data to SQL database"""
@@ -480,7 +470,6 @@ class Scop(object):
         for p in self._sunidDict.itervalues():
             for c in p.children:
                 cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
-
 
     def write_cla_sql(self, handle):
         """Write CLA data to SQL database"""
@@ -498,8 +487,7 @@ class Scop(object):
                          n.getAscendent('cl').sunid, n.getAscendent('cf').sunid,
                          n.getAscendent('sf').sunid, n.getAscendent('fa').sunid,
                          n.getAscendent('dm').sunid, n.getAscendent('sp').sunid,
-                         n.sunid ))                         
-        
+                         n.sunid ))
 
     def write_des_sql(self, handle):
         """Write DES data to SQL database"""
@@ -509,13 +497,12 @@ class Scop(object):
         cur.execute("CREATE TABLE des (sunid INT, type CHAR(2), sccs CHAR(10),\
         description VARCHAR(255),\
         PRIMARY KEY (sunid) )")
-        
+
         for n in self._sunidDict.itervalues():
             cur.execute( "INSERT INTO des VALUES (%s,%s,%s,%s)",
-                         ( n.sunid, n.type, n.sccs, n.description ) )                        
-        
+                         ( n.sunid, n.type, n.sccs, n.description ) )
 
-  
+
 class Node(object):
     """ A node in the Scop hierarchy
 
@@ -529,19 +516,19 @@ class Node(object):
 
     type     -- A 2 letter node type code. e.g. 'px' for domains
 
-    description -- 
-        
+    description --
+
     """
     def __init__(self, scop=None):
         """Create a Node in the scop hierarchy.  If a Scop instance is provided to the
         constructor, this will be used to lookup related references using the SQL
         methods.  If no instance is provided, it is assumed the whole tree exists
         and is connected."""
-        self.sunid=''    
+        self.sunid=''
         self.parent = None
         self.children=[]
-        self.sccs = ''   
-        self.type =''    
+        self.sccs = ''
+        self.type =''
         self.description =''
         self.scop=scop
 
@@ -558,16 +545,16 @@ class Node(object):
         """Return an Hie.Record"""
         rec = Hie.Record()
         rec.sunid = str(self.sunid)
-        if self.getParent() : #Not root node
+        if self.getParent():  # Not root node
             rec.parent = str(self.getParent().sunid)
         else:
             rec.parent = '-'
         for c in self.getChildren():
             rec.children.append(str(c.sunid))
         return rec
-    
+
     def toDesRecord(self):
-        """Return a Des.Record"""        
+        """Return a Des.Record"""
         rec = Des.Record()
         rec.sunid = str(self.sunid)
         rec.nodetype = self.type
@@ -580,7 +567,7 @@ class Node(object):
         if self.scop is None:
             return self.children
         else:
-            return map ( self.scop.getNodeBySunid, self.children )
+            return map( self.scop.getNodeBySunid, self.children )
 
     def getParent(self):
         """Return the parent of this Node"""
@@ -595,20 +582,20 @@ class Node(object):
         """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
-            
+
         nodes = [self]
         if self.scop:
             return self.scop.getDescendentsFromSQL(self,node_type)
         while nodes[0].type != node_type:
-            if nodes[0].type == 'px' : return [] # Fell of the bottom of the hierarchy
+            if nodes[0].type == 'px':
+                return [] # Fell of the bottom of the hierarchy
             child_list = []
             for n in nodes:
                 for child in n.getChildren():
                     child_list.append( child )
                 nodes = child_list
-                
+
         return nodes
-                    
 
     def getAscendent( self, node_type):
         """ Return the ancenstor node of the given type, or None.Node type can a
@@ -620,14 +607,16 @@ class Node(object):
             return self.scop.getAscendentFromSQL(self,node_type)
         else:
             n = self
-            if n.type == node_type: return None
+            if n.type == node_type:
+                return None
+
             while n.type != node_type:
-                if n.type == 'ro': return None # Fell of the top of the hierarchy
-                n = n.getParent()            
-                
+                if n.type == 'ro':
+                    return None # Fell of the top of the hierarchy
+                n = n.getParent()
+
             return n
-                                                            
-    
+
 
 class Domain(Node):
     """ A SCOP domain. A leaf node in the Scop hierarchy.
@@ -639,7 +628,7 @@ class Domain(Node):
     """
     def __init__(self,scop=None):
         Node.__init__(self,scop=scop)
-        self.sid = ''         
+        self.sid = ''
         self.residues = None
 
     def __str__(self):
@@ -665,24 +654,25 @@ class Domain(Node):
         return rec
 
     def toClaRecord(self):
-        """Return a Cla.Record"""        
+        """Return a Cla.Record"""
         rec = Cla.Record()
         rec.sid = self.sid
         rec.residues = self.residues
         rec.sccs = self.sccs
         rec.sunid = self.sunid
-        
+
         n = self
-        while n.sunid != 0: #Not root node
+        while n.sunid != 0:  # Not root node
             rec.hierarchy[n.type] = str(n.sunid)
             n = n.getParent()
 
         # Order does not matter in the hierarchy field. For more info, see
         # http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
         #rec.hierarchy.reverse()
-       
+
         return rec
-            
+
+
 class Astral(object):
     """Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
     as well as clusterings by percent id or evalue.
@@ -692,42 +682,41 @@ class Astral(object):
                   astral_file=None, db_handle=None):
         """
         Initialise the astral database.
-        
+
         You must provide either a directory of SCOP files:
-                
+
         dir_path - string, the path to location of the scopseq-x.xx directory
                    (not the directory itself), and
         version   -a version number.
-        
+
         or, a FASTA file:
-        
+
         astral_file - string, a path to a fasta file (which will be loaded in memory)
-        
+
         or, a MYSQL database:
-        
+
         db_handle - a database handle for a MYSQL database containing a table
                     'astral' with the astral data in it.  This can be created
                     using writeToSQL.
         """
 
-        if astral_file==dir_path==db_handle==None:
-            raise RuntimeError("Need either file handle, or (dir_path + "\
+        if astral_file is None and dir_path is None and db_handle is None:
+            raise RuntimeError("Need either file handle, or (dir_path + "
                        + "version) or database handle to construct Astral")
         if not scop:
             raise RuntimeError("Must provide a Scop instance to construct")
 
         self.scop = scop
-        self.db_handle = db_handle 
+        self.db_handle = db_handle
 
-        
         if not astral_file and not db_handle:
-            if dir_path == None or version == None:
+            if dir_path is None or version is None:
                 raise RuntimeError("must provide dir_path and version")
 
             self.version = version
             self.path = os.path.join( dir_path, "scopseq-%s" % version)
             astral_file = "astral-scopdom-seqres-all-%s.fa" % self.version
-            astral_file = os.path.join (self.path, astral_file)
+            astral_file = os.path.join(self.path, astral_file)
 
         if astral_file:
             #Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY
@@ -738,18 +727,17 @@ class Astral(object):
         self.EvDatahash = {}
         self.IdDatasets = {}
         self.IdDatahash = {}
-                
-        
+
     def domainsClusteredByEv(self,id):
         """get domains clustered by evalue"""
         if id not in self.EvDatasets:
             if self.db_handle:
                 self.EvDatasets[id] = self.getAstralDomainsFromSQL(astralEv_to_sql[id])
-                
+
             else:
                 if not self.path:
                     raise RuntimeError("No scopseq directory specified")
-                
+
                 file_prefix = "astral-scopdom-seqres-sel-gs"
                 filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id] ,
                                                   self.version)
@@ -757,27 +745,24 @@ class Astral(object):
                 self.EvDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.EvDatasets[id]
 
-
     def domainsClusteredById(self,id):
         """get domains clustered by percent id"""
         if id not in self.IdDatasets:
             if self.db_handle:
                 self.IdDatasets[id] = self.getAstralDomainsFromSQL("id"+str(id))
-                
             else:
                 if not self.path:
                     raise RuntimeError("No scopseq directory specified")
-                
+
                 file_prefix = "astral-scopdom-seqres-sel-gs"
                 filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
                 filename = os.path.join(self.path,filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
 
-
     def getAstralDomainsFromFile(self,filename=None,file_handle=None):
         """Get the scop domains from a file containing a list of sids"""
-        if file_handle == filename == None:
+        if file_handle is None and filename is None:
             raise RuntimeError("You must provide a filename or handle")
         if not file_handle:
             file_handle = open(filename)
@@ -802,15 +787,13 @@ class Astral(object):
         cur.execute("SELECT sid FROM astral WHERE "+column+"=1")
         data = cur.fetchall()
         data = map( lambda x: self.scop.getDomainBySid(x[0]), data)
-        
+
         return data
-    
 
     def getSeqBySid(self,domain):
         """get the seq record of a given domain from its sid"""
         if self.db_handle is None:
             return self.fasta_dict[domain].seq
-        
         else:
             cur = self.db_handle.cursor()
             cur.execute("SELECT seq FROM astral WHERE sid=%s", domain)
@@ -819,7 +802,6 @@ class Astral(object):
     def getSeq(self,domain):
         """Return seq associated with domain"""
         return self.getSeqBySid(domain.sid)
-
 
     def hashedDomainsById(self,id):
         """Get domains clustered by sequence identity in a dict"""
@@ -836,7 +818,6 @@ class Astral(object):
             for d in self.domainsClusteredByEv(id):
                 self.EvDatahash[id][d] = 1
         return self.EvDatahash[id]
-                                                        
 
     def isDomainInId(self,dom,id):
         """Returns true if the domain is in the astral clusters for percent ID"""
@@ -845,7 +826,6 @@ class Astral(object):
     def isDomainInEv(self,dom,id):
         """Returns true if the domain is in the ASTRAL clusters for evalues"""
         return dom in self.hashedDomainsByEv(id)
-            
 
     def writeToSQL(self, db_handle):
         """Write the ASTRAL database to a MYSQL database"""
@@ -857,10 +837,10 @@ class Astral(object):
         for dom in self.fasta_dict:
             cur.execute("INSERT INTO astral (sid,seq) values (%s,%s)",
                         (dom, self.fasta_dict[dom].seq.data))
-        
+
         for i in astralBibIds:
             cur.execute("ALTER TABLE astral ADD (id"+str(i)+" TINYINT)")
-            
+
             for d in self.domainsClusteredById(i):
                 cur.execute("UPDATE astral SET id"+str(i)+"=1  WHERE sid=%s",
                             d.sid)
@@ -869,9 +849,9 @@ class Astral(object):
             cur.execute("ALTER TABLE astral ADD ("+astralEv_to_sql[ev]+" TINYINT)")
 
             for d in self.domainsClusteredByEv(ev):
-                
                 cur.execute("UPDATE astral SET "+astralEv_to_sql[ev]+"=1  WHERE sid=%s",
                             d.sid)
+
 
 def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
            cgi='http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi', **keywds):
@@ -894,6 +874,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     variables.update(keywds)
     return _open(cgi, variables)
 
+
 def _open(cgi, params={}, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle
 
@@ -903,7 +884,8 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
-    import urllib, urllib2
+    import urllib
+    import urllib2
     # Open a handle to SCOP.
     options = urllib.urlencode(params)
     try:

@@ -6,8 +6,9 @@
 __version__ = "$Revision: 1.11 $"
 
 import cStringIO
-import doctest, unittest
+import doctest
 import sys
+import unittest
 
 if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
@@ -15,11 +16,12 @@ import requires_wise
 
 from Bio import Wise
 
+
 class TestWiseDryRun(unittest.TestCase):
     def setUp(self):
         self.old_stdout = sys.stdout
         sys.stdout = cStringIO.StringIO()
-        
+
     def test_dnal(self):
         """Call dnal, and do a trivial check on its output."""
         Wise.align(["dnal"], ("seq1.fna", "seq2.fna"), kbyte=100000, dry_run=True)
@@ -36,6 +38,7 @@ class TestWiseDryRun(unittest.TestCase):
 
     def tearDown(self):
         sys.stdout = self.old_stdout
+
 
 class TestWise(unittest.TestCase):
     def test_align(self):

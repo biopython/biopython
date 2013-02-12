@@ -90,8 +90,8 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     @param DSSP: DSSP executable (argument to os.system)
     @type DSSP: string
 
-    @return: a dictionary that maps (chainid, resid) to 
-        amino acid type, secondary structure code and 
+    @return: a dictionary that maps (chainid, resid) to
+        amino acid type, secondary structure code and
         accessibility.
     @rtype: {}
     """
@@ -135,7 +135,7 @@ def make_dssp_dict(filename):
             if ss == " ":
                 ss = "-"
             try:
-                acc = int(l[34:38]) 
+                acc = int(l[34:38])
                 phi = float(l[103:109])
                 psi = float(l[109:115])
             except ValueError, exc:
@@ -150,7 +150,7 @@ def make_dssp_dict(filename):
                     phi = float(l[103+shift:109+shift])
                     psi = float(l[109+shift:115+shift])
                 else:
-                    raise ValueError, exc
+                    raise ValueError(exc)
             res_id = (" ", resseq, icode)
             dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi)
             keys.append((chainid, res_id))
@@ -161,7 +161,7 @@ def make_dssp_dict(filename):
 
 class DSSP(AbstractResiduePropertyMap):
     """
-    Run DSSP on a pdb file, and provide a handle to the 
+    Run DSSP on a pdb file, and provide a handle to the
     DSSP secondary structure and accessibility.
 
     Note that DSSP can only handle one model.
@@ -205,8 +205,8 @@ class DSSP(AbstractResiduePropertyMap):
             """Serialize a residue's resseq and icode for easy comparison."""
             return '%s%s' % (res_id[1], res_id[2])
 
-        # Now create a dictionary that maps Residue objects to 
-        # secondary structure and accessibility, and a list of 
+        # Now create a dictionary that maps Residue objects to
+        # secondary structure and accessibility, and a list of
         # (residue, (secondary structure, accessibility)) tuples
         for key in dssp_keys:
             chain_id, res_id = key
@@ -266,8 +266,8 @@ class DSSP(AbstractResiduePropertyMap):
                     res_seq_icode = resid2code(res_id)
                     for r in chain:
                         if r.id[0] not in (' ', 'W'):
-                            if (resid2code(r.id) == res_seq_icode and
-                                r.get_list()[0].get_altloc() in tuple('A1 ')):
+                            if resid2code(r.id) == res_seq_icode and \
+                               r.get_list()[0].get_altloc() in tuple('A1 '):
                                 res = r
                                 break
 
@@ -323,4 +323,3 @@ if __name__ == "__main__":
         print s[0]['A'][1].xtra
     # Secondary structure
     print ''.join(d[key][1] for key in d.keys())
-

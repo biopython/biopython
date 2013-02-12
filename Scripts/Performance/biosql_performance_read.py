@@ -4,8 +4,8 @@
 import time
 # set up the connection
 from BioSQL import BioSeqDatabase
-server = BioSeqDatabase.open_database (host = "192.168.0.192", user = "root", 
-                                       passwd = "", db = "test_biosql")
+server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
+                                       passwd="", db="test_biosql")
 db = server["embl_rod"]
 
 # -- do the fasta-only timing part
@@ -15,7 +15,7 @@ for junk_id, record in all_records:
     sequence = record.seq.data
     d = record.description
     i = record.id
-    n = record.name 
+    n = record.name
 
 end_time = time.time()
 num_records = len(all_records)

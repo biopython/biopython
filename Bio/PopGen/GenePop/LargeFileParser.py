@@ -17,11 +17,12 @@ read             Parses a GenePop record (file) into a Record object.
 
 """
 
+
 def get_indiv(line):
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
     markers = [marker for marker in markers if marker!='']
-    if len(markers[0]) in [2, 4]: #2 digits per allele
+    if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
         marker_len = 3
@@ -29,10 +30,11 @@ def get_indiv(line):
         allele_list = [(int(marker[0:marker_len]),
                        int(marker[marker_len:]))
                    for marker in markers]
-    except ValueError: #Haploid
+    except ValueError:  # Haploid
         allele_list = [(int(marker[0:marker_len]),)
                    for marker in markers]
     return indiv_name, allele_list, marker_len
+
 
 def read(handle):
     """Parses a handle containing a GenePop file.
@@ -51,7 +53,7 @@ def read(handle):
     while line!="":
         line = line.rstrip()
         if line.upper()=="POP":
-            record.stack.append("POP")            
+            record.stack.append("POP")
             break
         record.loci_list.append(line)
         line = handle.readline()
@@ -65,8 +67,8 @@ class Record(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).    
-    
+    marker_len         The marker length (2 or 3 digit code per allele).
+
     comment_line       Comment line.
 
     loci_list          List of loci names.
@@ -83,16 +85,15 @@ class Record(object):
     has three diploid loci. For the second loci, one of the alleles
     is unknown.
 
-    
     """
     def __init__(self, handle):
-        self.handle          = handle
-        self.marker_len      = 0
-        self.comment_line    = ""
-        self.loci_list       = []
-        self.populations     = []
-        self.data_generator  = None
-        self.stack           = [] 
+        self.handle = handle
+        self.marker_len = 0
+        self.comment_line = ""
+        self.loci_list = []
+        self.populations = []
+        self.data_generator = None
+        self.stack = []
 
     def data_generator(self):
         for handle in [self.stack, self.handle]:
@@ -113,4 +114,3 @@ class Record(object):
                         clean_list.append(tuple(mk_real))
                     yield indiv_name, clean_list
         raise StopIteration()
-        

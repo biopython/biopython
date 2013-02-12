@@ -48,15 +48,15 @@ for f, format in genomes:
 
 print "Drawing matches..."
 for i, crunch_file in enumerate(comparisons):
-    q = genomes[i+1][0] #query file
-    s = genomes[i][0] #subject file
+    q = genomes[i+1][0]  # query file
+    s = genomes[i][0]  # subject file
     q_set = feature_sets[q]
     s_set = feature_sets[s]
     handle = open(crunch_file)
     for line in handle:
         if line[0]=="#":
             continue
-        parts = line.rstrip("\n").split(None,7)
+        parts = line.rstrip("\n").split(None, 7)
         #0 = score
         #1 = id
         #2 = S1
@@ -109,9 +109,9 @@ for f, format in genomes:
                                 border=colors.blue)
 
 gd_diagram.draw(format="linear", fragments=3,
-                orientation="landscape", pagesize=(20*cm,10*cm))
+                orientation="landscape", pagesize=(20*cm, 10*cm))
 gd_diagram.write(name + ".pdf", "PDF")
 
 gd_diagram.draw(format="circular",
-                orientation="landscape", pagesize=(20*cm,20*cm))
+                orientation="landscape", pagesize=(20*cm, 20*cm))
 gd_diagram.write(name + "_c.pdf", "PDF")

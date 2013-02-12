@@ -16,11 +16,13 @@ from Bio.Data import IUPACData
 #   http://www.chem.qmw.ac.uk/iupac/AminoAcid/A2021.html#AA21
 
 assert IUPACData.extended_protein_letters == IUPACData.extended_protein_letters.upper()
+
+
 class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
     """Extended uppercase IUPAC protein single letter alphabet including X etc.
 
     In addition to the standard 20 single letter protein codes, this includes:
-    
+
     B = "Asx";  Aspartic acid (R) or Asparagine (N)
     X = "Xxx";  Unknown or 'other' amino acid
     Z = "Glx";  Glutamic acid (E) or Glutamine (Q)
@@ -36,6 +38,8 @@ class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
 extended_protein = ExtendedIUPACProtein()
 
 assert IUPACData.protein_letters == IUPACData.protein_letters.upper()
+
+
 class IUPACProtein(ExtendedIUPACProtein):
     """Uppercase IUPAC protein single letter alphabet of the 20 standard amino acids."""
     letters = IUPACData.protein_letters
@@ -44,6 +48,7 @@ protein = IUPACProtein()
 
 ##################### DNA
 
+
 # The next two are the IUPAC definitions, from:
 #   http://www.chem.qmw.ac.uk/iubmb/misc/naseq.html
 class IUPACAmbiguousDNA(Alphabet.DNAAlphabet):
@@ -51,6 +56,7 @@ class IUPACAmbiguousDNA(Alphabet.DNAAlphabet):
     letters = IUPACData.ambiguous_dna_letters
 
 ambiguous_dna = IUPACAmbiguousDNA()
+
 
 class IUPACUnambiguousDNA(IUPACAmbiguousDNA):
     """Uppercase IUPAC unambiguous DNA (letters GATC only)."""
@@ -76,11 +82,13 @@ extended_dna = ExtendedIUPACDNA()
 
 ##################### RNA
 
+
 class IUPACAmbiguousRNA(Alphabet.RNAAlphabet):
     """Uppercase IUPAC ambiguous RNA."""
     letters = IUPACData.ambiguous_rna_letters
 
 ambiguous_rna = IUPACAmbiguousRNA()
+
 
 class IUPACUnambiguousRNA(IUPACAmbiguousRNA):
     """Uppercase IUPAC unambiguous RNA (letters GAUC only)."""

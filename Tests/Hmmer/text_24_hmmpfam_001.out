@@ -1,0 +1,489 @@
+hmmpfam - search one or more sequences against HMM database
+HMMER 2.4i (December 2006)
+Copyright (C) 1992-2006 HHMI Janelia Farm
+Freely distributed under the GNU General Public License (GPL)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+HMM file:                 /home/bow/db/hmmer/Pfam_fs
+Sequence file:            mult.fasta
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query sequence: random_s00
+Accession:      [none]
+Description:    [none]
+
+Scores for sequence family classification (score includes all domains):
+Model           Description                             Score    E-value  N 
+--------        -----------                             -----    ------- ---
+	[no hits above thresholds]
+
+Parsed for domains:
+Model           Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------        ------- ----- -----    ----- -----      -----  -------
+	[no hits above thresholds]
+
+Alignments of top-scoring domains:
+	[no hits above thresholds]
+//
+
+Query sequence: gi|4885477|ref|NP_005359.1|
+Accession:      [none]
+Description:    myoglobin [Homo sapiens]
+
+Scores for sequence family classification (score includes all domains):
+Model         Description                               Score    E-value  N 
+--------      -----------                               -----    ------- ---
+Globin        Globin                                    129.8    5.8e-37   1
+tRNA-synt_1b  tRNA synthetases class I (W and Y)          1.8        2.2   1
+Rotavirus_VP3 Rotavirus VP3 protein                      -1.2        7.9   1
+DTHCT         DTHCT (NUC029) region                       1.5        9.8   1
+
+Parsed for domains:
+Model         Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------      ------- ----- -----    ----- -----      -----  -------
+Globin          1/1       7   143 ..     1   148 []   129.8  5.8e-37
+DTHCT           1/1     101   106 ..   101   106 .]     1.5      9.8
+tRNA-synt_1b    1/1     120   137 ..   320   337 .]     1.8      2.2
+Rotavirus_VP3   1/1     134   147 ..     1    15 [.    -1.2      7.9
+
+Alignments of top-scoring domains:
+Globin: domain 1 of 1, from 7 to 143: score 129.8, E = 5.8e-37
+                   *->dkalvkasWgkvkgtdnreelGaealarlFkayPdtktyFpkfgdls
+                      +++lv+  Wgkv++  +++ +G+e+l rlFk +P+t ++F kf+ l+
+  gi|4885477     7    EWQLVLNVWGKVEA--DIPGHGQEVLIRLFKGHPETLEKFDKFKHLK 51   
+
+                   sadaikgspkfkaHgkkVlaalgeavkhLgnddddgnlkaalkkLaarHa
+                   s d++k s+++k+Hg++Vl alg ++k       +g + a +k La +Ha
+  gi|4885477    52 SEDEMKASEDLKKHGATVLTALGGILKK------KGHHEAEIKPLAQSHA 95   
+
+                   erghvdpanFkllgeallIvvLaahlggeveftpevkaAWdkaldvvada
+                   ++++++ ++ + ++e+++ +vL+++ +g  +f +++++A++kal  +  +
+  gi|4885477    96 TKHKIPVKYLEFISECII-QVLQSKHPG--DFGADAQGAMNKALELFRKD 142  
+
+                   l<-*
+                   +   
+  gi|4885477   143 M    143  
+
+DTHCT: domain 1 of 1, from 101 to 106: score 1.5, E = 9.8
+                   *->pvKYLe<-*
+                      pvKYLe   
+  gi|4885477   101    PVKYLE    106  
+
+tRNA-synt_1b: domain 1 of 1, from 120 to 137: score 1.8, E = 2.2
+                   *->hggelKkaaaeavnalls<-*
+                      h+g++  +a+ a+n++l+   
+  gi|4885477   120    HPGDFGADAQGAMNKALE    137  
+
+Rotavirus_VP3: domain 1 of 1, from 134 to 147: score -1.2, E = 7.9
+                   *->MkVLaLFrrgvalnY<-*
+                       k L LFr+++a+nY   
+  gi|4885477   134    -KALELFRKDMASNY    147  
+
+//
+
+Query sequence: gi|126362951:116-221
+Accession:      [none]
+Description:    leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]
+
+Scores for sequence family classification (score includes all domains):
+Model     Description                                   Score    E-value  N 
+--------  -----------                                   -----    ------- ---
+Pro-NT_NN Neurotensin/neuromedin N precursor              1.9        1.9   1
+ig        Immunoglobulin domain                           4.1        2.3   1
+
+Parsed for domains:
+Model     Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------  ------- ----- -----    ----- -----      -----  -------
+Pro-NT_NN   1/1      22    48 ..     1    28 [.     1.9      1.9
+ig          1/1      23    84 ..     1    65 []     4.1      2.3
+
+Alignments of top-scoring domains:
+Pro-NT_NN: domain 1 of 1, from 22 to 48: score 1.9, E = 1.9
+                   *->maGmnlqLvCliLLAFssWsLCsDsEEd<-*
+                        G n+ L C   +AF  +sLC + E++   
+  gi|1263629    22    -SGGNVILQCDSQVAFDGFSLCKEGEDE    48   
+
+ig: domain 1 of 1, from 23 to 84: score 4.1, E = 2.3
+                   *->GesvtLtCsvsgfgppdvtvtWlrngk.lt.gvlvtssenngdstyq
+                      G+ v L+C +         ++++++g + ++  l  + + +g+s  +
+  gi|1263629    23    GGNVILQCDS---QVAFDGFSLCKEGEdEHpQCLNSQPHARGSSRAI 66   
+
+                   tsLtitnvtpeDggtYtCvv<-*
+                     +++ +v+p+    Y+C++   
+  gi|1263629    67 --FSVGPVSPSRRWWYRCYA    84   
+
+//
+
+Query sequence: gi|22748937|ref|NP_065801.1|
+Accession:      [none]
+Description:    exportin-5 [Homo sapiens]
+
+Scores for sequence family classification (score includes all domains):
+Model           Description                             Score    E-value  N 
+--------        -----------                             -----    ------- ---
+Xpo1            Exportin 1-like protein                 170.1    5.1e-48   1
+Ssl1            Ssl1-like                                 8.7    0.00012   1
+IBN_N           Importin-beta N-terminal domain           9.7      0.053   1
+XH              XH domain                                 4.8       0.56   1
+Ni_hydr_CYTB    Cytochrome b561 family                    4.5        1.1   1
+Mic1            Colon cancer-associated protein Mic1-     3.3        1.7   1
+DNA_ligase_aden NAD-dependent DNA ligase adenylation      1.6        1.7   1
+FGGY_N          FGGY family of carbohydrate kinases,      2.2        1.9   1
+DUF1098         Protein of unknown function (DUF1098)     3.3          2   1
+Pox_L5          Poxvirus L5 protein family                3.8          2   1
+Phage_holin_4   Holin family                              3.0        2.3   1
+PTR2            POT family                                1.1          3   1
+EAV_GS          Equine arteritis virus small envelope     0.4        3.5   1
+VIRB2           VIRB2 type IV secretion protein           1.6        3.5   1
+SapB_1          Saposin-like type B, region 1             3.2        3.7   1
+DUF1177         Protein of unknown function (DUF1177)     0.3        3.7   1
+Trehalase       Trehalase                                 0.4        3.8   1
+DUF1019         Protein of unknown function (DUF1019)     1.4        3.9   1
+Peptidase_S13   D-Ala-D-Ala carboxypeptidase 3 (S13)      0.5          4   1
+LCM             Leucine carboxyl methyltransferase       -0.4        5.1   1
+RRN3            RNA polymerase I specific transcripti    -0.7        5.5   1
+dNK             Deoxynucleoside kinase                    1.1        6.1   1
+Transposase_5   Transposase                               2.1        6.3   1
+ATP-grasp       ATP-grasp domain                          0.1        6.7   1
+Lys             C-type lysozyme/alpha-lactalbumin fam     1.2        7.1   1
+Plant_TF        Plant transcription factor                0.9        7.2   1
+Hydantoinase_B  Hydantoinase B/oxoprolinase              -1.4        7.6   1
+DUF1116         Protein of unknown function (DUF1116)    -1.1        7.8   1
+Herpes_teg_N    Herpesvirus tegument protein, N-termi     0.1        8.7   1
+KE2             KE2 family protein                        1.6        9.1   1
+RVP_2           Retroviral aspartyl protease              0.1        9.1   1
+Rad50_zn_hook   Rad50 zinc hook motif                     2.2        9.2   2
+V-ATPase_H      V-ATPase subunit H                       -1.3        9.6   1
+
+Parsed for domains:
+Model           Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------        ------- ----- -----    ----- -----      -----  -------
+DUF1116           1/1       6    15 ..   405   414 .]    -1.1      7.8
+SapB_1            1/1       9    27 ..     6    24 ..     3.2      3.7
+Rad50_zn_hook     1/2      21    47 ..     1    28 [.     0.8       22
+IBN_N             1/1      33   100 ..     1    85 []     9.7    0.053
+dNK               1/1     103   120 ..   153   170 .]     1.1      6.1
+Xpo1              1/1     109   271 ..     1   178 []   170.1  5.1e-48
+Peptidase_S13     1/1     186   195 ..   390   399 .]     0.5        4
+DUF1098           1/1     193   213 ..    32    54 ..     3.3        2
+KE2               1/1     198   213 ..     1    16 [.     1.6      9.1
+RRN3              1/1     198   211 ..   656   669 .]    -0.7      5.5
+LCM               1/1     297   305 ..   322   330 .]    -0.4      5.1
+FGGY_N            1/1     325   338 ..   249   262 .]     2.2      1.9
+Ni_hydr_CYTB      1/1     376   396 ..   197   218 .]     4.5      1.1
+Ssl1              1/1     404   411 ..   257   264 .]     8.7  0.00012
+DUF1177           1/1     445   465 ..   292   312 .]     0.3      3.7
+V-ATPase_H        1/1     491   517 ..   144   170 ..    -1.3      9.6
+PTR2              1/1     497   513 ..   414   430 .]     1.1        3
+Mic1              1/1     502   528 ..     1    27 [.     3.3      1.7
+Hydantoinase_B    1/1     512   532 ..   308   328 ..    -1.4      7.6
+Transposase_5     1/1     605   617 ..     1    13 [.     2.1      6.3
+Lys               1/1     641   652 ..     1    12 [.     1.2      7.1
+XH                1/1     645   666 ..   133   156 .]     4.8     0.56
+Trehalase         1/1     660   673 ..     1    14 [.     0.4      3.8
+ATP-grasp         1/1     661   677 ..     1    18 [.     0.1      6.7
+DNA_ligase_aden   1/1     767   787 ..     1    21 [.     1.6      1.7
+Phage_holin_4     1/1     789   810 ..   124   146 .]     3.0      2.3
+Rad50_zn_hook     2/2     790   811 ..     1    22 [.     1.3       16
+RVP_2             1/1     873   894 ..    46    67 ..     0.1      9.1
+VIRB2             1/1     956   991 ..     1    32 [.     1.6      3.5
+DUF1019           1/1    1019  1028 ..     1    12 [.     1.4      3.9
+Plant_TF          1/1    1027  1034 ..   132   139 .]     0.9      7.2
+EAV_GS            1/1    1049  1071 ..     1    27 [.     0.4      3.5
+Pox_L5            1/1    1110  1134 ..     1    26 [.     3.8        2
+Herpes_teg_N      1/1    1125  1133 ..     1    10 [.     0.1      8.7
+
+Alignments of top-scoring domains:
+DUF1116: domain 1 of 1, from 6 to 15: score -1.1, E = 7.8
+                   *->leALAErvgv<-*
+                      + AL+E+ ++   
+  gi|2274893     6    VNALCEQLVK    15   
+
+SapB_1: domain 1 of 1, from 9 to 27: score 3.2, E = 3.7
+                   *->lCemvVkevenlLkdnkTq<-*
+                      lCe++Vk v  +   n Tq   
+  gi|2274893     9    LCEQLVKAVTVMMDPNSTQ    27   
+
+Rad50_zn_hook: domain 1 of 2, from 21 to 47: score 0.8, E = 22
+                   *->galesekaelkkaieeleeeesscCPvC<-*
+                       + +s+ +++++a++ +ee +  +CP+C   
+  gi|2274893    21    MDPNSTQRYRLEALKFCEEFKE-KCPIC    47   
+
+IBN_N: domain 1 of 1, from 33 to 100: score 9.7, E = 0.053
+                   *->AEkqLeqlekqklPgFllaLlqIlansdtssdlqvRqlAalyLKNlI
+                      A k +e++++ k P ++++ l+++   +t+    vR++++++L++ +
+  gi|2274893    33    ALKFCEEFKE-KCPICVPCGLRLA--EKTQ-VAIVRHFGLQILEHVV 75   
+
+                   trhWnshrkqggyeqrwlslpeeekeqIknnllnllgs<-*
+                   + +Wn              ++  ek ++kn++ +l++    
+  gi|2274893    76 KFRWN-------------GMSRLEKVYLKNSVMELIAN    100  
+
+dNK: domain 1 of 1, from 103 to 120: score 1.1, E = 6.1
+                   *->lDfvedeediknkreeil<-*
+                      l++ e+e++ik+++ +i+   
+  gi|2274893   103    LNILEEENHIKDALSRIV    120  
+
+Xpo1: domain 1 of 1, from 109 to 271: score 170.1, E = 5.1e-48
+                   *->pkflrnKLalalaelakqewPsnWpsffpdlvsllsssssqkspnps
+                      +++++  L+++++e++k+ewP++Wp+ + +l  l++++       ++
+  gi|2274893   109    ENHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQG-------ET 148  
+
+                   vcellLriLkvLpEEvfdqdfsrtrltqdrfnnrlkdllrsqDcmpqile
+                   ++el++ iL++L E+v+   f  ++l  +r +++++++l+++  m++i++
+  gi|2274893   149 QTELVMFILLRLAEDVVT--F--QTLPPQR-RRDIQQTLTQN--MERIFS 191  
+
+                   lllqiLessrsthss.e.t.q.e.kAkqssellsatLkclgswlslgWip
+                   +ll+ L+ +++++++ ++++++e+kA++++++ +a+L++l+++++  W++
+  gi|2274893   192 FLLNTLQENVNKYQQvKtDtSqEsKAQANCRVGVAALNTLAGYID--WVS 239  
+
+                   iglianvnpi.llnllfslLsgpesdpdlreaAveCL<-*
+                   +++i + ++++ll++l+ lL    +  +l++ A+eCL   
+  gi|2274893   240 MSHITA-ENCkLLEILCLLL----NEQELQLGAAECL    271  
+
+Peptidase_S13: domain 1 of 1, from 186 to 195: score 0.5, E = 4
+                   *->rklaFsfisN<-*
+                      ++++Fsf++N   
+  gi|2274893   186    MERIFSFLLN    195  
+
+DUF1098: domain 1 of 1, from 193 to 213: score 3.3, E = 2
+                   *->llnsLNalLsdTvAslIlnDtSe<-*
+                      lln+L+++  ++ ++++++DtS+   
+  gi|2274893   193    LLNTLQEN--VNKYQQVKTDTSQ    213  
+
+KE2: domain 1 of 1, from 198 to 213: score 1.6, E = 9.1
+                   *->QelinkfqqLqqqlek<-*
+                      Qe++nk+qq + + ++   
+  gi|2274893   198    QENVNKYQQVKTDTSQ    213  
+
+RRN3: domain 1 of 1, from 198 to 211: score -0.7, E = 5.5
+                   *->spnyiewSevkgdy<-*
+                      ++n +++++vk+d    
+  gi|2274893   198    QENVNKYQQVKTDT    211  
+
+LCM: domain 1 of 1, from 297 to 305: score -0.4, E = 5.1
+                   *->HYcLvhAss<-*
+                      HY+L +A++   
+  gi|2274893   297    HYILSAAQT    305  
+
+FGGY_N: domain 1 of 1, from 325 to 338: score 2.2, E = 1.9
+                   *->VvgGggDnaaaalG<-*
+                      V +++g++ +a+lG   
+  gi|2274893   325    VLCALGNQLCALLG    338  
+
+Ni_hydr_CYTB: domain 1 of 1, from 376 to 396: score 4.5, E = 1.1
+                   *->aAWAlfHhfvrkDnvllrMlpg<-*
+                      +A  ++H + ++D++ll+ +p+   
+  gi|2274893   376    GA-LFRHEILSRDPLLLAIIPK    396  
+
+Ssl1: domain 1 of 1, from 404 to 411: score 8.7, E = 0.00012
+                   *->sLIkMGFP<-*
+                      +L+kMGFP   
+  gi|2274893   404    NLVKMGFP    411  
+
+DUF1177: domain 1 of 1, from 445 to 465: score 0.3, E = 3.7
+                   *->ElkeLeeklGPksnLqklkre<-*
+                      E ++L  +l Pk++ q ++ +   
+  gi|2274893   445    EVMRLACRLDPKTSFQMAGEW    465  
+
+V-ATPase_H: domain 1 of 1, from 491 to 517: score -1.3, E = 9.6
+                   *->AKLAcfGpelvegsdLtyylnwLkeqL<-*
+                      +++++f+p  v   + t++l++ ++q+   
+  gi|2274893   491    SLCSVFSPSFVQWEAMTLFLESVITQM    517  
+
+PTR2: domain 1 of 1, from 497 to 513: score 1.1, E = 3
+                   *->lpssmkslwtllsaaas<-*
+                      +ps++++++++l++ ++   
+  gi|2274893   497    SPSFVQWEAMTLFLESV    513  
+
+Mic1: domain 1 of 1, from 502 to 528: score 3.3, E = 1.7
+                   *->emiapekYviaIlmeYLRSLnkaeiaa<-*
+                      + +a   ++++++++  R Ln++ei +   
+  gi|2274893   502    QWEAMTLFLESVITQMFRTLNREEIPV    528  
+
+Hydantoinase_B: domain 1 of 1, from 512 to 532: score -1.4, E = 7.6
+                   *->savlYvlrtlvgpDiPlNdGc<-*
+                      s++  ++rtl  + iP+NdG+   
+  gi|2274893   512    SVITQMFRTLNREEIPVNDGI    532  
+
+Transposase_5: domain 1 of 1, from 605 to 617: score 2.1, E = 6.3
+                   *->dRrIlrvvredPr<-*
+                      ++ I++++r +P+   
+  gi|2274893   605    CSSIIKMCRDYPQ    617  
+
+Lys: domain 1 of 1, from 641 to 652: score 1.2, E = 7.1
+                   *->KvftRCeLareL<-*
+                      +++++C+L ++L   
+  gi|2274893   641    TQMEKCALMEAL    652  
+
+XH: domain 1 of 1, from 645 to 666: score 4.8, E = 0.56
+                   *->KATLkEvvdfllniRqlkalkRkR<-*
+                      K+ L+E ++ ++n  q k+  R++   
+  gi|2274893   645    KCALMEALVLISN--QFKNYERQK    666  
+
+Trehalase: domain 1 of 1, from 660 to 673: score 0.4, E = 3.8
+                   *->klfpDsKtFVDmal<-*
+                      k + ++K F+++ +   
+  gi|2274893   660    KNYERQKVFLEELM    673  
+
+ATP-grasp: domain 1 of 1, from 661 to 677: score 0.1, E = 6.7
+                   *->DRlvqkellAkelGlptp<-*
+                      + ++qk +l +el +p++   
+  gi|2274893   661    NYERQKVFL-EELMAPVA    677  
+
+DNA_ligase_aden: domain 1 of 1, from 767 to 787: score 1.6, E = 1.7
+                   *->eeaqqeieeLrelirkydyeY<-*
+                      e++ +++++L +lir+++ +Y   
+  gi|2274893   767    EQILKLLDNLLALIRTHNTLY    787  
+
+Phage_holin_4: domain 1 of 1, from 789 to 810: score 3.0, E = 2.3
+                   *->PkemlldiletLknktkqlkked<-*
+                      P eml+++ e + ++++ l++e+   
+  gi|2274893   789    P-EMLAKMAEPFTKALDMLDAEK    810  
+
+Rad50_zn_hook: domain 2 of 2, from 790 to 811: score 1.3, E = 16
+                   *->galesekaelkkaieeleeees<-*
+                      ++l+ + + + ka+++l+ e+s   
+  gi|2274893   790    EMLAKMAEPFTKALDMLDAEKS    811  
+
+RVP_2: domain 1 of 1, from 873 to 894: score 0.1, E = 9.1
+                   *->ISqaFVgrHglpleaLrtPllV<-*
+                      +S aFV  +++p ++Lr  l+V   
+  gi|2274893   873    LSSAFVNLNNIPDYRLRPMLRV    894  
+
+VIRB2: domain 1 of 1, from 956 to 991: score 1.6, E = 3.5
+                   *->msknklrriiaivlmalataivls....efsyapaA<-*
+                      m++++l r+    +m l t+ ++s+++ + s+ap+A   
+  gi|2274893   956    MLEEQLVRMLTREVMDLITVCCVSkkgaDHSSAPPA    991  
+
+DUF1019: domain 1 of 1, from 1019 to 1028: score 1.4, E = 3.9
+                   *->MKIkhEhIreaL<-*
+                      M  khE ++ aL   
+  gi|2274893  1019    M--KHEDVCTAL    1028 
+
+Plant_TF: domain 1 of 1, from 1027 to 1034: score 0.9, E = 7.2
+                   *->AVlvsAFn<-*
+                      A l++AFn   
+  gi|2274893  1027    ALLITAFN    1034 
+
+EAV_GS: domain 1 of 1, from 1049 to 1071: score 0.4, E = 3.5
+                   *->FsflCylHWLLLLcfFsGsLLPsavAW<-*
+                       s lC   W LL  + sG LL  av W   
+  gi|2274893  1049    -SQLC---WPLLKQVLSGTLLADAVTW    1071 
+
+Pox_L5: domain 1 of 1, from 1110 to 1134: score 3.8, E = 2
+                   *->ElnmaFsptkkvpnDPIdqlvartrL<-*
+                      E+++     + + +D++dq+ + + L   
+  gi|2274893  1110    EIRAVMEQIPEIQKDSLDQF-DCKLL    1134 
+
+Herpes_teg_N: domain 1 of 1, from 1125 to 1133: score 0.1, E = 8.7
+                   *->StnQadDckf<-*
+                      S +Q+ Dck+   
+  gi|2274893  1125    SLDQF-DCKL    1133 
+
+//
+
+Query sequence: gi|125490392|ref|NP_038661.2|
+Accession:      [none]
+Description:    POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]
+
+Scores for sequence family classification (score includes all domains):
+Model           Description                             Score    E-value  N 
+--------        -----------                             -----    ------- ---
+Pou             Pou domain - N-terminal to homeobox d   171.2    2.4e-48   1
+Homeobox        Homeobox domain                          86.7    6.5e-23   1
+HTH_3           Helix-turn-helix                          7.5       0.33   1
+WSC             WSC domain                                2.1        1.5   1
+ComC            COMC family                               3.4        2.3   1
+CBM_1           Fungal cellulose binding domain           3.3        3.6   1
+Peptidase_M29   Thermophilic metalloprotease (M29)       -2.1        4.4   1
+DUF1690         Protein of Unknown function (DUF1690)     1.1        4.5   1
+DUF137          Protein of unknown function DUF137        1.0        4.7   1
+DASH_Duo1       DASH complex subunit Duo1                 2.3        5.7   1
+TFIIB           Transcription factor TFIIB repeat         2.6        6.1   1
+DUF1392         Protein of unknown function (DUF1392)     0.8        6.7   1
+
+Parsed for domains:
+Model           Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------        ------- ----- -----    ----- -----      -----  -------
+WSC               1/1      59    67 ..    80    87 .]     2.1      1.5
+CBM_1             1/1      61    73 ..     1    13 [.     3.3      3.6
+Pou               1/1     131   205 ..     1    78 []   171.2  2.4e-48
+ComC              1/1     132   145 ..     1    20 [.     3.4      2.3
+Peptidase_M29     1/1     132   145 ..     1    14 [.    -2.1      4.4
+DASH_Duo1         1/1     133   141 ..     1     9 [.     2.3      5.7
+DUF1690           1/1     137   147 ..   151   161 .]     1.1      4.5
+HTH_3             1/1     146   166 ..     1    25 [.     7.5     0.33
+DUF137            1/1     197   213 ..   164   180 ..     1.0      4.7
+Homeobox          1/1     224   280 ..     1    57 []    86.7  6.5e-23
+DUF1392           1/1     248   269 ..   127   164 .]     0.8      6.7
+TFIIB             1/1     253   268 ..     1    19 [.     2.6      6.1
+
+Alignments of top-scoring domains:
+WSC: domain 1 of 1, from 59 to 67: score 2.1, E = 1.5
+                   *->p.pseiCGG<-*
+                      p+++e CGG   
+  gi|1254903    59    PpAYEFCGG    67   
+
+CBM_1: domain 1 of 1, from 61 to 73: score 3.3, E = 3.6
+                   *->vygQCGGigysGp<-*
+                      +y+ CGG+ y Gp   
+  gi|1254903    61    AYEFCGGMAYCGP    73   
+
+Pou: domain 1 of 1, from 131 to 205: score 171.2, E = 2.4e-48
+                   *->deatdleeLEkFAkeFKqRRIkLGyTQadVGlALgalygPGvnafSQ
+                      d+++ ++eLE+FAk +Kq+RI+LGyTQadVGl+Lg l+g   ++fSQ
+  gi|1254903   131    DMKALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFG---KVFSQ 174  
+
+                   tTICRFEaLqLSfKNmcKLKPlLekWLeeAE<-*
+                   tTICRFEaLqLS KNmcKL+PlLekW+eeA+   
+  gi|1254903   175 TTICRFEALQLSLKNMCKLRPLLEKWVEEAD    205  
+
+ComC: domain 1 of 1, from 132 to 145: score 3.4, E = 2.3
+                   *->MKntvkkkllkkeLeqFkeL<-*
+                      MK ++k      eLeqF  L   
+  gi|1254903   132    MKALQK------ELEQFAKL    145  
+
+Peptidase_M29: domain 1 of 1, from 132 to 145: score -2.1, E = 4.4
+                   *->MdaFkkeLekyAeL<-*
+                      M a +keLe +A L   
+  gi|1254903   132    MKALQKELEQFAKL    145  
+
+DASH_Duo1: domain 1 of 1, from 133 to 141: score 2.3, E = 5.7
+                   *->aaLqkELeq<-*
+                      +aLqkELeq   
+  gi|1254903   133    KALQKELEQ    141  
+
+DUF1690: domain 1 of 1, from 137 to 147: score 1.1, E = 4.5
+                   *->eEvEqFKklvr<-*
+                      +E EqF+kl++   
+  gi|1254903   137    KELEQFAKLLK    147  
+
+HTH_3: domain 1 of 1, from 146 to 166: score 7.5, E = 0.33
+                   *->lkelRkkkelglsqeeLAeklGskv<-*
+                      lk++R    lg++q+++   lG  v   
+  gi|1254903   146    LKQKRI--TLGYTQADVGLTLG--V    166  
+
+DUF137: domain 1 of 1, from 197 to 213: score 1.0, E = 4.7
+                   *->LeeIVEnyDNkKnLkEv<-*
+                      Le+ VE+ DN++nL+E+   
+  gi|1254903   197    LEKWVEEADNNENLQEI    213  
+
+Homeobox: domain 1 of 1, from 224 to 280: score 86.7, E = 6.5e-23
+                   *->rrkRTtftpeQleeLEkeFqknrYPsreeReeLAkkLgLterqVkvW
+                      +rkRT++ +  +  LE +F k+++Ps +++ ++A++LgL++++V+vW
+  gi|1254903   224    KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVW 270  
+
+                   FQNRRaKwKk<-*
+                   F+NRR+K K+   
+  gi|1254903   271 FCNRRQKGKR    280  
+
+DUF1392: domain 1 of 1, from 248 to 269: score 0.8, E = 6.7
+                   *->PtLsqtttEGlCIFPrssqGnkmpnRfsLvrerDLVrV<-*
+                      P+L q+t                +n++ L  e+D VrV   
+  gi|1254903   248    PSLQQITH--------------IANQLGL--EKDVVRV    269  
+
+TFIIB: domain 1 of 1, from 253 to 268: score 2.6, E = 6.1
+                   *->ikrfadaLeLpeKkikVad<-*
+                      i+++a +L+L +    V++   
+  gi|1254903   253    ITHIANQLGLEK---DVVR    268  
+
+//

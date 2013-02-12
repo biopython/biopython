@@ -17,7 +17,7 @@ This module also provides code to work with the "legacy" standalone version of
 NCBI BLAST, tools blastall, rpsblast and blastpgp via three helper functions of
 the same name. These functions are very limited for dealing with the output as
 files rather than handles, for which the wrappers in Bio.Blast.Applications are
-prefered. Furthermore, the NCBI themselves regard these command line tools as
+preferred. Furthermore, the NCBI themselves regard these command line tools as
 "legacy", and encourage using the new BLAST+ tools instead. Biopython has
 wrappers for these under Bio.Blast.Applications (see the tutorial).
 
@@ -52,6 +52,8 @@ are likely to be deprecated and then removed in future releases.
 import warnings
 warnings.warn("The plain text parser in this module still works at the time of writing, but is considered obsolete and updating it to cope with the latest versions of BLAST is not a priority for us.", PendingDeprecationWarning)
 
+from Bio import BiopythonDeprecationWarning
+
 import os
 import re
 import StringIO
@@ -60,6 +62,7 @@ from Bio import File
 from Bio.ParserSupport import *
 from Bio.Blast import Record
 from Bio.Application import _escape_filename
+
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
@@ -71,6 +74,7 @@ class LowQualityBlastError(Exception):
     in this case.
     """
     pass
+
 
 class ShortQueryBlastError(Exception):
     """Error caused by running a short query sequence through BLAST.
@@ -85,7 +89,7 @@ class ShortQueryBlastError(Exception):
 
     """
     pass
-    
+
 
 class _Scanner(object):
     """Scan BLAST output from blastall or blastpgp.
@@ -94,7 +98,6 @@ class _Scanner(object):
 
     Methods:
     feed     Feed data into the scanner.
-    
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -119,16 +122,16 @@ class _Scanner(object):
 
     def _scan_header(self, uhandle, consumer):
         # BLASTP 2.0.10 [Aug-26-1999]
-        # 
-        # 
+        #
+        #
         # Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaf
-        # Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+        # Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997),
         # "Gapped BLAST and PSI-BLAST: a new generation of protein database sea
         # programs",  Nucleic Acids Res. 25:3389-3402.
-        # 
+        #
         # Query= test
         #          (140 letters)
-        # 
+        #
         # Database: sdqib40-1.35.seg.fa
         #            1323 sequences; 223,339 total letters
         #
@@ -140,19 +143,19 @@ class _Scanner(object):
         # ========================================================
         #
         # BLASTP 2.2.15 [Oct-15-2006]
-        # Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch??ffer, 
-        # Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman 
-        # (1997), "Gapped BLAST and PSI-BLAST: a new generation of 
+        # Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch??ffer,
+        # Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman
+        # (1997), "Gapped BLAST and PSI-BLAST: a new generation of
         # protein database search programs", Nucleic Acids Res. 25:3389-3402.
         #
-        # Reference: Sch??ffer, Alejandro A., L. Aravind, Thomas L. Madden, Sergei 
-        # Shavirin, John L. Spouge, Yuri I. Wolf, Eugene V. Koonin, and 
-        # Stephen F. Altschul (2001), "Improving the accuracy of PSI-BLAST 
-        # protein database searches with composition-based statistics 
-        # and other refinements", Nucleic Acids Res. 29:2994-3005. 
+        # Reference: Sch??ffer, Alejandro A., L. Aravind, Thomas L. Madden, Sergei
+        # Shavirin, John L. Spouge, Yuri I. Wolf, Eugene V. Koonin, and
+        # Stephen F. Altschul (2001), "Improving the accuracy of PSI-BLAST
+        # protein database searches with composition-based statistics
+        # and other refinements", Nucleic Acids Res. 29:2994-3005.
         #
         # RID: 1166022616-19998-65316425856.BLASTQ1
-        # 
+        #
         #
         # Database: All non-redundant GenBank CDS
         # translations+PDB+SwissProt+PIR+PRF excluding environmental samples
@@ -193,13 +196,13 @@ class _Scanner(object):
         # blastpgp may have a reference for compositional score matrix
         # adjustment (see Bug 2502):
         if attempt_read_and_call(
-            uhandle, consumer.reference, start="Reference"):
+           uhandle, consumer.reference, start="Reference"):
             read_and_call_until(uhandle, consumer.reference, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # blastpgp has a Reference for composition-based statistics.
         if attempt_read_and_call(
-            uhandle, consumer.reference, start="Reference"):
+           uhandle, consumer.reference, start="Reference"):
             read_and_call_until(uhandle, consumer.reference, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -232,8 +235,8 @@ class _Scanner(object):
             read_and_call_until(uhandle, consumer.query_info, start='Length=')
             while True:
                 line = uhandle.peekline()
-                if not line.strip() : break
-                if "Score     E" in line : break
+                if not line.strip() or "Score     E" in line:
+                    break
                 #It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
@@ -247,15 +250,15 @@ class _Scanner(object):
         # Each round begins with either a "Searching......" line
         # or a 'Score     E' line followed by descriptions and alignments.
         # The email server doesn't give the "Searching....." line.
-        # If there is no 'Searching.....' line then you'll first see a 
+        # If there is no 'Searching.....' line then you'll first see a
         # 'Results from round' line
 
         while not self._eof(uhandle):
             line = safe_peekline(uhandle)
-            if (not line.startswith('Searching') and
-                not line.startswith('Results from round') and
-                re.search(r"Score +E", line) is None and
-                'No hits found' not in line):
+            if not line.startswith('Searching') and \
+               not line.startswith('Results from round') and \
+               re.search(r"Score +E", line) is None and \
+               'No hits found' not in line:
                 break
             self._scan_descriptions(uhandle, consumer)
             self._scan_alignments(uhandle, consumer)
@@ -292,14 +295,14 @@ class _Scanner(object):
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
         if not uhandle.peekline():
-            raise ValueError("Unexpected end of blast report.  " + \
+            raise ValueError("Unexpected end of blast report.  " +
                   "Looks suspiciously like a PSI-BLAST crash.")
 
         # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
-        # Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch 
-        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: 
+        # Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch
+        # [blastall] ERROR:  [000.000]  AT1G08320: Blast:
         # [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at leas
-        # done 
+        # done
         # Reported by David Weisman.
         # Check for these error lines and ignore them for now.  Let
         # the BlastErrorParser deal with them.
@@ -318,13 +321,13 @@ class _Scanner(object):
         #
         #
         #     Results from round 2
-        
+
         # Skip a bunch of blank lines.
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         # Check for the results line if it's there.
         if attempt_read_and_call(uhandle, consumer.round, start='Results'):
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-        
+
         # Three things can happen here:
         # 1.  line contains 'Score     E'
         # 2.  line contains "No hits found"
@@ -333,15 +336,16 @@ class _Scanner(object):
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
         if not attempt_read_and_call(
-            uhandle, consumer.description_header,
-            has_re=re.compile(r'Score +E')):
+           uhandle, consumer.description_header,
+           has_re=re.compile(r'Score +E')):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError, err:
-                if str(err) != "Unexpected end of stream." : raise err
+                if str(err) != "Unexpected end of stream.":
+                    raise err
 
             consumer.end_descriptions()
             # Stop processing.
@@ -394,8 +398,9 @@ class _Scanner(object):
         consumer.end_descriptions()
 
     def _scan_alignments(self, uhandle, consumer):
-        if self._eof(uhandle) : return
-        
+        if self._eof(uhandle):
+            return
+
         # qblast inserts a helpful line here.
         attempt_read_and_call(uhandle, consumer.noevent, start="ALIGNMENTS")
 
@@ -409,6 +414,8 @@ class _Scanner(object):
         elif line[0] == '>':
             # XXX make a better check here between pairwise and masterslave
             self._scan_pairwise_alignments(uhandle, consumer)
+        elif line.startswith('Effective'):
+            return
         else:
             # XXX put in a check to make sure I'm in a masterslave alignment
             self._scan_masterslave_alignment(uhandle, consumer)
@@ -421,7 +428,8 @@ class _Scanner(object):
             self._scan_one_pairwise_alignment(uhandle, consumer)
 
     def _scan_one_pairwise_alignment(self, uhandle, consumer):
-        if self._eof(uhandle) : return
+        if self._eof(uhandle):
+            return
         consumer.start_alignment()
 
         self._scan_alignment_header(uhandle, consumer)
@@ -445,7 +453,7 @@ class _Scanner(object):
         # Or, more recently with different white space:
         #
         # >gi|15799684|ref|NP_285696.1| threonine synthase ...
-        #  gi|15829258|ref|NP_308031.1| threonine synthase 
+        #  gi|15829258|ref|NP_308031.1| threonine synthase
         #  ...
         # Length=428
         read_and_call(uhandle, consumer.title, start='>')
@@ -471,7 +479,7 @@ class _Scanner(object):
         self._scan_hsp_header(uhandle, consumer)
         self._scan_hsp_alignment(uhandle, consumer)
         consumer.end_hsp()
-        
+
     def _scan_hsp_header(self, uhandle, consumer):
         #  Score = 22.7 bits (47), Expect = 2.5
         #  Identities = 10/36 (27%), Positives = 18/36 (49%)
@@ -495,7 +503,7 @@ class _Scanner(object):
         # Query: 64 AEKILIKR 71
         #              I +K 
         # Sbjct: 70 PNIIQLKD 77
-        # 
+        #
 
         while 1:
             # Blastn adds an extra line filled with spaces before Query
@@ -506,7 +514,8 @@ class _Scanner(object):
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError, err:
-                if str(err) != "Unexpected end of stream." : raise err
+                if str(err) != "Unexpected end of stream.":
+                    raise err
                 # End of File (well, it looks like it with recent versions
                 # of BLAST for multiple queries after the Iterator class
                 # has broken up the whole file into chunks).
@@ -515,14 +524,14 @@ class _Scanner(object):
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
             if not (line.startswith('Query') or line.startswith('     ')):
                 break
- 
+
     def _scan_masterslave_alignment(self, uhandle, consumer):
         consumer.start_alignment()
         while 1:
             line = safe_readline(uhandle)
             # Check to see whether I'm finished reading the alignment.
             # This is indicated by 1) database section, 2) next psi-blast
-            # round, which can also be a 'Results from round' if no 
+            # round, which can also be a 'Results from round' if no
             # searching line is present
             # patch by chapmanb
             if line.startswith('Searching') or \
@@ -543,7 +552,8 @@ class _Scanner(object):
         try:
             line = safe_peekline(uhandle)
         except ValueError, err:
-            if str(err) != "Unexpected end of stream." : raise err
+            if str(err) != "Unexpected end of stream.":
+                raise err
             line = ""
         return not line
 
@@ -574,10 +584,11 @@ class _Scanner(object):
         # Lambda     K      H
         #    0.267   0.0410    0.140
 
-        if self._eof(uhandle) : return
+        if self._eof(uhandle):
+            return
 
         consumer.start_database_report()
-        
+
         # Subset of the database(s) listed below
         #    Number of letters searched: 562,618,960
         #    Number of sequences searched:  228,924
@@ -597,7 +608,7 @@ class _Scanner(object):
             or uhandle.peekline().startswith("BLAST"):
                 consumer.end_database_report()
                 return
-            
+
             # Database can span multiple lines.
             read_and_call_until(uhandle, consumer.database, start='    Posted')
             read_and_call(uhandle, consumer.posted_date, start='    Posted')
@@ -613,8 +624,11 @@ class _Scanner(object):
             if 'Lambda' in line:
                 break
 
-        read_and_call(uhandle, consumer.noevent, start='Lambda')
-        read_and_call(uhandle, consumer.ka_params)
+        try:
+            read_and_call(uhandle, consumer.noevent, start='Lambda')
+            read_and_call(uhandle, consumer.ka_params)
+        except:
+            pass
 
         #This blank line is optional:
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)
@@ -624,7 +638,7 @@ class _Scanner(object):
         # not TBLASTX
         if attempt_read_and_call(uhandle, consumer.noevent, start='Lambda'):
             read_and_call(uhandle, consumer.ka_params_gap)
-            
+
         # Blast 2.2.4 can sometimes skip the whole parameter section.
         # Thus, I need to be careful not to read past the end of the
         # file.
@@ -688,7 +702,6 @@ class _Scanner(object):
         # S1: 41 (21.7 bits)
         # S2: 32 (16.9 bits)
 
-
         # Blast 2.2.4 can sometimes skip the whole parameter section.
         # BLAT also skips the whole parameter section.
         # Thus, check to make sure that the parameter section really
@@ -727,7 +740,7 @@ class _Scanner(object):
                                      start="Number of HSP's gapped:"):
                 read_and_call(uhandle, consumer.noevent,
                               start="Number of HSP's successfully")
-                #This is ommitted in 2.2.15
+                #This is omitted in 2.2.15
                 attempt_read_and_call(uhandle, consumer.noevent,
                               start="Number of extra gapped extensions")
             else:
@@ -787,7 +800,7 @@ class _Scanner(object):
         # get this instead: "Window for multiple hits: 40"
         attempt_read_and_call(uhandle, consumer.window_size, start='Window for multiple hits')
 
-        # not in BLASTX 2.2.22+        
+        # not in BLASTX 2.2.22+
         attempt_read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
         # not TBLASTN
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
@@ -806,6 +819,7 @@ class _Scanner(object):
 
         consumer.end_parameters()
 
+
 class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object.
 
@@ -819,6 +833,7 @@ class BlastParser(AbstractParser):
         """parse(self, handle)"""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
+
 
 class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object.
@@ -834,10 +849,11 @@ class PSIBlastParser(AbstractParser):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
+
 class _HeaderConsumer(object):
     def start_header(self):
         self._header = Record.Header()
-        
+
     def version(self, line):
         c = line.split()
         self._header.application = c[0]
@@ -852,7 +868,7 @@ class _HeaderConsumer(object):
             self._header.reference = line[11:]
         else:
             self._header.reference = self._header.reference + line
-            
+
     def query_info(self, line):
         if line.startswith('Query= '):
             self._header.query = line[7:].lstrip()
@@ -867,7 +883,7 @@ class _HeaderConsumer(object):
                 r"([0-9,]+) letters", line,
                 "I could not find the number of letters in line\n%s" % line)
             self._header.query_letters = _safe_int(letters)
-                
+
     def database_info(self, line):
         line = line.rstrip()
         if line.startswith('Database: '):
@@ -877,7 +893,7 @@ class _HeaderConsumer(object):
                 #Need to include a space when merging multi line datase descr
                 self._header.database = self._header.database + " " + line.strip()
             else:
-                self._header.database = line.strip()                
+                self._header.database = line.strip()
         else:
             sequences, letters =_re_search(
                 r"([0-9,]+) sequences; ([0-9,-]+) total letters", line,
@@ -889,6 +905,7 @@ class _HeaderConsumer(object):
         # Get rid of the trailing newlines
         self._header.reference = self._header.reference.rstrip()
         self._header.query = self._header.query.rstrip()
+
 
 class _DescriptionConsumer(object):
     def start_descriptions(self):
@@ -906,7 +923,7 @@ class _DescriptionConsumer(object):
             cols = line.split()
             if cols[-1] == 'N':
                 self.__has_n = 1
-    
+
     def description(self, line):
         dh = self._parse(line)
         if self._type == 'model':
@@ -939,7 +956,7 @@ class _DescriptionConsumer(object):
     def _parse(self, description_line):
         line = description_line  # for convenience
         dh = Record.Description()
-        
+
         # I need to separate the score and p-value from the title.
         # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]         284  7e-77
         # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]         284  7e-77  1
@@ -949,7 +966,7 @@ class _DescriptionConsumer(object):
         #   - sometimes there's an "N" score of '1'.
         cols = line.split()
         if len(cols) < 3:
-            raise ValueError( \
+            raise ValueError(
                   "Line does not appear to contain description:\n%s" % line)
         if self.__has_n:
             i = line.rfind(cols[-1])        # find start of N
@@ -968,6 +985,7 @@ class _DescriptionConsumer(object):
         dh.score = _safe_int(dh.score)
         dh.e = _safe_float(dh.e)
         return dh
+
 
 class _AlignmentConsumer(object):
     # This is a little bit tricky.  An alignment can either be a
@@ -995,7 +1013,7 @@ class _AlignmentConsumer(object):
         if line.startswith('QUERY') or line.startswith('blast_tmp'):
             # If this is the first line of the multiple alignment,
             # then I need to figure out how the line is formatted.
-            
+
             # Format of line is:
             # QUERY 1   acttg...gccagaggtggtttattcagtctccataagagaggggacaaacg 60
             try:
@@ -1009,7 +1027,7 @@ class _AlignmentConsumer(object):
             self._name_length = self._start_index - 1
             self._start_length = self._seq_index - self._start_index - 1
             self._seq_length = line.rfind(end) - self._seq_index - 1
-            
+
             #self._seq_index = line.index(seq)
             ## subtract 1 for the space
             #self._seq_length = line.rfind(end) - self._seq_index - 1
@@ -1031,7 +1049,7 @@ class _AlignmentConsumer(object):
         # right pad the sequence with spaces if necessary
         if len(seq) < self._seq_length:
             seq = seq + ' '*(self._seq_length-len(seq))
-            
+
         # I need to make sure the sequence is aligned correctly with the query.
         # First, I will find the length of the query.  Then, if necessary,
         # I will pad my current sequence with spaces so that they will line
@@ -1059,7 +1077,7 @@ class _AlignmentConsumer(object):
         # in one alignment block, there may be multiple sequences with
         # the same id.  I'm not sure how to handle this, so I'm not
         # going to.
-        
+
         # # If the sequence is the query, then just add it.
         # if name == 'QUERY':
         #     if len(align) == 0:
@@ -1074,7 +1092,7 @@ class _AlignmentConsumer(object):
         #     if len(align) == 0:
         #         raise ValueError, "I could not find the query sequence"
         #     qname, qstart, qseq = align[0]
-        #     
+        #
         #     # Now find my sequence in the multiple alignment.
         #     for i in range(1, len(align)):
         #         aname, astart, aseq = align[i]
@@ -1087,7 +1105,7 @@ class _AlignmentConsumer(object):
         #         index = len(align)-1
         #         # Make sure to left-pad it.
         #         aname, astart, aseq = name, start, ' '*(len(qseq)-len(seq))
-        # 
+        #
         #     if len(qseq) != len(aseq) + len(seq):
         #         # If my sequences are shorter than the query sequence,
         #         # then I will need to pad some spaces to make them line up.
@@ -1122,7 +1140,7 @@ class _AlignmentConsumer(object):
         #             elif len(seq) > seqlen:
         #                 raise ValueError, \
         #                       "Sequence %s is longer than the query" % name
-        
+
         # Clean up some variables, if they exist.
         try:
             del self._seq_index
@@ -1132,6 +1150,7 @@ class _AlignmentConsumer(object):
             del self._name_length
         except AttributeError:
             pass
+
 
 class _HSPConsumer(object):
     def start_hsp(self):
@@ -1174,7 +1193,6 @@ class _HSPConsumer(object):
             self._hsp.gaps = _safe_int(x), _safe_int(y)
             assert self._hsp.align_length == _safe_int(y)
 
-        
     def strand(self, line):
         self._hsp.strand = _re_search(
             r"Strand\s?=\s?(\w+)\s?/\s?(\w+)", line,
@@ -1199,11 +1217,12 @@ class _HSPConsumer(object):
     # line below modified by Yair Benita, Sep 2004
     # Note that the colon is not always present. 2006
     _query_re = re.compile(r"Query(:?) \s*(\d+)\s*(.+) (\d+)")
+
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
             raise ValueError("I could not find the query in line\n%s" % line)
-        
+
         # line below modified by Yair Benita, Sep 2004.
         # added the end attribute for the query
         colon, start, seq, end = m.groups()
@@ -1225,13 +1244,14 @@ class _HSPConsumer(object):
             # Make sure the alignment is the same length as the query
             seq = seq + ' ' * (self._query_len-len(seq))
         elif len(seq) < self._query_len:
-            raise ValueError("Match is longer than the query in line\n%s" \
+            raise ValueError("Match is longer than the query in line\n%s"
                              % line)
         self._hsp.match = self._hsp.match + seq
 
     # To match how we do the query, cache the regular expression.
     # Note that the colon is not always present.
     _sbjct_re = re.compile(r"Sbjct(:?) \s*(\d+)\s*(.+) (\d+)")
+
     def sbjct(self, line):
         m = self._sbjct_re.search(line)
         if m is None:
@@ -1249,8 +1269,8 @@ class _HSPConsumer(object):
 
         self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
-            raise ValueError( \
-                  "QUERY and SBJCT sequence lengths don't match in line\n%s" \
+            raise ValueError(
+                  "QUERY and SBJCT sequence lengths don't match in line\n%s"
                   % line)
 
         del self._query_start_index   # clean up unused variables
@@ -1258,6 +1278,7 @@ class _HSPConsumer(object):
 
     def end_hsp(self):
         pass
+
 
 class _DatabaseReportConsumer(object):
 
@@ -1301,7 +1322,8 @@ class _DatabaseReportConsumer(object):
 
     def end_database_report(self):
         pass
-    
+
+
 class _ParametersConsumer(object):
     def start_parameters(self):
         self._params = Record.Parameters()
@@ -1345,7 +1367,7 @@ class _ParametersConsumer(object):
         else:
             x, = _get_cols(line, (-1,), ncols=5, expected={3:"extensions:"})
             self._params.num_good_extends = _safe_int(x)
-        
+
     def num_seqs_better_e(self, line):
         self._params.num_seqs_better_e, = _get_cols(
             line, (-1,), ncols=7, expected={2:"sequences"})
@@ -1373,12 +1395,12 @@ class _ParametersConsumer(object):
         self._params.hsps_gapped, = _get_cols(
             line, (-1,), ncols=6, expected={3:"gapped"})
         self._params.hsps_gapped = _safe_int(self._params.hsps_gapped)
-        
+
     def query_length(self, line):
         self._params.query_length, = _get_cols(
             line.lower(), (-1,), ncols=4, expected={0:"length", 2:"query:"})
         self._params.query_length = _safe_int(self._params.query_length)
-        
+
     def database_length(self, line):
         self._params.database_length, = _get_cols(
             line.lower(), (-1,), ncols=4, expected={0:"length", 2:"database:"})
@@ -1401,7 +1423,7 @@ class _ParametersConsumer(object):
             line.lower(), (-1,), ncols=5, expected={1:"length", 3:"database:"})
         self._params.effective_database_length = _safe_int(
             self._params.effective_database_length)
-        
+
     def effective_search_space(self, line):
         self._params.effective_search_space, = _get_cols(
             line, (-1,), ncols=4, expected={1:"search"})
@@ -1429,7 +1451,7 @@ class _ParametersConsumer(object):
         else:
             raise ValueError("Unrecognised threshold line:\n%s" % line)
         self._params.threshold = _safe_int(self._params.threshold)
-        
+
     def window_size(self, line):
         if line[:2] == "A:":
             self._params.window_size, = _get_cols(
@@ -1440,19 +1462,19 @@ class _ParametersConsumer(object):
         else:
             raise ValueError("Unrecognised window size line:\n%s" % line)
         self._params.window_size = _safe_int(self._params.window_size)
-        
+
     def dropoff_1st_pass(self, line):
         score, bits = _re_search(
             r"X1: (\d+) \(\s*([0-9,.]+) bits\)", line,
             "I could not find the dropoff in line\n%s" % line)
         self._params.dropoff_1st_pass = _safe_int(score), _safe_float(bits)
-        
+
     def gap_x_dropoff(self, line):
         score, bits = _re_search(
             r"X2: (\d+) \(\s*([0-9,.]+) bits\)", line,
             "I could not find the gap dropoff in line\n%s" % line)
         self._params.gap_x_dropoff = _safe_int(score), _safe_float(bits)
-        
+
     def gap_x_dropoff_final(self, line):
         score, bits = _re_search(
             r"X3: (\d+) \(\s*([0-9,.]+) bits\)", line,
@@ -1464,16 +1486,16 @@ class _ParametersConsumer(object):
             r"S1: (\d+) \(\s*([0-9,.]+) bits\)", line,
             "I could not find the gap trigger in line\n%s" % line)
         self._params.gap_trigger = _safe_int(score), _safe_float(bits)
-        
+
     def blast_cutoff(self, line):
         score, bits = _re_search(
             r"S2: (\d+) \(\s*([0-9,.]+) bits\)", line,
             "I could not find the blast cutoff in line\n%s" % line)
         self._params.blast_cutoff = _safe_int(score), _safe_float(bits)
-        
+
     def end_parameters(self):
         pass
-    
+
 
 class _BlastConsumer(AbstractConsumer,
                      _HeaderConsumer,
@@ -1498,7 +1520,7 @@ class _BlastConsumer(AbstractConsumer,
     def round(self, line):
         # Make sure nobody's trying to pass me PSI-BLAST data!
         raise ValueError("This consumer doesn't handle PSI-BLAST data")
-        
+
     def start_header(self):
         self.data = Record.Blast()
         _HeaderConsumer.start_header(self)
@@ -1531,6 +1553,7 @@ class _BlastConsumer(AbstractConsumer,
     def end_parameters(self):
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
+
 
 class _PSIBlastConsumer(AbstractConsumer,
                         _HeaderConsumer,
@@ -1588,6 +1611,7 @@ class _PSIBlastConsumer(AbstractConsumer,
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
 
+
 class Iterator(object):
     """Iterates over a file of multiple BLAST results.
 
@@ -1632,7 +1656,7 @@ class Iterator(object):
                           or line.startswith('<?xml ')):
                 self._uhandle.saveline(line)
                 break
-            # New style files ommit the BLAST line to mark a new query:
+            # New style files omit the BLAST line to mark a new query:
             if line.startswith("Query="):
                 if not query:
                     if not self._header:
@@ -1652,10 +1676,10 @@ class Iterator(object):
             #print "".join(lines)
             #print "-"*50
             lines = self._header + lines
-            
+
         if not lines:
             return None
-            
+
         data = ''.join(lines)
         if self._parser is not None:
             return self._parser.parse(StringIO.StringIO(data))
@@ -1664,11 +1688,13 @@ class Iterator(object):
     def __iter__(self):
         return iter(self.next, None)
 
+
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPALL as handles (OBSOLETE).
-    
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.BlastallCommandline instead.
+    """Execute and retrieve data from standalone BLASTPALL as handles (DEPRECATED).
+
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastallCommandline instead, or
+    better the BLAST+ command line wrappers in Bio.Blast.Applications.
 
     Execute and retrieve data from blastall.  blastcmd is the command
     used to launch the 'blastall' executable.  program is the blast program
@@ -1682,7 +1708,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     the search.  Otherwise, optional values will be chosen by blastall.
     The Blast output is by default in XML format. Use the align_view keyword
     for output in a different format.
-    
+
         Scoring
     matrix              Matrix to use.
     gap_open            Gap open penalty.
@@ -1720,7 +1746,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     outfile             Output file for report.  Filename to write to, if
-                        ommitted standard output is used (which you can access
+                        omitted standard output is used (which you can access
                         from the returned handles).
     """
 
@@ -1745,7 +1771,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'region_length' : '-L',
         'db_length' : '-z',
         'search_length' : '-Y',
-        
+
         'program' : '-p',
         'database' : '-d',
         'infile' : '-i',
@@ -1763,7 +1789,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", BiopythonDeprecationWarning)
     from Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
     cline.set_parameter(att2param['program'], program)
@@ -1776,11 +1802,12 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
 
 
 def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPGP as handles (OBSOLETE).
+    """Execute and retrieve data from standalone BLASTPGP as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.
-    
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead, or
+    better the BLAST+ tool psiblast via the NcbipsiblastCommandline wrapper.
+
     Execute and retrieve data from blastpgp.  blastcmd is the command
     used to launch the 'blastpgp' executable.  database is the path to the
     database to search against.  infile is the path to the file containing
@@ -1840,14 +1867,13 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     hit_infile          Hit file for PHI-BLAST.
     matrix_outfile      Output file for PSI-BLAST matrix in ASCII.
     align_outfile       Output file for alignment.  Filename to write to, if
-                        ommitted standard output is used (which you can access
+                        omitted standard output is used (which you can access
                         from the returned handles).
 
     align_infile        Input alignment file for PSI-BLAST restart.
-    
     """
 
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
@@ -1906,10 +1932,11 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
 
 def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
-    """Execute and retrieve data from standalone RPS-BLAST as handles (OBSOLETE).
-    
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead.
+    """Execute and retrieve data from standalone RPS-BLAST as handles (DEPRECATED).
+
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead, or
+    better the BLAST+ rpsblast wrapper NcbirpsblastCommandline.
 
     Execute and retrieve data from standalone RPS-BLAST.  blastcmd is the
     command used to launch the 'rpsblast' executable.  database is the path
@@ -1962,13 +1989,13 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.  Filename to write to, if
-                        ommitted standard output is used (which you can access
+                        omitted standard output is used (which you can access
                         from the returned handles).
     """
 
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
-    
+
     att2param = {
         'multihit' : '-P',
         'gapped' : '-g',
@@ -2015,18 +2042,19 @@ def _re_search(regex, line, error_msg):
         raise ValueError(error_msg)
     return m.groups()
 
+
 def _get_cols(line, cols_to_get, ncols=None, expected={}):
     cols = line.split()
 
     # Check to make sure number of columns is correct
     if ncols is not None and len(cols) != ncols:
-        raise ValueError("I expected %d columns (got %d) in line\n%s" \
+        raise ValueError("I expected %d columns (got %d) in line\n%s"
                          % (ncols, len(cols), line))
 
     # Check to make sure columns contain the correct data
     for k in expected:
         if cols[k] != expected[k]:
-            raise ValueError("I expected '%s' in column %d in line\n%s" \
+            raise ValueError("I expected '%s' in column %d in line\n%s"
                              % (expected[k], k, line))
 
     # Construct the answer tuple
@@ -2061,7 +2089,7 @@ def _safe_float(str):
     # Thomas Rosleff Soerensen (rosleff@mpiz-koeln.mpg.de) noted that
     # float('e-172') does not produce an error on his platform.  Thus,
     # we need to check the string for this condition.
-    
+
     # Sometimes BLAST leaves of the '1' in front of an exponent.
     if str and str[0] in ['E', 'e']:
         str = '1' + str
@@ -2079,7 +2107,8 @@ def _invoke_blast(cline):
 
     Expects a command line wrapper object from Bio.Blast.Applications
     """
-    import subprocess, sys
+    import subprocess
+    import sys
     blast_cmd = cline.program_name
     if not os.path.exists(blast_cmd):
         raise ValueError("BLAST executable does not exist at %s" % blast_cmd)
@@ -2112,9 +2141,11 @@ def _security_check_parameters(param_dict):
             if bad_str in str_value:
                 raise ValueError("Rejecting suspicious argument for %s" % key)
 
+
 class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
         _BlastConsumer.__init__(self)
+
     def noevent(self, line):
         if 'Query must be at least wordsize' in line:
             raise ShortQueryBlastError("Query must be at least wordsize")
@@ -2122,6 +2153,7 @@ class _BlastErrorConsumer(_BlastConsumer):
         method = getattr(_BlastConsumer, 'noevent',
                          _BlastConsumer.__getattr__(self, 'noevent'))
         method(line)
+
 
 class BlastErrorParser(AbstractParser):
     """Attempt to catch and diagnose BLAST errors while parsing.
@@ -2138,7 +2170,6 @@ class BlastErrorParser(AbstractParser):
     BLAST report that the parsers choke on. The parser will convert the
     ValueError to a LowQualityBlastError and attempt to provide useful
     information.
-    
     """
     def __init__(self, bad_report_handle = None):
         """Initialize a parser that tries to catch BlastErrors.
@@ -2150,7 +2181,7 @@ class BlastErrorParser(AbstractParser):
         is specified, the bad reports will not be saved.
         """
         self._bad_report_handle = bad_report_handle
-        
+
         #self._b_parser = BlastParser()
         self._scanner = _Scanner()
         self._consumer = _BlastErrorConsumer()
@@ -2162,7 +2193,7 @@ class BlastErrorParser(AbstractParser):
 
         try:
             self._scanner.feed(StringIO.StringIO(results), self._consumer)
-        except ValueError, msg:
+        except ValueError:
             # if we have a bad_report_file, save the info to it first
             if self._bad_report_handle:
                 # send the info to the error handle
@@ -2191,6 +2222,6 @@ class BlastErrorParser(AbstractParser):
             # to indicate a failure to perform the BLAST due to
             # low quality sequence
             if line.startswith('Searchingdone'):
-                raise LowQualityBlastError("Blast failure occured on query: ",
+                raise LowQualityBlastError("Blast failure occurred on query: ",
                                            data_record.query)
             line = handle.readline()
