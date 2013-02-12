@@ -1,4 +1,4 @@
-# Copyright (C) 2012 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2012, 2013 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -8,7 +8,7 @@ import os.path
 import sys
 
 
-VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6"]
+VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7"]
 
 
 def codeml(vers=None, verbose=False):
