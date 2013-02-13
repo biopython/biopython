@@ -26,6 +26,11 @@ from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 import urlparse
 
+try: 
+    import RDF
+    import Redland
+except ImportError:
+    raise CDAOError('Support for CDAO tree format requires the librdf Python bindings.')
 
 RDF_NAMESPACES = {
                   'owl': 'http://www.w3.org/2002/07/owl#',
@@ -35,8 +40,6 @@ RDF_NAMESPACES.update(cdao_namespaces)
 
 def node_uri(graph, uri):
     '''Returns the full URI of a node by appending the node URI to the graph URI.'''
-    RDF = import_rdf()
-
     if graph.endswith('/'):
         return RDF.Uri(urlparse.urljoin(graph, uri))
     else:
@@ -47,20 +50,9 @@ class CDAOError(Exception):
     pass
 
 
-def import_rdf():
-    '''Attempt to import librdf in this function, and raise a CDAOError if
-    import fails. This avoids an explicit dependence on librdf.'''
-
-    try: import RDF
-    except ImportError: raise CDAOError('Redland Python bindings are required for CDAO support.')
-    #RDF.debug(1)
-    return RDF
-        
-    
 def new_storage():
     '''Create a new in-memory Redland store for storing the RDF model.'''
-    RDF = import_rdf()
-    
+
     storage = RDF.Storage(storage_name="hashes",
                           name="test",
                           options_string="new='yes',hash-type='memory',dir='.'")
@@ -116,7 +108,6 @@ class Parser(object):
     def parse_handle_to_model(self, rooted=False, storage=None, 
                               mime_type='text/turtle', context=None, **kwargs):
         '''Parse self.handle into RDF model self.model.'''
-        RDF = import_rdf()
 
         if storage is None:
             # store RDF model in memory for now
@@ -146,7 +137,6 @@ class Parser(object):
             
     def parse_model(self, model=None, context=None):
         '''Generator that yields CDAO.Tree instances from an RDF model.'''
-        RDF = import_rdf()
         
         if model is None:
             model = self.model
@@ -164,7 +154,6 @@ class Parser(object):
             
     def new_clade(self, node):
         '''Returns a CDAO.Clade object for a given named node.'''
-        RDF = import_rdf()
         
         result = self.node_info[node]
         
@@ -180,7 +169,6 @@ class Parser(object):
             
     def get_node_info(self, model, context=None):
         '''Creates a dictionary containing information about all nodes in the tree.'''
-        RDF = import_rdf()
         
         Uri = RDF.Uri
         
@@ -287,7 +275,6 @@ class Writer(object):
             mime_type: used to determine the serialization format.
                 default is 'text/turtle'
         """
-        RDF = import_rdf()
         
         self.record_complete_ancestry = record_complete_ancestry
         
@@ -297,8 +284,6 @@ class Writer(object):
         
     def add_trees_to_model(self, trees=None, storage=None, tree_uri='tree', context=None):
         """Add triples describing a set of trees to an RDF model."""
-        RDF = import_rdf()
-        import Redland
 
         if context: context = RDF.Node(RDF.Uri(context))
         self.tree_uri = tree_uri
@@ -340,7 +325,6 @@ class Writer(object):
             
     def serialize_model(self, handle, mime_type='text/turtle'):
         """Serialize RDF model to file handle"""        
-        RDF = import_rdf()
         
         # serialize RDF model to output file
         serializer = RDF.Serializer(mime_type=mime_type)
@@ -354,7 +338,6 @@ class Writer(object):
                 
     def process_clade(self, clade, parent=None, root=False):
         '''recursively generate statements describing a tree of clades'''
-        RDF = import_rdf()
         
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(7)
@@ -447,6 +430,5 @@ class Writer(object):
 
 def qUri(s):
     '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
-    RDF = import_rdf()
 
     return RDF.Uri(resolve_uri(s, namespaces=RDF_NAMESPACES))

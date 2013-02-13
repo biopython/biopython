@@ -19,17 +19,20 @@ from Bio.Phylo import (
                        NexusIO, 
                        PhyloXMLIO,
                        NeXMLIO,
-                       CDAOIO,
                        )
-
 
 supported_formats = {
         'newick':   NewickIO,
         'nexus':    NexusIO,
         'phyloxml': PhyloXMLIO,
         'nexml':    NeXMLIO,
-        'cdao':     CDAOIO,
         }
+
+try: 
+    from Bio.Phylo import CDAOIO
+    supported_formats.update('cdao', CDAOIO)
+except:
+    pass
 
 
 def parse(file, format, **kwargs):
