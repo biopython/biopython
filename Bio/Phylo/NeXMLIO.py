@@ -17,27 +17,37 @@ from cStringIO import StringIO
 from Bio.Phylo import NeXML
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
-NAMESPACES = {
-              'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-              'xml': 'http://www.w3.org/XML/1998/namespace',
-              'nex': 'http://www.nexml.org/2009',
-              'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
-              'xsd': 'http://www.w3.org/2001/XMLSchema#',
-              }
-DEFAULT_NAMESPACE = NAMESPACES['nex']
+
+XML_NAMESPACES = {
+                  'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                  'xml': 'http://www.w3.org/XML/1998/namespace',
+                  'nex': 'http://www.nexml.org/2009',
+                  'xsd': 'http://www.w3.org/2001/XMLSchema#',
+                  }
+XML_NAMESPACES.update(cdao_namespaces)
+DEFAULT_NAMESPACE = XML_NAMESPACES['nex']
 VERSION = '0.9'
 SCHEMA = 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd'
 
 
-for prefix, uri in NAMESPACES.items():
+for prefix, uri in XML_NAMESPACES.items():
     ET.register_namespace(prefix, uri)
-    
-def qUri(s):
-    for prefix, uri in NAMESPACES.items():
-        s = s.replace('%s:' % prefix, '{%s}' % uri)
-    return s
 
+
+def qUri(s):
+    '''Given a prefixed URI, return the full URI.'''
+    return resolve_uri(s, namespaces=XML_NAMESPACES, xml_style=True)
+
+def cdao_to_obo(s):
+    '''Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI.'''
+    return 'obo:%s' % cdao_elements[s[len('cdao:'):]]
+    
+def matches(s):
+    '''Check for matches in both CDAO and OBO namespaces.'''
+    if s.startswith('cdao:'): return (s, cdao_to_obo(s))
+    else: return (s,)
 
 class NeXMLError(Exception):
     """Exception raised when NeXML object construction cannot continue."""
@@ -84,7 +94,7 @@ class Parser(object):
         if 'property' in meta_node.attrib: prop = meta_node.attrib['property']
         else: prop = 'meta'
         
-        if prop == 'cdao:has_Support_Value':
+        if prop in matches('cdao:has_Support_Value'):
             node_dict['confidence'] = float(meta_node.text)
         else:
             node_dict[prop] = meta_node.text
@@ -127,7 +137,7 @@ class Parser(object):
                     
                     node_children[src].add(tar)
                     if 'length' in edge.attrib: node_dict[tar]['branch_length'] = float(edge.attrib['length'])
-                    if 'property' in edge.attrib and edge.attrib['property'] == 'cdao:has_Support_Value':
+                    if 'property' in edge.attrib and edge.attrib['property'] in matches('cdao:has_Support_Value'):
                         node_dict[tar]['confidence'] = float(edge.attrib['content'])
                         
                     for child in edge._children:
@@ -178,10 +188,12 @@ class Writer(object):
         setattr(self, counter, getattr(self, counter) + 1)
         return '%s%s' % (obj_type, getattr(self, counter))
 
-    def write(self, handle, **kwargs):
+    def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
         
         # TODO: this is not handling XML namespaces and the root nex:nexml node correctly
+
+        self.cdao_to_obo = cdao_to_obo
         
         # set XML namespaces
         root_node = ET.Element('nex:nexml')
@@ -189,7 +201,7 @@ class Writer(object):
         root_node.set('xmlns', DEFAULT_NAMESPACE)
         root_node.set('xsi:schemaLocation', SCHEMA)
 
-        for prefix, uri in NAMESPACES.items():
+        for prefix, uri in XML_NAMESPACES.items():
             root_node.set('xmlns:%s' % prefix, uri)
 
         otus = ET.SubElement(root_node, 'otus', attrib={'id': 'tax', 'label': 'RootTaxaBlock'})
@@ -227,6 +239,8 @@ class Writer(object):
         '''Recursively process tree, adding nodes and edges to Tree object. 
         Returns a set of all OTUs encountered.'''
         tus = set()
+
+        convert_uri = cdao_to_obo if self.cdao_to_obo else (lambda s: s)
         
         node_id = self.new_label('node')
         clade.node_id = node_id
@@ -243,11 +257,11 @@ class Writer(object):
             attrib={
                     'id':edge_id, 'source':parent.node_id, 'target':node_id,
                     'length':str(clade.branch_length),
-                    'typeof':'cdao:Edge',
+                    'typeof':convert_uri('cdao:Edge'),
                     }
             if hasattr(clade, 'confidence') and not clade.confidence is None:
                 attrib.update({
-                               'property':'cdao:has_Support_Value',
+                               'property':convert_uri('cdao:has_Support_Value'),
                                'datatype':'xsd:float',
                                'content':'%1.2f' % clade.confidence,
                                })

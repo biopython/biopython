@@ -5,6 +5,25 @@
 
 import xml.etree.ElementTree as ET
 
+cdao_namespaces = {
+                   'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
+                   'obo': 'http://purl.obolibrary.org/obo/',
+                   }
+
+def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False):
+    '''Converts prefixed URIs to full URIs. Optionally, converts CDAO
+    named identifiers to OBO numeric identifiers.'''
+
+    if cdao_to_obo and s.startswith('cdao:'):
+        return resolve_uri('obo:%s' % cdao_elements[s[5:]], namespaces, cdao_to_obo)
+
+    for prefix in namespaces:
+        if xml_style: s = s.replace(prefix+':', '{%s}' % namespaces[prefix])
+        else: s = s.replace(prefix+':', namespaces[prefix])
+
+    return s
+
+
 cdao_owl = '''<?xml version="1.0"?>
 
 

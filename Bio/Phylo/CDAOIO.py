@@ -17,19 +17,19 @@ __docformat__ = "restructuredtext en"
 from cStringIO import StringIO
 
 from Bio.Phylo import CDAO
-from _cdao_owl import cdao_elements
+from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 import urlparse
 
 
 RDF_NAMESPACES = {
                   'owl': 'http://www.w3.org/2002/07/owl#',
-                  'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
-                  'obo': 'http://purl.obolibrary.org/obo/',
                   'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
                   }
+RDF_NAMESPACES.update(cdao_namespaces)
 
 def node_uri(graph, uri):
+    '''Returns the full URI of a node by appending the node URI to the graph URI.'''
     RDF = import_rdf()
 
     if graph.endswith('/'):
@@ -43,6 +43,9 @@ class CDAOError(Exception):
 
 
 def import_rdf():
+    '''Attempt to import librdf in this function, and raise a CDAOError if
+    import fails. This avoids an explicit dependence on librdf.'''
+
     try: import RDF
     except ImportError: raise CDAOError('Redland Python bindings are required for CDAO support.')
     #RDF.debug(1)
@@ -50,13 +53,14 @@ def import_rdf():
         
     
 def new_storage():
+    '''Create a new in-memory Redland store for storing the RDF model.'''
     RDF = import_rdf()
     
     storage = RDF.Storage(storage_name="hashes",
                           name="test",
                           options_string="new='yes',hash-type='memory',dir='.'")
     if storage is None:
-        raise CDAOError("new RDF.Storage failed")
+        raise CDAOError("Creation of new RDF.Storage failed.")
     return storage
 
 
@@ -439,15 +443,9 @@ class Writer(object):
                 for stmt in self.process_clade(new_clade, parent=clade, root=False):
                     yield stmt
                     
-                    
+
 def qUri(s):
     '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
     RDF = import_rdf()
-    
-    if s.startswith('cdao:'):
-        return qUri('obo:%s' % cdao_elements[s[5:]])
 
-    for url in RDF_NAMESPACES: 
-        s = s.replace(url+':', RDF_NAMESPACES[url])
-
-    return RDF.Uri(s)
+    return RDF.Uri(resolve_uri(s, namespaces=RDF_NAMESPACES))
