@@ -171,6 +171,7 @@ class Parser(object):
         kwargs = {}
         if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
         if 'label' in result: kwargs['name'] = result['label'].replace('_', ' ')
+        if 'confidence' in result: kwargs['confidence'] = result['confidence']
         
         clade = CDAO.Clade(**kwargs)
         
@@ -203,6 +204,7 @@ class Parser(object):
                            qUri('cdao:has_Value'): 'value',
                            qUri('cdao:represents_TU'): 'tu',
                            qUri('rdf:label'): 'label',
+                           qUri('cdao:has_Support_Value'): 'confidence',
                            }
             
             try:
@@ -232,6 +234,9 @@ class Parser(object):
                     annotation = self.obj_info[edge['annotation']]
                     if 'value' in annotation:
                         node_info['branch_length'] = float(annotation['value'])
+
+                if 'confidence' in edge:
+                    node_info['confidence'] = float(edge['confidence'])
             
             if 'tu' in obj:
                 # if this object points to a TU, we need the label of that TU
@@ -438,7 +443,11 @@ class Writer(object):
                            (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
                            (nUri(edge_ann_uri), qUri('cdao:has_Value'), branch_length),
                            ]
-            # TODO: annotate with confidences?
+            if hasattr(clade, 'confidence') and not clade.confidence is None:
+                confidence = RDF.Node(literal=str(clade.confidence), 
+                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
+
+                statements += [(nUri(edge_uri), qUri('cdao:has_Support_Value'), confidence)]
                       
         for stmt in statements:
             yield RDF.Statement(*stmt)
