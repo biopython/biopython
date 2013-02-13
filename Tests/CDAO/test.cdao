@@ -32,7 +32,6 @@
     obo:CDAO_0000200 <tree0000001#tree0000001> ;
     obo:CDAO_0000201 <tree0000001#node0000004> ;
     obo:CDAO_0000209 <tree0000001#node0000005> ;
-    obo:CDAO_0000214 20.0 ;
     a obo:CDAO_0000139 .
 
 <tree0000001#edge0000005>
@@ -815,6 +814,7 @@
     obo:CDAO_0000177 <tree0000001#edge0000004>, <tree0000001#edge0000053> ;
     obo:CDAO_0000179 <tree0000001#node0000003> ;
     obo:CDAO_0000200 <tree0000001#tree0000001> ;
+    obo:CDAO_0000214 20.0 ;
     a obo:CDAO_0000026 .
 
 <tree0000001#node0000005>
