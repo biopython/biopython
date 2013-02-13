@@ -111,7 +111,9 @@ class WriterTests(unittest.TestCase):
     pass
         
 for n, ex in enumerate(nexml_files):
-    if ex in tree_counts and tree_counts[ex] > 0:
+    count = 1
+    if ex in tree_counts: count = tree_counts[ex]
+    if count > 0:
         write_test = _test_write_factory(ex)
         write_test.__name__ = 'test_write_%s' % n
         setattr(WriterTests, write_test.__name__, write_test)
