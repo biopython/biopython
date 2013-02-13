@@ -21,7 +21,6 @@ from Bio.Phylo import (
                        NeXMLIO,
                        CDAOIO,
                        )
-from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, CDAOIO
 
 
 supported_formats = {
