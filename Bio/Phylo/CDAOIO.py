@@ -11,6 +11,8 @@
 This is an RDF format that conforms to the Comparative Data Analysis Ontology (CDAO).
 See: http://www.evolutionaryontology.org/cdao
 
+This module requires the librdf Python bindings (http://www.librdf.org)
+
 The CDAOIO.Parser, in addition to parsing text files, can also parse directly
 from a triple store that implements the Redland storage interface; similarly,
 the CDAOIO.Writer can store triples in a triple store instead of serializing
