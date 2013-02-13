@@ -94,7 +94,7 @@ def _test_write_factory(source):
         for prop_name in ('name', 'node_id', 'branch_length', 'confidence'):
             assert_property(prop_name)
 
-    test_write.__doc__ = "Parse the phylogenies in %s." % source
+    test_write.__doc__ = "Write and re-parse the phylogenies in %s." % source
     return test_write
 
 
