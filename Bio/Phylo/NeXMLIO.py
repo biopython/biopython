@@ -191,8 +191,6 @@ class Writer(object):
     def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
         
-        # TODO: this is not handling XML namespaces and the root nex:nexml node correctly
-
         self.cdao_to_obo = cdao_to_obo
         
         # set XML namespaces
