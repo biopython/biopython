@@ -30,9 +30,8 @@ supported_formats = {
 
 try: 
     from Bio.Phylo import CDAOIO
-    supported_formats.update('cdao', CDAOIO)
-except:
-    pass
+    supported_formats['cdao'] = CDAOIO
+except: pass
 
 
 def parse(file, format, **kwargs):

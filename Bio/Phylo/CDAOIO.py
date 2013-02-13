@@ -28,6 +28,10 @@ from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 import urlparse
 
+class CDAOError(Exception):
+    """Exception raised when CDAO object construction cannot continue."""
+    pass
+
 try: 
     import RDF
     import Redland
@@ -46,10 +50,6 @@ def node_uri(graph, uri):
         return RDF.Uri(urlparse.urljoin(graph, uri))
     else:
         return RDF.Uri(urlparse.urljoin(graph, '#%s' % uri))
-
-class CDAOError(Exception):
-    """Exception raised when CDAO object construction cannot continue."""
-    pass
 
 
 def new_storage():
@@ -270,7 +270,7 @@ class Writer(object):
         self.tree_counter = 0
 
     def write(self, handle, mime_type='text/turtle', tree_uri='tree', context=None,
-              storage=None, record_complete_ancestry=False):
+              storage=None, record_complete_ancestry=False, **kwargs):
         """Write this instance's trees to a file handle.
         
         Keywords:
