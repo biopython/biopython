@@ -91,7 +91,7 @@ def _test_write_factory(source):
             p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals()])
             self.assertEqual(p1,p2)
         
-        for prop_name in ('name', 'node_id', 'branch_length', 'confidence'):
+        for prop_name in ('name', 'branch_length', 'confidence'):
             assert_property(prop_name)
 
     test_write.__doc__ = "Write and re-parse the phylogenies in %s." % source

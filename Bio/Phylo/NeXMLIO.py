@@ -122,7 +122,6 @@ class Parser(object):
                     this_node = node_dict[node.id] = {}
                     if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
                     if 'root' in node.attrib and node.attrib['root'] == 'true': root = node.id
-                    this_node['node_id'] = node.id
                     
                     for child in node._children:
                         if child.tag == qUri('nex:meta'):
@@ -271,5 +270,7 @@ class Writer(object):
         if not clade.is_terminal():
             for new_clade in clade.clades:
                 tus.update(self._write_tree(new_clade, tree, parent=clade))
+
+        del clade.node_id
                 
         return tus
