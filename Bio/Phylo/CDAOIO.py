@@ -235,9 +235,6 @@ class Parser(object):
                     if 'value' in annotation:
                         node_info['branch_length'] = float(annotation['value'])
 
-                if 'confidence' in edge:
-                    node_info['confidence'] = float(edge['confidence'])
-            
             if 'tu' in obj:
                 # if this object points to a TU, we need the label of that TU
                 tu = self.obj_info[obj['tu']]
@@ -425,6 +422,13 @@ class Writer(object):
                            (nUri(clade.uri), qUri('cdao:has_Parent'), nUri(parent.uri)),
                            (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
+
+            if hasattr(clade, 'confidence') and not clade.confidence is None:
+                confidence = RDF.Node(literal=str(clade.confidence), 
+                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
+
+                statements += [(nUri(clade.uri), qUri('cdao:has_Support_Value'), confidence)]
+
             
             if len(clade.ancestors) > 0:
                 #ancestors = RDF.Node(literal=str(len(clade.ancestors)),
@@ -443,11 +447,6 @@ class Writer(object):
                            (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
                            (nUri(edge_ann_uri), qUri('cdao:has_Value'), branch_length),
                            ]
-            if hasattr(clade, 'confidence') and not clade.confidence is None:
-                confidence = RDF.Node(literal=str(clade.confidence), 
-                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
-
-                statements += [(nUri(edge_uri), qUri('cdao:has_Support_Value'), confidence)]
                       
         for stmt in statements:
             yield RDF.Statement(*stmt)
