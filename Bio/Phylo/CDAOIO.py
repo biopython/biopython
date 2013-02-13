@@ -279,7 +279,8 @@ class Writer(object):
         self.tu_counter = 0
         self.tree_counter = 0
 
-    def write(self, handle, **kwargs):
+    def write(self, handle, mime_type='text/turtle', tree_uri='tree', context=None,
+              storage=None, record_complete_ancestry=False):
         """Write this instance's trees to a file handle.
         
         Keywords:
@@ -288,17 +289,7 @@ class Writer(object):
         """
         RDF = import_rdf()
         
-        try: mime_type = kwargs['mime_type']
-        except KeyError: mime_type = 'text/turtle'
-        
-        try: tree_uri = kwargs['tree_uri']
-        except KeyError: tree_uri = 'tree'
-
-        try: context = kwargs['context']
-        except KeyError: context=None
-
-        try: storage = kwargs['storage']
-        except KeyError: storage = None
+        self.record_complete_ancestry = record_complete_ancestry
         
         self.add_trees_to_model(storage=storage, tree_uri=tree_uri, context=context)
         if storage is None: self.serialize_model(handle, mime_type=mime_type)
@@ -430,10 +421,7 @@ class Writer(object):
                 statements += [(nUri(clade.uri), qUri('cdao:has_Support_Value'), confidence)]
 
             
-            if len(clade.ancestors) > 0:
-                #ancestors = RDF.Node(literal=str(len(clade.ancestors)),
-                #                     datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#integer'))
-                #statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), ancestors)]
+            if self.record_complete_ancestry and len(clade.ancestors) > 0:
                 statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), nUri(ancestor))
                                for ancestor in clade.ancestors]
             
