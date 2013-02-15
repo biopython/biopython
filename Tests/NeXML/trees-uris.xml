@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<nex:nexml 
+	version="0.9" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd"
+	xmlns:nex="http://www.nexml.org/2009"
+	xmlns:cdao="http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.nexml.org/2009">	        
+	<otus id="tax1" xml:base="http://example.org/taxon/TB2:">
+		<otu id="t1"/>
+		<otu id="t2"/>
+		<otu id="t3"/>
+		<otu id="t4"/>
+		<otu id="t5"/>
+	</otus>
+	<trees otus="tax1" id="Trees" xml:base="http://example.org/tree/TB2:">
+		<tree id="tree1" xsi:type="nex:FloatTree">
+			<node id="n1" root="true"/>
+			<node id="n2" otu="t1"/>
+			<node id="n3"/>
+			<node id="n4"/>
+			<node id="n5" otu="t3"/>
+			<node id="n6" otu="t2"/>
+			<node id="n7"/>
+			<node id="n8" otu="t5"/>
+			<node id="n9" otu="t4"/>
+			<edge source="n1" target="n3" id="e1" length="0.34534"/>			
+			<edge source="n1" target="n2" id="e2" length="0.4353"/>
+			<edge source="n3" target="n4" id="e3" length="0.324"/>
+			<edge source="n3" target="n7" id="e4" length="0.3247"/>
+			<edge source="n4" target="n5" id="e5" length="0.234"/>
+			<edge source="n4" target="n6" id="e6" length="0.3243"/>
+			<edge source="n7" target="n8" id="e7" length="0.32443"/>
+			<edge source="n7" target="n9" id="e8" length="0.2342"/>
+		</tree>				
+	</trees>
+</nex:nexml>

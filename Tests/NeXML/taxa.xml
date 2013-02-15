@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+	This file is an example of a simple taxa block.
+-->
+<!-- 
+	The nexml root element below is structured as follows:
+		* there is a required version attribute. Additions where
+		  the 'core' remains backward compatible are identified
+		  by decimal increases (1.1, 1.2, etc.). Changes to the
+		  core standard are identified by integer increases (2.0,
+		  3.0, etc.). The former is somewhat likely to happen in
+		  practice, the latter hopefully isn't.
+		  
+		* In some places in instance documents, snippets of schema
+		  language code are necessary, for example to specify 
+		  concrete subclasses. Such snippets are bound to the 
+		  http://www.w3.org/2001/XMLSchema-instance namespace, and
+		  by convention identified by the 'xsi' prefix.
+		  http://en.wikipedia.org/wiki/Xsd
+		  
+		* to facilitate validation, the location of the schema is
+		  specified in the root element. Such a specification is
+		  done using the schema language snippet xsi:schemaLocation
+		  
+		* by convention, root elements of nexml fragments are 
+		  pre-fixed with 'nex', which is bound to the namespace
+		  http://www.nexml.org/1.0
+		  	
+		* the optional 'generator' attribute can be used to specify
+		  which program wrote out the file.
+		  
+		* other xml namespaces (i.e. attributes with the 'xmlns'
+		  prefix) can be specified here, in case they're used 
+		  in child elements. For example, the xlink namespace
+		  is used for links ('href' attributes, as in html), so
+		  that child elements may contain links to other resources.
+		  http://en.wikipedia.org/wiki/XLink
+-->
+<nex:nexml 
+	version="0.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	generator="mesquite"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:nex="http://www.nexml.org/2009"
+	xmlns="http://www.nexml.org/2009"
+	xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd">
+	<!--
+		The taxa element is analogous to the taxa block in nexus
+		files. Like all elements that capture things that might
+		need to be referred to elsewhere, it requires an 'id'
+		attribute, whose value must consist of a string of alpha-
+		numeric characters, starting with a letter. In addition,
+		it may (optionally) have the following attributes:
+			* 'label', a free form string, only meant for humans
+			* 'xml:base', indicating the base url of the resource
+			* 'xml:lang', indicating a two-letter language code
+			* 'xml:id', a file-scope unique ID
+			* 'xlink:href', a link to somewhere else
+			* 'class', a vector of nexml id references pointing
+			  to classes the element belongs to (this is analogous
+			  to 'sets' in nexus, but using the xml idiom to do
+			  the same thing).
+	-->
+	<otus 
+		id="taxa1" 
+		label="My taxa block" 
+		xml:base="http://example.org/" 
+		xml:id="taxa1" 
+		xml:lang="EN" 
+		xlink:href="#taxa1">
+		<!--  
+			The taxon element is analogous to a single label in 
+			a nexus taxa block. It may have the same additional
+			attributes (label, xml:base, xml:lang, xml:id, xlink:href
+			and class) as the taxa element.
+		-->
+		<otu id="t1"/>
+		<otu id="t2"/>
+		<otu id="t3"/>
+		<otu id="t4"/>
+		<otu id="t5"/>
+	</otus>
+</nex:nexml>

@@ -1,0 +1,2062 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nex:nexml xmlns:nex="http://www.nexml.org/2009" xmlns="http://www.nexml.org/2009" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:tb="http://treebase.org/terms#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" about="#nex_nexml2" generator="org.nexml.model.impl.DocumentImpl" id="S794" version="0.9" xml:base="http://purl.org/phylo/treebase/phylows/study/TB2:">
+  <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:A1269" id="meta1833" rel="tb:identifier.analysis" xsi:type="nex:ResourceMeta">
+    <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:As1269" id="meta1834" rel="tb:identifier.analysisstep" xsi:type="nex:ResourceMeta">
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:Al1269" id="meta1837" rel="tb:identifier.algorithm" xsi:type="nex:ResourceMeta">
+        <meta content="neighbor joining" datatype="xsd:string" id="meta1839" property="dc:description" xsi:type="nex:LiteralMeta"/>
+        <meta content="other algorithm" datatype="xsd:string" id="meta1838" property="dc:type" xsi:type="nex:LiteralMeta"/>
+      </meta>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:So1267" id="meta1835" rel="tb:identifier.software" xsi:type="nex:ResourceMeta">
+        <meta content="PAUP" datatype="xsd:string" id="meta1836" property="dc:title" xsi:type="nex:LiteralMeta"/>
+      </meta>
+    </meta>
+  </meta>
+  <meta content="Mycologia" datatype="xsd:string" id="meta17" property="dc:publisher" xsi:type="nex:LiteralMeta"/>
+  <meta content="Mycologia" datatype="xsd:string" id="meta16" property="prism:publicationName" xsi:type="nex:LiteralMeta"/>
+  <meta content="in press" datatype="xsd:string" id="meta15" property="dc:subject" xsi:type="nex:LiteralMeta"/>
+  <meta content="2001" datatype="xsd:string" id="meta14" property="prism:publicationDate" xsi:type="nex:LiteralMeta"/>
+  <meta content="Royse D." datatype="xsd:string" id="meta13" property="dc:contributor" xsi:type="nex:LiteralMeta"/>
+  <meta content="Geiser D." datatype="xsd:string" id="meta12" property="dc:contributor" xsi:type="nex:LiteralMeta"/>
+  <meta content="Shen Q." datatype="xsd:string" id="meta11" property="dc:contributor" xsi:type="nex:LiteralMeta"/>
+  <meta content="Shen Q., Geiser D., &amp; Royse D." datatype="xsd:string" id="meta10" property="dc:creator" xsi:type="nex:LiteralMeta"/>
+  <meta content="Molecular phylogenetic analysis of Grifola frondosa (maitake) reveals a species partition separating North American and Asian isolates." datatype="xsd:string" id="meta9" property="dc:title" xsi:type="nex:LiteralMeta"/>
+  <meta content="Shen Q., Geiser D., &amp; Royse D. 2001. Molecular phylogenetic analysis of Grifola frondosa (maitake) reveals a species partition separating North American and Asian isolates. Mycologia, null." datatype="xsd:string" id="meta8" property="dcterms:bibliographicCitation" xsi:type="nex:LiteralMeta"/>
+  <meta content="2001-07-24" datatype="xsd:string" id="meta7" property="prism:creationDate" xsi:type="nex:LiteralMeta"/>
+  <meta content="2001-07-24" datatype="xsd:string" id="meta6" property="prism:modificationDate" xsi:type="nex:LiteralMeta"/>
+  <meta content="2001-07-24" datatype="xsd:string" id="meta5" property="dc:date" xsi:type="nex:LiteralMeta"/>
+  <meta content="S651" datatype="xsd:string" id="meta4" property="tb:identifier.study.tb1" xsi:type="nex:LiteralMeta"/>
+  <meta content="794" datatype="xsd:string" id="meta3" property="tb:identifier.study" xsi:type="nex:LiteralMeta"/>
+  <meta content="Study" datatype="xsd:string" id="meta1" property="prism:section" xsi:type="nex:LiteralMeta"/>
+  <otus id="Tls10691" label="TaxonLabelSet10691" xml:base="http://purl.org/phylo/treebase/phylows/taxon/TB2:">
+    <otu about="#Tl126179" id="Tl126179" label="Grifola sordulenta">
+      <meta content="12578" datatype="xsd:long" id="meta24" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29804" datatype="xsd:long" id="meta23" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/172312" id="meta22" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3209417" id="meta21" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta20" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl261" id="Tl261" label="Grifola frondosa WC836">
+      <meta content="12577" datatype="xsd:long" id="meta31" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta30" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta29" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta28" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta27" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta26" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl238" id="Tl238" label="Grifola frondosa WC835">
+      <meta content="12577" datatype="xsd:long" id="meta38" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta37" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta36" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta35" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta34" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta33" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl282" id="Tl282" label="Grifola frondosa WC834">
+      <meta content="12577" datatype="xsd:long" id="meta45" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta44" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta43" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta42" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta41" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta40" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl266" id="Tl266" label="Grifola frondosa WC828">
+      <meta content="12577" datatype="xsd:long" id="meta52" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta51" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta50" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta49" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta48" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta47" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl280" id="Tl280" label="Grifola frondosa WC808">
+      <meta content="12577" datatype="xsd:long" id="meta59" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta58" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta57" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta56" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta55" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta54" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl257" id="Tl257" label="Grifola frondosa WC685">
+      <meta content="12577" datatype="xsd:long" id="meta66" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta65" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta64" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta63" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta62" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta61" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl260" id="Tl260" label="Grifola frondosa WC659">
+      <meta content="12577" datatype="xsd:long" id="meta73" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta72" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta71" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta70" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta69" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta68" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl270" id="Tl270" label="Grifola frondosa WC583">
+      <meta content="12577" datatype="xsd:long" id="meta80" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta79" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta78" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta77" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta76" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta75" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl247" id="Tl247" label="Grifola frondosa WC582">
+      <meta content="12577" datatype="xsd:long" id="meta87" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta86" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta85" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta84" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta83" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta82" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl256" id="Tl256" label="Grifola frondosa WC581">
+      <meta content="12577" datatype="xsd:long" id="meta94" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta93" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta92" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta91" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta90" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta89" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl281" id="Tl281" label="Grifola frondosa WC557">
+      <meta content="12577" datatype="xsd:long" id="meta101" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta100" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta99" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta98" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta97" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta96" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl244" id="Tl244" label="Grifola frondosa WC556">
+      <meta content="12577" datatype="xsd:long" id="meta108" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta107" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta106" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta105" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta104" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta103" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl263" id="Tl263" label="Grifola frondosa WC555">
+      <meta content="12577" datatype="xsd:long" id="meta115" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta114" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta113" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta112" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta111" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta110" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl279" id="Tl279" label="Grifola frondosa WC493">
+      <meta content="12577" datatype="xsd:long" id="meta122" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta121" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta120" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta119" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta118" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta117" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl236" id="Tl236" label="Grifola frondosa WC483">
+      <meta content="12577" datatype="xsd:long" id="meta129" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta128" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta127" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta126" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta125" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta124" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl252" id="Tl252" label="Grifola frondosa WC367">
+      <meta content="12577" datatype="xsd:long" id="meta136" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta135" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta134" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta133" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta132" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta131" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl272" id="Tl272" label="Grifola frondosa WC364">
+      <meta content="12577" datatype="xsd:long" id="meta143" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta142" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta141" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta140" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta139" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta138" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl249" id="Tl249" label="Grifola frondosa WC248">
+      <meta content="12577" datatype="xsd:long" id="meta150" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta149" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta148" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta147" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta146" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta145" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl275" id="Tl275" label="Grifola frondosa M040">
+      <meta content="12577" datatype="xsd:long" id="meta157" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta156" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta155" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta154" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta153" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta152" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl274" id="Tl274" label="Grifola frondosa M039">
+      <meta content="12577" datatype="xsd:long" id="meta164" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta163" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta162" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta161" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta160" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta159" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl233" id="Tl233" label="Grifola frondosa M038">
+      <meta content="12577" datatype="xsd:long" id="meta171" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta170" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta169" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta168" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta167" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta166" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl258" id="Tl258" label="Grifola frondosa M037">
+      <meta content="12577" datatype="xsd:long" id="meta178" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta177" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta176" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta175" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta174" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta173" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl254" id="Tl254" label="Grifola frondosa M036">
+      <meta content="12577" datatype="xsd:long" id="meta185" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta184" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta183" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta182" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta181" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta180" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl269" id="Tl269" label="Grifola frondosa M035">
+      <meta content="12577" datatype="xsd:long" id="meta192" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta191" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta190" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta189" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta188" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta187" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl242" id="Tl242" label="Grifola frondosa M034">
+      <meta content="12577" datatype="xsd:long" id="meta199" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta198" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta197" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta196" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta195" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta194" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl239" id="Tl239" label="Grifola frondosa M033">
+      <meta content="12577" datatype="xsd:long" id="meta206" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta205" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta204" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta203" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta202" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta201" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl246" id="Tl246" label="Grifola frondosa M032">
+      <meta content="12577" datatype="xsd:long" id="meta213" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta212" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta211" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta210" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta209" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta208" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl259" id="Tl259" label="Grifola frondosa M031">
+      <meta content="12577" datatype="xsd:long" id="meta220" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta219" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta218" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta217" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta216" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta215" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl277" id="Tl277" label="Grifola frondosa M030">
+      <meta content="12577" datatype="xsd:long" id="meta227" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta226" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta225" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta224" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta223" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta222" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl243" id="Tl243" label="Grifola frondosa M029">
+      <meta content="12577" datatype="xsd:long" id="meta234" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta233" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta232" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta231" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta230" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta229" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl250" id="Tl250" label="Grifola frondosa M021">
+      <meta content="12577" datatype="xsd:long" id="meta241" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta240" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta239" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta238" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta237" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta236" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl237" id="Tl237" label="Grifola frondosa M020">
+      <meta content="12577" datatype="xsd:long" id="meta248" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta247" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta246" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta245" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta244" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta243" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl264" id="Tl264" label="Grifola frondosa M019">
+      <meta content="12577" datatype="xsd:long" id="meta255" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta254" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta253" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta252" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta251" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta250" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl253" id="Tl253" label="Grifola frondosa M018">
+      <meta content="12577" datatype="xsd:long" id="meta262" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta261" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta260" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta259" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta258" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta257" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl232" id="Tl232" label="Grifola frondosa M017">
+      <meta content="12577" datatype="xsd:long" id="meta269" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta268" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta267" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta266" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta265" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta264" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl245" id="Tl245" label="Grifola frondosa M016">
+      <meta content="12577" datatype="xsd:long" id="meta276" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta275" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta274" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta273" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta272" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta271" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl262" id="Tl262" label="Grifola frondosa M015">
+      <meta content="12577" datatype="xsd:long" id="meta283" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta282" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta281" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta280" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta279" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta278" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl235" id="Tl235" label="Grifola frondosa M014">
+      <meta content="12577" datatype="xsd:long" id="meta290" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta289" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta288" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta287" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta286" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta285" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl276" id="Tl276" label="Grifola frondosa M013">
+      <meta content="12577" datatype="xsd:long" id="meta297" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta296" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta295" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta294" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta293" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta292" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl273" id="Tl273" label="Grifola frondosa M012">
+      <meta content="12577" datatype="xsd:long" id="meta304" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta303" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta302" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta301" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta300" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta299" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl265" id="Tl265" label="Grifola frondosa M011">
+      <meta content="12577" datatype="xsd:long" id="meta311" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta310" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta309" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta308" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta307" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta306" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl271" id="Tl271" label="Grifola frondosa M010">
+      <meta content="12577" datatype="xsd:long" id="meta318" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta317" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta316" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta315" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta314" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta313" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl251" id="Tl251" label="Grifola frondosa M009">
+      <meta content="12577" datatype="xsd:long" id="meta325" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta324" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta323" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta322" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta321" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta320" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl267" id="Tl267" label="Grifola frondosa M008">
+      <meta content="12577" datatype="xsd:long" id="meta332" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta331" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta330" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta329" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta328" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta327" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl278" id="Tl278" label="Grifola frondosa M007">
+      <meta content="12577" datatype="xsd:long" id="meta339" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta338" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta337" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta336" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta335" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta334" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl255" id="Tl255" label="Grifola frondosa M006">
+      <meta content="12577" datatype="xsd:long" id="meta346" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta345" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta344" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta343" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta342" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta341" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl240" id="Tl240" label="Grifola frondosa M005">
+      <meta content="12577" datatype="xsd:long" id="meta353" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta352" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta351" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta350" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta349" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta348" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl231" id="Tl231" label="Grifola frondosa M004">
+      <meta content="12577" datatype="xsd:long" id="meta360" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta359" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta358" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta357" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta356" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta355" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl234" id="Tl234" label="Grifola frondosa M003">
+      <meta content="12577" datatype="xsd:long" id="meta367" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta366" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta365" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta364" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta363" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta362" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl241" id="Tl241" label="Grifola frondosa M002">
+      <meta content="12577" datatype="xsd:long" id="meta374" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta373" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta372" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta371" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta370" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta369" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+    <otu about="#Tl248" id="Tl248" label="Grifola frondosa M001">
+      <meta content="12577" datatype="xsd:long" id="meta381" property="tb:identifier.taxon" xsi:type="nex:LiteralMeta"/>
+      <meta content="29801" datatype="xsd:long" id="meta380" property="tb:identifier.taxonVariant" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.uniprot.org/taxonomy/5627" id="meta379" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta content="Grifola frondosa" datatype="xsd:string" id="meta378" property="skos:altLabel" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://www.ubio.org/authority/metadata.php?lsid=urn:lsid:ubio.org:namebank:3234622" id="meta377" rel="skos:closeMatch" xsi:type="nex:ResourceMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta376" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    </otu>
+  </otus>
+  <characters about="#M83" id="M83" label="ITS and BT" otus="Tls10691" xml:base="http://purl.org/phylo/treebase/phylows/matrix/TB2:" xsi:type="nex:DnaSeqs">
+    <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:As1269" id="meta1840" rel="tb:input.analysistep" xsi:type="nex:ResourceMeta"/>
+    <meta content="M1020" datatype="xsd:string" id="meta1619" property="tb:identifier.matrix.tb1" xsi:type="nex:LiteralMeta"/>
+    <meta content="83" datatype="xsd:long" id="meta1618" property="tb:identifier.matrix" xsi:type="nex:LiteralMeta"/>
+    <meta content="1161" datatype="xsd:integer" id="meta1617" property="tb:nchar.matrix" xsi:type="nex:LiteralMeta"/>
+    <meta content="52" datatype="xsd:integer" id="meta1616" property="tb:ntax.matrix" xsi:type="nex:LiteralMeta"/>
+    <meta content="DNA" datatype="xsd:string" id="meta1615" property="tb:type.matrix" xsi:type="nex:LiteralMeta"/>
+    <format>
+      <states id="states383">
+        <state id="state384" symbol="A"/>
+        <state id="state385" symbol="C"/>
+        <state id="state386" symbol="G"/>
+        <state id="state387" symbol="T"/>
+        <uncertain_state_set id="uncertain_state_set388" symbol="K">
+          <member state="state386"/>
+          <member state="state387"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set389" symbol="M">
+          <member state="state385"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set390" symbol="R">
+          <member state="state386"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set391" symbol="S">
+          <member state="state386"/>
+          <member state="state385"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set392" symbol="W">
+          <member state="state387"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set393" symbol="Y">
+          <member state="state385"/>
+          <member state="state387"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set394" symbol="B">
+          <member state="state386"/>
+          <member state="state387"/>
+          <member state="state385"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set395" symbol="D">
+          <member state="state386"/>
+          <member state="state387"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set396" symbol="H">
+          <member state="state386"/>
+          <member state="state387"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set397" symbol="V">
+          <member state="state386"/>
+          <member state="state385"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set398" symbol="N">
+          <member state="state386"/>
+          <member state="state385"/>
+          <member state="state387"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set399" symbol="X">
+          <member state="state386"/>
+          <member state="state385"/>
+          <member state="state387"/>
+          <member state="state384"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="uncertain_state_set400" symbol="-"/>
+        <uncertain_state_set id="uncertain_state_set401" symbol="?">
+          <member state="uncertain_state_set400"/>
+          <member state="state386"/>
+          <member state="state384"/>
+          <member state="state387"/>
+          <member state="state385"/>
+        </uncertain_state_set>
+      </states>
+      <char id="char402" states="states383"/>
+      <char id="char403" states="states383"/>
+      <char id="char404" states="states383"/>
+      <char id="char405" states="states383"/>
+      <char id="char406" states="states383"/>
+      <char id="char407" states="states383"/>
+      <char id="char408" states="states383"/>
+      <char id="char409" states="states383"/>
+      <char id="char410" states="states383"/>
+      <char id="char411" states="states383"/>
+      <char id="char412" states="states383"/>
+      <char id="char413" states="states383"/>
+      <char id="char414" states="states383"/>
+      <char id="char415" states="states383"/>
+      <char id="char416" states="states383"/>
+      <char id="char417" states="states383"/>
+      <char id="char418" states="states383"/>
+      <char id="char419" states="states383"/>
+      <char id="char420" states="states383"/>
+      <char id="char421" states="states383"/>
+      <char id="char422" states="states383"/>
+      <char id="char423" states="states383"/>
+      <char id="char424" states="states383"/>
+      <char id="char425" states="states383"/>
+      <char id="char426" states="states383"/>
+      <char id="char427" states="states383"/>
+      <char id="char428" states="states383"/>
+      <char id="char429" states="states383"/>
+      <char id="char430" states="states383"/>
+      <char id="char431" states="states383"/>
+      <char id="char432" states="states383"/>
+      <char id="char433" states="states383"/>
+      <char id="char434" states="states383"/>
+      <char id="char435" states="states383"/>
+      <char id="char436" states="states383"/>
+      <char id="char437" states="states383"/>
+      <char id="char438" states="states383"/>
+      <char id="char439" states="states383"/>
+      <char id="char440" states="states383"/>
+      <char id="char441" states="states383"/>
+      <char id="char442" states="states383"/>
+      <char id="char443" states="states383"/>
+      <char id="char444" states="states383"/>
+      <char id="char445" states="states383"/>
+      <char id="char446" states="states383"/>
+      <char id="char447" states="states383"/>
+      <char id="char448" states="states383"/>
+      <char id="char449" states="states383"/>
+      <char id="char450" states="states383"/>
+      <char id="char451" states="states383"/>
+      <char id="char452" states="states383"/>
+      <char id="char453" states="states383"/>
+      <char id="char454" states="states383"/>
+      <char id="char455" states="states383"/>
+      <char id="char456" states="states383"/>
+      <char id="char457" states="states383"/>
+      <char id="char458" states="states383"/>
+      <char id="char459" states="states383"/>
+      <char id="char460" states="states383"/>
+      <char id="char461" states="states383"/>
+      <char id="char462" states="states383"/>
+      <char id="char463" states="states383"/>
+      <char id="char464" states="states383"/>
+      <char id="char465" states="states383"/>
+      <char id="char466" states="states383"/>
+      <char id="char467" states="states383"/>
+      <char id="char468" states="states383"/>
+      <char id="char469" states="states383"/>
+      <char id="char470" states="states383"/>
+      <char id="char471" states="states383"/>
+      <char id="char472" states="states383"/>
+      <char id="char473" states="states383"/>
+      <char id="char474" states="states383"/>
+      <char id="char475" states="states383"/>
+      <char id="char476" states="states383"/>
+      <char id="char477" states="states383"/>
+      <char id="char478" states="states383"/>
+      <char id="char479" states="states383"/>
+      <char id="char480" states="states383"/>
+      <char id="char481" states="states383"/>
+      <char id="char482" states="states383"/>
+      <char id="char483" states="states383"/>
+      <char id="char484" states="states383"/>
+      <char id="char485" states="states383"/>
+      <char id="char486" states="states383"/>
+      <char id="char487" states="states383"/>
+      <char id="char488" states="states383"/>
+      <char id="char489" states="states383"/>
+      <char id="char490" states="states383"/>
+      <char id="char491" states="states383"/>
+      <char id="char492" states="states383"/>
+      <char id="char493" states="states383"/>
+      <char id="char494" states="states383"/>
+      <char id="char495" states="states383"/>
+      <char id="char496" states="states383"/>
+      <char id="char497" states="states383"/>
+      <char id="char498" states="states383"/>
+      <char id="char499" states="states383"/>
+      <char id="char500" states="states383"/>
+      <char id="char501" states="states383"/>
+      <char id="char502" states="states383"/>
+      <char id="char503" states="states383"/>
+      <char id="char504" states="states383"/>
+      <char id="char505" states="states383"/>
+      <char id="char506" states="states383"/>
+      <char id="char507" states="states383"/>
+      <char id="char508" states="states383"/>
+      <char id="char509" states="states383"/>
+      <char id="char510" states="states383"/>
+      <char id="char511" states="states383"/>
+      <char id="char512" states="states383"/>
+      <char id="char513" states="states383"/>
+      <char id="char514" states="states383"/>
+      <char id="char515" states="states383"/>
+      <char id="char516" states="states383"/>
+      <char id="char517" states="states383"/>
+      <char id="char518" states="states383"/>
+      <char id="char519" states="states383"/>
+      <char id="char520" states="states383"/>
+      <char id="char521" states="states383"/>
+      <char id="char522" states="states383"/>
+      <char id="char523" states="states383"/>
+      <char id="char524" states="states383"/>
+      <char id="char525" states="states383"/>
+      <char id="char526" states="states383"/>
+      <char id="char527" states="states383"/>
+      <char id="char528" states="states383"/>
+      <char id="char529" states="states383"/>
+      <char id="char530" states="states383"/>
+      <char id="char531" states="states383"/>
+      <char id="char532" states="states383"/>
+      <char id="char533" states="states383"/>
+      <char id="char534" states="states383"/>
+      <char id="char535" states="states383"/>
+      <char id="char536" states="states383"/>
+      <char id="char537" states="states383"/>
+      <char id="char538" states="states383"/>
+      <char id="char539" states="states383"/>
+      <char id="char540" states="states383"/>
+      <char id="char541" states="states383"/>
+      <char id="char542" states="states383"/>
+      <char id="char543" states="states383"/>
+      <char id="char544" states="states383"/>
+      <char id="char545" states="states383"/>
+      <char id="char546" states="states383"/>
+      <char id="char547" states="states383"/>
+      <char id="char548" states="states383"/>
+      <char id="char549" states="states383"/>
+      <char id="char550" states="states383"/>
+      <char id="char551" states="states383"/>
+      <char id="char552" states="states383"/>
+      <char id="char553" states="states383"/>
+      <char id="char554" states="states383"/>
+      <char id="char555" states="states383"/>
+      <char id="char556" states="states383"/>
+      <char id="char557" states="states383"/>
+      <char id="char558" states="states383"/>
+      <char id="char559" states="states383"/>
+      <char id="char560" states="states383"/>
+      <char id="char561" states="states383"/>
+      <char id="char562" states="states383"/>
+      <char id="char563" states="states383"/>
+      <char id="char564" states="states383"/>
+      <char id="char565" states="states383"/>
+      <char id="char566" states="states383"/>
+      <char id="char567" states="states383"/>
+      <char id="char568" states="states383"/>
+      <char id="char569" states="states383"/>
+      <char id="char570" states="states383"/>
+      <char id="char571" states="states383"/>
+      <char id="char572" states="states383"/>
+      <char id="char573" states="states383"/>
+      <char id="char574" states="states383"/>
+      <char id="char575" states="states383"/>
+      <char id="char576" states="states383"/>
+      <char id="char577" states="states383"/>
+      <char id="char578" states="states383"/>
+      <char id="char579" states="states383"/>
+      <char id="char580" states="states383"/>
+      <char id="char581" states="states383"/>
+      <char id="char582" states="states383"/>
+      <char id="char583" states="states383"/>
+      <char id="char584" states="states383"/>
+      <char id="char585" states="states383"/>
+      <char id="char586" states="states383"/>
+      <char id="char587" states="states383"/>
+      <char id="char588" states="states383"/>
+      <char id="char589" states="states383"/>
+      <char id="char590" states="states383"/>
+      <char id="char591" states="states383"/>
+      <char id="char592" states="states383"/>
+      <char id="char593" states="states383"/>
+      <char id="char594" states="states383"/>
+      <char id="char595" states="states383"/>
+      <char id="char596" states="states383"/>
+      <char id="char597" states="states383"/>
+      <char id="char598" states="states383"/>
+      <char id="char599" states="states383"/>
+      <char id="char600" states="states383"/>
+      <char id="char601" states="states383"/>
+      <char id="char602" states="states383"/>
+      <char id="char603" states="states383"/>
+      <char id="char604" states="states383"/>
+      <char id="char605" states="states383"/>
+      <char id="char606" states="states383"/>
+      <char id="char607" states="states383"/>
+      <char id="char608" states="states383"/>
+      <char id="char609" states="states383"/>
+      <char id="char610" states="states383"/>
+      <char id="char611" states="states383"/>
+      <char id="char612" states="states383"/>
+      <char id="char613" states="states383"/>
+      <char id="char614" states="states383"/>
+      <char id="char615" states="states383"/>
+      <char id="char616" states="states383"/>
+      <char id="char617" states="states383"/>
+      <char id="char618" states="states383"/>
+      <char id="char619" states="states383"/>
+      <char id="char620" states="states383"/>
+      <char id="char621" states="states383"/>
+      <char id="char622" states="states383"/>
+      <char id="char623" states="states383"/>
+      <char id="char624" states="states383"/>
+      <char id="char625" states="states383"/>
+      <char id="char626" states="states383"/>
+      <char id="char627" states="states383"/>
+      <char id="char628" states="states383"/>
+      <char id="char629" states="states383"/>
+      <char id="char630" states="states383"/>
+      <char id="char631" states="states383"/>
+      <char id="char632" states="states383"/>
+      <char id="char633" states="states383"/>
+      <char id="char634" states="states383"/>
+      <char id="char635" states="states383"/>
+      <char id="char636" states="states383"/>
+      <char id="char637" states="states383"/>
+      <char id="char638" states="states383"/>
+      <char id="char639" states="states383"/>
+      <char id="char640" states="states383"/>
+      <char id="char641" states="states383"/>
+      <char id="char642" states="states383"/>
+      <char id="char643" states="states383"/>
+      <char id="char644" states="states383"/>
+      <char id="char645" states="states383"/>
+      <char id="char646" states="states383"/>
+      <char id="char647" states="states383"/>
+      <char id="char648" states="states383"/>
+      <char id="char649" states="states383"/>
+      <char id="char650" states="states383"/>
+      <char id="char651" states="states383"/>
+      <char id="char652" states="states383"/>
+      <char id="char653" states="states383"/>
+      <char id="char654" states="states383"/>
+      <char id="char655" states="states383"/>
+      <char id="char656" states="states383"/>
+      <char id="char657" states="states383"/>
+      <char id="char658" states="states383"/>
+      <char id="char659" states="states383"/>
+      <char id="char660" states="states383"/>
+      <char id="char661" states="states383"/>
+      <char id="char662" states="states383"/>
+      <char id="char663" states="states383"/>
+      <char id="char664" states="states383"/>
+      <char id="char665" states="states383"/>
+      <char id="char666" states="states383"/>
+      <char id="char667" states="states383"/>
+      <char id="char668" states="states383"/>
+      <char id="char669" states="states383"/>
+      <char id="char670" states="states383"/>
+      <char id="char671" states="states383"/>
+      <char id="char672" states="states383"/>
+      <char id="char673" states="states383"/>
+      <char id="char674" states="states383"/>
+      <char id="char675" states="states383"/>
+      <char id="char676" states="states383"/>
+      <char id="char677" states="states383"/>
+      <char id="char678" states="states383"/>
+      <char id="char679" states="states383"/>
+      <char id="char680" states="states383"/>
+      <char id="char681" states="states383"/>
+      <char id="char682" states="states383"/>
+      <char id="char683" states="states383"/>
+      <char id="char684" states="states383"/>
+      <char id="char685" states="states383"/>
+      <char id="char686" states="states383"/>
+      <char id="char687" states="states383"/>
+      <char id="char688" states="states383"/>
+      <char id="char689" states="states383"/>
+      <char id="char690" states="states383"/>
+      <char id="char691" states="states383"/>
+      <char id="char692" states="states383"/>
+      <char id="char693" states="states383"/>
+      <char id="char694" states="states383"/>
+      <char id="char695" states="states383"/>
+      <char id="char696" states="states383"/>
+      <char id="char697" states="states383"/>
+      <char id="char698" states="states383"/>
+      <char id="char699" states="states383"/>
+      <char id="char700" states="states383"/>
+      <char id="char701" states="states383"/>
+      <char id="char702" states="states383"/>
+      <char id="char703" states="states383"/>
+      <char id="char704" states="states383"/>
+      <char id="char705" states="states383"/>
+      <char id="char706" states="states383"/>
+      <char id="char707" states="states383"/>
+      <char id="char708" states="states383"/>
+      <char id="char709" states="states383"/>
+      <char id="char710" states="states383"/>
+      <char id="char711" states="states383"/>
+      <char id="char712" states="states383"/>
+      <char id="char713" states="states383"/>
+      <char id="char714" states="states383"/>
+      <char id="char715" states="states383"/>
+      <char id="char716" states="states383"/>
+      <char id="char717" states="states383"/>
+      <char id="char718" states="states383"/>
+      <char id="char719" states="states383"/>
+      <char id="char720" states="states383"/>
+      <char id="char721" states="states383"/>
+      <char id="char722" states="states383"/>
+      <char id="char723" states="states383"/>
+      <char id="char724" states="states383"/>
+      <char id="char725" states="states383"/>
+      <char id="char726" states="states383"/>
+      <char id="char727" states="states383"/>
+      <char id="char728" states="states383"/>
+      <char id="char729" states="states383"/>
+      <char id="char730" states="states383"/>
+      <char id="char731" states="states383"/>
+      <char id="char732" states="states383"/>
+      <char id="char733" states="states383"/>
+      <char id="char734" states="states383"/>
+      <char id="char735" states="states383"/>
+      <char id="char736" states="states383"/>
+      <char id="char737" states="states383"/>
+      <char id="char738" states="states383"/>
+      <char id="char739" states="states383"/>
+      <char id="char740" states="states383"/>
+      <char id="char741" states="states383"/>
+      <char id="char742" states="states383"/>
+      <char id="char743" states="states383"/>
+      <char id="char744" states="states383"/>
+      <char id="char745" states="states383"/>
+      <char id="char746" states="states383"/>
+      <char id="char747" states="states383"/>
+      <char id="char748" states="states383"/>
+      <char id="char749" states="states383"/>
+      <char id="char750" states="states383"/>
+      <char id="char751" states="states383"/>
+      <char id="char752" states="states383"/>
+      <char id="char753" states="states383"/>
+      <char id="char754" states="states383"/>
+      <char id="char755" states="states383"/>
+      <char id="char756" states="states383"/>
+      <char id="char757" states="states383"/>
+      <char id="char758" states="states383"/>
+      <char id="char759" states="states383"/>
+      <char id="char760" states="states383"/>
+      <char id="char761" states="states383"/>
+      <char id="char762" states="states383"/>
+      <char id="char763" states="states383"/>
+      <char id="char764" states="states383"/>
+      <char id="char765" states="states383"/>
+      <char id="char766" states="states383"/>
+      <char id="char767" states="states383"/>
+      <char id="char768" states="states383"/>
+      <char id="char769" states="states383"/>
+      <char id="char770" states="states383"/>
+      <char id="char771" states="states383"/>
+      <char id="char772" states="states383"/>
+      <char id="char773" states="states383"/>
+      <char id="char774" states="states383"/>
+      <char id="char775" states="states383"/>
+      <char id="char776" states="states383"/>
+      <char id="char777" states="states383"/>
+      <char id="char778" states="states383"/>
+      <char id="char779" states="states383"/>
+      <char id="char780" states="states383"/>
+      <char id="char781" states="states383"/>
+      <char id="char782" states="states383"/>
+      <char id="char783" states="states383"/>
+      <char id="char784" states="states383"/>
+      <char id="char785" states="states383"/>
+      <char id="char786" states="states383"/>
+      <char id="char787" states="states383"/>
+      <char id="char788" states="states383"/>
+      <char id="char789" states="states383"/>
+      <char id="char790" states="states383"/>
+      <char id="char791" states="states383"/>
+      <char id="char792" states="states383"/>
+      <char id="char793" states="states383"/>
+      <char id="char794" states="states383"/>
+      <char id="char795" states="states383"/>
+      <char id="char796" states="states383"/>
+      <char id="char797" states="states383"/>
+      <char id="char798" states="states383"/>
+      <char id="char799" states="states383"/>
+      <char id="char800" states="states383"/>
+      <char id="char801" states="states383"/>
+      <char id="char802" states="states383"/>
+      <char id="char803" states="states383"/>
+      <char id="char804" states="states383"/>
+      <char id="char805" states="states383"/>
+      <char id="char806" states="states383"/>
+      <char id="char807" states="states383"/>
+      <char id="char808" states="states383"/>
+      <char id="char809" states="states383"/>
+      <char id="char810" states="states383"/>
+      <char id="char811" states="states383"/>
+      <char id="char812" states="states383"/>
+      <char id="char813" states="states383"/>
+      <char id="char814" states="states383"/>
+      <char id="char815" states="states383"/>
+      <char id="char816" states="states383"/>
+      <char id="char817" states="states383"/>
+      <char id="char818" states="states383"/>
+      <char id="char819" states="states383"/>
+      <char id="char820" states="states383"/>
+      <char id="char821" states="states383"/>
+      <char id="char822" states="states383"/>
+      <char id="char823" states="states383"/>
+      <char id="char824" states="states383"/>
+      <char id="char825" states="states383"/>
+      <char id="char826" states="states383"/>
+      <char id="char827" states="states383"/>
+      <char id="char828" states="states383"/>
+      <char id="char829" states="states383"/>
+      <char id="char830" states="states383"/>
+      <char id="char831" states="states383"/>
+      <char id="char832" states="states383"/>
+      <char id="char833" states="states383"/>
+      <char id="char834" states="states383"/>
+      <char id="char835" states="states383"/>
+      <char id="char836" states="states383"/>
+      <char id="char837" states="states383"/>
+      <char id="char838" states="states383"/>
+      <char id="char839" states="states383"/>
+      <char id="char840" states="states383"/>
+      <char id="char841" states="states383"/>
+      <char id="char842" states="states383"/>
+      <char id="char843" states="states383"/>
+      <char id="char844" states="states383"/>
+      <char id="char845" states="states383"/>
+      <char id="char846" states="states383"/>
+      <char id="char847" states="states383"/>
+      <char id="char848" states="states383"/>
+      <char id="char849" states="states383"/>
+      <char id="char850" states="states383"/>
+      <char id="char851" states="states383"/>
+      <char id="char852" states="states383"/>
+      <char id="char853" states="states383"/>
+      <char id="char854" states="states383"/>
+      <char id="char855" states="states383"/>
+      <char id="char856" states="states383"/>
+      <char id="char857" states="states383"/>
+      <char id="char858" states="states383"/>
+      <char id="char859" states="states383"/>
+      <char id="char860" states="states383"/>
+      <char id="char861" states="states383"/>
+      <char id="char862" states="states383"/>
+      <char id="char863" states="states383"/>
+      <char id="char864" states="states383"/>
+      <char id="char865" states="states383"/>
+      <char id="char866" states="states383"/>
+      <char id="char867" states="states383"/>
+      <char id="char868" states="states383"/>
+      <char id="char869" states="states383"/>
+      <char id="char870" states="states383"/>
+      <char id="char871" states="states383"/>
+      <char id="char872" states="states383"/>
+      <char id="char873" states="states383"/>
+      <char id="char874" states="states383"/>
+      <char id="char875" states="states383"/>
+      <char id="char876" states="states383"/>
+      <char id="char877" states="states383"/>
+      <char id="char878" states="states383"/>
+      <char id="char879" states="states383"/>
+      <char id="char880" states="states383"/>
+      <char id="char881" states="states383"/>
+      <char id="char882" states="states383"/>
+      <char id="char883" states="states383"/>
+      <char id="char884" states="states383"/>
+      <char id="char885" states="states383"/>
+      <char id="char886" states="states383"/>
+      <char id="char887" states="states383"/>
+      <char id="char888" states="states383"/>
+      <char id="char889" states="states383"/>
+      <char id="char890" states="states383"/>
+      <char id="char891" states="states383"/>
+      <char id="char892" states="states383"/>
+      <char id="char893" states="states383"/>
+      <char id="char894" states="states383"/>
+      <char id="char895" states="states383"/>
+      <char id="char896" states="states383"/>
+      <char id="char897" states="states383"/>
+      <char id="char898" states="states383"/>
+      <char id="char899" states="states383"/>
+      <char id="char900" states="states383"/>
+      <char id="char901" states="states383"/>
+      <char id="char902" states="states383"/>
+      <char id="char903" states="states383"/>
+      <char id="char904" states="states383"/>
+      <char id="char905" states="states383"/>
+      <char id="char906" states="states383"/>
+      <char id="char907" states="states383"/>
+      <char id="char908" states="states383"/>
+      <char id="char909" states="states383"/>
+      <char id="char910" states="states383"/>
+      <char id="char911" states="states383"/>
+      <char id="char912" states="states383"/>
+      <char id="char913" states="states383"/>
+      <char id="char914" states="states383"/>
+      <char id="char915" states="states383"/>
+      <char id="char916" states="states383"/>
+      <char id="char917" states="states383"/>
+      <char id="char918" states="states383"/>
+      <char id="char919" states="states383"/>
+      <char id="char920" states="states383"/>
+      <char id="char921" states="states383"/>
+      <char id="char922" states="states383"/>
+      <char id="char923" states="states383"/>
+      <char id="char924" states="states383"/>
+      <char id="char925" states="states383"/>
+      <char id="char926" states="states383"/>
+      <char id="char927" states="states383"/>
+      <char id="char928" states="states383"/>
+      <char id="char929" states="states383"/>
+      <char id="char930" states="states383"/>
+      <char id="char931" states="states383"/>
+      <char id="char932" states="states383"/>
+      <char id="char933" states="states383"/>
+      <char id="char934" states="states383"/>
+      <char id="char935" states="states383"/>
+      <char id="char936" states="states383"/>
+      <char id="char937" states="states383"/>
+      <char id="char938" states="states383"/>
+      <char id="char939" states="states383"/>
+      <char id="char940" states="states383"/>
+      <char id="char941" states="states383"/>
+      <char id="char942" states="states383"/>
+      <char id="char943" states="states383"/>
+      <char id="char944" states="states383"/>
+      <char id="char945" states="states383"/>
+      <char id="char946" states="states383"/>
+      <char id="char947" states="states383"/>
+      <char id="char948" states="states383"/>
+      <char id="char949" states="states383"/>
+      <char id="char950" states="states383"/>
+      <char id="char951" states="states383"/>
+      <char id="char952" states="states383"/>
+      <char id="char953" states="states383"/>
+      <char id="char954" states="states383"/>
+      <char id="char955" states="states383"/>
+      <char id="char956" states="states383"/>
+      <char id="char957" states="states383"/>
+      <char id="char958" states="states383"/>
+      <char id="char959" states="states383"/>
+      <char id="char960" states="states383"/>
+      <char id="char961" states="states383"/>
+      <char id="char962" states="states383"/>
+      <char id="char963" states="states383"/>
+      <char id="char964" states="states383"/>
+      <char id="char965" states="states383"/>
+      <char id="char966" states="states383"/>
+      <char id="char967" states="states383"/>
+      <char id="char968" states="states383"/>
+      <char id="char969" states="states383"/>
+      <char id="char970" states="states383"/>
+      <char id="char971" states="states383"/>
+      <char id="char972" states="states383"/>
+      <char id="char973" states="states383"/>
+      <char id="char974" states="states383"/>
+      <char id="char975" states="states383"/>
+      <char id="char976" states="states383"/>
+      <char id="char977" states="states383"/>
+      <char id="char978" states="states383"/>
+      <char id="char979" states="states383"/>
+      <char id="char980" states="states383"/>
+      <char id="char981" states="states383"/>
+      <char id="char982" states="states383"/>
+      <char id="char983" states="states383"/>
+      <char id="char984" states="states383"/>
+      <char id="char985" states="states383"/>
+      <char id="char986" states="states383"/>
+      <char id="char987" states="states383"/>
+      <char id="char988" states="states383"/>
+      <char id="char989" states="states383"/>
+      <char id="char990" states="states383"/>
+      <char id="char991" states="states383"/>
+      <char id="char992" states="states383"/>
+      <char id="char993" states="states383"/>
+      <char id="char994" states="states383"/>
+      <char id="char995" states="states383"/>
+      <char id="char996" states="states383"/>
+      <char id="char997" states="states383"/>
+      <char id="char998" states="states383"/>
+      <char id="char999" states="states383"/>
+      <char id="char1000" states="states383"/>
+      <char id="char1001" states="states383"/>
+      <char id="char1002" states="states383"/>
+      <char id="char1003" states="states383"/>
+      <char id="char1004" states="states383"/>
+      <char id="char1005" states="states383"/>
+      <char id="char1006" states="states383"/>
+      <char id="char1007" states="states383"/>
+      <char id="char1008" states="states383"/>
+      <char id="char1009" states="states383"/>
+      <char id="char1010" states="states383"/>
+      <char id="char1011" states="states383"/>
+      <char id="char1012" states="states383"/>
+      <char id="char1013" states="states383"/>
+      <char id="char1014" states="states383"/>
+      <char id="char1015" states="states383"/>
+      <char id="char1016" states="states383"/>
+      <char id="char1017" states="states383"/>
+      <char id="char1018" states="states383"/>
+      <char id="char1019" states="states383"/>
+      <char id="char1020" states="states383"/>
+      <char id="char1021" states="states383"/>
+      <char id="char1022" states="states383"/>
+      <char id="char1023" states="states383"/>
+      <char id="char1024" states="states383"/>
+      <char id="char1025" states="states383"/>
+      <char id="char1026" states="states383"/>
+      <char id="char1027" states="states383"/>
+      <char id="char1028" states="states383"/>
+      <char id="char1029" states="states383"/>
+      <char id="char1030" states="states383"/>
+      <char id="char1031" states="states383"/>
+      <char id="char1032" states="states383"/>
+      <char id="char1033" states="states383"/>
+      <char id="char1034" states="states383"/>
+      <char id="char1035" states="states383"/>
+      <char id="char1036" states="states383"/>
+      <char id="char1037" states="states383"/>
+      <char id="char1038" states="states383"/>
+      <char id="char1039" states="states383"/>
+      <char id="char1040" states="states383"/>
+      <char id="char1041" states="states383"/>
+      <char id="char1042" states="states383"/>
+      <char id="char1043" states="states383"/>
+      <char id="char1044" states="states383"/>
+      <char id="char1045" states="states383"/>
+      <char id="char1046" states="states383"/>
+      <char id="char1047" states="states383"/>
+      <char id="char1048" states="states383"/>
+      <char id="char1049" states="states383"/>
+      <char id="char1050" states="states383"/>
+      <char id="char1051" states="states383"/>
+      <char id="char1052" states="states383"/>
+      <char id="char1053" states="states383"/>
+      <char id="char1054" states="states383"/>
+      <char id="char1055" states="states383"/>
+      <char id="char1056" states="states383"/>
+      <char id="char1057" states="states383"/>
+      <char id="char1058" states="states383"/>
+      <char id="char1059" states="states383"/>
+      <char id="char1060" states="states383"/>
+      <char id="char1061" states="states383"/>
+      <char id="char1062" states="states383"/>
+      <char id="char1063" states="states383"/>
+      <char id="char1064" states="states383"/>
+      <char id="char1065" states="states383"/>
+      <char id="char1066" states="states383"/>
+      <char id="char1067" states="states383"/>
+      <char id="char1068" states="states383"/>
+      <char id="char1069" states="states383"/>
+      <char id="char1070" states="states383"/>
+      <char id="char1071" states="states383"/>
+      <char id="char1072" states="states383"/>
+      <char id="char1073" states="states383"/>
+      <char id="char1074" states="states383"/>
+      <char id="char1075" states="states383"/>
+      <char id="char1076" states="states383"/>
+      <char id="char1077" states="states383"/>
+      <char id="char1078" states="states383"/>
+      <char id="char1079" states="states383"/>
+      <char id="char1080" states="states383"/>
+      <char id="char1081" states="states383"/>
+      <char id="char1082" states="states383"/>
+      <char id="char1083" states="states383"/>
+      <char id="char1084" states="states383"/>
+      <char id="char1085" states="states383"/>
+      <char id="char1086" states="states383"/>
+      <char id="char1087" states="states383"/>
+      <char id="char1088" states="states383"/>
+      <char id="char1089" states="states383"/>
+      <char id="char1090" states="states383"/>
+      <char id="char1091" states="states383"/>
+      <char id="char1092" states="states383"/>
+      <char id="char1093" states="states383"/>
+      <char id="char1094" states="states383"/>
+      <char id="char1095" states="states383"/>
+      <char id="char1096" states="states383"/>
+      <char id="char1097" states="states383"/>
+      <char id="char1098" states="states383"/>
+      <char id="char1099" states="states383"/>
+      <char id="char1100" states="states383"/>
+      <char id="char1101" states="states383"/>
+      <char id="char1102" states="states383"/>
+      <char id="char1103" states="states383"/>
+      <char id="char1104" states="states383"/>
+      <char id="char1105" states="states383"/>
+      <char id="char1106" states="states383"/>
+      <char id="char1107" states="states383"/>
+      <char id="char1108" states="states383"/>
+      <char id="char1109" states="states383"/>
+      <char id="char1110" states="states383"/>
+      <char id="char1111" states="states383"/>
+      <char id="char1112" states="states383"/>
+      <char id="char1113" states="states383"/>
+      <char id="char1114" states="states383"/>
+      <char id="char1115" states="states383"/>
+      <char id="char1116" states="states383"/>
+      <char id="char1117" states="states383"/>
+      <char id="char1118" states="states383"/>
+      <char id="char1119" states="states383"/>
+      <char id="char1120" states="states383"/>
+      <char id="char1121" states="states383"/>
+      <char id="char1122" states="states383"/>
+      <char id="char1123" states="states383"/>
+      <char id="char1124" states="states383"/>
+      <char id="char1125" states="states383"/>
+      <char id="char1126" states="states383"/>
+      <char id="char1127" states="states383"/>
+      <char id="char1128" states="states383"/>
+      <char id="char1129" states="states383"/>
+      <char id="char1130" states="states383"/>
+      <char id="char1131" states="states383"/>
+      <char id="char1132" states="states383"/>
+      <char id="char1133" states="states383"/>
+      <char id="char1134" states="states383"/>
+      <char id="char1135" states="states383"/>
+      <char id="char1136" states="states383"/>
+      <char id="char1137" states="states383"/>
+      <char id="char1138" states="states383"/>
+      <char id="char1139" states="states383"/>
+      <char id="char1140" states="states383"/>
+      <char id="char1141" states="states383"/>
+      <char id="char1142" states="states383"/>
+      <char id="char1143" states="states383"/>
+      <char id="char1144" states="states383"/>
+      <char id="char1145" states="states383"/>
+      <char id="char1146" states="states383"/>
+      <char id="char1147" states="states383"/>
+      <char id="char1148" states="states383"/>
+      <char id="char1149" states="states383"/>
+      <char id="char1150" states="states383"/>
+      <char id="char1151" states="states383"/>
+      <char id="char1152" states="states383"/>
+      <char id="char1153" states="states383"/>
+      <char id="char1154" states="states383"/>
+      <char id="char1155" states="states383"/>
+      <char id="char1156" states="states383"/>
+      <char id="char1157" states="states383"/>
+      <char id="char1158" states="states383"/>
+      <char id="char1159" states="states383"/>
+      <char id="char1160" states="states383"/>
+      <char id="char1161" states="states383"/>
+      <char id="char1162" states="states383"/>
+      <char id="char1163" states="states383"/>
+      <char id="char1164" states="states383"/>
+      <char id="char1165" states="states383"/>
+      <char id="char1166" states="states383"/>
+      <char id="char1167" states="states383"/>
+      <char id="char1168" states="states383"/>
+      <char id="char1169" states="states383"/>
+      <char id="char1170" states="states383"/>
+      <char id="char1171" states="states383"/>
+      <char id="char1172" states="states383"/>
+      <char id="char1173" states="states383"/>
+      <char id="char1174" states="states383"/>
+      <char id="char1175" states="states383"/>
+      <char id="char1176" states="states383"/>
+      <char id="char1177" states="states383"/>
+      <char id="char1178" states="states383"/>
+      <char id="char1179" states="states383"/>
+      <char id="char1180" states="states383"/>
+      <char id="char1181" states="states383"/>
+      <char id="char1182" states="states383"/>
+      <char id="char1183" states="states383"/>
+      <char id="char1184" states="states383"/>
+      <char id="char1185" states="states383"/>
+      <char id="char1186" states="states383"/>
+      <char id="char1187" states="states383"/>
+      <char id="char1188" states="states383"/>
+      <char id="char1189" states="states383"/>
+      <char id="char1190" states="states383"/>
+      <char id="char1191" states="states383"/>
+      <char id="char1192" states="states383"/>
+      <char id="char1193" states="states383"/>
+      <char id="char1194" states="states383"/>
+      <char id="char1195" states="states383"/>
+      <char id="char1196" states="states383"/>
+      <char id="char1197" states="states383"/>
+      <char id="char1198" states="states383"/>
+      <char id="char1199" states="states383"/>
+      <char id="char1200" states="states383"/>
+      <char id="char1201" states="states383"/>
+      <char id="char1202" states="states383"/>
+      <char id="char1203" states="states383"/>
+      <char id="char1204" states="states383"/>
+      <char id="char1205" states="states383"/>
+      <char id="char1206" states="states383"/>
+      <char id="char1207" states="states383"/>
+      <char id="char1208" states="states383"/>
+      <char id="char1209" states="states383"/>
+      <char id="char1210" states="states383"/>
+      <char id="char1211" states="states383"/>
+      <char id="char1212" states="states383"/>
+      <char id="char1213" states="states383"/>
+      <char id="char1214" states="states383"/>
+      <char id="char1215" states="states383"/>
+      <char id="char1216" states="states383"/>
+      <char id="char1217" states="states383"/>
+      <char id="char1218" states="states383"/>
+      <char id="char1219" states="states383"/>
+      <char id="char1220" states="states383"/>
+      <char id="char1221" states="states383"/>
+      <char id="char1222" states="states383"/>
+      <char id="char1223" states="states383"/>
+      <char id="char1224" states="states383"/>
+      <char id="char1225" states="states383"/>
+      <char id="char1226" states="states383"/>
+      <char id="char1227" states="states383"/>
+      <char id="char1228" states="states383"/>
+      <char id="char1229" states="states383"/>
+      <char id="char1230" states="states383"/>
+      <char id="char1231" states="states383"/>
+      <char id="char1232" states="states383"/>
+      <char id="char1233" states="states383"/>
+      <char id="char1234" states="states383"/>
+      <char id="char1235" states="states383"/>
+      <char id="char1236" states="states383"/>
+      <char id="char1237" states="states383"/>
+      <char id="char1238" states="states383"/>
+      <char id="char1239" states="states383"/>
+      <char id="char1240" states="states383"/>
+      <char id="char1241" states="states383"/>
+      <char id="char1242" states="states383"/>
+      <char id="char1243" states="states383"/>
+      <char id="char1244" states="states383"/>
+      <char id="char1245" states="states383"/>
+      <char id="char1246" states="states383"/>
+      <char id="char1247" states="states383"/>
+      <char id="char1248" states="states383"/>
+      <char id="char1249" states="states383"/>
+      <char id="char1250" states="states383"/>
+      <char id="char1251" states="states383"/>
+      <char id="char1252" states="states383"/>
+      <char id="char1253" states="states383"/>
+      <char id="char1254" states="states383"/>
+      <char id="char1255" states="states383"/>
+      <char id="char1256" states="states383"/>
+      <char id="char1257" states="states383"/>
+      <char id="char1258" states="states383"/>
+      <char id="char1259" states="states383"/>
+      <char id="char1260" states="states383"/>
+      <char id="char1261" states="states383"/>
+      <char id="char1262" states="states383"/>
+      <char id="char1263" states="states383"/>
+      <char id="char1264" states="states383"/>
+      <char id="char1265" states="states383"/>
+      <char id="char1266" states="states383"/>
+      <char id="char1267" states="states383"/>
+      <char id="char1268" states="states383"/>
+      <char id="char1269" states="states383"/>
+      <char id="char1270" states="states383"/>
+      <char id="char1271" states="states383"/>
+      <char id="char1272" states="states383"/>
+      <char id="char1273" states="states383"/>
+      <char id="char1274" states="states383"/>
+      <char id="char1275" states="states383"/>
+      <char id="char1276" states="states383"/>
+      <char id="char1277" states="states383"/>
+      <char id="char1278" states="states383"/>
+      <char id="char1279" states="states383"/>
+      <char id="char1280" states="states383"/>
+      <char id="char1281" states="states383"/>
+      <char id="char1282" states="states383"/>
+      <char id="char1283" states="states383"/>
+      <char id="char1284" states="states383"/>
+      <char id="char1285" states="states383"/>
+      <char id="char1286" states="states383"/>
+      <char id="char1287" states="states383"/>
+      <char id="char1288" states="states383"/>
+      <char id="char1289" states="states383"/>
+      <char id="char1290" states="states383"/>
+      <char id="char1291" states="states383"/>
+      <char id="char1292" states="states383"/>
+      <char id="char1293" states="states383"/>
+      <char id="char1294" states="states383"/>
+      <char id="char1295" states="states383"/>
+      <char id="char1296" states="states383"/>
+      <char id="char1297" states="states383"/>
+      <char id="char1298" states="states383"/>
+      <char id="char1299" states="states383"/>
+      <char id="char1300" states="states383"/>
+      <char id="char1301" states="states383"/>
+      <char id="char1302" states="states383"/>
+      <char id="char1303" states="states383"/>
+      <char id="char1304" states="states383"/>
+      <char id="char1305" states="states383"/>
+      <char id="char1306" states="states383"/>
+      <char id="char1307" states="states383"/>
+      <char id="char1308" states="states383"/>
+      <char id="char1309" states="states383"/>
+      <char id="char1310" states="states383"/>
+      <char id="char1311" states="states383"/>
+      <char id="char1312" states="states383"/>
+      <char id="char1313" states="states383"/>
+      <char id="char1314" states="states383"/>
+      <char id="char1315" states="states383"/>
+      <char id="char1316" states="states383"/>
+      <char id="char1317" states="states383"/>
+      <char id="char1318" states="states383"/>
+      <char id="char1319" states="states383"/>
+      <char id="char1320" states="states383"/>
+      <char id="char1321" states="states383"/>
+      <char id="char1322" states="states383"/>
+      <char id="char1323" states="states383"/>
+      <char id="char1324" states="states383"/>
+      <char id="char1325" states="states383"/>
+      <char id="char1326" states="states383"/>
+      <char id="char1327" states="states383"/>
+      <char id="char1328" states="states383"/>
+      <char id="char1329" states="states383"/>
+      <char id="char1330" states="states383"/>
+      <char id="char1331" states="states383"/>
+      <char id="char1332" states="states383"/>
+      <char id="char1333" states="states383"/>
+      <char id="char1334" states="states383"/>
+      <char id="char1335" states="states383"/>
+      <char id="char1336" states="states383"/>
+      <char id="char1337" states="states383"/>
+      <char id="char1338" states="states383"/>
+      <char id="char1339" states="states383"/>
+      <char id="char1340" states="states383"/>
+      <char id="char1341" states="states383"/>
+      <char id="char1342" states="states383"/>
+      <char id="char1343" states="states383"/>
+      <char id="char1344" states="states383"/>
+      <char id="char1345" states="states383"/>
+      <char id="char1346" states="states383"/>
+      <char id="char1347" states="states383"/>
+      <char id="char1348" states="states383"/>
+      <char id="char1349" states="states383"/>
+      <char id="char1350" states="states383"/>
+      <char id="char1351" states="states383"/>
+      <char id="char1352" states="states383"/>
+      <char id="char1353" states="states383"/>
+      <char id="char1354" states="states383"/>
+      <char id="char1355" states="states383"/>
+      <char id="char1356" states="states383"/>
+      <char id="char1357" states="states383"/>
+      <char id="char1358" states="states383"/>
+      <char id="char1359" states="states383"/>
+      <char id="char1360" states="states383"/>
+      <char id="char1361" states="states383"/>
+      <char id="char1362" states="states383"/>
+      <char id="char1363" states="states383"/>
+      <char id="char1364" states="states383"/>
+      <char id="char1365" states="states383"/>
+      <char id="char1366" states="states383"/>
+      <char id="char1367" states="states383"/>
+      <char id="char1368" states="states383"/>
+      <char id="char1369" states="states383"/>
+      <char id="char1370" states="states383"/>
+      <char id="char1371" states="states383"/>
+      <char id="char1372" states="states383"/>
+      <char id="char1373" states="states383"/>
+      <char id="char1374" states="states383"/>
+      <char id="char1375" states="states383"/>
+      <char id="char1376" states="states383"/>
+      <char id="char1377" states="states383"/>
+      <char id="char1378" states="states383"/>
+      <char id="char1379" states="states383"/>
+      <char id="char1380" states="states383"/>
+      <char id="char1381" states="states383"/>
+      <char id="char1382" states="states383"/>
+      <char id="char1383" states="states383"/>
+      <char id="char1384" states="states383"/>
+      <char id="char1385" states="states383"/>
+      <char id="char1386" states="states383"/>
+      <char id="char1387" states="states383"/>
+      <char id="char1388" states="states383"/>
+      <char id="char1389" states="states383"/>
+      <char id="char1390" states="states383"/>
+      <char id="char1391" states="states383"/>
+      <char id="char1392" states="states383"/>
+      <char id="char1393" states="states383"/>
+      <char id="char1394" states="states383"/>
+      <char id="char1395" states="states383"/>
+      <char id="char1396" states="states383"/>
+      <char id="char1397" states="states383"/>
+      <char id="char1398" states="states383"/>
+      <char id="char1399" states="states383"/>
+      <char id="char1400" states="states383"/>
+      <char id="char1401" states="states383"/>
+      <char id="char1402" states="states383"/>
+      <char id="char1403" states="states383"/>
+      <char id="char1404" states="states383"/>
+      <char id="char1405" states="states383"/>
+      <char id="char1406" states="states383"/>
+      <char id="char1407" states="states383"/>
+      <char id="char1408" states="states383"/>
+      <char id="char1409" states="states383"/>
+      <char id="char1410" states="states383"/>
+      <char id="char1411" states="states383"/>
+      <char id="char1412" states="states383"/>
+      <char id="char1413" states="states383"/>
+      <char id="char1414" states="states383"/>
+      <char id="char1415" states="states383"/>
+      <char id="char1416" states="states383"/>
+      <char id="char1417" states="states383"/>
+      <char id="char1418" states="states383"/>
+      <char id="char1419" states="states383"/>
+      <char id="char1420" states="states383"/>
+      <char id="char1421" states="states383"/>
+      <char id="char1422" states="states383"/>
+      <char id="char1423" states="states383"/>
+      <char id="char1424" states="states383"/>
+      <char id="char1425" states="states383"/>
+      <char id="char1426" states="states383"/>
+      <char id="char1427" states="states383"/>
+      <char id="char1428" states="states383"/>
+      <char id="char1429" states="states383"/>
+      <char id="char1430" states="states383"/>
+      <char id="char1431" states="states383"/>
+      <char id="char1432" states="states383"/>
+      <char id="char1433" states="states383"/>
+      <char id="char1434" states="states383"/>
+      <char id="char1435" states="states383"/>
+      <char id="char1436" states="states383"/>
+      <char id="char1437" states="states383"/>
+      <char id="char1438" states="states383"/>
+      <char id="char1439" states="states383"/>
+      <char id="char1440" states="states383"/>
+      <char id="char1441" states="states383"/>
+      <char id="char1442" states="states383"/>
+      <char id="char1443" states="states383"/>
+      <char id="char1444" states="states383"/>
+      <char id="char1445" states="states383"/>
+      <char id="char1446" states="states383"/>
+      <char id="char1447" states="states383"/>
+      <char id="char1448" states="states383"/>
+      <char id="char1449" states="states383"/>
+      <char id="char1450" states="states383"/>
+      <char id="char1451" states="states383"/>
+      <char id="char1452" states="states383"/>
+      <char id="char1453" states="states383"/>
+      <char id="char1454" states="states383"/>
+      <char id="char1455" states="states383"/>
+      <char id="char1456" states="states383"/>
+      <char id="char1457" states="states383"/>
+      <char id="char1458" states="states383"/>
+      <char id="char1459" states="states383"/>
+      <char id="char1460" states="states383"/>
+      <char id="char1461" states="states383"/>
+      <char id="char1462" states="states383"/>
+      <char id="char1463" states="states383"/>
+      <char id="char1464" states="states383"/>
+      <char id="char1465" states="states383"/>
+      <char id="char1466" states="states383"/>
+      <char id="char1467" states="states383"/>
+      <char id="char1468" states="states383"/>
+      <char id="char1469" states="states383"/>
+      <char id="char1470" states="states383"/>
+      <char id="char1471" states="states383"/>
+      <char id="char1472" states="states383"/>
+      <char id="char1473" states="states383"/>
+      <char id="char1474" states="states383"/>
+      <char id="char1475" states="states383"/>
+      <char id="char1476" states="states383"/>
+      <char id="char1477" states="states383"/>
+      <char id="char1478" states="states383"/>
+      <char id="char1479" states="states383"/>
+      <char id="char1480" states="states383"/>
+      <char id="char1481" states="states383"/>
+      <char id="char1482" states="states383"/>
+      <char id="char1483" states="states383"/>
+      <char id="char1484" states="states383"/>
+      <char id="char1485" states="states383"/>
+      <char id="char1486" states="states383"/>
+      <char id="char1487" states="states383"/>
+      <char id="char1488" states="states383"/>
+      <char id="char1489" states="states383"/>
+      <char id="char1490" states="states383"/>
+      <char id="char1491" states="states383"/>
+      <char id="char1492" states="states383"/>
+      <char id="char1493" states="states383"/>
+      <char id="char1494" states="states383"/>
+      <char id="char1495" states="states383"/>
+      <char id="char1496" states="states383"/>
+      <char id="char1497" states="states383"/>
+      <char id="char1498" states="states383"/>
+      <char id="char1499" states="states383"/>
+      <char id="char1500" states="states383"/>
+      <char id="char1501" states="states383"/>
+      <char id="char1502" states="states383"/>
+      <char id="char1503" states="states383"/>
+      <char id="char1504" states="states383"/>
+      <char id="char1505" states="states383"/>
+      <char id="char1506" states="states383"/>
+      <char id="char1507" states="states383"/>
+      <char id="char1508" states="states383"/>
+      <char id="char1509" states="states383"/>
+      <char id="char1510" states="states383"/>
+      <char id="char1511" states="states383"/>
+      <char id="char1512" states="states383"/>
+      <char id="char1513" states="states383"/>
+      <char id="char1514" states="states383"/>
+      <char id="char1515" states="states383"/>
+      <char id="char1516" states="states383"/>
+      <char id="char1517" states="states383"/>
+      <char id="char1518" states="states383"/>
+      <char id="char1519" states="states383"/>
+      <char id="char1520" states="states383"/>
+      <char id="char1521" states="states383"/>
+      <char id="char1522" states="states383"/>
+      <char id="char1523" states="states383"/>
+      <char id="char1524" states="states383"/>
+      <char id="char1525" states="states383"/>
+      <char id="char1526" states="states383"/>
+      <char id="char1527" states="states383"/>
+      <char id="char1528" states="states383"/>
+      <char id="char1529" states="states383"/>
+      <char id="char1530" states="states383"/>
+      <char id="char1531" states="states383"/>
+      <char id="char1532" states="states383"/>
+      <char id="char1533" states="states383"/>
+      <char id="char1534" states="states383"/>
+      <char id="char1535" states="states383"/>
+      <char id="char1536" states="states383"/>
+      <char id="char1537" states="states383"/>
+      <char id="char1538" states="states383"/>
+      <char id="char1539" states="states383"/>
+      <char id="char1540" states="states383"/>
+      <char id="char1541" states="states383"/>
+      <char id="char1542" states="states383"/>
+      <char id="char1543" states="states383"/>
+      <char id="char1544" states="states383"/>
+      <char id="char1545" states="states383"/>
+      <char id="char1546" states="states383"/>
+      <char id="char1547" states="states383"/>
+      <char id="char1548" states="states383"/>
+      <char id="char1549" states="states383"/>
+      <char id="char1550" states="states383"/>
+      <char id="char1551" states="states383"/>
+      <char id="char1552" states="states383"/>
+      <char id="char1553" states="states383"/>
+      <char id="char1554" states="states383"/>
+      <char id="char1555" states="states383"/>
+      <char id="char1556" states="states383"/>
+      <char id="char1557" states="states383"/>
+      <char id="char1558" states="states383"/>
+      <char id="char1559" states="states383"/>
+      <char id="char1560" states="states383"/>
+      <char id="char1561" states="states383"/>
+      <char id="char1562" states="states383"/>
+    </format>
+    <matrix>
+      <row id="row1563" otu="Tl126179">
+        <seq>AGTTCTGAAACGGGTTGTAGCTGGCCTTA-----CGAGGCATGTGCACGCCCTGCTCATCCACTCT-ACACCTGTGCACCATCTGTAGGTCGGTTTGGGTTCGGATGCTTCGCGGCGTTCGGGCTCGGGCCTTCCTATGTACT-TCACACACGCTTTAGTAT-CAGAATGTAATTGCGA----TAAAACGCACCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATCATCAACCCATATGTCCTTGTGTCG--GATGGGCTTGGA-TTTGGAGGCTTATGCCGGCCCTC-GTC--GGTCGGCTCCTCTTGAATGCATTAGCTCGATTCCTTGCGGATCGGCTCCCGGTGTGATAATTGTCTACGCCGTGACCGT-GAAGC----GTTTGGCGAGCTTCGAACCGTCCTATGGACAAACTTATATCTTGACATCTGACCTCCGAGGTGCGTGTCAAAATCAAGACGACGTTGCCCTCCATTAACAGCAGTCGTGACTTGTTAGCCCTACAACGCGACACTCTCTGTGCATCAACTCGTCGAGAACTCTGACCAGACGTTCTGCATTGATAACGAGGCATTATATGATATATGCTTCAGAACCCTCAAGCTCACTACACCAACTTATGGTGACCTTAACCACCTTGTATCGATTGTCATGTCCGGTATCACGACTTGCTTGCGTTTCCCTGGTCAGCTGAATTCTGACTTGCGGAAGTTGGCTGTCAACATGGGTAATGCTTTCCTTCAGACTGGCCTAGATGCGTT-TTTCTCATTCGATGTTTTCTTTTGCAGTTCCCTTCCCTCGTCTTCATTTCTTCATGACCGGCTTCGCGCCTTTGACCGCTCGGGGTAGCCAGCAATACCGCGCGGTCACCGTCCCTGAGCTGACGCAGCAAATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCAGGCATGGCCGCTACCTCACTGTAGGTGTTAATGTTTCTTCT----GTGTTCCG-------TCATCTGAAACCTGTTCCATAGGTTGCTGC</seq>
+      </row>
+      <row id="row1564" otu="Tl261">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTAA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCC?TATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1565" otu="Tl238">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTAA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGATCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1566" otu="Tl282">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGATCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1567" otu="Tl266">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTAA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGATCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1568" otu="Tl280">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGC?AGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGA?AACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1569" otu="Tl257">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATATGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGC?CTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1570" otu="Tl260">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCA?CAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGC?CTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCAT?TCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTAA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTAC?TTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1571" otu="Tl270">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGATCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1572" otu="Tl247">
+        <seq>AGTTCAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTCAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGTGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1573" otu="Tl256">
+        <seq>AGTTCAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1574" otu="Tl281">
+        <seq>AGTACAGAAAAGGGTTGTCGCTGGCCTCAAAATTCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGCGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCCACGGGACAATTCAATATGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTCAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1575" otu="Tl244">
+        <seq>AGTTCAGA?AAGGGTTGTCGCTGGCCTCAAAATTCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGCGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGCGGTCGTTGAAGCCTCAGTTGGGAGAGCT-ATAATCGTCCCCCACGGGACAAT-GAATTTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTCAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1576" otu="Tl263">
+        <seq>AGTTCAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCACATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCTGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTATGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGTTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1577" otu="Tl279">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGCTCATGCCGGTCCCC-ATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGATATTTGCTTCCGGACACTGAAGCTGACGACACCCACATATGGCGATCTGAACCACCTCATTTCCATTGTCATGTCCGGCATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGACCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTTTCACTT-GATTCCTTGTGATATGGCACTTATGATTGACTGTTGAAATTC-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTATCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCGAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATCACG-GAGCGTATCAATCTGATCTATTTGTT?C?TTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1578" otu="Tl236">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATA-GACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAACAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCT--TTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1579" otu="Tl252">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTT?TTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAACAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGG?TGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCT--TTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1580" otu="Tl272">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATT--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTATATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1581" otu="Tl249">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGTTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCTGC</seq>
+      </row>
+      <row id="row1582" otu="Tl275">
+        <seq>AGTTCAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATC?GGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCA?CAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGC?CTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTC?CCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTAC?TTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1583" otu="Tl274">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1584" otu="Tl233">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1585" otu="Tl258">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1586" otu="Tl254">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGC?CTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATAACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1587" otu="Tl269">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGCG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCTTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1588" otu="Tl242">
+        <seq>AGTTCAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGATCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1589" otu="Tl239">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATCTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTAA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1590" otu="Tl246">
+        <seq>AGTTCAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATCTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1591" otu="Tl259">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCACATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1592" otu="Tl277">
+        <seq>AGTACAGAAATGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCTCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1593" otu="Tl243">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCGCTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCTTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1594" otu="Tl250">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATTCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGACGTGCACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGCGGTCGTTGAAGCCTCAGTCGGGAGAGCTCATAATCGTCCCTTC-GGGACAATCGAATATTACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTTTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATCTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1595" otu="Tl237">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATCGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTTTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATCTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1596" otu="Tl264">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATTCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATCGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGACGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGCGGTCGTTGAAGCCTCGGTCGGGAGAGCTTATAATCGTCCCTTC-GGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CGTTTCAAATGTTACGTTGGAGAAAATC--TGACGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTTTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATCTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1597" otu="Tl253">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATC?GGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATAGTCCCCCACGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CGTTTCACATGTCACGTTGGAGAAAATC--TGA?GACCGTTGATC?T-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTAAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTAC?TTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1598" otu="Tl232">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATAGTCCCCTCCGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CATTTCACATGTCACGTTGGATAAAATC--TGATGACCGTTGATCAT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAA?GAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACATTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTACATTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1599" otu="Tl245">
+        <seq>AGTTCAGAAAAGGGTTGTCGCTGGCCTCAAAATTCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCGGGTCCCTCGCGGGGTCGGGTTCTGCGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACATCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTTGGGCGAGCTCACAATAGTCCCCTACGGGACAATTCAATCTGACATCTGACCTCCGAGGTCTGTG-CATTTCACATGTCACGTTGGATAAAATC--TGATGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCATCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAACCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGCTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGAAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGATATGACACTTATGATTGACTGTTGAAATTT-TAGTCCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTC?GACCCCCGGCATGGGCGATACCTGACCGTATGCGGCTCCCCCTATTACG-GAGCGTACCAATCTGATCTATTTGTTACGTTTTTCATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1600" otu="Tl262">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GA?GCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTATATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1601" otu="Tl235">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGCG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1602" otu="Tl276">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGACAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACAAGAGCGTACCAATCTGAAGTATCTGTTGCCTATTATAAAGGTTGCCGC</seq>
+      </row>
+      <row id="row1603" otu="Tl273">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1604" otu="Tl265">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1605" otu="Tl271">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGTTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCTGC</seq>
+      </row>
+      <row id="row1606" otu="Tl251">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACTGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTATATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1607" otu="Tl267">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1608" otu="Tl278">
+        <seq>AGTACAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGA?AACGAGGCACTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGATCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGTTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATTCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCTGC</seq>
+      </row>
+      <row id="row1609" otu="Tl255">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1610" otu="Tl240">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCT--TTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1611" otu="Tl231">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1612" otu="Tl234">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GACGCCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1613" otu="Tl241">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGACTTTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATT--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGACAACGAGGCCTTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGACCTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGCTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GATGCCTTGTGACATGACACTTATCATTGACTGTTAAAAATT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+      <row id="row1614" otu="Tl248">
+        <seq>AGTTCAGAAAAGGGTTGTAGCTGGCCTCAAA-TCCGGGGCATGTGCACACCCTGCTCATCCACTCTCACACCTGTGCACTTTCTGTAGGTCGGTTCGGGATCTGGTCCCTCGCGGGGTCGGGTTCTGTGCCTTCCTATGTACAATCACAAACGCTTCAGTATTCAGAATGTCATTGCGATAATTAAAACGCATCTTATACAACTTTCAGCAACGGATCTCTTGGCTCTCGCATCGATGAAGAACGCAGCGAAATGCGATAAGTAATGTGAATTGCAGAATTCAGTGAATCATCGAATCTTTGAACGCACCTTGCGCTCCTTGGTATTCCGAGGAGCATGCCTGTTTGAGTGTCATGGAATTCTCAACCCACACGTCCTTGTGATGTGGACGGGCTTGGATATTGGAGGTTTCTGCCGGCCCCCCATTCGGGTCGGCTCCTCTGGAATGCATTAGCTCCATCCCTTGCGGATCGGCTCTCGGTGTGATAATTGTCTACGCCGTGGTCGTTGAAGCCTCAGTCGGGCGAGCTTATAATCGTCCCCTCCGGGACAATCGAATATGACATCTGACCTCCGAGGTCTGTG-CATTTCAAATGTCACGTTGGAGAAAATC--TGACGACCGTTGATCGT-AGCCCTACAACGCAACCCTCTCCGTGCACCAACTGGTCGAGAACTCTGATGAGACTTTCTGCATTGATAACGAGGCATTGTACGACATTTGCTTCCGGACACTGAAGCTGACGACACCGACATACGGCGA?CTGAATCACCTCATTTCCATCGTCATGTCCGGTATTACAACTTGTTTGCGTTTCCCTGGTCAGTTGAACTCCGATCTCCGGAAGTTGGCTGTCAACATGGGTGA-GTTCTCACTT-GA??CCTTGTGACATGACACTTATCATTGACTGTTAAAAAAT-TAGTTCCCTTCCCCCGTCTCCACTTCTTCATGACCGGTTTCGCGCCCTTGACTGCGCGCGGCAGCCAGCAGTACCGTGCTGTCACTGTACCCGAGCTGACTCAACAGATGTTCGATGCCAAGAACATGATGGCTGCGTCCGACCCCCGGCATGGCCGATACCTCACTGTATGCAACATCC--TAGCACA-GAGCGTACCAATCTGATGTATCTGTTGCCTATTTTATAGGTTGCCGC</seq>
+      </row>
+    </matrix>
+  </characters>
+  <trees about="#Tb6045" id="Tb6045" label="Tb6045" otus="Tls10691" xml:base="http://purl.org/phylo/treebase/phylows/tree/TB2:">
+    <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta1621" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+    <tree about="#Tr3926" id="Tr3926" label="Fig. 4" xsi:type="nex:FloatTree">
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:As1269" id="meta1841" rel="tb:output.analysisstep" xsi:type="nex:ResourceMeta"/>
+      <meta content="52" datatype="xsd:integer" id="meta1627" property="tb:ntax.tree" xsi:type="nex:LiteralMeta"/>
+      <meta content="Unrated" datatype="xsd:string" id="meta1626" property="tb:quality.tree" xsi:type="nex:LiteralMeta"/>
+      <meta content="Single" datatype="xsd:string" id="meta1625" property="tb:type.tree" xsi:type="nex:LiteralMeta"/>
+      <meta content="Species Tree" datatype="xsd:string" id="meta1624" property="tb:kind.tree" xsi:type="nex:LiteralMeta"/>
+      <meta href="http://purl.org/phylo/treebase/phylows/study/TB2:S794" id="meta1623" rel="rdfs:isDefinedBy" xsi:type="nex:ResourceMeta"/>
+      <node id="Tn274900"/>
+      <node id="Tn274857" label="Grifola frondosa"/>
+      <node id="Tn274833"/>
+      <node id="Tn274867"/>
+      <node id="Tn274830"/>
+      <node id="Tn274917"/>
+      <node id="Tn274903" label="Grifola frondosa M001" otu="Tl248"/>
+      <node id="Tn274824"/>
+      <node id="Tn274910"/>
+      <node id="Tn274888"/>
+      <node id="Tn274860" label="Grifola frondosa M008" otu="Tl267"/>
+      <node id="Tn274831"/>
+      <node id="Tn274884"/>
+      <node id="Tn274881" label="Grifola frondosa M011" otu="Tl265"/>
+      <node id="Tn274834" label="Grifola frondosa WC808" otu="Tl280"/>
+      <node id="Tn274868" label="Grifola frondosa M012" otu="Tl273"/>
+      <node id="Tn274876"/>
+      <node id="Tn274823" label="Grifola frondosa M014" otu="Tl235"/>
+      <node id="Tn274840" label="Grifola frondosa M035" otu="Tl269"/>
+      <node id="Tn274872"/>
+      <node id="Tn274866" label="Grifola frondosa M009" otu="Tl251"/>
+      <node id="Tn274889" label="Grifola frondosa M013" otu="Tl276"/>
+      <node id="Tn274875"/>
+      <node id="Tn274825"/>
+      <node id="Tn274873"/>
+      <node id="Tn274822" label="Grifola frondosa M002" otu="Tl241"/>
+      <node id="Tn274907" label="Grifola frondosa WC364" otu="Tl272"/>
+      <node id="Tn274856" label="Grifola frondosa M015" otu="Tl262"/>
+      <node id="Tn274853"/>
+      <node id="Tn274862"/>
+      <node id="Tn274858" label="Grifola frondosa M003" otu="Tl234"/>
+      <node id="Tn274851" label="Grifola frondosa M004" otu="Tl231"/>
+      <node id="Tn274899" label="Grifola frondosa M006" otu="Tl255"/>
+      <node id="Tn274880"/>
+      <node id="Tn274894" label="Grifola frondosa M005" otu="Tl240"/>
+      <node id="Tn274887"/>
+      <node id="Tn274915" label="Grifola frondosa WC367" otu="Tl252"/>
+      <node id="Tn274849" label="Grifola frondosa WC483" otu="Tl236"/>
+      <node id="Tn274865"/>
+      <node id="Tn274885"/>
+      <node id="Tn274883" label="Grifola frondosa M007" otu="Tl278"/>
+      <node id="Tn274886" label="Grifola frondosa M010" otu="Tl271"/>
+      <node id="Tn274829" label="Grifola frondosa WC248" otu="Tl249"/>
+      <node id="Tn274836"/>
+      <node id="Tn274850"/>
+      <node id="Tn274845"/>
+      <node id="Tn274890"/>
+      <node id="Tn274919"/>
+      <node id="Tn274864"/>
+      <node id="Tn274839"/>
+      <node id="Tn274902" label="Grifola frondosa M016" otu="Tl245"/>
+      <node id="Tn274914" label="Grifola frondosa M017" otu="Tl232"/>
+      <node id="Tn274820" label="Grifola frondosa M018" otu="Tl253"/>
+      <node id="Tn274827" label="Grifola frondosa M031" otu="Tl259"/>
+      <node id="Tn274869"/>
+      <node id="Tn274918"/>
+      <node id="Tn274838" label="Grifola frondosa M020" otu="Tl237"/>
+      <node id="Tn274906" label="Grifola frondosa WC836" otu="Tl261"/>
+      <node id="Tn274892"/>
+      <node id="Tn274895"/>
+      <node id="Tn274848"/>
+      <node id="Tn274854" label="Grifola frondosa M029" otu="Tl243"/>
+      <node id="Tn274896"/>
+      <node id="Tn274846"/>
+      <node id="Tn274841"/>
+      <node id="Tn274911" label="Grifola frondosa M033" otu="Tl239"/>
+      <node id="Tn274843" label="Grifola frondosa WC659" otu="Tl260"/>
+      <node id="Tn274877"/>
+      <node id="Tn274835"/>
+      <node id="Tn274904"/>
+      <node id="Tn274905" label="Grifola frondosa M036" otu="Tl254"/>
+      <node id="Tn274852" label="Grifola frondosa M037" otu="Tl258"/>
+      <node id="Tn274912"/>
+      <node id="Tn274819" label="Grifola frondosa WC828" otu="Tl266"/>
+      <node id="Tn274847" label="Grifola frondosa WC835" otu="Tl238"/>
+      <node id="Tn274901" label="Grifola frondosa WC581" otu="Tl256"/>
+      <node id="Tn274863"/>
+      <node id="Tn274882"/>
+      <node id="Tn274916" label="Grifola frondosa WC556" otu="Tl244"/>
+      <node id="Tn274832" label="Grifola frondosa WC557" otu="Tl281"/>
+      <node id="Tn274898" label="Grifola frondosa WC582" otu="Tl247"/>
+      <node id="Tn274871"/>
+      <node id="Tn274844"/>
+      <node id="Tn274908"/>
+      <node id="Tn274891"/>
+      <node id="Tn274893" label="Grifola frondosa M030" otu="Tl277"/>
+      <node id="Tn274842"/>
+      <node id="Tn274920" label="Grifola frondosa M032" otu="Tl246"/>
+      <node id="Tn274913" label="Grifola frondosa M034" otu="Tl242"/>
+      <node id="Tn274821" label="Grifola frondosa M040" otu="Tl275"/>
+      <node id="Tn274828"/>
+      <node id="Tn274874" label="Grifola frondosa WC583" otu="Tl270"/>
+      <node id="Tn274826" label="Grifola frondosa WC834" otu="Tl282"/>
+      <node id="Tn274879"/>
+      <node id="Tn274878" label="Grifola frondosa M038" otu="Tl233"/>
+      <node id="Tn274837" label="Grifola frondosa M039" otu="Tl274"/>
+      <node id="Tn274855" label="Grifola frondosa WC685" otu="Tl257"/>
+      <node id="Tn274897" label="Grifola frondosa WC555" otu="Tl263"/>
+      <node id="Tn274861"/>
+      <node id="Tn274870" label="Grifola frondosa M019" otu="Tl264"/>
+      <node id="Tn274909" label="Grifola frondosa M021" otu="Tl250"/>
+      <node id="Tn274921" label="Grifola frondosa WC493" otu="Tl279"/>
+      <node id="Tn274859" label="Grifola sordulenta" otu="Tl126179"/>
+      <edge id="edge1630" source="Tn274900" target="Tn274857"/>
+      <edge id="edge1632" source="Tn274857" target="Tn274833"/>
+      <edge id="edge1634" source="Tn274833" target="Tn274867"/>
+      <edge id="edge1636" source="Tn274867" target="Tn274830"/>
+      <edge id="edge1638" source="Tn274830" target="Tn274917"/>
+      <edge id="edge1640" source="Tn274917" target="Tn274903"/>
+      <edge id="edge1642" source="Tn274917" target="Tn274824"/>
+      <edge id="edge1644" source="Tn274824" target="Tn274910"/>
+      <edge id="edge1646" source="Tn274910" target="Tn274888"/>
+      <edge id="edge1648" source="Tn274888" target="Tn274860"/>
+      <edge id="edge1650" source="Tn274888" target="Tn274831"/>
+      <edge id="edge1652" source="Tn274831" target="Tn274884"/>
+      <edge id="edge1654" source="Tn274884" target="Tn274881"/>
+      <edge id="edge1656" source="Tn274884" target="Tn274834"/>
+      <edge id="edge1658" source="Tn274831" target="Tn274868"/>
+      <edge id="edge1660" source="Tn274910" target="Tn274876"/>
+      <edge id="edge1662" source="Tn274876" target="Tn274823"/>
+      <edge id="edge1664" source="Tn274876" target="Tn274840"/>
+      <edge id="edge1666" source="Tn274824" target="Tn274872"/>
+      <edge id="edge1668" source="Tn274872" target="Tn274866"/>
+      <edge id="edge1670" source="Tn274872" target="Tn274889"/>
+      <edge id="edge1672" source="Tn274830" target="Tn274875"/>
+      <edge id="edge1674" source="Tn274875" target="Tn274825"/>
+      <edge id="edge1676" source="Tn274825" target="Tn274873"/>
+      <edge id="edge1678" source="Tn274873" target="Tn274822"/>
+      <edge id="edge1680" source="Tn274873" target="Tn274907"/>
+      <edge id="edge1682" source="Tn274825" target="Tn274856"/>
+      <edge id="edge1684" source="Tn274875" target="Tn274853"/>
+      <edge id="edge1686" source="Tn274853" target="Tn274862"/>
+      <edge id="edge1688" source="Tn274862" target="Tn274858"/>
+      <edge id="edge1690" source="Tn274862" target="Tn274851"/>
+      <edge id="edge1692" source="Tn274853" target="Tn274899"/>
+      <edge id="edge1694" source="Tn274867" target="Tn274880"/>
+      <edge id="edge1696" source="Tn274880" target="Tn274894"/>
+      <edge id="edge1698" source="Tn274880" target="Tn274887"/>
+      <edge id="edge1700" source="Tn274887" target="Tn274915"/>
+      <edge id="edge1702" source="Tn274887" target="Tn274849"/>
+      <edge id="edge1704" source="Tn274833" target="Tn274865"/>
+      <edge id="edge1706" source="Tn274865" target="Tn274885"/>
+      <edge id="edge1708" source="Tn274885" target="Tn274883"/>
+      <edge id="edge1710" source="Tn274885" target="Tn274886"/>
+      <edge id="edge1712" source="Tn274865" target="Tn274829"/>
+      <edge id="edge1714" source="Tn274857" target="Tn274836"/>
+      <edge id="edge1716" source="Tn274836" target="Tn274850"/>
+      <edge id="edge1718" source="Tn274850" target="Tn274845"/>
+      <edge id="edge1720" source="Tn274845" target="Tn274890"/>
+      <edge id="edge1722" source="Tn274890" target="Tn274919"/>
+      <edge id="edge1724" source="Tn274919" target="Tn274864"/>
+      <edge id="edge1726" source="Tn274864" target="Tn274839"/>
+      <edge id="edge1728" source="Tn274839" target="Tn274902"/>
+      <edge id="edge1730" source="Tn274839" target="Tn274914"/>
+      <edge id="edge1732" source="Tn274864" target="Tn274820"/>
+      <edge id="edge1734" source="Tn274919" target="Tn274827"/>
+      <edge id="edge1736" source="Tn274890" target="Tn274869"/>
+      <edge id="edge1738" source="Tn274869" target="Tn274918"/>
+      <edge id="edge1740" source="Tn274918" target="Tn274838"/>
+      <edge id="edge1742" source="Tn274918" target="Tn274906"/>
+      <edge id="edge1744" source="Tn274869" target="Tn274892"/>
+      <edge id="edge1746" source="Tn274892" target="Tn274895"/>
+      <edge id="edge1748" source="Tn274895" target="Tn274848"/>
+      <edge id="edge1750" source="Tn274848" target="Tn274854"/>
+      <edge id="edge1752" source="Tn274848" target="Tn274896"/>
+      <edge id="edge1754" source="Tn274896" target="Tn274846"/>
+      <edge id="edge1756" source="Tn274846" target="Tn274841"/>
+      <edge id="edge1758" source="Tn274841" target="Tn274911"/>
+      <edge id="edge1760" source="Tn274841" target="Tn274843"/>
+      <edge id="edge1762" source="Tn274846" target="Tn274877"/>
+      <edge id="edge1764" source="Tn274877" target="Tn274835"/>
+      <edge id="edge1766" source="Tn274835" target="Tn274904"/>
+      <edge id="edge1768" source="Tn274904" target="Tn274905"/>
+      <edge id="edge1770" source="Tn274904" target="Tn274852"/>
+      <edge id="edge1772" source="Tn274835" target="Tn274912"/>
+      <edge id="edge1774" source="Tn274912" target="Tn274819"/>
+      <edge id="edge1776" source="Tn274912" target="Tn274847"/>
+      <edge id="edge1778" source="Tn274877" target="Tn274901"/>
+      <edge id="edge1780" source="Tn274896" target="Tn274863"/>
+      <edge id="edge1782" source="Tn274863" target="Tn274882"/>
+      <edge id="edge1784" source="Tn274882" target="Tn274916"/>
+      <edge id="edge1786" source="Tn274882" target="Tn274832"/>
+      <edge id="edge1788" source="Tn274863" target="Tn274898"/>
+      <edge id="edge1790" source="Tn274895" target="Tn274871"/>
+      <edge id="edge1792" source="Tn274871" target="Tn274844"/>
+      <edge id="edge1794" source="Tn274844" target="Tn274908"/>
+      <edge id="edge1796" source="Tn274908" target="Tn274891"/>
+      <edge id="edge1798" source="Tn274891" target="Tn274893"/>
+      <edge id="edge1800" source="Tn274891" target="Tn274842"/>
+      <edge id="edge1802" source="Tn274842" target="Tn274920"/>
+      <edge id="edge1804" source="Tn274842" target="Tn274913"/>
+      <edge id="edge1806" source="Tn274908" target="Tn274821"/>
+      <edge id="edge1808" source="Tn274844" target="Tn274828"/>
+      <edge id="edge1810" source="Tn274828" target="Tn274874"/>
+      <edge id="edge1812" source="Tn274828" target="Tn274826"/>
+      <edge id="edge1814" source="Tn274871" target="Tn274879"/>
+      <edge id="edge1816" source="Tn274879" target="Tn274878"/>
+      <edge id="edge1818" source="Tn274879" target="Tn274837"/>
+      <edge id="edge1820" source="Tn274892" target="Tn274855"/>
+      <edge id="edge1822" source="Tn274845" target="Tn274897"/>
+      <edge id="edge1824" source="Tn274850" target="Tn274861"/>
+      <edge id="edge1826" source="Tn274861" target="Tn274870"/>
+      <edge id="edge1828" source="Tn274861" target="Tn274909"/>
+      <edge id="edge1830" source="Tn274836" target="Tn274921"/>
+      <edge id="edge1832" source="Tn274900" target="Tn274859"/>
+    </tree>
+  </trees>
+</nex:nexml>

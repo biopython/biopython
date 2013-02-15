@@ -1,0 +1,283 @@
+<nex:nexml 
+	generator="Bio::Phylo::Project v.0.17_RC9_841" 
+	version="0.9" 
+	xml:base="http://example.org/"
+	xmlns:nex="http://www.nexml.org/2009" 
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns" 
+	xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd"
+	xmlns="http://www.nexml.org/2009">
+  <otus id="otus3">
+    <otu id="taxona"/>
+    <otu id="taxonb"/>
+  </otus>
+  <trees id="trees2" otus="otus3">
+    <tree id="tree6" xsi:type="nex:FloatTree">
+      <node id="node12" root="true"/>
+      <node id="node13" label="Pan" otu="taxona"/>
+      <node id="node14" label="Homo" otu="taxonb"/>
+      <edge id="edge13" length="6.6" source="node12" target="node13"/>
+      <edge id="edge14" length="6.6" source="node12" target="node14"/>
+    </tree>
+    <tree id="tree15" xsi:type="nex:FloatTree">
+      <node id="node21" root="true"/>
+      <node id="node22" label="Pan" otu="taxona"/>
+      <node id="node23" label="Homo" otu="taxonb"/>
+      <edge id="edge22" length="5.8" source="node21" target="node22"/>
+      <edge id="edge23" length="5.8" source="node21" target="node23"/>
+    </tree>
+    <tree id="tree24" xsi:type="nex:FloatTree">
+      <node id="node30" root="true"/>
+      <node id="node31" label="Pan" otu="taxona"/>
+      <node id="node32" label="Homo" otu="taxonb"/>
+      <edge id="edge31" length="6.1" source="node30" target="node31"/>
+      <edge id="edge32" length="6.1" source="node30" target="node32"/>
+    </tree>
+    <tree id="tree33" xsi:type="nex:FloatTree">
+      <node id="node39" root="true"/>
+      <node id="node40" label="Pan" otu="taxona"/>
+      <node id="node41" label="Homo" otu="taxonb"/>
+      <edge id="edge40" length="6.8" source="node39" target="node40"/>
+      <edge id="edge41" length="6.8" source="node39" target="node41"/>
+    </tree>
+    <tree id="tree42" xsi:type="nex:FloatTree">
+      <node id="node48" root="true"/>
+      <node id="node49" label="Pan" otu="taxona"/>
+      <node id="node50" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge49" length="6.3" source="node48" target="node49"/>
+      <edge id="edge50" length="6.3" source="node48" target="node50"/>
+    </tree>
+    <tree id="tree51" xsi:type="nex:FloatTree">
+      <node id="node57" root="true"/>
+      <node id="node58" label="Pan" otu="taxona"/>
+      <node id="node59" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge58" length="8.1" source="node57" target="node58"/>
+      <edge id="edge59" length="8.1" source="node57" target="node59"/>
+    </tree>
+    <tree id="tree60" xsi:type="nex:IntTree">
+      <node id="node66" root="true"/>
+      <node id="node67" label="Pan" otu="taxona"/>
+      <node id="node68" label="Homo" otu="taxonb"/>
+      <edge id="edge67" length="6" source="node66" target="node67"/>
+      <edge id="edge68" length="6" source="node66" target="node68"/>
+    </tree>
+    <tree id="tree69" xsi:type="nex:FloatTree">
+      <node id="node75" root="true"/>
+      <node id="node76" label="Pan troglodytes" otu="taxona"/>
+      <node id="node77" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge76" length="5.1" source="node75" target="node76"/>
+      <edge id="edge77" length="5.1" source="node75" target="node77"/>
+    </tree>
+    <tree id="tree78" xsi:type="nex:FloatTree">
+      <node id="node84" root="true"/>
+      <node id="node85" label="Pan troglodytes" otu="taxona"/>
+      <node id="node86" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge85" length="5.1" source="node84" target="node85"/>
+      <edge id="edge86" length="5.1" source="node84" target="node86"/>
+    </tree>
+    <tree id="tree87" xsi:type="nex:FloatTree">
+      <node id="node93" root="true"/>
+      <node id="node94" label="Pan troglodytes" otu="taxona"/>
+      <node id="node95" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge94" length="5.4" source="node93" target="node94"/>
+      <edge id="edge95" length="5.4" source="node93" target="node95"/>
+    </tree>
+    <tree id="tree96" xsi:type="nex:FloatTree">
+      <node id="node102" root="true"/>
+      <node id="node103" label="Pan troglodytes" otu="taxona"/>
+      <node id="node104" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge103" length="7.5" source="node102" target="node103"/>
+      <edge id="edge104" length="7.5" source="node102" target="node104"/>
+    </tree>
+    <tree id="tree105" xsi:type="nex:FloatTree">
+      <node id="node111" root="true"/>
+      <node id="node112" label="Pan troglodytes" otu="taxona"/>
+      <node id="node113" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge112" length="7.6" source="node111" target="node112"/>
+      <edge id="edge113" length="7.6" source="node111" target="node113"/>
+    </tree>
+    <tree id="tree114" xsi:type="nex:FloatTree">
+      <node id="node120" root="true"/>
+      <node id="node121" label="Pan" otu="taxona"/>
+      <node id="node122" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge121" length="7.4" source="node120" target="node121"/>
+      <edge id="edge122" length="7.4" source="node120" target="node122"/>
+    </tree>
+    <tree id="tree123" xsi:type="nex:FloatTree">
+      <node id="node129" root="true"/>
+      <node id="node130" label="Pan troglodytes" otu="taxona"/>
+      <node id="node131" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge130" length="7.1" source="node129" target="node130"/>
+      <edge id="edge131" length="7.1" source="node129" target="node131"/>
+    </tree>
+    <tree id="tree132" xsi:type="nex:FloatTree">
+      <node id="node138" root="true"/>
+      <node id="node139" label="Pan troglodytes" otu="taxona"/>
+      <node id="node140" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge139" length="7.1" source="node138" target="node139"/>
+      <edge id="edge140" length="7.1" source="node138" target="node140"/>
+    </tree>
+    <tree id="tree141" xsi:type="nex:FloatTree">
+      <node id="node147" root="true"/>
+      <node id="node148" label="Pan troglodytes" otu="taxona"/>
+      <node id="node149" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge148" length="8.3" source="node147" target="node148"/>
+      <edge id="edge149" length="8.3" source="node147" target="node149"/>
+    </tree>
+    <tree id="tree150" xsi:type="nex:FloatTree">
+      <node id="node156" root="true"/>
+      <node id="node157" label="Pan troglodytes" otu="taxona"/>
+      <node id="node158" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge157" length="9.2" source="node156" target="node157"/>
+      <edge id="edge158" length="9.2" source="node156" target="node158"/>
+    </tree>
+    <tree id="tree159" xsi:type="nex:IntTree">
+      <node id="node165" root="true"/>
+      <node id="node166" label="Pan" otu="taxona"/>
+      <node id="node167" label="Homo" otu="taxonb"/>
+      <edge id="edge166" length="11" source="node165" target="node166"/>
+      <edge id="edge167" length="11" source="node165" target="node167"/>
+    </tree>
+    <tree id="tree168" xsi:type="nex:FloatTree">
+      <node id="node174" root="true"/>
+      <node id="node175" label="Pan troglodytes" otu="taxona"/>
+      <node id="node176" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge175" length="6.2" source="node174" target="node175"/>
+      <edge id="edge176" length="6.2" source="node174" target="node176"/>
+    </tree>
+    <tree id="tree177" xsi:type="nex:FloatTree">
+      <node id="node183" root="true"/>
+      <node id="node184" label="Pan troglodytes" otu="taxona"/>
+      <node id="node185" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge184" length="5.2" source="node183" target="node184"/>
+      <edge id="edge185" length="5.2" source="node183" target="node185"/>
+    </tree>
+    <tree id="tree186" xsi:type="nex:FloatTree">
+      <node id="node192" root="true"/>
+      <node id="node193" label="Pan troglodytes" otu="taxona"/>
+      <node id="node194" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge193" length="5.4" source="node192" target="node193"/>
+      <edge id="edge194" length="5.4" source="node192" target="node194"/>
+    </tree>
+    <tree id="tree195" xsi:type="nex:FloatTree">
+      <node id="node201" root="true"/>
+      <node id="node202" label="Pan troglodytes" otu="taxona"/>
+      <node id="node203" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge202" length="5.6" source="node201" target="node202"/>
+      <edge id="edge203" length="5.6" source="node201" target="node203"/>
+    </tree>
+    <tree id="tree204" xsi:type="nex:FloatTree">
+      <node id="node210" root="true"/>
+      <node id="node211" label="Pan troglodytes" otu="taxona"/>
+      <node id="node212" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge211" length="7.3" source="node210" target="node211"/>
+      <edge id="edge212" length="7.3" source="node210" target="node212"/>
+    </tree>
+    <tree id="tree213" xsi:type="nex:FloatTree">
+      <node id="node219" root="true"/>
+      <node id="node220" label="Pan troglodytes" otu="taxona"/>
+      <node id="node221" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge220" length="7.4" source="node219" target="node220"/>
+      <edge id="edge221" length="7.4" source="node219" target="node221"/>
+    </tree>
+    <tree id="tree222" xsi:type="nex:FloatTree">
+      <node id="node228" root="true"/>
+      <node id="node229" label="Pan" otu="taxona"/>
+      <node id="node230" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge229" length="6.6" source="node228" target="node229"/>
+      <edge id="edge230" length="6.6" source="node228" target="node230"/>
+    </tree>
+    <tree id="tree231" xsi:type="nex:FloatTree">
+      <node id="node237" root="true"/>
+      <node id="node238" label="Pan troglodytes" otu="taxona"/>
+      <node id="node239" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge238" length="5.41" source="node237" target="node238"/>
+      <edge id="edge239" length="5.41" source="node237" target="node239"/>
+    </tree>
+    <tree id="tree240" xsi:type="nex:FloatTree">
+      <node id="node246" root="true"/>
+      <node id="node247" label="Pan troglodytes" otu="taxona"/>
+      <node id="node248" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge247" length="6.7" source="node246" target="node247"/>
+      <edge id="edge248" length="6.7" source="node246" target="node248"/>
+    </tree>
+    <tree id="tree249" xsi:type="nex:FloatTree">
+      <node id="node255" root="true"/>
+      <node id="node256" label="Pan" otu="taxona"/>
+      <node id="node257" label="Homo" otu="taxonb"/>
+      <edge id="edge256" length="4.3" source="node255" target="node256"/>
+      <edge id="edge257" length="4.3" source="node255" target="node257"/>
+    </tree>
+    <tree id="tree258" xsi:type="nex:IntTree">
+      <node id="node264" root="true"/>
+      <node id="node265" label="Pan" otu="taxona"/>
+      <node id="node266" label="Homo" otu="taxonb"/>
+      <edge id="edge265" length="13" source="node264" target="node265"/>
+      <edge id="edge266" length="13" source="node264" target="node266"/>
+    </tree>
+    <tree id="tree267" xsi:type="nex:FloatTree">
+      <node id="node273" root="true"/>
+      <node id="node274" label="Pan troglodytes" otu="taxona"/>
+      <node id="node275" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge274" length="5.5" source="node273" target="node274"/>
+      <edge id="edge275" length="5.5" source="node273" target="node275"/>
+    </tree>
+    <tree id="tree276" xsi:type="nex:FloatTree">
+      <node id="node282" root="true"/>
+      <node id="node283" label="Pan troglodytes" otu="taxona"/>
+      <node id="node284" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge283" length="3.6" source="node282" target="node283"/>
+      <edge id="edge284" length="3.6" source="node282" target="node284"/>
+    </tree>
+    <tree id="tree285" xsi:type="nex:IntTree">
+      <node id="node291" root="true"/>
+      <node id="node292" label="Pan troglodytes" otu="taxona"/>
+      <node id="node293" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge292" length="4" source="node291" target="node292"/>
+      <edge id="edge293" length="4" source="node291" target="node293"/>
+    </tree>
+    <tree id="tree294" xsi:type="nex:FloatTree">
+      <node id="node300" root="true"/>
+      <node id="node301" label="Pan" otu="taxona"/>
+      <node id="node302" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge301" length="5.12" source="node300" target="node301"/>
+      <edge id="edge302" length="5.12" source="node300" target="node302"/>
+    </tree>
+    <tree id="tree303" xsi:type="nex:FloatTree">
+      <node id="node309" root="true"/>
+      <node id="node310" label="Pan" otu="taxona"/>
+      <node id="node311" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge310" length="5.55" source="node309" target="node310"/>
+      <edge id="edge311" length="5.55" source="node309" target="node311"/>
+    </tree>
+    <tree id="tree312" xsi:type="nex:FloatTree">
+      <node id="node318" root="true"/>
+      <node id="node319" label="Pan troglodytes" otu="taxona"/>
+      <node id="node320" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge319" length="4.87" source="node318" target="node319"/>
+      <edge id="edge320" length="4.87" source="node318" target="node320"/>
+    </tree>
+    <tree id="tree321" xsi:type="nex:FloatTree">
+      <node id="node327" root="true"/>
+      <node id="node328" label="Pan troglodytes" otu="taxona"/>
+      <node id="node329" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge328" length="6.4" source="node327" target="node328"/>
+      <edge id="edge329" length="6.4" source="node327" target="node329"/>
+    </tree>
+    <tree id="tree330" xsi:type="nex:FloatTree">
+      <node id="node336" root="true"/>
+      <node id="node337" label="Pan" otu="taxona"/>
+      <node id="node338" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge337" length="10.4" source="node336" target="node337"/>
+      <edge id="edge338" length="10.4" source="node336" target="node338"/>
+    </tree>
+    <tree id="tree339" xsi:type="nex:FloatTree">
+      <node id="node345" root="true"/>
+      <node id="node346" label="Pan" otu="taxona"/>
+      <node id="node347" label="Homo sapiens" otu="taxonb"/>
+      <edge id="edge346" length="13.7" source="node345" target="node346"/>
+      <edge id="edge347" length="13.7" source="node345" target="node347"/>
+    </tree>
+  </trees>
+</nex:nexml>

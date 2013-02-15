@@ -13,14 +13,25 @@ from __future__ import with_statement
 __docformat__ = "restructuredtext en"
 
 from Bio import File
-from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO
-
+from Bio.Phylo import (
+                       BaseTree, 
+                       NewickIO, 
+                       NexusIO, 
+                       PhyloXMLIO,
+                       NeXMLIO,
+                       )
 
 supported_formats = {
         'newick':   NewickIO,
         'nexus':    NexusIO,
         'phyloxml': PhyloXMLIO,
+        'nexml':    NeXMLIO,
         }
+
+try: 
+    from Bio.Phylo import CDAOIO
+    supported_formats['cdao'] = CDAOIO
+except: pass
 
 
 def parse(file, format, **kwargs):
@@ -72,7 +83,7 @@ def write(trees, file, format, **kwargs):
     return n
 
 
-def convert(in_file, in_format, out_file, out_format, **kwargs):
+def convert(in_file, in_format, out_file, out_format, parse_args={}, **kwargs):
     """Convert between two tree file formats."""
-    trees = parse(in_file, in_format)
+    trees = parse(in_file, in_format, **parse_args)
     return write(trees, out_file, out_format, **kwargs)

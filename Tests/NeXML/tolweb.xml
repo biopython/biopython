@@ -1,0 +1,49 @@
+<nex:nexml 
+  generator="Bio::Phylo::Project v.0.21_1265" 
+  version="0.9" 
+  xmlns="http://www.nexml.org/2009" 
+  xml:base="http://example.org/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/contributor" 
+  xmlns:dcterms="http://purl.org/dc/terms/" 
+  xmlns:nex="http://www.nexml.org/2009" 
+  xmlns:owl="http://www.w3.org/2002/07/owl#" 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:tba="http://tolweb.org/tree/home.pages/downloadtree.html#" 
+  xmlns:tbe="http://tolweb.org/tree/home.pages/downloadtree.html#" 
+  xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd"> 
+  <otus id="otus26"> 
+    <otu id="otu27" label="Eurysphindus"/> 
+  </otus> 
+  <trees about="#trees22" id="trees22" otus="otus26"> 
+    <meta content="117855" datatype="xsd:integer" id="meta24" property="dcterms:identifier" xsi:type="nex:LiteralMeta"/> 
+    <meta href="http://tolweb.org/117855" id="meta25" rel="owl:sameAs" xsi:type="nex:ResourceMeta"/> 
+    <tree id="tree1" xsi:type="nex:IntTree"> 
+      <node about="#node2" id="node2" root="true"> 
+        <meta content="117851" datatype="xsd:integer" id="meta21" property="tba:ID" xsi:type="nex:LiteralMeta"/> 
+      </node> 
+      <node about="#node3" id="node3" label="Eurysphindus" otu="otu27"> 
+        <meta content="" datatype="xsd:string" id="meta4" property="dc:description" xsi:type="nex:LiteralMeta"/> 
+        <meta content="Leconte" datatype="xsd:string" id="meta5" property="tbe:AUTHORITY" xsi:type="nex:LiteralMeta"/> 
+        <meta content="1878" datatype="xsd:integer" id="meta6" property="tbe:AUTHDATE" xsi:type="nex:LiteralMeta"/> 
+        <meta content="117851" datatype="xsd:integer" id="meta7" property="tba:ANCESTORWITHPAGE" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta8" property="tba:CHILDCOUNT" xsi:type="nex:LiteralMeta"/> 
+        <meta content="null" datatype="xsd:string" id="meta9" property="tba:COMBINATION_DATE" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta10" property="tba:CONFIDENCE" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta11" property="tba:EXTINCT" xsi:type="nex:LiteralMeta"/> 
+        <meta content="1" datatype="xsd:integer" id="meta12" property="tba:HASPAGE" xsi:type="nex:LiteralMeta"/> 
+        <meta content="117855" datatype="xsd:integer" id="meta13" property="tba:ID" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta14" property="tba:INCOMPLETESUBGROUPS" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta15" property="tba:IS_NEW_COMBINATION" xsi:type="nex:LiteralMeta"/> 
+        <meta content="1" datatype="xsd:integer" id="meta16" property="tba:ITALICIZENAME" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta17" property="tba:LEAF" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta18" property="tba:PHYLESIS" xsi:type="nex:LiteralMeta"/> 
+        <meta content="0" datatype="xsd:integer" id="meta19" property="tba:SHOWAUTHORITY" xsi:type="nex:LiteralMeta"/> 
+        <meta content="1" datatype="xsd:integer" id="meta20" property="tba:SHOWAUTHORITYCONTAINING" xsi:type="nex:LiteralMeta"/> 
+      </node> 
+      <edge id="edge3" source="node2" target="node3"/> 
+    </tree> 
+  </trees> 
+</nex:nexml> 

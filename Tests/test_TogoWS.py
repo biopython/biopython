@@ -31,65 +31,65 @@ class TogoFields(unittest.TestCase):
     def test_databases(self):
         """Check supported databases"""
         dbs = set(TogoWS._get_entry_dbs())
-        self.assert_(dbs.issuperset(['nuccore', 'nucest', 'nucgss',
-                                     'nucleotide', 'protein', 'gene',
-                                     'omim', 'homologene', 'snp',
-                                     'mesh', 'pubmed', 'embl',
-                                     'uniprot', 'uniparc', 'uniref100',
-                                     'uniref90', 'uniref50', 'ddbj',
-                                     'dad', 'pdb', 'compound', 'drug',
-                                     'enzyme', 'genes', 'glycan',
-                                     'orthology', 'reaction', 'module',
-                                     'pathway']), dbs)
+        self.assertTrue(dbs.issuperset(['nuccore', 'nucest', 'nucgss',
+                                        'nucleotide', 'protein', 'gene',
+                                        'omim', 'homologene', 'snp',
+                                        'mesh', 'pubmed', 'embl',
+                                        'uniprot', 'uniparc', 'uniref100',
+                                        'uniref90', 'uniref50', 'ddbj',
+                                        'dad', 'pdb', 'compound', 'drug',
+                                        'enzyme', 'genes', 'glycan',
+                                        'orthology', 'reaction', 'module',
+                                        'pathway']), dbs)
 
     def test_pubmed(self):
         """Check supported fields for pubmed database"""
         fields = set(TogoWS._get_entry_fields("pubmed"))
-        self.assert_(fields.issuperset(['abstract', 'au', 'authors',
-                                        'doi', 'mesh', 'so', 'ti',
-                                        'title']), fields)
+        self.assertTrue(fields.issuperset(['abstract', 'au', 'authors',
+                                           'doi', 'mesh', 'so', 'ti',
+                                           'title']), fields)
 
     def test_ncbi_protein(self):
         """Check supported fields for NCBI protein database"""
         fields = set(TogoWS._get_entry_fields("ncbi-protein"))
-        self.assert_(fields.issuperset(['entry_id', 'length', 'strand',
-                                        'moltype', 'linearity', 'division',
-                                        'date', 'definition', 'accession',
-                                        'accessions', 'version', 'versions',
-                                        'acc_version', 'gi', 'keywords',
-                                        'organism', 'common_name',
-                                        'taxonomy', 'comment', 'seq']),
-                                        fields)
+        self.assertTrue(fields.issuperset(['entry_id', 'length', 'strand',
+                                           'moltype', 'linearity', 'division',
+                                           'date', 'definition', 'accession',
+                                           'accessions', 'version', 'versions',
+                                           'acc_version', 'gi', 'keywords',
+                                           'organism', 'common_name',
+                                           'taxonomy', 'comment', 'seq']),
+                                           fields)
 
     def test_ddbj(self):
         """Check supported fields for ddbj database"""
         fields = set(TogoWS._get_entry_fields("ddbj"))
-        self.assert_(fields.issuperset(['entry_id', 'length', 'strand',
-                                        'moltype', 'linearity', 'division',
-                                        'date', 'definition', 'accession',
-                                        'accessions', 'version', 'versions',
-                                        'acc_version', 'gi', 'keywords',
-                                        'organism', 'common_name',
-                                        'taxonomy', 'comment', 'seq']),
-                                        fields)
+        self.assertTrue(fields.issuperset(['entry_id', 'length', 'strand',
+                                           'moltype', 'linearity', 'division',
+                                           'date', 'definition', 'accession',
+                                           'accessions', 'version', 'versions',
+                                           'acc_version', 'gi', 'keywords',
+                                           'organism', 'common_name',
+                                           'taxonomy', 'comment', 'seq']),
+                                           fields)
 
     def test_embl(self):
         """Check supported fields for embl database"""
         fields = set(TogoWS._get_entry_fields("embl"))
-        self.assert_(fields.issuperset(["definition", "entry_id", "seq"]),
-                     fields)
+        self.assertTrue(fields.issuperset(["definition", "entry_id", "seq"]),
+                        fields)
 
     def test_uniprot(self):
         """Check supported fields for uniprot database"""
         fields = set(TogoWS._get_entry_fields("uniprot"))
-        self.assert_(fields.issuperset(["definition", "entry_id", "seq"]),
-                     fields)
+        self.assertTrue(fields.issuperset(["definition", "entry_id", "seq"]),
+                        fields)
 
     def test_pdb(self):
         """Check supported fields for pdb database"""
         fields = set(TogoWS._get_entry_fields("pdb"))
-        self.assert_(fields.issuperset(["accession", "chains", "keywords",
-                                        "models"]), fields)
+        self.assertTrue(fields.issuperset(["accession", "chains", "keywords",
+                                           "models"]), fields)
 
 
 class TogoEntry(unittest.TestCase):
@@ -285,7 +285,7 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("ddbj", "X52960", format="gff")
         data = handle.read()
         handle.close()
-        self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
+        self.assertTrue(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
 
     def test_genbank_gff3(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
@@ -293,14 +293,14 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("nucleotide", "X52960", format="gff")
         data = handle.read()
         handle.close()
-        self.assert_(data.startswith("##gff-version 3\nX52960\tGenbank\t"), data)
+        self.assertTrue(data.startswith("##gff-version 3\nX52960\tGenbank\t"), data)
 
     def test_embl_AM905444_gff3(self):
         """Bio.TogoWS.entry("embl", "AM905444", format="gff")"""
         handle = TogoWS.entry("embl", "AM905444", format="gff")
         data = handle.read()
         handle.close()
-        self.assert_(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
+        self.assertTrue(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
 
     def test_embl_AM905444_seq(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
@@ -321,9 +321,9 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("embl", "AM905444")
         record = SeqIO.read(handle, "embl")
         handle.close()
-        self.assert_("AM905444" in record.id, record.id)
-        self.assert_("AM905444" in record.name, record.name)
-        self.assert_("porin" in record.description, record.description)
+        self.assertTrue("AM905444" in record.id, record.id)
+        self.assertTrue("AM905444" in record.name, record.name)
+        self.assertTrue("porin" in record.description, record.description)
         self.assertEqual(len(record), 1164)
         self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
@@ -332,8 +332,8 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("ddbj", "X52960", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
-        self.assert_("X52960" in record.id, record.id)
-        self.assert_("X52960" in record.name, record.name)
+        self.assertTrue("X52960" in record.id, record.id)
+        self.assertTrue("X52960" in record.name, record.name)
         self.assertEqual(len(record), 248)
         self.assertEqual(seguid(record.seq), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
@@ -359,8 +359,8 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("nucleotide", "6273291", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
-        self.assert_("6273291" in record.id, record.id)
-        self.assert_("6273291" in record.name, record.name)
+        self.assertTrue("6273291" in record.id, record.id)
+        self.assertTrue("6273291" in record.name, record.name)
         self.assertEqual(len(record), 902)
         self.assertEqual(seguid(record.seq), "bLhlq4mEFJOoS9PieOx4nhGnjAQ")
 
@@ -370,9 +370,9 @@ class TogoEntry(unittest.TestCase):
         record = SeqIO.read(handle, "fasta")
         handle.close()
         #Could use assertIn but requires Python 2.7+
-        self.assert_("16130152" in record.id, record.id)
-        self.assert_("16130152" in record.name, record.name)
-        self.assert_("porin protein" in record.description, record.description)
+        self.assertTrue("16130152" in record.id, record.id)
+        self.assertTrue("16130152" in record.name, record.name)
+        self.assertTrue("porin protein" in record.description, record.description)
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
 
@@ -471,8 +471,8 @@ class TogoSearch(unittest.TestCase):
         search_iter = list(TogoWS.search_iter(database, search_term, limit))
         self.assertEqual(count, len(search_iter))
         for match in expected_matches:
-            self.assert_(match in search_iter,
-                         "Expected %s in results but not" % match)
+            self.assertTrue(match in search_iter,
+                            "Expected %s in results but not" % match)
 
 
 class TogoConvert(unittest.TestCase):
