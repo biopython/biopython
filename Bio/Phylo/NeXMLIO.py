@@ -15,34 +15,52 @@ __docformat__ = "restructuredtext en"
 from cStringIO import StringIO
 
 from Bio.Phylo import NeXML
-import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import sys
 from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
 
-XML_NAMESPACES = {
+#For speed try to use cElementTree rather than ElementTree
+try:
+    if (3, 0) <= sys.version_info[:2] <= (3, 1):
+        # Workaround for bug in python 3.0 and 3.1,
+        # see http://bugs.python.org/issue9257
+        from xml.etree import ElementTree as ElementTree
+    else:
+        from xml.etree import cElementTree as ElementTree
+except ImportError:
+    from xml.etree import ElementTree as ElementTree
+
+NAMESPACES = {
                   'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                   'xml': 'http://www.w3.org/XML/1998/namespace',
                   'nex': 'http://www.nexml.org/2009',
                   'xsd': 'http://www.w3.org/2001/XMLSchema#',
                   }
-XML_NAMESPACES.update(cdao_namespaces)
-DEFAULT_NAMESPACE = XML_NAMESPACES['nex']
+NAMESPACES.update(cdao_namespaces)
+DEFAULT_NAMESPACE = NAMESPACES['nex']
 VERSION = '0.9'
 SCHEMA = 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd'
 
 
-for prefix, uri in XML_NAMESPACES.items():
-    try:
-        ET.register_namespace(prefix, uri)
-    except AttributeError:
-        # for portability with Python <= 2.6
-        ET._namespace_map[uri] = prefix
+try:
+    register_namespace = ElementTree.register_namespace
+except AttributeError:
+    if not hasattr(ElementTree, '_namespace_map'):
+        # cElementTree needs the pure-Python xml.etree.ElementTree
+        from xml.etree import ElementTree as ET_py
+        ElementTree._namespace_map = ET_py._namespace_map
+
+    def register_namespace(prefix, uri):
+        ElementTree._namespace_map[uri] = prefix
+
+for prefix, uri in NAMESPACES.iteritems():
+    register_namespace(prefix, uri)
 
 
 def qUri(s):
     '''Given a prefixed URI, return the full URI.'''
-    return resolve_uri(s, namespaces=XML_NAMESPACES, xml_style=True)
+    return resolve_uri(s, namespaces=NAMESPACES, xml_style=True)
 
 def cdao_to_obo(s):
     '''Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI.'''
@@ -106,7 +124,7 @@ class Parser(object):
     def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
 
-        nexml_doc = ET.iterparse(self.handle, events=('end',))
+        nexml_doc = ElementTree.iterparse(self.handle, events=('end',))
         
         for event, node in nexml_doc:
             if node.tag == qUri('nex:tree'):
@@ -114,22 +132,22 @@ class Parser(object):
                 node_children = {}
                 root = None
                 
-                child_tags = node._children
-                nodes = []                
+                child_tags = node.getchildren()
+                nodes = []
                 edges = []
                 for child in child_tags:
                     if child.tag == qUri('nex:node'): nodes.append(child)
                     if child.tag == qUri('nex:edge'): edges.append(child)
                     
                 for node in nodes:
-                    node.id = node.attrib['id']
-                    this_node = node_dict[node.id] = {}
+                    node_id = node.attrib['id']
+                    this_node = node_dict[node_id] = {}
                     if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
-                    if 'root' in node.attrib and node.attrib['root'] == 'true': root = node.id
+                    if 'root' in node.attrib and node.attrib['root'] == 'true': root = node_id
                     
-                    for child in node._children:
+                    for child in node.getchildren():
                         if child.tag == qUri('nex:meta'):
-                            self.add_annotation(node_dict[node.id], child)
+                            self.add_annotation(node_dict[node_id], child)
                     
                 srcs = set()
                 tars = set()
@@ -144,7 +162,7 @@ class Parser(object):
                     if 'property' in edge.attrib and edge.attrib['property'] in matches('cdao:has_Support_Value'):
                         node_dict[tar]['confidence'] = float(edge.attrib['content'])
                         
-                    for child in edge._children:
+                    for child in edge.getchildren():
                         if child.tag == qUri('nex:meta'):
                             self.add_annotation(node_dict[tar], child)
                     
@@ -152,7 +170,7 @@ class Parser(object):
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
                     rooted = False
-                    possible_roots = (node.id for node in nodes if node.id in srcs and not node.id in tars)
+                    possible_roots = (node.attrib['id'] for node in nodes if node.attrib['id'] in srcs and not node.attrib['id'] in tars)
                     root = possible_roots.next()
                 else:
                     rooted = True
@@ -198,22 +216,22 @@ class Writer(object):
         self.cdao_to_obo = cdao_to_obo
         
         # set XML namespaces
-        root_node = ET.Element('nex:nexml')
+        root_node = ElementTree.Element('nex:nexml')
         root_node.set('version', VERSION)
         root_node.set('xmlns', DEFAULT_NAMESPACE)
         root_node.set('xsi:schemaLocation', SCHEMA)
 
-        for prefix, uri in XML_NAMESPACES.items():
+        for prefix, uri in NAMESPACES.items():
             root_node.set('xmlns:%s' % prefix, uri)
 
-        otus = ET.SubElement(root_node, 'otus', attrib={'id': 'tax', 'label': 'RootTaxaBlock'})
+        otus = ElementTree.SubElement(root_node, 'otus', **{'id': 'tax', 'label': 'RootTaxaBlock'})
         
         # create trees
-        trees = ET.SubElement(root_node, 'trees', attrib={'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
+        trees = ElementTree.SubElement(root_node, 'trees', **{'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
         count = 0
         tus = set()
         for tree in self.trees:
-            this_tree = ET.SubElement(trees, 'tree', attrib={'id':self.new_label('tree')})
+            this_tree = ElementTree.SubElement(trees, 'tree', **{'id':self.new_label('tree')})
             
             first_clade = tree.clade
             tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
@@ -222,16 +240,16 @@ class Writer(object):
         
         # create OTUs
         for tu in tus:
-            otu = ET.SubElement(otus, 'otu', attrib={'id':tu})
+            otu = ElementTree.SubElement(otus, 'otu', **{'id':tu})
         
         # write XML document to file handle
-        xml_doc = ET.ElementTree(root_node)
+        #xml_doc = ElementTree.ElementTree(root_node)
         #xml_doc.write(handle,
         #              xml_declaration=True, encoding='utf-8',
         #              method='xml')
 
         # use xml.dom.minodom for pretty printing
-        rough_string = ET.tostring(root_node, 'utf-8')
+        rough_string = ElementTree.tostring(root_node, 'utf-8')
         reparsed = minidom.parseString(rough_string)
         handle.write(reparsed.toprettyxml(indent="  "))
         
@@ -252,7 +270,7 @@ class Writer(object):
         if clade.name:
             tus.add(clade.name)
             attrib['otu'] = clade.name
-        node = ET.SubElement(tree, 'node', attrib=attrib)
+        node = ElementTree.SubElement(tree, 'node', **attrib)
         
         if not parent is None:
             edge_id = self.new_label('edge')
@@ -267,7 +285,7 @@ class Writer(object):
                                'datatype':'xsd:float',
                                'content':'%1.2f' % clade.confidence,
                                })
-            node = ET.SubElement(tree, 'edge', attrib=attrib)
+            node = ElementTree.SubElement(tree, 'edge', **attrib)
     
         if not clade.is_terminal():
             for new_clade in clade.clades:
