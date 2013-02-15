@@ -251,7 +251,11 @@ class Writer(object):
         # use xml.dom.minodom for pretty printing
         rough_string = ElementTree.tostring(root_node, 'utf-8')
         reparsed = minidom.parseString(rough_string)
-        handle.write(reparsed.toprettyxml(indent="  "))
+        try:
+            handle.write(reparsed.toprettyxml(indent="  "))
+        except TypeError:
+            # for compatibility with Python 3
+            handle.write(bytes(reparsed.toprettyxml(indent="  "), 'utf8'))
         
         return count
     

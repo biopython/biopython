@@ -87,8 +87,8 @@ def _test_write_factory(source):
         t2 = NeXMLIO.Parser(open(DUMMY, 'rb')).parse().next()
         
         def assert_property(prop_name):
-            p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals()])
-            p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals()])
+            p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals() if getattr(n, prop_name)])
+            p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals() if getattr(n, prop_name)])
             self.assertEqual(p1,p2)
         
         for prop_name in ('name', 'branch_length', 'confidence'):
