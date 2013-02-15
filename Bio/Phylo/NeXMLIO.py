@@ -33,7 +33,11 @@ SCHEMA = 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd'
 
 
 for prefix, uri in XML_NAMESPACES.items():
-    ET.register_namespace(prefix, uri)
+    try:
+        ET.register_namespace(prefix, uri)
+    except AttributeError:
+        # for portability with Python <= 2.6
+        ET._namespace_map[uri] = prefix
 
 
 def qUri(s):
