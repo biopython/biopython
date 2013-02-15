@@ -21,6 +21,11 @@ a SeqFeature for something like a multi-exon CDS would have a child SeqFeature
 will still be populated for now, but is deprecated and will in future be
 removed. Please consult the examples in the help (docstrings) and Tutorial.
 
+Thanks to the efforts of Ben Morris, the Phylo module now supports the file
+formats NeXML and CDAO. The Newick parser is also significantly faster, and can
+now optionally extract bootstrap values from the Newick comment field (like
+Molphy and Archaeopteryx do).
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
