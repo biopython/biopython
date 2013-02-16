@@ -1,13 +1,13 @@
 from __future__ import with_statement
 import unittest
-from Bio.Webtools import TAIR
+from Bio.Seq.web import tair
 
 # Make sure test is skipped if not internet connected
 import requires_internet
 requires_internet.check()
 
 
-class TAIRDirect(unittest.TestCase):
+class TairDirect(unittest.TestCase):
     test_agis = [
         "AT4G36450.1",
         "AT4G36900.1",
@@ -26,7 +26,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "transcript",
                 "representative"
@@ -39,7 +39,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "transcript",
                 "all"
@@ -52,7 +52,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "transcript",
                 "specified"
@@ -65,7 +65,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "At_transcripts",
                 "representative"
@@ -78,7 +78,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "transcript",
                 "rep_gene"
@@ -91,7 +91,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "ATGGAGACGG", 591),
             ("AT5G63980.1", "ATGATGTCTA", 1224)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "cds",
                 "representative"
@@ -104,7 +104,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 2122)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "gene",
                 "representative"
@@ -117,7 +117,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "METATEVATV", 196),
             ("AT5G63980.1", "MMSINCFRTA", 407)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "protein",
                 "representative"
@@ -133,7 +133,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT5G63970-AT5G63980", "TTGCGCCGGC", 564),
             ("AT5G63980-AT5G63990", "GTATAAAGGG", 1324)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "intergenic",
                 "representative"
@@ -150,7 +150,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT5G63980.1-5", "GTAAATTGCT", 91),
             ("AT5G63980.1-6", "GTAACATTAA", 100)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "intron",
                 "representative"
@@ -162,7 +162,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "GAAAGCAAAA", 232),
             ("AT5G63980.1", "TTTGTTTTTT", 131)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "3prime_utr",
                 "representative"
@@ -174,7 +174,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 201),
             ("AT5G63980.1", "GACATATATT", 28)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "5prime_utr",
                 "representative"
@@ -187,7 +187,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "CTTAAATTAA", 500),
             ("AT5G63980", "TTTTTAGTCT", 500)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "upstream_500",
                 "representative"
@@ -200,7 +200,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AAATATCCTC", 1000),
             ("AT5G63980", "CTAAAATCAA", 1000)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "upstream_1000",
                 "representative"
@@ -213,7 +213,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "GGTTTAGTTA", 3000),
             ("AT5G63980", "TGATTAATAC", 3000)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "upstream_3000",
                 "representative"
@@ -226,7 +226,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AATCCCCCTC", 500),
             ("AT5G63980", "GTATAAAGGG", 500)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "downstream_500",
                 "representative"
@@ -239,7 +239,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AATCCCCCTC", 1000),
             ("AT5G63980", "GTATAAAGGG", 1000)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "downstream_1000",
                 "representative"
@@ -252,7 +252,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AATCCCCCTC", 3000),
             ("AT5G63980", "GTATAAAGGG", 3000)
             ]
-        returned = TAIR.get(
+        returned = tair.get(
                 self.test_agis,
                 "downstream_3000",
                 "representative"
@@ -262,7 +262,7 @@ class TAIRDirect(unittest.TestCase):
     def test_empty_return(self):
         # This checks to see that no errors are raised when a invalid AGI is
         # given.
-        returned = TAIR.get(
+        returned = tair.get(
                 ["AT5G66483.1"],
                 "downstream_3000",
                 "representative"
@@ -293,14 +293,14 @@ class TAIRDirect(unittest.TestCase):
                 "AT5G63980",
                 "AT5G63980"
                 ]
-        self.assertEqual(expected_return, TAIR._sanitise_agis(agis))
+        self.assertEqual(expected_return, tair._sanitise_agis(agis))
         not_agis = [
                 "notanagi",  # random text
                 r"\as23sd1321\ '.XS",  # random text
                 "AT5G63980.12345",  # Contains a valid AGI, but isn't one
                 "AT5G39846054546"  # Contains a valid AGI, but isn't one
                 ]
-        self.assertEqual([], TAIR._sanitise_agis(not_agis))
+        self.assertEqual([], tair._sanitise_agis(not_agis))
 
     def test_string_agi(self):
         # This checks to see that no errors are raised when an AGI is
@@ -308,7 +308,7 @@ class TAIRDirect(unittest.TestCase):
         expected_id = "AT4G36450.1"
         expected_seq = "ATGGCGATGC"
         expected_len = 1086
-        returned_seq = TAIR.get(
+        returned_seq = tair.get(
                 self.test_agis[0],
                 "transcript",
                 "representative"
