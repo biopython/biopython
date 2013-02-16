@@ -23,17 +23,18 @@ class NewickError(Exception):
     
     
 tokens = [
-    r"\(",                          # open parens
-    r"\)",                          # close parens
-    r"[^\s\(\)\[\]\'\:\;\,]+",      # unquoted node label
-    r"\:[0-9]*\.?[0-9]+",           # edge length
-    r"\,",                          # comma
-    r"\[(\\.|[^\]])*\]",            # comment
-    r"\'(\\.|[^\'])*\'",            # quoted node label
-    r"\;",                          # semicolon
-    r"\n",                          # newline
+    (r"\(",                         'open parens'),
+    (r"\)",                         'close parens'),
+    (r"[^\s\(\)\[\]\'\:\;\,]+",     'unquoted node label'),
+    (r"\:[0-9]*\.?[0-9]+",          'edge length'),
+    (r"\,",                         'comma'),
+    (r"\[(\\.|[^\]])*\]",           'comment'),
+    (r"\'(\\.|[^\'])*\'",           'quoted node label'),
+    (r"\;",                         'semicolon'),
+    (r"\n",                         'newline'),
 ]
-tokenizer = re.compile('(%s)' % '|'.join(tokens))
+tokenizer = re.compile('(%s)' % '|'.join([token[0] for token in tokens]))
+token_dict = {name:re.compile(token) for (token, name) in tokens}
 
 
 # ---------------------------------------------------------
@@ -69,6 +70,15 @@ def _parse_confidence(text):
         # assert 0 <= current_clade.confidence <= 1
     except ValueError:
         return None
+        
+        
+def _format_comment(text):
+    return '[%s]' % (text.replace('[', '\\[').replace(']', '\\]'))
+    
+def _get_comment(clade):
+    if hasattr(clade, 'comment') and clade.comment:
+        return _format_comment(str(clade.comment))
+    else: return ''
 
 
 class Parser(object):
@@ -240,13 +250,18 @@ class Writer(object):
 
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
+            label = clade.name or ''
+            unquoted_label = re.match(token_dict['unquoted node label'], label)
+            if (not unquoted_label) or (unquoted_label.end() < len(label)):
+                label = "'%s'" % label.replace("'", "\\'")
+
             if clade.is_terminal():    # terminal
-                return ((clade.name or '')
+                return (label
                         + make_info_string(clade, terminal=True))
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
-                        (clade.name or '') + make_info_string(clade))
+                        label + make_info_string(clade))
 
         # Convert each tree to a string
         for tree in self.trees:
@@ -273,21 +288,21 @@ class Writer(object):
         if plain:
             # Plain tree only. That's easy.
             def make_info_string(clade, terminal=False):
-                return ''
+                return _get_comment(clade)
 
         elif confidence_as_branch_length:
             # Support as branchlengths (eg. PAUP), ignore actual branchlengths
             def make_info_string(clade, terminal=False):
                 if terminal:
                     # terminal branches have 100% support
-                    return ':' + format_confidence % max_confidence
+                    return (':' + format_confidence % max_confidence) + _get_comment(clade)
                 else:
-                    return ':' + format_confidence % clade.confidence
+                    return (':' + format_confidence % clade.confidence) + _get_comment(clade)
 
         elif branch_length_only:
             # write only branchlengths, ignore support
             def make_info_string(clade, terminal=False):
-                return ':' + format_branch_length % clade.branch_length
+                return (':' + format_branch_length % clade.branch_length) + _get_comment(clade)
 
         else:
             # write support and branchlengths (e.g. .con tree of mrbayes)
@@ -296,9 +311,9 @@ class Writer(object):
                         not hasattr(clade, 'confidence') or
                         clade.confidence is None):
                     return (':' + format_branch_length
-                            ) % (clade.branch_length or 0.0)
+                            ) % (clade.branch_length or 0.0) + _get_comment(clade)
                 else:
                     return (format_confidence + ':' + format_branch_length
-                            ) % (clade.confidence, clade.branch_length or 0.0)
+                            ) % (clade.confidence, clade.branch_length or 0.0) + _get_comment(clade)
 
         return make_info_string
