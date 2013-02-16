@@ -88,8 +88,6 @@ def write(trees, handle, plain=False, **kwargs):
 class Parser(object):
     """Parse a CDAO tree given a file handle.
     """
-    urls = RDF_NAMESPACES
-
     def __init__(self, handle=None):
         self.handle = handle
         self.model = None
@@ -108,7 +106,7 @@ class Parser(object):
         return self.parse_model()
         
     def parse_handle_to_model(self, rooted=False, storage=None, 
-                              mime_type='text/turtle', context=None, **kwargs):
+                              parse_format='turtle', context=None, **kwargs):
         '''Parse self.handle into RDF model self.model.'''
 
         if storage is None:
@@ -123,7 +121,7 @@ class Parser(object):
         
         self.rooted = rooted
         
-        parser = RDF.Parser(mime_type=mime_type)
+        parser = RDF.Parser(name=parse_format)
         if parser is None:
             raise Exception('Failed to create RDF.Parser for MIME type %s' % mime_type)
         
@@ -258,58 +256,54 @@ class Parser(object):
 
 class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
-    urls = RDF_NAMESPACES
+    prefixes = RDF_NAMESPACES
 
     def __init__(self, trees):
         self.trees = trees
-        self.model = None
         
         self.node_counter = 0
         self.edge_counter = 0
         self.tu_counter = 0
         self.tree_counter = 0
 
-    def write(self, handle, mime_type='text/turtle', tree_uri='tree', context=None,
-              storage=None, record_complete_ancestry=False, **kwargs):
+    def write(self, handle, tree_uri='tree', context=None, record_complete_ancestry=False, 
+              rooted=False, **kwargs):
         """Write this instance's trees to a file handle.
-        
-        Keywords:
-            mime_type: used to determine the serialization format.
-                default is 'text/turtle'
+
+        If the handle is a librdf model, statements will be added directly to it.
         """
-        
+
+        self.rooted = rooted
         self.record_complete_ancestry = record_complete_ancestry
         
-        self.add_trees_to_model(storage=storage, tree_uri=tree_uri, context=context)
-        if storage is None: self.serialize_model(handle, mime_type=mime_type)
+        self.add_trees_to_handle(handle, tree_uri=tree_uri, context=context)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, tree_uri='tree', context=None):
-        """Add triples describing a set of trees to an RDF model."""
+    def add_trees_to_handle(self, handle, trees=None, tree_uri='tree', context=None):
+        """Add triples describing a set of trees to handle, which can be either 
+        a file or a librdf model."""
 
-        if context: context = RDF.Node(RDF.Uri(context))
+        is_librdf_model = isinstance(handle, RDF.Model)
+
+        if is_librdf_model and context: context = RDF.Node(RDF.Uri(context))
+        else: context = None
+
         self.tree_uri = tree_uri
 
         Uri = RDF.Uri
-        urls = self.urls
+        prefixes = self.prefixes
         
         if trees is None:
             trees = self.trees
         
-        if storage is None:
-            # store RDF model in memory for now
-            storage = new_storage()
+        if is_librdf_model: 
+            Redland.librdf_model_transaction_start(handle._model)
+        else:
+            for prefix, url in prefixes.items():
+                handle.write('@prefix %s: <%s> .\n' % (prefix, url))
         
-        if self.model is None:
-            self.model = RDF.Model(storage)
-            if self.model is None:
-                raise CDAOError("new RDF.model failed")
-        model = self.model
-                    
-        Redland.librdf_model_transaction_start(model._model)
-        
-        for stmt in [(Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology'))]:
-            model.append(RDF.Statement(*stmt), context)
+        for stmt in [(Uri(prefixes['cdao']), qUri('rdf:type'), qUri('owl:Ontology'))]:
+            self.add_stmt_to_handle(handle, RDF.Statement(*stmt), context)
         
         for tree in trees:
             self.tree_counter += 1
@@ -318,26 +312,42 @@ class Writer(object):
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree_uri)
             for stmt in statements:
-                model.append(stmt, context)
+                self.add_stmt_to_handle(handle, stmt, context)
                 
-        Redland.librdf_model_transaction_commit(model._model)
-            
-        model.sync()
-        
-            
-    def serialize_model(self, handle, mime_type='text/turtle'):
-        """Serialize RDF model to file handle"""        
-        
-        # serialize RDF model to output file
-        serializer = RDF.Serializer(mime_type=mime_type)
-        for prefix, url in self.urls.items():
-            serializer.set_namespace(prefix, url)
+        if is_librdf_model: 
+            Redland.librdf_model_transaction_commit(handle._model)
+            handle.sync()
 
-        handle.write(serializer.serialize_model_to_string(self.model))
+
+    def add_stmt_to_handle(self, handle, stmt, context):
+        if isinstance(handle, RDF.Model): handle.append(stmt, context)
+        else: 
+            # apply URI prefixes
+            stmt_parts = [stmt.subject, stmt.predicate, stmt.object]
+            stmt_strings = []
+            for n, part in enumerate(stmt_parts):
+                if part.is_resource():
+                    changed = False
+                    node_uri = str(part)
+                    if n > 0:
+                        for prefix, uri in self.prefixes.items():
+                            if node_uri.startswith(uri):
+                                node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
+                                changed = True
+                        if changed: stmt_strings.append(node_uri)
+                        else: stmt_strings.append('<%s>' % node_uri)
+                    else: stmt_strings.append('<%s>' % node_uri)
+
+                elif part.is_literal():
+                    stmt_strings.append(('"%s"' % str(part.literal[0])) + 
+                                        (('^^<%s>' % str(part.literal[2])) if part.literal[2] else ''))
+                    
+                else:
+                    stmt_strings.append(str(part))
+            
+            handle.write('%s .\n' % ' '.join(stmt_strings))
         
-        return self.tree_counter
-                
-                
+            
     def process_clade(self, clade, parent=None, root=False):
         '''recursively generate statements describing a tree of clades'''
         
@@ -348,19 +358,16 @@ class Writer(object):
         
         nUri = lambda s: node_uri(self.tree_uri, s)
         Uri = RDF.Uri
-        urls = self.urls
         
         statements = []
         
         if root:
             # create a cdao:RootedTree with reference to the tree root
+            tree_type = qUri('cdao:RootedTree') if self.rooted else qUri('cdao:Tree')
+
             statements += [
-                           (nUri(self.tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
+                           (nUri(self.tree_uri), qUri('rdf:type'), tree_type),
                            (nUri(self.tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
-                           ]
-        else:
-            statements += [
-                           (nUri(self.tree_uri), qUri('rdf:type'), qUri('cdao:Tree'))
                            ]
         
         if clade.name:
