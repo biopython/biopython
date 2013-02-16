@@ -16,7 +16,7 @@ __docformat__ ="epytext en"  # Don't just use plain text in epydoc API pages!
 import string  # for maketrans only
 import array
 import sys
-import BeautifulSoup
+
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
