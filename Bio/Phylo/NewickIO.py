@@ -251,9 +251,10 @@ class Writer(object):
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
             label = clade.name or ''
-            unquoted_label = re.match(token_dict['unquoted node label'], label)
-            if (not unquoted_label) or (unquoted_label.end() < len(label)):
-                label = "'%s'" % label.replace("'", "\\'")
+            if label:
+                unquoted_label = re.match(token_dict['unquoted node label'], label)
+                if (not unquoted_label) or (unquoted_label.end() < len(label)):
+                    label = "'%s'" % label.replace('\\', '\\\\').replace("'", "\\'")
 
             if clade.is_terminal():    # terminal
                 return (label
