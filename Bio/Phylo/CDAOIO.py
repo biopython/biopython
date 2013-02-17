@@ -266,7 +266,7 @@ class Writer(object):
         self.tu_counter = 0
         self.tree_counter = 0
 
-    def write(self, handle, tree_uri='tree', context=None, record_complete_ancestry=False, 
+    def write(self, handle, tree_uri='', context=None, record_complete_ancestry=False, 
               rooted=False, **kwargs):
         """Write this instance's trees to a file handle.
 
@@ -279,7 +279,7 @@ class Writer(object):
         self.add_trees_to_handle(handle, tree_uri=tree_uri, context=context)
         
         
-    def add_trees_to_handle(self, handle, trees=None, tree_uri='tree', context=None):
+    def add_trees_to_handle(self, handle, trees=None, tree_uri='', context=None):
         """Add triples describing a set of trees to handle, which can be either 
         a file or a librdf model."""
 
@@ -361,10 +361,10 @@ class Writer(object):
         
         statements = []
         
-        if root:
+        if not root is False:
             # create a cdao:RootedTree with reference to the tree root
-            tree_type = qUri('cdao:RootedTree') if self.rooted else qUri('cdao:Tree')
-
+            tree_type = qUri('cdao:RootedTree') if self.rooted else qUri('cdao:UnrootedTree')
+            
             statements += [
                            (nUri(self.tree_uri), qUri('rdf:type'), tree_type),
                            (nUri(self.tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
