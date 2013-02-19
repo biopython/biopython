@@ -47,9 +47,9 @@ RDF_NAMESPACES.update(cdao_namespaces)
 def node_uri(graph, uri):
     '''Returns the full URI of a node by appending the node URI to the graph URI.'''
     if graph.endswith('/'):
-        return RDF.Uri(urlparse.urljoin(graph, uri))
+        return urlparse.urljoin(graph, uri)
     else:
-        return RDF.Uri(urlparse.urljoin(graph, '#%s' % uri))
+        return urlparse.urljoin(graph, '#%s' % uri)
 
 
 def new_storage():
@@ -283,12 +283,12 @@ class Writer(object):
         """Add triples describing a set of trees to handle, which can be either 
         a file or a librdf model."""
 
+        if not tree_uri.endswith('/'): tree_uri = tree_uri + '/'
+
         is_librdf_model = isinstance(handle, RDF.Model)
 
         if is_librdf_model and context: context = RDF.Node(RDF.Uri(context))
         else: context = None
-
-        self.tree_uri = tree_uri
 
         Uri = RDF.Uri
         prefixes = self.prefixes
@@ -307,7 +307,7 @@ class Writer(object):
         
         for tree in trees:
             self.tree_counter += 1
-            self.tree_uri = 'tree%s' % str(self.tree_counter).zfill(7)
+            self.tree_uri = node_uri(tree_uri, 'tree%s' % str(self.tree_counter).zfill(7))
 
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree_uri)
@@ -333,6 +333,7 @@ class Writer(object):
                         for prefix, uri in self.prefixes.items():
                             if node_uri.startswith(uri):
                                 node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
+                                if node_uri == 'rdf:type': node_uri = 'a'
                                 changed = True
                         if changed: stmt_strings.append(node_uri)
                         else: stmt_strings.append('<%s>' % node_uri)
@@ -356,9 +357,9 @@ class Writer(object):
         if parent: clade.ancestors = parent.ancestors + [parent.uri]
         else: clade.ancestors = []
         
-        nUri = lambda s: node_uri(self.tree_uri, s)
-        tree_id = nUri('')
         Uri = RDF.Uri
+        nUri = lambda s: Uri(node_uri(self.tree_uri, s))
+        tree_id = nUri('')
         
         statements = []
         
