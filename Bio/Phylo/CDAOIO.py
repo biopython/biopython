@@ -357,6 +357,7 @@ class Writer(object):
         else: clade.ancestors = []
         
         nUri = lambda s: node_uri(self.tree_uri, s)
+        tree_id = nUri('')
         Uri = RDF.Uri
         
         statements = []
@@ -366,8 +367,8 @@ class Writer(object):
             tree_type = qUri('cdao:RootedTree') if self.rooted else qUri('cdao:UnrootedTree')
             
             statements += [
-                           (nUri(self.tree_uri), qUri('rdf:type'), tree_type),
-                           (nUri(self.tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
+                           (tree_id, qUri('rdf:type'), tree_type),
+                           (tree_id, qUri('cdao:has_Root'), nUri(clade.uri)),
                            ]
         
         if clade.name:
@@ -388,7 +389,7 @@ class Writer(object):
         node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
         statements += [
                        (nUri(clade.uri), qUri('rdf:type'), qUri(node_type)),
-                       (nUri(clade.uri), qUri('cdao:belongs_to_Tree'), nUri(self.tree_uri)),
+                       (nUri(clade.uri), qUri('cdao:belongs_to_Tree'), tree_id),
                        ]
                       
         if not parent is None:
@@ -398,7 +399,7 @@ class Writer(object):
 
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
-                           (nUri(edge_uri), qUri('cdao:belongs_to_Tree'), nUri(self.tree_uri)),
+                           (nUri(edge_uri), qUri('cdao:belongs_to_Tree'), tree_id),
                            (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
                            (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
                            (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
