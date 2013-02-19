@@ -1,6 +1,7 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
 # Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
+# Revisions 2013 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -12,6 +13,8 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
+import os
+
 from Bio import BiopythonDeprecationWarning
 
 import BioSeq
@@ -43,12 +46,23 @@ def open_database(driver="MySQLdb", **kwargs):
         raise ValueError("Using BioSQL with psycopg (version one) is no "
                          "longer supported. Use psycopg2 instead.")
 
-    module = __import__(driver)
+    if os.name == "java":
+        from com.ziclix.python.sql import zxJDBC
+        module = zxJDBC
+        if driver in ["MySQLdb"]:
+            jdbc_driver = "com.mysql.jdbc.Driver"
+            url_pref = "jdbc:mysql://" + kwargs["host"] + "/"
+        elif driver in ["psycopg2"]:
+            jdbc_driver = "org.postgresql.Driver"
+            url_pref = "jdbc:postgresql://" + kwargs["host"] + "/"
+
+    else:
+        module = __import__(driver)
     connect = getattr(module, "connect")
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver == "MySQLdb":
+    if driver == "MySQLdb" and os.name != "java":
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
@@ -66,7 +80,15 @@ def open_database(driver="MySQLdb", **kwargs):
     if driver in ["psycopg2", "pgdb"] and not kw.get("database"):
         kw["database"] = "template1"
     # SQLite connect takes the database name as input
-    if driver in ["sqlite3"]:
+    if os.name == "java":
+        if driver in ["MySQLdb"]:
+            conn = connect(url_pref + kw.get("database", "mysql"),
+                           kw["user"], kw["password"], jdbc_driver)
+        elif driver in ["psycopg2"]:
+            conn = connect(url_pref + kw.get("database", "postgresql") +
+                           "?stringtype=unspecified",
+                           kw["user"], kw["password"], jdbc_driver)
+    elif driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
         try:
@@ -83,7 +105,10 @@ def open_database(driver="MySQLdb", **kwargs):
             dsn = ' '.join(['='.join(i) for i in kw.items()])
             conn = connect(dsn)
 
-    server = DBServer(conn, module)
+    if os.name == "java":
+        server = DBServer(conn, module, driver)
+    else:
+        server = DBServer(conn, module)
 
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
     # Test for RULES in PostgreSQL schema, see also Bug 2833.
@@ -411,6 +436,8 @@ class Adaptor:
     def execute(self, sql, args=None):
         """Just execute an sql command.
         """
+        if os.name == "java":
+            sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
     def get_subseq_as_string(self, seqid, start, end):

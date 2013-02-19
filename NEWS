@@ -26,6 +26,9 @@ formats NeXML and CDAO. The Newick parser is also significantly faster, and can
 now optionally extract bootstrap values from the Newick comment field (like
 Molphy and Archaeopteryx do).
 
+The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
+can be used. The relevant JDBC driver should be available in the CLASSPATH.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -34,6 +37,7 @@ possible, especially the following contributors:
 Ben Morris (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
+Tiago Antao
 
 ===================================================================
 
