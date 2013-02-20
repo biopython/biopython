@@ -48,8 +48,9 @@ def node_uri(graph, uri):
     '''Returns the full URI of a node by appending the node URI to the graph URI.'''
     if graph.endswith('/'):
         return urlparse.urljoin(graph, uri)
-    else:
+    elif graph:
         return urlparse.urljoin(graph, '#%s' % uri)
+    else: return uri
 
 
 def new_storage():
@@ -283,7 +284,7 @@ class Writer(object):
         """Add triples describing a set of trees to handle, which can be either 
         a file or a librdf model."""
 
-        if not tree_uri.endswith('/'): tree_uri = tree_uri + '/'
+        if tree_uri and not tree_uri.endswith('/'): tree_uri = tree_uri + '/'
 
         is_librdf_model = isinstance(handle, RDF.Model)
 
