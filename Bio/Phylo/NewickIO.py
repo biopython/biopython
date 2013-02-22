@@ -34,7 +34,7 @@ tokens = [
     (r"\n",                         'newline'),
 ]
 tokenizer = re.compile('(%s)' % '|'.join([token[0] for token in tokens]))
-token_dict = {name:re.compile(token) for (token, name) in tokens}
+token_dict = dict((name, re.compile(token)) for (token, name) in tokens)
 
 
 # ---------------------------------------------------------
