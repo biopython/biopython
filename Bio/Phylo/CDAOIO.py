@@ -39,8 +39,9 @@ except ImportError:
     raise CDAOError('Support for CDAO tree format requires the librdf Python bindings.')
 
 RDF_NAMESPACES = {
-                  'owl': 'http://www.w3.org/2002/07/owl#',
-                  'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                  'owl':  'http://www.w3.org/2002/07/owl#',
+                  'rdf':  'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                  'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
                   }
 RDF_NAMESPACES.update(cdao_namespaces)
 
@@ -192,7 +193,7 @@ class Parser(object):
                            qUri('cdao:has_Annotation'): 'annotation',
                            qUri('cdao:has_Value'): 'value',
                            qUri('cdao:represents_TU'): 'tu',
-                           qUri('rdf:label'): 'label',
+                           qUri('rdfs:label'): 'label',
                            qUri('cdao:has_Support_Value'): 'confidence',
                            }
             
@@ -381,7 +382,7 @@ class Writer(object):
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
                            (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), qUri('rdf:label'), RDF.Node(literal=clade.name.replace('_', ' '))),
+                           (nUri(tu_uri), qUri('rdfs:label'), RDF.Node(literal=clade.name.replace('_', ' '))),
                            ]
                            
             # TODO: should be able to pass in an optional function for 
