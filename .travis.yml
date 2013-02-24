@@ -2,7 +2,7 @@
 #See http://travis-ci.org/ for details
 #
 #Note when testing Python 3, the 'python' command will invoke Python 3
-#(which we now do via $PYTHON_EXE).
+#and similarly for PyPy too.
 
 language: python
 python:
@@ -27,7 +27,7 @@ before_install:
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
 
 install:
-  - "/usr/bin/yes | $PYTHON_EXE setup.py install 2>&1 | tail -n 2"
+  - "/usr/bin/yes | python setup.py install 2>&1 | tail -n 2"
 
 before_script:
   - cd Tests
@@ -35,7 +35,7 @@ before_script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then cd ../build/py3.3/Tests; fi"
 
 script:
-  - $PYTHON_EXE run_tests.py --offline
+  - python run_tests.py --offline
 
 #The email defaults are too talkative while we're getting Travis working nicely.
 notifications:
