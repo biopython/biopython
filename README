@@ -127,10 +127,6 @@ Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
 currently uses git for distributed source code control, hosted by github
 at https://github.com/biopython/biopython
 
-Until late September 2009, Biopython source code was kept in CVS running
-on the OBF servers. These will remain online for a while as "read only"
-static backups of everything up to and including Biopython 1.52.
-
 
 Experimental code
 =================
