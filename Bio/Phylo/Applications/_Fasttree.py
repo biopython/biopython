@@ -24,7 +24,7 @@ class FastTreeCommandline(AbstractCommandline):
     import _Fasttree
 
     fasttree_exe = "C:\\FasttreeWin32\\fasttree.exe"
-    cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input='C:\\Input\\ExampleAlignment.fsa', output='C:\\Output\\ExampleTree.tree')
+    cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input='C:\\Input\\ExampleAlignment.fsa', out='C:\\Output\\ExampleTree.tree')
     print cmd
     out, err = cmd()
     print out
@@ -32,10 +32,10 @@ class FastTreeCommandline(AbstractCommandline):
     ######
     
     Usage advice:
-    the only parameters needed are (fasttree_exe, input='<InputFile>' output='<OutputFile>')
+    the only parameters needed are (fasttree_exe, input='<InputFile>' out='<OutputFile>')
     
-    parameters that use values are added this way: (fasttree_exe, parameter=value, input='<InputFile>' output='<OutputFile>')
-    parameters that don't use values are added this way: (fasttree_exe, parameter=True, input='<InputFile>' output='<OutputFile>')
+    parameters that use values are added this way: (fasttree_exe, parameter=value, input='<InputFile>' out='<OutputFile>')
+    parameters that don't use values are added this way: (fasttree_exe, parameter=True, input='<InputFile>' out='<OutputFile>')
     
     from the command line use 'fasttree.exe -help' or 'fasttree.exe -expert' for more explanation of usage options
     """
@@ -277,7 +277,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -fastest also updates out-distances in a very lazy way,
                     -fastest sets -2nd on as well, use -fastest -no2nd to avoid this""",   
                 ),     
-            _Switch(['-2nd', 'Second'],
+            _Switch(['-2nd', 'second'],
                 """Turn 2nd-level top hits heuristic on
                 
                     Top-hit heuristics:
@@ -455,7 +455,7 @@ class FastTreeCommandline(AbstractCommandline):
              _Switch(['-expert', 'expert'],
                 """Show the expert level help"""
                 ),                           
-             _Option(['-out', 'output'],
+             _Option(['-out', 'out'],
                 """Enter <output file>
                 
                     The path to a Newick Tree output file needs to be specified.""",
@@ -463,7 +463,7 @@ class FastTreeCommandline(AbstractCommandline):
                 is_required=True,
                 equate=False,
                 ),   
-             _Argument(['-in', 'input'],
+             _Argument(['input'],
                 """Enter <input file>
                 
                     An input file of sequence alignments in fasta or phylip format is needed.  By default FastTree expects protein 
