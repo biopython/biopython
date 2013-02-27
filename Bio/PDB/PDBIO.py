@@ -131,7 +131,7 @@ class PDBIO(object):
             structure = sb.structure
         self.structure=structure
 
-    def save(self, file, select=Select(), write_end=1):
+    def save(self, file, select=Select(), write_end=True):
         """
         @param file: output file
         @type file: string or filehandle
