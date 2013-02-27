@@ -100,23 +100,23 @@ class Hit(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
 
-    def __init__(self, hsps=[]):
+    def __init__(self, hsps=[], id=None, query_id=None):
         """Initializes a Hit object.
 
         Arguments:
         hsps -- List containing HSP objects.
+        id -- String of the Hit ID
+        query_id -- String of the Hit's query ID
 
-        Hit objects must be initialized with a list containing at least one HSP
-        object. If multiple HSP objects are used for initialization, they must
-        all have the same `query_id`, `query_description`, `hit_id`, and
+        If multiple HSP objects are used for initialization, they must all
+        have the same `query_id`, `query_description`, `hit_id`, and
         `hit_description` properties.
-
         """
         # default attribute values
-        self._id = '<unknown id>'
-        self._query_id = '<unknown id>'
-        self._description = '<unknown description>'
-        self._query_description = '<unknown description>'
+        self._id = id
+        self._query_id = query_id
+        self._description = None
+        self._query_description = None
 
         for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description'):
@@ -237,12 +237,35 @@ class Hit(_BaseSearchObject):
             raise TypeError("Hit objects can only contain HSP objects.")
         # HACK: to make validation during __init__ work
         if self._items:
-            if hsp.hit_id != self.id:
-                raise ValueError("Expected HSP with hit ID %r, "
-                        "found %r instead." % (self.id, hsp.hit_id))
-            if hsp.query_id != self.query_id:
-                raise ValueError("Expected HSP with query ID %r, "
-                        "found %r instead." % (self.query_id, hsp.query_id))
+            if self.id is not None:
+                if hsp.hit_id != self.id:
+                    raise ValueError("Expected HSP with hit ID %r, "
+                            "found %r instead." % (self.id, hsp.hit_id))
+            else:
+                self.id = hsp.hit_id
+
+            if self.description is not None:
+                if hsp.hit_description != self.description:
+                    raise ValueError("Expected HSP with hit description %r, "
+                            "found %r instead." % (self.description,
+                        hsp.hit_description))
+            else:
+                self.description = hsp.hit_description
+
+            if self.query_id is not None:
+                if hsp.query_id != self.query_id:
+                    raise ValueError("Expected HSP with query ID %r, "
+                            "found %r instead." % (self.query_id, hsp.query_id))
+            else:
+                self.query_id = hsp.query_id
+
+            if self.query_description is not None:
+                if hsp.query_description != self.query_description:
+                    raise ValueError("Expected HSP with query description %r, "
+                            "found %r instead." % (self.query_description,
+                            hsp.query_description))
+            else:
+                self.query_description = hsp.query_description
 
     ## properties ##
     description = optionalcascade('_description', 'hit_description',
