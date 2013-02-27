@@ -171,6 +171,11 @@ class InsdcScanner(object):
                 #feature lines within qualifiers are handled below (ignored).
                 line = self.handle.readline()
                 continue
+            if len(line) < self.FEATURE_QUALIFIER_INDENT:
+                warnings.warn("line too short to contain a feature: %r" % line,
+                              BiopythonParserWarning)
+                line = self.handle.readline()
+                continue
 
             if skip:
                 line = self.handle.readline()
