@@ -180,7 +180,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items',)
 
-    def __init__(self, id=None, hits=[],
+    def __init__(self, hits=[], id=None,
             hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
@@ -340,7 +340,7 @@ class QueryResult(_BaseSearchObject):
             # should we return just a list of Hits instead of a full blown
             # QueryResult object if it's a slice?
             hits = list(self.hits)[hit_key]
-            obj = self.__class__(self.id, hits, self._hit_key_function)
+            obj = self.__class__(hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
@@ -499,7 +499,7 @@ class QueryResult(_BaseSearchObject):
 
         """
         hits = filter(func, self.hits)
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -556,7 +556,7 @@ class QueryResult(_BaseSearchObject):
         hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
             hits = map(func, hits)
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -571,7 +571,7 @@ class QueryResult(_BaseSearchObject):
 
         """
         hits = filter(None, (hit.filter(func) for hit in self.hits))
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -584,7 +584,7 @@ class QueryResult(_BaseSearchObject):
 
         """
         hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -702,7 +702,7 @@ class QueryResult(_BaseSearchObject):
             self._items = new_hits
         # otherwise, return a new sorted QueryResult object
         else:
-            obj = self.__class__(self.id, sorted_hits, self._hit_key_function)
+            obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
