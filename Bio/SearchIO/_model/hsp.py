@@ -671,7 +671,7 @@ class HSPFragment(_BaseHSP):
     """
 
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
-            hit='', query='', alphabet=single_letter_alphabet):
+            hit=None, query=None, alphabet=single_letter_alphabet):
 
         self._alphabet = alphabet
         self.aln_annotation = {}
@@ -687,10 +687,7 @@ class HSPFragment(_BaseHSP):
             for attr in ('strand', 'frame', 'start', 'end'):
                 setattr(self, '%s_%s' % (seq_type, attr), None)
             # self.query or self.hit
-            if eval(seq_type):
-                setattr(self, seq_type, eval(seq_type))
-            else:
-                setattr(self, seq_type, None)
+            setattr(self, seq_type, eval(seq_type))
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
