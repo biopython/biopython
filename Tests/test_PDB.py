@@ -26,10 +26,11 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
+from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
+from Bio.PDB import Residue, Atom
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -677,6 +678,95 @@ class ParseReal(unittest.TestCase):
         finally:
             os.remove(filename)
 
+class WriteTest(unittest.TestCase):
+    def setUp(self):
+        warnings.simplefilter('ignore', PDBConstructionWarning)
+        self.parser = PDBParser(PERMISSIVE=1)
+        self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+        warnings.filters.pop()
+
+    def test_pdbio_write_structure(self):
+        """Write a full structure using PDBIO"""
+        io = PDBIO()
+        struct1 = self.structure
+        # Write full model to temp file
+        io.set_structure(struct1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(len(struct2), 1)
+            self.assertEqual(nresidues, 158)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_residue(self):
+        """Write a single residue using PDBIO"""
+        io = PDBIO()
+        struct1 = self.structure
+        residue1 = list(struct1.get_residues())[0]
+        # Write full model to temp file
+        io.set_structure(residue1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(nresidues, 1)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_custom_residue(self):
+        """Write a chainless residue using PDBIO"""
+        io = PDBIO()
+
+        res = Residue.Residue((' ', 1, ' '), 'DUM', '')
+        atm = Atom.Atom('CA', [0.1, 0.1, 0.1], 1.0, 1.0, ' ', 'CA', 1, 'C')
+        res.add(atm)
+        
+        # Write full model to temp file
+        io.set_structure(res)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("res", filename)
+            latoms = list(struct2.get_atoms())
+            self.assertEqual(len(latoms), 1)
+            self.assertEqual(latoms[0].name, 'CA')
+            self.assertEqual(latoms[0].parent.resname, 'DUM')
+            self.assertEqual(latoms[0].parent.parent.id, 'A')
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_select(self):
+        """Write a selection of the structure using a Select subclass"""
+        
+        # Selection class to filter all alpha carbons
+        class CAonly(Select):
+            """
+            Accepts only CA residues
+            """
+            def accept_atom(self, atom):
+                if atom.name == "CA" and atom.element == "C":
+                    return 1
+                
+        io = PDBIO()
+        struct1 = self.structure
+        # Write to temp file
+        io.set_structure(struct1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename, CAonly())
+            struct2 = self.parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(nresidues, 70)
+        finally:
+            os.remove(filename)
 
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
