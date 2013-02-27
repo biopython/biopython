@@ -596,6 +596,30 @@ class HitCases(unittest.TestCase):
         self.hit.evalue = 5e-10
         self.hit.name = 'test'
 
+    def test_init_none(self):
+        """Test Hit.__init__, no arguments"""
+        hit = Hit()
+        self.assertEqual(None, hit.id)
+        self.assertEqual(None, hit.description)
+        self.assertEqual(None, hit.query_id)
+        self.assertEqual(None, hit.query_description)
+
+    def test_init_id_only(self):
+        """Test Hit.__init__, with ID only"""
+        hit = Hit(id='hit1')
+        self.assertEqual('hit1', hit.id)
+        self.assertEqual(None, hit.description)
+        self.assertEqual(None, hit.query_id)
+        self.assertEqual(None, hit.query_description)
+
+    def test_init_hsps_only(self):
+        """Test Hit.__init__, with hsps only"""
+        hit = Hit([hsp111, hsp112, hsp113])
+        self.assertEqual('hit1', hit.id)
+        self.assertEqual('<unknown description>', hit.description)
+        self.assertEqual('query1', hit.query_id) # set from the HSPs
+        self.assertEqual('<unknown description>', hit.query_description)
+
     def test_repr(self):
         """Test Hit.__repr__"""
         # test for cases with 1 or other alignment numbers
