@@ -99,22 +99,16 @@ def optionalcascade(cont_attr, item_attr, doc=''):
     container's attribute. Otherwise, the first item's attribute is used.
 
     To keep the container items' query and/or hit ID and description in-sync,
-    the setter cascades any new value given to the items' values. Additionally,
-    each time and attribute lookup is performed, this property checks whether
-    the container's attribute and items' attributes all have the same value.
+    the setter cascades any new value given to the items' values.
 
     """
     def getter(self):
-        attrset = set([getattr(item, item_attr) for item in self])
-        if len(attrset) != 1:
-            if len(attrset) > 1:
-                raise ValueError("More than one value present in the contained"
-                        " %s objects: %r" % (self[0].__class__.__name__,
-                            list(attrset)))
-            else:
-                return getattr(self, cont_attr)
-
-        return getattr(self[0], item_attr)
+        if self._items:
+            # don't use self._items here, so QueryResult can use this property
+            # as well (the underlying OrderedDict is not integer-indexable)
+            return getattr(self[0], item_attr)
+        else:
+            return getattr(self, cont_attr)
 
     def setter(self, value):
         setattr(self, cont_attr, value)
