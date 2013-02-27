@@ -63,23 +63,13 @@ def fullcascade(attr, doc=''):
     """Returns a getter property with a cascading setter.
 
     This is similar to `optionalcascade`, but for SearchIO containers that have
-    at least one item (Hit and HSP). The getter always retrieves the attribute
+    at least one item (HSP). The getter always retrieves the attribute
     value from the first item. If the items have more than one attribute values,
     an error will be raised. The setter behaves like `partialcascade`, except
     that it only sets attributes to items in the object, not the object itself.
 
     """
     def getter(self):
-        attrset = set([getattr(item, attr) for item in self._items])
-        if len(attrset) != 1:
-            if len(attrset) > 1:
-                raise ValueError("More than one value present in the contained"
-                        " %s objects: %r" % (self._items[0].__class__.__name__,
-                            list(attrset)))
-            else:
-                raise AttributeError("%r attribute requires %s objects to be "
-                        "filled" % (attr, self.__class__.__name__))
-
         return getattr(self._items[0], attr)
 
     def setter(self, value):
