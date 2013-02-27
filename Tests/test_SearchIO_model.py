@@ -56,7 +56,7 @@ hit12 = Hit([hsp121])
 class QueryResultCases(unittest.TestCase):
 
     def setUp(self):
-        self.qresult = QueryResult('query1', [hit11, hit21, hit31])
+        self.qresult = QueryResult([hit11, hit21, hit31], 'query1')
         # set mock attributes
         self.qresult.seq_len = 1102
         self.qresult.target = 'refseq_rna'
@@ -75,7 +75,7 @@ class QueryResultCases(unittest.TestCase):
 
     def test_init_hits_only(self):
         """Test QueryResult.__init__, with hits only"""
-        qresult = QueryResult(hits=[hit11, hit21, hit31])
+        qresult = QueryResult([hit11, hit21, hit31])
         self.assertEqual('query1', qresult.id)
         self.assertEqual('<unknown description>', qresult.description)
 
@@ -141,7 +141,7 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.__nonzero__"""
         # nonzero should return true only if the qresult has hits
         self.assertTrue(self.qresult)
-        blank_qresult = QueryResult('queryX')
+        blank_qresult = QueryResult()
         self.assertFalse(blank_qresult)
 
     def test_setitem_ok(self):
@@ -266,7 +266,7 @@ class QueryResultCases(unittest.TestCase):
         frag3 = HSPFragment('hit2', 'query')
         hit1 = Hit([HSP([x]) for x in [frag1, frag2]])
         hit2 = Hit([HSP([frag3])])
-        qresult = QueryResult('query', [hit1, hit2])
+        qresult = QueryResult([hit1, hit2])
         # test initial condition
         for hit in qresult:
             for hsp in hit.hsps:

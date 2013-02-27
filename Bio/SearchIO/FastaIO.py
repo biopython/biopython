@@ -329,7 +329,7 @@ class FastaM10Parser(object):
                     query_id = regx.group(1)
                     seq_len = regx.group(3)
                     desc = regx.group(2)
-                    qresult = QueryResult(query_id)
+                    qresult = QueryResult(id=query_id)
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
                     self.line = self.handle.readline()

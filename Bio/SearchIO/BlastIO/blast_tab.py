@@ -251,7 +251,7 @@ class BlastTabParser(object):
                     assert 'fields' not in comments
                     # create an iterator returning one empty qresult
                     # if the query has no results
-                    qres_iter = iter([QueryResult('')])
+                    qres_iter = iter([QueryResult()])
 
                 for qresult in qres_iter:
                     for key, value in comments.items():
@@ -448,7 +448,7 @@ class BlastTabParser(object):
                     hsp_list = []
                 # create qresult and yield if we're at a new qresult or EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    qresult = QueryResult(hit_list, prev_qid)
                     for attr, value in prev['qresult'].items():
                         setattr(qresult, attr, value)
                     yield qresult
