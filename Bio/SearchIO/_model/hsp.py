@@ -687,7 +687,10 @@ class HSPFragment(_BaseHSP):
             for attr in ('strand', 'frame', 'start', 'end'):
                 setattr(self, '%s_%s' % (seq_type, attr), None)
             # self.query or self.hit
-            setattr(self, seq_type, eval(seq_type))
+            if eval(seq_type):
+                setattr(self, seq_type, eval(seq_type))
+            else:
+                setattr(self, seq_type, None)
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
