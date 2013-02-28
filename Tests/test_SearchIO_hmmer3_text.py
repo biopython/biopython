@@ -1422,6 +1422,25 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(5, len(qresult.hits))
         self.assertEqual('Esterase', qresult.hits[3].id)
 
+    def test_30_hmmscan_010(self):
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_010)"
+        hmmer_file = get_file('text_30_hmmscan_010.out')
+        qresults = list(parse(hmmer_file, FMT))
+
+        # test the Hit object without HSPs
+        hit = qresults[0][-1]
+        self.assertFalse(hit)
+        self.assertEqual('NRPS-COM_Cterm', hit.id)
+        self.assertEqual('', hit.description)
+        self.assertEqual('bpsA', hit.query_id)
+        self.assertEqual('<unknown description>', hit.query_description)
+        self.assertEqual(4.4e-11, hit.evalue)
+        self.assertEqual(33.6, hit.bitscore)
+        self.assertEqual(10.2, hit.bias)
+        self.assertEqual(2.9, hit.domain_exp_num)
+        self.assertEqual(0, hit.domain_obs_num)
+        self.assertEqual(0, len(hit))
+
 
 class HmmersearchCases(unittest.TestCase):
 
