@@ -166,9 +166,6 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -mllen -nome with -intree to optimize branch lengths on a fixed topology """,     
                 ),    
             _Switch(['-nome', 'nome'],
-                ###########################################################
-                # Not sure if this should be a _Switch or _Option instead #  
-                ###########################################################
                 """Changes support values calculation to a minimum-evolution bootstrap method
                 
                     Topology refinement:
