@@ -457,7 +457,6 @@ class FastTreeCommandline(AbstractCommandline):
                 
                     The path to a Newick Tree output file needs to be specified.""",
                 filename=True,
-                is_required=True,
                 equate=False,
                 ),   
              _Argument(['input'],
