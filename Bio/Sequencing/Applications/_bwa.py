@@ -9,10 +9,13 @@ class BwaIndexCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner
 
     http://bio-bwa.sourceforge.net/
-    
-    Command: 
+
+    Command:
 		bwa index [-p prefix] [-a algoType] [-c] <in.db.fasta>
-    
+
+    Description:
+        Index database sequences in the FASTA format.
+
     Options:
 		-c	 Build color-space index. The input fast should be in nucleotide space.
 		-p STR	 Prefix of the output database [same as db filename]
@@ -25,16 +28,16 @@ class BwaIndexCommandline(AbstractCommandline):
         >>> reference_genome = "/path/to/reference_genome.fasta"
         >>> index = BwaIndexCommandline(infile=reference_genome, algorithm="bwtsw")
         >>> index()
-        
-        
-    
+
+
+
 
     """
     def __init__(self, cmd="bwa index", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
-                    _Option(["-a","a"],"Algorithm for constructing BWT index. Available options are:\n \
+                    _Option(["-a","a","algorithm"],"Algorithm for constructing BWT index. Available options are:\n \
                             is:   IS linear-time algorithm for constructing suffix array. It requires 5.37N memory where N is the size of the database. IS is moderately fast, but does not work with database larger than 2GB. IS is the default algorithm due to its simplicity. The current codes for IS algorithm are reimplemented by Yuta Mori.\n \
                             bwtsw:   Algorithm implemented in BWT-SW. This method works with the whole human genome, but it does not work with database smaller than 10MB and it is usually slower than IS.", \
                             filename=False,equate=False,checker_function=lambda x:x in ["is","bwtsw"],is_required=True ),
@@ -48,14 +51,18 @@ class BwaAlignCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner
 
     http://bio-bwa.sourceforge.net/
-	
-	Command:	
-		bwa aln [-n maxDiff] [-o maxGapO] [-e maxGapE] [-d nDelTail] [-i nIndelEnd] 
-		[-k maxSeedDiff] [-l seedLen] [-t nThrds] [-cRN] [-M misMsc] [-O gapOsc] 
+
+	Command:
+		bwa aln [-n maxDiff] [-o maxGapO] [-e maxGapE] [-d nDelTail] [-i nIndelEnd]
+		[-k maxSeedDiff] [-l seedLen] [-t nThrds] [-cRN] [-M misMsc] [-O gapOsc]
 		[-E gapEsc] [-q trimQual] <in.db.fasta> <in.query.fq> > <out.sai>
-	
+
+    Description:
+        Find the SA coordinates of the input reads. Maximum maxSeedDiff differences are allowed
+        in the first seedLen subsequence and maximum maxDiff differences are allowed in the whole sequence.
+
 	Options:
-	
+
 		-n NUM	 Maximum edit distance if the value is INT, or the fraction of missing alignments given 2% uniform base error rate if FLOAT. In the latter case, the maximum edit distance is automatically chosen for different read lengths. [0.04]
 		-o INT	 Maximum number of gap opens [1]
 		-e INT	 Maximum number of gap extensions, -1 for k-difference mode (disallowing long gaps) [-1]
@@ -74,24 +81,24 @@ class BwaAlignCommandline(AbstractCommandline):
 		-I	 The input is in the Illumina 1.3+ read format (quality equals ASCII-64).
 		-B INT	 Length of barcode starting from the 5'-end. When INT is positive, the barcode of each read will be trimmed before mapping and will be written at the BC SAM tag. For paired-end reads, the barcode from both ends are concatenated. [0]
 		-b	 Specify the input read sequence file is the BAM format. For paired-end data, two ends in a pair must be grouped together and options -1 or -2 are usually applied to specify which end should be mapped. Typical command lines for mapping pair-end data in the BAM format are:
-			bwa aln ref.fa -b1 reads.bam > 1.sai 
-			bwa aln ref.fa -b2 reads.bam > 2.sai 
+			bwa aln ref.fa -b1 reads.bam > 1.sai
+			bwa aln ref.fa -b2 reads.bam > 2.sai
 			bwa sampe ref.fa 1.sai 2.sai reads.bam reads.bam > aln.sam
 
 			-0	 When -b is specified, only use single-end reads in mapping.
 			-1	 When -b is specified, only use the first read in a read pair in mapping (skip single-end reads and the second reads).
 			-2	 When -b is specified, only use the second read in a read pair in mapping.
-	
+
 	 Example:
         >>> from Bio.Sequencing.Applications import BwaAlignCommandline
         >>> reference_genome = "/path/to/reference_genome.fasta"
-        >>> read_file = "/path/to/read_1.fq"        
+        >>> read_file = "/path/to/read_1.fq"
         >>> output_sai_file = "/path/to/read_1.sai"
         >>> read_group="@RG\tID:foo\tSM:bar"
         >>> align = BwaAlignCommandline(reference=reference_genome, read_file=read_file)
         >>> output = align(stdout=output_sai_file)
-        
-    
+
+
 
     """
     def __init__(self, cmd="bwa aln", **kwargs):
@@ -126,10 +133,14 @@ class BwaSamseCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner
 
     http://bio-bwa.sourceforge.net/
-    
+
     Command:
 		bwa samse [-n maxOcc] <in.db.fasta> <in.sai> <in.fq> > <out.sam>
-	
+
+    Description:
+        Generate alignments in the SAM format given single-end reads.
+        Repetitive hits will be randomly chosen.
+
 	Options:
 		-n INT	 Maximum number of alignments to output in the XA tag for reads paired properly. If a read has more than INT hits, the XA tag will not be written. [3]
 		-r STR	 Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]
@@ -137,18 +148,18 @@ class BwaSamseCommandline(AbstractCommandline):
 	Example:
         >>> from Bio.Sequencing.Applications import BwaSamseCommandline
         >>> reference_genome = "/path/to/reference_genome.fasta"
-        >>> read_file = "/path/to/read_1.fq"      
-        >>> sai_file = "/path/to/read_1.sai"  
+        >>> read_file = "/path/to/read_1.fq"
+        >>> sai_file = "/path/to/read_1.sai"
         >>> output_sam_file = "/path/to/read_1.sam"
         >>> samse = BwaSamseCommandline(reference=reference_genome, read_file=read_file, sai_file=sai_file)
         >>> output = samse(stdout=output_sam_file)
-        
-    
-    
+
+
+
 
 
     """
-    def __init__(self, cmd="bwa aln", **kwargs):
+    def __init__(self, cmd="bwa samse", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
@@ -157,7 +168,7 @@ class BwaSamseCommandline(AbstractCommandline):
                     _Argument(["read_file"],"Read  file name", filename=True, is_required=True),
                     _Option(["-n","n"],"Maximum number of alignments to output in the XA tag for reads paired properly. If a read has more than INT hits, the XA tag will not be written. [3]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-r","r"],"Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,basestring))
-                    
+
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
@@ -165,10 +176,14 @@ class BwaSampeCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner
 
     http://bio-bwa.sourceforge.net/
-    
+
     Command:
 		bwa sampe [-a maxInsSize] [-o maxOcc] [-n maxHitPaired] [-N maxHitDis] [-P] <in.db.fasta> <in1.sai> <in2.sai> <in1.fq> <in2.fq> > <out.sam>
-	
+
+    Description:
+        Generate alignments in the SAM format given paired-end
+        reads. Repetitive read pairs will be placed randomly.
+
 	Options:
 		-a INT	 Maximum insert size for a read pair to be considered being mapped properly. Since 0.4.5, this option is only used when there are not enough good alignment to infer the distribution of insert sizes. [500]
         -o INT	 Maximum occurrences of a read for pairing. A read with more occurrneces will be treated as a single-end read. Reducing this parameter helps faster pairing. [100000]
@@ -180,20 +195,20 @@ class BwaSampeCommandline(AbstractCommandline):
     Example:
         >>> from Bio.Sequencing.Applications import BwaSampeCommandline
         >>> reference_genome = "/path/to/reference_genome.fasta"
-        >>> read_file1 = "/path/to/read_1.fq"        
-        >>> read_file2 = "/path/to/read_2.fq"        
+        >>> read_file1 = "/path/to/read_1.fq"
+        >>> read_file2 = "/path/to/read_2.fq"
         >>> sai_file1 = "/path/to/read_1.sai"
         >>> sai_file2 = "/path/to/read_2.sai"
         >>> output_sam_file = "/path/to/output.sam"
         >>> read_group="@RG\tID:foo\tSM:bar"
         >>> sampe = BwaSampeCommandline(reference=reference_genome, sai_file1=sai_file1, sai_file2=sai_file2, read_file1=read_file1, read_file2=read_file2, r=read_group)
         >>> output = sampe(stdout=output_sam_file)
-     
-     
-	
+
+
+
 
     """
-    def __init__(self, cmd="bwa aln", **kwargs):
+    def __init__(self, cmd="bwa sampe", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
@@ -207,8 +222,8 @@ class BwaSampeCommandline(AbstractCommandline):
                     _Option(["-n","n"],"Maximum number of alignments to output in the XA tag for reads paired properly. If a read has more than INT hits, the XA tag will not be written. [3]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-N","N"],"Maximum number of alignments to output in the XA tag for disconcordant read pairs (excluding singletons). If a read has more than INT hits, the XA tag will not be written. [10]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-r","r"],"Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,basestring)),
-                    
-                    
+
+
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
@@ -217,8 +232,15 @@ class BwaBwaswCommandline(AbstractCommandline):
 
     http://bio-bwa.sourceforge.net/
 
-	Command: 
+	Command:
 		bwa bwasw [-a matchScore] [-b mmPen] [-q gapOpenPen] [-r gapExtPen] [-t nThreads] [-w bandWidth] [-T thres] [-s hspIntv] [-z zBest] [-N nHspRev] [-c thresCoef] <in.db.fasta> <in.fq>
+
+    Description:
+        Align query sequences in the in.fq file. When mate.fq is present, perform paired-end alignment.
+        The paired-end mode only works for reads Illumina short-insert libraries. In the paired-end mode,
+        BWA-SW may still output split alignments but they are all marked as not properly paired;
+        the mate positions will not be written if the mate has multiple local hits
+
 
 	Options:
 	    -a INT	 Score of a match [1]
@@ -232,24 +254,25 @@ class BwaBwaswCommandline(AbstractCommandline):
 	    -z INT	 Z-best heuristics. Higher -z increases accuracy at the cost of speed. [1]
 	    -s INT	 Maximum SA interval size for initiating a seed. Higher -s increases accuracy at the cost of speed. [3]
 	    -N INT	 Minimum number of seeds supporting the resultant alignment to skip reverse alignment. [5]
-	
+
 	Example:
         >>> from Bio.Sequencing.Applications import BwaBwaswCommandline
         >>> reference_genome = "/path/to/reference_genome.fasta"
-        >>> read_file = "/path/to/read_1.fq"        
+        >>> read_file = "/path/to/read_1.fq"
         >>> bwasw = BwaBwaswCommandline(reference=reference_genome, read_file=read_file)
         >>> output = bwasw()
-	
-     
-     
+
+
+
 
     """
-    def __init__(self, cmd="bwa aln", **kwargs):
+    def __init__(self, cmd="bwa bwasw", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
-                    _Argument(["reference"],"Reference file name", filename=True, is_required=True),                   
-                    _Argument(["read_file"],"Read  file 1", filename=True, is_required=True),                    
+                    _Argument(["reference"],"Reference file name", filename=True, is_required=True),
+                    _Argument(["read_file"],"Read file", filename=True, is_required=True),
+                    _Argument(["mate_file"],"Mate file", filename=True, is_required=False)
                     _Option(["-a","a"],"Score of a match [1]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-b","b"],"Mismatch penalty [3]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-q","q"],"Gap open penalty [5]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
@@ -260,8 +283,8 @@ class BwaBwaswCommandline(AbstractCommandline):
                     _Option(["-c","c"],"Coefficient for threshold adjustment according to query length. Given an l-long query, the threshold for a hit to be retained is a*max{T,c*log(l)}. [5.5]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,float)),
                     _Option(["-z","z"],"Z-best heuristics. Higher -z increases accuracy at the cost of speed. [1]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-s","s"],"Maximum SA interval size for initiating a seed. Higher -s increases accuracy at the cost of speed. [3]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
-                    _Option(["-N","N"],"Minimum number of seeds supporting the resultant alignment to skip reverse alignment. [5]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),                 
-                  
+                    _Option(["-N","N"],"Minimum number of seeds supporting the resultant alignment to skip reverse alignment. [5]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
+
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
