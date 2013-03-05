@@ -23,7 +23,7 @@ before_install:
   - "export PYTHON_EXE=python"
   - "export JYTHON_URL='http://downloads.sourceforge.net/project/jython/jython/2.5.2/jython_installer-2.5.2.jar?r=http%3A%2F%2Fwww.jython.org%2Fdownloads.html&ts=1338089844&use_mirror=iweb'"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython | tail -n 2; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi"
-  - "sudo apt-get install clustalw clustalo | tail -n 2"
+  - "sudo apt-get install clustalw clustalo fasttree | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
