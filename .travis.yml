@@ -14,7 +14,7 @@ python:
   - "pypy"
 
 before_install:
-  - "sudo apt-get install clustalw clustalo | tail -n 2"
+  - "sudo apt-get install clustalw clustalo fasttree | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
