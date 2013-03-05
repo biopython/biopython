@@ -272,7 +272,7 @@ class BwaBwaswCommandline(AbstractCommandline):
                 [
                     _Argument(["reference"],"Reference file name", filename=True, is_required=True),
                     _Argument(["read_file"],"Read file", filename=True, is_required=True),
-                    _Argument(["mate_file"],"Mate file", filename=True, is_required=False)
+                    _Argument(["mate_file"],"Mate file", filename=True, is_required=False),
                     _Option(["-a","a"],"Score of a match [1]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-b","b"],"Mismatch penalty [3]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
                     _Option(["-q","q"],"Gap open penalty [5]",filename=False, equate=False,checker_function=lambda x :  isinstance(x,int)),
