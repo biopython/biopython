@@ -19,7 +19,7 @@ from Bio.Application import ApplicationError
 #Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
-clustalw_exe = None
+bwa_exe = None
 if sys.platform == "win32":
     #TODO - Check the path?
     try:
