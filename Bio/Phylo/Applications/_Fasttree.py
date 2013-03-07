@@ -6,7 +6,7 @@
 __docformat__ = "restructuredtext en"
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
-
+from decimal import *
 
 class FastTreeCommandline(AbstractCommandline):
     """Command-line wrapper for FastTree.
@@ -51,6 +51,8 @@ class FastTreeCommandline(AbstractCommandline):
                     This only works with phylip interleaved format. For example, you can
                     use it with the output from phylip's seqboot. If you use -n, FastTree
                     will write 1 tree per line to standard output.""",
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                    
                 equate=False,
                 ),                               
             _Switch(['-quote', 'quote'],
@@ -78,6 +80,8 @@ class FastTreeCommandline(AbstractCommandline):
                     In either case, the support values are proportions ranging from 0 to 1
 
                     Use -nosupport to turn off support values or -boot 100 to use just 100 resamples """,
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                    
                 equate=False,                    
                 ),
             _Switch(['-nosupport', 'nosupport'],
@@ -122,6 +126,8 @@ class FastTreeCommandline(AbstractCommandline):
                     subtree-prune-regraft (SPR) moves (also min. evo.), and
                     up to 2*log(N) rounds of maximum-likelihood NNIs.
                     Use -nni to set the number of rounds of min. evo. NNIs """,
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                    
                 equate=False,                    
                 ),               
             _Option(['-spr', 'spr'],
@@ -135,6 +141,8 @@ class FastTreeCommandline(AbstractCommandline):
                     up to 2*log(N) rounds of maximum-likelihood NNIs.
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs. """,
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                    
                 equate=False,                    
                 ),   
             _Switch(['-noml', 'noml'],
@@ -197,6 +205,8 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs.
                     Use -mlnni to set the number of rounds of maximum-likelihood NNIs """,
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()), 
                 equate=False,                    
                 ),          
             _Option(['-mlacc', 'mlacc'],
@@ -212,6 +222,8 @@ class FastTreeCommandline(AbstractCommandline):
                     and -spr to set the rounds of SPRs.
                     Use -mlacc 2 or -mlacc 3 to always optimize all 5 branches at each NNI,
                     and to optimize all 5 branches in 2 or 3 rounds """,
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                     
                 equate=False,                    
                 ),  
             _Switch(['-slownni', 'slownni'],
@@ -236,6 +248,8 @@ class FastTreeCommandline(AbstractCommandline):
                 ),                      
             _Option(['-cat', 'cat'],
                 """Maximum likelihood model options: Specify the number of rate categories of sites (default 20) """,
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                 
                 equate=False,                    
                 ),      
             _Switch(['-nocat', 'nocat'],
@@ -310,6 +324,8 @@ class FastTreeCommandline(AbstractCommandline):
                     likelihoods 1,000 times and the Shimodaira Hasegawa test. If you specify -nome,
                     it will compute minimum-evolution bootstrap supports instead
                     In either case, the support values are proportions ranging from 0 to 1""",
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                     
                 equate=False,                    
                 ),      
             _Switch(['-top', 'top'],
@@ -340,6 +356,8 @@ class FastTreeCommandline(AbstractCommandline):
                     top 2*m hits of a 'close' neighbor, where close is
                     defined as d(seed,close) < 0.75 * d(seed, hit of rank 2*m),
                     and updates the top-hits as joins proceed""",
+                checker_function=(lambda x:
+                    isinstance(x, float) or isinstance(x, Decimal)),                       
                 equate=False,                    
                 ),
             _Option(['-close', 'close'],
@@ -348,6 +366,8 @@ class FastTreeCommandline(AbstractCommandline):
                     Top-hit heuristics:
                     By default, FastTree uses a top-hit list to speed up search
                     -close 0.75 -- modify the close heuristic, lower is more conservative""",
+                checker_function=(lambda x:
+                    isinstance(x, float) or isinstance(x, Decimal)),                 
                 equate=False,                    
                 ),
             _Option(['-refresh', 'refresh'],
@@ -358,6 +378,8 @@ class FastTreeCommandline(AbstractCommandline):
                     -refresh 0.8 -- compare a joined node to all other nodes if its
                     top-hit list is less than 80% of the desired length,
                     or if the age of the top-hit list is log2(m) or greater""",
+                checker_function=(lambda x:
+                    isinstance(x, float) or isinstance(x, Decimal)),                     
                 equate=False,                    
                 ),
             _Option(['-matrix', 'matrix'],
@@ -368,6 +390,7 @@ class FastTreeCommandline(AbstractCommandline):
                     amino acid dissimilarity matrix derived from BLOSUM45
                     or for nucleotide sequences, Jukes-Cantor distances
                     To specify a different matrix, use -matrix FilePrefix or -nomatrix""",
+                filename=True,
                 equate=False,                    
                 ),
             _Switch(['-nomatrix', 'nomatrix'],
@@ -401,6 +424,7 @@ class FastTreeCommandline(AbstractCommandline):
                     Not all sequences need be present. A column of 0s and 1s defines a
                     constrained split. Some constraints may be violated
                     (see 'violating constraints:' in standard error).""",
+                filename=True,
                 equate=False,                    
                 ),
             _Option(['-constraintWeight', 'constraintWeight'],
@@ -410,6 +434,8 @@ class FastTreeCommandline(AbstractCommandline):
                     -constraintWeight -- how strongly to weight the constraints. A value of 1
                     means a penalty of 1 in tree length for violating a constraint
                     Default: 100.0""",
+                checker_function=(lambda x:
+                    isinstance(x, float) or isinstance(x, Decimal)),                     
                 equate=False,                    
                 ),          
             _Option(['-log', 'log'],
@@ -418,10 +444,12 @@ class FastTreeCommandline(AbstractCommandline):
                     -log logfile -- save intermediate trees so you can extract
                     the trees and restart long-running jobs if they crash
                     -log also reports the per-site rates (1 means slowest category) """,
+                filename=True,
                 equate=False,                    
                 ),      
             _Option(['-makematrix', 'makematrix'],
                 """-makematrix [alignment]""",
+                filename=True,
                 equate=False,                
                 ), 
             _Switch(['-rawdist', 'rawdist'],
@@ -444,6 +472,8 @@ class FastTreeCommandline(AbstractCommandline):
                     up to 2*log(N) rounds of maximum-likelihood NNIs.
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs.""",
+                checker_function=(lambda x:
+                    isinstance(x, int) or x.isdigit()),                
                 equate=False,                    
                 ),  
              _Switch(['-help', 'help'],
@@ -458,7 +488,7 @@ class FastTreeCommandline(AbstractCommandline):
                     The path to a Newick Tree output file needs to be specified.""",
                 filename=True,
                 equate=False,
-                ),   
+                ), 
              _Argument(['input'],
                 """Enter <input file>
                 
