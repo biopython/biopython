@@ -278,7 +278,7 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             self.assertEqual(str(example1.upper()), str1.upper())
 
-    def test_str_upper(self):
+    def test_str_lower(self):
         """Check matches the python string lower method."""
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
