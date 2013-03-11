@@ -50,7 +50,7 @@ class Alphabet(object):
             return generic_protein
         elif isinstance(self, DNAAlphabet):
             return generic_dna
-        elif isinstance(self, NucleotideAlphabet):
+        elif isinstance(self, RNAAlphabet):
             return generic_rna
         elif isinstance(self, NucleotideAlphabet):
             return generic_nucleotide
