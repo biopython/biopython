@@ -6,7 +6,6 @@
 __docformat__ = "restructuredtext en"
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
-from decimal import *
 
 class FastTreeCommandline(AbstractCommandline):
     """Command-line wrapper for FastTree.
@@ -39,6 +38,13 @@ class FastTreeCommandline(AbstractCommandline):
     
     from the command line use 'fasttree.exe -help' or 'fasttree.exe -expert' for more explanation of usage options
     """
+    
+    def is_numeric(self, x):
+        try:
+            float(str(x))
+            return True
+        except ValueError:
+            return False
 
     def __init__(self, cmd='fasttree', **kwargs):
         self.parameters = [                                                     
@@ -356,9 +362,8 @@ class FastTreeCommandline(AbstractCommandline):
                     top 2*m hits of a 'close' neighbor, where close is
                     defined as d(seed,close) < 0.75 * d(seed, hit of rank 2*m),
                     and updates the top-hits as joins proceed""",
-                checker_function=(lambda x:
-                    isinstance(x, float) or isinstance(x, Decimal)),                       
-                equate=False,                    
+                checker_function=(lambda x: FastTreeCommandline.is_numeric(self, x)),                       
+                equate=False,               
                 ),
             _Option(['-close', 'close'],
                 """Modify the close heuristic for the top-hit list
@@ -366,8 +371,7 @@ class FastTreeCommandline(AbstractCommandline):
                     Top-hit heuristics:
                     By default, FastTree uses a top-hit list to speed up search
                     -close 0.75 -- modify the close heuristic, lower is more conservative""",
-                checker_function=(lambda x:
-                    isinstance(x, float) or isinstance(x, Decimal)),                 
+                checker_function=(lambda x: FastTreeCommandline.is_numeric(self, x)), 
                 equate=False,                    
                 ),
             _Option(['-refresh', 'refresh'],
@@ -378,8 +382,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -refresh 0.8 -- compare a joined node to all other nodes if its
                     top-hit list is less than 80% of the desired length,
                     or if the age of the top-hit list is log2(m) or greater""",
-                checker_function=(lambda x:
-                    isinstance(x, float) or isinstance(x, Decimal)),                     
+                checker_function=(lambda x: FastTreeCommandline.is_numeric(self, x)),     
                 equate=False,                    
                 ),
             _Option(['-matrix', 'matrix'],
@@ -434,8 +437,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -constraintWeight -- how strongly to weight the constraints. A value of 1
                     means a penalty of 1 in tree length for violating a constraint
                     Default: 100.0""",
-                checker_function=(lambda x:
-                    isinstance(x, float) or isinstance(x, Decimal)),                     
+                checker_function=(lambda x: FastTreeCommandline.is_numeric(self, x)),                     
                 equate=False,                    
                 ),          
             _Option(['-log', 'log'],
