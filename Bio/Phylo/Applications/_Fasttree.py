@@ -81,6 +81,7 @@ class FastTreeCommandline(AbstractCommandline):
                     overlap. (Off by default.) Recommended if analyzing the alignment has
                     sequences with little or no overlap.
                     If the weight is not specified, it is 1.0 """,
+                checker_function=_is_numeric,
                 equate=False,
                 ),
             _Option(['-boot', 'boot'],
@@ -431,7 +432,7 @@ class FastTreeCommandline(AbstractCommandline):
                 equate=False,
                 ),
             _Option(['-constraintWeight', 'constraintWeight'],
-                """Weight streanth of contraints in topology searching
+                """Weight strength of contraints in topology searching
 
                     Constrained topology search options:
                     -constraintWeight -- how strongly to weight the constraints. A value of 1
