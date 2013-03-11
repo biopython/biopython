@@ -12,6 +12,19 @@ This is used by sequences which contain a finite number of similar words.
 
 
 class Alphabet(object):
+
+    """Generic unspecified alphabet.
+
+    This class is used as a base class for other types of alphabets.
+
+    Attributes:
+    letters -- list-like object containing the letters of the alphabet.
+               Usually it is a string when letters are single characters.
+    size    -- size of the alphabet's letters (e.g. 1 when letters are
+               single characters).
+
+    """
+
     size = None     # default to no fixed size for words
     letters = None  # default to no fixed alphabet
                     # In general, a list-like object. However,
@@ -32,7 +45,7 @@ class Alphabet(object):
         return isinstance(other, self.__class__)
 
     def _case_less(self):
-        """Return an case-less variant of the current alphabet (PRIVATE)."""
+        """Return a case-less variant of the current alphabet (PRIVATE)."""
         #TODO - remove this method by dealing with things in subclasses?
         if isinstance(self, ProteinAlphabet):
             return generic_protein
@@ -69,6 +82,9 @@ generic_alphabet = Alphabet()
 
 
 class SingleLetterAlphabet(Alphabet):
+
+    """Generic alphabet with letters of size 1."""
+
     size = 1
     letters = None   # string of all letters in the alphabet
 
@@ -109,6 +125,13 @@ generic_rna = RNAAlphabet()
 
 
 class SecondaryStructure(SingleLetterAlphabet):
+
+    """Alphabet used to describe secondary structure.
+
+    Letters are 'H' (helix), 'S' (strand), 'T' (turn) and 'C' (coil).
+
+    """
+
     letters = "HSTC"
 
 
