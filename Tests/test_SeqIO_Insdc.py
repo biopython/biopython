@@ -21,7 +21,9 @@ class TestEmbl(unittest.TestCase):
         self.assertEqual(len(record), 315)
         #Multiple keywords:
         self.assertEqual(record.annotations["keywords"],
-                         ['JP 2005522996-A/12', 'test-data'])
+                         ['JP 2005522996-A/12', 'test-data',
+                          'lot and lots of keywords for this example',
+                          'multi-line keywords'])
 
 
 if __name__ == "__main__":
