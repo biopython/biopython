@@ -995,6 +995,12 @@ class EmblWriter(_InsdcWriter):
         assert len(division) == 3
         return division
 
+    def _write_keywords(self, record):
+        #Put the keywords right after DE line.
+        self._write_multi_line("KW",
+                               "%s." % "; ".join(record.annotations["keywords"]))
+        self.handle.write("XX\n")
+
     def _write_references(self, record):
         #The order should be RN, RC, RP, RX, RG, RA, RT, RL
         number = 0
@@ -1067,6 +1073,9 @@ class EmblWriter(_InsdcWriter):
             descr = "."
         self._write_multi_line("DE", descr)
         handle.write("XX\n")
+
+        if "keywords" in record.annotations:
+            self._write_keywords(record)
 
         #Should this be "source" or "organism"?
         self._write_multi_line(
