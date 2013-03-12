@@ -769,6 +769,8 @@ class EmblScanner(InsdcScanner):
                 # In GenBank files this corresponds to the old PROJECT
                 # line which is being replaced with the DBLINK line.
                 consumer.project(data.rstrip(";"))
+            elif line_type == 'KW':
+                consumer.keywords(data.rstrip(";"))
             elif line_type in consumer_dict:
                 #Its a semi-automatic entry!
                 getattr(consumer, consumer_dict[line_type])(data)
