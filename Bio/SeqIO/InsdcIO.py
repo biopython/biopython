@@ -997,8 +997,11 @@ class EmblWriter(_InsdcWriter):
 
     def _write_keywords(self, record):
         #Put the keywords right after DE line.
-        self._write_multi_line("KW",
-                               "%s." % "; ".join(record.annotations["keywords"]))
+        #Each 'keyword' can have multiple words and spaces, but we
+        #must not split any 'keyword' between lines.
+        #TODO - Combine short keywords onto one line
+        for keyword in record.annotations["keywords"]:
+            self._write_single_line("KW", keyword)
         self.handle.write("XX\n")
 
     def _write_references(self, record):
