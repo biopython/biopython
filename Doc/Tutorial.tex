@@ -9851,9 +9851,8 @@ The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of Seq
 it aims to provide a common way to work with phylogenetic trees independently of the source data
 format, as well as a consistent API for I/O operations.
 
-Bio.Phylo is described in an open-access BMC Bioinformatics article
-by Talevich et al.~(2012) \cite{talevich2012}, which you might also find
-helpful.
+Bio.Phylo is described in an open-access journal article \cite[Talevich
+\textit{et al.}, 2012]{talevich2012}, which you might also find helpful.
 
 \section{Demo: What's in a Tree?}
 
@@ -10092,7 +10091,8 @@ examples of using Bio.Phylo, see the cookbook page on Biopython.org:
 \section{I/O functions}
 
 Like SeqIO and AlignIO, Phylo handles file input and output through four functions:
-\verb|parse|, \verb|read|, \verb|write| and \verb|convert|.
+\verb|parse|, \verb|read|, \verb|write| and \verb|convert|,
+all of which support the tree file formats Newick, NEXUS, phyloXML and NeXML.
 
 The \verb|read| function parses a single tree in the given file and returns it. Careful; it
 will raise an error if the file contains more than one tree, or no trees.
@@ -10130,7 +10130,7 @@ Write a tree or iterable of trees back to file with the \verb|write| function:
 Convert files between any of the supported formats with the \verb|convert| function:
 
 \begin{verbatim}
->>> Phylo.convert("tree1.xml", "phyloxml", "tree1.dnd", "newick")
+>>> Phylo.convert("tree1.dnd", "newick", "tree1.xml", "nexml")
 1
 >>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", 'nexus")
 12
@@ -10742,18 +10742,6 @@ releases:
     Currently, Bio.Nexus contains some useful features that have not yet been ported to
     Bio.Phylo classes --- notably, calculating a consensus tree. If you find some functionality
     lacking in Bio.Phylo, try poking throught Bio.Nexus to see if it's there instead.
-
-  \item[NeXML support]  
-    Within the next few releases, we intend to add support for another file format, NeXML. This
-    is unlikely to change the basic object hierarchy substantially, but could inspire some
-    additions to the attributes of existing classes.
-
-  \item[String representations] 
-    The string representations of some objects could change in future releases; we're
-    still determining which ``informal'' representations are most useful most often. To
-    future-proof your code against this, we recommend using the attributes of objects
-    directly (e.g.  \verb|my_clade.name|) rather than automatic string conversion
-    (\verb|str(my_clade)|) in scripts that require a consistent result.
 
 \end{description}
 
