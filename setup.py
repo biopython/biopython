@@ -322,7 +322,6 @@ PACKAGES = [
     'Bio.Pathway',
     'Bio.Pathway.Rep',
     'Bio.PDB',
-    'Bio.PDB.mmCIF',
     'Bio.PopGen',
     'Bio.PopGen.Async',
     'Bio.PopGen.FDist',
@@ -390,11 +389,6 @@ else:
                'Bio/trie.c'],
               include_dirs=["Bio"]
               ),
-    Extension('Bio.PDB.mmCIF.MMCIFlex',
-             ['Bio/PDB/mmCIF/lex.yy.c',
-              'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
-             include_dirs=["Bio"],
-             ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
