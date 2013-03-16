@@ -440,15 +440,15 @@ class CircularDrawer(AbstractDrawer):
             if feature.strand != -1:
                 # Feature is on top, or covers both strands
                 radius = top
-                if startangle < pi: # Turn text round and anchor end to inner radius
+                if startangle < pi: # Turn text round
                     label_angle -= pi
+                else:
                     labelgroup.contents[0].textAnchor = 'end'
             else:
                 # Feature on bottom strand
                 radius = btm
-                if startangle < pi: # Turn text round
+                if startangle < pi: # Turn text round and anchor end
                     label_angle -= pi
-                else:
                     labelgroup.contents[0].textAnchor = 'end'
             x_pos = self.xcenter + radius*sinval
             y_pos = self.ycenter + radius*cosval
