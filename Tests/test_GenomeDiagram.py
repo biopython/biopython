@@ -643,7 +643,7 @@ class DiagramTest(unittest.TestCase):
             gds_features.add_feature(feature, colour=color,
                                      url = url,
                                      sigil="ARROW",
-                                     label_position = "start",
+                                     label_position = None,
                                      label_size = 8,
                                      label_angle = 90,
                                      label=True)
