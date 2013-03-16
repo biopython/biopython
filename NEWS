@@ -30,12 +30,16 @@ Bio.Phylo.Applications.
 The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
 can be used. The relevant JDBC driver should be available in the CLASSPATH.
 
+Feature labels on circular GenomeDiagram figures now support the label_position
+argument (start, middle or end) in addition to the current default placement.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Ben Morris (first contribution)
+David Martin (first contribution)
 Nate Sutton (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
