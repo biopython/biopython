@@ -1032,22 +1032,24 @@ class LinearDrawer(AbstractDrawer):
             # the height and rotation of the label)
             if feature.strand in (0, 1):
                 rotation = angle2trig(feature.label_angle)
-                if feature.label_position in ('start', "5'", 'left'):
-                    pos = x0
+                if feature.label_position in ('end', "3'", 'right'):
+                    pos = x1
                 elif feature.label_position in ('middle', 'center', 'centre'):
                     pos = (x1 + x0)/2.
                 else:
-                    pos = x1
+                    # Default to start, i.e. 'start', "5'", 'left'
+                    pos = x0
                 labelgroup.transform = (rotation[0], rotation[1], rotation[2],
                                         rotation[3], pos, top)
             else:   # Feature on bottom strand
                 rotation = angle2trig(feature.label_angle + 180)
-                if feature.label_position in ('start', "5'", 'left'):
-                    pos = x1
+                if feature.label_position in ('end', "3'", 'right'):
+                    pos = x0
                 elif feature.label_position in ('middle', 'center', 'centre'):
                     pos = (x1 + x0)/2.
                 else:
-                    pos = x0
+                    # Default to start, i.e. 'start', "5'", 'left'
+                    pos = x1
                 labelgroup.transform = (rotation[0], rotation[1], rotation[2],
                                         rotation[3], pos, btm)
         else:

@@ -407,10 +407,26 @@ class CircularDrawer(AbstractDrawer):
                            fontSize=feature.label_size,
                            fillColor=feature.label_color)
             labelgroup = Group(label)
-            if feature.label_position in ('middle', 'center', 'centre'):
+            if feature.label_position in ('start', "5'", 'left'):
+                # Position the label at the feature's start
+                if feature.strand != -1:
+                    label_angle = startangle + 0.5 * pi # Make text radial
+                    sinval, cosval = startsin, startcos
+                else:
+                    label_angle = endangle + 0.5 * pi # Make text radial
+                    sinval, cosval = endsin, endcos
+            elif feature.label_position in ('middle', 'center', 'centre'):
                 # Position the label at the feature's midpoint
                 label_angle = midangle + 0.5 * pi # Make text radial
                 sinval, cosval = midsin, midcos
+            elif feature.label_position in ('end', "3'", 'right'):
+                # Position the label at the feature's end
+                if feature.strand != -1:
+                    label_angle = endangle + 0.5 * pi # Make text radial
+                    sinval, cosval = endsin, endcos
+                else:
+                    label_angle = startangle + 0.5 * pi # Make text radial
+                    sinval, cosval = startsin, startcos
             elif startangle < pi:
                 # Default to placing the label the bottom of the feature
                 # as drawn on the page, meaning feature end on left half

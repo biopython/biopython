@@ -90,7 +90,9 @@ class Feature(object):
                     feature label in degrees (default = 45, linear only)
 
         o label_position    String, 'start', 'end' or 'middle' denoting where
-                    to place the feature label (linear only)
+                    to place the feature label. Leave as None for the default
+                    which is 'start' for linear diagrams, and at the bottom of
+                    the feature as drawn on circular diagrams.
 
         o locations     List of tuples of (start, end) ints describing where the
                     feature and any subfeatures start and end
@@ -145,7 +147,7 @@ class Feature(object):
         self.label_size = 6
         self.label_color = colors.black
         self.label_angle = 45
-        self.label_position = 'start'
+        self.label_position = None #Expect 'start', 'middle', or 'end' (plus aliases)
 
         if feature is not None:
             self.set_feature(feature)
