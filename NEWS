@@ -31,7 +31,9 @@ The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
 can be used. The relevant JDBC driver should be available in the CLASSPATH.
 
 Feature labels on circular GenomeDiagram figures now support the label_position
-argument (start, middle or end) in addition to the current default placement.
+argument (start, middle or end) in addition to the current default placement,
+and in a change to prior releases these labels are outside the features which
+is now consistent with the linear diagrams.
 
 Additionally there have been other minor bug fixes and more unit tests.
 
