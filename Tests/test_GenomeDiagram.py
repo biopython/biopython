@@ -420,7 +420,7 @@ class SigilsTest(unittest.TestCase):
                                    label_position="middle",
                                    label_size=6, label_angle=-90)
         self.assertEqual(len(self.gdd.tracks), 4)
-        self.finish("GD_sigil_labels", circular=False)
+        self.finish("GD_sigil_labels", circular=True)
 
     def test_arrow_shafts(self):
         """Feature arrow sigils, varying shafts."""
