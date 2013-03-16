@@ -402,7 +402,9 @@ class CircularDrawer(AbstractDrawer):
                        color=feature.color, border=feature.border, **kwargs)
 
         if feature.label:   # Feature needs a label
-            label = String(0, 0, feature.name.strip(),
+            #The spaces are a hack to force a little space between the label
+            #and the edge of the feature
+            label = String(0, 0, " %s " % feature.name.strip(),
                            fontName=feature.label_font,
                            fontSize=feature.label_size,
                            fillColor=feature.label_color)
