@@ -1022,6 +1022,11 @@ class LinearDrawer(AbstractDrawer):
         sigil = method(btm, ctr, top, x0, x1, strand=feature.strand,
                        color=feature.color, border=feature.border,
                        **kwargs)
+
+        if feature.label_strand:
+            strand = feature.label_strand
+        else:
+            strand = feature.strand
         if feature.label:   # Feature requires a label
             label = String(0, 0, feature.name,
                            fontName=feature.label_font,
@@ -1030,7 +1035,7 @@ class LinearDrawer(AbstractDrawer):
             labelgroup = Group(label)
             # Feature is on top, or covers both strands (location affects
             # the height and rotation of the label)
-            if feature.strand in (0, 1):
+            if strand != -1:
                 rotation = angle2trig(feature.label_angle)
                 if feature.label_position in ('end', "3'", 'right'):
                     pos = x1

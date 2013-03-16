@@ -407,9 +407,13 @@ class CircularDrawer(AbstractDrawer):
                            fontSize=feature.label_size,
                            fillColor=feature.label_color)
             labelgroup = Group(label)
+            if feature.label_strand:
+                strand = feature.label_strand
+            else:
+                strand = feature.strand
             if feature.label_position in ('start', "5'", 'left'):
                 # Position the label at the feature's start
-                if feature.strand != -1:
+                if strand != -1:
                     label_angle = startangle + 0.5 * pi # Make text radial
                     sinval, cosval = startsin, startcos
                 else:
@@ -421,7 +425,7 @@ class CircularDrawer(AbstractDrawer):
                 sinval, cosval = midsin, midcos
             elif feature.label_position in ('end', "3'", 'right'):
                 # Position the label at the feature's end
-                if feature.strand != -1:
+                if strand != -1:
                     label_angle = endangle + 0.5 * pi # Make text radial
                     sinval, cosval = endsin, endcos
                 else:
@@ -437,15 +441,15 @@ class CircularDrawer(AbstractDrawer):
                 # which means the feature end when on right hand half
                 label_angle = startangle + 0.5 * pi # Make text radial
                 sinval, cosval = startsin, startcos
-            if feature.strand != -1:
-                # Feature is on top, or covers both strands
+            if strand != -1:
+                # Feature label on top
                 radius = top
                 if startangle < pi: # Turn text round
                     label_angle -= pi
                 else:
                     labelgroup.contents[0].textAnchor = 'end'
             else:
-                # Feature on bottom strand
+                # Feature label on bottom
                 radius = btm
                 if startangle < pi: # Turn text round and anchor end
                     label_angle -= pi
