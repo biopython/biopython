@@ -412,6 +412,7 @@ class SigilsTest(unittest.TestCase):
         """Feature labels."""
         self.add_track_with_sigils(label=True)
         self.add_track_with_sigils(label=True, color="green",
+                                   #label_position left as default!
                                    label_size=25, label_angle=0)
         self.add_track_with_sigils(label=True, color="purple",
                                    label_position="end",
@@ -419,7 +420,10 @@ class SigilsTest(unittest.TestCase):
         self.add_track_with_sigils(label=True, color="blue",
                                    label_position="middle",
                                    label_size=6, label_angle=-90)
-        self.assertEqual(len(self.gdd.tracks), 4)
+        self.add_track_with_sigils(label=True, color="cyan",
+                                   label_position="start",
+                                   label_size=6, label_angle=-90)
+        self.assertEqual(len(self.gdd.tracks), 5)
         self.finish("GD_sigil_labels", circular=True)
 
     def test_arrow_shafts(self):
