@@ -581,9 +581,9 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                  name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']):
         """Like the ChromosomeSegment, but accepts a list of features.
 
-        The features can either be SeqFeature objects, or tuples of five
-        values: start (int), end (int), strand (+1, -1, O or None), label
-        (string) and a ReportLab color.
+        The features can either be SeqFeature objects, or tuples of values:
+        start (int), end (int), strand (+1, -1, O or None), label (string),
+        ReportLab color, and optional ReportLab fill color.
 
         Note we require 0 <= start <= end <= bp_length, and within the vertical
         space allocated to this segmenet lines will be places according to the
@@ -651,7 +651,11 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                         break
             except AttributeError:
                 #Assume tuple of ints, string, and color
-                start, end, strand, name, color = f
+                start, end, strand, name, color = f[:5]
+                if len(f) > 5:
+                    fill_color = f[5]
+                else:
+                    fill_color = color
             assert 0 <= start <= end <= self.bp_length
             if strand == +1 :
                 #Right side only
@@ -662,13 +666,13 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 x = segment_x
                 w = segment_width * 0.4
             else:
-                #Both or neighther - full width
+                #Both or neither - full width
                 x = segment_x
                 w = segment_width
             local_scale = segment_height / self.bp_length
             fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
                                   w, local_scale*(start-end))
-            fill_rectangle.fillColor = color
+            fill_rectangle.fillColor = fill_color
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
             if name:
