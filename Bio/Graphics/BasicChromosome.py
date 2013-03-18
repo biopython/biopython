@@ -572,12 +572,13 @@ def _spring_layout(desired, minimum, maximum, gap=0):
 
 
 def _place_labels(desired_etc, minimum, maximum, gap=0):
+    #Want a list of lists/tuples for desired_etc
     desired_etc.sort()
     placed = _spring_layout([row[0] for row in desired_etc],
                             minimum, maximum, gap)
-    for old,y2 in zip(desired_etc, placed):
-        y1, color, name = old
-        yield (y1, y2, color, name)
+    for old, y2 in zip(desired_etc, placed):
+        #(y1, a, b, c, ..., z) --> (y1, y2, a, b, c, ..., z)
+        yield (old[0], y2) + tuple(old[1:])
 
 
 class AnnotatedChromosomeSegment(ChromosomeSegment):
