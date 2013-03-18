@@ -591,7 +591,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
 
         The features can either be SeqFeature objects, or tuples of values:
         start (int), end (int), strand (+1, -1, O or None), label (string),
-        ReportLab color, and optional ReportLab fill color.
+        ReportLab color (string or object), and optional ReportLab fill color.
 
         Note we require 0 <= start <= end <= bp_length, and within the vertical
         space allocated to this segmenet lines will be places according to the
@@ -660,8 +660,9 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
             except AttributeError:
                 #Assume tuple of ints, string, and color
                 start, end, strand, name, color = f[:5]
+                color = _color_trans.translate(color)
                 if len(f) > 5:
-                    fill_color = f[5]
+                    fill_color = _color_trans.translate(f[5])
                 else:
                     fill_color = color
             assert 0 <= start <= end <= self.bp_length

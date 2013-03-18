@@ -309,7 +309,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
             #Additional dummy entry to check fill colour on both strands,
             if name == "Chr III":
-                cytobands.append((11000000, 13000000, -1, "Reverse", colors.red, colors.yellow))
+                cytobands.append((11000000, 13000000, -1, "Reverse", "red", "yellow"))
             elif name == "Chr V":
                 cytobands.append((9500000, 11000000, +1, "Forward", colors.red, colors.yellow))
             #Create the drawing object for the chromosome
