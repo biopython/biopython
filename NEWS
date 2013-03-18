@@ -35,6 +35,9 @@ argument (start, middle or end) in addition to the current default placement,
 and in a change to prior releases these labels are outside the features which
 is now consistent with the linear diagrams.
 
+The code for parsing 3D structures in mmCIF files was updated to use the
+Python standard library's shlex module instead of C code using flex.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -42,6 +45,7 @@ possible, especially the following contributors:
 
 Ben Morris (first contribution)
 David Martin (first contribution)
+Michiel de Hoon
 Nate Sutton (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
