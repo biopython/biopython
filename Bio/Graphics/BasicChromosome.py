@@ -320,33 +320,27 @@ class Chromosome(_ChromosomeComponent):
         #font = pdfmetrics.getFont('Helvetica')
         #h = (font.face.ascent + font.face.descent) * 0.90
         h = self.label_size
-        left_labels = _place_labels(left_labels, y_min, y_max, h)
-        right_labels = _place_labels(right_labels, y_min, y_max, h)
-        x1 = segment_x
-        x2 = segment_x - label_sep
-        for (y1, y2, color, name) in left_labels:
-            cur_drawing.add(Line(x1, y1, x2, y2,
-                                 strokeColor = color,
-                                 strokeWidth = 0.25))
-            label_string = String(x2, y2, name,
-                                  textAnchor="end")
-            label_string.fontName = 'Helvetica'
-            label_string.fontSize = self.label_size
-            if color_label:
-                label_string.fillColor = color
-            cur_drawing.add(label_string)
-        x1 = segment_x + segment_width
-        x2 = segment_x + segment_width + label_sep
-        for (y1, y2, color, name) in right_labels:
-            cur_drawing.add(Line(x1, y1, x2, y2,
-                                 strokeColor = color,
-                                 strokeWidth = 0.25))
-            label_string = String(x2, y2, name)
-            label_string.fontName = 'Helvetica'
-            label_string.fontSize = self.label_size
-            if color_label:
-                label_string.fillColor = color
-            cur_drawing.add(label_string)
+        for x1, x2, labels, anchor in [
+                (segment_x,
+                 segment_x - label_sep,
+                 _place_labels(left_labels, y_min, y_max, h),
+                 "end"),
+                (segment_x + segment_width,
+                 segment_x + segment_width + label_sep,
+                 _place_labels(right_labels, y_min, y_max, h),
+                 "start"),
+            ]:
+            for (y1, y2, color, name) in labels:
+                cur_drawing.add(Line(x1, y1, x2, y2,
+                                     strokeColor = color,
+                                     strokeWidth = 0.25))
+                label_string = String(x2, y2, name,
+                                      textAnchor=anchor)
+                label_string.fontName = 'Helvetica'
+                label_string.fontSize = h
+                if color_label:
+                    label_string.fillColor = color
+                cur_drawing.add(label_string)
 
 
 class ChromosomeSegment(_ChromosomeComponent):
