@@ -119,6 +119,9 @@ class Organism(_ChromosomeComponent):
         o output_file -- The name of a file specifying where the
         document should be saved, or a handle to be written to.
         The output format is set when creating the Organism object.
+        Alternatively, output_file=None will return the drawing using
+        the low-level ReportLab objects (for further processing, such
+        as adding additional graphics, before writing).
 
         o title -- The output title of the produced document.
         """
@@ -148,6 +151,10 @@ class Organism(_ChromosomeComponent):
             cur_x_pos += x_pos_change
 
         self._draw_legend(cur_drawing, self._legend_height + 0.5 * inch, width)
+
+        if output_file is None:
+            #Let the user take care of writing to the file...
+            return cur_drawing
 
         return _write(cur_drawing, output_file, self.output_format)
 
