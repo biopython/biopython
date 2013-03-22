@@ -11,6 +11,7 @@ results are parseable. Detailed tests on each Entrez service are not within the
 scope of this file as they are already covered in test_Entrez.py.
 
 """
+import os
 import unittest
 
 import requires_internet
@@ -20,6 +21,13 @@ from Bio import Entrez
 from Bio import Medline
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
+
+if os.name == 'java':
+    from Bio import MissingExternalDependencyError
+    #This is a slight miss-use of MissingExternalDependencyError,
+    #but it will do in the short term to skip this unit test on Jython
+    raise MissingExternalDependencyError("The Bio.Entrez XML parser fails "
+        "on Jython, see http://bugs.jython.org/issue1447")
 
 
 #This lets us set the email address to be sent to NCBI Entrez:
