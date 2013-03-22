@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 11 February 2013 (Biopython 1.61+)}
+\date{Last Update -- 22 March 2013 (Biopython 1.61+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -98,7 +98,18 @@ Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
 
 \section{What is Biopython?}
 
-The Biopython Project is an international association of developers of freely available Python (\url{http://www.python.org}) tools for computational molecular biology. The web site \url{http://www.biopython.org} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
+The Biopython Project is an international association of developers of freely available Python (\url{http://www.python.org}) tools for computational molecular biology. Python is an object oriented, interpreted, flexible language that is becoming increasingly popular for scientific computing. Python is easy to learn, has a very clear syntax and can easily be extended with modules written in C, C++ or FORTRAN.
+
+The Biopython web site (\url{http://www.biopython.org}) provides
+an online resource for modules, scripts, and web links for developers
+of Python-based software for bioinformatics use and research. Basically,
+the goal of Biopython is to make it as easy as possible to use Python
+for bioinformatics by creating high-quality, reusable modules and
+classes. Biopython features include parsers for various Bioinformatics
+file formats (BLAST, Clustalw, FASTA, Genbank,...), access to online
+services (NCBI, Expasy,...), interfaces to common and not-so-common
+programs (Clustalw, DSSP, MSMS...), a standard sequence class, various
+clustering modules, a KD tree data structure etc. and even documentation. 
 
 Basically, we just like to program in Python and want to make it as easy as possible to use Python for bioinformatics by creating high-quality, reusable modules and scripts.
 
@@ -165,9 +176,11 @@ this document to make it easier to keep updated.
 
 The short version is go to our downloads page (\url{http://biopython.org/wiki/Download}),
 download and install the listed dependencies, then download and install Biopython.
+Biopython runs on many platforms (Windows, Mac, and on the various flavors of Linux and Unix).
 For Windows we provide pre-compiled click-and-run installers, while for Unix and other
 operating systems you must install from source as described in the included README file.
 This is usually as simple as the standard commands:
+
 
 \begin{verbatim}
 python setup.py build
@@ -190,8 +203,17 @@ and HTML formats
 \begin{enumerate}
 
   \item \emph{How do I cite Biopython in a scientific publication?} \\
-  Please cite our application note \cite[Cock {\textit et al.}, 2009]{cock2009}
-  and/or one of the publications listed on our website describing specific modules within Biopython.
+  Please cite our application note \cite[Cock \textit{et al.}, 2009]{cock2009}
+  as the main Biopython reference.
+  In addition, please cite any publications from the following list if appropriate, in particular as a reference for specific modules within Biopython (more information can be found on our website):
+  \begin{itemize}
+    \item For the official project announcement: \cite[Chapman and Chang, 2000]{chapman2000};
+    \item For \verb+Bio.PDB+: \cite[Hamelryck and Manderick, 2003]{hamelryck2003a};
+    \item For \verb+Bio.Cluster+: \cite[De Hoon \textit{et al.}, 2004]{dehoon2004};
+    \item For \verb+Bio.Graphics.GenomeDiagram+: \cite[Pritchard \textit{et al.}, 2006]{pritchard2006};
+    \item For \verb+Bio.Phylo+ and \verb+Bio.Phylo.PAML+: \cite[Talevich \textit{et al.}, 2012]{talevich2012};
+    \item For the FASTQ file format as supported in Biopython, BioPerl, BioRuby, BioJava, and EMBOSS: \cite[Cock \textit{et al.}, 2010]{cock2010}.
+  \end{itemize}
 
   \item \emph{How should I capitalize ``Biopython''?  Is ``BioPython'' OK?} \\
   The correct capitalization is ``Biopython'', not ``BioPython'' (even though
@@ -8675,9 +8697,7 @@ Other ScanProsite parameters can be passed as keyword arguments; see the \href{h
 
 \chapter{Going 3D: The PDB module}
 
-Biopython also allows you to explore the extensive realm of macromolecular structure.
-Biopython comes with a PDBParser class that produces a Structure object. The Structure object
-can be used to access the atomic data in the file in a convenient manner.
+Bio.PDB is a Biopython module that focuses on working with crystal structures of biological macromolecules. Among other things, Bio.PDB includes a PDBParser class that produces a Structure object, which can be used to access the atomic data in the file in a convenient manner. There is limited support for parsing the information contained in the PDB header.
 
 %Note the \verb|Bio.PDB| module requires Numerical Python (numpy) to be installed.
 
@@ -8737,7 +8757,7 @@ extracted from its parent (i.e. Residue, Chain, Model, Structure, respectively)
 by using an id as a key.
 
 \begin{verbatim}
-child_entity=parent_entity[child_id]
+>>> child_entity=parent_entity[child_id]
 \end{verbatim}
 
 You can also get a list of all child Entities of a parent Entity object. Note
@@ -8745,13 +8765,13 @@ that this list is sorted in a specific way (e.g. according to chain identifier
 for Chain objects in a Model object).
 
 \begin{verbatim}
-child_list=parent_entity.get_list()
+>>> child_list=parent_entity.get_list()
 \end{verbatim}
 
 You can also get the parent from a child.
 
 \begin{verbatim}
-parent_entity=child_entity.get_parent()
+>>> parent_entity=child_entity.get_parent()
 \end{verbatim}
 
 At all levels of the SMCRA hierarchy, you can also extract a \emph{full id}.
@@ -8760,10 +8780,8 @@ down to the current object. A full id for a Residue object e.g. is something
 like:
 
 \begin{verbatim}
-full_id=residue.get_full_id()
-
-print full_id
-
+>>> full_id = residue.get_full_id()
+>>> print full_id
 ("1abc", 0, "A", ("", 10, "A"))
 \end{verbatim}
 
@@ -8809,32 +8827,98 @@ string. The Structure contains a number of Model children. Most crystal structur
 of several models. Disorder in crystal structures of large parts of molecules
 can also result in several models.
 
-\subsubsection{Constructing a Structure object}
+\subsubsection{Constructing a Structure object from a PDB file}
 
-A Structure object is produced by a PDBParser object:
+First we create a \texttt{PDBParser} object:
 
 \begin{verbatim}
-from Bio.PDB.PDBParser import PDBParser
-
-p=PDBParser(PERMISSIVE=1)
-
-structure_id="1fat"
-
-filename="pdb1fat.ent"
-
-s=p.get_structure(structure_id, filename)
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> p = PDBParser(PERMISSIVE=1)
 \end{verbatim}
 
-The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures})
-associated with PDB files will be ignored (but note that some atoms and/or residues
-will be missing). If the flag is not present a {\tt PDBConstructionException}
-will be generated during the parse operation.
+The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated during the parse operation.
 
-\subsubsection{Header and trailer}
+The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called 'pdb1fat.ent', '1fat' is a user defined name for the structure):
+
+\begin{verbatim}
+>>> structure_id = "1fat"
+>>> filename = "pdb1fat.ent"
+>>> s = p.get_structure(structure_id, filename)
+\end{verbatim}
 
 You can extract the header and trailer (simple lists of strings) of the PDB
 file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
-methods.
+methods.  Note however that many PDB files contain headers with
+incomplete or erroneous information. Many of the errors have been
+fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
+in the header information, it is a good idea to extract information
+from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
+described below, instead of parsing the PDB header. }
+
+Now that is clarified, let's return to parsing the PDB header. The
+structure object has an attribute called \texttt{header} which is
+a Python dictionary that maps header records to their values.
+
+Example:
+
+\begin{verbatim}
+>>> resolution = structure.header['resolution']
+>>> keywords = structure.header['keywords']
+\end{verbatim}
+The available keys are \texttt{name, head, deposition\_\-date, release\_\-date,
+structure\_\-method, resolution, structure\_\-reference} (maps to
+a list of references), \texttt{journal\_\-reference, author} and
+\texttt{compound} (maps to a dictionary with various information about
+the crystallized compound).
+
+The dictionary can also be created without creating a \texttt{Structure}
+object, ie. directly from the PDB file:
+
+\begin{verbatim}
+>>> file = open(filename,'r')
+>>> header_dict = parse_pdb_header(file)
+>>> file.close()
+\end{verbatim}
+
+\subsubsection{Creating a structure object from an mmCIF file}
+
+Similarly to the case the case of PDB files, first create an \texttt{MMCIFParser} object:
+
+\begin{verbatim}
+>>> from Bio.PDB.MMCIFParser import MMCIFParser
+>>> parser = MMCIFParser()
+\end{verbatim}
+Then use this parser to create a structure object from the mmCIF file:
+\begin{verbatim}
+>>> structure = parser.get_structure('1fat', '1fat.cif')
+\end{verbatim}
+
+To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
+tags in an mmCIF file to their values. If there are multiple values
+(like in the case of tag \texttt{\_atom\_site.Cartn\_y}, which holds
+the y coordinates of all atoms), the tag is mapped to a list of values.
+The dictionary is created from the mmCIF file as follows:
+
+\begin{verbatim}
+>>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+>>> mmcif_dict = MMCIF2Dict('1FAT.cif')
+\end{verbatim}
+Example: get the solvent content from an mmCIF file:
+
+\begin{verbatim}
+>>> sc = mmcif_dict['_exptl_crystal.density_percent_sol']
+\end{verbatim}
+Example: get the list of the y coordinates of all atoms
+
+\begin{verbatim}
+>>> y_list = mmcif_dict['_atom_site.Cartn_y']
+\end{verbatim}
+
+\subsubsection{...and what about the new PDB XML format?}
+
+That's not yet supported, but we are definitely planning to support that
+in the future (it's not a lot of work). Contact the Biopython developers
+(\mailto{biopython-dev@biopython.org}) if you need this).
 
 \subsection{Model}
 
@@ -9254,6 +9338,881 @@ for polypeptide in polypeptide_list:
 
 The Polypeptide objects are always created from a single
 Model (in this case model 1).
+
+LyX
+
+
+\section{General questions}
+
+\subsection{How well tested is Bio.PDB?}
+
+Pretty well, actually. Bio.PDB has been extensively tested on nearly
+5500 structures from the PDB - all structures seemed to be parsed
+correctly. More details can be found in the Bio.PDB Bioinformatics
+article. Bio.PDB has been used/is being used in many research projects
+as a reliable tool. In fact, I'm using Bio.PDB almost daily for research
+purposes and continue working on improving it and adding new features.
+
+\subsection{How fast is it?}
+
+The \texttt{PDBParser} performance was tested on about 800 structures
+(each belonging to a unique SCOP superfamily). This takes about 20
+minutes, or on average 1.5 seconds per structure. Parsing the structure
+of the large ribosomal subunit (1FKK), which contains about 64000
+atoms, takes 10 seconds on a 1000 MHz PC. In short: it's more than
+fast enough for many applications.
+
+\subsection{Is there support for molecular graphics?}
+
+Not directly, mostly since there are quite a few Python based/Python
+aware solutions already, that can potentially be used with Bio.PDB.
+My choice is Pymol, BTW (I've used this successfully with Bio.PDB,
+and there will probably be specific PyMol modules in Bio.PDB soon/some
+day). Python based/aware molecular graphics solutions include:
+
+\begin{itemize}
+\item PyMol: \url{http://pymol.sourceforge.net/}
+\item Chimera: \url{http://www.cgl.ucsf.edu/chimera/}
+\item PMV: \url{http://www.scripps.edu/~sanner/python/}
+\item Coot: \url{http://www.ysbl.york.ac.uk/~emsley/coot/}
+\item CCP4mg: \url{http://www.ysbl.york.ac.uk/~lizp/molgraphics.html}
+\item mmLib: \url{http://pymmlib.sourceforge.net/} 
+\item VMD: \url{http://www.ks.uiuc.edu/Research/vmd/}
+\item MMTK: \url{http://starship.python.net/crew/hinsen/MMTK/}
+\end{itemize}
+I'd be crazy to write another molecular graphics application (been
+
+\subsection{Input/output}
+
+
+\subsubsection*{Can I use Bio.PDB with NMR structures (ie. with more than one model)?}
+
+Sure. Many PDB parsers assume that there is only one model, making
+them all but useless for NMR structures. The design of the \texttt{Structure}
+object makes it easy to handle PDB files with more than one model
+(see section \ref{sub:The-Structure-object}). 
+
+
+\subsubsection*{How do I download structures from the PDB?}
+
+This can be done using the \texttt{PDBList} object, using the \texttt{retrieve\_pdb\_file}
+method. The argument for this method is the PDB identifier of the
+structure.
+
+\begin{verbatim}
+>>> pdbl = PDBList()
+>>> pdbl.retrieve_pdb_file('1FAT')
+\end{verbatim}
+The \texttt{PDBList} class can also be used as a command-line tool: 
+
+\begin{verbatim}
+python PDBList.py 1fat
+\end{verbatim}
+The downloaded file will be called \texttt{pdb1fat.ent} and stored
+in the current working directory. Note that the \texttt{retrieve\_pdb\_file}
+method also has an optional argument \texttt{pdir} that specifies
+a specific directory in which to store the downloaded PDB files. 
+
+The \texttt{retrieve\_pdb\_file} method also has some options to specify
+the compression format used for the download, and the program used
+for local decompression (default \texttt{.Z} format and \texttt{gunzip}).
+In addition, the PDB ftp site can be specified upon creation of the
+\texttt{PDBList} object. By default, the RCSB PDB server (\url{ftp://ftp.rcsb.org/pub/pdb/data/structures/divided/pdb/})
+is used. See the API documentation for more details. Thanks again
+to Kristian Rother for donating this module.
+
+
+\subsubsection*{How do I download the entire PDB?}
+
+The following commands will store all PDB files in the \texttt{/data/pdb}
+directory: 
+
+\begin{verbatim}
+python PDBList.py all /data/pdb
+
+python PDBList.py all /data/pdb -d
+\end{verbatim}
+\noindent The API method for this is called \texttt{download\_entire\_pdb}.
+Adding the \texttt{-d} option will store all files in the same directory.
+Otherwise, they are sorted into PDB-style subdirectories according
+to their PDB ID's. Depending on the traffic, a complete download will
+take 2-4 days. 
+
+
+\subsubsection*{How do I keep a local copy of the PDB up-to-date?}
+
+This can also be done using the \texttt{PDBList} object. One simply
+creates a \texttt{PDBList} object (specifying the directory where
+the local copy of the PDB is present) and calls the \texttt{update\_pdb}
+method:
+
+\begin{verbatim}
+>>> pl = PDBList(pdb='/data/pdb')
+>>> pl.update_pdb()
+\end{verbatim}
+One can of course make a weekly \texttt{cronjob} out of this to keep
+the local copy automatically up-to-date. The PDB ftp site can also
+be specified (see API documentation).
+
+\texttt{PDBList} has some additional methods that can be of use. The
+\texttt{get\_all\_obsolete} method can be used to get a list of all
+obsolete PDB entries. The \texttt{changed\_this\_week} method can
+be used to obtain the entries that were added, modified or obsoleted
+during the current week. For more info on the possibilities of \texttt{PDBList},
+see the API documentation.
+
+
+\subsubsection*{What about all those buggy PDB files?}
+
+It is well known that many PDB files contain semantic errors (I'm
+not talking about the structures themselves know, but their representation
+in PDB files). Bio.PDB tries to handle this in two ways. The PDBParser
+object can behave in two ways: a restrictive way and a permissive
+way (THIS IS NOW THE DEFAULT). The restrictive way used to be the
+default, but people seemed to think that Bio.PDB 'crashed' due to
+a bug (hah!), so I changed it. If you ever encounter a real bug, please
+tell me immediately!
+
+Example:
+
+\begin{verbatim}
+# Permissive parser
+>>> parser = PDBParser(PERMISSIVE=1)
+>>> parser = PDBParser() # The same (default)
+>>> # Strict parser
+>>> strict_parser = PDBParser(PERMISSIVE=0)
+\end{verbatim}
+In the permissive state (DEFAULT), PDB files that obviously contain
+errors are 'corrected' (i.e. some residues or atoms are left out).
+These errors include:
+
+\begin{itemize}
+\item Multiple residues with the same identifier
+\item Multiple atoms with the same identifier (taking into account the altloc
+identifier)
+\end{itemize}
+These errors indicate real problems in the PDB file (for details see
+the Bioinformatics article). In the restrictive state, PDB files with
+errors cause an exception to occur. This is useful to find errors
+in PDB files.
+
+Some errors however are automatically corrected. Normally each disordered
+atom should have a non-blanc altloc identifier. However, there are
+many structures that do not follow this convention, and have a blank
+and a non-blank identifier for two disordered positions of the same
+atom. This is automatically interpreted in the right way.
+
+Sometimes a structure contains a list of residues belonging to chain
+A, followed by residues belonging to chain B, and again followed by
+residues belonging to chain A, i.e. the chains are 'broken'. This
+is also correctly interpreted.
+
+
+\subsubsection*{Can I write PDB files?}
+
+Use the PDBIO class for this. It's easy to write out specific parts
+of a structure too, of course.
+
+Example: saving a structure
+
+\begin{verbatim}
+>>> io = PDBIO()
+>>> io.set_structure(s)
+>>> io.save('out.pdb')
+\end{verbatim}
+If you want to write out a part of the structure, make use of the
+\texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
+
+\begin{verbatim}
+>>> accept_model(model)
+>>> accept_chain(chain)
+>>> accept_residue(residue)
+>>> accept_atom(atom)
+\end{verbatim}
+By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
+is included in the output). By subclassing \texttt{Select} and returning
+0 when appropriate you can exclude models, chains, etc. from the output.
+Cumbersome maybe, but very powerful. The following code only writes
+out glycine residues:
+
+\begin{verbatim}
+>>> class GlySelect(Select):
+...     def accept_residue(self, residue):
+...         if residue.get_name()=='GLY':
+...             return True
+...         else:
+...             return False
+...
+>>> io = PDBIO()
+>>> io.set_structure(s)
+>>> io.save('gly_only.pdb', GlySelect())
+\end{verbatim}
+If this is all too complicated for you, the \texttt{Dice} module contains
+a handy \texttt{extract} function that writes out all residues in
+a chain between a start and end residue. 
+
+
+\subsubsection*{Can I write mmCIF files?}
+
+No, and I also don't have plans to add that functionality soon (or
+ever - I don't need it at all, and it's a lot of work, plus no-one
+has ever asked for it). People who want to add this can contact me.
+
+
+\subsection{The Structure object\label{sub:The-Structure-object}}
+
+
+\subsubsection*{What's the overall layout of a Structure object?}
+
+The \texttt{Structure} object follows the so-called \texttt{SMCRA}
+(Structure/\-Model/\-Chain/\-Residue/\-Atom) architecture : 
+
+\begin{itemize}
+\item A structure consists of models
+\item A model consists of chains
+\item A chain consists of residues
+\item A residue consists of atoms
+\end{itemize}
+This is the way many structural biologists/bioinformaticians think
+about structure, and provides a simple but efficient way to deal with
+structure. Additional stuff is essentially added when needed. A UML
+diagram of the \texttt{Structure} object (forget about the \texttt{Disordered}
+classes for now) is shown in Fig. \ref{cap:SMCRA}.
+
+%
+\begin{figure}[tbh]
+\begin{center}\includegraphics[%
+  width=100mm,
+  keepaspectratio]{images/smcra.png}\end{center}
+
+
+\caption{\label{cap:SMCRA}UML diagram of SMCRA architecture of the \texttt{Structure}
+object. Full lines with diamonds denote aggregation, full lines with
+arrows denote referencing, full lines with triangles denote inheritance
+and dashed lines with triangles denote interface realization. }
+\end{figure}
+
+
+
+\subsubsection*{How do I navigate through a Structure object?}
+
+The following code iterates through all atoms of a structure:
+
+\begin{verbatim}
+>>> p=PDBParser()
+>>> structure=p.get_structure('X', 'pdb1fat.ent')
+>>> for model in structure:
+...     for chain in~model:
+...         for residue in chain:
+...             for atom in residue:
+...                 print atom
+...
+\end{verbatim}
+There are also some shortcuts:
+
+\begin{verbatim}
+# Iterate over all atoms in a structure
+>>> for atom in structure.get_atoms():
+...     print atom
+...
+# Iterate over all residues in a model
+>>> for residue in model.get_residues():
+...     print residue
+...
+\end{verbatim}
+Structures, models, chains, residues and atoms are called \texttt{Entities}
+in Biopython. You can always get a parent \texttt{Entity} from a child
+\texttt{Entity}, e.g.:
+
+\begin{verbatim}
+>>> residue=atom.get_parent()
+>>> chain=residue.get_parent()
+\end{verbatim}
+You can also test wether an \texttt{Entity} has a certain child using
+the \texttt{has\_id} method.
+
+
+\subsubsection*{Can I do that a bit more conveniently?}
+
+You can do things like:
+
+\begin{verbatim}
+>>> atoms=structure.get_atoms()
+>>> residue=structure.get_residues()
+>>> atoms=chain.get_atoms()
+\end{verbatim}
+You can also use the \texttt{Selection.unfold\_entities} function:
+
+\begin{verbatim}
+# Get all residues from a structure
+>>> res_list = Selection.unfold_entities(structure, 'R')
+# Get all atoms from a chain
+>>> atom_list = Selection.unfold_entities(chain, 'A')
+\end{verbatim}
+Obviously, \texttt{A=atom, R=residue, C=chain, M=model, S=structure}.
+You can use this to go up in the hierarchy, eg.\ to get a list of
+(unique) \texttt{Residue} or \texttt{Chain} parents from a list of
+\texttt{Atoms}:
+
+\begin{verbatim}
+>>> residue_list = Selection.unfold_entities(atom_list, 'R')
+>>> chain_list = Selection.unfold_entities(atom_list, 'C')
+\end{verbatim}
+For more info, see the API documentation.
+
+
+\subsubsection*{How do I extract a specific \texttt{Atom/\-Residue/\-Chain/\-Model}
+from a Structure?}
+
+Easy. Here are some examples:
+
+\begin{verbatim}
+>>> model = structure[0]
+>>> chain = model['A']
+>>> residue = chain[100]
+>>> atom = residue['CA']
+\end{verbatim}
+Note that you can use a shortcut:
+
+\begin{verbatim}
+>>> atom = structure[0]['A'][100]['CA']
+\end{verbatim}
+
+\subsubsection*{What is a model id?}
+
+The model id is an integer which denotes the rank of the model in
+the PDB/mmCIF file. The model is starts at 0. Crystal structures generally
+have only one model (with id 0), while NMR files usually have several
+models.
+
+
+\subsubsection*{What is a chain id?}
+
+The chain id is specified in the PDB/mmCIF file, and is a single character
+(typically a letter). 
+
+
+\subsubsection*{What is a residue id?}
+
+This is a bit more complicated, due to the clumsy PDB format. A residue
+id is a tuple with three elements:
+
+\begin{itemize}
+\item The \textbf{hetero-flag}: this is \texttt{'H\_'} plus the name of
+the hetero-residue (eg. \texttt{'H\_GLC'} in the case of a glucose
+molecule), or \texttt{'W'} in the case of a water molecule.
+\item The \textbf{sequence identifier} in the chain, eg. 100
+\item The \textbf{insertion code}, eg. 'A'. The insertion code is sometimes
+used to preserve a certain desirable residue numbering scheme. A Ser
+80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81
+residue) could e.g. have sequence identifiers and insertion codes
+as follows: Thr 80 A, Ser 80 B, Asn 81. In this way the residue numbering
+scheme stays in tune with that of the wild type structure.
+\end{itemize}
+The id of the above glucose residue would thus be \texttt{('H\_GLC',
+100, 'A')}. If the hetero-flag and insertion code are blanc, the sequence
+identifier alone can be used:
+
+\begin{verbatim}
+# Full id
+>>> residue=chain[(' ', 100, ' ')]
+# Shortcut id
+>>> residue=chain[100]
+\end{verbatim}
+The reason for the hetero-flag is that many, many PDB files use the
+same sequence identifier for an amino acid and a hetero-residue or
+a water, which would create obvious problems if the hetero-flag was
+not used. 
+
+
+\subsubsection*{What is an atom id?}
+
+The atom id is simply the atom name (eg. \texttt{'CA'}). In practice,
+the atom name is created by stripping all spaces from the atom name
+in the PDB file. 
+
+However, in PDB files, a space can be part of an atom name. Often,
+calcium atoms are called \texttt{'CA..'} in order to distinguish them
+from C$\alpha$ atoms (which are called \texttt{'.CA.'}). In cases
+were stripping the spaces would create problems (ie. two atoms called
+\texttt{'CA'} in the same residue) the spaces are kept.
+
+
+\subsubsection*{How is disorder handled?}
+
+This is one of the strong points of Bio.PDB. It can handle both disordered
+atoms and point mutations (ie. a Gly and an Ala residue in the same
+position). 
+
+Disorder should be dealt with from two points of view: the atom and
+the residue points of view. In general, I have tried to encapsulate
+all the complexity that arises from disorder. If you just want to
+loop over all C$\alpha$ atoms, you do not care that some residues
+have a disordered side chain. On the other hand it should also be
+possible to represent disorder completely in the data structure. Therefore,
+disordered atoms or residues are stored in special objects that behave
+as if there is no disorder. This is done by only representing a subset
+of the disordered atoms or residues. Which subset is picked (e.g.
+which of the two disordered OG side chain atom positions of a Ser
+residue is used) can be specified by the user.
+
+\textbf{Disordered atom positions} are represented by ordinary \texttt{Atom}
+objects, but all \texttt{Atom} objects that represent the same physical
+atom are stored in a \texttt{Disordered\-Atom} object (see Fig. \ref{cap:SMCRA}).
+Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
+be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
+object forwards all uncaught method calls to the selected Atom object,
+by default the one that represents the atom with the highest
+occupancy. The user can of course change the selected \texttt{Atom}
+object, making use of its altloc specifier. In this way atom disorder
+is represented correctly without much additional complexity. In other
+words, if you are not interested in atom disorder, you will not be
+bothered by it.
+
+Each disordered atom has a characteristic altloc identifier. You can
+specify that a \texttt{Disordered\-Atom} object should behave like
+the \texttt{Atom} object associated with a specific altloc identifier:
+
+\begin{verbatim}
+>>> atom.disordered_select('A') # select altloc A atom
+>>> atom.disordered_select('B') # select altloc B atom
+\end{verbatim}
+A special case arises when disorder is due to \textbf{point mutations},
+i.e. when two or more point mutants of a polypeptide are present in
+the crystal. An example of this can be found in PDB structure 1EN2.
+
+Since these residues belong to a different residue type (e.g. let's
+say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
+object as in the common case. In this case, each residue is represented
+by one \texttt{Residue} object, and both \texttt{Residue} objects
+are stored in a single \texttt{Disordered\-Residue} object (see Fig.
+\ref{cap:SMCRA}).
+
+The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught
+methods to the selected \texttt{Residue} object (by default the last
+\texttt{Residue} object added), and thus behaves like an ordinary
+residue. Each \texttt{Residue} object in a \texttt{Disordered\-Residue}
+object can be uniquely identified by its residue name. In the above
+example, residue Ser 60 would have id 'SER' in the \texttt{Disordered\-Residue}
+object, while residue Cys 60 would have id 'CYS'. The user can select
+the active \texttt{Residue} object in a \texttt{Disordered\-Residue}
+object via this id.
+
+Example: suppose that a chain has a point mutation at position 10,
+consisting of a Ser and a Cys residue. Make sure that residue 10 of
+this chain behaves as the Cys residue.
+
+\begin{verbatim}
+>>> residue = chain[10]
+>>> residue.disordered_select('CYS')
+\end{verbatim}
+In addition, you can get a list of all \texttt{Atom} objects (ie.
+all \texttt{DisorderedAtom} objects are 'unpacked' to their individual
+\texttt{Atom} objects) using the \texttt{get\_unpacked\_list} method
+of a \texttt{(Disordered)\-Residue} object.
+
+
+\subsubsection*{Can I sort residues in a chain somehow?}
+
+Yes, kinda, but I'm waiting for a request for this feature to finish
+it :-).
+
+
+\subsubsection*{How are ligands and solvent handled?}
+
+See 'What is a residue id?'.
+
+
+\subsubsection*{What about B factors?}
+
+Well, yes! Bio.PDB supports isotropic and anisotropic B factors, and
+also deals with standard deviations of anisotropic B factor if present
+(see \ref{sub:Analysis}).
+
+
+\subsubsection*{What about standard deviation of atomic positions?}
+
+Yup, supported. See section \ref{sub:Analysis}.
+
+
+\subsubsection*{I think the SMCRA data structure is not flexible/\-sexy/\-whatever
+enough...}
+
+Sure, sure. Everybody is always coming up with (mostly vaporware or
+partly implemented) data structures that handle all possible situations
+and are extensible in all thinkable (and unthinkable) ways. The prosaic
+truth however is that 99.9\% of people using (and I mean really using!)
+crystal structures think in terms of models, chains, residues and
+atoms. The philosophy of Bio.PDB is to provide a reasonably fast,
+clean, simple, but complete data structure to access structure data.
+The proof of the pudding is in the eating.
+
+Moreover, it is quite easy to build more specialised data structures
+on top of the \texttt{Structure} class (eg. there's a \texttt{Polypeptide}
+class). On the other hand, the \texttt{Structure} object is built
+using a Parser/\-Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
+and \texttt{Structure\-Builder}, respectively). One can easily re-use
+the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
+class. It is of course also trivial to add support for new file formats
+by writing new parsers.
+
+
+\subsection{\label{sub:Analysis}Analysis}
+
+
+\subsubsection*{How do I extract information from an \texttt{Atom} object?}
+
+Using the following methods:
+
+\begin{verbatim}
+>>> a.get_name() # atom name (spaces stripped, e.g. 'CA')
+>>> a.get_id() # id (equals atom name)
+>>> a.get_coord() # atomic coordinates
+>>> a.get_vector() # atomic coordinates as Vector object
+>>> a.get_bfactor() # isotropic B factor
+>>> a.get_occupancy() # occupancy
+>>> a.get_altloc() # alternative location specifier
+>>> a.get_sigatm() # std. dev. of atomic parameters
+>>> a.get_siguij() # std. dev. of anisotropic B factor
+>>> a.get_anisou() # anisotropic B factor
+>>> a.get_fullname() # atom name (with spaces, e.g. '.CA.')
+\end{verbatim}
+
+\subsubsection*{How do I extract information from a \texttt{Residue} object?}
+
+Using the following methods:
+
+\begin{verbatim}
+>>> r.get_resname() # return the residue name (eg. 'GLY')
+>>> r.is_disordered() # 1 if the residue has disordered atoms
+>>> r.get_segid() # return the SEGID
+>>> r.has_id(name) # test if a residue has a certain atom
+\end{verbatim}
+
+\subsubsection*{How do I measure distances?}
+
+That's simple: the minus operator for atoms has been overloaded to
+return the distance between two atoms. 
+
+Example:
+
+\begin{verbatim}
+# Get some atoms
+>>> ca1 = residue1['CA']
+>>> ca2 = residue2['CA']
+# Simply subtract the atoms to get their distance
+>>> distance = ca1-ca2
+\end{verbatim}
+
+\subsubsection*{How do I measure angles?}
+
+This can easily be done via the vector representation of the atomic
+coordinates, and the \texttt{calc\_angle} function from the \texttt{Vector}
+module:
+
+\begin{verbatim}
+>>> vector1=atom1.get_vector()
+>>> vector2=atom2.get_vector()
+>>> vector3=atom3.get_vector()
+>>> angle=calc_angle(vector1, vector2, vector3)
+\end{verbatim}
+
+\subsubsection*{How do I measure torsion angles?}
+
+Again, this can easily be done via the vector representation of the
+atomic coordinates, this time using the \texttt{calc\_dihedral} function
+from the \texttt{Vector} module:
+
+\begin{verbatim}
+>>> vector1 = atom1.get_vector()
+>>> vector2 = atom2.get_vector()
+>>> vector3 = atom3.get_vector()
+>>> vector4 = atom4.get_vector()
+>>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
+\end{verbatim}
+
+\subsubsection*{How do I determine atom-atom contacts?}
+
+Use \texttt{NeighborSearch}. This uses a KD tree data structure coded
+in C++ behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
+
+
+\subsubsection*{How do I extract polypeptides from a \texttt{Structure} object?}
+
+Use \texttt{PolypeptideBuilder}. You can use the resulting \texttt{Polypeptide}
+object to get the sequence as a \texttt{Seq} object or to get a list
+of C$\alpha$ atoms as well. Polypeptides can be built using a C-N
+or a C$\alpha$-C$\alpha$ distance criterion.
+
+Example:
+
+\begin{verbatim}
+# Using C-N 
+>>> ppb=PPBuilder()
+>>> for pp in ppb.build_peptides(structure): 
+...     print pp.get_sequence()
+...
+# Using CA-CA
+>>> ppb=CaPPBuilder()
+>>> for pp in ppb.build_peptides(structure): 
+...     print pp.get_sequence()
+...
+\end{verbatim}
+Note that in the above case only model 0 of the structure is considered
+by \texttt{PolypeptideBuilder}. However, it is possible to use \texttt{PolypeptideBuilder}
+to build \texttt{Polypeptide} objects from \texttt{Model} and \texttt{Chain}
+objects as well.
+
+
+\subsubsection*{How do I get the sequence of a structure?}
+
+The first thing to do is to extract all polypeptides from the structure
+(see previous entry). The sequence of each polypeptide can then easily
+be obtained from the \texttt{Polypeptide} objects. The sequence is
+represented as a Biopython \texttt{Seq} object, and its alphabet is
+defined by a \texttt{ProteinAlphabet} object.
+
+Example:
+
+\begin{verbatim}
+>>> seq = polypeptide.get_sequence()
+>>> print seq
+Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
+\end{verbatim}
+
+\subsubsection*{How do I determine secondary structure?}
+
+For this functionality, you need to install DSSP (and obtain a license
+for it - free for academic use, see \url{http://www.cmbi.kun.nl/gv/dssp/}).
+Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
+to their secondary structure (and accessible surface area). The DSSP
+codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
+program, and thus by consequence the class) cannot handle multiple
+models!
+
+%
+\begin{table}
+
+\subsubsection*{\begin{tabular}{|c|c|}
+\hline 
+Code&
+Secondary structure \\
+\hline
+\hline 
+H&
+$\alpha$-helix \\
+\hline 
+B&
+Isolated $\beta$-bridge residue \\
+\hline 
+E&
+Strand \\
+\hline 
+G&
+3-10 helix \\
+\hline 
+I&
+$\Pi$-helix \\
+\hline 
+T&
+Turn\\
+\hline 
+S&
+Bend \\
+\hline 
+-&
+Other\\
+\hline
+\end{tabular}}
+
+
+\caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
+\end{table}
+
+
+
+\subsubsection*{How do I calculate the accessible surface area of a residue?}
+
+Use the \texttt{DSSP} class (see also previous entry). But see also
+next entry.
+
+
+\subsubsection*{How do I calculate residue depth?}
+
+Residue depth is the average distance of a residue's atoms from the
+solvent accessible surface. It's a fairly new and very powerful parameterization
+of solvent accessibility. For this functionality, you need to install
+Michel Sanner's MSMS program (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
+Then use the \texttt{ResidueDepth} class. This class behaves as a
+dictionary which maps \texttt{Residue} objects to corresponding (residue
+depth, C$\alpha$ depth) tuples. The C$\alpha$ depth is the distance
+of a residue's C$\alpha$ atom to the solvent accessible surface. 
+
+Example:
+
+\begin{verbatim}
+>>> model = structure[0]
+>>> rd = ResidueDepth(model, pdb_file)
+>>> residue_depth, ca_depth=rd[some_residue]
+\end{verbatim}
+You can also get access to the molecular surface itself (via the \texttt{get\_surface}
+function), in the form of a Numeric Python array with the surface points.
+
+
+\subsubsection*{How do I calculate Half Sphere Exposure?}
+
+Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
+Basically, it counts the number of C$\alpha$ atoms around a residue
+in the direction of its side chain, and in the opposite direction
+(within a radius of $13 \AA$). Despite its simplicity, it outperforms
+many other measures of solvent exposure. An article describing this
+novel 2D measure has been submitted.
+
+HSE comes in two flavors: HSE$\alpha$ and HSE$\beta$. The former
+only uses the C$\alpha$ atom positions, while the latter uses the
+C$\alpha$ and C$\beta$ atom positions. The HSE measure is calculated
+by the \texttt{HSExposure} class, which can also calculate the contact
+number. The latter class has methods which return dictionaries that
+map a \texttt{Residue} object to its corresponding HSE$\alpha$, HSE$\beta$
+and contact number values.
+
+Example:
+
+\begin{verbatim}
+>>> model = structure[0]
+>>> hse = HSExposure()
+# Calculate HSEalpha
+>>> exp_ca = hse.calc_hs_exposure(model, option='CA3')
+# Calculate HSEbeta
+>>> exp_cb=hse.calc_hs_exposure(model, option='CB')
+# Calculate classical coordination number
+>>> exp_fs = hse.calc_fs_exposure(model)
+# Print HSEalpha for a residue
+>>> print exp_ca[some_residue]
+\end{verbatim}
+
+\subsubsection*{How do I map the residues of two related structures onto each other?}
+
+First, create an alignment file in FASTA format, then use the \texttt{StructureAlignment}
+class. This class can also be used for alignments with more than two
+structures.
+
+
+\subsubsection*{How do I test if a Residue object is an amino acid?}
+
+Use \texttt{is\_aa(residue)}.
+
+
+\subsubsection*{Can I do vector operations on atomic coordinates?}
+
+\texttt{Atom} objects return a \texttt{Vector} object representation
+of the coordinates with the \texttt{get\_vector} method. \texttt{Vector}
+implements the full set of 3D vector operations, matrix multiplication
+(left and right) and some advanced rotation-related operations as
+well. See also next question.
+
+
+\subsubsection*{How do I put a virtual C$\beta$ on a Gly residue?}
+
+OK, I admit, this example is only present to show off the possibilities
+of Bio.PDB's \texttt{Vector} module (though this code is actually
+used in the \texttt{HSExposure} module, which contains a novel way
+to parametrize residue exposure - publication underway). Suppose that
+you would like to find the position of a Gly residue's C$\beta$ atom,
+if it had one. How would you do that? Well, rotating the N atom of
+the Gly residue along the C$\alpha$-C bond over -120 degrees roughly
+puts it in the position of a virtual C$\beta$ atom. Here's how to
+do it, making use of the \texttt{rotaxis} method (which can be used
+to construct a rotation around a certain axis) of the \texttt{Vector}
+module:
+
+\begin{verbatim}
+# get atom coordinates as vectors
+>>> n=residue{[}'N'{]}.get\_vector() 
+>>> c=residue{[}'C'{]}.get\_vector() 
+>>> ca=residue{[}'CA'{]}.get\_vector()
+# center at origin
+>>> n = n - ca 
+>>> c = c - ca 
+# find rotation matrix that rotates n 
+# -120 degrees along the ca-c vector
+>>> rot = rotaxis(-pi * 120.0/180.0, c)
+# apply rotation to ca-n vector
+>>> cb_at_origin = n.left_multiply(rot)
+# put on top of ca atom
+>>> cb = cb_at_origin+ca
+\end{verbatim}
+This example shows that it's possible to do some quite nontrivial
+vector operations on atomic data, which can be quite useful. In addition
+to all the usual vector operations (cross (use \texttt{{*}{*}}), and
+dot (use \texttt{{*}}) product, angle, norm, etc.) and the above mentioned
+\texttt{rotaxis} function, the \texttt{Vector} module also has methods
+to rotate (\texttt{rotmat}) or reflect (\texttt{refmat}) one vector
+on top of another.
+
+
+\subsection{Manipulating the structure}
+
+
+\subsubsection*{How do I superimpose two structures?}
+
+Surprisingly, this is done using the \texttt{Superimposer} object.
+This object calculates the rotation and translation matrix that rotates
+two lists of atoms on top of each other in such a way that their RMSD
+is minimized. Of course, the two lists need to contain the same amount
+of atoms. The \texttt{Superimposer} object can also apply the rotation/translation
+to a list of atoms. The rotation and translation are stored as a tuple
+in the \texttt{rotran} attribute of the \texttt{Superimposer} object
+(note that the rotation is right multiplying!). The RMSD is stored
+in the \texttt{rmsd} attribute.
+
+The algorithm used by \texttt{Superimposer} comes from \textit{Matrix
+computations, 2nd ed. Golub, G. \& Van Loan (1989)} and makes use
+of singular value decomposition (this is implemented in the general
+\texttt{Bio.\-SVDSuperimposer} module).
+
+Example:
+
+\begin{verbatim}
+>>> sup = Superimposer()
+# Specify the atom lists
+# 'fixed' and 'moving' are lists of Atom objects
+# The moving atoms will be put on the fixed atoms
+>>> sup.set_atoms(fixed, moving)
+# Print rotation/translation/rmsd
+>>> print sup.rotran
+>>> print sup.rms 
+# Apply rotation/translation to the moving atoms
+>>> sup.apply(moving)
+\end{verbatim}
+
+\subsubsection*{How do I superimpose two structures based on their active sites?}
+
+Pretty easily. Use the active site atoms to calculate the rotation/translation
+matrices (see above), and apply these to the whole molecule.
+
+
+\subsubsection*{Can I manipulate the atomic coordinates?}
+
+Yes, using the \texttt{transform} method of the \texttt{Atom} object,
+or directly using the \texttt{set\_coord} method.
+
+
+  \section{Who's using Bio.PDB?}
+
+Bio.PDB was used in the construction of DISEMBL, a web server that
+predicts disordered regions in proteins (\url{http://dis.embl.de/}),
+and COLUMBA, a website that provides annotated protein structures
+(\url{http://www.columba-db.de/}). Bio.PDB has also been used to
+perform a large scale search for active sites similarities between
+protein structures in the PDB \cite[Hamelryck, 2003]{hamelryck2003b}, and to develop a new algorithm
+that identifies linear secondary structure elements \cite[Majumdar \textit{et al.}, 2005]{majumdar2005}.
+
+Judging from requests for features and information, Bio.PDB is also
+used by several LPCs (Large Pharmaceutical Companies :-).
+
+% Perhaps this section should be updated for other Biopython modules, and
+% moved to the Biopython FAQ above.
 
 \chapter{Bio.PopGen: Population genetics}
 
@@ -10759,7 +11718,7 @@ Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
 most of their functionality with a unified motif object implementation.
 
 Speaking of other libraries, if you are reading this you might be
-interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
+interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another Python library
 designed to deal with sequence motifs. It supports more \emph{de-novo}
 motif finders, but it is not a part of Biopython and has some restrictions
 on commercial use.
@@ -11896,7 +12855,7 @@ roughly $1-0.239=0.761$.
 \section{\emph{De novo} motif finding}
 \label{sec:find}
 
-Currently, biopython has only limited support for \emph{de novo} motif
+Currently, Biopython has only limited support for \emph{de novo} motif
 finding. Namely, we support running and parsing of AlignAce and
 MEME. Since the number of motif finding tools is growing rapidly, 
 contributions of new parsers are welcome. 
@@ -12416,7 +13375,7 @@ independently generating the same instance by both motifs.
 
 \subsection{\emph{De novo} motif finding}
 
-Currently, biopython has only limited support for \emph{de novo} motif
+Currently, Biopython has only limited support for \emph{de novo} motif
 finding. Namely, we support running and parsing of AlignAce and
 MEME. Since the number of motif finding tools is growing rapidly, 
 contributions of new parsers are welcome. 
@@ -12529,7 +13488,7 @@ The data to be clustered are represented by a $n \times m$ Numerical Python arra
 
 \subsection*{Missing values}
 
-Often in microarray experiments, some of the data values are missing, which is indicated by an additional $n \times m$ Numerical python integer array \verb|mask|. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing and is ignored in the analysis.
+Often in microarray experiments, some of the data values are missing, which is indicated by an additional $n \times m$ Numerical Python integer array \verb|mask|. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing and is ignored in the analysis.
 
 \subsection*{Random number generator}
 
@@ -15487,7 +16446,7 @@ quality scores), but that will be much slower.
 Back in Section~\ref{sec:SeqIO-conversion} we showed how to use
 \verb|Bio.SeqIO| to convert between two file formats. Here we'll go into a
 little more detail regarding FASTQ files which are used in second generation
-DNA sequencing. Please refer to Cock \textit{et al.} (2009) \cite{cock2009nar}
+DNA sequencing. Please refer to Cock \textit{et al.} (2009) \cite{cock2010}
 for a longer description. FASTQ files store both the DNA sequence (as a string)
 and the associated read qualities. 
 
@@ -17539,8 +18498,8 @@ Caroline Proux, Douwe van Sinderen, Juan Suarez, Pilar Garcia, Victor Ladero, Ge
 \bibitem{jupe2012}
 Florian Jupe, Leighton Pritchard, Graham J. Etherington, Katrin MacKenzie, Peter JA Cock, Frank Wright, Sanjeev Kumar Sharma1, Dan Bolser, Glenn J Bryan, Jonathan DG Jones, Ingo Hein: ``Identification and localisation of the NB-LRR gene family within the potato genome''. \textit{BMC Genomics} {\bf 13}: 75 (2012).
 \href{http://dx.doi.org/10.1186/1471-2164-13-75}{http://dx.doi.org/10.1186/1471-2164-13-75}
-\bibitem{cock2009nar}
-Peter J. A. Cock, Christopher J. Fields, Naohisa Goto, Michael L. Heuer, Peter M. Rice: ``The Sanger FASTQ file format for sequences with quality scores, and the Solexa/Illumina FASTQ variants''.  \textit{Nucleic Acids Research} {\bf 38} (6): 1767--1771 (2009). \href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137}
+\bibitem{cock2010}
+Peter J. A. Cock, Christopher J. Fields, Naohisa Goto, Michael L. Heuer, Peter M. Rice: ``The Sanger FASTQ file format for sequences with quality scores, and the Solexa/Illumina FASTQ variants''.  \textit{Nucleic Acids Research} {\bf 38} (6): 1767--1771 (2010). \href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137}
 \bibitem{brown1999}
 Patrick O. Brown, David Botstein: ``Exploring the new world of the genome with DNA microarrays''. \textit{Nature Genetics} {\bf 21} (Supplement 1), 33--37 (1999). \href{http://dx.doi.org/10.1038/4462}{doi:10.1038/4462}
 \bibitem{talevich2012}
@@ -17551,12 +18510,19 @@ Athel Cornish-Bowden: ``Nomenclature for incompletely specified bases in nucleic
 Douglas R. Cavener: ``Comparison of the consensus sequence flanking translational start sites in Drosophila and vertebrates.'' \textit{Nucleic Acids Research} {\bf 15} (4): 1353--1361 (1987). \href{http://dx.doi.org/10.1093/nar/15.4.1353}{doi:10.1093/nar/15.4.1353}
 \bibitem{bailey1994}
 Timothy L. Bailey and Charles Elkan: ``Fitting a mixture model by expectation maximization to discover motifs in biopolymers'', \textit{Proceedings of the Second International Conference on Intelligent Systems for Molecular Biology} 28--36. AAAI Press, Menlo Park, California (1994).
+\bibitem{chapman2000}
+Brad Chapman and Jeff Chang: ``Biopython: Python tools for computational biology''. \textit{ACM SIGBIO Newsletter} {\bf 20} (2): 15--19 (August 2000).
 \bibitem{dehoon2004}
 Michiel J. L. de Hoon, Seiya Imoto, John Nolan, Satoru Miyano: ``Open source clustering software''. \textit{Bioinformatics} {\bf 20} (9): 1453--1454 (2004). \href{http://dx.doi.org/10.1093/bioinformatics/bth078}{doi:10.1093/bioinformatics/bth078}
 \bibitem{eisen1998}
 Michiel B. Eisen, Paul T. Spellman, Patrick O. Brown, David Botstein: ``Cluster analysis and display of genome-wide expression patterns''. \textit{Proceedings of the National Academy of Science USA} {\bf 95} (25): 14863--14868 (1998). \href{http://dx.doi.org/10.1073/pnas.96.19.10943-c}{doi:10.1073/pnas.96.19.10943-c}
 \bibitem{golub1971}
 Gene H. Golub, Christian Reinsch: ``Singular value decomposition and least squares solutions''. In \textit{Handbook for Automatic Computation}, {\bf 2}, (Linear Algebra) (J. H. Wilkinson and C. Reinsch, eds), 134--151. New York: Springer-Verlag (1971).
+\bibitem{hamelryck2003a}
+Thomas Hamelryck and  Bernard Manderick: 11PDB parser and structure class
+implemented in Python''. \textit{Bioinformatics}, \textbf{19} (17): 2308--2310 (2003) \href{http://dx.doi.org/10.1093/bioinformatics/btg299}{doi: 10.1093/bioinformatics/btg299}. 
+\bibitem{hamelryck2003b}
+Thomas Hamelryck: ``Efficient identification of side-chain patterns using a multidimensional index tree''. \textit{Proteins} {\bf 51} (1): 96--108 (2003). \href{http://dx.doi.org/10.1002/prot.10338}{doi:10.1002/prot.10338}
 \bibitem{hartigan1975}
 John A. Hartiga. \textit{Clustering algorithms}. New York: Wiley (1975).
 \bibitem{jain1988}
@@ -17568,6 +18534,8 @@ Teuvo Kohonen: ``Self-organizing maps'', 2nd Edition. Berlin; New York: Springer
 \bibitem{lecuyer1988}
 Pierre L'Ecuyer: ``Efficient and Portable Combined Random Number Generators.''
 \textit{Communications of the ACM} {\bf 31} (6): 742--749,774 (1988). \href{http://dx.doi.org/10.1145/62959.62969}{doi:10.1145/62959.62969}
+\bibitem{majumdar2005}
+Indraneel Majumdar, S. Sri Krishna, Nick V. Grishin: ``PALSSE: A program to delineate linear secondary structural elements from protein structures.'' \textit{BMC Bioinformatics}, {\bf 6}: 202 (2005). \href{http://dx.doi.org/10.1186/1471-2105-6-202}{doi:10.1186/1471-2105-6-202}.
 \bibitem{matys2003}
 V. Matys, E. Fricke, R. Geffers, E. G\"ossling, M. Haubrock, R. Hehl, K. Hornischer, D. Karas, A.E. Kel, O.V. Kel-Margoulis, D.U. Kloos, S. Land, B. Lewicki-Potapov, H. Michael, R. M\"unch, I. Reuter, S. Rotert, H. Saxel, M. Scheer, S. Thiele, E. Wingender E: ``TRANSFAC: transcriptional regulation, from patterns to profiles.'' Nucleic Acids Research {\bf 31} (1): 374--378 (2003). \href{http://dx.doi.org/10.1093/nar/gkg108}{doi:10.1093/nar/gkg108}
 \bibitem{sibson1973}
