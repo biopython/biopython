@@ -74,7 +74,7 @@ import time
 import warnings
 import os.path
 
-from Bio._py3k import _binary_to_string_handle
+from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 email = None
 tool = "biopython"
@@ -451,7 +451,7 @@ E-utilities.""", UserWarning)
     try:
         if post:
             #HTTP POST
-            handle = urllib2.urlopen(cgi, data=options)
+            handle = urllib2.urlopen(cgi, data=_as_bytes(options))
         else:
             #HTTP GET
             cgi += "?" + options
