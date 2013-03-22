@@ -65,6 +65,12 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
+    def test_epost(self):
+        handle = Entrez.epost("nuccore", id="186972394,160418")
+        handle.close()
+        handle = Entrez.epost("nuccore", id=["160418", "160351"])
+        handle.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
