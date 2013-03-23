@@ -16669,7 +16669,8 @@ get a list of all the possible ORF translations in the six reading frames:
 \begin{verbatim}
 >>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
 ...     for frame in range(3):
-...         for pro in nuc[frame:].translate(table).split("*"):
+...         length = 3 * ((len(record)-frame) // 3) #Multiple of three
+...         for pro in nuc[frame:frame+length].translate(table).split("*"):
 ...             if len(pro) >= min_pro_len:
 ...                 print "%s...%s - length %i, strand %i, frame %i" \
 ...                       % (pro[:30], pro[-3:], len(pro), strand, frame)
