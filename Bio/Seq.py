@@ -1958,7 +1958,9 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     elif n % 3 != 0:
         import warnings
         from Bio import BiopythonWarning
-        warnings.warn("Sequence length %i is not a multiple of three" % n,
+        warnings.warn("Partial codon, len(sequence) not a multiple of three. "
+                      "Explicitly trim the sequence or add trailing N before "
+                      "translation. This may become an error in future.",
                       BiopythonWarning)
     for i in xrange(0, n-n%3, 3):
         codon = sequence[i:i+3]
