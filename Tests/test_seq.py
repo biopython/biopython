@@ -484,14 +484,14 @@ print
 print "Translating"
 print "==========="
 for nucleotide_seq in test_seqs:
+    #Truncate to a whole number of codons to avoid translation warning
+    nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
     try:
         expected = Seq.translate(nucleotide_seq)
-        print "%s\n-> %s" \
-        % (repr(nucleotide_seq) , repr(expected))
+        print "%s\n-> %s" % (repr(nucleotide_seq), repr(expected))
     except (ValueError, TranslationError), e:
         expected = None
-        print "%s\n-> %s" \
-        % (repr(nucleotide_seq) , str(e))
+        print "%s\n-> %s" % (repr(nucleotide_seq), str(e))
     #Now test the Seq object's method
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
