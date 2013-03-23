@@ -8703,16 +8703,20 @@ Bio.PDB is a Biopython module that focuses on working with crystal structures of
 
 \section{Structure representation}
 
-A macromolecular structure is represented using a structure, model chain,
-residue, atom (or SMCRA) hierarchy.
-\begin{htmlonly}
-The figure below
-\end{htmlonly}
-\begin{latexonly}
-Figure~\ref{fig:smcra}
-\end{latexonly}
-shows a UML
-class diagram of the SMCRA data structure.  Such a data structure is not
+The overall layout of a \texttt{Structure} object follows the so-called SMCRA
+(Structure/Model/Chain/Residue/Atom) architecture : 
+
+\begin{itemize}
+\item A structure consists of models
+\item A model consists of chains
+\item A chain consists of residues
+\item A residue consists of atoms
+\end{itemize}
+This is the way many structural biologists/bioinformaticians think
+about structure, and provides a simple but efficient way to deal with
+structure. Additional stuff is essentially added when needed. A UML
+diagram of the \texttt{Structure} object (forget about the \texttt{Disordered}
+classes for now) is shown in Fig. \ref{fig:smcra}. Such a data structure is not
 necessarily best suited for the representation of the macromolecular content of
 a structure, but it is absolutely necessary for a good interpretation of the
 data present in a file that describes the structure (typically a PDB or MMCIF
@@ -8723,20 +8727,20 @@ there is reason to suspect a problem. Parsing a PDB file can thus be used to
 detect likely problems. We will give several examples of this in section
 \ref{problem structures}.
 
+\begin{figure}[htbp]
 \begin{htmlonly}
 \imgsrc[width=650, height=750]{images/smcra.png}
-\label{fig:smcra}
 \end{htmlonly}
-
 \begin{latexonly}
-\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/smcra.png}
-\caption{UML diagram of the SMCRA data structure
-used to represent a macromolecular structure.}
+\end{latexonly}
+\caption{UML diagram of SMCRA architecture of the \texttt{Structure} class used to represent a macromolecular structure.
+Full lines with diamonds denote aggregation, full lines with
+arrows denote referencing, full lines with triangles denote inheritance
+and dashed lines with triangles denote interface realization.}
 \label{fig:smcra}
 \end{figure}
-\end{latexonly}
 
 Structure, Model, Chain and Residue are all subclasses of the Entity base class.
 The Atom class only (partly) implements the Entity interface (because an Atom
@@ -8757,7 +8761,7 @@ extracted from its parent (i.e. Residue, Chain, Model, Structure, respectively)
 by using an id as a key.
 
 \begin{verbatim}
->>> child_entity=parent_entity[child_id]
+>>> child_entity = parent_entity[child_id]
 \end{verbatim}
 
 You can also get a list of all child Entities of a parent Entity object. Note
@@ -8765,13 +8769,13 @@ that this list is sorted in a specific way (e.g. according to chain identifier
 for Chain objects in a Model object).
 
 \begin{verbatim}
->>> child_list=parent_entity.get_list()
+>>> child_list = parent_entity.get_list()
 \end{verbatim}
 
 You can also get the parent from a child.
 
 \begin{verbatim}
->>> parent_entity=child_entity.get_parent()
+>>> parent_entity = child_entity.get_parent()
 \end{verbatim}
 
 At all levels of the SMCRA hierarchy, you can also extract a \emph{full id}.
@@ -8800,17 +8804,12 @@ that its insertion code is \char`\"{}A\char`\"{}.
 Some other useful methods:
 
 \begin{verbatim}
-# get the entity's id
-
-entity.get_id()
-
-# check if there is a child with a given id
-
-entity.has_id(entity_id)
-
-# get number of children
-
-nr_children=len(entity)
+>>> # get the entity's id
+>>> entity.get_id()
+>>> # check if there is a child with a given id
+>>> entity.has_id(entity_id)
+>>> # get number of children
+>>> nr_children=len(entity)
 \end{verbatim}
 
 It is possible to delete, rename, add, etc. child entities from a parent entity,
@@ -8919,6 +8918,49 @@ Example: get the list of the y coordinates of all atoms
 That's not yet supported, but we are definitely planning to support that
 in the future (it's not a lot of work). Contact the Biopython developers
 (\mailto{biopython-dev@biopython.org}) if you need this).
+
+\subsection{Writing PDB files}
+
+Use the PDBIO class for this. It's easy to write out specific parts
+of a structure too, of course.
+
+Example: saving a structure
+
+\begin{verbatim}
+>>> io = PDBIO()
+>>> io.set_structure(s)
+>>> io.save('out.pdb')
+\end{verbatim}
+If you want to write out a part of the structure, make use of the
+\texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
+
+\begin{verbatim}
+>>> accept_model(model)
+>>> accept_chain(chain)
+>>> accept_residue(residue)
+>>> accept_atom(atom)
+\end{verbatim}
+By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
+is included in the output). By subclassing \texttt{Select} and returning
+0 when appropriate you can exclude models, chains, etc. from the output.
+Cumbersome maybe, but very powerful. The following code only writes
+out glycine residues:
+
+\begin{verbatim}
+>>> class GlySelect(Select):
+...     def accept_residue(self, residue):
+...         if residue.get_name()=='GLY':
+...             return True
+...         else:
+...             return False
+...
+>>> io = PDBIO()
+>>> io.set_structure(s)
+>>> io.save('gly_only.pdb', GlySelect())
+\end{verbatim}
+If this is all too complicated for you, the \texttt{Dice} module contains
+a handy \texttt{extract} function that writes out all residues in
+a chain between a start and end residue. 
 
 \subsection{Model}
 
@@ -9148,60 +9190,61 @@ would have hetfield {}``H\_GLC{}''. It's residue id could e.g. be ({}``H\_GLC{}'
 Parse a PDB file, and extract some Model, Chain, Residue and Atom objects.
 
 \begin{verbatim}
-from Bio.PDB.PDBParser import PDBParser
-
-parser=PDBParser()
-
-structure=parser.get_structure("test", "1fat.pdb")
-model=structure[0]
-chain=model["A"]
-residue=chain[1]
-atom=residue["CA"]
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> parser = PDBParser()
+>>> structure = parser.get_structure("test", "1fat.pdb")
+>>> model = structure[0]
+>>> chain = model["A"]
+>>> residue = chain[1]
+>>> atom = residue["CA"]
 \end{verbatim}
 
 Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq
 10).
 
 \begin{verbatim}
-residue_id=("H_GLC", 10, " ")
-residue=chain[residue_id]
+>>> residue_id = ("H_GLC", 10, " ")
+>>> residue = chain[residue_id]
 \end{verbatim}
 
 Print all hetero residues in chain.
 
 \begin{verbatim}
-for residue in chain.get_list():
-	residue_id=residue.get_id()
-	hetfield=residue_id[0]
-	if hetfield[0]=="H":
-		print residue_id
+>>> for residue in chain.get_list():
+...    residue_id = residue.get_id()
+...    hetfield = residue_id[0]
+...    if hetfield[0]=="H":
+...        print residue_id
+...
 \end{verbatim}
 
 Print out the coordinates of all CA atoms in a structure with B factor greater
 than 50.
 
 \begin{verbatim}
-for model in structure.get_list():
-  for chain in model.get_list():
-    for residue in chain.get_list():
-      if residue.has_id("CA"):
-        ca=residue["CA"]
-        if ca.get_bfactor()>50.0:
-          print ca.get_coord()
+>>> for model in structure.get_list():
+...     for chain in model.get_list():
+...         for residue in chain.get_list():
+...             if residue.has_id("CA"):
+...                 ca = residue["CA"]
+...                 if ca.get_bfactor() > 50.0:
+...                     print ca.get_coord()
+...
 \end{verbatim}
 
 Print out all the residues that contain disordered atoms.
 
 \begin{verbatim}
-for model in structure.get_list():
-  for chain in model.get_list():
-    for residue in chain.get_list():
-      if residue.is_disordered():
-        resseq=residue.get_id()[1]
-        resname=residue.get_resname()
-        model_id=model.get_id()
-        chain_id=chain.get_id()
-        print model_id, chain_id, resname, resseq
+>>> for model in structure.get_list():
+...     for chain in model.get_list():
+...         for residue in chain.get_list():
+...             if residue.is_disordered():
+...                 resseq = residue.get_id()[1]
+...                 resname = residue.get_resname()
+...                 model_id = model.get_id()
+...                 chain_id = chain.get_id()
+...                 print model_id, chain_id, resname, resseq
+...
 \end{verbatim}
 
 Loop over all disordered atoms, and select all atoms with altloc A (if present).
@@ -9209,14 +9252,15 @@ This will make sure that the SMCRA data structure will behave as if only the
 atoms with altloc A are present.
 
 \begin{verbatim}
-for model in structure.get_list():
-  for chain in model.get_list():
-    for residue in chain.get_list():
-      if residue.is_disordered():
-        for atom in residue.get_list():
-          if atom.is_disordered():
-            if atom.disordered_has_id("A"):
-              atom.disordered_select("A")
+>>> for model in structure.get_list():
+...     for chain in model.get_list():
+...         for residue in chain.get_list():
+...             if residue.is_disordered():
+...                 for atom in residue.get_list():
+...                     if atom.is_disordered():
+...                         if atom.disordered_has_id("A"):
+...                             atom.disordered_select("A")
+...
 \end{verbatim}
 
 Suppose that a chain has a point mutation at position 10, consisting of a Ser
@@ -9224,11 +9268,49 @@ and a Cys residue. Make sure that residue 10 of this chain behaves as the Cys
 residue.
 
 \begin{verbatim}
-residue=chain[10]
-residue.disordered_select("CYS")
+>>> residue = chain[10]
+>>> residue.disordered_select("CYS")
 \end{verbatim}
 
 \section{Common problems in PDB files}
+
+It is well known that many PDB files contain semantic errors (not the
+structures themselves, but their representation in PDB files).
+Bio.PDB tries to handle this in two ways. The PDBParser
+object can behave in two ways: a restrictive way and a permissive
+way, which is the default.
+
+Example:
+
+\begin{verbatim}
+# Permissive parser
+>>> parser = PDBParser(PERMISSIVE=1)
+>>> parser = PDBParser() # The same (default)
+>>> # Strict parser
+>>> strict_parser = PDBParser(PERMISSIVE=0)
+\end{verbatim}
+In the permissive state (DEFAULT), PDB files that obviously contain
+errors are 'corrected' (i.e. some residues or atoms are left out).
+These errors include:
+
+\begin{itemize}
+\item Multiple residues with the same identifier
+\item Multiple atoms with the same identifier (taking into account the altloc
+identifier)
+\end{itemize}
+These errors indicate real problems in the PDB file (for details see
+\cite[Hamelryck and Manderick, 2003]{hamelryck2003a}). In the restrictive state, PDB files with errors cause an exception to occur. This is useful to find errors in PDB files.
+
+Some errors however are automatically corrected. Normally each disordered
+atom should have a non-blank altloc identifier. However, there are
+many structures that do not follow this convention, and have a blank
+and a non-blank identifier for two disordered positions of the same
+atom. This is automatically interpreted in the right way.
+
+Sometimes a structure contains a list of residues belonging to chain
+A, followed by residues belonging to chain B, and again followed by
+residues belonging to chain A, i.e. the chains are 'broken'. This
+is also correctly interpreted.
 
 \subsection{Examples\label{problem structures}}
 
@@ -9321,7 +9403,7 @@ There are also some tools to analyze a crystal structure. Tools
 exist to superimpose two coordinate sets (SVDSuperimposer), to extract
 polypeptides from a structure (Polypeptide), to perform neighbor lookup
 (NeighborSearch) and to write out PDB files (PDBIO). The neighbor lookup
-is done using a KD tree module written in C++. It is very fast and also
+is done using a KD tree module written in C. It is very fast and also
 includes a fast method to find all point pairs within a certain distance
 of each other.
 
@@ -9329,11 +9411,11 @@ A Polypeptide object is simply a UserList of Residue objects. You can
 construct a list of Polypeptide objects from a Structure object as follows:
 
 \begin{verbatim}
-model_nr=1
-polypeptide_list=build_peptides(structure, model_nr)
-
-for polypeptide in polypeptide_list:
-    print polypeptide
+>>> model_nr = 1
+>>> polypeptide_list = build_peptides(structure, model_nr)
+>>> for polypeptide in polypeptide_list:
+...     print polypeptide
+...
 \end{verbatim}
 
 The Polypeptide objects are always created from a single
@@ -9384,13 +9466,6 @@ I'd be crazy to write another molecular graphics application (been
 
 \subsection{Input/output}
 
-
-\subsubsection*{Can I use Bio.PDB with NMR structures (ie. with more than one model)?}
-
-Sure. Many PDB parsers assume that there is only one model, making
-them all but useless for NMR structures. The design of the \texttt{Structure}
-object makes it easy to handle PDB files with more than one model
-(see section \ref{sub:The-Structure-object}). 
 
 
 \subsubsection*{How do I download structures from the PDB?}
@@ -9462,135 +9537,7 @@ during the current week. For more info on the possibilities of \texttt{PDBList},
 see the API documentation.
 
 
-\subsubsection*{What about all those buggy PDB files?}
-
-It is well known that many PDB files contain semantic errors (I'm
-not talking about the structures themselves know, but their representation
-in PDB files). Bio.PDB tries to handle this in two ways. The PDBParser
-object can behave in two ways: a restrictive way and a permissive
-way (THIS IS NOW THE DEFAULT). The restrictive way used to be the
-default, but people seemed to think that Bio.PDB 'crashed' due to
-a bug (hah!), so I changed it. If you ever encounter a real bug, please
-tell me immediately!
-
-Example:
-
-\begin{verbatim}
-# Permissive parser
->>> parser = PDBParser(PERMISSIVE=1)
->>> parser = PDBParser() # The same (default)
->>> # Strict parser
->>> strict_parser = PDBParser(PERMISSIVE=0)
-\end{verbatim}
-In the permissive state (DEFAULT), PDB files that obviously contain
-errors are 'corrected' (i.e. some residues or atoms are left out).
-These errors include:
-
-\begin{itemize}
-\item Multiple residues with the same identifier
-\item Multiple atoms with the same identifier (taking into account the altloc
-identifier)
-\end{itemize}
-These errors indicate real problems in the PDB file (for details see
-the Bioinformatics article). In the restrictive state, PDB files with
-errors cause an exception to occur. This is useful to find errors
-in PDB files.
-
-Some errors however are automatically corrected. Normally each disordered
-atom should have a non-blanc altloc identifier. However, there are
-many structures that do not follow this convention, and have a blank
-and a non-blank identifier for two disordered positions of the same
-atom. This is automatically interpreted in the right way.
-
-Sometimes a structure contains a list of residues belonging to chain
-A, followed by residues belonging to chain B, and again followed by
-residues belonging to chain A, i.e. the chains are 'broken'. This
-is also correctly interpreted.
-
-
-\subsubsection*{Can I write PDB files?}
-
-Use the PDBIO class for this. It's easy to write out specific parts
-of a structure too, of course.
-
-Example: saving a structure
-
-\begin{verbatim}
->>> io = PDBIO()
->>> io.set_structure(s)
->>> io.save('out.pdb')
-\end{verbatim}
-If you want to write out a part of the structure, make use of the
-\texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
-
-\begin{verbatim}
->>> accept_model(model)
->>> accept_chain(chain)
->>> accept_residue(residue)
->>> accept_atom(atom)
-\end{verbatim}
-By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
-is included in the output). By subclassing \texttt{Select} and returning
-0 when appropriate you can exclude models, chains, etc. from the output.
-Cumbersome maybe, but very powerful. The following code only writes
-out glycine residues:
-
-\begin{verbatim}
->>> class GlySelect(Select):
-...     def accept_residue(self, residue):
-...         if residue.get_name()=='GLY':
-...             return True
-...         else:
-...             return False
-...
->>> io = PDBIO()
->>> io.set_structure(s)
->>> io.save('gly_only.pdb', GlySelect())
-\end{verbatim}
-If this is all too complicated for you, the \texttt{Dice} module contains
-a handy \texttt{extract} function that writes out all residues in
-a chain between a start and end residue. 
-
-
-\subsubsection*{Can I write mmCIF files?}
-
-No, and I also don't have plans to add that functionality soon (or
-ever - I don't need it at all, and it's a lot of work, plus no-one
-has ever asked for it). People who want to add this can contact me.
-
-
 \subsection{The Structure object\label{sub:The-Structure-object}}
-
-
-\subsubsection*{What's the overall layout of a Structure object?}
-
-The \texttt{Structure} object follows the so-called \texttt{SMCRA}
-(Structure/\-Model/\-Chain/\-Residue/\-Atom) architecture : 
-
-\begin{itemize}
-\item A structure consists of models
-\item A model consists of chains
-\item A chain consists of residues
-\item A residue consists of atoms
-\end{itemize}
-This is the way many structural biologists/bioinformaticians think
-about structure, and provides a simple but efficient way to deal with
-structure. Additional stuff is essentially added when needed. A UML
-diagram of the \texttt{Structure} object (forget about the \texttt{Disordered}
-classes for now) is shown in Fig. \ref{cap:SMCRA}.
-
-%
-\begin{figure}[tbh]
-\begin{center}\includegraphics[%
-  width=100mm,
-  keepaspectratio]{images/smcra.png}\end{center}
-
-
-\caption{\label{cap:SMCRA}UML diagram of SMCRA architecture of the \texttt{Structure}
-object. Full lines with diamonds denote aggregation, full lines with
-arrows denote referencing, full lines with triangles denote inheritance
-and dashed lines with triangles denote interface realization. }
-\end{figure}
 
 
 
@@ -9758,7 +9705,7 @@ residue is used) can be specified by the user.
 
 \textbf{Disordered atom positions} are represented by ordinary \texttt{Atom}
 objects, but all \texttt{Atom} objects that represent the same physical
-atom are stored in a \texttt{Disordered\-Atom} object (see Fig. \ref{cap:SMCRA}).
+atom are stored in a \texttt{Disordered\-Atom} object (see Fig. \ref{fig:smcra}).
 Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
 be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
 object forwards all uncaught method calls to the selected Atom object,
@@ -9786,7 +9733,7 @@ say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
 object as in the common case. In this case, each residue is represented
 by one \texttt{Residue} object, and both \texttt{Residue} objects
 are stored in a single \texttt{Disordered\-Residue} object (see Fig.
-\ref{cap:SMCRA}).
+\ref{fig:smcra}).
 
 The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught
 methods to the selected \texttt{Residue} object (by default the last
@@ -9855,6 +9802,13 @@ and \texttt{Structure\-Builder}, respectively). One can easily re-use
 the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
 class. It is of course also trivial to add support for new file formats
 by writing new parsers.
+
+\subsubsection*{Can I use Bio.PDB with NMR structures (ie. with more than one model)?}
+
+Sure. Many PDB parsers assume that there is only one model, making
+them all but useless for NMR structures. The design of the \texttt{Structure}
+object makes it easy to handle PDB files with more than one model
+(see section \ref{sub:The-Structure-object}). 
 
 
 \subsection{\label{sub:Analysis}Analysis}
@@ -9934,7 +9888,7 @@ from the \texttt{Vector} module:
 \subsubsection*{How do I determine atom-atom contacts?}
 
 Use \texttt{NeighborSearch}. This uses a KD tree data structure coded
-in C++ behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
+in C behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
 
 
 \subsubsection*{How do I extract polypeptides from a \texttt{Structure} object?}
