@@ -8772,8 +8772,7 @@ for Chain objects in a Model object).
 >>> child_list = parent_entity.get_list()
 \end{verbatim}
 
-You can also get the parent from a child.
-
+You can also get the parent from a child:
 \begin{verbatim}
 >>> parent_entity = child_entity.get_parent()
 \end{verbatim}
@@ -8801,15 +8800,17 @@ The Residue id indicates that the residue is not a hetero-residue (nor a water)
 because it has a blank hetero field, that its sequence identifier is 10 and
 that its insertion code is \char`\"{}A\char`\"{}.
 
-Some other useful methods:
-
+To get the entity's id, use the \verb+get_id+ method:
 \begin{verbatim}
->>> # get the entity's id
 >>> entity.get_id()
->>> # check if there is a child with a given id
+\end{verbatim}
+You can check if the entity has a child with a given id by using the \verb+has_id+ method:
+\begin{verbatim}
 >>> entity.has_id(entity_id)
->>> # get number of children
->>> nr_children=len(entity)
+\end{verbatim}
+The length of an entity is equal to its number of children:
+\begin{verbatim}
+>>> nr_children = len(entity)
 \end{verbatim}
 
 It is possible to delete, rename, add, etc. child entities from a parent entity,
@@ -8966,56 +8967,64 @@ a chain between a start and end residue.
 
 The id of the Model object is an integer, which is derived from the position
 of the model in the parsed file (they are automatically numbered starting from
-0). The Model object stores a list of Chain children.
+0).
+Crystal structures generally have only one model (with id 0), while NMR files usually have several models. Whereas many PDB parsers assume that there is only one model, the \verb+Structure+ class in \verb+Bio.PDB+ is designed such that it can easily handle PDB files with more than one model.
 
-\subsubsection{Example}
-
-Get the first model from a Structure object.
-
+As an example, to get the first model from a Structure object, use
 \begin{verbatim}
-first_model=structure[0]
+>>> first_model = structure[0]
 \end{verbatim}
+
+The Model object stores a list of Chain children.
 
 \subsection{Chain}
 
-The id of a Chain object is derived from the chain identifier in the structure
-file, and can be any string. Each Chain in a Model object has a unique id. The
-Chain object stores a list of Residue children.
-
-\subsubsection{Example}
-
-Get the Chain object with identifier {}``A{}'' from a Model object.
-
+The id of a Chain object is derived from the chain identifier in the PDB/mmCIF
+file, and is a single character (typically a letter). Each Chain in a Model object has a unique id. As an example, to get the Chain object with identifier ``A'' from a Model object, use
 \begin{verbatim}
-chain_A=model["A"]
+>>> chain_A = model["A"]
 \end{verbatim}
+
+The Chain object stores a list of Residue children.
 
 \subsection{Residue}
 
-Unsurprisingly, a Residue object stores a set of Atom children. In addition,
-it also contains a string that specifies the residue name (e.g. {}``ASN{}'')
+A residue id is a tuple with three elements:
+
+\begin{itemize}
+\item The \textbf{hetero-field} (hetfield): this is
+    \begin{itemize}
+    \item \verb+'W'+ in the case of a water molecule;
+    \item \verb+'H_'+ followed by the residue name for other hetero residues (e.g. \verb+'H_GLC'+ in the case of a glucose molecule);
+    \item blank for standard amino and nucleic acids.
+    \end{itemize}
+This scheme is adopted for reasons described in section \ref{hetero problems}.
+\item The \textbf{sequence identifier} (resseq), an integer describing the position of the residue in the chain (e.g., 100);
+\item The \textbf{insertion code} (icode); a string, e.g. 'A'. The insertion code is sometimes used to preserve a certain desirable residue numbering scheme. A Ser 80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81
+residue) could e.g. have sequence identifiers and insertion codes
+as follows: Thr 80 A, Ser 80 B, Asn 81. In this way the residue numbering
+scheme stays in tune with that of the wild type structure.
+\end{itemize}
+The id of the above glucose residue would thus be \texttt{('H\_GLC',
+100, 'A')}. If the hetero-flag and insertion code are blank, the sequence
+identifier alone can be used:
+
+\begin{verbatim}
+# Full id
+>>> residue=chain[(' ', 100, ' ')]
+# Shortcut id
+>>> residue=chain[100]
+\end{verbatim}
+The reason for the hetero-flag is that many, many PDB files use the
+same sequence identifier for an amino acid and a hetero-residue or
+a water, which would create obvious problems if the hetero-flag was
+not used. 
+
+Unsurprisingly, a Residue object stores a set of Atom children. It also contains a string that specifies the residue name (e.g. ``ASN'')
 and the segment identifier of the residue (well known to X-PLOR users, but not
 used in the construction of the SMCRA data structure).
 
-The id of a Residue object is composed of three parts: the hetero field (hetfield),
-the sequence identifier (resseq) and the insertion code (icode).
-
-The hetero field is a string : it is {}``W{}'' for waters, {}``H\_{}'' followed
-by the residue name (e.g. {}``H\_FUC{}'') for other hetero residues and blank
-for standard amino and nucleic acids. This scheme is adopted for reasons described
-in section \ref{hetero probems}.
-
-The second field in the Residue id is the sequence identifier, an integer describing
-the position of the residue in the chain.
-
-The third field is a string, consisting of the insertion code. The insertion
-code is sometimes used to preserve a certain desirable residue numbering scheme.
-A Ser 80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81 residue)
-could e.g. have sequence identifiers and insertion codes as followed: Thr 80
-A, Ser 80 B, Asn 81. In this way the residue numbering scheme stays in tune
-with that of the wild type structure.
-
-Let's give some examples. Asn 10 with a blank insertion code would have residue
+Let's look at some examples. Asn 10 with a blank insertion code would have residue
 id {\tt ('' '', 10, '' '')}. Water 10 would have residue id {\tt (``W``, 10, `` ``)}.
 A glucose molecule (a hetero residue with residue name GLC) with sequence identifier
 10 would have residue id {\tt (''H\_GLC'', 10, '' '')}. In this way, the three
@@ -9028,12 +9037,9 @@ id:
 
 \begin{verbatim}
 # use full id
-
-res10=chain[("", 10, "")]
-
+>>> res10 = chain[("", 10, "")]
 # use shortcut
-
-res10=chain[10]
+>>> res10=chain[10]
 \end{verbatim}
 
 Each Residue object in a Chain object should have a unique id. However, disordered
@@ -9042,16 +9048,25 @@ residues are dealt with in a special way, as described in section \ref{point mut
 A Residue object has a number of additional methods:
 
 \begin{verbatim}
-r.get_resname()		# return residue name, e.g. "ASN"
-r.get_segid()		# return the SEGID, e.g. "CHN1"
+>>> r.get_resname()		# return residue name, e.g. "ASN"
+>>> r.get_segid()		# return the SEGID, e.g. "CHN1"
 \end{verbatim}
 
 \subsection{Atom}
 
 The Atom object stores the data associated with an atom, and has no children.
-The id of an atom is its atom name (e.g. {}``OG{}'' for the side chain oxygen
-of a Ser residue). An Atom id needs to be unique in a Residue. Again, an exception
-is made for disordered atoms, as described in section \ref{disordered atoms}.
+The id of an atom is its atom name (e.g. ``OG'' for the side chain oxygen
+of a Ser residue). An Atom id needs to be unique in a Residue. Again, an exception is made for disordered atoms, as described in section \ref{disordered atoms}.
+
+The atom id is simply the atom name (eg. \texttt{'CA'}). In practice,
+the atom name is created by stripping all spaces from the atom name
+in the PDB file. 
+
+However, in PDB files, a space can be part of an atom name. Often,
+calcium atoms are called \texttt{'CA..'} in order to distinguish them
+from C$\alpha$ atoms (which are called \texttt{'.CA.'}). In cases
+were stripping the spaces would create problems (ie. two atoms called
+\texttt{'CA'} in the same residue) the spaces are kept.
 
 In a PDB file, an atom name consists of 4 chars, typically with leading and
 trailing spaces. Often these spaces can be removed for ease of use (e.g. an
@@ -9072,20 +9087,37 @@ charge sometimes specified in a PDB file are not stored.
 An Atom object has the following additional methods:
 
 \begin{verbatim}
-a.get_name()       # atom name (spaces stripped, e.g. "CA")
-a.get_id()         # id (equals atom name)
-a.get_coord()      # atomic coordinates
-a.get_bfactor()    # B factor
-a.get_occupancy()  # occupancy
-a.get_altloc()     # alternative location specifie
-a.get_sigatm()     # std. dev. of atomic parameters
-a.get_siguij()     # std. dev. of anisotropic B factor
-a.get_anisou()     # anisotropic B factor
-a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
+>>> a.get_name()       # atom name (spaces stripped, e.g. "CA")
+>>> a.get_id()         # id (equals atom name)
+>>> a.get_coord()      # atomic coordinates
+>>> a.get_bfactor()    # B factor
+>>> a.get_occupancy()  # occupancy
+>>> a.get_altloc()     # alternative location specifie
+>>> a.get_sigatm()     # std. dev. of atomic parameters
+>>> a.get_siguij()     # std. dev. of anisotropic B factor
+>>> a.get_anisou()     # anisotropic B factor
+>>> a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
 \end{verbatim}
 
 To represent the atom coordinates, siguij, anisotropic B factor and sigatm Numpy
 arrays are used.
+
+\subsection{Extracting a specific \texttt{Atom/\-Residue/\-Chain/\-Model}
+from a Structure}
+
+These are some examples:
+
+\begin{verbatim}
+>>> model = structure[0]
+>>> chain = model['A']
+>>> residue = chain[100]
+>>> atom = residue['CA']
+\end{verbatim}
+Note that you can use a shortcut:
+
+\begin{verbatim}
+>>> atom = structure[0]['A'][100]['CA']
+\end{verbatim}
 
 \section{Disorder}
 
@@ -9161,7 +9193,7 @@ object via this id.
 
 \section{Hetero residues}
 
-\subsection{Associated problems\label{hetero probems}}
+\subsection{Associated problems\label{hetero problems}}
 
 A common problem with hetero residues is that several hetero and non-hetero
 residues present in the same chain share the same sequence identifier (and insertion
@@ -9184,6 +9216,61 @@ The hetfield string for other hetero residues starts with {}``H\_{}'' followed
 by the residue name. A glucose molecule e.g. with residue name {}``GLC{}''
 would have hetfield {}``H\_GLC{}''. It's residue id could e.g. be ({}``H\_GLC{}'',
 1, {}`` {}``).
+
+\section{Navigating through a Structure object}
+
+The following code iterates through all atoms of a structure:
+
+\begin{verbatim}
+>>> p=PDBParser()
+>>> structure=p.get_structure('X', 'pdb1fat.ent')
+>>> for model in structure:
+...     for chain in model:
+...         for residue in chain:
+...             for atom in residue:
+...                 print atom
+...
+\end{verbatim}
+
+There is a shortcut if you want to iterate over all atoms in a structure:
+\begin{verbatim}
+>>> for atom in structure.get_atoms():
+...     print atom
+...
+\end{verbatim}
+or if you want to iterate over all residues in a model:
+\begin{verbatim}
+>>> for residue in model.get_residues():
+...     print residue
+...
+\end{verbatim}
+
+To do this a bit more conveniently, store the return value of these methods in a new variable:
+
+\begin{verbatim}
+>>> atoms = structure.get_atoms()
+>>> residue = structure.get_residues()
+>>> atoms = chain.get_atoms()
+\end{verbatim}
+
+You can also use the \verb+Selection.unfold_entities+ function to get all residues from a structure:
+\begin{verbatim}
+>>> res_list = Selection.unfold_entities(structure, 'R')
+\end{verbatim}
+or to get all atoms from a chain:
+\begin{verbatim}
+>>> atom_list = Selection.unfold_entities(chain, 'A')
+\end{verbatim}
+Obviously, \verb+A=atom, R=residue, C=chain, M=model, S=structure+.
+You can use this to go up in the hierarchy, e.g. to get a list of
+(unique) \verb+Residue+ or \verb+Chain+ parents from a list of
+\verb+Atoms+:
+
+\begin{verbatim}
+>>> residue_list = Selection.unfold_entities(atom_list, 'R')
+>>> chain_list = Selection.unfold_entities(atom_list, 'C')
+\end{verbatim}
+For more info, see the API documentation.
 
 \section{Some random usage examples}
 
@@ -9397,6 +9484,74 @@ All atoms in a residue should have a unique id. This id is generated based on:
 If this does not lead to a unique id something is quite likely wrong, and an
 exception is generated.
 
+\section{Accessing the Protein Data Bank}
+
+\subsection{Downloading structures from the Protein Data Bank}
+
+Structures can be downloaded from the PDB (Protein Data Bank)
+by using the \texttt{retrieve\_pdb\_file} method on a \texttt{PDBList} object.
+The argument for this method is the PDB identifier of the structure.
+
+\begin{verbatim}
+>>> pdbl = PDBList()
+>>> pdbl.retrieve_pdb_file('1FAT')
+\end{verbatim}
+
+The \texttt{PDBList} class can also be used as a command-line tool: 
+\begin{verbatim}
+python PDBList.py 1fat
+\end{verbatim}
+The downloaded file will be called \texttt{pdb1fat.ent} and stored
+in the current working directory. Note that the \texttt{retrieve\_pdb\_file}
+method also has an optional argument \texttt{pdir} that specifies
+a specific directory in which to store the downloaded PDB files. 
+
+The \texttt{retrieve\_pdb\_file} method also has some options to specify
+the compression format used for the download, and the program used
+for local decompression (default \texttt{.Z} format and \texttt{gunzip}).
+In addition, the PDB ftp site can be specified upon creation of the
+\texttt{PDBList} object. By default, the server of the Worldwide Protein Data Bank (\url{ftp://ftp.wwpdb.org/pub/pdb/data/structures/divided/pdb/})
+is used. See the API documentation for more details. Thanks again
+to Kristian Rother for donating this module.
+
+\subsection{Downloading the entire PDB}
+
+The following commands will store all PDB files in the \texttt{/data/pdb}
+directory: 
+
+\begin{verbatim}
+python PDBList.py all /data/pdb
+
+python PDBList.py all /data/pdb -d
+\end{verbatim}
+\noindent The API method for this is called \texttt{download\_entire\_pdb}.
+Adding the \texttt{-d} option will store all files in the same directory.
+Otherwise, they are sorted into PDB-style subdirectories according
+to their PDB ID's. Depending on the traffic, a complete download will
+take 2-4 days. 
+
+\subsection{Keeping a local copy of the PDB up to date}
+
+This can also be done using the \texttt{PDBList} object. One simply
+creates a \texttt{PDBList} object (specifying the directory where
+the local copy of the PDB is present) and calls the \texttt{update\_pdb}
+method:
+
+\begin{verbatim}
+>>> pl = PDBList(pdb='/data/pdb')
+>>> pl.update_pdb()
+\end{verbatim}
+One can of course make a weekly \texttt{cronjob} out of this to keep
+the local copy automatically up-to-date. The PDB ftp site can also
+be specified (see API documentation).
+
+\texttt{PDBList} has some additional methods that can be of use. The
+\texttt{get\_all\_obsolete} method can be used to get a list of all
+obsolete PDB entries. The \texttt{changed\_this\_week} method can
+be used to obtain the entries that were added, modified or obsoleted
+during the current week. For more info on the possibilities of \texttt{PDBList},
+see the API documentation.
+
 \section{Other features}
 
 There are also some tools to analyze a crystal structure. Tools
@@ -9422,7 +9577,6 @@ The Polypeptide objects are always created from a single
 Model (in this case model 1).
 
 LyX
-
 
 \section{General questions}
 
@@ -9462,228 +9616,8 @@ day). Python based/aware molecular graphics solutions include:
 \item VMD: \url{http://www.ks.uiuc.edu/Research/vmd/}
 \item MMTK: \url{http://starship.python.net/crew/hinsen/MMTK/}
 \end{itemize}
-I'd be crazy to write another molecular graphics application (been
-
-\subsection{Input/output}
-
-
-
-\subsubsection*{How do I download structures from the PDB?}
-
-This can be done using the \texttt{PDBList} object, using the \texttt{retrieve\_pdb\_file}
-method. The argument for this method is the PDB identifier of the
-structure.
-
-\begin{verbatim}
->>> pdbl = PDBList()
->>> pdbl.retrieve_pdb_file('1FAT')
-\end{verbatim}
-The \texttt{PDBList} class can also be used as a command-line tool: 
-
-\begin{verbatim}
-python PDBList.py 1fat
-\end{verbatim}
-The downloaded file will be called \texttt{pdb1fat.ent} and stored
-in the current working directory. Note that the \texttt{retrieve\_pdb\_file}
-method also has an optional argument \texttt{pdir} that specifies
-a specific directory in which to store the downloaded PDB files. 
-
-The \texttt{retrieve\_pdb\_file} method also has some options to specify
-the compression format used for the download, and the program used
-for local decompression (default \texttt{.Z} format and \texttt{gunzip}).
-In addition, the PDB ftp site can be specified upon creation of the
-\texttt{PDBList} object. By default, the RCSB PDB server (\url{ftp://ftp.rcsb.org/pub/pdb/data/structures/divided/pdb/})
-is used. See the API documentation for more details. Thanks again
-to Kristian Rother for donating this module.
-
-
-\subsubsection*{How do I download the entire PDB?}
-
-The following commands will store all PDB files in the \texttt{/data/pdb}
-directory: 
-
-\begin{verbatim}
-python PDBList.py all /data/pdb
-
-python PDBList.py all /data/pdb -d
-\end{verbatim}
-\noindent The API method for this is called \texttt{download\_entire\_pdb}.
-Adding the \texttt{-d} option will store all files in the same directory.
-Otherwise, they are sorted into PDB-style subdirectories according
-to their PDB ID's. Depending on the traffic, a complete download will
-take 2-4 days. 
-
-
-\subsubsection*{How do I keep a local copy of the PDB up-to-date?}
-
-This can also be done using the \texttt{PDBList} object. One simply
-creates a \texttt{PDBList} object (specifying the directory where
-the local copy of the PDB is present) and calls the \texttt{update\_pdb}
-method:
-
-\begin{verbatim}
->>> pl = PDBList(pdb='/data/pdb')
->>> pl.update_pdb()
-\end{verbatim}
-One can of course make a weekly \texttt{cronjob} out of this to keep
-the local copy automatically up-to-date. The PDB ftp site can also
-be specified (see API documentation).
-
-\texttt{PDBList} has some additional methods that can be of use. The
-\texttt{get\_all\_obsolete} method can be used to get a list of all
-obsolete PDB entries. The \texttt{changed\_this\_week} method can
-be used to obtain the entries that were added, modified or obsoleted
-during the current week. For more info on the possibilities of \texttt{PDBList},
-see the API documentation.
-
 
 \subsection{The Structure object\label{sub:The-Structure-object}}
-
-
-
-\subsubsection*{How do I navigate through a Structure object?}
-
-The following code iterates through all atoms of a structure:
-
-\begin{verbatim}
->>> p=PDBParser()
->>> structure=p.get_structure('X', 'pdb1fat.ent')
->>> for model in structure:
-...     for chain in~model:
-...         for residue in chain:
-...             for atom in residue:
-...                 print atom
-...
-\end{verbatim}
-There are also some shortcuts:
-
-\begin{verbatim}
-# Iterate over all atoms in a structure
->>> for atom in structure.get_atoms():
-...     print atom
-...
-# Iterate over all residues in a model
->>> for residue in model.get_residues():
-...     print residue
-...
-\end{verbatim}
-Structures, models, chains, residues and atoms are called \texttt{Entities}
-in Biopython. You can always get a parent \texttt{Entity} from a child
-\texttt{Entity}, e.g.:
-
-\begin{verbatim}
->>> residue=atom.get_parent()
->>> chain=residue.get_parent()
-\end{verbatim}
-You can also test wether an \texttt{Entity} has a certain child using
-the \texttt{has\_id} method.
-
-
-\subsubsection*{Can I do that a bit more conveniently?}
-
-You can do things like:
-
-\begin{verbatim}
->>> atoms=structure.get_atoms()
->>> residue=structure.get_residues()
->>> atoms=chain.get_atoms()
-\end{verbatim}
-You can also use the \texttt{Selection.unfold\_entities} function:
-
-\begin{verbatim}
-# Get all residues from a structure
->>> res_list = Selection.unfold_entities(structure, 'R')
-# Get all atoms from a chain
->>> atom_list = Selection.unfold_entities(chain, 'A')
-\end{verbatim}
-Obviously, \texttt{A=atom, R=residue, C=chain, M=model, S=structure}.
-You can use this to go up in the hierarchy, eg.\ to get a list of
-(unique) \texttt{Residue} or \texttt{Chain} parents from a list of
-\texttt{Atoms}:
-
-\begin{verbatim}
->>> residue_list = Selection.unfold_entities(atom_list, 'R')
->>> chain_list = Selection.unfold_entities(atom_list, 'C')
-\end{verbatim}
-For more info, see the API documentation.
-
-
-\subsubsection*{How do I extract a specific \texttt{Atom/\-Residue/\-Chain/\-Model}
-from a Structure?}
-
-Easy. Here are some examples:
-
-\begin{verbatim}
->>> model = structure[0]
->>> chain = model['A']
->>> residue = chain[100]
->>> atom = residue['CA']
-\end{verbatim}
-Note that you can use a shortcut:
-
-\begin{verbatim}
->>> atom = structure[0]['A'][100]['CA']
-\end{verbatim}
-
-\subsubsection*{What is a model id?}
-
-The model id is an integer which denotes the rank of the model in
-the PDB/mmCIF file. The model is starts at 0. Crystal structures generally
-have only one model (with id 0), while NMR files usually have several
-models.
-
-
-\subsubsection*{What is a chain id?}
-
-The chain id is specified in the PDB/mmCIF file, and is a single character
-(typically a letter). 
-
-
-\subsubsection*{What is a residue id?}
-
-This is a bit more complicated, due to the clumsy PDB format. A residue
-id is a tuple with three elements:
-
-\begin{itemize}
-\item The \textbf{hetero-flag}: this is \texttt{'H\_'} plus the name of
-the hetero-residue (eg. \texttt{'H\_GLC'} in the case of a glucose
-molecule), or \texttt{'W'} in the case of a water molecule.
-\item The \textbf{sequence identifier} in the chain, eg. 100
-\item The \textbf{insertion code}, eg. 'A'. The insertion code is sometimes
-used to preserve a certain desirable residue numbering scheme. A Ser
-80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81
-residue) could e.g. have sequence identifiers and insertion codes
-as follows: Thr 80 A, Ser 80 B, Asn 81. In this way the residue numbering
-scheme stays in tune with that of the wild type structure.
-\end{itemize}
-The id of the above glucose residue would thus be \texttt{('H\_GLC',
-100, 'A')}. If the hetero-flag and insertion code are blanc, the sequence
-identifier alone can be used:
-
-\begin{verbatim}
-# Full id
->>> residue=chain[(' ', 100, ' ')]
-# Shortcut id
->>> residue=chain[100]
-\end{verbatim}
-The reason for the hetero-flag is that many, many PDB files use the
-same sequence identifier for an amino acid and a hetero-residue or
-a water, which would create obvious problems if the hetero-flag was
-not used. 
-
-
-\subsubsection*{What is an atom id?}
-
-The atom id is simply the atom name (eg. \texttt{'CA'}). In practice,
-the atom name is created by stripping all spaces from the atom name
-in the PDB file. 
-
-However, in PDB files, a space can be part of an atom name. Often,
-calcium atoms are called \texttt{'CA..'} in order to distinguish them
-from C$\alpha$ atoms (which are called \texttt{'.CA.'}). In cases
-were stripping the spaces would create problems (ie. two atoms called
-\texttt{'CA'} in the same residue) the spaces are kept.
-
 
 \subsubsection*{How is disorder handled?}
 
@@ -9802,14 +9736,6 @@ and \texttt{Structure\-Builder}, respectively). One can easily re-use
 the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
 class. It is of course also trivial to add support for new file formats
 by writing new parsers.
-
-\subsubsection*{Can I use Bio.PDB with NMR structures (ie. with more than one model)?}
-
-Sure. Many PDB parsers assume that there is only one model, making
-them all but useless for NMR structures. The design of the \texttt{Structure}
-object makes it easy to handle PDB files with more than one model
-(see section \ref{sub:The-Structure-object}). 
-
 
 \subsection{\label{sub:Analysis}Analysis}
 
