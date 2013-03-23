@@ -353,8 +353,9 @@ def six_frame_translations(seq, genetic_code=1):
     length = len(seq)
     frames = {}
     for i in range(0, 3):
-        frames[i+1] = translate(seq[i:], genetic_code)
-        frames[-(i+1)] = translate(anti[i:], genetic_code)[::-1]
+        fragment_length = 3 * ((length-i) // 3)
+        frames[i+1] = translate(seq[i:i+fragment_length], genetic_code)
+        frames[-(i+1)] = translate(anti[i:i+fragment_length], genetic_code)[::-1]
 
     # create header
     if length > 20:
