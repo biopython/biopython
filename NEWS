@@ -14,6 +14,11 @@ The latest news is at the top of this file.
 
 Please note that this could be our last release to support Python 2.5.
 
+The translation functions will give a warning on any partial codons (and this
+will probably become an error in a future release). If you know you are dealing
+with partial sequences, either pad with N to extend the sequence length to a
+multiple of three, or explicitly trim the sequence.
+
 The handling of joins and related complex features in Genbank/EMBL files has
 been changed with the introduction of a CompoundLocation object. Previously
 a SeqFeature for something like a multi-exon CDS would have a child SeqFeature

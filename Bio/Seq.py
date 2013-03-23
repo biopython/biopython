@@ -1390,9 +1390,9 @@ class UnknownSeq(Seq):
 
         e.g.
 
-        >>> my_seq = UnknownSeq(11, character="N")
+        >>> my_seq = UnknownSeq(9, character="N")
         >>> print my_seq
-        NNNNNNNNNNN
+        NNNNNNNNN
         >>> my_protein = my_seq.translate()
         >>> my_protein
         UnknownSeq(3, alphabet = ProteinAlphabet(), character = 'X')
@@ -1401,9 +1401,9 @@ class UnknownSeq(Seq):
 
         In comparison, using a normal Seq object:
 
-        >>> my_seq = Seq("NNNNNNNNNNN")
+        >>> my_seq = Seq("NNNNNNNNN")
         >>> print my_seq
-        NNNNNNNNNNN
+        NNNNNNNNN
         >>> my_protein = my_seq.translate()
         >>> my_protein
         Seq('XXX', ExtendedIUPACProtein())
@@ -1909,6 +1909,16 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     Traceback (most recent call last):
        ...
     TranslationError: Codon 'TA?' is invalid
+
+    In a change to older verions of Biopython, partial codons are now
+    always regarded as an error (previously only checked if cds=True)
+    and will trigger a warning (likely to become an exception in a
+    future release).
+
+    If cds=True, the start and stop codons are checked, and the start
+    codon will be translated at methionine. The sequence must be an
+    while number of codons.
+
     >>> _translate_str("ATGCCCTAG", table, cds=True)
     'MP'
     >>> _translate_str("AAACCCTAG", table, cds=True)
@@ -1930,20 +1940,26 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         #Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(IUPAC.ambiguous_dna.letters.upper() +
                             IUPAC.ambiguous_rna.letters.upper())
+    n = len(sequence)
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
             raise CodonTable.TranslationError(
                 "First codon '%s' is not a start codon" % sequence[:3])
-        if len(sequence) % 3 != 0:
+        if n % 3 != 0:
             raise CodonTable.TranslationError(
-                "Sequence length %i is not a multiple of three" % len(sequence))
+                "Sequence length %i is not a multiple of three" % n) 
         if str(sequence[-3:]).upper() not in stop_codons:
             raise CodonTable.TranslationError(
                 "Final codon '%s' is not a stop codon" % sequence[-3:])
         #Don't translate the stop symbol, and manually translate the M
         sequence = sequence[3:-3]
+        n -= 6
         amino_acids = ["M"]
-    n = len(sequence)
+    elif n % 3 != 0:
+        import warnings
+        from Bio import BiopythonWarning
+        warnings.warn("Sequence length %i is not a multiple of three" % n,
+                      BiopythonWarning)
     for i in xrange(0, n-n%3, 3):
         codon = sequence[i:i+3]
         try:
