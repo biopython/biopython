@@ -64,6 +64,7 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
 
 class StringMethodTests(unittest.TestCase):
     _examples = [
+        #These are length 9, a multiple of 3 for translation tests:
         Seq("ACGTGGGGT", generic_protein),
         Seq("ACGTGGGGT", generic_nucleotide),
         Seq("ACGTGGGGT", generic_dna),
@@ -81,12 +82,12 @@ class StringMethodTests(unittest.TestCase):
         UnknownSeq(1, generic_rna),
         UnknownSeq(1, generic_rna, "n"),
         UnknownSeq(1, generic_rna, "N"),
-        UnknownSeq(10, generic_rna, "N"),
-        UnknownSeq(10, generic_dna, "N"),
-        UnknownSeq(10, generic_nucleotide, "N"),
-        UnknownSeq(10, generic_protein, "X"),
-        UnknownSeq(10, character="X"),
-        UnknownSeq(10),
+        UnknownSeq(12, generic_rna, "N"),
+        UnknownSeq(12, generic_dna, "N"),
+        UnknownSeq(12, generic_nucleotide, "N"),
+        UnknownSeq(12, generic_protein, "X"),
+        UnknownSeq(12, character="X"),
+        UnknownSeq(12),
         ]
     for seq in _examples[:]:
         if isinstance(seq, Seq):
@@ -407,6 +408,9 @@ class StringMethodTests(unittest.TestCase):
                         continue
                     raise e
                 str1 = str(example1)
+                if len(str1) % 3 != 0:
+                    #TODO - Check for or silence the expected warning?
+                    continue
                 self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
                 self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
 
@@ -433,6 +437,9 @@ class StringMethodTests(unittest.TestCase):
             mapping = ""
             for example1 in self._examples:
                 if isinstance(example1, MutableSeq):
+                    continue
+                if len(example1) % 3 != 0:
+                    #TODO - Check for or silence the expected warning?
                     continue
                 try :
                     tran = example1.translate()
