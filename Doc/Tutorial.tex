@@ -8701,10 +8701,144 @@ Bio.PDB is a Biopython module that focuses on working with crystal structures of
 
 %Note the \verb|Bio.PDB| module requires Numerical Python (numpy) to be installed.
 
+\section{Reading and writing crystal structure files}
+
+\subsection{Reading a PDB file}
+
+First we create a \texttt{PDBParser} object:
+
+\begin{verbatim}
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> p = PDBParser(PERMISSIVE=1)
+\end{verbatim}
+
+The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
+
+The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called 'pdb1fat.ent', '1fat' is a user defined name for the structure):
+
+\begin{verbatim}
+>>> structure_id = "1fat"
+>>> filename = "pdb1fat.ent"
+>>> s = p.get_structure(structure_id, filename)
+\end{verbatim}
+
+You can extract the header and trailer (simple lists of strings) of the PDB
+file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
+methods.  Note however that many PDB files contain headers with
+incomplete or erroneous information. Many of the errors have been
+fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
+in the header information, it is a good idea to extract information
+from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
+described below, instead of parsing the PDB header. }
+
+Now that is clarified, let's return to parsing the PDB header. The
+structure object has an attribute called \texttt{header} which is
+a Python dictionary that maps header records to their values.
+
+Example:
+
+\begin{verbatim}
+>>> resolution = structure.header['resolution']
+>>> keywords = structure.header['keywords']
+\end{verbatim}
+The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, \verb+release_date+, \verb+structure_method+, \verb+resolution+, \verb+structure_reference+ (which maps to a list of references), \verb+journal_reference+, \verb+author+, and \verb+compound+ (which maps to a dictionary with various information about the crystallized compound).
+
+The dictionary can also be created without creating a \texttt{Structure}
+object, ie. directly from the PDB file:
+
+\begin{verbatim}
+>>> file = open(filename,'r')
+>>> header_dict = parse_pdb_header(file)
+>>> file.close()
+\end{verbatim}
+
+\subsection{Reading an mmCIF file}
+
+Similarly to the case the case of PDB files, first create an \texttt{MMCIFParser} object:
+
+\begin{verbatim}
+>>> from Bio.PDB.MMCIFParser import MMCIFParser
+>>> parser = MMCIFParser()
+\end{verbatim}
+Then use this parser to create a structure object from the mmCIF file:
+\begin{verbatim}
+>>> structure = parser.get_structure('1fat', '1fat.cif')
+\end{verbatim}
+
+To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
+tags in an mmCIF file to their values. If there are multiple values
+(like in the case of tag \verb+_atom_site.Cartn_y+, which holds
+the $y$ coordinates of all atoms), the tag is mapped to a list of values.
+The dictionary is created from the mmCIF file as follows:
+
+\begin{verbatim}
+>>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+>>> mmcif_dict = MMCIF2Dict('1FAT.cif')
+\end{verbatim}
+
+Example: get the solvent content from an mmCIF file:
+\begin{verbatim}
+>>> sc = mmcif_dict['_exptl_crystal.density_percent_sol']
+\end{verbatim}
+
+Example: get the list of the $y$ coordinates of all atoms
+\begin{verbatim}
+>>> y_list = mmcif_dict['_atom_site.Cartn_y']
+\end{verbatim}
+
+\subsection{Reading files in the PDB XML format}
+
+That's not yet supported, but we are definitely planning to support that
+in the future (it's not a lot of work). Contact the Biopython developers
+(\mailto{biopython-dev@biopython.org}) if you need this).
+
+\subsection{Writing PDB files}
+
+Use the PDBIO class for this. It's easy to write out specific parts
+of a structure too, of course.
+
+Example: saving a structure
+
+\begin{verbatim}
+>>> io = PDBIO()
+>>> io.set_structure(s)
+>>> io.save('out.pdb')
+\end{verbatim}
+If you want to write out a part of the structure, make use of the
+\texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
+
+\begin{itemize}
+\item \verb+accept_model(model)+
+\item \verb+accept_chain(chain)+
+\item \verb+accept_residue(residue)+
+\item \verb+accept_atom(atom)+
+\end{itemize}
+By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
+is included in the output). By subclassing \texttt{Select} and returning
+0 when appropriate you can exclude models, chains, etc. from the output.
+Cumbersome maybe, but very powerful. The following code only writes
+out glycine residues:
+
+\begin{verbatim}
+>>> class GlySelect(Select):
+...     def accept_residue(self, residue):
+...         if residue.get_name()=='GLY':
+...             return True
+...         else:
+...             return False
+...
+>>> io = PDBIO()
+>>> io.set_structure(s)
+>>> io.save('gly_only.pdb', GlySelect())
+\end{verbatim}
+If this is all too complicated for you, the \texttt{Dice} module contains
+a handy \texttt{extract} function that writes out all residues in
+a chain between a start and end residue. 
+
 \section{Structure representation}
 
 The overall layout of a \texttt{Structure} object follows the so-called SMCRA
-(Structure/Model/Chain/Residue/Atom) architecture : 
+(Structure/Model/Chain/Residue/Atom) architecture:
 
 \begin{itemize}
 \item A structure consists of models
@@ -8826,142 +8960,6 @@ string. The Structure contains a number of Model children. Most crystal structur
 (but not all) contain a single model, while NMR structures typically consist
 of several models. Disorder in crystal structures of large parts of molecules
 can also result in several models.
-
-\subsubsection{Constructing a Structure object from a PDB file}
-
-First we create a \texttt{PDBParser} object:
-
-\begin{verbatim}
->>> from Bio.PDB.PDBParser import PDBParser
->>> p = PDBParser(PERMISSIVE=1)
-\end{verbatim}
-
-The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated during the parse operation.
-
-The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called 'pdb1fat.ent', '1fat' is a user defined name for the structure):
-
-\begin{verbatim}
->>> structure_id = "1fat"
->>> filename = "pdb1fat.ent"
->>> s = p.get_structure(structure_id, filename)
-\end{verbatim}
-
-You can extract the header and trailer (simple lists of strings) of the PDB
-file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
-methods.  Note however that many PDB files contain headers with
-incomplete or erroneous information. Many of the errors have been
-fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
-in the header information, it is a good idea to extract information
-from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
-described below, instead of parsing the PDB header. }
-
-Now that is clarified, let's return to parsing the PDB header. The
-structure object has an attribute called \texttt{header} which is
-a Python dictionary that maps header records to their values.
-
-Example:
-
-\begin{verbatim}
->>> resolution = structure.header['resolution']
->>> keywords = structure.header['keywords']
-\end{verbatim}
-The available keys are \texttt{name, head, deposition\_\-date, release\_\-date,
-structure\_\-method, resolution, structure\_\-reference} (maps to
-a list of references), \texttt{journal\_\-reference, author} and
-\texttt{compound} (maps to a dictionary with various information about
-the crystallized compound).
-
-The dictionary can also be created without creating a \texttt{Structure}
-object, ie. directly from the PDB file:
-
-\begin{verbatim}
->>> file = open(filename,'r')
->>> header_dict = parse_pdb_header(file)
->>> file.close()
-\end{verbatim}
-
-\subsubsection{Creating a structure object from an mmCIF file}
-
-Similarly to the case the case of PDB files, first create an \texttt{MMCIFParser} object:
-
-\begin{verbatim}
->>> from Bio.PDB.MMCIFParser import MMCIFParser
->>> parser = MMCIFParser()
-\end{verbatim}
-Then use this parser to create a structure object from the mmCIF file:
-\begin{verbatim}
->>> structure = parser.get_structure('1fat', '1fat.cif')
-\end{verbatim}
-
-To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
-tags in an mmCIF file to their values. If there are multiple values
-(like in the case of tag \texttt{\_atom\_site.Cartn\_y}, which holds
-the y coordinates of all atoms), the tag is mapped to a list of values.
-The dictionary is created from the mmCIF file as follows:
-
-\begin{verbatim}
->>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
->>> mmcif_dict = MMCIF2Dict('1FAT.cif')
-\end{verbatim}
-Example: get the solvent content from an mmCIF file:
-
-\begin{verbatim}
->>> sc = mmcif_dict['_exptl_crystal.density_percent_sol']
-\end{verbatim}
-Example: get the list of the y coordinates of all atoms
-
-\begin{verbatim}
->>> y_list = mmcif_dict['_atom_site.Cartn_y']
-\end{verbatim}
-
-\subsubsection{...and what about the new PDB XML format?}
-
-That's not yet supported, but we are definitely planning to support that
-in the future (it's not a lot of work). Contact the Biopython developers
-(\mailto{biopython-dev@biopython.org}) if you need this).
-
-\subsection{Writing PDB files}
-
-Use the PDBIO class for this. It's easy to write out specific parts
-of a structure too, of course.
-
-Example: saving a structure
-
-\begin{verbatim}
->>> io = PDBIO()
->>> io.set_structure(s)
->>> io.save('out.pdb')
-\end{verbatim}
-If you want to write out a part of the structure, make use of the
-\texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
-
-\begin{verbatim}
->>> accept_model(model)
->>> accept_chain(chain)
->>> accept_residue(residue)
->>> accept_atom(atom)
-\end{verbatim}
-By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
-is included in the output). By subclassing \texttt{Select} and returning
-0 when appropriate you can exclude models, chains, etc. from the output.
-Cumbersome maybe, but very powerful. The following code only writes
-out glycine residues:
-
-\begin{verbatim}
->>> class GlySelect(Select):
-...     def accept_residue(self, residue):
-...         if residue.get_name()=='GLY':
-...             return True
-...         else:
-...             return False
-...
->>> io = PDBIO()
->>> io.set_structure(s)
->>> io.save('gly_only.pdb', GlySelect())
-\end{verbatim}
-If this is all too complicated for you, the \texttt{Dice} module contains
-a handy \texttt{extract} function that writes out all residues in
-a chain between a start and end residue. 
 
 \subsection{Model}
 
@@ -9088,6 +9086,10 @@ and standard deviation if present), the altloc specifier and the full atom name
 including spaces. Less used items like the atom element number or the atomic
 charge sometimes specified in a PDB file are not stored.
 
+To manipulate the atomic coordinates, use the \texttt{transform} method of
+the \texttt{Atom} object. Use the \texttt{set\_coord} method to specify the
+atomic coordinates directly.
+
 An Atom object has the following additional methods:
 
 \begin{verbatim}
@@ -9106,6 +9108,41 @@ An Atom object has the following additional methods:
 
 To represent the atom coordinates, siguij, anisotropic B factor and sigatm Numpy
 arrays are used.
+
+The \texttt{get\_vector} method returns a \texttt{Vector} object representation of the coordinates of the \texttt{Atom} object, allowing you to do vector operations on atomic coordinates. \texttt{Vector} implements the full set of 3D vector operations, matrix multiplication (left and right) and some advanced rotation-related operations as well.
+
+As an example of the capabilities of Bio.PDB's \texttt{Vector} module,
+suppose that you would like to find the position of a Gly residue's C$\beta$
+atom, if it had one. Rotating the N atom of
+the Gly residue along the C$\alpha$-C bond over -120 degrees roughly
+puts it in the position of a virtual C$\beta$ atom. Here's how to
+do it, making use of the \texttt{rotaxis} method (which can be used
+to construct a rotation around a certain axis) of the \texttt{Vector}
+module:
+
+\begin{verbatim}
+# get atom coordinates as vectors
+>>> n = residue['N'].get_vector() 
+>>> c = residue['C'].get_vector() 
+>>> ca = residue['CA'].get_vector()
+# center at origin
+>>> n = n - ca 
+>>> c = c - ca 
+# find rotation matrix that rotates n 
+# -120 degrees along the ca-c vector
+>>> rot = rotaxis(-pi * 120.0/180.0, c)
+# apply rotation to ca-n vector
+>>> cb_at_origin = n.left_multiply(rot)
+# put on top of ca atom
+>>> cb = cb_at_origin+ca
+\end{verbatim}
+This example shows that it's possible to do some quite nontrivial
+vector operations on atomic data, which can be quite useful. In addition
+to all the usual vector operations (cross (use \texttt{{*}{*}}), and
+dot (use \texttt{{*}}) product, angle, norm, etc.) and the above mentioned
+\texttt{rotaxis} function, the \texttt{Vector} module also has methods
+to rotate (\texttt{rotmat}) or reflect (\texttt{refmat}) one vector
+on top of another.
 
 \subsection{Extracting a specific \texttt{Atom/\-Residue/\-Chain/\-Model}
 from a Structure}
@@ -9243,11 +9280,23 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 
 \section{Navigating through a Structure object}
 
-The following code iterates through all atoms of a structure:
+\subsubsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
 
 \begin{verbatim}
->>> p=PDBParser()
->>> structure=p.get_structure('X', 'pdb1fat.ent')
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> parser = PDBParser()
+>>> structure = parser.get_structure("test", "1fat.pdb")
+>>> model = structure[0]
+>>> chain = model["A"]
+>>> residue = chain[1]
+>>> atom = residue["CA"]
+\end{verbatim}
+
+\subsubsection*{Iterating through all atoms of a structure}
+
+\begin{verbatim}
+>>> p = PDBParser()
+>>> structure = p.get_structure('X', 'pdb1fat.ent')
 >>> for model in structure:
 ...     for chain in model:
 ...         for residue in chain:
@@ -9258,23 +9307,28 @@ The following code iterates through all atoms of a structure:
 
 There is a shortcut if you want to iterate over all atoms in a structure:
 \begin{verbatim}
->>> for atom in structure.get_atoms():
+>>> atoms = structure.get_atoms()
+>>> for atom in atoms:
 ...     print atom
 ...
 \end{verbatim}
-or if you want to iterate over all residues in a model:
+
+Similarly, to iterate over all atoms in a chain, use
 \begin{verbatim}
->>> for residue in model.get_residues():
-...     print residue
+>>> atoms = chain.get_atoms()
+>>> for atom in atoms:
+...     print atom
 ...
 \end{verbatim}
 
-To do this a bit more conveniently, store the return value of these methods in a new variable:
+\subsubsection*{Iterating over all residues of a model}
 
+or if you want to iterate over all residues in a model:
 \begin{verbatim}
->>> atoms = structure.get_atoms()
->>> residue = structure.get_residues()
->>> atoms = chain.get_atoms()
+>>> residues = model.get_residues()
+>>> for residue in residues:
+...     print residue
+...
 \end{verbatim}
 
 You can also use the \verb+Selection.unfold_entities+ function to get all residues from a structure:
@@ -9295,20 +9349,6 @@ You can use this to go up in the hierarchy, e.g. to get a list of
 >>> chain_list = Selection.unfold_entities(atom_list, 'C')
 \end{verbatim}
 For more info, see the API documentation.
-
-\subsection{Examples}
-
-\subsubsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
-
-\begin{verbatim}
->>> from Bio.PDB.PDBParser import PDBParser
->>> parser = PDBParser()
->>> structure = parser.get_structure("test", "1fat.pdb")
->>> model = structure[0]
->>> chain = model["A"]
->>> residue = chain[1]
->>> atom = residue["CA"]
-\end{verbatim}
 
 \subsubsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
 
@@ -9409,7 +9449,7 @@ objects as well.
 \subsubsection*{Obtaining the sequence of a structure}
 
 The first thing to do is to extract all polypeptides from the structure
-(see \ref{subsubsec:extracting_polypeptides}). The sequence of each polypeptide can then easily
+(as above). The sequence of each polypeptide can then easily
 be obtained from the \texttt{Polypeptide} objects. The sequence is
 represented as a Biopython \texttt{Seq} object, and its alphabet is
 defined by a \texttt{ProteinAlphabet} object.
@@ -9422,7 +9462,7 @@ Example:
 Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
 \end{verbatim}
 
-\section{Analysis}
+\section{Analyzing structures}
 
 \subsection{Measuring distances}
 The minus operator for atoms has been overloaded to return the distance between two atoms. 
@@ -9791,8 +9831,6 @@ be used to obtain the entries that were added, modified or obsoleted
 during the current week. For more info on the possibilities of \texttt{PDBList},
 see the API documentation.
 
-LyX
-
 \section{General questions}
 
 \subsection{How well tested is Bio.PDB?}
@@ -9832,64 +9870,7 @@ day). Python based/aware molecular graphics solutions include:
 \item MMTK: \url{http://starship.python.net/crew/hinsen/MMTK/}
 \end{itemize}
 
-\subsubsection*{Can I do vector operations on atomic coordinates?}
-
-\texttt{Atom} objects return a \texttt{Vector} object representation
-of the coordinates with the \texttt{get\_vector} method. \texttt{Vector}
-implements the full set of 3D vector operations, matrix multiplication
-(left and right) and some advanced rotation-related operations as
-well. See also next question.
-
-
-\subsubsection*{How do I put a virtual C$\beta$ on a Gly residue?}
-
-OK, I admit, this example is only present to show off the possibilities
-of Bio.PDB's \texttt{Vector} module (though this code is actually
-used in the \texttt{HSExposure} module, which contains a novel way
-to parametrize residue exposure - publication underway). Suppose that
-you would like to find the position of a Gly residue's C$\beta$ atom,
-if it had one. How would you do that? Well, rotating the N atom of
-the Gly residue along the C$\alpha$-C bond over -120 degrees roughly
-puts it in the position of a virtual C$\beta$ atom. Here's how to
-do it, making use of the \texttt{rotaxis} method (which can be used
-to construct a rotation around a certain axis) of the \texttt{Vector}
-module:
-
-\begin{verbatim}
-# get atom coordinates as vectors
->>> n=residue{[}'N'{]}.get\_vector() 
->>> c=residue{[}'C'{]}.get\_vector() 
->>> ca=residue{[}'CA'{]}.get\_vector()
-# center at origin
->>> n = n - ca 
->>> c = c - ca 
-# find rotation matrix that rotates n 
-# -120 degrees along the ca-c vector
->>> rot = rotaxis(-pi * 120.0/180.0, c)
-# apply rotation to ca-n vector
->>> cb_at_origin = n.left_multiply(rot)
-# put on top of ca atom
->>> cb = cb_at_origin+ca
-\end{verbatim}
-This example shows that it's possible to do some quite nontrivial
-vector operations on atomic data, which can be quite useful. In addition
-to all the usual vector operations (cross (use \texttt{{*}{*}}), and
-dot (use \texttt{{*}}) product, angle, norm, etc.) and the above mentioned
-\texttt{rotaxis} function, the \texttt{Vector} module also has methods
-to rotate (\texttt{rotmat}) or reflect (\texttt{refmat}) one vector
-on top of another.
-
-
-\subsection{Manipulating the structure}
-
-
-\subsubsection*{Can I manipulate the atomic coordinates?}
-
-Yes, using the \texttt{transform} method of the \texttt{Atom} object,
-or directly using the \texttt{set\_coord} method.
-
-
-  \section{Who's using Bio.PDB?}
+\subsection{Who's using Bio.PDB?}
 
 Bio.PDB was used in the construction of DISEMBL, a web server that
 predicts disordered regions in proteins (\url{http://dis.embl.de/}),
