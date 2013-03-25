@@ -367,7 +367,7 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 
 Disputably (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{chapter:Bio.Seq}.
 
-Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
+Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``\verb+>>>+'' represents the Python prompt followed by what you would type in:
 
 %doctest
 \begin{verbatim}
@@ -443,7 +443,7 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 ...
 \end{verbatim}
 
-It contains 94 records, each has a line starting with ``$>$'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
+It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -9025,21 +9025,21 @@ and the segment identifier of the residue (well known to X-PLOR users, but not
 used in the construction of the SMCRA data structure).
 
 Let's look at some examples. Asn 10 with a blank insertion code would have residue
-id {\tt ('' '', 10, '' '')}. Water 10 would have residue id {\tt (``W``, 10, `` ``)}.
+id {\tt (' ', 10, ' ')}. Water 10 would have residue id {\tt ('W', 10, ' ')}.
 A glucose molecule (a hetero residue with residue name GLC) with sequence identifier
-10 would have residue id {\tt (''H\_GLC'', 10, '' '')}. In this way, the three
+10 would have residue id {\tt ('H\_GLC', 10, ' ')}. In this way, the three
 residues (with the same insertion code and sequence identifier) can be part
 of the same chain because their residue id's are distinct.
 
-In most cases, the hetflag and insertion code fields will be blank, e.g. {\tt ('' '', 10, '' '')}.
+In most cases, the hetflag and insertion code fields will be blank, e.g. {\tt (' ', 10, ' ')}.
 In these cases, the sequence identifier can be used as a shortcut for the full
 id:
 
 \begin{verbatim}
 # use full id
->>> res10 = chain[("", 10, "")]
+>>> res10 = chain[(' ', 10, ' ')]
 # use shortcut
->>> res10=chain[10]
+>>> res10 = chain[10]
 \end{verbatim}
 
 Each Residue object in a Chain object should have a unique id. However, disordered
@@ -9048,9 +9048,13 @@ residues are dealt with in a special way, as described in section \ref{point mut
 A Residue object has a number of additional methods:
 
 \begin{verbatim}
->>> r.get_resname()		# return residue name, e.g. "ASN"
->>> r.get_segid()		# return the SEGID, e.g. "CHN1"
+>>> residue.get_resname()       # returns the residue name, e.g. "ASN"
+>>> residue.is_disordered()     # returns 1 if the residue has disordered atoms
+>>> residue.get_segid()	        # returns the SEGID, e.g. "CHN1"
+>>> residue.has_id(name)        # test if a residue has a certain atom
 \end{verbatim}
+
+You can use \texttt{is\_aa(residue)} to test if a Residue object is an amino acid.
 
 \subsection{Atom}
 
@@ -9070,12 +9074,12 @@ were stripping the spaces would create problems (ie. two atoms called
 
 In a PDB file, an atom name consists of 4 chars, typically with leading and
 trailing spaces. Often these spaces can be removed for ease of use (e.g. an
-amino acid C\( \alpha  \) atom is labeled {}``.CA.{}'' in a PDB file, where
+amino acid C\( \alpha  \) atom is labeled ``.CA.'' in a PDB file, where
 the dots represent spaces). To generate an atom name (and thus an atom id) the
 spaces are removed, unless this would result in a name collision in a Residue
 (i.e. two Atom objects with the same atom name and id). In the latter case,
 the atom name including spaces is tried. This situation can e.g. happen when
-one residue contains atoms with names {}``.CA.{}'' and {}``CA..{}'', although
+one residue contains atoms with names ``.CA.'' and ``CA..'', although
 this is not very likely.
 
 The atomic data stored includes the atom name, the atomic coordinates (including
@@ -9090,11 +9094,12 @@ An Atom object has the following additional methods:
 >>> a.get_name()       # atom name (spaces stripped, e.g. "CA")
 >>> a.get_id()         # id (equals atom name)
 >>> a.get_coord()      # atomic coordinates
->>> a.get_bfactor()    # B factor
+>>> a.get_vector()     # atomic coordinates as Vector object
+>>> a.get_bfactor()    # isotropic B factor
 >>> a.get_occupancy()  # occupancy
->>> a.get_altloc()     # alternative location specifie
->>> a.get_sigatm()     # std. dev. of atomic parameters
->>> a.get_siguij()     # std. dev. of anisotropic B factor
+>>> a.get_altloc()     # alternative location specifier
+>>> a.get_sigatm()     # standard deviation of atomic parameters
+>>> a.get_siguij()     # standard deviation of anisotropic B factor
 >>> a.get_anisou()     # anisotropic B factor
 >>> a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
 \end{verbatim}
@@ -9121,11 +9126,14 @@ Note that you can use a shortcut:
 
 \section{Disorder}
 
+Bio.PDB can handle both disordered atoms and point mutations (i.e. a
+Gly and an Ala residue in the same position). 
+
 \subsection{General approach\label{disorder problems}}
 
 Disorder should be dealt with from two points of view: the atom and the residue
 points of view. In general, we have tried to encapsulate all the complexity that
-arises from disorder. If you just want to loop over all C\( \alpha  \) atoms,
+arises from disorder. If you just want to loop over all C$\alpha$ atoms,
 you do not care that some residues have a disordered side chain. On the other
 hand it should also be possible to represent disorder completely in the data
 structure. Therefore, disordered atoms or residues are stored in special objects
@@ -9136,34 +9144,35 @@ can be specified by the user.
 
 \subsection{Disordered atoms\label{disordered atoms}}
 
-Disordered atoms are represented by ordinary Atom objects, but all Atom objects
-that represent the same physical atom are stored in a DisorderedAtom object.
-Each Atom object in a DisorderedAtom object can be uniquely indexed using its
-altloc specifier. The DisorderedAtom object forwards all uncaught method calls
-to the selected Atom object, by default the one that represents the atom
-with the highest occupancy. The user can of course change the selected Atom
-object, making use of its altloc specifier. In this way atom disorder is represented
-correctly without much additional complexity. In other words, if you are not
-interested in atom disorder, you will not be bothered by it.
+Disordered atoms are represented by ordinary \texttt{Atom} objects, but
+all \texttt{Atom} objects that represent the same physical atom are stored
+in a \texttt{Disordered\-Atom} object (see Fig. \ref{fig:smcra}).
+Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
+be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
+object forwards all uncaught method calls to the selected Atom object,
+by default the one that represents the atom with the highest
+occupancy. The user can of course change the selected \texttt{Atom}
+object, making use of its altloc specifier. In this way atom disorder
+is represented correctly without much additional complexity. In other
+words, if you are not interested in atom disorder, you will not be
+bothered by it.
 
-Each disordered atom has a characteristic altloc identifier. You can specify
-that a DisorderedAtom object should behave like the Atom object associated with
-a specific altloc identifier:
+Each disordered atom has a characteristic altloc identifier. You can
+specify that a \texttt{Disordered\-Atom} object should behave like
+the \texttt{Atom} object associated with a specific altloc identifier:
 
 \begin{verbatim}
-atom.disordered_select("A")		# select altloc A atom
-
-print atom.get_altloc()
+>>> atom.disordered_select('A') # select altloc A atom
+>>> print atom.get_altloc()
 "A"
-
-atom.disordered_select("B")	   	# select altloc B atom
-print atom.get_altloc()
+>>> atom.disordered_select('B') # select altloc B atom
+>>> print atom.get_altloc()
 "B"
 \end{verbatim}
 
 \subsection{Disordered residues}
 
-\subsubsection{Common case}
+\subsubsection*{Common case}
 
 The most common case is a residue that contains one or more disordered atoms.
 This is evidently solved by using DisorderedAtom objects to represent the disordered
@@ -9172,24 +9181,39 @@ Atom objects. The DisorderedAtom will behave exactly like an ordinary atom (in
 fact the atom with the highest occupancy) by forwarding all uncaught method
 calls to one of the Atom objects (the selected Atom object) it contains.
 
-\subsubsection{Point mutations\label{point mutations}}
+\subsubsection*{Point mutations\label{point mutations}}
 
 A special case arises when disorder is due to a point mutation, i.e. when two
 or more point mutants of a polypeptide are present in the crystal. An example
 of this can be found in PDB structure 1EN2.
 
-Since these residues belong to a different residue type (e.g. let's say Ser
-60 and Cys 60) they should not be stored in a single Residue object as in the
-common case. In this case, each residue is represented by one Residue object,
-and both Residue objects are stored in a DisorderedResidue object.
+Since these residues belong to a different residue type (e.g. let's
+say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
+object as in the common case. In this case, each residue is represented
+by one \texttt{Residue} object, and both \texttt{Residue} objects
+are stored in a single \texttt{Disordered\-Residue} object (see Fig.
+\ref{fig:smcra}).
 
-The DisorderedResidue object forwards all uncaught methods to the selected Residue
-object (by default the last Residue object added), and thus behaves like an
-ordinary residue. Each Residue object in a DisorderedResidue object can be uniquely
-identified by its residue name. In the above example, residue Ser 60 would have
-id {}``SER{}'' in the DisorderedResidue object, while residue Cys 60 would
-have id {}``CYS{}''. The user can select the active Residue object in a DisorderedResidue
-object via this id.
+The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught methods to
+the selected \texttt{Residue} object (by default the last \texttt{Residue}
+object added), and thus behaves like an ordinary residue. Each
+\texttt{Residue} object in a \texttt{Disordered\-Residue} object can be
+uniquely identified by its residue name. In the above example, residue Ser 60
+would have id ``SER'' in the \texttt{Disordered\-Residue} object, while
+residue Cys 60 would have id ``CYS''. The user can select the active
+\texttt{Residue} object in a \texttt{Disordered\-Residue} object via this id.
+
+Example: suppose that a chain has a point mutation at position 10,
+consisting of a Ser and a Cys residue. Make sure that residue 10 of
+this chain behaves as the Cys residue.
+\begin{verbatim}
+>>> residue = chain[10]
+>>> residue.disordered_select('CYS')
+\end{verbatim}
+In addition, you can get a list of all \texttt{Atom} objects (ie.
+all \texttt{DisorderedAtom} objects are 'unpacked' to their individual
+\texttt{Atom} objects) using the \texttt{get\_unpacked\_list} method
+of a \texttt{(Disordered)\-Residue} object.
 
 \section{Hetero residues}
 
@@ -9201,21 +9225,21 @@ code). Therefore, to generate a unique id for each hetero residue, waters and
 other hetero residues are treated in a different way.
 
 Remember that Residue object have the tuple (hetfield, resseq, icode) as id.
-The hetfield is blank ({}`` {}``) for amino and nucleic acids, and a string
+The hetfield is blank (`` '') for amino and nucleic acids, and a string
 for waters and other hetero residues. The content of the hetfield is explained
 below.
 
 \subsection{Water residues}
 
-The hetfield string of a water residue consists of the letter {}``W{}''. So
-a typical residue id for a water is ({}``W{}'', 1, {}`` {}``).
+The hetfield string of a water residue consists of the letter ``W''. So
+a typical residue id for a water is (``W'', 1, `` '').
 
 \subsection{Other hetero residues}
 
-The hetfield string for other hetero residues starts with {}``H\_{}'' followed
-by the residue name. A glucose molecule e.g. with residue name {}``GLC{}''
-would have hetfield {}``H\_GLC{}''. It's residue id could e.g. be ({}``H\_GLC{}'',
-1, {}`` {}``).
+The hetfield string for other hetero residues starts with ``H\_'' followed
+by the residue name. A glucose molecule e.g. with residue name ``GLC''
+would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
+1, `` '').
 
 \section{Navigating through a Structure object}
 
@@ -9272,9 +9296,9 @@ You can use this to go up in the hierarchy, e.g. to get a list of
 \end{verbatim}
 For more info, see the API documentation.
 
-\section{Some random usage examples}
+\subsection{Examples}
 
-Parse a PDB file, and extract some Model, Chain, Residue and Atom objects.
+\subsubsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
 
 \begin{verbatim}
 >>> from Bio.PDB.PDBParser import PDBParser
@@ -9286,15 +9310,14 @@ Parse a PDB file, and extract some Model, Chain, Residue and Atom objects.
 >>> atom = residue["CA"]
 \end{verbatim}
 
-Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq
-10).
+\subsubsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
 
 \begin{verbatim}
 >>> residue_id = ("H_GLC", 10, " ")
 >>> residue = chain[residue_id]
 \end{verbatim}
 
-Print all hetero residues in chain.
+\subsubsection*{Print all hetero residues in chain}
 
 \begin{verbatim}
 >>> for residue in chain.get_list():
@@ -9305,8 +9328,7 @@ Print all hetero residues in chain.
 ...
 \end{verbatim}
 
-Print out the coordinates of all CA atoms in a structure with B factor greater
-than 50.
+\subsubsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
 
 \begin{verbatim}
 >>> for model in structure.get_list():
@@ -9319,7 +9341,7 @@ than 50.
 ...
 \end{verbatim}
 
-Print out all the residues that contain disordered atoms.
+\subsubsection*{Print out all the residues that contain disordered atoms}
 
 \begin{verbatim}
 >>> for model in structure.get_list():
@@ -9334,7 +9356,7 @@ Print out all the residues that contain disordered atoms.
 ...
 \end{verbatim}
 
-Loop over all disordered atoms, and select all atoms with altloc A (if present).
+\subsubsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
 This will make sure that the SMCRA data structure will behave as if only the
 atoms with altloc A are present.
 
@@ -9350,14 +9372,231 @@ atoms with altloc A are present.
 ...
 \end{verbatim}
 
-Suppose that a chain has a point mutation at position 10, consisting of a Ser
-and a Cys residue. Make sure that residue 10 of this chain behaves as the Cys
-residue.
+\subsubsection*{Extracting polypeptides from a \texttt{Structure} object\label{subsubsec:extracting_polypeptides}}
+
+To extract polypeptides from a structure, construct a list of \texttt{Polypeptide} objects from a \texttt{Structure} object using \texttt{PolypeptideBuilder} as follows:
 
 \begin{verbatim}
->>> residue = chain[10]
->>> residue.disordered_select("CYS")
+>>> model_nr = 1
+>>> polypeptide_list = build_peptides(structure, model_nr)
+>>> for polypeptide in polypeptide_list:
+...     print polypeptide
+...
 \end{verbatim}
+
+A Polypeptide object is simply a UserList of Residue objects, and is always created from a single Model (in this case model 1).
+You can use the resulting \texttt{Polypeptide} object to get the sequence as a \texttt{Seq} object or to get a list of C$\alpha$ atoms as well. Polypeptides can be built using a C-N or a C$\alpha$-C$\alpha$ distance criterion.
+
+Example:
+
+\begin{verbatim}
+# Using C-N 
+>>> ppb=PPBuilder()
+>>> for pp in ppb.build_peptides(structure): 
+...     print pp.get_sequence()
+...
+# Using CA-CA
+>>> ppb=CaPPBuilder()
+>>> for pp in ppb.build_peptides(structure): 
+...     print pp.get_sequence()
+...
+\end{verbatim}
+Note that in the above case only model 0 of the structure is considered
+by \texttt{PolypeptideBuilder}. However, it is possible to use \texttt{PolypeptideBuilder}
+to build \texttt{Polypeptide} objects from \texttt{Model} and \texttt{Chain}
+objects as well.
+
+\subsubsection*{Obtaining the sequence of a structure}
+
+The first thing to do is to extract all polypeptides from the structure
+(see \ref{subsubsec:extracting_polypeptides}). The sequence of each polypeptide can then easily
+be obtained from the \texttt{Polypeptide} objects. The sequence is
+represented as a Biopython \texttt{Seq} object, and its alphabet is
+defined by a \texttt{ProteinAlphabet} object.
+
+Example:
+
+\begin{verbatim}
+>>> seq = polypeptide.get_sequence()
+>>> print seq
+Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
+\end{verbatim}
+
+\section{Analysis}
+
+\subsection{Measuring distances}
+The minus operator for atoms has been overloaded to return the distance between two atoms. 
+\begin{verbatim}
+# Get some atoms
+>>> ca1 = residue1['CA']
+>>> ca2 = residue2['CA']
+# Simply subtract the atoms to get their distance
+>>> distance = ca1-ca2
+\end{verbatim}
+
+\subsection{Measuring angles}
+Use the vector representation of the atomic coordinates, and
+the \texttt{calc\_angle} function from the \texttt{Vector} module:
+\begin{verbatim}
+>>> vector1 = atom1.get_vector()
+>>> vector2 = atom2.get_vector()
+>>> vector3 = atom3.get_vector()
+>>> angle = calc_angle(vector1, vector2, vector3)
+\end{verbatim}
+
+\subsection{Measuring torsion angles}
+Use  the vector representation of the atomic coordinates, and
+the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
+\begin{verbatim}
+>>> vector1 = atom1.get_vector()
+>>> vector2 = atom2.get_vector()
+>>> vector3 = atom3.get_vector()
+>>> vector4 = atom4.get_vector()
+>>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
+\end{verbatim}
+
+\subsection{Determining atom-atom contacts}
+
+Use \texttt{NeighborSearch} to perform neighbor lookup.
+The neighbor lookup is done using a KD tree module written in C (see \texttt{Bio.KDTree}), making it very fast.
+It  also includes a fast method to find all point pairs within a certain distance of each other.
+
+\subsection{Superimposing two structures}
+
+Use a \texttt{Superimposer} object to superimpose two coordinate sets.
+This object calculates the rotation and translation matrix that rotates
+two lists of atoms on top of each other in such a way that their RMSD
+is minimized. Of course, the two lists need to contain the same number
+of atoms. The \texttt{Superimposer} object can also apply the rotation/translation
+to a list of atoms. The rotation and translation are stored as a tuple
+in the \texttt{rotran} attribute of the \texttt{Superimposer} object
+(note that the rotation is right multiplying!). The RMSD is stored
+in the \texttt{rmsd} attribute.
+
+The algorithm used by \texttt{Superimposer} comes from \cite[Golub \& Van Loan]{golub1989} and makes use of singular value decomposition (this is implemented in the general \texttt{Bio.SVDSuperimposer} module).
+
+Example:
+
+\begin{verbatim}
+>>> sup = Superimposer()
+# Specify the atom lists
+# 'fixed' and 'moving' are lists of Atom objects
+# The moving atoms will be put on the fixed atoms
+>>> sup.set_atoms(fixed, moving)
+# Print rotation/translation/rmsd
+>>> print sup.rotran
+>>> print sup.rms 
+# Apply rotation/translation to the moving atoms
+>>> sup.apply(moving)
+\end{verbatim}
+
+To superimpose two structures based on their active sites, use the active site atoms to calculate the rotation/translation matrices (as above), and apply these to the whole molecule.
+
+\subsection{Mapping the residues of two related structures onto each other}
+
+First, create an alignment file in FASTA format, then use the \texttt{StructureAlignment}
+class. This class can also be used for alignments with more than two
+structures.
+
+\subsection{Calculating the Half Sphere Exposure}
+
+Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure
+\cite{hamelryck2005}.
+Basically, it counts the number of C$\alpha$ atoms around a residue
+in the direction of its side chain, and in the opposite direction
+(within a radius of $13 \AA$). Despite its simplicity, it outperforms
+many other measures of solvent exposure.
+
+HSE comes in two flavors: HSE$\alpha$ and HSE$\beta$. The former
+only uses the C$\alpha$ atom positions, while the latter uses the
+C$\alpha$ and C$\beta$ atom positions. The HSE measure is calculated
+by the \texttt{HSExposure} class, which can also calculate the contact
+number. The latter class has methods which return dictionaries that
+map a \texttt{Residue} object to its corresponding HSE$\alpha$, HSE$\beta$
+and contact number values.
+
+Example:
+
+\begin{verbatim}
+>>> model = structure[0]
+>>> hse = HSExposure()
+# Calculate HSEalpha
+>>> exp_ca = hse.calc_hs_exposure(model, option='CA3')
+# Calculate HSEbeta
+>>> exp_cb=hse.calc_hs_exposure(model, option='CB')
+# Calculate classical coordination number
+>>> exp_fs = hse.calc_fs_exposure(model)
+# Print HSEalpha for a residue
+>>> print exp_ca[some_residue]
+\end{verbatim}
+
+\subsection{Determining the secondary structure}
+
+For this functionality, you need to install DSSP (and obtain a license
+for it --- free for academic use, see \url{http://www.cmbi.kun.nl/gv/dssp/}).
+Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
+to their secondary structure (and accessible surface area). The DSSP
+codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
+program, and thus by consequence the class) cannot handle multiple
+models!
+
+\begin{table}
+\begin{tabular}{|c|c|}
+\hline 
+Code&
+Secondary structure \\
+\hline
+\hline 
+H&
+$\alpha$-helix \\
+\hline 
+B&
+Isolated $\beta$-bridge residue \\
+\hline 
+E&
+Strand \\
+\hline 
+G&
+3-10 helix \\
+\hline 
+I&
+$\Pi$-helix \\
+\hline 
+T&
+Turn\\
+\hline 
+S&
+Bend \\
+\hline 
+-&
+Other\\
+\hline
+\end{tabular}
+\caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
+\end{table}
+
+The \texttt{DSSP} class can also be used to calculate the accessible surface area of a residue. But see also section \ref{subsec:residue_depth}.
+
+\subsection{Calculating the residue depth\label{subsec:residue_depth}}
+
+Residue depth is the average distance of a residue's atoms from the
+solvent accessible surface. It's a fairly new and very powerful parameterization
+of solvent accessibility. For this functionality, you need to install
+Michel Sanner's MSMS program (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
+Then use the \texttt{ResidueDepth} class. This class behaves as a
+dictionary which maps \texttt{Residue} objects to corresponding (residue
+depth, C$\alpha$ depth) tuples. The C$\alpha$ depth is the distance
+of a residue's C$\alpha$ atom to the solvent accessible surface. 
+
+Example:
+
+\begin{verbatim}
+>>> model = structure[0]
+>>> rd = ResidueDepth(model, pdb_file)
+>>> residue_depth, ca_depth=rd[some_residue]
+\end{verbatim}
+You can also get access to the molecular surface itself (via the \texttt{get\_surface}
+function), in the form of a Numeric Python array with the surface points.
 
 \section{Common problems in PDB files}
 
@@ -9373,11 +9612,11 @@ Example:
 # Permissive parser
 >>> parser = PDBParser(PERMISSIVE=1)
 >>> parser = PDBParser() # The same (default)
->>> # Strict parser
+# Strict parser
 >>> strict_parser = PDBParser(PERMISSIVE=0)
 \end{verbatim}
 In the permissive state (DEFAULT), PDB files that obviously contain
-errors are 'corrected' (i.e. some residues or atoms are left out).
+errors are ``corrected'' (i.e. some residues or atoms are left out).
 These errors include:
 
 \begin{itemize}
@@ -9416,7 +9655,7 @@ the structure in a data structure.
 
 One structure contains two amino acid residues in one chain with the same sequence
 identifier (resseq 3) and icode. Upon inspection it was found that this chain
-contains the residues Thr A3, \ldots{}, Gly A202, Leu A3, Glu A204. Clearly,
+contains the residues Thr A3, \ldots, Gly A202, Leu A3, Glu A204. Clearly,
 Leu A3 should be Leu A203. A couple of similar situations exist for structure
 1FFK (which e.g. contains Gly B64, Met B65, Glu B65, Thr B67, i.e. residue Glu
 B65 should be Glu B66).
@@ -9449,7 +9688,7 @@ is automatically interpreted in the right way.
 
 Sometimes a structure contains a list of residues belonging to chain A, followed
 by residues belonging to chain B, and again followed by residues belonging to
-chain A, i.e. the chains are {}``broken{}''. This is correctly interpreted.
+chain A, i.e. the chains are ``broken''. This is correctly interpreted.
 
 \subsection{Fatal errors}
 
@@ -9465,7 +9704,7 @@ on:
 \begin{itemize}
 \item The sequence identifier (resseq).
 \item The insertion code (icode).
-\item The hetfield string ({}``W{}'' for waters and {}``H\_{}'' followed by the
+\item The hetfield string (``W'' for waters and ``H\_'' followed by the
 residue name for other hetero residues)
 \item The residue names of the residues in the case of point mutations (to store the
 Residue objects in a DisorderedResidue object).
@@ -9552,30 +9791,6 @@ be used to obtain the entries that were added, modified or obsoleted
 during the current week. For more info on the possibilities of \texttt{PDBList},
 see the API documentation.
 
-\section{Other features}
-
-There are also some tools to analyze a crystal structure. Tools
-exist to superimpose two coordinate sets (SVDSuperimposer), to extract
-polypeptides from a structure (Polypeptide), to perform neighbor lookup
-(NeighborSearch) and to write out PDB files (PDBIO). The neighbor lookup
-is done using a KD tree module written in C. It is very fast and also
-includes a fast method to find all point pairs within a certain distance
-of each other.
-
-A Polypeptide object is simply a UserList of Residue objects. You can
-construct a list of Polypeptide objects from a Structure object as follows:
-
-\begin{verbatim}
->>> model_nr = 1
->>> polypeptide_list = build_peptides(structure, model_nr)
->>> for polypeptide in polypeptide_list:
-...     print polypeptide
-...
-\end{verbatim}
-
-The Polypeptide objects are always created from a single
-Model (in this case model 1).
-
 LyX
 
 \section{General questions}
@@ -9616,372 +9831,6 @@ day). Python based/aware molecular graphics solutions include:
 \item VMD: \url{http://www.ks.uiuc.edu/Research/vmd/}
 \item MMTK: \url{http://starship.python.net/crew/hinsen/MMTK/}
 \end{itemize}
-
-\subsection{The Structure object\label{sub:The-Structure-object}}
-
-\subsubsection*{How is disorder handled?}
-
-This is one of the strong points of Bio.PDB. It can handle both disordered
-atoms and point mutations (ie. a Gly and an Ala residue in the same
-position). 
-
-Disorder should be dealt with from two points of view: the atom and
-the residue points of view. In general, I have tried to encapsulate
-all the complexity that arises from disorder. If you just want to
-loop over all C$\alpha$ atoms, you do not care that some residues
-have a disordered side chain. On the other hand it should also be
-possible to represent disorder completely in the data structure. Therefore,
-disordered atoms or residues are stored in special objects that behave
-as if there is no disorder. This is done by only representing a subset
-of the disordered atoms or residues. Which subset is picked (e.g.
-which of the two disordered OG side chain atom positions of a Ser
-residue is used) can be specified by the user.
-
-\textbf{Disordered atom positions} are represented by ordinary \texttt{Atom}
-objects, but all \texttt{Atom} objects that represent the same physical
-atom are stored in a \texttt{Disordered\-Atom} object (see Fig. \ref{fig:smcra}).
-Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
-be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
-object forwards all uncaught method calls to the selected Atom object,
-by default the one that represents the atom with the highest
-occupancy. The user can of course change the selected \texttt{Atom}
-object, making use of its altloc specifier. In this way atom disorder
-is represented correctly without much additional complexity. In other
-words, if you are not interested in atom disorder, you will not be
-bothered by it.
-
-Each disordered atom has a characteristic altloc identifier. You can
-specify that a \texttt{Disordered\-Atom} object should behave like
-the \texttt{Atom} object associated with a specific altloc identifier:
-
-\begin{verbatim}
->>> atom.disordered_select('A') # select altloc A atom
->>> atom.disordered_select('B') # select altloc B atom
-\end{verbatim}
-A special case arises when disorder is due to \textbf{point mutations},
-i.e. when two or more point mutants of a polypeptide are present in
-the crystal. An example of this can be found in PDB structure 1EN2.
-
-Since these residues belong to a different residue type (e.g. let's
-say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
-object as in the common case. In this case, each residue is represented
-by one \texttt{Residue} object, and both \texttt{Residue} objects
-are stored in a single \texttt{Disordered\-Residue} object (see Fig.
-\ref{fig:smcra}).
-
-The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught
-methods to the selected \texttt{Residue} object (by default the last
-\texttt{Residue} object added), and thus behaves like an ordinary
-residue. Each \texttt{Residue} object in a \texttt{Disordered\-Residue}
-object can be uniquely identified by its residue name. In the above
-example, residue Ser 60 would have id 'SER' in the \texttt{Disordered\-Residue}
-object, while residue Cys 60 would have id 'CYS'. The user can select
-the active \texttt{Residue} object in a \texttt{Disordered\-Residue}
-object via this id.
-
-Example: suppose that a chain has a point mutation at position 10,
-consisting of a Ser and a Cys residue. Make sure that residue 10 of
-this chain behaves as the Cys residue.
-
-\begin{verbatim}
->>> residue = chain[10]
->>> residue.disordered_select('CYS')
-\end{verbatim}
-In addition, you can get a list of all \texttt{Atom} objects (ie.
-all \texttt{DisorderedAtom} objects are 'unpacked' to their individual
-\texttt{Atom} objects) using the \texttt{get\_unpacked\_list} method
-of a \texttt{(Disordered)\-Residue} object.
-
-
-\subsubsection*{Can I sort residues in a chain somehow?}
-
-Yes, kinda, but I'm waiting for a request for this feature to finish
-it :-).
-
-
-\subsubsection*{How are ligands and solvent handled?}
-
-See 'What is a residue id?'.
-
-
-\subsubsection*{What about B factors?}
-
-Well, yes! Bio.PDB supports isotropic and anisotropic B factors, and
-also deals with standard deviations of anisotropic B factor if present
-(see \ref{sub:Analysis}).
-
-
-\subsubsection*{What about standard deviation of atomic positions?}
-
-Yup, supported. See section \ref{sub:Analysis}.
-
-
-\subsubsection*{I think the SMCRA data structure is not flexible/\-sexy/\-whatever
-enough...}
-
-Sure, sure. Everybody is always coming up with (mostly vaporware or
-partly implemented) data structures that handle all possible situations
-and are extensible in all thinkable (and unthinkable) ways. The prosaic
-truth however is that 99.9\% of people using (and I mean really using!)
-crystal structures think in terms of models, chains, residues and
-atoms. The philosophy of Bio.PDB is to provide a reasonably fast,
-clean, simple, but complete data structure to access structure data.
-The proof of the pudding is in the eating.
-
-Moreover, it is quite easy to build more specialised data structures
-on top of the \texttt{Structure} class (eg. there's a \texttt{Polypeptide}
-class). On the other hand, the \texttt{Structure} object is built
-using a Parser/\-Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
-and \texttt{Structure\-Builder}, respectively). One can easily re-use
-the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
-class. It is of course also trivial to add support for new file formats
-by writing new parsers.
-
-\subsection{\label{sub:Analysis}Analysis}
-
-
-\subsubsection*{How do I extract information from an \texttt{Atom} object?}
-
-Using the following methods:
-
-\begin{verbatim}
->>> a.get_name() # atom name (spaces stripped, e.g. 'CA')
->>> a.get_id() # id (equals atom name)
->>> a.get_coord() # atomic coordinates
->>> a.get_vector() # atomic coordinates as Vector object
->>> a.get_bfactor() # isotropic B factor
->>> a.get_occupancy() # occupancy
->>> a.get_altloc() # alternative location specifier
->>> a.get_sigatm() # std. dev. of atomic parameters
->>> a.get_siguij() # std. dev. of anisotropic B factor
->>> a.get_anisou() # anisotropic B factor
->>> a.get_fullname() # atom name (with spaces, e.g. '.CA.')
-\end{verbatim}
-
-\subsubsection*{How do I extract information from a \texttt{Residue} object?}
-
-Using the following methods:
-
-\begin{verbatim}
->>> r.get_resname() # return the residue name (eg. 'GLY')
->>> r.is_disordered() # 1 if the residue has disordered atoms
->>> r.get_segid() # return the SEGID
->>> r.has_id(name) # test if a residue has a certain atom
-\end{verbatim}
-
-\subsubsection*{How do I measure distances?}
-
-That's simple: the minus operator for atoms has been overloaded to
-return the distance between two atoms. 
-
-Example:
-
-\begin{verbatim}
-# Get some atoms
->>> ca1 = residue1['CA']
->>> ca2 = residue2['CA']
-# Simply subtract the atoms to get their distance
->>> distance = ca1-ca2
-\end{verbatim}
-
-\subsubsection*{How do I measure angles?}
-
-This can easily be done via the vector representation of the atomic
-coordinates, and the \texttt{calc\_angle} function from the \texttt{Vector}
-module:
-
-\begin{verbatim}
->>> vector1=atom1.get_vector()
->>> vector2=atom2.get_vector()
->>> vector3=atom3.get_vector()
->>> angle=calc_angle(vector1, vector2, vector3)
-\end{verbatim}
-
-\subsubsection*{How do I measure torsion angles?}
-
-Again, this can easily be done via the vector representation of the
-atomic coordinates, this time using the \texttt{calc\_dihedral} function
-from the \texttt{Vector} module:
-
-\begin{verbatim}
->>> vector1 = atom1.get_vector()
->>> vector2 = atom2.get_vector()
->>> vector3 = atom3.get_vector()
->>> vector4 = atom4.get_vector()
->>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
-\end{verbatim}
-
-\subsubsection*{How do I determine atom-atom contacts?}
-
-Use \texttt{NeighborSearch}. This uses a KD tree data structure coded
-in C behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
-
-
-\subsubsection*{How do I extract polypeptides from a \texttt{Structure} object?}
-
-Use \texttt{PolypeptideBuilder}. You can use the resulting \texttt{Polypeptide}
-object to get the sequence as a \texttt{Seq} object or to get a list
-of C$\alpha$ atoms as well. Polypeptides can be built using a C-N
-or a C$\alpha$-C$\alpha$ distance criterion.
-
-Example:
-
-\begin{verbatim}
-# Using C-N 
->>> ppb=PPBuilder()
->>> for pp in ppb.build_peptides(structure): 
-...     print pp.get_sequence()
-...
-# Using CA-CA
->>> ppb=CaPPBuilder()
->>> for pp in ppb.build_peptides(structure): 
-...     print pp.get_sequence()
-...
-\end{verbatim}
-Note that in the above case only model 0 of the structure is considered
-by \texttt{PolypeptideBuilder}. However, it is possible to use \texttt{PolypeptideBuilder}
-to build \texttt{Polypeptide} objects from \texttt{Model} and \texttt{Chain}
-objects as well.
-
-
-\subsubsection*{How do I get the sequence of a structure?}
-
-The first thing to do is to extract all polypeptides from the structure
-(see previous entry). The sequence of each polypeptide can then easily
-be obtained from the \texttt{Polypeptide} objects. The sequence is
-represented as a Biopython \texttt{Seq} object, and its alphabet is
-defined by a \texttt{ProteinAlphabet} object.
-
-Example:
-
-\begin{verbatim}
->>> seq = polypeptide.get_sequence()
->>> print seq
-Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
-\end{verbatim}
-
-\subsubsection*{How do I determine secondary structure?}
-
-For this functionality, you need to install DSSP (and obtain a license
-for it - free for academic use, see \url{http://www.cmbi.kun.nl/gv/dssp/}).
-Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
-to their secondary structure (and accessible surface area). The DSSP
-codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
-program, and thus by consequence the class) cannot handle multiple
-models!
-
-%
-\begin{table}
-
-\subsubsection*{\begin{tabular}{|c|c|}
-\hline 
-Code&
-Secondary structure \\
-\hline
-\hline 
-H&
-$\alpha$-helix \\
-\hline 
-B&
-Isolated $\beta$-bridge residue \\
-\hline 
-E&
-Strand \\
-\hline 
-G&
-3-10 helix \\
-\hline 
-I&
-$\Pi$-helix \\
-\hline 
-T&
-Turn\\
-\hline 
-S&
-Bend \\
-\hline 
--&
-Other\\
-\hline
-\end{tabular}}
-
-
-\caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
-\end{table}
-
-
-
-\subsubsection*{How do I calculate the accessible surface area of a residue?}
-
-Use the \texttt{DSSP} class (see also previous entry). But see also
-next entry.
-
-
-\subsubsection*{How do I calculate residue depth?}
-
-Residue depth is the average distance of a residue's atoms from the
-solvent accessible surface. It's a fairly new and very powerful parameterization
-of solvent accessibility. For this functionality, you need to install
-Michel Sanner's MSMS program (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
-Then use the \texttt{ResidueDepth} class. This class behaves as a
-dictionary which maps \texttt{Residue} objects to corresponding (residue
-depth, C$\alpha$ depth) tuples. The C$\alpha$ depth is the distance
-of a residue's C$\alpha$ atom to the solvent accessible surface. 
-
-Example:
-
-\begin{verbatim}
->>> model = structure[0]
->>> rd = ResidueDepth(model, pdb_file)
->>> residue_depth, ca_depth=rd[some_residue]
-\end{verbatim}
-You can also get access to the molecular surface itself (via the \texttt{get\_surface}
-function), in the form of a Numeric Python array with the surface points.
-
-
-\subsubsection*{How do I calculate Half Sphere Exposure?}
-
-Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
-Basically, it counts the number of C$\alpha$ atoms around a residue
-in the direction of its side chain, and in the opposite direction
-(within a radius of $13 \AA$). Despite its simplicity, it outperforms
-many other measures of solvent exposure. An article describing this
-novel 2D measure has been submitted.
-
-HSE comes in two flavors: HSE$\alpha$ and HSE$\beta$. The former
-only uses the C$\alpha$ atom positions, while the latter uses the
-C$\alpha$ and C$\beta$ atom positions. The HSE measure is calculated
-by the \texttt{HSExposure} class, which can also calculate the contact
-number. The latter class has methods which return dictionaries that
-map a \texttt{Residue} object to its corresponding HSE$\alpha$, HSE$\beta$
-and contact number values.
-
-Example:
-
-\begin{verbatim}
->>> model = structure[0]
->>> hse = HSExposure()
-# Calculate HSEalpha
->>> exp_ca = hse.calc_hs_exposure(model, option='CA3')
-# Calculate HSEbeta
->>> exp_cb=hse.calc_hs_exposure(model, option='CB')
-# Calculate classical coordination number
->>> exp_fs = hse.calc_fs_exposure(model)
-# Print HSEalpha for a residue
->>> print exp_ca[some_residue]
-\end{verbatim}
-
-\subsubsection*{How do I map the residues of two related structures onto each other?}
-
-First, create an alignment file in FASTA format, then use the \texttt{StructureAlignment}
-class. This class can also be used for alignments with more than two
-structures.
-
-
-\subsubsection*{How do I test if a Residue object is an amino acid?}
-
-Use \texttt{is\_aa(residue)}.
-
 
 \subsubsection*{Can I do vector operations on atomic coordinates?}
 
@@ -10032,44 +9881,6 @@ on top of another.
 
 
 \subsection{Manipulating the structure}
-
-
-\subsubsection*{How do I superimpose two structures?}
-
-Surprisingly, this is done using the \texttt{Superimposer} object.
-This object calculates the rotation and translation matrix that rotates
-two lists of atoms on top of each other in such a way that their RMSD
-is minimized. Of course, the two lists need to contain the same amount
-of atoms. The \texttt{Superimposer} object can also apply the rotation/translation
-to a list of atoms. The rotation and translation are stored as a tuple
-in the \texttt{rotran} attribute of the \texttt{Superimposer} object
-(note that the rotation is right multiplying!). The RMSD is stored
-in the \texttt{rmsd} attribute.
-
-The algorithm used by \texttt{Superimposer} comes from \textit{Matrix
-computations, 2nd ed. Golub, G. \& Van Loan (1989)} and makes use
-of singular value decomposition (this is implemented in the general
-\texttt{Bio.\-SVDSuperimposer} module).
-
-Example:
-
-\begin{verbatim}
->>> sup = Superimposer()
-# Specify the atom lists
-# 'fixed' and 'moving' are lists of Atom objects
-# The moving atoms will be put on the fixed atoms
->>> sup.set_atoms(fixed, moving)
-# Print rotation/translation/rmsd
->>> print sup.rotran
->>> print sup.rms 
-# Apply rotation/translation to the moving atoms
->>> sup.apply(moving)
-\end{verbatim}
-
-\subsubsection*{How do I superimpose two structures based on their active sites?}
-
-Pretty easily. Use the active site atoms to calculate the rotation/translation
-matrices (see above), and apply these to the whole molecule.
 
 
 \subsubsection*{Can I manipulate the atomic coordinates?}
@@ -18399,11 +18210,15 @@ Michiel J. L. de Hoon, Seiya Imoto, John Nolan, Satoru Miyano: ``Open source clu
 Michiel B. Eisen, Paul T. Spellman, Patrick O. Brown, David Botstein: ``Cluster analysis and display of genome-wide expression patterns''. \textit{Proceedings of the National Academy of Science USA} {\bf 95} (25): 14863--14868 (1998). \href{http://dx.doi.org/10.1073/pnas.96.19.10943-c}{doi:10.1073/pnas.96.19.10943-c}
 \bibitem{golub1971}
 Gene H. Golub, Christian Reinsch: ``Singular value decomposition and least squares solutions''. In \textit{Handbook for Automatic Computation}, {\bf 2}, (Linear Algebra) (J. H. Wilkinson and C. Reinsch, eds), 134--151. New York: Springer-Verlag (1971).
+\bibitem{golub1989}
+Gene H. Golub, Charles F. Van Loan: \textit{Matrix computations}, 2nd edition (1989).
 \bibitem{hamelryck2003a}
 Thomas Hamelryck and  Bernard Manderick: 11PDB parser and structure class
 implemented in Python''. \textit{Bioinformatics}, \textbf{19} (17): 2308--2310 (2003) \href{http://dx.doi.org/10.1093/bioinformatics/btg299}{doi: 10.1093/bioinformatics/btg299}. 
 \bibitem{hamelryck2003b}
 Thomas Hamelryck: ``Efficient identification of side-chain patterns using a multidimensional index tree''. \textit{Proteins} {\bf 51} (1): 96--108 (2003). \href{http://dx.doi.org/10.1002/prot.10338}{doi:10.1002/prot.10338}
+\bibitem{hamelryck2005}
+Thomas Hamelryck: ``An amino acid has two sides; A new 2D measure provides a different view of solvent exposure''. \textit{Proteins} {\bf 59} (1): 29--48 (2005). \href{http://dx.doi.org/10.1002/prot.20379}{doi:10.1002/prot.20379}.
 \bibitem{hartigan1975}
 John A. Hartiga. \textit{Clustering algorithms}. New York: Wiley (1975).
 \bibitem{jain1988}
