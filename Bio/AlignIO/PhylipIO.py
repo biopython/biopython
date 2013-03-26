@@ -356,7 +356,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             handle.write(name[:id_width].ljust(id_width))
             # Write the entire sequence to one line (see sequential format
             # notes in the SequentialPhylipIterator docstring
-            handle.write(sequence)
+            handle.write(" %s" % sequence)
             handle.write("\n")
 
 
