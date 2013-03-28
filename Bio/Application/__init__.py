@@ -413,7 +413,10 @@ class AbstractCommandline(object):
         object, since they may be useful for diagnosing what went wrong.
         """
         if stdout:
-            stdout_arg = subprocess.PIPE
+            if isinstance(stdout,basestring):
+                stdout_arg = open(stdout,"w")
+            else:
+                stdout_arg = subprocess.PIPE
         else:
             stdout_arg = open(os.devnull)
         if stderr:
