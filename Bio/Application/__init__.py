@@ -415,11 +415,11 @@ class AbstractCommandline(object):
         if stdout:
             stdout_arg = subprocess.PIPE
         else:
-            stdout_arg = open(os.devnull)
+            stdout_arg = open(os.devnull, "w")
         if stderr:
             stderr_arg = subprocess.PIPE
         else:
-            stderr_arg = open(os.devnull)
+            stderr_arg = open(os.devnull, "w")
         #We may not need to supply any piped input, but we setup the
         #standard input pipe anyway as a work around for a python
         #bug if this is called from a Windows GUI program.  For

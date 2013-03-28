@@ -38,25 +38,17 @@ class TestApp(unittest.TestCase):
         self.assertEqual(stderr, None)
         self.assertEqual(stdout, "Hello World\n")
 
-    #Same failure on Linux, Mac OS X:
-    # ApplicationError: Command 'echo Hello World' returned non-zero exit status 1,
-    # '/bin/sh: line 0: echo: write error: Bad file descriptor'
-    #And on Windows XP (with cygwin):
-    # ApplicationError: Command 'echo Hello World' returned non-zero exit status 1,
-    # 'echo: write error: Bad file descriptor' 
-    #def test_echo_capture_stderr(self):
-    #    cline = EchoApp(text="Hello World")
-    #    stdout, stderr = cline(stdout=False, stderr=True)
-    #    self.assertEqual(stderr, "")
-    #    self.assertEqual(stdout, None)
+    def test_echo_capture_stderr(self):
+        cline = EchoApp(text="Hello World")
+        stdout, stderr = cline(stdout=False, stderr=True)
+        self.assertEqual(stderr, "")
+        self.assertEqual(stdout, None)
 
-    #Same failure on Linux, Mac OS X, and Windows XP (with cygwin):
-    # ApplicationError: Command 'echo Hello World' returned non-zero exit status 1
-    #def test_echo_capture_neither(self):
-    #    cline = EchoApp(text="Hello World")
-    #    stdout, stderr = cline(stdout=False, stderr=False)
-    #    self.assertEqual(stderr, None)
-    #    self.assertEqual(stdout, None)
+    def test_echo_capture_neither(self):
+        cline = EchoApp(text="Hello World")
+        stdout, stderr = cline(stdout=False, stderr=False)
+        self.assertEqual(stderr, None)
+        self.assertEqual(stdout, None)
 
 
 if __name__ == "__main__":
