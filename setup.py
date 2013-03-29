@@ -112,16 +112,9 @@ def check_dependencies_once():
         _CHECKED = check_dependencies()
     return _CHECKED
 
-
-def get_install_requires():
-    install_requires = []
-    # skip this with distutils (otherwise get a warning)
-    if not _SETUPTOOLS:
-        return []
-    # skip this with jython and pypy and ironpython
-    if os.name == "java" or is_pypy() or is_ironpython():
-        return []
-    # check for easy_install and pip
+def is_automated():
+    """Check for installation with easy_install or pip.
+    """
     is_automated = False
     # easy_install: --dist-dir option passed
     try:
@@ -136,15 +129,27 @@ def get_install_requires():
     if sys.argv in [["-c", "develop", "--no-deps"],
                     ["--no-deps", "-c", "develop"],
                     ["-c", "egg_info"]] \
-                    or "pip-egg-info" in sys.argv:
+                    or "pip-egg-info" in sys.argv \
+                    or sys.argv[:3] == ["-c", "install", "--record"]:
         is_automated = True
-    if is_automated:
+    return is_automated
+
+def get_install_requires():
+    install_requires = []
+    # skip this with distutils (otherwise get a warning)
+    if not _SETUPTOOLS:
+        return []
+    # skip this with jython and pypy and ironpython
+    if os.name == "java" or is_pypy() or is_ironpython():
+        return []
+    # check for easy_install and pip
+    if is_automated():
         global _CHECKED
         if _CHECKED is None:
             _CHECKED = True
-        install_requires.append("numpy >= 1.5.1")
+        # pip dependency resolution
+        #install_requires.append("numpy >= 1.5.1")
     return install_requires
-
 
 def check_dependencies():
     """Return whether the installation should continue."""
@@ -159,7 +164,8 @@ def check_dependencies():
     # We only check for NumPy, as this is a compile time dependency
     if is_Numpy_installed():
         return True
-
+    if is_automated():
+        return True  # For automated builds go ahead with installed packages
     if os.name == 'java':
         return True  # NumPy is not avaliable for Jython (for now)
     if is_pypy():
