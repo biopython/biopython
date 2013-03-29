@@ -9,6 +9,8 @@ This is intended to check generic things like argument parsing, and
 stdin/stdout/stderr handling.
 """
 
+from __future__ import with_statement
+
 import os
 import unittest
 
