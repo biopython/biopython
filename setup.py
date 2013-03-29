@@ -146,7 +146,9 @@ def get_install_requires():
         global _CHECKED
         if _CHECKED is None:
             _CHECKED = True
-        # pip dependency resolution
+        # pip dependency resolution does not fully install numpy
+        # before compiling Biopython so Biopython setup fails.
+        # Instead, we expect user to explicitly require numpy if needed.
         #install_requires.append("numpy >= 1.5.1")
     return install_requires
 
