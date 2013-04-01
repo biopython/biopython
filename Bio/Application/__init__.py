@@ -449,6 +449,15 @@ class AbstractCommandline(object):
         if not stderr:
             assert not stderr_str, stderr_str
         return_code = child_process.returncode
+
+        #Particularly important to close handles on Jython and PyPy
+        #(where garbage collection is less predictable) and on Windows
+        #(where cannot delete files with an open handle):
+        if stdout and isinstance(stdout, basestring):
+            stdout_arg.close()
+        if stderr and isinstance(stderr, basestring) and stdout != stderr:
+            stderr_arg.close()
+
         if return_code:
             raise ApplicationError(return_code, str(self),
                                    stdout_str, stderr_str)
