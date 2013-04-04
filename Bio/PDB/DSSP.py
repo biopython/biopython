@@ -24,7 +24,7 @@ import os
 import re
 import tempfile
 
-from Bio.SCOP.Raf import to_one_letter_code
+from Bio.Data import SCOPData
 
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
@@ -290,7 +290,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            resname = to_one_letter_code.get(resname, 'X')
+            resname = SCOPData.protein_letters_3to1.get(resname, 'X')
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'

@@ -1,4 +1,8 @@
-to_one_letter_code = {
+# Additional protein alphabets used in the SCOP database and PDB files.
+#
+# See Bio.SCOP for more information about SCOP and Biopython's SCOP module.
+
+protein_letters_3to1 = {
     '00C':'C','01W':'X','02K':'A','03Y':'C','07O':'C',
     '08P':'C','0A0':'D','0A1':'Y','0A2':'K','0A8':'C',
     '0AA':'V','0AB':'V','0AC':'G','0AD':'G','0AF':'W',

@@ -51,8 +51,8 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 import warnings
 
 from Bio.Alphabet import generic_protein
+from Bio.Data import SCOPData
 from Bio.Seq import Seq
-from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Vector import calc_dihedral, calc_angle
 
@@ -181,7 +181,7 @@ def is_aa(residue, standard=False):
     if standard:
         return residue in d3_to_index
     else:
-        return residue in to_one_letter_code
+        return residue in SCOPData.protein_letters_3to1
 
 
 class Polypeptide(list):
@@ -279,7 +279,7 @@ class Polypeptide(list):
         """
         s=""
         for res in self:
-            s += to_one_letter_code.get(res.get_resname(), 'X')
+            s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
         seq=Seq(s, generic_protein)
         return seq
 
