@@ -207,16 +207,6 @@ def nt_search(seq, subseq):
 ######################
 # {{{
 
-_THREECODE = {'A': 'Ala', 'B': 'Asx', 'C': 'Cys', 'D': 'Asp',
-             'E': 'Glu', 'F': 'Phe', 'G': 'Gly', 'H': 'His',
-             'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met',
-             'N': 'Asn', 'P': 'Pro', 'Q': 'Gln', 'R': 'Arg',
-             'S': 'Ser', 'T': 'Thr', 'V': 'Val', 'W': 'Trp',
-             'Y': 'Tyr', 'Z': 'Glx', 'X': 'Xaa',
-             'U': 'Sel', 'O': 'Pyl', 'J': 'Xle',
-             }
-
-
 def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
@@ -255,7 +245,7 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
 
     This function was inspired by BioPerl's seq3.
     """
-    threecode = _THREECODE
+    threecode = IUPACData.protein_letters_1to3_extended
     # add the given termination codon code
     threecode.update(custom_map)
     #We use a default of 'Xaa' for undefined letters
@@ -307,7 +297,9 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 
     """
     # reverse map of threecode
-    onecode = dict([(x[1].upper(), x[0]) for x in _THREECODE.items()])
+    # upper() on all keys to enable caps-insensitive input seq handling
+    onecode = dict((k.upper(), v) for k, v in
+            IUPACData.protein_letters_3to1_extended.items())
     # add the given termination codon code and custom maps
     onecode.update((k.upper(), v) for (k, v) in custom_map.iteritems())
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
