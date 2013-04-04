@@ -245,9 +245,10 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
 
     This function was inspired by BioPerl's seq3.
     """
-    threecode = IUPACData.protein_letters_1to3_extended
-    # add the given termination codon code
-    threecode.update(custom_map)
+    # not doing .update() on IUPACData dict with custom_map dict
+    # to preserve its initial state (may be imported in other modules)
+    threecode = dict(IUPACData.protein_letters_1to3_extended.items() +
+            custom_map.items())
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
     return ''.join([threecode.get(aa, undef_code) for aa in seq])
