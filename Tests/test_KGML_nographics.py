@@ -11,6 +11,7 @@
 # Builtins
 import os
 import unittest
+import tempfile
 
 # Biopython Bio.KEGG.KGML (?)
 from Bio.KEGG.KGML.KGML_parser import read
@@ -39,11 +40,11 @@ class KGMLPathwayTest(unittest.TestCase):
         # compound_count, map_counts), pathway_image,
         # show_image_map)
         self.data = [PathwayData(os.path.join("KEGG", "ko01100.xml"),
-                                 os.path.join("KEGG", "ko01100.kgml"),
+                                 tempfile.gettempprefix() + ".ko01100.kgml",
                                  (3628, 1726, 1746, 149),
                                  os.path.join("KEGG", "map01100.png")),
                      PathwayData(os.path.join("KEGG", "ko03070.xml"),
-                                 os.path.join("KEGG", "ko03070.kgml"),
+                                 tempfile.gettempprefix() + ".ko03070.kgml",
                                  (81, 72, 8, 1),
                                  os.path.join("KEGG", "map03070.png"),
                                  True)]
@@ -65,6 +66,10 @@ class KGMLPathwayTest(unittest.TestCase):
                  'ko:K00172','ko:K00171','ko:K01643','ko:K01644','ko:K01646',
                  'ko:K01610','ko:K01596'])
 
+    def tearDown(self):
+        for p in self.data:
+            if os.path.isfile(p.outfilename):
+                os.remove(p.outfilename)
 
     def test_read_and_write_KGML_files(self):
         """ Read KGML from, and write KGML to, local files.
