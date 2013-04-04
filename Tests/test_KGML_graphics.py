@@ -10,6 +10,7 @@
 """
 
 # Builtins
+from __future__ import with_statement
 import os
 import unittest
 
@@ -36,7 +37,6 @@ except ImportError:
 # Biopython Bio.KEGG.KGML
 from Bio.KEGG.KGML.KGML_parser import read
 from Bio.Graphics.KGML_vis import KGMLCanvas
-from Bio.KEGG.KGML.KGML_scrape import retrieve_KEGG_pathway
 
 class PathwayData(object):
     """ Convenience structure for testing pathway data
