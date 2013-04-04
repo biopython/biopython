@@ -4,6 +4,8 @@
 # as part of this package.
 
 """ This module provides a function to scrape specific KGML files from KEGG
+
+TODO: Replace this by using a proper KEGG REST API wrapper.
 """
 
 import urllib2
@@ -73,7 +75,8 @@ non_metabolic = ["ko02010", "ko02020", "ko02030", "ko02040", "ko02060",
                  "ko05412", "ko05414", "ko05416"]
 
 # This string is the template for a KGML request via the web API
-url_template = 'http://www.genome.jp/kegg-bin/download?entry=%s&format=kgml'
+# Replacing .../kgml with /image will give a PNG file.
+url_template = 'http://rest.kegg.jp/get/%s/kgml'
 
 def retrieve_kgml(map_id):
     """ Returns the raw KGML response from KEGG for the passed KEGG map ID
