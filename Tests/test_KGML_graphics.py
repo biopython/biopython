@@ -25,8 +25,13 @@ except ImportError:
     raise MissingExternalDependencyError(
             "Install reportlab if you want to use Bio.Graphics.")
 
-# Do we have internet (code from Biopython's requires_internet.py)
-from Bio import MissingExternalDependencyError
+#Do we have PIL?
+try:
+    from PIL import Image
+except ImportError:
+    raise MissingExternalDependencyError(
+            "Install PIL if you want to use bitmaps from KGML.")
+
 
 # Biopython Bio.KEGG.KGML
 from Bio.KEGG.KGML.KGML_parser import read
