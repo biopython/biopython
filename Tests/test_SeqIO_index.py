@@ -15,6 +15,7 @@ except ImportError:
 import sys
 import os
 import unittest
+import tempfile
 import gzip
 from StringIO import StringIO
 try:
@@ -94,6 +95,14 @@ if sqlite3:
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+    def setUp(self):
+        self.index_tmp = tempfile.gettempprefix() + ".idx.tmp"
+        self.assertFalse(os.path.isfile(self.index_tmp), self.index_tmp)
+
+    def tearDown(self):
+        if os.path.isfile(self.index_tmp):
+            os.remove(self.index_tmp)
+
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
@@ -126,7 +135,7 @@ class IndexDictTests(unittest.TestCase):
                           ":memory:", filenames=["dummy"])
 
         #Saving to file...
-        index_tmp = filename + ".idx"
+        index_tmp = self.index_tmp
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
 
