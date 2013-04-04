@@ -11,6 +11,7 @@
 # Builtins
 import os
 import unittest
+import tempfile
 
 import requires_internet
 requires_internet.check()
@@ -31,7 +32,10 @@ class KGMLPathwayTest(unittest.TestCase):
         """ Download a KEGG pathway from the KEGG server and write KGML.
         """
         # Download the KEGG ko01120 pathway and write to file as KGML
-        retrieve_kgml_to_file("ko01120", os.path.join("KEGG", "ko01120.xml"))
+        tmp = tempfile.gettempprefix() + ".ko01120.tmp"
+        retrieve_kgml_to_file("ko01120", tmp)
+        self.assertTrue(os.path.isfile(tmp), "Download failed")
+        os.remove(tmp)
         
     def test_KEGG_download_to_pathway(self):
         """ Download a KEGG pathway from the KEGG server and write KGML.
