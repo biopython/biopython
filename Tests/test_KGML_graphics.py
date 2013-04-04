@@ -41,13 +41,13 @@ from Bio.KEGG.KGML.KGML_scrape import retrieve_KEGG_pathway
 class PathwayData(object):
     """ Convenience structure for testing pathway data
     """
-    def __init__(self, infilename, outfilename, element_counts,
-                 pathway_image, show_pathway_image=False):
-        self.infilename = infilename
-        self.outfilename = outfilename
+    def __init__(self, name, element_counts,show_pathway_image=False):
+        self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
+        self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
         self.element_counts = element_counts
-        self.pathway_image = pathway_image
+        self.pathway_image = os.path.join("KEGG", "map%s.png" % name)
         self.show_pathway_image = show_pathway_image
+        self.output_stem = "Graphics/map%s" % name
 
 class KGMLPathwayTest(unittest.TestCase):
     """ Import the ko01100 metabolic map from a local .xml KGML file, and from
@@ -61,15 +61,10 @@ class KGMLPathwayTest(unittest.TestCase):
         # (infilename, outfilename, (entry_count, ortholog_count,
         # compound_count, map_counts), pathway_image,
         # show_image_map)
-        self.data = [PathwayData(os.path.join("KEGG", "ko01100.xml"),
-                                 os.path.join("KEGG", "ko01100.kgml"),
-                                 (3628, 1726, 1746, 149),
-                                 os.path.join("KEGG", "map01100.png")),
-                     PathwayData(os.path.join("KEGG", "ko03070.xml"),
-                                 os.path.join("KEGG", "ko03070.kgml"),
-                                 (81, 72, 8, 1),
-                                 os.path.join("KEGG", "map03070.png"),
-                                 True)]
+        self.data = [
+            PathwayData("01100", (3628, 1726, 1746, 149)),
+            PathwayData("03070", (81, 72, 8, 1), True),
+            ]
         # A list of KO IDs that we're going to use to modify pathway 
         # appearance. These are KO IDs for reactions that take part in ko00020, 
         # the TCA cycle
@@ -99,8 +94,7 @@ class KGMLPathwayTest(unittest.TestCase):
                 pathway.image = p.pathway_image
                 kgml_map = KGMLCanvas(pathway)
                 kgml_map.import_imagemap = p.show_pathway_image
-                kgml_map.draw(os.path.splitext(p.infilename)[0] +\
-                                  '_original.pdf')
+                kgml_map.draw(p.output_stem + '_original.pdf')
         
 
     def test_render_KGML_modify(self):
@@ -117,8 +111,7 @@ class KGMLPathwayTest(unittest.TestCase):
                 for g in r.graphics:
                     g.width = 10
             kgml_map = KGMLCanvas(pathway)
-            kgml_map.draw(os.path.splitext(p[0].infilename)[0] +\
-                              '_mod_original.pdf')
+            kgml_map.draw(p[0].output_stem + '_widths.pdf')
         # We test rendering of the original KGML for KO3070,
         # modifying the reaction colours for each ortholog entry
         with open(p[1].infilename) as f:
@@ -134,8 +127,7 @@ class KGMLPathwayTest(unittest.TestCase):
             kgml_map = KGMLCanvas(pathway)
             pathway.image = p[1].pathway_image
             kgml_map.import_imagemap = p[1].show_pathway_image
-            kgml_map.draw(os.path.splitext(p[1].infilename)[0] +\
-                              '_mod_original.pdf')
+            kgml_map.draw(p[1].output_stem + '_colors.pdf')
 
 
 if __name__ == '__main__':
