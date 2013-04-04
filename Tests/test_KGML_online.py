@@ -12,24 +12,8 @@
 import os
 import unittest
 
-def check_internet():
-    try:
-        check.available
-    except AttributeError:
-        # I'm going to check for internet availability
-        RELIABLE_DOMAIN = "biopython.org"
-        import socket
-        try:
-            socket.getaddrinfo(RELIABLE_DOMAIN,
-                               80,
-                               socket.AF_UNSPEC,
-                               socket.SOCK_STREAM)
-        except socket.gaierror, x:
-            check.available = False
-        else:
-            check.available = True
-    if not check.available:
-        raise MissingExternalDependencyError("internet not available")
+import requires_internet
+requires_internet.check()
 
 # Biopython Bio.KEGG.KGML
 from Bio.KEGG.KGML.KGML_scrape import *
