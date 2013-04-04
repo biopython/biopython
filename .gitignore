@@ -28,12 +28,14 @@ dist
 #Ignore all Jython class files (present if using Jython)
 *.class
 
-#Ingore the MANIFEST file created automatically from MANIFEST.in
+#Ignore the MANIFEST file created automatically from MANIFEST.in
 MANIFEST
+
+#Ignore potential directory created during install:
+biopython.egg-info
  
 #The graphics unit tests produce output files for human inspection
-#(at the time of writing, only PDF files are created but I expect
-#this to change).
+#(at the time of writing, only PDF and PNG files are created)
 Tests/Graphics/*.pdf
 Tests/Graphics/*.eps
 Tests/Graphics/*.svg
