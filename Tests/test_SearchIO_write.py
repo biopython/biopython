@@ -82,6 +82,19 @@ class BlastTabWriteCases(WriteCases):
         source = os.path.join('Blast', 'tab_2226_tblastn_005.txt')
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, comments=True)
 
+    def test_write_multiple_from_blasttabc_allfields(self):
+        """Test blast-tabc writing from blast-tabc, BLAST 2.2.28+, multiple queries (tab_2228_tblastx_001.txt)"""
+        source = os.path.join('Blast', 'tab_2228_tblastx_001.txt')
+        fields = ['qseqid', 'qgi', 'qacc', 'qaccver', 'qlen', 'sseqid',
+                'sallseqid', 'sgi', 'sallgi', 'sacc', 'saccver', 'sallacc',
+                'slen', 'qstart', 'qend', 'sstart', 'send', 'qseq', 'sseq',
+                'evalue', 'bitscore', 'score', 'length', 'pident', 'nident',
+                'mismatch', 'positive', 'gapopen', 'gaps', 'ppos', 'frames',
+                'qframe', 'sframe', 'btop', 'staxids', 'sscinames', 'scomnames',
+                'sblastnames', 'sskingdoms', 'stitle', 'salltitles', 'sstrand',
+                'qcovs', 'qcovhsp']
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, comments=True, fields=fields)
+
 
 class HmmerTabWriteCases(WriteCases):
 
