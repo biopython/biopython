@@ -52,11 +52,23 @@ _LONG_SHORT_MAP = {
     'subject gi': 'sgi',
     'subject gis': 'sallgi',
     'BTOP': 'btop',
+    'subject accs.': 'sallacc',
+    'subject tax ids': 'staxids',
+    'subject sci names': 'sscinames',
+    'subject com names': 'scomnames',
+    'subject blast names': 'sblastnames',
+    'subject super kingdoms': 'sskingdoms',
+    'subject title': 'stitle',
+    'subject titles': 'salltitles',
+    'subject strand': 'sstrand',
+    '% subject coverage': 'qcovs',
+    '% hsp coverage': 'qcovhsp',
 }
 
 # function to create a list from semicolon-delimited string
 # used in BlastTabParser._parse_result_row
 _list_semicol = lambda x: x.split(';')
+_list_diamond = lambda x: x.split('<>')
 # column to class attribute map
 _COLUMN_QRESULT = {
     'qseqid': ('id', str),
@@ -70,9 +82,20 @@ _COLUMN_HIT = {
     'sallseqid': ('id_all', _list_semicol),
     'sacc': ('accession', str),
     'saccver': ('accession_version', str),
+    'sallacc': ('accession_all', _list_semicol),
     'sgi': ('gi', str),
     'sallgi': ('gi_all', str),
     'slen': ('seq_len', int),
+    'staxids': ('tax_ids', _list_semicol),
+    'sscinames': ('sci_names', _list_semicol),
+    'scomnames': ('com_names', _list_semicol),
+    'sblastnames': ('blast_names', _list_semicol),
+    'sskingdoms': ('super_kingdoms', _list_semicol),
+    'stitle': ('title', str),
+    'salltitles': ('title_all', _list_diamond),
+    # set strand as HSP property?
+    'sstrand': ('strand', str),
+    'qcovs': ('query_coverage', float),
 }
 _COLUMN_HSP = {
     'bitscore': ('bitscore', float),
@@ -86,6 +109,7 @@ _COLUMN_HSP = {
     'gaps': ('gap_num', int),
     'gapopen': ('gapopen_num', int),
     'btop': ('btop', str),
+    'qcovhsp': ('query_coverage', float),
 }
 _COLUMN_FRAG = {
     'length': ('aln_span', int),
@@ -763,8 +787,18 @@ class BlastTabWriter(object):
             else:
                 value = '%4.1f' % value
 
+        # coverages have no comma (using floats still ~ a more proper
+        # representation)
+        elif field in ('qcovhsp', 'qcovs'):
+            value = '%.0f' % value
+
+        # list into '<>'-delimited string
+        elif field == 'salltitles':
+            value = '<>'.join(value)
+
         # list into ';'-delimited string
-        elif field == 'sallseqid':
+        elif field in ('sallseqid', 'sallacc', 'staxids', 'sscinames',
+                'scomnames', 'sblastnames', 'sskingdoms'):
             value = ';'.join(value)
 
         # everything else

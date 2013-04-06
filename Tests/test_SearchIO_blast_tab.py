@@ -12,6 +12,7 @@ import os
 import unittest
 
 from Bio.SearchIO import parse
+from Bio.SearchIO.BlastIO.blast_tab import _LONG_SHORT_MAP as all_fields
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
@@ -24,6 +25,39 @@ def get_file(filename):
 
 
 class BlastnTabCases(unittest.TestCase):
+
+    def test_tab_2228_tblastx_001(self):
+        "Test parsing TBLASTX 2.2.28+ tabular output (tab_2228_tblastx_001)"
+        tab_file = get_file('tab_2228_tblastx_001.txt')
+        qresults = list(parse(tab_file, FMT, fields=all_fields.values(),
+            comments=True))
+
+        # this a single query, with 192 hits and 243 hsps
+        self.assertEqual(1, len(qresults))
+        self.assertEqual(192, len(qresults[0].hits))
+        self.assertEqual(243, sum([len(x) for x in qresults[0]]))
+
+        # only checking the new fields in 2.2.28+
+        hit = qresults[0][0]
+        self.assertEqual(['NM_001183135', 'EF059095'], hit.accession_all)
+        self.assertEqual(['32630', '559292'], hit.tax_ids)
+        self.assertEqual(['N/A', 'N/A'], hit.sci_names)
+        self.assertEqual(['N/A', 'N/A'], hit.com_names)
+        self.assertEqual(['N/A'], hit.blast_names)
+        self.assertEqual(['N/A'], hit.super_kingdoms)
+        self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA', hit.title)
+        self.assertEqual(['Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA',
+            'Synthetic construct Saccharomyces cerevisiae clone '
+            'FLH203015.01X MON2, complete sequence'], hit.title_all)
+        self.assertEqual('N/A', hit.strand)
+        self.assertEqual(100.0, hit.query_coverage)
+
+        for hsp in hit[:4]:
+            # shorthand ~ the values just happen to all be 99
+            # in other cases, they may be different
+            self.assertEqual(99.0, hsp.query_coverage)
+        self.assertEqual(73.0, hit[5].query_coverage)
+        self.assertEqual(12.0, hit[6].query_coverage)
 
     def test_tab_2226_tblastn_001(self):
         "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_001)"
