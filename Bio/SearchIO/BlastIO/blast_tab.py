@@ -54,6 +54,9 @@ _LONG_SHORT_MAP = {
     'BTOP': 'btop',
 }
 
+# function to create a list from semicolon-delimited string
+# used in BlastTabParser._parse_result_row
+_list_semicol = lambda x: x.split(';')
 # column to class attribute map
 _COLUMN_QRESULT = {
     'qseqid': ('id', str),
@@ -64,7 +67,7 @@ _COLUMN_QRESULT = {
 }
 _COLUMN_HIT = {
     'sseqid': ('id', str),
-    'sallseqid': ('id_all', str),
+    'sallseqid': ('id_all', _list_semicol),
     'sacc': ('accession', str),
     'saccver': ('accession_version', str),
     'sgi': ('gi', str),
@@ -759,6 +762,10 @@ class BlastTabWriter(object):
                 value = '%4.0d' % value
             else:
                 value = '%4.1f' % value
+
+        # list into ';'-delimited string
+        elif field == 'sallseqid':
+            value = ';'.join(value)
 
         # everything else
         else:

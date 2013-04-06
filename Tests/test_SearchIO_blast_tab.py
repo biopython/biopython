@@ -654,7 +654,7 @@ class BlastnTabCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
-        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id_all)
+        self.assertEqual(['gi|145479850|ref|XM_001425911.1|'], hit.id_all)
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.accession)
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.accession_version)
         self.assertEqual('0', hit.gi)
@@ -732,7 +732,7 @@ class BlastnTabCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
-        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id_all)
+        self.assertEqual(['gi|350596019|ref|XM_003360601.2|'], hit.id_all)
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.accession)
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.accession_version)
         self.assertEqual('0', hit.gi)
