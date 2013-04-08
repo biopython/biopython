@@ -4,6 +4,9 @@
 # as part of this package.
 
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
+
+from __future__ import with_statement
+
 import os
 import unittest
 import warnings
@@ -42,7 +45,8 @@ def write_read(filename, in_format, out_format):
         mode = "rb"
     else:
         mode = "r"
-    records = list(SeqIO.parse(open(filename, mode),in_format))
+    with open(filename, mode) as handle:
+        records = list(SeqIO.parse(handle, in_format))
     #Write it out...
     if out_format in BINARY_FORMATS:
         handle = BytesIO()
