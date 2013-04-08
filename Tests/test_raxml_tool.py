@@ -39,12 +39,12 @@ class AppTests(unittest.TestCase):
                                sequences=EX_PHYLIP, model="PROTCATWAG",
                                name="test")
         # The parsimony seed should be set automatically
-        self.assert_('-p' in str(cmd))
+        self.assertTrue('-p' in str(cmd))
         # Smoke test
         try:
             out, err = cmd()
-            self.assert_(len(out) > 0)
-            self.assert_(len(err) == 0)
+            self.assertTrue(len(out) > 0)
+            self.assertEqual(len(err), 0)
             # Check the output tree
             tree = Phylo.read('RAxML_result.test', 'newick')
             self.assertEqual(tree.count_terminals(), 4)
