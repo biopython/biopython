@@ -214,6 +214,8 @@ def parse(handle):
     2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
     3.1.1.6 Acetylesterase
     2.7.2.1 Acetate kinase
+    >>> handle.close()
+
     """
     record = Record()
     for line in handle:

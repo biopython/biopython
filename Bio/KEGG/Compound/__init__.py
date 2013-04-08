@@ -144,6 +144,8 @@ def parse(handle):
     C00348 Undecaprenyl phosphate
     C00349 2-Methyl-3-oxopropanoate
     C01386 NH2Mec
+    >>> handle.close()
+
     """
     record = Record()
     for line in handle:
