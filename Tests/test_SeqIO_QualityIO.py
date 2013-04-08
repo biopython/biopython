@@ -224,7 +224,7 @@ for base_name, good_count, full_count in tests:
 
 class TestReferenceSffConversions(unittest.TestCase):
     def check(self, sff_name, sff_format, out_name, format) :
-        wanted = list(SeqIO.parse(open(out_name), format))
+        wanted = list(SeqIO.parse(out_name, format))
         data = StringIO()
         count = SeqIO.convert(sff_name, sff_format, data, format)
         self.assertEqual(count, len(wanted))
