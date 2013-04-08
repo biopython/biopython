@@ -498,8 +498,7 @@ class SeqRecord(object):
         per-letter-annotation:
 
         >>> from Bio import SeqIO
-        >>> rec = SeqIO.read(open("Quality/solexa_faked.fastq", "rU"),
-        ...                  "fastq-solexa")
+        >>> rec = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print rec.id, rec.seq
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print rec.letter_annotations.keys()
