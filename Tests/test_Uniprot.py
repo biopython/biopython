@@ -341,8 +341,8 @@ class TestUniprot(unittest.TestCase):
         for old in xml_list:
             new = xml_index[old.id]
             compare_record(old, new)
-        txt_index._proxy._handle.close() #hack
-        xml_index._proxy._handle.close() #hack
+        txt_index.close()
+        xml_index.close()
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

@@ -114,7 +114,7 @@ class IndexDictTests(unittest.TestCase):
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
         if not sqlite3:
@@ -177,7 +177,7 @@ class IndexDictTests(unittest.TestCase):
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
         if not sqlite3:
@@ -340,7 +340,7 @@ class IndexDictTests(unittest.TestCase):
             else:
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
     if sqlite3:
