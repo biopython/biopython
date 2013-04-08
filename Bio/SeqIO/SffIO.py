@@ -162,6 +162,7 @@ Or, using the trimmed reads:
     >>> record = reads["E3MFGYR02JHD4H"]
     >>> print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
+    >>> reads.close()
 
 You can also use the Bio.SeqIO.write() function with the "sff" format. Note
 that this requires all the flow information etc, and thus is probably only
