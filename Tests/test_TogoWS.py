@@ -1,10 +1,13 @@
-# Copyright 2010-2011 by Peter Cock.  All rights reserved.
+# Copyright 2010-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """Testing Bio.TogoWS online code.
 """
+
+from __future__ import with_statement
+
 import unittest
 from StringIO import StringIO
 
@@ -491,14 +494,16 @@ class TogoConvert(unittest.TestCase):
         """Conversion of GenBank to FASTA."""
         filename = "GenBank/NC_005816.gb"
         old = SeqIO.read(filename, "gb")
-        new = SeqIO.read(TogoWS.convert(open(filename), "genbank", "fasta"), "fasta")
+        with open(filename) as handle:
+            new = SeqIO.read(TogoWS.convert(handle, "genbank", "fasta"), "fasta")
         self.assertEqual(str(old.seq), str(new.seq))
 
     def test_genbank_to_embl(self):
         """Conversion of GenBank to EMBL."""
         filename = "GenBank/NC_005816.gb"
         old = SeqIO.read(filename, "gb")
-        new = SeqIO.read(TogoWS.convert(open(filename), "genbank", "embl"), "embl")
+        with open(filename) as handle:
+            new = SeqIO.read(TogoWS.convert(handle, "genbank", "embl"), "embl")
         self.assertEqual(str(old.seq), str(new.seq))
 
 if __name__ == "__main__":
