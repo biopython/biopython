@@ -2,6 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import with_statement
+
 try:
     from numpy import corrcoef
     del corrcoef
@@ -18,9 +20,11 @@ from Bio.SubsMat import FreqTable, MatrixInfo
 
 f = sys.stdout
 ftab_file = os.path.join('SubsMat', 'protein_count.txt')
-ftab_prot = FreqTable.read_count(open(ftab_file))
+with open(ftab_file) as handle:
+    ftab_prot = FreqTable.read_count(handle)
 ctab_file = os.path.join('SubsMat', 'protein_freq.txt')
-ctab_prot = FreqTable.read_freq(open(ctab_file))
+with open(ctab_file) as handle:
+    ctab_prot = FreqTable.read_freq(handle)
 f.write("Check differences between derived and true frequencies for each\n")
 f.write("letter. Differences should be very small\n")
 for i in ftab_prot.alphabet.letters:
@@ -28,7 +32,8 @@ for i in ftab_prot.alphabet.letters:
 
 pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
 #Don't want to use text mode on Python 3,
-acc_rep_mat = cPickle.load(open(pickle_file, 'rb'))
+with open(pickle_file, 'rb') as handle:
+    acc_rep_mat = cPickle.load(handle)
 acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
 obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
 ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
