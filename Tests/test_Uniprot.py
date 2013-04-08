@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Test for the Uniprot parser on Uniprot XML files.
 """
+from __future__ import with_statement
+
 import os
 import unittest
 
@@ -26,9 +28,8 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "uniprot-xml")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "uniprot-xml")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -311,7 +312,8 @@ class TestUniprot(unittest.TestCase):
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))
         xml_list = list(SeqIO.parse("SwissProt/multi_ex.xml", "uniprot-xml"))
         fas_list = list(SeqIO.parse("SwissProt/multi_ex.fasta", "fasta"))
-        ids = [x.strip() for x in open("SwissProt/multi_ex.list")]
+        with open("SwissProt/multi_ex.list") as handle:
+            ids = [x.strip() for x in handle]
         self.assertEqual(len(txt_list), len(ids))
         self.assertEqual(len(txt_list), len(fas_list))
         self.assertEqual(len(txt_list), len(xml_list))
@@ -325,7 +327,8 @@ class TestUniprot(unittest.TestCase):
         """Index SwissProt text and uniprot XML versions of several examples."""
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))
         xml_list = list(SeqIO.parse("SwissProt/multi_ex.xml", "uniprot-xml"))
-        ids = [x.strip() for x in open("SwissProt/multi_ex.list")]
+        with open("SwissProt/multi_ex.list") as handle:
+            ids = [x.strip() for x in handle]
         txt_index = SeqIO.index("SwissProt/multi_ex.txt", "swiss")
         xml_index = SeqIO.index("SwissProt/multi_ex.xml", "uniprot-xml")
         self.assertEqual(sorted(txt_index), sorted(ids))
