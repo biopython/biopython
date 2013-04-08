@@ -249,9 +249,7 @@ class SeqRecord(object):
         variant FASTQ file as a SeqRecord:
 
         >>> from Bio import SeqIO
-        >>> handle = open("Quality/solexa_faked.fastq", "rU")
-        >>> record = SeqIO.read(handle, "fastq-solexa")
-        >>> handle.close()
+        >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print record.id, record.seq
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print record.letter_annotations.keys()
@@ -737,9 +735,7 @@ class SeqRecord(object):
         annotation will be lost:
 
         >>> from Bio import SeqIO
-        >>> handle = open("Quality/solexa_faked.fastq", "rU")
-        >>> record = SeqIO.read(handle, "fastq-solexa")
-        >>> handle.close()
+        >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print record.id, record.seq
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print record.letter_annotations.keys()
@@ -845,9 +841,7 @@ class SeqRecord(object):
         See the __add__ method for more details, but for example:
 
         >>> from Bio import SeqIO
-        >>> handle = open("Quality/solexa_faked.fastq", "rU")
-        >>> record = SeqIO.read(handle, "fastq-solexa")
-        >>> handle.close()
+        >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print record.id, record.seq
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print record.letter_annotations.keys()
@@ -970,9 +964,7 @@ class SeqRecord(object):
         read in as a SeqRecord:
 
         >>> from Bio import SeqIO
-        >>> handle = open("Quality/solexa_faked.fastq", "rU")
-        >>> record = SeqIO.read(handle, "fastq-solexa")
-        >>> handle.close()
+        >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print record.id, record.seq
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print record.letter_annotations.keys()
