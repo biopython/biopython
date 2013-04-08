@@ -1,4 +1,4 @@
-# Copyright 2009-2011 by Peter Cock.  All rights reserved.
+# Copyright 2009-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -1059,7 +1059,7 @@ class NC_005816(NC_000932):
         compare_record(gb_record, fa_record)
         if self.emblname is None:
             return
-        embl_record = SeqIO.read(open(self.embl_filename),"embl")
+        embl_record = SeqIO.read(self.embl_filename, "embl")
         if len(embl_record.features) < len(gb_record.features):
             #Hack since now out of sync for NC_005816
             embl_record.features = [f for f in embl_record.features
