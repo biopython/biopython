@@ -409,6 +409,16 @@ class _IndexedSeqFileDict(_dict_base):
         raise NotImplementedError("An indexed a sequence file doesn't "
                                   "support this.")
 
+    def close(self):
+        """Close the file handle being used to read the data.
+
+        Once called, further use of the index won't work. The sole purpose
+        of this method is to allow explicit handle closure - for example
+        if you wish to delete the file, on Windows you must first close
+        all open handles to that file.
+        """
+        self._proxy._handle.close()
+
 
 class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     """Read only dictionary interface to many sequential record files.
