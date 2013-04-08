@@ -327,9 +327,9 @@ class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
     def test_paired(self):
         """Check FASTQ parsing matches FASTA+QUAL parsing"""
-        records1 = list(
-            QualityIO.PairedFastaQualIterator(open("Quality/example.fasta"),
-                                              open("Quality/example.qual")))
+        with open("Quality/example.fasta") as f:
+            with open("Quality/example.qual") as q:
+                records1 = list(QualityIO.PairedFastaQualIterator(f,q ))
         records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         self.assertTrue(compare_records(records1, records2))
 
