@@ -162,6 +162,8 @@ def main(python2_source, python3_source,
     #may differ slightly.
     print("The 2to3 library will be called automatically now,")
     print("and the converted files cached under %s" % python3_source)
+    if not os.path.isdir("build"):
+        os.mkdir("build")
     if not os.path.isdir(python3_source):
         os.mkdir(python3_source)
     for child in children:
