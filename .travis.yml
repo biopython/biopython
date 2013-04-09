@@ -25,6 +25,9 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export MSQL=no; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
+#Pre-run 2to3 separately to try and appease the TravisCI watchdog step limits:
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then python do2to3.py; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then python do2to3.py; fi"
 
 install:
   - "/usr/bin/yes | python setup.py install 2>&1 | tail -n 2"
