@@ -36,7 +36,7 @@ System Requirements
 ===================
 
 - Python 2.5, 2.6 or 2.7, see http://www.python.org
-  See below for notes about testing with Python 3.
+  See below for notes about testing with Python 3, Jython or PyPy.
  
 - NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
@@ -81,7 +81,28 @@ Python 3 support is still incomplete (and we do not yet officially support
 using Biopython with Python 3), but the majority of modules are largely
 functional. In order to be able to run Biopython with Python 3 it is first
 converted using the 2to3 script. This is done automatically by the setup.py
-script. Use `python3 setup.py build` etc (see installation notes below).
+script.
+
+Use `python3 setup.py build` etc (see installation notes below).
+
+
+Jython
+======
+
+Aside from modules with C code or dependent on NumPy, everything should work.
+We run nightly tests under Jython 2.5 (but intend to drop support for this
+when we drop support for Python 2.5) and Jython 2.7 (currently in beta).
+
+Use `jython setup.py build` etc (see installation notes below).
+
+
+PyPy
+====
+
+Aside from modules with C code or dependent of NumPy, everython should work.
+We run nightly tests under PyPy 1.9.
+
+Use `pypy setup.py build` etc	(see installation notes below).
 
 
 Installation
@@ -99,6 +120,9 @@ directory, and typing:
 If you need to do additional configuration, e.g. changing the base
 directory, please type `python setup.py`, or see the documentation for
 Distutils.
+
+Substitute `python` with your specific version, for example `python3`,
+`jython` or `pypy`.
 
 
 Testing
