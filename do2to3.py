@@ -155,7 +155,8 @@ def do_update(py2folder, py3folder, verbose=False):
         run2to3(to_convert)
 
 
-def main(python2_source, python3_source, children):
+def main(python2_source, python3_source,
+         children=["Bio", "BioSQL", "Tests", "Scripts", "Doc"]):
     #Note want to use different folders for Python 3.1, 3.2, etc
     #since the 2to3 libraries have changed so the conversion
     #may differ slightly.
