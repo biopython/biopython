@@ -27,6 +27,10 @@ before_install:
   - "export MSQL=$PG"
   - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors; fi"
+#Pre-run 2to3 separately to try and appease the TravisCI watchdog step limits:
+  - "if [[ $PY3 == 'yes' ]]; then python do2to3.py Bio; fi"
+  - "if [[ $PY3 == 'yes' ]]; then python do2to3.py BioSQL; fi"
+  - "if [[ $PY3 == 'yes' ]]; then python do2to3.py Tests; fi"
 
 install:
   - "/usr/bin/yes | python setup.py install"
