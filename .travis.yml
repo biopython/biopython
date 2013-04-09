@@ -14,6 +14,9 @@ python:
   - "pypy"
 
 before_install:
+  - "export PY3=no"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PY3=yes; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PY3=yes; fi"
   - "sudo apt-get install clustalw clustalo | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
 #Installing psycopg2 does not work under PyPy or Jython
@@ -22,12 +25,12 @@ before_install:
   - "if [[ $PG == 'yes' ]]; then pip install psycopg2 --use-mirrors 2>&1 | tail -n 2; fi"
 #Installing mysql-python does not work under Python 3.2
   - "export MSQL=$PG"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export MSQL=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export MSQL=no; fi"
+  - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
 #Pre-run 2to3 separately to try and appease the TravisCI watchdog step limits:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then python do2to3.py; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then python do2to3.py; fi"
+  - "if [[ $PY3 == 'yes' ]]; then python do2to3.py Bio | head; fi"
+  - "if [[ $PY3 == 'yes' ]]; then python do2to3.py BioSQL Scripts Doc | head; fi"
+  - "if [[ $PY3 == 'yes' ]]; then python do2to3.py Tests | head; fi"
 
 install:
   - "/usr/bin/yes | python setup.py install 2>&1 | tail -n 2"
