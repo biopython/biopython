@@ -100,7 +100,7 @@ PyPy
 ====
 
 Aside from modules with C code or dependent of NumPy, everython should work.
-We run nightly tests under PyPy 1.9.
+We run nightly tests under PyPy 1.9 and PyPy 2.0 (currently in beta).
 
 Use `pypy setup.py build` etc	(see installation notes below).
 
