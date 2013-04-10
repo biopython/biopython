@@ -35,8 +35,11 @@ directory at the command line, and type:
 System Requirements
 ===================
 
-- Python 2.5, 2.6 or 2.7, see http://www.python.org
-  See below for notes about testing with Python 3, Jython or PyPy.
+- Python 2.5, 2.6, 2.7 (see http://www.python.org),
+  or Python 3.1, 3.2, or 3.3 (see http://www.python.org and notes below)
+  or PyPy 1.9, 2.0 (see http://www.pypy.org and notes below),
+  or Jython 2.5, 2.7 (see http://www.jython.org and notes below).
+  Note that we are about to drop support for Python 2.5 and Jython 2.5.
  
 - NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
@@ -89,9 +92,9 @@ Use `python3 setup.py build` etc (see installation notes below).
 Jython
 ======
 
-Aside from modules with C code or dependent on NumPy, everything should work.
-We run nightly tests under Jython 2.5 (but intend to drop support for this
-when we drop support for Python 2.5) and Jython 2.7 (currently in beta).
+Aside from modules with C code, or dependent on SQLite3 or NumPy, everything
+should work. We run nightly tests under Jython 2.5 (but intend to drop support
+for this when we drop support for Python 2.5) and Jython 2.7 (currently in beta).
 
 Use `jython setup.py build` etc (see installation notes below).
 
@@ -99,7 +102,8 @@ Use `jython setup.py build` etc (see installation notes below).
 PyPy
 ====
 
-Aside from modules with C code or dependent of NumPy, everython should work.
+Aside from modules with C code or dependent of NumPy, everything should work.
+Evaluating PyPy's NumPy reimplementation NumPyPy is still in progress.
 We run nightly tests under PyPy 1.9 and PyPy 2.0 (currently in beta).
 
 Use `pypy setup.py build` etc	(see installation notes below).
