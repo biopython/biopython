@@ -96,8 +96,8 @@ if sqlite3:
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def setUp(self):
-        self.index_tmp = tempfile.gettempprefix() + ".idx.tmp"
-        self.assertFalse(os.path.isfile(self.index_tmp), self.index_tmp)
+        h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
+        os.close(h)
 
     def tearDown(self):
         if os.path.isfile(self.index_tmp):
