@@ -43,6 +43,8 @@ is now consistent with the linear diagrams.
 The code for parsing 3D structures in mmCIF files was updated to use the
 Python standard library's shlex module instead of C code using flex.
 
+The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -56,6 +58,7 @@ Michiel de Hoon
 Nate Sutton (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
+Saket Choudhary (first contribution)
 Tiago Antao
 Xabier Bello (first contribution)
 
