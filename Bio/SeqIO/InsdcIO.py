@@ -547,7 +547,9 @@ class GenBankWriter(_InsdcWriter):
             locus = self._get_annotation_str(
                 record, "accession", just_first=True)
         if len(locus) > 16:
-            raise ValueError("Locus identifier %r is too long" % str(locus))
+            #Some user may need a GenBank file with custom Locus length
+            import warnings
+            warnings.warn("Locus identifier %r is too long" % str(locus))
 
         if len(record) > 99999999999:
             #Currently GenBank only officially support up to 350000, but
