@@ -5021,7 +5021,7 @@ supplied just the sequence itself:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
+>>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
 \end{verbatim}
 
@@ -5033,7 +5033,7 @@ for your sequence automatically.  You might prefer to use the
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
+>>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
 \end{verbatim}
 
