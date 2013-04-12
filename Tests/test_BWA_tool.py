@@ -80,21 +80,20 @@ class BwaTestCase(unittest.TestCase):
         stdout,stderr = cmdline()
         output = stdout.startswith("[bwt_gen]")
         self.assertTrue(stdout.startswith("[bwt_gen]"),
-                        "FASTA indexing failed:\n%s" % stdout)
+                        "FASTA indexing failed:\n%s\nStdout:%s" \
+                        % (cmdline, stdout))
 
-    def test_aln(self, paired_end=False):
+    def do_aln(self, in_file, out_file):
         """Test for generating sai files given the reference and read file"""
         cmdline = BwaAlignCommandline()
         cmdline.set_parameter("reference", self.reference_file)
-        if not paired_end:
-            cmdline.set_parameter("read_file", self.infile1)
-            stdout, stderr = cmdline(stdout=self.saifile1)
-        else:
-            cmdline.set_parameter("read_file", self.infile2)
-            stdout, stderr = cmdline(stdout=self.saifile2)
+        cmdline.read_file = in_file
+        self.assertTrue(os.path.isfile(in_file))
+        stdout, stderr = cmdline(stdout=out_file)
 
         self.assertTrue("fail to locate the index" not in stderr,
-                        "Error aligning sequence to reference:\n%s" % stderr)
+                        "Error aligning sequence to reference:\n%s\nStderr:%s" \
+                        % (cmdline, stderr))
 
     def test_samse(self):
         """Test for single end sequencing """
@@ -107,13 +106,14 @@ class BwaTestCase(unittest.TestCase):
         with open(self.samfile1, "r") as handle:
             headline = handle.readline()
         self.assertTrue(headline.startswith("@SQ"),
-                        "Error generating sam files:\n%s" % headline)
+                        "Error generating sam files:\n%s\nOutput starts:%s" \
+                        % (cmdline, headline))
 
     def test_sampe(self):
         """Test for generating samfile by paired end sequencing"""
         ##Generate sai files from paired end data
-        self.test_aln(True)
-        self.test_aln(False)
+        self.do_aln(self.infile1, self.saifile1)
+        self.do_aln(self.infile2, self.saifile2)
 
         cmdline = BwaSampeCommandline()
         cmdline.set_parameter("reference", self.reference_file)
@@ -126,10 +126,10 @@ class BwaTestCase(unittest.TestCase):
         with open(self.samfile, "r") as handle:
             headline = handle.readline()
         self.assertTrue(headline.startswith("@SQ"),
-                        "Error generating sam files:\n%s" % headline)
-
+                        "Error generating sam files:\n%s\nOutput starts:%s" \
+                        % (cmdline, headline))
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
