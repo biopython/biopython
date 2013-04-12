@@ -11,7 +11,9 @@ import os
 import unittest
 from Bio import SeqIO
 from Bio import AlignIO
-from Bio.Sequencing.Applications import BwaIndexCommandline, BwaAlignCommandline, BwaSamseCommandline, BwaSampeCommandline, BwaBwaswCommandline
+from Bio.Sequencing.Applications import BwaIndexCommandline, BwaAlignCommandline
+from Bio.Sequencing.Applications import BwaSamseCommandline, BwaSampeCommandline
+from Bio.Sequencing.Applications import BwaBwaswCommandline
 from Bio.Application import ApplicationError
 
 #################################################################
@@ -75,7 +77,8 @@ class BwaTestCase(unittest.TestCase):
         cmdline.set_parameter("algorithm","bwtsw")
         stdout,stderr = cmdline()
         output = stdout.startswith("[bwt_gen]")
-        self.assertEqual(True, output, "FASTA indexing failed")
+        self.assertTrue(stdout.startswith("[bwt_gen]"),
+                        "FASTA indexing failed:\n%s" % stdout)
 
     def test_aln(self, paired_end=False):
         """Test for generating sai files given the reference and read file"""
@@ -88,11 +91,8 @@ class BwaTestCase(unittest.TestCase):
             cmdline.set_parameter("read_file", self.infile2)
             stdout, stderr = cmdline(stdout=self.saifile2)
 
-        if "fail to locate the index" in stderr:
-            output = False
-        else:
-            output = True
-        self.assertEqual(True, output, "Error aligning sequence to reference")
+        self.assertTrue("fail to locate the index" not in stderr,
+                        "Error aligning sequence to reference:\n%s" % stderr)
 
     def test_samse(self):
         """Test for single end sequencing """
@@ -102,12 +102,10 @@ class BwaTestCase(unittest.TestCase):
         cmdline.set_parameter("sai_file", self.saifile1)
         stdout, stderr = cmdline(stdout=self.samfile1)
 
-        headline = open(self.samfile1, "r").readline()
-        if headline.startswith("@SQ"):
-            output = True
-        else:
-            output = False
-        self.assertEqual(True, output, "Error generating sam files")
+        with open(self.samfile1, "r") as handle:
+            headline = handle.readline()
+        self.assertTrue(headline.startswith("@SQ"),
+                        "Error generating sam files:\n%s" % headline)
 
     def test_sampe(self):
         """Test for generating samfile by paired end sequencing"""
@@ -123,12 +121,10 @@ class BwaTestCase(unittest.TestCase):
         cmdline.set_parameter("read_file2", self.infile2)
         stdout, stderr = cmdline(stdout=self.samfile)
 
-        headline = open(self.samfile, "r").readline()
-        if headline.startswith("@SQ"):
-            output = True
-        else:
-            output = False
-        self.assertEqual(True, output, "Error generating sam files")
+        with open(self.samfile, "r") as handle:
+            headline = handle.readline()
+        self.assertTrue(headline.startswith("@SQ"),
+                        "Error generating sam files:\n%s" % headline)
 
 
 
