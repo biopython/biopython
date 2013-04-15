@@ -129,7 +129,9 @@ def is_automated():
                     ["--no-deps", "-c", "develop"],
                     ["-c", "egg_info"]] \
                     or "pip-egg-info" in sys.argv \
-                    or sys.argv[:3] == ["-c", "install", "--record"]:
+                    or sys.argv[:3] == ["-c", "install", "--record"] \
+                    or sys.argv[:4] == ['-c', 'install', '--single-version-externally-managed',
+                                        '--record']:
         is_automated = True
     return is_automated
 
