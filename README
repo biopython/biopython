@@ -35,8 +35,11 @@ directory at the command line, and type:
 System Requirements
 ===================
 
-- Python 2.5, 2.6 or 2.7, see http://www.python.org
-  See below for notes about testing with Python 3.
+- Python 2.5, 2.6, 2.7 (see http://www.python.org),
+  or Python 3.1, 3.2, or 3.3 (see http://www.python.org and notes below)
+  or PyPy 1.9, 2.0 (see http://www.pypy.org and notes below),
+  or Jython 2.5, 2.7 (see http://www.jython.org and notes below).
+  Note that we are about to drop support for Python 2.5 and Jython 2.5.
  
 - NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
@@ -81,7 +84,29 @@ Python 3 support is still incomplete (and we do not yet officially support
 using Biopython with Python 3), but the majority of modules are largely
 functional. In order to be able to run Biopython with Python 3 it is first
 converted using the 2to3 script. This is done automatically by the setup.py
-script. Use `python3 setup.py build` etc (see installation notes below).
+script.
+
+Use `python3 setup.py build` etc (see installation notes below).
+
+
+Jython
+======
+
+Aside from modules with C code, or dependent on SQLite3 or NumPy, everything
+should work. We run nightly tests under Jython 2.5 (but intend to drop support
+for this when we drop support for Python 2.5) and Jython 2.7 (currently in beta).
+
+Use `jython setup.py build` etc (see installation notes below).
+
+
+PyPy
+====
+
+Aside from modules with C code or dependent of NumPy, everything should work.
+Evaluating PyPy's NumPy reimplementation NumPyPy is still in progress.
+We run nightly tests under PyPy 1.9 and PyPy 2.0 (currently in beta).
+
+Use `pypy setup.py build` etc	(see installation notes below).
 
 
 Installation
@@ -99,6 +124,9 @@ directory, and typing:
 If you need to do additional configuration, e.g. changing the base
 directory, please type `python setup.py`, or see the documentation for
 Distutils.
+
+Substitute `python` with your specific version, for example `python3`,
+`jython` or `pypy`.
 
 
 Testing
@@ -126,10 +154,6 @@ Source Code Repository
 Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
 currently uses git for distributed source code control, hosted by github
 at https://github.com/biopython/biopython
-
-Until late September 2009, Biopython source code was kept in CVS running
-on the OBF servers. These will remain online for a while as "read only"
-static backups of everything up to and including Biopython 1.52.
 
 
 Experimental code
@@ -196,30 +220,18 @@ and join our mailing list: http://biopython.org/wiki/Mailing_lists
 Distribution Structure
 ======================
 
-README       -- This file.
-
-NEWS         -- Release notes and news
-
-LICENSE      -- What you can do with the code.
-
-CONTRIB      -- An (incomplete) list of people who helped Biopython in
-                one way or another.
-
-DEPRECATED   -- Contains information about modules in Biopython that are
-		removed or no longer recommended for use, and how to update
-		code that uses those modules.
-
-MANIFEST.in  -- Tells distutils what files to distribute
-
-setup.py     -- Installation file.
-
-Bio/         -- The main code base code.
-
-BioSQL/      -- Code for using Biopython with BioSQL databases.
-
-Doc/         -- Documentation.
-
-Scripts/     -- Miscellaneous, possibly useful, standalone scripts
-
-Tests/       -- Regression testing code
-
+- README      -- This file.
+- NEWS        -- Release notes and news
+- LICENSE     -- What you can do with the code.
+- CONTRIB     -- An (incomplete) list of people who helped Biopython in
+                 one way or another.
+- DEPRECATED  -- Contains information about modules in Biopython that are
+                 removed or no longer recommended for use, and how to update
+                 code that uses those modules.
+- MANIFEST.in -- Tells distutils what files to distribute
+- setup.py    -- Installation file.
+- Bio/        -- The main code base code.
+- BioSQL/     -- Code for using Biopython with BioSQL databases.
+- Doc/        -- Documentation.
+- Scripts/    -- Miscellaneous, possibly useful, standalone scripts
+- Tests/      -- Regression testing code

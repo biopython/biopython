@@ -769,7 +769,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['gi'] = content
 
     def keywords(self, content):
-        self.data.annotations['keywords'] = self._split_keywords(content)
+        if 'keywords' in self.data.annotations:
+            #Multi-line keywords, append to list
+            #Note EMBL states "A keyword is never split between lines."
+            self.data.annotations['keywords'].extend(self._split_keywords(content))
+        else:
+            self.data.annotations['keywords'] = self._split_keywords(content)
 
     def segment(self, content):
         self.data.annotations['segment'] = content

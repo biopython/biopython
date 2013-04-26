@@ -299,12 +299,19 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             #I haven't found a nice source of data for real Arabidopsis
             #cytobands, so these three are made up at random!
             cytobands = []
-            for color in [colors.gray, colors.darkgray, colors.black]:
+            for color in [colors.gray, colors.darkgray, colors.slategray]:
                 start = (length - 1000000) * random.random()
                 end = min(length, start + 1000000)
-                cytobands.append((start, end, 0, None, color))
-            cytobands.append((0, 1000000, 0, "First 1 Mbp", colors.brown))
-            cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.brown))
+                #Draw these with black borders, and a grey fill
+                cytobands.append((start, end, 0, None, colors.black, color))
+            #Draw these with black borders, and a brown fill:
+            cytobands.append((0, 1000000, 0, "First 1 Mbp", colors.black, colors.brown))
+            cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
+            #Additional dummy entry to check fill colour on both strands,
+            if name == "Chr III":
+                cytobands.append((11000000, 13000000, -1, "Reverse", "red", "yellow"))
+            elif name == "Chr V":
+                cytobands.append((9500000, 11000000, +1, "Forward", colors.red, colors.yellow))
             #Create the drawing object for the chromosome
             cur_chromosome = BasicChromosome.Chromosome(name)
             #Set the length, adding an extra 20 percent for the tolomeres etc:

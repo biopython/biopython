@@ -6,6 +6,11 @@ BLAST-related code in Biopython. All files are grouped by BLAST
 release version, from the most recent first.
 
 
+BLAST 2.2.28+
+-------------
+tab_2228_tblastx_001         single query with all columns (including new ones added in this version), commented
+
+
 BLAST 2.2.26+
 -------------
 tab_2226_tblastn_001         multiple queries

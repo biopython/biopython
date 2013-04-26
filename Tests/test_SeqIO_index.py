@@ -15,6 +15,7 @@ except ImportError:
 import sys
 import os
 import unittest
+import tempfile
 import gzip
 from StringIO import StringIO
 try:
@@ -94,6 +95,14 @@ if sqlite3:
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+    def setUp(self):
+        h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
+        os.close(h)
+
+    def tearDown(self):
+        if os.path.isfile(self.index_tmp):
+            os.remove(self.index_tmp)
+
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
@@ -105,7 +114,7 @@ class IndexDictTests(unittest.TestCase):
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
         if not sqlite3:
@@ -126,7 +135,7 @@ class IndexDictTests(unittest.TestCase):
                           ":memory:", filenames=["dummy"])
 
         #Saving to file...
-        index_tmp = filename + ".idx"
+        index_tmp = self.index_tmp
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
 
@@ -168,7 +177,7 @@ class IndexDictTests(unittest.TestCase):
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
         if not sqlite3:
@@ -331,7 +340,7 @@ class IndexDictTests(unittest.TestCase):
             else:
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
     if sqlite3:

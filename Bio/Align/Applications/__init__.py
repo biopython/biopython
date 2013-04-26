@@ -23,5 +23,5 @@ __all__ = ["MuscleCommandline",
            "MafftCommandline",
            "DialignCommandline",
            "ProbconsCommandline",
-           "TCoffeeCommandline",
+           "TCoffeeCommandline"
            ]

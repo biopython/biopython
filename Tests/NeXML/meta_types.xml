@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nex:nexml 
+	generator="Bio::Phylo::Project v.0.17_RC9_1175" 
+	version="0.9"
+	xml:base="http://example.org/base/" 
+	xmlns="http://www.nexml.org/2009"
+	xmlns:kt="http://example.org/knownTypes#"
+	xmlns:nex="http://www.nexml.org/2009" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd"> 
+  <otus about="#otus1" id="otus1">
+  	<otu about="#otu1" id="otu1"> 		  		
+		<meta href="http://example.org" id="meta12" rel="kt:hasURL" xsi:type="nex:ResourceMeta"/>
+		<meta content="bar" datatype="xsd:string" id="meta11" property="kt:hasString" xsi:type="nex:LiteralMeta"/>
+		<meta content="5" datatype="xsd:short" id="meta10" property="kt:hasShort" xsi:type="nex:LiteralMeta"/>
+		<meta content="10" datatype="xsd:long" id="meta9" property="kt:hasLong" xsi:type="nex:LiteralMeta"/>
+		<meta content="1.6" datatype="xsd:float" id="meta8" property="kt:hasFloat" xsi:type="nex:LiteralMeta"/>
+		<meta content="1.5" datatype="xsd:double" id="meta7" property="kt:hasDouble" xsi:type="nex:LiteralMeta"/>
+		<meta content="foo" datatype="xsd:QName" id="meta6" property="kt:hasQName" xsi:type="nex:LiteralMeta"/>
+		<meta content="1" datatype="xsd:byte" id="meta5" property="kt:hasByte" xsi:type="nex:LiteralMeta"/>
+		<meta content="true" datatype="xsd:boolean" id="meta4" property="kt:hasBoolean" xsi:type="nex:LiteralMeta"/>
+		<meta content="1" datatype="xsd:integer" id="meta3" property="kt:hasBigInteger" xsi:type="nex:LiteralMeta"/>
+		<meta content="0.1" datatype="xsd:decimal" id="meta2" property="kt:hasBigDecimal" xsi:type="nex:LiteralMeta"/>
+    </otu>
+  </otus>
+</nex:nexml>

@@ -5,11 +5,13 @@ import unittest
 
 import os
 if os.name == 'java':
-    from Bio import MissingExternalDependencyError
-    #This is a slight miss-use of MissingExternalDependencyError,
-    #but it will do in the short term to skip this unit test on Jython
-    raise MissingExternalDependencyError("The Bio.Entrez XML parser fails "
-        "on Jython, see http://bugs.jython.org/issue1447")
+    try:
+        from xml.parsers.expat import XML_PARAM_ENTITY_PARSING_ALWAYS
+        del XML_PARAM_ENTITY_PARSING_ALWAYS
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
+                                  "Jython, see http://bugs.jython.org/issue1447")
 
 
 try:

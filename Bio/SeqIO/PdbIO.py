@@ -22,8 +22,8 @@ def PdbSeqresIterator(handle):
 
     See: http://www.wwpdb.org/documentation/format23/sect3.html
     """
-    # Late-binding import to avoid circular dependency on SeqIO in Bio.SCOP
-    # TODO - swap in Bow's SeqUtils.seq1 once that's merged
+    # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
+    from Bio.SeqUtils import seq1
     from Bio.SCOP.three_to_one_dict import to_one_letter_code
 
     chains = collections.defaultdict(list)
@@ -42,8 +42,7 @@ def PdbSeqresIterator(handle):
             chn_id = line[11]
             # Number of residues in the chain (repeated on every record)
             # num_res = int(line[13:17])
-            residues = [to_one_letter_code.get(res, 'X')
-                        for res in line[19:].split()]
+            residues = [seq1(res, custom_map=to_one_letter_code) for res in line[19:].split()]
             chains[chn_id].extend(residues)
         elif rec_name == 'DBREF':
             #  ID code of this entry (PDB ID)
@@ -124,6 +123,7 @@ def PdbAtomIterator(handle):
     """
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
+    from Bio.SeqUtils import seq1
     from Bio.SCOP.three_to_one_dict import to_one_letter_code
 
     def restype(residue):
@@ -131,7 +131,7 @@ def PdbAtomIterator(handle):
 
         Non-standard residues (e.g. CSD, ANP) are returned as 'X'.
         """
-        return to_one_letter_code.get(residue.resname, 'X')
+        return seq1(residue.resname, custom_map=to_one_letter_code)
 
     # Deduce the PDB ID from the PDB header
     # ENH: or filename?
@@ -149,7 +149,8 @@ def PdbAtomIterator(handle):
     for chn_id, chain in sorted(model.child_dict.iteritems()):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [res for res in chain.get_unpacked_list()
-                    if res.get_resname().upper() in to_one_letter_code]
+                    if seq1(res.get_resname().upper(),
+                        custom_map=to_one_letter_code) != "X"]
         if not residues:
             continue
         # Identify missing residues in the structure

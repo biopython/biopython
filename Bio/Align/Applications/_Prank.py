@@ -46,7 +46,7 @@ class PrankCommandline(AbstractCommandline):
     Last checked against version: 081202
     """
     def __init__(self, cmd="prank", **kwargs):
-        OUTPUT_FORMAT_VALUES = list(range(1,18))
+        OUTPUT_FORMAT_VALUES = list(range(1, 18))
         self.parameters = [
             ################## input/output parameters: ##################
             #-d=sequence_file
@@ -55,7 +55,7 @@ class PrankCommandline(AbstractCommandline):
                     filename=True,
                     is_required=True),
             #-t=tree_file [default: no tree, generate approximate NJ tree]
-            _Option(["-t", "t"],"Input guide tree filename",
+            _Option(["-t", "t"], "Input guide tree filename",
                     filename=True),
             #-tree="tree_string" [tree in newick format; in double quotes]
             _Option(["-tree", "tree"],
@@ -193,7 +193,7 @@ class PrankCommandline(AbstractCommandline):
             _Switch(["-convert", "convert"],
                     "Convert input alignment to new format. Do "
                     "not perform alignment")
-            ]
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 

@@ -26,7 +26,7 @@ class CheckRaw(unittest.TestCase):
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
         self.assertEqual(raw, idx.get_raw(id))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        idx.close()
 
         #Now again, but using SQLite backend
         if sqlite3:
@@ -81,7 +81,7 @@ class CheckIndex(unittest.TestCase):
                 self.assertNotEqual(id(qres), id(dbidx_qres))
                 self.assertTrue(compare_search_obj(qres, dbidx_qres))
 
-        indexed._proxy._handle.close()  # TODO - Better solution
+        indexed.close()
         if sqlite3 is not None:
             db_indexed.close()
             db_indexed._con.close()

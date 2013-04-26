@@ -28,7 +28,8 @@ try:
     test_db_fname = tempfile.mkstemp(dir='/dev/shm')[1]
 except OSError:
     # We can't use /dev/shm
-    test_db_fname = os.path.join(os.getcwd(), "BioSQL", "temp_sqlite.db")
+    h, test_db_fname = tempfile.mkstemp("_BioSQL.db")
+    os.close(h)
 
 TESTDB = test_db_fname
 

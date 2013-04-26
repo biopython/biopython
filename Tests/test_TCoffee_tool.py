@@ -55,8 +55,8 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), t_coffee_exe + " -infile Fasta/fa01")
         stdout, stderr = cmdline()
         self.assertTrue(stderr.strip().startswith("PROGRAM: T-COFFEE"))
-        align = AlignIO.read(open(self.outfile1), "clustal")
-        records = list(SeqIO.parse(open(self.infile1),"fasta"))
+        align = AlignIO.read(self.outfile1, "clustal")
+        records = list(SeqIO.parse(self.infile1, "fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -74,8 +74,8 @@ class TCoffeeApplication(unittest.TestCase):
         stdout, stderr = cmdline()
         #Can get warnings in stderr output
         self.assertTrue("error" not in stderr.lower(), stderr)
-        align = AlignIO.read(open(self.outfile3), "pir")
-        records = list(SeqIO.parse(open(self.infile1),"fasta"))
+        align = AlignIO.read(self.outfile3, "pir")
+        records = list(SeqIO.parse(self.infile1,"fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -96,8 +96,8 @@ class TCoffeeApplication(unittest.TestCase):
                          "-type protein -outorder input -gapopen -2 -gapext -5")
         stdout, stderr = cmdline()
         self.assertTrue(stderr.strip().startswith("PROGRAM: T-COFFEE"))
-        align = AlignIO.read(open(self.outfile4), "clustal")
-        records = list(SeqIO.parse(open(self.infile1),"fasta"))
+        align = AlignIO.read(self.outfile4, "clustal")
+        records = list(SeqIO.parse(self.infile1, "fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)

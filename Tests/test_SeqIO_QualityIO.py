@@ -1,9 +1,12 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
+
+from __future__ import with_statement
+
 import os
 import unittest
 import warnings
@@ -42,7 +45,8 @@ def write_read(filename, in_format, out_format):
         mode = "rb"
     else:
         mode = "r"
-    records = list(SeqIO.parse(open(filename, mode),in_format))
+    with open(filename, mode) as handle:
+        records = list(SeqIO.parse(handle, in_format))
     #Write it out...
     if out_format in BINARY_FORMATS:
         handle = BytesIO()
@@ -220,7 +224,7 @@ for base_name, good_count, full_count in tests:
 
 class TestReferenceSffConversions(unittest.TestCase):
     def check(self, sff_name, sff_format, out_name, format) :
-        wanted = list(SeqIO.parse(open(out_name), format))
+        wanted = list(SeqIO.parse(out_name, format))
         data = StringIO()
         count = SeqIO.convert(sff_name, sff_format, data, format)
         self.assertEqual(count, len(wanted))
@@ -282,9 +286,9 @@ class TestReferenceFastqConversions(unittest.TestCase):
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
             #Load the reference output...
-            expected = open("Quality/%s_as_%s.fastq"
-                            % (base_name, out_variant),
-                            "rU").read()
+            with open("Quality/%s_as_%s.fastq"
+                      % (base_name, out_variant), "rU") as handle:
+                expected = handle.read()
             #Check matches using convert...
             handle = StringIO()
             SeqIO.convert(in_filename, "fastq-"+in_variant,
@@ -292,7 +296,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
             self.assertEqual(expected, handle.getvalue())
             #Check matches using parse/write
             handle = StringIO()
-            SeqIO.write(SeqIO.parse(open(in_filename), "fastq-"+in_variant),
+            SeqIO.write(SeqIO.parse(in_filename, "fastq-"+in_variant),
                         handle, "fastq-"+out_variant)
             self.assertEqual(expected, handle.getvalue())
             if out_variant != "sanger":
@@ -323,38 +327,40 @@ class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
     def test_paired(self):
         """Check FASTQ parsing matches FASTA+QUAL parsing"""
-        records1 = list(
-            QualityIO.PairedFastaQualIterator(open("Quality/example.fasta"),
-                                              open("Quality/example.qual")))
-        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        with open("Quality/example.fasta") as f:
+            with open("Quality/example.qual") as q:
+                records1 = list(QualityIO.PairedFastaQualIterator(f,q ))
+        records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         self.assertTrue(compare_records(records1, records2))
 
     def test_qual(self):
         """Check FASTQ parsing matches QUAL parsing"""
-        records1 = list(SeqIO.parse(open("Quality/example.qual"),"qual"))
-        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        records1 = list(SeqIO.parse("Quality/example.qual", "qual"))
+        records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         #Will ignore the unknown sequences :)
         self.assertTrue(compare_records(records1, records2))
 
     def test_qual_out(self):
         """Check FASTQ to QUAL output"""
-        records = SeqIO.parse(open("Quality/example.fastq"),"fastq")
+        records = SeqIO.parse("Quality/example.fastq", "fastq")
         h = StringIO("")
         SeqIO.write(records, h, "qual")
-        self.assertEqual(h.getvalue(),open("Quality/example.qual").read())
+        with open("Quality/example.qual") as expected:
+            self.assertEqual(h.getvalue(), expected.read())
 
     def test_fasta(self):
         """Check FASTQ parsing matches FASTA parsing"""
-        records1 = list(SeqIO.parse(open("Quality/example.fasta"),"fasta"))
-        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        records1 = list(SeqIO.parse("Quality/example.fasta", "fasta"))
+        records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         self.assertTrue(compare_records(records1, records2))
 
     def test_fasta_out(self):
         """Check FASTQ to FASTA output"""
-        records = SeqIO.parse(open("Quality/example.fastq"),"fastq")
+        records = SeqIO.parse("Quality/example.fastq", "fastq")
         h = StringIO("")
         SeqIO.write(records, h, "fasta")
-        self.assertEqual(h.getvalue(),open("Quality/example.fasta").read())
+        with open("Quality/example.fasta") as expected:
+            self.assertEqual(h.getvalue(), expected.read())
 
     def test_qual_negative(self):
         """Check QUAL negative scores mapped to PHRED zero"""

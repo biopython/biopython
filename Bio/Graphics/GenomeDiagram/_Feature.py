@@ -90,7 +90,15 @@ class Feature(object):
                     feature label in degrees (default = 45, linear only)
 
         o label_position    String, 'start', 'end' or 'middle' denoting where
-                    to place the feature label (linear only)
+                    to place the feature label. Leave as None for the default
+                    which is 'start' for linear diagrams, and at the bottom of
+                    the feature as drawn on circular diagrams.
+
+        o label_strand  Integer -1 or +1 to explicitly place the label on the
+                    forward or reverse strand. Default (None) follows th
+                    feature's strand. Use -1 to put labels under (linear) or
+                    inside (circular) the track, +1 to put them above (linear)
+                    or outside (circular) the track.
 
         o locations     List of tuples of (start, end) ints describing where the
                     feature and any subfeatures start and end
@@ -145,7 +153,8 @@ class Feature(object):
         self.label_size = 6
         self.label_color = colors.black
         self.label_angle = 45
-        self.label_position = 'start'
+        self.label_position = None #Expect 'start', 'middle', or 'end' (plus aliases)
+        self.label_strand = None #Expect +1 or -1 if overriding this
 
         if feature is not None:
             self.set_feature(feature)

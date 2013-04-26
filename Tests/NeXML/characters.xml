@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--  
+    This file shows encodings of character state data.
+-->
+<!--
+    For more discussion of the structure of the root element,
+    refer to 'taxa.xml' 
+-->
+<nex:nexml 
+    version="0.9"
+    xml:base="http://example.org/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd"
+    xmlns:nex="http://www.nexml.org/2009"
+    xmlns="http://www.nexml.org/2009">
+    
+    <!--  
+        For more discussion of the structure of the taxa
+        element, refer to 'taxa.xml'
+    -->    
+    <otus id="taxa1" label="Primary taxa block">
+        <otu id="t1" label="Homo sapiens"/>
+        <otu id="t2" label="Pan paniscus"/>
+        <otu id="t3" label="Pan troglodytes"/>
+        <otu id="t4" label="Gorilla gorilla"/>
+        <otu id="t5" label="Pongo pygmaeus"/>
+    </otus>
+    <!--
+        This characters block encodes restriction site data, i.e.
+        presence (1) / absence (0) observations. Because the states
+        that can occur - and what they mean - are known, there is no
+        'format' element to define states (see below for examples of
+        that). In this example, restriction site data is encoded
+        as a sequence of characters (rather than individual cells),
+        hence we use the subclass xsi:type="RestrictionSeqs".
+        
+        All characters blocks must have an id attribute and a 
+        reference to a taxa block that precedes it. In addition,
+        it may have the same additional attributes (label, xml:base, 
+        xml:lang, xml:id, xlink:href and class) as the taxa element. 
+    -->
+    <characters otus="taxa1" id="m1" xsi:type="nex:RestrictionSeqs" label="Restriction site sequences">
+    	<format>
+	      <states id="RestrictionSiteStateSet">
+	        <state id="Absent" symbol="0"/>
+	        <state id="Present" symbol="1"/>
+	      </states>
+    	    <char id="Site1" states="RestrictionSiteStateSet"/>
+    	    <char id="Site2" states="RestrictionSiteStateSet"/>
+    	    <char id="Site3" states="RestrictionSiteStateSet"/>
+    	    <char id="Site4" states="RestrictionSiteStateSet"/>
+        </format>
+        <matrix>
+        <!--
+            The matrix element is a container for row elements. 
+        -->        
+            <!--
+                Each row element must have an id and a reference
+                to a taxon element that precedes it. 
+            -->
+            <row otu="t1" id="RestrictionSiteRow1">
+                <!--
+                    Because this characters block is an instance
+                    of the subclass RestrictionSeqs it contains
+                    'seq' elements with 1's and 0's. 
+                -->
+                <seq>0101</seq>
+            </row>
+            <row otu="t2" id="RestrictionSiteRow2">
+                <seq>0101</seq>
+            </row>
+            <row otu="t3" id="RestrictionSiteRow3">
+                <seq>0101</seq>
+            </row>
+            <row otu="t4" id="RestrictionSiteRow4">
+                <seq>0101</seq>
+            </row>
+            <row otu="t5" id="RestrictionSiteRow5">
+                <seq>0101</seq>
+            </row>
+        </matrix>
+    </characters>
+    <!--
+        This characters block encodes 'standard' categorical characters,
+        marked up granularly, as cells. 
+    -->
+    <characters otus="taxa1" id="m2" xsi:type="nex:StandardCells" label="Categorical characters">
+        <!--
+            Because categorical characters in instances of this subclass
+            don't have a priori known numbers of states, they must be
+            defined using the 'format' element. 
+        -->
+        <format>
+            <!--
+                The first elements inside a format element are stateset
+                definitions. In this example, there is a set of four
+                states, each tagged with an id. The symbol attribute is
+                a shorthand token that would be used when serializing to
+                NEXUS, for example.
+            -->
+            <states id="StandardCategoricalStateSet1">
+                <state id="StandardCategoricalState1" symbol="1"/>                                
+                <state id="StandardCategoricalState2" symbol="2"/>                
+                <state id="StandardCategoricalState3" symbol="3"/>                 
+                <polymorphic_state_set symbol="4" id="StandardCategoricalState4">                    
+                    <member state="StandardCategoricalState2"/>
+                    <member state="StandardCategoricalState3"/>                    
+                </polymorphic_state_set>
+                <uncertain_state_set symbol="5" id="StandardCategoricalState5">
+                    <member state="StandardCategoricalState1"/>
+                    <member state="StandardCategoricalState2"/>
+                </uncertain_state_set>      
+            </states>
+            <!--
+                The matrix in this example contains two columns, both
+                referring to the same stateset - and so cells in both
+                columns can occupy one of four states. 
+             -->
+            <char states="StandardCategoricalStateSet1" id="StandardCharacter1"/>
+            <char states="StandardCategoricalStateSet1" id="StandardCharacter2"/>
+        </format>
+        <!--
+            In this subclass, the matrix contains rows consisting of
+            individual cells. 
+        -->
+        <matrix>
+            <row id="StandardCategoricalStateCellsRow1" otu="t1">
+                <!--
+                    Each cell must contain a reference to the column 
+                    it belongs to, and to a state allowed within that
+                    column. 
+                 -->
+                <cell char="StandardCharacter1" state="StandardCategoricalState1"/>
+                <cell char="StandardCharacter2" state="StandardCategoricalState2"/>
+            </row>
+            <row id="StandardCategoricalStateCellsRow2" otu="t2">
+                <cell char="StandardCharacter1" state="StandardCategoricalState2"/>
+                <cell char="StandardCharacter2" state="StandardCategoricalState2"/>
+            </row>
+            <row id="StandardCategoricalStateCellsRow3" otu="t3">
+                <cell char="StandardCharacter1" state="StandardCategoricalState3"/>
+                <cell char="StandardCharacter2" state="StandardCategoricalState4"/>
+            </row>
+            <row id="StandardCategoricalStateCellsRow4" otu="t4">
+                <cell char="StandardCharacter1" state="StandardCategoricalState2"/>
+                <cell char="StandardCharacter2" state="StandardCategoricalState3"/>
+            </row>
+            <row id="StandardCategoricalStateCellsRow5" otu="t5">
+                <cell char="StandardCharacter1" state="StandardCategoricalState4"/>
+                <cell char="StandardCharacter2" state="StandardCategoricalState1"/>
+            </row>
+        </matrix>
+    </characters>
+    <!--
+        This example is a characters block for continuous characters, marked
+        up as individual cells. 
+    -->
+    <characters otus="taxa1" id="m3" xsi:type="nex:ContinuousCells" label="Continuous characters">        
+        <format>
+            <!--
+                Because in this subclass, characters are marked up granularly -
+                as cells - we must define the columns these cells belong to.
+                Because this is continuous data, we don't (can't) define the
+                states cells in these columns may occupy, hence there are no
+                'states' elements in this subclass.  
+            -->
+            <char id="ContinuousCharacter1" label="this is character 1"/>
+            <char id="ContinuousCharacter2"/>
+            <char id="ContinuousCharacter3"/>
+            <char id="ContinuousCharacter4"/>
+            <char id="ContinuousCharacter5"/>
+        </format>
+        <matrix>
+            <row id="ContinuousCellsRow1" otu="t1">
+                <!--  
+                    In this subclass, the 'state' attribute holds the raw
+                    value of the cell (i.e. a floating point number), not
+                    a reference to a state defined previously.
+                -->
+                <cell char="ContinuousCharacter1" state="-1.545414144070023"/>
+                <cell char="ContinuousCharacter2" state="-2.3905621575431044"/>
+                <cell char="ContinuousCharacter3" state="-2.9610221833467265"/>
+                <cell char="ContinuousCharacter4" state="0.7868662069161243"/>
+                <cell char="ContinuousCharacter5" state="0.22968509237534918"/>
+            </row>
+            <row id="ContinuousCellsRow2" otu="t2">
+                <cell char="ContinuousCharacter1" state="-1.6259836379710066"/>
+                <cell char="ContinuousCharacter2" state="3.649352410850134"/>
+                <cell char="ContinuousCharacter3" state="1.778885099660406"/>
+                <cell char="ContinuousCharacter4" state="-1.2580877968480846"/>
+                <cell char="ContinuousCharacter5" state="0.22335354995610862"/>
+            </row>
+            <row id="ContinuousCellsRow3" otu="t3">
+                <cell char="ContinuousCharacter1" state="-1.5798979984134964"/>
+                <cell char="ContinuousCharacter2" state="2.9548251411133157"/>
+                <cell char="ContinuousCharacter3" state="1.522005675256233"/>
+                <cell char="ContinuousCharacter4" state="-0.8642016921755289"/>
+                <cell char="ContinuousCharacter5" state="-0.938129801832388"/>
+            </row>
+            <row id="ContinuousCellsRow4" otu="t4">
+                <cell char="ContinuousCharacter1" state="2.7436692306788086"/>
+                <cell char="ContinuousCharacter2" state="-0.7151148143399818"/>
+                <cell char="ContinuousCharacter3" state="4.592207937774776"/>
+                <cell char="ContinuousCharacter4" state="-0.6898841440534845"/>
+                <cell char="ContinuousCharacter5" state="0.5769509574453064"/>
+            </row>
+            <row id="ContinuousCellsRow5" otu="t5">
+                <cell char="ContinuousCharacter1" state="3.1060827493657683"/>
+                <cell char="ContinuousCharacter2" state="-1.0453787389160105"/>
+                <cell char="ContinuousCharacter3" state="2.67416332763427"/>
+                <cell char="ContinuousCharacter4" state="-1.4045634106692808"/>
+                <cell char="ContinuousCharacter5" state="0.019890469925520196"/>
+            </row>
+        </matrix>
+    </characters>
+    <!--
+        This subclass encodes DNA as sequences (not cells). Like the restriction
+        site data block shown above, the states are known (being IUPAC single
+        character nucleotide symbols), hence there is no 'format' element. In 
+        addition to the IUPAC symbols, '-' is used for gaps, '?' is used for
+        missing. Spaces are allowed (so that long lines can be broken up, some
+        parsers might otherwise complain) but have no meaning.
+    -->
+    <characters otus="taxa1" id="characters3" xsi:type="nex:DnaSeqs" label="DNA sequences">
+    <format>
+    	<states id="IUPACDNAStateSet1">
+    		<state id="NucA" symbol="A" />
+    		<state id="NucC" symbol="C" />
+    	    <state id="NucG" symbol="G" />
+    	    <state id="NucT" symbol="T" />
+    		<uncertain_state_set id="SymK" symbol="K">
+    		    <member state="NucG" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymM" symbol="M">
+    		    <member state="NucA" />
+    		    <member state="NucC" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymR" symbol="R">
+    		    <member state="NucA" />
+    		    <member state="NucG" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymS" symbol="S">
+    		    <member state="NucC" />
+    		    <member state="NucG" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymW" symbol="W">
+    		    <member state="NucA" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymY" symbol="Y">
+    		    <member state="NucC" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymB" symbol="B">
+    		    <member state="NucC" />
+    		    <member state="NucG" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymD" symbol="D">
+    		    <member state="NucA" />
+    		    <member state="NucG" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymH" symbol="H">
+    		    <member state="NucA" />
+    		    <member state="NucC" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymV" symbol="V">
+    		    <member state="NucA" />
+    		    <member state="NucC" />
+    		    <member state="NucG" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymN" symbol="N">
+    		    <member state="NucA" />
+    		    <member state="NucC" />
+    		    <member state="NucG" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymX" symbol="X">
+    		    <member state="NucA" />
+    		    <member state="NucC" />
+    		    <member state="NucG" />
+    		    <member state="NucT" />
+    		</uncertain_state_set>
+    		<uncertain_state_set id="SymGap" symbol="-" />
+    		<uncertain_state_set id="SymMiss" symbol="?">
+    		    <member state="NucA" />
+    		    <member state="NucC" />
+    		    <member state="NucG" />
+    		    <member state="NucT" />
+    		    <member state="SymK" />
+    		    <member state="SymM" />
+    		    <member state="SymR" />
+    		    <member state="SymS" />
+    		    <member state="SymW" />
+    		    <member state="SymY" />
+    		    <member state="SymB" />
+    		    <member state="SymD" />
+    		    <member state="SymH" />
+    		    <member state="SymV" />
+    		    <member state="SymN" />
+    		    <member state="SymX" />
+    		    <member state="SymGap" />
+    		</uncertain_state_set>
+    	</states>
+        <char id="ResidueCol1" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol2" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol3" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol4" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol5" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol6" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol7" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol8" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol9" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol10" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol11" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol12" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol13" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol14" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol15" states="IUPACDNAStateSet1" />
+        <char id="ResidueCol16" states="IUPACDNAStateSet1" />
+    </format>
+    <matrix>
+        <row otu="t1" id="DNASequence1"><seq>A C G C T C G C A T C G C A T C</seq></row>
+        <row otu="t2" id="DNASequence2"><seq>A C G C T C G C A T C G C A T C</seq></row>
+        <row otu="t3" id="DNASequence3"><seq>A C G C T C G C A T C G C A T C</seq></row>
+    </matrix>
+    </characters>
+    <!--
+        RNA only differs from the previous example by using U instead of T 
+    -->
+    <characters otus="taxa1" id="rnaseqs4" xsi:type="nex:RnaSeqs" label="RNA sequences">
+    <format>
+      <states id="rnastates">
+        <state id="rna1" symbol="A"/>
+        <state id="rna2" symbol="C"/>
+        <state id="rna3" symbol="G"/>
+        <state id="rna4" symbol="U"/>
+        <uncertain_state_set id="rna5" symbol="K">
+          <member state="rna3"/>
+          <member state="rna4"/>
+        </uncertain_state_set>
+        <uncertain_state_set id="rna6" symbol="M">
+            <member state="rna1"/>
+            <member state="rna2"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna7" symbol="R">
+              <member state="rna1"/>
+              <member state="rna3"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna8" symbol="S">
+              <member state="rna2"/>
+              <member state="rna3"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna9" symbol="W">
+              <member state="rna1"/>
+              <member state="rna4"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna10" symbol="Y">
+              <member state="rna2"/>
+              <member state="rna4"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna11" symbol="B">
+              <member state="rna2"/>
+              <member state="rna3"/>
+              <member state="rna4"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna12" symbol="D">
+              <member state="rna1"/>
+              <member state="rna3"/>
+              <member state="rna4"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna13" symbol="H">
+              <member state="rna1"/>
+              <member state="rna2"/>
+              <member state="rna4"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna14" symbol="V">
+              <member state="rna1"/>
+              <member state="rna2"/>
+              <member state="rna3"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna15" symbol="N">
+              <member state="rna3"/>
+              <member state="rna1"/>
+              <member state="rna4"/>
+              <member state="rna2"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna16" symbol="X">
+              <member state="rna3"/>
+              <member state="rna1"/>
+              <member state="rna4"/>
+              <member state="rna2"/>
+        </uncertain_state_set>
+          <uncertain_state_set id="rna17" symbol="-"/>
+          <uncertain_state_set id="rna18" symbol="?">
+              <member state="rna1"/>
+              <member state="rna2"/>
+              <member state="rna3"/>
+              <member state="rna4"/>
+              <member state="rna5"/>
+              <member state="rna6"/>
+              <member state="rna7"/>
+              <member state="rna8"/>
+              <member state="rna9"/>
+              <member state="rna10"/>
+              <member state="rna11"/>
+              <member state="rna12"/>
+              <member state="rna13"/>
+              <member state="rna14"/>
+              <member state="rna15"/>
+              <member state="rna16"/>
+              <member state="rna17"/>
+        </uncertain_state_set>
+      </states>
+        <char id="rnachar1" states="rnastates"/>
+        <char id="rnachar2" states="rnastates"/>
+        <char id="rnachar3" states="rnastates"/>
+        <char id="rnachar4" states="rnastates"/>
+        <char id="rnachar5" states="rnastates"/>
+        <char id="rnachar6" states="rnastates"/>
+        <char id="rnachar7" states="rnastates"/>
+        <char id="rnachar8" states="rnastates"/>
+        <char id="rnachar9" states="rnastates"/>
+        <char id="rnachar10" states="rnastates"/>
+        <char id="rnachar11" states="rnastates"/>
+        <char id="rnachar12" states="rnastates"/>
+        <char id="rnachar13" states="rnastates"/>
+        <char id="rnachar14" states="rnastates"/>
+        <char id="rnachar15" states="rnastates"/>
+        <char id="rnachar16" states="rnastates"/>
+        <char id="rnachar17" states="rnastates"/>
+        <char id="rnachar18" states="rnastates"/>
+        <char id="rnachar19" states="rnastates"/>
+        <char id="rnachar20" states="rnastates"/>    
+      </format>
+        <matrix>
+            <row otu="t1" id="rnarow1">
+                <seq>ACGCUCGCAUCGCAUC</seq>
+            </row>
+            <row otu="t2" id="rnarow2">
+                <seq>ACGCUCGCAUCGCAUC</seq>
+            </row>
+            <row otu="t3" id="rnarow3">
+                <seq>ACGCUCGCAUCGCAUC</seq>
+            </row>
+        </matrix>
+    </characters>
+    <!-- 
+        A more compact example of encoding of continuous characters as raw sequences.    
+    -->
+    <characters otus="taxa1" id="contchars5" xsi:type="nex:ContinuousSeqs" label="Continuous sequences">
+	    <format>
+	      <char id="contchar1"/>
+	        <char id="contchar2"/>
+	        <char id="contchar3"/>
+	        <char id="contchar4"/>
+	        <char id="contchar5"/>	      	      
+	    </format>    
+        <matrix>
+            <row id="controw1" otu="t1">
+                <seq>-1.545414144070023 -2.3905621575431044 -2.9610221833467265 0.7868662069161243 0.22968509237534918</seq>
+            </row>
+            <row id="controw2" otu="t2">
+                <seq>-1.6259836379710066 3.649352410850134 1.778885099660406 -1.2580877968480846 0.22335354995610862</seq>
+            </row>
+            <row id="controw3" otu="t3">
+                <seq>-1.5798979984134964 2.9548251411133157 1.522005675256233 -0.8642016921755289 -0.938129801832388</seq>
+            </row>
+            <row id="controw4" otu="t4">
+                <seq>2.7436692306788086 -0.7151148143399818 4.592207937774776 -0.6898841440534845 0.5769509574453064</seq>
+            </row>
+            <row id="controw5" otu="t5">
+                <seq>3.1060827493657683 -1.0453787389160105 2.67416332763427 -1.4045634106692808 0.019890469925520196</seq>
+            </row>
+        </matrix>
+    </characters>
+    <!-- 
+        A more compact example of encoding of standard data. Note that the symbols used here
+        are integers (also above 9) and so characters must be space-separated. The symbols used
+        here are the same as the symbol attributes used in characters block m2, earlier.    
+    -->
+    <characters otus="taxa1" id="standardchars6" xsi:type="nex:StandardSeqs" label="Standard sequences">
+        <format>
+            <!--
+                The first elements inside a format element are stateset
+                definitions. In this example, there is a set of four
+                states, each tagged with an id. The symbol attribute is
+                a shorthand token. 
+            -->
+            <states id="standardstateset1">
+                <state id="standardstates1" symbol="1"/>                                
+                <state id="standardstates2" symbol="2"/>                
+                <state id="standardstates3" symbol="3"/>                 
+                <polymorphic_state_set symbol="4" id="standardstates4">                    
+                    <member state="standardstates1"/>
+                    <member state="standardstates2"/>                    
+                </polymorphic_state_set>
+                <uncertain_state_set symbol="5" id="standardstates5">
+                    <member state="standardstates3"/>
+                    <member state="standardstates1"/>
+                </uncertain_state_set>      
+            </states>
+            <!--
+                The matrix in this example contains two columns, both
+                referring to the same stateset - and so cells in both
+                columns can occupy one of four states. 
+             -->
+            <char states="standardstateset1" id="standardc1"/>
+            <char states="standardstateset1" id="standardc2"/>
+        </format>    
+        <matrix>
+            <row id="standardr1" otu="t1">
+                <seq>1 2</seq>
+            </row>
+            <row id="standardr2" otu="t2">
+                <seq>2 2</seq>
+            </row>
+            <row id="standardr3" otu="t3">
+                <seq>3 4</seq>
+            </row>
+            <row id="standardr4" otu="t4">
+                <seq>2 3</seq>
+            </row>
+            <row id="standardr5" otu="t5">
+                <seq>4 1</seq>
+            </row>
+        </matrix>
+    </characters>
+</nex:nexml>

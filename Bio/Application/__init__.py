@@ -1,5 +1,5 @@
 # Copyright 2001-2004 Brad Chapman.
-# Revisions copyright 2009-2010 by Peter Cock.
+# Revisions copyright 2009-2013 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -380,10 +380,11 @@ class AbstractCommandline(object):
         The optional stdin argument should be a string of data which will be
         passed to the tool as standard input.
 
-        The optional stdout and stderr argument are treated as a booleans, and
-        control if the output should be captured (True, default), or ignored
-        by sending it to /dev/null to avoid wasting memory (False). In the
-        later case empty string(s) are returned.
+        The optional stdout and stderr argument may be filenames (string),
+        but otherwise are treated as a booleans, and control if the output
+        should be captured as strings (True, default), or ignored by sending
+        it to /dev/null to avoid wasting memory (False). If sent to a file
+        or ignored, then empty string(s) are returned.
 
         The optional cwd argument is a string giving the working directory
         to run the command from. See Python's subprocess module documentation
@@ -412,14 +413,23 @@ class AbstractCommandline(object):
         any stdout and stderr strings captured as attributes of the exception
         object, since they may be useful for diagnosing what went wrong.
         """
-        if stdout:
+        if not stdout:
+            stdout_arg = open(os.devnull, "w")
+        elif isinstance(stdout, basestring):
+            stdout_arg = open(stdout, "w")
+        else:
             stdout_arg = subprocess.PIPE
+
+        if not stderr:
+            stderr_arg = open(os.devnull, "w")
+        elif isinstance(stderr, basestring):
+            if stdout == stderr:
+                stderr_arg = stdout_arg #Write both to the same file
+            else:
+                stderr_arg = open(stderr, "w")
         else:
-            stdout_arg = open(os.devnull)
-        if stderr:
             stderr_arg = subprocess.PIPE
-        else:
-            stderr_arg = open(os.devnull)
+
         #We may not need to supply any piped input, but we setup the
         #standard input pipe anyway as a work around for a python
         #bug if this is called from a Windows GUI program.  For
@@ -435,10 +445,19 @@ class AbstractCommandline(object):
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
         if not stdout:
-            assert not stdout_str
+            assert not stdout_str, stdout_str
         if not stderr:
-            assert not stderr_str
+            assert not stderr_str, stderr_str
         return_code = child_process.returncode
+
+        #Particularly important to close handles on Jython and PyPy
+        #(where garbage collection is less predictable) and on Windows
+        #(where cannot delete files with an open handle):
+        if stdout and isinstance(stdout, basestring):
+            stdout_arg.close()
+        if stderr and isinstance(stderr, basestring) and stdout != stderr:
+            stderr_arg.close()
+
         if return_code:
             raise ApplicationError(return_code, str(self),
                                    stdout_str, stderr_str)

@@ -720,7 +720,7 @@ class Astral(object):
 
         if astral_file:
             #Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY
-            self.fasta_dict = SeqIO.to_dict(SeqIO.parse(open(astral_file), "fasta"))
+            self.fasta_dict = SeqIO.to_dict(SeqIO.parse(astral_file, "fasta"))
 
         self.astral_file = astral_file
         self.EvDatasets = {}

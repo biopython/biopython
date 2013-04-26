@@ -402,38 +402,68 @@ class CircularDrawer(AbstractDrawer):
                        color=feature.color, border=feature.border, **kwargs)
 
         if feature.label:   # Feature needs a label
-            label = String(0, 0, feature.name.strip(),
+            #The spaces are a hack to force a little space between the label
+            #and the edge of the feature
+            label = String(0, 0, " %s " % feature.name.strip(),
                            fontName=feature.label_font,
                            fontSize=feature.label_size,
                            fillColor=feature.label_color)
             labelgroup = Group(label)
-            label_angle = startangle + 0.5 * pi     # Make text radial
-            sinval, cosval = startsin, startcos
-            if feature.strand != -1:
-                # Feature is on top, or covers both strands
-                if startangle < pi: # Turn text round and anchor end to inner radius
-                    sinval, cosval = endsin, endcos
-                    label_angle = endangle - 0.5 * pi
-                    labelgroup.contents[0].textAnchor = 'end'
-                pos = self.xcenter+top*sinval
-                coslabel = cos(label_angle)
-                sinlabel = sin(label_angle)
-                labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
-                                        pos, self.ycenter+top*cosval)
+            if feature.label_strand:
+                strand = feature.label_strand
             else:
-                # Feature on bottom strand
-                if startangle < pi: # Turn text round and anchor end to inner radius
+                strand = feature.strand
+            if feature.label_position in ('start', "5'", 'left'):
+                # Position the label at the feature's start
+                if strand != -1:
+                    label_angle = startangle + 0.5 * pi # Make text radial
+                    sinval, cosval = startsin, startcos
+                else:
+                    label_angle = endangle + 0.5 * pi # Make text radial
                     sinval, cosval = endsin, endcos
-                    label_angle = endangle - 0.5 * pi
+            elif feature.label_position in ('middle', 'center', 'centre'):
+                # Position the label at the feature's midpoint
+                label_angle = midangle + 0.5 * pi # Make text radial
+                sinval, cosval = midsin, midcos
+            elif feature.label_position in ('end', "3'", 'right'):
+                # Position the label at the feature's end
+                if strand != -1:
+                    label_angle = endangle + 0.5 * pi # Make text radial
+                    sinval, cosval = endsin, endcos
+                else:
+                    label_angle = startangle + 0.5 * pi # Make text radial
+                    sinval, cosval = startsin, startcos
+            elif startangle < pi:
+                # Default to placing the label the bottom of the feature
+                # as drawn on the page, meaning feature end on left half
+                label_angle = endangle + 0.5 * pi # Make text radial
+                sinval, cosval = endsin,endcos
+            else:
+                # Default to placing the label on the bottom of the feature,
+                # which means the feature end when on right hand half
+                label_angle = startangle + 0.5 * pi # Make text radial
+                sinval, cosval = startsin, startcos
+            if strand != -1:
+                # Feature label on top
+                radius = top
+                if startangle < pi: # Turn text round
+                    label_angle -= pi
                 else:
                     labelgroup.contents[0].textAnchor = 'end'
-                pos = self.xcenter+btm*sinval
-                coslabel = cos(label_angle)
-                sinlabel = sin(label_angle)
-                labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
-                                        pos, self.ycenter+btm*cosval)
-
+            else:
+                # Feature label on bottom
+                radius = btm
+                if startangle < pi: # Turn text round and anchor end
+                    label_angle -= pi
+                    labelgroup.contents[0].textAnchor = 'end'
+            x_pos = self.xcenter + radius*sinval
+            y_pos = self.ycenter + radius*cosval
+            coslabel = cos(label_angle)
+            sinlabel = sin(label_angle)
+            labelgroup.transform = (coslabel, -sinlabel, sinlabel, coslabel,
+                                    x_pos, y_pos)
         else:
+            # No label required
             labelgroup = None
         #if locstart > locend:
         #    print locstart, locend, feature.strand, sigil, feature.name

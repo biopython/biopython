@@ -162,6 +162,7 @@ Or, using the trimmed reads:
     >>> record = reads["E3MFGYR02JHD4H"]
     >>> print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
+    >>> reads.close()
 
 You can also use the Bio.SeqIO.write() function with the "sff" format. Note
 that this requires all the flow information etc, and thus is probably only
@@ -768,8 +769,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     This function is used internally via the Bio.SeqIO functions:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SeqIO.parse(handle, "sff"):
+    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
     ...     print record.id, len(record)
     E3MFGYR02JWQ7T 265
     E3MFGYR02JA6IL 271
@@ -781,7 +781,6 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     E3MFGYR02HHZ8O 221
     E3MFGYR02GPGB1 269
     E3MFGYR02F7Z7G 219
-    >>> handle.close()
 
     You can also call it directly:
 
@@ -818,6 +817,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     >>> handle.close()
 
     """
+    #TODO - Once drop Python 2.5, update doctest to use 'with' to close handle
     if isinstance(Alphabet._get_base_alphabet(alphabet),
                   Alphabet.ProteinAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold proteins.")

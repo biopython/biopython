@@ -513,9 +513,9 @@ Alternatively, you can save %s in the directory
 Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
 
 Please also inform the Biopython developers about this missing DTD, by
-reporting a bug on http://bugzilla.open-bio.org/ or sign up to our mailing
-list and emailing us, so that we can include it with the next release of
-Biopython.
+reporting a bug on http://redmine.open-bio.org/projects/biopython or sign
+up to our mailing list and emailing us, so that we can include it with the
+next release of Biopython.
 
 Proceeding to access the DTD file through the internet...
 """ % (filename, filename, url, self.global_dtd_dir, self.local_dtd_dir, filename)

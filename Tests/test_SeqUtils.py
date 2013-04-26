@@ -52,7 +52,7 @@ class SeqUtilsTests(unittest.TestCase):
 
         tuple_records = quick_FASTA_reader(dna_fasta_filename)
         self.assertEqual(len(tuple_records), 3)
-        seq_records = list(SeqIO.parse(open(dna_fasta_filename), "fasta"))
+        seq_records = list(SeqIO.parse(dna_fasta_filename, "fasta"))
         self.assertEqual(len(seq_records), 3)
         for tuple_record, seq_record in zip(tuple_records, seq_records):
             self.assertEqual(tuple_record, (seq_record.description, str(seq_record.seq)))
@@ -68,7 +68,7 @@ class SeqUtilsTests(unittest.TestCase):
         #We need a FASTA file of CDS sequences to count the codon usage...
         dna_fasta_filename = "fasta.tmp"
         dna_genbank_filename = "GenBank/NC_005816.gb"
-        record = SeqIO.read(open(dna_genbank_filename), "genbank")
+        record = SeqIO.read(dna_genbank_filename, "genbank")
         records = []
         for feature in record.features:
             if feature.type == "CDS" and not feature.sub_features:

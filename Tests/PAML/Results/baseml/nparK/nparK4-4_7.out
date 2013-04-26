@@ -1,0 +1,53 @@
+
+BASEML (in paml version 4.7, January 2013)  Alignments/alignment.phylip  TN93 dGamma (ncatG=5)
+nparK:   4  K:   5
+
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.20090 0.16306 0.37027 0.26577
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances: TN93 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo         0.0047(999.0000)
+Gorilla_go         0.0047(999.0000)  0.0097(999.0000)
+Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
+Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 33):   -320.889684    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.004536 0.004545 0.000004 0.009206 21.546972 0.000010 0.999972 1.000048 0.999996 0.999997 0.167938 0.185800 0.200710 0.224976 0.173888 0.185280 0.203450 0.220151 0.179360 0.183138 0.201928 0.223833 0.189065 0.201222 0.200452 0.198364 0.200596 0.201005 0.215121 0.197472
+
+tree length =   0.01830
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.00000, Pan_troglo: 0.00454): 0.00000, Gorilla_go: 0.00454): 0.00000, Pongo_pygm: 0.00000, Macaca_mul: 0.00921);
+
+Detailed output identifying parameters
+
+Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
+ 21.54697  0.00001
+
+rate:  0.99997  1.00005  1.00000  1.00000  0.99999
+freq:  0.18272  0.19161  0.20444  0.21242  0.20881
+transition probabilities between rate categories:
+  0.16794  0.18580  0.20071  0.22498  0.22058
+  0.17389  0.18528  0.20345  0.22015  0.21723
+  0.17936  0.18314  0.20193  0.22383  0.21174
+  0.18906  0.20122  0.20045  0.19836  0.21090
+  0.20060  0.20100  0.21512  0.19747  0.18581
+

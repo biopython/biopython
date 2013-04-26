@@ -14,6 +14,11 @@ The latest news is at the top of this file.
 
 Please note that this could be our last release to support Python 2.5.
 
+The translation functions will give a warning on any partial codons (and this
+will probably become an error in a future release). If you know you are dealing
+with partial sequences, either pad with N to extend the sequence length to a
+multiple of three, or explicitly trim the sequence.
+
 The handling of joins and related complex features in Genbank/EMBL files has
 been changed with the introduction of a CompoundLocation object. Previously
 a SeqFeature for something like a multi-exon CDS would have a child SeqFeature
@@ -21,17 +26,45 @@ a SeqFeature for something like a multi-exon CDS would have a child SeqFeature
 will still be populated for now, but is deprecated and will in future be
 removed. Please consult the examples in the help (docstrings) and Tutorial.
 
+Thanks to the efforts of Ben Morris, the Phylo module now supports the file
+formats NeXML and CDAO. The Newick parser is also significantly faster, and can
+now optionally extract bootstrap values from the Newick comment field (like
+Molphy and Archaeopteryx do). Nate Sutton added a wrapper for FastTree to
+Bio.Phylo.Applications.
+
+The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
+can be used. The relevant JDBC driver should be available in the CLASSPATH.
+
+Feature labels on circular GenomeDiagram figures now support the label_position
+argument (start, middle or end) in addition to the current default placement,
+and in a change to prior releases these labels are outside the features which
+is now consistent with the linear diagrams.
+
+The code for parsing 3D structures in mmCIF files was updated to use the
+Python standard library's shlex module instead of C code using flex.
+
+The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Andrea Rizzi (first contribution)
+Ben Morris (first contribution)
+Christian Brueffer
+David Martin (first contribution)
+Michiel de Hoon
+Nate Sutton (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
+Saket Choudhary (first contribution)
+Tiago Antao
+Xabier Bello (first contribution)
 
 ===================================================================
 
-5 February 2013: Biopython 1.61
+5 February 2013: Biopython 1.61 released.
 
 GenomeDiagram has three new sigils (shapes to illustrate features). OCTO shows
 an octagonal shape, like the existing BOX sigil but with the corners cut off.
@@ -113,7 +146,7 @@ Wibowo 'Bow' Arindrarto
 
 ===================================================================
 
-25 June 2012: Biopython 1.60
+25 June 2012: Biopython 1.60 released.
 
 New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
 Zip Format), a variant of GZIP with efficient random access, most commonly
@@ -159,7 +192,7 @@ Wibowo Arindrarto
 
 ===================================================================
 
-24 February 2012: Biopython 1.59
+24 February 2012: Biopython 1.59 released.
 
 Please note that this release will *not* work on Python 2.4 (while the recent
 releases have worked despite us not officially supporting this).
@@ -227,7 +260,7 @@ Peter Cock
 
 ===================================================================
 
-18 August 2011: Biopython 1.58
+18 August 2011: Biopython 1.58 released.
 
 A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
 Likelihood) package of programs, supporting codeml, baseml and yn00 as well
@@ -278,7 +311,7 @@ Wibowo Arindrarto (first contribution)
 
 ===================================================================
 
-2 April 2011: Biopython 1.57
+2 April 2011: Biopython 1.57 released.
 
 Bio.SeqIO now includes an index_db() function which extends the existing
 indexing functionality to allow indexing many files, and more importantly

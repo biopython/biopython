@@ -355,7 +355,7 @@ class DatabaseLoader:
 
         taxon_id = self.adaptor.execute_and_fetch_col0(
             "SELECT taxon_id FROM taxon WHERE ncbi_taxon_id = %s",
-            (ncbi_taxon_id,))
+            (int(ncbi_taxon_id),))
         if taxon_id:
             #Good, we have mapped the NCBI taxid to a taxon table entry
             return taxon_id[0]
@@ -832,7 +832,7 @@ class DatabaseLoader:
         if location.ref:
             # sub_feature remote locations when they are in the same db as the current
             # record do not have a value for ref_db, which the SeqFeature object
-            # stores as None. BioSQL schema requires a varchar and is not NULL 
+            # stores as None. BioSQL schema requires a varchar and is not NULL
             dbxref_id = self._get_dbxref_id(location.ref_db or "", location.ref)
         else:
             dbxref_id = None

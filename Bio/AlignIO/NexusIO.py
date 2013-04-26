@@ -99,7 +99,8 @@ class NexusWriter(AlignmentWriter):
         #and then gets Nexus to prepare the output.
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
-        if alignment.get_alignment_length() == 0:
+        columns = alignment.get_alignment_length()
+        if columns == 0:
             raise ValueError("Non-empty sequences are required")
         minimal_record = "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; " \
                          + "format datatype=%s; end;"  \
@@ -108,7 +109,11 @@ class NexusWriter(AlignmentWriter):
         n.alphabet = alignment._alphabet
         for record in alignment:
             n.add_sequence(record.id, str(record.seq))
-        n.write_nexus_data(self.handle)
+        #For smaller alignments, don't bother to interleave.
+        #For larger alginments, interleave to avoid very long lines
+        #in the output - something MrBayes can't handle.
+        #TODO - Default to always interleaving?
+        n.write_nexus_data(self.handle, interleave=(columns > 1000))
 
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).

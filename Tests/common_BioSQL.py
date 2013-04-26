@@ -5,6 +5,7 @@
 """
 # standard library
 import os
+import platform
 import unittest
 from StringIO import StringIO
 
@@ -31,10 +32,14 @@ if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")
 
 global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
+global SYSTEM
+
+SYSTEM = platform.system()
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
-    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
+    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
+    global SYSTEM, SQL_FILE
     DBDRIVER = dbdriver
     DBTYPE = dbtype
     DBHOST = dbhost
@@ -43,21 +48,31 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     TESTDB = testdb
 
     #Check the database driver is installed:
-    try:
-        __import__(DBDRIVER)
-    except ImportError:
-        message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
-        raise MissingExternalDependencyError(message)
+    if SYSTEM == "Java":
+        try:
+            if DBDRIVER in ["MySQLdb"]:
+                import com.mysql.jdbc.Driver
+            elif DBDRIVER in ["psycopg2"]:
+                import org.postgresql.Driver
+        except ImportError:
+            message = "Install the JDBC driver for %s to use BioSQL " % DBTYPE
+            raise MissingExternalDependencyError(message)
+    else:
+        try:
+            __import__(DBDRIVER)
+        except ImportError:
+            message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
+            raise MissingExternalDependencyError(message)
 
     try:
         if DBDRIVER in ["sqlite3"]:
-            server = BioSeqDatabase.open_database(driver = DBDRIVER, db = TESTDB)
+            server = BioSeqDatabase.open_database(driver=DBDRIVER, db=TESTDB)
         else:
-            server = BioSeqDatabase.open_database(driver = DBDRIVER,
-                                                  user = DBUSER, passwd = DBPASSWD,
-                                                  host = DBHOST)
-            server.close()
-            del server
+            server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                                  user=DBUSER, passwd=DBPASSWD,
+                                                  host=DBHOST)
+        server.close()
+        del server
     except Exception, e:
         message = "Connection failed, check settings if you plan to use BioSQL: %s" % str(e)
         raise MissingExternalDependencyError(message)
@@ -101,6 +116,7 @@ def _do_db_create():
         sql = r"DROP DATABASE " + TESTDB
         server.adaptor.cursor.execute(sql, ())
     except (server.module.OperationalError,
+            server.module.Error,
             server.module.DatabaseError), e:  # the database doesn't exist
         pass
     except (server.module.IntegrityError,
@@ -456,6 +472,7 @@ class DupLoadTest(unittest.TestCase):
             #Note we don't do a specific exception handler because the
             #exception class will depend on which DB back end is in use.
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "AttributeError",
                                                        "OperationalError"],
                             err.__class__.__name__)
             return
@@ -470,7 +487,9 @@ class DupLoadTest(unittest.TestCase):
             count = self.db.load([record])
         except Exception, err:
             #Good!
-            self.assertEqual("IntegrityError", err.__class__.__name__)
+            self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "AttributeError"],
+                            err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
@@ -482,7 +501,9 @@ class DupLoadTest(unittest.TestCase):
             count = self.db.load([record1, record2])
         except Exception, err:
             #Good!
-            self.assertEqual("IntegrityError", err.__class__.__name__)
+            self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "AttributeError"],
+                            err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
@@ -678,7 +699,9 @@ class InDepthLoadTest(unittest.TestCase):
             count = self.db.load([record])
         except Exception, err:
             #Good!
-            self.assertEqual("IntegrityError", err.__class__.__name__)
+            self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "AttributeError"],
+                            err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
@@ -760,10 +783,10 @@ class AutoSeqIOTests(unittest.TestCase):
     def setUp(self):
         """Connect to the database."""
         db_name = "biosql-test-seqio"
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
-                                              user = DBUSER,
-                                              passwd = DBPASSWD,
-                                              host = DBHOST, db = TESTDB)
+        server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                              user=DBUSER,
+                                              passwd=DBPASSWD,
+                                              host=DBHOST, db=TESTDB)
         self.server = server
         if db_name not in server.keys():
             self.db = server.new_database(db_name)

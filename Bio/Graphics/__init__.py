@@ -1,5 +1,5 @@
 # Copyright 2008 by Michiel de Hoon.  All rights reserved.
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -15,7 +15,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Please install ReportLab if you want "
         "to use Bio.Graphics. You can find ReportLab at "
-        "http://www.reportlab.org/downloads.html")
+        "http://www.reportlab.com/software/opensource/")
 
 
 # The following code is to allow all the Bio.Graphics

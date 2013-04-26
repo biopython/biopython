@@ -46,7 +46,7 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
         #Check the decompressed files agree
-        self.assert_(new_data, "Empty BGZF file?")
+        self.assertTrue(new_data, "Empty BGZF file?")
         self.assertEqual(len(data), len(new_data))
         self.assertEqual(data, new_data)
 

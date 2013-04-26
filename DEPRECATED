@@ -16,6 +16,12 @@ Python 2.5
 ==========
 Still supported, but has triggered a warning since Release 1.61.
 
+Bio.PDB.mmCIF
+=============
+This was Removed in Release 1.62, when MMCIF2Dict was updated to use shlex
+from the standard library instead. This had required manual intervention to
+include when installing Biopython from source due to a dependency on flex.
+
 Bio.SeqFeature
 ==============
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
@@ -36,7 +42,8 @@ Long obsolete file Bio/Search.py was deprecated in Release 1.61.
 
 Bio.Pathway.Rep.HashSet
 =======================
-Deprecated in Release 1.59, use Python's built in set module.
+Deprecated in Release 1.59, removed in Release 1.62. Use Python's built in
+set object.
 
 Bio.SeqFeature.WithinPosition and OneOfPosition
 ===============================================

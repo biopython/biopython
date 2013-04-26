@@ -669,7 +669,7 @@ class EmblScanner(InsdcScanner):
 
     def _feed_seq_length(self, consumer, text):
         length_parts = text.split()
-        assert len(length_parts) == 2
+        assert len(length_parts) == 2, "Invalid sequence length string %r" % text
         assert length_parts[1].upper() in ["BP", "BP.", "AA."]
         consumer.size(length_parts[0])
 
@@ -769,6 +769,8 @@ class EmblScanner(InsdcScanner):
                 # In GenBank files this corresponds to the old PROJECT
                 # line which is being replaced with the DBLINK line.
                 consumer.project(data.rstrip(";"))
+            elif line_type == 'KW':
+                consumer.keywords(data.rstrip(";"))
             elif line_type in consumer_dict:
                 #Its a semi-automatic entry!
                 getattr(consumer, consumer_dict[line_type])(data)

@@ -11,6 +11,7 @@ results are parseable. Detailed tests on each Entrez service are not within the
 scope of this file as they are already covered in test_Entrez.py.
 
 """
+import os
 import unittest
 
 import requires_internet
@@ -20,6 +21,15 @@ from Bio import Entrez
 from Bio import Medline
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
+
+if os.name == 'java':
+    try:
+        from xml.parsers.expat import XML_PARAM_ENTITY_PARSING_ALWAYS
+        del XML_PARAM_ENTITY_PARSING_ALWAYS
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
+                                  "Jython, see http://bugs.jython.org/issue1447")
 
 
 #This lets us set the email address to be sent to NCBI Entrez:
@@ -64,6 +74,12 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(isinstance(record, dict))
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
+
+    def test_epost(self):
+        handle = Entrez.epost("nuccore", id="186972394,160418")
+        handle.close()
+        handle = Entrez.epost("nuccore", id=["160418", "160351"])
+        handle.close()
 
 
 if __name__ == "__main__":

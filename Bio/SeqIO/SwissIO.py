@@ -96,9 +96,11 @@ def SwissIterator(handle):
                 record.dbxrefs.append(dbxref)
         annotations = record.annotations
         annotations['accessions'] = swiss_record.accessions
-        annotations['date'] = swiss_record.created[0]
-        annotations[
-            'date_last_sequence_update'] = swiss_record.sequence_update[0]
+        if swiss_record.created:
+            annotations['date'] = swiss_record.created[0]
+        if swiss_record.sequence_update:
+            annotations[
+                'date_last_sequence_update'] = swiss_record.sequence_update[0]
         if swiss_record.annotation_update:
             annotations['date_last_annotation_update'] = swiss_record.annotation_update[0]
         if swiss_record.gene_name:

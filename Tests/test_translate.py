@@ -26,17 +26,17 @@ assert str(dna)=='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTC
 # use the standard table
 
 # Do some simple tests first
-s = "T"
+s = ""
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
 assert  str(protein)==""
 
-s = "TC"
+s = "TAA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
 assert str(protein)==""
 
-s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
+s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
 assert str(protein)=='ENSFSLDFL'
@@ -51,7 +51,7 @@ dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate('Vertebrate Mitochondrial', to_stop=True)
 assert str(protein)=="M"
 
-s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
+s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATAT"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate('SGC8', to_stop=True)
 assert str(protein)=='ENSFSLDFLWNPSPSNDAWDSSY'

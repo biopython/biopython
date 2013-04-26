@@ -1,12 +1,14 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
 # Revisions 2007-2010 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Brad Chapman.  All rights reserved.
+# Revisions 2013 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
 # Note that BioSQL (including the database schema and scripts) is
 # available and licensed separately.  Please consult www.biosql.org
+import os
 
 _dbutils = {}
 
@@ -53,6 +55,8 @@ _dbutils["sqlite3"] = Sqlite_dbutils
 class Mysql_dbutils(Generic_dbutils):
     """Custom database utilities for MySQL."""
     def last_id(self, cursor, table):
+        if os.name == "java":
+            return Generic_dbutils.last_id(self, cursor, table)
         try:
             #This worked on older versions of MySQL
             return cursor.insert_id()
@@ -86,9 +90,15 @@ class Psycopg2_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Psycopg2 (PostgreSQL)."""
     def autocommit(self, conn, y=True):
         if y:
-            conn.set_isolation_level(0)
+            if os.name == "java":
+                conn.autocommit = 1
+            else:
+                conn.set_isolation_level(0)
         else:
-            conn.set_isolation_level(1)
+            if os.name == "java":
+                conn.autocommit = 0
+            else:
+                conn.set_isolation_level(1)
 
 _dbutils["psycopg2"] = Psycopg2_dbutils
 

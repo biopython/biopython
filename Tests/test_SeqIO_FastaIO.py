@@ -1,8 +1,10 @@
-# Copyright 2009-2011 by Peter Cock.  All rights reserved.
+# Copyright 2009-2013 by Peter Cock.  All rights reserved.
 # Parts copyright 1999 by Jeffrey Chang.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+from __future__ import with_statement
 
 import unittest
 from StringIO import StringIO
@@ -42,12 +44,14 @@ def title_to_ids(title):
 
 def read_single_with_titles(filename, alphabet):
     global title_to_ids
-    iterator = FastaIterator(open(filename), alphabet, title_to_ids)
+    handle = open(filename)
+    iterator = FastaIterator(handle, alphabet, title_to_ids)
     record = iterator.next()
     try:
         second = iterator.next()
     except StopIteration:
         second = None
+    handle.close()
     assert record is not None and second is None
     return record
 
@@ -80,7 +84,7 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.seq.alphabet, alphabet)
         #Now check using Bio.SeqIO (default settings)
-        record = SeqIO.read(open(filename), "fasta", alphabet)
+        record = SeqIO.read(filename, "fasta", alphabet)
         self.assertEqual(record.id, title.split()[0])
         self.assertEqual(record.name, title.split()[0])
         self.assertEqual(record.description, title)
@@ -91,8 +95,9 @@ class TitleFunctions(unittest.TestCase):
 
     def multi_check(self, filename, alphabet):
         """Basic test for parsing multi-record FASTA files."""
-        re_titled = list(FastaIterator(open(filename), alphabet, title_to_ids))
-        default = list(SeqIO.parse(open(filename), "fasta", alphabet))
+        with open(filename) as handle:
+            re_titled = list(FastaIterator(handle, alphabet, title_to_ids))
+        default = list(SeqIO.parse(filename, "fasta", alphabet))
         self.assertEqual(len(re_titled), len(default))
         for old, new in zip(default, re_titled):
             idn, name, descr = title_to_ids(old.description)
