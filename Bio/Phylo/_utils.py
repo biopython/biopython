@@ -421,5 +421,15 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
     axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
+    """"Keyword arguments passed into this method are accessed as pyplot options.  The input format should be:
+        PyPlotOption=(tuple), PyPlotOption=(tuple, dict), or PyPlotOption=(dict)
+        For example: Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}), axvline={'x':'0', 'ymin':'0', 'ymax':'1'})"""
+    for key, value in kwargs.iteritems():
+        if isinstance(value, dict):
+            getattr(plt, str(key))(**dict(value))
+        elif not (isinstance(value[0], tuple)):
+            getattr(plt, str(key))(*value)
+        elif (isinstance(value[0], tuple)):
+            getattr(plt, str(key))(*value[0], **dict(value[1]))    
     if do_show:
         plt.show()
