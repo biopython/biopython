@@ -147,18 +147,18 @@ class Parser(object):
                 # and a new root should be created
                 if current_clade is root_clade:
                     root_clade = new_clade()
-                    current_clade.parent = root_clade
+                    root_clade.clades.append(current_clade)
                 # start a new child clade at the same level as the current clade
-                parent = self.process_clade(current_clade)
+                self.process_clade(current_clade)
+                parent = current_clade.parent
                 current_clade = new_clade(parent)
                 entering_branch_length = False
 
             elif token == ')':
                 # done adding children for this parent clade
-                parent = self.process_clade(current_clade)
-                if not parent:
+                if not hasattr(current_clade, 'parent'):
                     raise NewickError('Parenthesis mismatch.')
-                current_clade = parent
+                current_clade = current_clade.parent
                 entering_branch_length = False
                 rp_count += 1
 
@@ -199,24 +199,17 @@ class Parser(object):
         """Returns a new Newick.Clade, optionally with a temporary reference
         to its parent clade."""
         clade = Newick.Clade()
-        if parent:
-            clade.parent = parent
+        if parent: 
+            parent.clades.append(clade)
         return clade
 
     def process_clade(self, clade):
-        """Final processing of a parsed clade. Removes the node's parent and
-        returns it."""
+        """Final processing of a parsed clade."""
         if (clade.name and not (self.values_are_confidence or self.comments_are_confidence)
             and clade.confidence is None):
             clade.confidence = _parse_confidence(clade.name)
             if not clade.confidence is None:
                 clade.name = None
-            
-        if hasattr(clade, 'parent'):
-            parent = clade.parent
-            parent.clades.append(clade)
-            del clade.parent
-            return parent
 
 
 # ---------------------------------------------------------
