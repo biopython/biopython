@@ -1044,16 +1044,16 @@ class Clade(TreeElement, TreeMixin):
         self.color = color
         self.width = width
         
-    @property
-    def clades(self):
+    def _get_clades(self):
         return self._clades
         
-    @clades.setter
-    def clades(self, value):
+    def _set_clades(self, value):
         self._clades = CladeChildren(self, [])
         for x in value:
             self._clades.append(x)
         self.__dict__['clades'] = self._clades
+
+    clades = property(_get_clades, _set_clades)
             
     def get_parents(self, include_self=True):
         '''Generates the step-by-step path from this node to the tree root.'''
