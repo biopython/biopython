@@ -413,7 +413,7 @@ class TreeMixin(object):
         targets = _combine_args(targets, *more_targets)
 
         try:
-            mrca = next(targets)
+            mrca = targets.next()
             if not isinstance(mrca, TreeElement):
                 match = _combine_matchers(mrca, {}, True)
                 mrca = self.find_any(match)
@@ -427,7 +427,7 @@ class TreeMixin(object):
             
             ancestors = (x for x in mrca.parents if x in t.parents)
             try:
-                mrca = next(ancestors)
+                mrca = ancestors.next()
             except StopIteration:
                 raise ValueError("target %s is not in this tree" % repr(t))
 
@@ -481,10 +481,10 @@ class TreeMixin(object):
             if not isinstance(t, TreeElement): t = self.find_any(t)
             
             p = t.parents
-            n = next(p)
+            n = p.next()
             while n != mrca:
                 d += n.branch_length
-                n = next(p)
+                n = p.next()
                 
         return d
 
