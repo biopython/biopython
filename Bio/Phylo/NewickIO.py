@@ -150,15 +150,15 @@ class Parser(object):
                     root_clade.clades.append(current_clade)
                 # start a new child clade at the same level as the current clade
                 self.process_clade(current_clade)
-                parent = current_clade.parent
+                parent = current_clade._parent
                 current_clade = new_clade(parent)
                 entering_branch_length = False
 
             elif token == ')':
                 # done adding children for this parent clade
-                if not hasattr(current_clade, 'parent'):
+                if not hasattr(current_clade, '_parent'):
                     raise NewickError('Parenthesis mismatch.')
-                current_clade = current_clade.parent
+                current_clade = current_clade._parent
                 entering_branch_length = False
                 rp_count += 1
 

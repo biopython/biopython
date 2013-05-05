@@ -61,7 +61,7 @@ def _sorted_attrs(elem):
                                   key=lambda kv: kv[0]):
         if child is None:
             continue
-        if attrname == 'parent' or attrname.startswith('_'): continue
+        if attrname.startswith('_'): continue
         if isinstance(child, list):
             lists.extend(child)
         else:
@@ -968,7 +968,7 @@ class Tree(TreeElement, TreeMixin):
             textlines.append(TAB*indent + repr(obj))
             indent += 1
             for attr in obj.__dict__:
-                if attr.startswith('_') or attr == 'parent': continue
+                if attr.startswith('_'): continue
                 
                 child = getattr(obj, attr)
                 if isinstance(child, TreeElement):
@@ -993,20 +993,20 @@ class CladeChildren(list):
     def __repr__(self): return list.__repr__(self)
 
     def del_parent(self, x):
-        if hasattr(x, 'parent') and x.parent == self.node:
-            del x.parent        
+        if hasattr(x, '_parent') and x._parent == self.node:
+            del x._parent        
 
     def append(self, x):
-        x.parent = self.node
         list.append(self, x)
+        x._parent = self.node
 
     def insert(self, i, x):
-        x.parent = self.node
         list.insert(self, i, x)
+        x._parent = self.node
 
     def remove(self, x):
-        self.del_parent(x)
         list.remove(self, x)
+        self.del_parent(x)
 
     def pop(self, *args, **kwargs):
         x = list.pop(self, *args, **kwargs)
@@ -1059,9 +1059,9 @@ class Clade(TreeElement, TreeMixin):
         '''Generates the step-by-step path from this node to the tree root.'''
         if include_self: yield self
         current_node = self
-        while hasattr(current_node, 'parent'):
-            yield(current_node.parent)
-            current_node = current_node.parent
+        while hasattr(current_node, '_parent'):
+            yield(current_node._parent)
+            current_node = current_node._parent
             
     parents = property(get_parents)
 
