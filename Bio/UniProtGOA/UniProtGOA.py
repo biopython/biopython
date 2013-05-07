@@ -193,46 +193,55 @@ def _gpa11iterator(handle):
 def gpa_iterator(handle):
     """ This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
-    returns a gaf 2.0 or a gaf 1.0 iterator as needed
+    returns a gpa 1.1 or a gpa 1.0 iterator as needed
     """
 
     inline = handle.readline()
     if inline.strip() == '!gpa-version: 1.1':
         sys.stderr.write("gpa 1.1\n")
-        return _gaf20iterator(handle)
+        return _gpa20iterator(handle)
     else:
         sys.stderr.write("gaf 1.1\n")
-        return _gaf10iterator(handle)
+        return _gpa11iterator(handle)
 
-def _gaf20iterator(handle):
-    """ This is a generator function
-    This iterator is used to read a gene_association.goa_uniprot
-    file which is in the GAF 2.0 format. Should not be called directly,
-    but rather through the GAFIterator function"""
-
+def _gaf10iterator(handle):
     for inline in handle:
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        gaf_rec = {}
-        gaf_rec['DB'] = inrec[0]
-        gaf_rec['DB_Object_ID'] = inrec[1]
-        gaf_rec['DB_Object_Symbol'] = inrec[2]
-        gaf_rec['Qualifier'] = inrec[3]
-        gaf_rec['GO_ID'] = inrec[4]
-        gaf_rec['DB:Reference'] = inrec[5]
-        gaf_rec['Evidence'] = inrec[6]
-        gaf_rec['With'] = inrec[7]
-        gaf_rec['Aspect']=inrec[8]
-        gaf_rec['DB_Object_Name'] = inrec[9]
-        gaf_rec['Synonym'] = inrec[10]
-        gaf_rec['DB_Object_Type'] = inrec[11]
-        gaf_rec['Taxon_ID'] = inrec[12]
-        gaf_rec['Date'] = inrec[13]
-        gaf_rec['Assigned_By'] = inrec[14]
-        gaf_rec['Annotation_Extension'] = inrec[15]
-        gaf_rec['Gene_Product_Form_ID'] = inrec[16]
-        yield gaf_rec
+        inrec[3] = inrec[3].split('|') #Qualifier
+        inrec[5] = inrec[5].split('|') # DB:reference(s)
+        inrec[7] = inrec[7].split('|') # With || From
+        inrec[9] = inrec[9].split('|') # With || From
+        inrec[10] = inrec[10].split('|') # Synonym
+        inrec[12] = inrec[12].split('|') # Taxon
+        yield dict(zip(GAF10FIELDS, inrec))
+
+def _gaf20iterator(handle):
+    for inline in handle:
+        inrec = inline.rstrip('\n').split('\t')
+        if len(inrec) == 1:
+            continue
+        inrec[3] = inrec[3].split('|') #Qualifier
+        inrec[5] = inrec[5].split('|') # DB:reference(s)
+        inrec[7] = inrec[7].split('|') # With || From
+        inrec[9] = inrec[9].split('|') # With || From
+        inrec[10] = inrec[10].split('|') # Synonym
+        inrec[12] = inrec[12].split('|') # Taxon
+        yield dict(zip(GAF20FIELDS, inrec))
+
+def _gaf10iterator(handle):
+    for inline in handle:
+        inrec = inline.rstrip('\n').split('\t')
+        if len(inrec) == 1:
+            continue
+        inrec[3] = inrec[3].split('|') #Qualifier
+        inrec[5] = inrec[5].split('|') # DB:reference(s)
+        inrec[7] = inrec[7].split('|') # With || From
+        inrec[9] = inrec[9].split('|') # With || From
+        inrec[10] = inrec[10].split('|') # Synonym
+        inrec[12] = inrec[12].split('|') # Taxon
+        yield dict(zip(GAF10FIELDS, inrec))
 
 #def _gaf10iterator(handle):
 #    """ This is a generator function
@@ -293,15 +302,20 @@ def gafiterator(handle):
         sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
     
-def writerec(outrec,handle,FIELDS=GAF20FIELDS):
+def writerec(outrec,handle,FIELDS=GAF20FIELDS, header=None):
     """Write a single  record to an output stream. 
     Caller should know the  format version. Default: gaf-2.0
+    If header has a value, then it is assumed this is the first record,
+    a header is written and returned
     """
-    outstr = ''
-    for i in FIELDS[:-1]:
-        outstr += outrec[i] + '\t'
-    outstr += outrec[FIELDS[-1]] + '\n'
-    handle.write("%s" % outstr)
+    if header:
+        handle.write("%s\n" % header)
+    else:
+        outstr = ''
+        for i in FIELDS[:-1]:
+            outstr += outrec[i] + '\t'
+        outstr += outrec[FIELDS[-1]] + '\n'
+        handle.write("%s" % outstr)
 
 
 def record_has(inrec, fieldvals = {}):
