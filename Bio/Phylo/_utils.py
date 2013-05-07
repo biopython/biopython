@@ -410,7 +410,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         if hasattr(clade, 'width') and clade.width is not None:
             lw = clade.width * plt.rcParams['lines.linewidth']
         # Draw a horizontal line from start to here
-        draw_claude_line(useLineCollection=False, orientation='horizontal', y_here=y_here, x_start=x_start, x_here=x_here, color='red', lw=lw)
+        draw_claude_line(useLineCollection=False, orientation='horizontal', y_here=y_here, x_start=x_start, x_here=x_here, color='black', lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
@@ -425,7 +425,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
             # Only apply widths to horizontal lines, like Archaeopteryx
-            draw_claude_line(useLineCollection=False, orientation='vertical', x_here=x_here, y_bot=y_bot, y_top=y_top, color='red', lw=lw)
+            draw_claude_line(useLineCollection=False, orientation='vertical', x_here=x_here, y_bot=y_bot, y_top=y_top, color='black', lw=lw)
             # Draw descendents
             for child in clade:
                 draw_clade(child, x_here, color, lw)
