@@ -5,9 +5,11 @@ import sys
 Parsers for the GAF, GPA and GPI formats
 from UniProt-GOA.
 
-Uniprot-GOA README:
+Uniprot-GOA README + GAF format description:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/README
 
+GAF formats:
+http://www.geneontology.org/GO.format.annotation.shtml
 gp_association (GPA format) README:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_association_readme
 
@@ -191,7 +193,6 @@ def _gaf10iterator(handle):
         inrec[3] = inrec[3].split('|') #Qualifier
         inrec[5] = inrec[5].split('|') # DB:reference(s)
         inrec[7] = inrec[7].split('|') # With || From
-        inrec[9] = inrec[9].split('|') # With || From
         inrec[10] = inrec[10].split('|') # Synonym
         inrec[12] = inrec[12].split('|') # Taxon
         yield dict(zip(GAF10FIELDS, inrec))
@@ -221,8 +222,13 @@ def writerec(outrec,handle,fields=GAF20FIELDS, header=None):
         handle.write("%s\n" % header)
     else:
         outstr = ''
-        for i in fields[:-1]:
-            outstr += outrec[i] + '\t'
+        for field in fields[:-1]:
+            if type(outrec[field]) == type([]):
+                for subfield in outrec[field]:
+                    outstr += subfield +'|'
+                outstr = outstr[:-1] + '\t'
+            else:
+                outstr += outrec[field] + '\t'
         outstr += outrec[fields[-1]] + '\n'
         handle.write("%s" % outstr)
 
@@ -236,7 +242,11 @@ def record_has(inrec, fieldvals = {}):
     """
     retval = False
     for field in fieldvals:
-        if inrec[field] in fieldvals[field]:
+        if type(inrec[field]) is type(''):
+            set1 = set([inrec[field]])
+        else:
+            set1 = set(inrec[field])
+        if (set1 & fieldvals[field]):
             retval = True
             break
     return retval
@@ -248,10 +258,8 @@ if __name__ == '__main__':
     banned = {'Evidence': set(['IEA','EXP'])}
     allowed = {'Taxon_ID': set(['taxon:4932'])}
     for inrec in gafiterator(open(sys.argv[1])):
-        if (not record_has(inrec, banned)) and \
-               record_has(inrec, allowed):
+        if record_has(inrec, allowed) and \
+               not record_has(inrec, banned):
             writerec(inrec, sys.stdout,GAF10FIELDS)
-        
-        
         
          
