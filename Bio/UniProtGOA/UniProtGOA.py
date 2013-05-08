@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import sys
-###########################################
-"""
-Parsers for the GAF, GPA and GPI formats
-from UniProt-GOA.
+
+""" Parsers for the GAF, GPA and GPI formats from UniProt-GOA.
 
 Uniprot-GOA README + GAF format description:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/README
@@ -19,13 +17,14 @@ ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
 (c) 2013 Iddo Friedberg idoerg@gmail.com
 http://iddo-friedberg.net
 Distributed under Biopython license.
-"""
-###########################################
 
-###########################################
+"""
+
+
 # GAF: GO Annotation Format
 #
 # GAF version 2.0
+
 GAF20FIELDS = ['DB' , 
         'DB_Object_ID' , 
         'DB_Object_Symbol' , 
@@ -43,6 +42,7 @@ GAF20FIELDS = ['DB' ,
         'Assigned_By' , 
         'Annotation_Extension' , 
         'Gene_Product_Form_ID']
+
 # GAF version 1.0
 GAF10FIELDS = ['DB' , 
         'DB_Object_ID' , 
@@ -106,61 +106,81 @@ GPI10FIELDS = [
       'Parent_Object_ID']
 
 def _gpi10iterator(handle):
-    """ This is a generator function
+    """ Read GPI 1.0 format files
+
     This iterator is used to read a gp_information.goa_uniprot
-    file which is in the GPI 1.0 format."""
+    file which is in the GPI 1.0 format.
+    """
+
     for inline in handle:
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[5] = inrec[5].split('|')
-        inrec[8] = inrec[8].split('|')
+        inrec[5] = inrec[5].split('|') # DB_Object_Synonym(s)
+        inrec[8] = inrec[8].split('|') # Annotation_Target_Set
 
         yield dict(zip(GPI10FIELDS, inrec))
 
 
 def gpi_iterator(handle):
-    """ This function should be called to read a
+
+    """ Read GPI format files
+
+    This function should be called to read a
     gp_information.goa_uniprot file. At the moment, there is
     only one format, but this may change, so 
     this function is a placeholder a future wrapper.
     """
+
     return _gpi10iterator(handle)
 
 def _gpa10iterator(handle):
-    """ This is a generator function
+    """ Read GPA 1.0 format files
+
     This iterator is used to read a gp_association.*
-    file which is in the GPA 1.0 format."""
+    file which is in the GPA 1.0 format. Do not call directly. Rather,
+    use the gpaiterator function.
+    
+    """
 
     for inline in handle:
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|')
-        inrec[4] = inrec[4].split('|')
-        inrec[6] = inrec[6].split('|')
-        inrec[7] = inrec[7].split('|')
+        inrec[2] = inrec[2].split('|') # Qualifier
+        inrec[4] = inrec[4].split('|') # DB:Reference(s)
+        inrec[6] = inrec[6].split('|') # With
+        inrec[10] = inrec[10].split('|') # Annotation extension
         yield dict(zip(GPA10FIELDS, inrec))
 
 def _gpa11iterator(handle):
-    """ This is a generator function
+
+    """ Read GPA 1.1 format files
+
     This iterator is used to read a gp_association.goa_uniprot
-    file which is in the GPA 1.1 format."""
+    file which is in the GPA 1.1 format. Do not call directly. Rather
+    use the gpa_iterator function
+    
+    """
 
     for inline in handle:
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|')
-        inrec[4] = inrec[4].split('|')
-        inrec[6] = inrec[6].split('|')
-        inrec[7] = inrec[7].split('|')
+        inrec[2] = inrec[2].split('|') # Qualifier
+        inrec[4] = inrec[4].split('|') # DB:Reference(s)
+        inrec[6] = inrec[6].split('|') # With
+        inrec[10] = inrec[10].split('|') # Annotation extension
         yield dict(zip(GPA11FIELDS, inrec))
 
 def gpa_iterator(handle):
-    """ This function should be called to read a
+
+    """ Wrapper function: read GPA format files
+
+    This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
     returns a gpa 1.1 or a gpa 1.0 iterator as needed
+
     """
 
     inline = handle.readline()
@@ -180,7 +200,6 @@ def _gaf20iterator(handle):
         inrec[3] = inrec[3].split('|') #Qualifier
         inrec[5] = inrec[5].split('|') # DB:reference(s)
         inrec[7] = inrec[7].split('|') # With || From
-        inrec[9] = inrec[9].split('|') # With || From
         inrec[10] = inrec[10].split('|') # Synonym
         inrec[12] = inrec[12].split('|') # Taxon
         yield dict(zip(GAF20FIELDS, inrec))
@@ -213,10 +232,13 @@ def gafiterator(handle):
         return _gaf10iterator(handle)
     
 def writerec(outrec,handle,fields=GAF20FIELDS, header=None):
-    """Write a single  record to an output stream. 
+
+    """Write a single UniProt-GOA record to an output stream. 
+
     Caller should know the  format version. Default: gaf-2.0
     If header has a value, then it is assumed this is the first record,
     a header is written.
+
     """
     if header:
         handle.write("%s\n" % header)
@@ -234,12 +256,16 @@ def writerec(outrec,handle,fields=GAF20FIELDS, header=None):
 
 
 def record_has(inrec, fieldvals = {}):
+
     """
-    Accepts a record, and a dictionary of field values. The
-    format is {'field_name': set([val1, val2])}.
+    Accepts a record, and a dictionary of field values. 
+    
+    The format is {'field_name': set([val1, val2])}.
     If any field in the record has  a matching value, the function returns
     True. Otherwise, returns False.
+
     """
+
     retval = False
     for field in fieldvals:
         if type(inrec[field]) is type(''):
@@ -253,8 +279,12 @@ def record_has(inrec, fieldvals = {}):
 
 
 if __name__ == '__main__':
-    # Example: read a GAF file. Write only S. cerevisiae records, but
-    # remove all records with IEA evidence
+    """Example: read and filter a GAF file. 
+    
+    Write only S. cerevisiae records, but remove all
+    records with IEA evidence
+    """
+
     banned = {'Evidence': set(['IEA','EXP'])}
     allowed = {'Taxon_ID': set(['taxon:4932'])}
     for inrec in gafiterator(open(sys.argv[1])):
