@@ -216,6 +216,58 @@ def _gaf10iterator(handle):
         inrec[12] = inrec[12].split('|') # Taxon
         yield dict(zip(GAF10FIELDS, inrec))
 
+def _gaf10byIDiterator(handle):
+    cur_id = None
+    id_rec_list = []
+    for inline in handle:
+        inrec = inline.rstrip('\n').split('\t')
+        if len(inrec) == 1:
+            continue
+        inrec[3] = inrec[3].split('|') #Qualifier
+        inrec[5] = inrec[5].split('|') # DB:reference(s)
+        inrec[7] = inrec[7].split('|') # With || From
+        inrec[10] = inrec[10].split('|') # Synonym
+        inrec[12] = inrec[12].split('|') # Taxon
+        cur_rec = dict(zip(GAF10FIELDS, inrec))
+        if cur_rec['DB_Object_ID'] != cur_id and cur_id:
+            ret_list = copy.copy(id_rec_list)
+            id_rec_list = [cur_rec]
+            cur_id = cur_rec['DB_object_ID']
+            yield ret_list
+            
+def _gaf20byIDiterator(handle):
+    cur_id = None
+    id_rec_list = []
+    for inline in handle:
+        inrec = inline.rstrip('\n').split('\t')
+        if len(inrec) == 1:
+            continue
+        inrec[3] = inrec[3].split('|') #Qualifier
+        inrec[5] = inrec[5].split('|') # DB:reference(s)
+        inrec[7] = inrec[7].split('|') # With || From
+        inrec[10] = inrec[10].split('|') # Synonym
+        inrec[12] = inrec[12].split('|') # Taxon
+        cur_rec = dict(zip(GAF20FIELDS, inrec))
+        if cur_rec['DB_Object_ID'] != cur_id and cur_id:
+            ret_list = copy.copy(id_rec_list)
+            id_rec_list = [cur_rec]
+            cur_id = cur_rec['DB_object_ID']
+            yield ret_list
+                
+def _gafbyIDiterator(handle):
+    """ This function should be called to read a
+    gene_association.goa_uniprot file. Reads the first record and
+    returns a gaf 2.0 or a gaf 1.0 iterator as needed
+    """
+
+    inline = handle.readline()
+    if inline.strip() == '!gaf-version: 2.0':
+        sys.stderr.write("gaf 2.0\n")
+        return _gaf20byIDiterator(handle)
+    else:
+        sys.stderr.write("gaf 1.0\n")
+        return _gaf10byIDiterator(handle)
+
 
 def gafiterator(handle):
     """ This function should be called to read a
