@@ -217,7 +217,7 @@ def _gaf10iterator(handle):
         inrec[12] = inrec[12].split('|') # Taxon
         yield dict(zip(GAF10FIELDS, inrec))
 
-def _gaf10byIDiterator(handle):
+def _gaf10byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
     for inline in handle:
@@ -239,7 +239,7 @@ def _gaf10byIDiterator(handle):
             cur_id = cur_rec['DB_Object_ID']
             id_rec_list.append(cur_rec)
             
-def _gaf20byIDiterator(handle):
+def _gaf20byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
     for inline in handle:
@@ -261,7 +261,7 @@ def _gaf20byIDiterator(handle):
             cur_id = cur_rec['DB_Object_ID']
             id_rec_list.append(cur_rec)
                 
-def gafbyIDiterator(handle):
+def gafbyproteiniterator(handle):
 
     """ Iterates over records in a gene association file. 
     
