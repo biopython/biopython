@@ -236,7 +236,6 @@ def _gaf10byIDiterator(handle):
             cur_id = cur_rec['DB_Object_ID']
             yield ret_list
         else:
-            print "here"
             cur_id = cur_rec['DB_Object_ID']
             id_rec_list.append(cur_rec)
             
@@ -259,12 +258,16 @@ def _gaf20byIDiterator(handle):
             cur_id = cur_rec['DB_Object_ID']
             yield ret_list
         else:
-            print "here"
             cur_id = cur_rec['DB_Object_ID']
             id_rec_list.append(cur_rec)
                 
 def gafbyIDiterator(handle):
-    """ This function should be called to read a
+
+    """ Iterates over records in a gene association file. 
+    
+    Returns a list
+    of all consecutive records withe the same DB_Object_ID
+    This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
     returns a gaf 2.0 or a gaf 1.0 iterator as needed
     """
