@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import copy
 import sys
 
 """ Parsers for the GAF, GPA and GPI formats from UniProt-GOA.
@@ -232,8 +233,12 @@ def _gaf10byIDiterator(handle):
         if cur_rec['DB_Object_ID'] != cur_id and cur_id:
             ret_list = copy.copy(id_rec_list)
             id_rec_list = [cur_rec]
-            cur_id = cur_rec['DB_object_ID']
+            cur_id = cur_rec['DB_Object_ID']
             yield ret_list
+        else:
+            print "here"
+            cur_id = cur_rec['DB_Object_ID']
+            id_rec_list.append(cur_rec)
             
 def _gaf20byIDiterator(handle):
     cur_id = None
@@ -251,10 +256,14 @@ def _gaf20byIDiterator(handle):
         if cur_rec['DB_Object_ID'] != cur_id and cur_id:
             ret_list = copy.copy(id_rec_list)
             id_rec_list = [cur_rec]
-            cur_id = cur_rec['DB_object_ID']
+            cur_id = cur_rec['DB_Object_ID']
             yield ret_list
+        else:
+            print "here"
+            cur_id = cur_rec['DB_Object_ID']
+            id_rec_list.append(cur_rec)
                 
-def _gafbyIDiterator(handle):
+def gafbyIDiterator(handle):
     """ This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
     returns a gaf 2.0 or a gaf 1.0 iterator as needed
