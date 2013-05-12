@@ -266,7 +266,7 @@ def gafbyproteiniterator(handle):
     """ Iterates over records in a gene association file. 
     
     Returns a list
-    of all consecutive records withe the same DB_Object_ID
+    of all consecutive records with the the same DB_Object_ID
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
     returns a gaf 2.0 or a gaf 1.0 iterator as needed
@@ -275,10 +275,10 @@ def gafbyproteiniterator(handle):
     inline = handle.readline()
     if inline.strip() == '!gaf-version: 2.0':
         sys.stderr.write("gaf 2.0\n")
-        return _gaf20byIDiterator(handle)
+        return _gaf20byproteiniterator(handle)
     else:
         sys.stderr.write("gaf 1.0\n")
-        return _gaf10byIDiterator(handle)
+        return _gaf10byproteiniterator(handle)
 
 
 def gafiterator(handle):
@@ -295,7 +295,7 @@ def gafiterator(handle):
         sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
     
-def writerec(outrec,handle,fields=GAF20FIELDS, header=None):
+def writerec(outrec,handle,fields=GAF20FIELDS):
 
     """Write a single UniProt-GOA record to an output stream. 
 
@@ -304,21 +304,22 @@ def writerec(outrec,handle,fields=GAF20FIELDS, header=None):
     a header is written.
 
     """
-    if header:
-        handle.write("%s\n" % header)
-    else:
-        outstr = ''
-        for field in fields[:-1]:
-            if type(outrec[field]) == type([]):
-                for subfield in outrec[field]:
-                    outstr += subfield +'|'
-                outstr = outstr[:-1] + '\t'
-            else:
-                outstr += outrec[field] + '\t'
-        outstr += outrec[fields[-1]] + '\n'
-        handle.write("%s" % outstr)
+    outstr = ''
+    for field in fields[:-1]:
+        if type(outrec[field]) == type([]):
+            for subfield in outrec[field]:
+                outstr += subfield +'|'
+            outstr = outstr[:-1] + '\t'
+        else:
+            outstr += outrec[field] + '\t'
+    outstr += outrec[fields[-1]] + '\n'
+    handle.write("%s" % outstr)
 
+def writebyproteinrec(outprotrec,handle,fields=GAF20FIELDS):
+    for outrec in outprotrec:
+        writerec(outrec, handle, fields=fields)
 
+    
 def record_has(inrec, fieldvals = {}):
 
     """
