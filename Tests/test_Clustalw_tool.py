@@ -158,12 +158,17 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-
-            #Zero return code is a possible bug in clustal?
-            self.add_file_to_clean(input_file + ".aln")
+            #Zero return code is a possible bug in clustalw 2.1?
             self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
         except ApplicationError, err:
-            self.assertTrue(str(err) == "No records found in handle")
+            #Good, non-zero return code indicating an error in clustalw
+            #e.g. Using clustalw 1.83 get:
+            #Command 'clustalw -infile=Fasta/f001' returned non-zero exit status 4
+            pass
+
+        if os.path.isfile(input_file + ".aln"):
+            #Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):
         """Test an input file containing an invalid sequence."""
