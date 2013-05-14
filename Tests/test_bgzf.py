@@ -18,6 +18,32 @@ _empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
 
+def _have_bug17666():
+    """Debug function to check if Python's gzip is broken (PRIVATE).
+
+    Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
+    3.2.4 and 3.3.1 only.
+    """
+    try:
+        #This is in Python 2.6+, but we need it on Python 3
+        from io import BytesIO
+    except ImportError:
+        from StringIO import StringIO as BytesIO
+    h = gzip.GzipFile(fileobj=BytesIO(bgzf._bgzf_eof))
+    try:
+        data = h.read()
+        h.close()
+        assert not data, "Should be zero length, not %i" % len(data)
+        return False
+    except TypeError, err:
+        #TypeError: integer argument expected, got 'tuple'
+        return True
+
+if _have_bug17666():
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError("Your Python has a broken gzip library, see "
+                                       "http://bugs.python.org/issue17666 for details")
+
 
 class BgzfTests(unittest.TestCase):
     def setUp(self):
