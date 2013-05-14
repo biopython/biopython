@@ -226,7 +226,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
                     _Argument(["output_bam", "out_bam", "out", "output1"], "Output BAM file", filename=True, is_required=True),
                     _Argument(["input_bam1", "in_bam1", "input1", "bam1"],"Input BAM", filename=True, is_required=True),
                     _Argument(["input_bam2", "in_bam2", "input2", "bam2"],"Input BAM", filename=True, is_required=True),
-                    _Switch(["-1", "zlibcompression"], "Use zlib compression level 1 to comrpess the output "),
+                    _Switch(["-1", "zlib-compression-level-1"], "Use zlib compression level 1 to compress the output "),
                     _Switch(["-f", "f"], "Force to overwrite the output file if present. "),
                     _Option(["-h", "h"], "Use the lines of FILE as '@' headers to be copied to out.bam,", filename=True, equate=False, checker_function=lambda x : isinstance(x,basestring)),
                     _Option(["-R", "R"], "Merge files in the specified region indicated by STR ", filename=False, equate=False, checker_function=lambda x : isinstance(x,basestring)),
