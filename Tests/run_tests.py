@@ -39,6 +39,7 @@ import doctest
 import distutils.util
 import gc
 
+from Bio import MissingExternalDependencyError, MissingPythonDependencyError
 
 def is_pypy():
     import platform
@@ -137,6 +138,12 @@ except ImportError:
 #Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
+
+#Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
+try:
+    from test_bgzf import _have_bug17666
+except MissingPythonDependencyError:
+    DOCTEST_MODULES.remove("Bio.bgzf")
 
 #HACK: Since Python2.5 under Windows have slightly different str(float) output,
 #we're removing doctests that may fail because of this
@@ -350,7 +357,6 @@ class TestRunner(unittest.TextTestRunner):
                 verbosity=verbosity)
 
     def runTest(self, name):
-        from Bio import MissingExternalDependencyError
         result = self._makeResult()
         output = cStringIO.StringIO()
         # Restore the language and thus default encoding (in case a prior
