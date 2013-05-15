@@ -33,6 +33,12 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+from Bio import MissingPythonDependencyError
+try:
+    from test_bgzf import _have_bug17666
+    do_bgzf = _have_bug17666()
+except MissingPythonDependencyError:
+    do_bgzf = False
 
 def add_prefix(key):
     """Dummy key_function for testing index code."""
@@ -415,7 +421,7 @@ tests = [
 for filename, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename, None)]
-    if os.path.isfile(filename + ".bgz"):
+    if do_bgzf and os.path.isfile(filename + ".bgz"):
         tasks.append((filename + ".bgz","bgzf"))
     for filename, comp in tasks:
 
