@@ -155,7 +155,7 @@ def _have_bug17666():
                "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
     if sys.version_info[0] >= 3:
         import codecs
-        bgzf_eof = codecs.latin_1_decode(bgzf_eof)[0]
+        bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
     h = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
     try:
         data = h.read()
