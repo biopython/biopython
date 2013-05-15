@@ -39,8 +39,6 @@ import doctest
 import distutils.util
 import gc
 
-from Bio import MissingExternalDependencyError, MissingPythonDependencyError
-
 def is_pypy():
     import platform
     try:
@@ -383,6 +381,7 @@ class TestRunner(unittest.TextTestRunner):
                 verbosity=verbosity)
 
     def runTest(self, name):
+        from Bio import MissingExternalDependencyError
         result = self._makeResult()
         output = cStringIO.StringIO()
         # Restore the language and thus default encoding (in case a prior
