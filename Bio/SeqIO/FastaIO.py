@@ -151,7 +151,6 @@ class FastaWriter(SequentialSequenceWriter):
         Multiple calls to writer.write_record() and/or writer.write_records()
         ...
         writer.write_footer() # does nothing for Fasta files
-        writer.close()
         """
         SequentialSequenceWriter.__init__(self, handle)
         #self.handle = handle
