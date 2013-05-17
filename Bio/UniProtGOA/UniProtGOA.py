@@ -320,7 +320,7 @@ def writebyproteinrec(outprotrec,handle,fields=GAF20FIELDS):
         writerec(outrec, handle, fields=fields)
 
     
-def record_has(inrec, fieldvals = {}):
+def record_has(inrec, fieldvals):
 
     """
     Accepts a record, and a dictionary of field values. 
