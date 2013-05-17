@@ -266,7 +266,7 @@ def gafbyproteiniterator(handle):
     """ Iterates over records in a gene association file. 
     
     Returns a list
-    of all consecutive records with the the same DB_Object_ID
+    of all consecutive records with the same DB_Object_ID
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
     returns a gaf 2.0 or a gaf 1.0 iterator as needed
@@ -296,7 +296,6 @@ def gafiterator(handle):
         return _gaf10iterator(handle)
     
 def writerec(outrec,handle,fields=GAF20FIELDS):
-
     """Write a single UniProt-GOA record to an output stream. 
 
     Caller should know the  format version. Default: gaf-2.0
@@ -316,12 +315,19 @@ def writerec(outrec,handle,fields=GAF20FIELDS):
     handle.write("%s" % outstr)
 
 def writebyproteinrec(outprotrec,handle,fields=GAF20FIELDS):
+    """Write a list of GAF records to an output stream. 
+
+    Caller should know the  format version. Default: gaf-2.0
+    If header has a value, then it is assumed this is the first record,
+    a header is written. Typically the list is the one read by fafbyproteinrec, which
+    contains all consecutive lines with the same DB_Object_ID
+
+    """
     for outrec in outprotrec:
         writerec(outrec, handle, fields=fields)
 
     
 def record_has(inrec, fieldvals):
-
     """
     Accepts a record, and a dictionary of field values. 
     
