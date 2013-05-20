@@ -106,6 +106,20 @@ GPI10FIELDS = [
       'Annotation_Completed',
       'Parent_Object_ID']
 
+# GPI version 1.1
+GPI11FIELDS = [
+      'DB_Object_ID',
+      'DB_Object_Symbol',
+      'DB_Object_Name',
+      'DB_Object_Synonym',
+      'DB_Object_Type',
+      'Taxon',
+      'Parent_Object_ID',
+      'DB_Xref',
+      'Gene_Product_Properties',
+      'Annotation_Target_Set',
+      'GO_Annotation_Complete']
+
 def _gpi10iterator(handle):
     """Read GPI 1.0 format files (PRIVATE).
 
@@ -113,6 +127,7 @@ def _gpi10iterator(handle):
     file which is in the GPI 1.0 format.
     """
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -120,6 +135,22 @@ def _gpi10iterator(handle):
         inrec[8] = inrec[8].split('|') # Annotation_Target_Set
         yield dict(zip(GPI10FIELDS, inrec))
 
+def _gpi11iterator(handle):
+    """Read GPI 1.0 format files (PRIVATE).
+
+    This iterator is used to read a gp_information.goa_uniprot
+    file which is in the GPI 1.0 format.
+    """
+    for inline in handle:
+        if inline[0] == '!': continue
+        inrec = inline.rstrip('\n').split('\t')
+        if len(inrec) == 1:
+            continue
+        inrec[2] = inrec[2].split('|') # DB_Object_Name
+        inrec[3] = inrec[3].split('|') # DB_Object_Synonym(s)
+        inrec[7] = inrec[7].split('|') # DB_Xref(s)
+        inrec[8] = inrec[8].split('|') # Properties
+        yield dict(zip(GPI10FIELDS, inrec))
 
 def gpi_iterator(handle):
     """Read GPI format files.
@@ -129,7 +160,13 @@ def gpi_iterator(handle):
     only one format, but this may change, so 
     this function is a placeholder a future wrapper.
     """
-    return _gpi10iterator(handle)
+    inline = handle.readline()
+    if inline.strip() == '!gpi-version: 1.1':
+        sys.stderr.write("gpi 1.1\n")
+        return _gpi11iterator(handle)
+    else:
+        sys.stderr.write("gpi 1.0\n")
+        return _gpi10iterator(handle)
 
 
 def _gpa10iterator(handle):
@@ -141,6 +178,7 @@ def _gpa10iterator(handle):
     """
 
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -159,6 +197,7 @@ def _gpa11iterator(handle):
     use the gpa_iterator function
     """
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -187,6 +226,7 @@ def gpa_iterator(handle):
 
 def _gaf20iterator(handle):
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -200,6 +240,7 @@ def _gaf20iterator(handle):
 
 def _gaf10iterator(handle):
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -215,6 +256,7 @@ def _gaf10byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -238,6 +280,7 @@ def _gaf20byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
     for inline in handle:
+        if inline[0] == '!': continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
