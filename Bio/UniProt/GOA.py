@@ -373,7 +373,7 @@ def record_has(inrec, fieldvals):
     """
     retval = False
     for field in fieldvals:
-        if isinstance(inrec[field]), string):
+        if isinstance(inrec[field], string):
             set1 = set([inrec[field]])
         else:
             set1 = set(inrec[field])
