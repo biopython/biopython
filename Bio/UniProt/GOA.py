@@ -299,7 +299,7 @@ def writerec(outrec,handle,fields=GAF20FIELDS):
     """
     outstr = ''
     for field in fields[:-1]:
-        if type(outrec[field]) == type([]):
+        if isinstance(outrec[field], list):
             for subfield in outrec[field]:
                 outstr += subfield + '|'
             outstr = outstr[:-1] + '\t'
@@ -330,7 +330,7 @@ def record_has(inrec, fieldvals):
     """
     retval = False
     for field in fieldvals:
-        if type(inrec[field]) is type(''):
+        if isinstance(inrec[field]), string):
             set1 = set([inrec[field]])
         else:
             set1 = set(inrec[field])
