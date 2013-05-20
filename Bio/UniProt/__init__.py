@@ -1,20 +1,13 @@
+# Copyright 2013 by Iddo Friedberg idoerg@gmail.com
+# Revision copyright 2013 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Code for dealing with assorted UniProt file formats.
 
-###########################################
+This currently include arsers for the GAF, GPA and GPI formats
+from UniProt-GOA as the module Bio.UniProt.GOA.
+
+See also Bio.SwissProt and the "swiss" support in Bio.SeqIO for
+the legacy plain text sequence format still used in UniProt.
 """
-Parsers for the GAF, GPA and GPI formats
-from UniProt-GOA.
-
-Uniprot-GOA README:
-ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/README
-
-gp_association (GPA format) README:
-ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_association_readme
-
-gp_information (GPI format) README:
-ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
-
-(c) 2013 Iddo Friedberg idoerg@gmail.com
-http://iddo-friedberg.net
-Distributed under Biopython license.
-"""
-###########################################
