@@ -4,6 +4,7 @@
 __docformat__ = "epytext en"
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
+from Bio.Application import _StaticArgument
 
 class SamtoolsViewCommandline(AbstractCommandline):
     """Command line wrapper for samtools view
@@ -25,10 +26,11 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
 
     """
-    def __init__(self, cmd="samtools view", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("view"),
                     _Argument(["input", "input_file"], "Input File Name", filename=True, is_required=True),
                     _Argument(["region"], "Region", filename=False, is_required=False),
                     _Switch(["-b", "b"], "Output in the BAM format"),
@@ -71,10 +73,11 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
         >>> print samtools_mpileup_cmd
         samtools mpileup /path/to/sam_or_bam_file
     """
-    def __init__(self, cmd="samtools mpileup", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("mpileup"),
                     _Argument(["input_file"], "Input File for generating mpileup", filename=True, is_required=True),
                     _Switch(["-G", "G"],"Assume the quality is in the Illumina 1.3+ encoding. -A Do not skip anomalous read pairs in variant calling"),
                     _Switch(["-B", "B"],"Disable probabilistic realignment for the computation of base alignment quality (BAQ).\
@@ -125,10 +128,11 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
         samtools reheader /path/to/header_sam_file /path/to/input_bam_file
 
     """
-    def __init__(self, cmd="samtools reheader", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("reheader"),
                     _Argument(["input_header", "header_sam", "sam_file"], "Sam file with header", filename=True, is_required=True),
                     _Argument(["input_bam", "input_file", "bam_file"], "BAM file for writing header to", filename=True, is_required=True)
                 ]
@@ -151,10 +155,11 @@ class SamtoolsCatCommandline(AbstractCommandline):
         samtools cat /path/to/input_bam1 /path/to/input_bam2
 
     """
-    def __init__(self, cmd="samtools cat", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("cat"),
                     _Argument(["input1", "input_bam1", "bam1"], "Input BAM file", filename=True, is_required=False ),
                     _Argument(["input2", "input_bam2", "bam2"], "Input BAM file", filename=True, is_required=False ),
                     _Option(["-h", "h"], "Header SAM file", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
@@ -185,10 +190,11 @@ class SamtoolsSortCommandline(AbstractCommandline):
 
 
     """
-    def __init__(self, cmd="samtools sort", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("sort"),
                     _Argument(["input_bam"],"Input BAM file", filename=True, is_required=True),
                     _Argument(["out_prefix"], "Output prefix ", filename=True, is_required=True),
                     _Switch(["-o", "o"], "Output the final alignment to the standard output"),
@@ -220,10 +226,11 @@ class SamtoolsMergeCommandline(AbstractCommandline):
 
 
     """
-    def __init__(self, cmd="samtools merge", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("merge"),
                     _Argument(["output_bam", "out_bam", "out", "output1"], "Output BAM file", filename=True, is_required=True),
                     _Argument(["input_bam1", "in_bam1", "input1", "bam1"],"Input BAM", filename=True, is_required=True),
                     _Argument(["input_bam2", "in_bam2", "input2", "bam2"],"Input BAM", filename=True, is_required=True),
@@ -255,10 +262,11 @@ class SamtoolsIndexCommandline(AbstractCommandline):
         samtools index /path/to/aln_bam
 
     """
-    def __init__(self, cmd="samtools index", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("index"),
                     _Argument(["input", "in_bam", "input_bam"], "BAM file to be indexed")
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
@@ -282,10 +290,11 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
         samtools idxstats /path/to/aln_bam
 
     """
-    def __init__(self, cmd="samtools idxstats", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("idxstats"),
                     _Argument(["input",  "in_bam", "input_bam"], "BAM file to be indexed")
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
@@ -309,10 +318,11 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
         samtools faidx /path/to/reference.fasta
 
     """
-    def __init__(self, cmd="samtools faidx", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("faidx"),
                     _Argument(["reference", "reference_fasta", "ref"], "Reference FASTA to be indexed", filename=True, is_required=True)
 
                 ]
@@ -338,10 +348,11 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
         samtools fixmate /path/to/in.nameSrt.bam /path/to/out.bam
 
     """
-    def __init__(self, cmd="samtools fixmate", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("fixmate"),
                     _Argument(["in_bam", "sorted_bam", "input_bam", "input", "input_file"], "Name Sorted Alignment File ", filename=True, is_required=True),
                     _Argument(["out_bam", "output_bam", "output", "output_file"], "Output file", filename=True, is_required=True)
                 ]
@@ -367,10 +378,11 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
         samtools rmdup /path/to/input.srt.bam /path/to/out.bam
 
     """
-    def __init__(self, cmd="samtools rmdup", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("rmdup"),
                     _Switch(["-s", "s"], "Remove duplicate for single-end reads. By default, the command works for paired-end reads only"),
                     _Switch(["-S", "S"], "Treat paired-end reads and single-end reads"),
                     _Argument(["in_bam", "sorted_bam", "input_bam", "input", "input_file"], "Name Sorted Alignment File ", filename=True, is_required=True),
@@ -399,10 +411,11 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
         samtools calmd /path/to/aln.bam /path/to/reference.fasta
 
     """
-    def __init__(self, cmd="samtools calmd", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("calmd"),
                     _Switch(["-A", "A"], "When used jointly with -r this option overwrites the original base quality"),
                     _Switch(["-e", "e"], "Convert a the read base to = if it is identical to the aligned reference base. Indel caller does not support the = bases at the moment. "),
                     _Switch(["-u", "u"], "Output uncompressed BAM"),
@@ -438,10 +451,11 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
         samtools targetcut /path/to/aln.bam
 
     """
-    def __init__(self, cmd="samtools targetcut", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("targetcut"),
                     _Argument(["input", "input_bam", "in_bam"], "Input file", filename=True, is_required=True),
                     _Option(["-Q", "Q"], "Minimum Base Qulaity ", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
                     _Option(["-i", "i"], "Insertion Penalty", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
@@ -471,10 +485,11 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
         samtools phase /path/to/in.bam
 
     """
-    def __init__(self, cmd="samtools phase", **kwargs):
+    def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("phase"),
                     _Argument(["input", "input_bam", "in_bam"], "Input file", filename=True, is_required=True),
                     _Switch(["-A", "A"], "Drop reads with ambiguous phase"),
                     _Option(["-b", "b"], "Prefix of BAM output", filename=True, equate=False, checker_function=lambda x : isinstance(x,basestring)),
