@@ -43,10 +43,10 @@ class BwaIndexCommandline(AbstractCommandline):
                                       whole human genome, but it does not work with database
                                       smaller than 10MB and it is usually slower than IS.""",
                             checker_function=lambda x: x in ["is", "bwtsw"],
-                            filename=False, equate=False, is_required=True),
+                            equate=False, is_required=True),
                     _Option(["-p", "p", "prefix"],
                             "Prefix of the output database [same as db filename]",
-                            filename=False, equate=False, is_required=False),
+                            equate=False, is_required=False),
                     _Argument(["infile"], "Input file name", filename=True, is_required=True),
                     _Switch(["-c", "c"],
                             "Build color-space index. The input fasta should be in nucleotide space.")
@@ -90,23 +90,23 @@ class BwaAlignCommandline(AbstractCommandline):
                     _Option(["-n", "n"],
                             "Maximum edit distance if the value is INT, or the fraction of missing alignments given 2% uniform base error rate if FLOAT. In the latter case, the maximum edit distance is automatically chosen for different read lengths. [0.04]",
                             checker_function=lambda x: isinstance(x, (int, float)),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-o", "o"],
                             "Maximum edit distance if the value is INT, or the fraction of missing alignments given 2% uniform base error rate if FLOAT. In the latter case, the maximum edit distance is automatically chosen for different read lengths. [0.04]",
                             checker_function=lambda x: isinstance(x, (int, float)),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-e", "e"],
                             "Maximum number of gap extensions, -1 for k-difference mode (disallowing long gaps) [-1]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-d", "d"],
                             "Disallow a long deletion within INT bp towards the 3-end [16]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-i", "i"],
                             "Disallow an indel within INT bp towards the ends [5]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-l", "l"],
                             """Take the first INT subsequence as seed.
 
@@ -114,23 +114,23 @@ class BwaAlignCommandline(AbstractCommandline):
                             For long reads, this option is typically ranged from 25 to 35 for
                             -k 2. [inf]""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-k","k"], "Maximum edit distance in the seed [2]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-t", "t"], "Number of threads (multi-threading mode) [1]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-M", "M"],
                             "Mismatch penalty. BWA will not search for suboptimal hits with a score lower than (bestScore-misMsc). [3]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-O", "O"], "Gap open penalty [11]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-E", "E"], "Gap extension penalty [4]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-R", "R"],
                             """Proceed with suboptimal alignments if there are no more than INT equally best hits.
 
@@ -138,18 +138,18 @@ class BwaAlignCommandline(AbstractCommandline):
                             to improve the pairing accuracy at the cost of speed, especially for short
                             reads (~32bp).""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-q", "q"],
                             """Parameter for read trimming [0].
 
                             BWA trims a read down to argmax_x{\sum_{i=x+1}^l(INT-q_i)} if q_l<INT
                             where l is the original read length.""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-B", "B"],
                             "Length of barcode starting from the 5-end. When INT is positive, the barcode of each read will be trimmed before mapping and will be written at the BC SAM tag. For paired-end reads, the barcode from both ends are concatenated. [0]",
                             checker_function=lambda x: isinstance(x,int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Switch(["-c", "c"],
                             "Reverse query but not complement it, which is required for alignment in the color space."),
                     _Switch(["-N", "N"],
@@ -204,11 +204,11 @@ class BwaSamseCommandline(AbstractCommandline):
 
                             If a read has more than INT hits, the XA tag will not be written. [3]""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-r", "r"],
                             "Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
 
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
@@ -261,29 +261,29 @@ class BwaSampeCommandline(AbstractCommandline):
                             Since 0.4.5, this option is only used when there are not enough
                             good alignments to infer the distribution of insert sizes.""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-o", "o"],
                             """Maximum occurrences of a read for pairing [100000].
 
                             A read with more occurrences will be treated as a single-end read.
                             Reducing this parameter helps faster pairing.""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-n", "n"],
                             """Maximum number of alignments to output in the XA tag for reads paired properly [3].
 
                             If a read has more than INT hits, the XA tag will not be written.""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-N", "N"],
                             """Maximum number of alignments to output in the XA tag for disconcordant read pairs (excluding singletons) [10].
 
                          .  If a read has more than INT hits, the XA tag will not be written.""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-r", "r"], "Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",
                             checker_function=lambda x: isinstance(x,basestring),
-                            filename=False, equate=False),
+                            equate=False),
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
@@ -321,52 +321,52 @@ class BwaBwaswCommandline(AbstractCommandline):
                     _Option(["-a", "a"],
                             "Score of a match [1]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-b", "b"],
                             "Mismatch penalty [3]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-q", "q"],
                             "Gap open penalty [5]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-r", "r"],
                             "Gap extension penalty. The penalty for a contiguous gap of size k is q+k*r. [2]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-t", "t"],
                             "Number of threads in the multi-threading mode [1]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-w", "w"],
                             "Band width in the banded alignment [33]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-T", "T"],
                             "Minimum score threshold divided by a [37]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-c", "c"],
                             """Coefficient for threshold adjustment according to query length [5.5].
 
                             Given an l-long query, the threshold for a hit to be retained is
                             a*max{T,c*log(l)}.""",
                             checker_function=lambda x: isinstance(x, float),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-z", "z"],
                             "Z-best heuristics. Higher -z increases accuracy at the cost of speed. [1]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-s", "s"],
                             """Maximum SA interval size for initiating a seed [3].
 
                             Higher -s increases accuracy at the cost of speed.""",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                     _Option(["-N", "N"],
                             "Minimum number of seeds supporting the resultant alignment to skip reverse alignment. [5]",
                             checker_function=lambda x: isinstance(x, int),
-                            filename=False, equate=False),
+                            equate=False),
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
