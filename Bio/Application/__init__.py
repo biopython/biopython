@@ -173,6 +173,9 @@ class AbstractCommandline(object):
         #Create properties for each parameter at run time
         aliases = set()
         for p in parameters:
+            if not p.names:
+                assert isinstance(p, _StaticArgument), p
+                continue
             for name in p.names:
                 if name in aliases:
                     raise ValueError("Parameter alias %s multiply defined"
@@ -608,6 +611,22 @@ class _Argument(_AbstractParameter):
             return "%s " % _escape_filename(self.value)
         else:
             return "%s " % self.value
+
+
+class _StaticArgument(_AbstractParameter):
+    """Represent a static (read only) argument on a commandline.
+
+    This is not intended to be exposed as a named argument or
+    property of a command line wrapper object.
+    """
+    def __init__(self, value):
+        self.names = []
+        self.is_required = False
+        self.is_set = True
+        self.value = value
+
+    def __str__(self):
+        return "%s " % self.value
 
 
 def _escape_filename(filename):
