@@ -4,6 +4,7 @@
 __docformat__ = "epytext en"
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
+from Bio.Application import _StaticArgument
 
 
 class BwaIndexCommandline(AbstractCommandline):
@@ -27,10 +28,11 @@ class BwaIndexCommandline(AbstractCommandline):
     Python subprocess module, as described in the Biopython tutorial.
 
     """
-    def __init__(self, cmd="bwa index", **kwargs):
+    def __init__(self, cmd="bwa", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("index"),
                     _Option(["-a", "a", "algorithm"],
                             """Algorithm for constructing BWT index.
 
@@ -79,10 +81,11 @@ class BwaAlignCommandline(AbstractCommandline):
     You would typically run the command line using align_cmd(stdout=output_sai_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
     """
-    def __init__(self, cmd="bwa aln", **kwargs):
+    def __init__(self, cmd="bwa", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("aln"),
                     _Argument(["reference"], "Reference file name",
                               filename=True, is_required=True),
                     _Argument(["read_file"], "Read file name",
@@ -190,12 +193,12 @@ class BwaSamseCommandline(AbstractCommandline):
 
     You would typically run the command line using samse_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
-
     """
-    def __init__(self, cmd="bwa samse", **kwargs):
+    def __init__(self, cmd="bwa", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("samse"),
                     _Argument(["reference"], "Reference file name", filename=True, is_required=True),
                     _Argument(["sai_file"], "Sai file name", filename=True, is_required=True),
                     _Argument(["read_file"], "Read  file name", filename=True, is_required=True),
@@ -209,7 +212,6 @@ class BwaSamseCommandline(AbstractCommandline):
                             "Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",
                             checker_function=lambda x: isinstance(x, int),
                             equate=False),
-
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
@@ -246,10 +248,11 @@ class BwaSampeCommandline(AbstractCommandline):
     or via the Python subprocess module, as described in the Biopython tutorial.
     """
     #TODO - Should the read group have a raw tab in it, or \t?
-    def __init__(self, cmd="bwa sampe", **kwargs):
+    def __init__(self, cmd="bwa", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("sampe"),
                     _Argument(["reference"], "Reference file name", filename=True, is_required=True),
                     _Argument(["sai_file1"], "Sai file 1", filename=True, is_required=True),
                     _Argument(["sai_file2"], "Sai file 2", filename=True, is_required=True),
@@ -311,10 +314,11 @@ class BwaBwaswCommandline(AbstractCommandline):
     You would typically run the command line using bwasw_cmd() or via the                                                                              
     Python subprocess module, as described in the Biopython tutorial.
     """
-    def __init__(self, cmd="bwa bwasw", **kwargs):
+    def __init__(self, cmd="bwa", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
+                    _StaticArgument("bwasw"),
                     _Argument(["reference"],"Reference file name", filename=True, is_required=True),
                     _Argument(["read_file"],"Read file", filename=True, is_required=True),
                     _Argument(["mate_file"],"Mate file", filename=True, is_required=False),
