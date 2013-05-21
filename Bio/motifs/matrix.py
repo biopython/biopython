@@ -200,6 +200,23 @@ class GenericPositionMatrix(dict):
             sequence += nucleotide
         return Seq(sequence, alphabet = IUPAC.ambiguous_dna)
 
+    @property
+    def gc_content(self):
+        """
+Compute the fraction GC content.
+"""
+        alphabet = self.alphabet
+        gc_total = 0.0
+        total = 0.0
+        for i in xrange(self.length):
+            for letter in alphabet.letters:
+                if letter in 'CG':
+                    gc_total += self[letter][i]
+                total += self[letter][i]
+        return gc_total / total
+
+
+
     def reverse_complement(self):
         values = {}
         values["A"] = self["T"][::-1]
@@ -382,6 +399,10 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for position in xrange(0,self.length):
             score += min([self[letter][position] for letter in letters])
         return score
+
+    @property
+    def gc_content(self):
+        raise Exception("Cannot compute the %GC composition of a PSSM")
 
     def mean(self, background=None):
         """Expected value of the score of a motif."""
