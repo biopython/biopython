@@ -215,8 +215,6 @@ Compute the fraction GC content.
                 total += self[letter][i]
         return gc_total / total
 
-
-
     def reverse_complement(self):
         values = {}
         values["A"] = self["T"][::-1]
