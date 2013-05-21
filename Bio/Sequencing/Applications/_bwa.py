@@ -5,6 +5,7 @@ __docformat__ = "epytext en"
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 
+
 class BwaIndexCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) index.
 
@@ -39,6 +40,7 @@ class BwaIndexCommandline(AbstractCommandline):
                     _Switch(["-c","c"],"Build color-space index. The input fast should be in nucleotide space.")
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 class BwaAlignCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
@@ -93,6 +95,8 @@ class BwaAlignCommandline(AbstractCommandline):
                     _Switch(["-b2","b2"],"When -b is specified, only use the second read in a read pair in mapping.")
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+
 class BwaSamseCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) samse.
 
@@ -131,6 +135,7 @@ class BwaSamseCommandline(AbstractCommandline):
 
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 class BwaSampeCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
@@ -182,6 +187,7 @@ class BwaSampeCommandline(AbstractCommandline):
 
                   ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 class BwaBwaswCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) bwasw.
@@ -235,6 +241,7 @@ def _test():
         import doctest
         doctest.testmod()
         print "Done"
+
 
 if __name__ == "__main__":
     _test()
