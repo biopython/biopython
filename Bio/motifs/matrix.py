@@ -415,6 +415,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for i in range(self.length):
             for letter in self._letters:
                 logodds = self[letter,i]
+                if math.isnan(logodds):
+                    continue
                 b = background[letter]
                 p = b * math.pow(2,logodds)
                 sx += p * logodds
@@ -435,6 +437,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sxx = 0.0
             for letter in self._letters:
                 logodds = self[letter,i]
+                if math.isnan(logodds):
+                    continue
                 b = background[letter]
                 p = b * math.pow(2,logodds)
                 sx += p*logodds
