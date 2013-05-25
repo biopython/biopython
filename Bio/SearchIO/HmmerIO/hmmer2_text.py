@@ -51,7 +51,7 @@ class Hmmer2TextParser(object):
         if len(self.buf) > 0:
             return self.buf.pop()
         self.line = self.handle.readline()
-        while self.line and not self.line.strip():
+        while self.line and rstrip and not self.line.strip():
             self.line = self.handle.readline()
         if self.line:
             if rstrip:
