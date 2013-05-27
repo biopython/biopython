@@ -275,6 +275,10 @@ class Hmmer2TextParser(object):
                 if not self.read_next(rstrip=False):
                     break
                 consensus += self.line[19+pad:19+pad+line_len]
+                # If there's no consensus sequence, hmmer2 doesn't
+                # bother to put spaces here, so add extra padding
+                extra_padding = len(hmmseq) - len(consensus)
+                consensus += ' ' * extra_padding
 
                 if not self.read_next():
                     break
