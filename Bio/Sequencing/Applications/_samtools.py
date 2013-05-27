@@ -78,7 +78,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class SamtoolsMpileupCommandlineline(AbstractCommandline):
+class SamtoolsMpileupCommandline(AbstractCommandline):
     """ Command line wrapper for samtools mpileup.
 
     Generate BCF or pileup for one or multiple BAM files, equivalent to:
