@@ -166,6 +166,46 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('SEQ0002', res.id)
         self.assertEqual(0, len(res.hits))
 
+    def test_hmmpfam_23_missing_consensus(self):
+        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_003.out)"""
+        results = parse(path.join("Hmmer", "text_23_hmmpfam_003.out"), self.fmt)
+        res = results.next()
+
+        self.assertEqual('small_input', res.id)
+        self.assertEqual('[none]', res.description)
+        self.assertEqual('[none]', res.accession)
+        self.assertEqual('hmmpfam', res.program)
+        self.assertEqual('2.3.2', res.version)
+        self.assertEqual('antismash/specific_modules/lantipeptides/ClassIVLanti.hmm', res.target)
+        self.assertEqual(1, len(res))
+
+        hit = res[0]
+        self.assertEqual('ClassIVLanti', hit.id)
+        self.assertEqual('Class-IV', hit.description)
+        self.assertAlmostEqual(-79.3, hit.bitscore)
+        self.assertAlmostEqual(1, hit.evalue)
+        self.assertEqual(1, hit.domain_obs_num)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(1, hsp.domain_index)
+        self.assertEqual(0, hsp.hit_start)
+        self.assertEqual(66, hsp.hit_end)
+        self.assertEqual('[]', hsp.hit_endtype)
+        self.assertEqual(5, hsp.query_start)
+        self.assertEqual(20, hsp.query_end)
+        self.assertEqual('..', hsp.query_endtype)
+        self.assertAlmostEqual(-79.3, hsp.bitscore)
+        self.assertAlmostEqual(1, hsp.evalue)
+        self.assertEqual(len(hsp.query.seq), len(hsp.hit.seq))
+        self.assertEqual(len(hsp.query.seq), len(hsp.aln_annotation['homology']))
+        self.assertEqual('msEEqLKAFiAKvqaDtsLqEqLKaEGADvvaiAKAaGFtitteDLnahiqakeLsdeeLEgvaGg',
+                         str(hsp.hit.seq))
+        self.assertEqual('        F+                           G  +t   Ln                   ',
+                         str(hsp.aln_annotation['homology']))
+        self.assertEqual('-------CFL---------------------------GCLVTNWVLNRS-----------------',
+                         str(hsp.query.seq))
+
     def test_hmmpfam_24(self):
         """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)"""
         results = list(parse(path.join("Hmmer", "text_24_hmmpfam_001.out"), self.fmt))
