@@ -56,10 +56,28 @@ hit12 = Hit([hsp121])
 class QueryResultCases(unittest.TestCase):
 
     def setUp(self):
-        self.qresult = QueryResult('query1', [hit11, hit21, hit31])
+        self.qresult = QueryResult([hit11, hit21, hit31], 'query1')
         # set mock attributes
         self.qresult.seq_len = 1102
         self.qresult.target = 'refseq_rna'
+
+    def test_init_none(self):
+        """Test QueryResult.__init__, no arguments"""
+        qresult = QueryResult()
+        self.assertEqual(None, qresult.id)
+        self.assertEqual(None, qresult.description)
+
+    def test_init_id_only(self):
+        """Test QueryResult.__init__, with ID only"""
+        qresult = QueryResult(id='query1')
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual(None, qresult.description)
+
+    def test_init_hits_only(self):
+        """Test QueryResult.__init__, with hits only"""
+        qresult = QueryResult([hit11, hit21, hit31])
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
 
     def test_repr(self):
         """Test QueryResult.__repr__"""
@@ -123,7 +141,7 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.__nonzero__"""
         # nonzero should return true only if the qresult has hits
         self.assertTrue(self.qresult)
-        blank_qresult = QueryResult('queryX')
+        blank_qresult = QueryResult()
         self.assertFalse(blank_qresult)
 
     def test_setitem_ok(self):
@@ -153,6 +171,21 @@ class QueryResultCases(unittest.TestCase):
         # item assignment should fail if the hit object does not have the same
         # query id
         self.assertRaises(ValueError, self.qresult.__setitem__, 'hit4', hit12)
+
+    def test_setitem_from_empty(self):
+        """Test QueryResult.__setitem__, from empty container"""
+        qresult = QueryResult()
+        # initial desc and id is None
+        self.assertEqual(None, qresult.id)
+        self.assertEqual(None, qresult.description)
+        # but changes to the first item's after append
+        qresult.append(hit11)
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
+        # and remains the same after popping the last item
+        qresult.pop()
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
 
     def test_getitem_default_ok(self):
         """Test QueryResult.__getitem__"""
@@ -233,7 +266,7 @@ class QueryResultCases(unittest.TestCase):
         frag3 = HSPFragment('hit2', 'query')
         hit1 = Hit([HSP([x]) for x in [frag1, frag2]])
         hit2 = Hit([HSP([frag3])])
-        qresult = QueryResult('query', [hit1, hit2])
+        qresult = QueryResult([hit1, hit2])
         # test initial condition
         for hit in qresult:
             for hsp in hit.hsps:
@@ -562,6 +595,30 @@ class HitCases(unittest.TestCase):
         self.hit = Hit([hsp111, hsp112, hsp113])
         self.hit.evalue = 5e-10
         self.hit.name = 'test'
+
+    def test_init_none(self):
+        """Test Hit.__init__, no arguments"""
+        hit = Hit()
+        self.assertEqual(None, hit.id)
+        self.assertEqual(None, hit.description)
+        self.assertEqual(None, hit.query_id)
+        self.assertEqual(None, hit.query_description)
+
+    def test_init_id_only(self):
+        """Test Hit.__init__, with ID only"""
+        hit = Hit(id='hit1')
+        self.assertEqual('hit1', hit.id)
+        self.assertEqual(None, hit.description)
+        self.assertEqual(None, hit.query_id)
+        self.assertEqual(None, hit.query_description)
+
+    def test_init_hsps_only(self):
+        """Test Hit.__init__, with hsps only"""
+        hit = Hit([hsp111, hsp112, hsp113])
+        self.assertEqual('hit1', hit.id)
+        self.assertEqual('<unknown description>', hit.description)
+        self.assertEqual('query1', hit.query_id) # set from the HSPs
+        self.assertEqual('<unknown description>', hit.query_description)
 
     def test_repr(self):
         """Test Hit.__repr__"""

@@ -53,6 +53,7 @@ Some examples:
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
     # for mismatches or gaps.
+    >>> from Bio.pairwise2 import format_alignment
     >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
     ...     print format_alignment(*a)
     ACCGT

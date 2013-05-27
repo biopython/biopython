@@ -303,7 +303,7 @@ class BlastXmlParser(object):
                         hit_list.append(hit)
 
                 # create qresult and assign its attributes
-                qresult = QueryResult(query_id, hits=hit_list)
+                qresult = QueryResult(hit_list, query_id)
                 qresult.description = query_desc
                 qresult.seq_len = int(query_len)
                 qresult._blast_id = blast_query_id

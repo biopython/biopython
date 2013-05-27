@@ -137,7 +137,13 @@ class Hmmer3TextParser(object):
                         self.line = read_forward(self.handle)
 
             # create qresult, set its attributes and yield
-            qresult = QueryResult(qid, hits=hit_list)
+            # not initializing hit_list directly to handle empty hits
+            # (i.e. need to set its query description manually)
+            qresult = QueryResult(id=qid)
+            for hit in hit_list:
+                if not hit:
+                    hit.query_description = qresult.description
+                qresult.append(hit)
             for attr, value in qresult_attrs.items():
                 setattr(qresult, attr, value)
             yield qresult

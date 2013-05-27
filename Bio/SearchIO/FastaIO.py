@@ -329,7 +329,7 @@ class FastaM10Parser(object):
                     query_id = regx.group(1)
                     seq_len = regx.group(3)
                     desc = regx.group(2)
-                    qresult = QueryResult(query_id)
+                    qresult = QueryResult(id=query_id)
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
                     self.line = self.handle.readline()
@@ -344,13 +344,14 @@ class FastaM10Parser(object):
                 elif qres_state == state_QRES_CONTENT:
                     assert self.line[3:].startswith(qresult.id), self.line
                     for hit, strand in self._parse_hit(query_id):
-                        # re-set desc, for hsp hit description
+                        # HACK: re-set desc, for hsp hit and query description
                         hit.description = hit.description
+                        hit.query_description = qresult.description
                         # if hit is not in qresult, append it
-                        try:
+                        if hit.id not in qresult:
                             qresult.append(hit)
                         # otherwise, it might be the same hit with a different strand
-                        except ValueError:
+                        else:
                             # make sure strand is different and then append hsp to
                             # existing hit
                             for hsp in hit.hsps:
