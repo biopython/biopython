@@ -82,7 +82,7 @@ class FDistController(object):
         else:
             datacal_name = "Ddatacal"
         proc = subprocess.Popen([self._get_path(datacal_name)],
-                                stdin=subprocess.PIPE,
+                                stdin=subprocess.PIPE, shell=True,
                                 stdout=subprocess.PIPE, cwd=data_dir)
         if version == 1:
             out, err = proc.communicate('a\n')
@@ -178,7 +178,8 @@ class FDistController(object):
         else:
             bin_name = "fdist2"
         proc = subprocess.Popen([self._get_path(bin_name)], cwd=data_dir,
-                                stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                shell=True)
         out, err = proc.communicate('y\n\n')
         lines = out.split("\n")
         for line in lines:
@@ -241,7 +242,8 @@ class FDistController(object):
         else:
             cplot_name = "cplot2"
         proc = subprocess.Popen([self._get_path(cplot_name)], cwd=data_dir,
-                                stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                shell=True)
         if version == 1:
             proc.communicate('out.dat out.cpl\n' + str(ci) + '\n')
         else:
@@ -280,7 +282,8 @@ class FDistController(object):
             pv_name = "pv2"
 
         proc = subprocess.Popen([self._get_path(pv_name)], cwd=data_dir,
-                                stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                                shell=True, stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE)
         proc.communicate('data_fst_outfile ' + out_file +
                          ' out.dat\n' + str(smooth) + '\n')
         pvf = open(data_dir + os.sep + out_file, 'r')
