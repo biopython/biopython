@@ -612,6 +612,16 @@ class _Argument(_AbstractParameter):
         else:
             return "%s " % self.value
 
+class _ArgumentList(_Argument):
+    def __str__(self):
+        assert isinstance(self.value, list), \
+                "Arguments should be a list"
+        assert self.value, "Requires atleast one filename"
+        if self.is_filename:
+            return " ".join(_escape_filename(v) for v in self.value)
+        else:
+            return " ".join(self.value)
+
 
 class _StaticArgument(_AbstractParameter):
     """Represent a static (read only) argument on a commandline.
