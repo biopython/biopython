@@ -197,9 +197,11 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('..', hsp.query_endtype)
         self.assertAlmostEqual(-79.3, hsp.bitscore)
         self.assertAlmostEqual(1, hsp.evalue)
+        self.assertEqual(len(hsp.query.seq), len(hsp.hit.seq))
+        self.assertEqual(len(hsp.query.seq), len(hsp.aln_annotation['homology']))
         self.assertEqual('msEEqLKAFiAKvqaDtsLqEqLKaEGADvvaiAKAaGFtitteDLnahiqakeLsdeeLEgvaGg',
                          str(hsp.hit.seq))
-        self.assertEqual('        F+                           G  +t   Ln',
+        self.assertEqual('        F+                           G  +t   Ln                   ',
                          str(hsp.aln_annotation['homology']))
         self.assertEqual('-------CFL---------------------------GCLVTNWVLNRS-----------------',
                          str(hsp.query.seq))
