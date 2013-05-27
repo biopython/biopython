@@ -228,7 +228,8 @@ class SamtoolsCatCommandline(AbstractCommandline):
         >>> from Bio.Sequencing.Applications import SamtoolsCatCommandline
         >>> input_bam1 = "/path/to/input_bam1"
         >>> input_bam2 = "/path/to/input_bam2"
-        >>> samtools_cat_cmd = SamtoolsCatCommandline(input_bam1=input_bam1, input_bam2=input_bam2)
+        >>> input_bams = [input_bam1, input_bam2]
+        >>> samtools_cat_cmd = SamtoolsCatCommandline(input_bam=input_bams)
         >>> print samtools_cat_cmd
         samtools cat /path/to/input_bam1 /path/to/input_bam2
 
@@ -238,10 +239,8 @@ class SamtoolsCatCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("cat"),
-                    _Argument(["input1", "input_bam1", "bam1"], "Input BAM file",
-                              filename=True, is_required=False ),
-                    _Argument(["input2", "input_bam2", "bam2"], "Input BAM file",
-                              filename=True, is_required=False ),
+                    _ArgumentList(["input", "input_bam", "bams"], "Input BAM files",
+                                  filename=True, is_required=True ),
                     _Option(["-h", "h"], "Header SAM file",
                             filename=True, equate=False,
                             checker_function = lambda x : isinstance(x,basestring)),
