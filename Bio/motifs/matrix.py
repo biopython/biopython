@@ -10,6 +10,15 @@ import math
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
+#Hack for Python 2.5, isnan was new in Python 2.6
+try:
+    from math import isnan as _isnan
+except ImportError:
+    def _isnan(value):
+        #This is tricky due to cross platform float differences
+        if str(value).lower() == "nan":
+            return True
+        return value != value
 
 class GenericPositionMatrix(dict):
 
@@ -415,7 +424,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for i in range(self.length):
             for letter in self._letters:
                 logodds = self[letter,i]
-                if math.isnan(logodds):
+                if _isnan(logodds):
                     continue
                 b = background[letter]
                 p = b * math.pow(2,logodds)
@@ -437,7 +446,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sxx = 0.0
             for letter in self._letters:
                 logodds = self[letter,i]
-                if math.isnan(logodds):
+                if _isnan(logodds):
                     continue
                 b = background[letter]
                 p = b * math.pow(2,logodds)

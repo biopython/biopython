@@ -59,48 +59,17 @@ def allitems(attr=None, doc=''):
     return property(fget=getter, doc=doc)
 
 
-def partialcascade(cont_attr, item_attr, doc=''):
-    """Returns a getter property with a cascading setter.
-
-    This is used for the `id` and `description` properties of the container
-    objects. These items have their own private attributes that stores query
-    and/or hit ID and description. To keep the container items' query and/or
-    hit ID and description in-sync, the setter cascades any new value given
-    to the items' values as well.
-
-    """
-    def getter(self):
-        return getattr(self, cont_attr)
-
-    def setter(self, value):
-        setattr(self, cont_attr, value)
-        for item in self:
-            setattr(item, item_attr, value)
-
-    return property(fget=getter, fset=setter, doc=doc)
-
-
 def fullcascade(attr, doc=''):
     """Returns a getter property with a cascading setter.
 
-    This is similar to `partialcascade`, but for SearchIO containers that have
-    at least one item (Hit and HSP). The getter always retrieves the attribute
+    This is similar to `optionalcascade`, but for SearchIO containers that have
+    at least one item (HSP). The getter always retrieves the attribute
     value from the first item. If the items have more than one attribute values,
     an error will be raised. The setter behaves like `partialcascade`, except
     that it only sets attributes to items in the object, not the object itself.
 
     """
     def getter(self):
-        attrset = set([getattr(item, attr) for item in self._items])
-        if len(attrset) != 1:
-            if len(attrset) > 1:
-                raise ValueError("More than one value present in the contained"
-                        " %s objects: %r" % (self._items[0].__class__.__name__,
-                            list(attrset)))
-            else:
-                raise AttributeError("%r attribute requires %s objects to be "
-                        "filled" % (attr, self.__class__.__name__))
-
         return getattr(self._items[0], attr)
 
     def setter(self, value):
@@ -109,32 +78,32 @@ def fullcascade(attr, doc=''):
 
     return property(fget=getter, fset=setter, doc=doc)
 
-def optionalcascade(attr, doc=''):
+
+def optionalcascade(cont_attr, item_attr, doc=''):
     """Returns a getter property with a cascading setter.
 
-    This is similar to `fullcascade`, but for SearchIO containers that have
-    at zero or more items. The getter always tries to retrieve the attribute
-    value from the first item, but falls back to the value in the container.
-    If the items have more than one attribute values, an error will be raised.
-    The setter behaves like `partialcascade`.
+    This is used for the `id` and `description` properties of the container
+    objects with zero or more items. These items have their own private
+    attributes that stores query and/or hit ID and description. When the
+    container has zero items, attribute values are always retrieved from the
+    container's attribute. Otherwise, the first item's attribute is used.
+
+    To keep the container items' query and/or hit ID and description in-sync,
+    the setter cascades any new value given to the items' values.
 
     """
     def getter(self):
-        attrset = set([getattr(item, attr) for item in self._items])
-        if len(attrset) != 1:
-            if len(attrset) > 1:
-                raise ValueError("More than one value present in the contained"
-                        " %s objects: %r" % (self._items[0].__class__.__name__,
-                            list(attrset)))
-            else:
-                return getattr(self, "_%s" % attr)
-
-        return getattr(self._items[0], attr)
+        if self._items:
+            # don't use self._items here, so QueryResult can use this property
+            # as well (the underlying OrderedDict is not integer-indexable)
+            return getattr(self[0], item_attr)
+        else:
+            return getattr(self, cont_attr)
 
     def setter(self, value):
-        setattr(self, "_%s" % attr, value)
+        setattr(self, cont_attr, value)
         for item in self:
-            setattr(item, attr, value)
+            setattr(item, item_attr, value)
 
     return property(fget=getter, fset=setter, doc=doc)
 
