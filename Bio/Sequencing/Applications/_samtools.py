@@ -1,5 +1,4 @@
-"""Command line wrapper for samtools
-"""
+"""Command line wrapper for samtools """
 
 __docformat__ = "epytext en"
 
@@ -8,8 +7,9 @@ from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument
 
 class SamtoolsViewCommandline(AbstractCommandline):
-    """Command line wrapper for samtools view
-    Extract/print all or sub alignments in SAM or BAM format. Equivalent to
+    """Command line wrapper for samtools view.
+
+    Extract/print all or sub alignments in SAM or BAM format, equivalent to:
 
     $ samtools view [-bchuHS] [-t in.refList] [-o output] [-f reqFlag] [-F skipFlag] [-q minMapQ]
                     [-l library] [-r readGroup] [-R rgFile] <in.bam>|<in.sam> [region1 [...]]
@@ -18,13 +18,11 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     Example:
 
-
         >>> from Bio.Sequencing.Applications import SamtoolsViewCommandline
         >>> input_file = "/path/to/sam_or_bam_file"
         >>> samtools_view_cmd = SamtoolsViewCommandline(input_file=input_file)
         >>> print samtools_view_cmd
         samtools view /path/to/sam_or_bam_file
-
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -33,32 +31,57 @@ class SamtoolsViewCommandline(AbstractCommandline):
                 [
                     _StaticArgument("view"),
                     _Argument(["input", "input_file"], "Input File Name", filename=True, is_required=True),
-                    _Argument(["region"], "Region", filename=False, is_required=False),
+                    _Argument(["region"], "Region", is_required=False),
                     _Switch(["-b", "b"], "Output in the BAM format"),
-                    _Option(["-f", "f"], "Only output alignments with all bits in INT present in the FLAG field", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-F", "F"], "Skip alignments with bits present in INT", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-f", "f"],
+                            "Only output alignments with all bits in INT present in the FLAG field",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-F", "F"],
+                            "Skip alignments with bits present in INT",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
                     _Switch(["-h", "h"], "Include the header in the output"),
                     _Switch(["-H", "H"], "Output the header only"),
-                    _Option(["-l", "l"], "Only output reads in library STR", filename=False, equate=False, checker_function = lambda x : isinstance(x,basestring) ),
-                    _Option(["-o", "o"], "Output file", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring) ),
-                    _Option(["-q", "q"], "Skip alignments with MAPQ smaller than INT", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-r", "r"], "Only output reads in read group STR", filename=False, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Option(["-R", "R"], "Output reads in read groups listed in FILE", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Switch(["-S", "S"], "Input is in SAM. If @SQ header lines are absent, the '-t' option is required."),
-                    _Switch(["-c", "c"], "Instead of printing the alignments, only count them and print the total number. All filter options,\
-                            such as '-f', '-F' and '-q' , are taken into account"),
-                    _Option(["-t", "t"], "This file is TAB-delimited. Each line must contain the reference name and the \
-                            length of the reference, one line for each distinct reference; additional fields are ignored.\
+                    _Option(["-l", "l"],
+                            "Only output reads in library STR",
+                            equate=False, checker_function = lambda x : isinstance(x,basestring) ),
+                    _Option(["-o", "o"], "Output file",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring) ),
+                    _Option(["-q", "q"],
+                            "Skip alignments with MAPQ smaller than INT",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-r", "r"],
+                            "Only output reads in read group STR",
+                            equate=False, checker_function = lambda x : isinstance(x,basestring)),
+                    _Option(["-R", "R"],
+                            "Output reads in read groups listed in FILE",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring)),
+                    _Switch(["-S", "S"],
+                            "Input is in SAM. If @SQ header lines are absent, the '-t' option is required."),
+                    _Switch(["-c", "c"],
+                            "Instead of printing the alignments, only count them and print the total number.\
+                            All filter options,such as '-f', '-F' and '-q' , are taken into account"),
+                    _Option(["-t", "t"],
+                            "This file is TAB-delimited. Each line must contain the reference name and the \
+                            length of the reference, one line for each distinct reference; additional fields\
+                            are ignored.\
                             This file also defines the order of the reference sequences in sorting. If you run\
-                            'samtools faidx <ref.fa>', the resultant index file <ref.fa>.fai can be used as this <in.ref_list> file.", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Switch(["-u", "u"], "Output uncompressed BAM. This option saves time spent on compression/decomprssion and is thus preferred when the output is piped to another samtools command"),
+                            'samtools faidx <ref.fa>', the resultant index file <ref.fa>.fai can be used as this\
+                            <in.ref_list> file.",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring)),
+                    _Switch(["-u", "u"],
+                            "Output uncompressed BAM. This option saves time spent on compression/decomprssion\
+                            and is thus preferred when the output is piped to another samtools command"),
                     _Switch(["-1", "fast_bam"], "Use zlib compression level 1 to compress the output ")
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class SamtoolsMpileupCommandline(AbstractCommandline):
-    """ Command line wrapper for samtools mpileup
-    Generate BCF or pileup for one or multiple BAM files. Equivalent to
+class SamtoolsMpileupCommandlineline(AbstractCommandline):
+    """ Command line wrapper for samtools mpileup.
+
+    Generate BCF or pileup for one or multiple BAM files, equivalent to:
 
     $ samtools mpileup [-EBug] [-C capQcoef] [-r reg] [-f in.fa] [-l list]
                        [-M capMapQ] [-Q minBaseQ] [-q minMapQ] in.bam [in2.bam [...]]
@@ -67,53 +90,103 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
     Example:
 
-
         >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
         >>> input_file = "/path/to/sam_or_bam_file"
         >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input_file)
         >>> print samtools_mpileup_cmd
         samtools mpileup /path/to/sam_or_bam_file
+
     """
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = \
                 [
                     _StaticArgument("mpileup"),
-                    _Argument(["input_file"], "Input File for generating mpileup", filename=True, is_required=True),
-                    _Switch(["-G", "G"],"Assume the quality is in the Illumina 1.3+ encoding. -A Do not skip anomalous read pairs in variant calling"),
-                    _Switch(["-B", "B"],"Disable probabilistic realignment for the computation of base alignment quality (BAQ).\
-                            BAQ is the Phred-scaled probability of a read base being misaligned. Applying this option greatly \
-                            helps to reduce false SNPs caused by misalignments"),
-                    _Option(["-F", "F"], "List of input BAM files, one file per line", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Option(["-C", "C"], "Coefficient for downgrading mapping quality for reads containing excessive mismatches.\
-                            Given a read with a phred-scaled probability q of being generated from the mapped position, the new \
-                            mapping quality is about sqrt((INT-q)/INT)*INT. A zero value disables this functionality; if enabled,\
-                            the recommended value for BWA is 50", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-d", "d"], "At a position, read maximally INT reads per input BAM", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Switch(["-E","E"], "Extended BAQ computation. This option helps sensitivity especially for MNPs, but may hurt specificity a little bit" ),
-                    _Option(["-f", "f"], "The faidx-indexed reference file in the FASTA format. The file can be optionally compressed by razip", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Option(["-l", "l"], "BED or position list file containing a list of regions or sites where pileup or BCF should be generated", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Option(["-q", "q"], "Minimum mapping quality for an alignment to be used", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-Q", "Q"], "Minimum base quality for a base to be considered", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-r", "r"], "Only generate pileup in region STR", filename=False, equate=False, checker_function = lambda x : isinstance(x,basestring)),
+                    _Argument(["input_file"],
+                              "Input File for generating mpileup", filename=True, is_required=True),
+                    _Switch(["-6", "illumina_13"],
+                            "Assume the quality is in the Illumina 1.3+ encoding"),
+                    _Switch(["-A","A"],
+                            "Do not skip anomalous read pairs in variant calling."),
+                    _Switch(["-B", "B"],
+                            "Disable probabilistic realignment for the computation of base alignment\
+                            quality (BAQ). BAQ is the Phred-scaled probability of a read base being\
+                            misaligned. Applying this option greatly helps to reduce false SNPs\
+                            caused by misalignments"),
+                    _Option(["-F", "F"],
+                            "List of input BAM files, one file per line",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring)),
+                    _Option(["-C", "C"],
+                            "Coefficient for downgrading mapping quality for reads containing excessive\
+                            mismatches. Given a read with a phred-scaled probability q of being generated\
+                            from the mapped position, the new mapping quality is about sqrt((INT-q)/INT)*INT.\
+                            A zero value disables this functionality; if enabled, the recommended value\
+                            for BWA is 50",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-d", "d"],
+                            "At a position, read maximally INT reads per input BAM",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Switch(["-E","E"],
+                            "Extended BAQ computation. This option helps sensitivity especially for MNPs,\
+                            but may hurt specificity a little bit" ),
+                    _Option(["-f", "f"],
+                            "The faidx-indexed reference file in the FASTA format. \
+                            The file can be optionally compressed by razip",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring)),
+                    _Option(["-l", "l"],
+                            "BED or position list file containing a list of regions or sites where pileup\
+                            or BCF should be generated",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring)),
+                    _Option(["-q", "q"],
+                            "Minimum mapping quality for an alignment to be used",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-Q", "Q"],
+                            "Minimum base quality for a base to be considered",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-r", "r"],
+                            "Only generate pileup in region STR",
+                            equate=False, checker_function = lambda x : isinstance(x,basestring)),
                     _Switch(["-D", "D"], "Output per-sample read depth"),
-                    _Switch(["-g", "g"], "Compute genotype likelihoods and output them in the binary call format (BCF)"),
+                    _Switch(["-g", "g"],
+                            "Compute genotype likelihoods and output them in the binary call format (BCF)"),
                     _Switch(["-S", "S"], "Output per-sample Phred-scaled strand bias P-value"),
-                    _Switch(["-u", "u"], "Similar to -g except that the output is uncompressed BCF, which is preferred for piping"),
-                    _Option(["-e", "e"], "Phred-scaled gap extension sequencing error probability. Reducing INT leads to longer indels", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-h", "h"], "Coefficient for modeling homopolymer errors. Given an l-long homopolymer run, the sequencing error of an indel of size s is modeled as INT*s/l", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Switch(["-u", "u"],
+                            "Similar to -g except that the output is uncompressed BCF,\
+                            which is preferred for piping"),
+                    _Option(["-e", "e"],
+                            "Phred-scaled gap extension sequencing error probability. Reducing INT leads to\
+                            longer indels",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-h", "h"],
+                            "Coefficient for modeling homopolymer errors.\
+                            Given an l-long homopolymer run, the sequencing error of an indel of size s\
+                            is modeled as INT*s/l",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
                     _Switch(["-I", "I"], "Do not perform INDEL calling"),
-                    _Option(["-L", "L"], "Skip INDEL calling if the average per-sample depth is above INT", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-o", "o"], "Phred-scaled gap open sequencing error probability. Reducing INT leads to more indel calls.", filename=False, equate=False, checker_function = lambda x : isinstance(x,int)),
-                    _Option(["-p", "p"], "Comma dilimited list of platforms (determined by @RG-PL) from which indel candidates are obtained. \
-                            It is recommended to collect indel candidates from sequencing technologies that have low indel error rate such as ILLUMINA", filename=False, equate=False, checker_function = lambda x : isinstance(x,basestring))
+                    _Option(["-L", "L"],
+                            "Skip INDEL calling if the average per-sample depth is above INT",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-o", "o"],
+                            "Phred-scaled gap open sequencing error probability.\
+                            Reducing INT leads to more indel calls.",
+                            equate=False, checker_function = lambda x : isinstance(x,int)),
+                    _Option(["-p", "p"],
+                            "Comma dilimited list of platforms (determined by @RG-PL) from which indel\
+                            candidates are obtained. \
+                            It is recommended to collect indel candidates from sequencing technologies \
+                            that have low indel error rate such as ILLUMINA",
+                            equate=False, checker_function = lambda x : isinstance(x,basestring))
 
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsReheaderCommandline(AbstractCommandline):
-    """ Command line wrapper for samtools reheader
-    Replace the header in in.bam with the header in in.header.sam. Equivalent to:
+    """ Command line wrapper for samtools reheader.
+
+    Replace the header in in.bam with the header in in.header.sam, equivalent to:
 
     $ samtools reheader <in.header.sam> <in.bam>
 
@@ -134,14 +207,18 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("reheader"),
-                    _Argument(["input_header", "header_sam", "sam_file"], "Sam file with header", filename=True, is_required=True),
-                    _Argument(["input_bam", "input_file", "bam_file"], "BAM file for writing header to", filename=True, is_required=True)
+                    _Argument(["input_header", "header_sam", "sam_file"],
+                              "Sam file with header", filename=True, is_required=True),
+                    _Argument(["input_bam", "input_file", "bam_file"],
+                              "BAM file for writing header to", filename=True, is_required=True)
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsCatCommandline(AbstractCommandline):
-    """Command line wrapper for samtools cat
-    Concatenate BAMs. Equivalent to :
+    """Command line wrapper for samtools cat.
+
+    Concatenate BAMs, equivalent to:
+
     $ samtools cat [-h header.sam] [-o out.bam] <in1.bam> <in2.bam> [ ... ]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
@@ -161,18 +238,24 @@ class SamtoolsCatCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("cat"),
-                    _Argument(["input1", "input_bam1", "bam1"], "Input BAM file", filename=True, is_required=False ),
-                    _Argument(["input2", "input_bam2", "bam2"], "Input BAM file", filename=True, is_required=False ),
-                    _Option(["-h", "h"], "Header SAM file", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Option(["-o", "o"], "Output SAM file", filename=True, equate=False, checker_function = lambda x : isinstance(x,basestring))
+                    _Argument(["input1", "input_bam1", "bam1"], "Input BAM file",
+                              filename=True, is_required=False ),
+                    _Argument(["input2", "input_bam2", "bam2"], "Input BAM file",
+                              filename=True, is_required=False ),
+                    _Option(["-h", "h"], "Header SAM file",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring)),
+                    _Option(["-o", "o"], "Output SAM file",
+                            filename=True, equate=False,
+                            checker_function = lambda x : isinstance(x,basestring))
 
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsSortCommandline(AbstractCommandline):
-    """Command line wrapper for samtools sort
+    """Command line wrapper for samtools sort.
 
-    Concatenate BAMs. Equivalent to :
+    Concatenate BAMs, equivalent to:
 
     $ samtools sort [-no] [-m maxMem] <in.bam> <out.prefix>
 
@@ -187,9 +270,6 @@ class SamtoolsSortCommandline(AbstractCommandline):
         >>> print samtools_sort_cmd
         samtools sort /path/to/input_bam /path/to/out_prefix
 
-
-
-
     """
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
@@ -200,14 +280,16 @@ class SamtoolsSortCommandline(AbstractCommandline):
                     _Argument(["out_prefix"], "Output prefix ", filename=True, is_required=True),
                     _Switch(["-o", "o"], "Output the final alignment to the standard output"),
                     _Switch(["-n", "n"], "   Sort by read names rather than by chromosomal coordinates "),
-                    _Option(["-m", "m"], "Approximately the maximum required memory", filename=False, equate=False, checker_function = lambda x : isinstance(x,int))
+                    _Option(["-m", "m"], "Approximately the maximum required memory",
+                            equate=False, checker_function = lambda x : isinstance(x,int))
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
 class SamtoolsMergeCommandline(AbstractCommandline):
-    """Command line wrapper for samtools merge
-    Merge multiple sorted alignments. Equivalent to
+    """Command line wrapper for samtools merge.
+
+    Merge multiple sorted alignments, equivalent to:
 
     $ samtools merge [-nur1f] [-h inh.sam] [-R reg]
                      <out.bam> <in1.bam> <in2.bam> [...]
@@ -219,11 +301,9 @@ class SamtoolsMergeCommandline(AbstractCommandline):
         >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
         >>> out_bam = "/path/to/out_bam"
         >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
-        >>> samtools_merge_cmd = SamtoolsMergeCommandline(out_bam=out_bam,input_bam=in_bam)
+        >>> samtools_merge_cmd = SamtoolsMergeCommandline(out_bam=out_bam,input_bam1=in_bam1,input_bam2=in_bam2)
         >>> print samtools_merge_cmd
         samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
-
-
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -231,24 +311,33 @@ class SamtoolsMergeCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("merge"),
-                    _Argument(["output_bam", "out_bam", "out", "output1"], "Output BAM file", filename=True, is_required=True),
-                    _ArgumentList(["input_bam", "in_bam", "input", "bam"],"Input BAM", filename=True, is_required=True),
+                    _Argument(["output_bam", "out_bam", "out", "output"],
+                              "Output BAM file", filename=True, is_required=True),
+                    _ArgumentList(["input_bam", "in_bam", "input", "bam"],
+                                  "Input BAM", filename=True, is_required=True),
                     _Switch(["-1", "fast_bam"], "Use zlib compression level 1 to compress the output "),
                     _Switch(["-f", "f"], "Force to overwrite the output file if present. "),
-                    _Option(["-h", "h"], "Use the lines of FILE as '@' headers to be copied to out.bam,", filename=True, equate=False, checker_function=lambda x : isinstance(x,basestring)),
-                    _Option(["-R", "R"], "Merge files in the specified region indicated by STR ", filename=False, equate=False, checker_function=lambda x : isinstance(x,basestring)),
-                    _Switch(["-n", "n"], "The input alignments are sorted by read names rather than by chromosomal coordinates "),
-                    _Switch(["-r", "r"], "Attach an RG tag to each alignment. The tag value is inferred from file names"),
+                    _Option(["-h", "h"], "Use the lines of FILE as '@' headers to be copied to out.bam,",
+                            filename=True, equate=False,
+                            checker_function=lambda x : isinstance(x,basestring)),
+                    _Option(["-R", "R"],
+                            "Merge files in the specified region indicated by STR ",
+                            equate=False, checker_function=lambda x : isinstance(x,basestring)),
+                    _Switch(["-n", "n"],
+                            "The input alignments are sorted by read names rather than by chromosomal\
+                            coordinates "),
+                    _Switch(["-r", "r"], "Attach an RG tag to each alignment. The tag value is inferred\
+                            from file names"),
                     _Switch(["-u", "u"], "Uncompressed BAM output")
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsIndexCommandline(AbstractCommandline):
-    """Command line wrapper for samtools index
-    Index sorted alignment for fast random access. Equivalent to
+    """Command line wrapper for samtools index.
+
+    Index sorted alignment for fast random access, equivalent to:
 
     $ samtools index <aln.bam>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -271,12 +360,11 @@ class SamtoolsIndexCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsIdxstatsCommandline(AbstractCommandline):
+    """Command line wrapper for samtools idxstats.
 
-    """Command line wrapper for samtools idxstats
-    Retrieve and print stats in the index file. Equivalent to
+    Retrieve and print stats in the index file,equivalent to:
 
     $ samtools idxstats <aln.bam>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -299,12 +387,11 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsFaidxCommandline(AbstractCommandline):
+    """Command line wrapper for samtools faidx.
 
-    """Command line wrapper for samtools faidx
-    Retrieve and print stats in the index file. Equivalent to
+    Retrieve and print stats in the index file, equivalent to:
 
     $ samtools faidx <ref.fasta> [region1 [...]]
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -322,18 +409,20 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("faidx"),
-                    _Argument(["reference", "reference_fasta", "ref"], "Reference FASTA to be indexed", filename=True, is_required=True)
+                    _Argument(["reference", "reference_fasta", "ref"],
+                              "Reference FASTA to be indexed",
+                              filename=True, is_required=True)
 
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsFixmateCommandline(AbstractCommandline):
+    """Command line wrapper for samtools fixmate.
 
-    """Command line wrapper for samtools fixmate
-    Fill in mate coordinates, ISIZE and mate related flags from a name-sorted alignment. Equivalent to
+    Fill in mate coordinates, ISIZE and mate related flags from a name-sorted alignment,
+    equivalent to:
 
     $ samtools fixmate <in.nameSrt.bam> <out.bam>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -352,18 +441,19 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("fixmate"),
-                    _Argument(["in_bam", "sorted_bam", "input_bam", "input", "input_file"], "Name Sorted Alignment File ", filename=True, is_required=True),
-                    _Argument(["out_bam", "output_bam", "output", "output_file"], "Output file", filename=True, is_required=True)
+                    _Argument(["in_bam", "sorted_bam", "input_bam", "input", "input_file"],
+                              "Name Sorted Alignment File ", filename=True, is_required=True),
+                    _Argument(["out_bam", "output_bam", "output", "output_file"], "Output file",
+                              filename=True, is_required=True)
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsRmdupCommandline(AbstractCommandline):
+    """Command line wrapper for samtools rmdup.
 
-    """Command line wrapper for samtools rmdup
-    Remove potential PCR duplicates. Equivalent to
+    Remove potential PCR duplicates, equivalent to:
 
     $ samtools rmdup [-sS] <input.srt.bam> <out.bam>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -382,21 +472,24 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("rmdup"),
-                    _Switch(["-s", "s"], "Remove duplicate for single-end reads. By default, the command works for paired-end reads only"),
+                    _Switch(["-s", "s"],
+                            "Remove duplicate for single-end reads. By default, the command works\
+                            for paired-end reads only"),
                     _Switch(["-S", "S"], "Treat paired-end reads and single-end reads"),
-                    _Argument(["in_bam", "sorted_bam", "input_bam", "input", "input_file"], "Name Sorted Alignment File ", filename=True, is_required=True),
-                    _Argument(["out_bam", "output_bam", "output", "output_file"], "Output file", filename=True, is_required=True)
+                    _Argument(["in_bam", "sorted_bam", "input_bam", "input", "input_file"],
+                              "Name Sorted Alignment File ", filename=True, is_required=True),
+                    _Argument(["out_bam", "output_bam", "output", "output_file"],
+                              "Output file", filename=True, is_required=True)
 
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsCalmdCommandline(AbstractCommandline):
+    """Command line wrapper for samtools calmd.
 
-    """Command line wrapper for samtools calmd
-    Generate the MD tag. Equivalent to
+    Generate the MD tag, equivalent to:
 
     $ samtools calmd [-EeubSr] [-C capQcoef] <aln.bam> <ref.fasta>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -415,29 +508,39 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("calmd"),
-                    _Switch(["-A", "A"], "When used jointly with -r this option overwrites the original base quality"),
-                    _Switch(["-e", "e"], "Convert a the read base to = if it is identical to the aligned reference base. Indel caller does not support the = bases at the moment. "),
+                    _Switch(["-A", "A"],
+                            "When used jointly with -r this option overwrites the original base quality"),
+                    _Switch(["-e", "e"],
+                            "Convert a the read base to = if it is identical to the aligned reference \
+                            base. Indel caller does not support the = bases at the moment. "),
                     _Switch(["-u", "u"], "Output uncompressed BAM"),
                     _Switch(["-b", "b"], "Output compressed BAM "),
                     _Switch(["-S", "S"], "The input is SAM with header lines "),
-                    _Switch(["-r", "r"], "Compute the BQ tag (without -A) or cap base quality by BAQ (with -A)."),
-                    _Switch(["-E", "E"], "Extended BAQ calculation. This option trades specificity for sensitivity, though the effect is minor. "),
-                    _Option(["-C", "C"], "Coefficient to cap mapping quality of poorly mapped reads. See the pileup command for details.", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
-                    _Argument(["input", "input_file", "in_bam", "infile", "input_bam"], "Input BAM", filename=True, is_required=True),
-                    _Argument(["reference", "reference_fasta", "ref"], "Reference FASTA to be indexed", filename=True, is_required=True)
+                    _Switch(["-r", "r"],
+                            "Compute the BQ tag (without -A) or cap base quality by BAQ (with -A)."),
+                    _Switch(["-E", "E"],
+                            "Extended BAQ calculation. This option trades specificity for sensitivity,\
+                            though the effect is minor. "),
+                    _Option(["-C", "C"], "Coefficient to cap mapping quality of poorly mapped reads.\
+                            See the pileup command for details.",
+                            equate=False, checker_function=lambda x : isinstance(x,int)),
+                    _Argument(["input", "input_file", "in_bam", "infile", "input_bam"],
+                              "Input BAM", filename=True, is_required=True),
+                    _Argument(["reference", "reference_fasta", "ref"],
+                              "Reference FASTA to be indexed", filename=True, is_required=True)
 
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsTargetcutCommandline(AbstractCommandline):
-    """Command line wrapper for samtools targetcut
+    """Command line wrapper for samtools targetcut.
+
     This command identifies target regions by examining the continuity of read depth,\
     computes haploid consensus sequences  of targets and outputs a SAM with each sequence\
-    corresponding to a target. Equivalent to
+            corresponding to a target, equivalent to:
 
     $ samtools targetcut [-Q minBaseQ] [-i inPenalty] [-0 em0]
                          [-1 em1] [-2 em2] [-f ref] <in.bam>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -455,23 +558,31 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("targetcut"),
-                    _Argument(["input", "input_bam", "in_bam"], "Input file", filename=True, is_required=True),
-                    _Option(["-Q", "Q"], "Minimum Base Qulaity ", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
-                    _Option(["-i", "i"], "Insertion Penalty", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
-                    _Option(["-f", "f"], "Reference Filename", filename=True, equate=False, checker_function=lambda x : isinstance(x,basestring)),
-                    _Option(["-0", "em0"], "em0", filename=False, equate=False, checker_function=lambda x : isinstance(x,basestring)),
-                    _Option(["-1", "em1"], "em1", filename=False, equate=False, checker_function=lambda x : isinstance(x,basestring)),
-                    _Option(["-2", "em2"], "em2", filename=False, equate=False, checker_function=lambda x: isinstance(x,basestring)),
+                    _Argument(["input", "input_bam", "in_bam"], "Input file",
+                              filename=True, is_required=True),
+                    _Option(["-Q", "Q"], "Minimum Base Qulaity ",
+                            equate=False, checker_function=lambda x : isinstance(x,int)),
+                    _Option(["-i", "i"], "Insertion Penalty",
+                            equate=False, checker_function=lambda x : isinstance(x,int)),
+                    _Option(["-f", "f"], "Reference Filename",
+                            filename=True, equate=False,
+                            checker_function=lambda x : isinstance(x,basestring)),
+                    _Option(["-0", "em0"], "em0", equate=False,
+                            checker_function=lambda x : isinstance(x,basestring)),
+                    _Option(["-1", "em1"], "em1", equate=False,
+                            checker_function=lambda x : isinstance(x,basestring)),
+                    _Option(["-2", "em2"], "em2", equate=False,
+                            checker_function=lambda x: isinstance(x,basestring)),
 
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 class SamtoolsPhaseCommandline(AbstractCommandline):
+    """Command line wrapper for samtools phase.
 
-    """Command line wrapper for samtools phase
-    Call and phase heterozygous SNPs. Equivalent to
+    Call and phase heterozygous SNPs, equivalent to:
+
     $ samtools phase [-AF] [-k len] [-b prefix] [-q minLOD] [-Q minBaseQ] <in.bam>
-
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -489,13 +600,19 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
         self.parameters = \
                 [
                     _StaticArgument("phase"),
-                    _Argument(["input", "input_bam", "in_bam"], "Input file", filename=True, is_required=True),
+                    _Argument(["input", "input_bam", "in_bam"], "Input file",
+                              filename=True, is_required=True),
                     _Switch(["-A", "A"], "Drop reads with ambiguous phase"),
-                    _Option(["-b", "b"], "Prefix of BAM output", filename=True, equate=False, checker_function=lambda x : isinstance(x,basestring)),
+                    _Option(["-b", "b"], "Prefix of BAM output",
+                            filename=True, equate=False,
+                            checker_function=lambda x : isinstance(x,basestring)),
                     _Switch(["-F", "F"], "Do not attempt to fix chimeric reads"),
-                    _Option(["-k", "k"], "Maximum length for local phasing", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
-                    _Option(["-q", "q"], "Minimum Phred-scaled LOD to call a heterozygote", filename=False, equate=False, checker_function=lambda x : isinstance(x,int)),
-                    _Option(["-Q", "Q"], "Minimum base quality to be used in het calling", filename=False, equate=False, checker_function=lambda x : isinstance(x,int))
+                    _Option(["-k", "k"], "Maximum length for local phasing",
+                            equate=False, checker_function=lambda x : isinstance(x,int)),
+                    _Option(["-q", "q"], "Minimum Phred-scaled LOD to call a heterozygote",
+                            equate=False, checker_function=lambda x : isinstance(x,int)),
+                    _Option(["-Q", "Q"], "Minimum base quality to be used in het calling",
+                            equate=False, checker_function=lambda x : isinstance(x,int))
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
