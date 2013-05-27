@@ -300,7 +300,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
         >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
         >>> out_bam = "/path/to/out_bam"
         >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
-        >>> samtools_merge_cmd = SamtoolsMergeCommandline(out_bam=out_bam,input_bam1=in_bam1,input_bam2=in_bam2)
+        >>> samtools_merge_cmd = SamtoolsMergeCommandline(out_bam=out_bam,input_bam=in_bam)
         >>> print samtools_merge_cmd
         samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
 
