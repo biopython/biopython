@@ -51,7 +51,7 @@ class Hmmer2TextParser(object):
         if len(self.buf) > 0:
             return self.buf.pop()
         self.line = self.handle.readline()
-        while self.line and not self.line.strip():
+        while self.line and rstrip and not self.line.strip():
             self.line = self.handle.readline()
         if self.line:
             if rstrip:
@@ -275,6 +275,10 @@ class Hmmer2TextParser(object):
                 if not self.read_next(rstrip=False):
                     break
                 consensus += self.line[19+pad:19+pad+line_len]
+                # If there's no consensus sequence, hmmer2 doesn't
+                # bother to put spaces here, so add extra padding
+                extra_padding = len(hmmseq) - len(consensus)
+                consensus += ' ' * extra_padding
 
                 if not self.read_next():
                     break
