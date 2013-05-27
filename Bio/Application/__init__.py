@@ -618,7 +618,10 @@ class _ArgumentList(_Argument):
                 "Arguments should be a list"
         assert self.value, "Requires atleast one filename"
         if self.is_filename:
-            return " ".join(_escape_filename(v) for v in self.value)
+            return " ".join(_escape_filename(v) for v in self.value) + " "
+            ## Add a space after the last filename otherwise the rest of arguments are concatenated
+            ## without a space . For eg. samtools cat in1.bam in2.bam-o out. sam (there should be a space)
+            ## between -o and in2.bam
         else:
             return " ".join(self.value)
 
