@@ -27,7 +27,7 @@ from Bio.Application import ApplicationError
 #Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
-bwa_exe = None
+samtools_exe = None
 if sys.platform == "win32":
     #TODO - Check the path?
     try:
@@ -35,8 +35,8 @@ if sys.platform == "win32":
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
-    #A default path of C:\Program Files\bwa.exe was chosen
-    #but this path can be edited depending on where bwa is located
+    #A default path of C:\Program Files\samtools.exe was chosen
+    #but this path can be edited depending on where samtools is located
 
     likely_dirs = ["samtools", "Samtools", "SAMtools"]
     likely_exes = ["samtools.exe", "Samtools.exe", "SAMtools.exe"]
@@ -44,16 +44,16 @@ if sys.platform == "win32":
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
                 if os.path.isfile(os.path.join(prog_files, folder, filename)):
-                    bwa_exe = os.path.join(prog_files, folder, filename)
+                    samtools_exe = os.path.join(prog_files, folder, filename)
                     break
-            if bwa_exe:
+            if samtools_exe:
                 break
 else:
     import commands
     output = commands.getoutput("samtools")
 
     #Since "not found" may be in another language, try and be sure this is
-    #really the bwa tool's output
+    #really the samtools tool's output
     samtools_found = False
     if "not found" not in output and "samtools" in output \
     and "samtools (Tools for alignments in the SAM format)" in output:
