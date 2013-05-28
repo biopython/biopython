@@ -85,7 +85,6 @@ class SamtoolsTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def add_files_to_clean(self,filename):
-
         self.files_to_clean.add(filename)
 
 
@@ -111,7 +110,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("reference", self.reference)
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr.startswith(""), "Samtools calmd failed:\n%s\nStderr:%s" \
+        self.assertTrue(stderr=="", "Samtools calmd failed:\n%s\nStderr:%s" \
                         % (cmdline, stderr)    )
 
     def test_cat(self):
@@ -119,7 +118,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("o", self.outbamfile)
         cmdline.set_parameter("input_bam", [self.bamfile1,self.bamfile2])
         stdout, stderr = cmdline()
-        self.assertTrue(stderr.startswith(""), "Samtools cat failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr=="", "Samtools cat failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
@@ -129,7 +128,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsFaidxCommandline()
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr.startswith(""), "Samtools faidx failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr=="", "Samtools faidx failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
 
         self.assertTrue(os.path.exists(self.referenceindexfile))
@@ -144,7 +143,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         cmdline.set_parameter("out_prefix", "bam1")
         stdout, stderr = cmdline()
-        self.assertTrue(stderr.startswith(""), "Samtools sort failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr=="", "Samtools sort failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
 
 
@@ -152,7 +151,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsIndexCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr.startswith(""), "Samtools index failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr=="", "Samtools index failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
 
         self.assertTrue(os.path.exists(self.bamindexfile1))
@@ -161,7 +160,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsIdxstatsCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr.startswith(""), "Samtools idxstats failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr=="", "Samtools idxstats failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
 
 
@@ -173,7 +172,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("f", True) ## Overwrite out.bam if it exists
         stdout, stderr = cmdline()
 
-        self.assertTrue(stderr.startswith(""), "Samtools merge failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr=="", "Samtools merge failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
 
         self.assertTrue(os.path.exists(self.outbamfile))
