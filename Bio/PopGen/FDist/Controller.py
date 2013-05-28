@@ -82,7 +82,9 @@ class FDistController(object):
         else:
             datacal_name = "Ddatacal"
         proc = subprocess.Popen([self._get_path(datacal_name)],
-                                stdin=subprocess.PIPE, shell=True,
+                                universal_newlines=True,
+                                stdin=subprocess.PIPE,
+                                shell=(sys.platform != "win32"),
                                 stdout=subprocess.PIPE, cwd=data_dir)
         if version == 1:
             out, err = proc.communicate('a\n')
@@ -178,8 +180,9 @@ class FDistController(object):
         else:
             bin_name = "fdist2"
         proc = subprocess.Popen([self._get_path(bin_name)], cwd=data_dir,
+                                universal_newlines=True,
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                shell=True)
+                                shell=(sys.platform != "win32"))
         out, err = proc.communicate('y\n\n')
         lines = out.split("\n")
         for line in lines:
@@ -243,7 +246,8 @@ class FDistController(object):
             cplot_name = "cplot2"
         proc = subprocess.Popen([self._get_path(cplot_name)], cwd=data_dir,
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                shell=True)
+                                shell=(sys.platform != "win32"),
+                                universal_newlines=True)
         if version == 1:
             proc.communicate('out.dat out.cpl\n' + str(ci) + '\n')
         else:
@@ -282,8 +286,10 @@ class FDistController(object):
             pv_name = "pv2"
 
         proc = subprocess.Popen([self._get_path(pv_name)], cwd=data_dir,
-                                shell=True, stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE)
+                                shell=(sys.platform != "win32"),
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                universal_newlines=True)
         proc.communicate('data_fst_outfile ' + out_file +
                          ' out.dat\n' + str(smooth) + '\n')
         pvf = open(data_dir + os.sep + out_file, 'r')
