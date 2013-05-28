@@ -15,6 +15,7 @@ from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
+from Bio.Application import _escape_filename
 from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
@@ -37,7 +38,11 @@ if "EMBOSS_ROOT" in os.environ:
         for name in exes_wanted:
             if os.path.isfile(os.path.join(path, name+".exe")):
                 exes[name] = os.path.join(path, name+".exe")
-    del path, name
+        del name
+    else:
+        raise MissingExternalDependencyError(
+                  "$EMBOSS_ROOT=%r which does not exist!" % path)
+    del path
 if sys.platform!="win32":
     import commands
     for name in exes_wanted:
@@ -57,7 +62,7 @@ def get_emboss_version():
     """Returns a tuple of three ints, e.g. (6,1,0)"""
     #Windows and Unix versions of EMBOSS seem to differ in
     #which lines go to stdout and stderr - so merge them.
-    child = subprocess.Popen(exes["embossversion"],
+    child = subprocess.Popen(_escape_filename(exes["embossversion"]),
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT,
                              universal_newlines=True,
@@ -83,6 +88,9 @@ def get_emboss_version():
             raise MissingExternalDependencyError(
                 "Install EMBOSS if you want to use Bio.Emboss (%s)."
                 % line)
+    #In case there was no output at all...
+    raise MissingExternalDependencyError("Could not get EMBOSS version")
+
 
 #To avoid confusing known errors from old versions of EMBOSS ...
 emboss_version = get_emboss_version()
