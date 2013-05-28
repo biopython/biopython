@@ -69,15 +69,15 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.files_to_clean = set()
-        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools", "sam1.sam")
+        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "sam1.sam")
         self.reference = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "human_g1k_v37_truncated.fasta")
         self.referenceindexfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "human_g1k_v37_truncated.fasta.fai")
-        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools", "sam2.sam")
-        self.bamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools" ,"bam1.bam")
-        self.bamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools", "bam2.bam")
-        self.outsamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools", "out.sam")
-        self.outbamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools", "out.bam")
-        self.bamindexfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Samtools" ,"bam1.bam.bai")
+        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "sam2.sam")
+        self.bamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam" ,"bam1.bam")
+        self.bamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "bam2.bam")
+        self.outsamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "out.sam")
+        self.outbamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "out.bam")
+        self.bamindexfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam" ,"bam1.bam.bai")
 
     def tearDown(self):
         for filename in self.files_to_clean:
@@ -157,6 +157,7 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.bamindexfile1))
 
     def test_idxstats(self):
+        self.test_index()
         cmdline = SamtoolsIdxstatsCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
