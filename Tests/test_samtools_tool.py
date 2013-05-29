@@ -69,15 +69,15 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.files_to_clean = set()
-        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "sam1.sam")
-        self.reference = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "human_g1k_v37_truncated.fasta")
-        self.referenceindexfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "human_g1k_v37_truncated.fasta.fai")
-        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "sam2.sam")
-        self.bamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam" ,"bam1.bam")
-        self.bamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "bam2.bam")
-        self.outsamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "out.sam")
-        self.outbamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam", "out.bam")
-        self.bamindexfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"SamBam" ,"bam1.bam.bai")
+        self.samfile1 = os.path.join("SamBam", "sam1.sam")
+        self.reference = os.path.join("BWA", "human_g1k_v37_truncated.fasta")
+        self.referenceindexfile = os.path.join("BWA", "human_g1k_v37_truncated.fasta.fai")
+        self.samfile2 = os.path.join("SamBam", "sam2.sam")
+        self.bamfile1 = os.path.join("SamBam", "bam1.bam")
+        self.bamfile2 = os.path.join("SamBam", "bam2.bam")
+        self.outsamfile = os.path.join("SamBam", "out.sam")
+        self.outbamfile = os.path.join("SamBam", "out.bam")
+        self.bamindexfile1 = os.path.join("SamBam", "bam1.bam.bai")
 
     def tearDown(self):
         for filename in self.files_to_clean:
@@ -111,7 +111,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
         self.assertTrue(stderr=="", "Samtools calmd failed:\n%s\nStderr:%s" \
-                        % (cmdline, stderr)    )
+                        % (cmdline, stderr))
 
     def test_cat(self):
         cmdline = SamtoolsCatCommandline()
@@ -119,7 +119,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", [self.bamfile1,self.bamfile2])
         stdout, stderr = cmdline()
         self.assertTrue(stderr=="", "Samtools cat failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr)    )
+                        % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
 
@@ -129,7 +129,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
         self.assertTrue(stderr=="", "Samtools faidx failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr)    )
+                        % (cmdline, stderr))
 
         self.assertTrue(os.path.exists(self.referenceindexfile))
 
@@ -144,7 +144,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("out_prefix", "bam1")
         stdout, stderr = cmdline()
         self.assertTrue(stderr=="", "Samtools sort failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr)    )
+                        % (cmdline, stderr))
 
 
     def test_index(self):
@@ -152,7 +152,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
         self.assertTrue(stderr=="", "Samtools index failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr)    )
+                        % (cmdline, stderr))
 
         self.assertTrue(os.path.exists(self.bamindexfile1))
 
@@ -162,7 +162,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
         self.assertTrue(stderr=="", "Samtools idxstats failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr)    )
+                        % (cmdline, stderr))
 
 
 
