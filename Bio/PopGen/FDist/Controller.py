@@ -16,7 +16,8 @@ import subprocess
 import sys
 from random import randint
 from time import strftime, clock
-#from logging import debug
+
+from Bio._py3k import _as_bytes
 
 if sys.version_info[0] == 3:
     maxint = sys.maxsize
@@ -87,15 +88,15 @@ class FDistController(object):
                                 shell=(sys.platform != "win32"),
                                 stdout=subprocess.PIPE, cwd=data_dir)
         if version == 1:
-            out, err = proc.communicate('a\n')
+            out, err = proc.communicate(_as_bytes('a\n'))
             lines = out.split("\n")
             fst_line = lines[0].rstrip().split(' ')
             fst = my_float(fst_line[4])
             sample_line = lines[1].rstrip().split(' ')
             sample = int(sample_line[9])
         else:
-            out, err = proc.communicate('%f\n%f\n%f %f\na\n' % (
-                crit_freq, p, beta[0], beta[1]))
+            out, err = proc.communicate(_as_bytes('%f\n%f\n%f %f\na\n' % (
+                crit_freq, p, beta[0], beta[1])))
             lines = out.split("\n")
             l = lines[0].rstrip().split(" ")
             loci, pops = int(l[-5]), int(l[-2])
@@ -183,7 +184,7 @@ class FDistController(object):
                                 universal_newlines=True,
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 shell=(sys.platform != "win32"))
-        out, err = proc.communicate('y\n\n')
+        out, err = proc.communicate(_as_bytes('y\n\n'))
         lines = out.split("\n")
         for line in lines:
             if line.startswith('average Fst'):
@@ -249,11 +250,11 @@ class FDistController(object):
                                 shell=(sys.platform != "win32"),
                                 universal_newlines=True)
         if version == 1:
-            proc.communicate('out.dat out.cpl\n' + str(ci) + '\n')
+            proc.communicate(_as_bytes('out.dat out.cpl\n%s\n' % ci))
         else:
-            proc.communicate("\n".join([
+            proc.communicate(_as_bytes("\n".join([
                 "data_fst_outfile out.cpl out.dat",
-                str(ci), str(smooth)]))
+                str(ci), str(smooth)])))
 
         f = open(data_dir + os.sep + 'out.cpl')
         conf_lines = []
@@ -290,8 +291,8 @@ class FDistController(object):
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE,
                                 universal_newlines=True)
-        proc.communicate('data_fst_outfile ' + out_file +
-                         ' out.dat\n' + str(smooth) + '\n')
+        proc.communicate(_as_bytes('data_fst_outfile %s out.dat\n%s\n'
+                                   % (out_file, smooth)))
         pvf = open(data_dir + os.sep + out_file, 'r')
         result = map(lambda x: tuple(map(lambda y:
                                          my_float(y), x.rstrip().split(' '))),
