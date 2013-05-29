@@ -54,6 +54,8 @@ class EntrezTests(unittest.TestCase):
     def simple(self, database, formats, entry, length, checksum):
         for f in formats:
             handle = Entrez.efetch(db=database, id=entry, rettype=f, retmode="text")
+            if f == "gbwithparts":
+                f = "gb"
             record = SeqIO.read(handle, f)
             handle.close()
             self.assertTrue((entry in record.name) or
@@ -69,7 +71,7 @@ for database, formats, entry, length, checksum in [
          "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
         ("nucleotide", ["fasta", "gb"], "6273291", 902,
          "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
-        ("protein", ["fasta", "gb"], "16130152", 367,
+        ("protein", ["fasta", "gbwithparts"], "16130152", 367,
          "fCjcjMFeGIrilHAn6h+yju267lg"),
         ]:
 
