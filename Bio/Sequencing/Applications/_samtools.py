@@ -519,10 +519,9 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
                     _Switch(["-u", "u"], "Output uncompressed BAM"),
                     _Switch(["-b", "b"], "Output compressed BAM "),
                     _Switch(["-S", "S"], "The input is SAM with header lines "),
-                    _Switch(["-r", "r"],
+                    _Switch(["-r", "r"], "Compute the BQ tag (without -A) or cap base quality by BAQ (with -A)."),
                     _Switch(["-A", "A"],
                             "When used jointly with -r this option overwrites the original base quality"),
-                            "Compute the BQ tag (without -A) or cap base quality by BAQ (with -A)."),
                     _Option(["-C", "C"], "Coefficient to cap mapping quality of poorly mapped reads.\
                             See the pileup command for details.",
                             equate=False, checker_function=lambda x : isinstance(x,int)),
