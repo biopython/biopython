@@ -212,7 +212,7 @@ def _combine_args(first, *rest):
             raise ValueError("Arguments must be either a single list of "
                     "targets, or separately specified targets "
                     "(e.g. foo(t1, t2, t3)), but not both.")
-        return first
+        return (x for x in first)
     # `terminals` is a single target -- wrap in a container
     return itertools.chain([first], rest)
 
@@ -325,6 +325,12 @@ class TreeMixin(object):
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """
+        if hasattr(self, '_cached_labels') and isinstance(target, basestring):
+            if target in self._cached_labels:
+                return (x for x in self._cached_labels[target])
+            else:
+                return (x for x in ())
+            
         if terminal is not None:
             kwargs['terminal'] = terminal
         is_matching_elem = _combine_matchers(target, kwargs, False)
@@ -695,6 +701,14 @@ class TreeMixin(object):
             clade = clade_cls(name=base_name+str(i),
                               branch_length=branch_length)
             self.root.clades.append(clade)
+            
+    def cache_labels(self):
+        self._cached_labels = {}
+        for x in self.find_elements():
+            if x.name:
+                if not x.name in self._cached_labels:
+                    self._cached_labels[x.name] = set()
+                self._cached_labels[x.name].add(x)
 
 
 class Tree(TreeElement, TreeMixin):
