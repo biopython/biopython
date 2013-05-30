@@ -19,7 +19,7 @@ for path in os.environ['PATH'].split(os.pathsep):
     try:
         list = os.listdir(path)
         for file in os.listdir(path):
-            for f in ['fdist2', 'datacal', 'pv', 'cplot2']:
+            for f in ['fdist2', 'datacal', 'pv', 'cplot']:
                 if file == f or file.lower() == f.lower()+".exe":
                     wanted[f] = file
     except os.error:

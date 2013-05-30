@@ -119,7 +119,8 @@ class AbstractCommandline(object):
     >>> cline
     WaterCommandline(cmd='water', gapextend=0.5)
 
-    Once you have set the parameters you need, turn the object into a string:
+    Once you have set the parameters you need, you can turn the object into
+    a string (e.g. to log the command):
 
     >>> str(cline)
     Traceback (most recent call last):
@@ -144,7 +145,28 @@ class AbstractCommandline(object):
     case where you just want to run the command and get the output:
 
     stdout, stderr = water_cmd()
+
+    Note that by default we assume the underlying tool is installed on the
+    system $PATH environment variable. This is normal under Linux/Unix, but
+    may need to be done manually under Windows. Alternatively, you can specify
+    the full path to the binary as the first argument (cmd):
+
+    >>> from Bio.Emboss.Applications import WaterCommandline
+    >>> water_cmd = WaterCommandline("C:\Program Files\EMBOSS\water.exe",
+    ...                              gapopen=10, gapextend=0.5,
+    ...                              asequence="asis:ACCCGGGCGCGGT",
+    ...                              bsequence="asis:ACCCGAGCGCGGT",
+    ...                              outfile="temp_water.txt")
+    >>> print water_cmd
+    "C:\Program Files\EMBOSS\water.exe" -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
+
+    Notice that since the path name includes a space it has automatically
+    been quoted.
+
     """
+    #TODO - Replace the above example since EMBOSS doesn't work properly
+    #if installed into a folder with a space like "C:\Program Files\EMBOSS"
+
     #Note the call example above is not a doctest as we can't handle EMBOSS
     #(or any other tool) being missing in the unit tests.
     def __init__(self, cmd, **kwargs):
@@ -173,6 +195,9 @@ class AbstractCommandline(object):
         #Create properties for each parameter at run time
         aliases = set()
         for p in parameters:
+            if not p.names:
+                assert isinstance(p, _StaticArgument), p
+                continue
             for name in p.names:
                 if name in aliases:
                     raise ValueError("Parameter alias %s multiply defined"
@@ -246,7 +271,7 @@ class AbstractCommandline(object):
         'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5'
         """
         self._validate()
-        commandline = "%s " % self.program_name
+        commandline = "%s " % _escape_filename(self.program_name)
         for parameter in self.parameters:
             if parameter.is_set:
                 #This will include a trailing space:
@@ -608,6 +633,22 @@ class _Argument(_AbstractParameter):
             return "%s " % _escape_filename(self.value)
         else:
             return "%s " % self.value
+
+
+class _StaticArgument(_AbstractParameter):
+    """Represent a static (read only) argument on a commandline.
+
+    This is not intended to be exposed as a named argument or
+    property of a command line wrapper object.
+    """
+    def __init__(self, value):
+        self.names = []
+        self.is_required = False
+        self.is_set = True
+        self.value = value
+
+    def __str__(self):
+        return "%s " % self.value
 
 
 def _escape_filename(filename):

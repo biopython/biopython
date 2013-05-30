@@ -39,7 +39,7 @@ class BlastTextParser(object):
                 qid, qdesc = rec.query, ''
             qdesc = qdesc.replace('\n', '').replace('\r', '')
 
-            qresult = QueryResult(qid)
+            qresult = QueryResult(id=qid)
             qresult.program = rec.application.lower()
             qresult.target = rec.database
             qresult.seq_len = rec.query_letters

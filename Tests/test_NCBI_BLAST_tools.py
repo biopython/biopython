@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -12,6 +12,7 @@ import sys
 import subprocess
 import unittest
 
+from Bio.Application import _escape_filename
 from Bio import MissingExternalDependencyError
 from Bio.Blast import Applications
 
@@ -75,7 +76,7 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
-        self.assertEqual(str(cline), exe_names["blastp"]
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"])
                          + " -query Fasta/rose.pro -evalue 1"
                          + " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
@@ -105,7 +106,7 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
-        self.assertEqual(str(cline), exe_names["blastn"]
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"])
                          + " -query GenBank/NC_005816.ffn -evalue 0.000001"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
@@ -128,7 +129,7 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
-        self.assertEqual(str(cline), exe_names["tblastn"]
+        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"])
                          + " -query GenBank/NC_005816.faa -evalue 1e-6"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
