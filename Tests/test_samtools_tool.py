@@ -128,7 +128,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsFaidxCommandline()
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr=="", "Samtools faidx failed:\n%s\nStderr:%s"\
+        self.assertFalse(stderr, "Samtools faidx failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
 
         self.assertTrue(os.path.exists(self.referenceindexfile))
@@ -143,7 +143,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         cmdline.set_parameter("out_prefix", "bam1")
         stdout, stderr = cmdline()
-        self.assertTrue(stderr=="", "Samtools sort failed:\n%s\nStderr:%s"\
+        self.assertFalse(stderr, "Samtools sort failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
 
 
@@ -151,7 +151,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsIndexCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr=="", "Samtools index failed:\n%s\nStderr:%s"\
+        self.assertFalse(stderr, "Samtools index failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
 
         self.assertTrue(os.path.exists(self.bamindexfile1))
@@ -161,7 +161,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsIdxstatsCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertTrue(stderr=="", "Samtools idxstats failed:\n%s\nStderr:%s"\
+        self.assertFalse(stderr, "Samtools idxstats failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
 
 
@@ -173,7 +173,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("f", True) ## Overwrite out.bam if it exists
         stdout, stderr = cmdline()
 
-        self.assertTrue(stderr=="", "Samtools merge failed:\n%s\nStderr:%s"\
+        self.assertFalse(stderr, "Samtools merge failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
 
         self.assertTrue(os.path.exists(self.outbamfile))
