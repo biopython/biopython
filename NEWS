@@ -50,6 +50,7 @@ Additionally there have been other minor bug fixes and more unit tests.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Alexander Campbell (first contribution)
 Andrea Rizzi (first contribution)
 Ben Morris (first contribution)
 Christian Brueffer
