@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""mmCIF parser (partly implemented in C)."""
+"""mmCIF parser"""
 
 from string import ascii_letters
 
