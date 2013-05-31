@@ -325,9 +325,9 @@ class TreeMixin(object):
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """
-        if hasattr(self, '_cached_labels') and isinstance(target, basestring):
-            if target in self._cached_labels:
-                return (x for x in self._cached_labels[target])
+        if hasattr(self, '_label_index') and isinstance(target, basestring):
+            if target in self._label_index:
+                return (x for x in self._label_index[target])
             else:
                 return (x for x in ())
             
@@ -702,13 +702,13 @@ class TreeMixin(object):
                               branch_length=branch_length)
             self.root.clades.append(clade)
             
-    def cache_labels(self):
-        self._cached_labels = {}
+    def index_labels(self):
+        self._label_index = {}
         for x in self.find_elements():
             if x.name:
-                if not x.name in self._cached_labels:
-                    self._cached_labels[x.name] = set()
-                self._cached_labels[x.name].add(x)
+                if not x.name in self._label_index:
+                    self._label_index[x.name] = set()
+                self._label_index[x.name].add(x)
 
 
 class Tree(TreeElement, TreeMixin):
