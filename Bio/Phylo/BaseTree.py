@@ -61,6 +61,7 @@ def _sorted_attrs(elem):
                                   key=lambda kv: kv[0]):
         if child is None:
             continue
+        if attrname.startswith('_'): continue
         if isinstance(child, list):
             lists.extend(child)
         else:
@@ -211,7 +212,7 @@ def _combine_args(first, *rest):
             raise ValueError("Arguments must be either a single list of "
                     "targets, or separately specified targets "
                     "(e.g. foo(t1, t2, t3)), but not both.")
-        return first
+        return (x for x in first)
     # `terminals` is a single target -- wrap in a container
     return itertools.chain([first], rest)
 
@@ -324,6 +325,12 @@ class TreeMixin(object):
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """
+        if hasattr(self, '_label_index') and isinstance(target, basestring):
+            if target in self._label_index:
+                return (x for x in self._label_index[target])
+            else:
+                return (x for x in ())
+            
         if terminal is not None:
             kwargs['terminal'] = terminal
         is_matching_elem = _combine_matchers(target, kwargs, False)
@@ -358,6 +365,9 @@ class TreeMixin(object):
         :returns: list of all clade objects along this path, ending with the
             given target, but excluding the root clade.
         """
+        if isinstance(target, TreeElement):
+            return [x for x in target.parents][-2::-1]
+        
         # Only one path will work -- ignore weights and visits
         path = []
         match = _combine_matchers(target, kwargs, True)
@@ -406,22 +416,27 @@ class TreeMixin(object):
         - If 1 target is given, returns the target
         - If any target is not found in this tree, raises a ValueError
         """
-        paths = [self.get_path(t)
-                 for t in _combine_args(targets, *more_targets)]
-        # Validation -- otherwise izip throws a spooky error below
-        for p, t in zip(paths, targets):
-            if p is None:
+        targets = _combine_args(targets, *more_targets)
+
+        try:
+            mrca = targets.next()
+            if not isinstance(mrca, TreeElement):
+                match = _combine_matchers(mrca, {}, True)
+                mrca = self.find_any(match)
+        except StopIteration:
+            return self.root
+            
+        for t in targets:
+            if not isinstance(t, TreeElement):
+                match = _combine_matchers(t, {}, True)
+                t = self.find_any(match)
+            
+            ancestors = (x for x in mrca.parents if x in t.parents)
+            try:
+                mrca = ancestors.next()
+            except StopIteration:
                 raise ValueError("target %s is not in this tree" % repr(t))
-        mrca = self.root
-        for level in itertools.izip(*paths):
-            ref = level[0]
-            for other in level[1:]:
-                if ref is not other:
-                    break
-            else:
-                mrca = ref
-            if ref is not mrca:
-                break
+
         return mrca
 
     def count_terminals(self):
@@ -462,10 +477,22 @@ class TreeMixin(object):
         If only one target is specified, the other is the root of this tree.
         """
         if target2 is None:
-            return sum(n.branch_length for n in self.get_path(target1)
-                       if n.branch_length is not None)
-        mrca = self.common_ancestor(target1, target2)
-        return mrca.distance(target1) + mrca.distance(target2)
+            mrca = self.root
+        else:
+            mrca = self.common_ancestor(target1, target2)
+            
+        d = 0
+        for t in (target1, target2):
+            if not t: continue
+            if not isinstance(t, TreeElement): t = self.find_any(t)
+            
+            p = t.parents
+            n = p.next()
+            while n != mrca:
+                d += n.branch_length
+                n = p.next()
+                
+        return d
 
     def is_bifurcating(self):
         """Return True if tree downstream of node is strictly bifurcating.
@@ -674,6 +701,14 @@ class TreeMixin(object):
             clade = clade_cls(name=base_name+str(i),
                               branch_length=branch_length)
             self.root.clades.append(clade)
+            
+    def index_labels(self):
+        self._label_index = {}
+        for x in self.find_elements():
+            if x.name:
+                if not x.name in self._label_index:
+                    self._label_index[x.name] = set()
+                self._label_index[x.name].add(x)
 
 
 class Tree(TreeElement, TreeMixin):
@@ -947,6 +982,8 @@ class Tree(TreeElement, TreeMixin):
             textlines.append(TAB*indent + repr(obj))
             indent += 1
             for attr in obj.__dict__:
+                if attr.startswith('_'): continue
+                
                 child = getattr(obj, attr)
                 if isinstance(child, TreeElement):
                     print_tree(child, indent)
@@ -954,9 +991,45 @@ class Tree(TreeElement, TreeMixin):
                     for elem in child:
                         if isinstance(elem, TreeElement):
                             print_tree(elem, indent)
+                            
 
         print_tree(self, 0)
         return '\n'.join(textlines)
+
+
+class CladeChildren(list):
+    '''Whenever a new clade is appended to a list of child clades, that child
+    will have its `parent` attribute set.'''
+    def __init__(self, node, *args, **kwargs):
+        list.__init__(self, *args, **kwargs)
+        self.node = node
+
+    def __repr__(self): return list.__repr__(self)
+
+    def del_parent(self, x):
+        if hasattr(x, '_parent') and x._parent == self.node:
+            del x._parent        
+
+    def append(self, x):
+        list.append(self, x)
+        x._parent = self.node
+
+    def insert(self, i, x):
+        list.insert(self, i, x)
+        x._parent = self.node
+
+    def remove(self, x):
+        list.remove(self, x)
+        self.del_parent(x)
+
+    def pop(self, *args, **kwargs):
+        x = list.pop(self, *args, **kwargs)
+        self.del_parent(x)
+        return x
+
+    def extend(self, x):
+        for a in x:
+            self.append(a)
 
 
 class Clade(TreeElement, TreeMixin):
@@ -984,6 +1057,27 @@ class Clade(TreeElement, TreeMixin):
         self.confidence = confidence
         self.color = color
         self.width = width
+        
+    def _get_clades(self):
+        return self._clades
+        
+    def _set_clades(self, value):
+        self._clades = CladeChildren(self, [])
+        for x in value:
+            self._clades.append(x)
+        self.__dict__['clades'] = self._clades
+
+    clades = property(_get_clades, _set_clades)
+            
+    def get_parents(self, include_self=True):
+        '''Generates the step-by-step path from this node to the tree root.'''
+        if include_self: yield self
+        current_node = self
+        while hasattr(current_node, '_parent'):
+            yield(current_node._parent)
+            current_node = current_node._parent
+            
+    parents = property(get_parents)
 
     @property
     def root(self):
