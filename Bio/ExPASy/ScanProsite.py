@@ -71,7 +71,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if data[:5]!="<?xml":
+            if data[:5].decode('utf-8') != "<?xml":
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)
