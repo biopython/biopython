@@ -213,9 +213,11 @@ class PDBList(object):
         urllib.urlretrieve(url, filename)
 
         # Uncompress the archive, delete when done
-        with gzip.open(filename, 'rb') as gz:
-            with open(final_file, 'wb') as out:
-                out.writelines(gz)
+        #Can't use context manager with gzip.open until Python 2.7
+        gz = gzip.open(filename, 'rb')
+        with open(final_file, 'wb') as out:
+            out.writelines(gz)
+        gz.close()
         os.remove(filename)
 
         return final_file

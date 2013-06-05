@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""mmCIF parser (partly implemented in C)."""
+"""mmCIF parser"""
 
 from string import ascii_letters
 
@@ -84,8 +84,15 @@ class MMCIFParser(object):
                 altloc=" "
             resseq=seq_id_list[i]
             name=atom_id_list[i]
-            tempfactor=b_factor_list[i]
-            occupancy=occupancy_list[i]
+            # occupancy & B factor
+            try:
+                tempfactor=float(b_factor_list[i])
+            except ValueError:
+                raise PDBConstructionException("Invalid or missing B factor")
+            try:
+                occupancy=float(occupancy_list[i])
+            except ValueError:
+                raise PDBConstructionException("Invalid or missing occupancy")
             fieldname=fieldname_list[i]
             if fieldname=="HETATM":
                 hetatm_flag="H"
