@@ -19,7 +19,7 @@ for path in os.environ['PATH'].split(os.pathsep):
     try:
         list = os.listdir(path)
         for file in os.listdir(path):
-            for f in ['fdist2', 'datacal', 'pv', 'cplot2']:
+            for f in ['fdist2', 'datacal', 'pv', 'cplot']:
                 if file == f or file.lower() == f.lower()+".exe":
                     wanted[f] = file
     except os.error:
@@ -28,6 +28,11 @@ if len(wanted) != 4:
     raise MissingExternalDependencyError(
         "Install fdist2, datacal, pv and cplot if you want to use FDist2 with Bio.PopGen.FDist.")
 del wanted
+
+import sys
+if sys.version_info[0] == 3 and sys.version_info < (3, 2, 4):
+    raise MissingExternalDependencyError("Under Python 3, please use Python 3.2.4"
+               " onwards for this test - see http://bugs.python.org/issue16903")
 
 
 class AppTest(unittest.TestCase):

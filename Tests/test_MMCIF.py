@@ -10,7 +10,6 @@
 """Unit tests for the MMCIF portion of the Bio.PDB module."""
 
 import unittest
-import warnings
 
 try:
     import numpy
@@ -21,11 +20,6 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
-try:
-    import Bio.PDB.mmCIF.MMCIFlex
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError("C extension MMCIFlex not installed.")
 
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein

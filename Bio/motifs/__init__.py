@@ -13,6 +13,8 @@ and MAST programs, as well as files in the TRANSFAC format.
 Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
+import math
+
 
 def create(instances, alphabet=None):
     instances = Instances(instances, alphabet)
@@ -267,6 +269,21 @@ class Motif(object):
         self._pseudocounts = {}
         if isinstance(value, dict):
             self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet.letters)
+        elif value == 'sqrt':
+            nb_instances = sum([column[0] for column in self.counts.values()])
+            sq_nb_instances = math.sqrt(nb_instances)
+
+            alphabet = self.alphabet
+            background = self.background
+            if background:
+                background = dict(background)
+            else:
+                background = dict.fromkeys(sorted(alphabet.letters), 1.0)
+            total = sum(background.values())
+            self._pseudocounts = {}
+            for letter in alphabet.letters:
+                background[letter] /= total
+                self._pseudocounts[letter] = sq_nb_instances * background[letter]
         else:
             if value is None:
                 value = 0.0

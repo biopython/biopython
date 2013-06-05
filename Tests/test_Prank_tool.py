@@ -9,6 +9,7 @@ as part of this package.
 import sys
 import os
 import unittest
+from Bio.Application import _escape_filename
 from Bio import AlignIO
 from Bio import SeqIO
 from Bio import MissingExternalDependencyError
@@ -80,7 +81,7 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01")
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
@@ -97,7 +98,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.d = self.infile1
         cmdline.f = 17  # NEXUS format
         cmdline.set_parameter("notree", True)
-        self.assertEqual(str(cmdline), prank_exe +
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
                          " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
@@ -130,7 +131,8 @@ class PrankApplication(unittest.TestCase):
         cmdline.skipins = True
         cmdline.set_parameter("-once", True)
         cmdline.realbranches = True
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" +
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
+                         " -d=Fasta/fa01 -noxml" +
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" +
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
@@ -152,7 +154,7 @@ class PrankConversion(unittest.TestCase):
         cmdline = PrankCommandline(prank_exe, d=self.input,
                                    convert=True, f=prank_number,
                                    o='"%s"' % self.output)
-        self.assertEqual(str(cmdline), prank_exe
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe)
                          + ' -d=%s' % self.input
                          + ' -o="%s"' % self.output
                          + ' -f=%i' % prank_number
