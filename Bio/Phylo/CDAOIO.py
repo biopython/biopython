@@ -33,10 +33,9 @@ class CDAOError(Exception):
     pass
 
 try: 
-    import RDF
-    import Redland
+    import rdflib
 except ImportError:
-    raise CDAOError('Support for CDAO tree format requires the librdf Python bindings.')
+    raise CDAOError('Support for CDAO tree format requires RDFlib.')
 
 RDF_NAMESPACES = {
                   'owl':  'http://www.w3.org/2002/07/owl#',
@@ -44,6 +43,9 @@ RDF_NAMESPACES = {
                   'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
                   }
 RDF_NAMESPACES.update(cdao_namespaces)
+
+def qUri(x):
+    return resolve_uri(x, namespaces=RDF_NAMESPACES)
 
 def node_uri(graph, uri):
     '''Returns the full URI of a node by appending the node URI to the graph URI.'''
@@ -53,17 +55,6 @@ def node_uri(graph, uri):
         return urlparse.urljoin(graph, '#%s' % uri)
     else:
         return uri
-
-
-def new_storage():
-    '''Create a new in-memory Redland store for storing the RDF model.'''
-
-    storage = RDF.Storage(storage_name="hashes",
-                          name="test",
-                          options_string="new='yes',hash-type='memory',dir='.'")
-    if storage is None:
-        raise CDAOError("Creation of new RDF.Storage failed.")
-    return storage
 
 
 # ---------------------------------------------------------
@@ -93,7 +84,7 @@ class Parser(object):
     """
     def __init__(self, handle=None):
         self.handle = handle
-        self.model = None
+        self.graph = None
         self.node_info = None
         self.children = {}
         self.rooted = False
@@ -105,52 +96,40 @@ class Parser(object):
 
     def parse(self, **kwargs):
         """Parse the text stream this object was initialized with."""
-        self.parse_handle_to_model(**kwargs)
-        return self.parse_model()
+        self.parse_handle_to_graph(**kwargs)
+        return self.parse_graph()
         
-    def parse_handle_to_model(self, rooted=False, storage=None, 
+    def parse_handle_to_graph(self, rooted=False,
                               parse_format='turtle', context=None, **kwargs):
         '''Parse self.handle into RDF model self.model.'''
-
-        if storage is None:
-            # store RDF model in memory for now
-            storage = new_storage()
-
-        if self.model is None:
-            self.model = RDF.Model(storage)
-            if self.model is None:
-                raise CDAOError("new RDF.model failed")
-        model = self.model
+        
+        if self.graph is None:
+            self.graph = rdflib.Graph()
+        graph = self.graph
+        
+        for k, v in RDF_NAMESPACES.items():
+            graph.bind(k, v)
         
         self.rooted = rooted
-        
-        parser = RDF.Parser(name=parse_format)
-        if parser is None:
-            raise Exception('Failed to create RDF.Parser for MIME type %s' % mime_type)
         
         if 'base_uri' in kwargs:
             base_uri = kwargs['base_uri']
         else:
-            base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
+            base_uri = "file://"+os.path.abspath(self.handle.name)
         
-        statements = parser.parse_string_as_stream(self.handle.read(), base_uri)
-        for s in statements:
-            model.append(s)
+        graph.parse(file=self.handle, publicID=base_uri, format=parse_format)
             
-        return self.parse_model(model, context=context)
+        return self.parse_graph(graph, context=context)
             
             
-    def parse_model(self, model=None, context=None):
+    def parse_graph(self, graph=None, context=None):
         '''Generator that yields CDAO.Tree instances from an RDF model.'''
         
-        if model is None:
-            model = self.model
-
-        if not context is None:
-            context = RDF.Node(RDF.Uri(context))
+        if graph is None:
+            graph = self.graph
         
         # look up branch lengths/TUs for all nodes
-        self.get_node_info(model, context=context)
+        self.get_node_info(graph, context=context)
         
         for root_node in self.tree_roots:
             clade = self.parse_children(root_node)
@@ -176,10 +155,8 @@ class Parser(object):
         return clade
         
             
-    def get_node_info(self, model, context=None):
+    def get_node_info(self, graph, context=None):
         '''Creates a dictionary containing information about all nodes in the tree.'''
-        
-        Uri = RDF.Uri
         
         self.node_info = {}
         self.obj_info = {}
@@ -187,23 +164,23 @@ class Parser(object):
         self.nodes = set()
         self.tree_roots = set()
         
-        for statement, context in model.as_stream_context(context):
-            # process each RDF triple in the model sequentially
-            s, v, o = str(statement.subject), Uri(str(statement.predicate)), str(statement.object)
+        assignments = {
+                       qUri('cdao:has_Parent'): 'parent',
+                       qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
+                       qUri('cdao:has_Annotation'): 'annotation',
+                       qUri('cdao:has_Value'): 'value',
+                       qUri('cdao:represents_TU'): 'tu',
+                       qUri('rdfs:label'): 'label',
+                       qUri('cdao:has_Support_Value'): 'confidence',
+                       }
+        
+        for s, v, o in graph:
+            # process each RDF triple in the graph sequentially
             
-            if not s in self.obj_info:
-                self.obj_info[s] = {}
+            s, v, o = str(s), str(v), str(o)
+            
+            if not s in self.obj_info: self.obj_info[s] = {}
             this = self.obj_info[s]
-            
-            assignments = {
-                           qUri('cdao:has_Parent'): 'parent',
-                           qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
-                           qUri('cdao:has_Annotation'): 'annotation',
-                           qUri('cdao:has_Value'): 'value',
-                           qUri('cdao:represents_TU'): 'tu',
-                           qUri('rdfs:label'): 'label',
-                           qUri('cdao:has_Support_Value'): 'confidence',
-                           }
             
             try:
                 # if the predicate is one we care about, store information for later
@@ -212,7 +189,7 @@ class Parser(object):
                 pass
             
             if v == qUri('rdf:type'):
-                if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
+                if o in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
                     # this is a tree node; store it in set of all nodes
                     self.nodes.add(s)
             if v == qUri('cdao:has_Root'):
@@ -248,7 +225,7 @@ class Parser(object):
                     self.children[parent] = []
                 self.children[parent].append(node)
                 
-
+    
     def parse_children(self, node):
         '''Return a CDAO.Clade, and calls itself recursively for each child, 
         traversing the  entire tree and creating a nested structure of CDAO.Clade 
@@ -277,47 +254,24 @@ class Writer(object):
         self.tu_counter = 0
         self.tree_counter = 0
 
-    def write(self, handle, tree_uri='', context=None, record_complete_ancestry=False, 
-              rooted=False, **kwargs):
-        """Write this instance's trees to a file handle.
-
-        If the handle is a librdf model, statements will be added directly to it.
-        """
-
+    def write(self, handle, tree_uri='', record_complete_ancestry=False, 
+              rooted=False, rdf_format='turtle', **kwargs):
+        """Write this instance's trees to a file handle."""
+        
         self.rooted = rooted
         self.record_complete_ancestry = record_complete_ancestry
         
-        self.add_trees_to_handle(handle, tree_uri=tree_uri, context=context)
+        if tree_uri and not tree_uri.endswith('/'): tree_uri += '/'
         
-        
-    def add_trees_to_handle(self, handle, trees=None, tree_uri='', context=None):
-        """Add triples describing a set of trees to handle, which can be either 
-        a file or a librdf model."""
-
-        if tree_uri and not tree_uri.endswith('/'):
-            tree_uri = tree_uri + '/'
-
-        is_librdf_model = isinstance(handle, RDF.Model)
-
-        if is_librdf_model and context:
-            context = RDF.Node(RDF.Uri(context))
-        else:
-            context = None
-
-        Uri = RDF.Uri
+        graph = rdflib.Graph()
         prefixes = self.prefixes
+        for k, v in prefixes.items():
+            graph.bind(k, v)
         
-        if trees is None:
-            trees = self.trees
+        trees = self.trees
         
-        if is_librdf_model: 
-            Redland.librdf_model_transaction_start(handle._model)
-        else:
-            for prefix, url in prefixes.items():
-                handle.write('@prefix %s: <%s> .\n' % (prefix, url))
-        
-        for stmt in [(Uri(prefixes['cdao']), qUri('rdf:type'), qUri('owl:Ontology'))]:
-            self.add_stmt_to_handle(handle, RDF.Statement(*stmt), context)
+        for stmt in [(rdflib.URIRef(prefixes['cdao']), rdflib.URIRef(qUri('rdf:type')), rdflib.URIRef(qUri('owl:Ontology')))]:
+            graph.add(stmt)
         
         for tree in trees:
             self.tree_counter += 1
@@ -326,48 +280,16 @@ class Writer(object):
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree_uri)
             for stmt in statements:
-                self.add_stmt_to_handle(handle, stmt, context)
+                stmt = [rdflib.URIRef(x) 
+                        if isinstance(x, basestring) 
+                        and not (isinstance(x, rdflib.URIRef) 
+                              or isinstance(x, rdflib.Literal))
+                        else x
+                        for x in stmt]
+                graph.add(stmt)
                 
-        if is_librdf_model: 
-            Redland.librdf_model_transaction_commit(handle._model)
-            handle.sync()
-
-
-    def add_stmt_to_handle(self, handle, stmt, context):
-        if isinstance(handle, RDF.Model):
-            handle.append(stmt, context)
-        else: 
-            # apply URI prefixes
-            stmt_parts = [stmt.subject, stmt.predicate, stmt.object]
-            stmt_strings = []
-            for n, part in enumerate(stmt_parts):
-                if part.is_resource():
-                    changed = False
-                    node_uri = str(part)
-                    if n > 0:
-                        for prefix, uri in self.prefixes.items():
-                            if node_uri.startswith(uri):
-                                node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
-                                if node_uri == 'rdf:type':
-                                    node_uri = 'a'
-                                changed = True
-                        if changed:
-                            stmt_strings.append(node_uri)
-                        else:
-                            stmt_strings.append('<%s>' % node_uri)
-                    else:
-                        stmt_strings.append('<%s>' % node_uri)
-
-                elif part.is_literal():
-                    stmt_strings.append(('"%s"' % str(part.literal[0])) + 
-                                        (('^^<%s>' % str(part.literal[2])) if part.literal[2] else ''))
-                    
-                else:
-                    stmt_strings.append(str(part))
-            
-            handle.write('%s .\n' % ' '.join(stmt_strings))
+        graph.serialize(destination=handle, format=rdf_format)
         
-            
     def process_clade(self, clade, parent=None, root=False):
         '''recursively generate statements describing a tree of clades'''
         
@@ -378,8 +300,7 @@ class Writer(object):
         else:
             clade.ancestors = []
         
-        Uri = RDF.Uri
-        nUri = lambda s: Uri(node_uri(self.tree_uri, s))
+        nUri = lambda s: node_uri(self.tree_uri, s)
         tree_id = nUri('')
         
         statements = []
@@ -401,7 +322,7 @@ class Writer(object):
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
                            (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), qUri('rdfs:label'), RDF.Node(literal=clade.name.replace('_', ' '))),
+                           (nUri(tu_uri), qUri('rdfs:label'), rdflib.Literal(clade.name)),
                            ]
                            
             # TODO: should be able to pass in an optional function for 
@@ -430,11 +351,10 @@ class Writer(object):
                            ]
 
             if hasattr(clade, 'confidence') and not clade.confidence is None:
-                confidence = RDF.Node(literal=str(clade.confidence), 
-                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
-
+                confidence = rdflib.Literal(clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
+                
                 statements += [(nUri(clade.uri), qUri('cdao:has_Support_Value'), confidence)]
-
+            
             
             if self.record_complete_ancestry and len(clade.ancestors) > 0:
                 statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), nUri(ancestor))
@@ -443,8 +363,7 @@ class Writer(object):
             # add branch length
             edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(7)
 
-            branch_length = RDF.Node(literal=str(clade.branch_length), 
-                                     datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
+            branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#decimal'))
             statements += [
                            (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
                            (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
@@ -452,15 +371,9 @@ class Writer(object):
                            ]
                       
         for stmt in statements:
-            yield RDF.Statement(*stmt)
+            yield stmt
         
         if not clade.is_terminal():
             for new_clade in clade.clades:
                 for stmt in self.process_clade(new_clade, parent=clade, root=False):
                     yield stmt
-                    
-
-def qUri(s):
-    '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
-
-    return RDF.Uri(resolve_uri(s, namespaces=RDF_NAMESPACES))
