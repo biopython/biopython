@@ -46,7 +46,7 @@ RDF_NAMESPACES.update(cdao_namespaces)
 
 def qUri(x):
     return resolve_uri(x, namespaces=RDF_NAMESPACES)
-
+    
 def node_uri(graph, uri):
     '''Returns the full URI of a node by appending the node URI to the graph URI.'''
     if graph.endswith('/'):
@@ -55,6 +55,9 @@ def node_uri(graph, uri):
         return urlparse.urljoin(graph, '#%s' % uri)
     else:
         return uri
+    
+def format_label(x):
+    return x.replace('_', ' ')
 
 
 # ---------------------------------------------------------
@@ -255,7 +258,7 @@ class Writer(object):
         self.tree_counter = 0
 
     def write(self, handle, tree_uri='', record_complete_ancestry=False, 
-              rooted=False, rdf_format='turtle', **kwargs):
+              rooted=False, **kwargs):
         """Write this instance's trees to a file handle."""
         
         self.rooted = rooted
@@ -263,15 +266,13 @@ class Writer(object):
         
         if tree_uri and not tree_uri.endswith('/'): tree_uri += '/'
         
-        graph = rdflib.Graph()
-        prefixes = self.prefixes
-        for k, v in prefixes.items():
-            graph.bind(k, v)
-        
         trees = self.trees
         
-        for stmt in [(rdflib.URIRef(prefixes['cdao']), rdflib.URIRef(qUri('rdf:type')), rdflib.URIRef(qUri('owl:Ontology')))]:
-            graph.add(stmt)
+        for k, v in self.prefixes.items():
+            handle.write('@prefix %s: <%s> .\n' % (k,v))
+        
+        for stmt in [(rdflib.URIRef(self.prefixes['cdao']), rdflib.URIRef(qUri('rdf:type')), rdflib.URIRef(qUri('owl:Ontology')))]:
+            self.add_stmt_to_handle(handle, stmt)
         
         for tree in trees:
             self.tree_counter += 1
@@ -286,9 +287,33 @@ class Writer(object):
                               or isinstance(x, rdflib.Literal))
                         else x
                         for x in stmt]
-                graph.add(stmt)
+                self.add_stmt_to_handle(handle, stmt)
+        
+        
+    def add_stmt_to_handle(self, handle, stmt):
+        # apply URI prefixes
+        stmt_strings = []
+        for n, part in enumerate(stmt):
+            if isinstance(part, rdflib.URIRef):
+                changed = False
+                node_uri = str(part)
+                if n > 0:
+                    for prefix, uri in self.prefixes.items():
+                        if node_uri.startswith(uri):
+                            node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
+                            if node_uri == 'rdf:type': node_uri = 'a'
+                            changed = True
+                    if changed: stmt_strings.append(node_uri)
+                    else: stmt_strings.append('<%s>' % node_uri)
+                else: stmt_strings.append('<%s>' % node_uri)
+
+            elif isinstance(part, rdflib.Literal):
+                stmt_strings.append(part.n3())
                 
-        graph.serialize(destination=handle, format=rdf_format)
+            else:
+                stmt_strings.append(str(part))
+        
+        handle.write('%s .\n' % ' '.join(stmt_strings))
         
     def process_clade(self, clade, parent=None, root=False):
         '''recursively generate statements describing a tree of clades'''
@@ -322,7 +347,7 @@ class Writer(object):
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
                            (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), qUri('rdfs:label'), rdflib.Literal(clade.name)),
+                           (nUri(tu_uri), qUri('rdfs:label'), rdflib.Literal(format_label(clade.name))),
                            ]
                            
             # TODO: should be able to pass in an optional function for 
