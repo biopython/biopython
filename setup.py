@@ -348,6 +348,7 @@ PACKAGES = [
     'Bio.Phylo.Applications',
     'Bio.Phylo.PAML',
     'Bio.UniGene',
+    'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
     #Other top level packages,
