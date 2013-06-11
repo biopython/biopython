@@ -32,6 +32,9 @@ now optionally extract bootstrap values from the Newick comment field (like
 Molphy and Archaeopteryx do). Nate Sutton added a wrapper for FastTree to
 Bio.Phylo.Applications.
 
+New module Bio.UniProt adds parsers for the GAF, GPA and GPI formats from
+UniProt-GOA.
+
 The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
 can be used. The relevant JDBC driver should be available in the CLASSPATH.
 
@@ -55,6 +58,7 @@ Andrea Rizzi (first contribution)
 Ben Morris (first contribution)
 Christian Brueffer
 David Martin (first contribution)
+Iddo Friedberg
 Michiel de Hoon
 Nate Sutton (first contribution)
 Peter Cock
