@@ -31,6 +31,7 @@ def parse(handle, format):
      - TRANSFAC:      TRANSFAC database file format
      - pfm:           JASPAR-style position-frequency matrix
      - sites:         JASPAR-style sites file
+     - jaspar:        JASPAR file format containing multiple PFMs
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
     for those.
@@ -74,11 +75,10 @@ def parse(handle, format):
         from Bio.motifs import transfac
         record = transfac.read(handle)
         return record
-    elif format in ('pfm', 'sites'):
+    elif format in ('pfm', 'sites', 'jaspar'):
         from Bio.motifs import jaspar
-        motif = jaspar.read(handle, format)
-        motifs = [motif]
-        return motifs
+        record = jaspar.read(handle, format)
+        return record
     else:
         raise ValueError("Unknown format %s" % format)
 
