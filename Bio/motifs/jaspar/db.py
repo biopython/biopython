@@ -68,10 +68,7 @@ except:
 
 from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 
-import sys
-sys.path.append("/homed/home/dave/devel/biopython_devel")
-#sys.path.append("/home/anthony/PostDoc/JASPAR2013/Biopython_package/biopython-master/")
-from Bio_dev.motifs import jaspar, matrix
+from Bio.motifs import jaspar, matrix
 from warnings import warn
 
 JASPAR_DFLT_COLLECTION = 'CORE'
@@ -112,9 +109,9 @@ class JASPAR5(object):
         
         """
 
-        str = "%s\@%s:%s" % (self.user, self.host, self.name)
+        text = "%s\@%s:%s" % (self.user, self.host, self.name)
 
-        return str
+        return text
 
     def fetch_motif_by_id(self, id):
         """
@@ -126,7 +123,7 @@ class JASPAR5(object):
              version number (e.g. MA0049.2) or just the base ID (e.g. MA0049).
              If only a base ID is provided, the latest version is returned.
         Returns:
-        A Bio.motifs.Motif.jaspar object
+        A Bio.motifs.jaspar.Motif object
 
         NOTE: The perl TFBS module allows you to specify the type of matrix to
         return (PFM, PWM, ICM) but matrices are always stored in JASAPR as
@@ -234,7 +231,7 @@ class JASPAR5(object):
                       returned.
 
         Returns:
-        A Bio.motifs.Motif.jaspar.Record (list) of motifs.
+        A Bio.motifs.jaspar.Record (list) of motifs.
 
         """
 
@@ -725,6 +722,6 @@ class JASPAR5(object):
 
         if count == 0:
             # no matrices with higher version ID and same base id
-            return(True)
+            return True
 
-        return(False)
+        return False
