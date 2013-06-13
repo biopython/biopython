@@ -314,6 +314,7 @@ PACKAGES = [
     'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
+    'Bio.motifs.jaspar',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
