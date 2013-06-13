@@ -53,7 +53,7 @@ Example:
     ... )
     >>> 
     >>> for motif in motifs:
-    ...     # do something with the motif
+    ...     pass # do something with the motif
 
 """
 
