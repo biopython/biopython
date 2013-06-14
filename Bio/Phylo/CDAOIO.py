@@ -273,13 +273,14 @@ class Writer(object):
         
         for stmt in [(rdflib.URIRef(self.prefixes['cdao']), rdflib.URIRef(qUri('rdf:type')), rdflib.URIRef(qUri('owl:Ontology')))]:
             self.add_stmt_to_handle(handle, stmt)
+            
         
         for tree in trees:
             self.tree_counter += 1
             self.tree_uri = node_uri(tree_uri, 'tree%s' % str(self.tree_counter).zfill(7))
 
             first_clade = tree.clade
-            statements = self.process_clade(first_clade, root=tree_uri)
+            statements = self.process_clade(first_clade, root=tree)
             for stmt in statements:
                 stmt = [rdflib.URIRef(x) 
                         if isinstance(x, basestring) 
@@ -316,7 +317,7 @@ class Writer(object):
         handle.write('%s .\n' % ' '.join(stmt_strings))
         
     def process_clade(self, clade, parent=None, root=False):
-        '''recursively generate statements describing a tree of clades'''
+        '''recursively generate triples describing a tree of clades'''
         
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(7)
@@ -338,6 +339,12 @@ class Writer(object):
                            (tree_id, qUri('rdf:type'), tree_type),
                            (tree_id, qUri('cdao:has_Root'), nUri(clade.uri)),
                            ]
+            
+            try: tree_attributes = root.attributes
+            except AttributeError: tree_attributes = []
+            
+            for predicate, obj in tree_attributes:
+                statements.append((tree_id, predicate, obj))
         
         if clade.name:
             # create TU
@@ -350,8 +357,11 @@ class Writer(object):
                            (nUri(tu_uri), qUri('rdfs:label'), rdflib.Literal(format_label(clade.name))),
                            ]
                            
-            # TODO: should be able to pass in an optional function for 
-            # running each TU through TNRS, etc.
+            try: tu_attributes = clade.tu_attributes
+            except AttributeError: tu_attributes = []
+            
+            for predicate, obj in tu_attributes:
+                yield (nUri(clade.uri), predicate, obj)
             
         # create this node
         node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
@@ -374,7 +384,7 @@ class Writer(object):
                            (nUri(clade.uri), qUri('cdao:has_Parent'), nUri(parent.uri)),
                            (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
-
+            
             if hasattr(clade, 'confidence') and not clade.confidence is None:
                 confidence = rdflib.Literal(clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
                 
@@ -387,16 +397,28 @@ class Writer(object):
             
             # add branch length
             edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(7)
-
+            
             branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#decimal'))
             statements += [
                            (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
                            (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
                            (nUri(edge_ann_uri), qUri('cdao:has_Value'), branch_length),
                            ]
+                           
+            try: edge_attributes = clade.edge_attributes
+            except AttributeError: edge_attributes = []
+            
+            for predicate, obj in edge_attributes:
+                yield (nUri(edge_uri), predicate, obj)
                       
         for stmt in statements:
             yield stmt
+            
+        try: clade_attributes = clade.attributes
+        except AttributeError: clade_attributes = []
+        
+        for predicate, obj in clade_attributes:
+            yield (nUri(clade.uri), predicate, obj)
         
         if not clade.is_terminal():
             for new_clade in clade.clades:
