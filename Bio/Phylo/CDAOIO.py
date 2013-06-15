@@ -275,12 +275,6 @@ class Writer(object):
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree)
             for stmt in statements:
-                stmt = [rdflib.URIRef(x) 
-                        if isinstance(x, basestring) 
-                        and not (isinstance(x, rdflib.URIRef) 
-                              or isinstance(x, rdflib.Literal))
-                        else x
-                        for x in stmt]
                 self.add_stmt_to_handle(handle, stmt)
         
         
@@ -315,18 +309,19 @@ class Writer(object):
         if parent: clade.ancestors = parent.ancestors + [parent.uri]
         else: clade.ancestors = []
         
-        nUri = lambda s: s#':%s' % s
+        nUri = lambda s: rdflib.URIRef(s)#':%s' % s
+        pUri = lambda s: rdflib.URIRef(qUri(s))
         tree_id = nUri('')
         
         statements = []
         
         if not root is False:
             # create a cdao:RootedTree with reference to the tree root
-            tree_type = qUri('cdao:RootedTree') if self.rooted else qUri('cdao:UnrootedTree')
+            tree_type = pUri('cdao:RootedTree') if self.rooted else pUri('cdao:UnrootedTree')
             
             statements += [
-                           (tree_id, qUri('rdf:type'), tree_type),
-                           (tree_id, qUri('cdao:has_Root'), nUri(clade.uri)),
+                           (tree_id, pUri('rdf:type'), tree_type),
+                           (tree_id, pUri('cdao:has_Root'), nUri(clade.uri)),
                            ]
             
             try: tree_attributes = root.attributes
@@ -341,22 +336,22 @@ class Writer(object):
             tu_uri = 'tu%s' % str(self.tu_counter).zfill(ZEROES)
 
             statements += [
-                           (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
-                           (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), qUri('rdfs:label'), rdflib.Literal(format_label(clade.name))),
+                           (nUri(tu_uri), pUri('rdf:type'), pUri('cdao:TU')),
+                           (nUri(clade.uri), pUri('cdao:represents_TU'), nUri(tu_uri)),
+                           (nUri(tu_uri), pUri('rdfs:label'), rdflib.Literal(format_label(clade.name))),
                            ]
                            
             try: tu_attributes = clade.tu_attributes
             except AttributeError: tu_attributes = []
             
             for predicate, obj in tu_attributes:
-                yield (nUri(clade.uri), predicate, obj)
+                yield (nUri(tu_uri), predicate, obj)
             
         # create this node
         node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
         statements += [
-                       (nUri(clade.uri), qUri('rdf:type'), qUri(node_type)),
-                       (nUri(clade.uri), qUri('cdao:belongs_to_Tree'), tree_id),
+                       (nUri(clade.uri), pUri('rdf:type'), pUri(node_type)),
+                       (nUri(clade.uri), pUri('cdao:belongs_to_Tree'), tree_id),
                        ]
                       
         if not parent is None:
@@ -365,23 +360,23 @@ class Writer(object):
             edge_uri = 'edge%s' % str(self.edge_counter).zfill(ZEROES)
 
             statements += [
-                           (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
-                           (nUri(edge_uri), qUri('cdao:belongs_to_Tree'), tree_id),
-                           (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
-                           (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
-                           (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
-                           (nUri(clade.uri), qUri('cdao:has_Parent'), nUri(parent.uri)),
-                           (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
+                           (nUri(edge_uri), pUri('rdf:type'), pUri('cdao:DirectedEdge')),
+                           (nUri(edge_uri), pUri('cdao:belongs_to_Tree'), tree_id),
+                           (nUri(edge_uri), pUri('cdao:has_Parent_Node'), nUri(parent.uri)),
+                           (nUri(edge_uri), pUri('cdao:has_Child_Node'), nUri(clade.uri)),
+                           (nUri(clade.uri), pUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
+                           (nUri(clade.uri), pUri('cdao:has_Parent'), nUri(parent.uri)),
+                           (nUri(parent.uri), pUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
             
             if hasattr(clade, 'confidence') and not clade.confidence is None:
                 confidence = rdflib.Literal(clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
                 
-                statements += [(nUri(clade.uri), qUri('cdao:has_Support_Value'), confidence)]
+                statements += [(nUri(clade.uri), pUri('cdao:has_Support_Value'), confidence)]
             
             
             if self.record_complete_ancestry and len(clade.ancestors) > 0:
-                statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), nUri(ancestor))
+                statements += [(nUri(clade.uri), pUri('cdao:has_Ancestor'), nUri(ancestor))
                                for ancestor in clade.ancestors]
             
             # add branch length
