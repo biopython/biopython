@@ -379,16 +379,17 @@ class Writer(object):
                 statements += [(nUri(clade.uri), pUri('cdao:has_Ancestor'), nUri(ancestor))
                                for ancestor in clade.ancestors]
             
-            # add branch length
-            edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(ZEROES)
-            
-            branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#decimal'))
-            statements += [
-                           (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
-                           (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
-                           (nUri(edge_ann_uri), qUri('cdao:has_Value'), branch_length),
-                           ]
-                           
+            if not clade.branch_length is None:
+                # add branch length
+                edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(ZEROES)
+                
+                branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#decimal'))
+                statements += [
+                               (nUri(edge_ann_uri), pUri('rdf:type'), pUri('cdao:EdgeLength')),
+                               (nUri(edge_uri), pUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
+                               (nUri(edge_ann_uri), pUri('cdao:has_Value'), branch_length),
+                               ]
+                
             try: edge_attributes = clade.edge_attributes
             except AttributeError: edge_attributes = []
             
