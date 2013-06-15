@@ -43,18 +43,11 @@ RDF_NAMESPACES = {
                   'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
                   }
 RDF_NAMESPACES.update(cdao_namespaces)
+# pad node ids with zeroes until they're at least this length
+ZEROES = 8
 
 def qUri(x):
     return resolve_uri(x, namespaces=RDF_NAMESPACES)
-    
-def node_uri(graph, uri):
-    '''Returns the full URI of a node by appending the node URI to the graph URI.'''
-    if graph.endswith('/'):
-        return urlparse.urljoin(graph, uri)
-    elif graph:
-        return urlparse.urljoin(graph, '#%s' % uri)
-    else:
-        return uri
     
 def format_label(x):
     return x.replace('_', ' ')
@@ -268,16 +261,16 @@ class Writer(object):
         
         trees = self.trees
         
+        if tree_uri: handle.write('@base <%s>\n' % tree_uri)
         for k, v in self.prefixes.items():
             handle.write('@prefix %s: <%s> .\n' % (k,v))
-        
-        for stmt in [(rdflib.URIRef(self.prefixes['cdao']), rdflib.URIRef(qUri('rdf:type')), rdflib.URIRef(qUri('owl:Ontology')))]:
-            self.add_stmt_to_handle(handle, stmt)
+
+        handle.write('<%s> a owl:Ontology .\n' % self.prefixes['cdao'])
             
         
         for tree in trees:
             self.tree_counter += 1
-            self.tree_uri = node_uri(tree_uri, 'tree%s' % str(self.tree_counter).zfill(7))
+            self.tree_uri = 'tree%s'
 
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree)
@@ -296,16 +289,14 @@ class Writer(object):
         stmt_strings = []
         for n, part in enumerate(stmt):
             if isinstance(part, rdflib.URIRef):
-                changed = False
                 node_uri = str(part)
-                if n > 0:
-                    for prefix, uri in self.prefixes.items():
-                        if node_uri.startswith(uri):
-                            node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
-                            if node_uri == 'rdf:type': node_uri = 'a'
-                            changed = True
-                    if changed: stmt_strings.append(node_uri)
-                    else: stmt_strings.append('<%s>' % node_uri)
+                changed = False
+                for prefix, uri in self.prefixes.items():
+                    if node_uri.startswith(uri):
+                        node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
+                        if node_uri == 'rdf:type': node_uri = 'a'
+                        changed = True
+                if changed or ':' in node_uri: stmt_strings.append(node_uri)
                 else: stmt_strings.append('<%s>' % node_uri)
 
             elif isinstance(part, rdflib.Literal):
@@ -320,13 +311,11 @@ class Writer(object):
         '''recursively generate triples describing a tree of clades'''
         
         self.node_counter += 1
-        clade.uri = 'node%s' % str(self.node_counter).zfill(7)
-        if parent:
-            clade.ancestors = parent.ancestors + [parent.uri]
-        else:
-            clade.ancestors = []
+        clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
+        if parent: clade.ancestors = parent.ancestors + [parent.uri]
+        else: clade.ancestors = []
         
-        nUri = lambda s: node_uri(self.tree_uri, s)
+        nUri = lambda s: s#':%s' % s
         tree_id = nUri('')
         
         statements = []
@@ -349,7 +338,7 @@ class Writer(object):
         if clade.name:
             # create TU
             self.tu_counter += 1
-            tu_uri = 'tu%s' % str(self.tu_counter).zfill(7)
+            tu_uri = 'tu%s' % str(self.tu_counter).zfill(ZEROES)
 
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
@@ -373,7 +362,7 @@ class Writer(object):
         if not parent is None:
             # create edge from the parent node to this node
             self.edge_counter += 1
-            edge_uri = 'edge%s' % str(self.edge_counter).zfill(7)
+            edge_uri = 'edge%s' % str(self.edge_counter).zfill(ZEROES)
 
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
@@ -396,7 +385,7 @@ class Writer(object):
                                for ancestor in clade.ancestors]
             
             # add branch length
-            edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(7)
+            edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(ZEROES)
             
             branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#decimal'))
             statements += [
