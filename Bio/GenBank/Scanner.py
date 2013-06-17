@@ -1136,6 +1136,16 @@ class GenBankScanner(InsdcScanner):
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
                 warnings.warn("Minimal LOCUS line found - is this correct?\n:%r" % line)
+        elif len(line.split()) == 8 and line.split()[3] in ("aa", "bp") and \
+             line.split()[5] in ('linear', 'circular'):
+            # Cope with invalidly spaced GenBank LOCUS lines like
+            #LOCUS       AB070938          6497 bp    DNA     linear   BCT 11-OCT-2001
+            splitline = line.split()
+            consumer.locus(splitline[1])
+            consumer.size(splitline[2])
+            consumer.residue_type(splitline[4])
+            consumer.data_file_division(splitline[6])
+            consumer.date(splitline[7])
         elif len(line.split()) == 7 and line.split()[3] in ["aa", "bp"]:
             #Cope with EnsEMBL genbank files which use space separation rather
             #than the expected column based layout. e.g.
