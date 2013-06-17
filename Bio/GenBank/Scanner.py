@@ -185,7 +185,8 @@ class InsdcScanner(object):
                     #over indenting the location and qualifiers.
                     feature_key, line = line[2:].strip().split(None, 1)
                     feature_lines = [line]
-                    warnings.warn("Overindented %s feature?" % feature_key)
+                    warnings.warn("Overindented %s feature?" % feature_key,
+                                  BiopythonParserWarning)
                 else:
                     feature_key = line[2:self.FEATURE_QUALIFIER_INDENT].strip()
                     feature_lines = [line[self.FEATURE_QUALIFIER_INDENT:]]
@@ -893,7 +894,7 @@ class _ImgtScanner(EmblScanner):
                     #and since it is so common I don't want to issue a warning
                     #warnings.warn("Feature location %s is invalid, "
                     #              "moving greater than sign before position"
-                    #              % location)
+                    #              % location, BiopythonParserWarning)
                     location = bad_position_re.sub(r'>\1', location)
                 features.append((feature_key, location, qualifiers))
         self.line = line
@@ -935,12 +936,14 @@ class GenBankScanner(InsdcScanner):
         line = self.line
         while True:
             if not line:
-                warnings.warn("Premature end of file in sequence data", BiopythonParserWarning)
+                warnings.warn("Premature end of file in sequence data",
+                              BiopythonParserWarning)
                 line = '//'
                 break
             line = line.rstrip()
             if not line:
-                warnings.warn("Blank line in sequence data", BiopythonParserWarning)
+                warnings.warn("Blank line in sequence data",
+                              BiopythonParserWarning)
                 line = self.handle.readline()
                 continue
             if line == '//':
@@ -950,7 +953,8 @@ class GenBankScanner(InsdcScanner):
             if len(line) > 9 and line[9:10] != ' ':
                 # Some broken programs indent the sequence by one space too many
                 # so try to get rid of that and test again.
-                warnings.warn("Invalid indentation for sequence line", BiopythonParserWarning)
+                warnings.warn("Invalid indentation for sequence line",
+                              BiopythonParserWarning)
                 line = line[1:]
                 if len(line) > 9 and line[9:10] != ' ':
                     raise ValueError("Sequence line mal-formed, '%s'" % line)
@@ -1135,7 +1139,8 @@ class GenBankScanner(InsdcScanner):
             else:
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
-                warnings.warn("Minimal LOCUS line found - is this correct?\n:%r" % line)
+                warnings.warn("Minimal LOCUS line found - is this "
+                              "correct?\n:%r" % line, BiopythonParserWarning)
         elif len(line.split()) == 7 and line.split()[3] in ["aa", "bp"]:
             #Cope with EnsEMBL genbank files which use space separation rather
             #than the expected column based layout. e.g.
@@ -1154,14 +1159,16 @@ class GenBankScanner(InsdcScanner):
         elif len(line.split()) >= 4 and line.split()[3] in ["aa", "bp"]:
             #Cope with EMBOSS seqret output where it seems the locus id can cause
             #the other fields to overflow.  We just IGNORE the other fields!
-            warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
+            warnings.warn("Malformed LOCUS line found - is this "
+                          "correct?\n:%r" % line, BiopythonParserWarning)
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
         elif len(line.split()) >= 4 and line.split()[-1] in ["aa", "bp"]:
             #Cope with pseudo-GenBank files like this:
             #   "LOCUS       RNA5 complete       1718 bp"
             #Treat everything between LOCUS and the size as the identifier.
-            warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
+            warnings.warn("Malformed LOCUS line found - is this "
+                          "correct?\n:%r" % line, BiopythonParserWarning)
             consumer.locus(line[5:].rsplit(None, 2)[0].strip())
             consumer.size(line.split()[-2])
         else:
