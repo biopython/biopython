@@ -3367,13 +3367,17 @@ qualifiers:
 
 DB cross refs []
 ***Record from invalid_locus_line_spacing.gb with the FeatureParser
-Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', Alphabet())
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
 Id: AB070938.1
 Name: AB070938
 Description Streptomyces avermitilis melanin biosynthetic gene cluster.
 Annotations***
 Key: accessions
 Value: ['AB070938']
+Key: data_file_division
+Value: BCT
+Key: date
+Value: 11-OCT-2001
 Key: gi
 Value: 15823953
 Key: keywords
