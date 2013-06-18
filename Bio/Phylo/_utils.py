@@ -7,6 +7,7 @@
 
 Third-party libraries are loaded when the corresponding function is called.
 """
+from __future__ import division
 __docformat__ = "restructuredtext en"
 
 import math
@@ -219,8 +220,8 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
             for subclade in clade:
                 if subclade not in positions:
                     calc_row(subclade)
-            positions[clade] = (positions[clade.clades[0]] +
-                                positions[clade.clades[-1]]) / 2
+            positions[clade] = ((positions[clade.clades[0]] +
+                                 positions[clade.clades[-1]]) // 2)
 
         calc_row(tree.root)
         return positions
@@ -255,7 +256,7 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
         line = ''.join(row).rstrip()
         # Add labels for terminal taxa in the right margin
         if idx % 2 == 0:
-            line += ' ' + str(taxa[idx/2])
+            line += ' ' + str(taxa[idx//2])
         file.write(line + '\n')
     file.write('\n')
 
