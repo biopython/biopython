@@ -258,11 +258,13 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
             line += ' ' + str(taxa[idx/2])
         file.write(line + '\n')
     file.write('\n')
+    
+    print ('test', char_matrix)
 
 
 def draw(tree, label_func=str, do_show=True, show_confidence=True,
         # For power users
-        axes=None, branch_labels=None):
+        axes=None, branch_labels=None, *args, **kwargs):
     """Plot the given tree using matplotlib (or pylab).
 
     The graphic is a rooted tree, drawn with roughly the same algorithm as
@@ -272,6 +274,12 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     objects (via pylab or matplotlib). In particular, the pyplot.rcParams
     object can be used to scale the font size (rcParams["font.size"]) and line
     width (rcParams["lines.linewidth"]).
+    
+    Keyword arguments passed into this method are accessed as pyplot options.  
+    The input format should be: PyPlotOption=(tuple), PyPlotOption=(tuple, dict), 
+    or PyPlotOption=(dict)
+    Example usage: Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}), 
+    axvline={'x':'0', 'ymin':'0', 'ymax':'1'})
 
     :Parameters:
         label_func : callable
@@ -295,11 +303,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             or label the branches with something other than confidence, then use
             this option.
     """
-        
-    global ClaudeHorizontalLineCollections, ClaudeVerticalLineCollections
-    ClaudeHorizontalLineCollections = () 
-    ClaudeVerticalLineCollections = ()
-    
+
     try:
         import matplotlib.pyplot as plt
     except ImportError:
@@ -310,12 +314,11 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             raise MissingPythonDependencyError(
                     "Install matplotlib or pylab if you want to use draw.")
             
-    try:
-        import matplotlib.collections as MatPlotCollections
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError(
-                "Install matplotlib or pylab if you want to use MatPlot Collections.")            
+    import matplotlib.collections as mpcollections           
+    
+    # Arrays that store lines for the plot of clades
+    CladeHorizontalLineCollections = []
+    CladeVerticalLineCollections = []
 
     # Options for displaying branch labels / confidence
     def conf2str(conf):
@@ -389,16 +392,21 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
     
-    def draw_claude_lines(useLineCollection=False, orientation='horizontal', y_here=0, x_start=0, x_here=0, y_bot=0, y_top=0, color='black', lw='.1'):
-        """Create a line with or without a line collection object"""
-        if (useLineCollection==False and orientation=='horizontal'): axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
+    def draw_clade_lines(useLineCollection=False, orientation='horizontal', \
+        y_here=0, x_start=0, x_here=0, y_bot=0, y_top=0, color='black', lw='.1'):
+        """Create a line with or without a line collection object.  Graphical 
+        formatting of the lines representing clades in the plot can be customized 
+        by altering this method."""
+        if (useLineCollection==False and orientation=='horizontal'): 
+            axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
         elif (useLineCollection==True and orientation=='horizontal'):
-            global ClaudeHorizontalLineCollections 
-            ClaudeHorizontalLineCollections = ClaudeHorizontalLineCollections + (MatPlotCollections.LineCollection([[(x_start,y_here), (x_here,y_here)]], color=color, lw=lw),)
-        elif (useLineCollection==False and orientation=='vertical'): axes.vlines(x_here, y_bot, y_top, color=color)
-        elif (useLineCollection==True and orientation=='vertical'): 
-            global ClaudeVerticalLineCollections
-            ClaudeVerticalLineCollections =  ClaudeVerticalLineCollections + (MatPlotCollections.LineCollection([[(x_here,y_bot), (x_here,y_top)]], color=color, lw=lw),)
+            CladeHorizontalLineCollections.append(mpcollections.LineCollection( \
+            [[(x_start,y_here), (x_here,y_here)]], color=color, lw=lw),)
+        elif (useLineCollection==False and orientation=='vertical'): 
+            axes.vlines(x_here, y_bot, y_top, color=color)
+        elif (useLineCollection==True and orientation=='vertical'):
+            CladeVerticalLineCollections.append(mpcollections.LineCollection( \
+            [[(x_here,y_bot), (x_here,y_top)]], color=color, lw=lw),)
         
     def draw_clade(clade, x_start, color, lw):
         """Recursively draw a tree, down from the given clade."""
@@ -410,7 +418,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         if hasattr(clade, 'width') and clade.width is not None:
             lw = clade.width * plt.rcParams['lines.linewidth']
         # Draw a horizontal line from start to here
-        draw_claude_line(useLineCollection=False, orientation='horizontal', y_here=y_here, x_start=x_start, x_here=x_here, color='black', lw=lw)
+        draw_clade_lines(useLineCollection=True, orientation='horizontal', \
+            y_here=y_here, x_start=x_start, x_here=x_here, color='black', lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
@@ -425,17 +434,19 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
             # Only apply widths to horizontal lines, like Archaeopteryx
-            draw_claude_line(useLineCollection=False, orientation='vertical', x_here=x_here, y_bot=y_bot, y_top=y_top, color='black', lw=lw)
+            draw_clade_lines(useLineCollection=True, orientation='vertical', \
+                x_here=x_here, y_bot=y_bot, y_top=y_top, color='black', lw=lw)
             # Draw descendents
             for child in clade:
                 draw_clade(child, x_here, color, lw)
 
     draw_clade(tree.root, 0, 'k', plt.rcParams['lines.linewidth'])
 
-    # If line collections were used to create claude lines, here they are added the the pyplot plot.
-    for i in ClaudeHorizontalLineCollections:
+    # If line collections were used to create clade lines, here they are added 
+    # to the pyplot plot.
+    for i in CladeHorizontalLineCollections:
         axes.add_collection(i)
-    for i in ClaudeVerticalLineCollections:
+    for i in CladeVerticalLineCollections:
         axes.add_collection(i)
 
     # Aesthetics
@@ -450,15 +461,23 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
     axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
-    """"Keyword arguments passed into this method are accessed as pyplot options.  The input format should be:
-        PyPlotOption=(tuple), PyPlotOption=(tuple, dict), or PyPlotOption=(dict)
-        For example: Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}), axvline={'x':'0', 'ymin':'0', 'ymax':'1'})"""
+    
+    # Parse and process key word arguments as pyplot options
     for key, value in kwargs.iteritems():
+        # This try block is included to check for the pyplot option input being
+        # in the right format due to it being iterable.
+        try: [{} for i in value] 
+        except TypeError: 
+            print 'Error: ', key, '=', value, 'is not in the format '+\
+            'PyPlotOption=(tuple), PyPlotOption=(tuple, dict), or '+\
+            'PyPlotOption=(dict) '    
+            sys.exit(0)             
         if isinstance(value, dict):
             getattr(plt, str(key))(**dict(value))
         elif not (isinstance(value[0], tuple)):
             getattr(plt, str(key))(*value)
         elif (isinstance(value[0], tuple)):
-            getattr(plt, str(key))(*value[0], **dict(value[1]))    
+            getattr(plt, str(key))(*value[0], **dict(value[1]))                   
+            
     if do_show:
         plt.show()
