@@ -258,8 +258,6 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
             line += ' ' + str(taxa[idx/2])
         file.write(line + '\n')
     file.write('\n')
-    
-    print ('test', char_matrix)
 
 
 def draw(tree, label_func=str, do_show=True, show_confidence=True,
@@ -466,7 +464,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     for key, value in kwargs.iteritems():
         # This try block is included to check for the pyplot option input being
         # in the right format due to it being iterable.
-        try: [{} for i in value] 
+        try: [i for i in value] 
         except TypeError: 
             print 'Error: ', key, '=', value, 'is not in the format '+\
             'PyPlotOption=(tuple), PyPlotOption=(tuple, dict), or '+\
