@@ -97,6 +97,16 @@ class MissMatchError(Exception):
         return repr("Protein Record %s and Nucleotide Record %s do not match!" \
         % (self.pro_id, self.nucl_id))
 
+class IdMissMatchError(Exception):
+    """IdMissMatchError indicates one of the sequences in protein 
+    alignment could not find a match
+    """
+    def __init__(self, pro_id):
+        self.pro_id = pro_id
+    def __str__(self):
+        return repr("Protein Record %s cannot find a nucleotide sequence match, please check the id" \
+                % self.pro_id)
+
 
 def get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for futher use.
@@ -149,8 +159,8 @@ def check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
         raise TypeError("""
         check_corr accept two SeqRecord object. Please check your input.""")
     if not isinstance(nucl.seq.alphabet, NucleotideAlphabet):
-        raise TypeError("Alphabet for nucl should be an instance of \
-                NucleotideAlphabet, %s detected" % str(nucl.seq.alphabet))
+        raise TypeError("Alphabet for nucl should be an instance of NucleotideAlphabet, %s detected" \
+                % str(nucl.seq.alphabet))
 
     aa2re  = get_aa_regex(codon_table)
     pro_re = ""
@@ -180,17 +190,11 @@ def get_codon_aln(pro, nucl, span, gap_char="-", \
             raise MissMatchError(pro.id, nucl.id)
         aa_num = 0
         for aa in pro.seq:
-            #p = len(codon_seq)
             if aa == "-":
                 codon_seq += "---"
-                #print aa
-                #print len(codon_seq) - p
             else:
                 codon_seq += nucl_seq[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 aa_num += 1
-                #print aa
-                #print len(codon_seq) - p
-        #p = 0
     return SeqRecord(codon_seq, id=nucl.id)
 
 
@@ -207,21 +211,19 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
     Return a CodonAlignment object
     """
     from Bio.Alphabet import ProteinAlphabet
-    #from Bio._utils import iterlen
     
     # check the type of object of pro_align
     if not isinstance(pro_align, MultipleSeqAlignment):
-        raise TypeError("the first argument should be a MultipleSeqAlignment \
-                object")
+        raise TypeError("the first argument should be a MultipleSeqAlignment object")
     # check the alphabet of pro_align
     for pro in pro_align:
         if not isinstance(pro.seq.alphabet, ProteinAlphabet):
-            raise TypeError("""Alphabet Error!\nThe first argument should be a \
-                    protein alignment""")
+            raise TypeError("""Alphabet Error!\nThe input alignment should be a *PROTEIN* alignment""")
     # check whether the number of seqs in pro_align and nucl_seqs is the same
     pro_num = len(pro_align)
     if nucl_seqs.__class__.__name__ == "generator":
-        nucl_seqs = tuple(nucl_seqs)
+        # nucl_seqs will be a tuple if read by SeqIO.parse()
+        nucl_seqs = tuple(nucl_seqs) 
     nucl_num = len(nucl_seqs)
     if pro_num != nucl_num:
         raise NumError(pro_num, nucl_num)
@@ -240,11 +242,24 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
     elif nucl_seqs.__class__.__name__ == "dict":
         corr_method = 1
     else:
-        raise TypeError("Nucl Sequences Error, Unknown type to assign \
-                correspondance method")
-    
+        raise TypeError("Nucl Sequences Error, Unknown type to assign correspondance method")
     # set up pro-nucl correspondance based on corr_method
-    pro_nucl_pair = izip(pro_align, nucl_seqs)
+    # corr_method = 0, consecutive pairing
+    if corr_method == 0:
+        pro_nucl_pair = izip(pro_align, nucl_seqs)
+    # corr_method = 1, keyword pairing
+    elif corr_method == 1:
+        nucl_id  = set(nucl_seqs.keys())
+        pro_id = set([i.id for i in pro_align])
+        # check if there is pro_id that does not have a nuclteotide match
+        if pro_id - nucl_id: 
+            diff = list(pro_id - nucl_id)
+            raise IdMissMatchError(diff[0])
+        else:
+            pro_nucl_pair = []
+            for pro_rec in pro_align:
+                pro_nucl_pair.append((pro_rec, nucl_seqs[pro_rec.id]))
+
     codon_aln = []
     for pair in pro_nucl_pair:
         # Beaware that the following span corresponds to a ungapped 
