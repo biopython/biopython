@@ -7,7 +7,6 @@
 
 Third-party libraries are loaded when the corresponding function is called.
 """
-from __future__ import division
 __docformat__ = "restructuredtext en"
 
 import math
