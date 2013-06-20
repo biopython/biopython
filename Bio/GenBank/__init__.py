@@ -969,12 +969,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             assert location_line.endswith(")")
             location_line = location_line[11:-1]
             strand = -1
-        elif 'DNA' in self._seq_type.upper() or 'RNA' in self._seq_type.upper():
-            #Nucleotide
-            strand = 1
-        else:
-            #Protein
+        elif "PROTEIN" in self._seq_type.upper():
             strand = None
+        else:
+            #Assume nucleotide otherwise feature strand for
+            #GenBank files with bad LOCUS lines set to None
+            strand = 1
 
         #Special case handling of the most common cases for speed
         if _re_simple_location.match(location_line):
