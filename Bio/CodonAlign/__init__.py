@@ -23,9 +23,9 @@ from Bio.Data.CodonTable import generic_by_id
 default_codon_table = generic_by_id[1]
 
 def get_codon_alphabet(alphabet, gap="-", stop="*"):
-    """function to get alignment alphabet for codon alignment. Only nucleotide
-    alphabet is accepted. Raise an error with the type of alphabet is
-    incompatible.
+    """function to get alignment alphabet for codon alignment. Only
+    nucleotide alphabet is accepted. Raise an error when the type of 
+    alphabet is incompatible.
     """
     from Bio.Alphabet import NucleotideAlphabet
     if isinstance(alphabet, NucleotideAlphabet):
@@ -68,7 +68,10 @@ class CodonSeq(Seq):
         """get the `index`-th codon in from the self.seq
         """
         if isinstance(index, int):
-            return self._data[index*3:(index+1)*3]
+            if index != -1:
+                return self._data[index*3:(index+1)*3]
+            else:
+                return self._data[index*3:]
         # is there a clever way to deal triple slice??
         # The following code is a little stupid.
         elif index.step:
@@ -96,7 +99,8 @@ class CodonAlignment(MultipleSeqAlignment):
     >>> b = SeqRecord(CodonSeq("AAA-CGTCG", Gapped(IUPAC.unambiguous_dna, gap_char="-")), id="Beta")
     >>> c = SeqRecord(CodonSeq("AAAAGGTGG", IUPAC.unambiguous_dna), id="Gamma")
     >>> print CodonAlignment([a, b, c])
-    HasStopCodon(Gapped(IUPACUnambiguousDNA(), '-'), '*') alignment with 3 rows and 9 columns
+    CodonAlignment Object
+    HasStopCodon(Gapped(IUPACUnambiguousDNA(), '-'), '*') alignment with 3 rows and 9 columns (3 codons)
     AAAACGTCG Alpha
     AAA-CGTCG Beta
     AAAAGGTGG Gamma
@@ -298,6 +302,7 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
      - pro_align  - a MultipleSeqAlignment object that stores protein alignment
      - nucl_align - an object returned by SeqIO.parse or SeqIO.index or a 
                     colloction of SeqRecord.
+     - alphabet   - alphabet for the returned codon alignment
 
     Return a CodonAlignment object
     """
