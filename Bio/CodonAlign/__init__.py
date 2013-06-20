@@ -11,13 +11,14 @@ the core class to deal with codon alignment in biopython.
 """
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
-#from Bio.Seq import Seq
+from Bio.Seq import Seq
 from itertools import izip
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
+from Bio.Alphabet import IUPAC, Gapped
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data.CodonTable import generic_by_id
+
 
 default_codon_table = generic_by_id[1]
 
@@ -40,15 +41,57 @@ def get_codon_alphabet(alphabet, gap="-", stop="*"):
 default_alphabet = get_codon_alphabet(IUPAC.unambiguous_dna)
 
 
+class CodonSeq(Seq):
+    """CodonSeq is designed to be within a CodonSeqRecord
+    class. This most useful feature for Codon Sequences bacause
+    it slices three letters at once, ie, codon slice.
+
+    """
+    def __init__(self, data, alphabet=default_alphabet):
+
+        # Check the alphabet of the input sequences
+        # TODO:
+        # set up a codon alphabet to verify more rigorously
+        Seq.__init__(self, data.upper(), alphabet=alphabet)
+        # Not use Alphabet._verify_alphabet function because it 
+        # only works for single alphabet
+        for letter in self._data:
+            if letter not in alphabet.letters:
+                print letter
+                raise ValueError("Sequence contain undefined letters from alphabet!")
+    
+        # check the length of the alignment to be a triple
+        assert len(self) % 3 == 0, \
+            "Sequence length is not a triple number"
+    
+    def __getitem__(self, index):
+        """get the `index`-th codon in from the self.seq
+        """
+        if isinstance(index, int):
+            return self._data[index*3:(index+1)*3]
+        # is there a clever way to deal triple slice??
+        # The following code is a little stupid.
+        elif index.step:
+            import warnings
+            warnings.warn(
+                "Slice method in CodonSeq object won't deal with step.\nReturn all codons from start(%s) to end(%s)" % (index.start, index.stop))
+        # Problems here!!!
+        def idx(p):
+            return None if p is None else 3*p
+        index = slice(idx(index.start), idx(index.stop), None)
+        #print index
+        return CodonSeq(self._data[index], alphabet=self.alphabet)
+
+
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
 
     >>> from Bio.Alphabet import generic_dna
-    >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
-    >>> a = SeqRecord(Seq("AAAACGTCG", generic_dna), id="Alpha")
-    >>> b = SeqRecord(Seq("AAA-CGTCG", generic_dna), id="Beta")
-    >>> c = SeqRecord(Seq("AAAAGGTGG", generic_dna), id="Gamma")
+    >>> from Bio.Alphabet import IUPAC, Gapped
+    >>> a = SeqRecord(CodonSeq("AAAACGTCG", IUPAC.unambiguous_dna), id="Alpha")
+    >>> b = SeqRecord(CodonSeq("AAA-CGTCG", Gapped(IUPAC.unambiguous_dna, gap_char="-")), id="Beta")
+    >>> c = SeqRecord(CodonSeq("AAAAGGTGG", IUPAC.unambiguous_dna), id="Gamma")
     >>> print CodonAlignment([a, b, c])
     HasStopCodon(Gapped(IUPACUnambiguousDNA(), '-'), '*') alignment with 3 rows and 9 columns
     AAAACGTCG Alpha
@@ -62,14 +105,17 @@ class CodonAlignment(MultipleSeqAlignment):
 
         # check the type of the alignment to be nucleotide
         for rec in self:
-            rec.seq.alphabet = alphabet
-            rec.seq = rec.seq.upper()
-            assert Alphabet._verify_alphabet(rec.seq), \
-                "%s is incompatible with the %s\n" % (rec.id, str(alphabet))
+            if not isinstance(rec.seq, CodonSeq):
+                raise TypeError("CodonSeq object are expected in each SeqRecord in CodonAlignment")
+            #rec.seq.alphabet = alphabet
+            #rec.seq = rec.seq.upper()
+            #assert Alphabet._verify_alphabet(rec.seq), \
+            #    "%s is incompatible with the %s\n" % (rec.id, str(alphabet))
     
         # check the length of the alignment to be a triple
         assert self.get_alignment_length() % 3 == 0, \
             "Alignment length is not a triple number"
+
 
 class NumError(Exception):
     """NumError indicates the number of protein and nucleotide sequences
@@ -108,13 +154,13 @@ class IdMissMatchError(Exception):
                 % self.pro_id)
 
 
-def get_aa_regex(codon_table, stop='*', unknown='X'):
+def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for futher use.
 
-    >>> from __init__ import get_aa_regex
+    >>> from __init__ import _get_aa_regex
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]
-    >>> t = get_aa_regex(p)
+    >>> t = _get_aa_regex(p)
     >>> print t['A']
     (GC[ACUTG])
     >>> print t['L']
@@ -147,7 +193,7 @@ def get_aa_regex(codon_table, stop='*', unknown='X'):
     return aa2codon
 
 
-def check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
+def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
     """check if a give protein SeqRecord can be translated by another \
     nucleotide SeqRecord.
     """
@@ -157,12 +203,19 @@ def check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
     if (not isinstance(pro, SeqRecord)) or \
             (not isinstance(nucl, SeqRecord)):
         raise TypeError("""
-        check_corr accept two SeqRecord object. Please check your input.""")
-    if not isinstance(nucl.seq.alphabet, NucleotideAlphabet):
+        _check_corr accept two SeqRecord object. Please check your input.""")
+
+    def get_alpha(alpha):
+        if hasattr(alpha, 'alphabet'):
+            return get_alpha(alpha.alphabet)
+        else:
+            return alpha
+
+    if not isinstance(get_alpha(nucl.seq.alphabet), NucleotideAlphabet):
         raise TypeError("Alphabet for nucl should be an instance of NucleotideAlphabet, %s detected" \
                 % str(nucl.seq.alphabet))
 
-    aa2re  = get_aa_regex(codon_table)
+    aa2re  = _get_aa_regex(codon_table)
     pro_re = ""
     for aa in pro.seq:
         if aa != gap_char:
@@ -174,7 +227,7 @@ def check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
     if match:
         return match.span()
 
-def get_codon_aln(pro, nucl, span, gap_char="-", \
+def _get_codon_aln(pro, nucl, span, gap_char="-", \
         codon_table=default_codon_table, mode=0):
     """Generate codon alignment based on regular re match (PRIVATE)
 
@@ -182,7 +235,6 @@ def get_codon_aln(pro, nucl, span, gap_char="-", \
      - 0: direct match
 
     """
-    from Bio.Seq import Seq
     nucl_seq = nucl.seq.ungap(gap_char)
     codon_seq = ""
     if mode == 0:
@@ -193,9 +245,13 @@ def get_codon_aln(pro, nucl, span, gap_char="-", \
             if aa == "-":
                 codon_seq += "---"
             else:
-                codon_seq += nucl_seq[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
+                codon_seq += nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 aa_num += 1
-    return SeqRecord(codon_seq, id=nucl.id)
+    # If specialized codon alphabet are developed, the 
+    # following code should be modified
+    return SeqRecord(CodonSeq(codon_seq, \
+            alphabet=Gapped(nucl_seq.alphabet, gap_char=gap_char)), \
+            id=nucl.id)
 
 
 def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
@@ -264,12 +320,12 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
     for pair in pro_nucl_pair:
         # Beaware that the following span corresponds to a ungapped 
         # nucleotide sequence.
-        corr_span = check_corr(pair[0], pair[1], gap_char=gap_char, \
+        corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char, \
                 codon_table=codon_table)
         if not corr_span:
             raise MissMatchError(pair[0].id, pair[1].id)
         else:
-            codon_rec = get_codon_aln(pair[0], pair[1], corr_span, \
+            codon_rec = _get_codon_aln(pair[0], pair[1], corr_span, \
                     codon_table=codon_table)
             codon_aln.append(codon_rec)
     return CodonAlignment(codon_aln, alphabet=alphabet)
