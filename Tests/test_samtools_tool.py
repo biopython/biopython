@@ -104,13 +104,39 @@ class SamtoolsTestCase(unittest.TestCase):
                         "SAM file  viewing failed:\n%s\nStderr:%s" \
                         % (cmdline, stderr_sam))
 
+
+    def test_faidx(self):
+        cmdline = SamtoolsFaidxCommandline()
+        cmdline.set_parameter("reference", self.reference)
+        stdout, stderr = cmdline()
+        self.assertFalse(stderr, "Samtools faidx failed:\n%s\nStderr:%s"\
+                        % (cmdline, stderr))
+
+        self.assertTrue(os.path.isfile(self.referenceindexfile))
+
     def test_calmd(self):
         """Test for samtools calmd"""
         cmdline = SamtoolsCalmdCommandline()
         cmdline.set_parameter("reference", self.reference)
         cmdline.set_parameter("input_bam", self.bamfile1)
+        ## If there is no index file for the reference
+        ## samtools calmd creates one at the time of calling
+
+        if os.path.exists(self.referenceindexfile):
+            print "exists"
+            stderr_calmd_expected = ""
+        else:
+            print "doesnt exist"
+            stderr_calmd_expected = "[fai_load] build FASTA index.\n"
+
         stdout, stderr = cmdline()
-        self.assertTrue(stderr=="", "Samtools calmd failed:\n%s\nStderr:%s" \
+        if stderr == stderr_calmd_expected:
+            print "SAME"
+        else:
+            print "NOT SAME"
+            print stderr
+            print stderr_calmd_expected
+        self.assertTrue(stderr==stderr_calmd_expected, "Samtools calmd failed:\n%s\nStderr:%s" \
                         % (cmdline, stderr))
 
     def test_cat(self):
@@ -124,14 +150,6 @@ class SamtoolsTestCase(unittest.TestCase):
         self.add_files_to_clean(self.outbamfile)
 
 
-    def test_faidx(self):
-        cmdline = SamtoolsFaidxCommandline()
-        cmdline.set_parameter("reference", self.reference)
-        stdout, stderr = cmdline()
-        self.assertFalse(stderr, "Samtools faidx failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr))
-
-        self.assertTrue(os.path.exists(self.referenceindexfile))
 
     def test_fixmate(self):
         ##TODO : Needs a name-sorted alignment file
