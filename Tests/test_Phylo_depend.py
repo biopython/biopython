@@ -29,18 +29,15 @@ except ImportError:
 try:
     import networkx
 except ImportError:
-    raise MissingExternalDependencyError(
-            "Install NetworkX if you want to use Bio.Phylo._utils.")
+    #We'll skip any tests requiring this below...
+    networkx = None
 
 try:
     import pygraphviz
 except ImportError:
-    try:
-        import pydot
-    except ImportError:
-        raise MissingExternalDependencyError(
-                "Install PyGraphviz or Pydot if you want to use "
-                "Bio.Phylo._utils.")
+    #We'll skip any tests requiring this below...
+    pygraphviz = None
+
 
 # OK, we can go ahead
 import unittest
@@ -68,18 +65,19 @@ class UtilTests(unittest.TestCase):
         Phylo.draw(apaf, do_show=False, branch_labels=lambda c: c.branch_length)
 
     def test_draw_ascii(self):
-        """Tree to Graph conversion, if networkx is available."""
+        """Tree to Graph conversion."""
         handle = StringIO()
         tree = Phylo.read(EX_APAF, 'phyloxml')
         Phylo.draw_ascii(tree, file=handle)
         Phylo.draw_ascii(tree, file=handle, column_width=120)
         handle.close()
 
-    def test_to_networkx(self):
-        """Tree to Graph conversion, if networkx is available."""
-        tree = Phylo.read(EX_DOLLO, 'phyloxml')
-        G = Phylo.to_networkx(tree)
-        self.assertEqual(len(G.nodes()), 659)
+    if networkx:
+        def test_to_networkx(self):
+            """Tree to Graph conversion, if networkx is available."""
+            tree = Phylo.read(EX_DOLLO, 'phyloxml')
+            G = Phylo.to_networkx(tree)
+            self.assertEqual(len(G.nodes()), 659)
 
 
 # ---------------------------------------------------------

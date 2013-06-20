@@ -71,7 +71,8 @@ if sys.version_info[:2] < (2, 5):
 elif sys.version_info[:2] == (2, 5):
     print("WARNING - Biopython is dropping support for Python 2.5 after this release")
 elif sys.version_info[0] == 3:
-    print("WARNING - Biopython does not yet officially support Python 3")
+    if sys.version_info < (3, 3, 2):
+        print("WARNING - For Python 3, we recommend Python 3.3.2 or later.")
     import do2to3
     python3_source = "build/py%i.%i" % sys.version_info[:2]
     if "clean" in sys.argv:
@@ -314,6 +315,7 @@ PACKAGES = [
     'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
+    'Bio.motifs.jaspar',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
@@ -348,6 +350,7 @@ PACKAGES = [
     'Bio.Phylo.Applications',
     'Bio.Phylo.PAML',
     'Bio.UniGene',
+    'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
     #Other top level packages,
