@@ -74,13 +74,16 @@ class CodonSeq(Seq):
         elif index.step:
             import warnings
             warnings.warn(
-                "Slice method in CodonSeq object won't deal with step.\nReturn all codons from start(%s) to end(%s)" % (index.start, index.stop))
-        # Problems here!!!
+                "Slice method in CodonSeq object won't deal with step.\nReturn all codons from start(%s) to end(%s)" \
+                        % (index.start, index.stop))
         def idx(p):
             return None if p is None else 3*p
         index = slice(idx(index.start), idx(index.stop), None)
-        #print index
         return CodonSeq(self._data[index], alphabet=self.alphabet)
+
+    def get_codon_num(self):
+        """Return the number of codons in the CodonSeq"""
+        return len(self._data) / 3
 
 
 class CodonAlignment(MultipleSeqAlignment):
@@ -107,14 +110,48 @@ class CodonAlignment(MultipleSeqAlignment):
         for rec in self:
             if not isinstance(rec.seq, CodonSeq):
                 raise TypeError("CodonSeq object are expected in each SeqRecord in CodonAlignment")
-            #rec.seq.alphabet = alphabet
-            #rec.seq = rec.seq.upper()
-            #assert Alphabet._verify_alphabet(rec.seq), \
-            #    "%s is incompatible with the %s\n" % (rec.id, str(alphabet))
-    
-        # check the length of the alignment to be a triple
+
         assert self.get_alignment_length() % 3 == 0, \
             "Alignment length is not a triple number"
+
+    def _str_line(self, record):
+        """Returns a truncated representation of SeqRecord storing 
+        CodonSeq (PRIVATE).
+        
+        This is a PRIVATE function used by the __str__ method. The
+        idea is the same with Alignment._str_line().
+        """
+        if len(record.seq) < 60:
+            return "%s %s" % (record.seq, record.id)
+        else:
+            return "%s...%s %s" \
+                    % (record.seq[:17], record.seq[-3:], record.id)
+
+    def __str__(self):
+        """Return a multi-line string summary of the alignment.
+
+        This output is indicated to be readable, but large alignment 
+        is shown truncated. A maximum of 20 rows (sequences) and
+        60 columns (20 codons) are shown, with the record identifiers.
+        This should fit nicely on a single screen. e.g.
+
+        """
+        rows = len(self._records)
+        lines = ["CodonAlignment Object\n%s alignment with %i rows and %i columns (%i codons)"
+                 % (str(self._alphabet), rows, \
+                    self.get_alignment_length(), self.get_codon_num())]
+        
+        if rows <= 20:
+            lines.extend([self._str_line(rec) for rec in self._records])
+        else:
+            lines.extend([self._str_line(rec) for rec in self._records[:18]])
+            lines.append("...")
+            lines.append(self._str_line(self._records[-1]))
+        return "\n".join(lines)
+
+
+    def get_codon_num(self):
+        return self.get_alignment_length() / 3
 
 
 class NumError(Exception):
@@ -169,8 +206,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """
     from Bio.Data.CodonTable import CodonTable
     if not isinstance(codon_table, CodonTable):
-        raise TypeError("""
-        Input table is not a instance of Bio.Data.CodonTable object""")
+        raise TypeError("Input table is not a instance of Bio.Data.CodonTable object")
     aa2codon = {}
     for codon, aa in codon_table.forward_table.iteritems():
         aa2codon.setdefault(aa, []).append(codon)
@@ -194,7 +230,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 
 def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
-    """check if a give protein SeqRecord can be translated by another \
+    """check if a give protein SeqRecord can be translated by another
     nucleotide SeqRecord.
     """
     import re
@@ -202,8 +238,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
 
     if (not isinstance(pro, SeqRecord)) or \
             (not isinstance(nucl, SeqRecord)):
-        raise TypeError("""
-        _check_corr accept two SeqRecord object. Please check your input.""")
+        raise TypeError("_check_corr accept two SeqRecord object. Please check your input.")
 
     def get_alpha(alpha):
         if hasattr(alpha, 'alphabet'):
@@ -274,7 +309,7 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
     # check the alphabet of pro_align
     for pro in pro_align:
         if not isinstance(pro.seq.alphabet, ProteinAlphabet):
-            raise TypeError("""Alphabet Error!\nThe input alignment should be a *PROTEIN* alignment""")
+            raise TypeError("Alphabet Error!\nThe input alignment should be a *PROTEIN* alignment")
     # check whether the number of seqs in pro_align and nucl_seqs is the same
     pro_num = len(pro_align)
     if nucl_seqs.__class__.__name__ == "generator":
