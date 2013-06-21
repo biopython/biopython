@@ -42,7 +42,7 @@ default_alphabet = get_codon_alphabet(IUPAC.unambiguous_dna)
 class CodonAlphabet(Alphabet):
     """Generic Codon Alphabet with a size of three"""
     size = 3
-    letter = None
+    letters = None
 
 generic_codon_alphabet = CodonAlphabet()
 
@@ -331,7 +331,8 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
         # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id: 
             diff = pro_id - nucl_id
-            raise ValueError("Protein Record %s cannot find a nucleotide sequence match, please check the id" % ', '.join(diff))
+            raise ValueError("Protein Record %s cannot find a nucleotide sequence match, please check the id" \
+                    % ', '.join(diff))
         else:
             pro_nucl_pair = []
             for pro_rec in pro_align:
