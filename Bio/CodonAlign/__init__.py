@@ -42,9 +42,10 @@ default_alphabet = get_codon_alphabet(IUPAC.unambiguous_dna)
 
 
 class CodonSeq(Seq):
-    """CodonSeq is designed to be within a CodonSeqRecord
-    class. This most useful feature for Codon Sequences bacause
-    it slices three letters at once, ie, codon slice.
+    """CodonSeq is designed to be within the SeqRecords of a 
+    CodonAlignment class. This most useful feature for Codon 
+    Sequences bacause it slices three letters at once, i.e.
+    codon slice.
 
     """
     def __init__(self, data, alphabet=default_alphabet):
@@ -158,47 +159,9 @@ class CodonAlignment(MultipleSeqAlignment):
         return self.get_alignment_length() / 3
 
 
-class NumError(Exception):
-    """NumError indicates the number of protein and nucleotide sequences
-    is not the same.
-    """
-    def __init__(self, pro_num, nucl_num):
-        self.pro_num  = pro_num
-        self.nucl_num = nucl_num
-    def __str__(self):
-        return repr("Number of Seqs in Protein Alignment (%d) and Number of Nucleotide Seqs (%d) are not the same" \
-                     % (self.pro_num, self.nucl_num))
-
-class MissMatchError(Exception):
-    """MissMatchError indicates the protein sequence and nucleotide
-    sequence do not match.
-
-    TODO:
-      1) Modify this Exception to output a detailed information about 
-         the discrepancy between prot and nucl
-    """
-    def __init__(self, pro_id, nucl_id):
-        self.pro_id = pro_id
-        self.nucl_id = nucl_id
-    def __str__(self):
-        return repr("Protein Record %s and Nucleotide Record %s do not match!" \
-        % (self.pro_id, self.nucl_id))
-
-class IdMissMatchError(Exception):
-    """IdMissMatchError indicates one of the sequences in protein 
-    alignment could not find a match
-    """
-    def __init__(self, pro_id):
-        self.pro_id = pro_id
-    def __str__(self):
-        return repr("Protein Record %s cannot find a nucleotide sequence match, please check the id" \
-                % self.pro_id)
-
-
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for futher use.
 
-    >>> from __init__ import _get_aa_regex
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]
     >>> t = _get_aa_regex(p)
@@ -266,6 +229,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
     if match:
         return match.span()
 
+
 def _get_codon_aln(pro, nucl, span, gap_char="-", \
         codon_table=default_codon_table, mode=0):
     """Generate codon alignment based on regular re match (PRIVATE)
@@ -278,7 +242,9 @@ def _get_codon_aln(pro, nucl, span, gap_char="-", \
     codon_seq = ""
     if mode == 0:
         if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
-            raise MissMatchError(pro.id, nucl.id)
+            raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
+                    % (pro.id, nucl.id))
+            #raise MissMatchError(pro.id, nucl.id)
         aa_num = 0
         for aa in pro.seq:
             if aa == "-":
@@ -321,8 +287,9 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
         # nucl_seqs will be a tuple if read by SeqIO.parse()
         nucl_seqs = tuple(nucl_seqs) 
     nucl_num = len(nucl_seqs)
-    if pro_num != nucl_num:
-        raise NumError(pro_num, nucl_num)
+    if pro_num > nucl_num:
+        raise ValueError("More Number of SeqRecords in Protein Alignment (%d) than the Number of Nucleotide SeqRecords (%d) are found!" \
+                % (pro_num, nucl_num))
 
     # Determine the protein sequences and nucl sequences correspondance. If
     # nucl_seqs is a list, tuple or read by SeqIO.parse(), we assume the order
@@ -347,10 +314,10 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
     elif corr_method == 1:
         nucl_id  = set(nucl_seqs.keys())
         pro_id = set([i.id for i in pro_align])
-        # check if there is pro_id that does not have a nuclteotide match
+        # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id: 
-            diff = list(pro_id - nucl_id)
-            raise IdMissMatchError(diff[0])
+            diff = pro_id - nucl_id
+            raise ValueError("Protein Record %s cannot find a nucleotide sequence match, please check the id" % ', '.join(diff))
         else:
             pro_nucl_pair = []
             for pro_rec in pro_align:
@@ -363,7 +330,8 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
         corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char, \
                 codon_table=codon_table)
         if not corr_span:
-            raise MissMatchError(pair[0].id, pair[1].id)
+            raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
+                    % (pair[0].id, pair[1].id))
         else:
             codon_rec = _get_codon_aln(pair[0], pair[1], corr_span, \
                     codon_table=codon_table)
