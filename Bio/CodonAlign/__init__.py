@@ -91,17 +91,22 @@ class CodonSeq(Seq):
                 return self._data[index*3:(index+1)*3]
             else:
                 return self._data[index*3:]
-        # is there a clever way to deal triple slice??
-        # The following code is a little stupid.
-        elif index.step:
-            import warnings
-            warnings.warn(
-                "Slice method in CodonSeq object won't deal with step.\nReturn all codons from start(%s) to end(%s)" \
-                        % (index.start, index.stop))
-        def idx(p):
-            return None if p is None else 3*p
-        index = slice(idx(index.start), idx(index.stop), None)
-        return CodonSeq(self._data[index], alphabet=self.alphabet)
+        else:
+        # This slice ensures that codon will always be the unit
+        # in slicing (it won't change to other codon if you are 
+        # using reverse slicing such as [::-1]).
+        # The idea of the code below is to first map the slice
+        # to amino acid sequence and then transform it into 
+        # codon sequence.
+            aa_index = range(self.get_codon_num())
+            def cslice(p):
+                aa_slice = aa_index[p]
+                codon_slice = ''
+                for i in aa_slice:
+                    codon_slice += self._data[i*3:i*3+3]
+                return codon_slice
+            codon_slice = cslice(index)
+            return CodonSeq(codon_slice, alphabet=self.alphabet)
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq"""
