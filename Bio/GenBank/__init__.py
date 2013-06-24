@@ -1090,9 +1090,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         # Hack to try to preserve historical behaviour of /pseudo etc
         if value is None:
+            # if the key doesn't exist yet, add an empty string
             if key not in self._cur_feature.qualifiers:
                 self._cur_feature.qualifiers[key] = [""]
                 return
+            # otherwise just skip this key
+            return
 
         value = value.replace('"', '')
         if self._feature_cleaner is not None:
