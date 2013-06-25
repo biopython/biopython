@@ -112,6 +112,9 @@ class CodonSeq(Seq):
         """Return the number of codons in the CodonSeq"""
         return len(self._data) / 3
 
+    def toSeq(self):
+        return Seq(self._data, self.alphabet)
+
 
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
