@@ -142,19 +142,6 @@ class CodonAlignment(MultipleSeqAlignment):
         assert self.get_alignment_length() % 3 == 0, \
             "Alignment length is not a triple number"
 
-    def _str_line(self, record):
-        """Returns a truncated representation of SeqRecord storing 
-        CodonSeq (PRIVATE).
-        
-        This is a PRIVATE function used by the __str__ method. The
-        idea is the same with Alignment._str_line().
-        """
-        if len(record.seq) < 60:
-            return "%s %s" % (record.seq, record.id)
-        else:
-            return "%s...%s %s" \
-                    % (record.seq[:17], record.seq[-3:], record.id)
-
     def __str__(self):
         """Return a multi-line string summary of the alignment.
 
@@ -170,11 +157,11 @@ class CodonAlignment(MultipleSeqAlignment):
                     self.get_alignment_length(), self.get_codon_num())]
         
         if rows <= 20:
-            lines.extend([self._str_line(rec) for rec in self._records])
+            lines.extend([self._str_line(rec, length=20) for rec in self._records])
         else:
-            lines.extend([self._str_line(rec) for rec in self._records[:18]])
+            lines.extend([self._str_line(rec, length=20) for rec in self._records[:18]])
             lines.append("...")
-            lines.append(self._str_line(self._records[-1]))
+            lines.append(self._str_line(self._records[-1], length=60))
         return "\n".join(lines)
 
 
@@ -189,9 +176,9 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     >>> p = generic_by_id[1]
     >>> t = _get_aa_regex(p)
     >>> print t['A']
-    (GC[ACUTG])
+    GC[ACUTG]
     >>> print t['L']
-    ([CUT][UT][ACUTG])
+    [CUT][UT][ACUTG]
 
     """
     from Bio.Data.CodonTable import CodonTable
