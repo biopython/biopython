@@ -171,6 +171,15 @@ class CodonAlignment(MultipleSeqAlignment):
     def get_codon_num(self):
         return self.get_alignment_length() / 3
 
+    def toMultipleSeqAlignment(self):
+        """Return a MultipleSeqAlignment containing all the
+        SeqRecord in the CodonAlignment using Seq to store 
+        sequences
+        """
+        alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for \
+                rec in self._records]
+        return MultipleSeqAlignment(alignments)
+
 
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for futher use.
@@ -392,6 +401,7 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
                     alphabet=alphabet)
             codon_aln.append(codon_rec)
     return CodonAlignment(codon_aln, alphabet=alphabet)
+
 
 
 if __name__ == "__main__":
