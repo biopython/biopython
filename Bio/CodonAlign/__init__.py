@@ -80,8 +80,8 @@ class CodonSeq(Seq):
         # only works for single alphabet
         for i in range(self.get_codon_num()):
             if self[i] not in alphabet.letters:
-                raise ValueError(
-                        "Sequence contain undefined letters from alphabet (%s)!" % self[i])
+                raise ValueError("Sequence contain undefined letters from alphabet (%s)!"\
+                        % self[i])
     
     def __getitem__(self, index):
         """get the `index`-th codon in from the self.seq
@@ -204,13 +204,13 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     def codons2re(codons):
         """Generate regular expression based on a given list of codons
         """
-        reg = '('
+        reg = ''
         for i in izip(*codons):
             if len(set(i)) == 1:
                 reg += ''.join(set(i))
             else:
                 reg += '[' + ''.join(set(i)) + ']'
-        return reg + ')'
+        return reg
 
     for aa, codons in aa2codon.items():
         aa2codon[aa] = codons2re(codons)
@@ -244,25 +244,67 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
     pro_re = ""
     for aa in pro.seq:
         if aa != gap_char:
-            pro_re += aa2re[aa][1:-1]
+            pro_re += aa2re[aa]
     #TODO:
     #  1) Allow mismatches between protein sequences and nucleotides
     #  2) Allow frameshift between protein sequences and nucleotides
-    match = re.search(pro_re, str(nucl.seq.upper().ungap(gap_char)))
+    nucl_seq = str(nucl.seq.upper().ungap(gap_char))
+    match = re.search(pro_re, nucl_seq)
     if match:
-        return match.span()
+        # mode = 0, direct match
+        return (match.span(), 0)
+    else:
+        # Might caused by mismatches, using Anchors to have a try
+        anchor_len = 10 # adjust this value to test performance
+        anchors = [pro.seq[i:(i+anchor_len)] for i in \
+                range(0, len(pro.seq), anchor_len)]
+        if anchors[-1] < anchor_len:
+            anchors[-1] = anchors[-2] + anchors[-1]
 
+        pro_re = ""
+        for anchor in anchors:
+            this_anchor_len = len(anchor)
+            qcodon  = ""
+            fncodon = ""
+            for aa in anchor:
+                if aa != gap_char:
+                    qcodon += aa2re[aa]
+                    fncodon += aa2re['X']
+            match = re.search(qcodon, nucl_seq)
+            if match:
+                pro_re += qcodon
+            else:
+                pro_re += fncodon
+        match = re.search(pro_re, nucl_seq)
+        if match:
+            # mode = 1, mismatch
+            return (match.span(), 1)
+        else:
+            raise RuntimeError("Protein SeqRecord (%s) and Nucleotide SeqRecord (%s) do not match!" \
+                    % (pro.id, nucl.id))
+            
 
-def _get_codon_aln(pro, nucl, span, alphabet, gap_char="-", mode=0):
+def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
+        codon_table=default_codon_table):
     """Generate codon alignment based on regular re match (PRIVATE)
 
-    mode represents the re match approach:
+    span_mode is a tuple returned by _check_corr. The first element
+    is the span of a re search, and the second element is the mode
+    for the match.
+
+    mode
      - 0: direct match
+     - 1: mismatch (no indels)
 
     """
+    import re, warnings
+
     nucl_seq = nucl.seq.ungap(gap_char)
     codon_seq = ""
-    if mode == 0:
+    span = span_mode[0]
+    mode = span_mode[1]
+    aa2re = _get_aa_regex(codon_table)
+    if mode == 0 or mode == 1:
         if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
             raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
                     % (pro.id, nucl.id))
@@ -271,6 +313,9 @@ def _get_codon_aln(pro, nucl, span, alphabet, gap_char="-", mode=0):
             if aa == "-":
                 codon_seq += "---"
             else:
+                this_codon = nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
+                if not re.search(aa2re[aa], this_codon.upper()):
+                    warnings.warn("%s (%s %d) does not correspond to %s (%s)" % (pro.id, aa, aa_num, nucl.id, this_codon))
                 codon_seq += nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 aa_num += 1
     return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
