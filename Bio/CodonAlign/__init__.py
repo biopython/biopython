@@ -14,7 +14,7 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 from Bio.Seq import Seq
 from itertools import izip
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped, Alphabet, HasStopCodon
+from Bio.Alphabet import IUPAC, Gapped, Alphabet, HasStopCodon, generic_dna
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data.CodonTable import generic_by_id
 
@@ -112,8 +112,8 @@ class CodonSeq(Seq):
         """Return the number of codons in the CodonSeq"""
         return len(self._data) / 3
 
-    def toSeq(self):
-        return Seq(self._data, self.alphabet)
+    def toSeq(self, alphabet=generic_dna):
+        return Seq(self._data, generic_dna)
 
 
 class CodonAlignment(MultipleSeqAlignment):
@@ -126,8 +126,7 @@ class CodonAlignment(MultipleSeqAlignment):
     >>> b = SeqRecord(CodonSeq("AAA---TCG", alphabet=default_codon_alphabet), id="Beta")
     >>> c = SeqRecord(CodonSeq("AAAAGGTGG", alphabet=default_codon_alphabet), id="Gamma")
     >>> print CodonAlignment([a, b, c])
-    CodonAlignment Object
-    CodonAlphabet() alignment with 3 rows and 9 columns (3 codons)
+    CodonAlphabet() CodonAlignment with 3 rows and 9 columns (3 codons)
     AAAACGTCG Alpha
     AAA---TCG Beta
     AAAAGGTGG Gamma
@@ -155,7 +154,7 @@ class CodonAlignment(MultipleSeqAlignment):
 
         """
         rows = len(self._records)
-        lines = ["CodonAlignment Object\n%s alignment with %i rows and %i columns (%i codons)"
+        lines = ["%s CodonAlignment with %i rows and %i columns (%i codons)"
                  % (str(self._alphabet), rows, \
                     self.get_alignment_length(), self.get_codon_num())]
         
@@ -356,7 +355,11 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
      - alphabet   - alphabet for the returned codon alignment
 
     Return a CodonAlignment object
+
     """
+    # TODO
+    # add an option to allow the user to specify the returned object?
+
     from Bio.Alphabet import ProteinAlphabet
     
     # check the type of object of pro_align
@@ -425,6 +428,18 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
                     alphabet=alphabet)
             codon_aln.append(codon_rec)
     return CodonAlignment(codon_aln, alphabet=alphabet)
+
+def toCodonAlignment(align, alphabet=default_codon_alphabet):
+    """Function to convert a MultipleSeqAlignment to CodonAlignment.
+    It is the user's responsibility to ensure all the requirement
+    needed by CodonAlignment is met.
+
+    """
+    m = align._records[0]
+    print m.seq.upper()
+    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+            for i in align._records]
+    return CodonAlignment(rec, alphabet=align._alphabet)
 
 
 

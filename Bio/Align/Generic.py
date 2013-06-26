@@ -68,7 +68,7 @@ class Alignment(object):
 
         This is a PRIVATE function used by the __str__ method.
         """
-        if record.seq.__class__.__name__ == "CodonSeq"
+        if record.seq.__class__.__name__ == "CodonSeq":
             if len(record.seq) <= length:
                 return "%s %s" % (record.seq, record.id)
             else:
