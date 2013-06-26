@@ -245,8 +245,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
         if aa != gap_char:
             pro_re += aa2re[aa]
     #TODO:
-    #  1) Allow mismatches between protein sequences and nucleotides
-    #  2) Allow frameshift between protein sequences and nucleotides
+    #  1) Allow frameshift between protein sequences and nucleotides
     nucl_seq = str(nucl.seq.upper().ungap(gap_char))
     match = re.search(pro_re, nucl_seq)
     if match:
@@ -257,7 +256,10 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
         anchor_len = 10 # adjust this value to test performance
         anchors = [pro.seq[i:(i+anchor_len)] for i in \
                 range(0, len(pro.seq), anchor_len)]
-        if anchors[-1] < anchor_len:
+        # if the last anchor is less than the specified anchor
+        # size, we combine the penultimate and the last anchor
+        # together as the last one.
+        if len(anchors[-1]) < anchor_len:
             anchors[-1] = anchors[-2] + anchors[-1]
 
         pro_re = ""
@@ -265,15 +267,37 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
             this_anchor_len = len(anchor)
             qcodon  = ""
             fncodon = ""
-            for aa in anchor:
-                if aa != gap_char:
-                    qcodon += aa2re[aa]
-                    fncodon += aa2re['X']
+            ## dirty code to deal with the last anchor ##
+            # for the last anchor that is combined in the steps
+            # above, we need to get the true last anchor to
+            # pro_re
+            if this_anchor_len == 10:
+                for aa in anchor:
+                    if aa != gap_char:
+                        qcodon += aa2re[aa]
+                        fncodon += aa2re['X']
+            elif this_anchor_len > 10:
+                last_qcodon = ""
+                pos = 0
+                for aa in anchor:
+                    if aa != gap_char:
+                        qcodon += aa2re[aa]
+                        fncodon += aa2re['X']
+                        if pos >= 10:
+                            last_qcodon += aa2re[aa]
+                    pos += 1
             match = re.search(qcodon, nucl_seq)
             if match:
-                pro_re += qcodon
+                if this_anchor_len == 10:
+                    pro_re += qcodon
+                else:
+                    pro_re += last_qcodon
             else:
-                pro_re += fncodon
+                if this_anchor_len == 10:
+                    pro_re += fncodon
+                else:
+                    pro_re += fncodon[10:]
+            #print pro_re
         match = re.search(pro_re, nucl_seq)
         if match:
             # mode = 1, mismatch
