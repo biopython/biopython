@@ -180,6 +180,17 @@ class CodonAlignment(MultipleSeqAlignment):
         return MultipleSeqAlignment(alignments)
 
 
+def _codons2re(codons):
+    """Generate regular expression based on a given list of codons
+    """
+    reg = ''
+    for i in izip(*codons):
+        if len(set(i)) == 1:
+            reg += ''.join(set(i))
+        else:
+            reg += '[' + ''.join(set(i)) + ']'
+    return reg
+
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for futher use.
 
@@ -199,25 +210,15 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     for codon, aa in codon_table.forward_table.iteritems():
         aa2codon.setdefault(aa, []).append(codon)
 
-    def codons2re(codons):
-        """Generate regular expression based on a given list of codons
-        """
-        reg = ''
-        for i in izip(*codons):
-            if len(set(i)) == 1:
-                reg += ''.join(set(i))
-            else:
-                reg += '[' + ''.join(set(i)) + ']'
-        return reg
-
     for aa, codons in aa2codon.items():
-        aa2codon[aa] = codons2re(codons)
-    aa2codon[stop] = codons2re(codon_table.stop_codons)
+        aa2codon[aa] = _codons2re(codons)
+    aa2codon[stop] = _codons2re(codon_table.stop_codons)
     aa2codon[unknown] = '...'
     return aa2codon
 
 
-def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
+def _check_corr(pro, nucl, gap_char='-', \
+        codon_table=default_codon_table, complete_protein=False):
     """check if a give protein SeqRecord can be translated by another
     nucleotide SeqRecord.
     """
@@ -262,19 +263,23 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
             anchors[-1] = anchors[-2] + anchors[-1]
 
         pro_re = ""
-        for anchor in anchors:
+        for i, anchor in enumerate(anchors):
             this_anchor_len = len(anchor)
             qcodon  = ""
             fncodon = ""
             ## dirty code to deal with the last anchor ##
-            # for the last anchor that is combined in the steps
+            # as the last anchor is combined in the steps
             # above, we need to get the true last anchor to
             # pro_re
             if this_anchor_len == 10:
-                for aa in anchor:
-                    if aa != gap_char:
-                        qcodon += aa2re[aa]
+                for aa in str(anchor).replace(gap_char, ""):
+                    if complete_protein is True and i == 0:
+                        qcodon += _codons2re(codon_table.start_codons)
+                        print qcodon
                         fncodon += aa2re['X']
+                        continue
+                    qcodon += aa2re[aa]
+                    fncodon += aa2re['X']
             elif this_anchor_len > 10:
                 last_qcodon = ""
                 pos = 0
@@ -296,9 +301,9 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
                     pro_re += fncodon
                 else:
                     pro_re += fncodon[10:]
-            #print pro_re
         match = re.search(pro_re, nucl_seq)
         if match:
+            print '1'
             # mode = 1, mismatch
             return (match.span(), 1)
         else:
@@ -307,7 +312,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table):
             
 
 def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
-        codon_table=default_codon_table):
+        codon_table=default_codon_table, complete_protein=False):
     """Generate codon alignment based on regular re match (PRIVATE)
 
     span_mode is a tuple returned by _check_corr. The first element
@@ -334,17 +339,24 @@ def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
+            elif complete_protein is True and aa_num == 0:
+                this_codon = nucl_seq._data[span[0]:(span[0]+3)]
+                if not re.search(_codons2re[codon_table.start_codons], this_codon_upper()):
+                    warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
+                            % (pro.id, aa, aa_num, nucl.id, this_codon))
+                codon_seq += this_codon
+                aa_num += 1
             else:
                 this_codon = nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 if not re.search(aa2re[aa], this_codon.upper()):
                     warnings.warn("%s (%s %d) does not correspond to %s (%s)" % (pro.id, aa, aa_num, nucl.id, this_codon))
-                codon_seq += nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
+                codon_seq += this_codon
                 aa_num += 1
     return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
 
 
-def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
-        codon_table=default_codon_table, alphabet=None):
+def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
+        codon_table=default_codon_table, alphabet=None, complete_protein=False):
     """Build a codon alignment from a protein alignment and corresponding
     nucleotide sequences
 
@@ -353,6 +365,7 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
      - nucl_align - an object returned by SeqIO.parse or SeqIO.index or a 
                     colloction of SeqRecord.
      - alphabet   - alphabet for the returned codon alignment
+     - corr_dict  - a dict that maps protein id to nucleotide id
 
     Return a CodonAlignment object
 
@@ -371,31 +384,46 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
             raise TypeError("Alphabet Error!\nThe input alignment should be a *PROTEIN* alignment")
     # check whether the number of seqs in pro_align and nucl_seqs is the same
     pro_num = len(pro_align)
-    if nucl_seqs.__class__.__name__ == "generator":
-        # nucl_seqs will be a tuple if read by SeqIO.parse()
-        nucl_seqs = tuple(nucl_seqs) 
-    nucl_num = len(nucl_seqs)
-    if pro_num > nucl_num:
-        raise ValueError("More Number of SeqRecords in Protein Alignment (%d) than the Number of Nucleotide SeqRecords (%d) are found!" \
-                % (pro_num, nucl_num))
+    if corr_dict is None:
+        if nucl_seqs.__class__.__name__ == "generator":
+            # nucl_seqs will be a tuple if read by SeqIO.parse()
+            nucl_seqs = tuple(nucl_seqs) 
+        nucl_num = len(nucl_seqs)
+        if pro_num > nucl_num:
+            raise ValueError("More Number of SeqRecords in Protein Alignment (%d) than the Number of Nucleotide SeqRecords (%d) are found!" \
+                    % (pro_num, nucl_num))
 
-    if alphabet is None:
-        alphabet = get_codon_alphabet(codon_table, gap_char=gap_char)
-    # Determine the protein sequences and nucl sequences correspondance. If
-    # nucl_seqs is a list, tuple or read by SeqIO.parse(), we assume the order
-    # of sequences in pro_align and nucl_seqs are the same. If nucl_seqs is a
-    # dict or read by SeqIO.index(), we match seqs in pro_align and those in 
-    # nucl_seq by their id.
-    if   nucl_seqs.__class__.__name__ == "_IndexedSeqFileDict":
-        corr_method = 1
-    elif nucl_seqs.__class__.__name__ == "list":
-        corr_method = 0
-    elif nucl_seqs.__class__.__name__ == "tuple":
-        corr_method = 0
-    elif nucl_seqs.__class__.__name__ == "dict":
-        corr_method = 1
+        if alphabet is None:
+            alphabet = get_codon_alphabet(codon_table, gap_char=gap_char)
+        # Determine the protein sequences and nucl sequences correspondance. If
+        # nucl_seqs is a list, tuple or read by SeqIO.parse(), we assume the order
+        # of sequences in pro_align and nucl_seqs are the same. If nucl_seqs is a
+        # dict or read by SeqIO.index(), we match seqs in pro_align and those in 
+        # nucl_seq by their id.
+        if   nucl_seqs.__class__.__name__ in ("_IndexedSeqFileDict", "dict"):
+            corr_method = 1
+        elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
+            corr_method = 0
+        else:
+            raise TypeError("Nucl Sequences Error, Unknown type to assign correspondance method")
     else:
-        raise TypeError("Nucl Sequences Error, Unknown type to assign correspondance method")
+        if not isinstance(corr_dict, dict):
+            raise TypeError("corr_dict should be a dict that corresponds protein id to nucleotide id!")
+        if len(corr_dict) >= pro_num:
+            if nucl_seqs.__class__.__name__ == "generator": # read by SeqIO.parse()
+                from Bio import SeqIO
+                nucl_seqs = SeqIO.to_dict(nucl_seqs)
+            elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
+                nucl_seqs = {i.id: i for i in nucl_seqs}
+            elif nucl_seqs.__class__.__name__ in ("_IndexedSeqFileDict", "dict"):
+                pass
+            else:
+                raise TypeError("Nucl Sequences Error, Unknown type of Nucleotide Records!")
+            corr_method = 2
+        else:
+            raise RuntimeError("Number of items in corr_dict (%n) is less than number of protein records (%n)" \
+                    % (len(corr_dict), pro_num))
+
     # set up pro-nucl correspondance based on corr_method
     # corr_method = 0, consecutive pairing
     if corr_method == 0:
@@ -413,19 +441,28 @@ def build(pro_align, nucl_seqs, gap_char='-', unknown='X', \
             pro_nucl_pair = []
             for pro_rec in pro_align:
                 pro_nucl_pair.append((pro_rec, nucl_seqs[pro_rec.id]))
+    elif corr_method == 2:
+        pro_nucl_pair = []
+        for pro_rec in pro_align:
+            try:
+                nucl_id = corr_dict[pro_rec.id]
+            except KeyError:
+                print "Protein record (%s) is not in corr_dict!" % pro_rec.id
+                exit(1)
+            pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
     codon_aln = []
     for pair in pro_nucl_pair:
         # Beaware that the following span corresponds to a ungapped 
         # nucleotide sequence.
         corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char, \
-                codon_table=codon_table)
+                codon_table=codon_table, complete_protein=complete_protein)
         if not corr_span:
             raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
                     % (pair[0].id, pair[1].id))
         else:
             codon_rec = _get_codon_aln(pair[0], pair[1], corr_span, \
-                    alphabet=alphabet)
+                    alphabet=alphabet, complete_protein=False)
             codon_aln.append(codon_rec)
     return CodonAlignment(codon_aln, alphabet=alphabet)
 
