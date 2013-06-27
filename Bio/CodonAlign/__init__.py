@@ -271,7 +271,7 @@ def _check_corr(pro, nucl, gap_char='-', \
             # as the last anchor is combined in the steps
             # above, we need to get the true last anchor to
             # pro_re
-            if this_anchor_len == 10:
+            if this_anchor_len == anchor_len:
                 for aa in str(anchor).replace(gap_char, ""):
                     if complete_protein is True and i == 0:
                         qcodon += _codons2re(codon_table.start_codons)
@@ -280,27 +280,27 @@ def _check_corr(pro, nucl, gap_char='-', \
                         continue
                     qcodon += aa2re[aa]
                     fncodon += aa2re['X']
-            elif this_anchor_len > 10:
+            elif this_anchor_len > anchor_len:
                 last_qcodon = ""
                 pos = 0
                 for aa in anchor:
                     if aa != gap_char:
                         qcodon += aa2re[aa]
                         fncodon += aa2re['X']
-                        if pos >= 10:
+                        if pos >= anchor_len:
                             last_qcodon += aa2re[aa]
                     pos += 1
             match = re.search(qcodon, nucl_seq)
             if match:
-                if this_anchor_len == 10:
+                if this_anchor_len == anchor_len:
                     pro_re += qcodon
                 else:
                     pro_re += last_qcodon
             else:
-                if this_anchor_len == 10:
+                if this_anchor_len == anchor_len:
                     pro_re += fncodon
                 else:
-                    pro_re += fncodon[10:]
+                    pro_re += fncodon[anchor_len:]
         match = re.search(pro_re, nucl_seq)
         if match:
             print '1'
