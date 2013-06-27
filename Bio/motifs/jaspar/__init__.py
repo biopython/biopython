@@ -1,3 +1,9 @@
+# Copyright 2013 by Anthony Mathelier and David Arenillas. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
+
 from Bio.Seq import Seq
 from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
