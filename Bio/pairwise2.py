@@ -136,7 +136,9 @@ type help(pairwise2.align.localds) at the Python prompt.
 # - penalize_end_gaps: boolean
 #   Whether to count the gaps at the ends of an alignment.  By
 #   default, they are counted for global alignments but not for local
-#   ones.
+#   ones. Setting penalize_end_gaps to (boolean, boolean) allows you to
+#   specify for the two sequences separately whether gaps at the end of
+#   the alignment should be counted.
 # - gap_char: string
 #   Which character to use as a gap character in the alignment
 #   returned.  By default, uses '-'.
