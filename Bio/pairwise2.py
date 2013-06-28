@@ -295,6 +295,13 @@ alignment occurs.
                 ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
+            value = keywds['penalize_end_gaps']
+            try:
+                n = len(value)
+            except TypeError:
+                keywds['penalize_end_gaps'] = tuple([value]*2)
+            else:
+                assert n==2
             return keywds
 
         def __call__(self, *args, **keywds):
@@ -385,12 +392,12 @@ def _make_score_matrix_generic(
         # sequence A.  This is like opening up i gaps at the beginning
         # of sequence B.
         score = match_fn(sequenceA[i], sequenceB[0])
-        if penalize_end_gaps:
+        if penalize_end_gaps[1]:
             score += gap_B_fn(0, i)
         score_matrix[i][0] = score
     for i in range(1, lenB):
         score = match_fn(sequenceA[0], sequenceB[i])
-        if penalize_end_gaps:
+        if penalize_end_gaps[0]:
             score += gap_A_fn(0, i)
         score_matrix[0][i] = score
 
@@ -469,13 +476,13 @@ def _make_score_matrix_fast(
         # sequence A.  This is like opening up i gaps at the beginning
         # of sequence B.
         score = match_fn(sequenceA[i], sequenceB[0])
-        if penalize_end_gaps:
+        if penalize_end_gaps[1]:
             score += calc_affine_penalty(
                 i, open_B, extend_B, penalize_extend_when_opening)
         score_matrix[i][0] = score
     for i in range(1, lenB):
         score = match_fn(sequenceA[0], sequenceB[i])
-        if penalize_end_gaps:
+        if penalize_end_gaps[0]:
             score += calc_affine_penalty(
                 i, open_A, extend_A, penalize_extend_when_opening)
         score_matrix[0][i] = score
@@ -663,12 +670,8 @@ def _find_start(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
     # Return a list of (score, (row, col)) indicating every possible
     # place to start the tracebacks.
     if align_globally:
-        if penalize_end_gaps:
-            starts = _find_global_start(
-                sequenceA, sequenceB, score_matrix, gap_A_fn, gap_B_fn, 1)
-        else:
-            starts = _find_global_start(
-                sequenceA, sequenceB, score_matrix, None, None, 0)
+        starts = _find_global_start(
+            sequenceA, sequenceB, score_matrix, gap_A_fn, gap_B_fn, penalize_end_gaps)
     else:
         starts = _find_local_start(score_matrix)
     return starts
@@ -684,13 +687,13 @@ def _find_global_start(sequenceA, sequenceB,
     for row in range(nrows):
         # Find the score, penalizing end gaps if necessary.
         score = score_matrix[row][ncols-1]
-        if penalize_end_gaps:
+        if penalize_end_gaps[1]:
             score += gap_B_fn(ncols, nrows-row-1)
         positions.append((score, (row, ncols-1)))
     # Search all columns in the last row.
     for col in range(ncols-1):
         score = score_matrix[nrows-1][col]
-        if penalize_end_gaps:
+        if penalize_end_gaps[0]:
             score += gap_A_fn(nrows, ncols-col-1)
         positions.append((score, (nrows-1, col)))
     return positions

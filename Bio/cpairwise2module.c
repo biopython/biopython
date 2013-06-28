@@ -232,7 +232,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     char *sequenceA=NULL, *sequenceB=NULL;
     int use_sequence_cstring;
     double open_A, extend_A, open_B, extend_B;
-    int penalize_extend_when_opening, penalize_end_gaps;
+    int penalize_extend_when_opening, penalize_end_gaps_A, penalize_end_gaps_B;
     int align_globally, score_only;
 
     PyObject *py_match=NULL, *py_mismatch=NULL;
@@ -251,9 +251,10 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 
     PyObject *py_retval = NULL;
 
-    if(!PyArg_ParseTuple(args, "OOOddddiiii", &py_sequenceA, &py_sequenceB,
+    if(!PyArg_ParseTuple(args, "OOOddddi(ii)ii", &py_sequenceA, &py_sequenceB,
 			 &py_match_fn, &open_A, &extend_A, &open_B, &extend_B,
-			 &penalize_extend_when_opening, &penalize_end_gaps,
+			 &penalize_extend_when_opening,
+                         &penalize_end_gaps_A, &penalize_end_gaps_B,
 			 &align_globally, &score_only))
 	return NULL;
     if(!PySequence_Check(py_sequenceA) || !PySequence_Check(py_sequenceB)) {
@@ -347,7 +348,7 @@ cleanup_after_py_match_fn:
 					use_match_mismatch_scores);
 	if(PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
-	if(penalize_end_gaps)
+	if(penalize_end_gaps_B)
 	    score += calc_affine_penalty(i, open_B, extend_B,
 					 penalize_extend_when_opening);
 	score_matrix[i*lenB] = score;
@@ -361,7 +362,7 @@ cleanup_after_py_match_fn:
 					use_match_mismatch_scores);
 	if(PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
-	if(penalize_end_gaps)
+	if(penalize_end_gaps_A)
 	    score += calc_affine_penalty(i, open_A, extend_A,
 					 penalize_extend_when_opening);
 	score_matrix[i] = score;
