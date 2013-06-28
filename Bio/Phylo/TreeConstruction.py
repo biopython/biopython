@@ -6,7 +6,10 @@
 """Classes and methods for tree construction"""
 
 import itertools
+import copy
+from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
+
 
 class Matrix(object):
     """A base class for distance matrix or scoring matrix that accepts
@@ -470,11 +473,129 @@ class DistanceTreeConstructor(TreeContructor):
     def upgma(self):
         """Construct and return an UPGMA(Unweighted Pair Group Method
         with Arithmetic mean) tree."""
-        pass
+        # make a copy of the distance matrix to be used
+        dm = copy.deepcopy(self.distance_matrix)
+        # init terminal clades
+        clades = [BaseTree.Clade(None, name) for name in dm.names]
+        # init minimum index
+        min_i = 0
+        min_j = 0
+        inner_count = 0
+        while len(dm) > 1:
+            min_dist = dm[1, 0]
+            # find minimum index
+            for i in range(1, len(dm)):
+                for j in range(0, i):
+                    if min_dist >= dm[i, j]:
+                        min_dist = dm[i, j]
+                        min_i = i
+                        min_j = j
+
+            # create clade
+            clade1 = clades[min_i]
+            clade2 = clades[min_j]
+            inner_count += 1
+            inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
+            inner_clade.clades.append(clade1)
+            inner_clade.clades.append(clade2)
+            #assign branch length
+            if clade1.is_terminal():
+                clade1.branch_length = min_dist * 1.0 / 2
+            else:
+                clade1.branch_length = min_dist * 1.0 / 2 - self._height_of(clade1)
+
+            if clade2.is_terminal():
+                clade2.branch_length = min_dist * 1.0 / 2
+            else:
+                clade2.branch_length = min_dist * 1.0 / 2 - self._height_of(clade2)
+
+            # update node list
+            clades[min_j] = inner_clade
+            del clades[min_i]
+
+            # rebuild distance matrix,
+            # set the distances of new node at the index of min_j
+            for k in range(0, len(dm)):
+                if k != min_i and k != min_j:
+                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]) * 1.0 / 2
+
+            dm.names[min_j] = "Inner" + str(inner_count)
+
+            del dm[min_i]
+        return BaseTree.Tree(inner_clade)
 
     def nj(self):
         """Construct and return an Neighbor Joining tree."""
-        pass
+
+        # make a copy of the distance matrix to be used
+        dm = copy.deepcopy(self.distance_matrix)
+        # init terminal clades
+        clades = [BaseTree.Clade(None, name) for name in dm.names]
+        # init node distance
+        node_dist = [0] * len(dm)
+        # init minimum index
+        min_i = 0
+        min_j = 0
+        inner_count = 0
+        while len(dm) > 2:
+            # calculate nodeDist
+            for i in range(0, len(dm)):
+                node_dist[i] = 0
+                for j in range(0, len(dm)):
+                    node_dist[i] += dm[i, j]
+                node_dist[i] = node_dist[i] / (len(dm) - 2)
+
+            # find minimum distance pair
+            min_dist = dm[1, 0] - node_dist[1] - node_dist[0]
+            min_i = 0
+            min_j = 1
+            for i in range(1, len(dm)):
+                for j in range(0, i):
+                    temp = dm[i, j] - node_dist[i] - node_dist[j]
+                    if min_dist > temp:
+                        min_dist = temp
+                        min_i = i
+                        min_j = j
+            # create clade
+            clade1 = clades[min_i]
+            clade2 = clades[min_j]
+            inner_count += 1
+            inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
+            inner_clade.clades.append(clade1)
+            inner_clade.clades.append(clade2)
+            #assign branch length
+            clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i] - node_dist[min_j]) / 2
+            clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
+
+            # update node list
+            clades[min_j] = inner_clade
+            del clades[min_i]
+
+            # rebuild distance matrix,
+            # set the distances of new node at the index of min_j
+            for k in range(0, len(dm)):
+                if k != min_i and k != min_j:
+                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] - dm[min_i, min_j]) * 1.0 / 2
+
+            dm.names[min_j] = "Inner" + str(inner_count)
+
+            del dm[min_i]
+
+        # connect two rest nodes
+        clades[1].branch_length = dm[1, 0]
+        clades[0].clades.append(clades[1])
+
+        return BaseTree.Tree(clades[0])
+
+    def _height_of(self, clade):
+        """calculate height of the clade -- the longest path to one of
+        the terminals"""
+        height = 0
+        if clade.is_terminal():
+            height = clade.branch_length
+        else:
+            height = height + max([self._height_of(c) for c in clade.clades])
+        return height
 
 
 class ParsimonyTreeConstructor(TreeContructor):

@@ -5,12 +5,17 @@
 
 """Unit tests for the Bio.TreeConstruction module."""
 
+import logging
 import unittest
-
 from Bio import AlignIO
+from Bio import Phylo
+from Bio.Phylo import BaseTree
 from Bio.Phylo import TreeConstruction
 from Bio.Phylo.TreeConstruction import DistanceMatrix
 from Bio.Phylo.TreeConstruction import DistanceCaluculator
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+
+logging.basicConfig(filename='./TreeConstruction/test.log', level=logging.DEBUG)
 
 class DistanceMatrixTest(unittest.TestCase):
     """Test for DistanceMatrix construction and manipulation"""
@@ -38,6 +43,9 @@ class DistanceMatrixTest(unittest.TestCase):
         # getitem
         self.assertEqual(dm[1], [1, 0, 3, 5])
         self.assertEqual(dm[2, 1], 3)
+        self.assertEqual(dm[2][1], 3)
+        self.assertEqual(dm[1, 2], 3)
+        self.assertEqual(dm[1][2], 3)
         self.assertEqual(dm['Alpha'], [0, 1, 2, 4])
         self.assertEqual(dm['Gamma', 'Delta'], 6)
         # setitem
@@ -74,7 +82,7 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertRaises(TypeError, dm.__setitem__, (1, 'A'), 3)
         self.assertRaises(TypeError, dm.__setitem__, (1, 1.2), 2)
         self.assertRaises(IndexError, dm.__setitem__, 6, [1, 3, 4])
-        self.assertRaises(IndexError, dm.__setitem__, (10,10), 1)
+        self.assertRaises(IndexError, dm.__setitem__, (10, 10), 1)
         #setitem: value test
         self.assertRaises(ValueError, dm.__setitem__, 0, [1, 2])
         self.assertRaises(TypeError, dm.__setitem__, ('Alpha', 'Beta'), 'a')
@@ -101,6 +109,35 @@ class DistanceCaluculatorTest(unittest.TestCase):
         calculator = DistanceCaluculator(aln, 'blosum62')
         dm = calculator.get_distance()
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (53 * 1.0 / 84))
+
+
+class DistanceTreeConstructorTest(unittest.TestCase):
+    """Test DistanceTreeConstructor"""
+
+    def test_upgma(self):
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+
+        calculator = DistanceCaluculator(aln, 'blosum62')
+        dm = calculator.get_distance()
+        logging.info("DistanceMatrix:\n" + str(dm))
+        constructor = DistanceTreeConstructor(dm)
+        tree = constructor.upgma()
+        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        logging.info("UPGMA Tree:\n" + str(tree))
+        Phylo.write(tree, './TreeConstruction/upgma.tre', 'newick')
+
+    def test_nj(self):
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+
+        calculator = DistanceCaluculator(aln, 'blosum62')
+        dm = calculator.get_distance()
+        logging.info("DistanceMatrix:\n" + str(dm))
+        constructor = DistanceTreeConstructor(dm)
+        tree = constructor.nj()
+        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        logging.info("NJ Tree:\n" + str(tree))
+        Phylo.write(tree, './TreeConstruction/nj.tre', 'newick')
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

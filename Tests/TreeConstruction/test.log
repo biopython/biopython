@@ -1,0 +1,36 @@
+
+INFO:root:DistanceMatrix:
+Alpha	0
+Beta	0.369047619048	0
+Gamma	0.493975903614	0.25	0
+Delta	0.585365853659	0.547619047619	0.566265060241	0
+Epsilon	0.7	0.355555555556	0.488888888889	0.222222222222	0
+	Alpha	Beta	Gamma	Delta	Epsilon
+INFO:root:NJ Tree:
+Tree(rooted=True)
+    Clade(name='Inner3')
+        Clade(branch_length=0.0142054862889, name='Inner2')
+            Clade(branch_length=0.239265540676, name='Inner1')
+                Clade(branch_length=0.0853101915988, name='Epsilon')
+                Clade(branch_length=0.136912030623, name='Delta')
+            Clade(branch_length=0.292306275042, name='Alpha')
+        Clade(branch_length=0.0747705106139, name='Beta')
+        Clade(branch_length=0.175229489386, name='Gamma')
+INFO:root:DistanceMatrix:
+Alpha	0
+Beta	0.369047619048	0
+Gamma	0.493975903614	0.25	0
+Delta	0.585365853659	0.547619047619	0.566265060241	0
+Epsilon	0.7	0.355555555556	0.488888888889	0.222222222222	0
+	Alpha	Beta	Gamma	Delta	Epsilon
+INFO:root:UPGMA Tree:
+Tree(rooted=True)
+    Clade(name='Inner4')
+        Clade(branch_length=0.171955155115, name='Inner1')
+            Clade(branch_length=0.111111111111, name='Epsilon')
+            Clade(branch_length=0.111111111111, name='Delta')
+        Clade(branch_length=0.0673103855608, name='Inner3')
+            Clade(branch_length=0.0907558806655, name='Inner2')
+                Clade(branch_length=0.125, name='Gamma')
+                Clade(branch_length=0.125, name='Beta')
+            Clade(branch_length=0.215755880666, name='Alpha')
