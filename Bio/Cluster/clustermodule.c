@@ -1085,12 +1085,12 @@ static PyTypeObject PyNodeType = {
     0,                         /* tp_as_buffer */
     Py_TPFLAGS_DEFAULT,        /* tp_flags */
     PyNode_doc,                /* tp_doc */
-    0,		               /* tp_traverse */
-    0,		               /* tp_clear */
-    0,		               /* tp_richcompare */
-    0,		               /* tp_weaklistoffset */
-    0,		               /* tp_iter */
-    0,		               /* tp_iternext */
+    0,                         /* tp_traverse */
+    0,                         /* tp_clear */
+    0,                         /* tp_richcompare */
+    0,                         /* tp_weaklistoffset */
+    0,                         /* tp_iter */
+    0,                         /* tp_iternext */
     0,                         /* tp_methods */
     0,                         /* tp_members */
     PyNode_getset,             /* tp_getset */
@@ -1406,12 +1406,12 @@ static PyTypeObject PyTreeType = {
     0,                           /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT,          /*tp_flags*/
     PyTree_doc,                  /* tp_doc */
-    0,		                 /* tp_traverse */
-    0,		                 /* tp_clear */
-    0,		                 /* tp_richcompare */
-    0,		                 /* tp_weaklistoffset */
-    0,		                 /* tp_iter */
-    0,		                 /* tp_iternext */
+    0,                           /* tp_traverse */
+    0,                           /* tp_clear */
+    0,                           /* tp_richcompare */
+    0,                           /* tp_weaklistoffset */
+    0,                           /* tp_iter */
+    0,                           /* tp_iternext */
     PyTree_methods,              /* tp_methods */
     NULL,                        /* tp_members */
     0,                           /* tp_getset */
