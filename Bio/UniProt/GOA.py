@@ -150,7 +150,7 @@ def _gpi11iterator(handle):
         inrec[3] = inrec[3].split('|') # DB_Object_Synonym(s)
         inrec[7] = inrec[7].split('|') # DB_Xref(s)
         inrec[8] = inrec[8].split('|') # Properties
-        yield dict(zip(GPI10FIELDS, inrec))
+        yield dict(zip(GPI11FIELDS, inrec))
 
 def gpi_iterator(handle):
     """Read GPI format files.
