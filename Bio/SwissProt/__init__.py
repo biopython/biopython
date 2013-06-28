@@ -489,10 +489,6 @@ def _read_cc(record, line):
 
 
 def _read_dr(record, value):
-    # Remove the comments at the end of the line
-    i = value.find(' [')
-    if i >= 0:
-        value = value[:i]
     cols = value.rstrip(".").split('; ')
     record.cross_references.append(tuple(cols))
 
