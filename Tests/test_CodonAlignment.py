@@ -1,3 +1,11 @@
+# Copyright (C) 2013 by Zheng Ruan
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Unit tests for the CodonAlign modules.
+"""
+
 from Bio import CodonAlign, SeqIO, AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
