@@ -240,14 +240,14 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     double match, mismatch;
     int use_match_mismatch_scores;
     int lenA, lenB;
-    double *score_matrix = (double *)NULL;
-    struct IndexList *trace_matrix = (struct IndexList *)NULL;
+    double *score_matrix = NULL;
+    struct IndexList *trace_matrix = NULL;
     PyObject *py_score_matrix=NULL, *py_trace_matrix=NULL;
 
-    double *row_cache_score = (double *)NULL,
-        *col_cache_score = (double *)NULL;
-    struct IndexList *row_cache_index = (struct IndexList *)NULL,
-        *col_cache_index = (struct IndexList *)NULL;
+    double *row_cache_score = NULL,
+        *col_cache_score = NULL;
+    struct IndexList *row_cache_index = NULL,
+        *col_cache_index = NULL;
 
     PyObject *py_retval = NULL;
 
