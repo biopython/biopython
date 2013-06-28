@@ -11,8 +11,9 @@ the core class to deal with codon alignment in biopython.
 """
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
-from Bio.Seq import Seq
 from itertools import izip
+
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC, Gapped, Alphabet, HasStopCodon, generic_dna
 from Bio.Align import MultipleSeqAlignment
@@ -65,12 +66,13 @@ class CodonSeq(Seq):
     codon slice.
 
     """
-    def __init__(self, data, alphabet=default_codon_alphabet):
+    def __init__(self, data, alphabet=default_codon_alphabet, gap_char="-"):
 
         # Check the alphabet of the input sequences
         # TODO:
         # set up a codon alphabet to verify more rigorously
         Seq.__init__(self, data.upper(), alphabet=alphabet)
+        self.gap_char = gap_char
 
         # check the length of the alignment to be a triple
         assert len(self) % 3 == 0, "Sequence length is not a triple number"
@@ -78,7 +80,7 @@ class CodonSeq(Seq):
         # check alphabet
         # Not use Alphabet._verify_alphabet function because it 
         # only works for single alphabet
-        for i in range(self.get_codon_num()):
+        for i in range(len(self)/3):
             if self[i] not in alphabet.letters:
                 raise ValueError("Sequence contain undefined letters from alphabet (%s)!"\
                         % self[i])
@@ -98,7 +100,7 @@ class CodonSeq(Seq):
         # The idea of the code below is to first map the slice
         # to amino acid sequence and then transform it into 
         # codon sequence.
-            aa_index = range(self.get_codon_num())
+            aa_index = range(len(self)/3)
             def cslice(p):
                 aa_slice = aa_index[p]
                 codon_slice = ''
@@ -110,7 +112,7 @@ class CodonSeq(Seq):
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq"""
-        return len(self._data) / 3
+        return len(self.ungap(self.gap_char)) / 3
 
     def toSeq(self, alphabet=generic_dna):
         return Seq(self._data, generic_dna)
@@ -156,7 +158,7 @@ class CodonAlignment(MultipleSeqAlignment):
         rows = len(self._records)
         lines = ["%s CodonAlignment with %i rows and %i columns (%i codons)"
                  % (str(self._alphabet), rows, \
-                    self.get_alignment_length(), self.get_codon_num())]
+                    self.get_alignment_length(), self.get_aln_length())]
         
         if rows <= 20:
             lines.extend([self._str_line(rec, length=20) for rec in self._records])
@@ -167,7 +169,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return "\n".join(lines)
 
 
-    def get_codon_num(self):
+    def get_aln_length(self):
         return self.get_alignment_length() / 3
 
     def toMultipleSeqAlignment(self):
@@ -465,6 +467,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
                     alphabet=alphabet, complete_protein=False)
             codon_aln.append(codon_rec)
     return CodonAlignment(codon_aln, alphabet=alphabet)
+
 
 def toCodonAlignment(align, alphabet=default_codon_alphabet):
     """Function to convert a MultipleSeqAlignment to CodonAlignment.
