@@ -357,7 +357,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     # Recover the alignments and return them.
     x = _recover_alignments(
         sequenceA, sequenceB, starts, score_matrix, trace_matrix,
-        align_globally, penalize_end_gaps, gap_char, one_alignment_only)
+        align_globally, gap_char, one_alignment_only)
     return x
 
 
@@ -584,7 +584,7 @@ def _make_score_matrix_fast(
 
 def _recover_alignments(sequenceA, sequenceB, starts,
                         score_matrix, trace_matrix, align_globally,
-                        penalize_end_gaps, gap_char, one_alignment_only):
+                        gap_char, one_alignment_only):
     # Recover the alignments by following the traceback matrix.  This
     # is a recursive procedure, but it's implemented here iteratively
     # with a stack.
