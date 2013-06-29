@@ -10,7 +10,6 @@
  */
 
 #include "Python.h"
-#include "csupport.h"
 
 
 #define _PRECISION 1000
@@ -166,7 +165,7 @@ double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB,
 
     if(!(py_result = PyEval_CallObject(py_match_fn, py_arglist)))
 	goto _get_match_score_cleanup;
-    score = PyNumber_AsDouble(py_result);
+    score = PyFloat_AsDouble(py_result);
  _get_match_score_cleanup:
     if(py_A) {
 	Py_DECREF(py_A);
@@ -250,13 +249,13 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 	PyObject *py_match=NULL, *py_mismatch=NULL;
 	if(!(py_match = PyObject_GetAttrString(py_match_fn, "match")))
 	    goto cleanup_after_py_match_fn;
-	match = PyNumber_AsDouble(py_match);
-	if(PyErr_Occurred())
+	match = PyFloat_AsDouble(py_match);
+	if(match==-1.0 && PyErr_Occurred())
 	    goto cleanup_after_py_match_fn;
 	if(!(py_mismatch = PyObject_GetAttrString(py_match_fn, "mismatch")))
 	    goto cleanup_after_py_match_fn;
-	mismatch = PyNumber_AsDouble(py_mismatch);
-	if(PyErr_Occurred())
+	mismatch = PyFloat_AsDouble(py_mismatch);
+	if(mismatch==-1.0 && PyErr_Occurred())
 	    goto cleanup_after_py_match_fn;
 	use_match_mismatch_scores = 1;
     cleanup_after_py_match_fn:
@@ -298,7 +297,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 					use_sequence_cstring,
 					match, mismatch,
 					use_match_mismatch_scores);
-	if(PyErr_Occurred())
+	if(score==-1.0 && PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
 	if(penalize_end_gaps)
 	    score += calc_affine_penalty(i, open_B, extend_B, 
@@ -312,7 +311,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 					use_sequence_cstring,
 					match, mismatch,
 					use_match_mismatch_scores);
-	if(PyErr_Occurred())
+	if(score==-1.0 && PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
 	if(penalize_end_gaps)
 	    score += calc_affine_penalty(i, open_A, extend_A, 
@@ -352,7 +351,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 	    int best_score_rint;
 	    struct IndexList *il;
 
-	    double score, open_score, extend_score;
+	    double score, open_score, extend_score, delta_score;
 	    int open_score_rint, extend_score_rint;
 
 	    /* Calculate the best score. */
@@ -374,14 +373,15 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 	    best_score_rint = rint(best_score);
 
 	    /* Set the score and traceback matrices. */
-	    score = best_score + _get_match_score(py_sequenceA, py_sequenceB, 
-						  py_match_fn, row, col,
-						  sequenceA, sequenceB,
-						  use_sequence_cstring,
-						  match, mismatch,
-						  use_match_mismatch_scores);
-	    if(PyErr_Occurred())
+	    delta_score = _get_match_score(py_sequenceA, py_sequenceB, 
+					  py_match_fn, row, col,
+					  sequenceA, sequenceB,
+					  use_sequence_cstring,
+					  match, mismatch,
+					  use_match_mismatch_scores);
+	    if(delta_score==-1.0 && PyErr_Occurred())
 		goto _cleanup_make_score_matrix_fast;
+	    score = best_score + delta_score;
 	    if(!align_globally && score < 0)
 		score_matrix[row*lenB+col] = 0;
 	    else

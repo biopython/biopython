@@ -7,7 +7,6 @@
  */
 
 #include "Python.h"
-#include "csupport.h"
 
 
 /* Functions in this module. */
@@ -23,10 +22,10 @@ static PyObject *cMarkovModel__logadd(PyObject *self, PyObject *args)
 
     if(!PyArg_ParseTuple(args, "OO", &py_logx, &py_logy))
 	return NULL;
-    logx = PyNumber_AsDouble(py_logx);
-    logy = PyNumber_AsDouble(py_logy);
-    if(PyErr_Occurred())
-	return NULL;
+    logx = PyFloat_AsDouble(py_logx);
+    if (logx==-1.0 && PyErr_Occurred()) return NULL;
+    logy = PyFloat_AsDouble(py_logy);
+    if (logy==-1.0 && PyErr_Occurred()) return NULL;
 
     if(logy-logx > 100.0) {
 	Py_INCREF(py_logy);
