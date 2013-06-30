@@ -290,7 +290,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     if(!(py_mismatch = PyObject_GetAttrString(py_match_fn, "mismatch")))
         goto cleanup_after_py_match_fn;
     mismatch = PyFloat_AsDouble(py_mismatch);
-    if(mismtach==-1.0 && PyErr_Occurred())
+    if(mismatch==-1.0 && PyErr_Occurred())
         goto cleanup_after_py_match_fn;
     use_match_mismatch_scores = 1;
 cleanup_after_py_match_fn:
