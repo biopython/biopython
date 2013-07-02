@@ -70,6 +70,16 @@ class TestPdbAtom(unittest.TestCase):
             self.assertEqual(chain.annotations['chain'], chn_id)
             self.assertEqual(str(chain.seq), actual_seq)
 
+        chains = list(SeqIO.parse('PDB/2XHE.pdb', 'pdb-atom'))
+        actual_seq = 'DRLSRLRQMAAENQXXXXXXXXXXXXXXXXXXXXXXXPEPFMADFFNRVK'\
+                     'RIRDNIEDIEQAIEQVAQLHTESLVAVSKEDRDRLNEKLQDTMARISALG'\
+                     'NKIRADLKQIEKENKRAQQEGTFEDGTVSTDLRIRQSQHSSLSRKFVKVM'\
+                     'TRYNDVQAENKRRYGENVARQCRVVEPSLSDDAIQKVIEHGXXXXXXXXX'\
+                     'XXXXXXXXNEIRDRHKDIQQLERSLLELHEMFTDMSTLVASQGEMIDRIE'\
+                     'FSVEQSHNYV'
+        self.assertEqual(str(chains[1].seq), actual_seq)
+
+
     def test_atom_read(self):
         """Read a single-chain PDB by ATOM entries.
 

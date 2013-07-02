@@ -170,14 +170,16 @@ def PdbAtomIterator(handle):
                     res_out.extend(map(restype, residues[prev_idx:i]))
                     prev_idx = i
                     res_out.append('X'*gapsize)
-                    # Last segment
-                    res_out.extend(map(restype, residues[prev_idx:]))
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
                                   UserWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
                     res_out.extend(map(restype, residues[prev_idx:i]))
+                    break
+            else:
+                # Last segment
+                res_out.extend(map(restype, residues[prev_idx:]))
         else:
             # No gaps
             res_out = map(restype, residues)
