@@ -114,7 +114,8 @@ PyPy
 ----
 
 PyPy is an alternative Python implementation using Just-in-Time (JIT)
-compiler technology. It is often faster than traditional C Python.
+compiler technology, see http://pypy.org for details. PyPy is often
+faster than traditional C Python.
 
 Aside from modules with C code or dependent of NumPy, everything should work.
 Evaluating PyPy's NumPy reimplementation NumPyPy is still in progress.
