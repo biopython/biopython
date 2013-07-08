@@ -65,6 +65,10 @@ class CodonSeq(Seq):
     Sequences bacause it slices three letters at once, i.e.
     codon slice.
 
+    >>> codonseq = CodonSeq("AAATTTGGGCCAAATTT", rf_table=(0,3,6,8,11,14))
+    >>> print codonseq.translate()
+    KFGAKF
+
     """
     def __init__(self, data, alphabet=default_codon_alphabet, \
             gap_char="-", rf_table=None):
@@ -102,7 +106,7 @@ class CodonSeq(Seq):
             assert isinstance(rf_table, (tuple, list)), \
                     "rf_table should be a tuple or list object"
             assert all(isinstance(i, int) for i in rf_table), \
-                    "elements in rf_table should be int that specify" \
+                    "elements in rf_table should be int that specify " \
                   + "the codon positions of the sequence"
             self.rf_table = rf_table
     
@@ -110,10 +114,10 @@ class CodonSeq(Seq):
         """get the `index`-th codon in from the self.seq
         """
         if self.rf_table is not None:
-            raise RuntimeError("rf_table detected." \
-                             + "CodonSeq object is not able to deal" \
-                             + "with codon sequence with frameshift." \
-                             + "Convert it to str or Seq object to" \
+            raise RuntimeError("rf_table detected. " \
+                             + "CodonSeq object is not able to deal " \
+                             + "with codon sequence with frameshift. " \
+                             + "Convert it to str or Seq object to " \
                              + "use slice")
         if isinstance(index, int):
             if index != -1:
@@ -148,7 +152,7 @@ class CodonSeq(Seq):
         amino_acids = []
         seq_ungapped = self._data.replace(self.gap_char, "")
         if self.rf_table is not None:
-            for i in rf_table:
+            for i in self.rf_table:
                 amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
             return "".join(amino_acids)
         else:
