@@ -121,6 +121,22 @@ class MafftApplication(unittest.TestCase):
             stdoutdata, stderrdata = cmdline()
             #e.g. " 3 706\n" but allow some variation in the column count
             self.assertTrue(stdoutdata.startswith(" 3 70"), stdoutdata)
+            self.assertTrue("gi|1348912 " in stdoutdata,
+                            stdoutdata)
+            self.assertTrue("gi|1348912|gb|G26680|G26680" not in stdoutdata,
+                            stdoutdata)
+            self.assertTrue("$#=0" not in stderrdata)
+
+        def test_Mafft_with_PHYLIP_namelength(self):
+            """Check PHYLIP with --namelength"""
+            cmdline = MafftCommandline(mafft_exe, input=self.infile1,
+                                       phylipout=True, namelength=50)
+            self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+            stdoutdata, stderrdata = cmdline()
+            #e.g. " 3 706\n" but allow some variation in the column count
+            self.assertTrue(stdoutdata.startswith(" 3 70"), stdoutdata)
+            self.assertTrue("gi|1348912|gb|G26680|G26680" in stdoutdata,
+                            stdoutdata)
             self.assertTrue("$#=0" not in stderrdata)
 
     def test_Mafft_with_complex_command_line(self):
