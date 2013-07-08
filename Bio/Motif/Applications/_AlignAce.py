@@ -27,11 +27,10 @@ from Bio.Application import AbstractCommandline, _Option, _Argument
 
 import warnings
 from Bio import BiopythonDeprecationWarning
-warnings.warn("The AlignACE/CompareACE application wrapper is deprecated and is likely to be removed in a future release of Biopython, since an up to date version of the AlignACE software cannot be obtained anymore. If you have a copy of AlignACE 4, please consider contacting the Biopython developers.", BiopythonDeprecationWarning)
 
 
 class AlignAceCommandline(AbstractCommandline):
-    """Create a commandline for the AlignAce program.
+    """Create a commandline for the AlignAce program (DEPRECATED).
 
     Example:
 
@@ -45,6 +44,12 @@ class AlignAceCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="AlignACE", **kwargs):
+        warnings.warn("""The AlignACE application wrapper is deprecated and
+                      is likely to be removed in a future release of Biopython,
+                      since an up to date version of the AlignACE software
+                      cannot be obtained anymore. If you have a copy of
+                      AlignACE 4, please consider contacting the Biopython
+                      developers.""", BiopythonDeprecationWarning)
         self.parameters = \
           [
             _Option(["-i", "infile"],
@@ -92,7 +97,7 @@ class AlignAceCommandline(AbstractCommandline):
 
 
 class CompareAceCommandline(AbstractCommandline):
-    """Create a commandline for the CompareAce program.
+    """Create a commandline for the CompareAce program (DEPRECATED).
 
     Example:
 
@@ -107,8 +112,12 @@ class CompareAceCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="CompareACE", **kwargs):
-        import os.path
-
+        warnings.warn("""The CompareACE application wrapper is deprecated and
+                      is likely to be removed in a future release of Biopython,
+                      since an up to date version of the AlignACE software
+                      cannot be obtained anymore. If you have a copy of
+                      AlignACE 4, please consider contacting the Biopython
+                      developers.""", BiopythonDeprecationWarning)
         self.parameters = \
           [
             _Argument(["motif1"],
