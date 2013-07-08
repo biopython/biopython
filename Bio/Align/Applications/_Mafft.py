@@ -286,6 +286,15 @@ class MafftCommandline(AbstractCommandline):
             _Switch(["--fmodel", "fmodel"],
                     "Incorporate the AA/nuc composition information into "
                     "the scoring matrix (True) or not (False, default)"),
+            #Name length n in a CLUSTAL format output can be controlled by --
+            #clustalout --namelength n.
+            #Support for titles of >10 characters in the phylip format (--
+            #phylipout --namelength n).  n = 10 by default.
+            _Option(["--namelength", "namelength"],
+                    "Name length n in a CLUSTAL format output can be controlled "
+                    "by --clustalout --namelength n.",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #**** Output ****
             #Name length for CLUSTAL and PHYLIP format output
             _Option(["--namelength", "namelength"],
