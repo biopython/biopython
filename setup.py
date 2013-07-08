@@ -70,9 +70,15 @@ if sys.version_info[:2] < (2, 5):
     sys.exit(-1)
 elif sys.version_info[:2] == (2, 5):
     print("WARNING - Biopython is dropping support for Python 2.5 after this release")
+elif sys.version_info[:2] == (3, 0):
+    print("Biopython will not work on Python 3.0, please try Python 3.3.2 or later")
+    sys.exit(1)
 elif sys.version_info[0] == 3:
-    if sys.version_info < (3, 3, 2):
-        print("WARNING - For Python 3, we recommend Python 3.3.2 or later.")
+    if sys.version_info[:2] < (3, 3):
+        #TODO - Turn off old buildbots/travis and make this an error?
+        print("WARNING - For Python 3, we strongly recommend Python 3.3.2 or later.")
+    if sys.version_info == (3, 3, 1):
+        print("WARNING - Rather than Python 3.3.1, we recommend Python 3.3.0, or 3.3.2, or later.")
     import do2to3
     python3_source = "build/py%i.%i" % sys.version_info[:2]
     if "clean" in sys.argv:
