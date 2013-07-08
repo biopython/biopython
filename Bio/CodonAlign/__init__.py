@@ -72,8 +72,8 @@ class CodonSeq(Seq):
     """
     def __init__(self, data, alphabet=default_codon_alphabet, \
             gap_char="-", rf_table=None):
-        # rf_table should be a tuple indicating the every codon
-        # position along the sequence. For example:
+        # rf_table should be a tuple or list indicating the every
+        # codon position along the sequence. For example:
         # sequence = AAATTTGGGCCAAATTT
         # rf_table = (0, 3, 6, 8, 11, 14)
         # the translated protein sequences will be
@@ -84,41 +84,47 @@ class CodonSeq(Seq):
         #   feature ensures the rf_table is independent of where the
         #   codon sequence appears in the alignment
 
-        # Check the alphabet of the input sequences
-        # TODO:
-        # set up a codon alphabet to verify more rigorously
         Seq.__init__(self, data.upper(), alphabet=alphabet)
         self.gap_char = gap_char
 
         # check the length of the alignment to be a triple
         if rf_table is None:
-            self.rf_table = rf_table
+            seq_ungapped = self._data.replace(gap_char, "")
+            self.rf_table = filter(lambda x: x%3 == 0, range(len(seq_ungapped)))
             assert len(self) % 3 == 0, "Sequence length is not a triple number"
             # check alphabet
             # Not use Alphabet._verify_alphabet function because it 
             # only works for single alphabet
-            for i in range(len(self)/3):
-                if self[i] not in alphabet.letters:
-                    raise ValueError("Sequence contain undefined" \
-                                  + "letters from alphabet (%s)!" \
-                                  % self[i])
+            for i in self.rf_table:
+                if self[i:i+3] not in alphabet.letters:
+                    raise ValueError("Sequence contain undefined " \
+                                  + "letters from alphabet (%s)! " \
+                                  % self[i:i+3])
         else:
             assert isinstance(rf_table, (tuple, list)), \
                     "rf_table should be a tuple or list object"
             assert all(isinstance(i, int) for i in rf_table), \
                     "elements in rf_table should be int that specify " \
                   + "the codon positions of the sequence"
+            seq_ungapped = self._data.replace(gap_char, "")
+            for i in rf_table:
+                if seq_ungapped[i:i+3] not in alphabet.letters:
+                    raise ValueError("Sequence contain undefined " \
+                                  + "letters from alphabet (%s)! " \
+                                  % seq_ungapped[i:i+3])
             self.rf_table = rf_table
     
     def __getitem__(self, index):
+        return self._data[index]
+
+    def get_codon(self, index):
         """get the `index`-th codon in from the self.seq
         """
-        if self.rf_table is not None:
-            raise RuntimeError("rf_table detected. " \
+        if len(set([i % 3 for i in self.rf_table])) != 1:
+            raise RuntimeError("frameshift detected. " \
                              + "CodonSeq object is not able to deal " \
                              + "with codon sequence with frameshift. " \
-                             + "Convert it to str or Seq object to " \
-                             + "use slice")
+                             + "Plase use normal slice option ")
         if isinstance(index, int):
             if index != -1:
                 return self._data[index*3:(index+1)*3]
@@ -143,22 +149,14 @@ class CodonSeq(Seq):
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq"""
-        if rf_table is not None:
-            return len(self.rf_table)
-        else:
-            return len(self._data.replace(self.gap_char, "")) / 3
+        return len(self._data.replace(self.gap_char, "")) / 3
 
     def translate(self, codon_table=default_codon_table, stop_symbol="*"):
         amino_acids = []
         seq_ungapped = self._data.replace(self.gap_char, "")
-        if self.rf_table is not None:
-            for i in self.rf_table:
-                amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
-            return "".join(amino_acids)
-        else:
-            for i in filter(lambda x: x%3 == 0, range(len(seq_ungapped))):
-                amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
-            return "".join(amino_acids)
+        for i in self.rf_table:
+            amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
+        return "".join(amino_acids)
 
     def toSeq(self, alphabet=generic_dna):
         return Seq(self._data, generic_dna)
@@ -206,10 +204,10 @@ class CodonAlignment(MultipleSeqAlignment):
                  % (str(self._alphabet), rows, \
                     self.get_alignment_length(), self.get_aln_length())]
         
-        if rows <= 20:
-            lines.extend([self._str_line(rec, length=20) for rec in self._records])
+        if rows <= 60:
+            lines.extend([self._str_line(rec, length=60) for rec in self._records])
         else:
-            lines.extend([self._str_line(rec, length=20) for rec in self._records[:18]])
+            lines.extend([self._str_line(rec, length=60) for rec in self._records[:18]])
             lines.append("...")
             lines.append(self._str_line(self._records[-1], length=60))
         return "\n".join(lines)
@@ -538,7 +536,6 @@ def toCodonAlignment(align, alphabet=default_codon_alphabet):
     rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
             for i in align._records]
     return CodonAlignment(rec, alphabet=align._alphabet)
-
 
 
 if __name__ == "__main__":
