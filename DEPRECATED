@@ -27,10 +27,10 @@ Bio.SeqFeature
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated.
 
-Bio.Motif.Applications.AlignAceCommandline and CompareAceCommandline
-====================================================================
-Deprecated in release 1.61. An up to date version of the software cannot
-be obtained anymore.
+AlignAceCommandline and CompareAceCommandline
+=============================================
+Deprecated in release 1.62. An up to date version of the software cannot
+be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================
