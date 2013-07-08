@@ -4,10 +4,15 @@ Biopython README file
 The Biopython Project is an international association of developers of freely
 available Python tools for computational molecular biology.
 
-Our website http://www.biopython.org provides an online resource for modules,
-scripts, and web links for developers of Python-based software for life
-science research.  This is hosted by the Open Bioinformatics Foundation or
-O|B|F, http://www.open-bio.org, who also host BioPerl etc.
+Our user-centric documentation is hosted on http://biopython.org including
+the main Biopython Tutorial and Cookbook:
+ * HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
+ * PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+
+This README file is intended primarily for people interested in working
+with the Biopython source code, either one of the releases from the
+http://www.biopython.org website, or from our repository on GitHub
+https://github.com/biopython/biopython
 
 This Biopython package is made available under generous terms.  Please
 see the LICENSE file for further details.
@@ -30,6 +35,9 @@ directory at the command line, and type:
     python setup.py build
     python setup.py test
     sudo python setup.py install
+
+Windows users are recommended to use the installation packages provided on our
+http://biopython.org website.
 
 
 System Requirements
@@ -77,7 +85,7 @@ install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
 
 Python 3.x
-==========
+----------
 
 Note we do not intend to support Python 3.0, 3.1 or 3.2, please use
 Python 3.3 or later. This is officially supported as of Biopython 1.62,
@@ -90,7 +98,10 @@ Use `python3 setup.py build` etc (see installation notes below).
 
 
 Jython
-======
+------
+
+Jython is a Python implementation under the Java Virtual Machine, see
+http://jython.org for details.
 
 Aside from modules with C code, or dependent on SQLite3 or NumPy, everything
 should work. We run nightly tests under Jython 2.5 (but intend to drop support
@@ -100,11 +111,14 @@ Use `jython setup.py build` etc (see installation notes below).
 
 
 PyPy
-====
+----
+
+PyPy is an alternative Python implementation using Just-in-Time (JIT)
+compiler technology. It is often faster than traditional C Python.
 
 Aside from modules with C code or dependent of NumPy, everything should work.
 Evaluating PyPy's NumPy reimplementation NumPyPy is still in progress.
-We run nightly tests under PyPy 1.9 and PyPy 2.0 (currently in beta).
+We run nightly tests under PyPy 1.9 and PyPy 2.0.
 
 Use `pypy setup.py build` etc (see installation notes below).
 
@@ -112,21 +126,25 @@ Use `pypy setup.py build` etc (see installation notes below).
 Installation
 ============
 
-**Make sure that Python is installed correctly**
+First, **make sure that Python is installed correctly**.
 
-Installation should be as simple as going to the biopython source code
-directory, and typing:
+Windows users should use the appropriate provided installation package
+from our website (each is specific to a different Python version).
+
+Installation from source should be as simple as going to the Biopython
+source code directory, and typing:
 
     python setup.py build
     python setup.py test
     sudo python setup.py install
 
-If you need to do additional configuration, e.g. changing the base
-directory, please type `python setup.py`, or see the documentation for
-Distutils.
-
 Substitute `python` with your specific version, for example `python3`,
 `jython` or `pypy`.
+
+If you need to do additional configuration, e.g. changing the base
+directory, please type `python setup.py`, or see the documentation here:
+ * HTML - http://biopython.org/DIST/docs/install/Installation.html
+ * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
 
 
 Testing
