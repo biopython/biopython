@@ -66,7 +66,19 @@ class CodonSeq(Seq):
     codon slice.
 
     """
-    def __init__(self, data, alphabet=default_codon_alphabet, gap_char="-"):
+    def __init__(self, data, alphabet=default_codon_alphabet, \
+            gap_char="-", rf_table=None):
+        # rf_table should be a tuple indicating the every codon
+        # position along the sequence. For example:
+        # sequence = AAATTTGGGCCAAATTT
+        # rf_table = (0, 3, 6, 8, 11, 14)
+        # the translated protein sequences will be
+        # AAA TTT GGG GCC AAA TTT
+        #  K   F   G   A   K   F
+        # Notice: rf_table applies to ungapped sequence. If there
+        #   are gaps in the sequence, they will be discarded. This
+        #   feature ensures the rf_table is independent of where the
+        #   codon sequence appears in the alignment
 
         # Check the alphabet of the input sequences
         # TODO:
@@ -75,19 +87,34 @@ class CodonSeq(Seq):
         self.gap_char = gap_char
 
         # check the length of the alignment to be a triple
-        assert len(self) % 3 == 0, "Sequence length is not a triple number"
-
-        # check alphabet
-        # Not use Alphabet._verify_alphabet function because it 
-        # only works for single alphabet
-        for i in range(len(self)/3):
-            if self[i] not in alphabet.letters:
-                raise ValueError("Sequence contain undefined letters from alphabet (%s)!"\
-                        % self[i])
+        if rf_table is None:
+            self.rf_table = rf_table
+            assert len(self) % 3 == 0, "Sequence length is not a triple number"
+            # check alphabet
+            # Not use Alphabet._verify_alphabet function because it 
+            # only works for single alphabet
+            for i in range(len(self)/3):
+                if self[i] not in alphabet.letters:
+                    raise ValueError("Sequence contain undefined" \
+                                  + "letters from alphabet (%s)!" \
+                                  % self[i])
+        else:
+            assert isinstance(rf_table, (tuple, list)), \
+                    "rf_table should be a tuple or list object"
+            assert all(isinstance(i, int) for i in rf_table), \
+                    "elements in rf_table should be int that specify" \
+                  + "the codon positions of the sequence"
+            self.rf_table = rf_table
     
     def __getitem__(self, index):
         """get the `index`-th codon in from the self.seq
         """
+        if self.rf_table is not None:
+            raise RuntimeError("rf_table detected." \
+                             + "CodonSeq object is not able to deal" \
+                             + "with codon sequence with frameshift." \
+                             + "Convert it to str or Seq object to" \
+                             + "use slice")
         if isinstance(index, int):
             if index != -1:
                 return self._data[index*3:(index+1)*3]
@@ -112,7 +139,22 @@ class CodonSeq(Seq):
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq"""
-        return len(self.ungap(self.gap_char)) / 3
+        if rf_table is not None:
+            return len(self.rf_table)
+        else:
+            return len(self._data.replace(self.gap_char, "")) / 3
+
+    def translate(self, codon_table=default_codon_table, stop_symbol="*"):
+        amino_acids = []
+        seq_ungapped = self._data.replace(self.gap_char, "")
+        if self.rf_table is not None:
+            for i in rf_table:
+                amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
+            return "".join(amino_acids)
+        else:
+            for i in filter(lambda x: x%3 == 0, range(len(seq_ungapped))):
+                amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
+            return "".join(amino_acids)
 
     def toSeq(self, alphabet=generic_dna):
         return Seq(self._data, generic_dna)
@@ -254,10 +296,12 @@ def _check_corr(pro, nucl, gap_char='-', \
         # mode = 0, direct match
         return (match.span(), 0)
     else:
-        # Might caused by mismatches, using Anchors to have a try
+        # Might caused by mismatches or frameshift, using Anchors to
+        # have a try
         anchor_len = 10 # adjust this value to test performance
-        anchors = [pro.seq[i:(i+anchor_len)] for i in \
-                range(0, len(pro.seq), anchor_len)]
+        pro_seq = str(pro.seq).replace(gap_char, "")
+        anchors = [pro_seq[i:(i+anchor_len)] for i in \
+                range(0, len(pro_seq), anchor_len)]
         # if the last anchor is less than the specified anchor
         # size, we combine the penultimate and the last anchor
         # together as the last one.
@@ -265,7 +309,9 @@ def _check_corr(pro, nucl, gap_char='-', \
             anchors[-1] = anchors[-2] + anchors[-1]
 
         pro_re = ""
+        anchor_distance = 0
         for i, anchor in enumerate(anchors):
+            #print anchor
             this_anchor_len = len(anchor)
             qcodon  = ""
             fncodon = ""
@@ -274,10 +320,9 @@ def _check_corr(pro, nucl, gap_char='-', \
             # above, we need to get the true last anchor to
             # pro_re
             if this_anchor_len == anchor_len:
-                for aa in str(anchor).replace(gap_char, ""):
+                for aa in anchor:#str(anchor).replace(gap_char, ""):
                     if complete_protein is True and i == 0:
                         qcodon += _codons2re(codon_table.start_codons)
-                        print qcodon
                         fncodon += aa2re['X']
                         continue
                     qcodon += aa2re[aa]
@@ -286,14 +331,20 @@ def _check_corr(pro, nucl, gap_char='-', \
                 last_qcodon = ""
                 pos = 0
                 for aa in anchor:
-                    if aa != gap_char:
-                        qcodon += aa2re[aa]
-                        fncodon += aa2re['X']
-                        if pos >= anchor_len:
-                            last_qcodon += aa2re[aa]
+                    #if aa != gap_char:
+                    qcodon += aa2re[aa]
+                    fncodon += aa2re['X']
+                    if pos >= anchor_len:
+                        last_qcodon += aa2re[aa]
                     pos += 1
             match = re.search(qcodon, nucl_seq)
             if match:
+                if match.start() - anchor_distance not in (0, 3 * anchor_len):
+                    import warnings
+                    warnings.warn("Distance between anchors is not %d. It might be caused by frameshift" \
+                            % anchor_len)
+                anchor_distance = match.start()
+                #print anchor_distance
                 if this_anchor_len == anchor_len:
                     pro_re += qcodon
                 else:
@@ -305,7 +356,6 @@ def _check_corr(pro, nucl, gap_char='-', \
                     pro_re += fncodon[anchor_len:]
         match = re.search(pro_re, nucl_seq)
         if match:
-            print '1'
             # mode = 1, mismatch
             return (match.span(), 1)
         else:
@@ -351,7 +401,8 @@ def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
             else:
                 this_codon = nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 if not re.search(aa2re[aa], this_codon.upper()):
-                    warnings.warn("%s (%s %d) does not correspond to %s (%s)" % (pro.id, aa, aa_num, nucl.id, this_codon))
+                    warnings.warn("%s (%s %d) does not correspond to %s (%s)" \
+                            % (pro.id, aa, aa_num, nucl.id, this_codon))
                 codon_seq += this_codon
                 aa_num += 1
     return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
@@ -368,6 +419,9 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
                     colloction of SeqRecord.
      - alphabet   - alphabet for the returned codon alignment
      - corr_dict  - a dict that maps protein id to nucleotide id
+     - complete_protein - whether the sequence begins with a start codon
+                TODO: check stop codon
+     - frameshift - whether to appply frameshift detection
 
     Return a CodonAlignment object
 
