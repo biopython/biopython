@@ -48,6 +48,9 @@ Python standard library's shlex module instead of C code using flex.
 
 The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
 
+Bio.motifs supports JASPER format files with multiple position-frequence
+matrices.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -55,8 +58,10 @@ possible, especially the following contributors:
 
 Alexander Campbell (first contribution)
 Andrea Rizzi (first contribution)
+Anthony Mathelier (first contribution)
 Ben Morris (first contribution)
 Christian Brueffer
+David Arenillas (first contribution)
 David Martin (first contribution)
 Iddo Friedberg
 Kai Blin
