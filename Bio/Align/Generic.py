@@ -73,7 +73,7 @@ class Alignment(object):
                 return "%s %s" % (record.seq, record.id)
             else:
                 return "%s...%s %s" \
-                       % (record.seq[:length-3], record.seq[-2:], record.id)
+                       % (record.seq[:length-3], record.seq[-3:], record.id)
         else:
             if len(record.seq) <= length:
                 return "%s %s" % (record.seq, record.id)
