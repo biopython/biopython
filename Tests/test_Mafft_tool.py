@@ -54,14 +54,15 @@ def check_mafft_version(mafft_exe):
         if index == -1:
             continue
         version = output[index+len(marker):].strip().split(None,1)[0]
-        if int(version.split(".",1)[0]) < 6:
+        major = int(version.split(".",1)[0])
+        if major < 6:
             raise MissingExternalDependencyError("Test requires MAFFT v6 or "
                                                  "later (found %s)." % version)
-        return True
+        return (major, version)
     raise MissingExternalDependencyError("Couldn't determine MAFFT version.")
 
 #This also checks it actually runs!
-check_mafft_version(mafft_exe)
+version_major, version_string = check_mafft_version(mafft_exe)
 
 
 class MafftApplication(unittest.TestCase):
@@ -110,6 +111,17 @@ class MafftApplication(unittest.TestCase):
         #or "CLUSTAL (-like) formatted alignment by MAFFT FFT-NS-2 (v6.240)"
         self.assertTrue(stdoutdata.startswith("CLUSTAL"), stdoutdata)
         self.assertTrue("$#=0" not in stderrdata)
+
+    if version_major >= 7:
+        def test_Mafft_with_PHYLIP_output(self):
+            """Simple round-trip through app with PHYLIP output"""
+            cmdline = MafftCommandline(mafft_exe, input=self.infile1,
+                                       phylipout=True)
+            self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+            stdoutdata, stderrdata = cmdline()
+            #e.g. " 3 706\n" but allow some variation in the column count
+            self.assertTrue(stdoutdata.startswith(" 3 70"), stdoutdata)
+            self.assertTrue("$#=0" not in stderrdata)
 
     def test_Mafft_with_complex_command_line(self):
         """Round-trip with complex command line."""
