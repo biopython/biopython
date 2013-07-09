@@ -99,8 +99,8 @@ We recommend GCC as the C compiler, this is usually available as part
 of the standard set of packages on any Unix or Linux system.
 
 \subsection{Mac OS X}
-Please install Apple's XCode suite - \emph{including} the optional
-Mac OS 10.4 SDK which includes important header files. 
+Please install Apple's XCode suite from the App Store, and then from
+the Xcode options also install the optional command line utilities.
 
 \subsection{Windows}
 We recommend you install Biopython and its dependencies using the
@@ -124,11 +124,11 @@ to use support it).
 Upgrading bug-fix releases (for example. 2.6.1 to 2.6.2) 
 is incredibly easy and won't require any re-installation of libraries.
 
-Upgrading between versions (e.g. 2.5 to 2.6) is more time consuming since you
+Upgrading between versions (e.g. 2.6 to 2.7) is more time consuming since you
 need to re-install all libraries you have added to python.
 
-We do not yet officially support Python 3, although we are testing with
-Python 3.1 and 3.2 and most things work. Python 3.0 will not be supported.
+As of Biopython 1.62 we officially support Python 3, specifically Python 3.3.
+Python 3.0, 3.1 and 3.2 will not be supported.
 
 Let's get started with installation on various platforms.
 
@@ -136,23 +136,22 @@ Let's get started with installation on various platforms.
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
-latest stable python release is 2.6.2, which is available from
-\ahrefurl{\url{http://www.python.org/download/releases/2.6.2/}}. This page contains links
+latest stable Python 2 release is 2.7.5, which is available from
+\ahrefurl{\url{http://www.python.org/download/releases/2.7.5/}}. This page contains links
 to all released files for the given release. For UNIX, we'll want to use
-the tarred and gzipped file, which is called \verb|Python-2.6.2.tgz| at
+the tarred and gzipped file, which is called \verb|Python-2.7.5.tgz| at
 the time of this writing.
 
-Download this file and then unpack it with the following commands:
+Download this file and then unpack it with the following command:
 
 \begin{verbatim}
-$ gunzip Python-2.6.2.tgz 
-$ tar -xvpf Python-2.6.2.tar 
+$ tar -zxvf Python-2.7.5.tar.gz
 \end{verbatim}
 
 Then enter into the created directory:
 
 \begin{verbatim}
-$ cd Python-2.6
+$ cd Python-2.7
 \end{verbatim}
 
 Now, start the build process by configuring everything to your system:
@@ -180,8 +179,8 @@ python interpreter:
 
 \begin{verbatim}
 $ python
-Python 2.6.2 (...)
-[GCC 3.3.3] on cygwin
+Python 2.7.5 (...)
+...
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{verbatim}
@@ -216,8 +215,8 @@ Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
 installer. At the current time, you'd go to
-\ahrefurl{\url{http://www.python.org/download/releases/2.6.2/}} and download
-\verb|Python-2.6.2.msi|. 
+\ahrefurl{\url{http://www.python.org/download/releases/2.7.5/}} and download
+\verb|Python-2.7.5.msi|. 
 
 The installer is an executable program, so you only need to double click
 it to run it. Then just follow the friendly instructions. On all newer Windows
@@ -230,6 +229,8 @@ Apple includes python on Mac OS X, and while you can use this many people have
 preferred to install the latest version of python as well in parallel. We refer
 you to the \ahrefurl{\url{http://www.python.org}} for more details, although
 otherwise the UNIX instructions apply.
+
+(See note above about installing XCode to get the compiler tools.)
 
 \section{Installing Biopython dependencies}
 
