@@ -118,7 +118,7 @@ def make_dssp_dict(filename):
         keys = []
         for l in handle.readlines():
             sl = l.split()
-            if sl[1] == "RESIDUE":
+            if len(sl)>1 and sl[1] == "RESIDUE":
                 # Start parsing from here
                 start = 1
                 continue
