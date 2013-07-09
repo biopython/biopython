@@ -40,56 +40,31 @@ Windows users are recommended to use the installation packages provided on our
 http://biopython.org website.
 
 
-System Requirements
+Python Requirements
 ===================
 
-- Python 2.5, 2.6, 2.7 (see http://www.python.org),
-  or Python 3.3 onwards (see http://www.python.org and notes below)
-  or PyPy 1.9, 2.0 (see http://www.pypy.org and notes below),
-  or Jython 2.5, 2.7 (see http://www.jython.org and notes below).
-  Note that we are about to drop support for Python 2.5 and Jython 2.5.
- 
-- NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
-  This package is only used in the computationally-oriented modules.
-  It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
-  think you might need these modules, then please install NumPy first BEFORE
-  installing Biopython. The older Numeric library is no longer supported in
-  Biopython.
+We currently recommend using Python 2.7 from http://www.python.org which
+is the final version of Python 2.
 
-- ReportLab, see http://www.reportlab.com/software/opensource/ (optional)
-  This package is only used in Bio.Graphics, so if you do not need this
-  functionality, you will not need to install this package.  You can install
-  it later if needed.
+Python 2
+--------
 
-- matplotlib, see http://matplotlib.org/ (optional)
-  The Bio.Phylo uses this package to plot phylogenetic trees. As with
-  ReportLab, you can install this at any time to enable the plotting
-  functionality.
+The main development platform for Biopython is currently the standard C
+implementation of Python 2 from http://www.python.org and we support
+Python 2.5, 2.6 and 2.7.
 
-- networkx, see http://networkx.lanl.gov/ (optional) and
-  pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
-  http://code.google.com/p/pydot/ (optional)
-  These packages are used for certain niche functions in Bio.Phylo.
-  Again, they are only needed to enable these functions and can be installed
-  later if needed.
+Note that Biopython 1.62 will be our last release to support Python 2.5
 
-- psycopg2, see http://initd.org/psycopg/ (optional) or
-  PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
-  These packages are used by BioSQL to access a PostgreSQL database.
+On most Linux/Unix systems Python 2 is the default version of Python,
+so you can use `python setup.py build` etc (see installation notes
+below). More specifically, try `python2.7 setup.py build` etc.
 
-- MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
-  This package is used by BioSQL to access a MySQL database.
-
-In addition there are a number of useful third party tools you may wish to
-install such as standalone NCBI BLAST, EMBOSS or ClustalW.
-
-
-Python 3.x
-----------
+Python 3
+--------
 
 Note we do not intend to support Python 3.0, 3.1 or 3.2, please use
-Python 3.3 or later. This is officially supported as of Biopython 1.62,
-although not all modules are available the majority are.
+Python 3.3 or later. This is officially supported as of Biopython 1.62.
+Although not all modules are available, the majority are.
 
 In order to be able to run Biopython with Python 3 it is first converted
 using the 2to3 script. This is done automatically by our setup.py script.
@@ -124,10 +99,56 @@ We run nightly tests under PyPy 1.9 and PyPy 2.0.
 Use `pypy setup.py build` etc (see installation notes below).
 
 
+
+Dependencies
+============
+
+Depending on which parts of Biopython you plan to use, there are a
+number of other optional Python dependencies - which can in general
+be installed after Biopython.
+
+- NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
+  This package is only used in the computationally-oriented modules.
+  It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
+  think you might need these modules, then please install NumPy first BEFORE
+  installing Biopython. The older Numeric library is no longer supported in
+  Biopython.
+
+- ReportLab, see http://www.reportlab.com/software/opensource/ (optional)
+  This package is only used in Bio.Graphics, so if you do not need this
+  functionality, you will not need to install this package.  You can install
+  it later if needed.
+
+- matplotlib, see http://matplotlib.org/ (optional)
+  The Bio.Phylo uses this package to plot phylogenetic trees. As with
+  ReportLab, you can install this at any time to enable the plotting
+  functionality.
+
+- networkx, see http://networkx.lanl.gov/ (optional) and
+  pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
+  http://code.google.com/p/pydot/ (optional)
+  These packages are used for certain niche functions in Bio.Phylo.
+  Again, they are only needed to enable these functions and can be installed
+  later if needed.
+
+- psycopg2, see http://initd.org/psycopg/ (optional) or
+  PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
+  These packages are used by BioSQL to access a PostgreSQL database.
+
+- MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
+  This package is used by BioSQL to access a MySQL database.
+
+Note that some of these libraries are not available for Jython or PyPy.
+
+In addition there are a number of useful third party tools you may wish to
+install such as standalone NCBI BLAST, EMBOSS or ClustalW.
+
+
 Installation
 ============
 
-First, **make sure that Python is installed correctly**.
+First, **make sure that Python is installed correctly**. Second, we
+recommend you install NumPy (see above). Then install Biopython.
 
 Windows users should use the appropriate provided installation package
 from our website (each is specific to a different Python version).
