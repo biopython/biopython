@@ -11,11 +11,11 @@ the main Biopython Tutorial and Cookbook:
 
 This README file is intended primarily for people interested in working
 with the Biopython source code, either one of the releases from the
-http://www.biopython.org website, or from our repository on GitHub
+http://biopython.org website, or from our repository on GitHub
 https://github.com/biopython/biopython
 
-This Biopython package is made available under generous terms.  Please
-see the LICENSE file for further details.
+This Biopython package is open source software made available under generous
+terms. Please see the LICENSE file for further details.
 
 If you use Biopython in work contributing to a scientific publication, we ask
 that you cite our application note (below) or one of the module specific
@@ -36,8 +36,8 @@ directory at the command line, and type:
     python setup.py test
     sudo python setup.py install
 
-Windows users are recommended to use the installation packages provided on our
-http://biopython.org website.
+Windows users are instead recommended to use the installation packages provided
+on our http://biopython.org website.
 
 
 Python Requirements
@@ -146,8 +146,8 @@ Testing
 =======
 
 Biopython includes a suite of regression tests to check if everything is
-running correctly.  To do the tests, go to the biopython source code directory
-and type:
+running correctly. To run the tests, go to the biopython source code
+directory and type:
 
     python setup.py test
 
@@ -160,20 +160,14 @@ ignore this if it occurs in the tests for a module that you were not
 planning on using.  If you did want to use that module, please install
 the required dependency and re-run the tests.
 
-
-Source Code Repository
-======================
-
-Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
-currently uses git for distributed source code control, hosted by github
-at https://github.com/biopython/biopython
+There is more testing information in the Biopython Tutorial & Cookbook.
 
 
 Experimental code
 =================
 
-Biopython 1.61 introduced a new warning, Bio.BiopythonExperimentalWarning,
-which will be used to mark any experimental code included in the otherwise
+Biopython 1.61 introduced a new warning, `Bio.BiopythonExperimentalWarning`,
+which is used to mark any experimental code included in the otherwise
 stable Biopython releases. Such 'beta' level code is ready for wider
 testing, but still likely to change, and should only be tried by early
 adopters in order to give feedback via the biopython-dev mailing list.
@@ -200,9 +194,9 @@ format has changed and broken the parsing code.  (The text BLAST and GenBank
 formats seem to be particularly fragile.)  Thus, the parsing code in
 Biopython is sometimes updated faster than we can build Biopython releases.
 You can get the most recent parser by pulling the relevant files (e.g. the
-ones in Bio.SeqIO or Bio.Blast) from our git repository. However, be careful
-when doing this, because the code in github is not as well-tested as released
-code, and may contain new dependencies.
+ones in `Bio.SeqIO` or `Bio.Blast`) from our git repository. However, be
+careful when doing this, because the code in github is not as well-tested
+as released code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or the mailing list at
 biopython@biopython.org.  In the bug report, please let us know:
@@ -226,7 +220,7 @@ backgrounds. We are always looking for people interested in helping with code
 development, web-site management, documentation writing, technical
 administration, and whatever else comes up.
 
-If you wish to contribute, please visit the web site http://www.biopython.org
+If you wish to contribute, please visit the web site http://biopython.org
 and join our mailing list: http://biopython.org/wiki/Mailing_lists
 
 
