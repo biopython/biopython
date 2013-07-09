@@ -6,6 +6,7 @@
 
 """Unit tests for the NeXML and NeXMLIO modules.
 """
+from __future__ import with_statement
 
 import os
 import tempfile
@@ -77,14 +78,13 @@ def _test_write_factory(source):
 
     def test_write(self):
         """Parse, rewrite and retest an example file."""
-        infile = open(filename, 'rb')
-        t1 = NeXMLIO.Parser(infile).parse().next()
-        infile.close()
-        outfile = open(DUMMY, 'w+b')
-        NeXMLIO.write([t1], outfile)
-        outfile.close()
+        with open(filename, 'rb') as infile:
+            t1 = NeXMLIO.Parser(infile).parse().next()
+        with open(DUMMY, 'w+b') as outfile:
+            NeXMLIO.write([t1], outfile)
         
-        t2 = NeXMLIO.Parser(open(DUMMY, 'rb')).parse().next()
+        with open(DUMMY, 'rb') as infile:
+            t2 = NeXMLIO.Parser(infile).parse().next()
         
         def assert_property(prop_name):
             p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals() if getattr(n, prop_name)])

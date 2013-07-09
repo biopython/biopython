@@ -131,7 +131,7 @@ class Hmmer3TabParser(object):
 
                 # create qresult and yield if we're at a new qresult or at EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    qresult = QueryResult(hit_list, prev_qid)
                     for attr, value in prev['qresult'].items():
                         setattr(qresult, attr, value)
                     yield qresult

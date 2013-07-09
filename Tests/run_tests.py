@@ -39,7 +39,6 @@ import doctest
 import distutils.util
 import gc
 
-
 def is_pypy():
     import platform
     try:
@@ -114,6 +113,7 @@ DOCTEST_MODULES = [
                    "Bio.SeqUtils",
                    "Bio.SeqUtils.MeltingTemp",
                    "Bio.Sequencing.Applications._Novoalign",
+                   "Bio.Sequencing.Applications._bwa",
                    "Bio.Wise",
                    "Bio.Wise.psw",
                   ]
@@ -136,6 +136,38 @@ except ImportError:
 #Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
+
+#Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
+def _have_bug17666():
+    """Debug function to check if Python's gzip is broken (PRIVATE).
+
+    Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
+    3.2.4 and 3.3.1 only.
+    """
+    import gzip
+    try:
+        from io import BytesIO
+    except ImportError:
+        #Python 2.5 fall back
+        from StringIO import StringIO as BytesIO
+    #Would like to use byte literal here:
+    bgzf_eof = "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
+               "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+    if sys.version_info[0] >= 3:
+        import codecs
+        bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
+    h = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
+    try:
+        data = h.read()
+        h.close()
+        assert not data, "Should be zero length, not %i" % len(data)
+        return False
+    except TypeError, err:
+        #TypeError: integer argument expected, got 'tuple'
+        h.close()
+        return True
+if _have_bug17666():
+    DOCTEST_MODULES.remove("Bio.bgzf")
 
 #HACK: Since Python2.5 under Windows have slightly different str(float) output,
 #we're removing doctests that may fail because of this

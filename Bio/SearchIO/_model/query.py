@@ -10,7 +10,7 @@ from itertools import chain
 
 from Bio._py3k import OrderedDict
 from Bio._utils import trim_str
-from Bio.SearchIO._utils import partialcascade
+from Bio.SearchIO._utils import optionalcascade
 
 from _base import _BaseSearchObject
 from hit import Hit
@@ -180,7 +180,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items',)
 
-    def __init__(self, id='<unknown id>', hits=[],
+    def __init__(self, hits=[], id=None,
             hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
@@ -191,14 +191,11 @@ class QueryResult(_BaseSearchObject):
                             that return Hit object IDs.
 
         """
-        if id is None:
-            raise ValueError("Query ID string is required for QueryResult "
-                    "creation")
-
+        # default values
         self._id = id
         self._hit_key_function = hit_key_function
         self._items = OrderedDict()
-        self._description = '<unknown description>'
+        self._description = None
         self.program = '<unknown program>'
         self.target = '<unknown target>'
         self.version = '<unknown version>'
@@ -343,7 +340,7 @@ class QueryResult(_BaseSearchObject):
             # should we return just a list of Hits instead of a full blown
             # QueryResult object if it's a slice?
             hits = list(self.hits)[hit_key]
-            obj = self.__class__(self.id, hits, self._hit_key_function)
+            obj = self.__class__(hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
@@ -362,9 +359,22 @@ class QueryResult(_BaseSearchObject):
         if not isinstance(hit, Hit):
             raise TypeError("QueryResult objects can only contain Hit objects.")
         # and it must have the same query ID as this object's ID
-        if hit.query_id != self.id:
-            raise ValueError("Expected Hit with query ID '%s', found '%s' "
-                    "instead." % (self.id, hit.query_id))
+        # unless it's the query ID is None (default for empty objects), in which
+        # case we want to use the hit's query ID as the query ID
+        if self.id is not None:
+            if hit.query_id != self.id:
+                raise ValueError("Expected Hit with query ID %r, found %r "
+                        "instead." % (self.id, hit.query_id))
+        else:
+            self.id = hit.query_id
+        # same thing with descriptions
+        if self.description is not None:
+            if hit.query_description != self.description:
+                raise ValueError("Expected Hit with query description %r, "
+                        "found %r instead." % (self.description,
+                        hit.query_description))
+        else:
+            self.description = hit.query_description
 
         self._items[hit_key] = hit
 
@@ -385,8 +395,8 @@ class QueryResult(_BaseSearchObject):
         return
 
     ## properties ##
-    id = partialcascade('_id', 'query_id', """QueryResult ID string""")
-    description = partialcascade('_description', 'query_description',
+    id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
+    description = optionalcascade('_description', 'query_description',
             """QueryResult description""")
 
     @property
@@ -489,7 +499,7 @@ class QueryResult(_BaseSearchObject):
 
         """
         hits = filter(func, self.hits)
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -546,7 +556,7 @@ class QueryResult(_BaseSearchObject):
         hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
             hits = map(func, hits)
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -561,7 +571,7 @@ class QueryResult(_BaseSearchObject):
 
         """
         hits = filter(None, (hit.filter(func) for hit in self.hits))
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -574,7 +584,7 @@ class QueryResult(_BaseSearchObject):
 
         """
         hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -692,7 +702,7 @@ class QueryResult(_BaseSearchObject):
             self._items = new_hits
         # otherwise, return a new sorted QueryResult object
         else:
-            obj = self.__class__(self.id, sorted_hits, self._hit_key_function)
+            obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 

@@ -138,7 +138,7 @@ class TestReadAndWrite(unittest.TestCase):
         handle.seek(0)
         read2_records = list(SeqIO.parse(handle,"seqxml"))
 
-        self.assertEquals(len(read1_records),len(read2_records))
+        self.assertEqual(len(read1_records),len(read2_records))
 
         for record1,record2 in zip(read1_records,read2_records):
             assert_equal_records(self,record1,record2)

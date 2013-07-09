@@ -5021,7 +5021,7 @@ supplied just the sequence itself:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
+>>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
 \end{verbatim}
 
@@ -5033,7 +5033,7 @@ for your sequence automatically.  You might prefer to use the
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
+>>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
 \end{verbatim}
 
@@ -11377,10 +11377,10 @@ just let us know on the mailing list or our bug database.
 \chapter{Sequence motif analysis using Bio.motifs}
 
 This chapter gives an overview of the functionality of the
-\verb|Bio.motifs| package included in Biopython distribution. It is intended
-for people who are involved in analysis of sequence motif, so I'll
+\verb|Bio.motifs| package included in Biopython. It is intended
+for people who are involved in the analysis of sequence motifs, so I'll
 assume that you are familiar with basic notions of motif analysis. In
-case something is unclear, please look into Section~\ref{sec:links}
+case something is unclear, please look at Section~\ref{sec:links}
 for some relevant links.
 
 Most of this chapter describes the new \verb|Bio.motifs| package included
@@ -11390,7 +11390,7 @@ Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
 most of their functionality with a unified motif object implementation.
 
 Speaking of other libraries, if you are reading this you might be
-interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another Python library
+interested in \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
 designed to deal with sequence motifs. It supports more \emph{de-novo}
 motif finders, but it is not a part of Biopython and has some restrictions
 on commercial use.
@@ -11524,7 +11524,9 @@ high counts:
 >>> m.degenerate_consensus
 Seq('WACVC', IUPACAmbiguousDNA())
 \end{verbatim}
-Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T, and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is constructed followed the rules specified by Cavener \cite{cavener1987}.
+Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
+and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
+constructed following the rules specified by Cavener \cite{cavener1987}.
 
 We can also get the reverse complement of a motif:
 %cont-doctest
@@ -11560,8 +11562,10 @@ representation is based on instances or on some version of PWM matrix.
 
 \subsubsection*{JASPAR}
 One of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
- stores motifs either as a list of instances, or as a frequency matrix.
-As an example, these are the beginning and ending lines of the JASPAR \verb+Arnt.sites+ file showing known binding sites of the mouse helix-loop-helix transcription factor Arnt:
+stores motifs either as a list of instances, or as a frequency matrix.
+As an example, these are the beginning and ending lines of the JASPAR
+\verb+Arnt.sites+ file showing known binding sites of the mouse
+helix-loop-helix transcription factor Arnt:
 \begin{verbatim}
 >MA0004 ARNT    1
 CACGTGatgtcctc
@@ -11577,7 +11581,8 @@ AACGTGcacatcgtcc
 >MA0004 ARNT    20
 aggaatCGCGTGc
 \end{verbatim}
-The parts of the sequence in capital letters are the motif instances that were found to align to each other.
+The parts of the sequence in capital letters are the motif instances
+that were found to align to each other.
 
 We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
@@ -11585,7 +11590,8 @@ We can create a \verb+Motif+ object from these instances as follows:
 >>> from Bio import motifs
 >>> arnt = motifs.read(open("Arnt.sites"), "sites")
 \end{verbatim}
-The instances from which this motif was created is stored in the \verb+.instances+ property:
+The instances from which this motif was created is stored in the
+\verb+.instances+ property:
 %cont-doctest
 \begin{verbatim}
 >>> print arnt.instances[:3]
@@ -11665,9 +11671,13 @@ GCCCATATATGG
 
 \subsubsection*{MEME}
 
-MEME \cite{bailey1994} is a tool for discovering motifs in a group of related DNA or protein sequences. It takes as input a group of DNA or protein sequences and outputs as many motifs as requested. Therefore, in contrast to JASPAR files, MEME output files typically contain multiple motifs. This is an example
+MEME \cite{bailey1994} is a tool for discovering motifs in a group of related
+DNA or protein sequences. It takes as input a group of DNA or protein sequences 
+and outputs as many motifs as requested. Therefore, in contrast to JASPAR
+files, MEME output files typically contain multiple motifs. This is an example.
 
-At the top of an output file generated by MEME shows some background information about the MEME and the version of MEME used:
+At the top of an output file generated by MEME shows some background information
+about the MEME and the version of MEME used:
 \begin{verbatim}
 ********************************************************************************
 MEME - Motif discovery tool
@@ -11763,12 +11773,14 @@ specific information as calculated by MEME. For example,
 >>> motif.name
 'Motif 1'
 \end{verbatim}
-In addition to using an index into the record, as we did above, you can also find it by its name:
+In addition to using an index into the record, as we did above,
+you can also find it by its name:
 %cont-doctest
 \begin{verbatim}
 >>> motif = record['Motif 1']
 \end{verbatim}
-Each motif has an attribute \verb+.instances+ with the sequence instances in which the motif was found, providing some information on each instance
+Each motif has an attribute \verb+.instances+ with the sequence instances
+in which the motif was found, providing some information on each instance:
 %cont-doctest
 \begin{verbatim}
 >>> len(motif.instances)
@@ -11797,7 +11809,10 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 
 \subsubsection*{TRANSFAC}
 
-TRANSFAC is a manually curated database of transcription factors, together with their genomic binding sites and DNA binding profiles \cite{matys2003}. While the file format used in the TRANSFAC database is nowadays also used by others, we will refer to it as the TRANSFAC file format.
+TRANSFAC is a manually curated database of transcription factors, together
+with their genomic binding sites and DNA binding profiles \cite{matys2003}.
+While the file format used in the TRANSFAC database is nowadays also used
+by others, we will refer to it as the TRANSFAC file format.
 
 A minimal file in the TRANSFAC format looks as follows:
 \begin{verbatim}
@@ -11856,7 +11871,10 @@ The overall version number, if available, is stored as \verb+record.version+:
 'EXAMPLE January 15, 2013'
 \end{verbatim}
 
-Each motif in \verb+record+ is in instance of the \verb+Bio.motifs.transfac.Motif+ class, which inherits both from the \verb+Bio.motifs.Motif+ class and from a Python dictionary. The dictionary uses the two-letter keys to store any additional information about the motif:
+Each motif in \verb+record+ is in instance of the \verb+Bio.motifs.transfac.Motif+
+class, which inherits both from the \verb+Bio.motifs.Motif+ class and
+from a Python dictionary. The dictionary uses the two-letter keys to
+store any additional information about the motif:
 %cont-doctest
 \begin{verbatim}
 >>> motif = record[0]
@@ -11866,7 +11884,9 @@ Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
 'motif1'
 \end{verbatim}
 
-TRANSFAC files are typically much more elaborate than this example, containing lots of additional information about the motif. Table \ref{table:transfaccodes} lists the two-letter field codes that are commonly found in TRANSFAC files:
+TRANSFAC files are typically much more elaborate than this example, containing
+lots of additional information about the motif. Table \ref{table:transfaccodes}
+lists the two-letter field codes that are commonly found in TRANSFAC files:
 \begin{table}[h]
 \label{table:transfaccodes}
 \begin{center}
@@ -11896,7 +11916,8 @@ TRANSFAC files are typically much more elaborate than this example, containing l
 \end{center}
 \end{table}
 
-Each motif also has an attribute \verb+.references+ containing the references associated with the motif, using these two-letter keys:
+Each motif also has an attribute \verb+.references+ containing the
+references associated with the motif, using these two-letter keys:
 
 \begin{table}[h]
 \begin{center}
@@ -12027,13 +12048,25 @@ If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{w
 \begin{verbatim}
 >>> arnt.weblogo("Arnt.png")
 \end{verbatim}
-We should get our logo saved as a png in the specified file.
+We should get our logo saved as a PNG in the specified file.
 
 \section{Position-Weight Matrices}
 
-The \verb+.counts+ attribute of a Motif object shows how often each nucleotide appeared at each position along the alignment. We can normalize this matrix by dividing by the number of instances in the alignment, resulting in the probability of each nucleotide at each position along the alignment. We refer to these probabilities as the position-weight matrix. However, beware that in the literature this term may also be used to refer to the position-specific scoring matrix, which we discuss below.
+The \verb+.counts+ attribute of a Motif object shows how often each
+nucleotide appeared at each position along the alignment. We can
+normalize this matrix by dividing by the number of instances in the
+alignment, resulting in the probability of each nucleotide at each
+position along the alignment. We refer to these probabilities as
+the position-weight matrix. However, beware that in the literature
+this term may also be used to refer to the position-specific scoring
+matrix, which we discuss below.
 
-Usually, pseudocounts are added to each position before normalizing. This avoids overfitting of the position-weight matrix to the limited number of motif instances in the alignment, and can also prevent probabilities from becoming zero. To add a fixed pseudocount to all nucleotides at all positions, specify a number for the \verb+pseudocounts+ argument:
+Usually, pseudocounts are added to each position before normalizing.
+This avoids overfitting of the position-weight matrix to the limited
+number of motif instances in the alignment, and can also prevent
+probabilities from becoming zero. To add a fixed pseudocount to all
+nucleotides at all positions, specify a number for the
+\verb+pseudocounts+ argument:
 %cont-doctest
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts=0.5)
@@ -12045,7 +12078,10 @@ G:   0.06   0.06   0.06   0.39   0.06
 T:   0.50   0.06   0.28   0.06   0.06
 <BLANKLINE>
 \end{verbatim}
-Alternatively, \verb+pseudocounts+ can be a dictionary specifying the pseudocounts for each nucleotide. For example, as the GC content of the human genome is about 40\%, you may want to choose the pseudocounts accordingly:
+Alternatively, \verb+pseudocounts+ can be a dictionary specifying the
+pseudocounts for each nucleotide. For example, as the GC content of
+the human genome is about 40\%, you may want to choose the
+pseudocounts accordingly:
 %cont-doctest
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
@@ -12057,7 +12093,8 @@ G:   0.04   0.04   0.04   0.38   0.04
 T:   0.51   0.07   0.29   0.07   0.07
 <BLANKLINE>
 \end{verbatim}
-The position-weight matrix has its own methods to calculate the consensus, anticonsensus, and degenerate consensus sequences:
+The position-weight matrix has its own methods to calculate the
+consensus, anticonsensus, and degenerate consensus sequences:
 %cont-doctest
 \begin{verbatim}
 >>> pwm.consensus
@@ -12067,7 +12104,10 @@ Seq('GGGTG', IUPACUnambiguousDNA())
 >>> pwm.degenerate_consensus
 Seq('WACNC', IUPACAmbiguousDNA())
 \end{verbatim}
-Note that due to the pseudocounts, the degenerate consensus sequence calculated from the position-weight matrix is slightly different from the degenerate consensus sequence calculated from the instances in the motif:
+Note that due to the pseudocounts, the degenerate consensus sequence
+calculated from the position-weight matrix is slightly different
+from the degenerate consensus sequence calculated from the instances
+in the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.degenerate_consensus

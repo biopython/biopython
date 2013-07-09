@@ -358,6 +358,27 @@ class HSP(_BaseHSP):
         if not isinstance(fragment, HSPFragment):
             raise TypeError("HSP objects can only contain HSPFragment "
                     "objects.")
+        # HACK: to make validation during __init__ work
+        if self._items:
+            if fragment.hit_id != self.hit_id:
+                raise ValueError("Expected HSPFragment with hit ID %r, "
+                        "found %r instead." % (self.id, fragment.hit_id))
+
+            if fragment.hit_description != self.hit_description:
+                raise ValueError("Expected HSPFragment with hit "
+                        "description %r, found %r instead." % \
+                        (self.description, fragment.hit_description))
+
+            if fragment.query_id != self.query_id:
+                raise ValueError("Expected HSPFragment with query ID %r, "
+                        "found %r instead." % (self.query_id,
+                        fragment.query_id))
+
+            if fragment.query_description != self.query_description:
+                raise ValueError("Expected HSP with query description %r, "
+                        "found %r instead." % (self.query_description,
+                        fragment.query_description))
+
 
     def _aln_span_get(self):
         # length of all alignments
@@ -650,7 +671,7 @@ class HSPFragment(_BaseHSP):
     """
 
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
-            hit='', query='', alphabet=single_letter_alphabet):
+            hit=None, query=None, alphabet=single_letter_alphabet):
 
         self._alphabet = alphabet
         self.aln_annotation = {}

@@ -494,7 +494,7 @@ class BlatPslParser(object):
 
                 # create qresult and yield if we're at a new qresult or at EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid)
+                    qresult = QueryResult(id=prev_qid)
                     for hit in hit_list:
                         qresult.absorb(hit)
                     qresult.seq_len = prev['qsize']

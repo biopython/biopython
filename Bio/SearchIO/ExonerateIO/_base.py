@@ -368,7 +368,7 @@ class _BaseExonerateParser(object):
                     hsp_list = []
 
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid)
+                    qresult = QueryResult(id=prev_qid)
                     for hit in hit_list:
                         # not using append since Exonerate may separate the
                         # same hit if it has different strands

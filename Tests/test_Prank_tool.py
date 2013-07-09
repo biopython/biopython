@@ -9,6 +9,7 @@ as part of this package.
 import sys
 import os
 import unittest
+from Bio.Application import _escape_filename
 from Bio import AlignIO
 from Bio import SeqIO
 from Bio import MissingExternalDependencyError
@@ -19,7 +20,7 @@ from Bio.Nexus.Nexus import NexusError
 os.environ['LANG'] = 'C'
 
 prank_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     try:
         #This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
@@ -30,7 +31,7 @@ if sys.platform=="win32":
     #sensible locations under Program Files... and then the full path.
     likely_dirs = ["",  # Current dir
                    prog_files,
-                   os.path.join(prog_files,"Prank")] + sys.path
+                   os.path.join(prog_files, "Prank")] + sys.path
     for folder in likely_dirs:
         if os.path.isdir(folder):
             if os.path.isfile(os.path.join(folder, "prank.exe")):
@@ -80,7 +81,7 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01")
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
@@ -90,14 +91,14 @@ class PrankApplication(unittest.TestCase):
         """Simple round-trip through app with infile, output in NEXUS
         output.?.??? files written to cwd - no way to redirect
         """
-        records = list(SeqIO.parse(self.infile1,"fasta"))
+        records = list(SeqIO.parse(self.infile1, "fasta"))
         #Try using keyword argument,
         cmdline = PrankCommandline(prank_exe, d=self.infile1, noxml=True)
         #Try using a property,
         cmdline.d = self.infile1
-        cmdline.f = 17 # NEXUS format
+        cmdline.f = 17  # NEXUS format
         cmdline.set_parameter("notree", True)
-        self.assertEqual(str(cmdline), prank_exe +
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
                          " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
@@ -107,10 +108,10 @@ class PrankApplication(unittest.TestCase):
             align = AlignIO.read("output.2.nex", "nexus")
             for old, new in zip(records, align):
                 #Old versions of Prank reduced name to 9 chars
-                self.assertTrue(old.id==new.id or old.id[:9]==new.id)
+                self.assertTrue(old.id == new.id or old.id[:9] == new.id)
                 #infile1 has alignment gaps in it
-                self.assertEqual(str(new.seq).replace("-",""),
-                                 str(old.seq).replace("-",""))
+                self.assertEqual(str(new.seq).replace("-", ""),
+                                 str(old.seq).replace("-", ""))
         except NexusError:
             #See bug 3119,
             #Bio.Nexus can't parse output from prank v100701 (1 July 2010)
@@ -130,7 +131,8 @@ class PrankApplication(unittest.TestCase):
         cmdline.skipins = True
         cmdline.set_parameter("-once", True)
         cmdline.realbranches = True
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" +
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
+                         " -d=Fasta/fa01 -noxml" +
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" +
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
@@ -152,7 +154,7 @@ class PrankConversion(unittest.TestCase):
         cmdline = PrankCommandline(prank_exe, d=self.input,
                                    convert=True, f=prank_number,
                                    o='"%s"' % self.output)
-        self.assertEqual(str(cmdline), prank_exe
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe)
                          + ' -d=%s' % self.input
                          + ' -o="%s"' % self.output
                          + ' -f=%i' % prank_number
@@ -165,7 +167,7 @@ class PrankConversion(unittest.TestCase):
         self.assertTrue(os.path.isfile(filename))
         old = AlignIO.read(self.input, "fasta")
         #Hack...
-        if format=="phylip":
+        if format == "phylip":
             for record in old:
                 record.id = record.id[:10]
         new = AlignIO.read(filename, format)
@@ -197,5 +199,5 @@ class PrankConversion(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

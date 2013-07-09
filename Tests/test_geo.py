@@ -29,3 +29,5 @@ for file in testfiles:
     for record in records:
         print record
     print "\n"
+    fh.close()
+

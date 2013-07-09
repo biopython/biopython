@@ -12,7 +12,10 @@ The latest news is at the top of this file.
  
 (In progress, not released yet) Biopython 1.62
 
-Please note that this could be our last release to support Python 2.5.
+This is our first release to officially support Python 3, however it is
+also our final release supporting Python 2.5. Specifically this release
+is supported and tested on standard Python 2.5, 2.6, 2.7 and 3.3.
+It was also tested under Jython 2.5, 2.7 and PyPy 1.9, 2.0 as well.
 
 The translation functions will give a warning on any partial codons (and this
 will probably become an error in a future release). If you know you are dealing
@@ -32,6 +35,9 @@ now optionally extract bootstrap values from the Newick comment field (like
 Molphy and Archaeopteryx do). Nate Sutton added a wrapper for FastTree to
 Bio.Phylo.Applications.
 
+New module Bio.UniProt adds parsers for the GAF, GPA and GPI formats from
+UniProt-GOA.
+
 The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
 can be used. The relevant JDBC driver should be available in the CLASSPATH.
 
@@ -43,19 +49,37 @@ is now consistent with the linear diagrams.
 The code for parsing 3D structures in mmCIF files was updated to use the
 Python standard library's shlex module instead of C code using flex.
 
+The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
+
+Bio.motifs supports JASPER format files with multiple position-frequence
+matrices.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Alexander Campbell (first contribution)
 Andrea Rizzi (first contribution)
+Anthony Mathelier (first contribution)
 Ben Morris (first contribution)
+Brad Chapman
+Christian Brueffer
+David Arenillas (first contribution)
 David Martin (first contribution)
+Eric Talevich
+Iddo Friedberg
+Jian-Long Huang (first contribution)
+Joao Rodrigues
+Kai Blin
 Michiel de Hoon
 Nate Sutton (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
+Phillip Garland
+Saket Choudhary (first contribution)
 Tiago Antao
+Wibowo 'Bow' Arindrarto
 Xabier Bello (first contribution)
 
 ===================================================================

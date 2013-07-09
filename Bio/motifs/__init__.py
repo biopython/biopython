@@ -13,6 +13,8 @@ and MAST programs, as well as files in the TRANSFAC format.
 Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
+import math
+
 
 def create(instances, alphabet=None):
     instances = Instances(instances, alphabet)
@@ -29,6 +31,7 @@ def parse(handle, format):
      - TRANSFAC:      TRANSFAC database file format
      - pfm:           JASPAR-style position-frequency matrix
      - sites:         JASPAR-style sites file
+     - jaspar:        JASPAR file format containing multiple PFMs
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
     for those.
@@ -72,11 +75,10 @@ def parse(handle, format):
         from Bio.motifs import transfac
         record = transfac.read(handle)
         return record
-    elif format in ('pfm', 'sites'):
+    elif format in ('pfm', 'sites', 'jaspar'):
         from Bio.motifs import jaspar
-        motif = jaspar.read(handle, format)
-        motifs = [motif]
-        return motifs
+        record = jaspar.read(handle, format)
+        return record
     else:
         raise ValueError("Unknown format %s" % format)
 
@@ -267,6 +269,21 @@ class Motif(object):
         self._pseudocounts = {}
         if isinstance(value, dict):
             self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet.letters)
+        elif value == 'sqrt':
+            nb_instances = sum([column[0] for column in self.counts.values()])
+            sq_nb_instances = math.sqrt(nb_instances)
+
+            alphabet = self.alphabet
+            background = self.background
+            if background:
+                background = dict(background)
+            else:
+                background = dict.fromkeys(sorted(alphabet.letters), 1.0)
+            total = sum(background.values())
+            self._pseudocounts = {}
+            for letter in alphabet.letters:
+                background[letter] /= total
+                self._pseudocounts[letter] = sq_nb_instances * background[letter]
         else:
             if value is None:
                 value = 0.0
@@ -408,6 +425,7 @@ The same rules are used by TRANSFAC."""
             'yaxis_tic_interval' : '1.0',
             'show_ends' : True,
             'show_fineprint' : True,
+            'color_scheme': 'color_auto',
             'symbols0': '',
             'symbols1': '',
             'symbols2': '',
@@ -448,6 +466,7 @@ The same rules are used by TRANSFAC."""
                   'yaxis_tic_interval' : '1.0',
                   'show_ends' : True,
                   'show_fineprint' : True,
+                  'color_scheme': 'color_auto',
                   'symbols0': '',
                   'symbols1': '',
                   'symbols2': '',

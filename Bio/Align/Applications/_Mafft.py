@@ -37,22 +37,22 @@ class MafftCommandline(AbstractCommandline):
     You would typically run the command line with mafft_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
     Note that MAFFT will write the alignment to stdout, which you may
-    want to save to a file and then parse, e.g.
+    want to save to a file and then parse, e.g.::
 
-    stdout, stderr = mafft_cline()
-    handle = open("aligned.fasta", "w")
-    handle.write(stdout)
-    handle.close()
-    from Bio import AlignIO
-    align = AlignIO.read("aligned.fasta", "fasta")
+        stdout, stderr = mafft_cline()
+        handle = open("aligned.fasta", "w")
+        handle.write(stdout)
+        handle.close()
+        from Bio import AlignIO
+        align = AlignIO.read("aligned.fasta", "fasta")
 
     Alternatively, to parse the output with AlignIO directly you can
-    use StringIO to turn the string into a handle:
+    use StringIO to turn the string into a handle::
 
-    stdout, stderr = mafft_cline()
-    from StringIO import StringIO
-    from Bio import AlignIO
-    align = AlignIO.read(StringIO(stdout), "fasta")
+        stdout, stderr = mafft_cline()
+        from StringIO import StringIO
+        from Bio import AlignIO
+        align = AlignIO.read(StringIO(stdout), "fasta")
 
     Citations:
 
@@ -287,9 +287,25 @@ class MafftCommandline(AbstractCommandline):
                     "Incorporate the AA/nuc composition information into "
                     "the scoring matrix (True) or not (False, default)"),
             #**** Output ****
+            #Name length for CLUSTAL and PHYLIP format output
+            _Option(["--namelength", "namelength"],
+                    """Name length in CLUSTAL and PHYLIP output.
+
+                    MAFFT v6.847 (2011) added --namelength for use with
+                    the --clustalout option for CLUSTAL output.
+
+                    MAFFT v7.024 (2013) added support for this with the
+                    --phylipout option for PHYLIP output (default 10).
+                    """,
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #Output format: clustal format. Default: off (fasta format)
             _Switch(["--clustalout", "clustalout"],
                     "Output format: clustal (True) or fasta (False, default)"),
+            #Output format: phylip format.
+            #Added in beta with v6.847, fixed in v6.850 (2011)
+            _Switch(["--phylipout", "phylipout"],
+                    "Output format: phylip (True), or fasta (False, default)"),
             #Output order: same as input. Default: on
             _Switch(["--inputorder", "inputorder"],
                     "Output order: same as input (True, default) or alignment "

@@ -12,6 +12,8 @@ from Bio import BiopythonParserWarning
 from Bio import GenBank
 from Bio.GenBank import utils
 
+from Bio.Alphabet import _get_base_alphabet, ProteinAlphabet
+
 #TODO - Test we get the warnings we expect on the bad input files
 warnings.simplefilter('ignore', BiopythonParserWarning)
 
@@ -21,7 +23,9 @@ test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
               'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
               'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb',
-              'no_end_marker.gb', 'wrong_sequence_indent.gb']
+              'no_end_marker.gb', 'wrong_sequence_indent.gb',
+              'invalid_locus_line_spacing.gb', 'empty_feature_qualifier.gb',
+              'invalid_misc_feature.gb']
 
 # We only test writing on a subset of the examples:
 write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
@@ -87,6 +91,12 @@ for parser in all_parsers:
                 print "Feaures"
                 for feature in cur_record.features:
                     print feature
+                    if isinstance(_get_base_alphabet(cur_record.seq.alphabet),
+                                  ProteinAlphabet):
+                        assert feature.strand is None
+                    else:
+                        #Assuming no mixed strand examples...
+                        assert feature.strand is not None
                 print "DB cross refs", cur_record.dbxrefs
             elif isinstance(parser, GenBank.RecordParser):
                 print "***Record from %s with the RecordParser" \

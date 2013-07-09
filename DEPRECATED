@@ -14,7 +14,13 @@ Release 1.55, with advance notice in the release notes for Release 1.54.
 
 Python 2.5
 ==========
-Still supported, but has triggered a warning since Release 1.61.
+Biopython Release 1.61 will be the final release to support this, and
+shows a warning during installation.
+
+Python 3.0, 3.1, 3.2
+====================
+Never officially supported, these trigger a warning in Release 1.62
+recommending Python 3.3 or later if you wish to use Python 3.
 
 Bio.PDB.mmCIF
 =============
@@ -26,6 +32,11 @@ Bio.SeqFeature
 ==============
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated.
+
+AlignAceCommandline and CompareAceCommandline
+=============================================
+Deprecated in release 1.62. An up to date version of the software cannot
+be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================

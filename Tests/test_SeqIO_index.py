@@ -15,6 +15,7 @@ except ImportError:
 import sys
 import os
 import unittest
+import tempfile
 import gzip
 from StringIO import StringIO
 try:
@@ -32,6 +33,12 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+from Bio import MissingPythonDependencyError
+try:
+    from test_bgzf import _have_bug17666
+    do_bgzf = _have_bug17666()
+except MissingPythonDependencyError:
+    do_bgzf = False
 
 def add_prefix(key):
     """Dummy key_function for testing index code."""
@@ -94,6 +101,14 @@ if sqlite3:
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+    def setUp(self):
+        h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
+        os.close(h)
+
+    def tearDown(self):
+        if os.path.isfile(self.index_tmp):
+            os.remove(self.index_tmp)
+
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
@@ -105,7 +120,7 @@ class IndexDictTests(unittest.TestCase):
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
         if not sqlite3:
@@ -126,7 +141,7 @@ class IndexDictTests(unittest.TestCase):
                           ":memory:", filenames=["dummy"])
 
         #Saving to file...
-        index_tmp = filename + ".idx"
+        index_tmp = self.index_tmp
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
 
@@ -168,7 +183,7 @@ class IndexDictTests(unittest.TestCase):
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
         if not sqlite3:
@@ -331,7 +346,7 @@ class IndexDictTests(unittest.TestCase):
             else:
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
-        rec_dict._proxy._handle.close()  # TODO - Better solution
+        rec_dict.close()
         del rec_dict
 
     if sqlite3:
@@ -406,7 +421,7 @@ tests = [
 for filename, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename, None)]
-    if os.path.isfile(filename + ".bgz"):
+    if do_bgzf and os.path.isfile(filename + ".bgz"):
         tasks.append((filename + ".bgz","bgzf"))
     for filename, comp in tasks:
 

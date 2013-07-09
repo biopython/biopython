@@ -71,8 +71,8 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
             server = BioSeqDatabase.open_database(driver=DBDRIVER,
                                                   user=DBUSER, passwd=DBPASSWD,
                                                   host=DBHOST)
-            server.close()
-            del server
+        server.close()
+        del server
     except Exception, e:
         message = "Connection failed, check settings if you plan to use BioSQL: %s" % str(e)
         raise MissingExternalDependencyError(message)

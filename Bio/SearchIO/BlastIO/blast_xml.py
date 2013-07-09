@@ -303,7 +303,7 @@ class BlastXmlParser(object):
                         hit_list.append(hit)
 
                 # create qresult and assign its attributes
-                qresult = QueryResult(query_id, hits=hit_list)
+                qresult = QueryResult(hit_list, query_id)
                 qresult.description = query_desc
                 qresult.seq_len = int(query_len)
                 qresult._blast_id = blast_query_id
@@ -609,7 +609,7 @@ class _BlastXmlGenerator(XMLGenerator):
 
     def startDocument(self):
         """Starts the XML document."""
-        self.write('<?xml version="1.0"?>\n'
+        self.write(u'<?xml version="1.0"?>\n'
                 '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
                 '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
 
@@ -628,7 +628,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def endElement(self, name):
         """Ends and XML element of the given name."""
         XMLGenerator.endElement(self, name)
-        self.write('\n')
+        self.write(u'\n')
 
     def startParent(self, name, attrs={}):
         """Starts an XML element which has children.
@@ -640,7 +640,7 @@ class _BlastXmlGenerator(XMLGenerator):
         """
         self.startElement(name, attrs, children=True)
         self._level += self._increment
-        self.write('\n')
+        self.write(u'\n')
         # append the element name, so we can end it later
         self._parent_stack.append(name)
 
@@ -670,9 +670,8 @@ class _BlastXmlGenerator(XMLGenerator):
         self.endElement(name)
 
     def characters(self, content):
-        # apply sax's filter first, then ours
-        content = escape(content)
-        for a, b in (('"', '&quot;'), ("'", '&apos;')):
+        content = escape(unicode(content))
+        for a, b in ((u'"', u'&quot;'), (u"'", u'&apos;')):
             content = content.replace(a, b)
         self.write(content)
 

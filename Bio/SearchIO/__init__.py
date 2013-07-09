@@ -448,6 +448,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     ['gi|156630997:105-1160', 'gi|195230749:301-1383', ..., 'gi|53729353:216-1313']
     >>> search_idx['gi|195230749:301-1383']
     QueryResult(id='gi|195230749:301-1383', 5 hits)
+    >>> search_idx.close()
 
     If the file is BGZF compressed, this is detected automatically. Ordinary
     GZIP files are not supported:
@@ -458,6 +459,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml', key_function=None)
     >>> search_idx['gi|195230749:301-1383']
     QueryResult(id='gi|195230749:301-1383', 5 hits)
+    >>> search_idx.close()
 
     You can supply a custom callback function to alter the default identifier
     string. This function should accept as its input the QueryResult ID string
@@ -472,6 +474,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
     >>> search_idx['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
+    >>> search_idx.close()
 
     Note that the callback function does not change the QueryResult's ID value.
     It only changes the key value used to retrieve the associated QueryResult.
