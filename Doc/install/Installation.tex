@@ -597,11 +597,11 @@ Congratulations!
 Note that Biopython includes support for interfacing with or parsing the output from a number of third party command line tools.  These are not required to install Biopython, but may be of interest.  This includes:
 
 \begin{itemize}
-\item NCBI Standalone BLAST, which can used with the \verb|Bio.Blast| module.
+\item NCBI Standalone BLAST, which can used with the \verb|Bio.Blast| module and parsed with the \verb|Bio.SearchIO| module.
 \item EMBOSS tools, which can be invoked using the \verb|Bio.Emboss| module.  The \verb|Bio.AlignIO| module can also parse some alignment formats output by the EMBOSS suite.
-\item ClustalW, which can be invoked using the \verb|Bio.Clustalw| module.
+\item ClustalW, which can be parsed using \verb|Bio.AlignIO| and invoked using the \verb|Bio.Align.Applications| module.
 \item SIMCOAL2 and FDist tools for population genetics can be used via the \verb|Bio.PopGen| module.
-\item Bill Pearson's FASTA tools output can be parsed using the \verb|Bio.AlignIO| module.
+\item Bill Pearson's FASTA tools output can be parsed using the \verb|Bio.AlignIO| and \verb|Bio.SearchIO| module.
 \item Wise2 includes the useful tool dnal.
 \end{itemize}
 
