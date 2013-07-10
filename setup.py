@@ -400,16 +400,6 @@ if os.name == 'java':
 elif is_pypy() or is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
-elif sys.version_info[0] == 3:
-    # TODO - Must update our C extensions for Python 3
-    EXTENSIONS = [
-    Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c'],
-              ),
-    Extension('Bio.Nexus.cnexus',
-              ['Bio/Nexus/cnexus.c']
-              ),
-    ]
 else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
