@@ -51,7 +51,7 @@ Python standard library's shlex module instead of C code using flex.
 
 The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
 
-Bio.motifs supports JASPER format files with multiple position-frequence
+Bio.motifs supports JASPAR format files with multiple position-frequence
 matrices.
 
 Additionally there have been other minor bug fixes and more unit tests.
