@@ -346,6 +346,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         if sequence.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA sequences")
 
+        #TODO - Force uppercase here and optimise switch statement in C
+        #by assuming upper case?
         sequence = str(sequence)
         m = self.length
         n = len(sequence)
@@ -356,6 +358,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             import _pwm
         except ImportError:
             # use the slower Python code otherwise
+            #The C code handles mixed case so Python version must too:
+            sequence = sequence.upper()
             for i in xrange(n-m+1):
                 score = 0.0
                 for position in xrange(m):
