@@ -77,7 +77,7 @@ for database, formats, entry, length, checksum in [
 
     def funct(d, f, e, l, c):
         method = lambda x : x.simple(d, f, e, l, c)
-        method.__doc__ = "Bio.Entrez.efetch(%s, %s, ...)" % (d, e)
+        method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
         return method
 
     setattr(EntrezTests, "test_%s_%s" % (database, entry),
