@@ -177,9 +177,9 @@ GenomeDiagram originally used colour and centre (UK spelling of color and
 center) for argument names.  As part of its integration into Biopython 1.50,
 this will support both colour and color, and both centre and center, to help
 people port existing scripts written for the standalone version of
-GenomeDiagram.  However, these were deprecated in Release 1.55 final, and we
-intend to eventually remove support for colour and centre in later releases
-of Biopython.
+GenomeDiagram.  However, these were deprecated in Release 1.55 final.
+Support for centre was removed in Release 1.62, and we intend to eventually
+remove support for colour in later releases of Biopython.
 
 Bio.AlignAce and Bio.MEME
 =========================
