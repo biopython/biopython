@@ -145,6 +145,8 @@ test_files = [
     ("genbank",False, 'GenBank/gbvrl1_start.seq', 3),
 #Following files are also used in test_GFF.py
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
+#Generated with Entrez.efetch("protein", id="16130152", rettype="gbwithparts")
+    ("genbank",False, 'GenBank/NP_416719.gbwithparts', 1),
 #Following files are currently only used here or in test_SeqIO_index.py:
     ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
