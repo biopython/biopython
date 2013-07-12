@@ -27,6 +27,12 @@ except ImportError:
         if str(value).lower().endswith("inf"):
             return True
         return False
+#Hack for Python 2.5 on Windows:
+try:
+    _nan = float("nan")
+except ValueError:
+    _nan = 1e1000 / 1e1000
+
 
 class GenericPositionMatrix(dict):
 
@@ -323,7 +329,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = float("inf")
                     else:
-                        logodds = float("nan")
+                        logodds = _nan
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
         return pssm
@@ -360,7 +366,6 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             # use the slower Python code otherwise
             #The C code handles mixed case so Python version must too:
             sequence = sequence.upper()
-            nan = float("nan")
             for i in xrange(n-m+1):
                 score = 0.0
                 ok = True
@@ -374,7 +379,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 if ok:
                     scores.append(score)
                 else:
-                    scores.append(nan)
+                    scores.append(_nan)
         else:
             # get the log-odds matrix into a proper shape
             # (each row contains sorted (ACGT) log-odds values)
