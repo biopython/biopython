@@ -79,17 +79,16 @@ class CAPSMap(object):
         self._digest()
 
     def _digest_with(self, enzyme):
-        cuts = {}
+        cuts = [] # list of lists, one per sequence
         all = []
 
         # go through each sequence
         for seq in self.sequences:
-
             # grab all the cuts in the sequence
-            cuts[seq] = [cut - enzyme.fst5 for cut in enzyme.search(seq)]
-
+            seq_cuts = [cut - enzyme.fst5 for cut in enzyme.search(seq)]
             # maintain a list of all cuts in all sequences
-            all.extend(cuts[seq])
+            all.extend(seq_cuts)
+            cuts.append(seq_cuts)
 
         # we sort the all list and remove duplicates
         all.sort()
@@ -100,7 +99,6 @@ class CAPSMap(object):
             if cut != last:
                 new.append(cut)
             last = cut
-
         all = new
         # all now has indices for all sequences in the alignment
 
@@ -112,7 +110,7 @@ class CAPSMap(object):
 
             for i in range(0, self.size):
                 seq = self.sequences[i]
-                if cut in cuts[seq]:
+                if cut in cuts[i]:
                     cuts_in.append(i)
                 else:
                     blocked_in.append(i)
