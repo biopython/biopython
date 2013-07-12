@@ -184,8 +184,10 @@ def make_join_feature(f_list, ftype="misc_feature"):
     else:
         #All forward, or mixed strand
         c_loc = CompoundLocation([f.location for f in f_list])
-    return SeqFeature(c_loc, ftype, sub_features = f_list)
-    #TODO - Don't use sub-features at all in this test
+    answer = SeqFeature(c_loc, ftype)
+    answer._sub_features = f_list #to avoid deprecation warning
+    return answer
+
 
 #Prepare a single GenBank record with one feature with a %s place holder for
 #the feature location
