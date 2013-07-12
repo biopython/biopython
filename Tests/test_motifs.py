@@ -8,6 +8,7 @@ import os
 import unittest
 
 from Bio import motifs
+from Bio.motifs.matrix import _isnan
 from Bio.Seq import Seq
 
 
@@ -1629,6 +1630,36 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[3], -38.04542542, places=5)
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
+
+    def test_with_mixed_case(self):
+        """Test if Bio.motifs PWM scoring works with mixed case."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        #Note we're breaking Seq/Alphabet expectations here:
+        result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT", self.m.alphabet))
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5], -25.18009186, places=5)
+
+    def test_with_bad_char(self):
+        """Test if Bio.motifs PWM scoring works with unexpected letters like N."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = pssm.calculate(Seq("ACGTGTGCGTAGTGCGTN", self.m.alphabet))
+        self.assertEqual(7, len(result))
+        self.assertAlmostEqual(result[0], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5], -25.18009186, places=5)
+        self.assertTrue(_isnan(result[6]), "Expected nan, not %r" % result[6])
 
 
 if __name__ == "__main__":
