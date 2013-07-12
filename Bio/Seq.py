@@ -16,6 +16,7 @@ __docformat__ ="epytext en"  # Don't just use plain text in epydoc API pages!
 import string  # for maketrans only
 import array
 import sys
+import warnings
 
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -131,6 +132,13 @@ class Seq(object):
 
         See the __cmp__ documentation - we plan to change this!
         """
+        warnings.warn("In future comparing Seq objects will use string "
+                      "comparison (not object comparison). Please use "
+                      "hash(id(my_seq)) or my_dict[id(my_seq)] if you "
+                      "want the current behaviour, or for string hashing "
+                      "use hash(str(my_seq)) or my_dict[str(my_seq)] to "
+                      "to make your code explicit and to avoid this "
+                      "warning.", FutureWarning)
         return id(self)  # Currently use object identity for equality testing
 
     def __cmp__(self, other):
@@ -158,7 +166,6 @@ class Seq(object):
         """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
-            import warnings
             warnings.warn("In future comparing Seq objects will use string "
                           "comparison (not object comparison). Incompatible "
                           "alphabets will trigger a warning (not an exception). "
