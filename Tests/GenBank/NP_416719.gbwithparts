@@ -1,0 +1,173 @@
+LOCUS       NP_416719                367 aa            linear   CON 04-JUL-2013
+DEFINITION  outer membrane porin protein C [Escherichia coli str. K-12 substr.
+            MG1655].
+ACCESSION   NP_416719
+VERSION     NP_416719.1  GI:16130152
+DBLINK      Project: 57779
+            BioProject: PRJNA57779
+DBSOURCE    REFSEQ: accession NC_000913.2
+KEYWORDS    RefSeq.
+SOURCE      Escherichia coli str. K-12 substr. MG1655
+  ORGANISM  Escherichia coli str. K-12 substr. MG1655
+            Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+            Enterobacteriaceae; Escherichia.
+REFERENCE   1  (residues 1 to 367)
+  AUTHORS   Riley,M., Abe,T., Arnaud,M.B., Berlyn,M.K., Blattner,F.R.,
+            Chaudhuri,R.R., Glasner,J.D., Horiuchi,T., Keseler,I.M., Kosuge,T.,
+            Mori,H., Perna,N.T., Plunkett,G. III, Rudd,K.E., Serres,M.H.,
+            Thomas,G.H., Thomson,N.R., Wishart,D. and Wanner,B.L.
+  TITLE     Escherichia coli K-12: a cooperatively developed annotation
+            snapshot--2005
+  JOURNAL   Nucleic Acids Res. 34 (1), 1-9 (2006)
+   PUBMED   16397293
+  REMARK    Publication Status: Online-Only
+REFERENCE   2  (residues 1 to 367)
+  AUTHORS   Blattner,F.R., Plunkett,G. III, Bloch,C.A., Perna,N.T., Burland,V.,
+            Riley,M., Collado-Vides,J., Glasner,J.D., Rode,C.K., Mayhew,G.F.,
+            Gregor,J., Davis,N.W., Kirkpatrick,H.A., Goeden,M.A., Rose,D.J.,
+            Mau,B. and Shao,Y.
+  TITLE     The complete genome sequence of Escherichia coli K-12
+  JOURNAL   Science 277 (5331), 1453-1474 (1997)
+   PUBMED   9278503
+REFERENCE   3  (residues 1 to 367)
+  AUTHORS   Arnaud,M., Berlyn,M.K.B., Blattner,F.R., Galperin,M.Y.,
+            Glasner,J.D., Horiuchi,T., Kosuge,T., Mori,H., Perna,N.T.,
+            Plunkett,G. III, Riley,M., Rudd,K.E., Serres,M.H., Thomas,G.H. and
+            Wanner,B.L.
+  TITLE     Workshop on Annotation of Escherichia coli K-12
+  JOURNAL   Unpublished
+  REMARK    Woods Hole, Mass., on 14-18 November 2003 (sequence corrections)
+REFERENCE   4  (residues 1 to 367)
+  AUTHORS   Glasner,J.D., Perna,N.T., Plunkett,G. III, Anderson,B.D.,
+            Bockhorst,J., Hu,J.C., Riley,M., Rudd,K.E. and Serres,M.H.
+  TITLE     ASAP: Escherichia coli K-12 strain MG1655 version m56
+  JOURNAL   Unpublished
+  REMARK    ASAP download 10 June 2004 (annotation updates)
+REFERENCE   5  (residues 1 to 367)
+  AUTHORS   Hayashi,K., Morooka,N., Mori,H. and Horiuchi,T.
+  TITLE     A more accurate sequence comparison between genomes of Escherichia
+            coli K12 W3110 and MG1655 strains
+  JOURNAL   Unpublished
+  REMARK    GenBank accessions AG613214 to AG613378 (sequence corrections)
+REFERENCE   6  (residues 1 to 367)
+  AUTHORS   Perna,N.T.
+  TITLE     Escherichia coli K-12 MG1655 yqiK-rfaE intergenic region, genomic
+            sequence correction
+  JOURNAL   Unpublished
+  REMARK    GenBank accession AY605712 (sequence corrections)
+REFERENCE   7  (residues 1 to 367)
+  AUTHORS   Rudd,K.E.
+  TITLE     A manual approach to accurate translation start site annotation: an
+            E. coli K-12 case study
+  JOURNAL   Unpublished
+REFERENCE   8  (residues 1 to 367)
+  CONSRTM   NCBI Genome Project
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2013) National Center for Biotechnology
+            Information, NIH, Bethesda, MD 20894, USA
+REFERENCE   9  (residues 1 to 367)
+  AUTHORS   Rudd,K.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (06-FEB-2013) Department of Biochemistry and Molecular
+            Biology, University of Miami Miller School of Medicine, 118 Gautier
+            Bldg., Miami, FL 33136, USA
+  REMARK    Sequence update by submitter
+REFERENCE   10 (residues 1 to 367)
+  AUTHORS   Rudd,K.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (24-APR-2007) Department of Biochemistry and Molecular
+            Biology, University of Miami Miller School of Medicine, 118 Gautier
+            Bldg., Miami, FL 33136, USA
+  REMARK    Annotation update from ecogene.org as a multi-database
+            collaboration
+REFERENCE   11 (residues 1 to 367)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-FEB-2006) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+  REMARK    Protein updates by submitter
+REFERENCE   12 (residues 1 to 367)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-JUN-2004) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+  REMARK    Sequence update by submitter
+REFERENCE   13 (residues 1 to 367)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-OCT-1998) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   14 (residues 1 to 367)
+  AUTHORS   Blattner,F.R. and Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (02-SEP-1997) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   15 (residues 1 to 367)
+  AUTHORS   Blattner,F.R. and Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (16-JAN-1997) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence is identical to AAC75275.
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..367
+                     /organism="Escherichia coli str. K-12 substr. MG1655"
+                     /strain="K-12"
+                     /sub_strain="MG1655"
+                     /db_xref="taxon:511145"
+     Protein         1..367
+                     /product="outer membrane porin protein C"
+                     /function="membrane; Outer membrane constituents"
+                     /calculated_mol_wt=40237
+     mat_peptide     22..367
+                     /product="outer membrane porin protein C"
+                     /experiment="N-terminus verified by Edman degradation:
+                     PMID 6297988,9298646,9629924"
+                     /calculated_mol_wt=38308
+     Region          25..367
+                     /region_name="OmpC"
+                     /note="Outer membrane protein (porin) [Cell envelope
+                     biogenesis, outer membrane]; COG3203"
+                     /db_xref="CDD:225744"
+     Region          30..367
+                     /region_name="gram_neg_porins"
+                     /note="Porins form aqueous channels for the diffusion of
+                     small hydrophillic molecules across the outer membrane.
+                     Individual 16-strand anti-parallel beta-barrels form a
+                     central pore, and trimerizes thru mainly hydrophobic
+                     interactions at the interface. Trimers...; cd00342"
+                     /db_xref="CDD:238208"
+     Site            order(30,32,38,40..42,63..67,73,75..77,79,81..84,94..95,
+                     97..101,111..113,145,147..148,327..328,331,363,365,367)
+                     /site_type="other"
+                     /note="trimer interface [polypeptide binding]"
+                     /db_xref="CDD:238208"
+     Site            order(37,58,95,126,145)
+                     /site_type="other"
+                     /note="eyelet of channel"
+                     /db_xref="CDD:238208"
+     CDS             1..367
+                     /gene="ompC"
+                     /locus_tag="b2215"
+                     /gene_synonym="ECK2207; JW2203; meoA; par"
+                     /coded_by="complement(NC_000913.2:2309668..2310771)"
+                     /GO_component="GO:0009279 - cell outer membrane;
+                     GO:0009274 - peptidoglycan-based cell wall"
+                     /note="outer membrane protein 1b (Ib;c)"
+                     /transl_table=11
+                     /db_xref="ASAP:ABE-0007321"
+                     /db_xref="UniProtKB/Swiss-Prot:P06996"
+                     /db_xref="EcoGene:EG10670"
+                     /db_xref="GeneID:946716"
+CONTIG      join(WP_000865568.1:1..367)
+ORIGIN      
+        1 mkvkvlsllv pallvagaan aaevynkdgn kldlygkvdg lhyfsdnkdv dgdqtymrlg
+       61 fkgetqvtdq ltgygqweyq iqgnsaenen nswtrvafag lkfqdvgsfd ygrnygvvyd
+      121 vtswtdvlpe fggdtygsdn fmqqrgngfa tyrntdffgl vdglnfavqy qgkngnpsge
+      181 gftsgvtnng rdalrqngdg vggsitydye gfgiggaiss skrtdaqnta ayigngdrae
+      241 tytgglkyda nniylaaqyt qtynatrvgs lgwankaqnf eavaqyqfdf glrpslaylq
+      301 skgknlgrgy ddedilkyvd vgatyyfnkn mstyvdykin llddnqftrd agintdniva
+      361 lglvyqf
+//
+
