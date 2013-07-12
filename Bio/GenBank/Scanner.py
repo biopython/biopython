@@ -1391,6 +1391,12 @@ class GenBankScanner(InsdcScanner):
                         elif line[:GENBANK_INDENT] == GENBANK_SPACER:
                             #Don't need to preseve the whitespace here.
                             contig_location += line[GENBANK_INDENT:].rstrip()
+                        elif line.startswith('ORIGIN'):
+                            #Strange, seen this in GenPept files via Entrez gbwithparts
+                            line = line[6:].strip()
+                            if line:
+                                consumer.origin_name(line)
+                            break
                         else:
                             raise ValueError('Expected CONTIG continuation line, got:\n' + line)
                     consumer.contig_location(contig_location)
