@@ -36,7 +36,7 @@ class TogoFields(unittest.TestCase):
         dbs = set(TogoWS._get_entry_dbs())
         expected = set(['nuccore', 'nucest', 'nucgss',
                         'nucleotide', 'protein', 'gene',
-                        'omim', 'homologene', 'snp',
+                        'homologene', 'snp',
                         'mesh', 'pubmed', 'embl',
                         'uniprot', 'uniparc', 'uniref100',
                         'uniref90', 'uniref50', 'ddbj',
