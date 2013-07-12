@@ -623,9 +623,14 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(100),100),
                          "complement(join(<61..75,81..>90))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100)._sub_features :
+        for sub_loc in f.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, -1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, -1)
+        for sub_f in tmp._sub_features :
             self.assertEqual(sub_f.strand, -1)
-        self.assertEqual(f._flip(100).strand, -1)
 
         f1 = SeqFeature(FeatureLocation(OneOfPosition(107, [ExactPosition(107),
                                                             ExactPosition(110)]),
@@ -640,9 +645,14 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(200),200),
                          "complement(join((41.51)..55,61..75,81..one-of(90,93)))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100)._sub_features :
-            self.assertEqual(sub_f.strand,-1)
-        self.assertEqual(f._flip(100).strand, -1)
+        for sub_loc in f.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, -1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, -1)
+        for sub_f in tmp._sub_features :
+            self.assertEqual(sub_f.strand, -1)
         self.record.features.append(f)
 
         f1 = SeqFeature(FeatureLocation(BeforePosition(210),220), strand=-1)
@@ -654,9 +664,14 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(300),300),
                          "join((57.61)..75,81..>90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100)._sub_features :
+        for sub_loc in f.location.parts:
+            self.assertEqual(sub_loc.strand, -1)
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, +1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        for sub_f in tmp._sub_features :
             self.assertEqual(sub_f.strand, +1)
-        self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
         f1 = SeqFeature(FeatureLocation(AfterPosition(310),320), strand=-1)
@@ -672,9 +687,12 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(400),400),
                          "join((46.51)..55,one-of(64,61)..75,81..<90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100)._sub_features :
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, +1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        for sub_f in tmp._sub_features :
             self.assertEqual(sub_f.strand, +1)
-        self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
         self.write_read_checks()
