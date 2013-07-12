@@ -356,7 +356,6 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # check if the fast C code can be used
         try:
             import _pwm
-            raise ImportError
         except ImportError:
             # use the slower Python code otherwise
             #The C code handles mixed case so Python version must too:
