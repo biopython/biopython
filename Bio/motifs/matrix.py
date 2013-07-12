@@ -356,16 +356,26 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # check if the fast C code can be used
         try:
             import _pwm
+            raise ImportError
         except ImportError:
             # use the slower Python code otherwise
             #The C code handles mixed case so Python version must too:
             sequence = sequence.upper()
+            nan = float("nan")
             for i in xrange(n-m+1):
                 score = 0.0
+                ok = True
                 for position in xrange(m):
                     letter = sequence[i+position]
-                    score += self[letter][position]
-                scores.append(score)
+                    try:
+                        score += self[letter][position]
+                    except KeyError:
+                        ok = False
+                        break
+                if ok:
+                    scores.append(score)
+                else:
+                    scores.append(nan)
         else:
             # get the log-odds matrix into a proper shape
             # (each row contains sorted (ACGT) log-odds values)
