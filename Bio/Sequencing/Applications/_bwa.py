@@ -10,9 +10,9 @@ from Bio.Application import _StaticArgument
 class BwaIndexCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) index.
 
-    Index database sequences in the FASTA format, equivalent to:
+    Index database sequences in the FASTA format, equivalent to::
 
-    $ bwa index [-p prefix] [-a algoType] [-c] <in.db.fasta>
+        $ bwa index [-p prefix] [-a algoType] [-c] <in.db.fasta>
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
@@ -59,11 +59,9 @@ class BwaIndexCommandline(AbstractCommandline):
 class BwaAlignCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
 
-    Run a BWA alignment, equivalent to:
+    Run a BWA alignment, equivalent to::
 
-    $ bwa aln [-n maxDiff] [-o maxGapO] [-e maxGapE] [-d nDelTail] [-i nIndelEnd]
-              [-k maxSeedDiff] [-l seedLen] [-t nThrds] [-cRN] [-M misMsc] [-O gapOsc]
-              [-E gapEsc] [-q trimQual] <in.db.fasta> <in.query.fq> > <out.sai>
+        $ bwa aln [...] <in.db.fasta> <in.query.fq> > <out.sai>
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
@@ -173,9 +171,9 @@ class BwaSamseCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) samse.
 
     Generate alignments in the SAM format given single-end reads.
-    Equvialent to:
+    Equvialent to::
 
-    $ bwa samse [-n maxOcc] <in.db.fasta> <in.sai> <in.fq> > <out.sam>
+        $ bwa samse [-n maxOcc] <in.db.fasta> <in.sai> <in.fq> > <out.sam>
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
@@ -220,10 +218,9 @@ class BwaSampeCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
 
     Generate alignments in the SAM format given paired-end reads. 
-    Equivalent to:
+    Equivalent to::
 
-    $ bwa sampe [-a maxInsSize] [-o maxOcc] [-n maxHitPaired] [-N maxHitDis] [-P]
-                <in.db.fasta> <in1.sai> <in2.sai> <in1.fq> <in2.fq> > <out.sam>
+        $ bwa sampe [...] <in.db.fasta> <in1.sai> <in2.sai> <in1.fq> <in2.fq> > <out.sam>
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
@@ -294,11 +291,9 @@ class BwaSampeCommandline(AbstractCommandline):
 class BwaBwaswCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) bwasw.
 
-    Align query sequences from FASTQ files. Equivalent to:
+    Align query sequences from FASTQ files. Equivalent to::
 
-    $ bwa bwasw [-a matchScore] [-b mmPen] [-q gapOpenPen] [-r gapExtPen]
-                [-t nThreads] [-w bandWidth] [-T thres] [-s hspIntv]
-                [-z zBest] [-N nHspRev] [-c thresCoef] <in.db.fasta> <in.fq>
+        $ bwa bwasw [...] <in.db.fasta> <in.fq>
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
