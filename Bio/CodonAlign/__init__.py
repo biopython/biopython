@@ -61,20 +61,43 @@ default_codon_alphabet = get_codon_alphabet(default_codon_table)
 
 class CodonSeq(Seq):
     """CodonSeq is designed to be within the SeqRecords of a 
-    CodonAlignment class. This most useful feature for Codon 
-    Sequences bacause it slices three letters at once, i.e.
-    codon slice.
+    CodonAlignment class.
+
+    CodonSeq is useful as it allows the user to specify
+    reading frame when translate CodonSeq
+
+    CodonSeq also accepts codon style slice by calling
+    get_codon() method.
+
+    Important: Ungapped CodonSeq can be any length if you
+    specify the rf_table. Gapped CodonSeq should be a
+    multiple of three.
 
     >>> codonseq = CodonSeq("AAATTTGGGCCAAATTT", rf_table=(0,3,6,8,11,14))
     >>> print codonseq.translate()
     KFGAKF
+
+    test get_full_rf_table method
+
+    >>> p = CodonSeq('AAATTTCCCGG-TGGGTTTAA', rf_table=(0, 3, 6, 9, 11, 14, 17))
+    >>> full_rf_table = p.get_full_rf_table()
+    >>> print full_rf_table
+    [0, 3, 6, 9, 12, 15, 18]
+    >>> print p.translate(rf_table=full_rf_table, ungap_seq=False)
+    KFPPWV*
+    >>> p = CodonSeq('AAATTTCCCGGGAA-TTTTAA', rf_table=(0, 3, 6, 9, 14, 17))
+    >>> print p.get_full_rf_table()
+    [0, 3, 6, 9, 15, 18]
+    >>> p = CodonSeq('AAA------------TAA', rf_table=(0, 3)) 
+    >>> print p.get_full_rf_table()
+    [0, 3, 6, 9, 12, 15]
 
     """
     def __init__(self, data, alphabet=default_codon_alphabet, \
             gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
-        # sequence = AAATTTGGGCCAAATTT
+        # sequence = 'AAATTTGGGCCAAATTT'
         # rf_table = (0, 3, 6, 8, 11, 14)
         # the translated protein sequences will be
         # AAA TTT GGG GCC AAA TTT
@@ -90,8 +113,8 @@ class CodonSeq(Seq):
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
-            self.rf_table = filter(lambda x: x%3 == 0, range(len(seq_ungapped)))
             assert len(self) % 3 == 0, "Sequence length is not a triple number"
+            self.rf_table = filter(lambda x: x%3 == 0, range(len(seq_ungapped)))
             # check alphabet
             # Not use Alphabet._verify_alphabet function because it 
             # only works for single alphabet
@@ -101,6 +124,9 @@ class CodonSeq(Seq):
                                   + "letters from alphabet (%s)! " \
                                   % self[i:i+3])
         else:
+            if gap_char in self._data:
+                assert  len(self) % 3 == 0, \
+                        "Gapped sequence length is not a triple number"
             assert isinstance(rf_table, (tuple, list)), \
                     "rf_table should be a tuple or list object"
             assert all(isinstance(i, int) for i in rf_table), \
@@ -149,17 +175,90 @@ class CodonSeq(Seq):
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq"""
-        return len(self._data.replace(self.gap_char, "")) / 3
+        return len(self.rf_table) / 3
 
-    def translate(self, codon_table=default_codon_table, stop_symbol="*"):
+    def translate(self, codon_table=default_codon_table, \
+            stop_symbol="*", rf_table=None, ungap_seq=True):
+        """Translate the CodonSeq based on the reading frame
+        in rf_table. It is possible for the user to specify
+        a rf_table at this point. If you want to include
+        gaps in the translated sequence, this is the only
+        way. ungap_seq should be set to true for this
+        purpose.
+        """
         amino_acids = []
-        seq_ungapped = self._data.replace(self.gap_char, "")
-        for i in self.rf_table:
-            amino_acids.append(codon_table.forward_table[seq_ungapped[i:i+3]])
+        if ungap_seq is True:
+            tr_seq = self._data.replace(self.gap_char, "")
+        else:
+            tr_seq = self._data
+        if rf_table is None:
+            rf_table = self.rf_table
+        p = -1 #initiation
+        for i in rf_table:
+            if '---' == tr_seq[i:i+3]:
+                amino_acids.append('-')
+                continue
+            elif '-' in tr_seq[i:i+3]:
+                # considering two types of frameshift
+                if p == -1 or p - i == 3:
+                    p = i
+                    codon = tr_seq[i:i+6].replace('-', '')[:3]
+                elif p - i > 3:
+                    codon = tr_seq[i:i+3]
+                    p = i
+            else:
+                # normal condition without gaps
+                codon = tr_seq[i:i+3]
+                p = i
+            if codon in codon_table.stop_codons:
+                amino_acids.append(stop_symbol)
+                continue
+            try:
+                amino_acids.append(codon_table.forward_table[codon])
+            except KeyError:
+                raise RuntimeError("Unknown codon detected (%s). Do you forget to speficy ungap_seq argument?" % codon)
         return "".join(amino_acids)
 
     def toSeq(self, alphabet=generic_dna):
         return Seq(self._data, generic_dna)
+
+    def get_full_rf_table(self):
+        """This function returns a full rf_table of the given
+        CodonSeq records. A full rf_table is different from 
+        normal rf_table in that it translate gaps in CodonSeq.
+        It is helpful to construct alignment containing
+        frameshift.
+        """
+        assert self.gap_char in self._data, \
+                "get_full_rf_table() method is only useful when your sequence contains gaps"
+        full_rf_table = []
+        accum = 0
+        for i in filter(lambda x: x%3==0, range(len(self))):
+            if self[i:i+3] == self.gap_char*3:
+                full_rf_table.append(i)
+            elif self[i:i+3] in self.alphabet.letters:
+                full_rf_table.append(i)
+                accum += 1
+            else:
+                # think about the last codon
+                # code is dirty right now
+                #print self[i-100:i]
+                #print i
+                nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
+                if nxt_shift < 0:
+                    full_rf_table.append(i)
+                elif nxt_shift == 0:
+                    #print self.rf_table[accum-1]
+                    #print self.rf_table[accum]
+                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
+                    if pre_shift <= 0:
+                        raise RuntimeError("Unexpected Codon %s", self[i:i+3])
+                    else:
+                        pass
+                elif shift > 0:
+                    pass
+        #print len(full_rf_table)
+        return full_rf_table
 
 
 class CodonAlignment(MultipleSeqAlignment):
@@ -298,7 +397,7 @@ def _check_corr(pro, nucl, gap_char='-', \
         # mode = 0, direct match
         return (match.span(), 0)
     else:
-        # Might caused by mismatches or frameshift, using Anchors to
+        # Might caused by mismatches or frameshift, using anchors to
         # have a try
         anchor_len = 10 # adjust this value to test performance
         pro_seq = str(pro.seq).replace(gap_char, "")
@@ -307,13 +406,15 @@ def _check_corr(pro, nucl, gap_char='-', \
         # if the last anchor is less than the specified anchor
         # size, we combine the penultimate and the last anchor
         # together as the last one.
+        # TODO: modify this to deal with short sequence with only
+        # one anchor.
         if len(anchors[-1]) < anchor_len:
             anchors[-1] = anchors[-2] + anchors[-1]
 
-        pro_re = ""
+        pro_re = []
         anchor_distance = 0
+        anchor_pos = []
         for i, anchor in enumerate(anchors):
-            #print anchor
             this_anchor_len = len(anchor)
             qcodon  = ""
             fncodon = ""
@@ -329,43 +430,88 @@ def _check_corr(pro, nucl, gap_char='-', \
                         continue
                     qcodon += aa2re[aa]
                     fncodon += aa2re['X']
+                match = re.search(qcodon, nucl_seq)
             elif this_anchor_len > anchor_len:
                 last_qcodon = ""
-                pos = 0
-                for aa in anchor:
-                    #if aa != gap_char:
-                    qcodon += aa2re[aa]
-                    fncodon += aa2re['X']
-                    if pos >= anchor_len:
-                        last_qcodon += aa2re[aa]
-                    pos += 1
-            match = re.search(qcodon, nucl_seq)
+                last_fcodon = ""
+                for j in range(anchor_len, len(anchor)):
+                    last_qcodon += aa2re[anchor[j]]
+                    last_fcodon += aa2re['X']
+                match = re.search(last_qcodon, nucl_seq)
+            # build full_pro_re from anchors
             if match:
-                if match.start() - anchor_distance not in (0, 3 * anchor_len):
-                    import warnings
-                    warnings.warn("Distance between anchors is not %d. It might be caused by frameshift" \
-                            % anchor_len)
-                anchor_distance = match.start()
-                #print anchor_distance
+                anchor_pos.append((match.start(), match.end(), i))
                 if this_anchor_len == anchor_len:
-                    pro_re += qcodon
+                    pro_re.append(qcodon)
                 else:
-                    pro_re += last_qcodon
+                    pro_re.append(last_qcodon)
             else:
                 if this_anchor_len == anchor_len:
-                    pro_re += fncodon
+                    pro_re.append(fncodon)
                 else:
-                    pro_re += fncodon[anchor_len:]
-        match = re.search(pro_re, nucl_seq)
+                    pro_re.append(last_fcodon)
+                #anchor_pos.append(-1)
+
+        full_pro_re = "".join(pro_re)
+        match = re.search(full_pro_re, nucl_seq)
         if match:
             # mode = 1, mismatch
             return (match.span(), 1)
         else:
-            raise RuntimeError("Protein SeqRecord (%s) and Nucleotide SeqRecord (%s) do not match!" \
-                    % (pro.id, nucl.id))
+            # check frames of anchors
+            shift_id = [chr(i) for i in range(97,107)]
+            shift_id_pos = 0
+            for i in range(len(anchor_pos)-1):
+                # TODO: think about the first and last anchor (mismatch)
+                shift_val = (anchor_pos[i+1][0] - anchor_pos[i][0]) % anchor_len
+                #if shift_val != 0:
+                if shift_val > 0:
+                    # obtain shifted anchor and corresponding nucl
+                    sh_anc = "".join(anchors[anchor_pos[i][2]+1:anchor_pos[i+1][2]])
+                    sh_nuc = nucl_seq[anchor_pos[i][1]:anchor_pos[i+1][0]]
+                    # re substring matching doesn't allow number as id
+                    # use ascii instead
+                    qcodon = "^(?P<a>.*)"
+                    id_dict = {'a': 0}
+                    for j, aa in enumerate(sh_anc):
+                        qcodon += aa2re[aa] + "(?P<" + chr(j+98) + ">.*)"
+                        id_dict[chr(j+98)] = j+1
+                    qcodon += "$"
+                    match = re.search(qcodon, sh_nuc)
+                    if match:
+                        anc_shift_pos = [num for id, num in id_dict.iteritems() \
+                                if match.group(id) != ""]
+                        #print anc_shift_pos
+                        if 0 in anc_shift_pos:
+                            qcodon = "(?P<" + shift_id[shift_id_pos] + ">.*)"
+                            shift_id_pos += 1
+                        else:
+                            qcodon = ""
+                        for j, aa in enumerate(sh_anc):
+                            qcodon +=  aa2re[aa]
+                            if j+1 in anc_shift_pos:
+                                #print shift_id
+                                qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
+                                shift_id_pos += 1
+                        pro_re[anchor_pos[i][2]+1:anchor_pos[i+1][2]] = [qcodon]
+                    else:
+                        # failed to find a match (frameshift)
+                        import warnings
+                        warnings.warn("Frameshift detection failed")
+                elif shift_val == -1:
+                    print nucl_seq[anchor_pos[i]+3*anchor_len:anchor_pos[i+1]]
+                elif shift_val == -2:
+                    print nucl_seq[anchor_pos[i]+3*anchor_len:anchor_pos[i+1]]
+            full_pro_re = "".join(pro_re)
+            match = re.search(full_pro_re, nucl_seq)
+            if match:
+                return (match.span(), 2, match)
+            else:
+                raise RuntimeError("Protein SeqRecord (%s) and Nucleotide SeqRecord (%s) do not match!" \
+                        % (pro.id, nucl.id))
             
 
-def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
+def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
         codon_table=default_codon_table, complete_protein=False):
     """Generate codon alignment based on regular re match (PRIVATE)
 
@@ -376,6 +522,7 @@ def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
     mode
      - 0: direct match
      - 1: mismatch (no indels)
+     - 2: frameshift
 
     """
     import re, warnings
@@ -385,8 +532,8 @@ def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
     span = span_mode[0]
     mode = span_mode[1]
     aa2re = _get_aa_regex(codon_table)
-    if mode == 0 or mode == 1:
-        if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
+    if mode in (0, 1):
+        if len(pro.seq.ungap(gap_char))*3 != (span[1]-span[0]):
             raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
                     % (pro.id, nucl.id))
         aa_num = 0
@@ -394,7 +541,7 @@ def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
             if aa == "-":
                 codon_seq += "---"
             elif complete_protein is True and aa_num == 0:
-                this_codon = nucl_seq._data[span[0]:(span[0]+3)]
+                this_codon = nucl_seq._data[span[0]:span[0]+3]
                 if not re.search(_codons2re[codon_table.start_codons], this_codon_upper()):
                     warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
                             % (pro.id, aa, aa_num, nucl.id, this_codon))
@@ -407,11 +554,92 @@ def _get_codon_aln(pro, nucl, span_mode, alphabet, gap_char="-", \
                             % (pro.id, aa, aa_num, nucl.id, this_codon))
                 codon_seq += this_codon
                 aa_num += 1
-    return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
+        return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
+    elif mode == 2:
+        from collections import deque
+        shift_pos = deque([])
+        match = span_mode[2]
+        for i in match.groupdict():
+            shift_pos.append(match.span(i))
+        # this rf_table is relative to nucl_seq
+        rf_table = []
+        i = match.start()
+        while True:
+            rf_table.append(i)
+            i += 3
+            if len(shift_pos) != 0 and i == shift_pos[0][0]:
+                i = shift_pos[0][1]
+                shift_pos.popleft()
+            if i >= match.end():
+                break
+        aa_num = 0
+        for aa in pro.seq:
+            if aa == "-":
+                codon_seq += "---"
+            elif complete_protein is True and aa_num == 0:
+                this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
+                if not re.search(_codons2re[codon_table.start_codons], this_codon_upper()):
+                    warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
+                            % (pro.id, aa, aa_num, nucl.id, this_codon))
+                    codon_seq += this_codon
+                    aa_num += 1
+            else:
+                # two types of frameshift
+                if aa_num < len(pro.seq.ungap('-'))-1 and \
+                        rf_table[aa_num+1]-rf_table[aa_num]-3 < 0:
+                    start = rf_table[aa_num]
+                    end   = rf_table[aa_num+1]-3
+                    ngap  = rf_table[aa_num+1]-rf_table[aa_num]-3
+                    this_codon = nucl_seq._data[start:end] + '-' * ngap
+                elif rf_table[aa_num]-rf_table[aa_num-1]-3 > 0:
+                    start = rf_table[aa_num-1]+3
+                    end   = rf_table[aa_num]
+                    ngap  = 3-(rf_table[aa_num]-rf_table[aa_num-1]-3)
+                    this_codon = nucl_seq._data[start:end] + '-'*ngap + \
+                            nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
+                else:
+                    this_codon = nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
+                codon_seq += this_codon
+                aa_num += 1
+        #print len(codon_seq)
+        return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
+                rf_table=rf_table), id=nucl.id)
+
+
+def _align_shift_recs(recs):
+    """This function is useful to build alignment according to the
+    frameshift detected by _check_corr.
+
+    Argument:
+    - recs     - a list of SeqRecords containing a CodonSeq dictated
+                 by a rf_table (with frameshift in some of them).
+    """
+    # first check the full_rf_table of the recs are the same
+    frt_lst = [rec.seq.get_full_rf_table() for rec in recs]
+    if len(set([len(i) for i in frt_lst])) != 1:
+        raise RuntimeError("full_rf_table of given records are not the same!!")
+    else:
+        frt_len = len(frt_lst[0])
+    curate = [0 for i in range(len(frt_lst))]
+    for i in range(frt_len-1):
+        codons_range = [k[i+1]-k[i] for k in frt_lst]
+        if codons_range.count(3) == len(codons_range):
+            pass
+        elif set(codons_range) == set([3, 6]):
+            for n, j in enumerate(codons_range):
+                if j == 3:
+                    gaps = '-'*3
+                    insert_pos = frt_lst[n][i]+3
+                    seq = recs[n].seq
+                    seq = CodonSeq(recs[n].seq[:insert_pos] + gaps + \
+                            recs[n].seq[insert_pos:], rf_table=seq.rf_table)
+                    recs[n].seq = seq
+    return recs
 
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
-        codon_table=default_codon_table, alphabet=None, complete_protein=False):
+        codon_table=default_codon_table, alphabet=None, \
+        complete_protein=False):
     """Build a codon alignment from a protein alignment and corresponding
     nucleotide sequences
 
@@ -510,6 +738,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
     codon_aln = []
+    shift = None
     for pair in pro_nucl_pair:
         # Beaware that the following span corresponds to a ungapped 
         # nucleotide sequence.
@@ -519,10 +748,15 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
             raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
                     % (pair[0].id, pair[1].id))
         else:
-            codon_rec = _get_codon_aln(pair[0], pair[1], corr_span, \
+            codon_rec = _get_codon_rec(pair[0], pair[1], corr_span, \
                     alphabet=alphabet, complete_protein=False)
             codon_aln.append(codon_rec)
-    return CodonAlignment(codon_aln, alphabet=alphabet)
+            if corr_span[1] == 2:
+                shift = True
+    if shift is True:
+        return CodonAlignment(_align_shift_recs(codon_aln), alphabet=alphabet)
+    else:
+        return CodonAlignment(codon_aln, alphabet=alphabet)
 
 
 def toCodonAlignment(align, alphabet=default_codon_alphabet):
@@ -531,8 +765,6 @@ def toCodonAlignment(align, alphabet=default_codon_alphabet):
     needed by CodonAlignment is met.
 
     """
-    m = align._records[0]
-    print m.seq.upper()
     rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
             for i in align._records]
     return CodonAlignment(rec, alphabet=align._alphabet)
