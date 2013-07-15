@@ -9,6 +9,17 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 ===================================================================
+
+(In progress, not released yet) Biopython 1.62
+
+This is our first release to officially support Python 3, however it is
+also our final release supporting Python 2.5. Specifically this release
+is supported and tested on standard Python 2.5, 2.6, 2.7 and 3.3.
+It was also tested under Jython 2.5, 2.7 and PyPy 1.9, 2.0.
+
+See the Biopython 1.62 beta release notes below for most changes.
+
+===================================================================
  
 15 July 2013: Biopython 1.62 beta released.
 
