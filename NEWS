@@ -10,12 +10,15 @@ The latest news is at the top of this file.
 
 ===================================================================
  
-(In progress, not released yet) Biopython 1.62
+15 July 2013: Biopython 1.62 beta released.
 
-This is our first release to officially support Python 3, however it is
-also our final release supporting Python 2.5. Specifically this release
-is supported and tested on standard Python 2.5, 2.6, 2.7 and 3.3.
-It was also tested under Jython 2.5, 2.7 and PyPy 1.9, 2.0 as well.
+This is a beta release for testing purposes, both for new features added,
+and changes to location parsing, but more importantly Biopython 1.62 will
+be our first release to officially support Python 3.
+
+Specifically we intend Biopython 1.62 to support standard Python 2.5, 2.6, 2.7
+and 3.3, but the release will also be tested under Jython 2.5, 2.7 and PyPy
+1.9, 2.0 as well. It will be our final release supporting Python 2.5.
 
 The translation functions will give a warning on any partial codons (and this
 will probably become an error in a future release). If you know you are dealing
