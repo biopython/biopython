@@ -34,16 +34,14 @@ class FastTreeCommandline(AbstractCommandline):
     doi:10.1371/journal.pone.0009490.
 
     Example usage:
-    ######
-    import _Fasttree
 
-    fasttree_exe = "C:\\FasttreeWin32\\fasttree.exe"
-    cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input='C:\\Input\\ExampleAlignment.fsa', out='C:\\Output\\ExampleTree.tree')
-    print cmd
-    out, err = cmd()
-    print out
-    print err
-    ######
+    >>> import _Fasttree
+    >>> fasttree_exe = r"C:\FasttreeWin32\fasttree.exe"
+    >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input=r'C:\Input\ExampleAlignment.fsa', out='C:\Output\ExampleTree.tree')
+    >>> print cmd
+    >>> out, err = cmd()
+    >>> print out
+    >>> print err
 
     Usage advice:
     the only parameters needed are (fasttree_exe, input='<InputFile>' out='<OutputFile>')
