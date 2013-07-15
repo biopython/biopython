@@ -240,16 +240,16 @@ class CodonSeq(Seq):
                 full_rf_table.append(i)
                 accum += 1
             else:
-                # think about the last codon
-                # code is dirty right now
-                #print self[i-100:i]
-                #print i
-                nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
+                print self[i:i+3]
+                print "accum = " + str(accum)
+                # TODO: think about the last codon
+                try:
+                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
+                except IndexError:
+                    continue
                 if nxt_shift < 0:
                     full_rf_table.append(i)
                 elif nxt_shift == 0:
-                    #print self.rf_table[accum-1]
-                    #print self.rf_table[accum]
                     pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
                     if pre_shift <= 0:
                         raise RuntimeError("Unexpected Codon %s", self[i:i+3])
@@ -257,7 +257,6 @@ class CodonSeq(Seq):
                         pass
                 elif shift > 0:
                     pass
-        #print len(full_rf_table)
         return full_rf_table
 
 
