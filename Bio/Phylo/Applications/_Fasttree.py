@@ -70,7 +70,7 @@ class FastTreeCommandline(AbstractCommandline):
                 """-quote -- add quotes to sequence names in output.
 
                     Quote sequence names in the output and allow spaces, commas,
-                    parentheses, and colons in them but not ' characters (fasta files only) """,
+                    parentheses, and colons in them but not ' characters (fasta files only).""",
                 ),
             _Option(['-pseudo', 'pseudo'],
                 """-pseudo [weight] -- Pseudocounts are used with sequence distance estimation.
@@ -91,7 +91,7 @@ class FastTreeCommandline(AbstractCommandline):
                     it will compute minimum-evolution bootstrap supports instead
                     In either case, the support values are proportions ranging from 0 to 1
 
-                    Use -nosupport to turn off support values or -boot 100 to use just 100 resamples """,
+                    Use -nosupport to turn off support values or -boot 100 to use just 100 resamples.""",
                 checker_function=_is_int,
                 equate=False,
                 ),
@@ -104,28 +104,28 @@ class FastTreeCommandline(AbstractCommandline):
                     it will compute minimum-evolution bootstrap supports instead
                     In either case, the support values are proportions ranging from 0 to 1
 
-                    Use -nosupport to turn off support values or -boot 100 to use just 100 resamples """,
+                    Use -nosupport to turn off support values or -boot 100 to use just 100 resamples.""",
                 ),
             _Option(['-intree', 'intree'],
                 """-intree newickfile -- read the starting tree in from newickfile.
 
                     Any branch lengths in the starting trees are ignored.
-                    -intree with -n will read a separate starting tree for each alignment. """,
+                    -intree with -n will read a separate starting tree for each alignment.""",
                 filename=True,
                 equate=False,
                 ),
             _Option(['-intree1', 'intree1'],
-                """-intree1 newickfile -- read the same starting tree for each alignment """,
+                """-intree1 newickfile -- read the same starting tree for each alignment.""",
                 filename=True,
                 equate=False,
                 ),
             _Switch(['-quiet', 'quiet'],
                 """-quiet -- do not write to standard error during normal operation
 
-                    (no progress indicator, no options summary, no likelihood values, etc.) """,
+                    (no progress indicator, no options summary, no likelihood values, etc.)""",
                 ),
             _Switch(['-nopr', 'nopr'],
-                """-nopr -- do not write the progress indicator to stderr """,
+                """-nopr -- do not write the progress indicator to stderr.""",
                 ),
             _Option(['-nni', 'nni'],
                 """Set the rounds of minimum-evolution nearest-neighbor interchanges
@@ -136,7 +136,7 @@ class FastTreeCommandline(AbstractCommandline):
                     where N is the number of unique sequences, 2 rounds of
                     subtree-prune-regraft (SPR) moves (also min. evo.), and
                     up to 2*log(N) rounds of maximum-likelihood NNIs.
-                    Use -nni to set the number of rounds of min. evo. NNIs """,
+                    Use -nni to set the number of rounds of min. evo. NNIs.""",
                 checker_function=_is_int,
                 equate=False,
                 ),
@@ -150,12 +150,12 @@ class FastTreeCommandline(AbstractCommandline):
                     subtree-prune-regraft (SPR) moves (also min. evo.), and
                     up to 2*log(N) rounds of maximum-likelihood NNIs.
                     Use -nni to set the number of rounds of min. evo. NNIs,
-                    and -spr to set the rounds of SPRs. """,
+                    and -spr to set the rounds of SPRs.""",
                 checker_function=_is_int,
                 equate=False,
                 ),
             _Switch(['-noml', 'noml'],
-                """Deactivate min-evo NNIs and SPRs
+                """Deactivate min-evo NNIs and SPRs.
 
                     Topology refinement:
                     By default, FastTree tries to improve the tree with up to 4*log2(N)
@@ -169,7 +169,7 @@ class FastTreeCommandline(AbstractCommandline):
                     an approximately maximum-likelihood tree with further NNIs) """,
                 ),
             _Switch(['-mllen', 'mllen'],
-                """Optimize branch lengths on a fixed topology
+                """Optimize branch lengths on a fixed topology.
 
                     Topology refinement:
                     By default, FastTree tries to improve the tree with up to 4*log2(N)
@@ -180,10 +180,10 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs.
                     Use -mllen to optimize branch lengths without ML NNIs
-                    Use -mllen -nome with -intree to optimize branch lengths on a fixed topology """,
+                    Use -mllen -nome with -intree to optimize branch lengths on a fixed topology.""",
                 ),
             _Switch(['-nome', 'nome'],
-                """Changes support values calculation to a minimum-evolution bootstrap method
+                """Changes support values calculation to a minimum-evolution bootstrap method.
 
                     Topology refinement:
                     By default, FastTree tries to improve the tree with up to 4*log2(N)
@@ -200,10 +200,10 @@ class FastTreeCommandline(AbstractCommandline):
                     By default, FastTree computes local support values by resampling the site
                     likelihoods 1,000 times and the Shimodaira Hasegawa test. If you specify -nome,
                     it will compute minimum-evolution bootstrap supports instead
-                    In either case, the support values are proportions ranging from 0 to 1""",
+                    In either case, the support values are proportions ranging from 0 to 1.""",
                 ),
             _Option(['-mlnni', 'mlnni'],
-                """Set the number of rounds of maximum-likelihood NNIs
+                """Set the number of rounds of maximum-likelihood NNIs.
 
                     Topology refinement:
                     By default, FastTree tries to improve the tree with up to 4*log2(N)
@@ -213,12 +213,12 @@ class FastTreeCommandline(AbstractCommandline):
                     up to 2*log(N) rounds of maximum-likelihood NNIs.
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs.
-                    Use -mlnni to set the number of rounds of maximum-likelihood NNIs """,
+                    Use -mlnni to set the number of rounds of maximum-likelihood NNIs.""",
                 checker_function=_is_int,
                 equate=False,
                 ),
             _Option(['-mlacc', 'mlacc'],
-                """Option for optimization of branches at each NNI
+                """Option for optimization of branches at each NNI.
 
                     Topology refinement:
                     By default, FastTree tries to improve the tree with up to 4*log2(N)
@@ -229,12 +229,12 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs.
                     Use -mlacc 2 or -mlacc 3 to always optimize all 5 branches at each NNI,
-                    and to optimize all 5 branches in 2 or 3 rounds """,
+                    and to optimize all 5 branches in 2 or 3 rounds.""",
                 checker_function=_is_int,
                 equate=False,
                 ),
             _Switch(['-slownni', 'slownni'],
-                """Turn off heuristics to avoid constant subtrees with NNIs
+                """Turn off heuristics to avoid constant subtrees with NNIs.
 
                     Topology refinement:
                     By default, FastTree tries to improve the tree with up to 4*log2(N)
@@ -245,7 +245,7 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -nni to set the number of rounds of min. evo. NNIs,
                     and -spr to set the rounds of SPRs.
                     Use -slownni to turn off heuristics to avoid constant subtrees (affects both
-                    ML and ME NNIs) """,
+                    ML and ME NNIs).""",
                 ),
             _Switch(['-wag', 'wag'],
                 """Maximum likelihood model options: Whelan-And-Goldman 2001 model instead of (default) Jones-Taylor-Thorton 1992 model (a.a. only)""",
@@ -254,7 +254,7 @@ class FastTreeCommandline(AbstractCommandline):
                 """Maximum likelihood model options: Use generalized time-reversible instead of (default) Jukes-Cantor (nt only)""",
                 ),
             _Option(['-cat', 'cat'],
-                """Maximum likelihood model options: Specify the number of rate categories of sites (default 20) """,
+                """Maximum likelihood model options: Specify the number of rate categories of sites (default 20).""",
                 checker_function=_is_int,
                 equate=False,
                 ),
@@ -262,7 +262,7 @@ class FastTreeCommandline(AbstractCommandline):
                 """Maximum likelihood model options: No CAT model (just 1 category)""",
                 ),
             _Switch(['-gamma', 'gamma'],
-                """Report the likelihood under the discrete gamma model
+                """Report the likelihood under the discrete gamma model.
 
                     Maximum likelihood model options:
                     -gamma -- after the final round of optimizing branch lengths with the CAT model,
@@ -274,7 +274,7 @@ class FastTreeCommandline(AbstractCommandline):
                     GammaLogToPaup.pl and documentation on the FastTree web site.""",
                 ),
             _Switch(['-slow', 'slow'],
-                """Use an exhaustive search
+                """Use an exhaustive search.
 
                     Searching for the best join:
                     By default, FastTree combines the 'visible set' of fast neighbor-joining with
@@ -283,7 +283,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -slow takes half an hour instead of 8 seconds for 1,250 proteins""",
                 ),
             _Switch(['-fastest', 'fastest'],
-                """Search the visible set (the top hit for each node) only
+                """Search the visible set (the top hit for each node) only.
 
                     Searching for the best join:
                     By default, FastTree combines the 'visible set' of fast neighbor-joining with
@@ -295,7 +295,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -fastest sets -2nd on as well, use -fastest -no2nd to avoid this""",
                 ),
             _Switch(['-2nd', 'second'],
-                """Turn 2nd-level top hits heuristic on
+                """Turn 2nd-level top hits heuristic on.
 
                     Top-hit heuristics:
                     By default, FastTree uses a top-hit list to speed up search
@@ -309,7 +309,7 @@ class FastTreeCommandline(AbstractCommandline):
                     (By default, -fastest turns on -2nd.)""",
                 ),
             _Switch(['-no2nd', 'no2nd'],
-                """Turn 2nd-level top hits heuristic off
+                """Turn 2nd-level top hits heuristic off.
 
                     Top-hit heuristics:
                     By default, FastTree uses a top-hit list to speed up search
@@ -323,7 +323,7 @@ class FastTreeCommandline(AbstractCommandline):
                     (By default, -fastest turns on -2nd.)""",
                 ),
             _Option(['-seed', 'seed'],
-                """Use -seed to initialize the random number generator
+                """Use -seed to initialize the random number generator.
 
                     Support value options:
                     By default, FastTree computes local support values by resampling the site
@@ -444,7 +444,7 @@ class FastTreeCommandline(AbstractCommandline):
 
                     -log logfile -- save intermediate trees so you can extract
                     the trees and restart long-running jobs if they crash
-                    -log also reports the per-site rates (1 means slowest category) """,
+                    -log also reports the per-site rates (1 means slowest category).""",
                 filename=True,
                 equate=False,
                 ),
