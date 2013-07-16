@@ -6,6 +6,11 @@
 
 import os
 import unittest
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+
 
 from Bio import Motif
 from Bio.Seq import Seq

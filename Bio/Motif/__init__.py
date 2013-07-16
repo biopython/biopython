@@ -15,7 +15,7 @@ It also inlcudes functionality for parsing AlignACE and MEME programs.
 
 import warnings
 from Bio import BiopythonDeprecationWarning
-warnings.warn("The module Bio.Motif has been depreacted and will be "
+warnings.warn("The module Bio.Motif has been deprecated and will be "
               "removed in a future release of Biopython. Instead "
               "please use the new module Bio.motifs instead. Please "
               "be aware that though the functionality of Bio.Motif "
