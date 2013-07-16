@@ -235,7 +235,7 @@ class DistanceMatrix(Matrix):
             self.matrix[i][i] = 0
 
 
-class DistanceCaluculator(object):
+class DistanceCalculator(object):
     """Class to calculate the distance matrix from a DNA or Protein
     Multiple Sequence Alignment(MSA) and the given name of the
     substitution model.
@@ -597,20 +597,113 @@ class DistanceTreeConstructor(TreeContructor):
             height = height + max([self._height_of(c) for c in clade.clades])
         return height
 
+######################### Parsimony Classes ##########################
+
 
 class ParsimonyTreeConstructor(TreeContructor):
     """Parsimony tree constructor"""
-    def __init__(self, alignment):
+    def __init__(self, alignment, searcher, scorer, starting_tree=None):
         self.alignment = alignment
+        self.searcher = searcher
+        self.scorer = scorer
+        self.searcher.set_scorer(scorer)
+        self.starting_tree = starting_tree
 
-    def mp(self):
-        """Construct and return an Maximum Parsimony tree."""
-        pass
+    def build_tree(self):
+        return self.searcher.build_tree(self.starting_tree)
 
-    def _parsimony_score(self, tree):
+
+class ParsimonyScorer(object):
+    """Parsimony scorer with a scoring matrix"""
+    def __init__(self, matrix=None):
+        self.matrix = matrix
+
+    def get_score(self, tree, alignment):
         """Calculate and return the parsimony score given a tree and
         the MSA."""
+        # make sure the tree is rooted and bifurcated
+        if not tree.is_bifurcating():
+            raise ValueError("The tree provided should be bifurcated.")
+        if not tree.rooted:
+            tree.root_at_midpoint()
+        # sort tree terminals and alignment
+        terms = tree.get_terminals()
+        sorted(terms, key=lambda term: term.name)
+        alignment.sort()
+        if not all([t.name == a.id for t, a in zip(terms, alignment)]):
+            raise ValueError("Taxon names of the input tree should be the same with the alignment.")
+        #term_align = dict(zip(terms, alignment))
+        score = 0
+        root = tree.root
+        for i in range(len(alignment[0])):
+            # parsimony score for column i
+            score_i = 0
+            # get column
+            column_i = alignment[:, i]
+            # skip non-informative column and column with gap and stop characters
+            if column_i == len(column_i) * column_i[0] or '-' in column_i or '*' in column_i:
+                continue
+
+            #### start calculating score_i using the tree and column_i
+
+            ## init by mapping terminal clades and states in column_i
+            clade_states = zip(terms, [set([i]) for i in column_i])
+
+            ## pre-compute states for internal clades
+            self._set_states(root, clade_states)
+
+            ## traceback to assign states and find minimum score_i        
+            for clade in tree.get_nonterminals(order="level"):
+                state = clade_states[clade]
+                clade_childs = clade.clades
+                left_state = clade_states[clade_childs[0]]
+                right_state = clade_states[clade_childs[1]]
+                if state.issubset(left_state) and state.issubset(right_state):
+                    clade_states[clade_childs[0]] = state
+                    clade_states[clade_childs[1]] = state
+                else:
+                    if self.matrix:
+                        for sp in state:
+                            if sp not in self.matrix.names:
+                                raise ValueError("No alphabet '%s' in the given matrix" % sp)
+                            minl = float('inf')
+                            minr = float('inf')
+                            for sl in left_state:
+                                if sl not in self.matrix.names:
+                                    raise ValueError("No alphabet '%s' in the given matrix" % sl)
+                                s = self.matrix[sp, sl]
+                                minl = minl > s and s or minl
+                            for sr in right_state:
+                                if sr not in self.matrix.names:
+                                    raise ValueError("No alphabet '%s' in the given matrix" % sr)
+                                s = self.matrix[sp, sl]
+                                minr = minr > s and s or minr
+                        score_i = score_i + minl + minr
+                    else:
+                        score_i = score_i + 1
+            score = score + score_i
+        return score
+
+    def _set_states(self, clade, clade_states):
+        """Pre-compute states for internal clades"""
+        if not clade.is_terminal():
+            clade_childs = clade.clades
+            left_state = self._set_states(clade_childs[0], clade_states)
+            right_state = self._set_states(clade_childs[1], clade_states)
+            state = left_state & right_state
+            if not state:
+                state = left_state | right_state
+            clade_states[clade] = state
+        return clade_states[clade]
+
+
+class NNITreeSearcher(object):
+    def __init__(self, scorer):
+        self.scorer = scorer
         pass
+
+    def build_tree(self, starting_tree):
+        return self._nni(starting_tree)
 
     def _nni(self, tree):
         """Search the best parsimony tree by using the NNI(Nearest
