@@ -3,10 +3,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Code for dealing with Codon Alignment.
+"""Code for dealing with Codon Seq.
 
-CodonAlignment class is interited from MultipleSeqAlignment class. This is
-the core class to deal with codon alignment in biopython.
+CodonSeq class is interited from Seq class. This is the core class to
+deal with sequences in CodonAlignment in biopython.
 
 """
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
@@ -134,7 +134,7 @@ class CodonSeq(Seq):
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq"""
-        return len(self.rf_table) / 3
+        return len(self.rf_table)
 
     def translate(self, codon_table=default_codon_table, \
             stop_symbol="*", rf_table=None, ungap_seq=True):
