@@ -36,7 +36,6 @@ class MotifTestsBasic(unittest.TestCase):
     def test_alignace_parsing(self):
         """Test if Motif can parse AlignAce output files.
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import AlignAce
         handle = open("Motif/alignace.out")
         record = AlignAce.read(handle)
@@ -436,7 +435,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_1(self):
         """Test if Motif can parse MEME output files (first test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.out")
         record = MEME.read(handle)
@@ -547,7 +545,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_2(self):
         """Test if Motif can parse MEME output files (second test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.dna.oops.txt")
         record = MEME.read(handle)
@@ -665,7 +662,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_3(self):
         """Test if Motif can parse MEME output files (third test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.protein.oops.txt")
         record = MEME.read(handle)
@@ -1055,7 +1051,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_4(self):
         """Test if Motif can parse MEME output files (fourth test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.protein.tcm.txt")
         record = MEME.read(handle)
@@ -1360,7 +1355,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_1(self):
         """Test if Motif can parse MAST output files (first test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MAST
         handle = open("Motif/mast.dna.oops.txt")
         record = MAST.read(handle)
@@ -1394,7 +1388,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_2(self):
         """Test if Motif can parse MAST output files (second test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MAST
         handle = open("Motif/mast.protein.oops.txt")
         record = MAST.read(handle)
@@ -1480,7 +1473,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_3(self):
         """Test if Motif can parse MAST output files (third test)
         """
-        from Bio.Alphabet import IUPAC
         from Bio.Motif.Parsers import MAST
         handle = open("Motif/mast.protein.tcm.txt")
         record = MAST.read(handle)
