@@ -26,7 +26,7 @@ temp_dir = tempfile.mkdtemp()
 class TestCodonSeq(unittest.TestCase):
 
     def test_seq(self):
-        codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', CodonAlign.default_codon_alphabet)
+        codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0,3,6,9,12])
         self.assertEqual(len(codonseq1), 18)
         self.assertEqual(codonseq1.get_codon_num(), 5)
         self.assertEqual(str(codonseq1.get_codon(0)), 'AAA')
