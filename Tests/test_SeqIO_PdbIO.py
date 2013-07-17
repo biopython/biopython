@@ -10,6 +10,8 @@ try:
     import numpy
     from numpy import dot  # Missing on PyPy's micronumpy
     del dot
+    # We don't need this (?) but Bio.PDB imports it automatically :(
+    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
