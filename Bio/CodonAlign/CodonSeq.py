@@ -188,8 +188,8 @@ class CodonSeq(Seq):
         It is helpful to construct alignment containing
         frameshift.
         """
-        assert self.gap_char in self._data, \
-                "get_full_rf_table() method is only useful when your sequence contains gaps"
+        #assert self.gap_char in self._data, \
+        #        "get_full_rf_table() method is only useful when your sequence contains gaps"
         full_rf_table = []
         accum = 0
         for i in filter(lambda x: x%3==0, range(len(self))):
