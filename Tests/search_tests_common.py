@@ -21,17 +21,25 @@ class CheckRaw(unittest.TestCase):
 
     """Base class for testing index's get_raw method."""
 
+    @staticmethod
+    def fix_line_endings(string):
+        """Converts line endings in a given string to 'Unix' (\n) format"""
+        string = string.replace('\r\n', '\n')
+        string = string.replace('\r', '\n')
+        return string
+
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using **kwargs, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
+        raw = self.fix_line_endings(raw)
         raw = _as_bytes(raw)
-        self.assertEqual(raw, idx.get_raw(id))
+        self.assertEqual(raw, self.fix_line_endings(idx.get_raw(id)))
         idx.close()
 
         #Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
-            self.assertEqual(raw, idx.get_raw(id))
+            self.assertEqual(raw, self.fix_line_endings(idx.get_raw(id)))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
