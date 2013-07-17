@@ -11,7 +11,7 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 warnings.simplefilter('ignore', BiopythonDeprecationWarning)
 
-
+from Bio.Alphabet import IUPAC
 from Bio import Motif
 from Bio.Seq import Seq
 
@@ -1530,6 +1530,11 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[3], -38.04542542, places=5)
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
+
+    def test_with_alt_alphabet(self):
+        """Test motif search using alternative instance of alphabet."""
+        self.s = Seq(str(self.s), IUPAC.IUPACUnambiguousDNA())
+        self.test_simple()
 
 
 if __name__ == "__main__":

@@ -1624,6 +1624,11 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
 
+    def test_with_alt_alphabet(self):
+        """Test motif search using alternative instance of alphabet."""
+        self.s = Seq(str(self.s), IUPAC.IUPACUnambiguousDNA())
+        self.test_simple()
+
     def test_with_mixed_case(self):
         """Test if Bio.motifs PWM scoring works with mixed case."""
         counts = self.m.counts
