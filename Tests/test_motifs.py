@@ -7,6 +7,7 @@
 import os
 import unittest
 
+from Bio.Alphabet import IUPAC
 from Bio import motifs
 from Bio.motifs.matrix import _isnan
 from Bio.Seq import Seq
@@ -34,7 +35,6 @@ class MotifTestsBasic(unittest.TestCase):
     def test_alignace_parsing(self):
         """Test if Bio.motifs can parse AlignAce output files.
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/alignace.out")
         record = motifs.parse(handle, "AlignAce")
         handle.close()
@@ -419,7 +419,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_1(self):
         """Test if Bio.motifs can parse MEME output files (first test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.out")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.5.7')
@@ -530,7 +529,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_2(self):
         """Test if Bio.motifs can parse MEME output files (second test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.dna.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -649,7 +647,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_3(self):
         """Test if Bio.motifs can parse MEME output files (third test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.protein.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1040,7 +1037,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_4(self):
         """Test if Bio.motifs can parse MEME output files (fourth test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.protein.tcm.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1346,7 +1342,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_1(self):
         """Test if Bio.motifs can parse MAST output files (first test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/mast.dna.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1381,7 +1376,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_2(self):
         """Test if Bio.motifs can parse MAST output files (second test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/mast.protein.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1468,7 +1462,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_3(self):
         """Test if Bio.motifs can parse MAST output files (third test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/mast.protein.tcm.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
