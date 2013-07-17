@@ -767,10 +767,13 @@ class Motif(object):
         - the sequence can only be a DNA sequence
         - the search is performed only on one strand
         """
-        if self.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA motifs")
-        if seq.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+        #TODO - Code itself tolerates ambiguous bases (as NaN).
+        if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs" \
+                                 % self.alphabet)
+        if not isinstance(seq.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences" \
+                                 % sequence.alphabet)
 
         seq = seq.tostring()
 

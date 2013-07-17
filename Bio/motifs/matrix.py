@@ -347,10 +347,13 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
           number is returned
         - otherwise, the result is a one-dimensional list or numpy array
         """
-        if self.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA motifs")
-        if sequence.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+        #TODO - Code itself tolerates ambiguous bases (as NaN).
+        if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs" \
+                                 % self.alphabet)
+        if not isinstance(sequence.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences" \
+                                 % sequence.alphabet)
 
         #TODO - Force uppercase here and optimise switch statement in C
         #by assuming upper case?
