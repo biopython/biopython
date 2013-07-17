@@ -154,6 +154,11 @@ class ExonerateVulgarParser(_BaseExonerateParser):
         hsp['score'] = int(hsp['score'])
         # store vulgar line and parse it
         hsp['vulgar_comp'] = vulgars.group(10)
+        
+        # XXX: In windows the last attribute might have a \r at the end
+        if hsp['vulgar_comp'].endswith('\r'):
+            hsp['vulgar_comp'] = hsp['vulgar_comp'][:-1]
+        
         hsp = parse_vulgar_comp(hsp, hsp['vulgar_comp'])
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
@@ -196,7 +201,6 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
                     if curr_key != qresult_key:
                         break
             qresult_raw += line
-
         return qresult_raw
 
 
