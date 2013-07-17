@@ -13,7 +13,7 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Align import MultipleSeqAlignment
 
-from _utils import default_codon_table, default_codon_alphabet
+from CodonAlphabet import default_codon_table, default_codon_alphabet
 from CodonSeq import CodonSeq
 
 class CodonAlignment(MultipleSeqAlignment):

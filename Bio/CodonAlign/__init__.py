@@ -16,7 +16,7 @@ from Bio.SeqRecord import SeqRecord
 
 from CodonSeq import CodonSeq
 from CodonAlignment import CodonAlignment
-from _utils import default_codon_table, default_codon_alphabet
+from CodonAlphabet import default_codon_table, default_codon_alphabet
 
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \

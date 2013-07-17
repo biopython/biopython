@@ -16,7 +16,7 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
 from Bio.Data.CodonTable import generic_by_id
 
-from _utils import default_codon_alphabet, default_codon_table
+from CodonAlphabet import default_codon_alphabet, default_codon_table
 
 class CodonSeq(Seq):
     """CodonSeq is designed to be within the SeqRecords of a 
