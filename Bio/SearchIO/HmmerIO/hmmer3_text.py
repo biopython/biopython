@@ -90,8 +90,12 @@ class Hmmer3TextParser(object):
                 # if target in regx.group(1), then we store the key as target
                 if 'target' in regx.group(1):
                     meta['target'] = regx.group(2)
+                    if meta['target'].endswith('\r'): # Strip potential windows line ending
+                        meta['target'] = meta['target'][0:-1]
                 else:
                     meta[regx.group(1)] = regx.group(2)
+                    if meta[regx.group(1)].endswith('\r'): # Strip potential windows line ending
+                        meta[regx.group(1)] = meta[regx.group(1)][0:-1]
 
             self.line = read_forward(self.handle)
 
