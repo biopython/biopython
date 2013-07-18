@@ -13,7 +13,7 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
+from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna, _ungap
 from Bio.Data.CodonTable import generic_by_id
 
 from CodonAlphabet import default_codon_alphabet, default_codon_table
@@ -72,16 +72,18 @@ class CodonSeq(Seq):
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
+            if len(self) == 47:
+                raise RuntimeError('trace back')
             assert len(self) % 3 == 0, "Sequence length is not a triple number"
             self.rf_table = filter(lambda x: x%3 == 0, range(len(seq_ungapped)))
             # check alphabet
             # Not use Alphabet._verify_alphabet function because it 
             # only works for single alphabet
             for i in self.rf_table:
-                if self[i:i+3] not in alphabet.letters:
+                if self._data[i:i+3] not in alphabet.letters:
                     raise ValueError("Sequence contain undefined " \
                                   + "letters from alphabet (%s)! " \
-                                  % self[i:i+3])
+                                  % self._data[i:i+3])
         else:
             if gap_char in self._data:
                 assert  len(self) % 3 == 0, \
@@ -100,7 +102,16 @@ class CodonSeq(Seq):
             self.rf_table = rf_table
     
     def __getitem__(self, index):
-        return self._data[index]
+        #TODO: modify this to allow rf_table specification
+        #      return a Seq object if index is not for codon (warning)
+        seqlst = range(len(self._data))
+        rf_table = [i for i in seqlst[index] if i in self.rf_table]
+        rf_table = [i-rf_table[0] for i in rf_table]
+        try:
+            return CodonSeq(self._data[index], self.alphabet, rf_table=rf_table)
+        except ValueError:
+            # adjust alphabet
+            return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
         """get the `index`-th codon in from the self.seq
@@ -193,9 +204,9 @@ class CodonSeq(Seq):
         full_rf_table = []
         accum = 0
         for i in filter(lambda x: x%3==0, range(len(self))):
-            if self[i:i+3] == self.gap_char*3:
+            if self._data[i:i+3] == self.gap_char*3:
                 full_rf_table.append(i)
-            elif self[i:i+3] in self.alphabet.letters:
+            elif self._data[i:i+3] in self.alphabet.letters:
                 full_rf_table.append(i)
                 accum += 1
             else:
@@ -209,12 +220,29 @@ class CodonSeq(Seq):
                 elif nxt_shift == 0:
                     pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
                     if pre_shift <= 0:
-                        raise RuntimeError("Unexpected Codon %s", self[i:i+3])
+                        raise RuntimeError("Unexpected Codon %s", self._data[i:i+3])
                     else:
                         pass
                 elif shift > 0:
                     pass
         return full_rf_table
+
+    def ungap(self, gap=None):
+        if hasattr(self.alphabet, "gap_char"):
+            if not gap:
+                gap = self.alphabet.gap_char
+            elif gap != self.alphabet.gap_char:
+                raise ValueError("Gap %s does not match %s from alphabet"
+                        % (repr(gap), repr(self.alphabet.alphabet.gap_char)))
+            alpha = _ungap(self.alphabet)
+        elif not gap:
+            raise ValueError("Gap character not given and not defined in alphabet")
+        else:
+            alpha = self.alphabet # modify!
+        if len(gap) != 1 or not isinstance(gap, str):
+            raise ValueError("Unexpected gap character, %s" % repr(gap))
+        return CodonSeq(str(self._data).replace(gap, ""), alpha, rf_table=self.rf_table)
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
