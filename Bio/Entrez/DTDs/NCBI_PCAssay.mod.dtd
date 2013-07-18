@@ -1,0 +1,1006 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "pcassay.asn"
+     ::DATATOOL:: by application DATATOOL version 2.3.1
+     ::DATATOOL:: on 01/17/2012 23:05:10
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-PCAssay"
+================================================= -->
+
+<!--
+ $Id: pcassay.asn 282508 2011-05-11 22:47:31Z ywang $
+ ===========================================================================
+
+                            PUBLIC DOMAIN NOTICE
+               National Center for Biotechnology Information
+
+  This software/database is a "United States Government Work" under the
+  terms of the United States Copyright Act.  It was written as part of
+  the author's official duties as a United States Government employee and
+  thus cannot be copyrighted.  This software/database is freely available
+  to the public for use. The National Library of Medicine and the U.S.
+  Government have not placed any restriction on its use or reproduction.
+
+  Although all reasonable efforts have been taken to ensure the accuracy
+  and reliability of the software and data, the NLM and the U.S.
+  Government do not and cannot warrant the performance or results that
+  may be obtained by using this software or data. The NLM and the U.S.
+  Government disclaim all warranties, express or implied, including
+  warranties of performance, merchantability or fitness for any particular
+  purpose.
+
+  Please cite the author in any work or product based on this material.
+
+ ===========================================================================
+
+ Authors:  NCBI Structure Group
+
+ File Description:
+      ASN.1 definitions for PubChem biological assay data database
+
+ ===========================================================================
+-->
+
+<!-- Elements referenced from other modules:
+          Pub FROM NCBI-Pub,
+          BioSource FROM NCBI-BioSource,
+          Date,
+          Object-id FROM NCBI-General,
+          PC-ID,
+          PC-Source,
+          PC-XRefData FROM NCBI-PCSubstance -->
+<!-- ============================================ -->
+
+<!--
+ EXPORTS ;
+ Container for multiple Assay Data Submissions
+-->
+<!ELEMENT PC-AssayContainer (PC-AssaySubmit*)>
+
+<!-- Container for Data Depositions and Assay Definitions -->
+<!ELEMENT PC-AssaySubmit (
+        PC-AssaySubmit_assay, 
+        PC-AssaySubmit_data?, 
+        PC-AssaySubmit_revoke?)>
+<!-- Assay Description or pre-existing Identifier -->
+<!ELEMENT PC-AssaySubmit_assay (
+        PC-AssaySubmit_assay_aid | 
+        PC-AssaySubmit_assay_aid-source | 
+        PC-AssaySubmit_assay_descr | 
+        PC-AssaySubmit_assay_aidver)>
+
+<!--   Assay Identifier -->
+<!ELEMENT PC-AssaySubmit_assay_aid (%INTEGER;)>
+
+<!--   External Assay Identifier -->
+<!ELEMENT PC-AssaySubmit_assay_aid-source (PC-Source)>
+
+<!--   Assay Description (new or updated) -->
+<!ELEMENT PC-AssaySubmit_assay_descr (PC-AssayDescription)>
+
+<!--   Assay Identifier/Version (for internal use) -->
+<!ELEMENT PC-AssaySubmit_assay_aidver (PC-ID)>
+
+<!-- Assay Data Deposition (vector) -->
+<!ELEMENT PC-AssaySubmit_data (PC-AssayResults*)>
+
+<!-- List of SID's whose data is to be suppressed -->
+<!ELEMENT PC-AssaySubmit_revoke (PC-AssaySubmit_revoke_E*)>
+
+
+<!ELEMENT PC-AssaySubmit_revoke_E (%INTEGER;)>
+
+<!--
+ Container for multiple Assay Result Sets
+ PC-AssayResultsSet ::= SEQUENCE OF PC-AssayResults
+ Assay Results provided for a given Substance tested, with respect to the results types defined in the 
+   referenced Assay Description
+-->
+<!ELEMENT PC-AssayResults (
+        PC-AssayResults_sid, 
+        PC-AssayResults_sid-source?, 
+        PC-AssayResults_version?, 
+        PC-AssayResults_comment?, 
+        PC-AssayResults_outcome?, 
+        PC-AssayResults_rank?, 
+        PC-AssayResults_data?, 
+        PC-AssayResults_url?, 
+        PC-AssayResults_xref?, 
+        PC-AssayResults_date?)>
+
+<!--
+ Internal/External Tracking Information
+ Tested Substance ID/Version  [Either valid ID or, 
+   if "sid-source" is used, this is a "0" value]
+   Note: A valid ID is greater than "0"
+-->
+<!ELEMENT PC-AssayResults_sid (%INTEGER;)>
+
+<!--
+ External Identifier for this Substance
+   Note: May be used in-lieu of "sid"
+   Note: This is non-optional if "sid" is "0"
+-->
+<!ELEMENT PC-AssayResults_sid-source (PC-Source)>
+
+<!--
+ Version identifier for this AID-SID Result
+   Note: Incoming data should set this to be "0"
+-->
+<!ELEMENT PC-AssayResults_version (%INTEGER;)>
+
+<!--
+ Data Annotation/Qualifier and URL to further Depositor Information
+ Annotation or qualifier for this Result
+-->
+<!ELEMENT PC-AssayResults_comment (#PCDATA)>
+<!--
+ Assay Result Data for this Sample
+   Note: Users need populate only those "tid"s, for which there is data, in any order.
+ Assay Outcome
+-->
+<!ELEMENT PC-AssayResults_outcome (%INTEGER;)>
+
+<!--
+    inactive	-    Substance is considered Inactive
+    active	-    Substance is considered Active
+    inconclusive	-    Substance is Inconclusive
+    unspecified	-    Substance Outcome is Unspecified
+    probe	-    Substance Outcome is Unspecified
+-->
+<!ATTLIST PC-AssayResults_outcome value (
+        inactive |
+        active |
+        inconclusive |
+        unspecified |
+        probe
+        ) #IMPLIED >
+
+
+<!--
+ Rank of Assay Outcome (for result ordering)
+   Note: Larger numbers are more active
+-->
+<!ELEMENT PC-AssayResults_rank (%INTEGER;)>
+
+<!-- Assay Data Reported for this SID (vector) -->
+<!ELEMENT PC-AssayResults_data (PC-AssayData*)>
+
+<!-- Depositor provided URL for this Result -->
+<!ELEMENT PC-AssayResults_url (#PCDATA)>
+
+<!--
+ annotated Cross-Reference Information
+ to be removed, 
+ instead regulard TID will be generated
+ which are then annotated by xref type
+-->
+<!ELEMENT PC-AssayResults_xref (PC-AnnotatedXRef*)>
+
+<!-- Pubchem Release Date -->
+<!ELEMENT PC-AssayResults_date (Date)>
+
+<!-- Assay Readouts/Results for a Tested Substance -->
+<!ELEMENT PC-AssayData (
+        PC-AssayData_tid, 
+        PC-AssayData_value)>
+
+<!--
+ Assay Result Field Type ID (TID)
+   Note: Result Field ID's must be greater than "0"
+-->
+<!ELEMENT PC-AssayData_tid (%INTEGER;)>
+<!-- Assay Result, must be the same type as defined for TID -->
+<!ELEMENT PC-AssayData_value (
+        PC-AssayData_value_ival | 
+        PC-AssayData_value_fval | 
+        PC-AssayData_value_bval | 
+        PC-AssayData_value_sval)>
+
+<!ELEMENT PC-AssayData_value_ival (%INTEGER;)>
+
+<!ELEMENT PC-AssayData_value_fval (%REAL;)>
+
+<!ELEMENT PC-AssayData_value_bval EMPTY>
+<!ATTLIST PC-AssayData_value_bval value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT PC-AssayData_value_sval (#PCDATA)>
+
+<!--
+ Assay Description provided by an Organization that describes the assay/protocol performed and defines the 
+   measured end-points and parameters to be stored.  An Assay Description is not a database table.  You can 
+   define as many Result Definitions as needed and they need not be used by all Substances tested.
+ Assay Descriptions can be modified on both description text and Result Definitions after initial submission
+ as desired, and such udpates will be tracked in PubChem
+-->
+<!ELEMENT PC-AssayDescription (
+        PC-AssayDescription_aid, 
+        PC-AssayDescription_aid-source?, 
+        PC-AssayDescription_name, 
+        PC-AssayDescription_description?, 
+        PC-AssayDescription_protocol?, 
+        PC-AssayDescription_comment?, 
+        PC-AssayDescription_xref?, 
+        PC-AssayDescription_results?, 
+        PC-AssayDescription_pub?, 
+        PC-AssayDescription_revision?, 
+        PC-AssayDescription_target?, 
+        PC-AssayDescription_activity-outcome-method?, 
+        PC-AssayDescription_dr?, 
+        PC-AssayDescription_substance-type?, 
+        PC-AssayDescription_grant-number?, 
+        PC-AssayDescription_project-category?, 
+        PC-AssayDescription_is-panel?, 
+        PC-AssayDescription_assay-group?, 
+        PC-AssayDescription_panel-info?, 
+        PC-AssayDescription_is-mlp-late-stage?, 
+        PC-AssayDescription_categorized-comment?)>
+
+<!--
+ Internal/External Tracking Information
+ Assay Description ID/Version  [Either valid ID
+   or, if "aid-source" is used, a "0" dummy value]
+   Note: Version is for internal use (only?)
+   Note: A valid ID is greater than "0"
+-->
+<!ELEMENT PC-AssayDescription_aid (PC-ID)>
+
+<!--
+ External Identifier for this Assay Description
+   Note: May be used in-lieu of "aid"
+   Note: This is non-optional if "aid" ID is "0"
+-->
+<!ELEMENT PC-AssayDescription_aid-source (PC-Source)>
+
+<!--
+ Assay Description Information
+ Short Assay Name (for display purposes)
+-->
+<!ELEMENT PC-AssayDescription_name (#PCDATA)>
+
+<!-- Description of Assay -->
+<!ELEMENT PC-AssayDescription_description (PC-AssayDescription_description_E*)>
+
+
+<!ELEMENT PC-AssayDescription_description_E (#PCDATA)>
+
+<!-- Procedure used to generate results -->
+<!ELEMENT PC-AssayDescription_protocol (PC-AssayDescription_protocol_E*)>
+
+
+<!ELEMENT PC-AssayDescription_protocol_E (#PCDATA)>
+
+<!-- Comments or additional information -->
+<!ELEMENT PC-AssayDescription_comment (PC-AssayDescription_comment_E*)>
+
+
+<!ELEMENT PC-AssayDescription_comment_E (#PCDATA)>
+
+<!-- Annotated Cross-Reference Information -->
+<!ELEMENT PC-AssayDescription_xref (PC-AnnotatedXRef*)>
+
+<!--
+ Allowed Assay Result Types
+ Result Definitions (vector)
+-->
+<!ELEMENT PC-AssayDescription_results (PC-ResultType*)>
+
+<!--
+ Additional Information
+ Depositor provided publications for this assay
+-->
+<!ELEMENT PC-AssayDescription_pub (Pub*)>
+
+<!-- Revision identifier for textual description -->
+<!ELEMENT PC-AssayDescription_revision (%INTEGER;)>
+
+<!-- Target information -->
+<!ELEMENT PC-AssayDescription_target (PC-AssayTargetInfo*)>
+<!-- Assay Outcome Qualifier -->
+<!ELEMENT PC-AssayDescription_activity-outcome-method (%INTEGER;)>
+
+<!--
+    other	-    All Other Type
+    screening	-    Primary Screen Assay
+    confirmatory	-    Confirmatory Assay
+    summary	-    Probe Summary Assay
+-->
+<!ATTLIST PC-AssayDescription_activity-outcome-method value (
+        other |
+        screening |
+        confirmatory |
+        summary
+        ) #IMPLIED >
+
+
+<!-- Dose-Response Attribution -->
+<!ELEMENT PC-AssayDescription_dr (PC-AssayDRAttr*)>
+
+<!-- to distinguish the type of substance used in the screening -->
+<!ELEMENT PC-AssayDescription_substance-type (%INTEGER;)>
+<!ATTLIST PC-AssayDescription_substance-type value (
+        small-molecule |
+        nucleotide |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ Grant and project category information
+ grant proposal number
+ required for 'MLSCN' & 'MLPCN' projects
+-->
+<!ELEMENT PC-AssayDescription_grant-number (PC-AssayDescription_grant-number_E*)>
+
+
+<!ELEMENT PC-AssayDescription_grant-number_E (#PCDATA)>
+
+<!--
+ to distinguish projects funded through MLSCN, MLPCN or other
+ mlscn: assay depositions from MLSCN screen center
+ mlpcn: assay depositions from MLPCN screen center
+ mlscn-ap: assay depositions from MLSCN assay provider
+ mlpcn-ap: assay depositions from MLPCN assay provider
+ required for 'MLSCN' & 'MLPCN' projects
+ journal-article: to be deprecated; replaced by option 7,8 & 9 to better characterize data from literature 
+ literature-extracted: data from literature, extracted by curators
+ literature-author: data from literature, submitted by author of articles
+ literature-publisher: data from literature, submitted by journals/publishers
+ rnaigi: RNAi screenings from RNAi Global Initiative 
+-->
+<!ELEMENT PC-AssayDescription_project-category (%INTEGER;)>
+
+<!--
+    journal-article	-  to be deprecated
+-->
+<!ATTLIST PC-AssayDescription_project-category value (
+        mlscn |
+        mlpcn |
+        mlscn-ap |
+        mlpcn-ap |
+        journal-article |
+        assay-vendor |
+        literature-extracted |
+        literature-author |
+        literature-publisher |
+        rnaigi |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ annotation to indicate whether an assay is a panel, e.g. containing multiple components, or belongs to a group    
+ annotation for panel assay, e.g. to indicate that this assay
+ contains multiple members/components. 
+ A panel assay can be one assay reporting readouts for
+ many targets, or reporting readouts for different
+ cell lines, or different organisms
+ examples such as bioassay containing kinase profiling data
+ or bioassay containing cytoxicity data for multiple cell lines
+ or bioassay containing screening data from different stages, 
+ such as primary screening, follow ups
+-->
+<!ELEMENT PC-AssayDescription_is-panel EMPTY>
+<!ATTLIST PC-AssayDescription_is-panel value ( true | false ) #REQUIRED >
+
+
+<!--
+ annotation for assay gruop information, e.g. this 
+ assay belongs to a group of assay associated by 
+ a unique name, e.g. the value assigned to 'assay-group',  
+ assays belonging to this group can be 
+ retrieved using this unique name
+ it is depositor's responsibility to make the name 
+ distinct if necessary
+ this can be used as the mechanism to specify 'related bioassays'
+ before hand so it is not necessary to update the descriptions of
+ related assays when new group member submitted to PubChem 
+-->
+<!ELEMENT PC-AssayDescription_assay-group (PC-AssayDescription_assay-group_E*)>
+
+
+<!ELEMENT PC-AssayDescription_assay-group_E (#PCDATA)>
+
+<!--
+ for 'panel' type of bioassay only
+ store assay panel member information
+-->
+<!ELEMENT PC-AssayDescription_panel-info (PC-AssayPanel)>
+
+<!-- verification for 'late-stage-data' deposition -->
+<!ELEMENT PC-AssayDescription_is-mlp-late-stage EMPTY>
+<!ATTLIST PC-AssayDescription_is-mlp-late-stage value ( true | false ) #REQUIRED >
+
+
+<!-- to report categorized description/comment by associating with a category title  -->
+<!ELEMENT PC-AssayDescription_categorized-comment (PC-CategorizedComment*)>
+
+<!--
+ Description for Panel Assay
+ Describe general information about the panel, and link to information for each panel member 
+-->
+<!ELEMENT PC-AssayPanel (
+        PC-AssayPanel_name, 
+        PC-AssayPanel_descr?, 
+        PC-AssayPanel_member?)>
+
+<!-- short name for the panel, such as 'Kinase Profiling' -->
+<!ELEMENT PC-AssayPanel_name (#PCDATA)>
+
+<!-- short description of this panel -->
+<!ELEMENT PC-AssayPanel_descr (#PCDATA)>
+
+<!-- store panel member information -->
+<!ELEMENT PC-AssayPanel_member (PC-AssayPanelMember*)>
+
+<!-- Specific information about each panel member(or component), such as target, cell line name, cross-reference ...  -->
+<!ELEMENT PC-AssayPanelMember (
+        PC-AssayPanelMember_mid, 
+        PC-AssayPanelMember_name?, 
+        PC-AssayPanelMember_description?, 
+        PC-AssayPanelMember_protocol?, 
+        PC-AssayPanelMember_comment?, 
+        PC-AssayPanelMember_target?, 
+        PC-AssayPanelMember_xref?, 
+        PC-AssayPanelMember_activity-outcome-method?, 
+        PC-AssayPanelMember_dr?, 
+        PC-AssayPanelMember_categorized-comment?)>
+
+<!--
+ ID for panel member 
+ if a kinase panel with 300 kinases, ID will range from 1 to 300  
+ TIDs of the same panel member to be grouped based on panel member ID
+-->
+<!ELEMENT PC-AssayPanelMember_mid (%INTEGER;)>
+
+<!-- short name for this panel member  -->
+<!ELEMENT PC-AssayPanelMember_name (#PCDATA)>
+
+<!--
+ description about specifics of this panel member
+ such as about cell line, or target information 
+-->
+<!ELEMENT PC-AssayPanelMember_description (#PCDATA)>
+
+<!-- Specific procedure used to generate results for the panel member -->
+<!ELEMENT PC-AssayPanelMember_protocol (PC-AssayPanelMember_protocol_E*)>
+
+
+<!ELEMENT PC-AssayPanelMember_protocol_E (#PCDATA)>
+
+<!-- Comments or additional information -->
+<!ELEMENT PC-AssayPanelMember_comment (PC-AssayPanelMember_comment_E*)>
+
+
+<!ELEMENT PC-AssayPanelMember_comment_E (#PCDATA)>
+
+<!-- often provided for profiling assays across protein families -->
+<!ELEMENT PC-AssayPanelMember_target (PC-AssayTargetInfo*)>
+
+<!-- annotated Cross-Reference Information -->
+<!ELEMENT PC-AssayPanelMember_xref (PC-AnnotatedXRef*)>
+<!-- Assay Outcome Qualifier -->
+<!ELEMENT PC-AssayPanelMember_activity-outcome-method (%INTEGER;)>
+
+<!--
+    other	-    All Other Type
+    screening	-    Primary Screen Assay
+    confirmatory	-    Confirmatory Assay
+    summary	-    Probe Summary Assay
+-->
+<!ATTLIST PC-AssayPanelMember_activity-outcome-method value (
+        other |
+        screening |
+        confirmatory |
+        summary
+        ) #IMPLIED >
+
+
+<!-- Dose-Response Attribution within the panel member -->
+<!ELEMENT PC-AssayPanelMember_dr (PC-AssayDRAttr*)>
+
+<!-- to report categorized description/comment by associating with a category title  -->
+<!ELEMENT PC-AssayPanelMember_categorized-comment (PC-CategorizedComment*)>
+
+<!--
+ Definition for Categorized description/comment 
+ This field is added to provide flexibility for depositors to present textual description/comments in a desirable way 
+ and to facilitate information validation by the depositor and data exchange with PubChem 
+-->
+<!ELEMENT PC-CategorizedComment (
+        PC-CategorizedComment_title, 
+        PC-CategorizedComment_comment)>
+
+<!-- title for the description/comment -->
+<!ELEMENT PC-CategorizedComment_title (#PCDATA)>
+
+<!-- description/comment content -->
+<!ELEMENT PC-CategorizedComment_comment (PC-CategorizedComment_comment_E*)>
+
+
+<!ELEMENT PC-CategorizedComment_comment_E (#PCDATA)>
+
+<!--
+  Assay Dose-response attribute information used to define a set of readouts
+    as being part of a dose-response curve (for curve plotting/analysis)
+-->
+<!ELEMENT PC-AssayDRAttr (
+        PC-AssayDRAttr_id, 
+        PC-AssayDRAttr_descr?, 
+        PC-AssayDRAttr_dn?, 
+        PC-AssayDRAttr_rn?, 
+        PC-AssayDRAttr_type?)>
+
+<!--
+ Unique dose-response test set identifier
+   Note: A valid ID is greater than "0"
+-->
+<!ELEMENT PC-AssayDRAttr_id (%INTEGER;)>
+
+<!-- Dose-Response Curve Description (used as curve title) -->
+<!ELEMENT PC-AssayDRAttr_descr (#PCDATA)>
+
+<!-- Dose Axis Description (used as axis name) -->
+<!ELEMENT PC-AssayDRAttr_dn (#PCDATA)>
+
+<!-- Response Axis Description (used as axis name) -->
+<!ELEMENT PC-AssayDRAttr_rn (#PCDATA)>
+
+<!ELEMENT PC-AssayDRAttr_type (%INTEGER;)>
+
+<!--
+    experimental	-  dose-response data points measured directly by experiment
+    calculated	-  dose-response data points derived from fitted curve
+-->
+<!ATTLIST PC-AssayDRAttr_type value (
+        experimental |
+        calculated
+        ) #IMPLIED >
+
+
+<!--
+ Molecular target information provides by organization describes the functionality of the target, 
+ facilitates the linking between PubChem bioassays, and the linking between target molecule to other NCBI resources
+-->
+<!ELEMENT PC-AssayTargetInfo (
+        PC-AssayTargetInfo_name, 
+        PC-AssayTargetInfo_mol-id, 
+        PC-AssayTargetInfo_molecule-type?, 
+        PC-AssayTargetInfo_organism?, 
+        PC-AssayTargetInfo_descr?, 
+        PC-AssayTargetInfo_comment?)>
+
+<!-- Molecular name of target -->
+<!ELEMENT PC-AssayTargetInfo_name (#PCDATA)>
+
+<!-- NCBI database identifier of the target molecule -->
+<!ELEMENT PC-AssayTargetInfo_mol-id (%INTEGER;)>
+<!-- Assay Target Type -->
+<!ELEMENT PC-AssayTargetInfo_molecule-type (%INTEGER;)>
+
+<!--
+    protein	-  mol-id: NCBI Protein GI 
+    dna	-  mol-id: NCBI Nucleotide GI
+    rna	-  mol-id: NCBI Nucleotide GI
+    gene	-  mol-id: NCBI Gene ID
+    biosystem	-  mol-id: NCBI BioSystems ID
+-->
+<!ATTLIST PC-AssayTargetInfo_molecule-type value (
+        protein |
+        dna |
+        rna |
+        gene |
+        biosystem |
+        other
+        ) #IMPLIED >
+
+
+<!-- Target Organism -->
+<!ELEMENT PC-AssayTargetInfo_organism (BioSource)>
+
+<!-- Target Description  (e.g., cellular functionality and location) -->
+<!ELEMENT PC-AssayTargetInfo_descr (#PCDATA)>
+
+<!-- Comments or Additional Information -->
+<!ELEMENT PC-AssayTargetInfo_comment (PC-AssayTargetInfo_comment_E*)>
+
+
+<!ELEMENT PC-AssayTargetInfo_comment_E (#PCDATA)>
+
+<!-- Annotated Cross-Reference (XRef) Information to allow the XRef to be qualified, as to its meaning or context -->
+<!ELEMENT PC-AnnotatedXRef (
+        PC-AnnotatedXRef_xref, 
+        PC-AnnotatedXRef_comment?, 
+        PC-AnnotatedXRef_type?)>
+
+<!-- Cross-Reference Information -->
+<!ELEMENT PC-AnnotatedXRef_xref (PC-XRefData)>
+
+<!-- Annotation qualifier describing Cross-Reference meaning -->
+<!ELEMENT PC-AnnotatedXRef_comment (#PCDATA)>
+
+<!ELEMENT PC-AnnotatedXRef_type (%INTEGER;)>
+
+<!--
+    pcit	-  primary PMID/citation directly associated with the current assay data 
+    pgene	-  gene encoding the protein assay target
+-->
+<!ATTLIST PC-AnnotatedXRef_type value (
+        pcit |
+        pgene
+        ) #IMPLIED >
+
+
+<!-- Definition of Allowed Result Types for a given Assay -->
+<!ELEMENT PC-ResultType (
+        PC-ResultType_tid, 
+        PC-ResultType_name, 
+        PC-ResultType_description?, 
+        PC-ResultType_type, 
+        PC-ResultType_constraints?, 
+        PC-ResultType_unit?, 
+        PC-ResultType_sunit?, 
+        PC-ResultType_transform?, 
+        PC-ResultType_stransform?, 
+        PC-ResultType_tc?, 
+        PC-ResultType_ac?, 
+        PC-ResultType_panel-info?, 
+        PC-ResultType_annot?)>
+
+<!--
+ Tracking or Description Information
+ Assay Result Field Type ID (TID)
+-->
+<!ELEMENT PC-ResultType_tid (%INTEGER;)>
+
+<!-- Result Field Name (short name for display) -->
+<!ELEMENT PC-ResultType_name (#PCDATA)>
+
+<!-- Result Field Description -->
+<!ELEMENT PC-ResultType_description (PC-ResultType_description_E*)>
+
+
+<!ELEMENT PC-ResultType_description_E (#PCDATA)>
+<!--
+ Result Data Type and Validation Information
+ Result Data Type
+-->
+<!ELEMENT PC-ResultType_type (%INTEGER;)>
+<!ATTLIST PC-ResultType_type value (
+        float |
+        int |
+        bool |
+        string
+        ) #IMPLIED >
+
+<!--
+ Allowed Values, used for validating incoming data
+ If type is "float"
+-->
+<!ELEMENT PC-ResultType_constraints (
+        PC-ResultType_constraints_fset | 
+        PC-ResultType_constraints_fmin | 
+        PC-ResultType_constraints_fmax | 
+        PC-ResultType_constraints_frange | 
+        PC-ResultType_constraints_iset | 
+        PC-ResultType_constraints_imin | 
+        PC-ResultType_constraints_imax | 
+        PC-ResultType_constraints_irange | 
+        PC-ResultType_constraints_sset)>
+
+<!--   Allowed values must be equal to one of these -->
+<!ELEMENT PC-ResultType_constraints_fset (PC-ResultType_constraints_fset_E*)>
+
+
+<!ELEMENT PC-ResultType_constraints_fset_E (%REAL;)>
+
+<!--   Allowed values (x) must be [ fmin <= x ] -->
+<!ELEMENT PC-ResultType_constraints_fmin (%REAL;)>
+
+<!--   Allowed values (x) must be [ x <= fmax ] -->
+<!ELEMENT PC-ResultType_constraints_fmax (%REAL;)>
+
+<!--   Minimum/Maximum Range [ min <= x <= max ] -->
+<!ELEMENT PC-ResultType_constraints_frange (PC-RealMinMax)>
+
+<!--
+ If type is "int"
+   Allowed values must be equal to one of these
+-->
+<!ELEMENT PC-ResultType_constraints_iset (PC-ResultType_constraints_iset_E*)>
+
+
+<!ELEMENT PC-ResultType_constraints_iset_E (%INTEGER;)>
+
+<!--   Allowed values (x) must be [ imin <= x ] -->
+<!ELEMENT PC-ResultType_constraints_imin (%INTEGER;)>
+
+<!--   Allowed values (x) must be [ x <= imax ] -->
+<!ELEMENT PC-ResultType_constraints_imax (%INTEGER;)>
+
+<!--   Minimum/Maximum Range [ min <= x <= max ] -->
+<!ELEMENT PC-ResultType_constraints_irange (PC-IntegerMinMax)>
+
+<!--
+ If type is "string"
+   Allowed values must be equal to one of these
+-->
+<!ELEMENT PC-ResultType_constraints_sset (PC-ResultType_constraints_sset_E*)>
+
+
+<!ELEMENT PC-ResultType_constraints_sset_E (#PCDATA)>
+<!--
+ Unit information provides the units for the values reported for this TID.  For example, if the values 
+   reported for this TID are a concentration, e.g., micro-molar, setting the unit "um" allows PubChem to 
+   know that the value, e.g., "1.3", is actually "1.3 uM".  This also allows PubChem to properly report the 
+   units when displaying the reported values for this TID.  If the enumerated units provided below are 
+   insufficient, you may represent the units as a string in the optional "sunit" field (see below).
+ Units for Value
+-->
+<!ELEMENT PC-ResultType_unit (%INTEGER;)>
+
+<!--
+    ppt	-  Parts per Thousand
+    ppm	-  Parts per Million
+    ppb	-  Parts per Billion
+    mm	-  milliM
+    um	-  microM
+    nm	-  nanoM
+    pm	-  picoM
+    fm	-  femtoM
+    mgml	-  milligrams per mL
+    ugml	-  micrograms per mL
+    ngml	-  nanograms per mL
+    pgml	-  picograms per mL
+    fgml	-  femtograms per mL
+    m	-  Molar
+    percent	-  Percent
+    ratio	-  Ratio
+    sec	-  Seconds
+    rsec	-  Reciprocal Seconds
+    min	-  Minutes
+    rmin	-  Reciprocal Minutes
+    day	-  Days
+    rday	-  Reciprocal Days
+    ml-min-kg	-  milliliter / minute / kilogram
+    l-kg	-  liter / kilogram
+    hr-ng-ml	-  hour * nanogram / milliliter
+    cm-sec	-  centimeter / second
+    mg-kg	-  milligram / kilogram
+-->
+<!ATTLIST PC-ResultType_unit value (
+        ppt |
+        ppm |
+        ppb |
+        mm |
+        um |
+        nm |
+        pm |
+        fm |
+        mgml |
+        ugml |
+        ngml |
+        pgml |
+        fgml |
+        m |
+        percent |
+        ratio |
+        sec |
+        rsec |
+        min |
+        rmin |
+        day |
+        rday |
+        ml-min-kg |
+        l-kg |
+        hr-ng-ml |
+        cm-sec |
+        mg-kg |
+        none |
+        unspecified
+        ) #IMPLIED >
+
+
+<!--
+ ATTENTION: sunit field is DEPRECATED. It is no longer
+            supported and remains for legacy data only.
+ Unit Type (as a String)
+-->
+<!ELEMENT PC-ResultType_sunit (#PCDATA)>
+<!--
+ Value Transform information qualifies the values reported for this TID.  For example, if the values
+   reported for this TID are "-Log10 GI50", you may want to consider setting
+   the "nlog" value below.  In doing so, PubChem would know that the value, e.g., "5.0" 
+   is actually "1.0e-5".  If the transformation applied is not listed, you may represent
+   this transformation as a string in the "stransform" (see below) for eventual inclusion 
+   in the enumerated transform list below.
+
+
+ ATTENTION: transform field is DEPRECATED. It is no longer
+            supported and remains for legacy data only.
+ Value Type Details
+-->
+<!ELEMENT PC-ResultType_transform (%INTEGER;)>
+
+<!--
+    linear	-  Linear Scale (x)
+    ln	-  Natural Log Scale (ln x)
+    log	-  Log Base 10 Scale (log10 x)
+    reciprocal	-  Reciprocal Scale (1/x)
+    negative	-  Negative Linear Scale (-x)
+    nlog	-  Negative Log Base 10 Scale (-log10 x)
+    nln	-  Negative Natural Log Scane (-ln x)
+-->
+<!ATTLIST PC-ResultType_transform value (
+        linear |
+        ln |
+        log |
+        reciprocal |
+        negative |
+        nlog |
+        nln
+        ) #IMPLIED >
+
+
+<!--
+ ATTENTION: stransform field is DEPRECATED. It is no longer
+            supported and remains for legacy data only.
+ Value Transform Type (as a String)
+-->
+<!ELEMENT PC-ResultType_stransform (#PCDATA)>
+
+<!-- Tested concentration attribute -->
+<!ELEMENT PC-ResultType_tc (PC-ConcentrationAttr)>
+
+<!--
+ if true, indicates that this TID field 
+ provides active concentration summary by 
+ reporting the concentration which produces 
+ 50% of the maximum possible biological response
+ such as IC50, EC50, AC50, GI50 etc. 
+ or by reporting constant parameters such as Ki, 
+ that based on which the activity outcome in this assay is called   
+-->
+<!ELEMENT PC-ResultType_ac EMPTY>
+<!ATTLIST PC-ResultType_ac value ( true | false ) #REQUIRED >
+
+
+<!--
+ needed for panel assay only
+ each panel member may have a number of TID columns reported
+ such TIDs are grouped by panel member ID, see PC-AssayPanelMemberInfo
+-->
+<!ELEMENT PC-ResultType_panel-info (PC-AssayPanelTestResult)>
+
+<!--
+ treat substance associated cross-reference as regular TID
+ web servers would make a link 
+ to the corresponding record in Entrez databases
+ treat substance associated target information as regular TID
+ for example, for RNAi screening data, each 'substance' may
+ correspond to a specific gene target
+-->
+<!ELEMENT PC-ResultType_annot (%INTEGER;)>
+
+<!--
+    pmid	-  PubMed ID
+    mmdb	-  MMDB ID
+    url	-  indicate  TID data is a url that provides supplementary information
+    protein-gi	-  GenBank General ID (GI) for a Protein
+    nucleotide-gi	-  GenBank General ID (GI) for a Nucleotide 
+    taxonomy	-  Taxonomy ID for an Organism
+    mim	-  MIM, Mendelian Inheritance in Man, ID 
+    gene	-  Entrez Gene ID
+    probe	-  Entrez Probe ID
+    aid	-  PubChem BioAssay ID, may be used in 'Summary' assay
+    sid	-  PubChem Substance ID, may be used in 'Summary' assay 
+    cid	-  PubChem Compound ID 
+    protein-target-gi	-  GenBank General ID (GI) for a Protein target
+    biosystems-target-id	-  NCBI BioSystems ID 
+    target-name	-  target name
+    target-descr	-  brief target description 
+    target-tax-id	-  NCBI Taxonomy ID for target molecule 
+    gene-target-id	-  NCBI Gene ID for a gene target 
+    dna-nucleotide-target-gi	-  GenBank General ID (GI) for a DNA Nucleotide target 
+    rna-nucleotide-target-gi	-  GenBank General ID (GI) for a RNA Nucleotide target 
+-->
+<!ATTLIST PC-ResultType_annot value (
+        pmid |
+        mmdb |
+        url |
+        protein-gi |
+        nucleotide-gi |
+        taxonomy |
+        mim |
+        gene |
+        probe |
+        aid |
+        sid |
+        cid |
+        protein-target-gi |
+        biosystems-target-id |
+        target-name |
+        target-descr |
+        target-tax-id |
+        gene-target-id |
+        dna-nucleotide-target-gi |
+        rna-nucleotide-target-gi
+        ) #IMPLIED >
+
+
+
+<!ELEMENT PC-AssayPanelTestResult (
+        PC-AssayPanelTestResult_mid, 
+        PC-AssayPanelTestResult_readout-annot?)>
+
+<!--
+ panel member ID, see PC-AssayPanelMemberInfo
+ track association between a group of TIDs and panel member
+-->
+<!ELEMENT PC-AssayPanelTestResult_mid (%INTEGER;)>
+
+<!ELEMENT PC-AssayPanelTestResult_readout-annot (%INTEGER;)>
+
+<!--
+    regular	-  to indicate this TID column is a regular readout
+    outcome	-  to indicate this TID column is  "outcome" of the particular panel member
+    score	-  to indicate this TID column reports activity score of the particular panel member
+         to be used for neighboring assays
+    ac	-  to indicate this TID column is "active concentration"   
+         'outcome' and 'ac' type of TID are to be used for data analysis 
+         across members of panel
+         or across multiple assays including other panel assays
+-->
+<!ATTLIST PC-AssayPanelTestResult_readout-annot value (
+        regular |
+        outcome |
+        score |
+        ac
+        ) #IMPLIED >
+
+
+<!--The concentration attribute is to indicate that the readout under this test result field is biological concentration-response data, the attribute provides the value and unit of the tested concentration -->
+<!ELEMENT PC-ConcentrationAttr (
+        PC-ConcentrationAttr_concentration, 
+        PC-ConcentrationAttr_unit, 
+        PC-ConcentrationAttr_dr-id?)>
+
+<!ELEMENT PC-ConcentrationAttr_concentration (%REAL;)>
+<!-- Units for Concentration -->
+<!ELEMENT PC-ConcentrationAttr_unit (%INTEGER;)>
+
+<!--
+    um	-  microM
+-->
+<!ATTLIST PC-ConcentrationAttr_unit value (
+        um
+        ) #IMPLIED >
+
+
+<!-- Dose-Response Attribution ID (if applicable) -->
+<!ELEMENT PC-ConcentrationAttr_dr-id (%INTEGER;)>
+
+<!-- Mininum and Maximum Constraints on an Integer Value (used for validating incoming data) -->
+<!ELEMENT PC-IntegerMinMax (
+        PC-IntegerMinMax_min, 
+        PC-IntegerMinMax_max)>
+
+<!-- Minimum Value Allowed -->
+<!ELEMENT PC-IntegerMinMax_min (%INTEGER;)>
+
+<!-- Maximum Value Allowed -->
+<!ELEMENT PC-IntegerMinMax_max (%INTEGER;)>
+
+<!-- Mininum and Maximum Constraints on a Real Value (used for validating incoming data) -->
+<!ELEMENT PC-RealMinMax (
+        PC-RealMinMax_min, 
+        PC-RealMinMax_max)>
+
+<!-- Minimum Value Allowed -->
+<!ELEMENT PC-RealMinMax_min (%REAL;)>
+
+<!-- Maximum Value Allowed -->
+<!ELEMENT PC-RealMinMax_max (%REAL;)>
+

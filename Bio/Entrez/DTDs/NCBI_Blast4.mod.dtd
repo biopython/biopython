@@ -1,0 +1,1498 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "blast.asn"
+     ::DATATOOL:: by application DATATOOL version 2.3.1
+     ::DATATOOL:: on 04/01/2011 23:04:41
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Blast4"
+================================================= -->
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            PUBLIC DOMAIN NOTICE
+                National Center for Biotechnology Information
+
+  This software/database is a "United States Government Work" under the terms
+  of the United States Copyright Act.  It was written as part of the author's
+  official duties as a United States Government employee and thus cannot be
+  copyrighted.  This software/database is freely available to the public for
+  use.  The National Library of Medicine and the U.S. Government have not
+  placed any restriction on its use or reproduction.
+
+  Although all reasonable efforts have been taken to ensure the accuracy and
+  reliability of the software and data, the NLM and the U.S. Government do not
+  and cannot warrant the performance or results that may be obtained by using
+  this software or data.  The NLM and the U.S. Government disclaim all
+  warranties, express or implied, including warranties of performance,
+  merchantability or fitness for any particular purpose.
+
+  Please cite the authors in any work or product based on this material.
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Authors: Tom Madden, Tim Boemker
+
+  ASN.1 interface to BLAST.
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+
+<!-- Elements used by other modules:
+          Blast4-ka-block,
+          Blast4-value,
+          Blast4-parameter,
+          Blast4-parameters -->
+
+<!-- Elements referenced from other modules:
+          Bioseq FROM NCBI-Sequence,
+          Seq-data FROM NCBI-Sequence,
+          Bioseq-set FROM NCBI-Seqset,
+          PssmWithParameters FROM NCBI-ScoreMat,
+          Seq-id,
+          Seq-interval,
+          Seq-loc FROM NCBI-Seqloc,
+          Seq-align,
+          Seq-align-set FROM NCBI-Seqalign -->
+<!-- ============================================ -->
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Requests
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-request (
+        Blast4-request_ident?, 
+        Blast4-request_body)>
+
+<!--
+ Client identifier (email address, organization name, program/script
+ name, or any other form of contacting the owner of this request)
+-->
+<!ELEMENT Blast4-request_ident (#PCDATA)>
+
+<!-- Payload of the request -->
+<!ELEMENT Blast4-request_body (Blast4-request-body)>
+
+<!--
+ An archive format for results.  the results can be reformatted from
+ this format also.
+-->
+<!ELEMENT Blast4-archive (
+        Blast4-archive_request, 
+        Blast4-archive_results)>
+
+<!-- Query and options -->
+<!ELEMENT Blast4-archive_request (Blast4-request)>
+
+<!-- Results of search -->
+<!ELEMENT Blast4-archive_results (Blast4-get-search-results-reply)>
+
+
+<!ELEMENT Blast4-request-body (
+        Blast4-request-body_finish-params | 
+        Blast4-request-body_get-databases | 
+        Blast4-request-body_get-matrices | 
+        Blast4-request-body_get-parameters | 
+        Blast4-request-body_get-paramsets | 
+        Blast4-request-body_get-programs | 
+        Blast4-request-body_get-search-results | 
+        Blast4-request-body_get-sequences | 
+        Blast4-request-body_queue-search | 
+        Blast4-request-body_get-request-info | 
+        Blast4-request-body_get-sequence-parts | 
+        Blast4-request-body_get-windowmasked-taxids)>
+
+<!ELEMENT Blast4-request-body_finish-params (Blast4-finish-params-request)>
+
+<!-- Get all available BLAST databases -->
+<!ELEMENT Blast4-request-body_get-databases EMPTY>
+
+<!-- Get supported scoring matrices -->
+<!ELEMENT Blast4-request-body_get-matrices EMPTY>
+
+<!ELEMENT Blast4-request-body_get-parameters EMPTY>
+
+<!ELEMENT Blast4-request-body_get-paramsets EMPTY>
+
+<!ELEMENT Blast4-request-body_get-programs EMPTY>
+
+<!ELEMENT Blast4-request-body_get-search-results (Blast4-get-search-results-request)>
+<!-- Fetch sequence data from a BLAST database -->
+<!ELEMENT Blast4-request-body_get-sequences (Blast4-get-sequences-request)>
+<!--
+ Options have been broken down into three groups as part of the BLAST
+ API work.  The algorithm options essentially correspond to those
+ options available via the CBlastOptions class.
+ For definitions of the names used in the Blast4-parameter structures, see
+ c++/{include,src}/objects/blast/names.[hc]pp in the NCBI C++ toolkit.
+   algorithm-options: Options for BLAST (ie. seq comparison) algorithm.
+   program-options:   Options for controlling program execution and/or 
+                      database filtering
+   format-options:    Options for formatting BLAST results, clients should
+                      use this only if applicable, otherwise they should be
+                      ignored
+-->
+<!ELEMENT Blast4-request-body_queue-search (Blast4-queue-search-request)>
+<!-- Fetch information about the search request. -->
+<!ELEMENT Blast4-request-body_get-request-info (Blast4-get-request-info-request)>
+<!-- Fetch parts of sequences from a BLAST database -->
+<!ELEMENT Blast4-request-body_get-sequence-parts (Blast4-get-seq-parts-request)>
+
+<!ELEMENT Blast4-request-body_get-windowmasked-taxids EMPTY>
+
+
+<!ELEMENT Blast4-finish-params-request (
+        Blast4-finish-params-request_program, 
+        Blast4-finish-params-request_service, 
+        Blast4-finish-params-request_paramset?, 
+        Blast4-finish-params-request_params?)>
+
+<!ELEMENT Blast4-finish-params-request_program (#PCDATA)>
+
+<!ELEMENT Blast4-finish-params-request_service (#PCDATA)>
+
+<!ELEMENT Blast4-finish-params-request_paramset (#PCDATA)>
+
+<!ELEMENT Blast4-finish-params-request_params (Blast4-parameters)>
+
+<!-- This type allows the specification of what result types are desired -->
+<!ELEMENT Blast4-result-types %ENUM;>
+
+<!--
+    default	-  Default retrieves the following result types (if available): alignments,
+         phi-alignments masks, ka-blocks, search-stats and pssm
+-->
+<!ATTLIST Blast4-result-types value (
+        default |
+        alignments |
+        phi-alignments |
+        masks |
+        ka-blocks |
+        search-stats |
+        pssm |
+        simple-results
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Blast4-get-search-results-request (
+        Blast4-get-search-results-request_request-id, 
+        Blast4-get-search-results-request_result-types?)>
+
+<!-- The request ID of the BLAST search -->
+<!ELEMENT Blast4-get-search-results-request_request-id (#PCDATA)>
+
+<!-- Logical OR of Blast4-result-types, assumes default if absent -->
+<!ELEMENT Blast4-get-search-results-request_result-types (%INTEGER;)>
+
+<!--
+ If a PSSM is used (ie. for PSI-Blast), it must contain a "query"
+ for formatting purposes.  Bioseq-set may contain any number of
+ queries, specified as data.  Seq-loc-list may contain only the
+ "whole" or "interval" types.  In the case of "whole", any number of
+ queries may be used; in the case of "interval", there should be
+ exactly one query.  (This is limited by the BlastObject.)
+-->
+<!ELEMENT Blast4-queries (
+        Blast4-queries_pssm | 
+        Blast4-queries_seq-loc-list | 
+        Blast4-queries_bioseq-set)>
+
+<!ELEMENT Blast4-queries_pssm (PssmWithParameters)>
+
+<!ELEMENT Blast4-queries_seq-loc-list (Seq-loc*)>
+
+<!ELEMENT Blast4-queries_bioseq-set (Bioseq-set)>
+
+<!--
+ Options have been broken down into three groups as part of the BLAST
+ API work.  The algorithm options essentially correspond to those
+ options available via the CBlastOptions class.
+ For definitions of the names used in the Blast4-parameter structures, see
+ c++/{include,src}/objects/blast/names.[hc]pp in the NCBI C++ toolkit.
+   algorithm-options: Options for BLAST (ie. seq comparison) algorithm.
+   program-options:   Options for controlling program execution and/or 
+                      database filtering
+   format-options:    Options for formatting BLAST results, clients should
+                      use this only if applicable, otherwise they should be
+                      ignored
+-->
+<!ELEMENT Blast4-queue-search-request (
+        Blast4-queue-search-request_program, 
+        Blast4-queue-search-request_service, 
+        Blast4-queue-search-request_queries, 
+        Blast4-queue-search-request_subject, 
+        Blast4-queue-search-request_paramset?, 
+        Blast4-queue-search-request_algorithm-options?, 
+        Blast4-queue-search-request_program-options?, 
+        Blast4-queue-search-request_format-options?)>
+
+<!ELEMENT Blast4-queue-search-request_program (#PCDATA)>
+
+<!ELEMENT Blast4-queue-search-request_service (#PCDATA)>
+<!--
+ If a PSSM is used (ie. for PSI-Blast), it must contain a "query"
+ for formatting purposes.  Bioseq-set may contain any number of
+ queries, specified as data.  Seq-loc-list may contain only the
+ "whole" or "interval" types.  In the case of "whole", any number of
+ queries may be used; in the case of "interval", there should be
+ exactly one query.  (This is limited by the BlastObject.)
+-->
+<!ELEMENT Blast4-queue-search-request_queries (Blast4-queries)>
+
+<!ELEMENT Blast4-queue-search-request_subject (Blast4-subject)>
+
+<!-- This field contains a task description -->
+<!ELEMENT Blast4-queue-search-request_paramset (#PCDATA)>
+
+<!ELEMENT Blast4-queue-search-request_algorithm-options (Blast4-parameters)>
+
+<!ELEMENT Blast4-queue-search-request_program-options (Blast4-parameters)>
+
+<!ELEMENT Blast4-queue-search-request_format-options (Blast4-parameters)>
+
+<!-- Simplified search submission structure -->
+<!ELEMENT Blast4-queue-search-request-lite (
+        Blast4-queue-search-request-lite_query, 
+        Blast4-queue-search-request-lite_database-name, 
+        Blast4-queue-search-request-lite_options)>
+
+<!-- query sequence: provide a FASTA sequence, a gi number, or an accession -->
+<!ELEMENT Blast4-queue-search-request-lite_query (#PCDATA)>
+
+<!-- Name of BLAST database to search -->
+<!ELEMENT Blast4-queue-search-request-lite_database-name (#PCDATA)>
+
+<!-- BLAST options -->
+<!ELEMENT Blast4-queue-search-request-lite_options (Blast4-options-lite)>
+
+<!-- Request to retrieve the status of a given search -->
+<!ELEMENT Blast4-get-search-status-request (
+        Blast4-get-search-status-request_request-id)>
+
+<!ELEMENT Blast4-get-search-status-request_request-id (#PCDATA)>
+
+<!-- Reply to retrieve the status of a given search -->
+<!ELEMENT Blast4-get-search-status-reply (
+        Blast4-get-search-status-reply_status)>
+
+<!ELEMENT Blast4-get-search-status-reply_status (#PCDATA)>
+
+<!-- Fetch information about the search request. -->
+<!ELEMENT Blast4-get-request-info-request (
+        Blast4-get-request-info-request_request-id)>
+
+<!ELEMENT Blast4-get-request-info-request_request-id (#PCDATA)>
+
+
+<!ELEMENT Blast4-get-request-info-reply (
+        Blast4-get-request-info-reply_database, 
+        Blast4-get-request-info-reply_program, 
+        Blast4-get-request-info-reply_service, 
+        Blast4-get-request-info-reply_created-by, 
+        Blast4-get-request-info-reply_queries, 
+        Blast4-get-request-info-reply_algorithm-options, 
+        Blast4-get-request-info-reply_program-options, 
+        Blast4-get-request-info-reply_format-options?, 
+        Blast4-get-request-info-reply_subjects?)>
+
+<!ELEMENT Blast4-get-request-info-reply_database (Blast4-database)>
+
+<!ELEMENT Blast4-get-request-info-reply_program (#PCDATA)>
+
+<!ELEMENT Blast4-get-request-info-reply_service (#PCDATA)>
+
+<!ELEMENT Blast4-get-request-info-reply_created-by (#PCDATA)>
+<!--
+ If a PSSM is used (ie. for PSI-Blast), it must contain a "query"
+ for formatting purposes.  Bioseq-set may contain any number of
+ queries, specified as data.  Seq-loc-list may contain only the
+ "whole" or "interval" types.  In the case of "whole", any number of
+ queries may be used; in the case of "interval", there should be
+ exactly one query.  (This is limited by the BlastObject.)
+-->
+<!ELEMENT Blast4-get-request-info-reply_queries (Blast4-queries)>
+
+<!ELEMENT Blast4-get-request-info-reply_algorithm-options (Blast4-parameters)>
+
+<!ELEMENT Blast4-get-request-info-reply_program-options (Blast4-parameters)>
+
+<!ELEMENT Blast4-get-request-info-reply_format-options (Blast4-parameters)>
+
+<!ELEMENT Blast4-get-request-info-reply_subjects (Blast4-subject)>
+
+<!-- Fetch the search strategy (i.e.: object used to submit the search) -->
+<!ELEMENT Blast4-get-search-strategy-request (
+        Blast4-get-search-strategy-request_request-id)>
+
+<!ELEMENT Blast4-get-search-strategy-request_request-id (#PCDATA)>
+
+<!--
+ Return the search strategy (i.e.: Blast4-request containing a
+ Blast4-queue-search-request, an object used to submit the search)
+-->
+<!ELEMENT Blast4-get-search-strategy-reply (Blast4-request)>
+
+<!-- Fetch sequence data from a BLAST database -->
+<!ELEMENT Blast4-get-sequences-request (
+        Blast4-get-sequences-request_database, 
+        Blast4-get-sequences-request_seq-ids, 
+        Blast4-get-sequences-request_skip-seq-data?, 
+        Blast4-get-sequences-request_target-only?)>
+
+<!-- Name of the BLAST database from which to retrieve the sequence data -->
+<!ELEMENT Blast4-get-sequences-request_database (Blast4-database)>
+
+<!-- Sequence identifiers for the sequence to get -->
+<!ELEMENT Blast4-get-sequences-request_seq-ids (Seq-id*)>
+
+<!--
+ Determines whether the returned Bioseqs should contain the sequence data
+ or not
+-->
+<!ELEMENT Blast4-get-sequences-request_skip-seq-data EMPTY>
+<!ATTLIST Blast4-get-sequences-request_skip-seq-data value ( true | false ) "false" >
+
+
+<!--
+ Determines whether or not the defline of the returned Bioseqs should 
+ contain only the requested seq id.  This optional field only applies
+ to non-redundant BLAST database
+-->
+<!ELEMENT Blast4-get-sequences-request_target-only EMPTY>
+<!ATTLIST Blast4-get-sequences-request_target-only value ( true | false ) #REQUIRED >
+
+
+<!-- Fetch parts of sequences from a BLAST database -->
+<!ELEMENT Blast4-get-seq-parts-request (
+        Blast4-get-seq-parts-request_database, 
+        Blast4-get-seq-parts-request_seq-locations)>
+
+<!-- Name of the BLAST database from which to retrieve the sequence data -->
+<!ELEMENT Blast4-get-seq-parts-request_database (Blast4-database)>
+
+<!--
+ Allows the specification of ranges of sequence data needed.
+ If the sequence(s) interval's end is 0, no data will be fetched. 
+ If end is past the length of the sequence, it will be adjusted to the
+ end of the sequence (this allows fetching of the first chunk in
+ cases where the length is not yet known).
+-->
+<!ELEMENT Blast4-get-seq-parts-request_seq-locations (Seq-interval*)>
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Replies
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-reply (
+        Blast4-reply_errors?, 
+        Blast4-reply_body)>
+
+<!ELEMENT Blast4-reply_errors (Blast4-error*)>
+
+<!ELEMENT Blast4-reply_body (Blast4-reply-body)>
+
+
+<!ELEMENT Blast4-reply-body (
+        Blast4-reply-body_finish-params | 
+        Blast4-reply-body_get-databases | 
+        Blast4-reply-body_get-matrices | 
+        Blast4-reply-body_get-parameters | 
+        Blast4-reply-body_get-paramsets | 
+        Blast4-reply-body_get-programs | 
+        Blast4-reply-body_get-search-results | 
+        Blast4-reply-body_get-sequences | 
+        Blast4-reply-body_queue-search | 
+        Blast4-reply-body_get-queries | 
+        Blast4-reply-body_get-request-info | 
+        Blast4-reply-body_get-sequence-parts | 
+        Blast4-reply-body_get-windowmasked-taxids)>
+
+<!ELEMENT Blast4-reply-body_finish-params (Blast4-finish-params-reply)>
+
+<!ELEMENT Blast4-reply-body_get-databases (Blast4-get-databases-reply)>
+
+<!ELEMENT Blast4-reply-body_get-matrices (Blast4-get-matrices-reply)>
+
+<!ELEMENT Blast4-reply-body_get-parameters (Blast4-get-parameters-reply)>
+<!--
+ Note: Paramsets and tasks represent the same concept: a human readable
+ description that represents a set of parameters with specific values 
+ to accomplish a given task
+-->
+<!ELEMENT Blast4-reply-body_get-paramsets (Blast4-get-paramsets-reply)>
+
+<!ELEMENT Blast4-reply-body_get-programs (Blast4-get-programs-reply)>
+
+<!ELEMENT Blast4-reply-body_get-search-results (Blast4-get-search-results-reply)>
+
+<!ELEMENT Blast4-reply-body_get-sequences (Blast4-get-sequences-reply)>
+
+<!ELEMENT Blast4-reply-body_queue-search (Blast4-queue-search-reply)>
+
+<!ELEMENT Blast4-reply-body_get-queries (Blast4-get-queries-reply)>
+
+<!ELEMENT Blast4-reply-body_get-request-info (Blast4-get-request-info-reply)>
+
+<!ELEMENT Blast4-reply-body_get-sequence-parts (Blast4-get-seq-parts-reply)>
+
+<!ELEMENT Blast4-reply-body_get-windowmasked-taxids (Blast4-get-windowmasked-taxids-reply)>
+
+
+<!ELEMENT Blast4-finish-params-reply (Blast4-parameters)>
+
+
+<!ELEMENT Blast4-get-windowmasked-taxids-reply (Blast4-get-windowmasked-taxids-reply_E*)>
+
+
+
+<!ELEMENT Blast4-get-windowmasked-taxids-reply_E (%INTEGER;)>
+
+
+<!ELEMENT Blast4-get-databases-reply (Blast4-database-info*)>
+
+
+<!ELEMENT Blast4-get-matrices-reply (Blast4-matrix-id*)>
+
+
+<!ELEMENT Blast4-get-parameters-reply (Blast4-parameter-info*)>
+
+<!--
+ Note: Paramsets and tasks represent the same concept: a human readable
+ description that represents a set of parameters with specific values 
+ to accomplish a given task
+-->
+<!ELEMENT Blast4-get-paramsets-reply (Blast4-task-info*)>
+
+
+<!ELEMENT Blast4-get-programs-reply (Blast4-program-info*)>
+
+
+<!ELEMENT Blast4-get-search-results-reply (
+        Blast4-get-search-results-reply_alignments?, 
+        Blast4-get-search-results-reply_phi-alignments?, 
+        Blast4-get-search-results-reply_masks?, 
+        Blast4-get-search-results-reply_ka-blocks?, 
+        Blast4-get-search-results-reply_search-stats?, 
+        Blast4-get-search-results-reply_pssm?, 
+        Blast4-get-search-results-reply_simple-results?)>
+
+<!ELEMENT Blast4-get-search-results-reply_alignments (Seq-align-set)>
+
+<!ELEMENT Blast4-get-search-results-reply_phi-alignments (Blast4-phi-alignments)>
+
+<!--
+ Masking locations for the query sequence(s). Each element of this set
+ corresponds to a single query's translation frame as appropriate.
+-->
+<!ELEMENT Blast4-get-search-results-reply_masks (Blast4-mask*)>
+
+<!ELEMENT Blast4-get-search-results-reply_ka-blocks (Blast4-ka-block*)>
+
+<!ELEMENT Blast4-get-search-results-reply_search-stats (Blast4-get-search-results-reply_search-stats_E*)>
+
+
+<!ELEMENT Blast4-get-search-results-reply_search-stats_E (#PCDATA)>
+
+<!ELEMENT Blast4-get-search-results-reply_pssm (PssmWithParameters)>
+<!-- Complete set of simple Blast results -->
+<!ELEMENT Blast4-get-search-results-reply_simple-results (Blast4-simple-results)>
+
+
+<!ELEMENT Blast4-get-sequences-reply (Bioseq*)>
+
+<!--
+ Bundles Seq-ids and sequence data to fulfill requests of type
+ Blast4-get-seq-parts-request
+-->
+<!ELEMENT Blast4-seq-part-data (
+        Blast4-seq-part-data_id, 
+        Blast4-seq-part-data_data)>
+
+<!-- Sequence identifier -->
+<!ELEMENT Blast4-seq-part-data_id (Seq-id)>
+
+<!-- Its sequence data (may be partial) -->
+<!ELEMENT Blast4-seq-part-data_data (Seq-data)>
+
+
+<!ELEMENT Blast4-get-seq-parts-reply (Blast4-seq-part-data*)>
+
+
+<!ELEMENT Blast4-queue-search-reply (
+        Blast4-queue-search-reply_request-id?)>
+
+<!ELEMENT Blast4-queue-search-reply_request-id (#PCDATA)>
+
+
+<!ELEMENT Blast4-get-queries-reply (
+        Blast4-get-queries-reply_queries)>
+<!--
+ If a PSSM is used (ie. for PSI-Blast), it must contain a "query"
+ for formatting purposes.  Bioseq-set may contain any number of
+ queries, specified as data.  Seq-loc-list may contain only the
+ "whole" or "interval" types.  In the case of "whole", any number of
+ queries may be used; in the case of "interval", there should be
+ exactly one query.  (This is limited by the BlastObject.)
+-->
+<!ELEMENT Blast4-get-queries-reply_queries (Blast4-queries)>
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Errors
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-error (
+        Blast4-error_code, 
+        Blast4-error_message?)>
+
+<!--
+ This is an integer to allow for flexibility, but the values assigned
+ should be of type Blast4-error-code
+-->
+<!ELEMENT Blast4-error_code (%INTEGER;)>
+
+<!ELEMENT Blast4-error_message (#PCDATA)>
+
+<!--
+ This enumeration defines values that are intended to be used with the
+ Blast4-error::code in a logical AND operation to easily determine whether a
+ given Blast4-error object contains either a warning or an error
+-->
+<!ELEMENT Blast4-error-flags %ENUM;>
+<!ATTLIST Blast4-error-flags value (
+        warning |
+        error
+        ) #REQUIRED >
+
+
+<!--
+ Defines values for use in Blast4-error::code.
+ Note: warnings should have values greater than 1024 and less than 2048,
+ errors should have values greater than 2048.
+-->
+<!ELEMENT Blast4-error-code (%INTEGER;)>
+
+<!--
+    conversion-warning	-  A conversion issue was found when converting to/from blast3 from/to 
+         blast4 protocol in the blast4 server
+    internal-error	-  Indicates internal errors in the blast4 server
+    not-implemented	-  Request type is not implemented in the blast4 server
+    not-allowed	-  Request type is not allowed in the blast4 server
+    bad-request	-  Malformed/invalid requests (e.g.: parsing errors or invalid data in request)
+    bad-request-id	-  The RID requested is unknown or it has expired
+    search-pending	-  The search is pending
+-->
+<!ATTLIST Blast4-error-code value (
+        conversion-warning |
+        internal-error |
+        not-implemented |
+        not-allowed |
+        bad-request |
+        bad-request-id |
+        search-pending
+        ) #IMPLIED >
+
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Data types to be used in BLAST4 "Lite"
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-common-options-db-restriction-by-organism (
+        Blast4-common-options-db-restriction-by-organism_organism-restriction | 
+        Blast4-common-options-db-restriction-by-organism_taxid-restriction)>
+
+<!-- additional restriction on the database to search -->
+<!ELEMENT Blast4-common-options-db-restriction-by-organism_organism-restriction (#PCDATA)>
+
+<!-- same as above, specified with a taxid -->
+<!ELEMENT Blast4-common-options-db-restriction-by-organism_taxid-restriction (%INTEGER;)>
+
+
+<!ELEMENT Blast4-common-options-db-restriction (
+        Blast4-common-options-db-restriction_entrez-query?, 
+        Blast4-common-options-db-restriction_organism?)>
+
+<!-- entrez query restriction on the database to search -->
+<!ELEMENT Blast4-common-options-db-restriction_entrez-query (#PCDATA)>
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Data types to be used in BLAST4 "Lite"
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-common-options-db-restriction_organism (Blast4-common-options-db-restriction-by-organism)>
+
+
+<!ELEMENT Blast4-common-options-repeats-filtering (
+        Blast4-common-options-repeats-filtering_organism-taxid?)>
+
+<!-- defaults to human -->
+<!ELEMENT Blast4-common-options-repeats-filtering_organism-taxid (%INTEGER;)>
+
+
+<!ELEMENT Blast4-common-options-query-filtering (
+        Blast4-common-options-query-filtering_use-seg-filtering?, 
+        Blast4-common-options-query-filtering_use-dust-filtering?, 
+        Blast4-common-options-query-filtering_mask-for-lookup-table-only?, 
+        Blast4-common-options-query-filtering_repeats-filtering?, 
+        Blast4-common-options-query-filtering_user-specified-masks?, 
+        Blast4-common-options-query-filtering_no-filtering?)>
+
+<!-- use SEG filtering with default parameters -->
+<!ELEMENT Blast4-common-options-query-filtering_use-seg-filtering EMPTY>
+<!ATTLIST Blast4-common-options-query-filtering_use-seg-filtering value ( true | false ) #REQUIRED >
+
+
+<!-- use DUST filtering with default parameters -->
+<!ELEMENT Blast4-common-options-query-filtering_use-dust-filtering EMPTY>
+<!ATTLIST Blast4-common-options-query-filtering_use-dust-filtering value ( true | false ) #REQUIRED >
+
+
+<!-- mask for lookup table only (i.e.: soft masking) -->
+<!ELEMENT Blast4-common-options-query-filtering_mask-for-lookup-table-only EMPTY>
+<!ATTLIST Blast4-common-options-query-filtering_mask-for-lookup-table-only value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Blast4-common-options-query-filtering_repeats-filtering (Blast4-common-options-repeats-filtering)>
+
+<!-- user specified masking locations -->
+<!ELEMENT Blast4-common-options-query-filtering_user-specified-masks (Blast4-mask*)>
+
+<!-- This overrides all other filtering options -->
+<!ELEMENT Blast4-common-options-query-filtering_no-filtering EMPTY>
+<!ATTLIST Blast4-common-options-query-filtering_no-filtering value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT Blast4-common-options-discontiguous-megablast (
+        Blast4-common-options-discontiguous-megablast_template-type, 
+        Blast4-common-options-discontiguous-megablast_template-length)>
+
+<!ELEMENT Blast4-common-options-discontiguous-megablast_template-type (%INTEGER;)>
+
+<!ELEMENT Blast4-common-options-discontiguous-megablast_template-length (%INTEGER;)>
+
+
+<!ELEMENT Blast4-common-options-nucleotide-query (
+        Blast4-common-options-nucleotide-query_strand-type-list?, 
+        Blast4-common-options-nucleotide-query_disco-megablast-options?)>
+
+<!-- one per query -->
+<!ELEMENT Blast4-common-options-nucleotide-query_strand-type-list (Blast4-strand-type*)>
+
+<!ELEMENT Blast4-common-options-nucleotide-query_disco-megablast-options (Blast4-common-options-discontiguous-megablast)>
+
+
+<!ELEMENT Blast4-common-options-scoring (
+        Blast4-common-options-scoring_matrix-name?, 
+        Blast4-common-options-scoring_gap-opening-penalty?, 
+        Blast4-common-options-scoring_gap-extension-penalty?, 
+        Blast4-common-options-scoring_match-reward?, 
+        Blast4-common-options-scoring_mismatch-penalty?)>
+
+<!-- e.g.: BLOSUM62, PAM30, etc -->
+<!ELEMENT Blast4-common-options-scoring_matrix-name (#PCDATA)>
+
+<!ELEMENT Blast4-common-options-scoring_gap-opening-penalty (%INTEGER;)>
+
+<!ELEMENT Blast4-common-options-scoring_gap-extension-penalty (%INTEGER;)>
+
+<!ELEMENT Blast4-common-options-scoring_match-reward (%INTEGER;)>
+
+<!ELEMENT Blast4-common-options-scoring_mismatch-penalty (%INTEGER;)>
+
+
+<!ELEMENT Blast4-common-options (
+        Blast4-common-options_percent-identity?, 
+        Blast4-common-options_evalue?, 
+        Blast4-common-options_word-size?, 
+        Blast4-common-options_hitlist-size?, 
+        Blast4-common-options_db-restriction?, 
+        Blast4-common-options_query-filtering?, 
+        Blast4-common-options_nucl-query-options?, 
+        Blast4-common-options_scoring-options?, 
+        Blast4-common-options_phi-pattern?, 
+        Blast4-common-options_eff-search-space?, 
+        Blast4-common-options_comp-based-statistics?)>
+
+<!-- percent identity of matches (0-100) -->
+<!ELEMENT Blast4-common-options_percent-identity (%REAL;)>
+
+<!-- e-value threshold -->
+<!ELEMENT Blast4-common-options_evalue (%REAL;)>
+
+<!-- word size to use in lookup table construction -->
+<!ELEMENT Blast4-common-options_word-size (%INTEGER;)>
+
+<!-- max number of database sequences to align -->
+<!ELEMENT Blast4-common-options_hitlist-size (%INTEGER;)>
+
+<!ELEMENT Blast4-common-options_db-restriction (Blast4-common-options-db-restriction)>
+
+<!ELEMENT Blast4-common-options_query-filtering (Blast4-common-options-query-filtering)>
+
+<!ELEMENT Blast4-common-options_nucl-query-options (Blast4-common-options-nucleotide-query)>
+
+<!ELEMENT Blast4-common-options_scoring-options (Blast4-common-options-scoring)>
+
+<!-- PHI-BLAST pattern -->
+<!ELEMENT Blast4-common-options_phi-pattern (#PCDATA)>
+
+<!-- effective search space -->
+<!ELEMENT Blast4-common-options_eff-search-space (%REAL;)>
+
+<!-- Composition based statistics -->
+<!ELEMENT Blast4-common-options_comp-based-statistics (%INTEGER;)>
+
+
+<!ELEMENT Blast4-options-lite (
+        Blast4-options-lite_task, 
+        Blast4-options-lite_options?)>
+
+<!ELEMENT Blast4-options-lite_task (#PCDATA)>
+
+<!ELEMENT Blast4-options-lite_options (Blast4-common-options)>
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Other types in alphabetical order
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-cutoff (
+        Blast4-cutoff_e-value | 
+        Blast4-cutoff_raw-score)>
+
+<!ELEMENT Blast4-cutoff_e-value (%REAL;)>
+
+<!ELEMENT Blast4-cutoff_raw-score (%INTEGER;)>
+
+
+<!ELEMENT Blast4-database (
+        Blast4-database_name, 
+        Blast4-database_type)>
+
+<!ELEMENT Blast4-database_name (#PCDATA)>
+
+<!ELEMENT Blast4-database_type (Blast4-residue-type)>
+
+<!-- Borrowed from seq.asn -->
+<!ELEMENT Blast4-seqtech (%INTEGER;)>
+
+<!--
+    standard	-  standard sequencing
+    est	-  Expressed Sequence Tag
+    sts	-  Sequence Tagged Site
+    survey	-  one-pass genomic sequence
+    genemap	-  from genetic mapping techniques
+    physmap	-  from physical mapping techniques
+    derived	-  derived from other data, not a primary entity
+    concept-trans	-  conceptual translation
+    seq-pept	-  peptide was sequenced
+    both	-  concept transl. w/ partial pept. seq.
+    seq-pept-overlap	-  sequenced peptide, ordered by overlap
+    seq-pept-homol	-  sequenced peptide, ordered by homology
+    concept-trans-a	-  conceptual transl. supplied by author
+    htgs-1	-  unordered High Throughput sequence contig
+    htgs-2	-  ordered High Throughput sequence contig
+    htgs-3	-  finished High Throughput sequence
+    fli-cdna	-  full length insert cDNA
+    htgs-0	-  single genomic reads for coordination
+    htc	-  high throughput cDNA
+    wgs	-  whole genome shotgun sequencing
+    other	-  use Source.techexp
+-->
+<!ATTLIST Blast4-seqtech value (
+        unknown |
+        standard |
+        est |
+        sts |
+        survey |
+        genemap |
+        physmap |
+        derived |
+        concept-trans |
+        seq-pept |
+        both |
+        seq-pept-overlap |
+        seq-pept-homol |
+        concept-trans-a |
+        htgs-1 |
+        htgs-2 |
+        htgs-3 |
+        fli-cdna |
+        htgs-0 |
+        htc |
+        wgs |
+        other
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Blast4-database-info (
+        Blast4-database-info_database, 
+        Blast4-database-info_description, 
+        Blast4-database-info_last-updated, 
+        Blast4-database-info_total-length, 
+        Blast4-database-info_num-sequences, 
+        Blast4-database-info_seqtech, 
+        Blast4-database-info_taxid)>
+
+<!ELEMENT Blast4-database-info_database (Blast4-database)>
+
+<!ELEMENT Blast4-database-info_description (#PCDATA)>
+
+<!ELEMENT Blast4-database-info_last-updated (#PCDATA)>
+
+<!ELEMENT Blast4-database-info_total-length (%INTEGER;)>
+
+<!ELEMENT Blast4-database-info_num-sequences (%INTEGER;)>
+<!-- Borrowed from seq.asn -->
+<!ELEMENT Blast4-database-info_seqtech (Blast4-seqtech)>
+
+<!ELEMENT Blast4-database-info_taxid (%INTEGER;)>
+
+
+<!ELEMENT Blast4-frame-type %ENUM;>
+<!ATTLIST Blast4-frame-type value (
+        notset |
+        plus1 |
+        plus2 |
+        plus3 |
+        minus1 |
+        minus2 |
+        minus3
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Blast4-ka-block (
+        Blast4-ka-block_lambda, 
+        Blast4-ka-block_k, 
+        Blast4-ka-block_h, 
+        Blast4-ka-block_gapped)>
+
+<!ELEMENT Blast4-ka-block_lambda (%REAL;)>
+
+<!ELEMENT Blast4-ka-block_k (%REAL;)>
+
+<!ELEMENT Blast4-ka-block_h (%REAL;)>
+
+<!ELEMENT Blast4-ka-block_gapped EMPTY>
+<!ATTLIST Blast4-ka-block_gapped value ( true | false ) #REQUIRED >
+
+
+<!--
+ Masking locations for a query's frame. The locations field is a single
+ Seq-loc of type Packed-int, which contains all the masking locations for the
+ translation frame specified by the frame field.
+ Notes:
+ On input (i.e.: when the client specifies masking locations as a
+ Blast4-parameter), in the case of protein queries, the frame field must 
+ always be notset, in the case of nucleotide queries (regardless of whether 
+ the search will translate these or not), the frame must be plus1. Masking 
+ locations in the translated encoding are not permitted.
+ On output (i.e.: when blast 4 server encodes these as part of the 
+ Blast4-get-search-results-reply), the same conventions as above apply for
+ non-translated protein and nucleotide queries, but in the case of translated
+ nucleotide queries, the frame field can be specified in any of the
+ translation frames as appropriate.
+-->
+<!ELEMENT Blast4-mask (
+        Blast4-mask_locations, 
+        Blast4-mask_frame)>
+
+<!ELEMENT Blast4-mask_locations (Seq-loc*)>
+
+<!ELEMENT Blast4-mask_frame (Blast4-frame-type)>
+
+
+<!ELEMENT Blast4-matrix-id (
+        Blast4-matrix-id_residue-type, 
+        Blast4-matrix-id_name)>
+
+<!ELEMENT Blast4-matrix-id_residue-type (Blast4-residue-type)>
+
+<!ELEMENT Blast4-matrix-id_name (#PCDATA)>
+
+
+<!ELEMENT Blast4-parameter (
+        Blast4-parameter_name, 
+        Blast4-parameter_value)>
+
+<!ELEMENT Blast4-parameter_name (#PCDATA)>
+
+<!ELEMENT Blast4-parameter_value (Blast4-value)>
+
+
+<!ELEMENT Blast4-parameter-info (
+        Blast4-parameter-info_name, 
+        Blast4-parameter-info_type)>
+
+<!ELEMENT Blast4-parameter-info_name (#PCDATA)>
+
+<!ELEMENT Blast4-parameter-info_type (#PCDATA)>
+
+<!-- Self documenting task structure -->
+<!ELEMENT Blast4-task-info (
+        Blast4-task-info_name, 
+        Blast4-task-info_documentation)>
+
+<!-- Name of this task -->
+<!ELEMENT Blast4-task-info_name (#PCDATA)>
+
+<!-- Description of the task -->
+<!ELEMENT Blast4-task-info_documentation (#PCDATA)>
+
+
+<!ELEMENT Blast4-program-info (
+        Blast4-program-info_program, 
+        Blast4-program-info_services)>
+
+<!ELEMENT Blast4-program-info_program (#PCDATA)>
+
+<!ELEMENT Blast4-program-info_services (Blast4-program-info_services_E*)>
+
+
+<!ELEMENT Blast4-program-info_services_E (#PCDATA)>
+
+
+<!ELEMENT Blast4-residue-type %ENUM;>
+<!ATTLIST Blast4-residue-type value (
+        unknown |
+        protein |
+        nucleotide
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Blast4-strand-type %ENUM;>
+<!ATTLIST Blast4-strand-type value (
+        forward-strand |
+        reverse-strand |
+        both-strands
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Blast4-subject (
+        Blast4-subject_database | 
+        Blast4-subject_sequences | 
+        Blast4-subject_seq-loc-list)>
+
+<!ELEMENT Blast4-subject_database (#PCDATA)>
+
+<!ELEMENT Blast4-subject_sequences (Bioseq*)>
+
+<!ELEMENT Blast4-subject_seq-loc-list (Seq-loc*)>
+
+
+<!ELEMENT Blast4-parameters (Blast4-parameter*)>
+
+
+<!ELEMENT Blast4-phi-alignments (
+        Blast4-phi-alignments_num-alignments, 
+        Blast4-phi-alignments_seq-locs)>
+
+<!ELEMENT Blast4-phi-alignments_num-alignments (%INTEGER;)>
+
+<!ELEMENT Blast4-phi-alignments_seq-locs (Seq-loc*)>
+
+
+<!ELEMENT Blast4-value (
+        Blast4-value_big-integer | 
+        Blast4-value_bioseq | 
+        Blast4-value_boolean | 
+        Blast4-value_cutoff | 
+        Blast4-value_integer | 
+        Blast4-value_matrix | 
+        Blast4-value_real | 
+        Blast4-value_seq-align | 
+        Blast4-value_seq-id | 
+        Blast4-value_seq-loc | 
+        Blast4-value_strand-type | 
+        Blast4-value_string | 
+        Blast4-value_big-integer-list | 
+        Blast4-value_bioseq-list | 
+        Blast4-value_boolean-list | 
+        Blast4-value_cutoff-list | 
+        Blast4-value_integer-list | 
+        Blast4-value_matrix-list | 
+        Blast4-value_real-list | 
+        Blast4-value_seq-align-list | 
+        Blast4-value_seq-id-list | 
+        Blast4-value_seq-loc-list | 
+        Blast4-value_strand-type-list | 
+        Blast4-value_string-list | 
+        Blast4-value_bioseq-set | 
+        Blast4-value_seq-align-set | 
+        Blast4-value_query-mask)>
+
+<!-- scalar types -->
+<!ELEMENT Blast4-value_big-integer (%INTEGER;)>
+
+<!ELEMENT Blast4-value_bioseq (Bioseq)>
+
+<!ELEMENT Blast4-value_boolean EMPTY>
+<!ATTLIST Blast4-value_boolean value ( true | false ) #REQUIRED >
+
+<!--
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Other types in alphabetical order
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT Blast4-value_cutoff (Blast4-cutoff)>
+
+<!ELEMENT Blast4-value_integer (%INTEGER;)>
+
+<!ELEMENT Blast4-value_matrix (PssmWithParameters)>
+
+<!ELEMENT Blast4-value_real (%REAL;)>
+
+<!ELEMENT Blast4-value_seq-align (Seq-align)>
+
+<!ELEMENT Blast4-value_seq-id (Seq-id)>
+
+<!ELEMENT Blast4-value_seq-loc (Seq-loc)>
+
+<!ELEMENT Blast4-value_strand-type (Blast4-strand-type)>
+
+<!ELEMENT Blast4-value_string (#PCDATA)>
+
+<!-- lists of scalar types -->
+<!ELEMENT Blast4-value_big-integer-list (Blast4-value_big-integer-list_E*)>
+
+
+<!ELEMENT Blast4-value_big-integer-list_E (%INTEGER;)>
+
+<!ELEMENT Blast4-value_bioseq-list (Bioseq*)>
+
+<!ELEMENT Blast4-value_boolean-list (Blast4-value_boolean-list_E*)>
+
+
+<!ELEMENT Blast4-value_boolean-list_E EMPTY>
+<!ATTLIST Blast4-value_boolean-list_E value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Blast4-value_cutoff-list (Blast4-cutoff*)>
+
+<!ELEMENT Blast4-value_integer-list (Blast4-value_integer-list_E*)>
+
+
+<!ELEMENT Blast4-value_integer-list_E (%INTEGER;)>
+
+<!ELEMENT Blast4-value_matrix-list (PssmWithParameters*)>
+
+<!ELEMENT Blast4-value_real-list (Blast4-value_real-list_E*)>
+
+
+<!ELEMENT Blast4-value_real-list_E (%REAL;)>
+
+<!ELEMENT Blast4-value_seq-align-list (Seq-align*)>
+
+<!ELEMENT Blast4-value_seq-id-list (Seq-id*)>
+
+<!ELEMENT Blast4-value_seq-loc-list (Seq-loc*)>
+
+<!ELEMENT Blast4-value_strand-type-list (Blast4-strand-type*)>
+
+<!ELEMENT Blast4-value_string-list (Blast4-value_string-list_E*)>
+
+
+<!ELEMENT Blast4-value_string-list_E (#PCDATA)>
+
+<!-- imported collection types -->
+<!ELEMENT Blast4-value_bioseq-set (Bioseq-set)>
+
+<!ELEMENT Blast4-value_seq-align-set (Seq-align-set)>
+
+<!--
+ Intended to represent user-provided masking locations for a single query
+ sequence (name field in Blast4-parameter should be "LCaseMask").
+ Multiple Blast4-parameters of this type are needed to specify masking
+ locations for multiple queries.
+-->
+<!ELEMENT Blast4-value_query-mask (Blast4-mask)>
+
+<!-- Complete set of simple Blast results -->
+<!ELEMENT Blast4-simple-results (
+        Blast4-simple-results_all-alignments)>
+
+<!ELEMENT Blast4-simple-results_all-alignments (Blast4-alignments-for-query*)>
+
+<!-- Alignments for one query, compiled from the raw SeqAlign results -->
+<!ELEMENT Blast4-alignments-for-query (
+        Blast4-alignments-for-query_query-id, 
+        Blast4-alignments-for-query_alignments)>
+
+<!--
+ Query sequence identifier
+ (present if query is not a local id in the SeqAlign)
+-->
+<!ELEMENT Blast4-alignments-for-query_query-id (#PCDATA)>
+
+<!-- All the alignments for this query -->
+<!ELEMENT Blast4-alignments-for-query_alignments (Blast4-simple-alignment*)>
+
+<!-- A single alignment -->
+<!ELEMENT Blast4-simple-alignment (
+        Blast4-simple-alignment_subject-id, 
+        Blast4-simple-alignment_e-value, 
+        Blast4-simple-alignment_bit-score, 
+        Blast4-simple-alignment_num-identities?, 
+        Blast4-simple-alignment_num-indels?, 
+        Blast4-simple-alignment_full-query-range, 
+        Blast4-simple-alignment_full-subject-range)>
+
+<!--
+ Subject sequence identifier
+ (normally a GI from the SeqAlign)
+-->
+<!ELEMENT Blast4-simple-alignment_subject-id (#PCDATA)>
+
+<!-- E-Value -->
+<!ELEMENT Blast4-simple-alignment_e-value (%REAL;)>
+
+<!-- Bit score -->
+<!ELEMENT Blast4-simple-alignment_bit-score (%REAL;)>
+
+<!-- Number of identities -->
+<!ELEMENT Blast4-simple-alignment_num-identities (%INTEGER;)>
+
+<!-- Number of insertions/deletions -->
+<!ELEMENT Blast4-simple-alignment_num-indels (%INTEGER;)>
+
+<!-- Full query range covered by this HSP -->
+<!ELEMENT Blast4-simple-alignment_full-query-range (Blast4-range)>
+
+<!-- Full subject range covered by this HSP -->
+<!ELEMENT Blast4-simple-alignment_full-subject-range (Blast4-range)>
+
+<!-- Range on a sequence - zero offset -->
+<!ELEMENT Blast4-range (
+        Blast4-range_start?, 
+        Blast4-range_end?, 
+        Blast4-range_strand?)>
+
+<!ELEMENT Blast4-range_start (%INTEGER;)>
+
+<!ELEMENT Blast4-range_end (%INTEGER;)>
+
+<!--
+ The frame of the range (absent for proteins; -1/1 for nucleotides;
+ -1,-2,-3,1,2,3 for translated sequences)
+-->
+<!ELEMENT Blast4-range_strand (%INTEGER;)>
+

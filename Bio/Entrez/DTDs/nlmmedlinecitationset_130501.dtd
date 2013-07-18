@@ -1,0 +1,191 @@
+<!-- NLM MedlineCitationSet DTD
+
+     This is the DTD which NLM has written for Internal and External Use.
+     January 1, 2013
+      
+     **THIS IS THE FORTHCOMING DTD FOR 2013 NOT CURRENTLY IN USE.  SEE        http://www.nlm.nih.gov/databases/dtd/nlmmedlinecitationset_120101.dtd 
+     FOR THE NLM MEDLINECITATIONSET DTD DATED JANUARY 1, 2012 CURRENTLY IN USE.**    
+    
+         
+     NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+     represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+     XML elements were first created, MEDLINE records were the only data exported. 
+     Now NLM exports citations other than MEDLINE records using these tools. To 
+     minimize unnecessary disruption to users of the data and tools, NLM has
+     retained the original DTD and element names (e.g., NLMMedlineCitationSet, 
+     MedlineTA, MedlineJournalInfo)).  
+
+     NOTE:  StartPage and EndPage in Pagination element and NameID in Author
+     and Investigator elements are not currently used; are reserved for future use.  
+                
+
+        * = 0 or more occurrences (optional element, repeatable)
+        ? = 0 or 1 occurrences (optional element, at most 1)
+        + = 1 or more occurrences (required element, repeatable)
+        | = choice, one or the other but not both
+        no symbol = required element
+-->
+<!-- ================================================================= -->
+<!--             Revision Notes Section
+
+  The following changes were made:
+  
+        a. Changed nlmmedlinecitationset_120101.dtd to
+           nlmmedlinecitationset_130101.dtd. 
+        b. Added Language attribute to OtherAbstract. 
+        c. Changed NameID Element to Identifier Element.
+
+See http://www.nlm.nih.gov/databases/dtd/history_dtd_nlmmedline.html for historic Revision Notes for previous versions of NLMMedlineCitationSet DTD.
+-->
+<!-- ====================================================================== -->
+<!ENTITY % format	" b | i | sup | sub | u " >
+<!ENTITY % text             "(#PCDATA | %format;)*" >
+<!ELEMENT b		%text; > <!-- bold -->
+<!ELEMENT i		%text; > <!-- italic -->
+<!ELEMENT sup	%text; > <!-- superscript -->
+<!ELEMENT sub	%text; > <!-- subscript -->
+<!ELEMENT u		%text; > <!-- underline -->
+<!-- ================================================================= -->
+<!ELEMENT	MedlineCitationSet (MedlineCitation*, DeleteCitation?)>
+<!ELEMENT	MedlineCitation (PMID, DateCreated, DateCompleted?, DateRevised?,
+                Article, MedlineJournalInfo, ChemicalList?,SupplMeshList?,
+                CitationSubset*, CommentsCorrectionsList?, GeneSymbolList?,
+                MeshHeadingList?,NumberOfReferences?, PersonalNameSubjectList?,
+                OtherID*, OtherAbstract*, KeywordList*, SpaceFlightMission*, 
+                InvestigatorList?, GeneralNote*)>
+<!ATTLIST	MedlineCitation 
+                Owner  (NLM | NASA | PIP | KIE | HSR | HMD | NOTNLM) "NLM"
+		Status (Completed | In-Process | PubMed-not-MEDLINE | 
+                        In-Data-Review | Publisher | MEDLINE | 
+                        OLDMEDLINE) #REQUIRED
+                VersionID CDATA #IMPLIED
+                VersionDate CDATA #IMPLIED>
+<!ELEMENT	Abstract (AbstractText+,CopyrightInformation?)>
+<!ELEMENT	AbstractText %text;>
+<!ATTLIST       AbstractText
+                Label CDATA #IMPLIED
+                NlmCategory (UNLABELLED | BACKGROUND | OBJECTIVE | METHODS |
+                             RESULTS | CONCLUSIONS | UNASSIGNED) #IMPLIED>
+<!ELEMENT	AccessionNumber (#PCDATA)>
+<!ELEMENT	AccessionNumberList (AccessionNumber+)>
+<!ELEMENT	Acronym (#PCDATA)>
+<!ELEMENT	Affiliation %text;>
+<!ELEMENT	Agency (#PCDATA)>
+<!ELEMENT	Article (Journal,ArticleTitle,((Pagination, ELocationID*) | 
+                        ELocationID+),Abstract?, Affiliation?, AuthorList?, 
+                        Language+, DataBankList?, GrantList?,PublicationTypeList, 
+                        VernacularTitle?, ArticleDate*)>
+<!ATTLIST	Article 
+                PubModel (Print | Print-Electronic | Electronic | 
+                          Electronic-Print | Electronic-eCollection) #REQUIRED>
+<!ELEMENT	ArticleDate (Year,Month,Day)>
+<!ATTLIST	ArticleDate DateType CDATA  #FIXED "Electronic">
+<!ELEMENT	ArticleTitle %text;>
+<!ELEMENT	Author (((LastName, ForeName?, Initials?, Suffix?) | 
+                         CollectiveName),Identifier*)>
+<!ATTLIST	Author ValidYN (Y | N) "Y">
+<!ELEMENT	AuthorList (Author+)>
+<!ATTLIST	AuthorList CompleteYN (Y | N) "Y">
+<!ELEMENT	Chemical (RegistryNumber,NameOfSubstance)>
+<!ELEMENT	ChemicalList (Chemical+)>
+<!ELEMENT	CitationSubset (#PCDATA)>
+<!ELEMENT	CollectiveName %text;>
+<!ELEMENT	CommentsCorrections (RefSource,PMID?,Note?)>
+<!ATTLIST       CommentsCorrections 
+                RefType (CommentOn | CommentIn | ErratumIn | ErratumFor | 
+                PartialRetractionIn | PartialRetractionOf | RepublishedFrom |
+                RepublishedIn | RetractionOf | RetractionIn | UpdateIn |
+                UpdateOf | SummaryForPatientsIn | OriginalReportIn |
+                ReprintOf | ReprintIn | Cites) #REQUIRED >
+<!ELEMENT	CommentsCorrectionsList (CommentsCorrections+)>
+<!ELEMENT	CopyrightInformation (#PCDATA)>
+<!ELEMENT	Country (#PCDATA)>
+<!ELEMENT	DataBank (DataBankName, AccessionNumberList?)>
+<!ELEMENT	DataBankList (DataBank+)>
+<!ATTLIST	DataBankList CompleteYN (Y | N) "Y">
+<!ELEMENT	DataBankName (#PCDATA)>
+<!ELEMENT	DateCompleted (Year,Month,Day)>
+<!ELEMENT	DateCreated (Year,Month,Day)>
+<!ELEMENT	DateRevised (Year,Month,Day)>
+<!ELEMENT	Day (#PCDATA)>
+<!ELEMENT	DescriptorName (#PCDATA)>
+<!ATTLIST	DescriptorName 
+                MajorTopicYN (Y | N) "N"
+                Type (Geographic) #IMPLIED>
+<!ELEMENT	ELocationID (#PCDATA)>
+<!ATTLIST	ELocationID EIdType (doi | pii) #REQUIRED 
+                ValidYN  (Y | N) "Y">
+<!ELEMENT       EndPage (#PCDATA)>
+<!ELEMENT	ForeName (#PCDATA)>
+<!ELEMENT	GeneSymbol (#PCDATA)>
+<!ELEMENT	GeneSymbolList (GeneSymbol+)>
+<!ELEMENT	GeneralNote (#PCDATA)>
+<!ATTLIST	GeneralNote Owner (NLM | NASA | PIP | KIE | HSR | HMD) "NLM">
+<!ELEMENT	Grant (GrantID?, Acronym?, Agency, Country)>
+<!ELEMENT	GrantID (#PCDATA)>
+<!ELEMENT	GrantList (Grant+)>
+<!ATTLIST	GrantList CompleteYN (Y | N) "Y">
+<!ELEMENT       Identifier (#PCDATA)>
+<!ATTLIST       Identifier 
+                Source CDATA #REQUIRED >
+<!ELEMENT	ISOAbbreviation (#PCDATA)>
+<!ELEMENT	ISSN (#PCDATA)>
+<!ATTLIST	ISSN IssnType  (Electronic | Print) #REQUIRED>
+<!ELEMENT       ISSNLinking (#PCDATA)>
+<!ELEMENT	Initials (#PCDATA)>
+<!ELEMENT	Investigator (LastName,ForeName?, Initials?,Suffix?,Identifier*,Affiliation?)>
+<!ATTLIST	Investigator ValidYN (Y | N) "Y">
+<!ELEMENT	InvestigatorList (Investigator+)>
+<!ELEMENT	Issue (#PCDATA)>
+<!ELEMENT	Journal (ISSN?, JournalIssue, Title?, ISOAbbreviation?)>
+<!ELEMENT	JournalIssue (Volume?, Issue?, PubDate)>
+<!ATTLIST	JournalIssue CitedMedium (Internet | Print) #REQUIRED>
+<!ELEMENT	Keyword %text;>
+<!ATTLIST	Keyword MajorTopicYN (Y | N) "N">
+<!ELEMENT	KeywordList (Keyword+)>
+<!ATTLIST	KeywordList Owner (NLM | NLM-AUTO | NASA | PIP | KIE | NOTNLM | HHS) "NLM">
+<!ELEMENT	Language (#PCDATA)>
+<!ELEMENT	LastName (#PCDATA)>
+<!ELEMENT	MedlineDate (#PCDATA)>
+<!ELEMENT	MedlineJournalInfo (Country?, MedlineTA, NlmUniqueID?,ISSNLinking?)>
+<!ELEMENT       MedlinePgn (#PCDATA)>
+<!ELEMENT	MedlineTA (#PCDATA)>
+<!ELEMENT	MeshHeading (DescriptorName, QualifierName*)>
+<!ELEMENT	MeshHeadingList (MeshHeading+)>
+<!ELEMENT	Month (#PCDATA)>
+
+<!ELEMENT	NameOfSubstance (#PCDATA)>
+<!ELEMENT	NlmUniqueID (#PCDATA)>
+<!ELEMENT	Note (#PCDATA)>
+<!ELEMENT	NumberOfReferences (#PCDATA)>
+<!ELEMENT	OtherAbstract (AbstractText+,CopyrightInformation?)>
+<!ATTLIST	OtherAbstract Type (AAMC | AIDS | KIE | PIP | 
+                                    NASA | Publisher) #REQUIRED
+                              Language CDATA "eng">
+<!ELEMENT	OtherID (#PCDATA)>
+<!ATTLIST	OtherID Source (NASA | KIE | PIP | POP | ARPL | CPC | 
+                                IND | CPFH | CLML | NRCBL | NLM) #REQUIRED>
+<!ELEMENT	PMID (#PCDATA)>
+<!ATTLIST       PMID Version CDATA #REQUIRED>
+<!ELEMENT	Pagination ((StartPage, EndPage?, MedlinePgn?) | MedlinePgn)>
+<!ELEMENT	PersonalNameSubject (LastName,ForeName?, Initials?,Suffix?)>
+<!ELEMENT	PersonalNameSubjectList (PersonalNameSubject+)>
+<!ELEMENT	PubDate ((Year, ((Month, Day?) | Season)?) | MedlineDate)>
+<!ELEMENT	PublicationType (#PCDATA)>
+<!ELEMENT	PublicationTypeList (PublicationType+)>
+<!ELEMENT	QualifierName (#PCDATA)>
+<!ATTLIST	QualifierName MajorTopicYN (Y | N) "N">
+<!ELEMENT	RefSource (#PCDATA)>
+<!ELEMENT	RegistryNumber (#PCDATA)>
+<!ELEMENT	Season (#PCDATA)>
+<!ELEMENT	SpaceFlightMission (#PCDATA)>
+<!ELEMENT       StartPage (#PCDATA)>
+<!ELEMENT	Suffix %text;>
+<!ELEMENT       SupplMeshList (SupplMeshName+)>
+<!ELEMENT       SupplMeshName (#PCDATA)>
+<!ATTLIST       SupplMeshName Type (Disease | Protocol) #REQUIRED>
+<!ELEMENT	Title (#PCDATA)>
+<!ELEMENT	VernacularTitle %text;>
+<!ELEMENT	Volume (#PCDATA)>
+<!ELEMENT	Year (#PCDATA)>
+<!ELEMENT	DeleteCitation (PMID+)>

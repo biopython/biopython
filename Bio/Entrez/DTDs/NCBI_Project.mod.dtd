@@ -1,0 +1,158 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "proj.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Project"
+================================================= -->
+
+<!--
+$Revision: 6.3 $
+****************************************************************
+
+  NCBI Project Definition Module
+  by Jim Ostell and Jonathan Kans, 1998
+
+****************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Project,
+          Project-item -->
+
+<!-- Elements referenced from other modules:
+          Date FROM NCBI-General,
+          PubMedId FROM NCBI-Biblio,
+          Seq-id,
+          Seq-loc FROM NCBI-Seqloc,
+          Seq-annot,
+          Pubdesc FROM NCBI-Sequence,
+          Seq-entry FROM NCBI-Seqset,
+          Pubmed-entry FROM NCBI-PubMed -->
+<!-- ============================================ -->
+
+
+<!ELEMENT Project (
+        Project_descr?, 
+        Project_data)>
+
+<!ELEMENT Project_descr (Project-descr)>
+
+<!ELEMENT Project_data (Project-item)>
+
+
+<!ELEMENT Project-item (
+        Project-item_pmuid | 
+        Project-item_protuid | 
+        Project-item_nucuid | 
+        Project-item_sequid | 
+        Project-item_genomeuid | 
+        Project-item_structuid | 
+        Project-item_pmid | 
+        Project-item_protid | 
+        Project-item_nucid | 
+        Project-item_seqid | 
+        Project-item_genomeid | 
+        Project-item_structid | 
+        Project-item_pment | 
+        Project-item_protent | 
+        Project-item_nucent | 
+        Project-item_seqent | 
+        Project-item_genomeent | 
+        Project-item_structent | 
+        Project-item_seqannot | 
+        Project-item_loc | 
+        Project-item_proj)>
+
+<!ELEMENT Project-item_pmuid (Project-item_pmuid_E*)>
+
+
+<!ELEMENT Project-item_pmuid_E (%INTEGER;)>
+
+<!ELEMENT Project-item_protuid (Project-item_protuid_E*)>
+
+
+<!ELEMENT Project-item_protuid_E (%INTEGER;)>
+
+<!ELEMENT Project-item_nucuid (Project-item_nucuid_E*)>
+
+
+<!ELEMENT Project-item_nucuid_E (%INTEGER;)>
+
+<!ELEMENT Project-item_sequid (Project-item_sequid_E*)>
+
+
+<!ELEMENT Project-item_sequid_E (%INTEGER;)>
+
+<!ELEMENT Project-item_genomeuid (Project-item_genomeuid_E*)>
+
+
+<!ELEMENT Project-item_genomeuid_E (%INTEGER;)>
+
+<!ELEMENT Project-item_structuid (Project-item_structuid_E*)>
+
+
+<!ELEMENT Project-item_structuid_E (%INTEGER;)>
+
+<!ELEMENT Project-item_pmid (PubMedId*)>
+
+<!ELEMENT Project-item_protid (Seq-id*)>
+
+<!ELEMENT Project-item_nucid (Seq-id*)>
+
+<!ELEMENT Project-item_seqid (Seq-id*)>
+
+<!ELEMENT Project-item_genomeid (Seq-id*)>
+
+<!ELEMENT Project-item_structid EMPTY>
+
+<!ELEMENT Project-item_pment (Pubmed-entry*)>
+
+<!ELEMENT Project-item_protent (Seq-entry*)>
+
+<!ELEMENT Project-item_nucent (Seq-entry*)>
+
+<!ELEMENT Project-item_seqent (Seq-entry*)>
+
+<!ELEMENT Project-item_genomeent (Seq-entry*)>
+
+<!ELEMENT Project-item_structent EMPTY>
+
+<!ELEMENT Project-item_seqannot (Seq-annot*)>
+
+<!ELEMENT Project-item_loc (Seq-loc*)>
+
+<!ELEMENT Project-item_proj (Project*)>
+
+
+<!ELEMENT Project-descr (
+        Project-descr_id, 
+        Project-descr_name?, 
+        Project-descr_descr?)>
+
+<!ELEMENT Project-descr_id (Project-id*)>
+
+<!ELEMENT Project-descr_name (#PCDATA)>
+
+<!ELEMENT Project-descr_descr (Projdesc*)>
+
+
+<!ELEMENT Projdesc (
+        Projdesc_pub | 
+        Projdesc_date | 
+        Projdesc_comment | 
+        Projdesc_title)>
+
+<!ELEMENT Projdesc_pub (Pubdesc)>
+
+<!ELEMENT Projdesc_date (Date)>
+
+<!ELEMENT Projdesc_comment (#PCDATA)>
+
+<!ELEMENT Projdesc_title (#PCDATA)>
+
+
+<!ELEMENT Project-id (#PCDATA)>
+

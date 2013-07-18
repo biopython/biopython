@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqalign.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 08/02/2010 23:05:14
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 08/01/2012 23:04:42
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 161842 $
+$Revision: 370567 $
 **********************************************************************
 
   NCBI Sequence Alignment elements
@@ -413,21 +413,20 @@ $Revision: 161842 $
         Product-pos_protpos)>
 
 <!ELEMENT Product-pos_nucpos (%INTEGER;)>
-<!-- codon based position on protein (1/3 of aminoacid) -->
+<!-- position on protein (1/3 of amino-acid resolution) -->
 <!ELEMENT Product-pos_protpos (Prot-pos)>
 
-<!-- codon based position on protein (1/3 of aminoacid) -->
+<!-- position on protein (1/3 of amino-acid resolution) -->
 <!ELEMENT Prot-pos (
         Prot-pos_amin, 
         Prot-pos_frame?)>
 
-<!-- standard protein position -->
+<!-- amino-acid position (0-based) -->
 <!ELEMENT Prot-pos_amin (%INTEGER;)>
 
 <!--
- 0, 1, 2, or 3 as for Cdregion
- 0 = not set
- 1, 2, 3 = actual frame
+ position within codon (1-based)
+ 0 = not set (meaning 1)
 -->
 <!ELEMENT Prot-pos_frame (%INTEGER;)>
 

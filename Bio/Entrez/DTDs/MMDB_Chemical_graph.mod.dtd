@@ -1,0 +1,561 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "mmdb1.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "MMDB-Chemical-graph"
+================================================= -->
+
+<!--
+**********************************************************************
+
+  Biological Macromolecule 3-D Structure Data Types for MMDB,
+                A Molecular Modeling Database
+
+  Definitions for a chemical graph
+
+  By Hitomi Ohkawa, Jim Ostell, Chris Hogue and Steve Bryant 
+
+  National Center for Biotechnology Information
+  National Institutes of Health
+  Bethesda, MD 20894 USA
+
+  July, 1995
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Biostruc-graph,
+          Biomol-descr,
+          Residue-graph,
+          Molecule-id,
+          PCSubstance-id,
+          Residue-id,
+          Atom-id -->
+
+<!-- Elements referenced from other modules:
+          Pub FROM NCBI-Pub,
+          BioSource FROM NCBI-BioSource,
+          Seq-id FROM NCBI-Seqloc,
+          Biostruc-id FROM MMDB -->
+<!-- ============================================ -->
+
+<!--
+ A biostruc graph contains the complete chemical graph of the biomolecular 
+ assembly.  The assembly graph is defined hierarchically, in terms of 
+ subgraphs graphs of component molecules.  For PDB-derived biostrucs,
+ the molecules forming the assembly are the individual biopolymer chains and 
+ any non-polymer or "heterogen" groups which are present. 
+ The PDB-derived  "compound name" field appears as the name within the
+ biostruc-graph description.  PDB "class" and "source" fields appear as 
+ explicit attributes.  PDB-derived structures are assigned an assembly type 
+ of "other" unless they have been further classified as the "physiological
+ form" or "crystallographic cell" contents.  If they have, the source of the 
+ type classification appears as a citation within the  assembly description. 
+ Note that the biostruc-graph also includes as literals the subgraphs of 
+ any nonstandard residues present within it. For PDB-derived biostrucs these 
+ subgraphs are constructed automatically, with validation as described below.
+-->
+<!ELEMENT Biostruc-graph (
+        Biostruc-graph_descr?, 
+        Biostruc-graph_molecule-graphs, 
+        Biostruc-graph_inter-molecule-bonds?, 
+        Biostruc-graph_residue-graphs?)>
+
+<!ELEMENT Biostruc-graph_descr (Biomol-descr*)>
+
+<!ELEMENT Biostruc-graph_molecule-graphs (Molecule-graph*)>
+
+<!ELEMENT Biostruc-graph_inter-molecule-bonds (Inter-residue-bond*)>
+
+<!ELEMENT Biostruc-graph_residue-graphs (Residue-graph*)>
+
+<!--
+ A biomolecule description refers to the chemical structure of a molecule or 
+ component substructures.  This descriptor type is used at the level of
+ assemblies, molecules and residues, and also for residue-graph dictionaries.
+ The BioSource object type is drawn from NCBI taxonomy data specifications,
+ and is not repeated here.
+-->
+<!ELEMENT Biomol-descr (
+        Biomol-descr_name | 
+        Biomol-descr_pdb-class | 
+        Biomol-descr_pdb-source | 
+        Biomol-descr_pdb-comment | 
+        Biomol-descr_other-comment | 
+        Biomol-descr_organism | 
+        Biomol-descr_attribution | 
+        Biomol-descr_assembly-type | 
+        Biomol-descr_molecule-type)>
+
+<!ELEMENT Biomol-descr_name (#PCDATA)>
+
+<!ELEMENT Biomol-descr_pdb-class (#PCDATA)>
+
+<!ELEMENT Biomol-descr_pdb-source (#PCDATA)>
+
+<!ELEMENT Biomol-descr_pdb-comment (#PCDATA)>
+
+<!ELEMENT Biomol-descr_other-comment (#PCDATA)>
+
+<!ELEMENT Biomol-descr_organism (BioSource)>
+
+<!ELEMENT Biomol-descr_attribution (Pub)>
+
+<!ELEMENT Biomol-descr_assembly-type (%INTEGER;)>
+<!ATTLIST Biomol-descr_assembly-type value (
+        physiological-form |
+        crystallographic-cell |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Biomol-descr_molecule-type (%INTEGER;)>
+<!ATTLIST Biomol-descr_molecule-type value (
+        dna |
+        rna |
+        protein |
+        other-biopolymer |
+        solvent |
+        other-nonpolymer |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ A molecule chemical graph is defined by a sequence of residues.  Nonpolymers
+ are described in the same way, but may contain only a single residue.  
+ Biopolymer molecules are identified within PDB entries according to their
+ appearance on SEQRES records, which formally define a biopolymer as such. 
+ Biopolymers are defined by the distinction between ATOM and HETATM 
+ coordinate records only in cases where the chemical sequence from SEQRES
+ is in conflict with coordinate data. The PDB-assigned chain code appears as 
+ the name within the molecule descriptions of the biopolymers.
+ Nonpolymer molecules from PDB correspond to individual HETEROGEN groups, 
+ excluding any HETEROGEN groups which represent modified biopolymer residues.
+ These molecules are named according to the chain, residue type and residue 
+ number fields as assigned by PDB. Any description appearing in the PDB HET 
+ record appears as a pdb-comment within the molecule description. 
+ Molecule types for PDB-derived molecule graphs are assigned by matching 
+ residue and atom names against the PDB-documented standard types for protein,
+ DNA and RNA, and against residue codes commonly used to indicate solvent.
+ Classification is by "majority rule". If more than half of the residues in
+ a biopolymer are standard groups of one type, then the molecule is of that 
+ type, and otherwise classified as "other". Note that this classification does
+ not preclude the presence of modified residues, but insists they constitute 
+ less than half the biopolymer. Non-polymers are classified only as "solvent"
+ or "other".  
+ Note that a molecule graph may also contain a set of cross references 
+ to biopolymer sequence databases.  All biopolymer molecules in MMDB contain 
+ appropriate identifiers for the corresponding entry in the NCBI-Sequences 
+ database, in particular the NCBI "gi" number, which may be used for sequence
+ retrieval. The Seq-id object type is defined in the NCBI molecular sequence 
+ specification, and not repeated here.
+-->
+<!ELEMENT Molecule-graph (
+        Molecule-graph_id, 
+        Molecule-graph_descr?, 
+        Molecule-graph_seq-id?, 
+        Molecule-graph_residue-sequence, 
+        Molecule-graph_inter-residue-bonds?, 
+        Molecule-graph_sid?)>
+
+<!ELEMENT Molecule-graph_id (Molecule-id)>
+
+<!ELEMENT Molecule-graph_descr (Biomol-descr*)>
+
+<!ELEMENT Molecule-graph_seq-id (Seq-id)>
+
+<!ELEMENT Molecule-graph_residue-sequence (Residue*)>
+
+<!ELEMENT Molecule-graph_inter-residue-bonds (Inter-residue-bond*)>
+<!-- Pubchem substance id -->
+<!ELEMENT Molecule-graph_sid (PCSubstance-id)>
+
+
+<!ELEMENT Molecule-id (%INTEGER;)>
+
+<!-- Pubchem substance id -->
+<!ELEMENT PCSubstance-id (%INTEGER;)>
+
+<!--
+ Residues may be assigned a text-string name as well as an id number. PDB 
+ assigned residue numbers appear as the residue name.
+-->
+<!ELEMENT Residue (
+        Residue_id, 
+        Residue_name?, 
+        Residue_residue-graph)>
+
+<!ELEMENT Residue_id (Residue-id)>
+
+<!ELEMENT Residue_name (#PCDATA)>
+<!--
+ Residue graphs from different sources may be referenced within a molecule
+ graph.  The allowed choices are the nonstandard residue graphs included in 
+ the present biostruc, residue graphs within other biostrucs, or residue 
+ graphs within tables of standard residue definitions.
+-->
+<!ELEMENT Residue_residue-graph (Residue-graph-pntr)>
+
+
+<!ELEMENT Residue-id (%INTEGER;)>
+
+<!--
+ Residue graphs from different sources may be referenced within a molecule
+ graph.  The allowed choices are the nonstandard residue graphs included in 
+ the present biostruc, residue graphs within other biostrucs, or residue 
+ graphs within tables of standard residue definitions.
+-->
+<!ELEMENT Residue-graph-pntr (
+        Residue-graph-pntr_local | 
+        Residue-graph-pntr_biostruc | 
+        Residue-graph-pntr_standard)>
+
+<!ELEMENT Residue-graph-pntr_local (Residue-graph-id)>
+
+<!ELEMENT Residue-graph-pntr_biostruc (Biostruc-graph-pntr)>
+
+<!ELEMENT Residue-graph-pntr_standard (Biostruc-residue-graph-set-pntr)>
+
+
+<!ELEMENT Biostruc-graph-pntr (
+        Biostruc-graph-pntr_biostruc-id, 
+        Biostruc-graph-pntr_residue-graph-id)>
+
+<!ELEMENT Biostruc-graph-pntr_biostruc-id (Biostruc-id)>
+
+<!ELEMENT Biostruc-graph-pntr_residue-graph-id (Residue-graph-id)>
+
+
+<!ELEMENT Biostruc-residue-graph-set-pntr (
+        Biostruc-residue-graph-set-pntr_biostruc-residue-graph-set-id, 
+        Biostruc-residue-graph-set-pntr_residue-graph-id)>
+
+<!ELEMENT Biostruc-residue-graph-set-pntr_biostruc-residue-graph-set-id (Biostruc-id)>
+
+<!ELEMENT Biostruc-residue-graph-set-pntr_residue-graph-id (Residue-graph-id)>
+
+<!--
+ Residue graphs define atomic formulae, connectivity, chirality, and names.
+ For standard residue graphs from the MMDB dictionary the PDB-assigned 
+ residue-type code appears as the name within the residue graph description,
+ and the full trivial name of the residue as a comment within that 
+ description.  For any nonstandard residue graphs provided with an MMDB 
+ biostruc the PDB-assigned residue-type code similarly appears as the name 
+ within the description, and any information provided on PDB HET records as 
+ a pdb-comment within that description.  
+ Note that nonstandard residue graphs for a PDB-derived biostruc may be 
+ incomplete. Current PDB format cannot represent connectivity for groups 
+ which are disordered, and for which no coordinates are given.  In these 
+ cases the residue graph defined in MMDB represents only the subgraph that 
+ could be identified from available ATOM, HETATM and CONECT records.
+-->
+<!ELEMENT Residue-graph (
+        Residue-graph_id, 
+        Residue-graph_descr?, 
+        Residue-graph_residue-type?, 
+        Residue-graph_iupac-code?, 
+        Residue-graph_atoms, 
+        Residue-graph_bonds, 
+        Residue-graph_chiral-centers?)>
+
+<!ELEMENT Residue-graph_id (Residue-graph-id)>
+
+<!ELEMENT Residue-graph_descr (Biomol-descr*)>
+
+<!ELEMENT Residue-graph_residue-type (%INTEGER;)>
+<!ATTLIST Residue-graph_residue-type value (
+        deoxyribonucleotide |
+        ribonucleotide |
+        amino-acid |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Residue-graph_iupac-code (Residue-graph_iupac-code_E*)>
+
+
+<!ELEMENT Residue-graph_iupac-code_E (#PCDATA)>
+
+<!ELEMENT Residue-graph_atoms (Atom*)>
+
+<!ELEMENT Residue-graph_bonds (Intra-residue-bond*)>
+
+<!ELEMENT Residue-graph_chiral-centers (Chiral-center*)>
+
+
+<!ELEMENT Residue-graph-id (%INTEGER;)>
+
+<!--
+ Atoms in residue graphs are defined by elemental symbols and names.  PDB-
+ assigned atom names appear here in the name field, except in cases of known 
+ PDB synonyms.  In these cases atom names are mapped to the names used in the
+ MMDB standard dictionary. This occurs primarily for hydrogen atoms, where 
+ PDB practice allows synonyms for several atom types.  For PDB atoms the 
+ elemental symbol is obtained by parsing the PDB atom name field, allowing 
+ for known special-semantics cases where the atom name does not follow the
+ documented encoding rule.  Ionizable protons are identified within standard 
+ residue graphs in the MMDB dictionary, but not within automatically-defined
+ nonstandard graphs.
+-->
+<!ELEMENT Atom (
+        Atom_id, 
+        Atom_name?, 
+        Atom_iupac-code?, 
+        Atom_element, 
+        Atom_ionizable-proton?)>
+
+<!ELEMENT Atom_id (Atom-id)>
+
+<!ELEMENT Atom_name (#PCDATA)>
+
+<!ELEMENT Atom_iupac-code (Atom_iupac-code_E*)>
+
+
+<!ELEMENT Atom_iupac-code_E (#PCDATA)>
+
+<!ELEMENT Atom_element %ENUM;>
+<!ATTLIST Atom_element value (
+        h |
+        he |
+        li |
+        be |
+        b |
+        c |
+        n |
+        o |
+        f |
+        ne |
+        na |
+        mg |
+        al |
+        si |
+        p |
+        s |
+        cl |
+        ar |
+        k |
+        ca |
+        sc |
+        ti |
+        v |
+        cr |
+        mn |
+        fe |
+        co |
+        ni |
+        cu |
+        zn |
+        ga |
+        ge |
+        as |
+        se |
+        br |
+        kr |
+        rb |
+        sr |
+        y |
+        zr |
+        nb |
+        mo |
+        tc |
+        ru |
+        rh |
+        pd |
+        ag |
+        cd |
+        in |
+        sn |
+        sb |
+        te |
+        i |
+        xe |
+        cs |
+        ba |
+        la |
+        ce |
+        pr |
+        nd |
+        pm |
+        sm |
+        eu |
+        gd |
+        tb |
+        dy |
+        ho |
+        er |
+        tm |
+        yb |
+        lu |
+        hf |
+        ta |
+        w |
+        re |
+        os |
+        ir |
+        pt |
+        au |
+        hg |
+        tl |
+        pb |
+        bi |
+        po |
+        at |
+        rn |
+        fr |
+        ra |
+        ac |
+        th |
+        pa |
+        u |
+        np |
+        pu |
+        am |
+        cm |
+        bk |
+        cf |
+        es |
+        fm |
+        md |
+        no |
+        lr |
+        other |
+        unknown
+        ) #REQUIRED >
+
+
+<!ELEMENT Atom_ionizable-proton %ENUM;>
+<!ATTLIST Atom_ionizable-proton value (
+        true |
+        false |
+        unknown
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Atom-id (%INTEGER;)>
+
+<!--
+ Intra-residue-bond specifies connectivity between atoms in Residue-graph.
+ Unlike Inter-residue-bond defined later, its participating atoms are part of
+ a residue subgraph dictionary, not part of a specific biostruc-graph.
+ For residue graphs in the standard MMDB dictionary bonds are defined from
+ the known chemical structures of amino acids and nucleotides.  For 
+ nonstandard residue graphs bonds are defined from PDB CONECT records, with
+ validation for consistency with coordinate data, and from stereochemical
+ calculation to identify unreported bonds.  Validation and bond identification
+ are based on comparison of inter-atomic distances to the sum of covalent
+ radii for the corresponding elements. 
+-->
+<!ELEMENT Intra-residue-bond (
+        Intra-residue-bond_atom-id-1, 
+        Intra-residue-bond_atom-id-2, 
+        Intra-residue-bond_bond-order?)>
+
+<!ELEMENT Intra-residue-bond_atom-id-1 (Atom-id)>
+
+<!ELEMENT Intra-residue-bond_atom-id-2 (Atom-id)>
+
+<!ELEMENT Intra-residue-bond_bond-order (%INTEGER;)>
+<!ATTLIST Intra-residue-bond_bond-order value (
+        single |
+        partial-double |
+        aromatic |
+        double |
+        triple |
+        other |
+        unknown
+        ) #IMPLIED >
+
+
+<!--
+ Chiral centers are atoms with tetrahedral geometry.  Chirality is defined
+ by a chiral volume involving the chiral center and 3 other atoms bonded to 
+ it.  For any coordinates assigned to atoms c, n1, n2, and n3, the vector 
+ triple product (n1-c) dot ( (n2-c) cross (n3-c) ) must have the indicated
+ sign.  The calculation assumes an orthogonal right-handed coordinate system
+ as is used for MMDB model structures.  
+ Chirality is defined for standard residues in the MMDB dictionary, but is 
+ not assigned automatically for PDB-derived nonstandard residues. If assigned
+ for nonstandard residues, the source of chirality information is described 
+ by a citation within the residue description.
+-->
+<!ELEMENT Chiral-center (
+        Chiral-center_c, 
+        Chiral-center_n1, 
+        Chiral-center_n2, 
+        Chiral-center_n3, 
+        Chiral-center_sign)>
+
+<!ELEMENT Chiral-center_c (Atom-id)>
+
+<!ELEMENT Chiral-center_n1 (Atom-id)>
+
+<!ELEMENT Chiral-center_n2 (Atom-id)>
+
+<!ELEMENT Chiral-center_n3 (Atom-id)>
+
+<!ELEMENT Chiral-center_sign %ENUM;>
+<!ATTLIST Chiral-center_sign value (
+        positive |
+        negative
+        ) #REQUIRED >
+
+
+<!--
+ Inter-residue bonds are defined by a reference to two atoms. For PDB-derived 
+ structures bonds are identified from biopolymer connectivity according to
+ SEQRES and from other connectivity information on SSBOND and CONECT 
+ records. These data are validated and unreported bonds identified by
+ stereochemical calculation, using the same criteria as for intra-residue 
+ bonds.
+-->
+<!ELEMENT Inter-residue-bond (
+        Inter-residue-bond_atom-id-1, 
+        Inter-residue-bond_atom-id-2, 
+        Inter-residue-bond_bond-order?)>
+<!--
+ Atoms, residues and molecules within the current biostruc are referenced 
+ by hierarchical pointers.
+-->
+<!ELEMENT Inter-residue-bond_atom-id-1 (Atom-pntr)>
+<!--
+ Atoms, residues and molecules within the current biostruc are referenced 
+ by hierarchical pointers.
+-->
+<!ELEMENT Inter-residue-bond_atom-id-2 (Atom-pntr)>
+
+<!ELEMENT Inter-residue-bond_bond-order (%INTEGER;)>
+<!ATTLIST Inter-residue-bond_bond-order value (
+        single |
+        partial-double |
+        aromatic |
+        double |
+        triple |
+        other |
+        unknown
+        ) #IMPLIED >
+
+
+<!--
+ Atoms, residues and molecules within the current biostruc are referenced 
+ by hierarchical pointers.
+-->
+<!ELEMENT Atom-pntr (
+        Atom-pntr_molecule-id, 
+        Atom-pntr_residue-id, 
+        Atom-pntr_atom-id)>
+
+<!ELEMENT Atom-pntr_molecule-id (Molecule-id)>
+
+<!ELEMENT Atom-pntr_residue-id (Residue-id)>
+
+<!ELEMENT Atom-pntr_atom-id (Atom-id)>
+
+
+<!ELEMENT Atom-pntr-set (Atom-pntr*)>
+

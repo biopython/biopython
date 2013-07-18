@@ -1,0 +1,1088 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "cdd.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Cdd"
+================================================= -->
+
+<!--
+$Revision: 194512 $
+**********************************************************************
+
+  Definitions for CDD's 
+
+  NCBI Structure Group
+
+  National Center for Biotechnology Information
+  National Institutes of Health
+  Bethesda, MD 20894 USA
+
+  October 1999
+
+  asntool -m cdd.asn -w 100 -o cdd.h
+  asntool -B objcdd -m cdd.asn -G -w 100 -I objseq.h objsset.h -K cdd.h \
+          -M asn.all
+**********************************************************************
+ NCBI Conserved Domain Definition
+-->
+
+<!-- Elements used by other modules:
+          Cdd-id,
+          Cdd-id-set,
+          Cdd,
+          Cdd-set,
+          Cdd-tree,
+          Cdd-tree-set,
+          Cdd-pref-nodes,
+          Cdd-Project -->
+
+<!-- Elements referenced from other modules:
+          Date FROM NCBI-General,
+          Pub FROM NCBI-Pub,
+          Biostruc-annot-set FROM MMDB,
+          Bioseq FROM NCBI-Sequence,
+          Seq-annot FROM NCBI-Sequence,
+          Seq-entry FROM NCBI-Seqset,
+          Org-ref FROM NCBI-Organism,
+          Seq-id FROM NCBI-Seqloc,
+          Seq-interval FROM NCBI-Seqloc,
+          Seq-loc FROM NCBI-Seqloc,
+          Seq-feat FROM NCBI-Seqfeat,
+          Score-set FROM NCBI-Seqalign,
+          Cn3d-style-dictionary,
+          Cn3d-user-annotations FROM NCBI-Cn3d,
+          PssmWithParameters FROM NCBI-ScoreMat -->
+<!-- ============================================ -->
+
+<!-- dealing with lists of preferred tax-nodes  -->
+<!ELEMENT Cdd-org-ref (
+        Cdd-org-ref_reference, 
+        Cdd-org-ref_active?, 
+        Cdd-org-ref_parent-tax-id?, 
+        Cdd-org-ref_rank?)>
+
+<!ELEMENT Cdd-org-ref_reference (Org-ref)>
+
+<!ELEMENT Cdd-org-ref_active EMPTY>
+<!ATTLIST Cdd-org-ref_active value ( true | false ) "true" >
+
+
+<!ELEMENT Cdd-org-ref_parent-tax-id (%INTEGER;)>
+
+<!ELEMENT Cdd-org-ref_rank (#PCDATA)>
+
+
+<!ELEMENT Cdd-org-ref-set (Cdd-org-ref*)>
+
+
+<!ELEMENT Cdd-pref-node-descr (
+        Cdd-pref-node-descr_create-date | 
+        Cdd-pref-node-descr_description)>
+
+<!ELEMENT Cdd-pref-node-descr_create-date (Date)>
+
+<!ELEMENT Cdd-pref-node-descr_description (#PCDATA)>
+
+
+<!ELEMENT Cdd-pref-node-descr-set (Cdd-pref-node-descr*)>
+
+
+<!ELEMENT Cdd-pref-nodes (
+        Cdd-pref-nodes_preferred-nodes, 
+        Cdd-pref-nodes_model-organisms?, 
+        Cdd-pref-nodes_optional-nodes?, 
+        Cdd-pref-nodes_description?)>
+
+<!ELEMENT Cdd-pref-nodes_preferred-nodes (Cdd-org-ref-set)>
+
+<!ELEMENT Cdd-pref-nodes_model-organisms (Cdd-org-ref-set)>
+
+<!ELEMENT Cdd-pref-nodes_optional-nodes (Cdd-org-ref-set)>
+
+<!ELEMENT Cdd-pref-nodes_description (Cdd-pref-node-descr-set)>
+
+<!--
+ Cdd's should not exist without a unique accession, but alternative id's may
+ be present as well. It is conceivable that a CD which is created as a merged
+ product of two highly redundant CDs will retain the source ids in addition 
+ to its new unique id
+ database the object resides in
+ currently not in use
+-->
+<!ELEMENT Global-id (
+        Global-id_accession, 
+        Global-id_release?, 
+        Global-id_version?, 
+        Global-id_database?)>
+
+<!-- SMART, Pfam, LOAD or CD accession -->
+<!ELEMENT Global-id_accession (#PCDATA)>
+
+<!--
+ to hold CD-Database release number
+ if desired, currently not used
+-->
+<!ELEMENT Global-id_release (#PCDATA)>
+
+<!--
+ version 0 is the seed, version
+ numbers increase with update/curate
+ cycles
+-->
+<!ELEMENT Global-id_version (%INTEGER;)>
+
+<!-- this is NOT the source!, rather the -->
+<!ELEMENT Global-id_database (#PCDATA)>
+
+
+<!ELEMENT Cdd-id (
+        Cdd-id_uid | 
+        Cdd-id_gid)>
+
+<!--
+ for synchronization with Entrez
+ holds PSSM-Ids
+-->
+<!ELEMENT Cdd-id_uid (%INTEGER;)>
+
+<!-- holds accession/version pairs -->
+<!ELEMENT Cdd-id_gid (Global-id)>
+
+
+<!ELEMENT Cdd-id-set (Cdd-id*)>
+
+<!--
+ record whether the CD contains
+ repeated sequence/structure motifs
+-->
+<!ELEMENT Cdd-repeat (
+        Cdd-repeat_count, 
+        Cdd-repeat_location?, 
+        Cdd-repeat_avglen?)>
+
+<!-- number of tandem repeats in the CD -->
+<!ELEMENT Cdd-repeat_count (%INTEGER;)>
+
+<!-- location on the representative -->
+<!ELEMENT Cdd-repeat_location (Seq-loc)>
+
+<!-- average repeat length -->
+<!ELEMENT Cdd-repeat_avglen (%INTEGER;)>
+
+<!-- record a link to Entrez Books -->
+<!ELEMENT Cdd-book-ref (
+        Cdd-book-ref_bookname, 
+        Cdd-book-ref_textelement, 
+        Cdd-book-ref_elementid?, 
+        Cdd-book-ref_subelementid?, 
+        Cdd-book-ref_celementid?, 
+        Cdd-book-ref_csubelementid?)>
+
+<!-- abbreviated book title -->
+<!ELEMENT Cdd-book-ref_bookname (#PCDATA)>
+
+<!ELEMENT Cdd-book-ref_textelement %ENUM;>
+
+<!--
+    unassigned	-  type of element 
+    section	-  a section or paragraph
+    figgrp	-  a figure or set of figures
+    table	-  a table
+    chapter	-  a whole chapter
+    biblist	-  a lisf of references
+    box	-  an inserted box
+    glossary	-  glossary
+    appendix	-  appendix
+-->
+<!ATTLIST Cdd-book-ref_textelement value (
+        unassigned |
+        section |
+        figgrp |
+        table |
+        chapter |
+        biblist |
+        box |
+        glossary |
+        appendix |
+        other
+        ) #REQUIRED >
+
+
+<!-- numerical address of the text-element -->
+<!ELEMENT Cdd-book-ref_elementid (%INTEGER;)>
+
+<!-- exact address, used with section -->
+<!ELEMENT Cdd-book-ref_subelementid (%INTEGER;)>
+
+<!-- address of the text element, if character string -->
+<!ELEMENT Cdd-book-ref_celementid (#PCDATA)>
+
+<!-- exact address, if character string -->
+<!ELEMENT Cdd-book-ref_csubelementid (#PCDATA)>
+
+<!--
+ The description of CDD's refers to the specific set of aligned sequences,
+ the region that is being aligned and the information contained in the
+ alignment. It may contain a lengthy comment
+ describing the function of the domain as well as its origin and all
+ other anecdotal information that can't be pressed into a rigid scheme.
+ Crosslinks to reference papers available in PubMed are possible as well.
+ There can be as many of these as you want in the CDD.
+-->
+<!ELEMENT Cdd-descr (
+        Cdd-descr_othername | 
+        Cdd-descr_category | 
+        Cdd-descr_comment | 
+        Cdd-descr_reference | 
+        Cdd-descr_create-date | 
+        Cdd-descr_tax-source | 
+        Cdd-descr_source | 
+        Cdd-descr_status | 
+        Cdd-descr_update-date | 
+        Cdd-descr_scrapbook | 
+        Cdd-descr_source-id | 
+        Cdd-descr_repeats | 
+        Cdd-descr_old-root | 
+        Cdd-descr_curation-status | 
+        Cdd-descr_readonly-status | 
+        Cdd-descr_book-ref | 
+        Cdd-descr_attribution | 
+        Cdd-descr_title)>
+
+<!--
+ alternative names for the CDD
+ if domain has several common names
+-->
+<!ELEMENT Cdd-descr_othername (#PCDATA)>
+
+<!--
+ intracellular, extracellular, etc.
+ to record spatial and/or temporal
+ expression in free-text format
+-->
+<!ELEMENT Cdd-descr_category (#PCDATA)>
+
+<!-- this is where descriptions go -->
+<!ELEMENT Cdd-descr_comment (#PCDATA)>
+
+<!-- a citation describing the domain -->
+<!ELEMENT Cdd-descr_reference (Pub)>
+
+<!-- Date of first creation/dump -->
+<!ELEMENT Cdd-descr_create-date (Date)>
+
+<!-- holds the highest common tax node -->
+<!ELEMENT Cdd-descr_tax-source (Org-ref)>
+
+<!--
+ the database the seeds were created
+ from, e.g. SMART, PFAM, etc..
+-->
+<!ELEMENT Cdd-descr_source (#PCDATA)>
+
+<!ELEMENT Cdd-descr_status (%INTEGER;)>
+
+<!--
+    finished-ok	-  a public curated CD
+    pending-release	-  needs work done, not yet released
+    other-asis	-  imported as-is, immediate release
+    matrix-only	-  CD holds a Psi-Blast PSSM only,
+         does not contain alignment data
+    update-running	-  has been flagged for
+         update (in queue)
+    auto-updated	-  update finished, no
+         work necessary
+    claimed	-  is earmarked for curation
+    curated-complete	-  public curated member of a
+         completed family
+    other	-  for CD production?
+-->
+<!ATTLIST Cdd-descr_status value (
+        unassigned |
+        finished-ok |
+        pending-release |
+        other-asis |
+        matrix-only |
+        update-running |
+        auto-updated |
+        claimed |
+        curated-complete |
+        other
+        ) #IMPLIED >
+
+
+<!-- Date of last version change -->
+<!ELEMENT Cdd-descr_update-date (Date)>
+
+<!--
+ for storing curation notes
+ those won't make it into public
+ distributions
+-->
+<!ELEMENT Cdd-descr_scrapbook (Cdd-descr_scrapbook_E*)>
+
+
+<!ELEMENT Cdd-descr_scrapbook_E (#PCDATA)>
+
+<!-- for linking back to source db -->
+<!ELEMENT Cdd-descr_source-id (Cdd-id-set)>
+
+<!-- to record repeat counts -->
+<!ELEMENT Cdd-descr_repeats (Cdd-repeat)>
+
+<!-- to record short-term history -->
+<!ELEMENT Cdd-descr_old-root (Cdd-id-set)>
+
+<!ELEMENT Cdd-descr_curation-status (%INTEGER;)>
+
+<!--
+    unassigned	-  to record curation status
+    prein	-  when CD is checked out from
+    ofc	-  the tracking database, for 
+    iac	-  use within curation software
+-->
+<!ATTLIST Cdd-descr_curation-status value (
+        unassigned |
+        prein |
+        ofc |
+        iac |
+        ofv1 |
+        iav1 |
+        ofv2 |
+        iav2 |
+        postin |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Cdd-descr_readonly-status (%INTEGER;)>
+
+<!--
+    unassigned	-  to record read-only status
+    readonly	-  when CD is checked out from
+    readwrite	-  the tracking database, for
+    other	-  use within curation software
+-->
+<!ATTLIST Cdd-descr_readonly-status value (
+        unassigned |
+        readonly |
+        readwrite |
+        other
+        ) #IMPLIED >
+
+
+<!-- links to Entrez/books -->
+<!ELEMENT Cdd-descr_book-ref (Cdd-book-ref)>
+
+<!-- add citations and/or author names -->
+<!ELEMENT Cdd-descr_attribution (Pub)>
+
+<!-- hold short descriptive text -->
+<!ELEMENT Cdd-descr_title (#PCDATA)>
+
+
+<!ELEMENT Cdd-descr-set (Cdd-descr*)>
+
+<!--
+ the Cdd-tree stores the hierarchy of CDDs. These objects are stored separate
+ from the CDs to allow for fast retrieval and use as an 'index' into CDs
+ all the components in a CD-tree match components in the full-sized CD
+ and should be synchronized
+-->
+<!ELEMENT Cdd-tree (
+        Cdd-tree_name, 
+        Cdd-tree_id, 
+        Cdd-tree_description?, 
+        Cdd-tree_parent?, 
+        Cdd-tree_children?, 
+        Cdd-tree_siblings?, 
+        Cdd-tree_neighbors?)>
+
+<!-- short name  copied from CD -->
+<!ELEMENT Cdd-tree_name (#PCDATA)>
+
+<!-- IDs         copied from CD -->
+<!ELEMENT Cdd-tree_id (Cdd-id-set)>
+
+<!-- description copied from CD -->
+<!ELEMENT Cdd-tree_description (Cdd-descr-set)>
+
+<!-- CD is the result of a split/merge -->
+<!ELEMENT Cdd-tree_parent (Cdd-id)>
+
+<!-- this CD has been split -->
+<!ELEMENT Cdd-tree_children (Cdd-id-set)>
+
+<!-- related CDs (have common hits) -->
+<!ELEMENT Cdd-tree_siblings (Cdd-id-set)>
+
+<!--
+ co-occurring CDs (non-overlapping 
+ hits to same sequences)
+-->
+<!ELEMENT Cdd-tree_neighbors (Cdd-id-set)>
+
+
+<!ELEMENT Cdd-tree-set (Cdd-tree*)>
+
+<!--
+ Matrix definitions, these are supposed to store PSSMs and corresponding 
+ matrices of relative residue frequencies.
+ the number of columns and rows is listed explicitly, values in columns
+ are stored column by column, i.e. in groups of nrows values for each column
+-->
+<!ELEMENT Matrix (
+        Matrix_ncolumns, 
+        Matrix_nrows, 
+        Matrix_row-labels?, 
+        Matrix_scale-factor, 
+        Matrix_columns)>
+
+<!ELEMENT Matrix_ncolumns (%INTEGER;)>
+
+<!ELEMENT Matrix_nrows (%INTEGER;)>
+
+<!ELEMENT Matrix_row-labels (Matrix_row-labels_E*)>
+
+
+<!ELEMENT Matrix_row-labels_E (#PCDATA)>
+
+<!ELEMENT Matrix_scale-factor (%INTEGER;)>
+
+<!ELEMENT Matrix_columns (Matrix_columns_E*)>
+
+
+<!ELEMENT Matrix_columns_E (%INTEGER;)>
+
+<!--
+ definition for matrix of pairwise "distances", stored as the upper 
+ triangle of a squared n x n matrix (excluding the diagonal), this is
+ supposed to store pairwise percentages of identical residues, pairwise
+ alignment scores or E-values from pairwise BLAST sequence comparisons
+-->
+<!ELEMENT Triangle (
+        Triangle_nelements, 
+        Triangle_scores?, 
+        Triangle_div-ranks?)>
+
+<!ELEMENT Triangle_nelements (%INTEGER;)>
+
+<!ELEMENT Triangle_scores (Score-set)>
+
+<!ELEMENT Triangle_div-ranks (Triangle_div-ranks_E*)>
+
+
+<!ELEMENT Triangle_div-ranks_E (%INTEGER;)>
+
+<!--
+ Update-align is supposed to contain alignments that still need some work
+ done to fit into the CD-proper alignment. These originate from the
+ CD update process (generated by Blast, for example) or may be created in
+ an editing session to save its state
+-->
+<!ELEMENT Update-comment (
+        Update-comment_comment | 
+        Update-comment_addthis | 
+        Update-comment_replaces | 
+        Update-comment_reject-loc | 
+        Update-comment_reference)>
+
+<!--
+ free text to describe nature of
+ Update-align
+-->
+<!ELEMENT Update-comment_comment (#PCDATA)>
+
+<!--
+ suggestion for inclusion in the CD
+ without corresponding alignment
+-->
+<!ELEMENT Update-comment_addthis (Seq-loc)>
+
+<!--
+ if one or several alignment rows are
+ to be replaced by the Update-align
+-->
+<!ELEMENT Update-comment_replaces (Seq-loc)>
+
+<!--
+ if used with Reject-id, specify a
+ location on a sequence which should
+ not be used
+-->
+<!ELEMENT Update-comment_reject-loc (Seq-loc)>
+
+<!--
+ if update alignment imported from
+ citation and for whenever it seems
+ necessary to cite
+-->
+<!ELEMENT Update-comment_reference (Pub)>
+
+<!--
+ Both fields are optional, as the Update-align may be a Seq-annot without
+ description, or a suggestion to add a sequence without the corresponding
+ alignment
+-->
+<!ELEMENT Update-align (
+        Update-align_description?, 
+        Update-align_seqannot?, 
+        Update-align_type)>
+
+<!ELEMENT Update-align_description (Update-comment*)>
+
+<!-- contains the SeqAlign -->
+<!ELEMENT Update-align_seqannot (Seq-annot)>
+
+<!ELEMENT Update-align_type (%INTEGER;)>
+<!ATTLIST Update-align_type value (
+        unassigned |
+        update |
+        update-3d |
+        demoted |
+        demoted-3d |
+        other
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Reject-id (
+        Reject-id_description?, 
+        Reject-id_ids)>
+
+<!ELEMENT Reject-id_description (Update-comment*)>
+
+<!ELEMENT Reject-id_ids (Seq-id*)>
+
+
+<!ELEMENT Feature-evidence (
+        Feature-evidence_comment | 
+        Feature-evidence_reference | 
+        Feature-evidence_bsannot | 
+        Feature-evidence_seqfeat | 
+        Feature-evidence_book-ref)>
+
+<!--
+ so we can spell out what doesn't
+ fit in any other category
+-->
+<!ELEMENT Feature-evidence_comment (#PCDATA)>
+
+<!-- evidence via a literature reference -->
+<!ELEMENT Feature-evidence_reference (Pub)>
+
+<!--
+ evidence via Biostruc-features, such
+ as structure superpositions 
+-->
+<!ELEMENT Feature-evidence_bsannot (Biostruc-annot-set)>
+
+<!--
+ evidence is a Sequence feature found
+ elsewhere
+-->
+<!ELEMENT Feature-evidence_seqfeat (Seq-feat)>
+
+<!-- evidence is a book chapter or figure -->
+<!ELEMENT Feature-evidence_book-ref (Cdd-book-ref)>
+
+
+<!ELEMENT Align-annot (
+        Align-annot_location, 
+        Align-annot_description?, 
+        Align-annot_evidence?, 
+        Align-annot_type?, 
+        Align-annot_aliases?, 
+        Align-annot_motif?, 
+        Align-annot_motifuse?)>
+
+<!--
+ points to a location in one of the
+ aligned sequences, usually the
+ master/representative
+-->
+<!ELEMENT Align-annot_location (Seq-loc)>
+
+<!--
+ to hold descriptions/names like
+ "Heme binding site" or "catalytic
+ triad" etc., something that should
+ be used for labels in visualization
+-->
+<!ELEMENT Align-annot_description (#PCDATA)>
+
+<!--
+ evidence we can
+ compute with
+-->
+<!ELEMENT Align-annot_evidence (Feature-evidence*)>
+
+<!--
+ for typing annotated features
+ 0 .. no type assigned
+ 1 .. active site
+ 2 .. polypeptide binding site
+ 3 .. nucleic acid binding site
+ 4 .. ion binding site
+ 5 .. chemical binding site
+ 6 .. posttranslational modification site
+-->
+<!ELEMENT Align-annot_type (%INTEGER;)>
+
+<!-- adding more names for indexing -->
+<!ELEMENT Align-annot_aliases (Align-annot_aliases_E*)>
+
+
+<!ELEMENT Align-annot_aliases_E (#PCDATA)>
+
+<!-- to validate mapping of sites -->
+<!ELEMENT Align-annot_motif (#PCDATA)>
+
+<!--
+ 0 for validation,
+ 1 for motif somewhere in seqloc
+ 2 for multiple motifs in seqloc
+-->
+<!ELEMENT Align-annot_motifuse (%INTEGER;)>
+
+
+<!ELEMENT Align-annot-set (Align-annot*)>
+
+<!--
+ the Domain-parent records an evolutionary relationship which may not be
+ as simple as a classical parent-child relationship in a typical hierarchy,
+ i.e. where a CD is merely a specific subgroup ("child") of a more general
+ diverse alignment model ("parent"). A CD alignment model may be the result
+ of an ancient fusion event, combining two or more domains into a bigger unit
+ which has subsequently undergone a divergent evolutionary process similar to
+ what may have happened to a single "domain". A CD alignment model may 
+ also reflect the result of a deletion event, where a specific subgroup
+ lacks part of a (set of) domain(s), but where the part present is found to
+ be highly similar to a putative "parent", with some added evidence for
+ an actual deletion, like from the distribution of truncated copies in phylogenetic
+ lineages. Deletion events which affect different parts of a set of
+ duplicated domain architectures may be indistinguishable from actual
+ fission events, which means that we may want to represent the latter as
+ deletions after duplication and do not need a special case for fissions.
+-->
+<!ELEMENT Domain-parent (
+        Domain-parent_parent-type, 
+        Domain-parent_parentid, 
+        Domain-parent_seqannot?)>
+
+<!ELEMENT Domain-parent_parent-type (%INTEGER;)>
+
+<!--
+    classical	-  the classification of parent child relations
+-->
+<!ATTLIST Domain-parent_parent-type value (
+        classical |
+        fusion |
+        deletion |
+        permutation |
+        other
+        ) #IMPLIED >
+
+
+<!-- identify the section parent by accession -->
+<!ELEMENT Domain-parent_parentid (Cdd-id)>
+
+<!--
+ contains the sequence alignment linking
+ CD alignment models, should align the 
+ masters/representatives of each CD
+-->
+<!ELEMENT Domain-parent_seqannot (Seq-annot)>
+
+<!-- record sequence trees generated by a suitable algorithm. -->
+<!ELEMENT Sequence-tree (
+        Sequence-tree_cdAccession?, 
+        Sequence-tree_algorithm, 
+        Sequence-tree_isAnnotated?, 
+        Sequence-tree_root)>
+
+<!ELEMENT Sequence-tree_cdAccession (#PCDATA)>
+
+<!ELEMENT Sequence-tree_algorithm (Algorithm-type)>
+
+<!ELEMENT Sequence-tree_isAnnotated EMPTY>
+<!ATTLIST Sequence-tree_isAnnotated value ( true | false ) "false" >
+
+
+<!ELEMENT Sequence-tree_root (SeqTree-node)>
+
+
+<!ELEMENT SeqTree-node (
+        SeqTree-node_isAnnotated?, 
+        SeqTree-node_name?, 
+        SeqTree-node_distance?, 
+        SeqTree-node_children, 
+        SeqTree-node_annotation?)>
+
+<!ELEMENT SeqTree-node_isAnnotated EMPTY>
+<!ATTLIST SeqTree-node_isAnnotated value ( true | false ) "false" >
+
+
+<!ELEMENT SeqTree-node_name (#PCDATA)>
+
+<!ELEMENT SeqTree-node_distance (%REAL;)>
+
+<!ELEMENT SeqTree-node_children (
+        SeqTree-node_children_children | 
+        SeqTree-node_children_footprint)>
+
+<!ELEMENT SeqTree-node_children_children (SeqTree-node*)>
+
+<!ELEMENT SeqTree-node_children_footprint (
+        SeqTree-node_children_footprint_seqRange, 
+        SeqTree-node_children_footprint_rowId?)>
+
+<!ELEMENT SeqTree-node_children_footprint_seqRange (Seq-interval)>
+
+<!ELEMENT SeqTree-node_children_footprint_rowId (%INTEGER;)>
+
+<!ELEMENT SeqTree-node_annotation (Node-annotation)>
+
+
+<!ELEMENT Algorithm-type (
+        Algorithm-type_scoring-Scheme, 
+        Algorithm-type_clustering-Method, 
+        Algorithm-type_score-Matrix?, 
+        Algorithm-type_gapOpen?, 
+        Algorithm-type_gapExtend?, 
+        Algorithm-type_gapScaleFactor?, 
+        Algorithm-type_nTerminalExt?, 
+        Algorithm-type_cTerminalExt?, 
+        Algorithm-type_tree-scope?, 
+        Algorithm-type_coloring-scope?)>
+
+<!ELEMENT Algorithm-type_scoring-Scheme (%INTEGER;)>
+<!ATTLIST Algorithm-type_scoring-Scheme value (
+        unassigned |
+        percent-id |
+        kimura-corrected |
+        aligned-score |
+        aligned-score-ext |
+        aligned-score-filled |
+        blast-footprint |
+        blast-full |
+        hybrid-aligned-score |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Algorithm-type_clustering-Method (%INTEGER;)>
+<!ATTLIST Algorithm-type_clustering-Method value (
+        unassigned |
+        single-linkage |
+        neighbor-joining |
+        fast-minimum-evolution |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Algorithm-type_score-Matrix (%INTEGER;)>
+<!ATTLIST Algorithm-type_score-Matrix value (
+        unassigned |
+        blosum45 |
+        blosum62 |
+        blosum80 |
+        pam30 |
+        pam70 |
+        pam250 |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Algorithm-type_gapOpen (%INTEGER;)>
+
+<!ELEMENT Algorithm-type_gapExtend (%INTEGER;)>
+
+<!ELEMENT Algorithm-type_gapScaleFactor (%INTEGER;)>
+
+<!ELEMENT Algorithm-type_nTerminalExt (%INTEGER;)>
+
+<!ELEMENT Algorithm-type_cTerminalExt (%INTEGER;)>
+
+<!ELEMENT Algorithm-type_tree-scope (%INTEGER;)>
+<!ATTLIST Algorithm-type_tree-scope value (
+        allDescendants |
+        immediateChildrenOnly |
+        selfOnly |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Algorithm-type_coloring-scope (%INTEGER;)>
+<!ATTLIST Algorithm-type_coloring-scope value (
+        allDescendants |
+        immediateChildrenOnly |
+        other
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Node-annotation (
+        Node-annotation_presentInChildCD?, 
+        Node-annotation_note?)>
+
+<!ELEMENT Node-annotation_presentInChildCD (#PCDATA)>
+
+<!ELEMENT Node-annotation_note (#PCDATA)>
+
+<!--
+ the Cdd is the basic ASN.1 object storing an annotated and curated set of
+ alignments (formulated as a set of pairwise master-slave alignments). 
+ The alignment data are contained in Seq-annots, and a special type of
+ object, the Update-align, contains additional alignment data from unfinished
+ editing sessions and update processes. The Biostruc-annot-set holds 
+ structure superposition information for multiple structure-derived rows in
+ the alignment.
+ Version numbers in Global-ids are meant to be updated every time the Cdd is
+ changed in a way that does not require Global-ids to be changed (sequences
+ added in update cycle, annotation changed, alignment errors fixed)
+-->
+<!ELEMENT Cdd (
+        Cdd_name, 
+        Cdd_id, 
+        Cdd_description?, 
+        Cdd_seqannot?, 
+        Cdd_features?, 
+        Cdd_sequences?, 
+        Cdd_profile-range?, 
+        Cdd_trunc-master?, 
+        Cdd_posfreq?, 
+        Cdd_scoremat?, 
+        Cdd_distance?, 
+        Cdd_parent?, 
+        Cdd_children?, 
+        Cdd_siblings?, 
+        Cdd_neighbors?, 
+        Cdd_pending?, 
+        Cdd_rejects?, 
+        Cdd_master3d?, 
+        Cdd_alignannot?, 
+        Cdd_style-dictionary?, 
+        Cdd_user-annotations?, 
+        Cdd_ancestors?, 
+        Cdd_scoreparams?, 
+        Cdd_seqtree?)>
+
+<!-- a short name (can be the accession..) -->
+<!ELEMENT Cdd_name (#PCDATA)>
+
+<!-- this CD's Ids -->
+<!ELEMENT Cdd_id (Cdd-id-set)>
+
+<!-- status, references, etc. -->
+<!ELEMENT Cdd_description (Cdd-descr-set)>
+
+<!-- contains the CD alignment -->
+<!ELEMENT Cdd_seqannot (Seq-annot*)>
+
+<!--
+ contains structure
+ alignment data
+ or "core" definitions
+-->
+<!ELEMENT Cdd_features (Biostruc-annot-set)>
+
+<!-- store as bioseq-set inside seq-entry -->
+<!ELEMENT Cdd_sequences (Seq-entry)>
+
+<!--
+ profile for this region only
+ also stores the Seq-id of the master
+-->
+<!ELEMENT Cdd_profile-range (Seq-interval)>
+
+<!--
+ holds the truncated master, which
+ may be something like a consensus,
+ uses the same sequence coordinate
+ frame as the profile-range
+-->
+<!ELEMENT Cdd_trunc-master (Bioseq)>
+
+<!-- relative residue frequencies -->
+<!ELEMENT Cdd_posfreq (Matrix)>
+
+<!-- Position dependent score matrix -->
+<!ELEMENT Cdd_scoremat (Matrix)>
+
+<!-- pairwise distances for all seqs. -->
+<!ELEMENT Cdd_distance (Triangle)>
+
+<!-- this CD is the result of a split -->
+<!ELEMENT Cdd_parent (Cdd-id)>
+
+<!-- this CD has been split, not used -->
+<!ELEMENT Cdd_children (Cdd-id-set)>
+
+<!-- related CDs (common hits), clusters -->
+<!ELEMENT Cdd_siblings (Cdd-id-set)>
+
+<!-- co-occurring CDs, not used -->
+<!ELEMENT Cdd_neighbors (Cdd-id-set)>
+
+<!--
+ contains alignments from
+ update or "lower panel"
+-->
+<!ELEMENT Cdd_pending (Update-align*)>
+
+<!--
+ SeqIds of rejected CD-
+ members, ignore in update
+-->
+<!ELEMENT Cdd_rejects (Reject-id*)>
+
+<!-- record if CD has a 3D representative -->
+<!ELEMENT Cdd_master3d (Seq-id*)>
+
+<!-- alignment annotation -->
+<!ELEMENT Cdd_alignannot (Align-annot-set)>
+
+<!-- record rendering styles -->
+<!ELEMENT Cdd_style-dictionary (Cn3d-style-dictionary)>
+
+<!-- user annotations in Cn3D -->
+<!ELEMENT Cdd_user-annotations (Cn3d-user-annotations)>
+
+<!-- list of parents -->
+<!ELEMENT Cdd_ancestors (Domain-parent*)>
+
+<!ELEMENT Cdd_scoreparams (PssmWithParameters)>
+<!-- record sequence trees generated by a suitable algorithm. -->
+<!ELEMENT Cdd_seqtree (Sequence-tree)>
+
+
+<!ELEMENT Cdd-set (Cdd*)>
+
+<!--
+ Cdd projects store a set of CDs, typically related to each other
+ relationships would be specified using the ancestors fields in the
+ individual CD objects. For use with CD-Tree, a program to visualize
+ curated CD hierarchies and evidence for hierarchical family structures.
+-->
+<!ELEMENT Cdd-Viewer-Rect (
+        Cdd-Viewer-Rect_top, 
+        Cdd-Viewer-Rect_left, 
+        Cdd-Viewer-Rect_width, 
+        Cdd-Viewer-Rect_height)>
+
+<!-- top coordinate -->
+<!ELEMENT Cdd-Viewer-Rect_top (%INTEGER;)>
+
+<!-- left  coordinate -->
+<!ELEMENT Cdd-Viewer-Rect_left (%INTEGER;)>
+
+<!-- width  -->
+<!ELEMENT Cdd-Viewer-Rect_width (%INTEGER;)>
+
+<!-- height -->
+<!ELEMENT Cdd-Viewer-Rect_height (%INTEGER;)>
+
+
+<!ELEMENT Cdd-Viewer (
+        Cdd-Viewer_ctrl, 
+        Cdd-Viewer_rect?, 
+        Cdd-Viewer_accessions)>
+<!-- viewer type -->
+<!ELEMENT Cdd-Viewer_ctrl (%INTEGER;)>
+<!ATTLIST Cdd-Viewer_ctrl value (
+        unassigned |
+        cd-info |
+        align-annot |
+        seq-list |
+        seq-tree |
+        merge-preview |
+        cross-hits |
+        notes |
+        tax-tree |
+        dart |
+        dart-selected-rows |
+        other
+        ) #IMPLIED >
+
+
+<!-- viewer rectangle -->
+<!ELEMENT Cdd-Viewer_rect (Cdd-Viewer-Rect)>
+
+<!-- list of accessions associated with a viewer -->
+<!ELEMENT Cdd-Viewer_accessions (Cdd-Viewer_accessions_E*)>
+
+
+<!ELEMENT Cdd-Viewer_accessions_E (#PCDATA)>
+
+
+<!ELEMENT Cdd-Script (
+        Cdd-Script_type?, 
+        Cdd-Script_name?, 
+        Cdd-Script_commands)>
+
+<!ELEMENT Cdd-Script_type (%INTEGER;)>
+<!ATTLIST Cdd-Script_type value (
+        unassigned |
+        user-recorded |
+        server-generated |
+        other
+        ) #IMPLIED >
+
+
+<!-- user assigned name/description -->
+<!ELEMENT Cdd-Script_name (#PCDATA)>
+
+<!-- actual script commands -->
+<!ELEMENT Cdd-Script_commands (#PCDATA)>
+
+<!-- cd colors are as:  0000FF for red, 00FF00 for green, FF0000 for blue -->
+<!ELEMENT Cdd-Project (
+        Cdd-Project_cds, 
+        Cdd-Project_cdcolor, 
+        Cdd-Project_viewers, 
+        Cdd-Project_log, 
+        Cdd-Project_scripts?, 
+        Cdd-Project_id?, 
+        Cdd-Project_rids?, 
+        Cdd-Project_create-date?, 
+        Cdd-Project_update-date?, 
+        Cdd-Project_project-id?)>
+
+<!-- cds -->
+<!ELEMENT Cdd-Project_cds (Cdd*)>
+
+<!-- colors   -->
+<!ELEMENT Cdd-Project_cdcolor (Cdd-Project_cdcolor_E*)>
+
+
+<!ELEMENT Cdd-Project_cdcolor_E (%INTEGER;)>
+
+<!-- Sequence viewers -->
+<!ELEMENT Cdd-Project_viewers (Cdd-Viewer*)>
+
+<!-- log -->
+<!ELEMENT Cdd-Project_log (#PCDATA)>
+
+<!-- command scripts -->
+<!ELEMENT Cdd-Project_scripts (Cdd-Script*)>
+
+<!-- to assign unique project id -->
+<!ELEMENT Cdd-Project_id (Cdd-id-set)>
+
+<!-- to store request IDs for batch CD-Searches -->
+<!ELEMENT Cdd-Project_rids (Cdd-Project_rids_E*)>
+
+
+<!ELEMENT Cdd-Project_rids_E (#PCDATA)>
+
+<!ELEMENT Cdd-Project_create-date (Date)>
+
+<!ELEMENT Cdd-Project_update-date (Date)>
+
+<!-- for temporary tracking in the database -->
+<!ELEMENT Cdd-Project_project-id (%INTEGER;)>
+

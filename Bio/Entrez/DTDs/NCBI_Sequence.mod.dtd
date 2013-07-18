@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seq.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 12/20/2010 23:04:52
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 09/25/2012 23:04:47
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 217680 $
+$Revision: 375986 $
 **********************************************************************
 
   NCBI Sequence elements
@@ -221,7 +221,7 @@ $Revision: 217680 $
 <!ELEMENT MolInfo_biomol (%INTEGER;)>
 
 <!--
-    pre-RNA	-  precursor RNA of any sort really 
+    pre-RNA	-  precursor RNA of any sort really
     other-genetic	-  other genetic material
     genomic-mRNA	-  reported a mix of genomic and cdna sequence
     cRNA	-  viral RNA genome copy intermediate
@@ -348,7 +348,7 @@ $Revision: 217680 $
 <!ELEMENT GIBB-mol %ENUM;>
 
 <!--
-    pre-mRNA	-  precursor RNA of any sort really 
+    pre-mRNA	-  precursor RNA of any sort really
     other-genetic	-  other genetic material
     genomic-mRNA	-  reported a mix of genomic and cdna sequence
 -->
@@ -848,9 +848,15 @@ $Revision: 217680 $
 
 <!ELEMENT Seq-gap (
         Seq-gap_type, 
-        Seq-gap_linkage?)>
+        Seq-gap_linkage?, 
+        Seq-gap_linkage-evidence?)>
 
 <!ELEMENT Seq-gap_type (%INTEGER;)>
+
+<!--
+    fragment	-  Deprecated. Used only for AGP 1.1
+    clone	-  Deprecated. Used only for AGP 1.1
+-->
 <!ATTLIST Seq-gap_type value (
         unknown |
         fragment |
@@ -861,6 +867,7 @@ $Revision: 217680 $
         telomere |
         repeat |
         contig |
+        scaffold |
         other
         ) #IMPLIED >
 
@@ -869,6 +876,28 @@ $Revision: 217680 $
 <!ATTLIST Seq-gap_linkage value (
         unlinked |
         linked |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Seq-gap_linkage-evidence (Linkage-evidence*)>
+
+
+<!ELEMENT Linkage-evidence (
+        Linkage-evidence_type)>
+
+<!ELEMENT Linkage-evidence_type (%INTEGER;)>
+<!ATTLIST Linkage-evidence_type value (
+        paired-ends |
+        align-genus |
+        align-xgenus |
+        align-trnscpt |
+        within-clone |
+        clone-contig |
+        map |
+        strobe |
+        unspecified |
+        pcr |
         other
         ) #IMPLIED >
 

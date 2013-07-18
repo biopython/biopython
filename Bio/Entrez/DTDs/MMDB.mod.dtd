@@ -1,0 +1,259 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "mmdb1.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "MMDB"
+================================================= -->
+
+<!--
+$Revision: 6.1 $
+**********************************************************************
+
+  Biological Macromolecule 3-D Structure Data Types for MMDB,
+                A Molecular Modeling Database
+
+  Definitions for a biomolecular assembly and the MMDB database
+
+  By Hitomi Ohkawa, Jim Ostell, Chris Hogue, and Steve Bryant 
+
+  National Center for Biotechnology Information
+  National Institutes of Health
+  Bethesda, MD 20894 USA
+
+  July 1995
+
+**********************************************************************
+ Contents of the MMDB database are currently based on files distributed by
+ the Protein Data Bank, PDB.  These data are changed in form, as described
+ in this specification. To some extent they are also changed in content, in 
+ that many data items implicit in PDB are made explicit, and others are
+ corrected or omitted as a consequence of validation checks.  The semantics
+ of MMDB data items are indicated by comments within the specification below.
+ These comments explain in detail the manner in which data items from  PDB 
+ have been mapped into MMDB. 
+-->
+
+<!-- Elements used by other modules:
+          Biostruc,
+          Biostruc-id,
+          Biostruc-set,
+          Biostruc-annot-set,
+          Biostruc-residue-graph-set -->
+
+<!-- Elements referenced from other modules:
+          Biostruc-graph,
+          Biomol-descr,
+          Residue-graph FROM MMDB-Chemical-graph,
+          Biostruc-model FROM MMDB-Structural-model,
+          Biostruc-feature-set FROM MMDB-Features,
+          Pub FROM NCBI-Pub,
+          Date,
+          Object-id,
+          Dbtag FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+ A structure report or "biostruc" describes the components of a biomolecular 
+ assembly in terms of their names and descriptions, and a chemical graph 
+ giving atomic formula, connectivity and chirality. It also gives one or more
+ three-dimensional model structures, literally a mapping of the atoms, 
+ residues and/or molecules of each component into a measured three-
+ dimensional space. Structure may also be described by named features, which 
+ associate nodes in the chemical graph, or regions in space, with text or 
+ numeric descriptors.
+ Note that a biostruc may also contain cross references to other databases,
+ including citations to relevant scientific literature. These cross 
+ references use object types from other NCBI data specifications, which are 
+ "imported" into MMDB, and not repeated in this specification. 
+-->
+<!ELEMENT Biostruc (
+        Biostruc_id, 
+        Biostruc_descr?, 
+        Biostruc_chemical-graph, 
+        Biostruc_features?, 
+        Biostruc_model?)>
+
+<!ELEMENT Biostruc_id (Biostruc-id*)>
+
+<!ELEMENT Biostruc_descr (Biostruc-descr*)>
+
+<!ELEMENT Biostruc_chemical-graph (Biostruc-graph)>
+
+<!ELEMENT Biostruc_features (Biostruc-feature-set*)>
+
+<!ELEMENT Biostruc_model (Biostruc-model*)>
+
+<!--
+ A Biostruc-id is a collection identifiers for the molecular assembly.
+ Mmdb-id's are NCBI-assigned, and are intended to be unique and stable 
+ identifiers.  Other-id's are synonyms.
+-->
+<!ELEMENT Biostruc-id (
+        Biostruc-id_mmdb-id | 
+        Biostruc-id_other-database | 
+        Biostruc-id_local-id)>
+
+<!ELEMENT Biostruc-id_mmdb-id (Mmdb-id)>
+
+<!ELEMENT Biostruc-id_other-database (Dbtag)>
+
+<!ELEMENT Biostruc-id_local-id (Object-id)>
+
+
+<!ELEMENT Mmdb-id (%INTEGER;)>
+
+<!--
+ The description of a biostruc refers to both the reported chemical and 
+ spatial structure of a biomolecular assembly.  PDB-derived descriptors
+ which refer specifically to the chemical components or spatial structure
+ are not provided here, but instead as descriptors of the biostruc-graph or 
+ biostruc-model. For PDB-derived structures the biostruc name is the PDB 
+ id-code.  PDB-derived citations appear as publications within the biostruc 
+ description, and include a data-submission citation derived from PDB AUTHOR 
+ records.  Citations are described using the NCBI Pub specification.
+-->
+<!ELEMENT Biostruc-descr (
+        Biostruc-descr_name | 
+        Biostruc-descr_pdb-comment | 
+        Biostruc-descr_other-comment | 
+        Biostruc-descr_history | 
+        Biostruc-descr_attribution)>
+
+<!ELEMENT Biostruc-descr_name (#PCDATA)>
+
+<!ELEMENT Biostruc-descr_pdb-comment (#PCDATA)>
+
+<!ELEMENT Biostruc-descr_other-comment (#PCDATA)>
+<!--
+ The history of a biostruc indicates it's origin and it's update history
+ within MMDB, the NCBI-maintained molecular structure database.  
+-->
+<!ELEMENT Biostruc-descr_history (Biostruc-history)>
+
+<!ELEMENT Biostruc-descr_attribution (Pub)>
+
+<!--
+ The history of a biostruc indicates it's origin and it's update history
+ within MMDB, the NCBI-maintained molecular structure database.  
+-->
+<!ELEMENT Biostruc-history (
+        Biostruc-history_replaces?, 
+        Biostruc-history_replaced-by?, 
+        Biostruc-history_data-source?)>
+
+<!ELEMENT Biostruc-history_replaces (Biostruc-replace)>
+
+<!ELEMENT Biostruc-history_replaced-by (Biostruc-replace)>
+<!--
+ The origin of a biostruc is a reference to another database.  PDB release 
+ date and PDB-assigned id codes are recorded here, as are the PDB-assigned 
+ entry date and replacement history.
+-->
+<!ELEMENT Biostruc-history_data-source (Biostruc-source)>
+
+
+<!ELEMENT Biostruc-replace (
+        Biostruc-replace_id, 
+        Biostruc-replace_date)>
+<!--
+ A Biostruc-id is a collection identifiers for the molecular assembly.
+ Mmdb-id's are NCBI-assigned, and are intended to be unique and stable 
+ identifiers.  Other-id's are synonyms.
+-->
+<!ELEMENT Biostruc-replace_id (Biostruc-id)>
+
+<!ELEMENT Biostruc-replace_date (Date)>
+
+<!--
+ The origin of a biostruc is a reference to another database.  PDB release 
+ date and PDB-assigned id codes are recorded here, as are the PDB-assigned 
+ entry date and replacement history.
+-->
+<!ELEMENT Biostruc-source (
+        Biostruc-source_name-of-database, 
+        Biostruc-source_version-of-database?, 
+        Biostruc-source_database-entry-id, 
+        Biostruc-source_database-entry-date, 
+        Biostruc-source_database-entry-history?)>
+
+<!ELEMENT Biostruc-source_name-of-database (#PCDATA)>
+
+<!ELEMENT Biostruc-source_version-of-database (
+        Biostruc-source_version-of-database_release-date | 
+        Biostruc-source_version-of-database_release-code)>
+
+<!ELEMENT Biostruc-source_version-of-database_release-date (Date)>
+
+<!ELEMENT Biostruc-source_version-of-database_release-code (#PCDATA)>
+<!--
+ A Biostruc-id is a collection identifiers for the molecular assembly.
+ Mmdb-id's are NCBI-assigned, and are intended to be unique and stable 
+ identifiers.  Other-id's are synonyms.
+-->
+<!ELEMENT Biostruc-source_database-entry-id (Biostruc-id)>
+
+<!ELEMENT Biostruc-source_database-entry-date (Date)>
+
+<!ELEMENT Biostruc-source_database-entry-history (Biostruc-source_database-entry-history_E*)>
+
+
+<!ELEMENT Biostruc-source_database-entry-history_E (#PCDATA)>
+
+<!--
+ A biostruc set is a means to collect ASN.1 data for many biostrucs in 
+ one file, as convenient for application programs.  The object type is not
+ inteded to imply similarity of the biostrucs grouped together.
+-->
+<!ELEMENT Biostruc-set (
+        Biostruc-set_id?, 
+        Biostruc-set_descr?, 
+        Biostruc-set_biostrucs)>
+
+<!ELEMENT Biostruc-set_id (Biostruc-id*)>
+
+<!ELEMENT Biostruc-set_descr (Biostruc-descr*)>
+
+<!ELEMENT Biostruc-set_biostrucs (Biostruc*)>
+
+<!--
+ A biostruc annotation set is a means to collect ASN.1 data for biostruc
+ features into one file. The object type is intended as a means to store 
+ feature annotation of similar type, such as "core" definitions for a 
+ threading program, or structure-structure alignments for a structure-
+ similarity browser.
+-->
+<!ELEMENT Biostruc-annot-set (
+        Biostruc-annot-set_id?, 
+        Biostruc-annot-set_descr?, 
+        Biostruc-annot-set_features)>
+
+<!ELEMENT Biostruc-annot-set_id (Biostruc-id*)>
+
+<!ELEMENT Biostruc-annot-set_descr (Biostruc-descr*)>
+
+<!ELEMENT Biostruc-annot-set_features (Biostruc-feature-set*)>
+
+<!--
+ A biostruc residue graph set is a collection of residue graphs.  The object
+ type is intended as a means to record dictionaries containing the chemical
+ subgraphs of "standard" residue types, which are used as a means to 
+ simplify discription of the covalent structure of a biomolecular assembly.
+ The standard residue graph dictionary supplied with the MMDB database 
+ contains 20 standard L amino acids and 8 standard ribonucleotide groups. 
+ These graphs are complete, including explicit hydrogen atoms and separate 
+ instances for the terminal polypeptide and polynucleotide residues. 
+-->
+<!ELEMENT Biostruc-residue-graph-set (
+        Biostruc-residue-graph-set_id?, 
+        Biostruc-residue-graph-set_descr?, 
+        Biostruc-residue-graph-set_residue-graphs)>
+
+<!ELEMENT Biostruc-residue-graph-set_id (Biostruc-id*)>
+
+<!ELEMENT Biostruc-residue-graph-set_descr (Biomol-descr*)>
+
+<!ELEMENT Biostruc-residue-graph-set_residue-graphs (Residue-graph*)>
+

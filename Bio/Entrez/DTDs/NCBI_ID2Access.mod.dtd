@@ -1,0 +1,759 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "id2.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-ID2Access"
+================================================= -->
+
+<!--
+$Revision: 196770 $
+********************************************************************
+
+  Network Id server network access
+  Vasilchenko 2003
+
+
+*********************************************************************
+
+  ID2.asn
+
+     messages for id server network access
+
+*********************************************************************
+-->
+
+<!-- Elements referenced from other modules:
+          Seq-id,
+          Seq-loc FROM NCBI-Seqloc,
+          ID2S-Chunk-Id,
+          ID2S-Seq-annot-Info FROM NCBI-Seq-split -->
+<!-- ============================================ -->
+
+<!--
+*********************************************************************
+ request types
+*********************************************************************
+ Requests are sent in packets to allow sending several requests at once
+ to avoid network latency, without possiblity of deadlock with server.
+ Server will not start sending replies until it will read the whole packet.
+-->
+<!ELEMENT ID2-Request-Packet (ID2-Request*)>
+
+
+<!ELEMENT ID2-Request (
+        ID2-Request_serial-number?, 
+        ID2-Request_params?, 
+        ID2-Request_request)>
+
+<!--
+ request's serial number, can be used in asynchronic clients
+ server should copy it to corresponding field in reply
+-->
+<!ELEMENT ID2-Request_serial-number (%INTEGER;)>
+
+<!ELEMENT ID2-Request_params (ID2-Params)>
+
+<!ELEMENT ID2-Request_request (
+        ID2-Request_request_init | 
+        ID2-Request_request_get-packages | 
+        ID2-Request_request_get-seq-id | 
+        ID2-Request_request_get-blob-id | 
+        ID2-Request_request_get-blob-info | 
+        ID2-Request_request_reget-blob | 
+        ID2-Request_request_get-chunks)>
+
+<!ELEMENT ID2-Request_request_init EMPTY>
+<!--
+ Request for set of params packages know by server.
+ Packages can be used to abbreviate parameters of request.
+-->
+<!ELEMENT ID2-Request_request_get-packages (ID2-Request-Get-Packages)>
+<!--
+ Requested sequence ID, can be any string or Seq-id.
+ This request will be replied with one or more ID2-Reply-Get-Seq-id.
+-->
+<!ELEMENT ID2-Request_request_get-seq-id (ID2-Request-Get-Seq-id)>
+<!--
+ Return blob-id with specified seq-id.
+ This request with be replied with one or more ID2-Reply-Get-Blob-Id.
+-->
+<!ELEMENT ID2-Request_request_get-blob-id (ID2-Request-Get-Blob-Id)>
+<!--
+ Return some information related to the blob.
+ This request with be replied with one or more of:
+   ID2-Reply-Get-Blob-Seq-ids - if requested by get-seq-ids field
+   ID2-Reply-Get-Blob         - if requested by get-data field
+   ID2S-Reply-Get-Split-Info
+   ID2S-Reply-Get-Chunk
+ Last two can be sent in addition to ID2-Reply-Get-Blob
+ if the blob is split on the server.
+ The replies are made separate to allow server to create replies easier
+ from precalculated data. Each of these replies have ID2-Reply-Data field.
+-->
+<!ELEMENT ID2-Request_request_get-blob-info (ID2-Request-Get-Blob-Info)>
+<!--
+ This is similar to FTP reget command.
+ It may be unsupported by server.
+ It's defined only for plain blobs (returned in ID2-Reply-Get-Blob)
+ as all split data comes in small chunks, so reget doesn't make sense.
+-->
+<!ELEMENT ID2-Request_request_reget-blob (ID2-Request-ReGet-Blob)>
+<!--
+ Request for specific chunks.
+ Server will reply with one or more ID2S-Reply-Get-Chunk.
+-->
+<!ELEMENT ID2-Request_request_get-chunks (ID2S-Request-Get-Chunks)>
+
+<!--
+ Request for set of params packages know by server.
+ Packages can be used to abbreviate parameters of request.
+-->
+<!ELEMENT ID2-Request-Get-Packages (
+        ID2-Request-Get-Packages_names?, 
+        ID2-Request-Get-Packages_no-contents?)>
+
+<!--
+ return known packages from this list
+ if unset - return all known packages
+-->
+<!ELEMENT ID2-Request-Get-Packages_names (ID2-Request-Get-Packages_names_E*)>
+
+
+<!ELEMENT ID2-Request-Get-Packages_names_E (#PCDATA)>
+
+<!-- return packages' names only -->
+<!ELEMENT ID2-Request-Get-Packages_no-contents EMPTY>
+
+<!--
+ Requested sequence ID, can be any string or Seq-id.
+ This request will be replied with one or more ID2-Reply-Get-Seq-id.
+-->
+<!ELEMENT ID2-Request-Get-Seq-id (
+        ID2-Request-Get-Seq-id_seq-id, 
+        ID2-Request-Get-Seq-id_seq-id-type?)>
+
+<!ELEMENT ID2-Request-Get-Seq-id_seq-id (ID2-Seq-id)>
+
+<!ELEMENT ID2-Request-Get-Seq-id_seq-id-type (%INTEGER;)>
+
+<!--
+    any	-  return any qualified Seq-id
+    gi	-  gi is preferred
+    text	-  text Seq-id (accession etc) is preferred
+    general	-  general Seq-id is preferred
+    all	-  return all qualified Seq-ids of the sequence
+    label	-  return a sequence string label as string
+         in general id with db "LABEL"
+    taxid	-  return a sequence taxonomy ID as integer
+         in general id with db "TAXID"
+-->
+<!ATTLIST ID2-Request-Get-Seq-id_seq-id-type value (
+        any |
+        gi |
+        text |
+        general |
+        all |
+        label |
+        taxid
+        ) #IMPLIED >
+
+
+
+<!ELEMENT ID2-Seq-id (
+        ID2-Seq-id_string | 
+        ID2-Seq-id_seq-id)>
+
+<!ELEMENT ID2-Seq-id_string (#PCDATA)>
+
+<!ELEMENT ID2-Seq-id_seq-id (Seq-id)>
+
+<!--
+ Return blob-id with specified seq-id.
+ This request with be replied with one or more ID2-Reply-Get-Blob-Id.
+-->
+<!ELEMENT ID2-Request-Get-Blob-Id (
+        ID2-Request-Get-Blob-Id_seq-id, 
+        ID2-Request-Get-Blob-Id_sources?, 
+        ID2-Request-Get-Blob-Id_external?)>
+
+<!-- id can be supplied by inner request -->
+<!ELEMENT ID2-Request-Get-Blob-Id_seq-id (ID2-Request-Get-Seq-id)>
+
+<!-- return id of blob with sequence -->
+<!ELEMENT ID2-Request-Get-Blob-Id_sources (ID2-Request-Get-Blob-Id_sources_E*)>
+
+
+<!ELEMENT ID2-Request-Get-Blob-Id_sources_E (#PCDATA)>
+
+<!-- return Blob-Ids with external features on this Seq-id -->
+<!ELEMENT ID2-Request-Get-Blob-Id_external EMPTY>
+
+<!--
+ Return some information related to the blob.
+ This request with be replied with one or more of:
+   ID2-Reply-Get-Blob-Seq-ids - if requested by get-seq-ids field
+   ID2-Reply-Get-Blob         - if requested by get-data field
+   ID2S-Reply-Get-Split-Info
+   ID2S-Reply-Get-Chunk
+ Last two can be sent in addition to ID2-Reply-Get-Blob
+ if the blob is split on the server.
+ The replies are made separate to allow server to create replies easier
+ from precalculated data. Each of these replies have ID2-Reply-Data field.
+-->
+<!ELEMENT ID2-Request-Get-Blob-Info (
+        ID2-Request-Get-Blob-Info_blob-id, 
+        ID2-Request-Get-Blob-Info_get-seq-ids?, 
+        ID2-Request-Get-Blob-Info_get-data?)>
+<!-- id can be supplied by inner request -->
+<!ELEMENT ID2-Request-Get-Blob-Info_blob-id (
+        ID2-Request-Get-Blob-Info_blob-id_blob-id | 
+        ID2-Request-Get-Blob-Info_blob-id_resolve)>
+
+<!-- id can be supplied by inner request -->
+<!ELEMENT ID2-Request-Get-Blob-Info_blob-id_blob-id (ID2-Blob-Id)>
+<!-- generate blob-ids from request -->
+<!ELEMENT ID2-Request-Get-Blob-Info_blob-id_resolve (
+        ID2-Request-Get-Blob-Info_blob-id_resolve_request, 
+        ID2-Request-Get-Blob-Info_blob-id_resolve_exclude-blobs?)>
+<!--
+ Return blob-id with specified seq-id.
+ This request with be replied with one or more ID2-Reply-Get-Blob-Id.
+-->
+<!ELEMENT ID2-Request-Get-Blob-Info_blob-id_resolve_request (ID2-Request-Get-Blob-Id)>
+
+<!-- server will not send blobs listed here -->
+<!ELEMENT ID2-Request-Get-Blob-Info_blob-id_resolve_exclude-blobs (ID2-Blob-Id*)>
+
+<!-- return in addition list of Seq-ids also resolving to this blob -->
+<!ELEMENT ID2-Request-Get-Blob-Info_get-seq-ids EMPTY>
+
+<!--
+ level of details requested immediately
+ server will send relevant chunks if blob is splitted
+-->
+<!ELEMENT ID2-Request-Get-Blob-Info_get-data (ID2-Get-Blob-Details)>
+
+<!--
+ This is similar to FTP reget command.
+ It may be unsupported by server.
+ It's defined only for plain blobs (returned in ID2-Reply-Get-Blob)
+ as all split data comes in small chunks, so reget doesn't make sense.
+-->
+<!ELEMENT ID2-Request-ReGet-Blob (
+        ID2-Request-ReGet-Blob_blob-id, 
+        ID2-Request-ReGet-Blob_split-version, 
+        ID2-Request-ReGet-Blob_offset)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2-Request-ReGet-Blob_blob-id (ID2-Blob-Id)>
+
+<!-- blob split version to resend -->
+<!ELEMENT ID2-Request-ReGet-Blob_split-version (%INTEGER;)>
+
+<!-- start offset of data to get -->
+<!ELEMENT ID2-Request-ReGet-Blob_offset (%INTEGER;)>
+
+<!--
+ Request for specific chunks.
+ Server will reply with one or more ID2S-Reply-Get-Chunk.
+-->
+<!ELEMENT ID2S-Request-Get-Chunks (
+        ID2S-Request-Get-Chunks_blob-id, 
+        ID2S-Request-Get-Chunks_chunks, 
+        ID2S-Request-Get-Chunks_split-version?)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2S-Request-Get-Chunks_blob-id (ID2-Blob-Id)>
+
+<!-- requests for specific chunks of splitted blob -->
+<!ELEMENT ID2S-Request-Get-Chunks_chunks (ID2S-Chunk-Id*)>
+
+<!-- blob split version -->
+<!ELEMENT ID2S-Request-Get-Chunks_split-version (%INTEGER;)>
+
+<!--
+ The following structure describes what parts of blob are required
+ immediately after ID2-Request-Get-Blob-Info in case blob is split.
+ Seq-entry level will have probably the same values as Entry-complexities.
+-->
+<!ELEMENT ID2-Get-Blob-Details (
+        ID2-Get-Blob-Details_location?, 
+        ID2-Get-Blob-Details_seq-class-level?, 
+        ID2-Get-Blob-Details_descr-level?, 
+        ID2-Get-Blob-Details_descr-type-mask?, 
+        ID2-Get-Blob-Details_annot-type-mask?, 
+        ID2-Get-Blob-Details_feat-type-mask?, 
+        ID2-Get-Blob-Details_sequence-level?)>
+
+<!-- reference location for details - can be only part of sequence -->
+<!ELEMENT ID2-Get-Blob-Details_location (Seq-loc)>
+
+<!-- Seq-entry level for all data except descriptors (sequnence, annots) -->
+<!ELEMENT ID2-Get-Blob-Details_seq-class-level (%INTEGER;)>
+
+<!-- Seq-entry level for descriptors -->
+<!ELEMENT ID2-Get-Blob-Details_descr-level (%INTEGER;)>
+
+<!-- mask of descriptor types - see Seqdesc for variants' values -->
+<!ELEMENT ID2-Get-Blob-Details_descr-type-mask (%INTEGER;)>
+
+<!-- mask of annotation types - see Seq-annot.data for values -->
+<!ELEMENT ID2-Get-Blob-Details_annot-type-mask (%INTEGER;)>
+
+<!-- mask of feature types - see SeqFeatData for values -->
+<!ELEMENT ID2-Get-Blob-Details_feat-type-mask (%INTEGER;)>
+<!-- level of sequence data to load -->
+<!ELEMENT ID2-Get-Blob-Details_sequence-level %ENUM;>
+
+<!--
+    none	-  not required
+    seq-map	-  at least seq-map
+    seq-data	-  include seq-data
+-->
+<!ATTLIST ID2-Get-Blob-Details_sequence-level value (
+        none |
+        seq-map |
+        seq-data
+        ) #REQUIRED >
+
+
+<!--
+*********************************************************************
+ reply types
+*********************************************************************
+-->
+<!ELEMENT ID2-Reply (
+        ID2-Reply_serial-number?, 
+        ID2-Reply_params?, 
+        ID2-Reply_error?, 
+        ID2-Reply_end-of-reply?, 
+        ID2-Reply_reply, 
+        ID2-Reply_discard?)>
+
+<!-- request's serial number, copy from request -->
+<!ELEMENT ID2-Reply_serial-number (%INTEGER;)>
+
+<!ELEMENT ID2-Reply_params (ID2-Params)>
+
+<!ELEMENT ID2-Reply_error (ID2-Error*)>
+
+<!--
+ true if this reply is the last one for the request
+ false if more replies will follow
+-->
+<!ELEMENT ID2-Reply_end-of-reply EMPTY>
+<!--
+ reply data moved at the end to make it easier to construct
+ the reply data manually from precalculated data
+-->
+<!ELEMENT ID2-Reply_reply (
+        ID2-Reply_reply_init | 
+        ID2-Reply_reply_empty | 
+        ID2-Reply_reply_get-package | 
+        ID2-Reply_reply_get-seq-id | 
+        ID2-Reply_reply_get-blob-id | 
+        ID2-Reply_reply_get-blob-seq-ids | 
+        ID2-Reply_reply_get-blob | 
+        ID2-Reply_reply_reget-blob | 
+        ID2-Reply_reply_get-split-info | 
+        ID2-Reply_reply_get-chunk)>
+
+<!ELEMENT ID2-Reply_reply_init EMPTY>
+
+<!ELEMENT ID2-Reply_reply_empty EMPTY>
+<!-- Reply to ID2-Request-Get-Packages. -->
+<!ELEMENT ID2-Reply_reply_get-package (ID2-Reply-Get-Package)>
+<!-- Reply to ID2-Request-Get-Seq-id. -->
+<!ELEMENT ID2-Reply_reply_get-seq-id (ID2-Reply-Get-Seq-id)>
+<!-- Reply to ID2-Request-Get-Blob-Id. -->
+<!ELEMENT ID2-Reply_reply_get-blob-id (ID2-Reply-Get-Blob-Id)>
+<!-- Reply to ID2-Request-Get-Blob-Info. -->
+<!ELEMENT ID2-Reply_reply_get-blob-seq-ids (ID2-Reply-Get-Blob-Seq-ids)>
+<!-- Reply to ID2-Request-Get-Blob-Info. -->
+<!ELEMENT ID2-Reply_reply_get-blob (ID2-Reply-Get-Blob)>
+<!-- Reply to ID2-Request-ReGet-Blob. -->
+<!ELEMENT ID2-Reply_reply_reget-blob (ID2-Reply-ReGet-Blob)>
+<!-- Reply to ID2-Request-Get-Blob-Info. -->
+<!ELEMENT ID2-Reply_reply_get-split-info (ID2S-Reply-Get-Split-Info)>
+<!-- Reply to ID2S-Request-Get-Chunks. -->
+<!ELEMENT ID2-Reply_reply_get-chunk (ID2S-Reply-Get-Chunk)>
+<!--
+ additional error flag if the reply is broken in the middle
+ of transfer.
+ 'last-octet-string', and 'nothing' mean that
+ client may use ReGet request to get the remaining data.
+-->
+<!ELEMENT ID2-Reply_discard %ENUM;>
+
+<!--
+    reply	-  whole reply should be discarded
+    last-octet-string	-  all data in embedded ID2-Reply-Data
+         except last OCTET STRING is correct
+    nothing	-  all data in embedded ID2-Reply-Data
+         is correct, but is incomplete
+-->
+<!ATTLIST ID2-Reply_discard value (
+        reply |
+        last-octet-string |
+        nothing
+        ) #REQUIRED >
+
+
+
+<!ELEMENT ID2-Error (
+        ID2-Error_severity, 
+        ID2-Error_retry-delay?, 
+        ID2-Error_message?)>
+
+<!ELEMENT ID2-Error_severity %ENUM;>
+
+<!--
+    warning	-  nothing harmful happened
+    failed-command	-  command cannot be completed this time
+    failed-connection	-  connection cannot be reused, reconnect is required
+    failed-server	-  server cannot be used for a while
+    no-data	-  resolve request gives no data
+         probably temporarily (see retry-delay field)
+    restricted-data	-  data exists but client doesn't have permission to get it
+    unsupported-command	-  this request type is not supported by server
+    invalid-arguments	-  error in request packet, cannot retry
+-->
+<!ATTLIST ID2-Error_severity value (
+        warning |
+        failed-command |
+        failed-connection |
+        failed-server |
+        no-data |
+        restricted-data |
+        unsupported-command |
+        invalid-arguments
+        ) #REQUIRED >
+
+
+<!-- client may retry the request after specified time in seconds  -->
+<!ELEMENT ID2-Error_retry-delay (%INTEGER;)>
+
+<!ELEMENT ID2-Error_message (#PCDATA)>
+
+<!-- Reply to ID2-Request-Get-Packages. -->
+<!ELEMENT ID2-Reply-Get-Package (
+        ID2-Reply-Get-Package_name, 
+        ID2-Reply-Get-Package_params?)>
+
+<!ELEMENT ID2-Reply-Get-Package_name (#PCDATA)>
+
+<!ELEMENT ID2-Reply-Get-Package_params (ID2-Params)>
+
+<!-- Reply to ID2-Request-Get-Seq-id. -->
+<!ELEMENT ID2-Reply-Get-Seq-id (
+        ID2-Reply-Get-Seq-id_request, 
+        ID2-Reply-Get-Seq-id_seq-id?, 
+        ID2-Reply-Get-Seq-id_end-of-reply?)>
+
+<!-- copy of request -->
+<!ELEMENT ID2-Reply-Get-Seq-id_request (ID2-Request-Get-Seq-id)>
+
+<!--
+ resolved Seq-id
+ not set if error occurred
+-->
+<!ELEMENT ID2-Reply-Get-Seq-id_seq-id (Seq-id*)>
+
+<!-- this Seq-id is the last one in the request -->
+<!ELEMENT ID2-Reply-Get-Seq-id_end-of-reply EMPTY>
+
+
+<!ELEMENT ID2-Blob-State %ENUM;>
+<!ATTLIST ID2-Blob-State value (
+        live |
+        suppressed-temp |
+        suppressed |
+        dead |
+        protected |
+        withdrawn
+        ) #REQUIRED >
+
+
+<!-- Reply to ID2-Request-Get-Blob-Id. -->
+<!ELEMENT ID2-Reply-Get-Blob-Id (
+        ID2-Reply-Get-Blob-Id_seq-id, 
+        ID2-Reply-Get-Blob-Id_blob-id?, 
+        ID2-Reply-Get-Blob-Id_split-version?, 
+        ID2-Reply-Get-Blob-Id_annot-info?, 
+        ID2-Reply-Get-Blob-Id_end-of-reply?, 
+        ID2-Reply-Get-Blob-Id_blob-state?)>
+
+<!-- requested Seq-id -->
+<!ELEMENT ID2-Reply-Get-Blob-Id_seq-id (Seq-id)>
+
+<!-- result -->
+<!ELEMENT ID2-Reply-Get-Blob-Id_blob-id (ID2-Blob-Id)>
+
+<!--
+ version of split data
+ (0 for non split)
+-->
+<!ELEMENT ID2-Reply-Get-Blob-Id_split-version (%INTEGER;)>
+
+<!--
+ annotation types in this blob
+ annotation are unknown if this field is omitted
+-->
+<!ELEMENT ID2-Reply-Get-Blob-Id_annot-info (ID2S-Seq-annot-Info*)>
+
+<!-- this Blob-id is the last one in the request -->
+<!ELEMENT ID2-Reply-Get-Blob-Id_end-of-reply EMPTY>
+
+<!-- state of the blob, 0 or missing means regular live data -->
+<!ELEMENT ID2-Reply-Get-Blob-Id_blob-state (%INTEGER;)>
+
+<!-- Reply to ID2-Request-Get-Blob-Info. -->
+<!ELEMENT ID2-Reply-Get-Blob-Seq-ids (
+        ID2-Reply-Get-Blob-Seq-ids_blob-id, 
+        ID2-Reply-Get-Blob-Seq-ids_ids?)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2-Reply-Get-Blob-Seq-ids_blob-id (ID2-Blob-Id)>
+
+<!--
+ list of Seq-id resolving to this Blob-Id
+ in compressed format
+-->
+<!ELEMENT ID2-Reply-Get-Blob-Seq-ids_ids (ID2-Reply-Data)>
+
+<!-- Reply to ID2-Request-Get-Blob-Info. -->
+<!ELEMENT ID2-Reply-Get-Blob (
+        ID2-Reply-Get-Blob_blob-id, 
+        ID2-Reply-Get-Blob_split-version?, 
+        ID2-Reply-Get-Blob_data?)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2-Reply-Get-Blob_blob-id (ID2-Blob-Id)>
+
+<!--
+ version of split data
+ (0 for non split)
+-->
+<!ELEMENT ID2-Reply-Get-Blob_split-version (%INTEGER;)>
+
+<!--
+ whole blob or blob skeleton
+ not set if error occurred
+-->
+<!ELEMENT ID2-Reply-Get-Blob_data (ID2-Reply-Data)>
+
+<!-- Reply to ID2-Request-Get-Blob-Info. -->
+<!ELEMENT ID2S-Reply-Get-Split-Info (
+        ID2S-Reply-Get-Split-Info_blob-id, 
+        ID2S-Reply-Get-Split-Info_split-version, 
+        ID2S-Reply-Get-Split-Info_data?)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2S-Reply-Get-Split-Info_blob-id (ID2-Blob-Id)>
+
+<!-- version of split data -->
+<!ELEMENT ID2S-Reply-Get-Split-Info_split-version (%INTEGER;)>
+
+<!--
+ blob split info
+ not set if error occurred
+-->
+<!ELEMENT ID2S-Reply-Get-Split-Info_data (ID2-Reply-Data)>
+
+<!-- Reply to ID2-Request-ReGet-Blob. -->
+<!ELEMENT ID2-Reply-ReGet-Blob (
+        ID2-Reply-ReGet-Blob_blob-id, 
+        ID2-Reply-ReGet-Blob_split-version, 
+        ID2-Reply-ReGet-Blob_offset, 
+        ID2-Reply-ReGet-Blob_data?)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2-Reply-ReGet-Blob_blob-id (ID2-Blob-Id)>
+
+<!-- version of data split -->
+<!ELEMENT ID2-Reply-ReGet-Blob_split-version (%INTEGER;)>
+
+<!-- offset of data -->
+<!ELEMENT ID2-Reply-ReGet-Blob_offset (%INTEGER;)>
+
+<!--
+ blob split info
+ not set if error occurred
+-->
+<!ELEMENT ID2-Reply-ReGet-Blob_data (ID2-Reply-Data)>
+
+<!-- Reply to ID2S-Request-Get-Chunks. -->
+<!ELEMENT ID2S-Reply-Get-Chunk (
+        ID2S-Reply-Get-Chunk_blob-id, 
+        ID2S-Reply-Get-Chunk_chunk-id, 
+        ID2S-Reply-Get-Chunk_data?)>
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2S-Reply-Get-Chunk_blob-id (ID2-Blob-Id)>
+
+<!-- id of chunk to send -->
+<!ELEMENT ID2S-Reply-Get-Chunk_chunk-id (ID2S-Chunk-Id)>
+
+<!--
+ chunk data
+ not set if error occurred
+-->
+<!ELEMENT ID2S-Reply-Get-Chunk_data (ID2-Reply-Data)>
+
+<!-- Data packing. -->
+<!ELEMENT ID2-Reply-Data (
+        ID2-Reply-Data_data-type?, 
+        ID2-Reply-Data_data-format?, 
+        ID2-Reply-Data_data-compression?, 
+        ID2-Reply-Data_data)>
+<!--
+ index of negotiated types
+ recommended types
+   Seq-entry,
+   ID2S-Split-Info,
+   ID2S-Chunk
+-->
+<!ELEMENT ID2-Reply-Data_data-type (%INTEGER;)>
+<!ATTLIST ID2-Reply-Data_data-type value (
+        seq-entry |
+        seq-annot |
+        id2s-split-info |
+        id2s-chunk
+        ) #IMPLIED >
+
+<!--
+ serialization format (ASN.1 binary, ASN.1 text)
+ index of negotiated formats
+-->
+<!ELEMENT ID2-Reply-Data_data-format (%INTEGER;)>
+<!ATTLIST ID2-Reply-Data_data-format value (
+        asn-binary |
+        asn-text |
+        xml
+        ) #IMPLIED >
+
+<!--
+ post serialization compression (plain, gzip, etc.)
+ index of negotiated compressions
+-->
+<!ELEMENT ID2-Reply-Data_data-compression (%INTEGER;)>
+<!ATTLIST ID2-Reply-Data_data-compression value (
+        none |
+        gzip |
+        nlmzip |
+        bzip2
+        ) #IMPLIED >
+
+
+<!-- data blob -->
+<!ELEMENT ID2-Reply-Data_data (ID2-Reply-Data_data_E*)>
+
+
+<!ELEMENT ID2-Reply-Data_data_E (%OCTETS;)>
+
+<!-- Data packed within ID2-Reply-Get-Blob-Seq-ids reply. -->
+<!ELEMENT ID2-Blob-Seq-ids (ID2-Blob-Seq-id*)>
+
+
+<!ELEMENT ID2-Blob-Seq-id (
+        ID2-Blob-Seq-id_seq-id, 
+        ID2-Blob-Seq-id_replaced?)>
+
+<!ELEMENT ID2-Blob-Seq-id_seq-id (Seq-id)>
+
+<!-- this Seq-id is replaced by sequence in another blob -->
+<!ELEMENT ID2-Blob-Seq-id_replaced EMPTY>
+
+<!--
+*********************************************************************
+ utility types
+*********************************************************************
+-->
+<!ELEMENT ID2-Blob-Id (
+        ID2-Blob-Id_sat, 
+        ID2-Blob-Id_sub-sat?, 
+        ID2-Blob-Id_sat-key, 
+        ID2-Blob-Id_version?)>
+
+<!ELEMENT ID2-Blob-Id_sat (%INTEGER;)>
+
+<!ELEMENT ID2-Blob-Id_sub-sat (%INTEGER;)>
+<!ATTLIST ID2-Blob-Id_sub-sat value (
+        main |
+        snp |
+        snp-graph |
+        cdd |
+        mgc |
+        hprd |
+        sts |
+        trna |
+        exon
+        ) #IMPLIED >
+
+
+<!ELEMENT ID2-Blob-Id_sat-key (%INTEGER;)>
+
+<!-- version of blob, optional in some requests -->
+<!ELEMENT ID2-Blob-Id_version (%INTEGER;)>
+
+
+<!ELEMENT ID2-Params (ID2-Param*)>
+
+
+<!ELEMENT ID2-Param (
+        ID2-Param_name, 
+        ID2-Param_value?, 
+        ID2-Param_type?)>
+
+<!ELEMENT ID2-Param_name (#PCDATA)>
+
+<!ELEMENT ID2-Param_value (ID2-Param_value_E*)>
+
+
+<!ELEMENT ID2-Param_value_E (#PCDATA)>
+
+<!ELEMENT ID2-Param_type %ENUM;>
+
+<!--
+    set-value	-  no response expected
+    get-value	-  this option is for client only
+         server replies with its value of param if known
+         server omits this param in reply if unknown to server
+    force-value	-  no direct response expected,
+         but if the param or its value is not supported
+         an error is reported and the request is not be completed
+    use-package	-  use named package
+         value should be unset
+-->
+<!ATTLIST ID2-Param_type value (
+        set-value |
+        get-value |
+        force-value |
+        use-package
+        ) #REQUIRED >
+
+

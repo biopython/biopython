@@ -1,0 +1,133 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "objprt.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-ObjPrt"
+================================================= -->
+
+<!--
+$Revision: 6.0 $
+********************************************************************
+
+  Print Templates
+  James Ostell, 1993
+
+
+********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          PrintTemplate,
+          PrintTemplateSet -->
+<!-- ============================================ -->
+
+
+<!ELEMENT PrintTemplate (
+        PrintTemplate_name, 
+        PrintTemplate_labelfrom?, 
+        PrintTemplate_format)>
+
+<!-- name for this template -->
+<!ELEMENT PrintTemplate_name (TemplateName)>
+
+<!-- ASN.1 path to get label from -->
+<!ELEMENT PrintTemplate_labelfrom (#PCDATA)>
+
+<!ELEMENT PrintTemplate_format (PrintFormat)>
+
+
+<!ELEMENT TemplateName (#PCDATA)>
+
+
+<!ELEMENT PrintTemplateSet (PrintTemplate*)>
+
+
+<!ELEMENT PrintFormat (
+        PrintFormat_asn1, 
+        PrintFormat_label?, 
+        PrintFormat_prefix?, 
+        PrintFormat_suffix?, 
+        PrintFormat_form)>
+
+<!-- ASN.1 partial path for this -->
+<!ELEMENT PrintFormat_asn1 (#PCDATA)>
+
+<!-- printable label -->
+<!ELEMENT PrintFormat_label (#PCDATA)>
+
+<!ELEMENT PrintFormat_prefix (#PCDATA)>
+
+<!ELEMENT PrintFormat_suffix (#PCDATA)>
+<!-- Forms for various ASN.1 components -->
+<!ELEMENT PrintFormat_form (PrintForm)>
+
+<!-- Forms for various ASN.1 components -->
+<!ELEMENT PrintForm (
+        PrintForm_block | 
+        PrintForm_boolean | 
+        PrintForm_enum | 
+        PrintForm_text | 
+        PrintForm_use-template | 
+        PrintForm_user | 
+        PrintForm_null)>
+<!-- for SEQUENCE, SET -->
+<!ELEMENT PrintForm_block (PrintFormBlock)>
+
+<!ELEMENT PrintForm_boolean (PrintFormBoolean)>
+
+<!ELEMENT PrintForm_enum (PrintFormEnum)>
+
+<!ELEMENT PrintForm_text (PrintFormText)>
+
+<!ELEMENT PrintForm_use-template (TemplateName)>
+
+<!ELEMENT PrintForm_user (UserFormat)>
+
+<!-- rarely used -->
+<!ELEMENT PrintForm_null EMPTY>
+
+
+<!ELEMENT UserFormat (
+        UserFormat_printfunc, 
+        UserFormat_defaultfunc?)>
+
+<!ELEMENT UserFormat_printfunc (#PCDATA)>
+
+<!ELEMENT UserFormat_defaultfunc (#PCDATA)>
+
+<!-- for SEQUENCE, SET -->
+<!ELEMENT PrintFormBlock (
+        PrintFormBlock_separator?, 
+        PrintFormBlock_components)>
+
+<!ELEMENT PrintFormBlock_separator (#PCDATA)>
+
+<!ELEMENT PrintFormBlock_components (PrintFormat*)>
+
+
+<!ELEMENT PrintFormBoolean (
+        PrintFormBoolean_true?, 
+        PrintFormBoolean_false?)>
+
+<!ELEMENT PrintFormBoolean_true (#PCDATA)>
+
+<!ELEMENT PrintFormBoolean_false (#PCDATA)>
+
+
+<!ELEMENT PrintFormEnum (
+        PrintFormEnum_values?)>
+
+<!ELEMENT PrintFormEnum_values (PrintFormEnum_values_E*)>
+
+
+<!ELEMENT PrintFormEnum_values_E (#PCDATA)>
+
+
+<!ELEMENT PrintFormText (
+        PrintFormText_textfunc?)>
+
+<!ELEMENT PrintFormText_textfunc (#PCDATA)>
+

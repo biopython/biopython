@@ -1,0 +1,218 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "id1.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-ID1Access"
+================================================= -->
+
+<!--
+$Revision: 1.12 $
+********************************************************************
+
+  Network Id server network access
+  Yaschenko 1996
+
+
+*********************************************************************
+
+  ID1.asn
+
+     messages for id server network access
+
+*********************************************************************
+-->
+
+<!-- Elements referenced from other modules:
+          Seq-id FROM NCBI-Seqloc,
+          Seq-entry FROM NCBI-Seqset,
+          Seq-hist FROM NCBI-Sequence -->
+<!-- ============================================ -->
+
+<!--
+**********************************
+ requests
+
+-->
+<!ELEMENT ID1server-request (
+        ID1server-request_init | 
+        ID1server-request_getgi | 
+        ID1server-request_getsefromgi | 
+        ID1server-request_fini | 
+        ID1server-request_getseqidsfromgi | 
+        ID1server-request_getgihist | 
+        ID1server-request_getgirev | 
+        ID1server-request_getgistate | 
+        ID1server-request_getsewithinfo | 
+        ID1server-request_getblobinfo)>
+
+<!-- DlInit -->
+<!ELEMENT ID1server-request_init EMPTY>
+
+<!-- get a gi given a Seq-id -->
+<!ELEMENT ID1server-request_getgi (Seq-id)>
+
+<!-- given a gi, get the Seq-entry -->
+<!ELEMENT ID1server-request_getsefromgi (ID1server-maxcomplex)>
+
+<!-- DlFini -->
+<!ELEMENT ID1server-request_fini EMPTY>
+
+<!--get all Seq-ids of given gi -->
+<!ELEMENT ID1server-request_getseqidsfromgi (%INTEGER;)>
+
+<!--get an historical list of gis  -->
+<!ELEMENT ID1server-request_getgihist (%INTEGER;)>
+
+<!--get a revision history of gi -->
+<!ELEMENT ID1server-request_getgirev (%INTEGER;)>
+
+<!--get a state of gi -->
+<!ELEMENT ID1server-request_getgistate (%INTEGER;)>
+<!--  Complexity stuff will be for ID1 -->
+<!ELEMENT ID1server-request_getsewithinfo (ID1server-maxcomplex)>
+<!--  Complexity stuff will be for ID1 -->
+<!ELEMENT ID1server-request_getblobinfo (ID1server-maxcomplex)>
+
+<!--  Complexity stuff will be for ID1 -->
+<!ELEMENT ID1server-maxcomplex (
+        ID1server-maxcomplex_maxplex, 
+        ID1server-maxcomplex_gi, 
+        ID1server-maxcomplex_ent?, 
+        ID1server-maxcomplex_sat?)>
+
+<!ELEMENT ID1server-maxcomplex_maxplex (Entry-complexities)>
+
+<!ELEMENT ID1server-maxcomplex_gi (%INTEGER;)>
+
+<!-- needed when you want to retrieve a given ent -->
+<!ELEMENT ID1server-maxcomplex_ent (%INTEGER;)>
+
+<!-- satellite 0-id,1-dbEST -->
+<!ELEMENT ID1server-maxcomplex_sat (#PCDATA)>
+
+
+<!ELEMENT Entry-complexities (%INTEGER;)>
+
+<!--
+    entry	-  the "natural" entry for this (nuc-prot) 
+    bioseq	-  only the bioseq identified
+    bioseq-set	-  any seg-set it may be part of
+    nuc-prot	-  any nuc-prot it may be part of
+-->
+<!ATTLIST Entry-complexities value (
+        entry |
+        bioseq |
+        bioseq-set |
+        nuc-prot |
+        pub-set
+        ) #IMPLIED >
+
+
+
+<!ELEMENT ID1Seq-hist (
+        ID1Seq-hist_hist)>
+
+<!ELEMENT ID1Seq-hist_hist (Seq-hist)>
+
+
+<!ELEMENT ID1server-back (
+        ID1server-back_init | 
+        ID1server-back_error | 
+        ID1server-back_gotgi | 
+        ID1server-back_gotseqentry | 
+        ID1server-back_gotdeadseqentry | 
+        ID1server-back_fini | 
+        ID1server-back_gistate | 
+        ID1server-back_ids | 
+        ID1server-back_gihist | 
+        ID1server-back_girevhist | 
+        ID1server-back_gotsewithinfo | 
+        ID1server-back_gotblobinfo)>
+
+<!-- DlInit -->
+<!ELEMENT ID1server-back_init EMPTY>
+
+<!ELEMENT ID1server-back_error (%INTEGER;)>
+
+<!ELEMENT ID1server-back_gotgi (%INTEGER;)>
+
+<!-- live -->
+<!ELEMENT ID1server-back_gotseqentry (Seq-entry)>
+
+<!-- dead -->
+<!ELEMENT ID1server-back_gotdeadseqentry (Seq-entry)>
+
+<!-- DlFini -->
+<!ELEMENT ID1server-back_fini EMPTY>
+
+<!ELEMENT ID1server-back_gistate (%INTEGER;)>
+
+<!ELEMENT ID1server-back_ids (Seq-id*)>
+
+<!--
+ because hand crafted Seq-hist does not follow 
+ same conventions 
+-->
+<!ELEMENT ID1server-back_gihist (ID1Seq-hist*)>
+
+<!ELEMENT ID1server-back_girevhist (ID1Seq-hist*)>
+
+<!ELEMENT ID1server-back_gotsewithinfo (ID1SeqEntry-info)>
+
+<!ELEMENT ID1server-back_gotblobinfo (ID1blob-info)>
+
+
+<!ELEMENT ID1server-debug (ID1server-back*)>
+
+
+<!ELEMENT ID1blob-info (
+        ID1blob-info_gi, 
+        ID1blob-info_sat, 
+        ID1blob-info_sat-key, 
+        ID1blob-info_satname, 
+        ID1blob-info_suppress, 
+        ID1blob-info_withdrawn, 
+        ID1blob-info_confidential, 
+        ID1blob-info_blob-state, 
+        ID1blob-info_comment?, 
+        ID1blob-info_extfeatmask?)>
+
+<!ELEMENT ID1blob-info_gi (%INTEGER;)>
+
+<!ELEMENT ID1blob-info_sat (%INTEGER;)>
+
+<!ELEMENT ID1blob-info_sat-key (%INTEGER;)>
+
+<!ELEMENT ID1blob-info_satname (#PCDATA)>
+
+<!ELEMENT ID1blob-info_suppress (%INTEGER;)>
+
+<!ELEMENT ID1blob-info_withdrawn (%INTEGER;)>
+
+<!ELEMENT ID1blob-info_confidential (%INTEGER;)>
+
+<!--
+ blob-state now contains blob version info.
+ it's actually minutes from 01/01/1970
+ and it's negative if blob is dead.
+-->
+<!ELEMENT ID1blob-info_blob-state (%INTEGER;)>
+
+<!-- public comment for withdrawn record  -->
+<!ELEMENT ID1blob-info_comment (#PCDATA)>
+
+<!-- mask for external features (SNP,...) -->
+<!ELEMENT ID1blob-info_extfeatmask (%INTEGER;)>
+
+
+<!ELEMENT ID1SeqEntry-info (
+        ID1SeqEntry-info_blob-info, 
+        ID1SeqEntry-info_blob?)>
+
+<!ELEMENT ID1SeqEntry-info_blob-info (ID1blob-info)>
+
+<!ELEMENT ID1SeqEntry-info_blob (Seq-entry)>
+

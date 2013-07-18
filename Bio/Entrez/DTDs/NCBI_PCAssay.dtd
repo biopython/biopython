@@ -1,0 +1,38 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "pcassay.asn"
+     ::DATATOOL:: by application DATATOOL version 2.3.1
+     ::DATATOOL:: on 01/17/2012 23:05:10
+     ============================================ -->
+
+<!-- NCBI_PCAssay.dtd
+  This file is built from a series of basic modules.
+  The actual ELEMENT and ENTITY declarations are in the modules.
+  This file is used to put them together.
+-->
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % NCBI_Biblio_module PUBLIC "-//NCBI//NCBI Biblio Module//EN" "NCBI_Biblio.mod.dtd">
+%NCBI_Biblio_module;
+
+<!ENTITY % NCBI_BioSource_module PUBLIC "-//NCBI//NCBI BioSource Module//EN" "NCBI_BioSource.mod.dtd">
+%NCBI_BioSource_module;
+
+<!ENTITY % NCBI_General_module PUBLIC "-//NCBI//NCBI General Module//EN" "NCBI_General.mod.dtd">
+%NCBI_General_module;
+
+<!ENTITY % NCBI_Medline_module PUBLIC "-//NCBI//NCBI Medline Module//EN" "NCBI_Medline.mod.dtd">
+%NCBI_Medline_module;
+
+<!ENTITY % NCBI_Organism_module PUBLIC "-//NCBI//NCBI Organism Module//EN" "NCBI_Organism.mod.dtd">
+%NCBI_Organism_module;
+
+<!ENTITY % NCBI_PCAssay_module PUBLIC "-//NCBI//NCBI PCAssay Module//EN" "NCBI_PCAssay.mod.dtd">
+%NCBI_PCAssay_module;
+
+<!ENTITY % NCBI_PCSubstance_module PUBLIC "-//NCBI//NCBI PCSubstance Module//EN" "NCBI_PCSubstance.mod.dtd">
+%NCBI_PCSubstance_module;
+
+<!ENTITY % NCBI_Pub_module PUBLIC "-//NCBI//NCBI Pub Module//EN" "NCBI_Pub.mod.dtd">
+%NCBI_Pub_module;

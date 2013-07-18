@@ -1,0 +1,1054 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "docsum.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 07/01/2008 23:08:13
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "Docsum-3-0"
+================================================= -->
+
+<!--
+ ============================================
+ ::DATATOOL:: Generated from "docsum_3.0.xsd"
+ ::DATATOOL:: by application DATATOOL version 1.8.6
+ ::DATATOOL:: on 05/02/2008 10:59:28
+ ============================================
+ edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Michael Kholodov (National Library of Medicine) 
+ edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Michael Feolo (NCBI/NLM/NIH) 
+-->
+
+
+<!ELEMENT Assay (
+        Assay_attlist, 
+        Assay_method, 
+        Assay_taxonomy, 
+        Assay_strains?, 
+        Assay_comment?, 
+        Assay_citation?)>
+
+<!ELEMENT Assay_attlist (
+        Assay_attlist_handle?, 
+        Assay_attlist_batch?, 
+        Assay_attlist_batchId?, 
+        Assay_attlist_batchType?, 
+        Assay_attlist_molType?, 
+        Assay_attlist_sampleSize?, 
+        Assay_attlist_population?, 
+        Assay_attlist_linkoutUrl?)>
+
+<!ELEMENT Assay_attlist_handle (#PCDATA)>
+
+<!ELEMENT Assay_attlist_batch (#PCDATA)>
+
+<!ELEMENT Assay_attlist_batchId (%INTEGER;)>
+
+<!ELEMENT Assay_attlist_batchType %ENUM;>
+<!ATTLIST Assay_attlist_batchType value (
+        snpassay |
+        validation |
+        doublehit
+        ) #REQUIRED >
+
+
+<!ELEMENT Assay_attlist_molType %ENUM;>
+<!ATTLIST Assay_attlist_molType value (
+        genomic |
+        cDNA |
+        mito |
+        chloro
+        ) #REQUIRED >
+
+
+<!ELEMENT Assay_attlist_sampleSize (%INTEGER;)>
+
+<!ELEMENT Assay_attlist_population (#PCDATA)>
+
+<!ELEMENT Assay_attlist_linkoutUrl (#PCDATA)>
+
+<!ELEMENT Assay_method (
+        Assay_method_eMethod?)>
+
+<!ELEMENT Assay_method_eMethod (
+        Assay_method_eMethod_attlist, 
+        Assay_method_eMethod_exception)>
+
+<!ELEMENT Assay_method_eMethod_attlist (
+        Assay_method_eMethod_attlist_name?, 
+        Assay_method_eMethod_attlist_id?)>
+
+<!--Submitters method identifier -->
+<!ELEMENT Assay_method_eMethod_attlist_name (#PCDATA)>
+
+<!--dbSNP method identifier -->
+<!ELEMENT Assay_method_eMethod_attlist_id (#PCDATA)>
+
+<!--description of deviation from/addition to given method -->
+<!ELEMENT Assay_method_eMethod_exception (#PCDATA)>
+
+<!ELEMENT Assay_taxonomy (
+        Assay_taxonomy_attlist, 
+        Assay_taxonomy_taxonomy)>
+
+<!ELEMENT Assay_taxonomy_attlist (
+        Assay_taxonomy_attlist_id, 
+        Assay_taxonomy_attlist_organism?)>
+
+<!--NCBI taxonomy ID for variation -->
+<!ELEMENT Assay_taxonomy_attlist_id (%INTEGER;)>
+
+<!ELEMENT Assay_taxonomy_attlist_organism (#PCDATA)>
+
+<!ELEMENT Assay_taxonomy_taxonomy EMPTY>
+
+<!ELEMENT Assay_strains (Assay_strains_E*)>
+
+
+<!ELEMENT Assay_strains_E (#PCDATA)>
+
+<!ELEMENT Assay_comment (#PCDATA)>
+
+<!ELEMENT Assay_citation (Assay_citation_E*)>
+
+
+<!ELEMENT Assay_citation_E (#PCDATA)>
+
+<!--A collection of genome sequence records (curated gene regions (NG's), contigs (NWNT's)  and chromosomes (NC/AC's) produced by a genome sequence project. Structure is populated from ContigInfo tables. -->
+<!ELEMENT Assembly (
+        Assembly_attlist, 
+        Assembly_component?, 
+        Assembly_snpStat)>
+
+<!ELEMENT Assembly_attlist (
+        Assembly_attlist_dbSnpBuild, 
+        Assembly_attlist_genomeBuild, 
+        Assembly_attlist_groupLabel?, 
+        Assembly_attlist_assemblySource?, 
+        Assembly_attlist_current?, 
+        Assembly_attlist_reference?)>
+
+<!--dbSNP build number defining the rsid set aligned to this assembly -->
+<!ELEMENT Assembly_attlist_dbSnpBuild (%INTEGER;)>
+
+<!--assembly build number with possible 'subbuild' version numbers to reflect updates in gene annotation (human e.g. 34_3, 35_1, 36_1) -->
+<!ELEMENT Assembly_attlist_genomeBuild (#PCDATA)>
+
+<!--High-level classification of the assembly to distinguish reference projects from alternate solutions. GroupLabel field from organism/build-specific ContigInfo tables. "reference" is occasionally used as the preferred assembly; standards will converge as additional organism genome projects are finished. Note that some organism assembly names include extended characters like '~' and '/' that may be incompatible with OS filename conventions. -->
+<!ELEMENT Assembly_attlist_groupLabel (#PCDATA)>
+
+<!--Name of the group(s) or organization(s) that generated the assembly -->
+<!ELEMENT Assembly_attlist_assemblySource (#PCDATA)>
+
+<!--Marks the current genomic assembly -->
+<!ELEMENT Assembly_attlist_current EMPTY>
+<!ATTLIST Assembly_attlist_current value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Assembly_attlist_reference EMPTY>
+<!ATTLIST Assembly_attlist_reference value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Assembly_component (Component*)>
+
+<!ELEMENT Assembly_snpStat (
+        Assembly_snpStat_attlist, 
+        Assembly_snpStat_snpStat)>
+
+<!ELEMENT Assembly_snpStat_attlist (
+        Assembly_snpStat_attlist_mapWeight, 
+        Assembly_snpStat_attlist_chromCount?, 
+        Assembly_snpStat_attlist_placedContigCount?, 
+        Assembly_snpStat_attlist_unplacedContigCount?, 
+        Assembly_snpStat_attlist_seqlocCount?, 
+        Assembly_snpStat_attlist_hapCount?)>
+
+<!--summary measure of placement precision in the assembly -->
+<!ELEMENT Assembly_snpStat_attlist_mapWeight %ENUM;>
+<!ATTLIST Assembly_snpStat_attlist_mapWeight value (
+        unmapped |
+        unique-in-contig |
+        two-hits-in-contig |
+        less-10-hits |
+        multiple-hits
+        ) #REQUIRED >
+
+
+<!--number of distinct chromosomes in the mapset -->
+<!ELEMENT Assembly_snpStat_attlist_chromCount (%INTEGER;)>
+
+<!--number of distinct contigs [ gi | accession[.version] ] in the mapset -->
+<!ELEMENT Assembly_snpStat_attlist_placedContigCount (%INTEGER;)>
+
+<!--number of sequence postions to a contig with unknown chromosomal assignment -->
+<!ELEMENT Assembly_snpStat_attlist_unplacedContigCount (%INTEGER;)>
+
+<!--total number of sequence positions in the mapset -->
+<!ELEMENT Assembly_snpStat_attlist_seqlocCount (%INTEGER;)>
+
+<!--Number of hits to alternative genomic haplotypes (e.g. HLA DR region, KIR, or pseudo-autosomal regions like PAR) within the assembly mapset. Note that positions on haplotypes defined in other assemblies (a different assembly_group_label value) will not be counted in this value. -->
+<!ELEMENT Assembly_snpStat_attlist_hapCount (%INTEGER;)>
+
+<!ELEMENT Assembly_snpStat_snpStat EMPTY>
+
+<!--URL value from dbSNP_main.BaseURL links table. attributes provide context information and URL id that is referenced within individual refSNP objects. -->
+<!ELEMENT BaseURL (
+        BaseURL_attlist, 
+        BaseURL_baseURL)>
+
+<!ELEMENT BaseURL_attlist (
+        BaseURL_attlist_urlId?, 
+        BaseURL_attlist_resourceName?, 
+        BaseURL_attlist_resourceId?)>
+
+<!--Resource identifier from dbSNP_main.baseURL. -->
+<!ELEMENT BaseURL_attlist_urlId (%INTEGER;)>
+
+<!--Name of linked resource -->
+<!ELEMENT BaseURL_attlist_resourceName (#PCDATA)>
+
+<!--identifier expected by resource for URL -->
+<!ELEMENT BaseURL_attlist_resourceId (#PCDATA)>
+
+<!--URL value from dbSNP_main.BaseURL links table. attributes provide context information and URL id that is referenced within individual refSNP objects. -->
+<!ELEMENT BaseURL_baseURL (#PCDATA)>
+
+
+<!ELEMENT Component (
+        Component_attlist, 
+        Component_mapLoc)>
+
+<!ELEMENT Component_attlist (
+        Component_attlist_componentType?, 
+        Component_attlist_ctgId?, 
+        Component_attlist_accession?, 
+        Component_attlist_name?, 
+        Component_attlist_chromosome?, 
+        Component_attlist_start?, 
+        Component_attlist_end?, 
+        Component_attlist_orientation?, 
+        Component_attlist_gi?, 
+        Component_attlist_groupTerm?, 
+        Component_attlist_contigLabel?)>
+
+<!--type of component: chromosome, contig, gene_region, etc. -->
+<!ELEMENT Component_attlist_componentType %ENUM;>
+<!ATTLIST Component_attlist_componentType value (
+        contig |
+        mrna
+        ) #REQUIRED >
+
+
+<!--dbSNP contig_id used to join on contig hit / mapset data to these assembly properties -->
+<!ELEMENT Component_attlist_ctgId (%INTEGER;)>
+
+<!--Accession[.version] for the sequence component -->
+<!ELEMENT Component_attlist_accession (#PCDATA)>
+
+<!--contig name defined as either a submitter local id, element of a whole genome assembly set, or internal NCBI local id -->
+<!ELEMENT Component_attlist_name (#PCDATA)>
+
+<!--Organism appropriate chromosome tag, 'Un' reserved for default case of unplaced components -->
+<!ELEMENT Component_attlist_chromosome (#PCDATA)>
+
+<!--component starting position on the chromosome (base 0 inclusive) -->
+<!ELEMENT Component_attlist_start (%INTEGER;)>
+
+<!--component ending position on the chromosome (base 0 inclusive) -->
+<!ELEMENT Component_attlist_end (%INTEGER;)>
+
+<!--orientation of this component to chromosome, forward (fwd) = 0, reverse (rev) = 1, unknown = NULL in ContigInfo.orient. -->
+<!ELEMENT Component_attlist_orientation %ENUM;>
+<!ATTLIST Component_attlist_orientation value (
+        fwd |
+        rev |
+        unknown
+        ) #REQUIRED >
+
+
+<!--NCBI gi for component sequence (equivalent to accession.version) for nucleotide sequence. -->
+<!ELEMENT Component_attlist_gi (#PCDATA)>
+
+<!--Identifier label for the genome assembly that defines the contigs in this mapset and their placement within the organism genome.  -->
+<!ELEMENT Component_attlist_groupTerm (#PCDATA)>
+
+<!--Display label for component -->
+<!ELEMENT Component_attlist_contigLabel (#PCDATA)>
+
+<!ELEMENT Component_mapLoc (MapLoc*)>
+
+<!--Set of dbSNP refSNP docsums -->
+<!ELEMENT ExchangeSet (
+        ExchangeSet_attlist, 
+        ExchangeSet_sourceDatabase, 
+        ExchangeSet_rs?, 
+        ExchangeSet_assay?, 
+        ExchangeSet_query?, 
+        ExchangeSet_summary, 
+        ExchangeSet_baseURL)>
+
+<!ELEMENT ExchangeSet_attlist (
+        ExchangeSet_attlist_setType?, 
+        ExchangeSet_attlist_setDepth?, 
+        ExchangeSet_attlist_specVersion?, 
+        ExchangeSet_attlist_dbSnpBuild?, 
+        ExchangeSet_attlist_generated?)>
+
+<!--set-type: full dump; from query; single refSNP -->
+<!ELEMENT ExchangeSet_attlist_setType (#PCDATA)>
+
+<!--content depth: brief XML (only refSNP properties and summary subSNP element content); full XML (full refSNP, full subSNP content; all flanking sequences) -->
+<!ELEMENT ExchangeSet_attlist_setDepth (#PCDATA)>
+
+<!--version number of docsum.asn/docsum.dtd specification -->
+<!ELEMENT ExchangeSet_attlist_specVersion (#PCDATA)>
+
+<!--build number of database for this export -->
+<!ELEMENT ExchangeSet_attlist_dbSnpBuild (%INTEGER;)>
+
+<!--Generated date -->
+<!ELEMENT ExchangeSet_attlist_generated (#PCDATA)>
+
+<!ELEMENT ExchangeSet_sourceDatabase (
+        ExchangeSet_sourceDatabase_attlist, 
+        ExchangeSet_sourceDatabase_sourceDatabase)>
+
+<!ELEMENT ExchangeSet_sourceDatabase_attlist (
+        ExchangeSet_sourceDatabase_attlist_taxId, 
+        ExchangeSet_sourceDatabase_attlist_organism, 
+        ExchangeSet_sourceDatabase_attlist_dbSnpOrgAbbr?, 
+        ExchangeSet_sourceDatabase_attlist_gpipeOrgAbbr?)>
+
+<!--NCBI taxonomy ID for variation -->
+<!ELEMENT ExchangeSet_sourceDatabase_attlist_taxId (%INTEGER;)>
+
+<!--common name for species used as part of database name. -->
+<!ELEMENT ExchangeSet_sourceDatabase_attlist_organism (#PCDATA)>
+
+<!--organism abbreviation used in dbSNP.  -->
+<!ELEMENT ExchangeSet_sourceDatabase_attlist_dbSnpOrgAbbr (#PCDATA)>
+
+<!--organism abbreviation used within NCBI genome pipeline data dumps. -->
+<!ELEMENT ExchangeSet_sourceDatabase_attlist_gpipeOrgAbbr (#PCDATA)>
+
+<!ELEMENT ExchangeSet_sourceDatabase_sourceDatabase EMPTY>
+
+<!ELEMENT ExchangeSet_rs (Rs*)>
+
+<!ELEMENT ExchangeSet_assay (Assay)>
+
+<!ELEMENT ExchangeSet_query (
+        ExchangeSet_query_attlist, 
+        ExchangeSet_query_query)>
+
+<!ELEMENT ExchangeSet_query_attlist (
+        ExchangeSet_query_attlist_date?, 
+        ExchangeSet_query_attlist_string?)>
+
+<!--yyyy-mm-dd -->
+<!ELEMENT ExchangeSet_query_attlist_date (#PCDATA)>
+
+<!--Query terms or search constraints -->
+<!ELEMENT ExchangeSet_query_attlist_string (#PCDATA)>
+
+<!ELEMENT ExchangeSet_query_query EMPTY>
+
+<!ELEMENT ExchangeSet_summary (
+        ExchangeSet_summary_attlist, 
+        ExchangeSet_summary_summary)>
+
+<!ELEMENT ExchangeSet_summary_attlist (
+        ExchangeSet_summary_attlist_numRsIds?, 
+        ExchangeSet_summary_attlist_totalSeqLength?, 
+        ExchangeSet_summary_attlist_numContigHits?, 
+        ExchangeSet_summary_attlist_numGeneHits?, 
+        ExchangeSet_summary_attlist_numGiHits?, 
+        ExchangeSet_summary_attlist_num3dStructs?, 
+        ExchangeSet_summary_attlist_numAlleleFreqs?, 
+        ExchangeSet_summary_attlist_numStsHits?, 
+        ExchangeSet_summary_attlist_numUnigeneCids?)>
+
+<!--Total number of refsnp-ids in this exchange set -->
+<!ELEMENT ExchangeSet_summary_attlist_numRsIds (%INTEGER;)>
+
+<!--Total length of exemplar flanking sequences -->
+<!ELEMENT ExchangeSet_summary_attlist_totalSeqLength (%INTEGER;)>
+
+<!--Total number of contig locations from SNPContigLoc -->
+<!ELEMENT ExchangeSet_summary_attlist_numContigHits (%INTEGER;)>
+
+<!--Total number of locus ids from SNPContigLocusId -->
+<!ELEMENT ExchangeSet_summary_attlist_numGeneHits (%INTEGER;)>
+
+<!--Total number of gi hits from MapLink -->
+<!ELEMENT ExchangeSet_summary_attlist_numGiHits (%INTEGER;)>
+
+<!--Total number of 3D structures from SNP3D -->
+<!ELEMENT ExchangeSet_summary_attlist_num3dStructs (%INTEGER;)>
+
+<!--Total number of allele frequences from SubPopAllele -->
+<!ELEMENT ExchangeSet_summary_attlist_numAlleleFreqs (%INTEGER;)>
+
+<!--Total number of STS hits from SnpInSts -->
+<!ELEMENT ExchangeSet_summary_attlist_numStsHits (%INTEGER;)>
+
+<!--Total number of unigene cluster ids from UnigeneSnp -->
+<!ELEMENT ExchangeSet_summary_attlist_numUnigeneCids (%INTEGER;)>
+
+<!ELEMENT ExchangeSet_summary_summary EMPTY>
+
+<!ELEMENT ExchangeSet_baseURL (BaseURL*)>
+
+<!--functional relationship of SNP (and possibly alleles) to genes at contig location as defined in organism-specific bxxx_SNPContigLocusId_xxx tables. -->
+<!ELEMENT FxnSet (
+        FxnSet_attlist, 
+        FxnSet_fxnSet)>
+
+<!ELEMENT FxnSet_attlist (
+        FxnSet_attlist_geneId?, 
+        FxnSet_attlist_symbol?, 
+        FxnSet_attlist_mrnaAcc?, 
+        FxnSet_attlist_mrnaVer?, 
+        FxnSet_attlist_protAcc?, 
+        FxnSet_attlist_protVer?, 
+        FxnSet_attlist_fxnClass?, 
+        FxnSet_attlist_readingFrame?, 
+        FxnSet_attlist_allele?, 
+        FxnSet_attlist_residue?, 
+        FxnSet_attlist_aaPosition?)>
+
+<!--gene-id of gene as aligned to contig -->
+<!ELEMENT FxnSet_attlist_geneId (%INTEGER;)>
+
+<!--symbol (official if present in Entrez Gene) of gene -->
+<!ELEMENT FxnSet_attlist_symbol (#PCDATA)>
+
+<!--mRNA accession if variation in transcript -->
+<!ELEMENT FxnSet_attlist_mrnaAcc (#PCDATA)>
+
+<!--mRNA sequence version if variation is in transcripot -->
+<!ELEMENT FxnSet_attlist_mrnaVer (%INTEGER;)>
+
+<!--protein accession if variation in protein -->
+<!ELEMENT FxnSet_attlist_protAcc (#PCDATA)>
+
+<!--protein version if variation is in protein -->
+<!ELEMENT FxnSet_attlist_protVer (%INTEGER;)>
+<!--
+variation in region of gene, but not in transcript - deprecated
+								synonymous change	
+								nonsynonymous change - deprecated
+								untranslated region - deprecated
+								splice-site - deprecated
+								contig reference
+								deprecated
+									coding: synonymy unknown
+									In gene segment with null mrna and protein. ex. IGLV4-69. geneId=28784
+									within 3' 0.5kb to a gene.
+									changes to STOP codon.
+									alters codon to make an altered amino acid in protein product.
+									indel snp causing frameshift.
+									3 prime untranslated region
+									5 prime untranslated region
+									3 prime acceptor dinucleotide
+									5 prime donor dinucleotide
+-->
+<!ELEMENT FxnSet_attlist_fxnClass %ENUM;>
+<!ATTLIST FxnSet_attlist_fxnClass value (
+        locus-region |
+        coding-unknown |
+        coding-synonymous |
+        coding-nonsynonymous |
+        mrna-utr |
+        intron |
+        splice-site |
+        reference |
+        coding-exception |
+        synonymy-unknown |
+        gene-segment |
+        near-gene-3 |
+        near-gene-5 |
+        nonsense |
+        missense |
+        frameshift |
+        utr-3 |
+        utr-5 |
+        splice-3 |
+        splice-5
+        ) #REQUIRED >
+
+
+<!ELEMENT FxnSet_attlist_readingFrame (%INTEGER;)>
+
+<!--variation allele: * suffix indicates allele of contig at this location -->
+<!ELEMENT FxnSet_attlist_allele (#PCDATA)>
+
+<!--translated amino acid residue for allele -->
+<!ELEMENT FxnSet_attlist_residue (#PCDATA)>
+
+<!--position of the variant residue in peptide sequence -->
+<!ELEMENT FxnSet_attlist_aaPosition (%INTEGER;)>
+
+<!--functional relationship of SNP (and possibly alleles) to genes at contig location as defined in organism-specific bxxx_SNPContigLocusId_xxx tables. -->
+<!ELEMENT FxnSet_fxnSet EMPTY>
+
+<!--Position of a single hit of a variation on a contig -->
+<!ELEMENT MapLoc (
+        MapLoc_attlist, 
+        MapLoc_fxnSet?)>
+
+<!ELEMENT MapLoc_attlist (
+        MapLoc_attlist_asnFrom, 
+        MapLoc_attlist_asnTo, 
+        MapLoc_attlist_locType, 
+        MapLoc_attlist_alnQuality?, 
+        MapLoc_attlist_orient?, 
+        MapLoc_attlist_physMapInt?, 
+        MapLoc_attlist_leftFlankNeighborPos?, 
+        MapLoc_attlist_rightFlankNeighborPos?, 
+        MapLoc_attlist_leftContigNeighborPos?, 
+        MapLoc_attlist_rightContigNeighborPos?, 
+        MapLoc_attlist_numberOfMismatches?, 
+        MapLoc_attlist_numberOfDeletions?, 
+        MapLoc_attlist_numberOfInsertions?)>
+
+<!--beginning of variation as feature on contig -->
+<!ELEMENT MapLoc_attlist_asnFrom (%INTEGER;)>
+
+<!--end position of variation as feature on contig -->
+<!ELEMENT MapLoc_attlist_asnTo (%INTEGER;)>
+<!--
+defines the seq-loc symbol if asn_from != asn_to
+insertion on contig
+asn-from = asn-to write as 'asn-from'
+deletion on contig
+-->
+<!ELEMENT MapLoc_attlist_locType %ENUM;>
+<!ATTLIST MapLoc_attlist_locType value (
+        insertion |
+        exact |
+        deletion |
+        range-ins |
+        range-exact |
+        range-del
+        ) #REQUIRED >
+
+
+<!--alignment qualiity -->
+<!ELEMENT MapLoc_attlist_alnQuality (%REAL;)>
+
+<!--orientation of refSNP sequence to contig sequence -->
+<!ELEMENT MapLoc_attlist_orient %ENUM;>
+<!ATTLIST MapLoc_attlist_orient value (
+        forward |
+        reverse
+        ) #REQUIRED >
+
+
+<!--chromosome position as integer for sorting -->
+<!ELEMENT MapLoc_attlist_physMapInt (%INTEGER;)>
+
+<!--nearest aligned position in 5' flanking sequence of snp -->
+<!ELEMENT MapLoc_attlist_leftFlankNeighborPos (%INTEGER;)>
+
+<!--nearest aligned position in 3' flanking sequence of snp  -->
+<!ELEMENT MapLoc_attlist_rightFlankNeighborPos (%INTEGER;)>
+
+<!--nearest aligned position in 5' contig alignment of snp -->
+<!ELEMENT MapLoc_attlist_leftContigNeighborPos (%INTEGER;)>
+
+<!--nearest aligned position in 3' contig alignment of snp -->
+<!ELEMENT MapLoc_attlist_rightContigNeighborPos (%INTEGER;)>
+
+<!--number of Mismatched positions in this alignment -->
+<!ELEMENT MapLoc_attlist_numberOfMismatches (%INTEGER;)>
+
+<!--number of deletions in this alignment -->
+<!ELEMENT MapLoc_attlist_numberOfDeletions (%INTEGER;)>
+
+<!--number of insetions in this alignment -->
+<!ELEMENT MapLoc_attlist_numberOfInsertions (%INTEGER;)>
+
+<!ELEMENT MapLoc_fxnSet (FxnSet*)>
+
+
+<!ELEMENT PrimarySequence (
+        PrimarySequence_attlist, 
+        PrimarySequence_mapLoc)>
+
+<!ELEMENT PrimarySequence_attlist (
+        PrimarySequence_attlist_dbSnpBuild, 
+        PrimarySequence_attlist_gi, 
+        PrimarySequence_attlist_source?, 
+        PrimarySequence_attlist_accession?)>
+
+<!ELEMENT PrimarySequence_attlist_dbSnpBuild (%INTEGER;)>
+
+<!ELEMENT PrimarySequence_attlist_gi (%INTEGER;)>
+
+<!ELEMENT PrimarySequence_attlist_source %ENUM;>
+<!ATTLIST PrimarySequence_attlist_source value (
+        submitter |
+        blastmb |
+        xm
+        ) #REQUIRED >
+
+
+<!ELEMENT PrimarySequence_attlist_accession (#PCDATA)>
+
+<!ELEMENT PrimarySequence_mapLoc (MapLoc*)>
+
+<!--defines the docsum structure for refSNP clusters, where a refSNP cluster (rs) is a grouping of individual dbSNP submissions that all refer to the same variation. The refsnp provides a single unified record for annotation of NCBI resources such as reference genome sequence. -->
+<!ELEMENT Rs (
+        Rs_attlist, 
+        Rs_het?, 
+        Rs_validation, 
+        Rs_create, 
+        Rs_update?, 
+        Rs_sequence, 
+        Rs_ss, 
+        Rs_assembly?, 
+        Rs_primarySequence?, 
+        Rs_rsStruct?, 
+        Rs_rsLinkout?, 
+        Rs_mergeHistory?, 
+        Rs_hgvs?)>
+
+<!ELEMENT Rs_attlist (
+        Rs_attlist_rsId, 
+        Rs_attlist_snpClass, 
+        Rs_attlist_snpType, 
+        Rs_attlist_molType, 
+        Rs_attlist_validProbMin?, 
+        Rs_attlist_validProbMax?, 
+        Rs_attlist_genotype?, 
+        Rs_attlist_bitField?)>
+
+<!--refSNP (rs) number -->
+<!ELEMENT Rs_attlist_rsId (%INTEGER;)>
+
+<!ELEMENT Rs_attlist_snpClass %ENUM;>
+<!ATTLIST Rs_attlist_snpClass value (
+        snp |
+        in-del |
+        heterozygous |
+        microsatellite |
+        named-locus |
+        no-variation |
+        mixed |
+        multinucleotide-polymorphism
+        ) #REQUIRED >
+
+
+<!ELEMENT Rs_attlist_snpType %ENUM;>
+<!ATTLIST Rs_attlist_snpType value (
+        notwithdrawn |
+        artifact |
+        gene-duplication |
+        duplicate-submission |
+        notspecified |
+        ambiguous-location |
+        low-map-quality
+        ) #REQUIRED >
+
+
+<!ELEMENT Rs_attlist_molType %ENUM;>
+<!ATTLIST Rs_attlist_molType value (
+        genomic |
+        cDNA |
+        mito |
+        chloro |
+        unknown
+        ) #REQUIRED >
+
+
+<!--minimum reported success rate of all submissions in cluster -->
+<!ELEMENT Rs_attlist_validProbMin (%INTEGER;)>
+
+<!--maximum reported success rate of all submissions in cluster -->
+<!ELEMENT Rs_attlist_validProbMax (%INTEGER;)>
+
+<!--at least one genotype reported for this refSNP -->
+<!ELEMENT Rs_attlist_genotype EMPTY>
+<!ATTLIST Rs_attlist_genotype value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Rs_attlist_bitField (#PCDATA)>
+
+<!ELEMENT Rs_het (
+        Rs_het_attlist, 
+        Rs_het_het)>
+
+<!ELEMENT Rs_het_attlist (
+        Rs_het_attlist_type, 
+        Rs_het_attlist_value, 
+        Rs_het_attlist_stdError?)>
+
+<!--Est=Estimated average het from allele frequencies, Obs=Observed from genotype data -->
+<!ELEMENT Rs_het_attlist_type %ENUM;>
+<!ATTLIST Rs_het_attlist_type value (
+        est |
+        obs
+        ) #REQUIRED >
+
+
+<!--Heterozygosity -->
+<!ELEMENT Rs_het_attlist_value (%REAL;)>
+
+<!--Standard error of Het estimate -->
+<!ELEMENT Rs_het_attlist_stdError (%REAL;)>
+
+<!ELEMENT Rs_het_het EMPTY>
+
+<!ELEMENT Rs_validation (
+        Rs_validation_attlist, 
+        Rs_validation_otherPopBatchId?, 
+        Rs_validation_twoHit2AlleleBatchId?)>
+
+<!ELEMENT Rs_validation_attlist (
+        Rs_validation_attlist_byCluster?, 
+        Rs_validation_attlist_byFrequency?, 
+        Rs_validation_attlist_byOtherPop?, 
+        Rs_validation_attlist_by2Hit2Allele?, 
+        Rs_validation_attlist_byHapMap?)>
+
+<!--at least one subsnp in cluster has frequency data submitted -->
+<!ELEMENT Rs_validation_attlist_byCluster EMPTY>
+<!ATTLIST Rs_validation_attlist_byCluster value ( true | false ) #REQUIRED >
+
+
+<!--cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method -->
+<!ELEMENT Rs_validation_attlist_byFrequency EMPTY>
+<!ATTLIST Rs_validation_attlist_byFrequency value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Rs_validation_attlist_byOtherPop EMPTY>
+<!ATTLIST Rs_validation_attlist_byOtherPop value ( true | false ) #REQUIRED >
+
+
+<!--cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method -->
+<!ELEMENT Rs_validation_attlist_by2Hit2Allele EMPTY>
+<!ATTLIST Rs_validation_attlist_by2Hit2Allele value ( true | false ) #REQUIRED >
+
+
+<!--TBD -->
+<!ELEMENT Rs_validation_attlist_byHapMap EMPTY>
+<!ATTLIST Rs_validation_attlist_byHapMap value ( true | false ) #REQUIRED >
+
+
+<!--dbSNP batch-id's for other pop snp validation data. -->
+<!ELEMENT Rs_validation_otherPopBatchId (Rs_validation_otherPopBatchId_E*)>
+
+
+<!ELEMENT Rs_validation_otherPopBatchId_E (%INTEGER;)>
+
+<!--dbSNP batch-id's for double-hit snp validation data. Use batch-id to get methods, etc. -->
+<!ELEMENT Rs_validation_twoHit2AlleleBatchId (Rs_validation_twoHit2AlleleBatchId_E*)>
+
+
+<!ELEMENT Rs_validation_twoHit2AlleleBatchId_E (%INTEGER;)>
+<!--date the refsnp cluster was instantiated -->
+<!--date the refsnp cluster was instantiated -->
+<!ELEMENT Rs_create (
+        Rs_create_attlist, 
+        Rs_create_create)>
+<!--date the refsnp cluster was instantiated -->
+<!ELEMENT Rs_create_attlist (
+        Rs_create_attlist_build?, 
+        Rs_create_attlist_date?)>
+
+<!--build number when the cluster was created -->
+<!ELEMENT Rs_create_attlist_build (%INTEGER;)>
+
+<!--yyyy-mm-dd -->
+<!ELEMENT Rs_create_attlist_date (#PCDATA)>
+
+<!--date the refsnp cluster was instantiated -->
+<!ELEMENT Rs_create_create EMPTY>
+<!--most recent date the cluster was updated (member added or deleted) -->
+<!--most recent date the cluster was updated (member added or deleted) -->
+<!ELEMENT Rs_update (
+        Rs_update_attlist, 
+        Rs_update_update)>
+<!--most recent date the cluster was updated (member added or deleted) -->
+<!ELEMENT Rs_update_attlist (
+        Rs_update_attlist_build?, 
+        Rs_update_attlist_date?)>
+
+<!--build number when the cluster was updated -->
+<!ELEMENT Rs_update_attlist_build (%INTEGER;)>
+
+<!--yyyy-mm-dd -->
+<!ELEMENT Rs_update_attlist_date (#PCDATA)>
+
+<!--most recent date the cluster was updated (member added or deleted) -->
+<!ELEMENT Rs_update_update EMPTY>
+
+<!ELEMENT Rs_sequence (
+        Rs_sequence_attlist, 
+        Rs_sequence_seq5?, 
+        Rs_sequence_observed, 
+        Rs_sequence_seq3?)>
+
+<!ELEMENT Rs_sequence_attlist (
+        Rs_sequence_attlist_exemplarSs)>
+
+<!--dbSNP ss# selected as source of refSNP flanking sequence, ss# part of ss-list below  -->
+<!ELEMENT Rs_sequence_attlist_exemplarSs (%INTEGER;)>
+
+<!--
+5' sequence that flanks the variation
+5' sequence that flanks the variation
+-->
+<!ELEMENT Rs_sequence_seq5 (#PCDATA)>
+
+<!--
+list of all nucleotide alleles observed in ss-list members, correcting for reverse complementation of memebers reported in reverse orientation
+list of all nucleotide alleles observed in ss-list members, correcting for reverse complementation of memebers reported in reverse orientation
+-->
+<!ELEMENT Rs_sequence_observed (#PCDATA)>
+
+<!--
+3' sequence that flanks the variation
+3' sequence that flanks the variation
+-->
+<!ELEMENT Rs_sequence_seq3 (#PCDATA)>
+
+<!ELEMENT Rs_ss (Ss*)>
+
+<!ELEMENT Rs_assembly (Assembly*)>
+
+<!ELEMENT Rs_primarySequence (PrimarySequence*)>
+
+<!ELEMENT Rs_rsStruct (RsStruct*)>
+
+<!ELEMENT Rs_rsLinkout (RsLinkout*)>
+
+<!ELEMENT Rs_mergeHistory (Rs_mergeHistory_E*)>
+
+
+<!ELEMENT Rs_mergeHistory_E (
+        Rs_mergeHistory_E_attlist, 
+        Rs_mergeHistory_E_mergeHistory)>
+
+<!ELEMENT Rs_mergeHistory_E_attlist (
+        Rs_mergeHistory_E_attlist_rsId, 
+        Rs_mergeHistory_E_attlist_buildId?, 
+        Rs_mergeHistory_E_attlist_orientFlip?)>
+
+<!--previously issued rs id whose member assays have now been merged -->
+<!ELEMENT Rs_mergeHistory_E_attlist_rsId (%INTEGER;)>
+
+<!--build id when rs id was merged into parent rs -->
+<!ELEMENT Rs_mergeHistory_E_attlist_buildId (%INTEGER;)>
+
+<!--TRUE if strand of rs id is reverse to parent object's current strand -->
+<!ELEMENT Rs_mergeHistory_E_attlist_orientFlip EMPTY>
+<!ATTLIST Rs_mergeHistory_E_attlist_orientFlip value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Rs_mergeHistory_E_mergeHistory EMPTY>
+
+<!--							HGVS name list -->
+<!ELEMENT Rs_hgvs (Rs_hgvs_E*)>
+
+
+<!ELEMENT Rs_hgvs_E (#PCDATA)>
+
+<!--link data for another resource -->
+<!ELEMENT RsLinkout (
+        RsLinkout_attlist, 
+        RsLinkout_rsLinkout)>
+
+<!ELEMENT RsLinkout_attlist (
+        RsLinkout_attlist_resourceId, 
+        RsLinkout_attlist_linkValue)>
+
+<!--BaseURLList.url_id -->
+<!ELEMENT RsLinkout_attlist_resourceId (#PCDATA)>
+
+<!--value to append to ResourceURL.base-url for complete link -->
+<!ELEMENT RsLinkout_attlist_linkValue (#PCDATA)>
+
+<!--link data for another resource -->
+<!ELEMENT RsLinkout_rsLinkout EMPTY>
+
+<!--structure information for SNP -->
+<!ELEMENT RsStruct (
+        RsStruct_attlist, 
+        RsStruct_rsStruct)>
+
+<!ELEMENT RsStruct_attlist (
+        RsStruct_attlist_protAcc?, 
+        RsStruct_attlist_protGi?, 
+        RsStruct_attlist_protLoc?, 
+        RsStruct_attlist_protResidue?, 
+        RsStruct_attlist_rsResidue?, 
+        RsStruct_attlist_structGi?, 
+        RsStruct_attlist_structLoc?, 
+        RsStruct_attlist_structResidue?)>
+
+<!--accession of the protein with variation -->
+<!ELEMENT RsStruct_attlist_protAcc (#PCDATA)>
+
+<!--GI of the protein with variation -->
+<!ELEMENT RsStruct_attlist_protGi (%INTEGER;)>
+
+<!--position of the residue for the protein GI -->
+<!ELEMENT RsStruct_attlist_protLoc (%INTEGER;)>
+
+<!--residue specified for protein at prot-loc location -->
+<!ELEMENT RsStruct_attlist_protResidue (#PCDATA)>
+
+<!--alternative residue specified by variation sequence -->
+<!ELEMENT RsStruct_attlist_rsResidue (#PCDATA)>
+
+<!--GI of the structure neighbor -->
+<!ELEMENT RsStruct_attlist_structGi (%INTEGER;)>
+
+<!--position of the residue for the structure GI -->
+<!ELEMENT RsStruct_attlist_structLoc (%INTEGER;)>
+
+<!--residue specified for protein at struct-loc location -->
+<!ELEMENT RsStruct_attlist_structResidue (#PCDATA)>
+
+<!--structure information for SNP -->
+<!ELEMENT RsStruct_rsStruct EMPTY>
+
+<!--data for an individual submission to dbSNP -->
+<!ELEMENT Ss (
+        Ss_attlist, 
+        Ss_sequence)>
+
+<!ELEMENT Ss_attlist (
+        Ss_attlist_ssId, 
+        Ss_attlist_handle, 
+        Ss_attlist_batchId, 
+        Ss_attlist_locSnpId?, 
+        Ss_attlist_subSnpClass?, 
+        Ss_attlist_orient?, 
+        Ss_attlist_strand?, 
+        Ss_attlist_molType?, 
+        Ss_attlist_buildId?, 
+        Ss_attlist_methodClass?, 
+        Ss_attlist_validated?, 
+        Ss_attlist_linkoutUrl?)>
+
+<!--dbSNP accession number for submission -->
+<!ELEMENT Ss_attlist_ssId (%INTEGER;)>
+
+<!--Tag for the submitting laboratory -->
+<!ELEMENT Ss_attlist_handle (#PCDATA)>
+
+<!--dbSNP number for batch submission -->
+<!ELEMENT Ss_attlist_batchId (%INTEGER;)>
+
+<!--
+submission (ss#)
+submitter ID
+-->
+<!ELEMENT Ss_attlist_locSnpId (#PCDATA)>
+
+<!--SubSNP classification by type of variation -->
+<!ELEMENT Ss_attlist_subSnpClass %ENUM;>
+<!ATTLIST Ss_attlist_subSnpClass value (
+        snp |
+        in-del |
+        heterozygous |
+        microsatellite |
+        named-locus |
+        no-variation |
+        mixed |
+        multinucleotide-polymorphism
+        ) #REQUIRED >
+
+<!--
+orientation of refsnp cluster members to refsnp cluster sequence
+ss flanking sequence is in same orientation as seq-ss-exemplar
+lanking sequence and alleles are reverse complement of refSNP as defined by ss exemplar
+-->
+<!ELEMENT Ss_attlist_orient %ENUM;>
+<!ATTLIST Ss_attlist_orient value (
+        forward |
+        reverse
+        ) #REQUIRED >
+
+
+<!--strand is defined as TOP/BOTTOM by nature of flanking nucleotide sequence -->
+<!ELEMENT Ss_attlist_strand %ENUM;>
+<!ATTLIST Ss_attlist_strand value (
+        top |
+        bottom
+        ) #REQUIRED >
+
+
+<!--moltype from Batch table -->
+<!ELEMENT Ss_attlist_molType %ENUM;>
+<!ATTLIST Ss_attlist_molType value (
+        genomic |
+        cDNA |
+        mito |
+        chloro |
+        unknown
+        ) #REQUIRED >
+
+
+<!--dbSNP build number when ss# was added to a refSNP (rs#) cluster -->
+<!ELEMENT Ss_attlist_buildId (%INTEGER;)>
+<!--
+class of method used to assay for the variation
+Denaturing High Pressure Liquid Chromatography used to detect SNP
+a hybridization method (e.g. chip) was used to assay for variation
+variation was mined from sequence alignment with software
+samples were sequenced and resulting alignment used to define variation
+-->
+<!ELEMENT Ss_attlist_methodClass %ENUM;>
+<!ATTLIST Ss_attlist_methodClass value (
+        dHPLC |
+        hybridize |
+        computed |
+        sSCP |
+        other |
+        unknown |
+        rFLP |
+        sequence
+        ) #REQUIRED >
+
+<!--
+subsnp has been experimentally validated by submitter
+subsnp has frequency data submitted
+has 2+ submissions, with 1+ submission assayed with a non-computational method
+-->
+<!ELEMENT Ss_attlist_validated %ENUM;>
+<!ATTLIST Ss_attlist_validated value (
+        by-submitter |
+        by-frequency |
+        by-cluster
+        ) #REQUIRED >
+
+
+<!--append loc-snp-id to this base URL to construct a pointer to submitter data. -->
+<!ELEMENT Ss_attlist_linkoutUrl (#PCDATA)>
+
+<!ELEMENT Ss_sequence (
+        Ss_sequence_seq5?, 
+        Ss_sequence_observed, 
+        Ss_sequence_seq3?)>
+
+<!--
+5' sequence that flanks the variation
+5' sequence that flanks the variation
+-->
+<!ELEMENT Ss_sequence_seq5 (#PCDATA)>
+
+<!--
+list of all nucleotide alleles observed in ss-list members, correcting for reverse complementation of memebers reported in reverse orientation
+list of all nucleotide alleles observed in ss-list members, correcting for reverse complementation of memebers reported in reverse orientation
+-->
+<!ELEMENT Ss_sequence_observed (#PCDATA)>
+
+<!--
+3' sequence that flanks the variation
+3' sequence that flanks the variation
+-->
+<!ELEMENT Ss_sequence_seq3 (#PCDATA)>
+

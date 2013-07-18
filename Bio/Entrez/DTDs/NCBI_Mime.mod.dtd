@@ -1,0 +1,251 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "ncbimime.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Mime"
+================================================= -->
+
+<!--
+$Revision: 6.12 $
+****************************************************************
+
+  NCBI MIME type (chemical/ncbi-asn1-ascii and chemical/ncbi-asn1-binary)
+  by Jonathan Epstein, February 1996
+
+****************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Ncbi-mime-asn1 -->
+
+<!-- Elements referenced from other modules:
+          Biostruc,
+          Biostruc-annot-set FROM MMDB,
+          Cdd FROM NCBI-Cdd,
+          Seq-entry FROM NCBI-Seqset,
+          Seq-annot FROM NCBI-Sequence,
+          Medline-entry FROM NCBI-Medline,
+          Cn3d-style-dictionary,
+          Cn3d-user-annotations FROM NCBI-Cn3d -->
+<!-- ============================================ -->
+
+
+<!ELEMENT Ncbi-mime-asn1 (
+        Ncbi-mime-asn1_entrez | 
+        Ncbi-mime-asn1_alignstruc | 
+        Ncbi-mime-asn1_alignseq | 
+        Ncbi-mime-asn1_strucseq | 
+        Ncbi-mime-asn1_strucseqs | 
+        Ncbi-mime-asn1_general)>
+
+<!-- just a structure -->
+<!ELEMENT Ncbi-mime-asn1_entrez (Entrez-general)>
+
+<!-- structures & sequences & alignments -->
+<!ELEMENT Ncbi-mime-asn1_alignstruc (Biostruc-align)>
+
+<!-- sequence alignment -->
+<!ELEMENT Ncbi-mime-asn1_alignseq (Biostruc-align-seq)>
+
+<!-- structure & sequences -->
+<!ELEMENT Ncbi-mime-asn1_strucseq (Biostruc-seq)>
+
+<!-- structure & sequences & alignments -->
+<!ELEMENT Ncbi-mime-asn1_strucseqs (Biostruc-seqs)>
+
+<!--
+ all-purpose "grab bag"
+ others may be added here in the future
+-->
+<!ELEMENT Ncbi-mime-asn1_general (Biostruc-seqs-aligns-cdd)>
+
+<!-- generic bundle of sequence and alignment info -->
+<!ELEMENT Bundle-seqs-aligns (
+        Bundle-seqs-aligns_sequences?, 
+        Bundle-seqs-aligns_seqaligns?, 
+        Bundle-seqs-aligns_strucaligns?, 
+        Bundle-seqs-aligns_imports?, 
+        Bundle-seqs-aligns_style-dictionary?, 
+        Bundle-seqs-aligns_user-annotations?)>
+
+<!-- sequences -->
+<!ELEMENT Bundle-seqs-aligns_sequences (Seq-entry*)>
+
+<!-- sequence alignments -->
+<!ELEMENT Bundle-seqs-aligns_seqaligns (Seq-annot*)>
+
+<!-- structure alignments -->
+<!ELEMENT Bundle-seqs-aligns_strucaligns (Biostruc-annot-set)>
+
+<!-- imports (updates in Cn3D) -->
+<!ELEMENT Bundle-seqs-aligns_imports (Seq-annot*)>
+
+<!-- Cn3D stuff -->
+<!ELEMENT Bundle-seqs-aligns_style-dictionary (Cn3d-style-dictionary)>
+
+<!ELEMENT Bundle-seqs-aligns_user-annotations (Cn3d-user-annotations)>
+
+
+<!ELEMENT Biostruc-seqs-aligns-cdd (
+        Biostruc-seqs-aligns-cdd_seq-align-data, 
+        Biostruc-seqs-aligns-cdd_structures?, 
+        Biostruc-seqs-aligns-cdd_structure-type?)>
+
+<!ELEMENT Biostruc-seqs-aligns-cdd_seq-align-data (
+        Biostruc-seqs-aligns-cdd_seq-align-data_bundle | 
+        Biostruc-seqs-aligns-cdd_seq-align-data_cdd)>
+
+<!-- either seqs + alignments -->
+<!ELEMENT Biostruc-seqs-aligns-cdd_seq-align-data_bundle (Bundle-seqs-aligns)>
+
+<!-- or CDD (which contains these) -->
+<!ELEMENT Biostruc-seqs-aligns-cdd_seq-align-data_cdd (Cdd)>
+
+<!-- structures -->
+<!ELEMENT Biostruc-seqs-aligns-cdd_structures (Biostruc*)>
+<!-- type of structures to load if -->
+<!ELEMENT Biostruc-seqs-aligns-cdd_structure-type %ENUM;>
+
+<!--
+    ncbi-backbone	-  not present; meanings and
+    ncbi-all-atom	-  values are same as MMDB's
+    pdb-model	-  Model-type
+-->
+<!ATTLIST Biostruc-seqs-aligns-cdd_structure-type value (
+        ncbi-backbone |
+        ncbi-all-atom |
+        pdb-model
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Biostruc-align (
+        Biostruc-align_master, 
+        Biostruc-align_slaves, 
+        Biostruc-align_alignments, 
+        Biostruc-align_sequences, 
+        Biostruc-align_seqalign, 
+        Biostruc-align_style-dictionary?, 
+        Biostruc-align_user-annotations?)>
+
+<!ELEMENT Biostruc-align_master (Biostruc)>
+
+<!ELEMENT Biostruc-align_slaves (Biostruc*)>
+
+<!-- structure alignments -->
+<!ELEMENT Biostruc-align_alignments (Biostruc-annot-set)>
+
+<!-- sequences -->
+<!ELEMENT Biostruc-align_sequences (Seq-entry*)>
+
+<!ELEMENT Biostruc-align_seqalign (Seq-annot*)>
+
+<!ELEMENT Biostruc-align_style-dictionary (Cn3d-style-dictionary)>
+
+<!ELEMENT Biostruc-align_user-annotations (Cn3d-user-annotations)>
+
+<!-- display seq structure align only -->
+<!ELEMENT Biostruc-align-seq (
+        Biostruc-align-seq_sequences, 
+        Biostruc-align-seq_seqalign, 
+        Biostruc-align-seq_style-dictionary?, 
+        Biostruc-align-seq_user-annotations?)>
+
+<!-- sequences -->
+<!ELEMENT Biostruc-align-seq_sequences (Seq-entry*)>
+
+<!ELEMENT Biostruc-align-seq_seqalign (Seq-annot*)>
+
+<!ELEMENT Biostruc-align-seq_style-dictionary (Cn3d-style-dictionary)>
+
+<!ELEMENT Biostruc-align-seq_user-annotations (Cn3d-user-annotations)>
+
+<!-- display  structure seq added by yanli -->
+<!ELEMENT Biostruc-seq (
+        Biostruc-seq_structure, 
+        Biostruc-seq_sequences, 
+        Biostruc-seq_style-dictionary?, 
+        Biostruc-seq_user-annotations?)>
+
+<!ELEMENT Biostruc-seq_structure (Biostruc)>
+
+<!ELEMENT Biostruc-seq_sequences (Seq-entry*)>
+
+<!ELEMENT Biostruc-seq_style-dictionary (Cn3d-style-dictionary)>
+
+<!ELEMENT Biostruc-seq_user-annotations (Cn3d-user-annotations)>
+
+<!-- display blast alignment along with neighbor's structure added by yanli -->
+<!ELEMENT Biostruc-seqs (
+        Biostruc-seqs_structure, 
+        Biostruc-seqs_sequences, 
+        Biostruc-seqs_seqalign, 
+        Biostruc-seqs_style-dictionary?, 
+        Biostruc-seqs_user-annotations?)>
+
+<!ELEMENT Biostruc-seqs_structure (Biostruc)>
+
+<!-- sequences -->
+<!ELEMENT Biostruc-seqs_sequences (Seq-entry*)>
+
+<!ELEMENT Biostruc-seqs_seqalign (Seq-annot*)>
+
+<!ELEMENT Biostruc-seqs_style-dictionary (Cn3d-style-dictionary)>
+
+<!ELEMENT Biostruc-seqs_user-annotations (Cn3d-user-annotations)>
+
+
+<!ELEMENT Entrez-style %ENUM;>
+<!ATTLIST Entrez-style value (
+        docsum |
+        genbank |
+        genpept |
+        fasta |
+        asn1 |
+        graphic |
+        alignment |
+        globalview |
+        report |
+        medlars |
+        embl |
+        pdb |
+        kinemage
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Entrez-general (
+        Entrez-general_title?, 
+        Entrez-general_data, 
+        Entrez-general_style, 
+        Entrez-general_location?)>
+
+<!ELEMENT Entrez-general_title (#PCDATA)>
+
+<!ELEMENT Entrez-general_data (
+        Entrez-general_data_ml | 
+        Entrez-general_data_prot | 
+        Entrez-general_data_nuc | 
+        Entrez-general_data_genome | 
+        Entrez-general_data_structure | 
+        Entrez-general_data_strucAnnot)>
+
+<!ELEMENT Entrez-general_data_ml (Medline-entry)>
+
+<!ELEMENT Entrez-general_data_prot (Seq-entry)>
+
+<!ELEMENT Entrez-general_data_nuc (Seq-entry)>
+
+<!ELEMENT Entrez-general_data_genome (Seq-entry)>
+
+<!ELEMENT Entrez-general_data_structure (Biostruc)>
+
+<!ELEMENT Entrez-general_data_strucAnnot (Biostruc-annot-set)>
+
+<!ELEMENT Entrez-general_style (Entrez-style)>
+
+<!ELEMENT Entrez-general_location (#PCDATA)>
+

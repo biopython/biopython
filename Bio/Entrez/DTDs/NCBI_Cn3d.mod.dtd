@@ -1,0 +1,534 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "cn3d.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Cn3d"
+================================================= -->
+
+<!--
+$Revision: 1.15 $
+**********************************************************************
+
+  Definitions for Cn3D-specific data (rendering settings,
+    user annotations, etc.)
+
+  by Paul Thiessen
+
+  National Center for Biotechnology Information
+  National Institutes of Health
+  Bethesda, MD 20894 USA
+
+ asntool -m cn3d.asn -w 100 -o cn3d.h
+ asntool -B objcn3d -m cn3d.asn -G -w 100 -K cn3d.h -I mapcn3d.h \
+   -M ../mmdb1.asn,../mmdb2.asn,../mmdb3.asn
+**********************************************************************
+ Cn3D-specific information
+-->
+
+<!-- Elements used by other modules:
+          Cn3d-style-dictionary,
+          Cn3d-user-annotations -->
+
+<!-- Elements referenced from other modules:
+          Biostruc-id FROM MMDB,
+          Molecule-id,
+          Residue-id FROM MMDB-Chemical-graph -->
+<!-- ============================================ -->
+
+<!--
+ values of enumerations must match those in cn3d/style_manager.hpp!
+ for different types of backbones
+-->
+<!ELEMENT Cn3d-backbone-type %ENUM;>
+<!ATTLIST Cn3d-backbone-type value (
+        off |
+        trace |
+        partial |
+        complete
+        ) #REQUIRED >
+
+
+<!--
+ atom/bond/object rendering styles
+ for atoms and bonds
+-->
+<!ELEMENT Cn3d-drawing-style %ENUM;>
+
+<!--
+    with-arrows	-  for 3d-objects
+-->
+<!ATTLIST Cn3d-drawing-style value (
+        wire |
+        tubes |
+        ball-and-stick |
+        space-fill |
+        wire-worm |
+        tube-worm |
+        with-arrows |
+        without-arrows
+        ) #REQUIRED >
+
+
+<!--
+ available color schemes (not all
+ necessarily applicable to all objects)
+-->
+<!ELEMENT Cn3d-color-scheme %ENUM;>
+
+<!--
+    aligned	-  different alignment conservation coloring (currently only for proteins)
+    temperature	-  other schemes
+-->
+<!ATTLIST Cn3d-color-scheme value (
+        element |
+        object |
+        molecule |
+        domain |
+        residue |
+        secondary-structure |
+        user-select |
+        aligned |
+        identity |
+        variety |
+        weighted-variety |
+        information-content |
+        fit |
+        block-fit |
+        block-z-fit |
+        block-row-fit |
+        temperature |
+        hydrophobicity |
+        charge |
+        rainbow
+        ) #REQUIRED >
+
+
+<!--
+ RGB triplet, interpreted (after division by the scale-factor) as floating
+ point values which should range from [0..1]. The default scale-factor is
+ 255, so that one can conveniently set integer byte values [0..255] for
+ colors with the scale-factor already set appropriately to map to [0..1].
+    An alpha value is allowed, but is currently ignored by Cn3D.
+-->
+<!ELEMENT Cn3d-color (
+        Cn3d-color_scale-factor?, 
+        Cn3d-color_red, 
+        Cn3d-color_green, 
+        Cn3d-color_blue, 
+        Cn3d-color_alpha?)>
+
+<!ELEMENT Cn3d-color_scale-factor (%INTEGER;)>
+
+<!ELEMENT Cn3d-color_red (%INTEGER;)>
+
+<!ELEMENT Cn3d-color_green (%INTEGER;)>
+
+<!ELEMENT Cn3d-color_blue (%INTEGER;)>
+
+<!ELEMENT Cn3d-color_alpha (%INTEGER;)>
+
+<!-- style blob for backbones only -->
+<!ELEMENT Cn3d-backbone-style (
+        Cn3d-backbone-style_type, 
+        Cn3d-backbone-style_style, 
+        Cn3d-backbone-style_color-scheme, 
+        Cn3d-backbone-style_user-color)>
+<!--
+ values of enumerations must match those in cn3d/style_manager.hpp!
+ for different types of backbones
+-->
+<!ELEMENT Cn3d-backbone-style_type (Cn3d-backbone-type)>
+<!--
+ atom/bond/object rendering styles
+ for atoms and bonds
+-->
+<!ELEMENT Cn3d-backbone-style_style (Cn3d-drawing-style)>
+<!--
+ available color schemes (not all
+ necessarily applicable to all objects)
+-->
+<!ELEMENT Cn3d-backbone-style_color-scheme (Cn3d-color-scheme)>
+<!--
+ RGB triplet, interpreted (after division by the scale-factor) as floating
+ point values which should range from [0..1]. The default scale-factor is
+ 255, so that one can conveniently set integer byte values [0..255] for
+ colors with the scale-factor already set appropriately to map to [0..1].
+    An alpha value is allowed, but is currently ignored by Cn3D.
+-->
+<!ELEMENT Cn3d-backbone-style_user-color (Cn3d-color)>
+
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-general-style (
+        Cn3d-general-style_is-on, 
+        Cn3d-general-style_style, 
+        Cn3d-general-style_color-scheme, 
+        Cn3d-general-style_user-color)>
+
+<!ELEMENT Cn3d-general-style_is-on EMPTY>
+<!ATTLIST Cn3d-general-style_is-on value ( true | false ) #REQUIRED >
+
+<!--
+ atom/bond/object rendering styles
+ for atoms and bonds
+-->
+<!ELEMENT Cn3d-general-style_style (Cn3d-drawing-style)>
+<!--
+ available color schemes (not all
+ necessarily applicable to all objects)
+-->
+<!ELEMENT Cn3d-general-style_color-scheme (Cn3d-color-scheme)>
+<!--
+ RGB triplet, interpreted (after division by the scale-factor) as floating
+ point values which should range from [0..1]. The default scale-factor is
+ 255, so that one can conveniently set integer byte values [0..255] for
+ colors with the scale-factor already set appropriately to map to [0..1].
+    An alpha value is allowed, but is currently ignored by Cn3D.
+-->
+<!ELEMENT Cn3d-general-style_user-color (Cn3d-color)>
+
+<!-- style blob for backbone labels -->
+<!ELEMENT Cn3d-backbone-label-style (
+        Cn3d-backbone-label-style_spacing, 
+        Cn3d-backbone-label-style_type, 
+        Cn3d-backbone-label-style_number, 
+        Cn3d-backbone-label-style_termini, 
+        Cn3d-backbone-label-style_white)>
+
+<!-- zero means none -->
+<!ELEMENT Cn3d-backbone-label-style_spacing (%INTEGER;)>
+
+<!ELEMENT Cn3d-backbone-label-style_type %ENUM;>
+<!ATTLIST Cn3d-backbone-label-style_type value (
+        one-letter |
+        three-letter
+        ) #REQUIRED >
+
+
+<!ELEMENT Cn3d-backbone-label-style_number %ENUM;>
+
+<!--
+    sequential	-  from 1, by residues present, to match sequence
+    pdb	-  use number assigned by PDB
+-->
+<!ATTLIST Cn3d-backbone-label-style_number value (
+        none |
+        sequential |
+        pdb
+        ) #REQUIRED >
+
+
+<!ELEMENT Cn3d-backbone-label-style_termini EMPTY>
+<!ATTLIST Cn3d-backbone-label-style_termini value ( true | false ) #REQUIRED >
+
+
+<!-- all white, or (if false) color of alpha carbon -->
+<!ELEMENT Cn3d-backbone-label-style_white EMPTY>
+<!ATTLIST Cn3d-backbone-label-style_white value ( true | false ) #REQUIRED >
+
+
+<!-- rendering settings for Cn3D (mirrors StyleSettings class) -->
+<!ELEMENT Cn3d-style-settings (
+        Cn3d-style-settings_name?, 
+        Cn3d-style-settings_protein-backbone, 
+        Cn3d-style-settings_nucleotide-backbone, 
+        Cn3d-style-settings_protein-sidechains, 
+        Cn3d-style-settings_nucleotide-sidechains, 
+        Cn3d-style-settings_heterogens, 
+        Cn3d-style-settings_solvents, 
+        Cn3d-style-settings_connections, 
+        Cn3d-style-settings_helix-objects, 
+        Cn3d-style-settings_strand-objects, 
+        Cn3d-style-settings_virtual-disulfides-on, 
+        Cn3d-style-settings_virtual-disulfide-color, 
+        Cn3d-style-settings_hydrogens-on, 
+        Cn3d-style-settings_background-color, 
+        Cn3d-style-settings_scale-factor, 
+        Cn3d-style-settings_space-fill-proportion, 
+        Cn3d-style-settings_ball-radius, 
+        Cn3d-style-settings_stick-radius, 
+        Cn3d-style-settings_tube-radius, 
+        Cn3d-style-settings_tube-worm-radius, 
+        Cn3d-style-settings_helix-radius, 
+        Cn3d-style-settings_strand-width, 
+        Cn3d-style-settings_strand-thickness, 
+        Cn3d-style-settings_protein-labels?, 
+        Cn3d-style-settings_nucleotide-labels?, 
+        Cn3d-style-settings_ion-labels?)>
+
+<!-- a name (for favorites) -->
+<!ELEMENT Cn3d-style-settings_name (#PCDATA)>
+
+<!-- backbone styles -->
+<!ELEMENT Cn3d-style-settings_protein-backbone (Cn3d-backbone-style)>
+<!-- style blob for backbones only -->
+<!ELEMENT Cn3d-style-settings_nucleotide-backbone (Cn3d-backbone-style)>
+
+<!-- styles for other stuff -->
+<!ELEMENT Cn3d-style-settings_protein-sidechains (Cn3d-general-style)>
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-style-settings_nucleotide-sidechains (Cn3d-general-style)>
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-style-settings_heterogens (Cn3d-general-style)>
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-style-settings_solvents (Cn3d-general-style)>
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-style-settings_connections (Cn3d-general-style)>
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-style-settings_helix-objects (Cn3d-general-style)>
+<!-- style blob for other objects -->
+<!ELEMENT Cn3d-style-settings_strand-objects (Cn3d-general-style)>
+
+<!-- virtual disulfides -->
+<!ELEMENT Cn3d-style-settings_virtual-disulfides-on EMPTY>
+<!ATTLIST Cn3d-style-settings_virtual-disulfides-on value ( true | false ) #REQUIRED >
+
+<!--
+ RGB triplet, interpreted (after division by the scale-factor) as floating
+ point values which should range from [0..1]. The default scale-factor is
+ 255, so that one can conveniently set integer byte values [0..255] for
+ colors with the scale-factor already set appropriately to map to [0..1].
+    An alpha value is allowed, but is currently ignored by Cn3D.
+-->
+<!ELEMENT Cn3d-style-settings_virtual-disulfide-color (Cn3d-color)>
+
+<!-- hydrogens -->
+<!ELEMENT Cn3d-style-settings_hydrogens-on EMPTY>
+<!ATTLIST Cn3d-style-settings_hydrogens-on value ( true | false ) #REQUIRED >
+
+
+<!--
+ background
+ floating point parameters - scale-factor applies to all the following:
+-->
+<!ELEMENT Cn3d-style-settings_background-color (Cn3d-color)>
+
+<!ELEMENT Cn3d-style-settings_scale-factor (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_space-fill-proportion (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_ball-radius (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_stick-radius (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_tube-radius (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_tube-worm-radius (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_helix-radius (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_strand-width (%INTEGER;)>
+
+<!ELEMENT Cn3d-style-settings_strand-thickness (%INTEGER;)>
+
+<!-- backbone labels (no labels if not present) -->
+<!ELEMENT Cn3d-style-settings_protein-labels (Cn3d-backbone-label-style)>
+<!-- style blob for backbone labels -->
+<!ELEMENT Cn3d-style-settings_nucleotide-labels (Cn3d-backbone-label-style)>
+
+<!-- ion labels -->
+<!ELEMENT Cn3d-style-settings_ion-labels EMPTY>
+<!ATTLIST Cn3d-style-settings_ion-labels value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT Cn3d-style-settings-set (Cn3d-style-settings*)>
+
+
+<!ELEMENT Cn3d-style-table-id (%INTEGER;)>
+
+
+<!ELEMENT Cn3d-style-table-item (
+        Cn3d-style-table-item_id, 
+        Cn3d-style-table-item_style)>
+
+<!ELEMENT Cn3d-style-table-item_id (Cn3d-style-table-id)>
+<!-- rendering settings for Cn3D (mirrors StyleSettings class) -->
+<!ELEMENT Cn3d-style-table-item_style (Cn3d-style-settings)>
+
+<!-- the global settings, and a lookup table of styles for user annotations. -->
+<!ELEMENT Cn3d-style-dictionary (
+        Cn3d-style-dictionary_global-style, 
+        Cn3d-style-dictionary_style-table?)>
+<!-- rendering settings for Cn3D (mirrors StyleSettings class) -->
+<!ELEMENT Cn3d-style-dictionary_global-style (Cn3d-style-settings)>
+
+<!ELEMENT Cn3d-style-dictionary_style-table (Cn3d-style-table-item*)>
+
+<!--
+ a range of residues in a chain, identified by MMDB residue-id
+ (e.g., numbered from 1)
+-->
+<!ELEMENT Cn3d-residue-range (
+        Cn3d-residue-range_from, 
+        Cn3d-residue-range_to)>
+
+<!ELEMENT Cn3d-residue-range_from (Residue-id)>
+
+<!ELEMENT Cn3d-residue-range_to (Residue-id)>
+
+<!-- set of locations on a particular chain -->
+<!ELEMENT Cn3d-molecule-location (
+        Cn3d-molecule-location_molecule-id, 
+        Cn3d-molecule-location_residues?)>
+
+<!--
+ MMDB molecule id
+ which residues; whole molecule implied if absent
+-->
+<!ELEMENT Cn3d-molecule-location_molecule-id (Molecule-id)>
+
+<!ELEMENT Cn3d-molecule-location_residues (Cn3d-residue-range*)>
+
+<!--
+ set of locations on a particular structure object (e.g., a PDB/MMDB
+ structure), which may include multiple ranges of residues each on
+ multiple chains.
+-->
+<!ELEMENT Cn3d-object-location (
+        Cn3d-object-location_structure-id, 
+        Cn3d-object-location_residues)>
+
+<!ELEMENT Cn3d-object-location_structure-id (Biostruc-id)>
+
+<!ELEMENT Cn3d-object-location_residues (Cn3d-molecule-location*)>
+
+<!-- information for an individual user annotation -->
+<!ELEMENT Cn3d-user-annotation (
+        Cn3d-user-annotation_name, 
+        Cn3d-user-annotation_description?, 
+        Cn3d-user-annotation_style-id, 
+        Cn3d-user-annotation_residues, 
+        Cn3d-user-annotation_is-on)>
+
+<!-- a (short) name for this annotation -->
+<!ELEMENT Cn3d-user-annotation_name (#PCDATA)>
+
+<!-- an optional longer description -->
+<!ELEMENT Cn3d-user-annotation_description (#PCDATA)>
+
+<!-- how to draw this annotation -->
+<!ELEMENT Cn3d-user-annotation_style-id (Cn3d-style-table-id)>
+
+<!-- which residues to cover -->
+<!ELEMENT Cn3d-user-annotation_residues (Cn3d-object-location*)>
+
+<!-- whether this annotation is to be turned on in Cn3D -->
+<!ELEMENT Cn3d-user-annotation_is-on EMPTY>
+<!ATTLIST Cn3d-user-annotation_is-on value ( true | false ) #REQUIRED >
+
+
+<!-- a GL-ordered transformation matrix -->
+<!ELEMENT Cn3d-GL-matrix (
+        Cn3d-GL-matrix_m0, 
+        Cn3d-GL-matrix_m1, 
+        Cn3d-GL-matrix_m2, 
+        Cn3d-GL-matrix_m3, 
+        Cn3d-GL-matrix_m4, 
+        Cn3d-GL-matrix_m5, 
+        Cn3d-GL-matrix_m6, 
+        Cn3d-GL-matrix_m7, 
+        Cn3d-GL-matrix_m8, 
+        Cn3d-GL-matrix_m9, 
+        Cn3d-GL-matrix_m10, 
+        Cn3d-GL-matrix_m11, 
+        Cn3d-GL-matrix_m12, 
+        Cn3d-GL-matrix_m13, 
+        Cn3d-GL-matrix_m14, 
+        Cn3d-GL-matrix_m15)>
+
+<!ELEMENT Cn3d-GL-matrix_m0 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m1 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m2 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m3 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m4 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m5 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m6 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m7 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m8 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m9 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m10 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m11 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m12 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m13 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m14 (%REAL;)>
+
+<!ELEMENT Cn3d-GL-matrix_m15 (%REAL;)>
+
+<!-- a floating point 3d vector -->
+<!ELEMENT Cn3d-vector (
+        Cn3d-vector_x, 
+        Cn3d-vector_y, 
+        Cn3d-vector_z)>
+
+<!ELEMENT Cn3d-vector_x (%REAL;)>
+
+<!ELEMENT Cn3d-vector_y (%REAL;)>
+
+<!ELEMENT Cn3d-vector_z (%REAL;)>
+
+<!-- parameters used to set up the camera in Cn3D -->
+<!ELEMENT Cn3d-view-settings (
+        Cn3d-view-settings_camera-distance, 
+        Cn3d-view-settings_camera-angle-rad, 
+        Cn3d-view-settings_camera-look-at-X, 
+        Cn3d-view-settings_camera-look-at-Y, 
+        Cn3d-view-settings_camera-clip-near, 
+        Cn3d-view-settings_camera-clip-far, 
+        Cn3d-view-settings_matrix, 
+        Cn3d-view-settings_rotation-center)>
+
+<!-- camera on +Z axis this distance from origin -->
+<!ELEMENT Cn3d-view-settings_camera-distance (%REAL;)>
+
+<!-- camera angle -->
+<!ELEMENT Cn3d-view-settings_camera-angle-rad (%REAL;)>
+
+<!-- X,Y of point in Z=0 plane camera points at -->
+<!ELEMENT Cn3d-view-settings_camera-look-at-X (%REAL;)>
+
+<!ELEMENT Cn3d-view-settings_camera-look-at-Y (%REAL;)>
+
+<!-- distance of clipping planes from camera -->
+<!ELEMENT Cn3d-view-settings_camera-clip-near (%REAL;)>
+
+<!ELEMENT Cn3d-view-settings_camera-clip-far (%REAL;)>
+
+<!-- transformation of objects in the scene -->
+<!ELEMENT Cn3d-view-settings_matrix (Cn3d-GL-matrix)>
+
+<!-- center of rotation of whole scene -->
+<!ELEMENT Cn3d-view-settings_rotation-center (Cn3d-vector)>
+
+<!--
+ The list of annotations for a given CDD/mime. If residue regions overlap
+ between annotations that are turned on, the last annotation in this list
+ that contains these residues will be used as the display style for these
+ residues.
+   Also contains the current viewpoint, so that user's camera angle
+ can be stored and reproduced, for illustrations, on-line figures, etc.
+-->
+<!ELEMENT Cn3d-user-annotations (
+        Cn3d-user-annotations_annotations?, 
+        Cn3d-user-annotations_view?)>
+
+<!ELEMENT Cn3d-user-annotations_annotations (Cn3d-user-annotation*)>
+<!-- parameters used to set up the camera in Cn3D -->
+<!ELEMENT Cn3d-user-annotations_view (Cn3d-view-settings)>
+

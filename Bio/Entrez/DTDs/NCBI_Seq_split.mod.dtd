@@ -1,0 +1,559 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqsplit.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Seq-split"
+================================================= -->
+
+<!--
+$Revision: 181438 $
+********************************************************************
+
+  Network Id server network access
+  Vasilchenko 2003
+
+
+*********************************************************************
+
+  seqsplit.asn
+
+     representation of split sequences
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          ID2S-Chunk-Id,
+          ID2S-Seq-annot-Info -->
+
+<!-- Elements referenced from other modules:
+          Seq-id FROM NCBI-Seqloc,
+          Seq-entry FROM NCBI-Seqset,
+          Bioseq,
+          Seq-annot,
+          Seq-descr,
+          Seq-literal FROM NCBI-Sequence,
+          Seq-align FROM NCBI-Seqalign,
+          Feat-id FROM NCBI-Seqfeat -->
+<!-- ============================================ -->
+
+<!--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Blob split info types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Chunks split description
+-->
+<!ELEMENT ID2S-Split-Info (
+        ID2S-Split-Info_bioseqs-info?, 
+        ID2S-Split-Info_chunks, 
+        ID2S-Split-Info_skeleton?)>
+
+<!ELEMENT ID2S-Split-Info_bioseqs-info (ID2S-Bioseqs-Info*)>
+
+<!ELEMENT ID2S-Split-Info_chunks (ID2S-Chunk-Info*)>
+
+<!ELEMENT ID2S-Split-Info_skeleton (Seq-entry)>
+
+
+<!ELEMENT ID2S-Bioseqs-Info (
+        ID2S-Bioseqs-Info_info, 
+        ID2S-Bioseqs-Info_bioseqs)>
+
+<!ELEMENT ID2S-Bioseqs-Info_info (ID2S-Bioseq-Info)>
+
+<!ELEMENT ID2S-Bioseqs-Info_bioseqs (ID2S-Bioseq-Ids)>
+
+
+<!ELEMENT ID2S-Bioseq-Info (
+        ID2S-Bioseq-Info_gap-count?, 
+        ID2S-Bioseq-Info_seq-map-has-ref?)>
+
+<!ELEMENT ID2S-Bioseq-Info_gap-count (%INTEGER;)>
+
+<!ELEMENT ID2S-Bioseq-Info_seq-map-has-ref EMPTY>
+<!ATTLIST ID2S-Bioseq-Info_seq-map-has-ref value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT ID2S-Chunk-Info (
+        ID2S-Chunk-Info_id, 
+        ID2S-Chunk-Info_content)>
+<!--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ utility types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT ID2S-Chunk-Info_id (ID2S-Chunk-Id)>
+
+<!ELEMENT ID2S-Chunk-Info_content (ID2S-Chunk-Content*)>
+
+<!--
+ Description of information in this chunk
+ Place means id of Bioseq or Bioseq-set
+-->
+<!ELEMENT ID2S-Chunk-Content (
+        ID2S-Chunk-Content_seq-descr | 
+        ID2S-Chunk-Content_seq-annot | 
+        ID2S-Chunk-Content_seq-assembly | 
+        ID2S-Chunk-Content_seq-map | 
+        ID2S-Chunk-Content_seq-data | 
+        ID2S-Chunk-Content_seq-annot-place | 
+        ID2S-Chunk-Content_bioseq-place | 
+        ID2S-Chunk-Content_feat-ids)>
+
+<!-- place of Seq-descrs -->
+<!ELEMENT ID2S-Chunk-Content_seq-descr (ID2S-Seq-descr-Info)>
+
+<!-- locations and types of annotations -->
+<!ELEMENT ID2S-Chunk-Content_seq-annot (ID2S-Seq-annot-Info)>
+
+<!-- place of assembly history -->
+<!ELEMENT ID2S-Chunk-Content_seq-assembly (ID2S-Seq-assembly-Info)>
+
+<!-- place of sequence map -->
+<!ELEMENT ID2S-Chunk-Content_seq-map (ID2S-Seq-map-Info)>
+
+<!-- place of sequence data -->
+<!ELEMENT ID2S-Chunk-Content_seq-data (ID2S-Seq-data-Info)>
+
+<!-- place of Seq-annots -->
+<!ELEMENT ID2S-Chunk-Content_seq-annot-place (ID2S-Seq-annot-place-Info)>
+
+<!-- place of Bioseqs -->
+<!ELEMENT ID2S-Chunk-Content_bioseq-place (ID2S-Bioseq-place-Info*)>
+
+<!-- ids of features -->
+<!ELEMENT ID2S-Chunk-Content_feat-ids (ID2S-Seq-feat-Ids-Info*)>
+
+
+<!ELEMENT ID2S-Seq-descr-Info (
+        ID2S-Seq-descr-Info_type-mask, 
+        ID2S-Seq-descr-Info_bioseqs?, 
+        ID2S-Seq-descr-Info_bioseq-sets?)>
+
+<!-- mask of Seq-descr types, -->
+<!ELEMENT ID2S-Seq-descr-Info_type-mask (%INTEGER;)>
+
+<!ELEMENT ID2S-Seq-descr-Info_bioseqs (ID2S-Bioseq-Ids)>
+
+<!ELEMENT ID2S-Seq-descr-Info_bioseq-sets (ID2S-Bioseq-set-Ids)>
+
+
+<!ELEMENT ID2S-Seq-annot-Info (
+        ID2S-Seq-annot-Info_name?, 
+        ID2S-Seq-annot-Info_align?, 
+        ID2S-Seq-annot-Info_graph?, 
+        ID2S-Seq-annot-Info_feat?, 
+        ID2S-Seq-annot-Info_seq-loc?)>
+
+<!--
+ name is set if this is named annot
+ name may be empty which differ from unnamed annot
+-->
+<!ELEMENT ID2S-Seq-annot-Info_name (#PCDATA)>
+
+<!ELEMENT ID2S-Seq-annot-Info_align EMPTY>
+
+<!ELEMENT ID2S-Seq-annot-Info_graph EMPTY>
+
+<!ELEMENT ID2S-Seq-annot-Info_feat (ID2S-Feat-type-Info*)>
+<!--
+ ID2S-Seq-loc is used to represent unordered and unstranded
+ set of intervals on set of sequences.
+ It's optimized for compact encoding of several common cases:
+    Seq-ids of type gi,
+    intervals covering whole sequences,
+    whole sequences with sequential gis,
+    set of intervals on the same sequence (Seq-id sharing).
+-->
+<!ELEMENT ID2S-Seq-annot-Info_seq-loc (ID2S-Seq-loc)>
+
+
+<!ELEMENT ID2S-Seq-annot-place-Info (
+        ID2S-Seq-annot-place-Info_name?, 
+        ID2S-Seq-annot-place-Info_bioseqs?, 
+        ID2S-Seq-annot-place-Info_bioseq-sets?)>
+
+<!ELEMENT ID2S-Seq-annot-place-Info_name (#PCDATA)>
+
+<!ELEMENT ID2S-Seq-annot-place-Info_bioseqs (ID2S-Bioseq-Ids)>
+
+<!ELEMENT ID2S-Seq-annot-place-Info_bioseq-sets (ID2S-Bioseq-set-Ids)>
+
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info (
+        ID2S-Seq-feat-Ids-Info_feat-types?, 
+        ID2S-Seq-feat-Ids-Info_xref-types?, 
+        ID2S-Seq-feat-Ids-Info_local-ids?, 
+        ID2S-Seq-feat-Ids-Info_local-str-ids?)>
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info_feat-types (ID2S-Feat-type-Info*)>
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info_xref-types (ID2S-Feat-type-Info*)>
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info_local-ids (ID2S-Seq-feat-Ids-Info_local-ids_E*)>
+
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info_local-ids_E (%INTEGER;)>
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info_local-str-ids (ID2S-Seq-feat-Ids-Info_local-str-ids_E*)>
+
+
+<!ELEMENT ID2S-Seq-feat-Ids-Info_local-str-ids_E (#PCDATA)>
+
+
+<!ELEMENT ID2S-Feat-type-Info (
+        ID2S-Feat-type-Info_type, 
+        ID2S-Feat-type-Info_subtypes?)>
+
+<!ELEMENT ID2S-Feat-type-Info_type (%INTEGER;)>
+
+<!ELEMENT ID2S-Feat-type-Info_subtypes (ID2S-Feat-type-Info_subtypes_E*)>
+
+
+<!ELEMENT ID2S-Feat-type-Info_subtypes_E (%INTEGER;)>
+
+
+<!ELEMENT ID2S-Seq-assembly-Info (
+        ID2S-Seq-assembly-Info_bioseqs)>
+
+<!ELEMENT ID2S-Seq-assembly-Info_bioseqs (ID2S-Bioseq-Ids)>
+
+
+<!ELEMENT ID2S-Seq-map-Info (ID2S-Seq-loc)>
+
+
+<!ELEMENT ID2S-Seq-data-Info (ID2S-Seq-loc)>
+
+
+<!ELEMENT ID2S-Bioseq-place-Info (
+        ID2S-Bioseq-place-Info_bioseq-set, 
+        ID2S-Bioseq-place-Info_seq-ids)>
+
+<!ELEMENT ID2S-Bioseq-place-Info_bioseq-set (%INTEGER;)>
+
+<!ELEMENT ID2S-Bioseq-place-Info_seq-ids (ID2S-Bioseq-Ids)>
+
+
+<!ELEMENT ID2S-Chunk (
+        ID2S-Chunk_data)>
+
+<!ELEMENT ID2S-Chunk_data (ID2S-Chunk-Data*)>
+
+
+<!ELEMENT ID2S-Chunk-Data (
+        ID2S-Chunk-Data_id, 
+        ID2S-Chunk-Data_descr?, 
+        ID2S-Chunk-Data_annots?, 
+        ID2S-Chunk-Data_assembly?, 
+        ID2S-Chunk-Data_seq-map?, 
+        ID2S-Chunk-Data_seq-data?, 
+        ID2S-Chunk-Data_bioseqs?)>
+<!-- place of data to insert -->
+<!ELEMENT ID2S-Chunk-Data_id (
+        ID2S-Chunk-Data_id_bioseq-set | 
+        ID2S-Chunk-Data_id_gi | 
+        ID2S-Chunk-Data_id_seq-id)>
+
+<!-- Bioseq-set id -->
+<!ELEMENT ID2S-Chunk-Data_id_bioseq-set (%INTEGER;)>
+
+<!-- Bioseq id -->
+<!ELEMENT ID2S-Chunk-Data_id_gi (%INTEGER;)>
+
+<!-- Bioseq id -->
+<!ELEMENT ID2S-Chunk-Data_id_seq-id (Seq-id)>
+
+<!-- Seq-descr, for Bioseq and Bioseq-set -->
+<!ELEMENT ID2S-Chunk-Data_descr (Seq-descr)>
+
+<!-- Seq-annot, for Bioseq and Bioseq-set -->
+<!ELEMENT ID2S-Chunk-Data_annots (Seq-annot*)>
+
+<!-- assembly history Seq-align, for Bioseq -->
+<!ELEMENT ID2S-Chunk-Data_assembly (Seq-align*)>
+
+<!-- sequence map, for Bioseq -->
+<!ELEMENT ID2S-Chunk-Data_seq-map (ID2S-Sequence-Piece*)>
+
+<!-- sequence data, for Bioseq -->
+<!ELEMENT ID2S-Chunk-Data_seq-data (ID2S-Sequence-Piece*)>
+
+<!-- Bioseq, for Bioseq-set -->
+<!ELEMENT ID2S-Chunk-Data_bioseqs (Bioseq*)>
+
+
+<!ELEMENT ID2S-Sequence-Piece (
+        ID2S-Sequence-Piece_start, 
+        ID2S-Sequence-Piece_data)>
+
+<!-- start position on sequence -->
+<!ELEMENT ID2S-Sequence-Piece_start (%INTEGER;)>
+
+<!ELEMENT ID2S-Sequence-Piece_data (Seq-literal*)>
+
+<!--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ utility types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT ID2S-Chunk-Id (%INTEGER;)>
+
+
+<!ELEMENT ID2S-Bioseq-set-Ids (ID2S-Bioseq-set-Ids_E*)>
+
+
+
+<!ELEMENT ID2S-Bioseq-set-Ids_E (%INTEGER;)>
+
+
+<!ELEMENT ID2S-Bioseq-Ids (ID2S-Bioseq-Ids_E*)>
+
+
+
+<!ELEMENT ID2S-Bioseq-Ids_E (
+        ID2S-Bioseq-Ids_E_gi | 
+        ID2S-Bioseq-Ids_E_seq-id | 
+        ID2S-Bioseq-Ids_E_gi-range)>
+
+<!ELEMENT ID2S-Bioseq-Ids_E_gi (%INTEGER;)>
+
+<!ELEMENT ID2S-Bioseq-Ids_E_seq-id (Seq-id)>
+
+<!ELEMENT ID2S-Bioseq-Ids_E_gi-range (ID2S-Gi-Range)>
+
+
+<!ELEMENT ID2S-Gi-Range (
+        ID2S-Gi-Range_start, 
+        ID2S-Gi-Range_count?)>
+
+<!-- start gi in this gi range -->
+<!ELEMENT ID2S-Gi-Range_start (%INTEGER;)>
+
+<!-- number of sequential gis -->
+<!ELEMENT ID2S-Gi-Range_count (%INTEGER;)>
+
+<!--
+ ID2S-Seq-loc is used to represent unordered and unstranded
+ set of intervals on set of sequences.
+ It's optimized for compact encoding of several common cases:
+    Seq-ids of type gi,
+    intervals covering whole sequences,
+    whole sequences with sequential gis,
+    set of intervals on the same sequence (Seq-id sharing).
+-->
+<!ELEMENT ID2S-Seq-loc (
+        ID2S-Seq-loc_whole-gi | 
+        ID2S-Seq-loc_whole-seq-id | 
+        ID2S-Seq-loc_whole-gi-range | 
+        ID2S-Seq-loc_gi-interval | 
+        ID2S-Seq-loc_seq-id-interval | 
+        ID2S-Seq-loc_gi-ints | 
+        ID2S-Seq-loc_seq-id-ints | 
+        ID2S-Seq-loc_loc-set)>
+
+<!-- whole sequence by gi -->
+<!ELEMENT ID2S-Seq-loc_whole-gi (%INTEGER;)>
+
+<!-- whole sequence by Seq-id -->
+<!ELEMENT ID2S-Seq-loc_whole-seq-id (Seq-id)>
+
+<!-- set of whole sequences by gis -->
+<!ELEMENT ID2S-Seq-loc_whole-gi-range (ID2S-Gi-Range)>
+
+<!-- interval on sequence by gi -->
+<!ELEMENT ID2S-Seq-loc_gi-interval (ID2S-Gi-Interval)>
+
+<!-- interval on sequence by Seq-id -->
+<!ELEMENT ID2S-Seq-loc_seq-id-interval (ID2S-Seq-id-Interval)>
+
+<!-- set of intervals on the same gi -->
+<!ELEMENT ID2S-Seq-loc_gi-ints (ID2S-Gi-Ints)>
+
+<!-- set of intervals on the same id -->
+<!ELEMENT ID2S-Seq-loc_seq-id-ints (ID2S-Seq-id-Ints)>
+
+<!-- combination of locations -->
+<!ELEMENT ID2S-Seq-loc_loc-set (ID2S-Seq-loc*)>
+
+
+<!ELEMENT ID2S-Gi-Interval (
+        ID2S-Gi-Interval_gi, 
+        ID2S-Gi-Interval_start, 
+        ID2S-Gi-Interval_length?)>
+
+<!ELEMENT ID2S-Gi-Interval_gi (%INTEGER;)>
+
+<!ELEMENT ID2S-Gi-Interval_start (%INTEGER;)>
+
+<!ELEMENT ID2S-Gi-Interval_length (%INTEGER;)>
+
+
+<!ELEMENT ID2S-Seq-id-Interval (
+        ID2S-Seq-id-Interval_seq-id, 
+        ID2S-Seq-id-Interval_start, 
+        ID2S-Seq-id-Interval_length?)>
+
+<!ELEMENT ID2S-Seq-id-Interval_seq-id (Seq-id)>
+
+<!ELEMENT ID2S-Seq-id-Interval_start (%INTEGER;)>
+
+<!ELEMENT ID2S-Seq-id-Interval_length (%INTEGER;)>
+
+
+<!ELEMENT ID2S-Interval (
+        ID2S-Interval_start, 
+        ID2S-Interval_length?)>
+
+<!ELEMENT ID2S-Interval_start (%INTEGER;)>
+
+<!ELEMENT ID2S-Interval_length (%INTEGER;)>
+
+
+<!ELEMENT ID2S-Gi-Ints (
+        ID2S-Gi-Ints_gi, 
+        ID2S-Gi-Ints_ints)>
+
+<!ELEMENT ID2S-Gi-Ints_gi (%INTEGER;)>
+
+<!ELEMENT ID2S-Gi-Ints_ints (ID2S-Interval*)>
+
+
+<!ELEMENT ID2S-Seq-id-Ints (
+        ID2S-Seq-id-Ints_seq-id, 
+        ID2S-Seq-id-Ints_ints)>
+
+<!ELEMENT ID2S-Seq-id-Ints_seq-id (Seq-id)>
+
+<!ELEMENT ID2S-Seq-id-Ints_ints (ID2S-Interval*)>
+

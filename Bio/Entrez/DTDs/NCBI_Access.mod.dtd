@@ -1,0 +1,49 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "access.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Access"
+================================================= -->
+
+<!--
+$Revision: 6.0 $
+*********************************************************************
+
+  access.asn
+
+     messages for data access
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Link-set -->
+<!-- ============================================ -->
+
+<!--
+ links between same class = neighbors
+ links between other classes = links
+-->
+<!ELEMENT Link-set (
+        Link-set_num, 
+        Link-set_uids?, 
+        Link-set_weights?)>
+
+<!-- number of links to this doc type -->
+<!ELEMENT Link-set_num (%INTEGER;)>
+
+<!-- the links -->
+<!ELEMENT Link-set_uids (Link-set_uids_E*)>
+
+
+<!ELEMENT Link-set_uids_E (%INTEGER;)>
+
+<!-- the weights -->
+<!ELEMENT Link-set_weights (Link-set_weights_E*)>
+
+
+<!ELEMENT Link-set_weights_E (%INTEGER;)>
+

@@ -1,0 +1,579 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "scoremat.asn"
+     ::DATATOOL:: by application DATATOOL version 2.3.1
+     ::DATATOOL:: on 03/06/2012 23:04:40
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-ScoreMat"
+================================================= -->
+
+<!--
+$Id: scoremat.asn 347837 2011-12-21 15:28:42Z boratyng $
+ ===========================================================================
+
+                            PUBLIC DOMAIN NOTICE
+               National Center for Biotechnology Information
+
+  This software/database is a "United States Government Work" under the
+  terms of the United States Copyright Act.  It was written as part of
+  the author's official duties as a United States Government employee and
+  thus cannot be copyrighted.  This software/database is freely available
+  to the public for use. The National Library of Medicine and the U.S.
+  Government have not placed any restriction on its use or reproduction.
+
+  Although all reasonable efforts have been taken to ensure the accuracy
+  and reliability of the software and data, the NLM and the U.S.
+  Government do not and cannot warrant the performance or results that
+  may be obtained by using this software or data. The NLM and the U.S.
+  Government disclaim all warranties, express or implied, including
+  warranties of performance, merchantability or fitness for any particular
+  purpose.
+
+  Please cite the author in any work or product based on this material.
+
+ ===========================================================================
+
+ Author:  Christiam Camacho
+
+ File Description:
+      ASN.1 definitions for scoring matrix
+
+ ===========================================================================
+-->
+
+<!-- Elements used by other modules:
+          Pssm,
+          PssmIntermediateData,
+          PssmFinalData,
+          PssmParameters,
+          PssmWithParameters -->
+
+<!-- Elements referenced from other modules:
+          Object-id FROM NCBI-General,
+          Seq-entry FROM NCBI-Seqset -->
+<!-- ============================================ -->
+
+<!--
+ a rudimentary block/core-model, to be used with block-based alignment 
+ routines and threading
+-->
+<!ELEMENT BlockProperty (
+        BlockProperty_type, 
+        BlockProperty_intvalue?, 
+        BlockProperty_textvalue?)>
+
+<!ELEMENT BlockProperty_type (%INTEGER;)>
+
+<!--
+    threshold	-  score threshold for heuristics
+    minscore	-  observed minimum score in CD
+    maxscore	-  observed maximum score in CD
+    meanscore	-  observed mean score in CD
+    variance	-  observed score variance
+    name	-  just name the block
+    is-optional	-  block may not have to be used    
+-->
+<!ATTLIST BlockProperty_type value (
+        unassigned |
+        threshold |
+        minscore |
+        maxscore |
+        meanscore |
+        variance |
+        name |
+        is-optional |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT BlockProperty_intvalue (%INTEGER;)>
+
+<!ELEMENT BlockProperty_textvalue (#PCDATA)>
+
+
+<!ELEMENT CoreBlock (
+        CoreBlock_start, 
+        CoreBlock_stop, 
+        CoreBlock_minstart?, 
+        CoreBlock_maxstop?, 
+        CoreBlock_property?)>
+
+<!-- begin of block on query -->
+<!ELEMENT CoreBlock_start (%INTEGER;)>
+
+<!-- end of block on query -->
+<!ELEMENT CoreBlock_stop (%INTEGER;)>
+
+<!-- optional N-terminal extension -->
+<!ELEMENT CoreBlock_minstart (%INTEGER;)>
+
+<!-- optional C-terminal extension -->
+<!ELEMENT CoreBlock_maxstop (%INTEGER;)>
+
+<!ELEMENT CoreBlock_property (BlockProperty*)>
+
+
+<!ELEMENT LoopConstraint (
+        LoopConstraint_minlength?, 
+        LoopConstraint_maxlength?)>
+
+<!-- minimum length of unaligned region -->
+<!ELEMENT LoopConstraint_minlength (%INTEGER;)>
+
+<!-- maximum length of unaligned region -->
+<!ELEMENT LoopConstraint_maxlength (%INTEGER;)>
+
+
+<!ELEMENT CoreDef (
+        CoreDef_nblocks, 
+        CoreDef_blocks, 
+        CoreDef_loops, 
+        CoreDef_isDiscontinuous?, 
+        CoreDef_insertions?)>
+
+<!-- number of core elements/blocks -->
+<!ELEMENT CoreDef_nblocks (%INTEGER;)>
+
+<!-- nblocks locations -->
+<!ELEMENT CoreDef_blocks (CoreBlock*)>
+
+<!-- (nblocks+1) constraints -->
+<!ELEMENT CoreDef_loops (LoopConstraint*)>
+
+<!-- is it a discontinuous domain -->
+<!ELEMENT CoreDef_isDiscontinuous EMPTY>
+<!ATTLIST CoreDef_isDiscontinuous value ( true | false ) #REQUIRED >
+
+
+<!-- positions of long insertions -->
+<!ELEMENT CoreDef_insertions (CoreDef_insertions_E*)>
+
+
+<!ELEMENT CoreDef_insertions_E (%INTEGER;)>
+
+
+<!ELEMENT Site-annot (
+        Site-annot_startPosition, 
+        Site-annot_stopPosition, 
+        Site-annot_description?, 
+        Site-annot_type?, 
+        Site-annot_aliases?, 
+        Site-annot_motif?, 
+        Site-annot_motifuse?)>
+
+<!-- location of the annotation, -->
+<!ELEMENT Site-annot_startPosition (%INTEGER;)>
+
+<!--
+ start and stop position in the
+ PSSM
+-->
+<!ELEMENT Site-annot_stopPosition (%INTEGER;)>
+
+<!--
+ holds description or names, that
+ can be used for labels in
+ visualization
+-->
+<!ELEMENT Site-annot_description (#PCDATA)>
+
+<!--
+ type of the annotated feature,
+ similarly to Align-annot in
+ NCBI-Cdd
+-->
+<!ELEMENT Site-annot_type (%INTEGER;)>
+
+<!--
+ additional names for
+ the annotation
+-->
+<!ELEMENT Site-annot_aliases (Site-annot_aliases_E*)>
+
+
+<!ELEMENT Site-annot_aliases_E (#PCDATA)>
+
+<!-- motif to validate mapping of sites -->
+<!ELEMENT Site-annot_motif (#PCDATA)>
+
+<!--
+ 0 for validation
+ 1 for motif in seqloc
+ 2 for multiple motifs in seqloc
+-->
+<!ELEMENT Site-annot_motifuse (%INTEGER;)>
+
+
+<!ELEMENT Site-annot-set (Site-annot*)>
+
+<!--
+ ===========================================================================
+ PSI-BLAST, formatrpsdb, RPS-BLAST workflow:
+ ===========================================
+
+ Two possible inputs to PSI-BLAST and formatrpsdb:
+ 1) PssmWithParams where pssm field contains intermediate PSSM data (matrix 
+    of frequency ratios)
+ 2) PssmWithParams where pssm field contains final PSSM data (matrix of 
+    scores and statistical parameters) - such as written by cddumper
+
+ In case 1, PSI-BLAST's PSSM engine is invoked to create the PSSM and perform
+ the PSI-BLAST search or build the PSSM to then build the RPS-BLAST database.
+ In case 2, PSI-BLAST's PSSM engine is not invoked and the matrix of scores
+ statistical parameters are used to perform the search in PSI-BLAST and the
+ same data and the data in PssmWithParams::params::rpsdbparams is used to
+ build the PSSM and ultimately the RPS-BLAST database
+ 
+ 
+                 reads    ++++++++++++++ writes
+ PssmWithParams  ====>    + PSI-BLAST  + =====> PssmWithParams
+                          ++++++++++++++             |  ^
+         ^                                           |  |
+         |                                           |  |
+         +===========================================+  |
+                                                     |  |
+         +===========================================+  |
+         |                                              |
+ reads   |                                              | 
+         v                                              |
+  +++++++++++++++ writes +++++++++++++++++++++++        |
+  | formatrpsdb | =====> | RPS-BLAST databases |        |
+  +++++++++++++++        +++++++++++++++++++++++        |
+                                   ^                    |
+                                   |                    |
+                                   | reads              |
+                             +++++++++++++              |
+                             | RPS-BLAST |              |
+                             +++++++++++++              |
+                                                        |
+       reads  ++++++++++++               writes         |
+  Cdd ======> | cddumper | =============================+
+              ++++++++++++
+
+ ===========================================================================
+ Contains the PSSM's scores and its associated statistical parameters. 
+ Dimensions and order in which scores are stored must be the same as that 
+ specified in Pssm::numRows, Pssm::numColumns, and Pssm::byrow
+-->
+<!ELEMENT PssmFinalData (
+        PssmFinalData_scores, 
+        PssmFinalData_lambda, 
+        PssmFinalData_kappa, 
+        PssmFinalData_h, 
+        PssmFinalData_scalingFactor?, 
+        PssmFinalData_lambdaUngapped?, 
+        PssmFinalData_kappaUngapped?, 
+        PssmFinalData_hUngapped?)>
+
+<!-- PSSM's scores -->
+<!ELEMENT PssmFinalData_scores (PssmFinalData_scores_E*)>
+
+
+<!ELEMENT PssmFinalData_scores_E (%INTEGER;)>
+
+<!-- Karlin & Altschul parameter produced during the PSSM's calculation -->
+<!ELEMENT PssmFinalData_lambda (%REAL;)>
+
+<!-- Karlin & Altschul parameter produced during the PSSM's calculation -->
+<!ELEMENT PssmFinalData_kappa (%REAL;)>
+
+<!-- Karlin & Altschul parameter produced during the PSSM's calculation -->
+<!ELEMENT PssmFinalData_h (%REAL;)>
+
+<!--
+ scaling factor used to obtain more precision when building the PSSM.
+ (i.e.: scores are scaled by this value). By default, PSI-BLAST's PSSM
+ engine generates PSSMs which are not scaled-up, however, if PSI-BLAST is
+ given a PSSM which contains a scaled-up PSSM (indicated by having a
+ scalingFactor greater than 1), then it will scale down the PSSM to
+ perform the initial stages of the search with it.
+ N.B.: When building RPS-BLAST databases, if formatrpsdb is provided 
+ scaled-up PSSMs, it will ensure that all PSSMs used to build the 
+ RPS-BLAST database are scaled by the same factor (otherwise, RPS-BLAST 
+ will silently produce incorrect results).
+-->
+<!ELEMENT PssmFinalData_scalingFactor (%INTEGER;)>
+
+<!-- Karlin & Altschul parameter produced during the PSSM's calculation -->
+<!ELEMENT PssmFinalData_lambdaUngapped (%REAL;)>
+
+<!-- Karlin & Altschul parameter produced during the PSSM's calculation -->
+<!ELEMENT PssmFinalData_kappaUngapped (%REAL;)>
+
+<!-- Karlin & Altschul parameter produced during the PSSM's calculation -->
+<!ELEMENT PssmFinalData_hUngapped (%REAL;)>
+
+<!--
+ Contains the PSSM's intermediate data used to create the PSSM's scores 
+ and statistical parameters. Dimensions and order in which scores are 
+ stored must be the same as that specified in Pssm::numRows, 
+ Pssm::numColumns, and Pssm::byrow
+-->
+<!ELEMENT PssmIntermediateData (
+        PssmIntermediateData_resFreqsPerPos?, 
+        PssmIntermediateData_weightedResFreqsPerPos?, 
+        PssmIntermediateData_freqRatios, 
+        PssmIntermediateData_informationContent?, 
+        PssmIntermediateData_gaplessColumnWeights?, 
+        PssmIntermediateData_sigma?, 
+        PssmIntermediateData_intervalSizes?, 
+        PssmIntermediateData_numMatchingSeqs?, 
+        PssmIntermediateData_numIndeptObsr?)>
+
+<!--
+ observed residue frequencies (or counts) per position of the PSSM 
+ (prior to application of pseudocounts)
+-->
+<!ELEMENT PssmIntermediateData_resFreqsPerPos (PssmIntermediateData_resFreqsPerPos_E*)>
+
+
+<!ELEMENT PssmIntermediateData_resFreqsPerPos_E (%INTEGER;)>
+
+<!--
+ Weighted observed residue frequencies per position of the PSSM.
+ (N.B.: each position's weights should add up to 1.0).
+ This field corresponds to f_i (f sub i) in equation 2 of 
+ Nucleic Acids Res. 2001 Jul 15;29(14):2994-3005.
+ NOTE: this is needed for diagnostics information only (i.e.:
+ -out_ascii_pssm option in psiblast)
+-->
+<!ELEMENT PssmIntermediateData_weightedResFreqsPerPos (PssmIntermediateData_weightedResFreqsPerPos_E*)>
+
+
+<!ELEMENT PssmIntermediateData_weightedResFreqsPerPos_E (%REAL;)>
+
+<!-- PSSM's frequency ratios -->
+<!ELEMENT PssmIntermediateData_freqRatios (PssmIntermediateData_freqRatios_E*)>
+
+
+<!ELEMENT PssmIntermediateData_freqRatios_E (%REAL;)>
+
+<!--
+ Information content per position of the PSSM
+ NOTE: this is needed for diagnostics information only (i.e.:
+ -out_ascii_pssm option in psiblast)
+-->
+<!ELEMENT PssmIntermediateData_informationContent (PssmIntermediateData_informationContent_E*)>
+
+
+<!ELEMENT PssmIntermediateData_informationContent_E (%REAL;)>
+
+<!--
+ Relative weight for columns of the PSSM without gaps to pseudocounts
+ NOTE: this is needed for diagnostics information only (i.e.:
+ -out_ascii_pssm option in psiblast)
+-->
+<!ELEMENT PssmIntermediateData_gaplessColumnWeights (PssmIntermediateData_gaplessColumnWeights_E*)>
+
+
+<!ELEMENT PssmIntermediateData_gaplessColumnWeights_E (%REAL;)>
+
+<!--
+ Used in sequence weights computation
+ NOTE: this is needed for diagnostics information only (i.e.:
+ -out_ascii_pssm option in psiblast)
+-->
+<!ELEMENT PssmIntermediateData_sigma (PssmIntermediateData_sigma_E*)>
+
+
+<!ELEMENT PssmIntermediateData_sigma_E (%REAL;)>
+
+<!--
+ Length of the aligned regions per position of the query sequence
+ NOTE: this is needed for diagnostics information only (i.e.:
+ -out_ascii_pssm option in psiblast)
+-->
+<!ELEMENT PssmIntermediateData_intervalSizes (PssmIntermediateData_intervalSizes_E*)>
+
+
+<!ELEMENT PssmIntermediateData_intervalSizes_E (%INTEGER;)>
+
+<!--
+ Number of matching sequences per position of the PSSM (including the
+ query)
+ NOTE: this is needed for diagnostics information only (i.e.:
+ -out_ascii_pssm option in psiblast)
+-->
+<!ELEMENT PssmIntermediateData_numMatchingSeqs (PssmIntermediateData_numMatchingSeqs_E*)>
+
+
+<!ELEMENT PssmIntermediateData_numMatchingSeqs_E (%INTEGER;)>
+
+<!--
+ Number of independent observations per position of the PSSM
+ NOTE: this is needed for building CDD database for DELTA-BLAST
+-->
+<!ELEMENT PssmIntermediateData_numIndeptObsr (PssmIntermediateData_numIndeptObsr_E*)>
+
+
+<!ELEMENT PssmIntermediateData_numIndeptObsr_E (%REAL;)>
+
+<!--
+ Position-specific scoring matrix
+
+ Column indices on the PSSM refer to the positions corresponding to the
+ query/master sequence, i.e. the number of columns (N) is the same
+ as the length of the query/master sequence. 
+ Row indices refer to individual amino acid types, i.e. the number of 
+ rows (M) is the same as the number of different residues in the 
+ alphabet we use. Consequently, row labels are amino acid identifiers.
+
+ PSSMs are stored as linear arrays of integers. By default, we store
+ them column-by-column, M values for the first column followed by M
+ values for the second column, and so on. In order to provide
+ flexibility for external applications, the boolean field "byrow" is 
+ provided to specify the storage order.
+-->
+<!ELEMENT Pssm (
+        Pssm_isProtein?, 
+        Pssm_identifier?, 
+        Pssm_numRows, 
+        Pssm_numColumns, 
+        Pssm_rowLabels?, 
+        Pssm_byRow?, 
+        Pssm_query?, 
+        Pssm_intermediateData?, 
+        Pssm_finalData?)>
+
+<!-- Is the this a protein or nucleotide scoring matrix? -->
+<!ELEMENT Pssm_isProtein EMPTY>
+<!ATTLIST Pssm_isProtein value ( true | false ) "true" >
+
+
+<!-- PSSM identifier -->
+<!ELEMENT Pssm_identifier (Object-id)>
+
+<!--
+ The dimensions of the matrix are returned so the client can
+ verify that all data was received.
+ number of rows
+-->
+<!ELEMENT Pssm_numRows (%INTEGER;)>
+
+<!-- number of columns -->
+<!ELEMENT Pssm_numColumns (%INTEGER;)>
+
+<!--
+ row-labels is given to note the order of residue types so that it can
+ be cross-checked between applications.
+ If this field is not given, the matrix values are presented in 
+ order of the alphabet ncbistdaa is used for protein, ncbi4na for nucl.
+ for proteins the values returned correspond to 
+ (-,-), (-,A), (-,B), (-,C) ... (A,-), (A,A), (A,B), (A,C) ...
+-->
+<!ELEMENT Pssm_rowLabels (Pssm_rowLabels_E*)>
+
+
+<!ELEMENT Pssm_rowLabels_E (#PCDATA)>
+
+<!-- are matrices stored row by row? -->
+<!ELEMENT Pssm_byRow EMPTY>
+<!ATTLIST Pssm_byRow value ( true | false ) "false" >
+
+
+<!-- PSSM representative sequence (master)  -->
+<!ELEMENT Pssm_query (Seq-entry)>
+
+<!--
+ both intermediateData and finalData can be provided, but at least one of
+ them must be provided.
+ N.B.: by default PSI-BLAST will return the PSSM in its PssmIntermediateData 
+ representation. 
+ Intermediate or final data for the PSSM
+-->
+<!ELEMENT Pssm_intermediateData (PssmIntermediateData)>
+
+<!-- Final representation for the PSSM -->
+<!ELEMENT Pssm_finalData (PssmFinalData)>
+
+<!--
+ This structure is used to create the RPS-BLAST database auxiliary file 
+ (*.aux) and it contains parameters set at creation time of the PSSM.
+ Also, the matrixName field is used by formatrpsdb to build a PSSM from 
+ a Pssm structure which only contains PssmIntermediateData.
+-->
+<!ELEMENT FormatRpsDbParameters (
+        FormatRpsDbParameters_matrixName, 
+        FormatRpsDbParameters_gapOpen?, 
+        FormatRpsDbParameters_gapExtend?)>
+
+<!--
+ name of the underlying score matrix whose frequency ratios were
+ used in PSSM construction (e.g.: BLOSUM62)
+-->
+<!ELEMENT FormatRpsDbParameters_matrixName (#PCDATA)>
+
+<!-- gap opening penalty corresponding to the matrix above -->
+<!ELEMENT FormatRpsDbParameters_gapOpen (%INTEGER;)>
+
+<!-- gap extension penalty corresponding to the matrix above -->
+<!ELEMENT FormatRpsDbParameters_gapExtend (%INTEGER;)>
+
+<!--
+ Populated by PSSM engine of PSI-BLAST, original source for these values 
+ are the PSI-BLAST options specified using the BLAST options API
+-->
+<!ELEMENT PssmParameters (
+        PssmParameters_pseudocount?, 
+        PssmParameters_rpsdbparams?, 
+        PssmParameters_constraints?, 
+        PssmParameters_bitScoreThresh?, 
+        PssmParameters_annotatedSites?)>
+
+<!--
+ pseudocount constant used for PSSM. This field corresponds to beta in 
+ equation 2 of Nucleic Acids Res. 2001 Jul 15;29(14):2994-3005.
+-->
+<!ELEMENT PssmParameters_pseudocount (%INTEGER;)>
+
+<!--
+ data needed by formatrpsdb to create RPS-BLAST databases. matrixName is
+ populated by PSI-BLAST
+-->
+<!ELEMENT PssmParameters_rpsdbparams (FormatRpsDbParameters)>
+
+<!--
+ alignment constraints needed by sequence-structure threader
+ and other global or local block-alignment algorithms
+-->
+<!ELEMENT PssmParameters_constraints (CoreDef)>
+
+<!-- bit score threshold for specific conserved domain hits -->
+<!ELEMENT PssmParameters_bitScoreThresh (%REAL;)>
+
+<!-- conserved functional sites with annotations -->
+<!ELEMENT PssmParameters_annotatedSites (Site-annot-set)>
+
+<!--
+ Envelope containing PSSM and the parameters used to create it. 
+ Provided for use in PSI-BLAST, formatrpsdb, and for the structure group.
+-->
+<!ELEMENT PssmWithParameters (
+        PssmWithParameters_pssm, 
+        PssmWithParameters_params?)>
+
+<!--
+ This field is applicable to PSI-BLAST and formatrpsdb.
+ When both the intermediate and final PSSM data are provided in this
+ field, the final data (matrix of scores and associated statistical
+ parameters) takes precedence and that data is used for further
+ processing. The rationale for this is that the PSSM's scores and
+ statistical parameters might have been calculated by other applications
+ and it might not be possible to recreate it by using PSI-BLAST's PSSM 
+ engine.
+-->
+<!ELEMENT PssmWithParameters_pssm (Pssm)>
+
+<!--
+ This field's rpsdbparams is used to specify the values of options 
+ for processing by formatrpsdb. If these are not set, the command 
+ line defaults of formatrpsdb are applied. This field is used
+ by PSI-BLAST to verify that the underlying scorem matrix used to BUILD
+ the PSSM is the same as the one being specified through the BLAST
+ Options API. If this field is omitted, no verification will be
+ performed, so be careful to keep track of what matrix was used to build
+ the PSSM or else the results produced by PSI-BLAST will be unreliable.
+-->
+<!ELEMENT PssmWithParameters_params (PssmParameters)>
+

@@ -1,0 +1,97 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "featdef.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-FeatDef"
+================================================= -->
+
+<!--
+$Revision: 6.0 $
+**********************************************************************
+
+  NCBI Sequence Feature Definition Module
+  by James Ostell, 1994
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          FeatDef,
+          FeatDefSet,
+          FeatDispGroup,
+          FeatDispGroupSet -->
+<!-- ============================================ -->
+
+
+<!ELEMENT FeatDef (
+        FeatDef_typelabel, 
+        FeatDef_menulabel, 
+        FeatDef_featdef-key, 
+        FeatDef_seqfeat-key, 
+        FeatDef_entrygroup, 
+        FeatDef_displaygroup, 
+        FeatDef_molgroup)>
+
+<!-- short label for type eg "CDS" -->
+<!ELEMENT FeatDef_typelabel (#PCDATA)>
+
+<!-- label for a menu eg "Coding Region" -->
+<!ELEMENT FeatDef_menulabel (#PCDATA)>
+
+<!-- unique for this feature definition -->
+<!ELEMENT FeatDef_featdef-key (%INTEGER;)>
+
+<!-- SeqFeat.data.choice from objfeat.h -->
+<!ELEMENT FeatDef_seqfeat-key (%INTEGER;)>
+
+<!-- Group for data entry -->
+<!ELEMENT FeatDef_entrygroup (%INTEGER;)>
+
+<!-- Group for data display -->
+<!ELEMENT FeatDef_displaygroup (%INTEGER;)>
+
+<!-- Type of Molecule used for -->
+<!ELEMENT FeatDef_molgroup (FeatMolType)>
+
+
+<!ELEMENT FeatMolType %ENUM;>
+
+<!--
+    aa	-  proteins
+    na	-  nucleic acids
+    both	-  both
+-->
+<!ATTLIST FeatMolType value (
+        aa |
+        na |
+        both
+        ) #REQUIRED >
+
+
+<!-- collections of defintions -->
+<!ELEMENT FeatDefSet (FeatDef*)>
+
+
+<!ELEMENT FeatDispGroup (
+        FeatDispGroup_groupkey, 
+        FeatDispGroup_groupname)>
+
+<!ELEMENT FeatDispGroup_groupkey (%INTEGER;)>
+
+<!ELEMENT FeatDispGroup_groupname (#PCDATA)>
+
+
+<!ELEMENT FeatDispGroupSet (FeatDispGroup*)>
+
+
+<!ELEMENT FeatDefGroupSet (
+        FeatDefGroupSet_groups, 
+        FeatDefGroupSet_defs)>
+
+<!ELEMENT FeatDefGroupSet_groups (FeatDispGroupSet)>
+<!-- collections of defintions -->
+<!ELEMENT FeatDefGroupSet_defs (FeatDefSet)>
+

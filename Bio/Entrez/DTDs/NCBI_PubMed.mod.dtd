@@ -1,0 +1,64 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "pubmed.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-PubMed"
+================================================= -->
+
+<!--
+$Revision: 6.0 $
+**********************************************************************
+
+  PUBMED data definitions
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Pubmed-entry,
+          Pubmed-url -->
+
+<!-- Elements referenced from other modules:
+          PubMedId FROM NCBI-Biblio,
+          Medline-entry FROM NCBI-Medline -->
+<!-- ============================================ -->
+
+<!--
+ a PubMed entry
+ PUBMED records must include the PubMedId
+-->
+<!ELEMENT Pubmed-entry (
+        Pubmed-entry_pmid, 
+        Pubmed-entry_medent?, 
+        Pubmed-entry_publisher?, 
+        Pubmed-entry_urls?, 
+        Pubmed-entry_pubid?)>
+
+<!ELEMENT Pubmed-entry_pmid (PubMedId)>
+
+<!-- Medline entry information -->
+<!ELEMENT Pubmed-entry_medent (Medline-entry)>
+
+<!-- Publisher name -->
+<!ELEMENT Pubmed-entry_publisher (#PCDATA)>
+
+<!-- List of URL to publisher cite -->
+<!ELEMENT Pubmed-entry_urls (Pubmed-url*)>
+
+<!-- Publisher's article identifier -->
+<!ELEMENT Pubmed-entry_pubid (#PCDATA)>
+
+
+<!ELEMENT Pubmed-url (
+        Pubmed-url_location?, 
+        Pubmed-url_url)>
+
+<!-- Location code -->
+<!ELEMENT Pubmed-url_location (#PCDATA)>
+
+<!-- Selected URL for location -->
+<!ELEMENT Pubmed-url_url (#PCDATA)>
+
