@@ -35,6 +35,22 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
      - frameshift - whether to appply frameshift detection
 
     Return a CodonAlignment object
+    
+    >>> from Bio.Alphabet import IUPAC
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Align import MultipleSeqAlignment
+    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG', 
+    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
+    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG', 
+    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+    >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
+    >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
+    >>> aln = MultipleSeqAlignment([pro1, pro2])
+    >>> codon_aln = build(aln, [seq1, seq2])
+    >>> print codon_aln
+    CodonAlphabet() CodonAlignment with 2 rows and 69 columns (23 codons)
+    TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
+    TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
 
     """
     # TODO
@@ -276,7 +292,6 @@ def _check_corr(pro, nucl, gap_char='-', \
                     pro_re.append(fncodon)
                 else:
                     pro_re.append(last_fcodon)
-                #anchor_pos.append(-1)
 
         full_pro_re = "".join(pro_re)
         match = re.search(full_pro_re, nucl_seq)
@@ -288,18 +303,36 @@ def _check_corr(pro, nucl, gap_char='-', \
             # ten frameshift events are allowed in a sequence
             first_anchor = True
             for i in range(len(anchor_pos)-1):
-                # TODO: think about the first and last anchor (mismatch)
-                #if try_first_anchor is True and anchor_pos[0][2] != 0:
-                #    print anchor_pos[1][0]
+                # TODO: think about last anchor (mismatch)
+                if first_anchor is True and anchor_pos[0][2] != 0:
+                    shift_val_lst = (1,2,anchor_len-2,anchor_len-1)
+                    sh_anc = anchors[0]
+                    for shift_val in shift_val_lst:
+                        if shift_val in (1,2):
+                            sh_nuc_len = anchor_len*3 + shift_val
+                        elif shift_val in (anchor_len-2,anchor_len-1):
+                            sh_nuc_len = anchor_len*3-(anchor_len-shift_val)
+                        if anchor_pos[0][0] >= sh_nuc_len:
+                            sh_nuc = nucl_seq[anchor_pos[0][0]-sh_nuc_len:anchor_pos[0][0]]
+                        else:
+                            #this is unlikely to produce the correct output
+                            sh_nuc = nucl_seq[:anchor_pos[0][0]]
+                        qcodon = None
+                        qcodon = _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len)
+                        if qcodon is not None and qcodon != -1:
+                            # pro_re[0] should be '.'*anchor_len, therefore I replace it.
+                            pro_re[0] = qcodon
+                            break
+                    if qcodon == -1:
+                        import warnings
+                        warnings.warn("frameshift detection failed for %s" % nucl.id)
+                first_anchor = False
                 shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) % anchor_len
-                #if shift_val != 0:
-                #    print anchor_pos[i], anchor_pos[i+1]
-                #print anchors[anchor_pos[i][2]+1:anchor_pos[i+1][2]]
                 sh_anc = "".join(anchors[anchor_pos[i][2]:anchor_pos[i+1][2]])
                 sh_nuc = nucl_seq[anchor_pos[i][0]:anchor_pos[i+1][0]]
                 qcodon = None
                 if shift_val != 0:
-                    qcodon =_re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len)
+                    qcodon = _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len)
                 if qcodon is not None and qcodon != -1:
                     pro_re[anchor_pos[i][2]:anchor_pos[i+1][2]] = [qcodon]
                     qcodon = None
@@ -358,7 +391,6 @@ def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
             for j, aa in enumerate(sh_anc):
                 qcodon +=  aa2re[aa]
                 if j+1 in anc_shift_pos:
-                    #print shift_id
                     qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
                     shift_id_pos += 1
             return qcodon
@@ -367,16 +399,9 @@ def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
             return -1
     elif shift_val in (anchor_len-1, anchor_len-2):
         shift_val = anchor_len-shift_val
-        #print shift_val
         # obtain shifted anchor and corresponding nucl
         # first check if the shifted pos is just at the end of the 
         # previous anchor.
-        # TODO:
-        # think about the frameshift that happens in the first aa of 
-        # the anchor.
-        if i > 0:
-            pre_aa = anchors[anchor_pos[i][2]][-shift_val:]
-            print pre_aa
         for j in range(1,len(sh_anc)):
             qcodon = "^"
             for k, aa in enumerate(sh_anc):
@@ -434,7 +459,6 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re):
                     '[' + intersect2   + ']' + \
                     '[' + scodon[1][2] + ']'
     scodonre += ')'
-    print scodonre
     return scodonre
 
 
@@ -525,7 +549,6 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
                         this_codon = nucl_seq._data[start:end]
                     codon_seq += this_codon
                     aa_num += 1
-                    print codon_seq
             return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
                     rf_table=rf_table), id=nucl.id)
         else:
