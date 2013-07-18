@@ -286,84 +286,26 @@ def _check_corr(pro, nucl, gap_char='-', \
         else:
             # check frames of anchors
             # ten frameshift events are allowed in a sequence
-            shift_id = [chr(i) for i in range(97,107)]
-            shift_id_pos = 0
-            print anchor_pos ###
             first_anchor = True
             for i in range(len(anchor_pos)-1):
                 # TODO: think about the first and last anchor (mismatch)
                 #if try_first_anchor is True and anchor_pos[0][2] != 0:
                 #    print anchor_pos[1][0]
-                shift_val = (anchor_pos[i+1][0] - anchor_pos[i][0]) % anchor_len
-                if shift_val in (1, 2):
-                    # obtain shifted anchor and corresponding nucl
-                    sh_anc = "".join(anchors[anchor_pos[i][2]+1:anchor_pos[i+1][2]])
-                    sh_nuc = nucl_seq[anchor_pos[i][1]:anchor_pos[i+1][0]]
-                    # re substring matching doesn't allow number as id
-                    # use ascii instead
-                    qcodon = "^(?P<a>.*)"
-                    # this stores the id of subre match, at least 'a' should be there
-                    id_dict = {'a': 0}
-                    # append subre between each codon
-                    for j, aa in enumerate(sh_anc):
-                        qcodon += aa2re[aa] + "(?P<" + chr(j+98) + ">.*)"
-                        id_dict[chr(j+98)] = j+1
-                    qcodon += "$"
-                    match = re.search(qcodon, sh_nuc)
-                    if match:
-                        # where shift events happend (in the anchor)
-                        anc_shift_pos = [num for id, num in id_dict.iteritems() \
-                                if match.group(id) != ""]
-                        if 0 in anc_shift_pos:
-                            qcodon = "(?P<" + shift_id[shift_id_pos] + ">.*)"
-                            shift_id_pos += 1
-                        else:
-                            qcodon = ""
-                        for j, aa in enumerate(sh_anc):
-                            qcodon +=  aa2re[aa]
-                            if j+1 in anc_shift_pos:
-                                #print shift_id
-                                qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
-                                shift_id_pos += 1
-                        pro_re[anchor_pos[i][2]+1:anchor_pos[i+1][2]] = [qcodon]
-                    else:
-                        # failed to find a match (frameshift)
-                        import warnings
-                        warnings.warn("Frameshift detection failed")
-                elif shift_val in (anchor_len-1, anchor_len-2):
-                    shift_val = anchor_len-shift_val
-                    #print shift_val
-                    # obtain shifted anchor and corresponding nucl
-                    sh_anc = "".join(anchors[anchor_pos[i][2]+1:anchor_pos[i+1][2]])
-                    sh_nuc = nucl_seq[anchor_pos[i][1]:anchor_pos[i+1][0]]
-                    # first check if the shifted pos is just at the end of the 
-                    # previous anchor.
-                    # TODO:
-                    # think about the frameshift that happens in the first aa of 
-                    # the anchor.
-                    if i > 0:
-                        pre_aa = anchors[anchor_pos[i][2]][-shift_val:]
-                        print pre_aa
-                    for j in range(1,len(sh_anc)):
-                        qcodon = "^"
-                        for k, aa in enumerate(sh_anc):
-                            if k == j-1:
-                                # will be considered in the next step
-                                pass
-                            elif k == j:
-                                qcodon += _merge_aa2re(sh_anc[j-1], sh_anc[j], shift_val, aa2re) 
-                            else:
-                                qcodon += aa2re[aa]
-                        qcodon += '$'
-                        match = re.search(qcodon, sh_nuc)
-                        if match:
-                            qcodon = qcodon.replace('^','').replace('$','')
-                            pro_re[anchor_pos[i][2]+1:anchor_pos[i+1][2]] = [qcodon]
-                            break
-                    if not match:
-                        # failed to find a match (frameshift)
-                        import warnings
-                        warnings.warn("Frameshift detection failed")
+                shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) % anchor_len
+                #if shift_val != 0:
+                #    print anchor_pos[i], anchor_pos[i+1]
+                #print anchors[anchor_pos[i][2]+1:anchor_pos[i+1][2]]
+                sh_anc = "".join(anchors[anchor_pos[i][2]:anchor_pos[i+1][2]])
+                sh_nuc = nucl_seq[anchor_pos[i][0]:anchor_pos[i+1][0]]
+                qcodon = None
+                if shift_val != 0:
+                    qcodon =_re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len)
+                if qcodon is not None and qcodon != -1:
+                    pro_re[anchor_pos[i][2]:anchor_pos[i+1][2]] = [qcodon]
+                    qcodon = None
+                elif qcodon == -1:
+                    import warnings
+                    warnings.warn("frameshift detection failed for %s" % nucl.id)
             # try global match
             full_pro_re = "".join(pro_re)
             match = re.search(full_pro_re, nucl_seq)
@@ -373,19 +315,86 @@ def _check_corr(pro, nucl, gap_char='-', \
                 raise RuntimeError("Protein SeqRecord (%s) and Nucleotide SeqRecord (%s) do not match!" \
                         % (pro.id, nucl.id))
 
-#def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re):
-#    """This function tries all the best to come up with an re that
-#    matches a potentially shifted anchor.
-#
-#    Arguments:
-#        - sh_anc    - shifted anchor sequence
-#        - sh_nuc    - potentially corresponding nucleotide sequence
-#                      of sh_anc
-#        - shift_val - 1 or 2 indicates forward frame shift, whereas
-#                      anchor_len-1 or anchor_len-2 indicates backward
-#                      shift
-#        - aa2re     - aa to codon re dict
-#    """
+
+def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
+    """This function tries all the best to come up with an re that
+    matches a potentially shifted anchor.
+
+    Arguments:
+        - sh_anc    - shifted anchor sequence
+        - sh_nuc    - potentially corresponding nucleotide sequence
+                      of sh_anc
+        - shift_val - 1 or 2 indicates forward frame shift, whereas
+                      anchor_len-1 or anchor_len-2 indicates backward
+                      shift
+        - aa2re     - aa to codon re dict
+        - anchor_len - length of the anchor
+    """
+    import re
+    shift_id = [chr(i) for i in range(97,107)]
+    shift_id_pos = 0
+    if shift_val in (1, 2):
+        # obtain shifted anchor and corresponding nucl
+        # re substring matching doesn't allow number as id
+        # use ascii instead
+        qcodon = "^(?P<a>.*)"
+        # this stores the id of subre match, at least 'a' should be there
+        id_dict = {'a': 0}
+        # append subre between each codon
+        for j, aa in enumerate(sh_anc):
+            qcodon += aa2re[aa] + "(?P<" + chr(j+98) + ">.*)"
+            id_dict[chr(j+98)] = j+1
+        qcodon += "$"
+        match = re.search(qcodon, sh_nuc)
+        if match:
+            # where shift events happend (in the anchor)
+            anc_shift_pos = [num for id, num in id_dict.iteritems() \
+                    if match.group(id) != ""]
+            if 0 in anc_shift_pos:
+                qcodon = "(?P<" + shift_id[shift_id_pos] + ">.*)"
+                shift_id_pos += 1
+            else:
+                qcodon = ""
+            for j, aa in enumerate(sh_anc):
+                qcodon +=  aa2re[aa]
+                if j+1 in anc_shift_pos:
+                    #print shift_id
+                    qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
+                    shift_id_pos += 1
+            return qcodon
+        else:
+            # failed to find a match (frameshift)
+            return -1
+    elif shift_val in (anchor_len-1, anchor_len-2):
+        shift_val = anchor_len-shift_val
+        #print shift_val
+        # obtain shifted anchor and corresponding nucl
+        # first check if the shifted pos is just at the end of the 
+        # previous anchor.
+        # TODO:
+        # think about the frameshift that happens in the first aa of 
+        # the anchor.
+        if i > 0:
+            pre_aa = anchors[anchor_pos[i][2]][-shift_val:]
+            print pre_aa
+        for j in range(1,len(sh_anc)):
+            qcodon = "^"
+            for k, aa in enumerate(sh_anc):
+                if k == j-1:
+                    # will be considered in the next step
+                    pass
+                elif k == j:
+                    qcodon += _merge_aa2re(sh_anc[j-1], sh_anc[j], shift_val, aa2re) 
+                else:
+                    qcodon += aa2re[aa]
+            qcodon += '$'
+            match = re.search(qcodon, sh_nuc)
+            if match:
+                qcodon = qcodon.replace('^','').replace('$','')
+                return qcodon
+        if not match:
+            # failed to find a match (frameshift)
+            return -1
 
 
 def _merge_aa2re(aa1, aa2, shift_val, aa2re):
