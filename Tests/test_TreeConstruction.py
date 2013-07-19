@@ -11,9 +11,11 @@ from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
 from Bio.Phylo import TreeConstruction
+from Bio.Phylo.TreeConstruction import Matrix
 from Bio.Phylo.TreeConstruction import DistanceMatrix
-from Bio.Phylo.TreeConstruction import DistanceCaluculator
+from Bio.Phylo.TreeConstruction import DistanceCalculator
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+from Bio.Phylo.TreeConstruction import ParsimonyScorer
 
 logging.basicConfig(filename='./TreeConstruction/test.log', level=logging.DEBUG)
 
@@ -88,25 +90,25 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertRaises(TypeError, dm.__setitem__, ('Alpha', 'Beta'), 'a')
         self.assertRaises(TypeError, dm.__setitem__, 'Alpha', ['a', 'b', 'c'])
 
-class DistanceCaluculatorTest(unittest.TestCase):
-    """Test DistanceCaluculator"""
+class DistanceCalculatorTest(unittest.TestCase):
+    """Test DistanceCalculator"""
 
     def test_distance_calculator(self):
         aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
 
-        calculator = DistanceCaluculator(aln, 'identity')
+        calculator = DistanceCalculator(aln, 'identity')
         dm = calculator.get_distance()
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (10 * 1.0 / 13))
 
-        calculator = DistanceCaluculator(aln, 'blastn')
+        calculator = DistanceCalculator(aln, 'blastn')
         dm = calculator.get_distance()
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (38 * 1.0 / 65))
 
-        calculator = DistanceCaluculator(aln, 'trans')
+        calculator = DistanceCalculator(aln, 'trans')
         dm = calculator.get_distance()
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (49 * 1.0 / 78))
 
-        calculator = DistanceCaluculator(aln, 'blosum62')
+        calculator = DistanceCalculator(aln, 'blosum62')
         dm = calculator.get_distance()
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (53 * 1.0 / 84))
 
@@ -117,7 +119,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     def test_upgma(self):
         aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
 
-        calculator = DistanceCaluculator(aln, 'blosum62')
+        calculator = DistanceCalculator(aln, 'blosum62')
         dm = calculator.get_distance()
         logging.info("DistanceMatrix:\n" + str(dm))
         constructor = DistanceTreeConstructor(dm)
@@ -129,7 +131,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     def test_nj(self):
         aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
 
-        calculator = DistanceCaluculator(aln, 'blosum62')
+        calculator = DistanceCalculator(aln, 'blosum62')
         dm = calculator.get_distance()
         logging.info("DistanceMatrix:\n" + str(dm))
         constructor = DistanceTreeConstructor(dm)
@@ -138,6 +140,55 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         logging.info("NJ Tree:\n" + str(tree))
         Phylo.write(tree, './TreeConstruction/nj.tre', 'newick')
 
+class ParsimonyScorerTest(unittest.TestCase):
+    """Test ParsimonyScorer"""
+
+    def test_get_score(self):
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        tree = Phylo.read('./TreeConstruction/upgma.tre', 'newick')
+        scorer = ParsimonyScorer()
+        score = scorer.get_score(tree, aln)
+        self.assertEqual(score, 2 + 1 + 2 + 2 + 1 + 1 + 1 + 3)
+
+        alphabet = ['A', 'T', 'C', 'G']
+        step_matrix = [[0],
+                       [2.5,   0],
+                       [2.5,   1,    0],
+                       [  1, 2.5,  2.5, 0]]
+        matrix = Matrix(alphabet, step_matrix)
+        scorer = ParsimonyScorer(matrix)
+        score = scorer.get_score(tree, aln)
+        self.assertEqual(score, 3.5 + 2.5 + 3.5 + 3.5 + 2.5 + 1 + 2.5 + 4.5)
+
+        alphabet = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', '1', '2', 'T', 'V', 'W', 'Y', '*', '-']
+        step_matrix = [[0],
+                       [2, 0],
+                       [1, 2, 0],
+                       [1, 2, 1, 0],
+                       [2, 1, 2, 2, 0],
+                       [1, 1, 1, 1, 2, 0],
+                       [2, 2, 1, 2, 2, 2, 0],
+                       [2, 2, 2, 2, 1, 2, 2, 0],
+                       [2, 2, 2, 1, 2, 2, 2, 1, 0],
+                       [2, 2, 2, 2, 1, 2, 1, 1, 2, 0],
+                       [2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0],
+                       [2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 0],
+                       [1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
+                       [2, 2, 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 0],
+                       [2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0],
+                       [1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
+                       [2, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 0],
+                       [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 0],
+                       [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0],
+                       [2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 3, 2, 2, 1, 1, 2, 2, 2, 0],
+                       [2, 1, 1, 2, 1, 2, 1, 2, 2, 2, 3, 1, 2, 2, 2, 1, 2, 2, 2, 2, 0],
+                       [2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 0],
+                       [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0]]
+
+        matrix = Matrix(alphabet, step_matrix)
+        scorer = ParsimonyScorer(matrix)
+        score = scorer.get_score(tree, aln)
+        self.assertEqual(score, 3 + 1 + 3 + 3 + 2 + 1 + 2 + 5)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
