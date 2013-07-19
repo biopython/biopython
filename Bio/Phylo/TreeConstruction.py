@@ -622,9 +622,9 @@ class ParsimonyScorer(object):
         """Calculate and return the parsimony score given a tree and
         the MSA using the Fitch algorithm without the penalty matrix
         the Sankoff algorithm with the matrix"""
-        # make sure the tree is rooted and bifurcated
+        # make sure the tree is rooted and bifurcating
         if not tree.is_bifurcating():
-            raise ValueError("The tree provided should be bifurcated.")
+            raise ValueError("The tree provided should be bifurcating.")
         if not tree.rooted:
             tree.root_at_midpoint()
         # make child to parent dict
@@ -697,7 +697,7 @@ class ParsimonyScorer(object):
                     clade_scores[clade] = array
                 # minimum from root score
                 score_i = min(array)
-                # TODO: set states
+                # TODO: resolve internal states
             score = score + score_i
         return score
 
@@ -705,7 +705,6 @@ class ParsimonyScorer(object):
 class NNITreeSearcher(object):
     def __init__(self, scorer):
         self.scorer = scorer
-        pass
 
     def build_tree(self, starting_tree):
         return self._nni(starting_tree)
