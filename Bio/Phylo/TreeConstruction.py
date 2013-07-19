@@ -620,81 +620,86 @@ class ParsimonyScorer(object):
 
     def get_score(self, tree, alignment):
         """Calculate and return the parsimony score given a tree and
-        the MSA."""
+        the MSA using the Fitch algorithm without the penalty matrix
+        the Sankoff algorithm with the matrix"""
         # make sure the tree is rooted and bifurcated
         if not tree.is_bifurcating():
             raise ValueError("The tree provided should be bifurcated.")
         if not tree.rooted:
             tree.root_at_midpoint()
+        # make child to parent dict
+        parents = {}
+        for clade in tree.find_clades():
+            if not clade.is_terminal:
+                node_path = tree.get_path(clade)
+                parents[clade] = node_path[-2]
         # sort tree terminals and alignment
         terms = tree.get_terminals()
-        sorted(terms, key=lambda term: term.name)
+        terms.sort(key=lambda term: term.name)
         alignment.sort()
         if not all([t.name == a.id for t, a in zip(terms, alignment)]):
             raise ValueError("Taxon names of the input tree should be the same with the alignment.")
         #term_align = dict(zip(terms, alignment))
         score = 0
-        root = tree.root
         for i in range(len(alignment[0])):
-            # parsimony score for column i
+            # parsimony score for column_i
             score_i = 0
             # get column
             column_i = alignment[:, i]
-            # skip non-informative column and column with gap and stop characters
-            if column_i == len(column_i) * column_i[0] or '-' in column_i or '*' in column_i:
+            # skip non-informative column
+            if column_i == len(column_i) * column_i[0]:
                 continue
 
             #### start calculating score_i using the tree and column_i
 
-            ## init by mapping terminal clades and states in column_i
-            clade_states = zip(terms, [set([i]) for i in column_i])
-
-            ## pre-compute states for internal clades
-            self._set_states(root, clade_states)
-
-            ## traceback to assign states and find minimum score_i        
-            for clade in tree.get_nonterminals(order="level"):
-                state = clade_states[clade]
-                clade_childs = clade.clades
-                left_state = clade_states[clade_childs[0]]
-                right_state = clade_states[clade_childs[1]]
-                if state.issubset(left_state) and state.issubset(right_state):
-                    clade_states[clade_childs[0]] = state
-                    clade_states[clade_childs[1]] = state
-                else:
-                    if self.matrix:
-                        for sp in state:
-                            if sp not in self.matrix.names:
-                                raise ValueError("No alphabet '%s' in the given matrix" % sp)
-                            minl = float('inf')
-                            minr = float('inf')
-                            for sl in left_state:
-                                if sl not in self.matrix.names:
-                                    raise ValueError("No alphabet '%s' in the given matrix" % sl)
-                                s = self.matrix[sp, sl]
-                                minl = minl > s and s or minl
-                            for sr in right_state:
-                                if sr not in self.matrix.names:
-                                    raise ValueError("No alphabet '%s' in the given matrix" % sr)
-                                s = self.matrix[sp, sl]
-                                minr = minr > s and s or minr
-                        score_i = score_i + minl + minr
-                    else:
+            ## Fitch algorithm without the penalty matrix
+            if not self.matrix:
+                # init by mapping terminal clades and states in column_i
+                clade_states = dict(zip(terms, [set([c]) for c in column_i]))
+                for clade in tree.get_nonterminals(order="postorder"):
+                    clade_childs = clade.clades
+                    left_state = clade_states[clade_childs[0]]
+                    right_state = clade_states[clade_childs[1]]
+                    state = left_state & right_state
+                    if not state:
+                        state = left_state | right_state
                         score_i = score_i + 1
+                    clade_states[clade] = state
+            ## Sankoff algorithm with the penalty matrix
+            else:
+                inf = float('inf')
+                # init score arrays for terminal clades
+                alphabet = self.matrix.names
+                length = len(alphabet)
+                clade_scores = {}
+                for j in range(len(column_i)):
+                    array = [inf] * length
+                    index = alphabet.index(column_i[j])
+                    array[index] = 0
+                    clade_scores[terms[j]] = array
+                # bottom up calculation
+                for clade in tree.get_nonterminals(order="postorder"):
+                    clade_childs = clade.clades
+                    left_score = clade_scores[clade_childs[0]]
+                    right_score = clade_scores[clade_childs[1]]
+                    array = []
+                    for m in range(length):
+                        min_l = inf
+                        min_r = inf
+                        for n in range(length):
+                            sl = self.matrix[alphabet[m], alphabet[n]] + left_score[n]
+                            sr = self.matrix[alphabet[m], alphabet[n]] + right_score[n]
+                            if min_l > sl:
+                                min_l = sl
+                            if min_r > sr:
+                                min_r = sr
+                        array.append(min_l + min_r)
+                    clade_scores[clade] = array
+                # minimum from root score
+                score_i = min(array)
+                # TODO: set states
             score = score + score_i
         return score
-
-    def _set_states(self, clade, clade_states):
-        """Pre-compute states for internal clades"""
-        if not clade.is_terminal():
-            clade_childs = clade.clades
-            left_state = self._set_states(clade_childs[0], clade_states)
-            right_state = self._set_states(clade_childs[1], clade_states)
-            state = left_state & right_state
-            if not state:
-                state = left_state | right_state
-            clade_states[clade] = state
-        return clade_states[clade]
 
 
 class NNITreeSearcher(object):
