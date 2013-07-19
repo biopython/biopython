@@ -16,6 +16,7 @@ from Bio.Phylo.TreeConstruction import DistanceMatrix
 from Bio.Phylo.TreeConstruction import DistanceCalculator
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo.TreeConstruction import ParsimonyScorer
+from Bio.Phylo.TreeConstruction import NNITreeSearcher
 
 logging.basicConfig(filename='./TreeConstruction/test.log', level=logging.DEBUG)
 
@@ -189,6 +190,24 @@ class ParsimonyScorerTest(unittest.TestCase):
         scorer = ParsimonyScorer(matrix)
         score = scorer.get_score(tree, aln)
         self.assertEqual(score, 3 + 1 + 3 + 3 + 2 + 1 + 2 + 5)
+
+
+class NNITreeSearcherTest(unittest.TestCase):
+    """Test NNITreeSearcher"""
+
+    def test_get_neighbors(self):
+        tree = Phylo.read('./TreeConstruction/upgma.tre', 'newick')
+        alphabet = ['A', 'T', 'C', 'G']
+        step_matrix = [[0],
+                       [2.5,   0],
+                       [2.5,   1,    0],
+                       [  1, 2.5,  2.5, 0]]
+        matrix = Matrix(alphabet, step_matrix)
+        scorer = ParsimonyScorer(matrix)
+        searcher = NNITreeSearcher(scorer)
+        trees = searcher._get_neighbors(tree)
+        self.assertEqual(len(trees), 2 * (5 - 3))
+        Phylo.write(trees, './TreeConstruction/neighbor_trees.tre', 'newick')
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

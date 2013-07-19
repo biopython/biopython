@@ -581,7 +581,7 @@ class DistanceTreeConstructor(TreeContructor):
 
             del dm[min_i]
 
-        # connect two rest nodes
+        # connect the rest two nodes
         clades[1].branch_length = dm[1, 0]
         clades[0].clades.append(clades[1])
 
@@ -606,11 +606,11 @@ class ParsimonyTreeConstructor(TreeContructor):
         self.alignment = alignment
         self.searcher = searcher
         self.scorer = scorer
-        self.searcher.set_scorer(scorer)
+        self.searcher.scorer = scorer
         self.starting_tree = starting_tree
 
     def build_tree(self):
-        return self.searcher.build_tree(self.starting_tree)
+        return self.searcher.search(self.starting_tree)
 
 
 class ParsimonyScorer(object):
@@ -627,12 +627,6 @@ class ParsimonyScorer(object):
             raise ValueError("The tree provided should be bifurcating.")
         if not tree.rooted:
             tree.root_at_midpoint()
-        # make child to parent dict
-        parents = {}
-        for clade in tree.find_clades():
-            if not clade.is_terminal:
-                node_path = tree.get_path(clade)
-                parents[clade] = node_path[-2]
         # sort tree terminals and alignment
         terms = tree.get_terminals()
         terms.sort(key=lambda term: term.name)
@@ -702,14 +696,125 @@ class ParsimonyScorer(object):
         return score
 
 
-class NNITreeSearcher(object):
+class TreeSearcher(object):
+    """Base class for all tree searching methods"""
+
     def __init__(self, scorer):
         self.scorer = scorer
 
-    def build_tree(self, starting_tree):
+    def search(self, starting_tree):
+        """Caller to search the best tree with a starting tree.
+        This should be implemented in subclass"""
+        raise NotImplementedError("Method not implemented!")
+
+
+class NNITreeSearcher(TreeSearcher):
+    """Tree searching class of NI(Nearest Neighbor Interchanges)
+     algorithm"""
+
+    def search(self, starting_tree):
         return self._nni(starting_tree)
 
     def _nni(self, tree):
         """Search the best parsimony tree by using the NNI(Nearest
         Neighbor Interchanges) algorithm"""
         pass
+
+    def _get_neighbors(self, tree):
+        """Get all neighbor trees of the given tree(currently only
+         for rooted tree)"""
+        # make child to parent dict
+        parents = {}
+        for clade in tree.find_clades():
+            if clade != tree.root:
+                node_path = tree.get_path(clade)
+                # cannot get the parent if the parent is root. Bug?
+                if len(node_path) == 1:
+                    parents[clade] = tree.root
+                else:
+                    parents[clade] = node_path[-2]
+        neighbors = []
+        root_childs = []
+        for clade in tree.get_nonterminals(order="level"):
+            if clade == tree.root:
+                left = clade.clades[0]
+                right = clade.clades[1]
+                root_childs.append(left)
+                root_childs.append(right)
+                if not left.is_terminal() and not right.is_terminal():
+                    # make changes around the left_left clade
+                    #left_left = left.clades[0]
+                    left_right = left.clades[1]
+                    right_left = right.clades[0]
+                    right_right = right.clades[1]
+                    # neightbor 1 (left_left + right_right)
+                    del left.clades[1]
+                    del right.clades[1]
+                    left.clades.append(right_right)
+                    right.clades.append(left_right)
+                    temp_tree = copy.deepcopy(tree)
+                    neighbors.append(temp_tree)
+                    # neighbor 2 (left_left + right_left)
+                    del left.clades[1]
+                    del right.clades[0]
+                    left.clades.append(right_left)
+                    right.clades.append(right_right)
+                    temp_tree = copy.deepcopy(tree)
+                    neighbors.append(temp_tree)
+                    # change back (left_left + left_right)
+                    del left.clades[1]
+                    del right.clades[0]
+                    left.clades.append(left_right)
+                    right.clades.insert(0, right_left)
+            elif clade in root_childs:
+                # skip root child
+                continue
+            else:
+                # method for other clades
+                # make changes around the parent clade
+                left = clade.clades[0]
+                right = clade.clades[1]
+                parent = parents[clade]
+                if clade == parent.clades[0]:
+                    sister = parent.clades[1]
+                    # neighbor 1 (parent + right)
+                    del parent.clades[1]
+                    del clade.clades[1]
+                    parent.clades.append(right)
+                    clade.clades.append(sister)
+                    temp_tree = copy.deepcopy(tree)
+                    neighbors.append(temp_tree)
+                    # neighbor 2 (parent + left)
+                    del parent.clades[1]
+                    del clade.clades[0]
+                    parent.clades.append(left)
+                    clade.clades.append(right)
+                    temp_tree = copy.deepcopy(tree)
+                    neighbors.append(temp_tree)
+                    # change back (parent + sister)
+                    del parent.clades[1]
+                    del clade.clades[0]
+                    parent.clades.append(sister)
+                    clade.clades.insert(0, left)
+                else:
+                    sister = parent.clades[0]
+                    # neighbor 1 (parent + right)
+                    del parent.clades[0]
+                    del clade.clades[1]
+                    parent.clades.insert(0, right)
+                    clade.clades.append(sister)
+                    temp_tree = copy.deepcopy(tree)
+                    neighbors.append(temp_tree)
+                    # neighbor 2 (parent + left)
+                    del parent.clades[0]
+                    del clade.clades[0]
+                    parent.clades.insert(0, left)
+                    clade.clades.append(right)
+                    temp_tree = copy.deepcopy(tree)
+                    neighbors.append(temp_tree)
+                    # change back (parent + sister)
+                    del parent.clades[0]
+                    del clade.clades[0]
+                    parent.clades.insert(0, sister)
+                    clade.clades.insert(0, left)
+        return neighbors

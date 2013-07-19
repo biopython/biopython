@@ -1,0 +1,4 @@
+((Epsilon:0.11111,Alpha:0.21576)Inner1:0.17196,((Gamma:0.12500,Beta:0.12500)Inner2:0.09076,Delta:0.11111)Inner3:0.06731)Inner4:0.00000;
+((Epsilon:0.11111,(Gamma:0.12500,Beta:0.12500)Inner2:0.09076)Inner1:0.17196,(Delta:0.11111,Alpha:0.21576)Inner3:0.06731)Inner4:0.00000;
+((Epsilon:0.11111,Delta:0.11111)Inner1:0.17196,((Gamma:0.12500,Alpha:0.21576)Inner2:0.09076,Beta:0.12500)Inner3:0.06731)Inner4:0.00000;
+((Epsilon:0.11111,Delta:0.11111)Inner1:0.17196,((Alpha:0.21576,Beta:0.12500)Inner2:0.09076,Gamma:0.12500)Inner3:0.06731)Inner4:0.00000;
