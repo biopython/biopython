@@ -602,15 +602,13 @@ class DistanceTreeConstructor(TreeContructor):
 
 class ParsimonyTreeConstructor(TreeContructor):
     """Parsimony tree constructor"""
-    def __init__(self, alignment, searcher, scorer, starting_tree=None):
+    def __init__(self, alignment, searcher, starting_tree=None):
         self.alignment = alignment
         self.searcher = searcher
-        self.scorer = scorer
-        self.searcher.scorer = scorer
         self.starting_tree = starting_tree
 
     def build_tree(self):
-        return self.searcher.search(self.starting_tree)
+        return self.searcher.search(self.starting_tree, self.alignment)
 
 
 class ParsimonyScorer(object):
@@ -699,9 +697,6 @@ class ParsimonyScorer(object):
 class TreeSearcher(object):
     """Base class for all tree searching methods"""
 
-    def __init__(self, scorer):
-        self.scorer = scorer
-
     def search(self, starting_tree):
         """Caller to search the best tree with a starting tree.
         This should be implemented in subclass"""
@@ -712,13 +707,28 @@ class NNITreeSearcher(TreeSearcher):
     """Tree searching class of NI(Nearest Neighbor Interchanges)
      algorithm"""
 
-    def search(self, starting_tree):
-        return self._nni(starting_tree)
+    def __init__(self, scorer):
+        self.scorer = scorer
 
-    def _nni(self, tree):
+    def search(self, starting_tree, alignment):
+        return self._nni(starting_tree, alignment)
+
+    def _nni(self, starting_tree, alignment):
         """Search the best parsimony tree by using the NNI(Nearest
         Neighbor Interchanges) algorithm"""
-        pass
+        best_tree = starting_tree
+        while True:
+            best_score = self.scorer.get_score(best_tree, alignment)
+            temp = best_score
+            for t in self._get_neighbors(best_tree):
+                score = self.scorer.get_score(t, alignment)
+                if score < best_score:
+                    best_score = score
+                    best_tree = t
+            # stop if no smaller score exist
+            if best_score == temp:
+                break
+        return best_tree
 
     def _get_neighbors(self, tree):
         """Get all neighbor trees of the given tree(currently only
