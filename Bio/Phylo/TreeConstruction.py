@@ -581,9 +581,13 @@ class DistanceTreeConstructor(TreeContructor):
 
             del dm[min_i]
 
-        # connect the rest two nodes
-        clades[1].branch_length = dm[1, 0]
-        clades[0].clades.append(clades[1])
+        # set the last clade as one of the child of the inner_clade
+        if clades[0] == inner_clade:
+            clades[1].branch_length = dm[1, 0]
+            clades[0].clades.append(clades[1])
+        else:
+            clades[0].branch_length = dm[1, 0]
+            clades[1].clades.append(clades[0])
 
         return BaseTree.Tree(clades[0])
 
