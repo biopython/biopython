@@ -151,6 +151,7 @@ test_files = [
     ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
+    ("embl",   False, 'EMBL/DD231055_edited2.embl', 1), #Partial ID line
     ("embl",   False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
     ("embl",   False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
     ("embl",   False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
