@@ -625,7 +625,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def residue_type(self, type):
         """Record the sequence type so we can choose an appropriate alphabet.
         """
-        self._seq_type = type
+        self._seq_type = type.strip()
 
     def data_file_division(self, division):
         self.data.annotations['data_file_division'] = division
