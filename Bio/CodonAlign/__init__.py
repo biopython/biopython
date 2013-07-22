@@ -625,8 +625,8 @@ def _align_shift_recs(recs):
                     gaps = '-'*3
                     insert_pos = frt_lst[n][i]+3
                     seq = recs[n].seq
-                    seq = CodonSeq(recs[n].seq[:insert_pos] + gaps + \
-                            recs[n].seq[insert_pos:], rf_table=seq.rf_table)
+                    seq = CodonSeq(recs[n].seq._data[:insert_pos] + gaps + \
+                            recs[n].seq._data[insert_pos:], rf_table=seq.rf_table)
                     recs[n].seq = seq
     return recs
 

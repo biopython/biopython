@@ -53,9 +53,10 @@ def get_codon_alphabet(codon_table, gap_char="-"):
     letters.extend(codon_table.start_codons)
     letters.append(gap_char*3)
     generic_codon_alphabet.letters = letters
+    generic_codon_alphabet.gap_char = '-'
     return generic_codon_alphabet
 
-default_codon_alphabet = get_codon_alphabet(default_codon_table)
+default_codon_alphabet = Gapped(get_codon_alphabet(default_codon_table))
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
