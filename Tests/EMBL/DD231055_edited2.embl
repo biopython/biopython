@@ -1,0 +1,67 @@
+ID   DD231055; SV 1; linear; ; PAT; HUM; 315 BP.
+XX
+AC   DD231055;
+XX
+DT   20-MAR-2006 (Rel. 87, Created)
+DT   31-AUG-2006 (Rel. 89, Last updated, Version 2)
+XX
+DE   RSV PROTEINS, ANTIBODIES, COMPOSITIONS, METHODS AND USES.
+XX
+KW   JP 2005522996-A/12; test-data; lot and lots of keywords for this example;
+KW   multi-line keywords.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-200, 300-315
+RA   Scarron B.;
+RT   "RSV PROTEINS, ANTIBODIES, COMPOSITIONS, METHODS AND USES";
+RL   Patent number JP2005522996-A/12, 04-AUG-2005.
+RL   Centocor.
+XX
+DR   IMGT/LIGM; DD231055; DD231055.
+XX
+CC   This is a comments section added by hand to stress test the parser
+CC   in Biopython.  Please do not use this modified file for any real analysis!
+CC   I added lots of odd notes to the features, modified the RP line, ...
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..315
+FT                   /organism="Homo
+FT                   sapiens"
+FT                   /mol_type="unassigned DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /note="First note, with quotes"
+FT                   /note="Second note, multiline
+FT                   with quotes"
+FT                   /note="Third note, multiline
+
+FT                   with quotes, and a completely blank line."
+FT                   /note="Fourth note, multiline
+FT                   
+FT                   with quotes, and an indented blank line."
+FT                   /note=Fifth note, without quotes, single line
+FT                   /note=Sixth note, without
+FT                   quotes, multiline.
+FT                   /note=Seventh note, without
+FT                   
+FT                   quotes, and an indented blank line.
+FT                   /note=Eigtht note, without quotes, but with a single very long line which breaks another rule.
+FT   misc_feature    315^1
+FT                   /note="This location would make sense on a circular genome!"
+FT
+FT                   /note="Empty FT line between qualifiers"
+XX
+SQ   Sequence 315 BP; 78 A; 81 C; 79 G; 77 T; 0 other;
+     gccgagctga cccagtctcc atcctccctg tctgcatctg taggagacag agtcaccatc        60
+     acttgccggg caactcagag tgttagtaac tttttaaatt ggtatcagca gaagccaggg       120
+     gaagccccta cgctcctgat ctatgatgca tccacttcgc aaagtggggt cccatcaagg       180
+     ttcagtggca gtggatctgg gatggatttc agtctcacca tcagcagtct gcagcctgaa       240
+     gatcttgcaa tgtattactg tcaagcgagt atcaataccc cgcttttcgg cggagggacc       300
+     agaatagata tgaga                                                        315
+//
+
