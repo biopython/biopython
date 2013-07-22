@@ -61,7 +61,7 @@ def get_codon_alphabet(codon_table, gap_char="-"):
     generic_codon_alphabet.names = codon_table.names
     return generic_codon_alphabet
 
-default_codon_alphabet = get_codon_alphabet(default_codon_table)
+default_codon_alphabet = Gapped(get_codon_alphabet(default_codon_table))
 
 
 if __name__ == "__main__":
