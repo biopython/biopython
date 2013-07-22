@@ -513,7 +513,7 @@ Alternatively, you can save %s in the directory
 Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
 
 Please also inform the Biopython developers about this missing DTD, by
-reporting a bug on http://redmine.open-bio.org/projects/biopython or sign
+reporting a bug on https://github.com/biopython/biopython/issues or sign
 up to our mailing list and emailing us, so that we can include it with the
 next release of Biopython.
 
