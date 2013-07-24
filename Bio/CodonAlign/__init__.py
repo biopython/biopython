@@ -302,6 +302,7 @@ def _check_corr(pro, nucl, gap_char='-', \
             # check frames of anchors
             # ten frameshift events are allowed in a sequence
             first_anchor = True
+            shift_id_pos = 0
             for i in range(len(anchor_pos)-1):
                 # TODO: think about last anchor (mismatch)
                 if first_anchor is True and anchor_pos[0][2] != 0:
@@ -309,7 +310,7 @@ def _check_corr(pro, nucl, gap_char='-', \
                     sh_anc = anchors[0]
                     for shift_val in shift_val_lst:
                         if shift_val in (1,2):
-                            sh_nuc_len = anchor_len*3 + shift_val
+                            sh_nuc_len = anchor_len*3+shift_val
                         elif shift_val in (anchor_len-2,anchor_len-1):
                             sh_nuc_len = anchor_len*3-(anchor_len-shift_val)
                         if anchor_pos[0][0] >= sh_nuc_len:
@@ -318,7 +319,8 @@ def _check_corr(pro, nucl, gap_char='-', \
                             #this is unlikely to produce the correct output
                             sh_nuc = nucl_seq[:anchor_pos[0][0]]
                         qcodon = None
-                        qcodon = _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len)
+                        qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
+                                shift_val, aa2re, anchor_len, shift_id_pos)
                         if qcodon is not None and qcodon != -1:
                             # pro_re[0] should be '.'*anchor_len, therefore I replace it.
                             pro_re[0] = qcodon
@@ -332,7 +334,8 @@ def _check_corr(pro, nucl, gap_char='-', \
                 sh_nuc = nucl_seq[anchor_pos[i][0]:anchor_pos[i+1][0]]
                 qcodon = None
                 if shift_val != 0:
-                    qcodon = _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len)
+                    qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
+                            shift_val, aa2re, anchor_len, shift_id_pos)
                 if qcodon is not None and qcodon != -1:
                     pro_re[anchor_pos[i][2]:anchor_pos[i+1][2]] = [qcodon]
                     qcodon = None
@@ -349,7 +352,8 @@ def _check_corr(pro, nucl, gap_char='-', \
                         % (pro.id, nucl.id))
 
 
-def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
+def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
+        anchor_len, shift_id_pos):
     """This function tries all the best to come up with an re that
     matches a potentially shifted anchor.
 
@@ -362,10 +366,10 @@ def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
                       shift
         - aa2re     - aa to codon re dict
         - anchor_len - length of the anchor
+        - shift_id_pos - specify current shift name we are at
     """
     import re
     shift_id = [chr(i) for i in range(97,107)]
-    shift_id_pos = 0
     if shift_val in (1, 2):
         # obtain shifted anchor and corresponding nucl
         # re substring matching doesn't allow number as id
@@ -393,10 +397,10 @@ def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
                 if j+1 in anc_shift_pos:
                     qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
                     shift_id_pos += 1
-            return qcodon
+            return qcodon, shift_id_pos
         else:
             # failed to find a match (frameshift)
-            return -1
+            return -1, shift_id_pos
     elif shift_val in (anchor_len-1, anchor_len-2):
         shift_val = anchor_len-shift_val
         # obtain shifted anchor and corresponding nucl
@@ -409,20 +413,22 @@ def _re_shift_anchor(sh_anc, sh_nuc, shift_val, aa2re, anchor_len):
                     # will be considered in the next step
                     pass
                 elif k == j:
-                    qcodon += _merge_aa2re(sh_anc[j-1], sh_anc[j], shift_val, aa2re) 
+                    qcodon += _merge_aa2re(sh_anc[j-1], sh_anc[j], \
+                            shift_val, aa2re, shift_id[shift_id_pos].upper())
                 else:
                     qcodon += aa2re[aa]
             qcodon += '$'
             match = re.search(qcodon, sh_nuc)
             if match:
                 qcodon = qcodon.replace('^','').replace('$','')
-                return qcodon
+                shift_id_pos += 1
+                return qcodon, shift_id_pos
         if not match:
             # failed to find a match (frameshift)
-            return -1
+            return -1, shift_id_pos
 
 
-def _merge_aa2re(aa1, aa2, shift_val, aa2re):
+def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
     """Function to merge two amino acids based on detected frame shift
     value.
     """
@@ -444,7 +450,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re):
     scodon = map(get_aa_from_codonre, (aa2re[aa1], aa2re[aa2]))
     if shift_val == 1:
         intersect = ''.join(set(scodon[0][2]) & set(scodon[1][0]))
-        scodonre = '(?P<A>'
+        scodonre = '(?P<' + reid + '>'
         scodonre += '[' + scodon[0][0] + ']' + \
                     '[' + scodon[0][1] + ']' + \
                     '[' + intersect    + ']' + \
@@ -453,7 +459,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re):
     elif shift_val == 2:
         intersect1 = ''.join(set(scodon[0][1]) & set(scodon[1][0]))
         intersect2 = ''.join(set(scodon[0][2]) & set(scodon[1][1]))
-        scodonre = '(?P<A>'
+        scodonre = '(?P<' + reid + '>'
         scodonre += '[' + scodon[0][0] + ']' + \
                     '[' + intersect1   + ']' + \
                     '[' + intersect2   + ']' + \
@@ -509,20 +515,26 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
     elif mode == 2:
         from collections import deque
         shift_pos = deque([])
+        shift_start = []
         match = span_mode[2]
-        if 'A' in match.groupdict():
+        m_groupdict = match.groupdict().keys()
+        # TODO: more conditions should be considered here
+        if all([i.isupper() for i in m_groupdict]):
             # backward frameshift
-            shift_pos.append(match.span('A'))
+            for i in m_groupdict:
+                shift_pos.append(match.span(i))
+                shift_start.append(match.start(i))
             rf_table = []
             i = match.start()
             while True:
                 rf_table.append(i)
                 i += 3
-                if len(shift_pos) != 0 and i == shift_pos[0][0]:
-                    shift_val = 6 - (shift_pos[0][1] - shift_pos[0][0])
+                if len(shift_pos) != 0 and i in shift_start:
+                    shift_index = shift_start.index(i)
+                    shift_val = 6-(shift_pos[shift_index][1]-shift_pos[shift_index][0])
                     rf_table.append(i)
                     rf_table.append(i+3-shift_val)
-                    i = shift_pos[0][1]
+                    i = shift_pos[shift_index][1]
                 if i >= match.end():
                     break
             aa_num = 0

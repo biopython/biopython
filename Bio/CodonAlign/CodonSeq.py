@@ -217,6 +217,7 @@ class CodonSeq(Seq):
                     continue
                 if nxt_shift < 0:
                     full_rf_table.append(i)
+                    accum += 1
                 elif nxt_shift == 0:
                     pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
                     if pre_shift <= 0:
