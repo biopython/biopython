@@ -292,7 +292,7 @@ def _check_corr(pro, nucl, gap_char='-', \
                     pro_re.append(fncodon)
                 else:
                     pro_re.append(last_fcodon)
-
+        print pro_re[0]
         full_pro_re = "".join(pro_re)
         match = re.search(full_pro_re, nucl_seq)
         if match:
@@ -371,34 +371,51 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
     import re
     shift_id = [chr(i) for i in range(97,107)]
     if shift_val in (1, 2):
-        # obtain shifted anchor and corresponding nucl
-        # re substring matching doesn't allow number as id
-        # use ascii instead
-        qcodon = "^(?P<a>.*)"
-        # this stores the id of subre match, at least 'a' should be there
-        id_dict = {'a': 0}
-        # append subre between each codon
-        for j, aa in enumerate(sh_anc):
-            qcodon += aa2re[aa] + "(?P<" + chr(j+98) + ">.*)"
-            id_dict[chr(j+98)] = j+1
-        qcodon += "$"
-        match = re.search(qcodon, sh_nuc)
-        if match:
-            # where shift events happend (in the anchor)
-            anc_shift_pos = [num for id, num in id_dict.iteritems() \
-                    if match.group(id) != ""]
-            if 0 in anc_shift_pos:
-                qcodon = "(?P<" + shift_id[shift_id_pos] + ">.*)"
+#        # obtain shifted anchor and corresponding nucl
+#        # re substring matching doesn't allow number as id
+#        # use ascii instead
+#        qcodon = "^(?P<a>.*)"
+#        # this stores the id of subre match, at least 'a' should be there
+#        id_dict = {'a': 0}
+#        # append subre between each codon
+#        for j, aa in enumerate(sh_anc):
+#            qcodon += aa2re[aa] + "(?P<" + chr(j+98) + ">.*)"
+#            id_dict[chr(j+98)] = j+1
+#        qcodon += "$"
+#        match = re.search(qcodon, sh_nuc)
+#        if match:
+#            # where shift events happend (in the anchor)
+#            anc_shift_pos = [num for id, num in id_dict.iteritems() \
+#                    if match.group(id) != ""]
+#            if 0 in anc_shift_pos:
+#                qcodon = "(?P<" + shift_id[shift_id_pos] + ">.*)"
+#                shift_id_pos += 1
+#            else:
+#                qcodon = ""
+#            for j, aa in enumerate(sh_anc):
+#                qcodon +=  aa2re[aa]
+#                if j+1 in anc_shift_pos:
+#                    qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
+#                    shift_id_pos += 1
+#            return qcodon, shift_id_pos
+#        else:
+#            # failed to find a match (frameshift)
+#            return -1, shift_id_pos
+        for j in range(len(sh_anc)):
+            qcodon = "^"
+            for k, aa in enumerate(sh_anc):
+                if k == j:
+                    qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)" \
+                            + aa2re[aa]
+                else:
+                    qcodon += aa2re[aa]
+            qcodon += "$"
+            match = re.search(qcodon, sh_nuc)
+            if match:
+                qcodon = qcodon.replace('^','').replace('$','')
                 shift_id_pos += 1
-            else:
-                qcodon = ""
-            for j, aa in enumerate(sh_anc):
-                qcodon +=  aa2re[aa]
-                if j+1 in anc_shift_pos:
-                    qcodon += "(?P<" + shift_id[shift_id_pos] + ">.*)"
-                    shift_id_pos += 1
-            return qcodon, shift_id_pos
-        else:
+                return qcodon, shift_id_pos
+        if not match:
             # failed to find a match (frameshift)
             return -1, shift_id_pos
     elif shift_val in (anchor_len-1, anchor_len-2):
@@ -518,99 +535,109 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
         shift_start = []
         match = span_mode[2]
         m_groupdict = match.groupdict().keys()
-        # TODO: more conditions should be considered here
-        if all([i.isupper() for i in m_groupdict]):
-            # backward frameshift
-            for i in m_groupdict:
-                shift_pos.append(match.span(i))
-                shift_start.append(match.start(i))
-            rf_table = []
-            i = match.start()
-            while True:
+        #if all([i.isupper() for i in m_groupdict]):
+        # backward frameshift
+        for i in m_groupdict:
+            shift_pos.append(match.span(i))
+            shift_start.append(match.start(i))
+        rf_table = []
+        i = match.start()
+        while True:
+            rf_table.append(i)
+            i += 3
+            #if len(shift_pos) != 0 and i in shift_start:
+            if i in shift_start and m_groupdict[shift_start.index(i)].isupper():
+                shift_index = shift_start.index(i)
+                shift_val = 6-(shift_pos[shift_index][1]-shift_pos[shift_index][0])
                 rf_table.append(i)
-                i += 3
-                if len(shift_pos) != 0 and i in shift_start:
-                    shift_index = shift_start.index(i)
-                    shift_val = 6-(shift_pos[shift_index][1]-shift_pos[shift_index][0])
-                    rf_table.append(i)
-                    rf_table.append(i+3-shift_val)
-                    i = shift_pos[shift_index][1]
-                if i >= match.end():
-                    break
-            aa_num = 0
-            for aa in pro.seq:
-                if aa == "-":
-                    codon_seq += "---"
-                elif complete_protein is True and aa_num == 0:
-                    this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
-                    if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
-                        warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
-                                % (pro.id, aa, aa_num, nucl.id, this_codon))
-                        codon_seq += this_codon
-                        aa_num += 1
-                else:
-                    if aa_num < len(pro.seq.ungap('-'))-1 and \
-                            rf_table[aa_num+1]-rf_table[aa_num]-3 < 0:
-                        start = rf_table[aa_num]
-                        end   = start + (3-shift_val)
-                        ngap  = shift_val
-                        this_codon = nucl_seq._data[start:end] + '-'*ngap
-                    else:
-                        start = rf_table[aa_num]
-                        end   = start + 3
-                        this_codon = nucl_seq._data[start:end]
+                rf_table.append(i+3-shift_val)
+                i = shift_pos[shift_index][1]
+            elif i in shift_start and m_groupdict[shift_start.index(i)].islower():
+                i = shift_pos[shift_start.index(i)][1]
+            if i >= match.end():
+                break
+        aa_num = 0
+        for aa in pro.seq:
+            if aa == "-":
+                codon_seq += "---"
+            elif complete_protein is True and aa_num == 0:
+                this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
+                if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+                    warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
+                            % (pro.id, aa, aa_num, nucl.id, this_codon))
                     codon_seq += this_codon
                     aa_num += 1
-            return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
-                    rf_table=rf_table), id=nucl.id)
-        else:
-            for i in match.groupdict():
-                shift_pos.append(match.span(i))
-            # this rf_table is relative to nucl_seq
-            rf_table = []
-            i = match.start()
-            while True:
-                rf_table.append(i)
-                i += 3
-                if len(shift_pos) != 0 and i == shift_pos[0][0]:
-                    i = shift_pos[0][1]
-                    shift_pos.popleft()
-                # TODO:
-                # if i > shift_pos[0][0], then an exception should raise up.
-                if i >= match.end():
-                    break
-            aa_num = 0
-            for aa in pro.seq:
-                if aa == "-":
-                    codon_seq += "---"
-                elif complete_protein is True and aa_num == 0:
-                    this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
-                    if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
-                        warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
-                                % (pro.id, aa, aa_num, nucl.id, this_codon))
-                        codon_seq += this_codon
-                        aa_num += 1
+            else:
+                if aa_num < len(pro.seq.ungap('-'))-1 and \
+                        rf_table[aa_num+1]-rf_table[aa_num]-3 < 0:
+                    start = rf_table[aa_num]
+                    end   = start + (3-shift_val)
+                    ngap  = shift_val
+                    this_codon = nucl_seq._data[start:end] + '-'*ngap
+                elif rf_table[aa_num]-rf_table[aa_num-1]-3 > 0:
+                    start = rf_table[aa_num-1]+3
+                    end   = rf_table[aa_num]
+                    ngap  = 3-(rf_table[aa_num]-rf_table[aa_num-1]-3)
+                    this_codon = nucl_seq._data[start:end] + '-'*ngap + \
+                            nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
                 else:
-                    # two types of frameshift
-                    if aa_num < len(pro.seq.ungap('-'))-1 and \
-                            rf_table[aa_num+1]-rf_table[aa_num]-3 < 0:
-                        start = rf_table[aa_num]
-                        end   = rf_table[aa_num+1]-3
-                        ngap  = rf_table[aa_num+1]-rf_table[aa_num]-3
-                        this_codon = nucl_seq._data[start:end] + '-' * ngap
-                    elif rf_table[aa_num]-rf_table[aa_num-1]-3 > 0:
-                        start = rf_table[aa_num-1]+3
-                        end   = rf_table[aa_num]
-                        ngap  = 3-(rf_table[aa_num]-rf_table[aa_num-1]-3)
-                        this_codon = nucl_seq._data[start:end] + '-'*ngap + \
-                                nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
-                    else:
-                        this_codon = nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
-                    codon_seq += this_codon
-                    aa_num += 1
-            return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
+                    start = rf_table[aa_num]
+                    end   = start + 3
+                    this_codon = nucl_seq._data[start:end]
+                codon_seq += this_codon
+                aa_num += 1
+        return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
                     rf_table=rf_table), id=nucl.id)
 
+#        else:
+#            #for i in match.groupdict():
+#            for i in m_groupdict:
+#                if i.islower(): shift_pos.append(match.span(i))
+#            # this rf_table is relative to nucl_seq
+#            rf_table = []
+#            i = match.start()
+#            while True:
+#                rf_table.append(i)
+#                i += 3
+#                if len(shift_pos) != 0 and i == shift_pos[0][0]:
+#                    i = shift_pos[0][1]
+#                    shift_pos.popleft()
+#                # TODO:
+#                # if i > shift_pos[0][0], then an exception should raise up.
+#                if i >= match.end():
+#                    break
+#            aa_num = 0
+#            for aa in pro.seq:
+#                if aa == "-":
+#                    codon_seq += "---"
+#                elif complete_protein is True and aa_num == 0:
+#                    this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
+#                    if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+#                        warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
+#                                % (pro.id, aa, aa_num, nucl.id, this_codon))
+#                        codon_seq += this_codon
+#                        aa_num += 1
+#                else:
+#                    # two types of frameshift
+#                    if aa_num < len(pro.seq.ungap('-'))-1 and \
+#                            rf_table[aa_num+1]-rf_table[aa_num]-3 < 0:
+#                        start = rf_table[aa_num]
+#                        end   = rf_table[aa_num+1]-3
+#                        ngap  = rf_table[aa_num+1]-rf_table[aa_num]-3
+#                        this_codon = nucl_seq._data[start:end] + '-' * ngap
+#                    elif rf_table[aa_num]-rf_table[aa_num-1]-3 > 0:
+#                        start = rf_table[aa_num-1]+3
+#                        end   = rf_table[aa_num]
+#                        ngap  = 3-(rf_table[aa_num]-rf_table[aa_num-1]-3)
+#                        this_codon = nucl_seq._data[start:end] + '-'*ngap + \
+#                                nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
+#                    else:
+#                        this_codon = nucl_seq._data[rf_table[aa_num]:rf_table[aa_num]+3]
+#                    codon_seq += this_codon
+#                    aa_num += 1
+#            return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
+#                    rf_table=rf_table), id=nucl.id)
+#
 
 def _align_shift_recs(recs):
     """This function is useful to build alignment according to the
