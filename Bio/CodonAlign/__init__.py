@@ -20,7 +20,7 @@ from CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
         codon_table=default_codon_table, alphabet=None, \
-        complete_protein=False):
+        complete_protein=False, anchor_len=10):
     """Build a codon alignment from a protein alignment and corresponding
     nucleotide sequences
 
@@ -141,7 +141,8 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
         # Beaware that the following span corresponds to a ungapped 
         # nucleotide sequence.
         corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char, \
-                codon_table=codon_table, complete_protein=complete_protein)
+                codon_table=codon_table, complete_protein=complete_protein, \
+                anchor_len=anchor_len)
         if not corr_span:
             raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
                     % (pair[0].id, pair[1].id))
@@ -207,7 +208,8 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 
 def _check_corr(pro, nucl, gap_char='-', \
-        codon_table=default_codon_table, complete_protein=False):
+        codon_table=default_codon_table, complete_protein=False, \
+        anchor_len=10):
     """check if a give protein SeqRecord can be translated by another
     nucleotide SeqRecord.
     """
@@ -241,7 +243,7 @@ def _check_corr(pro, nucl, gap_char='-', \
     else:
         # Might caused by mismatches or frameshift, using anchors to
         # have a try
-        anchor_len = 10 # adjust this value to test performance
+        #anchor_len = 10 # adjust this value to test performance
         pro_seq = str(pro.seq).replace(gap_char, "")
         anchors = [pro_seq[i:(i+anchor_len)] for i in \
                 range(0, len(pro_seq), anchor_len)]
