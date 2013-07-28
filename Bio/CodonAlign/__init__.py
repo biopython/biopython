@@ -584,7 +584,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
                     end   = start + 3
                     this_codon = nucl_seq._data[start:end]
                     if not str(Seq(this_codon.upper()).translate()) == aa:
-                        warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
+                        warnings.warn("Codon of %s (%s %d) does not correspond to %s (%s)" \
                                 % (pro.id, aa, aa_num, nucl.id, this_codon))
                 codon_seq += this_codon
                 aa_num += 1
