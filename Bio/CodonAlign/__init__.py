@@ -5,7 +5,6 @@
 # as part of this package.
 
 """Code for dealing with Codon Alignment.
-
 """
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
@@ -304,33 +303,34 @@ def _check_corr(pro, nucl, gap_char='-', \
             # ten frameshift events are allowed in a sequence
             first_anchor = True
             shift_id_pos = 0
+            # check the first anchor
+            if first_anchor is True and anchor_pos[0][2] != 0:
+                shift_val_lst = [1,2,anchor_len-2,anchor_len-1,0]
+                sh_anc = anchors[0]
+                for shift_val in shift_val_lst:
+                    if shift_val == 0:
+                        qcodon = None
+                        break
+                    if shift_val in (1,2):
+                        sh_nuc_len = anchor_len*3+shift_val
+                    elif shift_val in (anchor_len-2,anchor_len-1):
+                        sh_nuc_len = anchor_len*3-(anchor_len-shift_val)
+                    if anchor_pos[0][0] >= sh_nuc_len:
+                        sh_nuc = nucl_seq[anchor_pos[0][0]-sh_nuc_len:anchor_pos[0][0]]
+                    else:
+                        #this is unlikely to produce the correct output
+                        sh_nuc = nucl_seq[:anchor_pos[0][0]]
+                    qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
+                            shift_val, aa2re, anchor_len, shift_id_pos)
+                    if qcodon is not None and qcodon != -1:
+                        # pro_re[0] should be '.'*anchor_len, therefore I replace it.
+                        pro_re[0] = qcodon
+                        break
+                if qcodon == -1:
+                    import warnings
+                    warnings.warn("first frameshift detection failed for %s" % nucl.id)
+            # check anchors in the middle
             for i in range(len(anchor_pos)-1):
-                if first_anchor is True and anchor_pos[0][2] != 0:
-                    shift_val_lst = [1,2,anchor_len-2,anchor_len-1,0]
-                    sh_anc = anchors[0]
-                    for shift_val in shift_val_lst:
-                        if shift_val == 0:
-                            qcodon = None
-                            break
-                        if shift_val in (1,2):
-                            sh_nuc_len = anchor_len*3+shift_val
-                        elif shift_val in (anchor_len-2,anchor_len-1):
-                            sh_nuc_len = anchor_len*3-(anchor_len-shift_val)
-                        if anchor_pos[0][0] >= sh_nuc_len:
-                            sh_nuc = nucl_seq[anchor_pos[0][0]-sh_nuc_len:anchor_pos[0][0]]
-                        else:
-                            #this is unlikely to produce the correct output
-                            sh_nuc = nucl_seq[:anchor_pos[0][0]]
-                        qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
-                                shift_val, aa2re, anchor_len, shift_id_pos)
-                        if qcodon is not None and qcodon != -1:
-                            # pro_re[0] should be '.'*anchor_len, therefore I replace it.
-                            pro_re[0] = qcodon
-                            break
-                    if qcodon == -1:
-                        import warnings
-                        warnings.warn("frameshift detection failed for %s" % nucl.id)
-                first_anchor = False
                 shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) % anchor_len
                 sh_anc = "".join(anchors[anchor_pos[i][2]:anchor_pos[i+1][2]])
                 sh_nuc = nucl_seq[anchor_pos[i][0]:anchor_pos[i+1][0]]
@@ -343,7 +343,34 @@ def _check_corr(pro, nucl, gap_char='-', \
                     qcodon = None
                 elif qcodon == -1:
                     import warnings
-                    warnings.warn("frameshift detection failed for %s" % nucl.id)
+                    warnings.warn("middle frameshift detection failed for %s" % nucl.id)
+            # check the last anchor
+            if anchor_pos[-1][2]+1 == len(anchors)-1:
+                sh_anc = anchors[-1]
+                this_anchor_len = len(sh_anc)
+                shift_val_lst = [1,2,this_anchor_len-2,this_anchor_len-1,0]
+                for shift_val in shift_val_lst:
+                    if shift_val == 0:
+                        qcodon = None
+                        break
+                    if shift_val in (1,2):
+                        sh_nuc_len = this_anchor_len*3+shift_val
+                    elif shift_val in (this_anchor_len-2,this_anchor_len-1):
+                        sh_nuc_len = this_anchor_len*3-(this_anchor_len-shift_val)
+                    if len(nucl_seq)-anchor_pos[-1][0] >= sh_nuc_len:
+                        sh_nuc = nucl_seq[anchor_pos[-1][0]:anchor_pos[-1][0]+sh_nuc_len]
+                    else:
+                        #this is unlikely to produce the correct output
+                        sh_nuc = nucl_seq[anchor_pos[-1][0]:]
+                    qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
+                            shift_val, aa2re, this_anchor_len, shift_id_pos)
+                    if qcodon is not None and qcodon != -1:
+                        pro_re.pop()
+                        pro_re[-1] = qcodon
+                        break
+                if qcodon == -1:
+                    import warnings
+                    warnings.warn("last frameshift detection failed for %s" % nucl.id)
             # try global match
             full_pro_re = "".join(pro_re)
             match = re.search(full_pro_re, nucl_seq)
