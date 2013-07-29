@@ -18,6 +18,9 @@ is supported and tested on standard Python 2.5, 2.6, 2.7 and 3.3.
 It was also tested under Jython 2.5, 2.7 and PyPy 1.9, 2.0.
 
 See the Biopython 1.62 beta release notes below for most changes.
+Additional contributors since the beta:
+
+Bertrand Néron (first contribution)
 
 ===================================================================
  
