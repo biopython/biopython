@@ -64,6 +64,17 @@ class Matrix(object):
     >>> m[0,1]
     7
 
+    Also you can delete or insert a column&row of elemets by index.
+
+    >>> m
+    Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
+    >>> del m['Alpha']
+    >>> m
+    Matrix(names=['Beta', 'Gamma', 'Delta'], matrix=[[0], [4, 0], [5, 6, 0]])
+    >>> m.insert('Alpha', [0, 7, 8, 9] , 0)
+    >>> m
+    Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
+
     """
 
     def __init__(self, names, matrix=None):
@@ -229,9 +240,9 @@ class Matrix(object):
         """Insert distances given the name and value"""
         if isinstance(name, str):
             # insert at the given index or at the end
-            if index is None or isinstance(index, int):
-                index = index and index or len(self)
-            else:
+            if index is None:
+                index = len(self)
+            if not isinstance(index, int):
                 raise TypeError("Invalid index type.")
             # insert name
             self.names.insert(index, name)
