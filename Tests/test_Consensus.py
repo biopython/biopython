@@ -29,10 +29,12 @@ class BitStringTest(unittest.TestCase):
 
 class ConsensusTest(unittest.TestCase):
     """Test for consensus methods"""
-    def test_consensus(self):
-        trees = list(Phylo.parse('./TreeConstruction/trees.tre', 'newick'))
-        # test _count_clades
-        bitstr_counts = Consensus._count_clades(trees)
+
+    def setUp(self):
+        self.trees = list(Phylo.parse('./TreeConstruction/trees.tre', 'newick'))
+
+    def test_count_clades(self):
+        bitstr_counts = Consensus._count_clades(self.trees)
         self.assertEqual(len(bitstr_counts), 6)
         self.assertEqual(bitstr_counts[BitString('11111')], 3)
         self.assertEqual(bitstr_counts[BitString('11000')], 2)
@@ -40,12 +42,13 @@ class ConsensusTest(unittest.TestCase):
         self.assertEqual(bitstr_counts[BitString('00110')], 2)
         self.assertEqual(bitstr_counts[BitString('00011')], 1)
         self.assertEqual(bitstr_counts[BitString('01111')], 1)
-        # test stric_consensus
-        consensus_tree = strict_consensus(trees)
+
+    def test_strict_consensus(self):
+        consensus_tree = strict_consensus(self.trees)
         Phylo.write(consensus_tree, './TreeConstruction/consensus.tre', 'newick')
-        consensus_tree = strict_consensus(trees[:2])
+        consensus_tree = strict_consensus(self.trees[:2])
         Phylo.write(consensus_tree, './TreeConstruction/consensus1.tre', 'newick')
-        consensus_tree = strict_consensus(trees[::2])
+        consensus_tree = strict_consensus(self.trees[::2])
         Phylo.write(consensus_tree, './TreeConstruction/consensus2.tre', 'newick')
 
 if __name__ == '__main__':
