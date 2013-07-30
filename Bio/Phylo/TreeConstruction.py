@@ -4,6 +4,7 @@
 # as part of this package.
 
 """Classes and methods for tree construction"""
+__docformat__ = "restructuredtext en"
 
 import itertools
 import copy
@@ -13,7 +14,7 @@ from Bio.SubsMat.MatrixInfo import *
 
 class Matrix(object):
     """A base class for distance matrix or scoring matrix that accepts
-     a list of names and a lower triangular matrix.
+    a list of names and a lower triangular matrix.
 
     matrix = [[0],
               [1, 0],
@@ -24,6 +25,45 @@ class Matrix(object):
     [1,0,3,5]
     [2,3,0,6]
     [4,5,6,0]
+
+    :Parameters:
+        names : list
+            names of elements, used for indexing 
+        matrix : list
+            nested list of numerical lists in lower triangular format
+
+    Example
+    -------
+
+    >>> from TreeConstruction import Matrix
+    >>> names = ['Alpha', 'Beta', 'Gamma', 'Delta']
+    >>> matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
+    >>> m = Matrix(names, matrix)
+    >>> m
+    Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])
+    
+    You can use two indices to get or assign an element in the matrix.
+    
+    >>> m[1,2]
+    3
+    >>> m['Beta','Gamma']
+    3
+    >>> m['Beta','Gamma'] = 4
+    >>> m['Beta','Gamma']
+    4
+
+    Further more, you can use one index to get or assign a list of elements related to that index.
+    
+    >>> m[0]
+    [0, 1, 2, 4]
+    >>> m['Alpha']
+    [0, 1, 2, 4]
+    >>> m['Alpha'] = [0, 7, 8, 9]
+    >>> m[0]
+    [0, 7, 8, 9]
+    >>> m[0,1]
+    7
+
     """
 
     def __init__(self, names, matrix=None):
@@ -172,10 +212,16 @@ class Matrix(object):
     def __len__(self):
         """Matrix length"""
         return len(self.names)
+    
+    def __repr__(self):
+        return self.__class__.__name__ \
+        + "(names=%s, matrix=%s)" \
+        % tuple(map(repr, (self.names, self.matrix)))
 
     def __str__(self):
         """Get a lower triangular matrix string"""
-        matrix_string = '\n'.join([self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]]) for i in range(0, len(self))])
+        matrix_string = '\n'.join([self.names[i] + "\t" + 
+            "\t".join([str(n) for n in self.matrix[i]]) for i in range(0, len(self))])
         matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
         return matrix_string
 

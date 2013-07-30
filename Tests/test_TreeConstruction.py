@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the Bio.TreeConstruction module."""
+"""Unit tests for the Bio.Phylo.TreeConstruction module."""
 
 import logging
 import unittest
@@ -23,15 +23,17 @@ logging.basicConfig(filename='./TreeConstruction/test.log', level=logging.DEBUG)
 
 class DistanceMatrixTest(unittest.TestCase):
     """Test for DistanceMatrix construction and manipulation"""
+    def setUp(self):
+        self.names = ['Alpha', 'Beta', 'Gamma', 'Delta']
+        self.matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
 
     def test_good_construction(self):
-        names = ['Alpha', 'Beta', 'Gamma', 'Delta']
-        matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
-        dm = DistanceMatrix(names, matrix)
+        dm = DistanceMatrix(self.names, self.matrix)
         self.assertTrue(isinstance(dm, TreeConstruction.DistanceMatrix))
         self.assertEqual(dm.names[0], 'Alpha')
         self.assertEqual(dm.matrix[2][1], 3)
         self.assertEqual(len(dm), 4)
+        self.assertEqual(repr(dm), "DistanceMatrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])")
 
     def test_bad_construction(self):
         self.assertRaises(TypeError, DistanceMatrix, ['Alpha', 100, 'Gamma', 'Delta'], [[0], [0.1, 0], [0.2, 0.3, 0], [0.4, 0.5, 0.6, 0]])
@@ -41,9 +43,7 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertRaises(ValueError, DistanceMatrix, ['Alpha', 'Beta', 'Gamma', 'Delta'], [[0], [0.1], [0.2, 0.3, 0.4], [0.4, 0.5, 0.6]])
 
     def test_good_manipulation(self):
-        names = ['Alpha', 'Beta', 'Gamma', 'Delta']
-        matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
-        dm = DistanceMatrix(names, matrix)
+        dm = DistanceMatrix(self.names, self.matrix)
         # getitem
         self.assertEqual(dm[1], [1, 0, 3, 5])
         self.assertEqual(dm[2, 1], 3)
@@ -60,7 +60,7 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertEqual(dm.names, ['Alpha', 'Gamma', 'Delta'])
         self.assertEqual(dm.matrix, [[0], [20, 0], [40, 6, 0]])
         dm.insert('Beta', [1, 0, 3, 5], 1)
-        self.assertEqual(dm.names, names)
+        self.assertEqual(dm.names, self.names)
         self.assertEqual(dm.matrix, [[0], [1, 0], [20, 3, 0], [40, 5, 6, 0]])
         del dm['Alpha']
         self.assertEqual(dm.names, ['Beta', 'Gamma', 'Delta'])
@@ -70,9 +70,7 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertEqual(dm.matrix, [[0], [3, 0], [5, 6, 0], [1, 2, 4, 0]])
 
     def test_bad_manipulation(self):
-        names = ['Alpha', 'Beta', 'Gamma', 'Delta']
-        matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
-        dm = DistanceMatrix(names, matrix)
+        dm = DistanceMatrix(self.names, self.matrix)
         #getitem
         self.assertRaises(ValueError, dm.__getitem__, 'A')
         self.assertRaises(ValueError, dm.__getitem__, ('Alpha', 'A'))
@@ -117,29 +115,23 @@ class DistanceCalculatorTest(unittest.TestCase):
 
 class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor"""
+    def setUp(self):
+        self.aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        calculator = DistanceCalculator(self.aln, 'blosum62')
+        dm = calculator.get_distance()
+        #logging.info("DistanceMatrix:\n" + str(dm))
+        self.constructor = DistanceTreeConstructor(dm)
 
     def test_upgma(self):
-        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-
-        calculator = DistanceCalculator(aln, 'blosum62')
-        dm = calculator.get_distance()
-        logging.info("DistanceMatrix:\n" + str(dm))
-        constructor = DistanceTreeConstructor(dm)
-        tree = constructor.upgma()
+        tree = self.constructor.upgma()
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        logging.info("UPGMA Tree:\n" + str(tree))
+        #logging.info("UPGMA Tree:\n" + str(tree))
         Phylo.write(tree, './TreeConstruction/upgma.tre', 'newick')
 
     def test_nj(self):
-        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-
-        calculator = DistanceCalculator(aln, 'blosum62')
-        dm = calculator.get_distance()
-        logging.info("DistanceMatrix:\n" + str(dm))
-        constructor = DistanceTreeConstructor(dm)
-        tree = constructor.nj()
+        tree = self.constructor.nj()
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        logging.info("NJ Tree:\n" + str(tree))
+        #logging.info("NJ Tree:\n" + str(tree))
         Phylo.write(tree, './TreeConstruction/nj.tre', 'newick')
 
 class ParsimonyScorerTest(unittest.TestCase):
