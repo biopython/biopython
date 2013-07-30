@@ -209,37 +209,6 @@ class Matrix(object):
         else:
             raise TypeError("Invalid index type.")
 
-    def __len__(self):
-        """Matrix length"""
-        return len(self.names)
-    
-    def __repr__(self):
-        return self.__class__.__name__ \
-        + "(names=%s, matrix=%s)" \
-        % tuple(map(repr, (self.names, self.matrix)))
-
-    def __str__(self):
-        """Get a lower triangular matrix string"""
-        matrix_string = '\n'.join([self.names[i] + "\t" + 
-            "\t".join([str(n) for n in self.matrix[i]]) for i in range(0, len(self))])
-        matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
-        return matrix_string
-
-
-class DistanceMatrix(Matrix):
-    """Distance matrix class that can be used for distance based tree
-     algorithms.
-    All diagonal elements will be zero no matter what the users provide.
-    """
-
-    def __init__(self, names, matrix=None):
-        Matrix.__init__(self, names, matrix)
-        self._set_zero_diagonal()
-
-    def __setitem__(self, item, value):
-        Matrix.__setitem__(self, item, value)
-        self._set_zero_diagonal()
-
     def __delitem__(self, item):
         """Delete related distances by the index or name"""
         index = None
@@ -274,6 +243,37 @@ class DistanceMatrix(Matrix):
             self[index] = value
         else:
             raise TypeError("Invalid name type.")
+
+    def __len__(self):
+        """Matrix length"""
+        return len(self.names)
+    
+    def __repr__(self):
+        return self.__class__.__name__ \
+        + "(names=%s, matrix=%s)" \
+        % tuple(map(repr, (self.names, self.matrix)))
+
+    def __str__(self):
+        """Get a lower triangular matrix string"""
+        matrix_string = '\n'.join([self.names[i] + "\t" + 
+            "\t".join([str(n) for n in self.matrix[i]]) for i in range(0, len(self))])
+        matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
+        return matrix_string
+
+
+class DistanceMatrix(Matrix):
+    """Distance matrix class that can be used for distance based tree
+     algorithms.
+    All diagonal elements will be zero no matter what the users provide.
+    """
+
+    def __init__(self, names, matrix=None):
+        Matrix.__init__(self, names, matrix)
+        self._set_zero_diagonal()
+
+    def __setitem__(self, item, value):
+        Matrix.__setitem__(self, item, value)
+        self._set_zero_diagonal()
 
     def _set_zero_diagonal(self):
         """set all diagonal elements to zero"""
