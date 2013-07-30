@@ -5,6 +5,7 @@
 
 """Unit tests for the Bio.Phylo.Consensus module."""
 import unittest
+import StringIO
 from Bio import Phylo
 from Bio.Phylo import Consensus
 from Bio.Phylo.Consensus import *
@@ -44,12 +45,24 @@ class ConsensusTest(unittest.TestCase):
         self.assertEqual(bitstr_counts[BitString('01111')], 1)
 
     def test_strict_consensus(self):
+        ref_trees = open('./TreeConstruction/consensus_refs.tre')
+        # three trees
         consensus_tree = strict_consensus(self.trees)
-        Phylo.write(consensus_tree, './TreeConstruction/consensus.tre', 'newick')
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_trees.readline())
+        # tree 1 and tree 2
         consensus_tree = strict_consensus(self.trees[:2])
-        Phylo.write(consensus_tree, './TreeConstruction/consensus1.tre', 'newick')
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_trees.readline())
+        # tree 1 and tree 3
         consensus_tree = strict_consensus(self.trees[::2])
-        Phylo.write(consensus_tree, './TreeConstruction/consensus2.tre', 'newick')
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_trees.readline())
+        ref_trees.close()
+        tree_file.close()
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
