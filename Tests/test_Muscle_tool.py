@@ -276,7 +276,6 @@ class SimpleAlignTest(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
-        os.remove(temp_large_fasta_file)
         #See if quiet worked:
         self.assertEqual("", child.stderr.read().strip())
         return_code = child.wait()
@@ -284,6 +283,7 @@ class SimpleAlignTest(unittest.TestCase):
         child.stdout.close()
         child.stderr.close()
         del child
+        os.remove(temp_large_fasta_file)
 
     def test_using_stdin(self):
         """Simple alignment using stdin"""
