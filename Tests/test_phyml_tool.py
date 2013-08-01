@@ -22,8 +22,8 @@ if sys.platform=="win32":
         "Testing PhyML on Windows not supported yet")
 else:
     import commands
-    output = commands.getoutput("phyml -version")
-    if "not found" not in output and "PhyML v3.0" in output:
+    output = commands.getoutput("phyml --version")
+    if "not found" not in output and "20" in output:
         phyml_exe = "phyml"
 
 if not phyml_exe:
