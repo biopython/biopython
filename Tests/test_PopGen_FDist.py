@@ -14,6 +14,16 @@ from Bio import MissingExternalDependencyError
 #Tests FDist2 related code. Note: this case requires fdist2 (four binaries)
 #test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
 
+def is_pypy():
+    import platform
+    try:
+        if platform.python_implementation() == 'PyPy':
+            return True
+    except AttributeError:
+        #New in Python 2.6, not in Jython yet either
+        pass
+    return False
+
 wanted = dict()
 for path in os.environ['PATH'].split(os.pathsep):
     try:
@@ -30,9 +40,9 @@ if len(wanted) != 4:
 del wanted
 
 import sys
-if sys.version_info[0] == 3 and sys.version_info < (3, 2, 4):
+if not is_pypy() and sys.version_info[0] == 3 and sys.version_info < (3, 2, 4):
     raise MissingExternalDependencyError("Under Python 3, please use Python 3.2.4"
-               " onwards for this test - see http://bugs.python.org/issue16903")
+                                         " onwards for this test - see http://bugs.python.org/issue16903")
 
 
 class AppTest(unittest.TestCase):
