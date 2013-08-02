@@ -235,6 +235,9 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
+        if "-ignore_msa_master" in extra and exe_name=="psiblast":
+            #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
+            extra.remove("-ignore_msa_master")                                        
         if exe_name == "blastx":
             #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-comp_based_stats",
