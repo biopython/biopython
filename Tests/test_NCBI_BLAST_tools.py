@@ -18,6 +18,7 @@ from Bio.Blast import Applications
 
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
+          "rpsblast+", #For Debian
           "rpsblast", "rpstblastn", "psiblast", "blast_formatter"]
 exe_names = {}
 
@@ -60,6 +61,12 @@ for folder in likely_dirs:
         #else :
         #    print "Rejecting", exe_name
         del exe_name, name
+
+#To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias
+wanted.remove("rpsblast+")
+if "rpsblast+" in exe_names:
+    exe_names["rpsblast"] = exe_names["rpsblast+"]
+    del exe_names["rpsblast+"]
 
 #We can cope with blast_formatter being missing, only added in BLAST 2.2.24+
 if len(set(exe_names).difference(["blast_formatter"])) < len(wanted)-1 :
