@@ -158,6 +158,14 @@ class XXmotifCommandline(AbstractCommandline):
                    "expected end position for motif occurrences relative to anchor point (--localization)",
                    checker_function = lambda x: isinstance(x, int),
                    equate = False),
+
+          # XXmotif wrapper options
+          _Switch(["--XXmasker"],
+                   "mask the input sequences for homology, repeats and low complexity regions"),
+          _Switch(["--XXmasker-pos"],
+                   "mask only the positive set for homology, repeats and low complexity regions"),
+          _Switch(["--no-graphics"],
+                   "run XXmotif without graphical output"),
           ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
