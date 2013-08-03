@@ -34,7 +34,7 @@ class AlignAceCommandline(AbstractCommandline):
 
     Example:
 
-    >>> from Bio.Motif.Applications import AlignAceCommandline
+    >>> from Bio.motifs.applications import AlignAceCommandline
     >>> in_file = "sequences.fasta"
     >>> alignace_cline = AlignAceCommandline(infile=in_file, gcback=0.55)
     >>> print alignace_cline
@@ -101,7 +101,7 @@ class CompareAceCommandline(AbstractCommandline):
 
     Example:
 
-    >>> from Bio.Motif.Applications import CompareAceCommandline
+    >>> from Bio.motifs.applications import CompareAceCommandline
     >>> m1_file = "sequences1.fasta"
     >>> m2_file = "sequences2.fasta"
     >>> compareace_cline = CompareAceCommandline(motif1=m1_file, motif2=m2_file)
