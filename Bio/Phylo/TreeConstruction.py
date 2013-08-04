@@ -321,6 +321,13 @@ class DistanceCalculator(object):
     >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
     >>> from Bio import AlignIO
     >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
+    >>> print aln
+    SingleLetterAlphabet() alignment with 5 rows and 13 columns
+    AACGTGGCCACAT Alpha
+    AAGGTCGCCACAC Beta
+    GAGATTTCCGCCT Delta
+    GAGATCTCCGCCC Epsilon
+    CAGTTCGCCACAA Gamma
 
     DNA calculator with 'identity' model:
 
@@ -623,101 +630,15 @@ class DistanceTreeConstructor(TreeContructor):
             height = height + max([self._height_of(c) for c in clade.clades])
         return height
 
-######################### Parsimony Classes ##########################
+######################### Tree Scoring and Searching Classes ##########################
 
-
-class ParsimonyTreeConstructor(TreeContructor):
-    """Parsimony tree constructor"""
-    def __init__(self, alignment, searcher, starting_tree=None):
-        self.alignment = alignment
-        self.searcher = searcher
-        self.starting_tree = starting_tree
-
-    def build_tree(self):
-        return self.searcher.search(self.starting_tree, self.alignment)
-
-
-class ParsimonyScorer(object):
-    """Parsimony scorer with a scoring matrix"""
-    def __init__(self, matrix=None):
-        self.matrix = matrix
+class Scorer(object):
+    """Base class for all tree scoring methods"""
 
     def get_score(self, tree, alignment):
-        """Calculate and return the parsimony score given a tree and
-        the MSA using the Fitch algorithm without the penalty matrix
-        the Sankoff algorithm with the matrix"""
-        # make sure the tree is rooted and bifurcating
-        if not tree.is_bifurcating():
-            raise ValueError("The tree provided should be bifurcating.")
-        if not tree.rooted:
-            tree.root_at_midpoint()
-        # sort tree terminals and alignment
-        terms = tree.get_terminals()
-        terms.sort(key=lambda term: term.name)
-        alignment.sort()
-        if not all([t.name == a.id for t, a in zip(terms, alignment)]):
-            raise ValueError("Taxon names of the input tree should be the same with the alignment.")
-        #term_align = dict(zip(terms, alignment))
-        score = 0
-        for i in range(len(alignment[0])):
-            # parsimony score for column_i
-            score_i = 0
-            # get column
-            column_i = alignment[:, i]
-            # skip non-informative column
-            if column_i == len(column_i) * column_i[0]:
-                continue
-
-            #### start calculating score_i using the tree and column_i
-
-            ## Fitch algorithm without the penalty matrix
-            if not self.matrix:
-                # init by mapping terminal clades and states in column_i
-                clade_states = dict(zip(terms, [set([c]) for c in column_i]))
-                for clade in tree.get_nonterminals(order="postorder"):
-                    clade_childs = clade.clades
-                    left_state = clade_states[clade_childs[0]]
-                    right_state = clade_states[clade_childs[1]]
-                    state = left_state & right_state
-                    if not state:
-                        state = left_state | right_state
-                        score_i = score_i + 1
-                    clade_states[clade] = state
-            ## Sankoff algorithm with the penalty matrix
-            else:
-                inf = float('inf')
-                # init score arrays for terminal clades
-                alphabet = self.matrix.names
-                length = len(alphabet)
-                clade_scores = {}
-                for j in range(len(column_i)):
-                    array = [inf] * length
-                    index = alphabet.index(column_i[j])
-                    array[index] = 0
-                    clade_scores[terms[j]] = array
-                # bottom up calculation
-                for clade in tree.get_nonterminals(order="postorder"):
-                    clade_childs = clade.clades
-                    left_score = clade_scores[clade_childs[0]]
-                    right_score = clade_scores[clade_childs[1]]
-                    array = []
-                    for m in range(length):
-                        min_l = inf
-                        min_r = inf
-                        for n in range(length):
-                            sl = self.matrix[alphabet[m], alphabet[n]] + left_score[n]
-                            sr = self.matrix[alphabet[m], alphabet[n]] + right_score[n]
-                            if min_l > sl:
-                                min_l = sl
-                            if min_r > sr:
-                                min_r = sr
-                        array.append(min_l + min_r)
-                    clade_scores[clade] = array
-                # minimum from root score
-                score_i = min(array)
-                # TODO: resolve internal states
-            score = score + score_i
-        return score
+        """Caller to get the score of a tree for the given alignment.
+        This should be implemented in subclass"""
+        raise NotImplementedError("Method not implemented!")
 
 
 class TreeSearcher(object):
@@ -730,13 +651,32 @@ class TreeSearcher(object):
 
 
 class NNITreeSearcher(TreeSearcher):
-    """Tree searching class of NI(Nearest Neighbor Interchanges)
-     algorithm"""
+    """Tree searching class of NNI(Nearest Neighbor Interchanges)
+     algorithm.
+
+    :Parameters:
+        scorer: ParsimonyScorer
+            parsimony scorer to calculate the parsimony score of
+            different trees during NNI algorithm.
+     """
 
     def __init__(self, scorer):
-        self.scorer = scorer
+        if isinstance(scorer, Scorer):
+            self.scorer = scorer
+        else:
+            raise TypeError("Must provide a Scorer object.")
 
     def search(self, starting_tree, alignment):
+        """Implement the TreeSearcher.search method.
+
+        :Parameters:
+           starting_tree : BaseTree
+               starting tree of NNI method.
+           alignment: MultipleSeqAlignment
+               multiple sequence alignment used to calculate parsimony
+               score of different NNI trees.
+        """
+
         return self._nni(starting_tree, alignment)
 
     def _nni(self, starting_tree, alignment):
@@ -758,7 +698,7 @@ class NNITreeSearcher(TreeSearcher):
 
     def _get_neighbors(self, tree):
         """Get all neighbor trees of the given tree(currently only
-         for rooted tree)"""
+         for binary rooted tree)"""
         # make child to parent dict
         parents = {}
         for clade in tree.find_clades():
@@ -854,3 +794,159 @@ class NNITreeSearcher(TreeSearcher):
                     parent.clades.insert(0, sister)
                     clade.clades.insert(0, left)
         return neighbors
+
+######################### Parsimony Classes ##########################
+
+
+class ParsimonyScorer(Scorer):
+    """Parsimony scorer with a scoring matrix.
+
+    This is a combination of Fitch algorithm and Sankoff algorithm. 
+    See ParsimonyTreeConstructor for usage.
+
+    :Parameters:
+        matrix: Matrix
+            scoring matrix used in parsimony score calculation.
+    """
+    def __init__(self, matrix=None):
+        if not matrix or isinstance(matrix, Matrix):
+            self.matrix = matrix
+        else:
+            raise TypeError("Must provide a Matrix object.")
+
+    def get_score(self, tree, alignment):
+        """Calculate and return the parsimony score given a tree and
+        the MSA using the Fitch algorithm without the penalty matrix
+        the Sankoff algorithm with the matrix"""
+        # make sure the tree is rooted and bifurcating
+        if not tree.is_bifurcating():
+            raise ValueError("The tree provided should be bifurcating.")
+        if not tree.rooted:
+            tree.root_at_midpoint()
+        # sort tree terminals and alignment
+        terms = tree.get_terminals()
+        terms.sort(key=lambda term: term.name)
+        alignment.sort()
+        if not all([t.name == a.id for t, a in zip(terms, alignment)]):
+            raise ValueError("Taxon names of the input tree should be the same with the alignment.")
+        #term_align = dict(zip(terms, alignment))
+        score = 0
+        for i in range(len(alignment[0])):
+            # parsimony score for column_i
+            score_i = 0
+            # get column
+            column_i = alignment[:, i]
+            # skip non-informative column
+            if column_i == len(column_i) * column_i[0]:
+                continue
+
+            #### start calculating score_i using the tree and column_i
+
+            ## Fitch algorithm without the penalty matrix
+            if not self.matrix:
+                # init by mapping terminal clades and states in column_i
+                clade_states = dict(zip(terms, [set([c]) for c in column_i]))
+                for clade in tree.get_nonterminals(order="postorder"):
+                    clade_childs = clade.clades
+                    left_state = clade_states[clade_childs[0]]
+                    right_state = clade_states[clade_childs[1]]
+                    state = left_state & right_state
+                    if not state:
+                        state = left_state | right_state
+                        score_i = score_i + 1
+                    clade_states[clade] = state
+            ## Sankoff algorithm with the penalty matrix
+            else:
+                inf = float('inf')
+                # init score arrays for terminal clades
+                alphabet = self.matrix.names
+                length = len(alphabet)
+                clade_scores = {}
+                for j in range(len(column_i)):
+                    array = [inf] * length
+                    index = alphabet.index(column_i[j])
+                    array[index] = 0
+                    clade_scores[terms[j]] = array
+                # bottom up calculation
+                for clade in tree.get_nonterminals(order="postorder"):
+                    clade_childs = clade.clades
+                    left_score = clade_scores[clade_childs[0]]
+                    right_score = clade_scores[clade_childs[1]]
+                    array = []
+                    for m in range(length):
+                        min_l = inf
+                        min_r = inf
+                        for n in range(length):
+                            sl = self.matrix[alphabet[m], alphabet[n]] + left_score[n]
+                            sr = self.matrix[alphabet[m], alphabet[n]] + right_score[n]
+                            if min_l > sl:
+                                min_l = sl
+                            if min_r > sr:
+                                min_r = sr
+                        array.append(min_l + min_r)
+                    clade_scores[clade] = array
+                # minimum from root score
+                score_i = min(array)
+                # TODO: resolve internal states
+            score = score + score_i
+        return score
+
+class ParsimonyTreeConstructor(TreeContructor):
+    """Parsimony tree constructor.
+
+    :Parameters:
+        alignment: MultipleSeqAlignment
+            multiple sequence alignment to calculate parsimony tree.
+        searcher: TreeSearcher
+            tree searcher to search the best parsimony tree.
+        starting_tree: BaseTree
+            starting tree provided to the searcher.
+
+    Example
+    --------
+
+    >>> from Bio import AlignIO
+    >>> from TreeConstruction import *
+    >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
+    >>> print aln
+    SingleLetterAlphabet() alignment with 5 rows and 13 columns
+    AACGTGGCCACAT Alpha
+    AAGGTCGCCACAC Beta
+    GAGATTTCCGCCT Delta
+    GAGATCTCCGCCC Epsilon
+    CAGTTCGCCACAA Gamma
+    >>> starting_tree = Phylo.read('Tests/TreeConstruction/nj.tre', 'newick')
+    >>> print tree
+    Tree(weight=1.0, rooted=False)
+        Clade(branch_length=0.0, name='Inner3')
+            Clade(branch_length=0.01421, name='Inner2')
+                Clade(branch_length=0.23927, name='Inner1')
+                    Clade(branch_length=0.08531, name='Epsilon')
+                    Clade(branch_length=0.13691, name='Delta')
+                Clade(branch_length=0.29231, name='Alpha')
+            Clade(branch_length=0.07477, name='Beta')
+            Clade(branch_length=0.17523, name='Gamma')
+    >>> from TreeConstruction import *
+    >>> scorer = ParsimonyScorer()
+    >>> searcher = NNITreeSearcher(scorer)
+    >>> constructor = ParsimonyTreeConstructor(aln, searcher, starting_tree)
+    >>> pars_tree = constructor.build_tree()
+    >>> print pars_tree
+    Tree(weight=1.0, rooted=True)
+        Clade(branch_length=0.0)
+            Clade(branch_length=0.197335, name='Inner1')
+                Clade(branch_length=0.13691, name='Delta')
+                Clade(branch_length=0.08531, name='Epsilon')
+            Clade(branch_length=0.041935, name='Inner2')
+                Clade(branch_length=0.01421, name='Inner3')
+                    Clade(branch_length=0.17523, name='Gamma')
+                    Clade(branch_length=0.07477, name='Beta')
+                Clade(branch_length=0.29231, name='Alpha')
+    """
+    def __init__(self, alignment, searcher, starting_tree=None):
+        self.alignment = alignment
+        self.searcher = searcher
+        self.starting_tree = starting_tree
+
+    def build_tree(self):
+        return self.searcher.search(self.starting_tree, self.alignment)
