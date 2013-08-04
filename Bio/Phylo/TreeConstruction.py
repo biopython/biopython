@@ -35,7 +35,7 @@ class Matrix(object):
     Example
     -------
 
-    >>> from TreeConstruction import Matrix
+    >>> from Bio.Phylo.TreeConstruction import Matrix
     >>> names = ['Alpha', 'Beta', 'Gamma', 'Delta']
     >>> matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
     >>> m = Matrix(names, matrix)
@@ -237,7 +237,14 @@ class Matrix(object):
         del self.names[index]
 
     def insert(self, name, value, index=None):
-        """Insert distances given the name and value"""
+        """Insert distances given the name and value.
+
+        :Parameters:
+        name : str
+            name of a row/col to be inserted
+        value : list
+            a row/col of values to be inserted
+        """
         if isinstance(name, str):
             # insert at the given index or at the end
             if index is None:
@@ -296,7 +303,47 @@ class DistanceCalculator(object):
     """Class to calculate the distance matrix from a DNA or Protein
     Multiple Sequence Alignment(MSA) and the given name of the
     substitution model.
+
     Currently only scoring matrices are used.
+
+    :Parameters:
+        msa : MultipleSeqAlignment
+            DNA or Protein multiple sequence alignment.  
+        model : str
+            Name of the model matrix to be used to calculate distance.
+            The attribute `dna_matrices` contains the available model
+            names for DNA sequences and `protein_matrices` for protein
+            sequences.
+
+    Example
+    -------
+
+    >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
+    >>> from Bio import AlignIO
+    >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
+
+    DNA calculator with 'identity' model:
+
+    >>> calculator = DistanceCalculator(aln, 'identity')
+    >>> dm = calculator.get_distance()
+    >>> print dm
+    Alpha   0
+    Beta    0.230769230769  0
+    Gamma   0.384615384615  0.230769230769  0
+    Delta   0.538461538462  0.538461538462  0.538461538462  0
+    Epsilon 0.615384615385  0.384615384615  0.461538461538  0.153846153846  0
+            Alpha           Beta            Gamma           Delta           Epsilon
+
+    Protein calculator with 'blosum62' model:
+    >>> calculator = DistanceCalculator(aln, 'blosum62')
+    >>> dm = calculator.get_distance()
+    >>> print dm
+    Alpha   0
+    Beta    0.369047619048  0
+    Gamma   0.493975903614  0.25            0
+    Delta   0.585365853659  0.547619047619  0.566265060241  0
+    Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
+            Alpha           Beta            Gamma           Delta           Epsilon
     """
 
     dna_alphabet = ['A', 'T', 'C', 'G']
@@ -340,7 +387,7 @@ class DistanceCalculator(object):
         if isinstance(msa, MultipleSeqAlignment):
             self.msa = msa
         else:
-            raise ValueError("Must provide a MultipleSeqAlignment object.")
+            raise TypeError("Must provide a MultipleSeqAlignment object.")
 
         dna_keys = self.dna_matrices.keys()
         protein_keys = self.protein_matrices.keys()
@@ -396,9 +443,54 @@ class TreeContructor(object):
 
 
 class DistanceTreeConstructor(TreeContructor):
-    """Distance based tree constructor"""
+    """Distance based tree constructor.
+
+    :Parameters:
+        distance_matrix : DistanceMatrix
+            The distance matrix for tree construction.
+
+    Example
+    --------
+
+    >>> from TreeConstruction import DistanceTreeConstructor
+    >>> constructor = DistanceTreeConstructor(dm)
+
+    UPGMA Tree: 
+
+    >>> upgmatree = constructor.upgma()
+    >>> print upgmatree
+    Tree(rooted=True)
+        Clade(name='Inner4')
+            Clade(branch_length=0.171955155115, name='Inner1')
+                Clade(branch_length=0.111111111111, name='Epsilon')
+                Clade(branch_length=0.111111111111, name='Delta')
+            Clade(branch_length=0.0673103855608, name='Inner3')
+                Clade(branch_length=0.0907558806655, name='Inner2')
+                    Clade(branch_length=0.125, name='Gamma')
+                    Clade(branch_length=0.125, name='Beta')
+                Clade(branch_length=0.215755880666, name='Alpha')
+
+    NJ Tree:
+
+    >>> njtree = constructor.nj()
+    >>> print njtree
+    Tree(rooted=False)
+        Clade(name='Inner3')
+            Clade(branch_length=0.0142054862889, name='Inner2')
+                Clade(branch_length=0.239265540676, name='Inner1')
+                    Clade(branch_length=0.0853101915988, name='Epsilon')
+                    Clade(branch_length=0.136912030623, name='Delta')
+                Clade(branch_length=0.292306275042, name='Alpha')
+            Clade(branch_length=0.0747705106139, name='Beta')
+            Clade(branch_length=0.175229489386, name='Gamma')
+
+
+    """
     def __init__(self, distance_matrix):
-        self.distance_matrix = distance_matrix
+        if isinstance(distance_matrix, DistanceMatrix):
+            self.distance_matrix = distance_matrix
+        else:
+            raise TypeError("Must provide a DistanceMatrix object.")
 
     def upgma(self):
         """Construct and return an UPGMA(Unweighted Pair Group Method
@@ -519,7 +611,7 @@ class DistanceTreeConstructor(TreeContructor):
             clades[0].branch_length = dm[1, 0]
             clades[1].clades.append(clades[0])
 
-        return BaseTree.Tree(clades[0])
+        return BaseTree.Tree(clades[0], rooted=False)
 
     def _height_of(self, clade):
         """calculate height of the clade -- the longest path to one of
