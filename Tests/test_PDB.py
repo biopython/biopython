@@ -891,6 +891,32 @@ class Atom_Element(unittest.TestCase):
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
 
+    def test_hydrogens(self):
+
+        def quick_assign(fullname):
+            return Atom.Atom(fullname.strip(), None, None, None, None,
+                             fullname, None).element
+
+        pdb_elements = dict(
+            H=(
+                ' H  ', ' HA ', ' HB ', ' HD1', ' HD2', ' HE ', ' HE1', ' HE2',
+                ' HE3', ' HG ', ' HG1', ' HH ', ' HH2', ' HZ ', ' HZ2', ' HZ3',
+                '1H  ', '1HA ', '1HB ', '1HD ', '1HD1', '1HD2', '1HE ', '1HE2',
+                '1HG ', '1HG1', '1HG2', '1HH1', '1HH2', '1HZ ', '2H  ', '2HA ',
+                '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
+                '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
+                '3HE ', '3HG1', '3HG2', '3HZ '
+            ),
+            O=(' OH ',),
+            C=(' CH2',),
+            N=(' NH1', ' NH2'),
+        )
+
+        for element, atom_names in pdb_elements.iteritems():
+            for fullname in atom_names:
+                e = quick_assign(fullname)
+                #warnings.warn("%s %s" % (fullname, e))
+                self.assertEqual(e, element)
 
 class IterationTests(unittest.TestCase):
 
