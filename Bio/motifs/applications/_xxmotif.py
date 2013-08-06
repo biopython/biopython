@@ -160,11 +160,11 @@ class XXmotifCommandline(AbstractCommandline):
                    equate = False),
 
           # XXmotif wrapper options
-          _Switch(["--XXmasker"],
+          _Switch(["--XXmasker", "masker"],
                    "mask the input sequences for homology, repeats and low complexity regions"),
-          _Switch(["--XXmasker-pos"],
+          _Switch(["--XXmasker-pos", "maskerpos"],
                    "mask only the positive set for homology, repeats and low complexity regions"),
-          _Switch(["--no-graphics"],
+          _Switch(["--no-graphics", "nographics"],
                    "run XXmotif without graphical output"),
           ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
