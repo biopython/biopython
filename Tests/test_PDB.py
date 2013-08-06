@@ -891,7 +891,7 @@ class Atom_Element(unittest.TestCase):
                 '1HG ', '1HG1', '1HG2', '1HH1', '1HH2', '1HZ ', '2H  ', '2HA ',
                 '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
                 '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
-                '3HE ', '3HG1', '3HG2', '3HZ '
+                '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21',
             ),
             O=(' OH ',),
             C=(' CH2',),
