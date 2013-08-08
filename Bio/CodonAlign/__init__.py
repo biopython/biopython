@@ -19,7 +19,7 @@ from CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
         codon_table=default_codon_table, alphabet=None, \
-        complete_protein=False, anchor_len=10):
+        complete_protein=False, anchor_len=10, max_score=10):
     """Build a codon alignment from a protein alignment and corresponding
     nucleotide sequences
 
@@ -147,7 +147,8 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
                     % (pair[0].id, pair[1].id))
         else:
             codon_rec = _get_codon_rec(pair[0], pair[1], corr_span, \
-                    alphabet=alphabet, complete_protein=False)
+                    alphabet=alphabet, complete_protein=False, \
+                    max_score=max_score)
             codon_aln.append(codon_rec)
             if corr_span[1] == 2:
                 shift = True
@@ -484,7 +485,8 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
 
 
 def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
-        codon_table=default_codon_table, complete_protein=False):
+        codon_table=default_codon_table, complete_protein=False, \
+        max_score=10):
     """Generate codon alignment based on regular re match (PRIVATE)
 
     span_mode is a tuple returned by _check_corr. The first element
@@ -516,15 +518,21 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
             elif complete_protein is True and aa_num == 0:
                 this_codon = nucl_seq._data[span[0]:span[0]+3]
                 if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+                    max_score -= 1
                     warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
                             % (pro.id, aa, aa_num, nucl.id, this_codon))
+                if max_score == 0:
+                    raise RuntimeError("max_score reached for %s! Please raise up the tolerance to get an alignment in anyway" % nucl.id)
                 codon_seq += this_codon
                 aa_num += 1
             else:
                 this_codon = nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 if not str(Seq(this_codon.upper()).translate()) == aa:
+                    max_score -= 1
                     warnings.warn("%s (%s %d) does not correspond to %s (%s)" \
                             % (pro.id, aa, aa_num, nucl.id, this_codon))
+                if max_score == 0:
+                    raise RuntimeError("max_score reached for %s! Please raise up the tolerance to get an alignment in anyway" % nucl.id)
                 codon_seq += this_codon
                 aa_num += 1
         return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
@@ -562,6 +570,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
             elif complete_protein is True and aa_num == 0:
                 this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
                 if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+                    max_score -= 1
                     warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
                             % (pro.id, aa, aa_num, nucl.id, this_codon))
                     codon_seq += this_codon
@@ -569,11 +578,13 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
             else:
                 if aa_num < len(pro.seq.ungap('-'))-1 and \
                         rf_table[aa_num+1]-rf_table[aa_num]-3 < 0:
+                    max_score -= 1
                     start = rf_table[aa_num]
                     end   = start + (3-shift_val)
                     ngap  = shift_val
                     this_codon = nucl_seq._data[start:end] + '-'*ngap
                 elif rf_table[aa_num]-rf_table[aa_num-1]-3 > 0:
+                    max_score -= 1
                     start = rf_table[aa_num-1]+3
                     end   = rf_table[aa_num]
                     ngap  = 3-(rf_table[aa_num]-rf_table[aa_num-1]-3)
@@ -584,8 +595,11 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
                     end   = start + 3
                     this_codon = nucl_seq._data[start:end]
                     if not str(Seq(this_codon.upper()).translate()) == aa:
+                        max_score -= 1
                         warnings.warn("Codon of %s (%s %d) does not correspond to %s (%s)" \
                                 % (pro.id, aa, aa_num, nucl.id, this_codon))
+                if max_score == 0:
+                    raise RuntimeError("max_score reached for %s! Please raise up the tolerance to get an alignment in anyway" % nucl.id)
                 codon_seq += this_codon
                 aa_num += 1
         return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
