@@ -101,6 +101,20 @@ class A_ExceptionTest(unittest.TestCase):
         self.assertRaises(PDBConstructionException,
                 parser.get_structure, "example", StringIO(data))
 
+    def test_4_occupancy(self):
+        """Parse file with missing occupancy"""
+        permissive = PDBParser(PERMISSIVE=True)
+        structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+        atoms = structure[0]['A'][(' ', 152, ' ')]
+        # Blank occupancy behavior set in Bio/PDB/PDBParser
+        self.assertEqual(atoms['N'].get_occupancy(), 1.0)
+        self.assertEqual(atoms['CA'].get_occupancy(), 1.0)
+        self.assertEqual(atoms['C'].get_occupancy(), 0.0)
+
+        strict = PDBParser(PERMISSIVE=False)
+        self.assertRaises(PDBConstructionException,
+                          strict.get_structure, "test", "PDB/occupancy.pdb")
+
 
 class HeaderTests(unittest.TestCase):
     """Tests for parse_pdb_header."""
