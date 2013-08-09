@@ -11,10 +11,10 @@ Example:
 
     >>> from Bio.motifs.jaspar.db import JASPAR5
     >>> 
-    >>> JASPAR_DB_HOST = 'vm5.cmmt.ubc.ca'
-    >>> JASPAR_DB_NAME = 'JASPAR_2010'
-    >>> JASPAR_DB_USER = 'jaspar_r'
-    >>> JASPAR_DB_PASS = ''
+    >>> JASPAR_DB_HOST = <hostname>
+    >>> JASPAR_DB_NAME = <db_name>
+    >>> JASPAR_DB_USER = <user>
+    >>> JASPAR_DB_PASS = <password>
     >>> 
     >>> DFLT_COLLECTION = 'CORE'
     >>> jdb = JASPAR5(

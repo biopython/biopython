@@ -30,8 +30,8 @@ def parse(handle, format):
      - MAST:          MAST output file motif
      - TRANSFAC:      TRANSFAC database file format
      - pfm:           JASPAR-style position-frequency matrix
+     - jaspar:        JASPAR-style multiple PFM format
      - sites:         JASPAR-style sites file
-     - jaspar:        JASPAR file format containing multiple PFMs
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
     for those.
@@ -269,21 +269,6 @@ class Motif(object):
         self._pseudocounts = {}
         if isinstance(value, dict):
             self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet.letters)
-        elif value == 'sqrt':
-            nb_instances = sum([column[0] for column in self.counts.values()])
-            sq_nb_instances = math.sqrt(nb_instances)
-
-            alphabet = self.alphabet
-            background = self.background
-            if background:
-                background = dict(background)
-            else:
-                background = dict.fromkeys(sorted(alphabet.letters), 1.0)
-            total = sum(background.values())
-            self._pseudocounts = {}
-            for letter in alphabet.letters:
-                background[letter] /= total
-                self._pseudocounts[letter] = sq_nb_instances * background[letter]
         else:
             if value is None:
                 value = 0.0
@@ -497,13 +482,15 @@ The same rules are used by TRANSFAC."""
         """Returns a string representation of the Motif in a given format
 
         Currently supported fromats:
-         - pfm : JASPAR Position Frequency Matrix
+         - pfm : JASPAR single Position Frequency Matrix
+         - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
         """
 
-        if format=="pfm":
+        if format in ('pfm', 'jaspar'):
             from Bio.motifs import jaspar
-            return jaspar.write(self)
+            motifs = [self]
+            return jaspar.write(motifs, format)
         elif format=="transfac":
             from Bio.motifs import transfac
             motifs = [self]
@@ -515,19 +502,16 @@ The same rules are used by TRANSFAC."""
 def write(motifs, format):
     """Returns a string representation of motifs in a given format
 
-    Currently supported fromats (case is ignored):
-     - pfm : JASPAR Position Frequency Matrix
-             [only if len(motifs)==1]
+    Currently supported formats (case is ignored):
+     - pfm : JASPAR simple single Position Frequency Matrix
+     - jaspar : JASPAR multiple PFM format
      - transfac : TRANSFAC like files
     """
 
     format = format.lower()
-    if format=="pfm":
+    if format in ("pfm", "jaspar"):
         from Bio.motifs import jaspar
-        if len(motifs)!=1:
-            raise Exception("Only a single motif can be written in the JASPAR Position Frequency Matrix (pfm) format")
-        motif = motifs[0]
-        return jaspar.write(motif)
+        return jaspar.write(motifs, format)
     elif format=="transfac":
         from Bio.motifs import transfac
         return transfac.write(motifs)

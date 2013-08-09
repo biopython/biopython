@@ -371,18 +371,14 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sequence = sequence.upper()
             for i in xrange(n-m+1):
                 score = 0.0
-                ok = True
                 for position in xrange(m):
                     letter = sequence[i+position]
                     try:
                         score += self[letter][position]
                     except KeyError:
-                        ok = False
+                        score = _nan
                         break
-                if ok:
-                    scores.append(score)
-                else:
-                    scores.append(_nan)
+                scores.append(score)
         else:
             # get the log-odds matrix into a proper shape
             # (each row contains sorted (ACGT) log-odds values)

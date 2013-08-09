@@ -2,11 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-
-
 from Bio.Seq import Seq
 from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
+import math
 
 from Bio import motifs
 
@@ -159,21 +158,36 @@ def read(handle, format):
         record = _read_jaspar(handle)
         return record
     else:
-        raise ValueError("Unknown format %s" % format)
+        raise ValueError("Unknown JASPAR format %s" % format)
 
 
-def write(motif):
-    """Returns the pfm representation of the motif
+def write(motifs, format):
+    """Returns the representation of the motifs in "pfm" or "jaspar" format
     """
     letters = "ACGT"
-    counts = motif.counts
     lines = []
-    for letter in letters:
-        terms = map(str, counts[letter])
-        line = "\t".join(terms) + "\n"
-        lines.append(line)
+    if format == 'pfm':
+        motif = motifs[0]
+        counts = motif.counts
+        for letter in letters:
+            terms = ["{0:6.2f}".format(value) for value in counts[letter]]
+            line = "{0}\n".format(" ".join(terms))
+            lines.append(line)
+    elif format == 'jaspar':
+        for m in motifs:
+            counts = m.counts
+            line = ">{0} {1}\n".format(m.matrix_id, m.name)
+            lines.append(line)
+            for letter in letters:
+                terms = ["{0:6.2f}".format(value) for value in counts[letter]]
+                line = "{0} [{1}]\n".format(letter, " ".join(terms))
+                lines.append(line)
+    else:
+        raise ValueError("Unknown JASPAR format %s" % format)
+
     # Finished; glue the lines together
     text = "".join(lines)
+
     return text
 
 
@@ -181,7 +195,6 @@ def _read_pfm(handle):
     """
     Reads the motif from a JASPAR .pfm file
     """
-
     alphabet = dna
     counts = {}
 
@@ -289,6 +302,32 @@ def _read_jaspar(handle):
 
     return record
 
+def calculate_pseudocounts(motif):
+    alphabet = motif.alphabet
+    background = motif.background
+
+    # It is possible to have unequal column sums so use the average
+    # number of instances.
+    total = 0
+    for i in xrange(motif.length):
+        total += sum([float(motif.counts[letter][i]) for letter in alphabet.letters])
+
+    avg_nb_instances = total / motif.length
+    sq_nb_instances = math.sqrt(avg_nb_instances)
+
+    if background:
+        background = dict(background)
+    else:
+        background = dict.fromkeys(sorted(alphabet.letters), 1.0)
+
+    total = sum(background.values())
+    pseudocounts = {}
+
+    for letter in alphabet.letters:
+        background[letter] /= total
+        pseudocounts[letter] = sq_nb_instances * background[letter]
+
+    return pseudocounts
 
 def split_jaspar_id(id):
     """
