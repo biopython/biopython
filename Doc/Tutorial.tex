@@ -11551,39 +11551,62 @@ GCATT
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 
-\subsection{Reading motifs}
+\subsection{Creating a sequence logo}
+If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+\begin{verbatim}
+>>> m.weblogo("mymotif.png")
+\end{verbatim}
+We should get our logo saved as a PNG in the specified file.
+
+\section{Reading motifs}
 \label{sec:io}
 
 Creating motifs from instances by hand is a bit boring, so it's
 useful to have some I/O functions for reading and writing
-motifs. There are no really well established standards for storing
-motifs, but there's a couple of formats which are more used than
-others. The most important distinction is whether the motif
-representation is based on instances or on some version of PWM matrix.
+motifs. There are not any really well established standards for storing
+motifs, but there are a couple of formats that are more used than
+others.
 
-\subsubsection*{JASPAR}
-One of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
-stores motifs either as a list of instances, or as a frequency matrix.
-As an example, these are the beginning and ending lines of the JASPAR
-\verb+Arnt.sites+ file showing known binding sites of the mouse
-helix-loop-helix transcription factor Arnt:
+\subsection{JASPAR}
+One of the most popular motif databases is \href{http://jaspar.genereg.net}{JASPAR}. In addition to the motif sequence information, the JASPAR database stores a lot of meta-information for each motif. The module \verb+Bio.motifs+ contains a specialized class \verb+jaspar.Motif+ in which this meta-information is represented as attributes:
+\begin{itemize}
+    \item \verb+matrix_id+ - the unique JASPAR motif ID, e.g. 'MA0004.1'
+    \item \verb+name+ - the name of the TF, e.g. 'Arnt'
+    \item \verb+collection+ - the JASPAR collection to which the motif belongs, e.g. 'CORE'
+    \item \verb+tf_class+ - the structual class of this TF, e.g. 'Zipper-Type'
+    \item \verb+tf_family+ - the family to which this TF belongs, e.g. 'Helix-Loop-Helix'
+    \item \verb+species+ - the species to which this TF belongs, may have multiple values, these are specified as taxonomy IDs, e.g. 10090
+    \item \verb+tax_group+ - the taxonomic supergroup to which this motif belongs, e.g. 'vertebrates'
+    \item \verb+acc+ - the accesion number of the TF protein, e.g. 'P53762'
+    \item \verb+data_type+ - the type of data used to construct this motif, e.g. 'SELEX'
+    \item \verb+medline+ - the Pubmed ID of literature supporting this motif, may be multiple values, e.g. 7592839 
+    \item \verb+pazar_id+ - external reference to the TF in the \href{http://pazar.info}{PAZAR} database, e.g. 'TF0000003'
+    \item \verb+comment+ - free form text containing notes about the construction of the motif
+\end{itemize}
+
+The \verb+jaspar.Motif+ class inherits from the generic \verb+Motif+ class and therefore provides all the facilities of any of the motif formats --- reading motifs, writing motifs, scanning sequences for motif instances etc.
+
+JASPAR stores motifs in several different ways including three different flat file formats and as an SQL database. All of these formats facilitate the construction of a counts matrix. However, the amount of meta information described above that is available varies with the format.
+
+\subsubsection*{The JASPAR \texttt{sites} format}
+
+The first of the three flat file formats contains a list of instances. As an example, these are the beginning and ending lines of the JASPAR \verb+Arnt.sites+ file showing known binding sites of the mouse helix-loop-helix transcription factor Arnt.
 \begin{verbatim}
->MA0004 ARNT    1
+>MA0004 ARNT 1
 CACGTGatgtcctc
->MA0004 ARNT    2
+>MA0004 ARNT 2
 CACGTGggaggtac
->MA0004 ARNT    3
+>MA0004 ARNT 3
 CACGTGccgcgcgc
 ...
->MA0004 ARNT    18
+>MA0004 ARNT 18
 AACGTGacagccctcc
->MA0004 ARNT    19
+>MA0004 ARNT 19
 AACGTGcacatcgtcc
->MA0004 ARNT    20
+>MA0004 ARNT 20
 aggaatCGCGTGc
 \end{verbatim}
-The parts of the sequence in capital letters are the motif instances
-that were found to align to each other.
+The parts of the sequence in capital letters are the motif instances that were found to align to each other.
 
 We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
@@ -11591,15 +11614,14 @@ We can create a \verb+Motif+ object from these instances as follows:
 >>> from Bio import motifs
 >>> arnt = motifs.read(open("Arnt.sites"), "sites")
 \end{verbatim}
-The instances from which this motif was created is stored in the
-\verb+.instances+ property:
+The instances from which this motif was created is stored in the \verb+.instances+ property:
 %cont-doctest
 \begin{verbatim}
 >>> print arnt.instances[:3]
 [Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
 >>> for instance in arnt.instances:
 ...     print instance
-... 
+...
 CACGTG
 CACGTG
 CACGTG
@@ -11632,16 +11654,19 @@ G:   0.00   1.00   0.00  20.00   0.00  20.00
 T:   0.00   0.00   0.00   0.00  20.00   0.00
 <BLANKLINE>
 \end{verbatim}
+This format does not store any meta information.
 
-The JASPAR database also makes motifs available directly as a count matrix,
-without the instances from which it was created.
-For example, this is the JASPAR file \verb+SRF.pfm+ containing the count
-matrix for the human SRF transcription factor:
+\subsubsection*{The JASPAR \texttt{pfm} format}
+
+JASPAR also makes motifs available directly as a count matrix,
+without the instances from which it was created. This \verb+pfm+ format only
+stores the counts matrix for a single motif.
+For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix for the human SRF transcription factor:
 \begin{verbatim}
- 2  9  0  1 32  3 46  1 43 15  2  2
- 1 33 45 45  1  1  0  0  0  1  0  1
-39  2  1  0  0  0  0  0  0  0 44 43
- 4  2  0  0 13 42  0 45  3 30  0  0
+ 2 9 0 1 32 3 46 1 43 15 2 2
+ 1 33 45 45 1 1 0 0 0 1 0 1
+39 2 1 0 0 0 0 0 0 0 44 43
+ 4 2 0 0 13 42 0 45 3 30 0 0
 \end{verbatim}
 We can create a motif for this count matrix as follows:
 %cont-doctest
@@ -11670,7 +11695,201 @@ CACGTG
 GCCCATATATGG
 \end{verbatim}
 
-\subsubsection*{MEME}
+As with the instances file, not meta information is stored in this format.
+
+\subsubsection*{The JASPAR format \texttt{jaspar}}
+
+The \verb+jaspar+ file format allows multiple motifs to be specified in a single file. In this format each of the motif records consist of a header line followed by four lines defining the counts matrix. The header line begins with a \verb+>+ character (similar to the Fasta file format) and is followed by the unique JASPAR matrix ID and the TF name. The following example shows a \verb+jaspar+ formatted file containing the three motifs Arnt, RUNX1 and MEF2A:
+\begin{verbatim}
+>MA0004.1 Arnt
+A  [ 4 19  0  0  0  0 ]
+C  [16  0 20  0  0  0 ]
+G  [ 0  1  0 20  0 20 ]
+T  [ 0  0  0  0 20  0 ]
+>MA0002.1 RUNX1
+A  [10 12  4  1  2  2  0  0  0  8 13 ]
+C  [ 2  2  7  1  0  8  0  0  1  2  2 ]
+G  [ 3  1  1  0 23  0 26 26  0  0  4 ]
+T  [11 11 14 24  1 16  0  0 25 16  7 ]
+>MA0052.1 MEF2A
+A  [ 1  0 57  2  9  6 37  2 56  6 ]
+C  [50  0  1  1  0  0  0  0  0  0 ]
+G  [ 0  0  0  0  0  0  0  0  2 50 ]
+T  [ 7 58  0 55 49 52 21 56  0  2 ]
+\end{verbatim}
+The motifs are read as follows:
+\begin{verbatim}
+>>> fh = open("jaspar_motifs.txt")
+>>> for m in motifs.parse(fh, "jaspar"))
+...     print m
+TF name	 Arnt
+Matrix ID	MA0004.1
+Matrix:
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+
+TF name	 RUNX1
+Matrix ID	MA0002.1
+Matrix:
+        0      1      2      3      4      5      6      7      8      9     10
+A:  10.00  12.00   4.00   1.00   2.00   2.00   0.00   0.00   0.00   8.00  13.00
+C:   2.00   2.00   7.00   1.00   0.00   8.00   0.00   0.00   1.00   2.00   2.00
+G:   3.00   1.00   1.00   0.00  23.00   0.00  26.00  26.00   0.00   0.00   4.00
+T:  11.00  11.00  14.00  24.00   1.00  16.00   0.00   0.00  25.00  16.00   7.00
+
+
+
+TF name	 MEF2A
+Matrix ID	MA0052.1
+Matrix:
+        0      1      2      3      4      5      6      7      8      9
+A:   1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00
+C:  50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00
+G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00
+T:   7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00
+\end{verbatim}
+
+Note that printing a JASPAR motif yields both the counts data and the available meta-information.
+
+\subsubsection*{Accessing the JASPAR database}
+
+In addition to parsing these flat file formats, we can also retrieve motifs from a JASPAR SQL database. Unlike the flat file formats, a JASPAR database allows storing of all possible meta information defined in the JASPAR \verb+Motif+ class. It is beyond the scope of this document to describe how to set up a JASPAR database (please see the main \href{http://jaspar.genereg.net}{JASPAR} website). Motifs are read from a JASPAR database using the \verb+Bio.motifs.jaspar.db+ module.  First connect to the JASPAR database using the JASPAR5 class which models the the latest JASPAR schema:
+\begin{verbatim}
+>>> from Bio.motifs.jaspar.db import JASPAR5
+>>> 
+>>> JASPAR_DB_HOST = <hostname>
+>>> JASPAR_DB_NAME = <db_name>
+>>> JASPAR_DB_USER = <user>
+>>> JASPAR_DB_PASS = <passord>
+>>> 
+>>> jdb = JASPAR5(
+...     host=JASPAR_DB_HOST,
+...     name=JASPAR_DB_NAME,
+...     user=JASPAR_DB_USER,
+...     password=JASPAR_DB_PASS
+... )
+\end{verbatim}
+
+Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number seperated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
+\begin{verbatim}
+>>> arnt = jdb.fetch_motif_by_id("MA0004")
+\end{verbatim}
+Printing the motif reveals that the JASPAR SQL database stores much more meeta-information than the flat files:
+\begin{verbatim}
+>>> print arnt
+TF name	Arnt
+Matrix ID	MA0004.1
+Collection	CORE
+TF class	Zipper-Type
+TF family	Helix-Loop-Helix
+Species	10090
+Taxonomic group	vertebrates
+Accession	['P53762']
+Data type used	SELEX
+Medline	7592839
+PAZAR ID	TF0000003
+Comments	-
+Matrix:
+	0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+\end{verbatim}
+
+We can also fetch motifs by name. The name must be an exact match (partial matches or database wildcards are not currently supported). Note that as the name is not guaranteed to be unique, the \verb+fetch_motifs_by_name+ method actually returns a list.
+\begin{verbatim}
+>>> motifs = jdb.fetch_motifs_by_name("Arnt")
+>>> print motifs[0]
+TF name	Arnt
+Matrix ID	MA0004.1
+Collection	CORE
+TF class	Zipper-Type
+TF family	Helix-Loop-Helix
+Species	10090
+Taxonomic group	vertebrates
+Accession	['P53762']
+Data type used	SELEX
+Medline	7592839
+PAZAR ID	TF0000003
+Comments	-
+Matrix:
+	0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+\end{verbatim}
+
+The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
+\begin{verbatim}
+>>> motifs = jdb.fetch_motifs(
+...     collection = 'CORE',
+...     tax_group = ['vertebrates', 'insects'],
+...     tf_class = 'Winged Helix-Turn-Helix',
+...     tf_family = ['Forkhead', 'Ets'],
+...     min_ic = 12
+... )
+>>> for motif in motifs:
+...     pass # do something with the motif
+\end{verbatim}
+
+\subsubsection*{Compatibility with Perl TFBS modules}
+
+An important thing to note is that the JASPAR \verb+Motif+ class was designed to be compatible with the popular \href{http://tfbs.genereg.net/}{Perl TFBS modules}. Therefore some specifics about the choice of defaults for background and pseudocounts as well as how information content is computed and sequences searched for instances is based on this compatibility criteria. These choices are noted in the specific subsections below.
+
+\begin{itemize}
+\item{\bf Choice of background:} \\
+The Perl \verb+TFBS+ modules appear to allow a choice of custom background probabilities (although the documentation states that uniform background is assumed). However the default is to use a uniform background. Therefore it is recommended that you use a uniform background for computing the position-specific scoring matrix (PSSM). This is the default when using the Biopython \verb+motifs+ module.
+\item{\bf Choice of pseudocounts:} \\
+By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * \textrm{bg}[\textrm{nucleotide}]$, where $N$ represents the total number of sequences used to construct the matrix. To apply this same pseudocount formula, set the motif \verb+pseudocounts+ attribute using the \verb+jaspar.calculate\_pseudcounts()+ funtion:
+\begin{verbatim}
+>>> motif.pseudocounts = motifs.jaspar.calculate_pseudocounts(motif)
+\end{verbatim}
+Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the pssm computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
+\item{\bf Computation of matrix information content:} \\
+The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behaviour is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
+\item{\bf Searching for instances:} \\
+Searching for instances with the Perl \verb+TFBS+ motifs was usually performed using a relative score threshold, i.e. a score in the range 0 to 1. In order to compute the absolute PSSM score corresponding to a relative score one can use the equation:
+\begin{verbatim}
+>>> abs_score =  (pssm.max - pssm.min) * rel_score + pssm.min
+\end{verbatim}
+To convert the absolute score of an instance back to a relative score, one can use the equation:
+\begin{verbatim}
+>>> rel_score = (abs_score - pssm.min) / (pssm.max - pssm.min)
+\end{verbatim}
+For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
+\begin{verbatim}
+>>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA", unambiguous_dna)
+>>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt) 
+>>> pssm = arnt.pssm()
+>>> max_score = pssm.max()
+>>> min_score = pssm.min()
+>>> abs_score_threshold = (max_score - min_score) * 0.8 + min_score
+>>> for position, score in pssm.search(test_seq,
+                                       threshold=abs_score_threshold):
+...     rel_score = (score - min_score) / (max_score - min_score)
+...     print "Position %d: score = %5.3f, rel. score = %5.3f" % (
+            position, score, rel_score)
+... 
+Position 2: score = 5.362, rel. score = 0.801
+Position 8: score = 6.112, rel. score = 0.831
+Position -20: score = 7.103, rel. score = 0.870
+Position 17: score = 10.351, rel. score = 1.000
+Position -11: score = 10.351, rel. score = 1.000
+\end{verbatim}
+\end{itemize}
+
+\subsection{MEME}
 
 MEME \cite{bailey1994} is a tool for discovering motifs in a group of related
 DNA or protein sequences. It takes as input a group of DNA or protein sequences 
@@ -11808,7 +12027,7 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 
 \subsubsection*{MAST}
 
-\subsubsection*{TRANSFAC}
+\subsection{TRANSFAC}
 
 TRANSFAC is a manually curated database of transcription factors, together
 with their genomic binding sites and DNA binding profiles \cite{matys2003}.
@@ -11983,17 +12202,26 @@ in a string and saving it in a file:
 >>> handle.close()
 \end{verbatim}
 
-\subsection{Writing motifs}
+\section{Writing motifs}
+
 Speaking of exporting, let's look at export functions in general.
-To export a motif in the JASPAR \verb+.pfm+ format, use
+We can use the \verb+format+ method to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
 \begin{verbatim}
->>> print m.format("pfm")
-3       7       0       2       1
-0       0       5       2       6
-0       0       0       3       0
-4       0       2       0       0
-<BLANKLINE>
+>>> print arnt.format("pfm")
+  4.00  19.00   0.00   0.00   0.00   0.00
+ 16.00   0.00  20.00   0.00   0.00   0.00
+  0.00   1.00   0.00  20.00   0.00  20.00
+  0.00   0.00   0.00   0.00  20.00   0.00
+\end{verbatim}
+Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
+\begin{verbatim}
+>>> print arnt.format("jaspar")
+>MA0004.1  Arnt
+A [  4.00  19.00   0.00   0.00   0.00   0.00]
+C [ 16.00   0.00  20.00   0.00   0.00   0.00]
+G [  0.00   1.00   0.00  20.00   0.00  20.00]
+T [  0.00   0.00   0.00   0.00  20.00   0.00]
 \end{verbatim}
 
 To write the motif in a TRANSFAC-like matrix format, use
@@ -12044,12 +12272,21 @@ XX
 <BLANKLINE>
 \end{verbatim}
 
-\subsection{Creating a sequence logo}
-If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+Or, to write multiple motifs in the \verb+jaspar+ format:
 \begin{verbatim}
->>> arnt.weblogo("Arnt.png")
+>>> two_motifs = [arnt, mef2a]
+>>> print motifs.write(two_motifs, "jaspar")
+>MA0004.1  Arnt
+A [  4.00  19.00   0.00   0.00   0.00   0.00]
+C [ 16.00   0.00  20.00   0.00   0.00   0.00]
+G [  0.00   1.00   0.00  20.00   0.00  20.00]
+T [  0.00   0.00   0.00   0.00  20.00   0.00]
+>MA0052.1  MEF2A
+A [  1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00]
+C [ 50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00]
+G [  0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00]
+T [  7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00]
 \end{verbatim}
-We should get our logo saved as a PNG in the specified file.
 
 \section{Position-Weight Matrices}
 
@@ -18274,3 +18511,4 @@ Alok Saldanha: ``Java Treeview---extensible visualization of microarray data''. 
 \href{http://dx.doi.org/10.1093/bioinformatics/bth349}{http://dx.doi.org/10.1093/bioinformatics/bth349}
 \end{thebibliography}
 \end{document}
+
