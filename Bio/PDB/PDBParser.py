@@ -191,7 +191,7 @@ class PDBParser(object):
                 except:
                     self._handle_PDB_exception("Invalid or missing occupancy",
                                                global_line_counter)
-                    occupancy = 1.0  # Is one or zero a good default?
+                    occupancy = None # Rather than arbitrary zero or one
                 try:
                     bfactor = float(line[60:66])
                 except:
