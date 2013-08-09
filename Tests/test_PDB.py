@@ -107,7 +107,7 @@ class A_ExceptionTest(unittest.TestCase):
         structure = permissive.get_structure("test", "PDB/occupancy.pdb")
         atoms = structure[0]['A'][(' ', 152, ' ')]
         # Blank occupancy behavior set in Bio/PDB/PDBParser
-        self.assertEqual(atoms['N'].get_occupancy(), 1.0)
+        self.assertEqual(atoms['N'].get_occupancy(), None)
         self.assertEqual(atoms['CA'].get_occupancy(), 1.0)
         self.assertEqual(atoms['C'].get_occupancy(), 0.0)
 
