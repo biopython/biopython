@@ -425,17 +425,18 @@ def _count_diff(codon1, codon2, codon_table=default_codon_table):
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError("codon should be three letter string (%d, %d detected)" \
                 (len(codon1), len(codon2)))
+    SN = [0, 0]
     Sd = 0 # synonymous differences
     Nd = 0 # non-synonymous differences
     if codon1 == '---' or codon2 == '---':
-        return Sd, Nd
+        return SN
     base_tuple = ('A', 'C', 'G', 'T')
     if not all([i in base_tuple for i in codon1]):
         raise RuntimeError("Unrecognized character detected in codon1 %s (Codon are consists of A, T, C or G)" % codon1)
     if not all([i in base_tuple for i in codon2]):
         raise RuntimeError("Unrecognized character detected in codon2 %s (Codon are consists of A, T, C or G)" % codon2)
     if codon1 == codon2:
-        return Sd, Nd
+        return SN
     else:
         diff_pos = []
         for i, k in enumerate(zip(codon1, codon2)):
@@ -450,27 +451,21 @@ def _count_diff(codon1, codon2, codon_table=default_codon_table):
                 nd += weight
             return (sd, nd)
         if len(diff_pos) == 1:
-            sd, nd = compare_codon(codon1, codon2, codon_table=codon_table)
-            Sd += sd
-            Nd += nd
+            SN = [i+j for i,j in zip(SN, compare_codon(codon1, codon2, codon_table=codon_table))]
         elif len(diff_pos) == 2:
             codon2_aa = codon_table.forward_table[codon2]
             for i in diff_pos:
                 codon1_chars = [c for c in codon1]
                 codon1_chars[i] = codon2[i]
                 temp_codon = ''.join(codon1_chars)
-                sd, nd = compare_codon(codon1, temp_codon, codon_table=codon_table, weight=0.5)
-                Sd += sd
-                Nd += nd
-                sd, nd = compare_codon(temp_codon, codon2, codon_table=codon_table, weight=0.5)
-                Sd += sd
-                Nd += nd
+                SN = [i+j for i,j in zip(SN, compare_codon(codon1, temp_codon, codon_table=codon_table, weight=0.5))]
+                SN = [i+j for i,j in zip(SN, compare_codon(temp_codon, codon2, codon_table=codon_table, weight=0.5))]
         elif len(diff_pos) == 3:
             # we are now in the most complex situation
             # I don't want to think about this.
             # the substitution is considered non-synonymous (modify!!!)
-            Nd += 1
-    return (Sd, Nd)
+            SN[1] += 1
+    return SN
         
 
 #################################################################
