@@ -268,6 +268,112 @@ def _get_codon_list(codonseq):
     return codon_lst
 
 
+def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
+        codon_table=default_codon_table, w=1):
+    """Function to calculate the dN and dS of the given two CodonSeq
+    or SeqRecord that contain CodonSeq objects.
+
+    Available methods:
+        - NG86  - PMID: 3444411
+        - LWL85 - PMID: 3916709
+    
+    Arguments:
+        - w  - transition/transvertion ratio
+    """
+    from math import log10, log
+    if all([isinstance(codon_seq1, CodonSeq), isinstance(codon_seq2, CodonSeq)]):
+        pass
+    elif all([isinstance(codon_seq1, SeqRecord), isinstance(codon_seq2, SeqRecord)]):
+        assert isinstance(codon_seq1.seq, CodonSeq), "cal_dn_ds accepts SeqRecords that contain CodonSeq as its seq!"
+        assert isinstance(codon_seq2.seq, CodonSeq), "cal_dn_ds accepts SeqRecords that contain CodonSeq as its seq!"
+        codon_seq1 = codon_seq1.seq
+        codon_seq2 = codon_seq2.seq
+    else:
+        raise TypeError("cal_dn_ds accepts two CodonSeq objects or SeqRecord that contains CodonSeq as its seq!")
+    if len(codon_seq1.get_full_rf_table()) != len(codon_seq2.get_full_rf_table()):
+        raise RuntimeError("full_rf_table length of seq1 (%d) and seq2 (%s) are not the same" \
+                % (len(codon_seq1.get_full_rf_table()), len(codon_seq2.get_full_rf_table())))
+    seq1_codon_lst = _get_codon_list(codon_seq1)
+    seq2_codon_lst = _get_codon_list(codon_seq2)
+    if method == "NG86":
+        S_sites1, N_sites1 = _count_site(seq1_codon_lst, codon_table=codon_table, w=w)
+        S_sites2, N_sites2 = _count_site(seq2_codon_lst, codon_table=codon_table, w=w)
+        S_sites = (S_sites1 + S_sites2) / 2.0
+        N_sites = (N_sites1 + N_sites2) / 2.0
+        Sd = 0
+        Nd = 0
+        for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+            sd, nd = _count_diff(i, j, codon_table=codon_table)
+            Sd += sd
+            Nd += nd
+        ps = Sd / S_sites
+        pn = Nd / N_sites
+        dS = -3.0/4*log10(1-4.0/3*pn)
+        dN = -3.0/4*log10(1-4.0/3*ps)
+        # print S_sites, N_sites
+        # print Sd, Nd
+        return dS, dN
+    elif method == "LWL85":
+        codon_fold_dict = _get_codon_fold(codon_table)
+        # count number of sites in different degenerate classes
+        fold0 = [0, 0]
+        fold2 = [0, 0]
+        fold4 = [0, 0]
+        for codon in seq1_codon_lst:
+            fold_num = codon_fold_dict[codon]
+            for f in fold_num:
+                if f == '0':
+                    fold0[0] += 1
+                elif f == '2':
+                    fold2[0] += 1
+                elif f == '4':
+                    fold4[0] += 1
+        for codon in seq2_codon_lst:
+            fold_num = codon_fold_dict[codon]
+            for f in fold_num:
+                if f == '0':
+                    fold0[1] += 1
+                elif f == '2':
+                    fold2[1] += 1
+                elif f == '4':
+                    fold4[1] += 1
+        fold0 = sum(fold0)/2.0
+        fold2 = sum(fold2)/2.0
+        fold4 = sum(fold4)/2.0
+        # count number of differences in different degenerate classes
+        P0 = P2 = P4 = Q0 = Q2 = Q4 = 0
+        p0 = p2 = p4 = q0 = q2 = q4 = 0
+        for codon1, codon2 in zip(seq1_codon_lst, seq2_codon_lst):
+            if (codon1 == "---" or codon2 == "---") or codon1 == codon2:
+                continue
+            else:
+                p0, p2, p4, q0, q2, q4 = _diff_codon(codon1, codon2, fold_dict=codon_fold_dict)
+                P0 += p0
+                P2 += p2
+                P4 += p4
+                Q0 += q0
+                Q2 += q2
+                Q4 += q4
+        P0 = P0/fold0
+        P2 = P2/fold2
+        P4 = P4/fold4
+        Q0 = Q0/fold0
+        Q2 = Q2/fold2
+        Q4 = Q4/fold4
+        A0 = (1./2)*log(1./(1-2*P0-Q0)) - (1./4)*log(1./(1-2*Q0))
+        A2 = (1./2)*log(1./(1-2*P2-Q2)) - (1./4)*log(1./(1-2*Q2))
+        A4 = (1./2)*log(1./(1-2*P4-Q4)) - (1./4)*log(1./(1-2*Q4))
+        B0 = (1./2)*log(1./(1-2*Q0))
+        B2 = (1./2)*log(1./(1-2*Q2))
+        B4 = (1./2)*log(1./(1-2*Q4))
+        dS = 3*(fold2*A2+fold4*(A4+B4))/(fold2+3*fold4)
+        dN = 3*(fold2*B2+fold0*(A0+B0))/(2*fold2+3*fold0)
+        return dS, dN
+
+
+#################################################################
+#  private functions for NG86 methods
+#################################################################
 def _count_site(codon_lst, w=1, codon_table=default_codon_table):
     """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
     Argument:
@@ -382,43 +488,91 @@ def _count_diff(codon1, codon2, codon_table=default_codon_table):
     return (Sd, Nd)
         
 
-def cal_dn_ds(codon_seq1, codon_seq2, method="NG86"):
-    """Function to calculate the dN and dS of the given two CodonSeq
-    or SeqRecord that contain CodonSeq objects.
+#################################################################
+#  private functions for LWL85 methods
+#################################################################
+def _get_codon_fold(codon_table):
+    """function to classify different position in a codon into
+    different fold (PRIVATE).
     """
-    from math import log10
-    if all([isinstance(codon_seq1, CodonSeq), isinstance(codon_seq2, CodonSeq)]):
-        pass
-    elif all([isinstance(codon_seq1, SeqRecord), isinstance(codon_seq2, SeqRecord)]):
-        assert isinstance(codon_seq1.seq, CodonSeq), "cal_dn_ds accepts SeqRecords that contain CodonSeq as its seq!"
-        assert isinstance(codon_seq2.seq, CodonSeq), "cal_dn_ds accepts SeqRecords that contain CodonSeq as its seq!"
-        codon_seq1 = codon_seq1.seq
-        codon_seq2 = codon_seq2.seq
-    else:
-        raise TypeError("cal_dn_ds accepts two CodonSeq objects or SeqRecord that contains CodonSeq as its seq!")
-    if len(codon_seq1.get_full_rf_table()) != len(codon_seq2.get_full_rf_table()):
-        raise RuntimeError("full_rf_table length of seq1 (%d) and seq2 (%s) are not the same" \
-                % (len(codon_seq1.get_full_rf_table()), len(codon_seq2.get_full_rf_table())))
-    codon1_lst = _get_codon_list(codon_seq1)
-    codon2_lst = _get_codon_list(codon_seq2)
-    if method == "NG86":
-        S_sites1, N_sites1 = _count_site(codon1_lst)
-        S_sites2, N_sites2 = _count_site(codon2_lst)
-        S_sites = (S_sites1 + S_sites2) / 2.0
-        N_sites = (N_sites1 + N_sites2) / 2.0
-        Sd = 0
-        Nd = 0
-        for i, j in zip(codon1_lst, codon2_lst):
-            sd, nd = _count_diff(i, j)
-            Sd += sd
-            Nd += nd
-        ps = Sd / S_sites
-        pn = Nd / N_sites
-        dS = -3.0/4*log10(1-4.0/3*pn)
-        dN = -3.0/4*log10(1-4.0/3*ps)
-        print S_sites, N_sites
-        print Sd, Nd
-        return (dS, dN)
+    def find_fold_class(codon, forward_table):
+        base = set(['A', 'T', 'C', 'G'])
+        fold = ''
+        codon_base_lst = [i for i in codon]
+        for i, b in enumerate(codon_base_lst):
+            other_base = base - set(b)
+            aa = []
+            for j in other_base:
+                codon_base_lst[i] = j
+                try:
+                    aa.append(forward_table[''.join(codon_base_lst)])
+                except KeyError:
+                    aa.append('stop')
+            if aa.count(forward_table[codon]) == 0:
+                fold += '0'
+            elif aa.count(forward_table[codon]) in (1,2):
+                fold += '2'
+            elif aa.count(forward_table[codon]) == 3:
+                fold += '4'
+            else:
+                raise RuntimeError("Unknown Error, cannot assign the position to a fold")
+            codon_base_lst[i] = b
+        return fold
+    fold_table = {}
+    for codon in codon_table.forward_table:
+        if 'U' not in codon:
+            fold_table[codon] = find_fold_class(codon, \
+                    codon_table.forward_table)
+    fold_table["---"] = '000'
+    return fold_table
+
+
+def _diff_codon(codon1, codon2, fold_dict):
+    """function to get the differences of two codon and return
+    number of different types substitutions
+
+    return (P0, P2, P4, Q0, Q2, Q4)
+    Nomenclature is according to PMID (3916709)
+    """
+    P0 = P2 = P4 = Q0 = Q2 = Q4 = 0
+    fold_num = fold_dict[codon1]
+    purine = ('A', 'G')
+    pyrimidine = ('T', 'C')
+    for n, (i, j) in enumerate(zip(codon1, codon2)):
+            if i!= j and (i in purine and j in purine):
+                if fold_num[n] == '0':
+                    P0 += 1
+                elif fold_num[n] == '2':
+                    P2 += 1
+                elif fold_num[n] == '4':
+                    P4 += 1
+                else:
+                    raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+            if i!= j and (i in pyrimidine and j in pyrimidine):
+                if fold_num[n] == '0':
+                    P0 += 1
+                elif fold_num[n] == '2':
+                    P2 += 1
+                elif fold_num[n] == '4':
+                    P4 += 1
+                else:
+                    raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+            if i != j and ((i in purine and j in pyrimidine) \
+                    or (i in pyrimidine and j in purine)):
+                if fold_num[n] == '0':
+                    Q0 += 1
+                elif fold_num[n] == '2':
+                    Q2 += 1
+                elif fold_num[n] == '4':
+                    Q4 += 1
+                else:
+                    raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+    return (P0, P2, P4, Q0, Q2, Q4)
+
+
+
+
+
 
 
 if __name__ == "__main__":
