@@ -312,8 +312,9 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
         dN = -3.0/4*log10(1-4.0/3*ps)
         # print S_sites, N_sites
         # print Sd, Nd
-        return dS, dN
+        return dN, dS
     elif method == "LWL85":
+        # Nomenclature is according to PMID (3916709)
         codon_fold_dict = _get_codon_fold(codon_table)
         # count number of sites in different degenerate classes
         fold0 = [0, 0]
@@ -552,11 +553,6 @@ def _diff_codon(codon1, codon2, fold_dict):
                 else:
                     raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
     return (P0, P2, P4, Q0, Q2, Q4)
-
-
-
-
-
 
 
 if __name__ == "__main__":
