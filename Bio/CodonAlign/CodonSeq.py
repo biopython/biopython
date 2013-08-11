@@ -337,37 +337,21 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
                     fold2[1] += 1
                 elif f == '4':
                     fold4[1] += 1
-        fold0 = sum(fold0)/2.0
-        fold2 = sum(fold2)/2.0
-        fold4 = sum(fold4)/2.0
+        L = [sum(fold0)/2.0, sum(fold2)/2.0, sum(fold4)/2.0]
         # count number of differences in different degenerate classes
-        P0 = P2 = P4 = Q0 = Q2 = Q4 = 0
-        p0 = p2 = p4 = q0 = q2 = q4 = 0
+        PQ = [0] * 6 # with P0, P2, P4, Q0, Q2, Q4 in each position
         for codon1, codon2 in zip(seq1_codon_lst, seq2_codon_lst):
             if (codon1 == "---" or codon2 == "---") or codon1 == codon2:
                 continue
             else:
-                p0, p2, p4, q0, q2, q4 = _diff_codon(codon1, codon2, fold_dict=codon_fold_dict)
-                P0 += p0
-                P2 += p2
-                P4 += p4
-                Q0 += q0
-                Q2 += q2
-                Q4 += q4
-        P0 = P0/fold0
-        P2 = P2/fold2
-        P4 = P4/fold4
-        Q0 = Q0/fold0
-        Q2 = Q2/fold2
-        Q4 = Q4/fold4
-        A0 = (1./2)*log(1./(1-2*P0-Q0)) - (1./4)*log(1./(1-2*Q0))
-        A2 = (1./2)*log(1./(1-2*P2-Q2)) - (1./4)*log(1./(1-2*Q2))
-        A4 = (1./2)*log(1./(1-2*P4-Q4)) - (1./4)*log(1./(1-2*Q4))
-        B0 = (1./2)*log(1./(1-2*Q0))
-        B2 = (1./2)*log(1./(1-2*Q2))
-        B4 = (1./2)*log(1./(1-2*Q4))
-        dS = 3*(fold2*A2+fold4*(A4+B4))/(fold2+3*fold4)
-        dN = 3*(fold2*B2+fold0*(A0+B0))/(2*fold2+3*fold0)
+                PQ = [i+j for i, j in zip(PQ, _diff_codon(codon1, codon2, fold_dict=codon_fold_dict))]
+        PQ = [i/j for i, j in zip(PQ, L*2)]
+        P = PQ[:3]
+        Q = PQ[3:]
+        A = [(1./2)*log(1./(1-2*i-j)) - (1./4)*log(1./(1-2*j)) for i, j in zip(P, Q)]
+        B = [(1./2)*log(1./(1-2*i)) for i in Q]
+        dS = 3*(L[2]*A[1]+L[2]*(A[2]+B[2]))/(L[1]+3*L[2])
+        dN = 3*(L[2]*B[1]+L[0]*(A[0]+B[0]))/(2*L[1]+3*L[0])
         return dS, dN
 
 
