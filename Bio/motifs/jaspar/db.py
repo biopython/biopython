@@ -7,14 +7,15 @@ This modules requires MySQLdb to be installed.
 
 Provides read access to a JASPAR5 formatted database.
 
-Example:
+Example, substitute the your database credentials as
+appropriate:
 
     >>> from Bio.motifs.jaspar.db import JASPAR5
     >>> 
-    >>> JASPAR_DB_HOST = <hostname>
-    >>> JASPAR_DB_NAME = <db_name>
-    >>> JASPAR_DB_USER = <user>
-    >>> JASPAR_DB_PASS = <password>
+    >>> JASPAR_DB_HOST = "hostname.example.org"
+    >>> JASPAR_DB_NAME = "JASPAR_2013"
+    >>> JASPAR_DB_USER = "guest"
+    >>> JASPAR_DB_PASS = "guest"
     >>> 
     >>> DFLT_COLLECTION = 'CORE'
     >>> jdb = JASPAR5(
