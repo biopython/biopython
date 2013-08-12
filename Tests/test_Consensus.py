@@ -26,7 +26,15 @@ class BitStringTest(unittest.TestCase):
         self.assertTrue(bitstr1.contains(bitstr1))
         self.assertTrue(bitstr1.contains(bitstr3))
         self.assertTrue(bitstr1.contains(bitstr4))
-
+        self.assertFalse(bitstr1.independent(bitstr2))
+        self.assertFalse(bitstr1.independent(bitstr4))
+        self.assertTrue(bitstr2.independent(bitstr4))
+        self.assertTrue(bitstr3.independent(bitstr4))
+        self.assertFalse(bitstr1.iscompatible(bitstr2))
+        self.assertTrue(bitstr1.iscompatible(bitstr3))
+        self.assertTrue(bitstr1.iscompatible(bitstr4))
+        self.assertTrue(bitstr2.iscompatible(bitstr4))
+        self.assertTrue(bitstr3.iscompatible(bitstr4))
 
 class ConsensusTest(unittest.TestCase):
     """Test for consensus methods"""
@@ -37,12 +45,12 @@ class ConsensusTest(unittest.TestCase):
     def test_count_clades(self):
         bitstr_counts = Consensus._count_clades(self.trees)
         self.assertEqual(len(bitstr_counts), 6)
-        self.assertEqual(bitstr_counts[BitString('11111')], 3)
-        self.assertEqual(bitstr_counts[BitString('11000')], 2)
-        self.assertEqual(bitstr_counts[BitString('00111')], 3)
-        self.assertEqual(bitstr_counts[BitString('00110')], 2)
-        self.assertEqual(bitstr_counts[BitString('00011')], 1)
-        self.assertEqual(bitstr_counts[BitString('01111')], 1)
+        self.assertEqual(bitstr_counts[BitString('11111')][0], 3)
+        self.assertEqual(bitstr_counts[BitString('11000')][0], 2)
+        self.assertEqual(bitstr_counts[BitString('00111')][0], 3)
+        self.assertEqual(bitstr_counts[BitString('00110')][0], 2)
+        self.assertEqual(bitstr_counts[BitString('00011')][0], 1)
+        self.assertEqual(bitstr_counts[BitString('01111')][0], 1)
 
     def test_strict_consensus(self):
         ref_trees = open('./TreeConstruction/consensus_refs.tre')
@@ -63,6 +71,14 @@ class ConsensusTest(unittest.TestCase):
         self.assertEqual(tree_file.getvalue(), ref_trees.readline())
         ref_trees.close()
         tree_file.close()
+
+    def test_majority_consensus(self):
+        # three trees
+        ref_tree = open('./TreeConstruction/majority_ref.tre')
+        consensus_tree = majority_consensus(self.trees)
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_tree.readline())
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
