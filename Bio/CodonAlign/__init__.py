@@ -36,20 +36,21 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
      - frameshift - whether to appply frameshift detection
 
     Return a CodonAlignment object
-    
+
     >>> from Bio.Alphabet import IUPAC
     >>> from Bio.Seq import Seq
+    >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
-    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG', 
-    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG', 
-    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG',
+    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
+    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
+    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
     >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
     >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print codon_aln
-    CodonAlphabet() CodonAlignment with 2 rows and 69 columns (23 codons)
+    CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)
     TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
     TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
 
@@ -760,4 +761,3 @@ def toCodonAlignment(align, alphabet=default_codon_alphabet):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-
