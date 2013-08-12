@@ -305,8 +305,8 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
             NS = [m+n for m,n in zip(NS, _count_diff(i, j, codon_table=codon_table))]
         ps = NS[0] / S_sites
         pn = NS[1] / N_sites
-        dS = -3.0/4*log(1-4.0/3*pn)
-        dN = -3.0/4*log(1-4.0/3*ps)
+        dN = -3.0/4*log(1-4.0/3*pn)
+        dS = -3.0/4*log(1-4.0/3*ps)
         #print N_sites, S_sites
         #print  Nd, Sd
         #print pn, ps
@@ -351,7 +351,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
         B = [(1./2)*log(1./(1-2*i)) for i in Q]
         dS = 3*(L[2]*A[1]+L[2]*(A[2]+B[2]))/(L[1]+3*L[2])
         dN = 3*(L[2]*B[1]+L[0]*(A[0]+B[0]))/(2*L[1]+3*L[0])
-        return dS, dN
+        return dN, dS
 
 
 #################################################################
