@@ -280,7 +280,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
     Arguments:
         - w  - transition/transvertion ratio
     """
-    from math import log10, log
+    from math import log
     if all([isinstance(codon_seq1, CodonSeq), isinstance(codon_seq2, CodonSeq)]):
         pass
     elif all([isinstance(codon_seq1, SeqRecord), isinstance(codon_seq2, SeqRecord)]):
@@ -300,18 +300,16 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
         S_sites2, N_sites2 = _count_site(seq2_codon_lst, codon_table=codon_table, w=w)
         S_sites = (S_sites1 + S_sites2) / 2.0
         N_sites = (N_sites1 + N_sites2) / 2.0
-        Sd = 0
-        Nd = 0
+        NS = [0, 0]
         for i, j in zip(seq1_codon_lst, seq2_codon_lst):
-            sd, nd = _count_diff(i, j, codon_table=codon_table)
-            Sd += sd
-            Nd += nd
-        ps = Sd / S_sites
-        pn = Nd / N_sites
-        dS = -3.0/4*log10(1-4.0/3*pn)
-        dN = -3.0/4*log10(1-4.0/3*ps)
-        # print S_sites, N_sites
-        # print Sd, Nd
+            NS = [m+n for m,n in zip(NS, _count_diff(i, j, codon_table=codon_table))]
+        ps = NS[0] / S_sites
+        pn = NS[1] / N_sites
+        dS = -3.0/4*log(1-4.0/3*pn)
+        dN = -3.0/4*log(1-4.0/3*ps)
+        #print N_sites, S_sites
+        #print  Nd, Sd
+        #print pn, ps
         return dN, dS
     elif method == "LWL85":
         # Nomenclature is according to PMID (3916709)
