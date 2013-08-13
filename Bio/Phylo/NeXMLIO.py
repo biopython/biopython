@@ -68,8 +68,10 @@ def cdao_to_obo(s):
     
 def matches(s):
     '''Check for matches in both CDAO and OBO namespaces.'''
-    if s.startswith('cdao:'): return (s, cdao_to_obo(s))
-    else: return (s,)
+    if s.startswith('cdao:'):
+        return (s, cdao_to_obo(s))
+    else:
+        return (s,)
 
 class NeXMLError(Exception):
     """Exception raised when NeXML object construction cannot continue."""
@@ -113,8 +115,10 @@ class Parser(object):
         return cls(handle)
 
     def add_annotation(self, node_dict, meta_node):
-        if 'property' in meta_node.attrib: prop = meta_node.attrib['property']
-        else: prop = 'meta'
+        if 'property' in meta_node.attrib:
+            prop = meta_node.attrib['property']
+        else:
+            prop = 'meta'
         
         if prop in matches('cdao:has_Support_Value'):
             node_dict['confidence'] = float(meta_node.text)
@@ -136,14 +140,18 @@ class Parser(object):
                 nodes = []
                 edges = []
                 for child in child_tags:
-                    if child.tag == qUri('nex:node'): nodes.append(child)
-                    if child.tag == qUri('nex:edge'): edges.append(child)
+                    if child.tag == qUri('nex:node'):
+                        nodes.append(child)
+                    if child.tag == qUri('nex:edge'):
+                        edges.append(child)
                     
                 for node in nodes:
                     node_id = node.attrib['id']
                     this_node = node_dict[node_id] = {}
-                    if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
-                    if 'root' in node.attrib and node.attrib['root'] == 'true': root = node_id
+                    if 'otu' in node.attrib and node.attrib['otu']:
+                        this_node['name'] = node.attrib['otu']
+                    if 'root' in node.attrib and node.attrib['root'] == 'true':
+                        root = node_id
                     
                     for child in node.getchildren():
                         if child.tag == qUri('nex:meta'):
@@ -155,10 +163,12 @@ class Parser(object):
                     src, tar = edge.attrib['source'], edge.attrib['target']
                     srcs.add(src)
                     tars.add(tar)
-                    if not src in node_children: node_children[src] = set()
+                    if not src in node_children:
+                        node_children[src] = set()
                     
                     node_children[src].add(tar)
-                    if 'length' in edge.attrib: node_dict[tar]['branch_length'] = float(edge.attrib['length'])
+                    if 'length' in edge.attrib:
+                        node_dict[tar]['branch_length'] = float(edge.attrib['length'])
                     if 'property' in edge.attrib and edge.attrib['property'] in matches('cdao:has_Support_Value'):
                         node_dict[tar]['confidence'] = float(edge.attrib['content'])
                         
@@ -270,7 +280,8 @@ class Writer(object):
         clade.node_id = node_id
         attrib={'id':node_id, 'label':node_id}
         root = rooted and parent is None
-        if root: attrib['root'] = 'true'
+        if root:
+            attrib['root'] = 'true'
         if clade.name:
             tus.add(clade.name)
             attrib['otu'] = clade.name

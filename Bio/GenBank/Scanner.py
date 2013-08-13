@@ -494,7 +494,8 @@ class InsdcScanner(object):
                 line = self.handle.readline()
                 if not line:
                     break
-                if line[:2] == "//": break
+                if line[:2] == "//":
+                    break
             self.line = line.rstrip()
 
             #Now go though those features...

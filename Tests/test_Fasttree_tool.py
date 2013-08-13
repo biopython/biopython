@@ -40,7 +40,8 @@ if sys.platform=="win32":
                 if os.path.isfile(os.path.join(prog_files, folder, filename)):
                     fasttree_exe = os.path.join(prog_files, folder, filename)
                     break
-            if fasttree_exe : break
+            if fasttree_exe:
+                break
 else:
     import commands
     # Checking the -help argument

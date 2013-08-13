@@ -51,7 +51,8 @@ def node_uri(graph, uri):
         return urlparse.urljoin(graph, uri)
     elif graph:
         return urlparse.urljoin(graph, '#%s' % uri)
-    else: return uri
+    else:
+        return uri
 
 
 def new_storage():
@@ -127,8 +128,10 @@ class Parser(object):
         if parser is None:
             raise Exception('Failed to create RDF.Parser for MIME type %s' % mime_type)
         
-        if 'base_uri' in kwargs: base_uri = kwargs['base_uri']
-        else: base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
+        if 'base_uri' in kwargs:
+            base_uri = kwargs['base_uri']
+        else:
+            base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
         
         statements = parser.parse_string_as_stream(self.handle.read(), base_uri)
         for s in statements:
@@ -143,7 +146,8 @@ class Parser(object):
         if model is None:
             model = self.model
 
-        if not context is None: context = RDF.Node(RDF.Uri(context))
+        if not context is None:
+            context = RDF.Node(RDF.Uri(context))
         
         # look up branch lengths/TUs for all nodes
         self.get_node_info(model, context=context)
@@ -160,9 +164,12 @@ class Parser(object):
         result = self.node_info[node]
         
         kwargs = {}
-        if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
-        if 'label' in result: kwargs['name'] = result['label'].replace('_', ' ')
-        if 'confidence' in result: kwargs['confidence'] = result['confidence']
+        if 'branch_length' in result:
+            kwargs['branch_length'] = result['branch_length']
+        if 'label' in result:
+            kwargs['name'] = result['label'].replace('_', ' ')
+        if 'confidence' in result:
+            kwargs['confidence'] = result['confidence']
         
         clade = CDAO.Clade(**kwargs)
         
@@ -184,7 +191,8 @@ class Parser(object):
             # process each RDF triple in the model sequentially
             s, v, o = str(statement.subject), Uri(str(statement.predicate)), str(statement.object)
             
-            if not s in self.obj_info: self.obj_info[s] = {}
+            if not s in self.obj_info:
+                self.obj_info[s] = {}
             this = self.obj_info[s]
             
             assignments = {
@@ -200,7 +208,8 @@ class Parser(object):
             try:
                 # if the predicate is one we care about, store information for later
                 this[assignments[v]] = o
-            except KeyError: pass
+            except KeyError:
+                pass
             
             if v == qUri('rdf:type'):
                 if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
@@ -285,12 +294,15 @@ class Writer(object):
         """Add triples describing a set of trees to handle, which can be either 
         a file or a librdf model."""
 
-        if tree_uri and not tree_uri.endswith('/'): tree_uri = tree_uri + '/'
+        if tree_uri and not tree_uri.endswith('/'):
+            tree_uri = tree_uri + '/'
 
         is_librdf_model = isinstance(handle, RDF.Model)
 
-        if is_librdf_model and context: context = RDF.Node(RDF.Uri(context))
-        else: context = None
+        if is_librdf_model and context:
+            context = RDF.Node(RDF.Uri(context))
+        else:
+            context = None
 
         Uri = RDF.Uri
         prefixes = self.prefixes
@@ -322,7 +334,8 @@ class Writer(object):
 
 
     def add_stmt_to_handle(self, handle, stmt, context):
-        if isinstance(handle, RDF.Model): handle.append(stmt, context)
+        if isinstance(handle, RDF.Model):
+            handle.append(stmt, context)
         else: 
             # apply URI prefixes
             stmt_parts = [stmt.subject, stmt.predicate, stmt.object]
@@ -335,11 +348,15 @@ class Writer(object):
                         for prefix, uri in self.prefixes.items():
                             if node_uri.startswith(uri):
                                 node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
-                                if node_uri == 'rdf:type': node_uri = 'a'
+                                if node_uri == 'rdf:type':
+                                    node_uri = 'a'
                                 changed = True
-                        if changed: stmt_strings.append(node_uri)
-                        else: stmt_strings.append('<%s>' % node_uri)
-                    else: stmt_strings.append('<%s>' % node_uri)
+                        if changed:
+                            stmt_strings.append(node_uri)
+                        else:
+                            stmt_strings.append('<%s>' % node_uri)
+                    else:
+                        stmt_strings.append('<%s>' % node_uri)
 
                 elif part.is_literal():
                     stmt_strings.append(('"%s"' % str(part.literal[0])) + 
@@ -356,8 +373,10 @@ class Writer(object):
         
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(7)
-        if parent: clade.ancestors = parent.ancestors + [parent.uri]
-        else: clade.ancestors = []
+        if parent:
+            clade.ancestors = parent.ancestors + [parent.uri]
+        else:
+            clade.ancestors = []
         
         Uri = RDF.Uri
         nUri = lambda s: Uri(node_uri(self.tree_uri, s))
