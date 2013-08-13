@@ -395,4 +395,3 @@ if __name__ == '__main__':
         if record_has(inrec, allowed) and \
                not record_has(inrec, banned):
             writerec(inrec, sys.stdout, GAF10FIELDS)
-
