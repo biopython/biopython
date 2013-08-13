@@ -127,7 +127,8 @@ def _gpi10iterator(handle):
     file which is in the GPI 1.0 format.
     """
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -142,7 +143,8 @@ def _gpi11iterator(handle):
     file which is in the GPI 1.0 format.
     """
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -178,7 +180,8 @@ def _gpa10iterator(handle):
     """
 
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -197,7 +200,8 @@ def _gpa11iterator(handle):
     use the gpa_iterator function
     """
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -226,7 +230,8 @@ def gpa_iterator(handle):
 
 def _gaf20iterator(handle):
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -240,7 +245,8 @@ def _gaf20iterator(handle):
 
 def _gaf10iterator(handle):
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -256,7 +262,8 @@ def _gaf10byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -280,7 +287,8 @@ def _gaf20byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
     for inline in handle:
-        if inline[0] == '!': continue
+        if inline[0] == '!':
+            continue
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
@@ -395,4 +403,3 @@ if __name__ == '__main__':
         if record_has(inrec, allowed) and \
                not record_has(inrec, banned):
             writerec(inrec, sys.stdout, GAF10FIELDS)
-

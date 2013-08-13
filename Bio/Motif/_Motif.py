@@ -32,14 +32,14 @@ class Motif(object):
         self.name=""
 
     def _check_length(self, len):
-        if self.length==None:
+        if self.length is None:
             self.length = len
         elif self.length != len:
             print "len",self.length,self.instances, len
             raise ValueError("You can't change the length of the motif")
 
     def _check_alphabet(self,alphabet):
-        if self.alphabet==None:
+        if self.alphabet is None:
             self.alphabet=alphabet
         elif self.alphabet != alphabet:
                 raise ValueError("Wrong Alphabet")
@@ -379,7 +379,7 @@ class Motif(object):
 
         Please use this method (i.e. invoke len(m)) instead of refering to the m.length directly.
         """
-        if self.length==None:
+        if self.length is None:
             return 0
         else:
             return self.length
@@ -442,7 +442,7 @@ class Motif(object):
 
         self.counts = {}
         self.has_counts=True
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         self.length=0
         for i in letters:
@@ -453,14 +453,14 @@ class Motif(object):
                 self.counts[k].append(v)
             self.length+=1
         self.set_mask("*"*self.length)
-        if make_instances==True:
+        if make_instances is True:
             self.make_instances_from_counts()
         return self
         
     def _from_horiz_matrix(self,stream,letters=None,make_instances=False):
         """reads a horizontal count matrix from stream and fill in the counts.
         """
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         self.counts = {}
         self.has_counts=True
@@ -481,7 +481,7 @@ class Motif(object):
         l = len(self.counts[letters[0]])
         self.length=l
         self.set_mask("*"*l)
-        if make_instances==True:
+        if make_instances is True:
             self.make_instances_from_counts()
         return self
         
@@ -700,7 +700,7 @@ class Motif(object):
         """Return string representation of the motif as  a matrix.
         
         """
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         self._pwm_is_current=False
         pwm=self.pwm(laplace=False)
@@ -714,7 +714,7 @@ class Motif(object):
         """Return string representation of the motif as  a matrix.
         
         """
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         res=""
         if normalized: #output PWM
@@ -800,7 +800,7 @@ class Motif(object):
             for j in xrange(m):
                 c = sequence[i+j]
                 temp = logodds[j].get(c)
-                if temp==None:
+                if temp is None:
                     break
                 score += temp
             else:

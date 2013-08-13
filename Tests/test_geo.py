@@ -30,4 +30,3 @@ for file in testfiles:
         print record
     print "\n"
     fh.close()
-

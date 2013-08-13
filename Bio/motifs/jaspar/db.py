@@ -721,7 +721,7 @@ class JASPAR5(object):
 
         cur.execute("select count(*) from MATRIX where BASE_ID = (select BASE_ID from MATRIX where ID = %s) and VERSION > (select VERSION from MATRIX where ID = %s)", (int_id, int_id))
 
-        row = cur.fetchone();
+        row = cur.fetchone()
 
         count = row[0]
 

@@ -51,5 +51,3 @@ def read(handle):
         else:
             raise ValueError(line)
     return record
-
-

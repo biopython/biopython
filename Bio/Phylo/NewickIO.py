@@ -78,7 +78,8 @@ def _format_comment(text):
 def _get_comment(clade):
     if hasattr(clade, 'comment') and clade.comment:
         return _format_comment(str(clade.comment))
-    else: return ''
+    else:
+        return ''
 
 
 class Parser(object):
