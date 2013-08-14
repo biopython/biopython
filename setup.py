@@ -25,6 +25,15 @@ import sys
 import os
 import shutil
 
+from distutils.core import setup
+from distutils.core import Command
+from distutils.command.install import install
+from distutils.command.build_py import build_py
+from distutils.command.build_ext import build_ext
+from distutils.extension import Extension
+
+_CHECKED = None
+
 
 def is_pypy():
     import platform
@@ -62,6 +71,7 @@ def get_yes_or_no(question, default):
             break
         print ("Please answer y or n.")
     return response[0] == 'y'
+
 
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 5):
@@ -104,25 +114,6 @@ elif sys.version_info[0] == 3:
         if sys.argv[idx + 1] == 'pip-egg-info':
             sys.argv[idx + 1] = os.path.join(local_path, 'pip-egg-info')
 
-# use setuptools, falling back on core modules if not found
-try:
-    from setuptools import setup, Command
-    from setuptools.command.install import install
-    from setuptools.command.build_py import build_py
-    from setuptools.command.build_ext import build_ext
-    from setuptools.extension import Extension
-    _SETUPTOOLS = True
-except ImportError:
-    from distutils.core import setup
-    from distutils.core import Command
-    from distutils.command.install import install
-    from distutils.command.build_py import build_py
-    from distutils.command.build_ext import build_ext
-    from distutils.extension import Extension
-    _SETUPTOOLS = False
-
-_CHECKED = None
-
 
 def check_dependencies_once():
     # Call check_dependencies, but cache the result for subsequent
@@ -131,6 +122,7 @@ def check_dependencies_once():
     if _CHECKED is None:
         _CHECKED = check_dependencies()
     return _CHECKED
+
 
 def is_automated():
     """Check for installation with easy_install or pip.
@@ -156,24 +148,6 @@ def is_automated():
         is_automated = True
     return is_automated
 
-def get_install_requires():
-    install_requires = []
-    # skip this with distutils (otherwise get a warning)
-    if not _SETUPTOOLS:
-        return []
-    # skip this with jython and pypy and ironpython
-    if os.name == "java" or is_pypy() or is_ironpython():
-        return []
-    # check for easy_install and pip
-    if is_automated():
-        global _CHECKED
-        if _CHECKED is None:
-            _CHECKED = True
-        # pip dependency resolution does not fully install numpy
-        # before compiling Biopython so Biopython setup fails.
-        # Instead, we expect user to explicitly require numpy if needed.
-        #install_requires.append("numpy >= 1.5.1")
-    return install_requires
 
 def check_dependencies():
     """Return whether the installation should continue."""
@@ -484,9 +458,6 @@ setup_args = {
         'Bio.PopGen': ['SimCoal/data/*.par'],
          },
    }
-
-if _SETUPTOOLS:
-    setup_args["install_requires"] = get_install_requires()
 
 try:
     setup(**setup_args)
