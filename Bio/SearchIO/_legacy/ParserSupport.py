@@ -26,10 +26,6 @@ is_blank_line          Test whether a line is blank.
 """
 
 
-import warnings
-warnings.warn("The module Bio.ParserSupport is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
-
-
 import sys
 try:
     from types import InstanceType

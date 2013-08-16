@@ -49,8 +49,8 @@ blastall, blastpgp and rpsblast are considered to be obsolete now, and
 are likely to be deprecated and then removed in future releases.
 """
 
+
 import warnings
-warnings.warn("The plain text parser in this module still works at the time of writing, but is considered obsolete and updating it to cope with the latest versions of BLAST is not a priority for us.", PendingDeprecationWarning)
 
 from Bio import BiopythonDeprecationWarning
 
