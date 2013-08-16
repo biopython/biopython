@@ -59,9 +59,9 @@ import re
 import StringIO
 
 from Bio import File
-from Bio.ParserSupport import *
 from Bio.Blast import Record
 from Bio.Application import _escape_filename
+from Bio.SearchIO._legacy.ParserSupport import *
 
 
 class LowQualityBlastError(Exception):
