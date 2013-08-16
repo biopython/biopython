@@ -11,7 +11,7 @@ parser.
 """
 
 from Bio.Alphabet import generic_dna, generic_protein
-from Bio.Blast import NCBIStandalone
+from Bio.SearchIO._legacy import NCBIStandalone
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
