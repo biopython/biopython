@@ -15,7 +15,7 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 from itertools import izip
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
+from Bio.Alphabet import IUPAC, HasStopCodon, Alphabet, generic_dna
 from Bio.Data.CodonTable import generic_by_id
 
 
@@ -51,12 +51,13 @@ def get_codon_alphabet(codon_table, gap_char="-"):
     letters = codon_table.forward_table.keys()
     letters.extend(codon_table.stop_codons)
     letters.extend(codon_table.start_codons)
-    letters.append(gap_char*3)
+    if gap_char:
+        letters.append(gap_char*3)
     generic_codon_alphabet.letters = letters
     generic_codon_alphabet.gap_char = '-'
     return generic_codon_alphabet
 
-default_codon_alphabet = Gapped(get_codon_alphabet(default_codon_table))
+default_codon_alphabet = get_codon_alphabet(default_codon_table)
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
