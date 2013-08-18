@@ -9,8 +9,11 @@ CodonSeq class is interited from Seq class. This is the core class to
 deal with sequences in CodonAlignment in biopython.
 
 """
+from __future__ import division
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
+from math import log
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -276,11 +279,11 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
     Available methods:
         - NG86  - PMID: 3444411
         - LWL85 - PMID: 3916709
+        - ML    - PMID: 7968486
     
     Arguments:
         - w  - transition/transvertion ratio
     """
-    from math import log
     if all([isinstance(codon_seq1, CodonSeq), isinstance(codon_seq2, CodonSeq)]):
         pass
     elif all([isinstance(codon_seq1, SeqRecord), isinstance(codon_seq2, SeqRecord)]):
@@ -307,9 +310,6 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
         pn = NS[1] / N_sites
         dN = -3.0/4*log(1-4.0/3*pn)
         dS = -3.0/4*log(1-4.0/3*ps)
-        #print N_sites, S_sites
-        #print  Nd, Sd
-        #print pn, ps
         return dN, dS
     elif method == "LWL85":
         # Nomenclature is according to PMID (3916709)
@@ -352,10 +352,88 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", \
         dS = 3*(L[2]*A[1]+L[2]*(A[2]+B[2]))/(L[1]+3*L[2])
         dN = 3*(L[2]*B[1]+L[0]*(A[0]+B[0]))/(2*L[1]+3*L[0])
         return dN, dS
+    elif method == "ML":
+        from collections import Counter
+        from scipy.optimize import minimize
+        codon_cnt = Counter()
+        # three codon position
+        fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
+                  {'A': 0, 'G': 0, 'C': 0, 'T': 0},
+                  {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
+        for i in seq1_codon_lst + seq2_codon_lst:
+            if i != '---':
+                fcodon[0][i[0]] += 1
+                fcodon[1][i[1]] += 1
+                fcodon[2][i[2]] += 1
+        for i in range(3):
+            tot = sum(fcodon[i].values())
+            fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
+        pi = {}
+        for i in set(seq1_codon_lst+seq2_codon_lst):
+            if i != '---':
+                pi[i] = fcodon[0][i[0]]*fcodon[1][i[1]]*fcodon[2][i[2]]
+        for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+            #if i != j and ('---' not in (i, j)):
+            if '---' not in (i, j):
+                codon_cnt[(i,j)] += 1
+        codon_lst = [i for i in \
+                codon_table.forward_table.keys() + codon_table.stop_codons if 'U' not in i]
+        # apply optimization
+        def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst, \
+                codon_table=codon_table):
+            """params = [t, k, w]"""
+            return -_likelihood_func(params[0], params[1], params[2], pi, \
+                    codon_cnt, codon_lst=codon_lst, codon_table=codon_table)
+        # count sites
+        opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
+                bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)), tol=1e-5)
+        t, k, w = opt_res.x
+        Q = _get_Q(pi, k, w, codon_lst, codon_table)
+        Sd = Nd = 0
+        for i, c1 in enumerate(codon_lst):
+            for j, c2 in enumerate(codon_lst):
+                if i != j:
+                    try:
+                        if codon_table.forward_table[c1] == codon_table.forward_table[c2]:
+                            # synonymous count
+                            Sd += pi[c1] * Q[i, j]
+                        else:
+                            # nonsynonymous count
+                            Nd += pi[c1] * Q[i, j]
+                    except:
+                        # This is probably due to stop codons
+                        pass
+        Sd *= t
+        Nd *= t
+        # count differences (with w fixed to 1)
+        opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
+                bounds=((1e-10, 20), (1e-10, 20), (1, 1)), tol=1e-5)
+        t, k, w = opt_res.x
+        Q = _get_Q(pi, k, w, codon_lst, codon_table)
+        rhoS = rhoN = 0
+        for i, c1 in enumerate(codon_lst):
+            for j, c2 in enumerate(codon_lst):
+                if i != j:
+                    try:
+                        if codon_table.forward_table[c1] == codon_table.forward_table[c2]:
+                            # synonymous count
+                            rhoS += pi[c1] * Q[i, j]
+                        else:
+                            # nonsynonymous count
+                            rhoN += pi[c1] * Q[i, j]
+                    except:
+                        # This is probably due to stop codons
+                        pass
+        rhoS *= 3
+        rhoN *= 3
+        dN = Nd/rhoN
+        dS = Sd/rhoS
+        return dN, dS
+
 
 
 #################################################################
-#  private functions for NG86 methods
+#  private functions for NG86 method
 #################################################################
 def _count_site(codon_lst, w=1, codon_table=default_codon_table):
     """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
@@ -449,15 +527,18 @@ def _count_diff(codon1, codon2, codon_table=default_codon_table):
                 nd += weight
             return (sd, nd)
         if len(diff_pos) == 1:
-            SN = [i+j for i,j in zip(SN, compare_codon(codon1, codon2, codon_table=codon_table))]
+            SN = [i+j for i,j in zip(SN, \
+                    compare_codon(codon1, codon2, codon_table=codon_table))]
         elif len(diff_pos) == 2:
             codon2_aa = codon_table.forward_table[codon2]
             for i in diff_pos:
                 codon1_chars = [c for c in codon1]
                 codon1_chars[i] = codon2[i]
                 temp_codon = ''.join(codon1_chars)
-                SN = [i+j for i,j in zip(SN, compare_codon(codon1, temp_codon, codon_table=codon_table, weight=0.5))]
-                SN = [i+j for i,j in zip(SN, compare_codon(temp_codon, codon2, codon_table=codon_table, weight=0.5))]
+                SN = [i+j for i,j in zip(SN, \
+                        compare_codon(codon1, temp_codon, codon_table=codon_table, weight=0.5))]
+                SN = [i+j for i,j in zip(SN, \
+                        compare_codon(temp_codon, codon2, codon_table=codon_table, weight=0.5))]
         elif len(diff_pos) == 3:
             # we are now in the most complex situation
             # I don't want to think about this.
@@ -467,7 +548,7 @@ def _count_diff(codon1, codon2, codon_table=default_codon_table):
         
 
 #################################################################
-#  private functions for LWL85 methods
+#  private functions for LWL85 method
 #################################################################
 def _get_codon_fold(codon_table):
     """function to classify different position in a codon into
@@ -546,6 +627,98 @@ def _diff_codon(codon1, codon2, fold_dict):
                 else:
                     raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
     return (P0, P2, P4, Q0, Q2, Q4)
+
+
+#################################################################
+#  private functions for Maximum Likelihood method
+#################################################################
+
+def _q(i, j, pi, k, w, codon_table=default_codon_table):
+    """Q matrix for codon substitution.
+
+    Arguments:
+        - i, j  : three letter codon string
+        - pi    : expected codon frequency
+        - k     : transition/transversion ratio
+        - w     : nonsynonymous/synonymous rate ratio
+        - codon_table: Bio.Data.CodonTable object
+    """
+    if i == j:
+        # diagonal elements is the sum of all other elements
+        return 0
+    if i in codon_table.stop_codons or j in codon_table.stop_codons:
+        return 0
+    if (i not in pi) or (j not in pi):
+        return 0
+    purine = ('A', 'G')
+    pyrimidine = ('T', 'C')
+    diff = []
+    for n, (c1, c2) in enumerate(zip(i, j)):
+        if c1 != c2:
+            diff.append((n, c1, c2))
+    if len(diff) >= 2:
+        return 0
+    if codon_table.forward_table[i] == codon_table.forward_table[j]:
+        # synonymous substitution
+        if diff[0][1] in purine and diff[0][2] in purine:
+            # transition
+            return k*pi[j]
+        elif diff[0][1] in pyrimidine and diff[0][2] in pyrimidine:
+            # transition
+            return k*pi[j]
+        else:
+            # transversion
+            return pi[j]
+    else:
+        # nonsynonymous substitution
+        if diff[0][1] in purine and diff[0][2] in purine:
+            # transition
+            return w*k*pi[j]
+        elif diff[0][1] in pyrimidine and diff[0][2] in pyrimidine:
+            # transition
+            return w*k*pi[j]
+        else:
+            # transversion
+            return w*pi[j]
+
+def _get_Q(pi, k, w, codon_lst, codon_table):
+    """Q matrix for codon substitution"""
+    import numpy as np
+    codon_num = len(codon_lst)
+    Q = np.zeros((codon_num, codon_num))
+    for i in range(codon_num):
+        for j in range(codon_num):
+            if i != j:
+                Q[i, j] = _q(codon_lst[i], codon_lst[j], pi, k, w, \
+                        codon_table=codon_table)
+    nucl_substitutions = 0
+    for i in range(codon_num):
+        Q[i,i] = -sum(Q[i,:])
+        try:
+            nucl_substitutions += pi[codon_lst[i]] * (-Q[i, i])
+        except KeyError:
+            pass
+    Q = Q / nucl_substitutions
+    return Q
+
+
+def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):
+    """likelihood function for ML method
+    """
+    from scipy.linalg import expm
+    Q = _get_Q(pi, k, w, codon_lst, codon_table)
+    P = expm(Q*t)
+    l = 0 # likelihood value
+    for i, c1 in enumerate(codon_lst):
+        for j, c2 in enumerate(codon_lst):
+            #if i == j: print P[i, j]
+            if (c1, c2) in codon_cnt:
+                if P[i, j] * pi[c1] <= 0:
+                    #print c1, c2
+                    l += codon_cnt[(c1, c2)] * 0
+                else:
+                    l += codon_cnt[(c1, c2)] * log(pi[c1] * P[i, j])
+    return l
 
 
 if __name__ == "__main__":
