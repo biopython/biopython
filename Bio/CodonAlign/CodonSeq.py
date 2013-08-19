@@ -76,8 +76,6 @@ class CodonSeq(Seq):
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
-            if len(self) == 47:
-                raise RuntimeError('trace back')
             assert len(self) % 3 == 0, "Sequence length is not a triple number"
             self.rf_table = filter(lambda x: x%3 == 0, range(len(seq_ungapped)))
             # check alphabet
@@ -106,11 +104,22 @@ class CodonSeq(Seq):
             self.rf_table = rf_table
     
     def __getitem__(self, index):
-        #TODO: modify this to allow rf_table specification
-        #      return a Seq object if index is not for codon (warning)
         seqlst = range(len(self._data))
-        rf_table = [i for i in seqlst[index] if i in self.rf_table]
-        rf_table = [i-rf_table[0] for i in rf_table]
+        # full_rf_table of self
+        full_rf_table = self.get_full_rf_table()
+        # full rf_table of sliced record (output)
+        rf_table_full = []
+        rf_table_full = [i for i in seqlst[index] if i in full_rf_table]
+        rf_table_full = [i-full_rf_table[0] for i in rf_table_full]
+        # brute way to force rf_table_full back to rf_table
+        # more elegant way for this?
+        shift = 0
+        rf_table = []
+        for pos in rf_table_full:
+            if self._data[pos:pos+3] == '---':
+                shift += 3
+            else:
+                rf_table.append(pos-shift)
         try:
             return CodonSeq(self._data[index], self.alphabet, rf_table=rf_table)
         except ValueError:
@@ -118,7 +127,7 @@ class CodonSeq(Seq):
             return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
-        """get the `index`-th codon in from the self.seq
+        """get the `index`-th codon from the self.seq
         """
         if len(set([i % 3 for i in self.rf_table])) != 1:
             raise RuntimeError("frameshift detected. " \
