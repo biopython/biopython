@@ -53,7 +53,7 @@ class ConsensusTest(unittest.TestCase):
         self.assertEqual(bitstr_counts[BitString('01111')][0], 1)
 
     def test_strict_consensus(self):
-        ref_trees = open('./TreeConstruction/consensus_refs.tre')
+        ref_trees = open('./TreeConstruction/strict_refs.tre')
         # three trees
         consensus_tree = strict_consensus(self.trees)
         tree_file = StringIO.StringIO()
@@ -79,6 +79,31 @@ class ConsensusTest(unittest.TestCase):
         tree_file = StringIO.StringIO()
         Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertEqual(tree_file.getvalue(), ref_tree.readline())
+        consensus_tree = majority_consensus(self.trees, 1)
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_tree.readline())
+
+    def test_adam_consensus(self):
+        ref_trees = open('./TreeConstruction/adam_refs.tre')
+        # three trees
+        consensus_tree = adam_consensus(self.trees)
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_trees.readline())
+        # tree 1 and tree 2
+        consensus_tree = adam_consensus(self.trees[:2])
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_trees.readline())
+        # tree 1 and tree 3
+        consensus_tree = adam_consensus(self.trees[::2])
+        tree_file = StringIO.StringIO()
+        Phylo.write(consensus_tree, tree_file, 'newick')
+        self.assertEqual(tree_file.getvalue(), ref_trees.readline())
+        ref_trees.close()
+        tree_file.close()
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
