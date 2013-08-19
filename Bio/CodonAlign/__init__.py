@@ -47,7 +47,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print codon_aln
-    CodonAlphabet() CodonAlignment with 2 rows and 69 columns (23 codons)
+    CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)
     TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
     TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
 
@@ -306,7 +306,7 @@ def _check_corr(pro, nucl, gap_char='-', \
             shift_id_pos = 0
             # check the first anchor
             if first_anchor is True and anchor_pos[0][2] != 0:
-                shift_val_lst = [1,2,anchor_len-2,anchor_len-1,0]
+                shift_val_lst = [1,2,3*anchor_len-2,3*anchor_len-1,0]
                 sh_anc = anchors[0]
                 for shift_val in shift_val_lst:
                     if shift_val == 0:
@@ -314,8 +314,8 @@ def _check_corr(pro, nucl, gap_char='-', \
                         break
                     if shift_val in (1,2):
                         sh_nuc_len = anchor_len*3+shift_val
-                    elif shift_val in (anchor_len-2,anchor_len-1):
-                        sh_nuc_len = anchor_len*3-(anchor_len-shift_val)
+                    elif shift_val in (3*anchor_len-2,3*anchor_len-1):
+                        sh_nuc_len = anchor_len*3-(3*anchor_len-shift_val)
                     if anchor_pos[0][0] >= sh_nuc_len:
                         sh_nuc = nucl_seq[anchor_pos[0][0]-sh_nuc_len:anchor_pos[0][0]]
                     else:
@@ -332,7 +332,7 @@ def _check_corr(pro, nucl, gap_char='-', \
                     warnings.warn("first frameshift detection failed for %s" % nucl.id)
             # check anchors in the middle
             for i in range(len(anchor_pos)-1):
-                shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) % anchor_len
+                shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) % (3*anchor_len)
                 sh_anc = "".join(anchors[anchor_pos[i][2]:anchor_pos[i+1][2]])
                 sh_nuc = nucl_seq[anchor_pos[i][0]:anchor_pos[i+1][0]]
                 qcodon = None
@@ -349,15 +349,15 @@ def _check_corr(pro, nucl, gap_char='-', \
             if anchor_pos[-1][2]+1 == len(anchors)-1:
                 sh_anc = anchors[-1]
                 this_anchor_len = len(sh_anc)
-                shift_val_lst = [1,2,this_anchor_len-2,this_anchor_len-1,0]
+                shift_val_lst = [1,2,3*this_anchor_len-2,3*this_anchor_len-1,0]
                 for shift_val in shift_val_lst:
                     if shift_val == 0:
                         qcodon = None
                         break
                     if shift_val in (1,2):
                         sh_nuc_len = this_anchor_len*3+shift_val
-                    elif shift_val in (this_anchor_len-2,this_anchor_len-1):
-                        sh_nuc_len = this_anchor_len*3-(this_anchor_len-shift_val)
+                    elif shift_val in (3*this_anchor_len-2,3*this_anchor_len-1):
+                        sh_nuc_len = this_anchor_len*3-(3*this_anchor_len-shift_val)
                     if len(nucl_seq)-anchor_pos[-1][0] >= sh_nuc_len:
                         sh_nuc = nucl_seq[anchor_pos[-1][0]:anchor_pos[-1][0]+sh_nuc_len]
                     else:
@@ -392,7 +392,7 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
         - sh_nuc    - potentially corresponding nucleotide sequence
                       of sh_anc
         - shift_val - 1 or 2 indicates forward frame shift, whereas
-                      anchor_len-1 or anchor_len-2 indicates backward
+                      3*anchor_len-1 or 3*anchor_len-2 indicates backward
                       shift
         - aa2re     - aa to codon re dict
         - anchor_len - length of the anchor
@@ -417,8 +417,8 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
         if not match:
             # failed to find a match (frameshift)
             return -1, shift_id_pos
-    elif shift_val in (anchor_len-1, anchor_len-2):
-        shift_val = anchor_len-shift_val
+    elif shift_val in (3*anchor_len-1, 3*anchor_len-2):
+        shift_val = 3*anchor_len-shift_val
         # obtain shifted anchor and corresponding nucl
         # first check if the shifted pos is just at the end of the 
         # previous anchor.
