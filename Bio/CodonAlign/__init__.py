@@ -9,6 +9,7 @@
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from itertools import izip
+
 from Bio.SeqRecord import SeqRecord
 
 from CodonSeq import CodonSeq
@@ -17,31 +18,32 @@ from CodonAlphabet import default_codon_table, default_codon_alphabet, CodonAlph
 from CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
 
 
-def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
-        codon_table=default_codon_table, alphabet=None, \
-        complete_protein=False, anchor_len=10, max_score=10):
-    """Build a codon alignment from a protein alignment and corresponding
-    nucleotide sequences
+def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
+          codon_table=default_codon_table, alphabet=None, \
+          complete_protein=False, anchor_len=10, max_score=10):
+    """Build a codon alignment from a protein alignment and
+    corresponding nucleotide sequences
 
     Arguments:
-     - pro_align  - a MultipleSeqAlignment object that stores protein alignment
-     - nucl_align - an object returned by SeqIO.parse or SeqIO.index or a 
-                    colloction of SeqRecord.
+     - pro_align  - a protein MultipleSeqAlignment object
+     - nucl_align - an object returned by SeqIO.parse or SeqIO.index
+                    or a colloction of SeqRecord.
      - alphabet   - alphabet for the returned codon alignment
      - corr_dict  - a dict that maps protein id to nucleotide id
-     - complete_protein - whether the sequence begins with a start codon
-                TODO: check stop codon
+     - complete_protein - whether the sequence begins with a start
+                          codon
      - frameshift - whether to appply frameshift detection
 
     Return a CodonAlignment object
     
     >>> from Bio.Alphabet import IUPAC
     >>> from Bio.Seq import Seq
+    >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
     >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG', 
-    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG', 
-    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
+    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
+    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
     >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
     >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
@@ -60,12 +62,15 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
     
     # check the type of object of pro_align
     if not isinstance(pro_align, MultipleSeqAlignment):
-        raise TypeError("the first argument should be a MultipleSeqAlignment object")
+        raise TypeError("the first argument should be a "
+                        "MultipleSeqAlignment object")
     # check the alphabet of pro_align
     for pro in pro_align:
         if not isinstance(pro.seq.alphabet, ProteinAlphabet):
-            raise TypeError("Alphabet Error!\nThe input alignment should be a *PROTEIN* alignment")
-    # check whether the number of seqs in pro_align and nucl_seqs is the same
+            raise TypeError("Alphabet Error!\nThe input alignment "
+                            "should be a *PROTEIN* alignment")
+    # check whether the number of seqs in pro_align and nucl_seqs is
+    # the same
     pro_num = len(pro_align)
     if corr_dict is None:
         if nucl_seqs.__class__.__name__ == "generator":
@@ -73,39 +78,47 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
             nucl_seqs = tuple(nucl_seqs) 
         nucl_num = len(nucl_seqs)
         if pro_num > nucl_num:
-            raise ValueError("More Number of SeqRecords in Protein Alignment (%d) than the Number of Nucleotide SeqRecords (%d) are found!" \
-                    % (pro_num, nucl_num))
+            raise ValueError("More Number of SeqRecords in Protein Alignment "
+                             "({0}) than the Number of Nucleotide SeqRecords "
+                             "({1}) are found!".format(pro_num, nucl_num))
 
         if alphabet is None:
             alphabet = _get_codon_alphabet(codon_table, gap_char=gap_char)
-        # Determine the protein sequences and nucl sequences correspondance. If
-        # nucl_seqs is a list, tuple or read by SeqIO.parse(), we assume the order
-        # of sequences in pro_align and nucl_seqs are the same. If nucl_seqs is a
-        # dict or read by SeqIO.index(), we match seqs in pro_align and those in 
+        # Determine the protein sequences and nucl sequences
+        # correspondance. If nucl_seqs is a list, tuple or read by
+        # SeqIO.parse(), we assume the order of sequences in pro_align
+        # and nucl_seqs are the same. If nucl_seqs is a dict or read by
+        # SeqIO.index(), we match seqs in pro_align and those in
         # nucl_seq by their id.
         if   nucl_seqs.__class__.__name__ in ("_IndexedSeqFileDict", "dict"):
             corr_method = 1
         elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
             corr_method = 0
         else:
-            raise TypeError("Nucl Sequences Error, Unknown type to assign correspondance method")
+            raise TypeError("Nucl Sequences Error, Unknown type to assign "
+                            "correspondance method")
     else:
         if not isinstance(corr_dict, dict):
-            raise TypeError("corr_dict should be a dict that corresponds protein id to nucleotide id!")
+            raise TypeError("corr_dict should be a dict that corresponds "
+                            "protein id to nucleotide id!")
         if len(corr_dict) >= pro_num:
-            if nucl_seqs.__class__.__name__ == "generator": # read by SeqIO.parse()
+            # read by SeqIO.parse()
+            if nucl_seqs.__class__.__name__ == "generator":
                 from Bio import SeqIO
                 nucl_seqs = SeqIO.to_dict(nucl_seqs)
             elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
                 nucl_seqs = {i.id: i for i in nucl_seqs}
-            elif nucl_seqs.__class__.__name__ in ("_IndexedSeqFileDict", "dict"):
+            elif nucl_seqs.__class__.__name__ in \
+                    ("_IndexedSeqFileDict", "dict"):
                 pass
             else:
-                raise TypeError("Nucl Sequences Error, Unknown type of Nucleotide Records!")
+                raise TypeError("Nucl Sequences Error, Unknown type of "
+                                "Nucleotide Records!")
             corr_method = 2
         else:
-            raise RuntimeError("Number of items in corr_dict (%n) is less than number of protein records (%n)" \
-                    % (len(corr_dict), pro_num))
+            raise RuntimeError("Number of items in corr_dict ({0}) is less "
+                               "than number of protein records "
+                               "({1})".format(len(corr_dict), pro_num))
 
     # set up pro-nucl correspondance based on corr_method
     # corr_method = 0, consecutive pairing
@@ -118,8 +131,9 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
         # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id: 
             diff = pro_id - nucl_id
-            raise ValueError("Protein Record %s cannot find a nucleotide sequence match, please check the id" \
-                    % ', '.join(diff))
+            raise ValueError("Protein Record {0} cannot find a nucleotide "
+                             "sequence match, please check the "
+                             "id".format(', '.join(diff)))
         else:
             pro_nucl_pair = []
             for pro_rec in pro_align:
@@ -139,16 +153,18 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X', \
     for pair in pro_nucl_pair:
         # Beaware that the following span corresponds to a ungapped 
         # nucleotide sequence.
-        corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char, \
-                codon_table=codon_table, complete_protein=complete_protein, \
-                anchor_len=anchor_len)
+        corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char,
+                                codon_table=codon_table,
+                                complete_protein=complete_protein,
+                                anchor_len=anchor_len)
         if not corr_span:
-            raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
-                    % (pair[0].id, pair[1].id))
+            raise ValueError("Protein Record {0} and Nucleotide Record {1} do"
+                             " not match!".format((pair[0].id, pair[1].id)))
         else:
-            codon_rec = _get_codon_rec(pair[0], pair[1], corr_span, \
-                    alphabet=alphabet, complete_protein=False, \
-                    max_score=max_score)
+            codon_rec = _get_codon_rec(pair[0], pair[1], corr_span,
+                                       alphabet=alphabet,
+                                       complete_protein=False,
+                                       max_score=max_score)
             codon_aln.append(codon_rec)
             if corr_span[1] == 2:
                 shift = True
@@ -182,7 +198,8 @@ def _codons2re(codons):
 
 
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
-    """Set up the regular expression of a given CodonTable for futher use.
+    """Set up the regular expression of a given CodonTable for
+    futher use.
 
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]
@@ -195,7 +212,8 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """
     from Bio.Data.CodonTable import CodonTable
     if not isinstance(codon_table, CodonTable):
-        raise TypeError("Input table is not a instance of Bio.Data.CodonTable object")
+        raise TypeError("Input table is not a instance of " 
+                        "Bio.Data.CodonTable object")
     aa2codon = {}
     for codon, aa in codon_table.forward_table.iteritems():
         aa2codon.setdefault(aa, []).append(codon)
@@ -207,9 +225,8 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     return aa2codon
 
 
-def _check_corr(pro, nucl, gap_char='-', \
-        codon_table=default_codon_table, complete_protein=False, \
-        anchor_len=10):
+def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
+                complete_protein=False, anchor_len=10):
     """check if a give protein SeqRecord can be translated by another
     nucleotide SeqRecord.
     """
@@ -217,7 +234,8 @@ def _check_corr(pro, nucl, gap_char='-', \
     from Bio.Alphabet import NucleotideAlphabet
 
     if not all([isinstance(pro, SeqRecord), isinstance(nucl, SeqRecord)]):
-        raise TypeError("_check_corr accept two SeqRecord object. Please check your input.")
+        raise TypeError("_check_corr accept two SeqRecord object. Please "
+                        "check your input.")
 
     def get_alpha(alpha):
         if hasattr(alpha, 'alphabet'):
@@ -226,8 +244,9 @@ def _check_corr(pro, nucl, gap_char='-', \
             return alpha
 
     if not isinstance(get_alpha(nucl.seq.alphabet), NucleotideAlphabet):
-        raise TypeError("Alphabet for nucl should be an instance of NucleotideAlphabet, %s detected" \
-                % str(nucl.seq.alphabet))
+        raise TypeError("Alphabet for nucl should be an instance of "
+                        "NucleotideAlphabet, {0} "
+                        "detected".format(str(nucl.seq.alphabet)))
 
     aa2re  = _get_aa_regex(codon_table)
     pro_re = ""
@@ -317,34 +336,41 @@ def _check_corr(pro, nucl, gap_char='-', \
                     elif shift_val in (3*anchor_len-2,3*anchor_len-1):
                         sh_nuc_len = anchor_len*3-(3*anchor_len-shift_val)
                     if anchor_pos[0][0] >= sh_nuc_len:
-                        sh_nuc = nucl_seq[anchor_pos[0][0]-sh_nuc_len:anchor_pos[0][0]]
+                        sh_nuc = nucl_seq[anchor_pos[0][0]-\
+                                 sh_nuc_len:anchor_pos[0][0]]
                     else:
                         #this is unlikely to produce the correct output
                         sh_nuc = nucl_seq[:anchor_pos[0][0]]
-                    qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
-                            shift_val, aa2re, anchor_len, shift_id_pos)
+                    qcodon, shift_id_pos = _get_shift_anchor_re(
+                            sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
+                            shift_id_pos)
                     if qcodon is not None and qcodon != -1:
-                        # pro_re[0] should be '.'*anchor_len, therefore I replace it.
+                        # pro_re[0] should be '.'*anchor_len, therefore I
+                        # replace it.
                         pro_re[0] = qcodon
                         break
                 if qcodon == -1:
                     import warnings
-                    warnings.warn("first frameshift detection failed for %s" % nucl.id)
+                    warnings.warn("first frameshift detection failed for "
+                                  "{0}".format(nucl.id))
             # check anchors in the middle
             for i in range(len(anchor_pos)-1):
-                shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) % (3*anchor_len)
+                shift_val = (anchor_pos[i+1][0]-anchor_pos[i][0]) \
+                            % (3*anchor_len)
                 sh_anc = "".join(anchors[anchor_pos[i][2]:anchor_pos[i+1][2]])
                 sh_nuc = nucl_seq[anchor_pos[i][0]:anchor_pos[i+1][0]]
                 qcodon = None
                 if shift_val != 0:
-                    qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
-                            shift_val, aa2re, anchor_len, shift_id_pos)
+                    qcodon, shift_id_pos = _get_shift_anchor_re(
+                            sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
+                            shift_id_pos)
                 if qcodon is not None and qcodon != -1:
                     pro_re[anchor_pos[i][2]:anchor_pos[i+1][2]] = [qcodon]
                     qcodon = None
                 elif qcodon == -1:
                     import warnings
-                    warnings.warn("middle frameshift detection failed for %s" % nucl.id)
+                    warnings.warn("middle frameshift detection failed for "
+                                  "{0}".format(nucl.id))
             # check the last anchor
             if anchor_pos[-1][2]+1 == len(anchors)-1:
                 sh_anc = anchors[-1]
@@ -356,34 +382,40 @@ def _check_corr(pro, nucl, gap_char='-', \
                         break
                     if shift_val in (1,2):
                         sh_nuc_len = this_anchor_len*3+shift_val
-                    elif shift_val in (3*this_anchor_len-2,3*this_anchor_len-1):
-                        sh_nuc_len = this_anchor_len*3-(3*this_anchor_len-shift_val)
+                    elif shift_val in \
+                            (3*this_anchor_len-2,3*this_anchor_len-1):
+                        sh_nuc_len = this_anchor_len*3-\
+                                (3*this_anchor_len-shift_val)
                     if len(nucl_seq)-anchor_pos[-1][0] >= sh_nuc_len:
-                        sh_nuc = nucl_seq[anchor_pos[-1][0]:anchor_pos[-1][0]+sh_nuc_len]
+                        sh_nuc = nucl_seq[
+                                anchor_pos[-1][0]:anchor_pos[-1][0]+sh_nuc_len]
                     else:
                         #this is unlikely to produce the correct output
                         sh_nuc = nucl_seq[anchor_pos[-1][0]:]
-                    qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc, \
-                            shift_val, aa2re, this_anchor_len, shift_id_pos)
+                    qcodon, shift_id_pos = _get_shift_anchor_re(
+                            sh_anc, sh_nuc, shift_val, aa2re, this_anchor_len,
+                            shift_id_pos)
                     if qcodon is not None and qcodon != -1:
                         pro_re.pop()
                         pro_re[-1] = qcodon
                         break
                 if qcodon == -1:
                     import warnings
-                    warnings.warn("last frameshift detection failed for %s" % nucl.id)
+                    warnings.warn("last frameshift detection failed for "
+                                  "{0}".format(nucl.id))
             # try global match
             full_pro_re = "".join(pro_re)
             match = re.search(full_pro_re, nucl_seq)
             if match:
                 return (match.span(), 2, match)
             else:
-                raise RuntimeError("Protein SeqRecord (%s) and Nucleotide SeqRecord (%s) do not match!" \
-                        % (pro.id, nucl.id))
+                raise RuntimeError("Protein SeqRecord ({0}) and Nucleotide "
+                                   "SeqRecord ({1}) do not "
+                                   "match!".format((pro.id, nucl.id)))
 
 
-def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
-        anchor_len, shift_id_pos):
+def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
+                         shift_id_pos):
     """This function tries all the best to come up with an re that
     matches a potentially shifted anchor.
 
@@ -392,20 +424,22 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
         - sh_nuc    - potentially corresponding nucleotide sequence
                       of sh_anc
         - shift_val - 1 or 2 indicates forward frame shift, whereas
-                      3*anchor_len-1 or 3*anchor_len-2 indicates backward
-                      shift
+                      3*anchor_len-1 or 3*anchor_len-2 indicates
+                      backward shift
         - aa2re     - aa to codon re dict
         - anchor_len - length of the anchor
         - shift_id_pos - specify current shift name we are at
     """
     import re
     shift_id = [chr(i) for i in range(97,107)]
-    if shift_val in (1, 2):
+    if 0 < shift_val < 3*anchor_len-2:
+    #if shift_val in (1, 2):
         for j in range(len(sh_anc)):
             qcodon = "^"
             for k, aa in enumerate(sh_anc):
                 if k == j:
-                    qcodon += aa2re[aa] + "(?P<" + shift_id[shift_id_pos] + ">..*)"
+                    qcodon += aa2re[aa] + "(?P<" + \
+                            shift_id[shift_id_pos] + ">..*)"
                 else:
                     qcodon += aa2re[aa]
             qcodon += "$"
@@ -429,8 +463,9 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, \
                     # will be considered in the next step
                     pass
                 elif k == j:
-                    qcodon += _merge_aa2re(sh_anc[j-1], sh_anc[j], \
-                            shift_val, aa2re, shift_id[shift_id_pos].upper())
+                    qcodon += _merge_aa2re(
+                            sh_anc[j-1], sh_anc[j], shift_val, aa2re,
+                            shift_id[shift_id_pos].upper())
                 else:
                     qcodon += aa2re[aa]
             qcodon += '$'
@@ -484,9 +519,9 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
     return scodonre
 
 
-def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
-        codon_table=default_codon_table, complete_protein=False, \
-        max_score=10):
+def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
+                   codon_table=default_codon_table, complete_protein=False,
+                   max_score=10):
     """Generate codon alignment based on regular re match (PRIVATE)
 
     span_mode is a tuple returned by _check_corr. The first element
@@ -509,30 +544,39 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
     aa2re = _get_aa_regex(codon_table)
     if mode in (0, 1):
         if len(pro.seq.ungap(gap_char))*3 != (span[1]-span[0]):
-            raise ValueError("Protein Record %s and Nucleotide Record %s do not match!" \
-                    % (pro.id, nucl.id))
+            raise ValueError("Protein Record {0} and Nucleotide Record {1} "
+                             "do not match!".format((pro.id, nucl.id)))
         aa_num = 0
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
             elif complete_protein is True and aa_num == 0:
                 this_codon = nucl_seq._data[span[0]:span[0]+3]
-                if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+                if not re.search(_codons2re[codon_table.start_codons],
+                                 this_codon.upper()):
                     max_score -= 1
-                    warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
-                            % (pro.id, aa, aa_num, nucl.id, this_codon))
+                    warnings.warn("start codon of {0} ({1} {2}) does not "
+                                  "correspond to {3} "
+                                  "({4})".format(pro.id, aa, aa_num,
+                                                 nucl.id, this_codon)
+                                 )
                 if max_score == 0:
-                    raise RuntimeError("max_score reached for %s! Please raise up the tolerance to get an alignment in anyway" % nucl.id)
+                    raise RuntimeError("max_score reached for {0}! Please "
+                                       "raise up the tolerance to get an "
+                                       "alignment in anyway".format(nucl.id))
                 codon_seq += this_codon
                 aa_num += 1
             else:
-                this_codon = nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
+                this_codon = nucl_seq._data[
+                        (span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
                 if not str(Seq(this_codon.upper()).translate()) == aa:
                     max_score -= 1
-                    warnings.warn("%s (%s %d) does not correspond to %s (%s)" \
+                    warnings.warn("%s(%s %d) does not correspond to %s(%s)" \
                             % (pro.id, aa, aa_num, nucl.id, this_codon))
                 if max_score == 0:
-                    raise RuntimeError("max_score reached for %s! Please raise up the tolerance to get an alignment in anyway" % nucl.id)
+                    raise RuntimeError("max_score reached for {0}! Please "
+                                       "raise up the tolerance to get an "
+                                       "alignment in anyway".format(nucl.id))
                 codon_seq += this_codon
                 aa_num += 1
         return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
@@ -542,7 +586,6 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
         shift_start = []
         match = span_mode[2]
         m_groupdict = match.groupdict().keys()
-        #if all([i.isupper() for i in m_groupdict]):
         # backward frameshift
         for i in m_groupdict:
             shift_pos.append(match.span(i))
@@ -552,14 +595,16 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
         while True:
             rf_table.append(i)
             i += 3
-            #if len(shift_pos) != 0 and i in shift_start:
-            if i in shift_start and m_groupdict[shift_start.index(i)].isupper():
+            if i in shift_start and \
+                    m_groupdict[shift_start.index(i)].isupper():
                 shift_index = shift_start.index(i)
-                shift_val = 6-(shift_pos[shift_index][1]-shift_pos[shift_index][0])
+                shift_val = 6 - (shift_pos[shift_index][1] - \
+                        shift_pos[shift_index][0])
                 rf_table.append(i)
                 rf_table.append(i+3-shift_val)
                 i = shift_pos[shift_index][1]
-            elif i in shift_start and m_groupdict[shift_start.index(i)].islower():
+            elif i in shift_start and \
+                      m_groupdict[shift_start.index(i)].islower():
                 i = shift_pos[shift_start.index(i)][1]
             if i >= match.end():
                 break
@@ -569,10 +614,13 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
                 codon_seq += "---"
             elif complete_protein is True and aa_num == 0:
                 this_codon = nucl_seq._data[rf_table[0]:rf_table[0]+3]
-                if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+                if not re.search(_codons2re[codon_table.start_codons], 
+                                 this_codon.upper()):
                     max_score -= 1
-                    warnings.warn("start codon of %s (%s %d) does not correspond to %s (%s)" \
-                            % (pro.id, aa, aa_num, nucl.id, this_codon))
+                    warnings.warn("start codon of {0}({1} {2}) does not "
+                                  "correspond to {3}({4})".format(
+                                      pro.id, aa, aa_num, nucl.id, this_codon)
+                                 )
                     codon_seq += this_codon
                     aa_num += 1
             else:
@@ -596,10 +644,15 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-", \
                     this_codon = nucl_seq._data[start:end]
                     if not str(Seq(this_codon.upper()).translate()) == aa:
                         max_score -= 1
-                        warnings.warn("Codon of %s (%s %d) does not correspond to %s (%s)" \
-                                % (pro.id, aa, aa_num, nucl.id, this_codon))
+                        warnings.warn("Codon of {0}({1} {2}) does not "
+                                      "correspond to {3}({4})".format(
+                                          pro.id, aa, aa_num, nucl.id, 
+                                          this_codon)
+                                     )
                 if max_score == 0:
-                    raise RuntimeError("max_score reached for %s! Please raise up the tolerance to get an alignment in anyway" % nucl.id)
+                    raise RuntimeError("max_score reached for {0}! Please "
+                                       "raise up the tolerance to get an "
+                                       "alignment in anyway".format(nucl.id))
                 codon_seq += this_codon
                 aa_num += 1
         return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet, \
@@ -632,7 +685,8 @@ def _align_shift_recs(recs):
                     insert_pos = frt_lst[n][i]+3
                     seq = recs[n].seq
                     seq = CodonSeq(recs[n].seq._data[:insert_pos] + gaps + \
-                            recs[n].seq._data[insert_pos:], rf_table=seq.rf_table)
+                                       recs[n].seq._data[insert_pos:],
+                                   rf_table=seq.rf_table)
                     recs[n].seq = seq
     return recs
 

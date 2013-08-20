@@ -12,6 +12,7 @@ the core class to deal with codon alignment in biopython.
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Align import MultipleSeqAlignment
+from Bio.SeqRecord import SeqRecord
 
 from CodonAlphabet import default_codon_table, default_codon_alphabet
 from CodonSeq import CodonSeq
@@ -26,7 +27,7 @@ class CodonAlignment(MultipleSeqAlignment):
     >>> b = SeqRecord(CodonSeq("AAA---TCG", alphabet=default_codon_alphabet), id="Beta")
     >>> c = SeqRecord(CodonSeq("AAAAGGTGG", alphabet=default_codon_alphabet), id="Gamma")
     >>> print CodonAlignment([a, b, c])
-    CodonAlphabet() CodonAlignment with 3 rows and 9 columns (3 codons)
+    CodonAlphabet(Standard) CodonAlignment with 3 rows and 9 columns (3 codons)
     AAAACGTCG Alpha
     AAA---TCG Beta
     AAAAGGTGG Gamma
@@ -39,7 +40,8 @@ class CodonAlignment(MultipleSeqAlignment):
         # check the type of the alignment to be nucleotide
         for rec in self:
             if not isinstance(rec.seq, CodonSeq):
-                raise TypeError("CodonSeq object are expected in each SeqRecord in CodonAlignment")
+                raise TypeError("CodonSeq object are expected in each "
+                                "SeqRecord in CodonAlignment")
 
         assert self.get_alignment_length() % 3 == 0, \
             "Alignment length is not a triple number"
@@ -59,9 +61,11 @@ class CodonAlignment(MultipleSeqAlignment):
                     self.get_alignment_length(), self.get_aln_length())]
         
         if rows <= 60:
-            lines.extend([self._str_line(rec, length=60) for rec in self._records])
+            lines.extend([self._str_line(rec, length=60) \
+                    for rec in self._records])
         else:
-            lines.extend([self._str_line(rec, length=60) for rec in self._records[:18]])
+            lines.extend([self._str_line(rec, length=60) \
+                    for rec in self._records[:18]])
             lines.append("...")
             lines.append(self._str_line(self._records[-1], length=60))
         return "\n".join(lines)
@@ -78,6 +82,16 @@ class CodonAlignment(MultipleSeqAlignment):
         alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for \
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
+
+def toCodonAlignment(align, alphabet=default_codon_alphabet):
+    """Function to convert a MultipleSeqAlignment to CodonAlignment.
+    It is the user's responsibility to ensure all the requirement
+    needed by CodonAlignment is met.
+
+    """
+    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+             for i in align._records]
+    return CodonAlignment(rec, alphabet=align._alphabet)
 
 
 if __name__ == "__main__":
