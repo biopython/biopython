@@ -50,10 +50,10 @@ class CodonSeq(Seq):
     KFPPWV*
     >>> p = CodonSeq('AAATTTCCCGGGAA-TTTTAA', rf_table=(0, 3, 6, 9, 14, 17))
     >>> print p.get_full_rf_table()
-    [0, 3, 6, 9, 15, 18]
+    [0, 3, 6, 9, 12.0, 15, 18]
     >>> p = CodonSeq('AAA------------TAA', rf_table=(0, 3)) 
     >>> print p.get_full_rf_table()
-    [0, 3, 6, 9, 12, 15]
+    [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
     def __init__(self, data, alphabet=default_codon_alphabet, \
@@ -105,28 +105,30 @@ class CodonSeq(Seq):
             self.rf_table = rf_table
     
     def __getitem__(self, index):
-        seqlst = range(len(self._data))
-        # full_rf_table of self
-        full_rf_table = self.get_full_rf_table()
-        # full rf_table of sliced record (output)
-        rf_table_full = []
-        rf_table_full = [i for i in seqlst[index] if i in full_rf_table]
-        rf_table_full = [i-full_rf_table[0] for i in rf_table_full]
-        # brute way to force rf_table_full back to rf_table
-        # more elegant way for this?
-        shift = 0
-        rf_table = []
-        for pos in rf_table_full:
-            if self._data[pos:pos+3] == '---':
-                shift += 3
-            else:
-                rf_table.append(pos-shift)
-        try:
-            return CodonSeq(self._data[index], self.alphabet,
-                            rf_table=rf_table)
-        except:
-            # adjust alphabet
-            return Seq(self._data[index], alphabet=generic_dna)
+        # TODO: handle alphabet elegantly
+        return Seq(self._data[index], alphabet=generic_dna)
+#        seqlst = range(len(self._data))
+#        # full_rf_table of self
+#        full_rf_table = self.get_full_rf_table()
+#        # full rf_table of sliced record (output)
+#        rf_table_full = []
+#        rf_table_full = [i for i in seqlst[index] if i in full_rf_table]
+#        rf_table_full = [i-full_rf_table[0] for i in rf_table_full]
+#        # brute way to force rf_table_full back to rf_table
+#        # more elegant way for this?
+#        shift = 0
+#        rf_table = []
+#        for pos in rf_table_full:
+#            if self._data[pos:pos+3] == '---':
+#                shift += 3
+#            else:
+#                rf_table.append(pos-shift)
+#        try:
+#            return CodonSeq(self._data[index], self.alphabet,
+#                            rf_table=rf_table)
+#        except:
+#            # adjust alphabet
+#            return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
         """get the `index`-th codon from the self.seq
@@ -162,7 +164,7 @@ class CodonSeq(Seq):
         """Return the number of codons in the CodonSeq"""
         return len(self.rf_table)
 
-    def translate(self, codon_table=default_codon_table, \
+    def translate(self, codon_table=default_codon_table,
             stop_symbol="*", rf_table=None, ungap_seq=True):
         """Translate the CodonSeq based on the reading frame
         in rf_table. It is possible for the user to specify
@@ -180,9 +182,12 @@ class CodonSeq(Seq):
             rf_table = self.rf_table
         p = -1 #initiation
         for i in rf_table:
-            if '---' == tr_seq[i:i+3]:
+            if isinstance(i, float):
                 amino_acids.append('-')
                 continue
+            #elif '---' == tr_seq[i:i+3]:
+            #    amino_acids.append('-')
+            #    continue
             elif '-' in tr_seq[i:i+3]:
                 # considering two types of frameshift
                 if p == -1 or p - i == 3:
@@ -216,33 +221,65 @@ class CodonSeq(Seq):
         It is helpful to construct alignment containing
         frameshift.
         """
+        ungap_seq = self._data.replace("-", "")
+        codon_lst = [ungap_seq[i:i+3] for i in self.rf_table]
+        relative_pos = [self.rf_table[0]]
+        for i in range(1, len(self.rf_table[1:])+1):
+            relative_pos.append(self.rf_table[i]-self.rf_table[i-1])
         full_rf_table = []
-        accum = 0
-        for i in filter(lambda x: x%3==0, range(len(self))):
+        codon_num = 0
+        for i in filter(lambda x: x%3==0, range(len(self._data))):
             if self._data[i:i+3] == self.gap_char*3:
+                full_rf_table.append(i+0.0)
+            elif relative_pos[codon_num] == 0:
                 full_rf_table.append(i)
-            elif self._data[i:i+3] in self.alphabet.letters:
-                full_rf_table.append(i)
-                accum += 1
-            else:
-                # TODO: think about the last codon
-                try:
-                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
-                except IndexError:
-                    continue
-                if nxt_shift < 0:
-                    full_rf_table.append(i)
-                    accum += 1
-                elif nxt_shift == 0:
-                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
-                    if pre_shift <= 0:
-                        raise RuntimeError("Unexpected Codon %s", 
-                                           self._data[i:i+3])
-                    else:
-                        pass
-                elif nxt_shift > 0:
-                    pass
+                codon_num += 1
+            elif relative_pos[codon_num] in (-1, -2):
+                # check the gap status of previous codon
+                gap_stat = len(self._data[i-3:i].replace("-", ""))
+                if gap_stat == 3:
+                    full_rf_table.append(i+relative_pos[codon_num])
+                elif gap_stat == 2:
+                    full_rf_table.append(i+1+relative_pos[codon_num])
+                elif gap_stat == 1:
+                    full_rf_table.append(i+2+relative_pos[codon_num])
+                codon_num += 1
+            elif relative_pos[codon_num] > 0:
+                full_rf_table.append(i+0.0)
+            try:
+                this_len = len(self._data[i:i+3].replace("-", ""))
+                relative_pos[codon_num] -= this_len
+            except:
+                # we probably reached the last codon
+                pass
         return full_rf_table
+#        full_rf_table = []
+#        accum = 0
+#        for i in filter(lambda x: x%3==0, range(len(self))):
+#            if self._data[i:i+3] == self.gap_char*3:
+#                full_rf_table.append(i)
+#            elif self._data[i:i+3] in self.alphabet.letters:
+#                full_rf_table.append(i)
+#                accum += 1
+#            else:
+#                # TODO: think about the last codon
+#                try:
+#                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
+#                except IndexError:
+#                    continue
+#                if nxt_shift < 0:
+#                    full_rf_table.append(i)
+#                    accum += 1
+#                elif nxt_shift == 0:
+#                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
+#                    if pre_shift <= 0:
+#                        raise RuntimeError("Unexpected Codon %s", 
+#                                           self._data[i:i+3])
+#                    else:
+#                        pass
+#                elif nxt_shift > 0:
+#                    pass
+#        return full_rf_table
 
     def ungap(self, gap=None):
         if hasattr(self.alphabet, "gap_char"):
@@ -270,20 +307,25 @@ def _get_codon_list(codonseq):
     if not isinstance(codonseq, CodonSeq):
         raise TypeError("_get_codon_list accept a CodonSeq object "
                         "({0} detected)".format(type(codonseq)))
-    full_rf_table = codonseq.get_full_rf_table()
+    ungap_seq = codonseq._data.replace("-", "")
     codon_lst = []
-    for i in range(len(full_rf_table)):
-        start = full_rf_table[i]
-        try:
-            end = full_rf_table[i+1]
-        except IndexError:
-            end = start+3
-        this_codon = str(codonseq[start:end])
-        if len(this_codon) == 3:
-            codon_lst.append(this_codon)
-        else:
-            codon_lst.append(str(this_codon.ungap()))
+    for i in codonseq.rf_table:
+        codon_lst.append(ungap_seq[i:i+3])
     return codon_lst
+    #full_rf_table = codonseq.get_full_rf_table()
+    #codon_lst = []
+    #for i in range(len(full_rf_table)):
+    #    start = full_rf_table[i]
+    #    try:
+    #        end = full_rf_table[i+1]
+    #    except IndexError:
+    #        end = start+3
+    #    this_codon = str(codonseq[start:end])
+    #    if len(this_codon) == 3:
+    #        codon_lst.append(this_codon)
+    #    else:
+    #        codon_lst.append(str(this_codon.ungap()))
+    #return codon_lst
 
 
 def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
