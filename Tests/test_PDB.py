@@ -1,5 +1,6 @@
-# Copyright 2009 by Eric Talevich.  All rights reserved.
-# Revisions copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Eric Talevich.  All rights reserved.
+# Revisions copyright 2009-2013 by Peter Cock.  All rights reserved.
+# Revisions copyright 2013 Lenna X. Peterson. All rights reserved.
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
@@ -693,6 +694,7 @@ class ParseReal(unittest.TestCase):
         finally:
             os.remove(filename)
 
+
 class WriteTest(unittest.TestCase):
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
@@ -939,6 +941,7 @@ class Atom_Element(unittest.TestCase):
                 #warnings.warn("%s %s" % (fullname, e))
                 self.assertEqual(e, element)
 
+
 class IterationTests(unittest.TestCase):
 
     def setUp(self):
@@ -976,6 +979,7 @@ class IterationTests(unittest.TestCase):
 #        print nums
 #
 # -------------------------------------------------------------
+
 
 class TransformTests(unittest.TestCase):
 
