@@ -253,33 +253,35 @@ class CodonSeq(Seq):
                 # we probably reached the last codon
                 pass
         return full_rf_table
-#        full_rf_table = []
-#        accum = 0
-#        for i in filter(lambda x: x%3==0, range(len(self))):
-#            if self._data[i:i+3] == self.gap_char*3:
-#                full_rf_table.append(i)
-#            elif self._data[i:i+3] in self.alphabet.letters:
-#                full_rf_table.append(i)
-#                accum += 1
-#            else:
-#                # TODO: think about the last codon
-#                try:
-#                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
-#                except IndexError:
-#                    continue
-#                if nxt_shift < 0:
-#                    full_rf_table.append(i)
-#                    accum += 1
-#                elif nxt_shift == 0:
-#                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
-#                    if pre_shift <= 0:
-#                        raise RuntimeError("Unexpected Codon %s", 
-#                                           self._data[i:i+3])
-#                    else:
-#                        pass
-#                elif nxt_shift > 0:
-#                    pass
-#        return full_rf_table
+
+    def _get_full_rf_table(self):
+        full_rf_table = []
+        accum = 0
+        for i in filter(lambda x: x%3==0, range(len(self))):
+            if self._data[i:i+3] == self.gap_char*3:
+                full_rf_table.append(i)
+            elif self._data[i:i+3] in self.alphabet.letters:
+                full_rf_table.append(i)
+                accum += 1
+            else:
+                # TODO: think about the last codon
+                try:
+                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
+                except IndexError:
+                    continue
+                if nxt_shift < 0:
+                    full_rf_table.append(i)
+                    accum += 1
+                elif nxt_shift == 0:
+                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
+                    if pre_shift <= 0:
+                        raise RuntimeError("Unexpected Codon %s", 
+                                           self._data[i:i+3])
+                    else:
+                        pass
+                elif nxt_shift > 0:
+                    pass
+        return full_rf_table
 
     def ungap(self, gap=None):
         if hasattr(self.alphabet, "gap_char"):
