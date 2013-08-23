@@ -717,52 +717,6 @@ def _align_shift_recs(recs):
         i += 1
     return recs
 
-        #for j, (rec, v) in enumerate(zip(recs, full_rf_table_lst)):
-        #    try:
-        #        add_lst.append((j, v[i]))
-        #    except IndexError:
-        #        # we probably reached the last codon
-        #        stop = True
-        #        break
-        #    if isinstance(v[i],float) and \
-        #            rec.seq._data[int(v[i]):int(v[i])+3] != "---":
-        #        print rec.seq._data[int(v[i]):int(v[i])+3]
-        #        add_lst.pop()
-#        if stop is True:
-#            break
-#        if len(add_lst) != rec_num:
-#            print add_lst
-#            for j, v in add_lst:
-#                gaps = '-'*3
-#                seq = recs[j].seq._data[:int(v)] + gaps + recs[j].seq._data[int(v):]
-#                rf_table = recs[j].seq.rf_table
-#                #break_point = rf_table.index(v)
-#                #rf_table = rf_table[:break_point+1] + [k+3 for k in rf_table[break_point+1:]]
-#                recs[j].seq = CodonSeq(seq,
-#                                       rf_table=rf_table,
-#                                       alphabet=recs[j].seq.alphabet)
-#        i += 1
-#    for i in recs:
-#        print len(i.seq)
-#    return recs
-        
-#    frt_len = len(frt_lst[0])
-#    for i in range(frt_len-1):
-#        codons_range = [k[i+1]-k[i] for k in frt_lst]
-#        if codons_range.count(3) == len(codons_range):
-#            pass
-#        elif set(codons_range) == set([3, 6]):
-#            for n, j in enumerate(codons_range):
-#                if j == 3:
-#                    gaps = '-'*3
-#                    insert_pos = frt_lst[n][i]+3
-#                    seq = recs[n].seq
-#                    seq = CodonSeq(recs[n].seq._data[:insert_pos] + gaps + \
-#                                       recs[n].seq._data[insert_pos:],
-#                                   rf_table=seq.rf_table)
-#                    recs[n].seq = seq
-#    return recs
-
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

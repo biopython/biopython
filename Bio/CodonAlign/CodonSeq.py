@@ -309,25 +309,23 @@ def _get_codon_list(codonseq):
     if not isinstance(codonseq, CodonSeq):
         raise TypeError("_get_codon_list accept a CodonSeq object "
                         "({0} detected)".format(type(codonseq)))
-    ungap_seq = codonseq._data.replace("-", "")
+    full_rf_table = codonseq.get_full_rf_table()
     codon_lst = []
-    for i in codonseq.rf_table:
-        codon_lst.append(ungap_seq[i:i+3])
+    for i, k in enumerate(full_rf_table):
+        if isinstance(k, int):
+            start = k
+            try:
+                end = int(full_rf_table[i+1])
+            except IndexError:
+                end = start+3
+            this_codon = str(codonseq[start:end])
+            if len(this_codon) == 3:
+                codon_lst.append(this_codon)
+            else:
+                codon_lst.append(str(this_codon.ungap()))
+        elif str(codonseq[int(k):int(k)+3]) == "---":
+            codon_lst.append("---")
     return codon_lst
-    #full_rf_table = codonseq.get_full_rf_table()
-    #codon_lst = []
-    #for i in range(len(full_rf_table)):
-    #    start = full_rf_table[i]
-    #    try:
-    #        end = full_rf_table[i+1]
-    #    except IndexError:
-    #        end = start+3
-    #    this_codon = str(codonseq[start:end])
-    #    if len(this_codon) == 3:
-    #        codon_lst.append(this_codon)
-    #    else:
-    #        codon_lst.append(str(this_codon.ungap()))
-    #return codon_lst
 
 
 def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
@@ -373,14 +371,14 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                                          codon_table=codon_table, w=w)
         S_sites = (S_sites1 + S_sites2) / 2.0
         N_sites = (N_sites1 + N_sites2) / 2.0
-        NS = [0, 0]
+        SN = [0, 0]
         for i, j in zip(seq1_codon_lst, seq2_codon_lst):
-            NS = [m+n for m,n in zip(NS, _count_diff(i, j, 
+            SN = [m+n for m,n in zip(SN, _count_diff(i, j, 
                                                      codon_table=codon_table))]
-        ps = NS[0] / S_sites
-        pn = NS[1] / N_sites
-        dN = -3.0/4*log(1-4.0/3*pn)
+        ps = SN[0] / S_sites
+        pn = SN[1] / N_sites
         dS = -3.0/4*log(1-4.0/3*ps)
+        dN = -3.0/4*log(1-4.0/3*pn)
         return dN, dS
     elif method == "LWL85":
         # Nomenclature is according to PMID (3916709)
@@ -812,10 +810,8 @@ def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):
     l = 0 # likelihood value
     for i, c1 in enumerate(codon_lst):
         for j, c2 in enumerate(codon_lst):
-            #if i == j: print P[i, j]
             if (c1, c2) in codon_cnt:
                 if P[i, j] * pi[c1] <= 0:
-                    #print c1, c2
                     l += codon_cnt[(c1, c2)]*0
                 else:
                     l += codon_cnt[(c1, c2)]*log(pi[c1]*P[i, j])
