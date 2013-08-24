@@ -14,6 +14,8 @@ __docformat__ = "epytext en"  # Simple markup to show doctests nicely
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
 
+from Bio.Seq import Seq
+
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
 
@@ -76,7 +78,7 @@ class _RestrictedDict(dict):
         if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
         or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
-                            "strings) of length %i." % self._length)
+                            "strings) of length %i whereas you passed an object of length %s." % (self._length, str(len(value))))
         dict.__setitem__(self, key, value)
 
     def update(self, new_dict):
@@ -290,10 +292,11 @@ class SeqRecord(object):
         """)
 
     def _set_seq(self, value):
-        #TODO - Add a deprecation warning that the seq should be write only?
-        if self._per_letter_annotations:
-            #TODO - Make this a warning? Silently empty the dictionary?
-            raise ValueError("You must empty the letter annotations first!")
+        # we should be much more user friendly and accept even a plain sequence string
+	# and make the Seq or MutableSeq object ourselves
+        if not isinstance(value, Seq):
+            raise ValueError("You must pass a Seq object containing the new sequence instead of just plain string.")
+        else:
         self._seq = value
         try:
             self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
@@ -696,7 +699,7 @@ class SeqRecord(object):
         SeqIO.write(self, handle, format_spec)
         return handle.getvalue()
 
-    def __len__(self):
+    def __len__(self, trim=False, interpret_qual_trims=True, interpret_adapter_trims=False):
         """Returns the length of the sequence.
 
         For example, using Bio.SeqIO to read in a FASTA nucleotide file:
@@ -707,6 +710,10 @@ class SeqRecord(object):
         309
         >>> len(record.seq)
         309
+
+	It should be possible to get length of a raw object, of trimmed
+	object by quality or adapter criteria or both, whenever user wants
+	to, not only when data is parsed from input.
         """
         return len(self.seq)
 
@@ -724,6 +731,13 @@ class SeqRecord(object):
         object behaviour)!
         """
         return True
+
+    def apply_trimpoints(self, trim=False, interpret_qual_trims=False, interpret_adapter_trims=False):
+        """We should apply either of the quality-based or adapter-based annotated
+	trim points and return a new, sliced object.
+	"""
+	pass
+
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
