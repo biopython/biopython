@@ -377,8 +377,9 @@ def _sff_do_slow_index(handle):
         if padding:
             padding = 8 - padding
             if handle.read(padding).count(_null) != padding:
-                raise ValueError("Post quality %i byte padding region contained data"
-                                 % padding)
+                import warnings
+                warnings.warn("%s: Post quality %i byte padding region contained data"
+                                 % (read.id, padding))
         #print read, name, record_offset
         yield name, record_offset
     if handle.tell() % 8 != 0:
@@ -583,7 +584,9 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     if padding:
         padding = 8 - padding
         if handle.read(padding).count(_null) != padding:
-            raise ValueError("Post quality %i byte padding region contained data"
+            # do not break on SRR088820.sff, ERR016587.sff, ERR016602.sff created from .sra files using broken sff-dump.2.1.[7-9]
+            import warnings
+            warnings.warn("Post quality %i byte padding region contained data, SFF data is not broken"
                              % padding)
     #Follow Roche and apply most aggressive of qual and adapter clipping.
     #Note Roche seems to ignore adapter clip fields when writing SFF,
