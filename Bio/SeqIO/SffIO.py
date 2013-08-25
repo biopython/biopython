@@ -383,8 +383,9 @@ def _sff_do_slow_index(handle):
         if padding:
             padding = 8 - padding
             if handle.read(padding).count(_null) != padding:
-                raise ValueError("Post quality %i byte padding region contained data"
-                                 % padding)
+                import warnings
+                warnings.warn("%s: Post quality %i byte padding region contained data"
+                                 % (read.id, padding))
         #print read, name, record_offset
         yield name, record_offset
     if handle.tell() % 8 != 0:
@@ -544,8 +545,15 @@ _valid_UAN_read_name = re.compile(r'^[a-zA-Z0-9]{14}$')
 
 
 def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
-                         key_sequence, alphabet, trim=False):
-    """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
+                         key_sequence, alphabet, trim=False, interpret_qual_trims=True, interpret_adapter_trims=False):
+    """Parse the next read in the file, return data as a SeqRecord (PRIVATE).
+    Allow user to specify which type of clipping values should be applied
+    while reading the SFF stream. To be backwards compatible, we interpret
+    only the quality-based trim points by default. That results in lower-cased
+    sequences in the low-qual region, regardless what adapter-based clip points
+    say. This should be the desired behavior. More discussion at
+    https://redmine.open-bio.org/issues/3437
+    """
     #Now on to the reads...
     #the read header format (fixed part):
     #read_header_length     H
@@ -589,23 +597,46 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     if padding:
         padding = 8 - padding
         if handle.read(padding).count(_null) != padding:
-            raise ValueError("Post quality %i byte padding region contained data"
+            # do not break on SRR088820.sff, ERR016587.sff, ERR016602.sff created from .sra files using broken sff-dump.2.1.[7-9]
+            import warnings
+            warnings.warn("Post quality %i byte padding region contained data, SFF data is not broken"
                              % padding)
     #Follow Roche and apply most aggressive of qual and adapter clipping.
-    #Note Roche seems to ignore adapter clip fields when writing SFF,
-    #and uses just the quality clipping values for any clipping.
-    clip_left = max(clip_qual_left, clip_adapter_left)
-    #Right clipping of zero means no clipping
-    if clip_qual_right:
-        if clip_adapter_right:
-            clip_right = min(clip_qual_right, clip_adapter_right)
+    #Note Roche does not use adapter clip fields when writing SFF files
+    #but instead combines the adapter clipping information with quality-based
+    #values and writes the most aggressive combination into clip fields (as
+    #allowed by SFF specs).
+
+    if interpret_qual_trims:
+        if interpret_adapter_trims:
+            clip_left = max(clip_qual_left, clip_adapter_left)
+            #Right clipping of zero means no clipping
+            if clip_qual_right:
+                if clip_adapter_right:
+                    clip_right = min(clip_qual_right, clip_adapter_right)
+                else:
+                    #Typical case with Roche SFF files
+                    clip_right = clip_qual_right
+            elif clip_adapter_right:
+                clip_right = clip_adapter_right
+            else:
+                clip_right = seq_len
         else:
-            #Typical case with Roche SFF files
-            clip_right = clip_qual_right
-    elif clip_adapter_right:
-        clip_right = clip_adapter_right
+	    clip_left = clip_qual_left
+	    if clip_qual_right:
+	        clip_right = clip_qual_right
+            else:
+	        clip_right = seq_len
+    elif interpret_adapter_trims:
+        clip_left = clip_adapter_left
+	if clip_adapter_right:
+	    clip_right = clip_adapter_right
+	else:
+	    clip_right = seq_len
     else:
-        clip_right = seq_len
+        clip_left = 0
+	clip_right = seq_len
+
     #Now build a SeqRecord
     if trim:
         seq = seq[clip_left:clip_right].upper()
