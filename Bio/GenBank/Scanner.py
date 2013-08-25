@@ -311,6 +311,8 @@ class InsdcScanner(object):
                     assert len(qualifiers) > 0
                     assert key == qualifiers[-1][0]
                     #if debug : print "Unquoted Cont %s:%s" % (key, line)
+                    if qualifiers[-1][1] is None:
+                        raise StopIteration
                     qualifiers[-1] = (key, qualifiers[-1][1] + "\n" + line)
             return (feature_key, feature_location, qualifiers)
         except StopIteration:
