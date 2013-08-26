@@ -81,7 +81,8 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe) + " -d=Fasta/fa01")
+        self.assertEqual(str(cmdline),
+                         _escape_filename(prank_exe) + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
@@ -105,7 +106,15 @@ class PrankApplication(unittest.TestCase):
         self.assertTrue("Total time" in stdout)
         self.assertEqual(stderr, "")
         try:
-            align = AlignIO.read("output.2.nex", "nexus")
+            if os.path.isfile("output.best.nex"):
+                # Prank v.130820 and perhaps earlier use ".best.*" output names
+                nex_fname = "output.best.nex"
+            elif os.path.isfile("output.2.nex"):
+                # Older Prank versions use ".2.*" output names
+                nex_fname = "output.2.nex"
+            else:
+                raise RuntimeError("Can't find PRANK's NEXUS output (*.nex)")
+            align = AlignIO.read(nex_fname, "nexus")
             for old, new in zip(records, align):
                 #Old versions of Prank reduced name to 9 chars
                 self.assertTrue(old.id == new.id or old.id[:9] == new.id)
