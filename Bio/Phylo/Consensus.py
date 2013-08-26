@@ -415,3 +415,26 @@ def _count_clades(trees):
             else:
                 bitstrs[bitstr] = (1, clade.branch_length)
     return bitstrs
+
+
+def get_support(target_tree, trees):
+    """Calculate branch support given a target tree and a list of bootstrap
+    replicate trees"""
+    term_names = [term.name for term in target_tree.get_terminals()]
+    bitstrs = {}
+    size = len(trees)
+    for clade in target_tree.get_nonterminals():
+        clade_term_names = [term.name for term in clade.get_terminals()]
+        boolvals = [name in clade_term_names for name in term_names]
+        bitstr = BitString(''.join(map(str, map(int, boolvals))))
+        bitstrs[bitstr] = (clade, 0)
+    for tree in trees:
+        for clade in tree.get_nonterminals():
+            clade_term_names = [term.name for term in clade.get_terminals()]
+            boolvals = [name in clade_term_names for name in term_names]
+            bitstr = BitString(''.join(map(str, map(int, boolvals))))
+            if bitstr in bitstrs.keys():
+                c,t = bitstrs[bitstr]
+                c.confidence = (t + 1) * 100.0 / size
+                bitstrs[bitstr] = (c, t + 1)
+    return target_tree
