@@ -268,16 +268,20 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     The graphic is a rooted tree, drawn with roughly the same algorithm as
     draw_ascii.
 
-    Visual aspects of the plot can be modified using pyplot's own functions and
-    objects (via pylab or matplotlib). In particular, the pyplot.rcParams
+    Additional keyword arguments passed into this function are used as pyplot
+    options. The input format should be in the form of:
+    pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict), or
+    pyplot_option_name=(dict).
+
+    Example using the pyplot options 'axhspan' and 'axvline':
+
+    >>> Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
+    ...     axvline={'x':'0', 'ymin':'0', 'ymax':'1'})
+
+    Visual aspects of the plot can also be modified using pyplot's own functions
+    and objects (via pylab or matplotlib). In particular, the pyplot.rcParams
     object can be used to scale the font size (rcParams["font.size"]) and line
     width (rcParams["lines.linewidth"]).
-    
-    Keyword arguments passed into this method are accessed as pyplot options.  
-    The input format should be: PyPlotOption=(tuple), PyPlotOption=(tuple, dict), 
-    or PyPlotOption=(dict)
-    Example usage: Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}), 
-    axvline={'x':'0', 'ymin':'0', 'ymax':'1'})
 
     :Parameters:
         label_func : callable
@@ -311,9 +315,9 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError(
                     "Install matplotlib or pylab if you want to use draw.")
-            
-    import matplotlib.collections as mpcollections           
-    
+
+    import matplotlib.collections as mpcollections
+
     # Arrays that store lines for the plot of clades
     CladeHorizontalLineCollections = []
     CladeVerticalLineCollections = []
@@ -389,23 +393,25 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         axes = fig.add_subplot(1, 1, 1)
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
-    
+
     def draw_clade_lines(useLineCollection=False, orientation='horizontal', \
         y_here=0, x_start=0, x_here=0, y_bot=0, y_top=0, color='black', lw='.1'):
-        """Create a line with or without a line collection object.  Graphical 
-        formatting of the lines representing clades in the plot can be customized 
-        by altering this method."""
-        if (useLineCollection==False and orientation=='horizontal'): 
+        """Create a line with or without a line collection object.
+
+        Graphical formatting of the lines representing clades in the plot can be
+        customized by altering this function.
+        """
+        if (useLineCollection==False and orientation=='horizontal'):
             axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
         elif (useLineCollection==True and orientation=='horizontal'):
             CladeHorizontalLineCollections.append(mpcollections.LineCollection( \
             [[(x_start,y_here), (x_here,y_here)]], color=color, lw=lw),)
-        elif (useLineCollection==False and orientation=='vertical'): 
+        elif (useLineCollection==False and orientation=='vertical'):
             axes.vlines(x_here, y_bot, y_top, color=color)
         elif (useLineCollection==True and orientation=='vertical'):
             CladeVerticalLineCollections.append(mpcollections.LineCollection( \
             [[(x_here,y_bot), (x_here,y_top)]], color=color, lw=lw),)
-        
+
     def draw_clade(clade, x_start, color, lw):
         """Recursively draw a tree, down from the given clade."""
         x_here = x_posns[clade]
@@ -440,7 +446,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
 
     draw_clade(tree.root, 0, 'k', plt.rcParams['lines.linewidth'])
 
-    # If line collections were used to create clade lines, here they are added 
+    # If line collections were used to create clade lines, here they are added
     # to the pyplot plot.
     for i in CladeHorizontalLineCollections:
         axes.add_collection(i)
@@ -459,23 +465,23 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
     axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
-    
+
     # Parse and process key word arguments as pyplot options
     for key, value in kwargs.iteritems():
-        # This try block is included to check for the pyplot option input being
-        # in the right format due to it being iterable.
-        try: [i for i in value] 
-        except TypeError: 
-            print 'Error: ', key, '=', value, 'is not in the format '+\
-            'PyPlotOption=(tuple), PyPlotOption=(tuple, dict), or '+\
-            'PyPlotOption=(dict) '    
-            sys.exit(0)             
+        try:
+            # Check that the pyplot option input is iterable, as required
+            [i for i in value]
+        except TypeError:
+            raise ValueError('Keyword argument "%s=%s" is not in the format '
+                'pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),'
+                ' or pyplot_option_name=(dict) '
+                % (key, value))
         if isinstance(value, dict):
             getattr(plt, str(key))(**dict(value))
         elif not (isinstance(value[0], tuple)):
             getattr(plt, str(key))(*value)
         elif (isinstance(value[0], tuple)):
-            getattr(plt, str(key))(*value[0], **dict(value[1]))                   
-            
+            getattr(plt, str(key))(*value[0], **dict(value[1]))
+
     if do_show:
         plt.show()
