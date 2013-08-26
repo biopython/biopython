@@ -104,6 +104,14 @@ class ConsensusTest(unittest.TestCase):
         ref_trees.close()
         tree_file.close()
 
+    def test_get_support(self):
+        support_tree = get_support(self.trees[0], self.trees)
+        clade = support_tree.common_ancestor([support_tree.find_any(name="Beta"), support_tree.find_any(name="Gamma")])
+        self.assertEqual(clade.confidence, 2 * 100.0 / 3)
+        clade = support_tree.common_ancestor([support_tree.find_any(name="Alpha"), support_tree.find_any(name="Beta")])
+        self.assertEqual(clade.confidence, 3 * 100.0 / 3)
+        clade = support_tree.common_ancestor([support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")])
+        self.assertEqual(clade.confidence, 2 * 100.0 / 3)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
