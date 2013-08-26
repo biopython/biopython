@@ -319,8 +319,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     import matplotlib.collections as mpcollections
 
     # Arrays that store lines for the plot of clades
-    CladeHorizontalLineCollections = []
-    CladeVerticalLineCollections = []
+    horizontal_linecollections = []
+    vertical_linecollections = []
 
     # Options for displaying branch labels / confidence
     def conf2str(conf):
@@ -394,22 +394,23 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
 
-    def draw_clade_lines(useLineCollection=False, orientation='horizontal', \
-        y_here=0, x_start=0, x_here=0, y_bot=0, y_top=0, color='black', lw='.1'):
+    def draw_clade_lines(use_linecollection=False, orientation='horizontal',
+                         y_here=0, x_start=0, x_here=0, y_bot=0, y_top=0,
+                         color='black', lw='.1'):
         """Create a line with or without a line collection object.
 
         Graphical formatting of the lines representing clades in the plot can be
         customized by altering this function.
         """
-        if (useLineCollection==False and orientation=='horizontal'):
+        if (use_linecollection==False and orientation=='horizontal'):
             axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
-        elif (useLineCollection==True and orientation=='horizontal'):
-            CladeHorizontalLineCollections.append(mpcollections.LineCollection( \
+        elif (use_linecollection==True and orientation=='horizontal'):
+            horizontal_linecollections.append(mpcollections.LineCollection(
             [[(x_start,y_here), (x_here,y_here)]], color=color, lw=lw),)
-        elif (useLineCollection==False and orientation=='vertical'):
+        elif (use_linecollection==False and orientation=='vertical'):
             axes.vlines(x_here, y_bot, y_top, color=color)
-        elif (useLineCollection==True and orientation=='vertical'):
-            CladeVerticalLineCollections.append(mpcollections.LineCollection( \
+        elif (use_linecollection==True and orientation=='vertical'):
+            vertical_linecollections.append(mpcollections.LineCollection(
             [[(x_here,y_bot), (x_here,y_top)]], color=color, lw=lw),)
 
     def draw_clade(clade, x_start, color, lw):
@@ -422,7 +423,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         if hasattr(clade, 'width') and clade.width is not None:
             lw = clade.width * plt.rcParams['lines.linewidth']
         # Draw a horizontal line from start to here
-        draw_clade_lines(useLineCollection=True, orientation='horizontal', \
+        draw_clade_lines(use_linecollection=True, orientation='horizontal',
             y_here=y_here, x_start=x_start, x_here=x_here, color='black', lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
@@ -438,7 +439,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
             # Only apply widths to horizontal lines, like Archaeopteryx
-            draw_clade_lines(useLineCollection=True, orientation='vertical', \
+            draw_clade_lines(use_linecollection=True, orientation='vertical',
                 x_here=x_here, y_bot=y_bot, y_top=y_top, color='black', lw=lw)
             # Draw descendents
             for child in clade:
@@ -448,9 +449,9 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
 
     # If line collections were used to create clade lines, here they are added
     # to the pyplot plot.
-    for i in CladeHorizontalLineCollections:
+    for i in horizontal_linecollections:
         axes.add_collection(i)
-    for i in CladeVerticalLineCollections:
+    for i in vertical_linecollections:
         axes.add_collection(i)
 
     # Aesthetics
