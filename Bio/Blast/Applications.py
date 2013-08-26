@@ -379,7 +379,7 @@ class RpsBlastCommandline(_BlastCommandLine):
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     are replacing the old rpsblast with a new version of the same name plus a
     second tool rpstblastn, both taking different command line arguments. This
-    module provides NcbirpsblastCommandline and NcbirpsblasntCommandline as
+    module provides NcbirpsblastCommandline and NcbirpsblastCommandline as
     wrappers for the new tools.
 
     Like the old rpsblast (and blastall), this wrapper is now obsolete, and will
