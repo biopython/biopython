@@ -67,6 +67,13 @@ class IOTests(unittest.TestCase):
                 if c is not None)
         self.assertEqual(internal_names, set(('E', 'F')))
 
+    def test_newick_read_scinot(self):
+        """Parse Newick branch lengths in scientific notation."""
+        tree = Phylo.read(StringIO("(foo:1e-1,bar:0.1)"), 'newick')
+        clade_a = tree.clade[0]
+        self.assertEqual(clade_a.name, 'foo')
+        self.assertAlmostEqual(clade_a.branch_length, 0.1)
+
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
         tree = Phylo.read(StringIO('A:0.1;'), 'newick')
