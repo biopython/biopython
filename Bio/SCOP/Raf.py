@@ -21,16 +21,16 @@ ascii alphabetic character, a-z, A-Z). e.g. "1", "10A", "1010b", "-1"
 
 See "ASTRAL RAF Sequence Maps":http://astral.stanford.edu/raf.html
 
-to_one_letter_code -- A mapping from the 3-letter amino acid codes found
+protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
                         in PDB files to 1-letter codes.  The 3-letter codes
                         include chemically modified residues.
 """
 
 from copy import copy
 
-from Bio.SCOP.Residues import Residues
+from Bio.Data.SCOPData import protein_letters_3to1
 
-from three_to_one_dict import to_one_letter_code
+from Bio.SCOP.Residues import Residues
 
 
 def normalize_letters(one_letter_code):
@@ -276,8 +276,8 @@ class SeqMap(object):
                     res = resSet[key]
                     atom_aa = res.atom
                     resName = line[17:20]
-                    if resName in to_one_letter_code:
-                        if to_one_letter_code[resName] == atom_aa:
+                    if resName in protein_letters_3to1:
+                        if protein_letters_3to1[resName] == atom_aa:
                             out_handle.write(line)
                             resFound[key] = res
 

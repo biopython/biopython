@@ -23,6 +23,25 @@ extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
 #
 #   O = "Pyl";  pyrrolysine
 #   http://www.chem.qmul.ac.uk/iubmb/newsletter/2009.html#item35
+
+protein_letters_1to3  = {
+    'A': 'Ala', 'C': 'Cys', 'D': 'Asp',
+    'E': 'Glu', 'F': 'Phe', 'G': 'Gly', 'H': 'His',
+    'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met',
+    'N': 'Asn', 'P': 'Pro', 'Q': 'Gln', 'R': 'Arg',
+    'S': 'Ser', 'T': 'Thr', 'V': 'Val', 'W': 'Trp',
+    'Y': 'Tyr',
+}
+protein_letters_1to3_extended = dict(protein_letters_1to3.items() + {
+    'B': 'Asx', 'X': 'Xaa', 'Z': 'Glx', 'J': 'Xle',
+    'U': 'Sel', 'O': 'Pyl',
+}.items())
+
+protein_letters_31to1 = dict([(x[1], x[0]) for x in
+    protein_letters_1to3.items()])
+protein_letters_3to1_extended = dict([(x[1], x[0]) for x in
+    protein_letters_1to3_extended.items()])
+
 ambiguous_dna_letters = "GATCRYWSMKHBVDN"
 unambiguous_dna_letters = "GATC"
 ambiguous_rna_letters = "GAUCRYWSMKHBVDN"
