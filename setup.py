@@ -337,6 +337,7 @@ PACKAGES = [
     'Bio.Restriction._Update',
     'Bio.SCOP',
     'Bio.SearchIO',
+    'Bio.SearchIO._legacy',
     'Bio.SearchIO._model',
     'Bio.SearchIO.BlastIO',
     'Bio.SearchIO.HmmerIO',
