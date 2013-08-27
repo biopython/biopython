@@ -37,7 +37,7 @@ protein_letters_1to3_extended = dict(protein_letters_1to3.items() + {
     'U': 'Sel', 'O': 'Pyl',
 }.items())
 
-protein_letters_31to1 = dict([(x[1], x[0]) for x in
+protein_letters_3to1 = dict([(x[1], x[0]) for x in
     protein_letters_1to3.items()])
 protein_letters_3to1_extended = dict([(x[1], x[0]) for x in
     protein_letters_1to3_extended.items()])
