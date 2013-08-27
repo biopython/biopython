@@ -8,7 +8,7 @@
 from Bio.PDB.StructureBuilder import StructureBuilder # To allow saving of chains, residues, etc..
 from Bio.Data.IUPACData import atom_weights # Allowed Elements
 
-_ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
+_ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 
 
 class Select(object):
@@ -85,8 +85,21 @@ class PDBIO(object):
         x, y, z=atom.get_coord()
         bfactor=atom.get_bfactor()
         occupancy=atom.get_occupancy()
+        try:
+            occupancy_str = "%6.2f" % occupancy
+        except TypeError:
+            if occupancy is None:
+                occupancy_str = " " * 6
+                import warnings
+                from Bio import BiopythonWarning
+                warnings.warn("Missing occupancy in atom %s written as blank" %
+                              repr(atom.get_full_id()), BiopythonWarning)
+            else:
+                raise TypeError("Invalid occupancy %r in atom %r"
+                                % (occupancy, atom.get_full_id()))
+            pass
         args=(record_type, atom_number, name, altloc, resname, chain_id,
-            resseq, icode, x, y, z, occupancy, bfactor, segid,
+            resseq, icode, x, y, z, occupancy_str, bfactor, segid,
             element, charge)
         return _ATOM_FORMAT_STRING % args
 
