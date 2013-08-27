@@ -4,7 +4,10 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Bio.PDB.DSSP"""
+"""Unit test for Bio.PDB.DSSP which need the binary tool.
+
+See also test_PDB.py for dependency free DSSP tests.
+"""
 
 import subprocess
 import unittest
@@ -12,7 +15,7 @@ import unittest
 
 from Bio import MissingExternalDependencyError
 from Bio.PDB import PDBParser
-from Bio.PDB import DSSP, make_dssp_dict
+from Bio.PDB import DSSP
 
 # Check if DSSP is installed
 try:
@@ -24,11 +27,6 @@ except OSError:
 
 class DSSP_test(unittest.TestCase):
     """Test DSSP module"""
-
-    def test_DSSP_file(self):
-        """Test parsing of pregenerated DSSP"""
-        dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
-        self.assertEqual(len(dssp), 130)
 
     def test_DSSP(self):
         """Test DSSP generation from PDB"""

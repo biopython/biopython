@@ -33,6 +33,7 @@ from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
+from Bio.PDB import make_dssp_dict
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -1047,6 +1048,17 @@ class CopyTests(unittest.TestCase):
             ee = e.copy()
             self.assertFalse(e is ee)
             self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+
+
+class DsspTests(unittest.TestCase):
+    """Tests for DSSP parsing etc which don't need the binary tool.
+
+    See also test_DSSP_tool.py for run time testing with the tool.
+    """
+    def test_DSSP_file(self):
+        """Test parsing of pregenerated DSSP"""
+        dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
+        self.assertEqual(len(dssp), 130)
 
 
 if __name__ == '__main__':
