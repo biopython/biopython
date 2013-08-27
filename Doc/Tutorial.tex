@@ -10719,7 +10719,8 @@ examples of using Bio.Phylo, see the cookbook page on Biopython.org:
 
 Like SeqIO and AlignIO, Phylo handles file input and output through four functions:
 \verb|parse|, \verb|read|, \verb|write| and \verb|convert|,
-all of which support the tree file formats Newick, NEXUS, phyloXML and NeXML.
+all of which support the tree file formats Newick, NEXUS, phyloXML and NeXML, as
+well as the Comparative Data Analysis Ontology (CDAO).
 
 The \verb|read| function parses a single tree in the given file and returns it. Careful; it
 will raise an error if the file contains more than one tree, or no trees.
@@ -11287,7 +11288,8 @@ This generates a tree file and a stats file with the names
 \end{verbatim}
 
 A similar wrapper for RAxML (\url{http://sco.h-its.org/exelixis/software.html})
-was added in Biopython 1.60.
+was added in Biopython 1.60, and FastTree
+(\url{http://www.microbesonline.org/fasttree/}) in Biopython 1.62.
 
 Note that some popular Phylip programs, including \texttt{dnaml} and \texttt{protml},
 are already available through the EMBOSS wrappers in \texttt{Bio.Emboss.Applications} if
@@ -11374,6 +11376,14 @@ releases:
 
 We're open to any suggestions for improving the functionality and usability of this module;
 just let us know on the mailing list or our bug database.
+
+Finally, if you need additional functionality not yet included in the Phylo
+module, check if it's available in another of the high-quality Python libraries
+for phylogenetics such as DendroPy (\url{http://pythonhosted.org/DendroPy/}) or
+PyCogent (\url{http://pycogent.org/}). Since these libraries also support
+standard file formats for phylogenetic trees, you can easily transfer data
+between libraries by writing to a temporary file or StringIO object.
+
 
 \chapter{Sequence motif analysis using Bio.motifs}
 
