@@ -18,8 +18,14 @@ from Bio.PDB import PDBParser
 from Bio.PDB import DSSP
 
 # Check if DSSP is installed
+quiet_kwargs = dict(stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 try:
-    subprocess.check_call(["dssp", "-h"])
+    try:
+        # Newer versions of DSSP
+        subprocess.check_call(["dssp", "--version"], **quiet_kwargs)
+    except subprocess.CalledProcessError:
+        # Older versions of DSSP
+        subprocess.check_call(["dssp", "-h"], **quiet_kwargs)
 except OSError:
     raise MissingExternalDependencyError(
         "Install dssp if you want to use it from Biopython.")
