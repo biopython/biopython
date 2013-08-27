@@ -783,6 +783,27 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
+    def test_pdbio_missing_occupancy(self):
+        """Write PDB file with missing occupancy"""
+
+        from Bio import BiopythonWarning
+        warnings.simplefilter('ignore', BiopythonWarning)
+
+        io = PDBIO()
+        structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
+        io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("test", filename)
+            atoms = struct2[0]['A'][(' ', 152, ' ')]
+            self.assertEqual(atoms['N'].get_occupancy(), None)
+        finally:
+            os.remove(filename)
+            warnings.filters.pop()
+
+
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
     def setUp(self):
