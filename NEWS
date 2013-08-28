@@ -10,7 +10,13 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.62
+(In progress, not released yet) Biopython 1.63
+
+Note this release does *not* support Python 2.5 (or Jython 2.5).
+
+===================================================================
+
+28 August 2013: Biopython 1.62 released.
 
 This is our first release to officially support Python 3, however it is
 also our final release supporting Python 2.5. Specifically this release
