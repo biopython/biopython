@@ -10,7 +10,12 @@ from __future__ import with_statement
 
 import warnings
 
-import numpy
+try:
+    import numpy
+except:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use the PDB parser.")
 
 from Bio.File import as_handle
 
