@@ -97,8 +97,10 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         accessibility.
     @rtype: {}
     """
-    p = subprocess.Popen(
-        [DSSP, in_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    #Using universal newlines is important on Python 3, this
+    #gives unicode handles rather than bytes handles.
+    p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
+                         stdout=stdout_arg, stderr=stderr_arg)
     out, err = p.communicate()
     out_dict, keys = _make_dssp_dict(StringIO(out))
     return out_dict, keys
