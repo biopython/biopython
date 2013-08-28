@@ -6,8 +6,6 @@
 """Testing Bio.TogoWS online code.
 """
 
-from __future__ import with_statement
-
 import unittest
 from StringIO import StringIO
 

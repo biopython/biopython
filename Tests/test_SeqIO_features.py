@@ -8,8 +8,6 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-from __future__ import with_statement
-
 import os
 import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein

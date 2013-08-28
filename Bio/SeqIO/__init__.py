@@ -259,9 +259,6 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 making up each alignment as SeqRecords.
 """
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 __docformat__ = "epytext en"  # not just plaintext
 
 #TODO

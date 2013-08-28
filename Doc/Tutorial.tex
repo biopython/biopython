@@ -2675,11 +2675,10 @@ record GenBank file using a generator expression:
 
 \noindent
 Here we use a file handle instead, using the \verb|with| statement
-(Python 2.5 or later) to close the handle automatically:
+to close the handle automatically:
 
-%This doctest won't work on Python 2.5, even with the __future__ import. Odd.
+%doctest examples
 \begin{verbatim}
->>> from __future__ import with_statement #Needed on Python 2.5
 >>> from Bio import SeqIO
 >>> with open("ls_orchid.gbk") as handle:
 ...     print sum(len(r) for r in SeqIO.parse(handle, "gb"))
