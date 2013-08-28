@@ -5,8 +5,6 @@
 
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
 
-from __future__ import with_statement
-
 import os
 import unittest
 import warnings

@@ -15,8 +15,6 @@ Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
 use.
 """
-# For with statement in Python 2.5
-from __future__ import with_statement
 import codecs
 import os
 import contextlib

@@ -23,8 +23,6 @@
 
 """Parse the header of a PDB file."""
 
-# For 'with' on Python 2.5/Jython 2.5
-from __future__ import with_statement
 import re
 
 from Bio import File

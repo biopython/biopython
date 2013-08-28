@@ -194,9 +194,6 @@ of the format's documentation.
 
 """
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 __docformat__ = 'epytext en'
 
 import sys

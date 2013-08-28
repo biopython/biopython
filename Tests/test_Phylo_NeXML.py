@@ -6,8 +6,6 @@
 
 """Unit tests for the NeXML and NeXMLIO modules.
 """
-from __future__ import with_statement
-
 import os
 import tempfile
 import unittest

@@ -9,9 +9,6 @@
 Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
-# For with in Python/Jython 2.5
-from __future__ import with_statement
-
 import copy
 import math
 import random
