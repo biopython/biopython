@@ -12,7 +12,15 @@ The latest news is at the top of this file.
 
 (In progress, not released yet) Biopython 1.63
 
-Note this release does *not* support Python 2.5 (or Jython 2.5).
+Note this release does *not* support Python 2.5 (or Jython 2.5), which has
+allowed some code clean-up, and wider use of context managers (with
+statements).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Peter Cock
+Wayne Decatur (first contribution)
 
 ===================================================================
 
