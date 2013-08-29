@@ -49,7 +49,7 @@ Biopython under Python 3.3 as well.
 
 Biopython is currently supported and tested on the following Python verions:
 
-- Python 2.5, 2.6, 2.7 -- see http://www.python.org
+- Python 2.6, 2.7 -- see http://www.python.org
 
   This is the currently the primary development platform for Biopython.
 
@@ -64,12 +64,12 @@ Biopython is currently supported and tested on the following Python verions:
   Aside from modules with C code or dependent of NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
 
-- Jython 2.5, 2.7 -- see http://www.jython.org
+- Jython 2.7 -- see http://www.jython.org
 
   Aside from modules with C code, or dependent on SQLite3 or NumPy,
   everything should work.
 
-Please note that after Biopython 1.62 we will drop support for Python 2.5
+Please note that Biopython 1.62 was our final release to support Python 2.5
 and Jython 2.5.
 
 
