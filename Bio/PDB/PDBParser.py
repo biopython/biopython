@@ -212,20 +212,20 @@ class PDBParser(object):
                     current_resname = resname
                     try:
                         structure_builder.init_residue(resname, hetero_flag, resseq, icode)
-                    except PDBConstructionException, message:
+                    except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)
                 elif current_residue_id != residue_id or current_resname != resname:
                     current_residue_id = residue_id
                     current_resname = resname
                     try:
                         structure_builder.init_residue(resname, hetero_flag, resseq, icode)
-                    except PDBConstructionException, message:
+                    except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)
                 # init atom
                 try:
                     structure_builder.init_atom(name, coord, bfactor, occupancy, altloc,
                                                 fullname, serial_number, element)
-                except PDBConstructionException, message:
+                except PDBConstructionException as message:
                     self._handle_PDB_exception(message, global_line_counter)
             elif record_type == "ANISOU":
                 anisou = map(float, (line[28:35], line[35:42], line[43:49],

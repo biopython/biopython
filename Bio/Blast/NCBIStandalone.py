@@ -343,7 +343,7 @@ class _Scanner(object):
                                   contains='No hits found')
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
-            except ValueError, err:
+            except ValueError as err:
                 if str(err) != "Unexpected end of stream.":
                     raise err
 
@@ -513,7 +513,7 @@ class _Scanner(object):
             read_and_call(uhandle, consumer.sbjct, start='Sbjct')
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
-            except ValueError, err:
+            except ValueError as err:
                 if str(err) != "Unexpected end of stream.":
                     raise err
                 # End of File (well, it looks like it with recent versions
@@ -551,7 +551,7 @@ class _Scanner(object):
     def _eof(self, uhandle):
         try:
             line = safe_peekline(uhandle)
-        except ValueError, err:
+        except ValueError as err:
             if str(err) != "Unexpected end of stream.":
                 raise err
             line = ""
@@ -644,7 +644,7 @@ class _Scanner(object):
         # file.
         try:
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-        except ValueError, x:
+        except ValueError as x:
             if str(x) != "Unexpected end of stream.":
                 raise
         consumer.end_database_report()

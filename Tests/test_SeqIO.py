@@ -331,7 +331,7 @@ def check_simple_write_read(records, indent=" "):
         try:
             c = SeqIO.write(sequences=records, handle=handle, format=format)
             assert c == len(records)
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
             if "len()" in str(e):
@@ -358,7 +358,7 @@ def check_simple_write_read(records, indent=" "):
         #Now ready to read back from the handle...
         try:
             records2 = list(SeqIO.parse(handle=handle, format=format))
-        except ValueError, e:
+        except ValueError as e:
             #This is BAD.  We can't read our own output.
             #I want to see the output when called from the test harness,
             #run_tests.py (which can be funny about new lines on Windows)

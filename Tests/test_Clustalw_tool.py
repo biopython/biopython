@@ -142,7 +142,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
                             "non-zero exit status" in str(err))
@@ -160,7 +160,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             stdout, stderr = cline()
             #Zero return code is a possible bug in clustalw 2.1?
             self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
-        except ApplicationError, err:
+        except ApplicationError as err:
             #Good, non-zero return code indicating an error in clustalw
             #e.g. Using clustalw 1.83 get:
             #Command 'clustalw -infile=Fasta/f001' returned non-zero exit status 4
@@ -178,7 +178,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             #Ideally we'd catch the return code and raise the specific
             #error for "invalid format", rather than just notice there
             #is not output file.

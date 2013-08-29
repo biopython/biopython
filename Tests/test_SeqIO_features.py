@@ -1020,7 +1020,7 @@ class NC_000932(unittest.TestCase):
             self.assertEqual(len(nuc), len(f))
             try:
                 pro = nuc.translate(table=self.table, cds=True)
-            except TranslationError, e:
+            except TranslationError as e:
                 print e
                 print r.id, nuc, self.table
                 print f

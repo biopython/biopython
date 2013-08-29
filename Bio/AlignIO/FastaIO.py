@@ -121,7 +121,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             else:
                 m = _extract_alignment_region(match_seq, match_tags)
             assert len(q) == len(m)
-        except AssertionError, err:
+        except AssertionError as err:
             print "Darn... amino acids vs nucleotide coordinates?"
             print tool
             print query_seq

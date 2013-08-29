@@ -27,7 +27,7 @@ Arguments:
 if __name__ == '__main__':
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "hcd:")
-    except getopt.error, x:
+    except getopt.error as x:
         print x
         sys.exit(0)
     if len(args) != 1:     # If they gave extraneous arguments,

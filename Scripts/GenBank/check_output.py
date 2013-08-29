@@ -74,7 +74,7 @@ def write_format(file):
         output_record = str(cur_record) + "\n"
         try:
             do_comparison(compare_record, output_record)
-        except AssertionError, msg:
+        except AssertionError as msg:
             print "\tTesting for %s" % cur_record.version
             print msg
 

@@ -20,7 +20,7 @@ class TestNCBIStandalone(unittest.TestCase):
                               "/tmp/example.fasta",
                               expectation=10**-4,
                               matrix="IDENTITY -F 0; cat /etc/passwd'")
-            except ValueError, e:
+            except ValueError as e:
                 self.assertEqual(str(e), "Rejecting suspicious argument for matrix")
                 #Good
             else:
@@ -37,7 +37,7 @@ class TestNCBIStandalone(unittest.TestCase):
                               nprocessors=4,
                               expectation="0.001",
                               filter= "F > /etc/passwd'")
-            except ValueError, e:
+            except ValueError as e:
                 self.assertEqual(str(e), "Rejecting suspicious argument for filter")
                 #Good
             else:

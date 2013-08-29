@@ -456,7 +456,7 @@ E-utilities.""", UserWarning)
             #HTTP GET
             cgi += "?" + options
             handle = urllib2.urlopen(cgi)
-    except urllib2.HTTPError, exception:
+    except urllib2.HTTPError as exception:
         raise exception
 
     return _binary_to_string_handle(handle)

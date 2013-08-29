@@ -87,7 +87,7 @@ def _open_for_random_access(filename):
     import bgzf
     try:
         return bgzf.BgzfReader(mode="rb", fileobj=handle)
-    except ValueError, e:
+    except ValueError as e:
         assert "BGZF" in str(e)
         #Not a BGZF file after all, rewind to start:
         handle.seek(0)
@@ -485,7 +485,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 if filenames and filenames != self._filenames:
                     con.close()
                     raise ValueError("Index file has different filenames")
-            except _OperationalError, err:
+            except _OperationalError as err:
                 con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
             #Now we have the format (from the DB if not given to us),
@@ -551,7 +551,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             try:
                 con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                             "key_index ON offset_data(key);")
-            except _IntegrityError, err:
+            except _IntegrityError as err:
                 self._proxies = random_access_proxies
                 self.close()
                 con.close()

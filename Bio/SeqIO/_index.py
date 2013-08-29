@@ -101,7 +101,7 @@ class SffRandomAccess(SeqFileRandomAccess):
                     "Indexed %i records, expected %i" \
                     % (count, number_of_reads)
                 return
-            except ValueError, err:
+            except ValueError as err:
                 import warnings
                 warnings.warn("Could not parse the SFF index: %s" % err)
                 assert count == 0, "Partially populated index"
@@ -483,7 +483,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 break  # End of file
             try:
                 key = line.split(tab_char)[0]
-            except ValueError, err:
+            except ValueError as err:
                 if not line.strip():
                     #Ignore blank lines
                     continue
