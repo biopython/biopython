@@ -74,12 +74,10 @@ def get_yes_or_no(question, default):
 
 
 # Make sure we have the right Python version.
-if sys.version_info[:2] < (2, 5):
-    print("Biopython requires Python 2.5 or better (but not Python 3 "
-          "yet).  Python %d.%d detected" % sys.version_info[:2])
+if sys.version_info[:2] < (2, 6):
+    print("Biopython requires Python 2.6 or later (or python 3.3 or later). "
+          "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(-1)
-elif sys.version_info[:2] == (2, 5):
-    print("WARNING - Biopython is dropping support for Python 2.5 after this release")
 elif sys.version_info[:2] == (3, 0):
     print("Biopython will not work on Python 3.0, please try Python 3.3 or later")
     sys.exit(1)
