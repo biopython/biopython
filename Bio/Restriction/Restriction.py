@@ -247,7 +247,7 @@ class RestrictionType(type):
         # super(RestrictionType, cls).__init__(cls, name, bases, dct)
         try :
             cls.compsite = re.compile(cls.compsite)
-        except Exception, err :
+        except Exception as err :
             raise ValueError("Problem with regular expression, re.compiled(%s)"
                              % repr(cls.compsite))
 

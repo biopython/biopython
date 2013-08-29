@@ -399,7 +399,7 @@ class Parser(object):
         def _parse_position(element, offset=0):
             try:
                 position = int(element.attrib['position']) + offset
-            except KeyError, err:
+            except KeyError as err:
                 position = None
             status = element.attrib.get('status', '')
             if status == 'unknown':

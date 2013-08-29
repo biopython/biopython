@@ -35,7 +35,7 @@ def _have_bug17666():
         h.close()
         assert not data, "Should be zero length, not %i" % len(data)
         return False
-    except TypeError, err:
+    except TypeError as err:
         #TypeError: integer argument expected, got 'tuple'
         return True
 

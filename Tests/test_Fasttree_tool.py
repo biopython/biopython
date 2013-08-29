@@ -72,7 +72,7 @@ cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
     assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
-except ApplicationError, err:
+except ApplicationError as err:
     print "Failed (good)"
     #Python 2.3 on Windows gave (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
@@ -92,7 +92,7 @@ try:
         print "Failed (good)"
     else:
         assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
-except ApplicationError, err:
+except ApplicationError as err:
     print "Failed (good)"
     #assert str(err) == "No records found in handle", str(err)
 
@@ -104,7 +104,7 @@ cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
     assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
-except ApplicationError, err:
+except ApplicationError as err:
     print "Failed (good)"
     #Ideally we'd catch the return code and raise the specific
     #error for "invalid format", rather than just notice there

@@ -162,7 +162,7 @@ def _have_bug17666():
         h.close()
         assert not data, "Should be zero length, not %i" % len(data)
         return False
-    except TypeError, err:
+    except TypeError as err:
         #TypeError: integer argument expected, got 'tuple'
         h.close()
         return True
@@ -206,7 +206,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
             "doctest", "help", "offline"])
-    except getopt.error, msg:
+    except getopt.error as msg:
         print msg
         print __doc__
         return 2
@@ -429,10 +429,10 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("FAIL\n")
                 result.printErrors()
             return False
-        except MissingExternalDependencyError, msg:
+        except MissingExternalDependencyError as msg:
             sys.stderr.write("skipping. %s\n" % msg)
             return True
-        except Exception, msg:
+        except Exception as msg:
             # This happened during the import
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1+"\n")
@@ -440,7 +440,7 @@ class TestRunner(unittest.TextTestRunner):
             result.stream.write(result.separator2+"\n")
             result.stream.write(traceback.format_exc())
             return False
-        except KeyboardInterrupt, err:
+        except KeyboardInterrupt as err:
             # Want to allow this, and abort the test
             # (see below for special case)
             raise err

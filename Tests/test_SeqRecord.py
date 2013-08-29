@@ -42,7 +42,7 @@ class SeqRecordCreation(unittest.TestCase):
         try:
             rec.letter_annotations["bad"] = "abc"
             self.assertTrue(False, "Adding a bad letter_annotation should fail!")
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             pass
         #Now try setting it afterwards to a bad value...
         rec = SeqRecord(Seq("ACGT", generic_dna),
@@ -50,7 +50,7 @@ class SeqRecordCreation(unittest.TestCase):
         try:
             rec.letter_annotations={"test" : [1, 2, 3]}
             self.assertTrue(False, "Changing to bad letter_annotations should fail!")
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             pass
         #Now try setting it at creation time to a bad value...
         try:
@@ -58,7 +58,7 @@ class SeqRecordCreation(unittest.TestCase):
                             id="Test", name="Test", description="Test",
                             letter_annotations={"test" : [1, 2, 3]})
             self.assertTrue(False, "Wrong length letter_annotations should fail!")
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             pass
 
 

@@ -135,7 +135,7 @@ class WriterTests(unittest.TestCase):
         if err_msg:
             try:
                 SeqIO.write(records, handle, format)
-            except err_type, err:
+            except err_type as err:
                 self.assertEqual(str(err), err_msg)
         else:
             self.assertRaises(err_type, SeqIO.write, records, handle, format)

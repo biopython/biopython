@@ -151,7 +151,7 @@ def _make_dssp_dict(handle):
             acc = int(l[34:38])
             phi = float(l[103:109])
             psi = float(l[109:115])
-        except ValueError, exc:
+        except ValueError as exc:
             # DSSP output breaks its own format when there are >9999
             # residues, since only 4 digits are allocated to the seq num
             # field.  See 3kic chain T res 321, 1vsy chain T res 6077.

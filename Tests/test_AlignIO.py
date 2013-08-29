@@ -120,7 +120,7 @@ def check_simple_write_read(alignments, indent=" "):
         try:
             c = AlignIO.write(alignments, handle=handle, format=format)
             assert c == len(alignments)
-        except ValueError, e:
+        except ValueError as e:
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
             print indent+"Failed: %s" % str(e)
@@ -134,7 +134,7 @@ def check_simple_write_read(alignments, indent=" "):
             try:
                 alignments2 = list(AlignIO.parse(handle=handle, format=format,
                                                  seq_count=records_per_alignment))
-            except ValueError, e:
+            except ValueError as e:
                 #This is BAD.  We can't read our own output.
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
@@ -149,7 +149,7 @@ def check_simple_write_read(alignments, indent=" "):
             handle.seek(0)
             try:
                 alignments2 = list(AlignIO.parse(handle=handle, format=format))
-            except ValueError, e:
+            except ValueError as e:
                 #This is BAD.  We can't read our own output.
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
@@ -214,7 +214,7 @@ def check_phylip_reject_duplicate():
         # This should raise a ValueError
         AlignIO.write(alignment, handle, 'phylip')
         assert False, "Duplicate IDs after truncation are not allowed."
-    except ValueError, e:
+    except ValueError as e:
         # Expected - check the error
         assert "Repeated name 'longsequen'" in str(e)
 
@@ -339,7 +339,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         rep_dict = summary.replacement_dictionary()
         try:
             info_content = summary.information_content()
-        except ValueError, e:
+        except ValueError as e:
             if str(e) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
                 raise e
             pass

@@ -64,7 +64,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
             warnings.filters.pop()
         handle.seek(0)
         assert False, "Parse or write should have failed!"
-    except ValueError, err:
+    except ValueError as err:
         err1 = err
     #Now do the conversion...
     try:
@@ -75,7 +75,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         if qual_truncate:
             warnings.filters.pop()
         assert False, "Convert should have failed!"
-    except ValueError, err2:
+    except ValueError as err2:
         assert str(err1) == str(err2), \
                "Different failures, parse/write:\n%s\nconvert:\n%s" \
                % (err1, err2)

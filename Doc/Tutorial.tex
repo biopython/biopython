@@ -5548,7 +5548,7 @@ We can read these records one a time, but now we can catch and deal with errors 
 \begin{verbatim}
 >>> try:
 ...     next_record = iterator.next()
-... except NCBIStandalone.LowQualityBlastError, info:
+... except NCBIStandalone.LowQualityBlastError as info:
 ...     print "LowQualityBlastError detected in id %s" % info[1]
 \end{verbatim}
 
