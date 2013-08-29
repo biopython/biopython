@@ -227,12 +227,12 @@ import sys
 import re
 
 from Bio._py3k import _bytes_to_string, _as_bytes
-_null = _as_bytes("\0")
-_sff = _as_bytes(".sff")
-_hsh = _as_bytes(".hsh")
-_srt = _as_bytes(".srt")
-_mft = _as_bytes(".mft")
-_flag = _as_bytes("\xff")
+_null = b"\0"
+_sff = b".sff"
+_hsh = b".hsh"
+_srt = b".srt"
+_mft = b".mft"
+_flag = b"\xff"
 
 
 def _sff_file_header(handle):

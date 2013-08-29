@@ -229,14 +229,10 @@ from Bio._py3k import _as_bytes, _as_string
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 #but need to use bytes on Python 3
-_bgzf_magic = _as_bytes("\x1f\x8b\x08\x04")
-_bgzf_header = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00"
-                         "\x00\xff\x06\x00\x42\x43\x02\x00")
-_bgzf_eof = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" +
-                      "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00")
-_bytes_BC = _as_bytes("BC")
-_empty_bytes_string = _as_bytes("")
-_bytes_newline = _as_bytes("\n")
+_bgzf_magic = b"\x1f\x8b\x08\x04"
+_bgzf_header = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00"
+_bgzf_eof = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+_bytes_BC = b"BC"
 
 
 def open(filename, mode="rb"):
@@ -522,7 +518,7 @@ class BgzfReader(object):
         if self._text:
             self._newline = "\n"
         else:
-            self._newline = _bytes_newline
+            self._newline = b"\n"
         self._handle = handle
         self.max_cache = max_cache
         self._buffers = {}
@@ -562,7 +558,7 @@ class BgzfReader(object):
             if self._text:
                 self._buffer = ""
             else:
-                self._buffer = _empty_bytes_string
+                self._buffer = b""
         self._within_block_offset = 0
         self._block_raw_length = block_size
         #Finally save the block in our cache,
@@ -612,7 +608,7 @@ class BgzfReader(object):
             if self._text:
                 return ""
             else:
-                return _empty_bytes_string
+                return b""
         elif self._within_block_offset + size <= len(self._buffer):
             #This may leave us right at the end of a block
             #(lazy loading, don't load the next block unless we have too)
@@ -702,7 +698,7 @@ class BgzfWriter(object):
                 handle = __builtin__.open(filename, "wb")
         self._text = "b" not in mode.lower()
         self._handle = handle
-        self._buffer = _empty_bytes_string
+        self._buffer = b""
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
@@ -759,7 +755,7 @@ class BgzfWriter(object):
             self._write_block(self._buffer[:65535])
             self._buffer = self._buffer[65535:]
         self._write_block(self._buffer)
-        self._buffer = _empty_bytes_string
+        self._buffer = b""
         self._handle.flush()
 
     def close(self):
