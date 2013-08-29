@@ -1211,7 +1211,7 @@ if __name__ == "__main__":
         handle = StringIO()
         try:
             EmblWriter(handle).write_file(records)
-        except ValueError, err:
+        except ValueError as err:
             print err
             return
         handle.seek(0)

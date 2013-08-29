@@ -73,7 +73,7 @@ class XMLRecordIterator:
                 elif event == "END_ELEMENT" and node.namespaceURI == self._namespace and node.localName == self._recordTag:
                     yield record
 
-        except SAXParseException, e:
+        except SAXParseException as e:
 
             if e.getLineNumber() == 1 and e.getColumnNumber() == 0:
                 #empty file

@@ -32,7 +32,7 @@ while 1:
         try:
             cur_record = iterator.next()
             have_record = 1
-        except GenBank.ParserFailureError, msg:
+        except GenBank.ParserFailureError as msg:
             print "Parsing Problem:", msg
             sys.exit()
 

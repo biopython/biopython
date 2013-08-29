@@ -170,7 +170,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
                              shell=(sys.platform!="win32"))
     try:
         AlignIO.write(alignments, child.stdin, old_format)
-    except Exception, err:
+    except Exception as err:
         child.stdin.close()
         child.stderr.close()
         child.stdout.close()
@@ -181,7 +181,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     #automatically close the handle?
     try:
         aligns = list(AlignIO.parse(child.stdout, new_format))
-    except Exception, err:
+    except Exception as err:
         child.stdout.close()
         raise
     child.stdout.close()
@@ -252,7 +252,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
             new_records = list(emboss_piped_SeqIO_convert(records, temp_format, "fasta"))
             try:
                 self.assertTrue(compare_records(records, new_records))
-            except ValueError, err:
+            except ValueError as err:
                 raise ValueError("Disagree on file %s %s in %s format: %s"
                                  % (in_format, in_filename, temp_format, err))
 
@@ -270,7 +270,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
             handle.close()
             try:
                 self.assertTrue(compare_records(old_records, new_records))
-            except ValueError, err:
+            except ValueError as err:
                 raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
@@ -371,7 +371,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
             handle.close()
             try:
                 self.assertTrue(compare_alignments(old_aligns, new_aligns))
-            except ValueError, err:
+            except ValueError as err:
                 raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
@@ -395,13 +395,13 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 new_aligns = list(emboss_piped_AlignIO_convert(old_aligns,
                                                                temp_format,
                                                                "phylip"))
-            except ValueError, e:
+            except ValueError as e:
                 #e.g. ValueError: Need a DNA, RNA or Protein alphabet
                 #from writing Nexus files...
                 continue
             try:
                 self.assertTrue(compare_alignments(old_aligns, new_aligns))
-            except ValueError, err:
+            except ValueError as err:
                 raise ValueError("Disagree on file %s %s in %s format: %s"
                                  % (in_format, in_filename, temp_format, err))
 

@@ -182,7 +182,7 @@ class DataHandler(object):
             raise IOError("Can't parse a closed handle")
         try:
             self.parser.ParseFile(handle)
-        except expat.ExpatError, e:
+        except expat.ExpatError as e:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, so we can be sure that
                 # we are parsing XML data. Most likely, the XML file is
@@ -235,7 +235,7 @@ class DataHandler(object):
 
             try:
                 self.parser.Parse(text, False)
-            except expat.ExpatError, e:
+            except expat.ExpatError as e:
                 if self.parser.StartElementHandler:
                     # We saw the initial <!xml declaration, so we can be sure
                     # that we are parsing XML data. Most likely, the XML file

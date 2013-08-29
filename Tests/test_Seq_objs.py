@@ -345,7 +345,7 @@ class StringMethodTests(unittest.TestCase):
                 continue
             try :
                 comp = example1.complement()
-            except ValueError, e:
+            except ValueError as e:
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
@@ -373,7 +373,7 @@ class StringMethodTests(unittest.TestCase):
                 continue
             try :
                 comp = example1.reverse_complement()
-            except ValueError, e:
+            except ValueError as e:
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
@@ -401,7 +401,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 try :
                     tran = example1.transcribe()
-                except ValueError, e:
+                except ValueError as e:
                     if str(e) == "Proteins cannot be transcribed!":
                         continue
                     if str(e) == "RNA cannot be transcribed!":
@@ -422,7 +422,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 try :
                     tran = example1.back_transcribe()
-                except ValueError, e:
+                except ValueError as e:
                     if str(e) == "Proteins cannot be back transcribed!":
                         continue
                     if str(e) == "DNA cannot be back transcribed!":
@@ -443,7 +443,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 try :
                     tran = example1.translate()
-                except ValueError, e:
+                except ValueError as e:
                     if str(e) == "Proteins cannot be translated!":
                         continue
                     raise e

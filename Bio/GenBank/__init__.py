@@ -1041,7 +1041,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     ref = None
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
-                except ValueError, err:
+                except ValueError as err:
                     print location_line
                     print part
                     raise err

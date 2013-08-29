@@ -195,7 +195,7 @@ class Insert(Create):
     def __init__(self, *args, **keywds):
         try:
             Create.__init__(self, *args, **keywds)
-        except MySQLdb.IntegrityError, error_data:
+        except MySQLdb.IntegrityError as error_data:
             self.error_message += self.MSG_INTEGRITY_ERROR % error_data[1]
             try:
                 self.total_count

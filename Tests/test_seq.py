@@ -167,14 +167,14 @@ for a in rna:
         try:
             c=a+b
             assert str(c) == str(a) + str(b)
-        except ValueError, e:
+        except ValueError as e:
             print "%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e))
 for a in dna:
     for b in dna:
         try:
             c=a+b
             assert str(c) == str(a) + str(b)
-        except ValueError, e:
+        except ValueError as e:
             print "%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e))
     for b in rna:
         try:
@@ -194,7 +194,7 @@ for a in protein:
         try:
             c=a+b
             assert str(c) == str(a) + str(b)
-        except ValueError, e:
+        except ValueError as e:
             print "%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e))
     for b in nuc+dna+rna:
         try:
@@ -382,7 +382,7 @@ for nucleotide_seq in test_seqs:
         assert str(nucleotide_seq).replace("t","u").replace("T","U") == str(expected)
         print "%s -> %s" \
         % (repr(nucleotide_seq) , repr(expected))
-    except ValueError, e:
+    except ValueError as e:
         expected = None
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
@@ -416,7 +416,7 @@ for nucleotide_seq in test_seqs:
         assert str(nucleotide_seq).replace("u","t").replace("U","T") == str(expected)
         print "%s -> %s" \
         % (repr(nucleotide_seq) , repr(expected))
-    except ValueError, e:
+    except ValueError as e:
         expected = None
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
@@ -449,7 +449,7 @@ for nucleotide_seq in test_seqs:
         expected = Seq.reverse_complement(nucleotide_seq)
         print "%s\n-> %s" \
         % (repr(nucleotide_seq) , repr(expected))
-    except ValueError, e:
+    except ValueError as e:
         expected = None
         print "%s\n-> %s" \
         % (repr(nucleotide_seq) , str(e))
@@ -489,7 +489,7 @@ for nucleotide_seq in test_seqs:
     try:
         expected = Seq.translate(nucleotide_seq)
         print "%s\n-> %s" % (repr(nucleotide_seq), repr(expected))
-    except (ValueError, TranslationError), e:
+    except (ValueError, TranslationError) as e:
         expected = None
         print "%s\n-> %s" % (repr(nucleotide_seq), str(e))
     #Now test the Seq object's method
@@ -501,7 +501,7 @@ for nucleotide_seq in test_seqs:
     #Now check translate(..., to_stop=True)
     try:
         short = Seq.translate(nucleotide_seq, to_stop=True)
-    except (ValueError, TranslationError), e:
+    except (ValueError, TranslationError) as e:
         short = None
     if expected is not None:
         assert short is not None
@@ -613,7 +613,7 @@ for nucleotide_seq in test_seqs:
             assert str(nucleotide_seq.complement()) \
                 == str(Seq.reverse_complement(nucleotide_seq))[::-1], \
                 "Bio.Seq function and method disagree!"
-        except ValueError, e:
+        except ValueError as e:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , str(e))
 
@@ -628,6 +628,6 @@ for nucleotide_seq in test_seqs:
             assert str(nucleotide_seq.reverse_complement()) \
                 == str(Seq.reverse_complement(nucleotide_seq)), \
                 "Bio.Seq function and method disagree!"
-        except ValueError, e:
+        except ValueError as e:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , str(e))

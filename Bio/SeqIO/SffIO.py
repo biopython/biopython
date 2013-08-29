@@ -1315,7 +1315,7 @@ if __name__ == "__main__":
         for record in SffIterator(handle):
             print record.id
         assert False, "Should have failed"
-    except ValueError, err:
+    except ValueError as err:
         print "Checking what happens on re-reading a handle:"
         print err
 

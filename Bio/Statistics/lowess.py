@@ -26,7 +26,7 @@ try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
     # in NumPy, as it does not require a full sort.
-except ImportError, x:
+except ImportError as x:
     # Use the median function in NumPy if Bio.Cluster is not available
     from numpy import median
 
