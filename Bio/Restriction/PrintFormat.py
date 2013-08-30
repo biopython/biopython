@@ -115,7 +115,7 @@ class PrintFormat(object):
                 ls.append((k,v))
             else:
                 nc.append(k)
-        print self.make_format(ls, title, nc, s1)
+        print(self.make_format(ls, title, nc, s1))
         return
 
     def make_format(self, cut=[], title='', nc=[], s1=''):

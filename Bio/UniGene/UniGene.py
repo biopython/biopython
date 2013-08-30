@@ -192,20 +192,20 @@ class UniGeneParser( sgmllib.SGMLParser ):
             indent = indent + '    '
         if isinstance(item, str):
             if( item != '' ):
-                print '%s%s' % ( indent, item )
+                print('%s%s' % ( indent, item ))
         elif isinstance(item, list):
             for subitem in item:
                 self.print_item( subitem, level + 1 )
         elif( isinstance( item, UserDict.UserDict ) ):
             for subitem in item:
-                print '%skey is %s' % ( indent, subitem )
+                print('%skey is %s' % ( indent, subitem ))
                 self.print_item( item[ subitem ], level + 1 )
         else:
-            print item
+            print(item)
 
     def print_tags( self ):
         for key in self.queue:
-            print 'key %s' % key
+            print('key %s' % key)
             self.print_item( self.queue[ key ] )
 
 

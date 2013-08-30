@@ -24,8 +24,8 @@ class ScopTests(unittest.TestCase):
         """
         fields1 = cla_line_1.rstrip().split('\t')
         fields2 = cla_line_2.rstrip().split('\t')
-        print fields1
-        print fields2
+        print(fields1)
+        print(fields2)
         # compare the first five fields in a Cla line, which should be exactly
         # the same
         if fields1[:5] != fields2[:5]:

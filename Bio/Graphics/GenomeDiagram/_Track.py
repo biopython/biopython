@@ -403,9 +403,9 @@ if __name__ == '__main__':
     gdgs.add_graph(graphdata, 'Test Data')
     gdt.add_set(gdgs)
 
-    print gdt.get_ids()
+    print(gdt.get_ids())
     sets = gdt.get_sets()
     for set in sets:
-        print set
+        print(set)
 
-    print gdt.get_element_limits()
+    print(gdt.get_element_limits())

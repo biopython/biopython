@@ -53,11 +53,11 @@ feature_parser = GenBank.FeatureParser(debug_level = 0)
 record_parser = GenBank.RecordParser(debug_level = 0)
 
 all_parsers = [feature_parser, record_parser]
-print "Testing parsers..."
+print("Testing parsers...")
 for parser in all_parsers:
     for filename in files_to_parse:
         if not os.path.isfile(filename):
-            print "Missing test input file: %s" % filename
+            print("Missing test input file: %s" % filename)
             continue
 
         handle = open(filename, 'r')
@@ -70,27 +70,27 @@ for parser in all_parsers:
                 break
 
             if isinstance(parser, GenBank.FeatureParser):
-                print "***Record from %s with the FeatureParser" \
-                      % filename.split(os.path.sep)[-1]
+                print("***Record from %s with the FeatureParser" \
+                      % filename.split(os.path.sep)[-1])
                 print "Seq:", repr(cur_record.seq)
                 print "Id:", cur_record.id
                 print "Name:", cur_record.name
                 print "Description", cur_record.description
-                print "Annotations***"
+                print("Annotations***")
                 ann_keys = cur_record.annotations.keys()
                 ann_keys.sort()
                 for ann_key in ann_keys:
                     if ann_key != 'references':
-                        print "Key: %s" % ann_key
-                        print "Value: %s" % \
-                              cur_record.annotations[ann_key]
+                        print("Key: %s" % ann_key)
+                        print("Value: %s" % \
+                              cur_record.annotations[ann_key])
                     else:
-                        print "References*"
+                        print("References*")
                         for reference in cur_record.annotations[ann_key]:
-                            print str(reference)
-                print "Feaures"
+                            print(str(reference))
+                print("Feaures")
                 for feature in cur_record.features:
-                    print feature
+                    print(feature)
                     if isinstance(_get_base_alphabet(cur_record.seq.alphabet),
                                   ProteinAlphabet):
                         assert feature.strand is None
@@ -99,9 +99,9 @@ for parser in all_parsers:
                         assert feature.strand is not None
                 print "DB cross refs", cur_record.dbxrefs
             elif isinstance(parser, GenBank.RecordParser):
-                print "***Record from %s with the RecordParser" \
-                      % filename.split(os.path.sep)[-1]
-                print "sequence length: %i" % len(cur_record.sequence)
+                print("***Record from %s with the RecordParser" \
+                      % filename.split(os.path.sep)[-1])
+                print("sequence length: %i" % len(cur_record.sequence))
                 print "locus:", cur_record.locus
                 print "definition:", cur_record.definition
                 print "accession:", cur_record.accession
@@ -122,7 +122,7 @@ for parser in all_parsers:
 #...
 
 # test writing GenBank format
-print "Testing writing GenBank format..."
+print("Testing writing GenBank format...")
 
 
 def do_comparison(good_record, test_record):
@@ -155,7 +155,7 @@ def t_write_format():
     record_parser = GenBank.RecordParser(debug_level = 0)
 
     for file in write_format_files:
-        print "Testing GenBank writing for %s..." % os.path.basename(file)
+        print("Testing GenBank writing for %s..." % os.path.basename(file))
         cur_handle = open(os.path.join("GenBank", file), "r")
         compare_handle = open(os.path.join("GenBank", file), "r")
 
@@ -169,7 +169,7 @@ def t_write_format():
             if cur_record is None or compare_record is None:
                 break
 
-            print "\tTesting for %s" % cur_record.version
+            print("\tTesting for %s" % cur_record.version)
 
             output_record = str(cur_record) + "\n"
             do_comparison(compare_record, output_record)
@@ -200,7 +200,7 @@ def t_cleaning_features():
 
     handle.close()
 
-print "Testing feature cleaning..."
+print("Testing feature cleaning...")
 t_cleaning_features()
 
 
@@ -233,7 +233,7 @@ def t_ensembl_locus():
     assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
     assert c._expected_size == 1219964, c._expected_size
 
-    print "Done"
+    print("Done")
 
-print "Testing EnsEMBL LOCUS lines..."
+print("Testing EnsEMBL LOCUS lines...")
 t_ensembl_locus()

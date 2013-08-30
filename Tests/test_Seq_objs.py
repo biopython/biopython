@@ -301,7 +301,7 @@ class StringMethodTests(unittest.TestCase):
                     for step in range(-3,4):
                         if step == 0:
                             try:
-                                print example1[i:j:step]
+                                print(example1[i:j:step])
                                 self._assert(False)  # Should fail!
                             except ValueError:
                                 pass
@@ -449,7 +449,7 @@ class StringMethodTests(unittest.TestCase):
                     raise e
                 #This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:
-                    print tran.alphabet
+                    print(tran.alphabet)
                     self.assertTrue(False)
                 #TODO - check the actual translation, and all the optional args
 
@@ -503,7 +503,7 @@ class StringMethodTests(unittest.TestCase):
                         Seq(codon, generic_dna),
                         Seq(codon, unambiguous_dna)]:
                 try :
-                    print nuc.translate()
+                    print(nuc.translate())
                     self.assertTrue(False, "Transating %s should fail" % codon)
                 except TranslationError :
                     pass

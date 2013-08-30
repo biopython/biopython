@@ -165,7 +165,7 @@ if __name__=="__main__":
     import sys
 
     if len(sys.argv) != 2:
-        print "Usage: python MMCIFparser.py filename"
+        print("Usage: python MMCIFparser.py filename")
         raise SystemExit
     filename=sys.argv[1]
 
@@ -174,7 +174,7 @@ if __name__=="__main__":
     structure=p.get_structure("test", filename)
 
     for model in structure.get_list():
-        print model
+        print(model)
         for chain in model.get_list():
-            print chain
-            print "Found %d residues." % len(chain.get_list())
+            print(chain)
+            print("Found %d residues." % len(chain.get_list()))

@@ -266,6 +266,6 @@ if __name__=='__main__':
 
     # print the dictionary
     for k, y in data_dict.iteritems():
-        print "-"*40
-        print k
-        print y
+        print("-"*40)
+        print(k)
+        print(y)

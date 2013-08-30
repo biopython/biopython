@@ -16,7 +16,7 @@ from Bio import GenBank
 verbose = 0
 
 if len(sys.argv) != 2:
-    print "Usage ./find_parser_problems <GenBank file to parse>"
+    print("Usage ./find_parser_problems <GenBank file to parse>")
     sys.exit()
 
 feature_parser = GenBank.FeatureParser(debug_level=0)
@@ -42,14 +42,14 @@ while 1:
     print "Successfully parsed record", cur_record.id
 
     if verbose:
-        print "***Record"
+        print("***Record")
         print "Seq:", cur_record.seq
         print "Id:", cur_record.id
         print "Name:", cur_record.name
         print "Description", cur_record.description
         print "Annotations", cur_record.annotations
-        print "Feaures"
+        print("Feaures")
         for feature in cur_record.features:
-            print feature
+            print(feature)
 
 handle.close()

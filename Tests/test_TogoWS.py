@@ -463,7 +463,7 @@ class TogoSearch(unittest.TestCase):
             raise ValueError("Only %i matches, expected at least %i"
                              % (search_count, len(expected_matches)))
         if search_count > 5000 and not limit:
-            print "%i results, skipping" % search_count
+            print("%i results, skipping" % search_count)
             return
         if limit:
             count = min(search_count, limit)

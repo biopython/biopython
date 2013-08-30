@@ -855,8 +855,8 @@ def print_matrix(matrix):
     ndigits = map(max, matrixT)
     for i in range(len(matrix)):
         #Using string formatting trick to add leading spaces,
-        print " ".join("%*s " % (ndigits[j], matrix[i][j])
-                       for j in range(len(matrix[i])))
+        print(" ".join("%*s " % (ndigits[j], matrix[i][j])
+                       for j in range(len(matrix[i]))))
 
 
 def format_alignment(align1, align2, score, begin, end):
@@ -883,10 +883,10 @@ except ImportError:
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running doctests..."
+    print("Running doctests...")
     import doctest
     doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

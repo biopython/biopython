@@ -144,12 +144,12 @@ class SeqPanel(wx.Panel):
     def OnApply(self, event):
         codon_table_lb = self.parent.params_panel.codon_table_lb
         selection = codon_table_lb.GetStringSelection()
-        print selection
+        print(selection)
         codon_table = selection[:]
         transform_lb = self.parent.params_panel.transform_lb
         selection = transform_lb.GetStringSelection()
         transform = selection[:]
-        print transform
+        print(transform)
         if(transform == 'Translate'):
             self.translate(codon_table)
         elif(transform == 'Transcribe'):
@@ -163,20 +163,20 @@ class SeqPanel(wx.Panel):
 
     def translate(self, codon_table):
         seq = "".join(self.src_text.GetValue().split())  # remove whitespace
-        print seq
+        print(seq)
         self.dest_text.Clear()
         self.dest_text.SetValue(translate(seq, table=codon_table,
                                           to_stop=True))
 
     def transcribe(self):
         seq = "".join(self.src_text.GetValue().split())  # remove whitespace
-        print seq
+        print(seq)
         self.dest_text.Clear()
         self.dest_text.SetValue(transcribe(seq))
 
     def back_transcribe(self):
         seq = "".join(self.src_text.GetValue().split())  # remove whitespace
-        print seq
+        print(seq)
         self.dest_text.Clear()
         self.dest_text.SetValue(back_transcribe(seq))
 

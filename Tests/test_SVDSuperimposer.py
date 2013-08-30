@@ -71,8 +71,8 @@ def simple_matrix_print(matrix):
     + "]"
 
 # output results
-print simple_matrix_print(y_on_x1)
+print(simple_matrix_print(y_on_x1))
 print
-print simple_matrix_print(y_on_x2)
+print(simple_matrix_print(y_on_x2))
 print
-print "%.2f" % rms
+print("%.2f" % rms)

@@ -152,4 +152,4 @@ class CodonAdaptationIndex(object):
     def print_index(self):
         """Prints out the index used."""
         for i in sorted(self.index):
-            print "%s\t%.3f" % (i, self.index[i])
+            print("%s\t%.3f" % (i, self.index[i]))

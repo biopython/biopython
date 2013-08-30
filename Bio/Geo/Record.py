@@ -54,7 +54,7 @@ class Record(object):
                 output = output + '%s: %s\n' % ( key, contents[ :40 ] )
                 output = output + out_block( contents[ 40: ] )
             else:
-                print contents
+                print(contents)
                 output = output + '%s: %s\n' % ( key, val[ :40 ] )
                 output = output + out_block( val[ 40: ] )
         col_keys = self.col_defs.keys()

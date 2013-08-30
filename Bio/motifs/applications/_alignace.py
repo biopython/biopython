@@ -134,10 +134,10 @@ class CompareAceCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running alignace doctests..."
+    print("Running alignace doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 
 if __name__ == "__main__":

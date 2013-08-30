@@ -152,9 +152,9 @@ class Codeml(Paml):
                 # control file it is specified as a series of numbers
                 # separated by spaces.
                 NSsites = " ".join([str(site) for site in option[1]])
-                print "%s = %s" % (option[0], NSsites)
+                print("%s = %s" % (option[0], NSsites))
             else:
-                print "%s = %s" % (option[0], option[1])
+                print("%s = %s" % (option[0], option[1]))
 
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.

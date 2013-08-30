@@ -122,7 +122,7 @@ class PDBList(object):
         PDB entries and some annotation to them.
         Returns a list of PDB codes in the index file.
         """
-        print "retrieving index file. Takes about 5 MB."
+        print("retrieving index file. Takes about 5 MB.")
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
         with contextlib.closing(_urlopen(url)) as handle:
             all_entries = [line[:4] for line in handle.readlines()[2:]
@@ -202,11 +202,11 @@ class PDBList(object):
         # Skip download if the file already exists
         if not self.overwrite:
             if os.path.exists(final_file):
-                print "Structure exists: '%s' " % final_file
+                print("Structure exists: '%s' " % final_file)
                 return final_file
 
         # Retrieve the file
-        print "Downloading PDB structure '%s'..." % pdb_code
+        print("Downloading PDB structure '%s'..." % pdb_code)
         urllib.urlretrieve(url, filename)
 
         # Uncompress the archive, delete when done
@@ -235,7 +235,7 @@ class PDBList(object):
             try:
                 self.retrieve_pdb_file(pdb_code)
             except Exception:
-                print 'error %s\n' % pdb_code
+                print('error %s\n' % pdb_code)
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
@@ -256,11 +256,11 @@ class PDBList(object):
                 try:
                     shutil.move(old_file, new_file)
                 except Exception:
-                    print "Could not move %s to obsolete folder" % old_file
+                    print("Could not move %s to obsolete folder" % old_file)
             elif os.path.isfile(new_file):
-                print "Obsolete file %s already moved" % old_file
+                print("Obsolete file %s already moved" % old_file)
             else:
-                print "Obsolete file %s is missing" % old_file
+                print("Obsolete file %s is missing" % old_file)
 
     def download_entire_pdb(self, listfile=None):
         """Retrieve all PDB entries not present in the local PDB copy.
@@ -296,7 +296,7 @@ class PDBList(object):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
-        print "Retrieving sequence file (takes about 15 MB)."
+        print("Retrieving sequence file (takes about 15 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         urllib.urlretrieve(url, savefile)
 
@@ -321,7 +321,7 @@ if __name__ == '__main__':
        -d   A single directory will be used as <pdb_path>, not a tree.
        -o   Overwrite existing structure files.
     """
-    print doc
+    print(doc)
 
     if len(sys.argv) > 2:
         pdb_path = sys.argv[2]
@@ -341,7 +341,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == 'update':
             # update PDB
-            print "updating local PDB at " + pdb_path
+            print("updating local PDB at " + pdb_path)
             pl.update_pdb()
 
         elif sys.argv[1] == 'all':

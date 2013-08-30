@@ -51,20 +51,20 @@ class ValidationIncreaseStop(object):
         """
         if num_iterations % 10 == 0:
             if self.verbose:
-                print "%s; Training Error:%s; Validation Error:%s"\
-                      % (num_iterations, training_error, validation_error)
+                print("%s; Training Error:%s; Validation Error:%s"\
+                      % (num_iterations, training_error, validation_error))
 
         if num_iterations > self.min_iterations:
             if self.last_error is not None:
                 if validation_error > self.last_error:
                     if self.verbose:
-                        print "Validation Error increasing -- Stop"
+                        print("Validation Error increasing -- Stop")
                     return 1
 
         if self.max_iterations is not None:
             if num_iterations > self.max_iterations:
                 if self.verbose:
-                    print "Reached maximum number of iterations -- Stop"
+                    print("Reached maximum number of iterations -- Stop")
                 return 1
 
         self.last_error = validation_error

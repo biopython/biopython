@@ -75,19 +75,19 @@ def choose_parser(outfile):
 def test_blast_output(outfile):
     # Try to auto-detect the format
     if 1:
-        print "No parser specified.  I'll try to choose one for you based"
-        print "on the format of the output file."
+        print("No parser specified.  I'll try to choose one for you based")
+        print("on the format of the output file.")
         print
 
         parser_class = choose_parser(outfile)
-        print "It looks like you have given output that should be parsed"
-        print "with %s.%s.  If I'm wrong, you can select the correct parser" %\
-              (parser_class.__module__, parser_class.__name__)
-        print "on the command line of this script (NOT IMPLEMENTED YET)."
+        print("It looks like you have given output that should be parsed")
+        print("with %s.%s.  If I'm wrong, you can select the correct parser" %\
+              (parser_class.__module__, parser_class.__name__))
+        print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
         raise NotImplementedError
         parser_class = NCBIWWW.BlastParser
-        print "Using %s to parse the file." % parser_class.__name__
+        print("Using %s to parse the file." % parser_class.__name__)
     print
 
     scanner_class = parser_class()._scanner.__class__
@@ -95,7 +95,7 @@ def test_blast_output(outfile):
 
     #parser_class()._scanner.feed(
     #    open(outfile), ParserSupport.TaggingConsumer())
-    print "I'm going to run the data through the parser to see what happens..."
+    print("I'm going to run the data through the parser to see what happens...")
     parser = parser_class()
     try:
         rec = parser.parse_file(outfile)
@@ -103,19 +103,19 @@ def test_blast_output(outfile):
         raise
     except Exception as x:
         exception_info = str(x)
-        print "Dang, the parsing failed."
+        print("Dang, the parsing failed.")
     else:
-        print "Parsing succeeded, no problems detected."
-        print "However, you should check to make sure the following scanner"
-        print "trace looks reasonable."
+        print("Parsing succeeded, no problems detected.")
+        print("However, you should check to make sure the following scanner")
+        print("trace looks reasonable.")
         print
         parser_class()._scanner.feed(
             open(outfile), ParserSupport.TaggingConsumer())
         return 0
     print
 
-    print "Alright.  Let me try and figure out where in the parser the"
-    print "problem occurred..."
+    print("Alright.  Let me try and figure out where in the parser the")
+    print("problem occurred...")
     etype, value, tb = sys.exc_info()
     ftb = traceback.extract_tb(tb)
     ftb.reverse()
@@ -128,21 +128,21 @@ def test_blast_output(outfile):
             class_found = scanner_class
             break
     if class_found is None:
-        print "Sorry, I could not pinpoint the error to the parser."
-        print "There's nothing more I can tell you."
-        print "Here's the traceback:"
+        print("Sorry, I could not pinpoint the error to the parser.")
+        print("There's nothing more I can tell you.")
+        print("Here's the traceback:")
         traceback.print_exception(etype, value, tb)
         return 1
     else:
-        print "I found the problem in %s.%s.%s, line %d:" % \
+        print("I found the problem in %s.%s.%s, line %d:" % \
               (class_found.__module__, class_found.__name__,
-               err_function, err_line)
-        print "    %s" % err_text
-        print "This output caused an %s to be raised with the" % etype
-        print "information %r." % exception_info
+               err_function, err_line))
+        print("    %s" % err_text)
+        print("This output caused an %s to be raised with the" % etype)
+        print("information %r." % exception_info)
     print
 
-    print "Let me find the line in the file that triggers the problem..."
+    print("Let me find the line in the file that triggers the problem...")
     parser = parser_class()
     scanner, consumer = parser._scanner, parser._consumer
     consumer = DebuggingConsumer(consumer)
@@ -151,9 +151,9 @@ def test_blast_output(outfile):
     except etype as x:
         pass
     else:
-        print "Odd, the exception disappeared!  What happened?"
+        print("Odd, the exception disappeared!  What happened?")
         return 3
-    print "It's caused by line %d:" % consumer.linenum
+    print("It's caused by line %d:" % consumer.linenum)
     lines = open(outfile).readlines()
     start, end = consumer.linenum - CONTEXT, consumer.linenum + CONTEXT + 1
     if start < 0:
@@ -170,47 +170,47 @@ def test_blast_output(outfile):
 
         s = "%s%*d %s" % (prefix, ndigits, linenum, line)
         s = s[:80]
-        print s
+        print(s)
     print
 
     if class_found == scanner_class:
-        print "Problems in %s are most likely caused by changed formats." % \
-              class_found.__name__
-        print "You can start to fix this by going to line %d in module %s." % \
-              (err_line, class_found.__module__)
-        print "Perhaps the scanner needs to be made more lenient by accepting"
-        print "the changed format?"
+        print("Problems in %s are most likely caused by changed formats." % \
+              class_found.__name__)
+        print("You can start to fix this by going to line %d in module %s." % \
+              (err_line, class_found.__module__))
+        print("Perhaps the scanner needs to be made more lenient by accepting")
+        print("the changed format?")
         print
 
         if VERBOSITY <= 0:
-            print "For more help, you can run this script in verbose mode"
-            print "to see detailed information about how the scanner"
-            print "identifies each line."
+            print("For more help, you can run this script in verbose mode")
+            print("to see detailed information about how the scanner")
+            print("identifies each line.")
         else:
-            print "OK, let's see what the scanner's doing!"
+            print("OK, let's see what the scanner's doing!")
             print
-            print "*" * 20 + " BEGIN SCANNER TRACE " + "*" * 20
+            print("*" * 20 + " BEGIN SCANNER TRACE " + "*" * 20)
             try:
                 parser_class()._scanner.feed(
                     open(outfile), ParserSupport.TaggingConsumer())
             except etype as x:
                 pass
-            print "*" * 20 + " END SCANNER TRACE " + "*" * 20
+            print("*" * 20 + " END SCANNER TRACE " + "*" * 20)
         print
 
     elif class_found == consumer_class:
-        print "Problems in %s can be caused by two things:" % \
-              class_found.__name__
-        print "    - The format of the line parsed by '%s' changed." % \
-              err_function
-        print "    - The scanner misidentified the line."
-        print "Check to make sure '%s' should parse the line:" % \
-              err_function
+        print("Problems in %s can be caused by two things:" % \
+              class_found.__name__)
+        print("    - The format of the line parsed by '%s' changed." % \
+              err_function)
+        print("    - The scanner misidentified the line.")
+        print("Check to make sure '%s' should parse the line:" % \
+              err_function)
         s = "    %s" % chomp(lines[consumer.linenum])
         s = s[:80]
-        print s
-        print "If so, debug %s.%s.  Otherwise, debug %s." % \
-              (class_found.__name__, err_function, scanner_class.__name__)
+        print(s)
+        print("If so, debug %s.%s.  Otherwise, debug %s." % \
+              (class_found.__name__, err_function, scanner_class.__name__))
 
 
 VERBOSITY = 0
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     PROTEIN = NUCLEOTIDE = OUTPUT = None
     for opt, arg in optlist:
         if opt == '-h':
-            print USAGE
+            print(USAGE)
             sys.exit(0)
         elif opt == '-p':
             PROTEIN = 1

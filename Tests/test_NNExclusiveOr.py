@@ -17,7 +17,7 @@ def main():
     Since we have so few examples, we use all of them for training,
     validation and testing.
     """
-    print "Setting up training examples..."
+    print("Setting up training examples...")
     # set up the training examples
     examples = []
     examples.append(TrainingExample([0, 0], [0]))
@@ -32,19 +32,19 @@ def main():
 
     network = BasicNetwork(input, hidden, output)
 
-    print "Training the network..."
+    print("Training the network...")
     # train it
     learning_rate = .5
     momentum = .1
     network.train(examples, examples, stopping_criteria, learning_rate,
                   momentum)
 
-    print "Predicting..."
+    print("Predicting...")
     # try predicting
     for example in examples:
         prediction = network.predict(example.inputs)
         if VERBOSE:
-            print "%s;%s=> %s" % (example.inputs, example.outputs, prediction)
+            print("%s;%s=> %s" % (example.inputs, example.outputs, prediction))
 
 
 def stopping_criteria(num_iterations, validation_error, training_error):

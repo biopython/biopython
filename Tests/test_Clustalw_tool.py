@@ -297,7 +297,7 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
             self.standard_test_procedure(cline)
             self.assertTrue(os.path.isfile(statistics_file))
         else:
-            print "Skipping ClustalW2 specific test."
+            print("Skipping ClustalW2 specific test.")
 
 
 if __name__ == "__main__":

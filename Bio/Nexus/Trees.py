@@ -359,11 +359,11 @@ class Tree(Nodes.Chain):
             try:
                 return frozenset([self.set_subtree(n) for n in self.node(node).succ])
             except:
-                print node
-                print self.node(node).succ
+                print(node)
+                print(self.node(node).succ)
                 for n in self.node(node).succ:
                     print n, self.set_subtree(n)
-                print [self.set_subtree(n) for n in self.node(node).succ]
+                print([self.set_subtree(n) for n in self.node(node).succ])
                 raise
 
     def is_identical(self,tree2):
@@ -384,9 +384,9 @@ class Tree(Nodes.Chain):
         missing1=set(tree2.get_taxa())-set(self.get_taxa())
         if strict and (missing1 or missing2):
             if missing1:
-                print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing1) , self.name)
+                print('Taxon/taxa %s is/are missing in tree %s' % (','.join(missing1) , self.name))
             if missing2:
-                print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2) , tree2.name)
+                print('Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2) , tree2.name))
             raise TreeError('Can\'t compare trees with different taxon compositions.')
         t1=[(set(self.get_taxa(n)),self.node(n).data.support) for n in self.all_ids() if
             self.node(n).succ and
@@ -552,7 +552,7 @@ class Tree(Nodes.Chain):
                     comment='-'
                 table.append((str(i),tx,str(n.prev),str(n.succ),
                              blength, sum_blength, support, comment))
-        print '\n'.join(['%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table])
+        print('\n'.join(['%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table]))
         print '\nRoot: ',self.root
 
     def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None,ignore_comments=True):

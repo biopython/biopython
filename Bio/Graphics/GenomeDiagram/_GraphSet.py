@@ -235,4 +235,4 @@ if __name__ == '__main__':
     gdgs.add_graph(testdata1, 'TestData 1')
     gdgs.add_graph(testdata2, 'TestData 2')
 
-    print gdgs
+    print(gdgs)

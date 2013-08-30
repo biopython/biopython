@@ -53,9 +53,9 @@ ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
      0.0000001, None, ["21554275","18409071","296087288"]),
 ]
 
-print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
+print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 for program,database,query,e_value,entrez_filter,expected_hits in tests:
-    print "qblast('%s', '%s', %s, ...)" % (program, database, repr(query))
+    print("qblast('%s', '%s', %s, ...)" % (program, database, repr(query)))
     try:
         if program=="blastn":
             #Check the megablast parameter is accepted
@@ -103,9 +103,9 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests:
                     found_result = True
                     break
         if len(expected_hits)==1:
-            print "Update this test to have some redundancy..."
+            print("Update this test to have some redundancy...")
             for alignment in record.alignments:
-                print alignment.hit_id
+                print(alignment.hit_id)
         assert found_result, "Missing all of %s in alignments" \
                % ", ".join(expected_hits)
 
@@ -123,4 +123,4 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests:
                     break
         assert found_result, "Missing all of %s in descriptions" % expected_hit
 
-print "Done"
+print("Done")

@@ -49,17 +49,17 @@ for n in ambiguous_generic_by_id.keys():
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
         try:
-            print ambiguous_dna_by_id[n].forward_table["TRA"]
+            print(ambiguous_dna_by_id[n].forward_table["TRA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_rna_by_id[n].forward_table["URA"]
+            print(ambiguous_rna_by_id[n].forward_table["URA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_generic_by_id[n].forward_table["URA"]
+            print(ambiguous_generic_by_id[n].forward_table["URA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
@@ -72,22 +72,22 @@ for n in ambiguous_generic_by_id.keys():
     and "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
         try:
-            print ambiguous_dna_by_id[n].forward_table["TAR"]
+            print(ambiguous_dna_by_id[n].forward_table["TAR"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_rna_by_id[n].forward_table["UAR"]
+            print(ambiguous_rna_by_id[n].forward_table["UAR"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_generic_by_id[n].forward_table["UAR"]
+            print(ambiguous_generic_by_id[n].forward_table["UAR"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_generic_by_id[n].forward_table["URR"]
+            print(ambiguous_generic_by_id[n].forward_table["URR"])
             assert False, "Should be a stop OR an amino"
         except TranslationError:
             pass
@@ -125,4 +125,4 @@ assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Stan
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
 
-print "Done"
+print("Done")

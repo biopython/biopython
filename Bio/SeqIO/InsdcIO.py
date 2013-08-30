@@ -1114,7 +1114,7 @@ class ImgtWriter(EmblWriter):
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\n"
 
 if __name__ == "__main__":
-    print "Quick self test"
+    print("Quick self test")
     import os
     from StringIO import StringIO
 
@@ -1212,7 +1212,7 @@ if __name__ == "__main__":
         try:
             EmblWriter(handle).write_file(records)
         except ValueError as err:
-            print err
+            print(err)
             return
         handle.seek(0)
 
@@ -1222,7 +1222,7 @@ if __name__ == "__main__":
     for filename in os.listdir("../../Tests/GenBank"):
         if not filename.endswith(".gbk") and not filename.endswith(".gb"):
             continue
-        print filename
+        print(filename)
 
         handle = open("../../Tests/GenBank/%s" % filename)
         records = list(GenBankIterator(handle))
@@ -1234,7 +1234,7 @@ if __name__ == "__main__":
     for filename in os.listdir("../../Tests/EMBL"):
         if not filename.endswith(".embl"):
             continue
-        print filename
+        print(filename)
 
         handle = open("../../Tests/EMBL/%s" % filename)
         records = list(EmblIterator(handle))
@@ -1247,7 +1247,7 @@ if __name__ == "__main__":
     for filename in os.listdir("../../Tests/SwissProt"):
         if not filename.startswith("sp"):
             continue
-        print filename
+        print(filename)
 
         handle = open("../../Tests/SwissProt/%s" % filename)
         records = list(SeqIO.parse(handle, "swiss"))

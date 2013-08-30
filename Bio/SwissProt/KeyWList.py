@@ -75,7 +75,7 @@ def parse(handle):
             elif key in ("DE", "SY", "GO", "HI", "WW"):
                 record[key].append(value)
             else:
-                print "Ignoring: %s" % line.strip()
+                print("Ignoring: %s" % line.strip())
     # Read the footer and throw it away
     for line in handle:
         pass

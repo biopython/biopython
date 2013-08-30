@@ -50,7 +50,7 @@ def do_comparison(good_record, test_record):
 def write_format(file):
     record_parser = GenBank.RecordParser(debug_level=2)
 
-    print "Testing GenBank writing for %s..." % os.path.basename(file)
+    print("Testing GenBank writing for %s..." % os.path.basename(file))
     # be able to handle gzipped files
     if '.gz' in file:
         cur_handle = gzip.open(file, "r")
@@ -75,15 +75,15 @@ def write_format(file):
         try:
             do_comparison(compare_record, output_record)
         except AssertionError as msg:
-            print "\tTesting for %s" % cur_record.version
-            print msg
+            print("\tTesting for %s" % cur_record.version)
+            print(msg)
 
     cur_handle.close()
     compare_handle.close()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print __doc__
+        print(__doc__)
         sys.exit()
 
     write_format(sys.argv[1])

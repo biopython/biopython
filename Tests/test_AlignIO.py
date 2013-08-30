@@ -112,7 +112,7 @@ def check_simple_write_read(alignments, indent=" "):
         and format not in test_write_read_alignment_formats:
             continue
 
-        print indent+"Checking can write/read as '%s' format" % format
+        print(indent+"Checking can write/read as '%s' format" % format)
 
         #Going to write to a handle...
         handle = StringIO()
@@ -123,7 +123,7 @@ def check_simple_write_read(alignments, indent=" "):
         except ValueError as e:
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
-            print indent+"Failed: %s" % str(e)
+            print(indent+"Failed: %s" % str(e))
             #Carry on to the next format:
             continue
 
@@ -249,8 +249,8 @@ del list_of_records, t_format
 
 #Main tests...
 for (t_format, t_per, t_count, t_filename) in test_files:
-    print "Testing reading %s format file %s with %i alignments" \
-          % (t_format, t_filename, t_count)
+    print("Testing reading %s format file %s with %i alignments" \
+          % (t_format, t_filename, t_count))
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
@@ -321,13 +321,13 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     #Print the alignment
     for i,alignment in enumerate(alignments):
         if i < 3 or i+1 == t_count:
-            print " Alignment %i, with %i sequences of length %i" \
+            print(" Alignment %i, with %i sequences of length %i" \
                   % (i,
                      len(alignment),
-                     alignment.get_alignment_length())
-            print alignment_summary(alignment)
+                     alignment.get_alignment_length()))
+            print(alignment_summary(alignment))
         elif i==3:
-            print " ..."
+            print(" ...")
 
     #Check AlignInfo.SummaryInfo likes the alignment
     summary = AlignInfo.SummaryInfo(alignment)
@@ -359,4 +359,4 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     alignments.reverse()
     check_simple_write_read(alignments)
 
-print "Finished tested reading files"
+print("Finished tested reading files")

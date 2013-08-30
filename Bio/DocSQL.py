@@ -121,7 +121,7 @@ class Query(object):
 
     def dump(self):
         for item in self:
-            print item
+            print(item)
 
 
 class QueryGeneric(Query):
