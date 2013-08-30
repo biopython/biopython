@@ -129,7 +129,7 @@ def _make_dssp_dict(handle):
     keys = []
     for l in handle.readlines():
         sl = l.split()
-        if not sl:
+        if len(sl) < 2:
             continue
         if sl[1] == "RESIDUE":
             # Start parsing from here

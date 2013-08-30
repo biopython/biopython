@@ -1060,6 +1060,12 @@ class DsspTests(unittest.TestCase):
         dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
         self.assertEqual(len(dssp), 130)
 
+    def test_DSSP_noheader_file(self):
+        """Test parsing of pregenerated DSSP missing header information"""
+        # New DSSP prints a line containing only whitespace and "."
+        dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
+        self.assertEqual(len(dssp), 130)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
