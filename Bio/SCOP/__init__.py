@@ -235,7 +235,7 @@ class Scop(object):
                 records = Hie.parse(hie_handle)
                 for record in records:
                     if record.sunid not in sunidDict:
-                        print record.sunid
+                        print(record.sunid)
 
                     n = sunidDict[record.sunid]
 

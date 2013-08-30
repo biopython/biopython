@@ -787,19 +787,19 @@ class BgzfWriter(object):
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:
-        print "Call this with no arguments and pipe uncompressed data in on stdin"
-        print "and it will produce BGZF compressed data on stdout. e.g."
+        print("Call this with no arguments and pipe uncompressed data in on stdin")
+        print("and it will produce BGZF compressed data on stdout. e.g.")
         print
-        print "./bgzf.py < example.fastq > example.fastq.bgz"
+        print("./bgzf.py < example.fastq > example.fastq.bgz")
         print
-        print "The extension convention of *.bgz is to distinugish these from *.gz"
-        print "used for standard gzipped files without the block structure of BGZF."
-        print "You can use the standard gunzip command to decompress BGZF files,"
-        print "if it complains about the extension try something like this:"
+        print("The extension convention of *.bgz is to distinugish these from *.gz")
+        print("used for standard gzipped files without the block structure of BGZF.")
+        print("You can use the standard gunzip command to decompress BGZF files,")
+        print("if it complains about the extension try something like this:")
         print
-        print "cat example.fastq.bgz | gunzip > example.fastq"
+        print("cat example.fastq.bgz | gunzip > example.fastq")
         print
-        print "See also the tool bgzip that comes with samtools"
+        print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 
     sys.stderr.write("Producing BGZF output from stdin...\n")

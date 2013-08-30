@@ -109,7 +109,7 @@ class BlastIt:
 
         self.Update()
 
-        print self.command
+        print(self.command)
         self.pipe = posix.popen(self.command)
         while 1:
             try:

@@ -1021,9 +1021,9 @@ class NC_000932(unittest.TestCase):
             try:
                 pro = nuc.translate(table=self.table, cds=True)
             except TranslationError as e:
-                print e
+                print(e)
                 print r.id, nuc, self.table
-                print f
+                print(f)
                 raise
             if pro[-1] == "*":
                 self.assertEqual(str(pro)[:-1], str(r.seq))

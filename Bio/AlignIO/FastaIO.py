@@ -122,15 +122,15 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                 m = _extract_alignment_region(match_seq, match_tags)
             assert len(q) == len(m)
         except AssertionError as err:
-            print "Darn... amino acids vs nucleotide coordinates?"
-            print tool
-            print query_seq
-            print query_tags
+            print("Darn... amino acids vs nucleotide coordinates?")
+            print(tool)
+            print(query_seq)
+            print(query_tags)
             print q, len(q)
-            print match_seq
-            print match_tags
+            print(match_seq)
+            print(match_tags)
             print m, len(m)
-            print handle.name
+            print(handle.name)
             raise err
 
         assert alphabet is not None
@@ -356,7 +356,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
 
 
 if __name__ == "__main__":
-    print "Running a quick self-test"
+    print("Running a quick self-test")
 
     #http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
     simple_example = \
@@ -598,12 +598,12 @@ Function used was FASTA [version 34.26 January 12, 2007]
     assert len(alignments) == 4, len(alignments)
     assert len(alignments[0]) == 2
     for a in alignments:
-        print "Alignment %i sequences of length %i" \
-              % (len(a), a.get_alignment_length())
+        print("Alignment %i sequences of length %i" \
+              % (len(a), a.get_alignment_length()))
         for r in a:
-            print "%s %s %i" % (r.seq, r.id, r.annotations["original_length"])
+            print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
         #print a.annotations
-    print "Done"
+    print("Done")
 
     import os
     path = "../../Tests/Fasta/"
@@ -612,10 +612,10 @@ Function used was FASTA [version 34.26 January 12, 2007]
     for filename in files:
         if os.path.splitext(filename)[-1] == ".m10":
             print
-            print filename
-            print "=" * len(filename)
+            print(filename)
+            print("=" * len(filename))
             for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):
-                print "#%i, %s" % (i+1, a)
+                print("#%i, %s" % (i+1, a))
                 for r in a:
                     if "-" in r.seq:
                         assert r.seq.alphabet.gap_char == "-"

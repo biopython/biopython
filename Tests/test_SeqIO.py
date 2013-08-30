@@ -320,7 +320,7 @@ def check_simple_write_read(records, indent=" "):
             #Skipping for speed.  Some of the unknown sequences are
             #rather long, and it seems a bit pointless to record them.
             continue
-        print indent+"Checking can write/read as '%s' format" % format
+        print(indent+"Checking can write/read as '%s' format" % format)
 
         #Going to write to a handle...
         if format in SeqIO._BinaryFormats:
@@ -344,9 +344,9 @@ def check_simple_write_read(records, indent=" "):
                 #>>> len(None)
                 #...
                 #TypeError: object of type 'NoneType' has no len()
-                print "Failed: Probably len() of None"
+                print("Failed: Probably len() of None")
             else:
-                print indent+"Failed: %s" % str(e)
+                print(indent+"Failed: %s" % str(e))
             if records[0].seq.alphabet.letters is not None:
                 assert format != t_format, \
                        "Should be able to re-write in the original format!"
@@ -433,7 +433,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     else:
         mode = "r"
 
-    print "Testing reading %s format file %s" % (t_format, t_filename)
+    print("Testing reading %s format file %s" % (t_format, t_filename))
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
@@ -534,12 +534,12 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         assert compare_record(record, records5[i])
 
         if i < 3:
-            print record_summary(record)
+            print(record_summary(record))
     # Only printed the only first three records: 0,1,2
     if t_count > 4:
-        print " ..."
+        print(" ...")
     if t_count > 3:
-        print record_summary(records[-1])
+        print(record_summary(records[-1]))
 
     # Check Bio.SeqIO.read(...)
     if t_count == 1:
@@ -599,7 +599,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         #These should all fail...
         h = open(t_filename,mode)
         try:
-            print SeqIO.parse(h,t_format,given_alpha).next()
+            print(SeqIO.parse(h,t_format,given_alpha).next())
             h.close()
             assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
                    % (repr(given_alpha), t_filename)
@@ -610,8 +610,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     del good, bad, given_alpha, base_alpha
 
     if t_alignment:
-        print "Testing reading %s format file %s as an alignment" \
-              % (t_format, t_filename)
+        print("Testing reading %s format file %s as an alignment" \
+              % (t_format, t_filename))
 
         alignment = MultipleSeqAlignment(SeqIO.parse(
                     handle=t_filename, format=t_format))
@@ -625,7 +625,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             assert compare_record(records[i], alignment[i])
             assert len(records[i].seq) == alignment_len
 
-        print alignment_summary(alignment)
+        print(alignment_summary(alignment))
 
     #Some alignment file formats have magic characters which mean
     #use the letter in this position in the first sequence.
@@ -634,4 +634,4 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     records.reverse()
     check_simple_write_read(records)
 
-print "Finished tested reading files"
+print("Finished tested reading files")

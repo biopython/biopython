@@ -14,8 +14,7 @@ from Bio.SCOP import *
 
 
 def usage():
-    print \
-"""Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
+    print("""Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
 
 For example:
   scop_pdb.py astral-rapid-access-1.55.raf dir.cla.scop.txt_1.55 d3hbib_
@@ -53,7 +52,7 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
               See [http://scop.berkeley.edu/parse/index.html]
 
   sid      -- A SCOP domain identifier. e.g. d3hbib_
-"""
+""")
 
 default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
                       "format=PDB&pdbId=%s&compression=None"

@@ -70,11 +70,11 @@ class _XMLparser(ContentHandler):
         if hasattr(self, method):
             eval("self.%s()" % method)
             if self._debug > 4:
-                print "NCBIXML: Parsed:  " + method
+                print("NCBIXML: Parsed:  " + method)
         elif self._debug > 3:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                print "NCBIXML: Ignored: " + method
+                print("NCBIXML: Ignored: " + method)
                 self._debug_ignore_list.append(method)
 
         #We don't care about white space in parent tags like Hsp,
@@ -209,7 +209,7 @@ class BlastParser(_XMLparser):
         self._blast = None
 
         if self._debug:
-            print "NCBIXML: Added Blast record to results"
+            print("NCBIXML: Added Blast record to results")
 
     # Header
     def _end_BlastOutput_program(self):
@@ -695,9 +695,9 @@ if __name__ == '__main__':
     for r in r_list:
         # Small test
         print 'Blast of', r.query
-        print 'Found %s alignments with a total of %s HSPs' % (len(r.alignments),
+        print('Found %s alignments with a total of %s HSPs' % (len(r.alignments),
                   reduce(lambda a,b: a+b,
-                         [len(a.hsps) for a in r.alignments]))
+                         [len(a.hsps) for a in r.alignments])))
 
         for al in r.alignments:
             print al.title[:50], al.length, 'bp', len(al.hsps), 'HSPs'
@@ -707,10 +707,10 @@ if __name__ == '__main__':
         for alignment in r.alignments:
             for hsp in alignment.hsps:
                 if hsp.expect < E_VALUE_THRESH:
-                    print '*****'
+                    print('*****')
                     print 'sequence', alignment.title
                     print 'length', alignment.length
                     print 'e value', hsp.expect
-                    print hsp.query[:75] + '...'
-                    print hsp.match[:75] + '...'
-                    print hsp.sbjct[:75] + '...'
+                    print(hsp.query[:75] + '...')
+                    print(hsp.match[:75] + '...')
+                    print(hsp.sbjct[:75] + '...')

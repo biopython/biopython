@@ -137,7 +137,7 @@ def align(pair,
 
 
 def main():
-    print align(sys.argv[1:3])
+    print(align(sys.argv[1:3]))
 
 
 def _test(*args, **keywds):

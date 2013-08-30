@@ -54,9 +54,9 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     else:
         l2 = len(r)
     if l1 == l2:
-        print "Passed."
+        print("Passed.")
     else:
-        print "Not passed: %i != %i." % (l1, l2)
+        print("Not passed: %i != %i." % (l1, l2))
 
 
 def _test(nr_points, dim, bucket_size, radius):
@@ -87,9 +87,9 @@ def _test(nr_points, dim, bucket_size, radius):
         if _dist(p, center) <= radius:
             l2 = l2 + 1
     if l1 == l2:
-        print "Passed."
+        print("Passed.")
     else:
-        print "Not passed: %i != %i." % (l1, l2)
+        print("Not passed: %i != %i." % (l1, l2))
 
 
 class KDTree(object):
@@ -245,7 +245,7 @@ if __name__ == "__main__":
     indices = kdtree.all_get_indices()
     radii = kdtree.all_get_radii()
 
-    print "Found %i point pairs within radius %f." % (len(indices), query_radius)
+    print("Found %i point pairs within radius %f." % (len(indices), query_radius))
 
     # Do 10 individual queries
 
@@ -261,4 +261,4 @@ if __name__ == "__main__":
         radii = kdtree.get_radii()
 
         x, y, z = center
-        print "Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)
+        print("Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z))

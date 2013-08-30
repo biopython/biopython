@@ -1042,8 +1042,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
-                    print location_line
-                    print part
+                    print(location_line)
+                    print(part)
                     raise err
                 f = SeqFeature.SeqFeature(location=loc, ref=ref,
                         location_operator=cur_feature.location_operator,
@@ -1513,21 +1513,21 @@ def _test():
     import doctest
     import os
     if os.path.isdir(os.path.join("..","..","Tests")):
-        print "Running doctests..."
+        print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
     elif os.path.isdir(os.path.join("Tests")):
-        print "Running doctests..."
+        print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
 
 if __name__ == "__main__":
     _test()

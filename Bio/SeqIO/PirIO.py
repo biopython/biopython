@@ -167,15 +167,15 @@ def PirIterator(handle):
     assert False, "Should not reach this line"
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
 
     import os
 
     for name in ["clustalw", "DMA_nuc", "DMB_prot", "B_nuc", "Cw_prot"]:
-        print name
+        print(name)
         filename = "../../Tests/NBRF/%s.pir" % name
         if not os.path.isfile(filename):
-            print "Missing %s" % filename
+            print("Missing %s" % filename)
             continue
 
         records = list(PirIterator(open(filename)))
@@ -185,4 +185,4 @@ if __name__ == "__main__":
             parts = record.description.split()
             if "bases," in parts:
                 assert len(record) == int(parts[parts.index("bases,") - 1])
-        print "Could read %s (%i records)" % (name, count)
+        print("Could read %s (%i records)" % (name, count))

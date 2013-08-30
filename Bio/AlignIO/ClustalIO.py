@@ -272,7 +272,7 @@ class ClustalIterator(AlignmentIterator):
         return alignment
 
 if __name__ == "__main__":
-    print "Running a quick self-test"
+    print("Running a quick self-test")
 
     #This is a truncated version of the example in Tests/cw02.aln
     #Notice the inclusion of sequence numbers (right hand side)
@@ -371,14 +371,14 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
           "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV"
 
     for alignment in ClustalIterator(StringIO(aln_example2 + aln_example1)):
-        print "Alignment with %i records of length %i" \
+        print("Alignment with %i records of length %i" \
               % (len(alignment),
-                 alignment.get_alignment_length())
+                 alignment.get_alignment_length()))
 
-    print "Checking empty file..."
+    print("Checking empty file...")
     assert 0 == len(list(ClustalIterator(StringIO(""))))
 
-    print "Checking write/read..."
+    print("Checking write/read...")
     alignments = list(ClustalIterator(StringIO(aln_example1))) \
                + list(ClustalIterator(StringIO(aln_example2)))*2
     handle = StringIO()
@@ -388,7 +388,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
         assert a.get_alignment_length() == alignments[i].get_alignment_length()
     handle.seek(0)
 
-    print "Testing write/read when there is only one sequence..."
+    print("Testing write/read when there is only one sequence...")
     alignment = alignment[0:1]
     handle = StringIO()
     ClustalWriter(handle).write_file([alignment])
@@ -465,4 +465,4 @@ AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
     assert 1 == len(alignments)
     assert alignments[0]._version == "2.0.9"
 
-    print "The End"
+    print("The End")

@@ -62,10 +62,10 @@ if not fasttree_exe:
 
 #################################################################
 
-print "Checking error conditions"
-print "========================="
+print("Checking error conditions")
+print("=========================")
 
-print "Empty file"
+print("Empty file")
 input_file = "does_not_exist.fasta"
 assert not os.path.isfile(input_file)
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
@@ -73,7 +73,7 @@ try:
     stdout, stderr = cline()
     assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
-    print "Failed (good)"
+    print("Failed (good)")
     #Python 2.3 on Windows gave (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "Cannot open sequence file" in str(err) or \
@@ -81,7 +81,7 @@ except ApplicationError as err:
            "non-zero exit status" in str(err), str(err)
 
 print
-print "Single sequence"
+print("Single sequence")
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
 assert len(list(SeqIO.parse(input_file,"fasta")))==1
@@ -89,15 +89,15 @@ cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
     if "Unique: 1/1" in stderr:
-        print "Failed (good)"
+        print("Failed (good)")
     else:
         assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
-    print "Failed (good)"
+    print("Failed (good)")
     #assert str(err) == "No records found in handle", str(err)
 
 print
-print "Invalid sequence"
+print("Invalid sequence")
 input_file = "Medline/pubmed_result1.txt"
 assert os.path.isfile(input_file)
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
@@ -105,7 +105,7 @@ try:
     stdout, stderr = cline()
     assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
-    print "Failed (good)"
+    print("Failed (good)")
     #Ideally we'd catch the return code and raise the specific
     #error for "invalid format", rather than just notice there
     #is not output file.
@@ -119,8 +119,8 @@ except ApplicationError as err:
 
 #################################################################
 print
-print "Checking normal situations"
-print "=========================="
+print("Checking normal situations")
+print("==========================")
 
 #Create a temp fasta file with a space in the name
 temp_filename_with_spaces = "Clustalw/temp horses.fasta"
@@ -131,8 +131,8 @@ handle.close()
 for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"))
     print
-    print "Calling fasttree on %s (with %i records)" \
-          % (repr(input_file), len(input_records))
+    print("Calling fasttree on %s (with %i records)" \
+          % (repr(input_file), len(input_records)))
 
     #Any filesnames with spaces should get escaped with quotes automatically.
     #Using keyword arguments here.
@@ -143,7 +143,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     assert err.strip().startswith("FastTree")
 
     print
-    print "Checking generation of tree terminals"
+    print("Checking generation of tree terminals")
     tree = Phylo.read(StringIO(out), 'newick')
 
     def lookup_by_names(tree):
@@ -158,10 +158,10 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     names = lookup_by_names(tree)
 
     assert len(names) > 0.0
-    print "Success"
+    print("Success")
 
     print
-    print "Checking distances between tree terminals"
+    print("Checking distances between tree terminals")
     def terminal_neighbor_dists(self):
         """Return a list of distances between adjacent terminals."""
         def generate_pairs(self):
@@ -174,7 +174,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     for dist in terminal_neighbor_dists(tree):
         assert dist > 0.0
 
-    print "Success"
+    print("Success")
 
 print
-print "Done"
+print("Done")

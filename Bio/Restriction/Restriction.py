@@ -475,7 +475,7 @@ class AbstractCut(RestrictionType):
         """RE.all_suppliers -> print all the suppliers of R"""
         supply = [x[0] for x in suppliers_dict.itervalues()]
         supply.sort()
-        print ",\n".join(supply)
+        print(",\n".join(supply))
         return
 
     @classmethod
@@ -1779,7 +1779,7 @@ class Commercially_available(AbstractCut):
         supply = suppliers_dict.items()
         for k,v in supply:
             if k in self.suppl:
-                print v[0]+','
+                print(v[0]+',')
         return
 
     @classmethod
@@ -2033,7 +2033,7 @@ class RestrictionBatch(set):
     def show_codes(self):
         """B.show_codes() -> letter codes for the suppliers"""
         supply = [' = '.join(i) for i in self.suppl_codes().iteritems()]
-        print '\n'.join(supply)
+        print('\n'.join(supply))
         return
 
     def search(self, dna, linear=True):

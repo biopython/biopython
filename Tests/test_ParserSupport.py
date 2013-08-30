@@ -18,12 +18,12 @@ def pb(b):
 
 ### TaggingConsumer
 
-print "Running tests on TaggingConsumer"
+print("Running tests on TaggingConsumer")
 
 
 class TestHandle:
     def write(self, s):
-        print s
+        print(s)
 
 h = TestHandle()
 tc = ParserSupport.TaggingConsumer(handle=h, colwidth=5)
@@ -34,27 +34,27 @@ tc.end_section()    # '***** end_section\n'
 
 ### is_blank_line
 
-print "Running tests on is_blank_line"
+print("Running tests on is_blank_line")
 
 is_blank_line = lambda *args, **keywds: \
                 pb(ParserSupport.is_blank_line(*args, **keywds))
 
-print is_blank_line('\n')                              # 1
-print is_blank_line('\r\n')                            # 1
-print is_blank_line('\r')                              # 1
-print is_blank_line('')                                # 1
-print is_blank_line('', allow_spaces=1)                # 1
-print is_blank_line('', allow_spaces=0)                # 1
-print is_blank_line(string.whitespace, allow_spaces=1) # 1
-print is_blank_line('hello')                           # 0
-print is_blank_line('hello', allow_spaces=1)           # 0
-print is_blank_line('hello', allow_spaces=0)           # 0
-print is_blank_line(string.whitespace, allow_spaces=0) # 0
+print(is_blank_line('\n'))                              # 1
+print(is_blank_line('\r\n'))                            # 1
+print(is_blank_line('\r'))                              # 1
+print(is_blank_line(''))                                # 1
+print(is_blank_line('', allow_spaces=1))                # 1
+print(is_blank_line('', allow_spaces=0))                # 1
+print(is_blank_line(string.whitespace, allow_spaces=1)) # 1
+print(is_blank_line('hello'))                           # 0
+print(is_blank_line('hello', allow_spaces=1))           # 0
+print(is_blank_line('hello', allow_spaces=0))           # 0
+print(is_blank_line(string.whitespace, allow_spaces=0)) # 0
 
 
 ### safe_readline
 
-print "Running tests on safe_readline"
+print("Running tests on safe_readline")
 
 data = """This
 file"""
@@ -62,19 +62,19 @@ file"""
 h = File.UndoHandle(StringIO(data))
 
 safe_readline = ParserSupport.safe_readline
-print safe_readline(h)    # "This"
-print safe_readline(h)    # "file"
+print(safe_readline(h))    # "This"
+print(safe_readline(h))    # "file"
 try:
     safe_readline(h)
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 
 
 ### safe_peekline
 
-print "Running tests on safe_peekline"
+print("Running tests on safe_peekline")
 safe_peekline = ParserSupport.safe_peekline
 
 data = """This
@@ -82,23 +82,23 @@ file"""
 
 h = File.UndoHandle(StringIO(data))
 
-print safe_peekline(h) # "This"
+print(safe_peekline(h)) # "This"
 h.readline()
-print safe_peekline(h) # "file"
+print(safe_peekline(h)) # "file"
 h.readline()
 try:
     safe_peekline(h)
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 h.saveline('hello')
-print safe_peekline(h) # 'hello'
+print(safe_peekline(h)) # 'hello'
 
 
 ### read_and_call
 
-print "Running tests on read_and_call"
+print("Running tests on read_and_call")
 
 data = """>gi|132871|sp|P19947|RL30_BACSU 50S RIBOSOMAL PROTEIN L30 (BL27)
 MAKLEITLKRSVIGRPEDQRVTVRTLGLKKTNQTVVHEDNAAIRGMINKVSHLVSVKEQ
@@ -120,7 +120,7 @@ def m(line):
     lines.append(line)
 
 rac(h, m)
-print lines[-1][:10]   # '>gi|132871'
+print(lines[-1][:10])   # '>gi|132871'
 rac(h, m, start='MAKLE', end='KEQ', contains='SVIG')
 rac(h, m, blank=0)
 
@@ -128,42 +128,42 @@ rac(h, m, blank=0)
 try:
     rac(h, m, blank=1)
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 
 try:
     rac(h, m, start='foobar')
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 
 try:
     rac(h, m, end='foobar')
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 
 try:
     rac(h, m, contains='foobar')
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 
 try:
     rac(h, m, blank=0)
 except ValueError:
-    print "correctly failed"
+    print("correctly failed")
 else:
-    print "ERROR, should have failed"
+    print("ERROR, should have failed")
 
 
 ### attempt_read_and_call
 
-print "Running tests on attempt_read_and_call"
+print("Running tests on attempt_read_and_call")
 
 data = """>gi|132871|sp|P19947|RL30_BACSU 50S RIBOSOMAL PROTEIN L30 (BL27)
 MAKLEITLKRSVIGRPEDQRVTVRTLGLKKTNQTVVHEDNAAIRGMINKVSHLVSVKEQ
@@ -182,7 +182,7 @@ lines = []
 def m(line):
     lines.append(line)
 
-print arac(h, m, contains="RIBOSOMAL PROTEIN")   # 1
-print arac(h, m, start="foobar")                 # 0
-print arac(h, m, blank=1)                        # 0
-print arac(h, m, end="LVSVKEQ")                  # 1
+print(arac(h, m, contains="RIBOSOMAL PROTEIN"))   # 1
+print(arac(h, m, start="foobar"))                 # 0
+print(arac(h, m, blank=1))                        # 0
+print(arac(h, m, end="LVSVKEQ"))                  # 1

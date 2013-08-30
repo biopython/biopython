@@ -466,10 +466,10 @@ _open.previous = 0
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running doctests..."
+    print("Running doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

@@ -305,7 +305,7 @@ if __name__ == "__main__":
             p = c.get_parent()
             assert(p is m)
             for r in c:
-                print r
+                print(r)
                 p = r.get_parent()
                 assert(p is c)
                 for a in r:

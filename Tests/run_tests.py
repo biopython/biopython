@@ -207,8 +207,8 @@ def main(argv):
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
             "doctest", "help", "offline"])
     except getopt.error as msg:
-        print msg
-        print __doc__
+        print(msg)
+        print(__doc__)
         return 2
 
     verbosity = VERBOSITY
@@ -216,22 +216,22 @@ def main(argv):
     # deal with the options
     for o, a in opts:
         if o == "--help":
-            print __doc__
+            print(__doc__)
             return 0
         if o == "--offline":
-            print "Skipping any tests requiring internet access"
+            print("Skipping any tests requiring internet access")
             #This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
             #The check() function should now report internet not available
         if o == "-g" or o == "--generate":
             if len(args) > 1:
-                print "Only one argument (the test name) needed for generate"
-                print __doc__
+                print("Only one argument (the test name) needed for generate")
+                print(__doc__)
                 return 2
             elif len(args) == 0:
-                print "No test name specified to generate output for."
-                print __doc__
+                print("No test name specified to generate output for.")
+                print(__doc__)
                 return 2
             # strip off .py if it was included
             if args[0][-3:] == ".py":

@@ -326,11 +326,11 @@ if __name__ == "__main__":
     d = DSSP(model, sys.argv[1])
 
     for r in d:
-        print r
+        print(r)
     print "Handled", len(d), "residues"
-    print d.keys()
+    print(d.keys())
     if ('A', 1) in d:
-        print d[('A', 1)]
-        print s[0]['A'][1].xtra
+        print(d[('A', 1)])
+        print(s[0]['A'][1].xtra)
     # Secondary structure
-    print ''.join(d[key][1] for key in d.keys())
+    print(''.join(d[key][1] for key in d.keys()))

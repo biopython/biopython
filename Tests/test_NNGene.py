@@ -524,9 +524,9 @@ class SchemaFactoryTest(unittest.TestCase):
 
         schema_bank = self.factory.from_motifs(motif_bank, .5, 2)
         if VERBOSE:
-            print "\nSchemas:"
+            print("\nSchemas:")
             for schema in schema_bank.get_all():
-                print "%s: %s" % (schema, schema_bank.count(schema))
+                print("%s: %s" % (schema, schema_bank.count(schema)))
 
     def test_hard_from_motifs(self):
         """Generating schema from a real life set of motifs.
@@ -534,9 +534,9 @@ class SchemaFactoryTest(unittest.TestCase):
         schema_bank = self._load_schema_repository()
 
         if VERBOSE:
-            print "\nSchemas:"
+            print("\nSchemas:")
             for schema in schema_bank.get_top(5):
-                print "%s: %s" % (schema, schema_bank.count(schema))
+                print("%s: %s" % (schema, schema_bank.count(schema)))
 
     def _load_schema_repository(self):
         """Helper function to load a schema repository from a file.

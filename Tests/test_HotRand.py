@@ -20,10 +20,10 @@ from Bio.HotRand import HotRandom
 def are_items_in_range( a, high, low ):
     for j in range( 0, len( a ) ):
         if( a[ j ] > high ):
-            print 'a[ %d ] is %d' % ( j , a[ j ] )
+            print('a[ %d ] is %d' % ( j , a[ j ] ))
             return 0
         if( a[ j ] < low ):
-            print 'a[ %d ] is %d' % ( j , a[ j ] )
+            print('a[ %d ] is %d' % ( j , a[ j ] ))
             return 0
     return 1
 

@@ -400,7 +400,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                     self.xml_generator.endElement("property")
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
 
     from Bio import SeqIO
     import sys

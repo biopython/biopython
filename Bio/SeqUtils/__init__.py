@@ -434,21 +434,21 @@ def _test():
     import os
     import doctest
     if os.path.isdir(os.path.join("..", "Tests")):
-        print "Running doctests..."
+        print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
     elif os.path.isdir(os.path.join("Tests")):
-        print "Running doctests..."
+        print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
 
 
 if __name__ == "__main__":

@@ -124,11 +124,11 @@ def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_STA
 def main():
     import sys
     stats = align(sys.argv[1:3])
-    print "\n".join(["%s: %s" % (attr, getattr(stats, attr))
+    print("\n".join(["%s: %s" % (attr, getattr(stats, attr))
                      for attr in
-                     ("matches", "mismatches", "gaps", "extensions")])
-    print "identity_fraction: %s" % stats.identity_fraction()
-    print "coords: %s" % stats.coords
+                     ("matches", "mismatches", "gaps", "extensions")]))
+    print("identity_fraction: %s" % stats.identity_fraction())
+    print("coords: %s" % stats.coords)
 
 
 def _test(*args, **keywds):

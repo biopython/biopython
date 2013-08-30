@@ -12,7 +12,7 @@ from Bio import Entrez
 
 
 def print_usage():
-    print """query_pubmed.py [-h] [-c] [-d delay] query
+    print("""query_pubmed.py [-h] [-c] [-d delay] query
 
 This script sends a query to PubMed (via the NCBI Entrez webservice*)
 and prints the MEDLINE formatted results to the screen.
@@ -22,13 +22,13 @@ Arguments:
     -c           Count the hits, and don't print them out.
 
 * http://www.ncbi.nlm.nih.gov/Entrez/
-"""
+""")
 
 if __name__ == '__main__':
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "hcd:")
     except getopt.error as x:
-        print x
+        print(x)
         sys.exit(0)
     if len(args) != 1:     # If they gave extraneous arguments,
         print_usage()      # print the instructions and quit.
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         print_usage()
         sys.exit(0)
 
-    print "Doing a PubMed search for %s..." % repr(query)
+    print("Doing a PubMed search for %s..." % repr(query))
 
     if count_only:
         handle = Entrez.esearch(db="pubmed", term=query)
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     search_results = Entrez.read(handle)
     ids = search_results["IdList"]
     count = len(ids)
-    print "Found %d citations" % count
+    print("Found %d citations" % count)
 
     if count_only:
         sys.exit(0)

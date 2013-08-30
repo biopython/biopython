@@ -173,4 +173,4 @@ if __name__=="__main__":
     rd=ResidueDepth(model, sys.argv[1])
 
     for item in rd:
-        print item
+        print(item)

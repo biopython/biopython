@@ -16,7 +16,7 @@ my_blast_file = os.path.join(os.getcwd(), 'at-est', 'test_blast',
                              'sorghum_est-test.fasta')
 my_blast_exe = os.path.join(os.getcwd(), 'blast', 'blastall')
 
-print 'Running blastall...'
+print('Running blastall...')
 blast_out, error_info = NCBIStandalone.blastall(my_blast_exe, 'blastn',
                                                 my_blast_db, my_blast_file)
 
@@ -35,7 +35,7 @@ while 1:
     for alignment in b_record.alignments:
         for hsp in alignment.hsps:
             if hsp.expect < E_VALUE_THRESH:
-                print '****Alignment****'
+                print('****Alignment****')
                 print 'sequence:', alignment.title
                 print 'length:', alignment.length
                 print 'e value:', hsp.expect
@@ -45,6 +45,6 @@ while 1:
                 else:
                     dots = ''
 
-                print hsp.query[0:75] + dots
-                print hsp.match[0:75] + dots
-                print hsp.sbjct[0:75] + dots
+                print(hsp.query[0:75] + dots)
+                print(hsp.match[0:75] + dots)
+                print(hsp.sbjct[0:75] + dots)

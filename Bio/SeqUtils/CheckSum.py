@@ -115,7 +115,7 @@ def seguid(seq):
 
 
 if __name__ == "__main__":
-    print "Quick self test"
+    print("Quick self test")
 
     str_light_chain_one = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
                     + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
@@ -131,4 +131,4 @@ if __name__ == "__main__":
     assert 'BpBeDdcNUYNsdk46JoJdw7Pd3BI' == seguid(str_light_chain_one)
     assert 'X5XEaayob1nZLOc7eVT9qyczarY' == seguid(str_light_chain_two)
 
-    print "Done"
+    print("Done")

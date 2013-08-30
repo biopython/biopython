@@ -280,12 +280,12 @@ class newenzyme(object):
         cls.charac = (cls.fst5, cls.fst3, cls.scd5, cls.scd3, cls.site)
         if not target[2] and cls.suppl:
             supp = ', '.join([suppliersdict[s][0] for s in cls.suppl])
-            print 'WARNING : It seems that %s is both commercially available\
+            print('WARNING : It seems that %s is both commercially available\
             \n\tand its characteristics are unknown. \
             \n\tThis seems counter-intuitive.\
             \n\tThere is certainly an error either in ranacompiler or\
             \n\tin this REBASE release.\
-            \n\tThe supplier is : %s.' % (name, supp)
+            \n\tThe supplier is : %s.' % (name, supp))
         return
 
 
@@ -458,14 +458,14 @@ class DictionaryBuilder(object):
                 supplier = suppliersdict[letter]
                 suppliersdict[letter][1].append(name)
         if not classdict or not suppliersdict or not typedict:
-            print 'One of the new dictionaries is empty.'
-            print 'Check the integrity of the emboss file before continuing.'
-            print 'Update aborted.'
+            print('One of the new dictionaries is empty.')
+            print('Check the integrity of the emboss file before continuing.')
+            print('Update aborted.')
             sys.exit()
         #
         #   How many enzymes this time?
         #
-        print '\nThe new database contains %i enzymes.\n' % len(classdict)
+        print('\nThe new database contains %i enzymes.\n' % len(classdict))
         #
         #   the dictionaries are done. Build the file
         #
@@ -484,7 +484,7 @@ class DictionaryBuilder(object):
             results.write("    }\n")
             results.write("rest_dict[%s] = _temp()\n" % repr(name))
             results.write("\n")
-        print 'OK.\n'
+        print('OK.\n')
         print 'Writing the dictionary containing the suppliers data.\t\t',
         results.write('suppliers = {}\n')
         for name in sorted(suppliersdict) :
@@ -495,7 +495,7 @@ class DictionaryBuilder(object):
             results.write("    )\n")
             results.write("suppliers[%s] = _temp()\n" % repr(name))
             results.write("\n")
-        print 'OK.\n'
+        print('OK.\n')
         print 'Writing the dictionary containing the Restriction types.\t',
         results.write('typedict = {}\n')
         for name in sorted(typedict) :
@@ -511,7 +511,7 @@ class DictionaryBuilder(object):
         #one the final "del _temp" to clean up the namespace.
         results.write("del _temp\n")
         results.write("\n")
-        print 'OK.\n'
+        print('OK.\n')
         results.close()
         return
 
@@ -521,14 +521,14 @@ class DictionaryBuilder(object):
         Install the newly created dictionary in the site-packages folder.
 
         May need super user privilege on some architectures."""
-        print '\n ' +'*'*78 + ' \n'
-        print '\n\t\tInstalling Restriction_Dictionary.py'
+        print('\n ' +'*'*78 + ' \n')
+        print('\n\t\tInstalling Restriction_Dictionary.py')
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
         except ImportError:
-            print '\
+            print('\
             \n Unable to locate the previous Restriction_Dictionary.py module\
-            \n Aborting installation.'
+            \n Aborting installation.')
             sys.exit()
         #
         #   first save the old file in Updates
@@ -545,24 +545,24 @@ class DictionaryBuilder(object):
         new = os.path.join(update_folder, 'Restriction_Dictionary.py')
         try:
             execfile(new)
-            print '\
-            \n\tThe new file seems ok. Proceeding with the installation.'
+            print('\
+            \n\tThe new file seems ok. Proceeding with the installation.')
         except SyntaxError:
-            print '\
-            \n The new dictionary file is corrupted. Aborting the installation.'
+            print('\
+            \n The new dictionary file is corrupted. Aborting the installation.')
             return
         try:
             shutil.copyfile(new, old)
-            print'\n\t Everything ok. If you need it a version of the old\
+            print('\n\t Everything ok. If you need it a version of the old\
             \n\t dictionary have been saved in the Updates folder under\
-            \n\t the name Restriction_Dictionary.old.'
-            print '\n ' +'*'*78 + ' \n'
+            \n\t the name Restriction_Dictionary.old.')
+            print('\n ' +'*'*78 + ' \n')
         except IOError:
-            print '\n ' +'*'*78 + ' \n'
-            print '\
+            print('\n ' +'*'*78 + ' \n')
+            print('\
             \n\t WARNING : Impossible to install the new dictionary.\
             \n\t Are you sure you have write permission to the folder :\n\
-            \n\t %s ?\n\n' % os.path.split(old)[0]
+            \n\t %s ?\n\n' % os.path.split(old)[0])
             return self.no_install()
         return
 
@@ -570,14 +570,14 @@ class DictionaryBuilder(object):
         """BD.no_install() -> None.
 
         build the new dictionary but do not install the dictionary."""
-        print '\n ' +'*'*78 + '\n'
+        print('\n ' +'*'*78 + '\n')
         #update = config.updatefolder
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
         except ImportError:
-            print '\
+            print('\
             \n Unable to locate the previous Restriction_Dictionary.py module\
-            \n Aborting installation.'
+            \n Aborting installation.')
             sys.exit()
         #
         #   first save the old file in Updates
@@ -587,7 +587,7 @@ class DictionaryBuilder(object):
         update = os.getcwd()
         shutil.copyfile(old, os.path.join(update, 'Restriction_Dictionary.old'))
         places = update, os.path.split(Bio.Restriction.Restriction.__file__)[0]
-        print "\t\tCompilation of the new dictionary : OK.\
+        print("\t\tCompilation of the new dictionary : OK.\
         \n\t\tInstallation : No.\n\
         \n You will find the newly created 'Restriction_Dictionary.py' file\
         \n in the folder : \n\
@@ -596,8 +596,8 @@ class DictionaryBuilder(object):
         \n the other Restriction libraries.\n\
         \n note : \
         \n This folder should be :\n\
-        \n\t%s\n" % places
-        print '\n ' +'*'*78 + '\n'
+        \n\t%s\n" % places)
+        print('\n ' +'*'*78 + '\n')
         return
 
     def lastrebasefile(self):
@@ -624,22 +624,22 @@ class DictionaryBuilder(object):
             #
             #   nothing to be done
             #
-            print '\n Using the files : %s'% ', '.join(emboss_now)
+            print('\n Using the files : %s'% ', '.join(emboss_now))
             return tuple([open(os.path.join(base, n)) for n in emboss_now])
         else:
             #
             #   may be download the files.
             #
-            print '\n The rebase files are more than one month old.\
-            \n Would you like to update them before proceeding?(y/n)'
+            print('\n The rebase files are more than one month old.\
+            \n Would you like to update them before proceeding?(y/n)')
             r = raw_input(' update [n] >>> ')
             if r in ['y', 'yes', 'Y', 'Yes']:
                 updt = RebaseUpdate(self.rebase_pass, self.proxy)
                 updt.openRebase()
                 updt.getfiles()
                 updt.close()
-                print '\n Update complete. Creating the dictionaries.\n'
-                print '\n Using the files : %s'% ', '.join(emboss_now)
+                print('\n Update complete. Creating the dictionaries.\n')
+                print('\n Using the files : %s'% ', '.join(emboss_now))
                 return tuple([open(os.path.join(base, n)) for n in emboss_now])
             else:
                 #
@@ -657,7 +657,7 @@ class DictionaryBuilder(object):
                             pass
                         raise NotFoundError
                     except NotFoundError:
-                        print "\nNo %s file found. Upgrade is impossible.\n"%name
+                        print("\nNo %s file found. Upgrade is impossible.\n"%name)
                         sys.exit()
                     continue
                 pass
@@ -691,7 +691,7 @@ class DictionaryBuilder(object):
                         strmess += '\t%s.\n'%file
                     else:
                         raise ValueError
-                print strmess
+                print(strmess)
                 emboss_e = open(os.path.join(base, 'emboss_e.%s'%number),'r')
                 emboss_r = open(os.path.join(base, 'emboss_r.%s'%number),'r')
                 emboss_s = open(os.path.join(base, 'emboss_s.%s'%number),'r')
@@ -744,10 +744,10 @@ class DictionaryBuilder(object):
             #   Should HaeIV become commercially available or other similar
             #   new enzymes be added, this might be modified.
             #
-            print '\
+            print('\
             \nWARNING : %s cut twice with different overhang length each time.\
             \n\tUnable to deal with this behaviour. \
-            \n\tThis enzyme will not be included in the database. Sorry.' %name
+            \n\tThis enzyme will not be included in the database. Sorry.' %name)
             print '\tChecking :',
             raise OverhangError
         if 0 <= fst5 <= size and 0 <= fst3 <= size:
@@ -956,9 +956,9 @@ class DictionaryBuilder(object):
                 except OverhangError:   # overhang error
                     n = name            # do not include the enzyme
                     if not bl[2]:
-                        print 'Anyway, %s is not commercially available.\n' %n
+                        print('Anyway, %s is not commercially available.\n' %n)
                     else:
-                        print 'Unfortunately, %s is commercially available.\n'%n
+                        print('Unfortunately, %s is commercially available.\n'%n)
 
                     continue
                 #Hyphens can't be used as a Python name, nor as a
