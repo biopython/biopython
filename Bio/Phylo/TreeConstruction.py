@@ -331,8 +331,8 @@ class DistanceCalculator(object):
 
     DNA calculator with 'identity' model:
 
-    >>> calculator = DistanceCalculator(aln, 'identity')
-    >>> dm = calculator.get_distance()
+    >>> calculator = DistanceCalculator('identity')
+    >>> dm = calculator.get_distance(aln)
     >>> print dm
     Alpha   0
     Beta    0.230769230769  0
@@ -342,8 +342,8 @@ class DistanceCalculator(object):
             Alpha           Beta            Gamma           Delta           Epsilon
 
     Protein calculator with 'blosum62' model:
-    >>> calculator = DistanceCalculator(aln, 'blosum62')
-    >>> dm = calculator.get_distance()
+    >>> calculator = DistanceCalculator('blosum62')
+    >>> dm = calculator.get_distance(aln)
     >>> print dm
     Alpha   0
     Beta    0.369047619048  0
@@ -388,13 +388,8 @@ class DistanceCalculator(object):
                       'pam90': pam90, 'rao': rao, 'risler': risler, 'structure': structure
                      }
 
-    def __init__(self, msa, model):
-        """Initialize with a MSA object and the distance model to be
-        used()"""
-        if isinstance(msa, MultipleSeqAlignment):
-            self.msa = msa
-        else:
-            raise TypeError("Must provide a MultipleSeqAlignment object.")
+    def __init__(self, model):
+        """Initialize with a distance model"""
 
         dna_keys = self.dna_matrices.keys()
         protein_keys = self.protein_matrices.keys()
@@ -428,11 +423,15 @@ class DistanceCalculator(object):
 
         return 1 - (score * 1.0 / max_score)
 
-    def get_distance(self):
+    def get_distance(self, msa):
         """Return a DistanceMatrix for MSA object"""
-        names = [s.id for s in self.msa]
+
+        if not isinstance(msa, MultipleSeqAlignment):
+            raise TypeError("Must provide a MultipleSeqAlignment object.")
+
+        names = [s.id for s in msa]
         dm = DistanceMatrix(names)
-        for seq1, seq2 in itertools.combinations(self.msa, 2):
+        for seq1, seq2 in itertools.combinations(msa, 2):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
 
@@ -447,6 +446,11 @@ class DistanceCalculator(object):
 
 class TreeContructor(object):
     """Base class for all tree constructor."""
+
+    def build_tree(self):
+        """Caller to built the tree. This should be implemented
+        in subclass"""
+        raise NotImplementedError("Method not implemented!")
 
 
 class DistanceTreeConstructor(TreeContructor):
@@ -670,7 +674,7 @@ class NNITreeSearcher(TreeSearcher):
         """Implement the TreeSearcher.search method.
 
         :Parameters:
-           starting_tree : BaseTree
+           starting_tree : Tree
                starting tree of NNI method.
            alignment: MultipleSeqAlignment
                multiple sequence alignment used to calculate parsimony
@@ -899,7 +903,7 @@ class ParsimonyTreeConstructor(TreeContructor):
             multiple sequence alignment to calculate parsimony tree.
         searcher: TreeSearcher
             tree searcher to search the best parsimony tree.
-        starting_tree: BaseTree
+        starting_tree: Tree
             starting tree provided to the searcher.
 
     Example

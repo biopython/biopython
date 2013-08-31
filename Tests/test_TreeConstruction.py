@@ -96,20 +96,20 @@ class DistanceCalculatorTest(unittest.TestCase):
     def test_distance_calculator(self):
         aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
 
-        calculator = DistanceCalculator(aln, 'identity')
-        dm = calculator.get_distance()
+        calculator = DistanceCalculator('identity')
+        dm = calculator.get_distance(aln)
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (10 * 1.0 / 13))
 
-        calculator = DistanceCalculator(aln, 'blastn')
-        dm = calculator.get_distance()
+        calculator = DistanceCalculator('blastn')
+        dm = calculator.get_distance(aln)
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (38 * 1.0 / 65))
 
-        calculator = DistanceCalculator(aln, 'trans')
-        dm = calculator.get_distance()
+        calculator = DistanceCalculator('trans')
+        dm = calculator.get_distance(aln)
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (49 * 1.0 / 78))
 
-        calculator = DistanceCalculator(aln, 'blosum62')
-        dm = calculator.get_distance()
+        calculator = DistanceCalculator('blosum62')
+        dm = calculator.get_distance(aln)
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (53 * 1.0 / 84))
 
 
@@ -117,8 +117,8 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor"""
     def setUp(self):
         self.aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-        calculator = DistanceCalculator(self.aln, 'blosum62')
-        dm = calculator.get_distance()
+        calculator = DistanceCalculator('blosum62')
+        dm = calculator.get_distance(self.aln)
         #logging.info("DistanceMatrix:\n" + str(dm))
         self.constructor = DistanceTreeConstructor(dm)
 
