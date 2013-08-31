@@ -2,14 +2,13 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-from __future__ import with_statement
-
 import collections
 import warnings
 
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Data.SCOPData import protein_letters_3to1
 
 
 def PdbSeqresIterator(handle):
@@ -24,7 +23,6 @@ def PdbSeqresIterator(handle):
     """
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
     from Bio.SeqUtils import seq1
-    from Bio.SCOP.three_to_one_dict import to_one_letter_code
 
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
@@ -42,7 +40,7 @@ def PdbSeqresIterator(handle):
             chn_id = line[11]
             # Number of residues in the chain (repeated on every record)
             # num_res = int(line[13:17])
-            residues = [seq1(res, custom_map=to_one_letter_code) for res in line[19:].split()]
+            residues = [seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()]
             chains[chn_id].extend(residues)
         elif rec_name == 'DBREF':
             #  ID code of this entry (PDB ID)
@@ -124,14 +122,13 @@ def PdbAtomIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
     from Bio.SeqUtils import seq1
-    from Bio.SCOP.three_to_one_dict import to_one_letter_code
 
     def restype(residue):
         """Return a residue's type as a one-letter code.
 
         Non-standard residues (e.g. CSD, ANP) are returned as 'X'.
         """
-        return seq1(residue.resname, custom_map=to_one_letter_code)
+        return seq1(residue.resname, custom_map=protein_letters_3to1)
 
     # Deduce the PDB ID from the PDB header
     # ENH: or filename?
@@ -150,7 +147,7 @@ def PdbAtomIterator(handle):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [res for res in chain.get_unpacked_list()
                     if seq1(res.get_resname().upper(),
-                        custom_map=to_one_letter_code) != "X"]
+                        custom_map=protein_letters_3to1) != "X"]
         if not residues:
             continue
         # Identify missing residues in the structure
@@ -170,14 +167,16 @@ def PdbAtomIterator(handle):
                     res_out.extend(map(restype, residues[prev_idx:i]))
                     prev_idx = i
                     res_out.append('X'*gapsize)
-                    # Last segment
-                    res_out.extend(map(restype, residues[prev_idx:]))
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
                                   UserWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
                     res_out.extend(map(restype, residues[prev_idx:i]))
+                    break
+            else:
+                # Last segment
+                res_out.extend(map(restype, residues[prev_idx:]))
         else:
             # No gaps
             res_out = map(restype, residues)

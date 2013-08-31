@@ -1,16 +1,21 @@
+# Copyright 2013 by David Arenillas and Anthony Mathelier. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
 """
 This modules requires MySQLdb to be installed.
 
 Provides read access to a JASPAR5 formatted database.
 
-Example:
+Example, substitute the your database credentials as
+appropriate:
 
     >>> from Bio.motifs.jaspar.db import JASPAR5
     >>> 
-    >>> JASPAR_DB_HOST = 'vm5.cmmt.ubc.ca'
-    >>> JASPAR_DB_NAME = 'JASPAR_2010'
-    >>> JASPAR_DB_USER = 'jaspar_r'
-    >>> JASPAR_DB_PASS = ''
+    >>> JASPAR_DB_HOST = "hostname.example.org"
+    >>> JASPAR_DB_NAME = "JASPAR_2013"
+    >>> JASPAR_DB_USER = "guest"
+    >>> JASPAR_DB_PASS = "guest"
     >>> 
     >>> DFLT_COLLECTION = 'CORE'
     >>> jdb = JASPAR5(
@@ -262,7 +267,7 @@ class JASPAR5(object):
 
             # Filter motifs to those with matrix IC greater than min_ic
             if min_ic:
-                if motif.ic() < min_ic:
+                if motif.pssm.mean() < min_ic:
                     continue
 
             # Filter motifs to those with minimum length of min_length
@@ -716,7 +721,7 @@ class JASPAR5(object):
 
         cur.execute("select count(*) from MATRIX where BASE_ID = (select BASE_ID from MATRIX where ID = %s) and VERSION > (select VERSION from MATRIX where ID = %s)", (int_id, int_id))
 
-        row = cur.fetchone();
+        row = cur.fetchone()
 
         count = row[0]
 

@@ -26,7 +26,7 @@ try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
     # in NumPy, as it does not require a full sort.
-except ImportError, x:
+except ImportError as x:
     # Use the median function in NumPy if Bio.Cluster is not available
     from numpy import median
 
@@ -95,10 +95,10 @@ def lowess(x, y, f=2. / 3., iter=3):
 
 def _test():
     """Run the Bio.Statistics.lowess module's doctests."""
-    print "Running doctests..."
+    print("Running doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

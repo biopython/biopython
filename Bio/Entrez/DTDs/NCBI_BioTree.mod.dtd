@@ -1,0 +1,109 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "biotree.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-BioTree"
+================================================= -->
+
+<!--
+$Revision: 184613 $
+*********************************************************************
+
+  biotree.asn
+
+     BioTree ASN
+     Anatoliy Kuznetsov
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          BioTreeContainer,
+          DistanceMatrix -->
+<!-- ============================================ -->
+
+
+<!ELEMENT BioTreeContainer (
+        BioTreeContainer_treetype?, 
+        BioTreeContainer_fdict, 
+        BioTreeContainer_nodes, 
+        BioTreeContainer_label?)>
+
+<!-- hint on what kind of tree is that -->
+<!ELEMENT BioTreeContainer_treetype (#PCDATA)>
+
+<!-- features dictionary  -->
+<!ELEMENT BioTreeContainer_fdict (FeatureDictSet)>
+
+<!-- set of nodes with encoded topology -->
+<!ELEMENT BioTreeContainer_nodes (NodeSet)>
+
+<!-- bio-tree label (short name) -->
+<!ELEMENT BioTreeContainer_label (#PCDATA)>
+
+
+<!ELEMENT NodeSet (Node*)>
+
+
+<!ELEMENT Node (
+        Node_id, 
+        Node_parent?, 
+        Node_features?)>
+
+<!-- node uid -->
+<!ELEMENT Node_id (%INTEGER;)>
+
+<!-- parent node id -->
+<!ELEMENT Node_parent (%INTEGER;)>
+
+<!ELEMENT Node_features (NodeFeatureSet)>
+
+
+<!ELEMENT NodeFeatureSet (NodeFeature*)>
+
+
+<!ELEMENT NodeFeature (
+        NodeFeature_featureid, 
+        NodeFeature_value)>
+
+<!ELEMENT NodeFeature_featureid (%INTEGER;)>
+
+<!ELEMENT NodeFeature_value (#PCDATA)>
+
+
+<!ELEMENT FeatureDictSet (FeatureDescr*)>
+
+
+<!ELEMENT FeatureDescr (
+        FeatureDescr_id, 
+        FeatureDescr_name)>
+
+<!-- feature id -->
+<!ELEMENT FeatureDescr_id (%INTEGER;)>
+
+<!-- feature name -->
+<!ELEMENT FeatureDescr_name (#PCDATA)>
+
+
+<!ELEMENT DistanceMatrix (
+        DistanceMatrix_labels, 
+        DistanceMatrix_distances)>
+
+<!-- n labels -->
+<!ELEMENT DistanceMatrix_labels (DistanceMatrix_labels_E*)>
+
+
+<!ELEMENT DistanceMatrix_labels_E (#PCDATA)>
+
+<!--
+ n(n-1)/2 pairwise distances
+ (0, 1)...(0, n), (1, 2)...(1, n)...
+-->
+<!ELEMENT DistanceMatrix_distances (DistanceMatrix_distances_E*)>
+
+
+<!ELEMENT DistanceMatrix_distances_E (%REAL;)>
+

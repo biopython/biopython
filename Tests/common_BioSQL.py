@@ -73,7 +73,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
                                                   host=DBHOST)
         server.close()
         del server
-    except Exception, e:
+    except Exception as e:
         message = "Connection failed, check settings if you plan to use BioSQL: %s" % str(e)
         raise MissingExternalDependencyError(message)
 
@@ -467,7 +467,7 @@ class DupLoadTest(unittest.TestCase):
         record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna), id="Test1")
         try:
             count = self.db.load([record, record])
-        except Exception, err:
+        except Exception as err:
             #Good!
             #Note we don't do a specific exception handler because the
             #exception class will depend on which DB back end is in use.
@@ -485,7 +485,7 @@ class DupLoadTest(unittest.TestCase):
         self.assertEqual(count, 1)
         try:
             count = self.db.load([record])
-        except Exception, err:
+        except Exception as err:
             #Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError"],
@@ -499,7 +499,7 @@ class DupLoadTest(unittest.TestCase):
         record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna), id="TestA")
         try:
             count = self.db.load([record1, record2])
-        except Exception, err:
+        except Exception as err:
             #Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError"],
@@ -697,7 +697,7 @@ class InDepthLoadTest(unittest.TestCase):
         #Good... now try reloading it!
         try:
             count = self.db.load([record])
-        except Exception, err:
+        except Exception as err:
             #Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError"],

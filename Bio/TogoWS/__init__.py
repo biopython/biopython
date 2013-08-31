@@ -320,7 +320,7 @@ def _open(url, post=None):
             handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))
         else:
             handle = urllib2.urlopen(url)
-    except urllib2.HTTPError, exception:
+    except urllib2.HTTPError as exception:
         raise exception
 
     #We now trust TogoWS to have set an HTTP error code, that

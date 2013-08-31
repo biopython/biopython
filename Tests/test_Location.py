@@ -7,7 +7,7 @@ are working properly.
 from Bio import SeqFeature
 
 # --- test fuzzy representations
-print "Testing fuzzy representations..."
+print("Testing fuzzy representations...")
 
 # check the positions alone
 exact_pos = SeqFeature.ExactPosition(5)
@@ -18,9 +18,9 @@ before_pos = SeqFeature.BeforePosition(15)
 after_pos = SeqFeature.AfterPosition(40)
 
 print "Exact:", exact_pos
-print "Within (as start, %i): %s" % (int(within_pos_s), within_pos_s)
-print "Within (as end, %i): %s" % (int(within_pos_e), within_pos_e)
-print "Between (as end, %i): %s" % (int(between_pos_e), between_pos_e)
+print("Within (as start, %i): %s" % (int(within_pos_s), within_pos_s))
+print("Within (as end, %i): %s" % (int(within_pos_e), within_pos_e))
+print("Between (as end, %i): %s" % (int(between_pos_e), between_pos_e))
 print "Before:", before_pos
 print "After:", after_pos
 
@@ -35,7 +35,7 @@ for location in [location1, location2, location3]:
     print "   End  :", location.end
 
 # --- test non-fuzzy represenations
-print "Testing non-fuzzy representations..."
+print("Testing non-fuzzy representations...")
 for location in [location1, location2, location3]:
     print "Location:", location
     print "  Non-Fuzzy Start:", location.nofuzzy_start

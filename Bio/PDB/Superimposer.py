@@ -78,7 +78,7 @@ if __name__=="__main__":
 
     sup.set_atoms(fixed, moving)
 
-    print sup.rotran
-    print sup.rms
+    print(sup.rotran)
+    print(sup.rms)
 
     sup.apply(moving)

@@ -29,7 +29,7 @@ def codeml(vers=None, verbose=False):
             ("SE", "alignment.phylip", "species.tree")]
 
     for test in tests:
-        print test[0]
+        print(test[0])
         cml = codeml.Codeml()
         cml.working_dir = "temp"
         ctl_file = os.path.join("Control_files",
@@ -41,7 +41,7 @@ def codeml(vers=None, verbose=False):
         cml.alignment = alignment
         cml.tree = tree
         for version in versions:
-            print "\t{0}".format(version.replace('_', '.'))
+            print("\t{0}".format(version.replace('_', '.')))
             if test[0] in ["ngene2_mgene02", "ngene2_mgene34"] and \
                version == "4_6":
                 cml.tree = ".".join([cml.tree, "4.6"])
@@ -62,16 +62,16 @@ def baseml(vers=None, verbose=False):
     alignment = os.path.join("Alignments", "alignment.phylip")
     tree = os.path.join("Trees", "species.tree")
     for test in tests:
-        print test[0]
+        print(test[0])
         bml = baseml.Baseml()
         for version in versions:
-            print "\t{0}".format(version.replace('_', '.'))
+            print("\t{0}".format(version.replace('_', '.')))
             if test[1] is not None:
                 for n in test[1]:
                     if (version in ["4_3", "4_4", "4_4c", "4_5"] and
                             test[0] == "nparK" and n in [3, 4]):
                         continue
-                    print "\t\tn = {0}".format(n)
+                    print("\t\tn = {0}".format(n))
                     ctl_file = os.path.join("Control_files", "baseml",
                         "{0}{1}.ctl".format(test[0], n))
                     bml.read_ctl_file(ctl_file)
@@ -107,10 +107,10 @@ def yn00(vers=None, verbose=False):
     tests = ["yn00"]
     alignment = os.path.join("Alignments", "alignment.phylip")
     for test in tests:
-        print test[0]
+        print(test[0])
         yn = yn00.Yn00()
         for version in versions:
-            print "\t{0}".format(version.replace('_', '.'))
+            print("\t{0}".format(version.replace('_', '.')))
             ctl_file = os.path.join("Control_files", "yn00",
                 "{0}.ctl".format(test))
             yn.read_ctl_file(ctl_file)
@@ -150,18 +150,18 @@ if __name__ == "__main__":
             verbose = True
         elif arg in programs:
             if prog is not None:
-                print "Only one program at a time, please."
+                print("Only one program at a time, please.")
                 print_usage()
             prog = arg
         elif arg.replace(".", "_") in VERSIONS:
             if vers is not None:
-                print "Only one version at a time, sorry."
+                print("Only one version at a time, sorry.")
             vers = arg.replace(".", "_")
         else:
-            print "Unrecognized argument"
+            print("Unrecognized argument")
             print_usage()
     if prog is None:
-        print "No program specified"
+        print("No program specified")
         print_usage()
     if prog == "codeml":
         codeml(vers, verbose)

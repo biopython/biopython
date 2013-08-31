@@ -5,8 +5,6 @@
 
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
 
-from __future__ import with_statement
-
 import os
 import unittest
 import warnings
@@ -105,9 +103,9 @@ def compare_record(old, new, truncate=None):
             converted = [min(q,truncate) for q in converted]
         if converted != new.letter_annotations["solexa_quality"]:
             print
-            print old.letter_annotations["phred_quality"]
-            print converted
-            print new.letter_annotations["solexa_quality"]
+            print(old.letter_annotations["phred_quality"])
+            print(converted)
+            print(new.letter_annotations["solexa_quality"])
             raise ValueError("Mismatch in phred_quality vs solexa_quality")
     if "solexa_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations:
@@ -118,9 +116,9 @@ def compare_record(old, new, truncate=None):
         if truncate:
             converted = [min(q,truncate) for q in converted]
         if converted != new.letter_annotations["phred_quality"]:
-            print old.letter_annotations["solexa_quality"]
-            print converted
-            print new.letter_annotations["phred_quality"]
+            print(old.letter_annotations["solexa_quality"])
+            print(converted)
+            print(new.letter_annotations["phred_quality"])
             raise ValueError("Mismatch in solexa_quality vs phred_quality")
     return True
 

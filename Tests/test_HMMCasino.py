@@ -168,15 +168,15 @@ def stop_training(log_likelihood_change, num_iterations):
         return 0
 
 # -- Standard Training with known states
-print "Training with the Standard Trainer..."
+print("Training with the Standard Trainer...")
 known_training_seq = Trainer.TrainingSequence(rolls, states)
 
 trainer = Trainer.KnownStateTrainer(standard_mm)
 trained_mm = trainer.train([known_training_seq])
 
 if VERBOSE:
-    print trained_mm.transition_prob
-    print trained_mm.emission_prob
+    print(trained_mm.transition_prob)
+    print(trained_mm.emission_prob)
 
 test_rolls, test_states = generate_rolls(300)
 
@@ -186,15 +186,15 @@ if VERBOSE:
     Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
 
 # -- Baum-Welch training without known state sequences
-print "Training with Baum-Welch..."
+print("Training with Baum-Welch...")
 training_seq = Trainer.TrainingSequence(rolls, Seq("", DiceTypeAlphabet()))
 
 trainer = Trainer.BaumWelchTrainer(baum_welch_mm)
 trained_mm = trainer.train([training_seq], stop_training)
 
 if VERBOSE:
-    print trained_mm.transition_prob
-    print trained_mm.emission_prob
+    print(trained_mm.transition_prob)
+    print(trained_mm.emission_prob)
 
 test_rolls, test_states = generate_rolls(300)
 

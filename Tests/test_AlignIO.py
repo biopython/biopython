@@ -112,7 +112,7 @@ def check_simple_write_read(alignments, indent=" "):
         and format not in test_write_read_alignment_formats:
             continue
 
-        print indent+"Checking can write/read as '%s' format" % format
+        print(indent+"Checking can write/read as '%s' format" % format)
 
         #Going to write to a handle...
         handle = StringIO()
@@ -120,10 +120,10 @@ def check_simple_write_read(alignments, indent=" "):
         try:
             c = AlignIO.write(alignments, handle=handle, format=format)
             assert c == len(alignments)
-        except ValueError, e:
+        except ValueError as e:
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
-            print indent+"Failed: %s" % str(e)
+            print(indent+"Failed: %s" % str(e))
             #Carry on to the next format:
             continue
 
@@ -134,7 +134,7 @@ def check_simple_write_read(alignments, indent=" "):
             try:
                 alignments2 = list(AlignIO.parse(handle=handle, format=format,
                                                  seq_count=records_per_alignment))
-            except ValueError, e:
+            except ValueError as e:
                 #This is BAD.  We can't read our own output.
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
@@ -149,7 +149,7 @@ def check_simple_write_read(alignments, indent=" "):
             handle.seek(0)
             try:
                 alignments2 = list(AlignIO.parse(handle=handle, format=format))
-            except ValueError, e:
+            except ValueError as e:
                 #This is BAD.  We can't read our own output.
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
@@ -214,7 +214,7 @@ def check_phylip_reject_duplicate():
         # This should raise a ValueError
         AlignIO.write(alignment, handle, 'phylip')
         assert False, "Duplicate IDs after truncation are not allowed."
-    except ValueError, e:
+    except ValueError as e:
         # Expected - check the error
         assert "Repeated name 'longsequen'" in str(e)
 
@@ -249,8 +249,8 @@ del list_of_records, t_format
 
 #Main tests...
 for (t_format, t_per, t_count, t_filename) in test_files:
-    print "Testing reading %s format file %s with %i alignments" \
-          % (t_format, t_filename, t_count)
+    print("Testing reading %s format file %s with %i alignments" \
+          % (t_format, t_filename, t_count))
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
@@ -321,13 +321,13 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     #Print the alignment
     for i,alignment in enumerate(alignments):
         if i < 3 or i+1 == t_count:
-            print " Alignment %i, with %i sequences of length %i" \
+            print(" Alignment %i, with %i sequences of length %i" \
                   % (i,
                      len(alignment),
-                     alignment.get_alignment_length())
-            print alignment_summary(alignment)
+                     alignment.get_alignment_length()))
+            print(alignment_summary(alignment))
         elif i==3:
-            print " ..."
+            print(" ...")
 
     #Check AlignInfo.SummaryInfo likes the alignment
     summary = AlignInfo.SummaryInfo(alignment)
@@ -339,7 +339,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         rep_dict = summary.replacement_dictionary()
         try:
             info_content = summary.information_content()
-        except ValueError, e:
+        except ValueError as e:
             if str(e) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
                 raise e
             pass
@@ -359,4 +359,4 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     alignments.reverse()
     check_simple_write_read(alignments)
 
-print "Finished tested reading files"
+print("Finished tested reading files")

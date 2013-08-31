@@ -120,8 +120,6 @@ You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 same length.
 """
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
 
 __docformat__ = "epytext en"  # not just plaintext
 

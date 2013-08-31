@@ -9,10 +9,51 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 ===================================================================
- 
-(In progress, not released yet) Biopython 1.62
 
-Please note that this could be our last release to support Python 2.5.
+(In progress, not released yet) Biopython 1.63
+
+Note this release does *not* support Python 2.5 (or Jython 2.5), which has
+allowed some code clean-up, and wider use of context managers (with
+statements).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Chris Mitchell (first contribution)
+Lenna Peterson
+Peter Cock
+Sergei Lebedev (first contribution)
+Wayne Decatur (first contribution)
+
+===================================================================
+
+28 August 2013: Biopython 1.62 released.
+
+This is our first release to officially support Python 3, however it is
+also our final release supporting Python 2.5. Specifically this release
+is supported and tested on standard Python 2.5, 2.6, 2.7 and 3.3.
+It was also tested under Jython 2.5, 2.7 and PyPy 1.9, 2.0.
+
+See the Biopython 1.62 beta release notes below for most changes. Since the
+beta release we have added several minor bug fixes and test improvements.
+Additional contributors since the beta:
+
+Bertrand Néron (first contribution)
+Lenna Peterson
+Martin Mokrejs
+Matsuyuki Shirota (first contribution)
+
+===================================================================
+ 
+15 July 2013: Biopython 1.62 beta released.
+
+This is a beta release for testing purposes, both for new features added,
+and changes to location parsing, but more importantly Biopython 1.62 will
+be our first release to officially support Python 3.
+
+Specifically we intend Biopython 1.62 to support standard Python 2.5, 2.6, 2.7
+and 3.3, but the release will also be tested under Jython 2.5, 2.7 and PyPy
+1.9, 2.0 as well. It will be our final release supporting Python 2.5.
 
 The translation functions will give a warning on any partial codons (and this
 will probably become an error in a future release). If you know you are dealing
@@ -48,6 +89,9 @@ Python standard library's shlex module instead of C code using flex.
 
 The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
 
+Bio.motifs supports JASPAR format files with multiple position-frequence
+matrices.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -55,10 +99,16 @@ possible, especially the following contributors:
 
 Alexander Campbell (first contribution)
 Andrea Rizzi (first contribution)
+Anthony Mathelier (first contribution)
 Ben Morris (first contribution)
+Brad Chapman
 Christian Brueffer
+David Arenillas (first contribution)
 David Martin (first contribution)
+Eric Talevich
 Iddo Friedberg
+Jian-Long Huang (first contribution)
+Joao Rodrigues
 Kai Blin
 Michiel de Hoon
 Nate Sutton (first contribution)
@@ -67,6 +117,7 @@ Petra Kubincová (first contribution)
 Phillip Garland
 Saket Choudhary (first contribution)
 Tiago Antao
+Wibowo 'Bow' Arindrarto
 Xabier Bello (first contribution)
 
 ===================================================================

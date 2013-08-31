@@ -73,7 +73,7 @@ class XMLRecordIterator:
                 elif event == "END_ELEMENT" and node.namespaceURI == self._namespace and node.localName == self._recordTag:
                     yield record
 
-        except SAXParseException, e:
+        except SAXParseException as e:
 
             if e.getLineNumber() == 1 and e.getColumnNumber() == 0:
                 #empty file
@@ -400,7 +400,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                     self.xml_generator.endElement("property")
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
 
     from Bio import SeqIO
     import sys

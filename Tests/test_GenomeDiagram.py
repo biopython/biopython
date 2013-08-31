@@ -582,14 +582,14 @@ class DiagramTest(unittest.TestCase):
                 gdd.write(filename, output)
                 assert False, \
                        "Should have rejected %s as an output format" % output
-            except ValueError, e:
+            except ValueError as e:
                 #Good!
                 pass
             try:
                 gdd.write_to_string(output)
                 assert False, \
                        "Should have rejected %s as an output format" % output
-            except ValueError, e:
+            except ValueError as e:
                 #Good!
                 pass
 

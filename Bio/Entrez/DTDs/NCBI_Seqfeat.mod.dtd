@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 02/17/2011 23:04:43
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 09/28/2012 23:04:43
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 254752 $
+$Revision: 376374 $
 **********************************************************************
 
   NCBI Sequence Feature elements
@@ -678,6 +678,9 @@ $Revision: 254752 $
     end-seq	-  Clone placed by end sequence
     insert-alignment	-  Clone placed by insert alignment
     sts	-  Clone placed by STS
+    end-seq-insert-alignment	-  combined end-seq and insert align
+    external	-  Placement provided externally
+    curated	-  Human placed or approved
 -->
 <!ATTLIST Clone-ref_placement-method value (
         end-seq |
@@ -685,6 +688,9 @@ $Revision: 254752 $
         sts |
         fish |
         fingerprint |
+        end-seq-insert-alignment |
+        external |
+        curated |
         other
         ) #IMPLIED >
 
@@ -700,7 +706,8 @@ $Revision: 254752 $
         Clone-seq_confidence?, 
         Clone-seq_location, 
         Clone-seq_seq?, 
-        Clone-seq_align-id?)>
+        Clone-seq_align-id?, 
+        Clone-seq_support?)>
 
 <!ELEMENT Clone-seq_type (%INTEGER;)>
 <!ATTLIST Clone-seq_type value (
@@ -715,10 +722,13 @@ $Revision: 254752 $
 <!--
     multiple	-  Multiple hits
     na	-  Unspecified
-    nohit-rep	-  No hits, repetitive
-    nohitnorep	-  No hits, not repetitive
+    nohit-rep	-  No hits, end flagged repetitive
+    nohitnorep	-  No hits, end not flagged repetitive
     other-chrm	-  Hit on different chromosome
     virtual	-  Virtual (hasn't been sequenced)
+    multiple-rep	-  Multiple hits, end flagged repetitive
+    multiplenorep	-  Multiple hits, end not flagged repetitive
+    no-hit	-  No hits
 -->
 <!ATTLIST Clone-seq_confidence value (
         multiple |
@@ -728,6 +738,9 @@ $Revision: 254752 $
         other-chrm |
         unique |
         virtual |
+        multiple-rep |
+        multiplenorep |
+        no-hit |
         other
         ) #IMPLIED >
 
@@ -738,5 +751,22 @@ $Revision: 254752 $
 <!-- clone sequence location -->
 <!ELEMENT Clone-seq_seq (Seq-loc)>
 
+<!-- internal alignment identifier -->
 <!ELEMENT Clone-seq_align-id (Dbtag)>
+
+<!ELEMENT Clone-seq_support (%INTEGER;)>
+
+<!--
+    prototype	-  sequence used to place clone
+    supporting	-  sequence supports placement
+    supports-other	-  supports a different placement
+    non-supporting	-  does not support any placement
+-->
+<!ATTLIST Clone-seq_support value (
+        prototype |
+        supporting |
+        supports-other |
+        non-supporting
+        ) #IMPLIED >
+
 

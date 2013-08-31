@@ -109,14 +109,14 @@ def run_doctest(target_dir=None, *args, **kwargs):
 
     cur_dir = os.path.abspath(os.curdir)
 
-    print "Runing doctests..."
+    print("Runing doctests...")
     try:
         os.chdir(find_test_dir(target_dir))
         doctest.testmod(*args, **kwargs)
     finally:
         # and revert back to initial directory
         os.chdir(cur_dir)
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     run_doctest()

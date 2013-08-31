@@ -74,12 +74,12 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
 
     if dry_run:
-        print _build_align_cmdline(cmdline,
+        print(_build_align_cmdline(cmdline,
                                    pair,
                                    output_file.name,
                                    kbyte,
                                    force_type,
-                                   quiet)
+                                   quiet))
         return
 
     for filename, input_file in zip(pair, input_files):

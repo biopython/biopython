@@ -1,0 +1,158 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "remap.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Remap"
+================================================= -->
+
+<!--
+$Id: remap.asn,v 1.2 2004/07/28 13:43:33 jcherry Exp $********************************************
+
+  remap.asn
+   Version 1
+
+   API for remapping locations on sequences
+
+   Author: Josh Cherry
+
+***************************************************************
+-->
+
+<!-- Elements referenced from other modules:
+          Seq-loc FROM NCBI-Seqloc -->
+<!-- ============================================ -->
+
+<!-- a date/time stamp -->
+<!ELEMENT Remap-dt (%INTEGER;)>
+
+<!-- database name -->
+<!ELEMENT Remap-db-id (#PCDATA)>
+
+<!--
+***************************************
+  Remap Request types
+***************************************
+****************************************
+ The basic request wrapper leaves space for a version which
+   allow the server to support older clients
+ The tool parameter allows us to log the client types for
+   debugging and tuning
+****************************************
+ a standard request
+-->
+<!ELEMENT Remap-request (
+        Remap-request_request, 
+        Remap-request_version, 
+        Remap-request_tool?)>
+
+<!-- the actual request -->
+<!ELEMENT Remap-request_request (RMRequest)>
+
+<!-- ASN1 spec version -->
+<!ELEMENT Remap-request_version (%INTEGER;)>
+
+<!-- tool making request -->
+<!ELEMENT Remap-request_tool (#PCDATA)>
+
+<!-- request types -->
+<!ELEMENT RMRequest (
+        RMRequest_remap | 
+        RMRequest_maps-to-builds | 
+        RMRequest_maps-from-builds | 
+        RMRequest_all-builds)>
+
+<!-- do the actual remapping -->
+<!ELEMENT RMRequest_remap (Remap-query)>
+
+<!-- what builds can this be mapped to? -->
+<!ELEMENT RMRequest_maps-to-builds (#PCDATA)>
+
+<!-- what builds can be mapped to this? -->
+<!ELEMENT RMRequest_maps-from-builds (#PCDATA)>
+
+<!-- all the builds the server knows of -->
+<!ELEMENT RMRequest_all-builds EMPTY>
+
+
+<!ELEMENT Remap-query (
+        Remap-query_from-build, 
+        Remap-query_to-build, 
+        Remap-query_locs)>
+
+<!-- build to map from -->
+<!ELEMENT Remap-query_from-build (#PCDATA)>
+
+<!-- build to map to -->
+<!ELEMENT Remap-query_to-build (#PCDATA)>
+
+<!-- the locations to remap -->
+<!ELEMENT Remap-query_locs (Seq-loc*)>
+
+<!--
+**********************************************************
+ Replies from the server
+  all replies contain the date/time stamp when they were executed
+**********************************************************
+-->
+<!ELEMENT Remap-reply (
+        Remap-reply_reply, 
+        Remap-reply_dt, 
+        Remap-reply_server, 
+        Remap-reply_msg?)>
+
+<!-- the actual reply -->
+<!ELEMENT Remap-reply_reply (RMReply)>
+
+<!-- date/time stamp from server -->
+<!ELEMENT Remap-reply_dt (Remap-dt)>
+
+<!-- server version info -->
+<!ELEMENT Remap-reply_server (#PCDATA)>
+
+<!-- possibly a message to the user -->
+<!ELEMENT Remap-reply_msg (#PCDATA)>
+
+
+<!ELEMENT RMReply (
+        RMReply_error | 
+        RMReply_remap | 
+        RMReply_maps-to-builds | 
+        RMReply_maps-from-builds | 
+        RMReply_all-builds)>
+
+<!-- if nothing can be returned -->
+<!ELEMENT RMReply_error (#PCDATA)>
+
+<!-- result of actual remapping -->
+<!ELEMENT RMReply_remap (Remap-result)>
+
+<!--
+ all the builds that the server
+ knows how to map this build to
+-->
+<!ELEMENT RMReply_maps-to-builds (RMReply_maps-to-builds_E*)>
+
+
+<!ELEMENT RMReply_maps-to-builds_E (#PCDATA)>
+
+<!--
+ all the builds that the server
+ knows how to map to this build
+-->
+<!ELEMENT RMReply_maps-from-builds (RMReply_maps-from-builds_E*)>
+
+
+<!ELEMENT RMReply_maps-from-builds_E (#PCDATA)>
+
+<!-- all builds that the server knows of -->
+<!ELEMENT RMReply_all-builds (RMReply_all-builds_E*)>
+
+
+<!ELEMENT RMReply_all-builds_E (#PCDATA)>
+
+<!-- remapped locations -->
+<!ELEMENT Remap-result (Seq-loc*)>
+

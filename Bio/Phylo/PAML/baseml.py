@@ -3,9 +3,6 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 import os
 import os.path
 from _paml import Paml, _relpath

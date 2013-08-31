@@ -117,8 +117,8 @@ if __name__ == '__main__':
 #         print test.frame1(s[i:])
     #print s
     #print test.complement(s)
-    print '============================================================'
-    print test.gcframe(s)
+    print('============================================================')
+    print(test.gcframe(s))
 
 #     for i in Translate.unambiguous_dna_by_id.keys():
 #         print Translate.unambiguous_dna_by_id[i].table.names[0]

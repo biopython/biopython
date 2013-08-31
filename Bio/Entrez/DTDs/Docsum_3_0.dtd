@@ -1,0 +1,17 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "docsum.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 07/01/2008 23:08:13
+     ============================================ -->
+
+<!-- Docsum_3_0.dtd
+  This file is built from a series of basic modules.
+  The actual ELEMENT and ENTITY declarations are in the modules.
+  This file is used to put them together.
+-->
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % Docsum_3_0_module PUBLIC "-//NCBI//Docsum 3 0 Module//EN" "Docsum_3_0.mod.dtd">
+%Docsum_3_0_module;

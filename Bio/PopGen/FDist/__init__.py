@@ -7,7 +7,9 @@
 """
 This module provides code to work with FDist.
 
-See http://www.rubic.rdg.ac.uk/~mab/software.html .
+See http://www.rubic.rdg.ac.uk/~mab/software.html (old) and
+http://www.maths.bris.ac.uk/~mamab/ (new) for downloading the
+FDist tool by Mark Beaumont.
 
 Classes:
 Record           Holds FDist data.

@@ -235,7 +235,7 @@ class Scop(object):
                 records = Hie.parse(hie_handle)
                 for record in records:
                     if record.sunid not in sunidDict:
-                        print record.sunid
+                        print(record.sunid)
 
                     n = sunidDict[record.sunid]
 
@@ -895,6 +895,6 @@ def _open(cgi, params={}, get=1):
             handle = urllib2.urlopen(cgi)
         else:    # do a POST
             handle = urllib2.urlopen(cgi, data=options)
-    except urllib2.HTTPError, exception:
+    except urllib2.HTTPError as exception:
         raise exception
     return handle

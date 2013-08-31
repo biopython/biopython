@@ -22,7 +22,7 @@ file_a_vs_b = "af063097_v_b132222.crunch"
 
 for f in [file_a, file_b, file_a_vs_b]:
     if not os.path.isfile(os.path.join(input_folder, f)):
-        print "Missing input file %s.fna" % f
+        print("Missing input file %s.fna" % f)
         sys.exit(1)
 
 #Only doing a_vs_b here, could also have b_vs_c and c_vs_d etc
@@ -46,7 +46,7 @@ for f, format in genomes:
                                      greytrack=True, greytrack_labels=0)
     feature_sets[f] = tracks[f].new_set()
 
-print "Drawing matches..."
+print("Drawing matches...")
 for i, crunch_file in enumerate(comparisons):
     q = genomes[i+1][0]  # query file
     s = genomes[i][0]  # subject file
@@ -96,7 +96,7 @@ for i, crunch_file in enumerate(comparisons):
         #Note ACT puts long hits at the back, and colours by hit score
     handle.close()
 
-print "Drawing CDS features..."
+print("Drawing CDS features...")
 for f, format in genomes:
     record = records[f]
     feature_set = feature_sets[f]

@@ -209,12 +209,12 @@ if __name__ == '__main__':
 
     # Test code
     gdct = ColorTranslator()
-    print gdct.float1_color((0.5, 0.5, 0.5))
-    print gdct.int255_color((1, 75, 240))
-    print gdct.artemis_color(7)
-    print gdct.scheme_color(2)
+    print(gdct.float1_color((0.5, 0.5, 0.5)))
+    print(gdct.int255_color((1, 75, 240)))
+    print(gdct.artemis_color(7))
+    print(gdct.scheme_color(2))
 
-    print gdct.translate((0.5, 0.5, 0.5))
-    print gdct.translate((1, 75, 240))
-    print gdct.translate(7)
-    print gdct.translate(2)
+    print(gdct.translate((0.5, 0.5, 0.5)))
+    print(gdct.translate((1, 75, 240)))
+    print(gdct.translate(7))
+    print(gdct.translate(2))

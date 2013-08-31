@@ -324,22 +324,22 @@ if __name__=="__main__":
 
     hse=HSExposureCA(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
-        print l
+        print(l)
     print
 
     hse=HSExposureCB(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
-        print l
+        print(l)
     print
 
     hse=ExposureCN(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
-        print l
+        print(l)
     print
 
     for c in model:
         for r in c:
             try:
-                print r.xtra['PCB_CB_ANGLE']
+                print(r.xtra['PCB_CB_ANGLE'])
             except:
                 pass

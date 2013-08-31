@@ -182,7 +182,7 @@ class DataHandler(object):
             raise IOError("Can't parse a closed handle")
         try:
             self.parser.ParseFile(handle)
-        except expat.ExpatError, e:
+        except expat.ExpatError as e:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, so we can be sure that
                 # we are parsing XML data. Most likely, the XML file is
@@ -235,7 +235,7 @@ class DataHandler(object):
 
             try:
                 self.parser.Parse(text, False)
-            except expat.ExpatError, e:
+            except expat.ExpatError as e:
                 if self.parser.StartElementHandler:
                     # We saw the initial <!xml declaration, so we can be sure
                     # that we are parsing XML data. Most likely, the XML file
@@ -513,7 +513,7 @@ Alternatively, you can save %s in the directory
 Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
 
 Please also inform the Biopython developers about this missing DTD, by
-reporting a bug on http://redmine.open-bio.org/projects/biopython or sign
+reporting a bug on https://github.com/biopython/biopython/issues or sign
 up to our mailing list and emailing us, so that we can include it with the
 next release of Biopython.
 

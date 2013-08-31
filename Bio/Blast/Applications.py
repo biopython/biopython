@@ -379,7 +379,7 @@ class RpsBlastCommandline(_BlastCommandLine):
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     are replacing the old rpsblast with a new version of the same name plus a
     second tool rpstblastn, both taking different command line arguments. This
-    module provides NcbirpsblastCommandline and NcbirpsblasntCommandline as
+    module provides NcbirpsblastCommandline and NcbirpsblastCommandline as
     wrappers for the new tools.
 
     Like the old rpsblast (and blastall), this wrapper is now obsolete, and will
@@ -980,14 +980,15 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     equate=False),
             _Option(["-comp_based_stats", "comp_based_stats"],
                     """Use composition-based statistics for blastp, blastx, or tblastn:
-                        D or d: default (equivalent to 2 )
-                        0 or F or f: no composition-based statistics
-                        1: Composition-based statistics as in NAR 29:2994-3005, 2001
-                        2 or T or t : Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-                        3: Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
 
-                        For programs other than tblastn, must either be absent or be D, F or 0
-                        Default = `2'
+                    D or d: default (equivalent to 2 )
+                    0 or F or f: no composition-based statistics
+                    1: Composition-based statistics as in NAR 29:2994-3005, 2001
+                    2 or T or t : Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                    3: Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
+
+                    For programs other than tblastn, must either be absent or be D, F or 0
+                    Default = `2'
                     """,
                     equate=False),
             #Query filtering options:
@@ -1325,6 +1326,22 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
 
                     Incompatible with: culling_limit.""",
                     equate=False),
+            #General search options:
+            _Option(["-comp_based_stats", "comp_based_stats"],
+                    """Use composition-based statistics.
+
+                    D or d: default (equivalent to 0 )
+                    0 or F or f: Simplified Composition-based statistics as in
+                                 Bioinformatics 15:1000-1011, 1999
+                    1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
+
+                    Default = `0'
+                    """,
+                    checker_function=lambda value : value in "Dd0Ff1Tt",
+                    equate=False),
+            #Misc options:
+            _Switch(["-use_sw_tback", "use_sw_tback"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 

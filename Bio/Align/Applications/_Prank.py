@@ -82,9 +82,15 @@ class PrankCommandline(AbstractCommandline):
                     "7. Fitch      	17. PAUP/NEXUS",
                     checker_function=lambda x: x in OUTPUT_FORMAT_VALUES),
             _Switch(["-noxml", "noxml"],
-                    "Do not output XML files"),
+                    "Do not output XML files "
+                    "(PRANK versions earlier than v.120626)"),
             _Switch(["-notree", "notree"],
-                    "Do not output dnd tree files"),
+                    "Do not output dnd tree files "
+                    "(PRANK versions earlier than v.120626)"),
+            _Switch(["-showxml", "showxml"],
+                    "Output XML files (PRANK v.120626 and later)"),
+            _Switch(["-showtree", "showtree"],
+                    "Output dnd tree files (PRANK v.120626 and later)"),
             _Switch(["-shortnames", "shortnames"],
                     "Truncate names at first space"),
             _Switch(["-quiet", "quiet"],
@@ -199,10 +205,10 @@ class PrankCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running modules doctests..."
+    print("Running modules doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

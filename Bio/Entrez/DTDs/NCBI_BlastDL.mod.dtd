@@ -1,0 +1,138 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "blastdb.asn"
+     ::DATATOOL:: by application DATATOOL version 2.3.1
+     ::DATATOOL:: on 07/15/2011 23:04:47
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-BlastDL"
+================================================= -->
+
+<!--
+$Id: blastdb.asn 311249 2011-07-11 14:12:16Z camacho $
+
+ Notes:
+
+ taxonomy: an integer is proposed, which would require some sort of 
+ table (or network connection) to do the conversions from integer 
+ to various names.  This could save quite a bit of space for databases 
+ that are predominantly of one organism (e.g., human in htgs).
+ I've proposed here that table contain scientific-, common-, and 
+ blast-names at the advice of Scott Federhen.  Scott also was in 
+ favor of having the complete lineage in the file, but it seems like 
+ this would be seldom used and we could have a view with a link back 
+ to the taxonomy page for anyone needing it. Since one file would 
+ suffice for all blast databases, it seems like this should be a new file.
+
+ memberships: a sequence of integers is proposed.  Each bit of an integer 
+ would indicate membership in some (virtual) blast database (e.g., pdb, 
+ swissprot) or some classification (e.g., mRNA, genomic).
+
+ links: a sequence of integers is proposed.  Each bit of an integer would 
+ indicate a link that could be established based upon the gi of the 
+ database sequence.
+
+-->
+
+<!-- Elements used by other modules:
+          Blast-def-line-set,
+          Blast-def-line -->
+
+<!-- Elements referenced from other modules:
+          Seq-id,
+          Seq-loc FROM NCBI-Seqloc -->
+<!-- ============================================ -->
+
+<!-- all deflines for an entry -->
+<!ELEMENT Blast-def-line-set (Blast-def-line*)>
+
+
+<!ELEMENT Blast-def-line (
+        Blast-def-line_title?, 
+        Blast-def-line_seqid, 
+        Blast-def-line_taxid?, 
+        Blast-def-line_memberships?, 
+        Blast-def-line_links?, 
+        Blast-def-line_other-info?)>
+
+<!-- simple title -->
+<!ELEMENT Blast-def-line_title (#PCDATA)>
+
+<!-- Regular NCBI Seq-Id -->
+<!ELEMENT Blast-def-line_seqid (Seq-id*)>
+
+<!-- taxonomy id -->
+<!ELEMENT Blast-def-line_taxid (%INTEGER;)>
+
+<!-- bit arrays -->
+<!ELEMENT Blast-def-line_memberships (Blast-def-line_memberships_E*)>
+
+
+<!ELEMENT Blast-def-line_memberships_E (%INTEGER;)>
+
+<!-- DEPRECATED, replaced by LinkoutDB -->
+<!ELEMENT Blast-def-line_links (Blast-def-line_links_E*)>
+
+
+<!ELEMENT Blast-def-line_links_E (%INTEGER;)>
+
+<!-- for future use (probably genomic sequences) -->
+<!ELEMENT Blast-def-line_other-info (Blast-def-line_other-info_E*)>
+
+
+<!ELEMENT Blast-def-line_other-info_E (%INTEGER;)>
+
+<!--
+ This defines the possible sequence filtering algorithms to be used in a
+ BLAST database
+-->
+<!ELEMENT Blast-filter-program (%INTEGER;)>
+<!ATTLIST Blast-filter-program value (
+        not-set |
+        dust |
+        seg |
+        windowmasker |
+        repeat |
+        other |
+        max
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Blast-mask-list (
+        Blast-mask-list_masks, 
+        Blast-mask-list_more)>
+
+<!-- masks for a single sequence should be grouped in a Packed-seqint -->
+<!ELEMENT Blast-mask-list_masks (Seq-loc*)>
+
+<!--
+ as of 01/21/2010, this field is set to false always, indicating that the
+ entire object (set of Seq-loc) is contained in this object
+-->
+<!ELEMENT Blast-mask-list_more EMPTY>
+<!ATTLIST Blast-mask-list_more value ( true | false ) #REQUIRED >
+
+
+<!-- Defines the masking information for a set of sequences -->
+<!ELEMENT Blast-db-mask-info (
+        Blast-db-mask-info_algo-id, 
+        Blast-db-mask-info_algo-program, 
+        Blast-db-mask-info_algo-options, 
+        Blast-db-mask-info_masks)>
+
+<!ELEMENT Blast-db-mask-info_algo-id (%INTEGER;)>
+<!--
+ This defines the possible sequence filtering algorithms to be used in a
+ BLAST database
+-->
+<!ELEMENT Blast-db-mask-info_algo-program (Blast-filter-program)>
+
+<!ELEMENT Blast-db-mask-info_algo-options (#PCDATA)>
+
+<!--
+ This object was originally created to allow pagination of the sequence
+ masks, but this feature was discontinued in 01/21/2010
+-->
+<!ELEMENT Blast-db-mask-info_masks (Blast-mask-list)>
+

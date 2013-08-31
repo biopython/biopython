@@ -1205,7 +1205,8 @@ class CompoundLocation(object):
         parts = [loc.extract(parent_sequence) for loc in self.parts]
         #We use addition rather than a join to avoid alphabet issues:
         f_seq = parts[0]
-        for part in parts[1:] : f_seq += part
+        for part in parts[1:]:
+            f_seq += part
         return f_seq
 
 

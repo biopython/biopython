@@ -625,7 +625,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def residue_type(self, type):
         """Record the sequence type so we can choose an appropriate alphabet.
         """
-        self._seq_type = type
+        self._seq_type = type.strip()
 
     def data_file_division(self, division):
         self.data.annotations['data_file_division'] = division
@@ -1041,9 +1041,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     ref = None
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
-                except ValueError, err:
-                    print location_line
-                    print part
+                except ValueError as err:
+                    print(location_line)
+                    print(part)
                     raise err
                 f = SeqFeature.SeqFeature(location=loc, ref=ref,
                         location_operator=cur_feature.location_operator,
@@ -1090,9 +1090,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         # Hack to try to preserve historical behaviour of /pseudo etc
         if value is None:
+            # if the key doesn't exist yet, add an empty string
             if key not in self._cur_feature.qualifiers:
                 self._cur_feature.qualifiers[key] = [""]
                 return
+            # otherwise just skip this key
+            return
 
         value = value.replace('"', '')
         if self._feature_cleaner is not None:
@@ -1510,21 +1513,21 @@ def _test():
     import doctest
     import os
     if os.path.isdir(os.path.join("..","..","Tests")):
-        print "Running doctests..."
+        print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
     elif os.path.isdir(os.path.join("Tests")):
-        print "Running doctests..."
+        print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
 
 if __name__ == "__main__":
     _test()

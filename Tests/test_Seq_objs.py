@@ -301,7 +301,7 @@ class StringMethodTests(unittest.TestCase):
                     for step in range(-3,4):
                         if step == 0:
                             try:
-                                print example1[i:j:step]
+                                print(example1[i:j:step])
                                 self._assert(False)  # Should fail!
                             except ValueError:
                                 pass
@@ -345,7 +345,7 @@ class StringMethodTests(unittest.TestCase):
                 continue
             try :
                 comp = example1.complement()
-            except ValueError, e:
+            except ValueError as e:
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
@@ -373,7 +373,7 @@ class StringMethodTests(unittest.TestCase):
                 continue
             try :
                 comp = example1.reverse_complement()
-            except ValueError, e:
+            except ValueError as e:
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
@@ -401,7 +401,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 try :
                     tran = example1.transcribe()
-                except ValueError, e:
+                except ValueError as e:
                     if str(e) == "Proteins cannot be transcribed!":
                         continue
                     if str(e) == "RNA cannot be transcribed!":
@@ -422,7 +422,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 try :
                     tran = example1.back_transcribe()
-                except ValueError, e:
+                except ValueError as e:
                     if str(e) == "Proteins cannot be back transcribed!":
                         continue
                     if str(e) == "DNA cannot be back transcribed!":
@@ -443,13 +443,13 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 try :
                     tran = example1.translate()
-                except ValueError, e:
+                except ValueError as e:
                     if str(e) == "Proteins cannot be translated!":
                         continue
                     raise e
                 #This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:
-                    print tran.alphabet
+                    print(tran.alphabet)
                     self.assertTrue(False)
                 #TODO - check the actual translation, and all the optional args
 
@@ -503,7 +503,7 @@ class StringMethodTests(unittest.TestCase):
                         Seq(codon, generic_dna),
                         Seq(codon, unambiguous_dna)]:
                 try :
-                    print nuc.translate()
+                    print(nuc.translate())
                     self.assertTrue(False, "Transating %s should fail" % codon)
                 except TranslationError :
                     pass

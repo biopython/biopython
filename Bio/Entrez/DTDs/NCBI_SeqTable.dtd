@@ -1,0 +1,86 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqtable.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 04/26/2010 23:04:43
+     ============================================ -->
+
+<!-- NCBI_SeqTable.dtd
+  This file is built from a series of basic modules.
+  The actual ELEMENT and ENTITY declarations are in the modules.
+  This file is used to put them together.
+-->
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % EMBL_General_module PUBLIC "-//NCBI//EMBL General Module//EN" "EMBL_General.mod.dtd">
+%EMBL_General_module;
+
+<!ENTITY % GenBank_General_module PUBLIC "-//NCBI//GenBank General Module//EN" "GenBank_General.mod.dtd">
+%GenBank_General_module;
+
+<!ENTITY % NCBI_Biblio_module PUBLIC "-//NCBI//NCBI Biblio Module//EN" "NCBI_Biblio.mod.dtd">
+%NCBI_Biblio_module;
+
+<!ENTITY % NCBI_BioSource_module PUBLIC "-//NCBI//NCBI BioSource Module//EN" "NCBI_BioSource.mod.dtd">
+%NCBI_BioSource_module;
+
+<!ENTITY % NCBI_Gene_module PUBLIC "-//NCBI//NCBI Gene Module//EN" "NCBI_Gene.mod.dtd">
+%NCBI_Gene_module;
+
+<!ENTITY % NCBI_General_module PUBLIC "-//NCBI//NCBI General Module//EN" "NCBI_General.mod.dtd">
+%NCBI_General_module;
+
+<!ENTITY % NCBI_Medline_module PUBLIC "-//NCBI//NCBI Medline Module//EN" "NCBI_Medline.mod.dtd">
+%NCBI_Medline_module;
+
+<!ENTITY % NCBI_Organism_module PUBLIC "-//NCBI//NCBI Organism Module//EN" "NCBI_Organism.mod.dtd">
+%NCBI_Organism_module;
+
+<!ENTITY % NCBI_Protein_module PUBLIC "-//NCBI//NCBI Protein Module//EN" "NCBI_Protein.mod.dtd">
+%NCBI_Protein_module;
+
+<!ENTITY % NCBI_Pub_module PUBLIC "-//NCBI//NCBI Pub Module//EN" "NCBI_Pub.mod.dtd">
+%NCBI_Pub_module;
+
+<!ENTITY % NCBI_RNA_module PUBLIC "-//NCBI//NCBI RNA Module//EN" "NCBI_RNA.mod.dtd">
+%NCBI_RNA_module;
+
+<!ENTITY % NCBI_Rsite_module PUBLIC "-//NCBI//NCBI Rsite Module//EN" "NCBI_Rsite.mod.dtd">
+%NCBI_Rsite_module;
+
+<!ENTITY % NCBI_SeqTable_module PUBLIC "-//NCBI//NCBI SeqTable Module//EN" "NCBI_SeqTable.mod.dtd">
+%NCBI_SeqTable_module;
+
+<!ENTITY % NCBI_Seqalign_module PUBLIC "-//NCBI//NCBI Seqalign Module//EN" "NCBI_Seqalign.mod.dtd">
+%NCBI_Seqalign_module;
+
+<!ENTITY % NCBI_Seqfeat_module PUBLIC "-//NCBI//NCBI Seqfeat Module//EN" "NCBI_Seqfeat.mod.dtd">
+%NCBI_Seqfeat_module;
+
+<!ENTITY % NCBI_Seqloc_module PUBLIC "-//NCBI//NCBI Seqloc Module//EN" "NCBI_Seqloc.mod.dtd">
+%NCBI_Seqloc_module;
+
+<!ENTITY % NCBI_Seqres_module PUBLIC "-//NCBI//NCBI Seqres Module//EN" "NCBI_Seqres.mod.dtd">
+%NCBI_Seqres_module;
+
+<!ENTITY % NCBI_Sequence_module PUBLIC "-//NCBI//NCBI Sequence Module//EN" "NCBI_Sequence.mod.dtd">
+%NCBI_Sequence_module;
+
+<!ENTITY % NCBI_TxInit_module PUBLIC "-//NCBI//NCBI TxInit Module//EN" "NCBI_TxInit.mod.dtd">
+%NCBI_TxInit_module;
+
+<!ENTITY % NCBI_Variation_module PUBLIC "-//NCBI//NCBI Variation Module//EN" "NCBI_Variation.mod.dtd">
+%NCBI_Variation_module;
+
+<!ENTITY % PDB_General_module PUBLIC "-//NCBI//PDB General Module//EN" "PDB_General.mod.dtd">
+%PDB_General_module;
+
+<!ENTITY % PIR_General_module PUBLIC "-//NCBI//PIR General Module//EN" "PIR_General.mod.dtd">
+%PIR_General_module;
+
+<!ENTITY % PRF_General_module PUBLIC "-//NCBI//PRF General Module//EN" "PRF_General.mod.dtd">
+%PRF_General_module;
+
+<!ENTITY % SP_General_module PUBLIC "-//NCBI//SP General Module//EN" "SP_General.mod.dtd">
+%SP_General_module;

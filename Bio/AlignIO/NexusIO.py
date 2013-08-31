@@ -137,9 +137,9 @@ class NexusWriter(AlignmentWriter):
 
 if __name__ == "__main__":
     from StringIO import StringIO
-    print "Quick self test"
+    print("Quick self test")
     print
-    print "Repeated names without a TAXA block"
+    print("Repeated names without a TAXA block")
     handle = StringIO("""#NEXUS
     [TITLE: NoName]
 
@@ -156,13 +156,13 @@ if __name__ == "__main__":
     end; 
     """)
     for a in NexusIterator(handle):
-        print a
+        print(a)
         for r in a:
             print repr(r.seq), r.name, r.id
-    print "Done"
+    print("Done")
 
     print
-    print "Repeated names with a TAXA block"
+    print("Repeated names with a TAXA block")
     handle = StringIO("""#NEXUS
     [TITLE: NoName]
 
@@ -186,21 +186,21 @@ if __name__ == "__main__":
     end; 
     """)
     for a in NexusIterator(handle):
-        print a
+        print(a)
         for r in a:
             print repr(r.seq), r.name, r.id
-    print "Done"
+    print("Done")
     print
-    print "Reading an empty file"
+    print("Reading an empty file")
     assert 0 == len(list(NexusIterator(StringIO())))
-    print "Done"
+    print("Done")
     print
-    print "Writing..."
+    print("Writing...")
 
     handle = StringIO()
     NexusWriter(handle).write_file([a])
     handle.seek(0)
-    print handle.read()
+    print(handle.read())
 
     handle = StringIO()
     try:

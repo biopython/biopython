@@ -284,7 +284,7 @@ class FragmentMapper(object):
                         index=i-self.edge
                         assert(index>=0)
                         fd[res]=mflist[index]
-            except PDBException, why:
+            except PDBException as why:
                 if why == 'CHAINBREAK':
                     # Funny polypeptide - skip
                     pass
@@ -333,6 +333,6 @@ if __name__=="__main__":
 
         print r,
         if r in fm:
-            print fm[r]
+            print(fm[r])
         else:
             print

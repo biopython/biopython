@@ -18,6 +18,7 @@ from Bio.Blast import Applications
 
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
+          "rpsblast+", #For Debian
           "rpsblast", "rpstblastn", "psiblast", "blast_formatter"]
 exe_names = {}
 
@@ -60,6 +61,12 @@ for folder in likely_dirs:
         #else :
         #    print "Rejecting", exe_name
         del exe_name, name
+
+#To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias
+wanted.remove("rpsblast+")
+if "rpsblast+" in exe_names:
+    exe_names["rpsblast"] = exe_names["rpsblast+"]
+    del exe_names["rpsblast+"]
 
 #We can cope with blast_formatter being missing, only added in BLAST 2.2.24+
 if len(set(exe_names).difference(["blast_formatter"])) < len(wanted)-1 :
@@ -220,7 +227,7 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-msa_master_idx" in extra and exe_name=="psiblast":
             #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-msa_master_idx")
-        if exe_name=="rpsblast":
+        if exe_name == "rpsblast":
             #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-best_hit_overhang",
                                       "-best_hit_score_edge",
@@ -228,13 +235,19 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
-        if exe_name=="blastx":
+        if "-ignore_msa_master" in extra and exe_name=="psiblast":
+            #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
+            extra.remove("-ignore_msa_master")                                        
+        if exe_name == "blastx":
             #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-comp_based_stats",
                                       "-use_sw_tback"])
         if exe_name in ["blastx", "tblastn"]:
             #Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
             extra = extra.difference(["-frame_shift_penalty"])
+        if exe_name == "rpsblast":
+            #New in BLAST 2.2.28+ so will look like extra args on old BLAST:
+            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
 
         if extra or missing:
             import warnings

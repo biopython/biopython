@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqtable.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 08/02/2010 23:05:14
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 01/23/2013 23:05:37
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 115504 $
+$Revision: 386776 $
   
 
 
@@ -334,7 +334,7 @@ $Revision: 115504 $
         SeqTable-sparse-index_indexes | 
         SeqTable-sparse-index_bit-set)>
 
-<!-- indexed of rows with values -->
+<!-- indexes of rows with values -->
 <!ELEMENT SeqTable-sparse-index_indexes (SeqTable-sparse-index_indexes_E*)>
 
 

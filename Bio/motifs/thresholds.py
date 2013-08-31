@@ -15,7 +15,7 @@ class ScoreDistribution(object):
     thresholds for motif occurences.
     """
     def __init__(self, motif=None, precision=10**3, pssm=None, background=None):
-        if pssm==None:
+        if pssm is None:
             self.min_score = min(0.0, motif.min_score())
             self.interval = max(0.0, motif.max_score())-self.min_score
             self.n_points = precision * motif.length
@@ -30,7 +30,7 @@ class ScoreDistribution(object):
         self.mo_density[-self._index_diff(self.min_score)] = 1.0
         self.bg_density = [0.0]*self.n_points
         self.bg_density[-self._index_diff(self.min_score)] = 1.0
-        if pssm==None:
+        if pssm is None:
             for lo,mo in zip(motif.log_odds(),motif.pwm()):
                 self.modify(lo,mo,motif.background)
         else:

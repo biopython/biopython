@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "entrezgene.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 08/02/2010 23:05:14
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 02/14/2013 23:04:00
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 158408 $ 
+$Revision: 389081 $ 
 ********************************************************************** 
  
   NCBI Entrezgene 
@@ -158,7 +158,7 @@ $Revision: 158408 $
 <!--
     secondary	-  synonym with merged
     discontinued	-  'deleted', still index and display to public
-    newentry	-   for GeneRif submission
+    newentry	-   for GeneRif submission (DEPRECATED)
 -->
 <!ATTLIST Gene-track_status value (
         live |

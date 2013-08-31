@@ -86,7 +86,7 @@ class GraphData(object):
     """
     def __init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen,
-                 center=None, colour=None, altcolour=None, centre=None):
+                 center=None, colour=None, altcolour=None):
         """__init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen)
 
@@ -107,8 +107,7 @@ class GraphData(object):
                        values (some styles only) (overridden by backwards
                        compatible argument with UK spelling, colour).
 
-            o center Value at which x-axis crosses y-axis (overridden by
-                     backwards comparible argument with UK spelling, centre).
+            o center Value at which x-axis crosses y-axis.
 
         """
 
@@ -117,8 +116,6 @@ class GraphData(object):
             color = colour
         if altcolour is not None:
             altcolor = altcolour
-        if centre is not None:
-            center = centre
 
         self.id = id            # Unique identifier for the graph
         self.data = {}          # holds values, keyed by sequence position
@@ -132,13 +129,6 @@ class GraphData(object):
         self.negcolor = altcolor  # Color to draw 'low' values
         self.linewidth = 2          # linewidth to use in line graphs
         self.center = center        # value at which x-axis crosses y-axis
-
-    @property
-    def centre(self):
-        """Backwards compatible alias for center (DEPRECATED)."""
-        warnings.warn("The .centre attribute is deprecated, use .center instead",
-                      Bio.BiopythonDeprecationWarning)
-        return self.center
 
     def set_data(self, data):
         """ set_data(self, data)

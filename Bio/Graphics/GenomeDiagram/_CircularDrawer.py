@@ -1408,6 +1408,9 @@ class CircularDrawer(AbstractDrawer):
         if head_length_ratio and tail_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle*0.5), startangle)
             tailangle = min(startangle + min(height*tail_length_ratio/(center*teeth), angle*0.5), endangle)
+            #With very small features, can due to floating point calculations
+            #violate the assertion below that start <= tail <= head <= end
+            tailangle = min(tailangle, headangle)
         elif head_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle), startangle)
             tailangle = startangle

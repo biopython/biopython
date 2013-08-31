@@ -33,7 +33,7 @@ def _extract(handle):
         line = handle.readline()
         if not line:
             if lines:
-                print "".join(lines[:30])
+                print("".join(lines[:30]))
                 raise ValueError("Didn't find end of test starting: %r", lines[0])
             else:
                 raise ValueError("Didn't find end of test!")
@@ -159,13 +159,13 @@ class TutorialTestCase(unittest.TestCase):
 #This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
     if missing_deps:
-        print "Skipping tests needing the following:"
+        print("Skipping tests needing the following:")
         for dep in sorted(missing_deps):
-            print " - %s" % dep
-    print "Running Tutorial doctests..."
+            print(" - %s" % dep)
+    print("Running Tutorial doctests...")
     import doctest
     tests = doctest.testmod()
     if tests[0]:
         #Note on Python 2.5+ can use tests.failed rather than tests[0]
         raise RuntimeError("%i/%i tests failed" % tests)
-    print "Tests done"
+    print("Tests done")

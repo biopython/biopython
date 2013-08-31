@@ -433,20 +433,6 @@ class AbstractDrawer(object):
         else:
             self.cross_track_links = cross_track_links
 
-    @property
-    def xcentre(self):
-        """Backwards compatible alias for xcenter (DEPRECATED)"""
-        warnings.warn("The .xcentre attribute is deprecated, use .xcenter instead",
-                      Bio.BiopythonDeprecationWarning)
-        return self.xcenter
-
-    @property
-    def ycentre(self):
-        """Backwards compatible alias for ycenter (DEPRECATED)"""
-        warnings.warn("The .ycentre attribute is deprecated, use .ycenter instead",
-                      Bio.BiopythonDeprecationWarning)
-        return self.ycenter
-
     def set_page_size(self, pagesize, orientation):
         """ set_page_size(self, pagesize, orientation)
 

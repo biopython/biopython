@@ -1,0 +1,271 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "mla.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 11/02/2010 23:04:52
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-MedArchive"
+================================================= -->
+
+<!--
+$Revision: 209893 $
+********************************************************************
+
+  Network MEDLINE Archive message formats
+  Ostell 1993
+
+
+*********************************************************************
+
+  mla.asn
+
+     messages for medline archive data access
+
+*********************************************************************
+-->
+
+<!-- Elements referenced from other modules:
+          Medline-entry FROM NCBI-Medline,
+          Medlars-entry FROM NCBI-Medlars,
+          Pubmed-entry FROM NCBI-PubMed,
+          Medline-si FROM NCBI-Medline,
+          Pub FROM NCBI-Pub,
+          Title,
+          PubMedId FROM NCBI-Biblio -->
+<!-- ============================================ -->
+
+<!--
+**********************************
+ requests
+
+-->
+<!ELEMENT Mla-request (
+        Mla-request_init | 
+        Mla-request_getmle | 
+        Mla-request_getpub | 
+        Mla-request_gettitle | 
+        Mla-request_citmatch | 
+        Mla-request_fini | 
+        Mla-request_getmriuids | 
+        Mla-request_getaccuids | 
+        Mla-request_uidtopmid | 
+        Mla-request_pmidtouid | 
+        Mla-request_getmlepmid | 
+        Mla-request_getpubpmid | 
+        Mla-request_citmatchpmid | 
+        Mla-request_getmripmids | 
+        Mla-request_getaccpmids | 
+        Mla-request_citlstpmids | 
+        Mla-request_getmleuid | 
+        Mla-request_getmlrpmid | 
+        Mla-request_getmlruid)>
+
+<!-- DlInit -->
+<!ELEMENT Mla-request_init EMPTY>
+
+<!-- get MedlineEntry -->
+<!ELEMENT Mla-request_getmle (%INTEGER;)>
+
+<!-- get citation by muid -->
+<!ELEMENT Mla-request_getpub (%INTEGER;)>
+
+<!-- match titles -->
+<!ELEMENT Mla-request_gettitle (Title-msg)>
+
+<!-- -->
+<!ELEMENT Mla-request_citmatch (Pub)>
+
+<!-- DlFini -->
+<!ELEMENT Mla-request_fini EMPTY>
+
+<!-- Get MUIDs for an MRI -->
+<!ELEMENT Mla-request_getmriuids (%INTEGER;)>
+
+<!-- Get MUIDs for an Accessions -->
+<!ELEMENT Mla-request_getaccuids (Medline-si)>
+
+<!-- get PMID for MUID -->
+<!ELEMENT Mla-request_uidtopmid (%INTEGER;)>
+
+<!-- get MUID for PMID -->
+<!ELEMENT Mla-request_pmidtouid (PubMedId)>
+
+<!-- get MedlineEntry by PubMed id -->
+<!ELEMENT Mla-request_getmlepmid (PubMedId)>
+
+<!-- get citation by PubMed id -->
+<!ELEMENT Mla-request_getpubpmid (PubMedId)>
+
+<!-- citation match, PMID on out -->
+<!ELEMENT Mla-request_citmatchpmid (Pub)>
+
+<!-- get PMIDs for an MRI -->
+<!ELEMENT Mla-request_getmripmids (%INTEGER;)>
+
+<!-- get PMIDs for an Accessions -->
+<!ELEMENT Mla-request_getaccpmids (Medline-si)>
+
+<!-- generate list of PMID for Pub -->
+<!ELEMENT Mla-request_citlstpmids (Pub)>
+
+<!-- get MedlineEntry by Medline id -->
+<!ELEMENT Mla-request_getmleuid (%INTEGER;)>
+
+<!-- get MedlarsEntry by PubMed id -->
+<!ELEMENT Mla-request_getmlrpmid (PubMedId)>
+
+<!-- get MedlarsEntry by Medline id -->
+<!ELEMENT Mla-request_getmlruid (%INTEGER;)>
+
+<!--
+**********************************************************************
+
+  if request = all
+	if one row returned
+	   reply=all, return every column
+	else 
+	   reply=ml-jta for each row
+
+  if request = not-set, reply=ml-jta
+
+  otherwise,
+	if request != ml-jta
+	   if column exist, reply=column, else reply=ml-jta
+
+**********************************************************************
+-->
+<!ELEMENT Title-type %ENUM;>
+
+<!--
+    not-set	-  request=ml-jta (default), reply=not-found
+-->
+<!ATTLIST Title-type value (
+        not-set |
+        name |
+        tsub |
+        trans |
+        jta |
+        iso-jta |
+        ml-jta |
+        coden |
+        issn |
+        abr |
+        isbn |
+        all
+        ) #REQUIRED >
+
+
+<!-- Title match request/response -->
+<!ELEMENT Title-msg (
+        Title-msg_type, 
+        Title-msg_title)>
+
+<!-- type to get, or type returned -->
+<!ELEMENT Title-msg_type (Title-type)>
+
+<!-- title(s) to look up, or title(s) found -->
+<!ELEMENT Title-msg_title (Title)>
+
+
+<!ELEMENT Title-msg-list (
+        Title-msg-list_num, 
+        Title-msg-list_titles)>
+
+<!-- number of titles -->
+<!ELEMENT Title-msg-list_num (%INTEGER;)>
+
+<!ELEMENT Title-msg-list_titles (Title-msg*)>
+
+
+<!ELEMENT Error-val %ENUM;>
+
+<!--
+    not-found	-  Entry was not found
+    operational-error	-  A run-time operation error was occurred
+    cannot-connect-jrsrv	-  Cannot connect to Journal server
+    cannot-connect-pmdb	-  Cannot connect to PubMed
+    journal-not-found	-  Journal title not found
+    citation-not-found	-  Volume, Page and Author do not match any
+         article
+    citation-ambiguous	-  More than one article found
+    citation-too-many	-  Too many article was found
+    cannot-connect-searchbackend-jrsrv	-  Cannot connect to searchbackend Journals db
+    cannot-connect-searchbackend-pmdb	-  Cannot connect to searchbackend PubMed db
+    cannot-connect-docsumbackend	-  Cannot connect to docsumbackend
+-->
+<!ATTLIST Error-val value (
+        not-found |
+        operational-error |
+        cannot-connect-jrsrv |
+        cannot-connect-pmdb |
+        journal-not-found |
+        citation-not-found |
+        citation-ambiguous |
+        citation-too-many |
+        cannot-connect-searchbackend-jrsrv |
+        cannot-connect-searchbackend-pmdb |
+        cannot-connect-docsumbackend
+        ) #REQUIRED >
+
+
+
+<!ELEMENT Mla-back (
+        Mla-back_init | 
+        Mla-back_error | 
+        Mla-back_getmle | 
+        Mla-back_getpub | 
+        Mla-back_gettitle | 
+        Mla-back_citmatch | 
+        Mla-back_fini | 
+        Mla-back_getuids | 
+        Mla-back_getpmids | 
+        Mla-back_outuid | 
+        Mla-back_outpmid | 
+        Mla-back_getpme | 
+        Mla-back_getmlr)>
+
+<!-- DlInit -->
+<!ELEMENT Mla-back_init EMPTY>
+
+<!-- not found for getmle/getpub/citmatch -->
+<!ELEMENT Mla-back_error (Error-val)>
+
+<!-- got Medline Entry -->
+<!ELEMENT Mla-back_getmle (Medline-entry)>
+
+<!ELEMENT Mla-back_getpub (Pub)>
+
+<!-- match titles -->
+<!ELEMENT Mla-back_gettitle (Title-msg-list)>
+
+<!-- citation lookup muid or 0 -->
+<!ELEMENT Mla-back_citmatch (%INTEGER;)>
+
+<!-- DlFini -->
+<!ELEMENT Mla-back_fini EMPTY>
+
+<!-- got a set of MUIDs -->
+<!ELEMENT Mla-back_getuids (Mla-back_getuids_E*)>
+
+
+<!ELEMENT Mla-back_getuids_E (%INTEGER;)>
+
+<!-- got a set of PMIDs -->
+<!ELEMENT Mla-back_getpmids (Mla-back_getpmids_E*)>
+
+
+<!ELEMENT Mla-back_getpmids_E (%INTEGER;)>
+
+<!-- result muid or 0 if not found -->
+<!ELEMENT Mla-back_outuid (%INTEGER;)>
+
+<!-- result pmid or 0 if not found -->
+<!ELEMENT Mla-back_outpmid (PubMedId)>
+
+<!-- got Pubmed Entry -->
+<!ELEMENT Mla-back_getpme (Pubmed-entry)>
+
+<!-- got Medlars Entry -->
+<!ELEMENT Mla-back_getmlr (Medlars-entry)>
+

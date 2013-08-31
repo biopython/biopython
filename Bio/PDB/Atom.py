@@ -79,7 +79,7 @@ class Atom(object):
             # isdigit() check on last two characters to avoid mis-assignment of
             # hydrogens atoms (GLN HE21 for example)
 
-            if self.fullname[0] != " " and not self.fullname[2:].isdigit():
+            if self.fullname[0].isalpha() and not self.fullname[2:].isdigit():
                 putative_element = self.name.strip()
             else:
                 # Hs may have digit in [0]

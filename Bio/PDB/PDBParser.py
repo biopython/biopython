@@ -5,12 +5,14 @@
 
 """Parser for PDB files."""
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 import warnings
 
-import numpy
+try:
+    import numpy
+except:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use the PDB parser.")
 
 from Bio.File import as_handle
 
@@ -191,7 +193,7 @@ class PDBParser(object):
                 except:
                     self._handle_PDB_exception("Invalid or missing occupancy",
                                                global_line_counter)
-                    occupancy = 0.0  # Is one or zero a good default?
+                    occupancy = None # Rather than arbitrary zero or one
                 try:
                     bfactor = float(line[60:66])
                 except:
@@ -210,20 +212,20 @@ class PDBParser(object):
                     current_resname = resname
                     try:
                         structure_builder.init_residue(resname, hetero_flag, resseq, icode)
-                    except PDBConstructionException, message:
+                    except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)
                 elif current_residue_id != residue_id or current_resname != resname:
                     current_residue_id = residue_id
                     current_resname = resname
                     try:
                         structure_builder.init_residue(resname, hetero_flag, resseq, icode)
-                    except PDBConstructionException, message:
+                    except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)
                 # init atom
                 try:
                     structure_builder.init_atom(name, coord, bfactor, occupancy, altloc,
                                                 fullname, serial_number, element)
-                except PDBConstructionException, message:
+                except PDBConstructionException as message:
                     self._handle_PDB_exception(message, global_line_counter)
             elif record_type == "ANISOU":
                 anisou = map(float, (line[28:35], line[35:42], line[43:49],
@@ -303,7 +305,7 @@ if __name__ == "__main__":
             p = c.get_parent()
             assert(p is m)
             for r in c:
-                print r
+                print(r)
                 p = r.get_parent()
                 assert(p is c)
                 for a in r:
