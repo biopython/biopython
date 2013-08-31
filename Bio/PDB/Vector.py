@@ -327,9 +327,9 @@ if __name__=="__main__":
 
     v4.normalize()
 
-    print v4
+    print(v4)
 
-    print calc_angle(v1, v2, v3)
+    print(calc_angle(v1, v2, v3))
     dih=calc_dihedral(v1, v2, v3, v4)
     # Test dihedral sign
     assert(dih>0)
@@ -338,41 +338,41 @@ if __name__=="__main__":
     ref=refmat(v1, v3)
     rot=rotmat(v1, v3)
 
-    print v3
-    print v1.left_multiply(ref)
-    print v1.left_multiply(rot)
-    print v1.right_multiply(numpy.transpose(rot))
+    print(v3)
+    print(v1.left_multiply(ref))
+    print(v1.left_multiply(rot))
+    print(v1.right_multiply(numpy.transpose(rot)))
 
     # -
-    print v1-v2
-    print v1-1
-    print v1+(1,2,3)
+    print(v1-v2)
+    print(v1-1)
+    print(v1+(1,2,3))
     # +
-    print v1+v2
-    print v1+3
-    print v1-(1,2,3)
+    print(v1+v2)
+    print(v1+3)
+    print(v1-(1,2,3))
     # *
-    print v1*v2
+    print(v1*v2)
     # /
-    print v1/2
-    print v1/(1,2,3)
+    print(v1/2)
+    print(v1/(1,2,3))
     # **
-    print v1**v2
-    print v1**2
-    print v1**(1,2,3)
+    print(v1**v2)
+    print(v1**2)
+    print(v1**(1,2,3))
     # norm
-    print v1.norm()
+    print(v1.norm())
     # norm squared
-    print v1.normsq()
+    print(v1.normsq())
     # setitem
     v1[2]=10
-    print v1
+    print(v1)
     # getitem
-    print v1[2]
+    print(v1[2])
 
-    print numpy.array(v1)
+    print(numpy.array(v1))
 
-    print "ROT"
+    print("ROT")
 
     angle=random()*numpy.pi
     axis=Vector(random(3)-random(3))
@@ -382,6 +382,6 @@ if __name__=="__main__":
 
     cangle, caxis=m2rotaxis(m)
 
-    print angle-cangle
-    print axis-caxis
+    print(angle-cangle)
+    print(axis-caxis)
     print

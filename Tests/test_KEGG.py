@@ -17,11 +17,11 @@ def t_KEGG_Enzyme(testfiles):
     """Tests Bio.KEGG.Enzyme functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Enzyme on " + file + "\n\n"
+        print("Testing Bio.KEGG.Enzyme on " + file + "\n\n")
         records = Enzyme.parse(fh)
         for record in records:
-            print record
-        print "\n"
+            print(record)
+        print("\n")
         fh.close()
 
 
@@ -29,11 +29,11 @@ def t_KEGG_Compound(testfiles):
     """Tests Bio.KEGG.Compound functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Compound on " + file + "\n\n"
+        print("Testing Bio.KEGG.Compound on " + file + "\n\n")
         records = Compound.parse(fh)
         for record in records:
-            print record
-        print "\n"
+            print(record)
+        print("\n")
         fh.close()
 
 
@@ -41,7 +41,7 @@ def t_KEGG_Map(testfiles):
     """Tests Bio.KEGG.Map functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Map on " + file + "\n\n"
+        print("Testing Bio.KEGG.Map on " + file + "\n\n")
         reactions = Map.parse(fh)
         system = System()
         for reaction in reactions:
@@ -56,7 +56,7 @@ def t_KEGG_Map(testfiles):
         #  solution below proves resilient
         rxs.sort(key=lambda x:str(x))
         for x in rxs:
-            print str(x)
+            print(str(x))
         fh.close()
 
 

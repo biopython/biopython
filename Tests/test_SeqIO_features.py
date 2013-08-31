@@ -8,8 +8,6 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-from __future__ import with_statement
-
 import os
 import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
@@ -184,8 +182,10 @@ def make_join_feature(f_list, ftype="misc_feature"):
     else:
         #All forward, or mixed strand
         c_loc = CompoundLocation([f.location for f in f_list])
-    return SeqFeature(c_loc, ftype, sub_features = f_list)
-    #TODO - Don't use sub-features at all in this test
+    answer = SeqFeature(c_loc, ftype)
+    answer._sub_features = f_list #to avoid deprecation warning
+    return answer
+
 
 #Prepare a single GenBank record with one feature with a %s place holder for
 #the feature location
@@ -621,9 +621,14 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(100),100),
                          "complement(join(<61..75,81..>90))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100)._sub_features :
+        for sub_loc in f.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, -1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, -1)
+        for sub_f in tmp._sub_features :
             self.assertEqual(sub_f.strand, -1)
-        self.assertEqual(f._flip(100).strand, -1)
 
         f1 = SeqFeature(FeatureLocation(OneOfPosition(107, [ExactPosition(107),
                                                             ExactPosition(110)]),
@@ -638,9 +643,14 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(200),200),
                          "complement(join((41.51)..55,61..75,81..one-of(90,93)))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100)._sub_features :
-            self.assertEqual(sub_f.strand,-1)
-        self.assertEqual(f._flip(100).strand, -1)
+        for sub_loc in f.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, -1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, -1)
+        for sub_f in tmp._sub_features :
+            self.assertEqual(sub_f.strand, -1)
         self.record.features.append(f)
 
         f1 = SeqFeature(FeatureLocation(BeforePosition(210),220), strand=-1)
@@ -652,9 +662,14 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(300),300),
                          "join((57.61)..75,81..>90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100)._sub_features :
+        for sub_loc in f.location.parts:
+            self.assertEqual(sub_loc.strand, -1)
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, +1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        for sub_f in tmp._sub_features :
             self.assertEqual(sub_f.strand, +1)
-        self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
         f1 = SeqFeature(FeatureLocation(AfterPosition(310),320), strand=-1)
@@ -670,9 +685,12 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(400),400),
                          "join((46.51)..55,one-of(64,61)..75,81..<90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100)._sub_features :
+        tmp = f._flip(100)
+        self.assertEqual(tmp.strand, +1)
+        for sub_loc in tmp.location.parts:
+            self.assertEqual(sub_loc.strand, +1)
+        for sub_f in tmp._sub_features :
             self.assertEqual(sub_f.strand, +1)
-        self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
         self.write_read_checks()
@@ -1002,10 +1020,10 @@ class NC_000932(unittest.TestCase):
             self.assertEqual(len(nuc), len(f))
             try:
                 pro = nuc.translate(table=self.table, cds=True)
-            except TranslationError, e:
-                print e
+            except TranslationError as e:
+                print(e)
                 print r.id, nuc, self.table
-                print f
+                print(f)
                 raise
             if pro[-1] == "*":
                 self.assertEqual(str(pro)[:-1], str(r.seq))

@@ -2,11 +2,11 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tools for sequence motif analysis (OBSOLETE, see Bio.motifs instead).
+"""Tools for sequence motif analysis (DEPRECATED, see Bio.motifs instead).
 
-This module (Bio.Motif) is now obsolete, and will be deprecated and
-removed in a future release of release of Biopython. Please use the
-new module Bio.motifs instead.
+This module (Bio.Motif) has been deprecated and will be removed in a
+future release of release of Biopython. Please use the new module
+Bio.motifs instead.
 
 This contains the core Motif class containing various I/O methods as
 well as methods for motif comparisons and motif searching in sequences.
@@ -14,14 +14,14 @@ It also inlcudes functionality for parsing AlignACE and MEME programs.
 """
 
 import warnings
-warnings.warn("The module Bio.Motif is now obsolete, and will be"
-              "deprecated and removed in a future release of"
-              "release of Biopython. As a replacement for Bio.Motif,"
-              "please use the new module Bio.motifs instead. Please"
-              "be aware that though the functionality of Bio.Motif"
-              "is retained (and extended) in Bio.motifs, usage may"
+from Bio import BiopythonDeprecationWarning
+warnings.warn("The module Bio.Motif has been deprecated and will be "
+              "removed in a future release of Biopython. Instead "
+              "please use the new module Bio.motifs instead. Please "
+              "be aware that though the functionality of Bio.Motif "
+              "is retained (and extended) in Bio.motifs, usage may "
               "be different.",
-              PendingDeprecationWarning)
+              BiopythonDeprecationWarning)
 
 
 from Bio.Motif._Motif import Motif
@@ -158,13 +158,13 @@ def _test():
     import doctest
     import os
     if os.path.isdir(os.path.join("..","..","Tests")):
-        print "Runing doctests..."
+        print("Runing doctests...")
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
-        print "Done"
+        print("Done")
 
 if __name__ == "__main__":
     #Run the doctests

@@ -4,13 +4,18 @@ Biopython README file
 The Biopython Project is an international association of developers of freely
 available Python tools for computational molecular biology.
 
-Our website http://www.biopython.org provides an online resource for modules,
-scripts, and web links for developers of Python-based software for life
-science research.  This is hosted by the Open Bioinformatics Foundation or
-O|B|F, http://www.open-bio.org, who also host BioPerl etc.
+Our user-centric documentation is hosted on http://biopython.org including
+the main Biopython Tutorial and Cookbook:
+ * HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
+ * PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
-This Biopython package is made available under generous terms.  Please
-see the LICENSE file for further details.
+This README file is intended primarily for people interested in working
+with the Biopython source code, either one of the releases from the
+http://biopython.org website, or from our repository on GitHub
+https://github.com/biopython/biopython
+
+This Biopython package is open source software made available under generous
+terms. Please see the LICENSE file for further details.
 
 If you use Biopython in work contributing to a scientific publication, we ask
 that you cite our application note (below) or one of the module specific
@@ -31,16 +36,50 @@ directory at the command line, and type:
     python setup.py test
     sudo python setup.py install
 
+Windows users are instead recommended to use the installation packages provided
+on our website, http://biopython.org
 
-System Requirements
+
+Python Requirements
 ===================
 
-- Python 2.5, 2.6, 2.7 (see http://www.python.org),
-  or Python 3.1, 3.2, or 3.3 (see http://www.python.org and notes below)
-  or PyPy 1.9, 2.0 (see http://www.pypy.org and notes below),
-  or Jython 2.5, 2.7 (see http://www.jython.org and notes below).
-  Note that we are about to drop support for Python 2.5 and Jython 2.5.
- 
+We currently recommend using Python 2.7 from http://www.python.org which
+is the final version of Python 2. Early adopters are encouraged to try
+Biopython under Python 3.3 as well.
+
+Biopython is currently supported and tested on the following Python verions:
+
+- Python 2.6, 2.7 -- see http://www.python.org
+
+  This is the currently the primary development platform for Biopython.
+
+- Python 3.3 -- see http://www.python.org
+
+  Under Python 3 our setup.py script calls the 2to3 library automatically
+  to convert our Python 2 code into Python 3 code. Most of the Biopython
+  modules are available under Python 3 (but not yet all).
+
+- PyPy 1.9, 2.0, 2.1 -- see http://www.pypy.org
+
+  Aside from modules with C code or dependent of NumPy, everything should
+  work. PyPy's NumPy reimplementation NumPyPy is still in progress.
+
+- Jython 2.7 -- see http://www.jython.org
+
+  Aside from modules with C code, or dependent on SQLite3 or NumPy,
+  everything should work.
+
+Please note that Biopython 1.62 was our final release to support Python 2.5
+and Jython 2.5.
+
+
+Dependencies
+============
+
+Depending on which parts of Biopython you plan to use, there are a
+number of other optional Python dependencies - which can in general
+be installed after Biopython.
+
 - NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
@@ -72,69 +111,43 @@ System Requirements
 - MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
   This package is used by BioSQL to access a MySQL database.
 
+Note that some of these libraries are not available for Jython or PyPy.
+
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
-
-
-Python 3.x
-==========
-
-Note we do not intend to support Python 3.0, please use Python 3.1 or later.
-Python 3 support is still incomplete (and we do not yet officially support
-using Biopython with Python 3), but the majority of modules are largely
-functional. In order to be able to run Biopython with Python 3 it is first
-converted using the 2to3 script. This is done automatically by the setup.py
-script.
-
-Use `python3 setup.py build` etc (see installation notes below).
-
-
-Jython
-======
-
-Aside from modules with C code, or dependent on SQLite3 or NumPy, everything
-should work. We run nightly tests under Jython 2.5 (but intend to drop support
-for this when we drop support for Python 2.5) and Jython 2.7 (currently in beta).
-
-Use `jython setup.py build` etc (see installation notes below).
-
-
-PyPy
-====
-
-Aside from modules with C code or dependent of NumPy, everything should work.
-Evaluating PyPy's NumPy reimplementation NumPyPy is still in progress.
-We run nightly tests under PyPy 1.9 and PyPy 2.0 (currently in beta).
-
-Use `pypy setup.py build` etc	(see installation notes below).
 
 
 Installation
 ============
 
-**Make sure that Python is installed correctly**
+First, **make sure that Python is installed correctly**. Second, we
+recommend you install NumPy (see above). Then install Biopython.
 
-Installation should be as simple as going to the biopython source code
-directory, and typing:
+Windows users should use the appropriate provided installation package
+from our website (each is specific to a different Python version).
+
+Installation from source should be as simple as going to the Biopython
+source code directory, and typing:
 
     python setup.py build
     python setup.py test
     sudo python setup.py install
 
-If you need to do additional configuration, e.g. changing the base
-directory, please type `python setup.py`, or see the documentation for
-Distutils.
-
 Substitute `python` with your specific version, for example `python3`,
 `jython` or `pypy`.
+
+If you need to do additional configuration, e.g. changing the base
+directory, please type `python setup.py`, or see the documentation here:
+ * HTML - http://biopython.org/DIST/docs/install/Installation.html
+ * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
 
 
 Testing
 =======
 
 Biopython includes a suite of regression tests to check if everything is
-running correctly.  To do the tests, go to the biopython source code directory
-and type:
+running correctly. To run the tests, go to the biopython source code
+directory and type:
 
     python setup.py test
 
@@ -147,20 +160,14 @@ ignore this if it occurs in the tests for a module that you were not
 planning on using.  If you did want to use that module, please install
 the required dependency and re-run the tests.
 
-
-Source Code Repository
-======================
-
-Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
-currently uses git for distributed source code control, hosted by github
-at https://github.com/biopython/biopython
+There is more testing information in the Biopython Tutorial & Cookbook.
 
 
 Experimental code
 =================
 
-Biopython 1.61 introduced a new warning, Bio.BiopythonExperimentalWarning,
-which will be used to mark any experimental code included in the otherwise
+Biopython 1.61 introduced a new warning, `Bio.BiopythonExperimentalWarning`,
+which is used to mark any experimental code included in the otherwise
 stable Biopython releases. Such 'beta' level code is ready for wider
 testing, but still likely to change, and should only be tried by early
 adopters in order to give feedback via the biopython-dev mailing list.
@@ -177,19 +184,21 @@ While we try to ship a robust package, bugs inevitably pop up.  If you are
 having problems that might be caused by a bug in Biopython, it is possible
 that it has already been identified. Update to the latest release if you are
 not using it already, and retry. If the problem persists, please search our
-bug database at https://redmine.open-bio.org/projects/biopython and our
-mailing lists to see if it has already been reported (and hopefully fixed),
-and if not please do report the bug. We can't fix problems we don't know
-about ;)
+bug database and our mailing lists to see if it has already been reported
+(and hopefully fixed), and if not please do report the bug. We can't fix
+problems we don't know about ;)
+
+ * Old issue tracker: https://redmine.open-bio.org/projects/biopython
+ * Current issue tracker: https://github.com/biopython/biopython/issues
 
 If you suspect the problem lies within a parser, it is likely that the data
 format has changed and broken the parsing code.  (The text BLAST and GenBank
 formats seem to be particularly fragile.)  Thus, the parsing code in
 Biopython is sometimes updated faster than we can build Biopython releases.
 You can get the most recent parser by pulling the relevant files (e.g. the
-ones in Bio.SeqIO or Bio.Blast) from our git repository. However, be careful
-when doing this, because the code in github is not as well-tested as released
-code, and may contain new dependencies.
+ones in `Bio.SeqIO` or `Bio.Blast`) from our git repository. However, be
+careful when doing this, because the code in github is not as well-tested
+as released code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or the mailing list at
 biopython@biopython.org.  In the bug report, please let us know:
@@ -213,7 +222,7 @@ backgrounds. We are always looking for people interested in helping with code
 development, web-site management, documentation writing, technical
 administration, and whatever else comes up.
 
-If you wish to contribute, please visit the web site http://www.biopython.org
+If you wish to contribute, please visit the web site http://biopython.org
 and join our mailing list: http://biopython.org/wiki/Mailing_lists
 
 

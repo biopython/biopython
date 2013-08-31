@@ -430,10 +430,10 @@ class Alignment(object):
 
 def _test():
     """Run the Bio.Align.Generic module's doctests."""
-    print "Running doctests..."
+    print("Running doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

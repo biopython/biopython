@@ -378,7 +378,7 @@ class xbb_widget:
         if not seq:
             return
         aa_seq = self.translator.frame(seq, frame, self.current_codon_table_id)
-        print '>%s<' % aa_seq
+        print('>%s<' % aa_seq)
         aa_seq = re.sub('(.{50})', '\\1\n', str(aa_seq))
         np = NotePad()
         tid = np.text_id()

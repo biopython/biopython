@@ -26,7 +26,7 @@ cifname = os.extsep.join(gzname.split(os.extsep)[:-1])
 url_handle = urllib.urlopen(url)
 
 with open(gzname, 'wb') as gzh:
-    print "Downloading file... (approx. 29 MB)"
+    print("Downloading file... (approx. 29 MB)")
     while True:
         data = url_handle.read(1024)
         if len(data) == 0:

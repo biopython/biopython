@@ -1,0 +1,1361 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "omssa.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "OMSSA"
+================================================= -->
+
+<!--
+ $Id: omssa.asn 192083 2010-05-19 22:28:08Z lewisg $
+**********************************************************************
+
+  OMSSA (Open Mass Spectrometry Search Algorithm) data definitions
+  Lewis Geer, 2003
+
+  make using something like
+  "datatool -m omssa.asn -oc ObjOmssa -oA -od omssa.def"
+
+  note that this file requires omssa.def
+
+**********************************************************************
+-->
+
+<!-- Elements referenced from other modules:
+          Bioseq FROM NCBI-Sequence -->
+<!-- ============================================ -->
+
+<!-- Generic holder for experimental info -->
+<!ELEMENT NameValue (
+        NameValue_name, 
+        NameValue_value)>
+
+<!ELEMENT NameValue_name (#PCDATA)>
+
+<!ELEMENT NameValue_value (#PCDATA)>
+
+<!-- Holds a single spectrum -->
+<!ELEMENT MSSpectrum (
+        MSSpectrum_number, 
+        MSSpectrum_charge, 
+        MSSpectrum_precursormz, 
+        MSSpectrum_mz, 
+        MSSpectrum_abundance, 
+        MSSpectrum_iscale, 
+        MSSpectrum_ids?, 
+        MSSpectrum_namevalue?)>
+
+<!-- unique number of spectrum -->
+<!ELEMENT MSSpectrum_number (%INTEGER;)>
+
+<!-- may be more than one if unknown -->
+<!ELEMENT MSSpectrum_charge (MSSpectrum_charge_E*)>
+
+
+<!ELEMENT MSSpectrum_charge_E (%INTEGER;)>
+
+<!-- scaled precursor m/z, scale is in MSSearchSettings -->
+<!ELEMENT MSSpectrum_precursormz (%INTEGER;)>
+
+<!-- scaled product m/z -->
+<!ELEMENT MSSpectrum_mz (MSSpectrum_mz_E*)>
+
+
+<!ELEMENT MSSpectrum_mz_E (%INTEGER;)>
+
+<!-- scaled product abundance -->
+<!ELEMENT MSSpectrum_abundance (MSSpectrum_abundance_E*)>
+
+
+<!ELEMENT MSSpectrum_abundance_E (%INTEGER;)>
+
+<!-- abundance scale, float to integer -->
+<!ELEMENT MSSpectrum_iscale (%REAL;)>
+
+<!-- ids/filenames -->
+<!ELEMENT MSSpectrum_ids (MSSpectrum_ids_E*)>
+
+
+<!ELEMENT MSSpectrum_ids_E (#PCDATA)>
+
+<!-- extra info: retention times, etc. -->
+<!ELEMENT MSSpectrum_namevalue (NameValue*)>
+
+<!-- Holds a set of spectra -->
+<!ELEMENT MSSpectrumset (MSSpectrum*)>
+
+<!-- enumerate enzymes -->
+<!ELEMENT MSEnzymes (%INTEGER;)>
+<!ATTLIST MSEnzymes value (
+        trypsin |
+        argc |
+        cnbr |
+        chymotrypsin |
+        formicacid |
+        lysc |
+        lysc-p |
+        pepsin-a |
+        tryp-cnbr |
+        tryp-chymo |
+        trypsin-p |
+        whole-protein |
+        aspn |
+        gluc |
+        aspngluc |
+        top-down |
+        semi-tryptic |
+        no-enzyme |
+        chymotrypsin-p |
+        aspn-de |
+        gluc-de |
+        lysn |
+        thermolysin-p |
+        semi-chymotrypsin |
+        semi-gluc |
+        max |
+        none
+        ) #IMPLIED >
+
+
+<!-- enumerate modifications -->
+<!ELEMENT MSMod (%INTEGER;)>
+
+<!--
+    methylk	-  methylation of K
+    oxym	-  oxidation of methionine
+    carboxymethylc	-  carboxymethyl cysteine
+    carbamidomethylc	-  carbamidomethyl cysteine
+    deamidationkq	-  deamidation of K and Q
+    propionamidec	-  propionamide cysteine
+    phosphorylations	-  phosphorylation of S
+    phosphorylationt	-  phosphorylation of T
+    phosphorylationy	-  phosphorylation of Y    
+    ntermmcleave	-  N terminal methionine cleavage
+    ntermacetyl	-  N terminal protein acetyl
+    ntermmethyl	-  N terminal protein methyl
+    ntermtrimethyl	-  N terminal protein trimethyl
+    methythiold	-  beta methythiolation of D
+    methylq	-  methylation of Q
+    trimethylk	-  trimethylation of K
+    methyld	-  methylation of D
+    methyle	-  methylation of E
+    ctermpepmethyl	-  C terminal methylation
+    trideuteromethyld	-  trideuteromethylation of D
+    trideuteromethyle	-  trideuteromethylation of E
+    ctermpeptrideuteromethyl	-  C terminal trideuteromethylation
+    usermod1	-  start of user defined mods
+    usermod10	-  end of user defined mods
+    max	-  maximum number of mods
+    unknown	-  modification of unknown type
+-->
+<!ATTLIST MSMod value (
+        methylk |
+        oxym |
+        carboxymethylc |
+        carbamidomethylc |
+        deamidationkq |
+        propionamidec |
+        phosphorylations |
+        phosphorylationt |
+        phosphorylationy |
+        ntermmcleave |
+        ntermacetyl |
+        ntermmethyl |
+        ntermtrimethyl |
+        methythiold |
+        methylq |
+        trimethylk |
+        methyld |
+        methyle |
+        ctermpepmethyl |
+        trideuteromethyld |
+        trideuteromethyle |
+        ctermpeptrideuteromethyl |
+        nformylmet |
+        twoamino3oxobutanoicacid |
+        acetylk |
+        ctermamide |
+        bmethylthiold |
+        carbamidomethylk |
+        carbamidometylh |
+        carbamidomethyld |
+        carbamidomethyle |
+        carbamylk |
+        ntermcarbamyl |
+        citrullinationr |
+        cysteicacidc |
+        diiodinationy |
+        dimethylk |
+        dimethylr |
+        ntermpepdimethyl |
+        dihydroxyf |
+        thioacetylk |
+        ntermpeptioacetyl |
+        farnesylationc |
+        formylk |
+        ntermpepformyl |
+        formylkynureninw |
+        phef |
+        gammacarboxyld |
+        gammacarboxyle |
+        geranylgeranylc |
+        ntermpepglucuronylg |
+        glutathionec |
+        glyglyk |
+        guanidinationk |
+        his2asnh |
+        his2asph |
+        ctermpephsem |
+        ctermpephselactm |
+        hydroxykynureninw |
+        hydroxylationd |
+        hydroxylationk |
+        hydroxylationn |
+        hydroxylationp |
+        hydroxylationf |
+        hydroxylationy |
+        iodinationy |
+        kynureninw |
+        lipoylk |
+        ctermpepmeester |
+        meesterd |
+        meestere |
+        meesters |
+        meestery |
+        methylc |
+        methylh |
+        methyln |
+        ntermpepmethyl |
+        methylr |
+        ntermpepmyristoyeylationg |
+        ntermpepmyristoyl4hg |
+        ntermpepmyristoylationg |
+        myristoylationk |
+        ntermformyl |
+        nemc |
+        nipcam |
+        nitrow |
+        nitroy |
+        ctermpepo18 |
+        ctermpepdio18 |
+        oxyh |
+        oxyw |
+        ppantetheines |
+        palmitoylationc |
+        palmitoylationk |
+        palmitoylations |
+        palmitoylationt |
+        phospholosss |
+        phospholosst |
+        phospholossy |
+        phosphoneutrallossc |
+        phosphoneutrallossd |
+        phosphoneutrallossh |
+        propionylk |
+        ntermpeppropionyl |
+        propionylheavyk |
+        ntermpeppropionylheavy |
+        pyridylk |
+        ntermpeppyridyl |
+        ntermpeppyrocmc |
+        ntermpeppyroe |
+        ntermpeppyroq |
+        pyroglutamicp |
+        spyridylethylc |
+        semetm |
+        sulfationy |
+        suphonem |
+        triiodinationy |
+        trimethylationr |
+        ntermpeptripalmitatec |
+        usermod1 |
+        usermod2 |
+        usermod3 |
+        usermod4 |
+        usermod5 |
+        usermod6 |
+        usermod7 |
+        usermod8 |
+        usermod9 |
+        usermod10 |
+        icatlight |
+        icatheavy |
+        camthiopropanoylk |
+        phosphoneutrallosss |
+        phosphoneutrallosst |
+        phosphoetdlosss |
+        phosphoetdlosst |
+        arg-13c6 |
+        arg-13c6-15n4 |
+        lys-13c6 |
+        oxy18 |
+        beta-elim-s |
+        beta-elim-t |
+        usermod11 |
+        usermod12 |
+        usermod13 |
+        usermod14 |
+        usermod15 |
+        usermod16 |
+        usermod17 |
+        usermod18 |
+        usermod19 |
+        usermod20 |
+        usermod21 |
+        usermod22 |
+        usermod23 |
+        usermod24 |
+        usermod25 |
+        usermod26 |
+        usermod27 |
+        usermod28 |
+        usermod29 |
+        usermod30 |
+        sulfinicacid |
+        arg2orn |
+        dehydro |
+        carboxykynurenin |
+        sumoylation |
+        iTRAQ114nterm |
+        iTRAQ114K |
+        iTRAQ114Y |
+        iTRAQ115nterm |
+        iTRAQ115K |
+        iTRAQ115Y |
+        iTRAQ116nterm |
+        iTRAQ116K |
+        iTRAQ116Y |
+        iTRAQ117nterm |
+        iTRAQ117K |
+        iTRAQ117Y |
+        mmts |
+        lys-2H4 |
+        lys-13C615N2 |
+        hexNAcN |
+        dHexHexNAcN |
+        hexNAcS |
+        hexNAcT |
+        mod186 |
+        mod187 |
+        mod188 |
+        mod189 |
+        mod190 |
+        mod191 |
+        mod192 |
+        mod193 |
+        mod194 |
+        mod195 |
+        mod196 |
+        mod197 |
+        mod198 |
+        mod199 |
+        mod200 |
+        mod201 |
+        mod202 |
+        mod203 |
+        mod204 |
+        mod205 |
+        mod206 |
+        mod207 |
+        mod208 |
+        mod209 |
+        mod210 |
+        mod211 |
+        mod212 |
+        mod213 |
+        mod214 |
+        mod215 |
+        mod216 |
+        mod217 |
+        mod218 |
+        mod219 |
+        mod220 |
+        mod221 |
+        mod222 |
+        mod223 |
+        mod224 |
+        mod225 |
+        mod226 |
+        mod227 |
+        mod228 |
+        mod229 |
+        mod230 |
+        max |
+        unknown |
+        none
+        ) #IMPLIED >
+
+
+<!-- enumerate modification types -->
+<!ELEMENT MSModType (%INTEGER;)>
+
+<!--
+    modaa	-  at particular amino acids
+    modn	-  at the N terminus of a protein
+    modnaa	-  at the N terminus of a protein at particular amino acids
+    modc	-  at the C terminus of a protein
+    modcaa	-  at the C terminus of a protein at particular amino acids
+    modnp	-  at the N terminus of a peptide
+    modnpaa	-  at the N terminus of a peptide at particular amino acids
+    modcp	-  at the C terminus of a peptide
+    modcpaa	-  at the C terminus of a peptide at particular amino acids
+    modmax	-  the max number of modification types
+-->
+<!ATTLIST MSModType value (
+        modaa |
+        modn |
+        modnaa |
+        modc |
+        modcaa |
+        modnp |
+        modnpaa |
+        modcp |
+        modcpaa |
+        modmax
+        ) #IMPLIED >
+
+
+<!-- mass container -->
+<!ELEMENT MSMassSet (
+        MSMassSet_monomass, 
+        MSMassSet_averagemass, 
+        MSMassSet_n15mass)>
+
+<!ELEMENT MSMassSet_monomass (%REAL;)>
+
+<!ELEMENT MSMassSet_averagemass (%REAL;)>
+
+<!ELEMENT MSMassSet_n15mass (%REAL;)>
+
+<!-- Modification Definition -->
+<!ELEMENT MSModSpec (
+        MSModSpec_mod, 
+        MSModSpec_type, 
+        MSModSpec_name, 
+        MSModSpec_monomass, 
+        MSModSpec_averagemass, 
+        MSModSpec_n15mass, 
+        MSModSpec_residues?, 
+        MSModSpec_neutralloss?, 
+        MSModSpec_unimod?, 
+        MSModSpec_psi-ms?)>
+
+<!-- what is the mod -->
+<!ELEMENT MSModSpec_mod (MSMod)>
+
+<!-- modification type -->
+<!ELEMENT MSModSpec_type (MSModType)>
+
+<!-- friendly name of mod -->
+<!ELEMENT MSModSpec_name (#PCDATA)>
+
+<!-- monoisotopic mass -->
+<!ELEMENT MSModSpec_monomass (%REAL;)>
+
+<!-- average mass -->
+<!ELEMENT MSModSpec_averagemass (%REAL;)>
+
+<!-- monoisotopic n15 mass -->
+<!ELEMENT MSModSpec_n15mass (%REAL;)>
+
+<!-- residues to apply mod to -->
+<!ELEMENT MSModSpec_residues (MSModSpec_residues_E*)>
+
+
+<!ELEMENT MSModSpec_residues_E (#PCDATA)>
+
+<!-- loss after precursor mass determination -->
+<!ELEMENT MSModSpec_neutralloss (MSMassSet)>
+
+<!-- the equivalent Unimod Accession number -->
+<!ELEMENT MSModSpec_unimod (%INTEGER;)>
+
+<!-- the PSI-MS equivalent name   -->
+<!ELEMENT MSModSpec_psi-ms (#PCDATA)>
+
+<!-- Holds a set of modifications -->
+<!ELEMENT MSModSpecSet (MSModSpec*)>
+
+<!--
+ How is charge to be handled?  Some input files are not clear
+ on this.  For example, a dta file only specifies one charge, 
+ even though the charge is not really known.
+-->
+<!ELEMENT MSCalcPlusOne (%INTEGER;)>
+
+<!--
+    dontcalc	-  don't guess charge one
+    calc	-  guess charge one
+-->
+<!ATTLIST MSCalcPlusOne value (
+        dontcalc |
+        calc
+        ) #IMPLIED >
+
+
+<!-- user instructions on whether to believe charges in input file -->
+<!ELEMENT MSCalcCharge (%INTEGER;)>
+
+<!--
+    calculate	-  guess the charge(s) from the data
+    usefile	-  use what the input file says
+    userange	-  use the charge range specified
+-->
+<!ATTLIST MSCalcCharge value (
+        calculate |
+        usefile |
+        userange
+        ) #IMPLIED >
+
+
+<!-- How to handle precursor charge -->
+<!ELEMENT MSChargeHandle (
+        MSChargeHandle_calcplusone?, 
+        MSChargeHandle_calccharge?, 
+        MSChargeHandle_mincharge?, 
+        MSChargeHandle_maxcharge?, 
+        MSChargeHandle_considermult?, 
+        MSChargeHandle_plusone, 
+        MSChargeHandle_maxproductcharge?, 
+        MSChargeHandle_prodlesspre?, 
+        MSChargeHandle_negative?)>
+
+<!-- do we guess charge one? -->
+<!ELEMENT MSChargeHandle_calcplusone (MSCalcPlusOne)>
+
+<!-- how do we handle charges? -->
+<!ELEMENT MSChargeHandle_calccharge (MSCalcCharge)>
+
+<!-- if userange, what is the min? -->
+<!ELEMENT MSChargeHandle_mincharge (%INTEGER;)>
+
+<!-- if userange, what is the max? -->
+<!ELEMENT MSChargeHandle_maxcharge (%INTEGER;)>
+
+<!-- at which precursor charge to consider +2 ions? -->
+<!ELEMENT MSChargeHandle_considermult (%INTEGER;)>
+
+<!-- what % of peaks below precursor needed to call as +1 -->
+<!ELEMENT MSChargeHandle_plusone (%REAL;)>
+
+<!-- maximum product ion charge -->
+<!ELEMENT MSChargeHandle_maxproductcharge (%INTEGER;)>
+
+<!-- product charge always less thanor equal to precursor? -->
+<!ELEMENT MSChargeHandle_prodlesspre EMPTY>
+<!ATTLIST MSChargeHandle_prodlesspre value ( true | false ) #REQUIRED >
+
+
+<!-- negative ion search if -1, positive ion if 1 -->
+<!ELEMENT MSChargeHandle_negative (%INTEGER;)>
+
+<!-- what type of atomic mass to use -->
+<!ELEMENT MSSearchType (%INTEGER;)>
+<!ATTLIST MSSearchType value (
+        monoisotopic |
+        average |
+        monon15 |
+        exact |
+        multiisotope |
+        max
+        ) #IMPLIED >
+
+
+<!-- what is the charge dependence of the mass tolerance? -->
+<!ELEMENT MSZdependence (%INTEGER;)>
+
+<!--
+    independent	-  mass tol. invariant with charge
+    linearwithz	-  mass tol. scales with charge
+-->
+<!ATTLIST MSZdependence value (
+        independent |
+        linearwithz |
+        max
+        ) #IMPLIED >
+
+
+<!-- Iterative search settings -->
+<!ELEMENT MSIterativeSettings (
+        MSIterativeSettings_researchthresh, 
+        MSIterativeSettings_subsetthresh, 
+        MSIterativeSettings_replacethresh)>
+
+<!-- e-val threshold for re-searching spectra, 0 = always re-search -->
+<!ELEMENT MSIterativeSettings_researchthresh (%REAL;)>
+
+<!-- e-val threshold for picking sequence subset, 0 = all sequences -->
+<!ELEMENT MSIterativeSettings_subsetthresh (%REAL;)>
+
+<!-- e-val threshold for replacing hitset, 0 = only if better -->
+<!ELEMENT MSIterativeSettings_replacethresh (%REAL;)>
+
+<!-- Library search settings -->
+<!ELEMENT MSLibrarySettings (
+        MSLibrarySettings_libnames, 
+        MSLibrarySettings_presearch, 
+        MSLibrarySettings_useomssascore, 
+        MSLibrarySettings_usereplicatescore, 
+        MSLibrarySettings_qtofscore)>
+
+<!-- names of search libraries -->
+<!ELEMENT MSLibrarySettings_libnames (MSLibrarySettings_libnames_E*)>
+
+
+<!ELEMENT MSLibrarySettings_libnames_E (#PCDATA)>
+
+<!-- should there be a restriction on precursor mass? -->
+<!ELEMENT MSLibrarySettings_presearch EMPTY>
+<!ATTLIST MSLibrarySettings_presearch value ( true | false ) #REQUIRED >
+
+
+<!-- use the omssa score? -->
+<!ELEMENT MSLibrarySettings_useomssascore EMPTY>
+<!ATTLIST MSLibrarySettings_useomssascore value ( true | false ) #REQUIRED >
+
+
+<!-- use the number of replicates score? -->
+<!ELEMENT MSLibrarySettings_usereplicatescore EMPTY>
+<!ATTLIST MSLibrarySettings_usereplicatescore value ( true | false ) #REQUIRED >
+
+
+<!-- use the qtof score? -->
+<!ELEMENT MSLibrarySettings_qtofscore EMPTY>
+<!ATTLIST MSLibrarySettings_qtofscore value ( true | false ) #REQUIRED >
+
+
+<!-- Generic search settings -->
+<!ELEMENT MSSearchSettings (
+        MSSearchSettings_precursorsearchtype, 
+        MSSearchSettings_productsearchtype, 
+        MSSearchSettings_ionstosearch, 
+        MSSearchSettings_peptol, 
+        MSSearchSettings_msmstol, 
+        MSSearchSettings_zdep, 
+        MSSearchSettings_cutoff, 
+        MSSearchSettings_cutlo, 
+        MSSearchSettings_cuthi, 
+        MSSearchSettings_cutinc, 
+        MSSearchSettings_singlewin, 
+        MSSearchSettings_doublewin, 
+        MSSearchSettings_singlenum, 
+        MSSearchSettings_doublenum, 
+        MSSearchSettings_fixed, 
+        MSSearchSettings_variable, 
+        MSSearchSettings_enzyme, 
+        MSSearchSettings_missedcleave, 
+        MSSearchSettings_hitlistlen?, 
+        MSSearchSettings_db, 
+        MSSearchSettings_tophitnum, 
+        MSSearchSettings_minhit?, 
+        MSSearchSettings_minspectra?, 
+        MSSearchSettings_scale?, 
+        MSSearchSettings_maxmods?, 
+        MSSearchSettings_taxids?, 
+        MSSearchSettings_chargehandling?, 
+        MSSearchSettings_usermods?, 
+        MSSearchSettings_pseudocount?, 
+        MSSearchSettings_searchb1?, 
+        MSSearchSettings_searchctermproduct?, 
+        MSSearchSettings_maxproductions?, 
+        MSSearchSettings_minnoenzyme?, 
+        MSSearchSettings_maxnoenzyme?, 
+        MSSearchSettings_exactmass?, 
+        MSSearchSettings_settingid?, 
+        MSSearchSettings_iterativesettings?, 
+        MSSearchSettings_precursorcull?, 
+        MSSearchSettings_infiles?, 
+        MSSearchSettings_outfiles?, 
+        MSSearchSettings_nocorrelationscore?, 
+        MSSearchSettings_probfollowingion?, 
+        MSSearchSettings_nmethionine?, 
+        MSSearchSettings_automassadjust?, 
+        MSSearchSettings_lomasscutoff?, 
+        MSSearchSettings_libsearchsettings?, 
+        MSSearchSettings_noprolineions?, 
+        MSSearchSettings_reversesearch?, 
+        MSSearchSettings_othersettings?, 
+        MSSearchSettings_numisotopes?, 
+        MSSearchSettings_pepppm?, 
+        MSSearchSettings_msmsppm?, 
+        MSSearchSettings_reportedhitcount?)>
+
+<!-- average or monoisotopic? -->
+<!ELEMENT MSSearchSettings_precursorsearchtype (MSSearchType)>
+
+<!-- average or monoisotopic? -->
+<!ELEMENT MSSearchSettings_productsearchtype (MSSearchType)>
+
+<!-- which ions to search? -->
+<!ELEMENT MSSearchSettings_ionstosearch (MSIonType*)>
+
+<!-- peptide mass tolerance -->
+<!ELEMENT MSSearchSettings_peptol (%REAL;)>
+
+<!-- msms mass tolerance -->
+<!ELEMENT MSSearchSettings_msmstol (%REAL;)>
+
+<!-- what is the charge dependence of the mass tolerance? -->
+<!ELEMENT MSSearchSettings_zdep (MSZdependence)>
+
+<!--
+ evalue cutoff
+ next 3 fields define intensity fraction below
+ which peaks will be discard
+-->
+<!ELEMENT MSSearchSettings_cutoff (%REAL;)>
+
+<!-- the start of the cutoff, fraction of most intense peak -->
+<!ELEMENT MSSearchSettings_cutlo (%REAL;)>
+
+<!-- the end of the cutoff -->
+<!ELEMENT MSSearchSettings_cuthi (%REAL;)>
+
+<!-- the increment of the cutoff -->
+<!ELEMENT MSSearchSettings_cutinc (%REAL;)>
+
+<!-- the size of the single charge filtering window -->
+<!ELEMENT MSSearchSettings_singlewin (%INTEGER;)>
+
+<!-- the size of the double charge filtering window -->
+<!ELEMENT MSSearchSettings_doublewin (%INTEGER;)>
+
+<!-- the number of peaks allowed in the single window -->
+<!ELEMENT MSSearchSettings_singlenum (%INTEGER;)>
+
+<!-- the number of peaks allowed in the double window -->
+<!ELEMENT MSSearchSettings_doublenum (%INTEGER;)>
+
+<!-- fixed PTM's -->
+<!ELEMENT MSSearchSettings_fixed (MSMod*)>
+
+<!-- variable PTM's -->
+<!ELEMENT MSSearchSettings_variable (MSMod*)>
+
+<!-- digestion enzyme -->
+<!ELEMENT MSSearchSettings_enzyme (MSEnzymes)>
+
+<!-- number of missed cleaves allowed -->
+<!ELEMENT MSSearchSettings_missedcleave (%INTEGER;)>
+
+<!--
+ the number of hits kept in memory
+ for a spectrum
+-->
+<!ELEMENT MSSearchSettings_hitlistlen (%INTEGER;)>
+
+<!-- sequence set to search, e.g. "nr" -->
+<!ELEMENT MSSearchSettings_db (#PCDATA)>
+
+<!-- number of m/z to consider in first pass -->
+<!ELEMENT MSSearchSettings_tophitnum (%INTEGER;)>
+
+<!-- minimum number of m/z values for a valid hit -->
+<!ELEMENT MSSearchSettings_minhit (%INTEGER;)>
+
+<!-- minimum number of m/z for a valid spectra -->
+<!ELEMENT MSSearchSettings_minspectra (%INTEGER;)>
+
+<!-- scale for m/z float to integer -->
+<!ELEMENT MSSearchSettings_scale (%INTEGER;)>
+
+<!--
+ maximum number of mass ladders per
+ database peptide
+-->
+<!ELEMENT MSSearchSettings_maxmods (%INTEGER;)>
+
+<!-- taxa to limit search -->
+<!ELEMENT MSSearchSettings_taxids (MSSearchSettings_taxids_E*)>
+
+
+<!ELEMENT MSSearchSettings_taxids_E (%INTEGER;)>
+
+<!-- how to deal with charges -->
+<!ELEMENT MSSearchSettings_chargehandling (MSChargeHandle)>
+
+<!-- user defined modifications -->
+<!ELEMENT MSSearchSettings_usermods (MSModSpecSet)>
+
+<!-- min number of counts per precursor bin -->
+<!ELEMENT MSSearchSettings_pseudocount (%INTEGER;)>
+
+<!-- should b1 product be in search (1=no, 0=yes) -->
+<!ELEMENT MSSearchSettings_searchb1 (%INTEGER;)>
+
+<!-- should c terminus ion be searched (1=no, 0=yes) -->
+<!ELEMENT MSSearchSettings_searchctermproduct (%INTEGER;)>
+
+<!-- max number of ions in each series (0=all) -->
+<!ELEMENT MSSearchSettings_maxproductions (%INTEGER;)>
+
+<!-- min number of AA in peptide for noenzyme search -->
+<!ELEMENT MSSearchSettings_minnoenzyme (%INTEGER;)>
+
+<!-- max number of AA in peptide for noenzyme search (0=none) -->
+<!ELEMENT MSSearchSettings_maxnoenzyme (%INTEGER;)>
+
+<!-- the threshold in Da for adding neutron -->
+<!ELEMENT MSSearchSettings_exactmass (%REAL;)>
+
+<!-- id of the search settings -->
+<!ELEMENT MSSearchSettings_settingid (%INTEGER;)>
+
+<!-- iterative search settings -->
+<!ELEMENT MSSearchSettings_iterativesettings (MSIterativeSettings)>
+
+<!-- turn on aggressive precursor culling for ETD (0=none) -->
+<!ELEMENT MSSearchSettings_precursorcull (%INTEGER;)>
+
+<!-- input files -->
+<!ELEMENT MSSearchSettings_infiles (MSInFile*)>
+
+<!-- output files -->
+<!ELEMENT MSSearchSettings_outfiles (MSOutFile*)>
+
+<!-- turn on correlation score (1=nocorr) -->
+<!ELEMENT MSSearchSettings_nocorrelationscore (%INTEGER;)>
+
+<!-- probability of a consecutive ion (used in correlation) -->
+<!ELEMENT MSSearchSettings_probfollowingion (%REAL;)>
+
+<!-- should nmethionine be cleaved? -->
+<!ELEMENT MSSearchSettings_nmethionine EMPTY>
+<!ATTLIST MSSearchSettings_nmethionine value ( true | false ) #REQUIRED >
+
+
+<!-- fraction allowable adjustment of product mass tolerance -->
+<!ELEMENT MSSearchSettings_automassadjust (%REAL;)>
+
+<!-- low mass filter in Daltons, unscaled -->
+<!ELEMENT MSSearchSettings_lomasscutoff (%REAL;)>
+
+<!-- library search settings -->
+<!ELEMENT MSSearchSettings_libsearchsettings (MSLibrarySettings)>
+
+<!-- which ions to use no proline rule -->
+<!ELEMENT MSSearchSettings_noprolineions (MSIonType*)>
+
+<!-- do reverse search -->
+<!ELEMENT MSSearchSettings_reversesearch EMPTY>
+<!ATTLIST MSSearchSettings_reversesearch value ( true | false ) #REQUIRED >
+
+
+<!-- extra search settings -->
+<!ELEMENT MSSearchSettings_othersettings (NameValue*)>
+
+<!-- number of isotopic peaks to search when using MSSearchType multiisotope -->
+<!ELEMENT MSSearchSettings_numisotopes (%INTEGER;)>
+
+<!-- search precursor as ppm -->
+<!ELEMENT MSSearchSettings_pepppm EMPTY>
+<!ATTLIST MSSearchSettings_pepppm value ( true | false ) #REQUIRED >
+
+
+<!-- search product as ppm -->
+<!ELEMENT MSSearchSettings_msmsppm EMPTY>
+<!ATTLIST MSSearchSettings_msmsppm value ( true | false ) #REQUIRED >
+
+
+<!-- the maximum number of hits to report per spectrum, 0=all -->
+<!ELEMENT MSSearchSettings_reportedhitcount (%INTEGER;)>
+
+
+<!ELEMENT MSSerialDataFormat (%INTEGER;)>
+
+<!--
+    asntext	-  open ASN.1 text format
+    asnbinary	-  open ASN.1 binary format
+    xml	-  open XML format
+    csv	-  csv (excel)
+    pepxml	-  pepXML format
+    xmlbz2	-  bzip2 XML format
+-->
+<!ATTLIST MSSerialDataFormat value (
+        none |
+        asntext |
+        asnbinary |
+        xml |
+        csv |
+        pepxml |
+        xmlbz2
+        ) #IMPLIED >
+
+
+
+<!ELEMENT MSOutFile (
+        MSOutFile_outfile, 
+        MSOutFile_outfiletype, 
+        MSOutFile_includerequest)>
+
+<!-- output file name -->
+<!ELEMENT MSOutFile_outfile (#PCDATA)>
+
+<!-- output file type -->
+<!ELEMENT MSOutFile_outfiletype (MSSerialDataFormat)>
+
+<!-- should the output include the request? -->
+<!ELEMENT MSOutFile_includerequest EMPTY>
+<!ATTLIST MSOutFile_includerequest value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT MSSpectrumFileType (%INTEGER;)>
+
+<!--
+    oms	-  asn.1 binary for iterative search
+    omx	-  xml for iterative search
+    xml	-  xml MSRequest
+    omxbz2	-  bzip2 omx file
+-->
+<!ATTLIST MSSpectrumFileType value (
+        dta |
+        dtablank |
+        dtaxml |
+        asc |
+        pkl |
+        pks |
+        sciex |
+        mgf |
+        unknown |
+        oms |
+        omx |
+        xml |
+        omxbz2
+        ) #IMPLIED >
+
+
+
+<!ELEMENT MSInFile (
+        MSInFile_infile, 
+        MSInFile_infiletype)>
+
+<!-- input file name -->
+<!ELEMENT MSInFile_infile (#PCDATA)>
+
+<!-- input file type -->
+<!ELEMENT MSInFile_infiletype (MSSpectrumFileType)>
+
+
+<!ELEMENT MSSearchSettingsSet (MSSearchSettings*)>
+
+<!-- The search request that is given to the OMSSA algorithm -->
+<!ELEMENT MSRequest (
+        MSRequest_spectra, 
+        MSRequest_settings, 
+        MSRequest_rid?, 
+        MSRequest_moresettings?, 
+        MSRequest_modset?)>
+
+<!-- the set of spectra -->
+<!ELEMENT MSRequest_spectra (MSSpectrumset)>
+
+<!-- the search settings -->
+<!ELEMENT MSRequest_settings (MSSearchSettings)>
+
+<!-- request id -->
+<!ELEMENT MSRequest_rid (#PCDATA)>
+
+<!-- additional search runs -->
+<!ELEMENT MSRequest_moresettings (MSSearchSettingsSet)>
+
+<!-- list of mods that can be used in search -->
+<!ELEMENT MSRequest_modset (MSModSpecSet)>
+
+<!-- enumeration of ion types -->
+<!ELEMENT MSIonType (%INTEGER;)>
+
+<!--
+    z	-  actually zdot
+-->
+<!ATTLIST MSIonType value (
+        a |
+        b |
+        c |
+        x |
+        y |
+        z |
+        parent |
+        internal |
+        immonium |
+        unknown |
+        adot |
+        x-CO2 |
+        adot-CO2 |
+        max
+        ) #IMPLIED >
+
+
+<!-- types of neutral loss -->
+<!ELEMENT MSIonNeutralLoss (%INTEGER;)>
+
+<!--
+    water	-  minus 18 Da
+    ammonia	-  minus 17 Da
+-->
+<!ATTLIST MSIonNeutralLoss value (
+        water |
+        ammonia
+        ) #IMPLIED >
+
+
+<!-- iosotopic type of ion -->
+<!ELEMENT MSIonIsotopicType (%INTEGER;)>
+
+<!--
+    monoisotopic	-  no c13s in molecule
+    c13	-  one c13 in molecule
+    c13two	-  two c13s in molecule, and so on...
+-->
+<!ATTLIST MSIonIsotopicType value (
+        monoisotopic |
+        c13 |
+        c13two |
+        c13three |
+        c13four
+        ) #IMPLIED >
+
+
+<!-- type of immonium ion -->
+<!ELEMENT MSImmonium (
+        MSImmonium_parent, 
+        MSImmonium_product?)>
+
+<!-- parent amino acid -->
+<!ELEMENT MSImmonium_parent (#PCDATA)>
+
+<!-- product ion code -->
+<!ELEMENT MSImmonium_product (#PCDATA)>
+
+<!-- ion type at a finer level than ion series -->
+<!ELEMENT MSIon (
+        MSIon_neutralloss?, 
+        MSIon_isotope?, 
+        MSIon_internal?, 
+        MSIon_immonium?)>
+
+<!-- is this peak a neutral loss? -->
+<!ELEMENT MSIon_neutralloss (MSIonNeutralLoss)>
+
+<!-- isotopic composition of peak -->
+<!ELEMENT MSIon_isotope (MSIonIsotopicType)>
+
+<!-- if iontype is internal, this is the internal sequence -->
+<!ELEMENT MSIon_internal (#PCDATA)>
+
+<!-- if iontype is immonium, show characteristics -->
+<!ELEMENT MSIon_immonium (MSImmonium)>
+
+<!-- annotated comments about the ion -->
+<!ELEMENT MSIonAnnot (
+        MSIonAnnot_suspect?, 
+        MSIonAnnot_massdiff?, 
+        MSIonAnnot_missingisotope?)>
+
+<!-- is this peak suspect? -->
+<!ELEMENT MSIonAnnot_suspect EMPTY>
+<!ATTLIST MSIonAnnot_suspect value ( true | false ) #REQUIRED >
+
+
+<!-- what is the difference in mass from library spectrum? -->
+<!ELEMENT MSIonAnnot_massdiff (%REAL;)>
+
+<!-- are the lower mass peaks missing? -->
+<!ELEMENT MSIonAnnot_missingisotope EMPTY>
+<!ATTLIST MSIonAnnot_missingisotope value ( true | false ) #REQUIRED >
+
+
+<!-- defines a particular ion -->
+<!ELEMENT MSMZHit (
+        MSMZHit_ion, 
+        MSMZHit_charge, 
+        MSMZHit_number, 
+        MSMZHit_mz, 
+        MSMZHit_index?, 
+        MSMZHit_moreion?, 
+        MSMZHit_annotation?)>
+
+<!-- ion type, e.g. b -->
+<!ELEMENT MSMZHit_ion (MSIonType)>
+
+<!-- ion charge -->
+<!ELEMENT MSMZHit_charge (%INTEGER;)>
+
+<!-- the sequential number of the ion -->
+<!ELEMENT MSMZHit_number (%INTEGER;)>
+
+<!-- scaled m/z value in Da -->
+<!ELEMENT MSMZHit_mz (%INTEGER;)>
+
+<!-- the index of the peak in the original spectrum -->
+<!ELEMENT MSMZHit_index (%INTEGER;)>
+
+<!-- more information about the ion type -->
+<!ELEMENT MSMZHit_moreion (MSIon)>
+
+<!-- annotations on the ion -->
+<!ELEMENT MSMZHit_annotation (MSIonAnnot)>
+
+<!--
+ contains information about sequences with identical peptide
+ sequences
+-->
+<!ELEMENT MSPepHit (
+        MSPepHit_start, 
+        MSPepHit_stop, 
+        MSPepHit_gi?, 
+        MSPepHit_accession?, 
+        MSPepHit_defline?, 
+        MSPepHit_protlength?, 
+        MSPepHit_oid?, 
+        MSPepHit_reversed?, 
+        MSPepHit_pepstart?, 
+        MSPepHit_pepstop?)>
+
+<!-- start position (inclusive) in sequence -->
+<!ELEMENT MSPepHit_start (%INTEGER;)>
+
+<!-- stop position (inclusive) in sequence -->
+<!ELEMENT MSPepHit_stop (%INTEGER;)>
+
+<!-- genbank identifier -->
+<!ELEMENT MSPepHit_gi (%INTEGER;)>
+
+<!-- sequence accession -->
+<!ELEMENT MSPepHit_accession (#PCDATA)>
+
+<!-- sequence description -->
+<!ELEMENT MSPepHit_defline (#PCDATA)>
+
+<!-- length of protein -->
+<!ELEMENT MSPepHit_protlength (%INTEGER;)>
+
+<!-- blast library oid  -->
+<!ELEMENT MSPepHit_oid (%INTEGER;)>
+
+<!-- reversed sequence -->
+<!ELEMENT MSPepHit_reversed EMPTY>
+<!ATTLIST MSPepHit_reversed value ( true | false ) #REQUIRED >
+
+
+<!-- AA before the peptide -->
+<!ELEMENT MSPepHit_pepstart (#PCDATA)>
+
+<!-- AA after the peptide -->
+<!ELEMENT MSPepHit_pepstop (#PCDATA)>
+
+<!-- modifications to a hit peptide -->
+<!ELEMENT MSModHit (
+        MSModHit_site, 
+        MSModHit_modtype)>
+
+<!-- the position in the peptide -->
+<!ELEMENT MSModHit_site (%INTEGER;)>
+
+<!-- the type of modification -->
+<!ELEMENT MSModHit_modtype (MSMod)>
+
+<!-- sets of scores -->
+<!ELEMENT MSScoreSet (
+        MSScoreSet_name, 
+        MSScoreSet_value)>
+
+<!ELEMENT MSScoreSet_name (#PCDATA)>
+
+<!ELEMENT MSScoreSet_value (%REAL;)>
+
+<!-- hits to a given spectrum -->
+<!ELEMENT MSHits (
+        MSHits_evalue, 
+        MSHits_pvalue, 
+        MSHits_charge, 
+        MSHits_pephits, 
+        MSHits_mzhits?, 
+        MSHits_pepstring?, 
+        MSHits_mass?, 
+        MSHits_mods?, 
+        MSHits_pepstart?, 
+        MSHits_pepstop?, 
+        MSHits_protlength?, 
+        MSHits_theomass?, 
+        MSHits_oid?, 
+        MSHits_scores?, 
+        MSHits_libaccession?)>
+
+<!-- E-value (expect value) -->
+<!ELEMENT MSHits_evalue (%REAL;)>
+
+<!-- P-value (probability value) -->
+<!ELEMENT MSHits_pvalue (%REAL;)>
+
+<!-- the charge state used in search.  -1 == not +1 -->
+<!ELEMENT MSHits_charge (%INTEGER;)>
+
+<!-- peptides that match this hit -->
+<!ELEMENT MSHits_pephits (MSPepHit*)>
+
+<!-- ions hit -->
+<!ELEMENT MSHits_mzhits (MSMZHit*)>
+
+<!-- the peptide sequence -->
+<!ELEMENT MSHits_pepstring (#PCDATA)>
+
+<!-- scaled experimental mass of peptide in Da -->
+<!ELEMENT MSHits_mass (%INTEGER;)>
+
+<!-- modifications to sequence -->
+<!ELEMENT MSHits_mods (MSModHit*)>
+
+<!-- AA before the peptide (depricated) -->
+<!ELEMENT MSHits_pepstart (#PCDATA)>
+
+<!-- AA after the peptide (depricated) -->
+<!ELEMENT MSHits_pepstop (#PCDATA)>
+
+<!-- length of protein hit (depricated) -->
+<!ELEMENT MSHits_protlength (%INTEGER;)>
+
+<!-- scaled theoretical mass of peptide hit -->
+<!ELEMENT MSHits_theomass (%INTEGER;)>
+
+<!-- blast library oid (depricated)  -->
+<!ELEMENT MSHits_oid (%INTEGER;)>
+
+<!-- optional scores (for library search) -->
+<!ELEMENT MSHits_scores (MSScoreSet*)>
+
+<!-- library search accesssion -->
+<!ELEMENT MSHits_libaccession (#PCDATA)>
+
+<!-- error return for a particular spectrum's hitset -->
+<!ELEMENT MSHitError (%INTEGER;)>
+
+<!--
+    unable2read	-  can't read the spectrum
+    notenuffpeaks	-  not enough peaks to search
+-->
+<!ATTLIST MSHitError value (
+        none |
+        generalerr |
+        unable2read |
+        notenuffpeaks
+        ) #IMPLIED >
+
+
+<!-- MSHitSet annotation by end user -->
+<!ELEMENT MSUserAnnot (%INTEGER;)>
+<!ATTLIST MSUserAnnot value (
+        none |
+        delete |
+        flag
+        ) #IMPLIED >
+
+
+<!-- contains a set of hits to a single spectrum -->
+<!ELEMENT MSHitSet (
+        MSHitSet_number, 
+        MSHitSet_error?, 
+        MSHitSet_hits?, 
+        MSHitSet_ids?, 
+        MSHitSet_namevalue?, 
+        MSHitSet_settingid?, 
+        MSHitSet_userannotation?)>
+
+<!-- unique number of spectrum -->
+<!ELEMENT MSHitSet_number (%INTEGER;)>
+
+<!-- error, if any -->
+<!ELEMENT MSHitSet_error (MSHitError)>
+
+<!-- set of hit to spectrum -->
+<!ELEMENT MSHitSet_hits (MSHits*)>
+
+<!-- filenames or other ids of spectra searched -->
+<!ELEMENT MSHitSet_ids (MSHitSet_ids_E*)>
+
+
+<!ELEMENT MSHitSet_ids_E (#PCDATA)>
+
+<!-- extra info: retention times, etc. -->
+<!ELEMENT MSHitSet_namevalue (NameValue*)>
+
+<!-- id of the search setting used -->
+<!ELEMENT MSHitSet_settingid (%INTEGER;)>
+
+<!-- allows users to flag certain -->
+<!ELEMENT MSHitSet_userannotation (MSUserAnnot)>
+
+<!-- error return for the entire response -->
+<!ELEMENT MSResponseError (%INTEGER;)>
+
+<!--
+    noblastdb	-  unable to open blast library
+    noinput	-  input missing
+-->
+<!ATTLIST MSResponseError value (
+        none |
+        generalerr |
+        noblastdb |
+        noinput
+        ) #IMPLIED >
+
+
+<!-- bioseq container -->
+<!ELEMENT MSBioseq (
+        MSBioseq_oid, 
+        MSBioseq_seq)>
+
+<!-- blast library oid -->
+<!ELEMENT MSBioseq_oid (%INTEGER;)>
+
+<!ELEMENT MSBioseq_seq (Bioseq)>
+
+
+<!ELEMENT MSBioseqSet (MSBioseq*)>
+
+<!-- search results -->
+<!ELEMENT MSResponse (
+        MSResponse_hitsets, 
+        MSResponse_scale?, 
+        MSResponse_rid?, 
+        MSResponse_error?, 
+        MSResponse_version?, 
+        MSResponse_email?, 
+        MSResponse_dbversion?, 
+        MSResponse_bioseqs?)>
+
+<!-- hits grouped by spectrum -->
+<!ELEMENT MSResponse_hitsets (MSHitSet*)>
+
+<!-- scale to change m/z float to integer -->
+<!ELEMENT MSResponse_scale (%INTEGER;)>
+
+<!-- request id -->
+<!ELEMENT MSResponse_rid (#PCDATA)>
+
+<!-- error response -->
+<!ELEMENT MSResponse_error (MSResponseError)>
+
+<!-- version of OMSSA -->
+<!ELEMENT MSResponse_version (#PCDATA)>
+
+<!-- email address for notification -->
+<!ELEMENT MSResponse_email (#PCDATA)>
+
+<!-- version of db searched (usually size) -->
+<!ELEMENT MSResponse_dbversion (%INTEGER;)>
+
+<!-- sequences found in search      -->
+<!ELEMENT MSResponse_bioseqs (MSBioseqSet)>
+
+<!-- holds both search requests and responses -->
+<!ELEMENT MSSearch (
+        MSSearch_request?, 
+        MSSearch_response?)>
+
+<!ELEMENT MSSearch_request (MSRequest*)>
+
+<!ELEMENT MSSearch_response (MSResponse*)>
+

@@ -283,11 +283,11 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 record = SeqIO.read(filename, "gb")
                 assert length == len(record)
                 features = [f for f in record.features if f.type=="tRNA"]
-                print name
+                print(name)
                 #Strip of the first three chars, AT# where # is the chr
-                print [(int(f.location.start), int(f.location.end),
+                print([(int(f.location.start), int(f.location.end),
                         f.strand, f.qualifiers['locus_tag'][0][3:])
-                       for f in features]
+                       for f in features])
                 #Output was copy and pasted to the script, see above.
                 #Continue test using SeqFeature objects!
                 #To test colours from the qualifiers,

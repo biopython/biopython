@@ -295,7 +295,7 @@ def _parse_tag_data(elem_code, elem_num, raw_data):
             return bool(data)
         elif elem_code == 18:
             return _bytes_to_string(data[1:])
-        elif self.elem_code == 19:
+        elif elem_code == 19:
             return _bytes_to_string(data[:-1])
         else:
             return data

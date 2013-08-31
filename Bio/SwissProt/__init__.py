@@ -489,10 +489,6 @@ def _read_cc(record, line):
 
 
 def _read_dr(record, value):
-    # Remove the comments at the end of the line
-    i = value.find(' [')
-    if i >= 0:
-        value = value[:i]
     cols = value.rstrip(".").split('; ')
     record.cross_references.append(tuple(cols))
 
@@ -547,22 +543,22 @@ def _read_ft(record, line):
 
 
 if __name__ == "__main__":
-    print "Quick self test..."
+    print("Quick self test...")
 
     example_filename = "../../Tests/SwissProt/sp008"
 
     import os
     if not os.path.isfile(example_filename):
-        print "Missing test file %s" % example_filename
+        print("Missing test file %s" % example_filename)
     else:
         #Try parsing it!
 
         handle = open(example_filename)
         records = parse(handle)
         for record in records:
-            print record.entry_name
-            print ",".join(record.accessions)
-            print record.keywords
-            print repr(record.organism)
-            print record.sequence[:20] + "..."
+            print(record.entry_name)
+            print(",".join(record.accessions))
+            print(record.keywords)
+            print(repr(record.organism))
+            print(record.sequence[:20] + "...")
         handle.close()

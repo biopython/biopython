@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """Test for the Uniprot parser on Uniprot XML files.
 """
-from __future__ import with_statement
-
 import os
 import unittest
 

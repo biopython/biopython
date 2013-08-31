@@ -24,7 +24,7 @@ def check():
                                80,
                                socket.AF_UNSPEC,
                                socket.SOCK_STREAM)
-        except socket.gaierror, x:
+        except socket.gaierror as x:
             check.available = False
         else:
             check.available = True

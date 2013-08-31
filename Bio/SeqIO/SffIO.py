@@ -227,12 +227,12 @@ import sys
 import re
 
 from Bio._py3k import _bytes_to_string, _as_bytes
-_null = _as_bytes("\0")
-_sff = _as_bytes(".sff")
-_hsh = _as_bytes(".hsh")
-_srt = _as_bytes(".srt")
-_mft = _as_bytes(".mft")
-_flag = _as_bytes("\xff")
+_null = b"\0"
+_sff = b".sff"
+_hsh = b".hsh"
+_srt = b".srt"
+_mft = b".mft"
+_flag = b"\xff"
 
 
 def _sff_file_header(handle):
@@ -314,8 +314,11 @@ def _sff_file_header(handle):
     padding = header_length - number_of_flows_per_read - key_length - 31
     assert 0 <= padding < 8, padding
     if handle.read(padding).count(_null) != padding:
-        raise ValueError("Post header %i byte padding region contained data"
-                         % padding)
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post header %i byte "
+                      "null padding region contained data." % padding,
+                      BiopythonParserWarning)
     return header_length, index_offset, index_length, \
         number_of_reads, number_of_flows_per_read, \
         flow_chars, key_sequence
@@ -366,8 +369,11 @@ def _sff_do_slow_index(handle):
         name = _bytes_to_string(handle.read(name_length))
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
-            raise ValueError("Post name %i byte padding region contained data"
-                             % padding)
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Your SFF file is invalid, post name %i byte "
+                          "padding region contained data" % padding,
+                          BiopythonParserWarning)
         assert record_offset + read_header_length == handle.tell()
         #now the flowgram values, flowgram index, bases and qualities
         size = read_flow_size + 3 * seq_len
@@ -1174,7 +1180,7 @@ class SffWriter(SequenceWriter):
 
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
     metadata = ReadRocheXmlManifest(open(filename, "rb"))
     index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
@@ -1241,7 +1247,7 @@ if __name__ == "__main__":
 
     sff_trim = list(SffIterator(open(filename, "rb"), trim=True))
 
-    print ReadRocheXmlManifest(open(filename, "rb"))
+    print(ReadRocheXmlManifest(open(filename, "rb")))
 
     from Bio import SeqIO
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
@@ -1257,7 +1263,7 @@ if __name__ == "__main__":
     for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
                                    qual_no_trim, fasta_trim, qual_trim):
         #print
-        print s.id
+        print(s.id)
         #print s.seq
         #print s.letter_annotations["phred_quality"]
 
@@ -1271,12 +1277,12 @@ if __name__ == "__main__":
         assert sT.letter_annotations[
             "phred_quality"] == qT.letter_annotations["phred_quality"]
 
-    print "Writing with a list of SeqRecords..."
+    print("Writing with a list of SeqRecords...")
     handle = StringIO()
     w = SffWriter(handle, xml=metadata)
     w.write_file(sff)  # list
     data = handle.getvalue()
-    print "And again with an iterator..."
+    print("And again with an iterator...")
     handle = StringIO()
     w = SffWriter(handle, xml=metadata)
     w.write_file(iter(sff))
@@ -1289,15 +1295,15 @@ if __name__ == "__main__":
     del data
     handle.close()
 
-    print "-" * 50
+    print("-" * 50)
     filename = "../../Tests/Roche/greek.sff"
     for record in SffIterator(open(filename, "rb")):
-        print record.id
+        print(record.id)
     index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
     index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
     assert index1 == index2
     try:
-        print ReadRocheXmlManifest(open(filename, "rb"))
+        print(ReadRocheXmlManifest(open(filename, "rb")))
         assert False, "Should fail!"
     except ValueError:
         pass
@@ -1307,11 +1313,11 @@ if __name__ == "__main__":
         pass
     try:
         for record in SffIterator(handle):
-            print record.id
+            print(record.id)
         assert False, "Should have failed"
-    except ValueError, err:
-        print "Checking what happens on re-reading a handle:"
-        print err
+    except ValueError as err:
+        print("Checking what happens on re-reading a handle:")
+        print(err)
 
     """
     #Ugly code to make test files...
@@ -1427,4 +1433,4 @@ if __name__ == "__main__":
         open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     """
 
-    print "Done"
+    print("Done")

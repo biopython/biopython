@@ -66,7 +66,7 @@ class Paml(object):
     def print_options(self):
         """Print out all of the options and their current settings."""
         for option in self._options.items():
-            print "%s = %s" % (option[0], option[1])
+            print("%s = %s" % (option[0], option[1]))
 
     def set_options(self, **kwargs):
         """Set the value of an option.

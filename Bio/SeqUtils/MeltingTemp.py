@@ -178,9 +178,9 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
 def _test():
     """Run the module's doctests (PRIVATE)."""
     import doctest
-    print "Running doctests..."
+    print("Running doctests...")
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

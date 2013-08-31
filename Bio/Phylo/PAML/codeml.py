@@ -3,9 +3,6 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 import os
 import os.path
 from _paml import Paml, _relpath
@@ -155,9 +152,9 @@ class Codeml(Paml):
                 # control file it is specified as a series of numbers
                 # separated by spaces.
                 NSsites = " ".join([str(site) for site in option[1]])
-                print "%s = %s" % (option[0], NSsites)
+                print("%s = %s" % (option[0], NSsites))
             else:
-                print "%s = %s" % (option[0], option[1])
+                print("%s = %s" % (option[0], option[1]))
 
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.

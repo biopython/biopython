@@ -36,7 +36,7 @@ class CheckRaw(unittest.TestCase):
 
         if os.path.isfile(filename + ".bgz"):
             #Do the tests again with the BGZF compressed file
-            print "[BONUS %s.bgz]" % filename
+            print("[BONUS %s.bgz]" % filename)
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
 
@@ -88,7 +88,7 @@ class CheckIndex(unittest.TestCase):
 
         if os.path.isfile(filename + ".bgz"):
             #Do the tests again with the BGZF compressed file
-            print "[BONUS %s.bgz]" % filename
+            print("[BONUS %s.bgz]" % filename)
             self.check_index(filename + ".bgz", format, **kwargs)
 
 def _num_difference(obj_a, obj_b):

@@ -68,23 +68,23 @@ print len(protein), "ungapped residues translated"
 
 gapped_protein = dna.translate()
 assert isinstance(gapped_protein.alphabet, Alphabet.HasStopCodon)
-print str(protein)
+print(str(protein))
 
 print len(gapped_protein), "residues translated, including gaps"
-print str(gapped_protein)
+print(str(gapped_protein))
 
 # This has "AGG" as a stop codon
 p2 = dna.translate(table=2, to_stop=True)
 print len(p2), "SGC1 has a stop codon"
-print str(p2)
+print(str(p2))
 p2 = dna.translate(table=2)
 print "Actually, there are", p2.count("*"), "stops."
-print str(p2)
+print(str(p2))
 
 # Make sure I can change the stop character
 p2 = dna.translate(table=2, stop_symbol="+")
 print "Yep,", p2.count("+"), "stops."
-print str(p2)
+print(str(p2))
 
 
 # Some of the same things, with RNA
@@ -95,23 +95,23 @@ print "RNA translation ...",
 protein_from_rna = rna.translate(to_stop=True)
 assert protein.alphabet is protein_from_rna.alphabet
 assert str(protein) == str(protein_from_rna)
-print "works."
+print("works.")
 
 print "RNA translation to stop ...",
 gapped_protein_from_rna = rna.translate()
 assert len(gapped_protein) == len(gapped_protein_from_rna)
 assert str(gapped_protein) == str(gapped_protein_from_rna)
-print "works."
+print("works.")
 
 # some tests for "by name"
 # How about some forward ambiguity?
-print "Forward ambiguous"
+print("Forward ambiguous")
 s = "RATGATTARAATYTA"
 #     B  D  *  N  L
 dna = Seq.Seq(s, IUPAC.ambiguous_dna)
 protein = dna.translate('Vertebrate Mitochondrial')
-print str(protein)
+print(str(protein))
 stop_protein = dna.translate('SGC1', to_stop=True)
-print str(stop_protein)
+print(str(stop_protein))
 
 # XXX (Backwards with ambiguity code is unfinished!)

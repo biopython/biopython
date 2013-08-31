@@ -439,7 +439,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
 
 if __name__ == "__main__":
-    print "Running short mini-test"
+    print("Running short mini-test")
 
     phylip_text = """     8    286
 V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG
@@ -503,7 +503,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
     for alignment in PhylipIterator(handle):
         for record in alignment:
             count = count+1
-            print record.id
+            print(record.id)
             #print str(record.seq)
     assert count == 8
 
@@ -600,9 +600,9 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
         list5 = list(PhylipIterator(handle))
         assert len(list5) == 1
         assert len(list5[0]) == 5
-        print "That should have failed..."
+        print("That should have failed...")
     except ValueError:
-        print "Evil multiline non-interlaced example failed as expected"
+        print("Evil multiline non-interlaced example failed as expected")
     handle.close()
 
     handle = StringIO(phylip_text5a)
@@ -611,16 +611,16 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     assert len(list5) == 1
     assert len(list4[0]) == 5
 
-    print "Concatenation"
+    print("Concatenation")
     handle = StringIO(phylip_text4 + "\n" + phylip_text4)
     assert len(list(PhylipIterator(handle))) == 2
 
     handle = StringIO(phylip_text3 + "\n" + phylip_text4 + "\n\n\n" + phylip_text)
     assert len(list(PhylipIterator(handle))) == 3
 
-    print "OK"
+    print("OK")
 
-    print "Checking write/read"
+    print("Checking write/read")
     handle = StringIO()
     PhylipWriter(handle).write_file(list5)
     handle.seek(0)
@@ -631,4 +631,4 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
         for r1, r2 in zip(a1, a2):
             assert r1.id == r2.id
             assert str(r1.seq) == str(r2.seq)
-    print "Done"
+    print("Done")

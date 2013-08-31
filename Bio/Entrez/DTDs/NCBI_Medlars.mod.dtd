@@ -1,0 +1,58 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "medlars.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Medlars"
+================================================= -->
+
+<!--
+$Revision: 6.0 $
+**********************************************************************
+
+  MEDLARS data definitions
+  Grigoriy Starchenko, 1997
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Medlars-entry,
+          Medlars-record -->
+
+<!-- Elements referenced from other modules:
+          PubMedId FROM NCBI-Biblio -->
+<!-- ============================================ -->
+
+<!-- a MEDLARS entry -->
+<!ELEMENT Medlars-entry (
+        Medlars-entry_pmid, 
+        Medlars-entry_muid?, 
+        Medlars-entry_recs)>
+
+<!-- All entries in PubMed must have it -->
+<!ELEMENT Medlars-entry_pmid (PubMedId)>
+
+<!-- Medline(OCCS) id -->
+<!ELEMENT Medlars-entry_muid (%INTEGER;)>
+
+<!-- List of Medlars records -->
+<!ELEMENT Medlars-entry_recs (Medlars-record*)>
+
+
+<!ELEMENT Medlars-record (
+        Medlars-record_code, 
+        Medlars-record_abbr?, 
+        Medlars-record_data)>
+
+<!-- Unit record field type integer form -->
+<!ELEMENT Medlars-record_code (%INTEGER;)>
+
+<!-- Unit record field type abbreviation form -->
+<!ELEMENT Medlars-record_abbr (#PCDATA)>
+
+<!-- Unit record data -->
+<!ELEMENT Medlars-record_data (#PCDATA)>
+

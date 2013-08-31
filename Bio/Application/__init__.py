@@ -325,7 +325,13 @@ class AbstractCommandline(object):
             raise ValueError("Option name %s was not found." % name)
 
     def set_parameter(self, name, value = None):
-        """Set a commandline option for a program.
+        """Set a commandline option for a program (OBSOLETE).
+
+        Every parameter is available via a property and as a named
+        keyword when creating the instance. Using either of these is
+        preferred to this legacy set_parameter method which is now
+        OBSOLETE, and likely to be DEPRECATED and later REMOVED in
+        future releases.
         """
         set_option = False
         for parameter in self.parameters:
@@ -512,14 +518,17 @@ class _Option(_AbstractParameter):
 
     Attributes:
 
-    o names -- a list of string names by which the parameter can be
-    referenced (ie. ["-a", "--append", "append"]). The first name in
-    the list is considered to be the one that goes on the commandline,
-    for those parameters that print the option. The last name in the list
-    is assumed to be a "human readable" name describing the option in one
-    word.
+    o names -- a list of string names (typically two entries) by which
+    the parameter can be set via the legacy set_parameter method
+    (eg ["-a", "--append", "append"]). The first name in list is used
+    when building the command line. The last name in the list is a
+    "human readable" name describing the option in one word. This
+    must be a valid Python identifer as it is used as the property
+    name and as a keyword argument, and should therefore follow PEP8
+    naming.
 
-    o description -- a description of the option.
+    o description -- a description of the option. This is used as
+    the property docstring.
 
     o filename -- True if this argument is a filename and should be
     automatically quoted if it contains spaces.
@@ -580,14 +589,17 @@ class _Switch(_AbstractParameter):
     take a value, they are either included in the command string
     or omitted.
 
-    o names -- a list of string names by which the parameter can be
-    referenced (ie. ["-a", "--append", "append"]). The first name in
-    the list is considered to be the one that goes on the commandline,
-    for those parameters that print the option. The last name in the list
-    is assumed to be a "human readable" name describing the option in one
-    word.
+    o names -- a list of string names (typically two entries) by which
+    the parameter can be set via the legacy set_parameter method
+    (eg ["-a", "--append", "append"]). The first name in list is used
+    when building the command line. The last name in the list is a
+    "human readable" name describing the option in one word. This
+    must be a valid Python identifer as it is used as the property
+    name and as a keyword argument, and should therefore follow PEP8
+    naming. 
 
-    o description -- a description of the option.
+    o description -- a description of the option. This is used as
+    the property docstring.
 
     o is_set -- if the parameter has been set
 
@@ -613,9 +625,17 @@ class _Switch(_AbstractParameter):
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
+
+    The names argument should be a list containing one string.
+    This must be a valid Python identifer as it is used as the
+    property name and as a keyword argument, and should therefore
+    follow PEP8 naming.
     """
     def __init__(self, names, description, filename=False,
                  checker_function=None, is_required=False):
+        #if len(names) != 1:
+        #    raise ValueError("The names argument to _Argument should be a "
+        #                     "single entry list with a PEP8 property name.")
         self.names = names
         assert isinstance(description, basestring), \
                "%r for %s" % (description, names[-1])

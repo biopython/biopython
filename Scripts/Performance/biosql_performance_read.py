@@ -20,9 +20,9 @@ for junk_id, record in all_records:
 end_time = time.time()
 num_records = len(all_records)
 elapsed_time = end_time - start_time
-print "Fasta"
-print "\tDid %s records in %s seconds for\n\t%f records per second" % \
-      (num_records, elapsed_time, float(num_records) / float(elapsed_time))
+print("Fasta")
+print("\tDid %s records in %s seconds for\n\t%f records per second" % \
+      (num_records, elapsed_time, float(num_records) / float(elapsed_time)))
 
 # -- do the "EMBL" timing part
 start_time = time.time()
@@ -40,6 +40,6 @@ for junk_id, record in all_records:
 end_time = time.time()
 num_records = len(all_records)
 elapsed_time = end_time - start_time
-print "EMBL"
-print "\tDid %s records in %s seconds for\n\t%f records per second" % \
-      (num_records, elapsed_time, float(num_records) / float(elapsed_time))
+print("EMBL")
+print("\tDid %s records in %s seconds for\n\t%f records per second" % \
+      (num_records, elapsed_time, float(num_records) / float(elapsed_time)))

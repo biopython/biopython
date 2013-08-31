@@ -10,7 +10,7 @@ import math
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-#Hack for Python 2.5, isnan was new in Python 2.6
+#Hack for Python 2.5, isnan and isinf were new in Python 2.6
 try:
     from math import isnan as _isnan
 except ImportError:
@@ -19,6 +19,20 @@ except ImportError:
         if str(value).lower() == "nan":
             return True
         return value != value
+try:
+    from math import isinf as _isinf
+except ImportError:
+    def _isinf(value):
+        #This is tricky due to cross platform float differences
+        if str(value).lower().endswith("inf"):
+            return True
+        return False
+#Hack for Python 2.5 on Windows:
+try:
+    _nan = float("nan")
+except ValueError:
+    _nan = 1e1000 / 1e1000
+
 
 class GenericPositionMatrix(dict):
 
@@ -315,7 +329,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = float("inf")
                     else:
-                        logodds = float("nan")
+                        logodds = _nan
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
         return pssm
@@ -333,11 +347,16 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
           number is returned
         - otherwise, the result is a one-dimensional list or numpy array
         """
-        if self.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA motifs")
-        if sequence.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+        #TODO - Code itself tolerates ambiguous bases (as NaN).
+        if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs" \
+                                 % self.alphabet)
+        if not isinstance(sequence.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences" \
+                                 % sequence.alphabet)
 
+        #TODO - Force uppercase here and optimise switch statement in C
+        #by assuming upper case?
         sequence = str(sequence)
         m = self.length
         n = len(sequence)
@@ -348,11 +367,17 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             import _pwm
         except ImportError:
             # use the slower Python code otherwise
+            #The C code handles mixed case so Python version must too:
+            sequence = sequence.upper()
             for i in xrange(n-m+1):
                 score = 0.0
                 for position in xrange(m):
                     letter = sequence[i+position]
-                    score += self[letter][position]
+                    try:
+                        score += self[letter][position]
+                    except KeyError:
+                        score = _nan
+                        break
                 scores.append(score)
         else:
             # get the log-odds matrix into a proper shape
@@ -426,6 +451,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 logodds = self[letter,i]
                 if _isnan(logodds):
                     continue
+                if _isinf(logodds) and logodds < 0:
+                    continue
                 b = background[letter]
                 p = b * math.pow(2,logodds)
                 sx += p * logodds
@@ -447,6 +474,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             for letter in self._letters:
                 logodds = self[letter,i]
                 if _isnan(logodds):
+                    continue
+                if _isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
                 p = b * math.pow(2,logodds)

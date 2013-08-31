@@ -287,9 +287,25 @@ class MafftCommandline(AbstractCommandline):
                     "Incorporate the AA/nuc composition information into "
                     "the scoring matrix (True) or not (False, default)"),
             #**** Output ****
+            #Name length for CLUSTAL and PHYLIP format output
+            _Option(["--namelength", "namelength"],
+                    """Name length in CLUSTAL and PHYLIP output.
+
+                    MAFFT v6.847 (2011) added --namelength for use with
+                    the --clustalout option for CLUSTAL output.
+
+                    MAFFT v7.024 (2013) added support for this with the
+                    --phylipout option for PHYLIP output (default 10).
+                    """,
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #Output format: clustal format. Default: off (fasta format)
             _Switch(["--clustalout", "clustalout"],
                     "Output format: clustal (True) or fasta (False, default)"),
+            #Output format: phylip format.
+            #Added in beta with v6.847, fixed in v6.850 (2011)
+            _Switch(["--phylipout", "phylipout"],
+                    "Output format: phylip (True), or fasta (False, default)"),
             #Output order: same as input. Default: on
             _Switch(["--inputorder", "inputorder"],
                     "Output order: same as input (True, default) or alignment "

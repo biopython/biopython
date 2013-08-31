@@ -261,8 +261,8 @@ class DB_Index:
 
 def help(exit=0):
     name = os.path.basename(sys.argv[0])
-    print 'Usage: %s <db> <gene ID>' % name
-    print '  or   %s --index <db.dat>' % name
+    print('Usage: %s <db> <gene ID>' % name)
+    print('  or   %s --index <db.dat>' % name)
     if exit:
         sys.exit(0)
 
@@ -303,4 +303,4 @@ if __name__ == '__main__':
     db_index.Open(dbfile)
     for id in ids:
         #print db_index.Get(id)
-        print func(id)
+        print(func(id))

@@ -92,7 +92,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertEqual(err.returncode, 255)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
@@ -106,7 +106,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertEqual(err.returncode, 255)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))

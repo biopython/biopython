@@ -3,12 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module allows to control fdist.
+"""This module allows you to control fdist.
 
-This will allow to call fdist and associated program (cplot, datacal, pv).
+This will allow you to call fdist and associated programs (cplot,
+datacal, pv) by Mark Beaumont.
 
-http://www.rubic.rdg.ac.uk/~mab/software.html
+http://www.rubic.rdg.ac.uk/~mab/software.html (old)
+http://www.maths.bris.ac.uk/~mamab/ (new)
 """
 
 import os

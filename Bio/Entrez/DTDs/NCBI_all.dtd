@@ -1,0 +1,202 @@
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % Docsum_3_0_module PUBLIC "-//NCBI//Docsum 3 0 Module//EN" "Docsum_3_0.mod.dtd">
+%Docsum_3_0_module;
+
+<!ENTITY % Docsum_3_1_module PUBLIC "-//NCBI//Docsum 3 1 Module//EN" "Docsum_3_1.mod.dtd">
+%Docsum_3_1_module;
+
+<!ENTITY % Docsum_3_2_module PUBLIC "-//NCBI//Docsum 3 2 Module//EN" "Docsum_3_2.mod.dtd">
+%Docsum_3_2_module;
+
+<!ENTITY % Docsum_3_3_module PUBLIC "-//NCBI//Docsum 3 3 Module//EN" "Docsum_3_3.mod.dtd">
+%Docsum_3_3_module;
+
+<!ENTITY % Docsum_3_4_module PUBLIC "-//NCBI//Docsum 3 4 Module//EN" "Docsum_3_4.mod.dtd">
+%Docsum_3_4_module;
+
+<!ENTITY % EMBL_General_module PUBLIC "-//NCBI//EMBL General Module//EN" "EMBL_General.mod.dtd">
+%EMBL_General_module;
+
+<!ENTITY % GenBank_General_module PUBLIC "-//NCBI//GenBank General Module//EN" "GenBank_General.mod.dtd">
+%GenBank_General_module;
+
+<!ENTITY % HomoloGene_module PUBLIC "-//NCBI//HomoloGene Module//EN" "HomoloGene.mod.dtd">
+%HomoloGene_module;
+
+<!ENTITY % INSD_INSDSeq_module PUBLIC "-//NCBI//INSD INSDSeq Module//EN" "INSD_INSDSeq.mod.dtd">
+%INSD_INSDSeq_module;
+
+<!ENTITY % MMDB_module PUBLIC "-//NCBI//MMDB Module//EN" "MMDB.mod.dtd">
+%MMDB_module;
+
+<!ENTITY % MMDB_Chemical_graph_module PUBLIC "-//NCBI//MMDB Chemical graph Module//EN" "MMDB_Chemical_graph.mod.dtd">
+%MMDB_Chemical_graph_module;
+
+<!ENTITY % MMDB_Features_module PUBLIC "-//NCBI//MMDB Features Module//EN" "MMDB_Features.mod.dtd">
+%MMDB_Features_module;
+
+<!ENTITY % MMDB_Structural_model_module PUBLIC "-//NCBI//MMDB Structural model Module//EN" "MMDB_Structural_model.mod.dtd">
+%MMDB_Structural_model_module;
+
+<!ENTITY % NCBI_Access_module PUBLIC "-//NCBI//NCBI Access Module//EN" "NCBI_Access.mod.dtd">
+%NCBI_Access_module;
+
+<!ENTITY % NCBI_Biblio_module PUBLIC "-//NCBI//NCBI Biblio Module//EN" "NCBI_Biblio.mod.dtd">
+%NCBI_Biblio_module;
+
+<!ENTITY % NCBI_BioSource_module PUBLIC "-//NCBI//NCBI BioSource Module//EN" "NCBI_BioSource.mod.dtd">
+%NCBI_BioSource_module;
+
+<!ENTITY % NCBI_BioTree_module PUBLIC "-//NCBI//NCBI BioTree Module//EN" "NCBI_BioTree.mod.dtd">
+%NCBI_BioTree_module;
+
+<!ENTITY % NCBI_Blast4_module PUBLIC "-//NCBI//NCBI Blast4 Module//EN" "NCBI_Blast4.mod.dtd">
+%NCBI_Blast4_module;
+
+<!ENTITY % NCBI_BlastDL_module PUBLIC "-//NCBI//NCBI BlastDL Module//EN" "NCBI_BlastDL.mod.dtd">
+%NCBI_BlastDL_module;
+
+<!ENTITY % NCBI_BlastOutput_module PUBLIC "-//NCBI//NCBI BlastOutput Module//EN" "NCBI_BlastOutput.mod.dtd">
+%NCBI_BlastOutput_module;
+
+<!ENTITY % NCBI_Cdd_module PUBLIC "-//NCBI//NCBI Cdd Module//EN" "NCBI_Cdd.mod.dtd">
+%NCBI_Cdd_module;
+
+<!ENTITY % NCBI_Cn3d_module PUBLIC "-//NCBI//NCBI Cn3d Module//EN" "NCBI_Cn3d.mod.dtd">
+%NCBI_Cn3d_module;
+
+<!ENTITY % NCBI_Entrez2_module PUBLIC "-//NCBI//NCBI Entrez2 Module//EN" "NCBI_Entrez2.mod.dtd">
+%NCBI_Entrez2_module;
+
+<!ENTITY % NCBI_Entrezgene_module PUBLIC "-//NCBI//NCBI Entrezgene Module//EN" "NCBI_Entrezgene.mod.dtd">
+%NCBI_Entrezgene_module;
+
+<!ENTITY % NCBI_FeatDef_module PUBLIC "-//NCBI//NCBI FeatDef Module//EN" "NCBI_FeatDef.mod.dtd">
+%NCBI_FeatDef_module;
+
+<!ENTITY % NCBI_GBSeq_module PUBLIC "-//NCBI//NCBI GBSeq Module//EN" "NCBI_GBSeq.mod.dtd">
+%NCBI_GBSeq_module;
+
+<!ENTITY % NCBI_Gene_module PUBLIC "-//NCBI//NCBI Gene Module//EN" "NCBI_Gene.mod.dtd">
+%NCBI_Gene_module;
+
+<!ENTITY % NCBI_General_module PUBLIC "-//NCBI//NCBI General Module//EN" "NCBI_General.mod.dtd">
+%NCBI_General_module;
+
+<!ENTITY % NCBI_ID1Access_module PUBLIC "-//NCBI//NCBI ID1Access Module//EN" "NCBI_ID1Access.mod.dtd">
+%NCBI_ID1Access_module;
+
+<!ENTITY % NCBI_ID2Access_module PUBLIC "-//NCBI//NCBI ID2Access Module//EN" "NCBI_ID2Access.mod.dtd">
+%NCBI_ID2Access_module;
+
+<!ENTITY % NCBI_MedArchive_module PUBLIC "-//NCBI//NCBI MedArchive Module//EN" "NCBI_MedArchive.mod.dtd">
+%NCBI_MedArchive_module;
+
+<!ENTITY % NCBI_Medlars_module PUBLIC "-//NCBI//NCBI Medlars Module//EN" "NCBI_Medlars.mod.dtd">
+%NCBI_Medlars_module;
+
+<!ENTITY % NCBI_Medline_module PUBLIC "-//NCBI//NCBI Medline Module//EN" "NCBI_Medline.mod.dtd">
+%NCBI_Medline_module;
+
+<!ENTITY % NCBI_Mim_module PUBLIC "-//NCBI//NCBI Mim Module//EN" "NCBI_Mim.mod.dtd">
+%NCBI_Mim_module;
+
+<!ENTITY % NCBI_Mime_module PUBLIC "-//NCBI//NCBI Mime Module//EN" "NCBI_Mime.mod.dtd">
+%NCBI_Mime_module;
+
+<!ENTITY % NCBI_ObjPrt_module PUBLIC "-//NCBI//NCBI ObjPrt Module//EN" "NCBI_ObjPrt.mod.dtd">
+%NCBI_ObjPrt_module;
+
+<!ENTITY % NCBI_Organism_module PUBLIC "-//NCBI//NCBI Organism Module//EN" "NCBI_Organism.mod.dtd">
+%NCBI_Organism_module;
+
+<!ENTITY % NCBI_PCAssay_module PUBLIC "-//NCBI//NCBI PCAssay Module//EN" "NCBI_PCAssay.mod.dtd">
+%NCBI_PCAssay_module;
+
+<!ENTITY % NCBI_PCSubstance_module PUBLIC "-//NCBI//NCBI PCSubstance Module//EN" "NCBI_PCSubstance.mod.dtd">
+%NCBI_PCSubstance_module;
+
+<!ENTITY % NCBI_Project_module PUBLIC "-//NCBI//NCBI Project Module//EN" "NCBI_Project.mod.dtd">
+%NCBI_Project_module;
+
+<!ENTITY % NCBI_Protein_module PUBLIC "-//NCBI//NCBI Protein Module//EN" "NCBI_Protein.mod.dtd">
+%NCBI_Protein_module;
+
+<!ENTITY % NCBI_Pub_module PUBLIC "-//NCBI//NCBI Pub Module//EN" "NCBI_Pub.mod.dtd">
+%NCBI_Pub_module;
+
+<!ENTITY % NCBI_PubMed_module PUBLIC "-//NCBI//NCBI PubMed Module//EN" "NCBI_PubMed.mod.dtd">
+%NCBI_PubMed_module;
+
+<!ENTITY % NCBI_RNA_module PUBLIC "-//NCBI//NCBI RNA Module//EN" "NCBI_RNA.mod.dtd">
+%NCBI_RNA_module;
+
+<!ENTITY % NCBI_Remap_module PUBLIC "-//NCBI//NCBI Remap Module//EN" "NCBI_Remap.mod.dtd">
+%NCBI_Remap_module;
+
+<!ENTITY % NCBI_Rsite_module PUBLIC "-//NCBI//NCBI Rsite Module//EN" "NCBI_Rsite.mod.dtd">
+%NCBI_Rsite_module;
+
+<!ENTITY % NCBI_ScoreMat_module PUBLIC "-//NCBI//NCBI ScoreMat Module//EN" "NCBI_ScoreMat.mod.dtd">
+%NCBI_ScoreMat_module;
+
+<!ENTITY % NCBI_SeqCode_module PUBLIC "-//NCBI//NCBI SeqCode Module//EN" "NCBI_SeqCode.mod.dtd">
+%NCBI_SeqCode_module;
+
+<!ENTITY % NCBI_SeqTable_module PUBLIC "-//NCBI//NCBI SeqTable Module//EN" "NCBI_SeqTable.mod.dtd">
+%NCBI_SeqTable_module;
+
+<!ENTITY % NCBI_Seq_split_module PUBLIC "-//NCBI//NCBI Seq split Module//EN" "NCBI_Seq_split.mod.dtd">
+%NCBI_Seq_split_module;
+
+<!ENTITY % NCBI_Seqalign_module PUBLIC "-//NCBI//NCBI Seqalign Module//EN" "NCBI_Seqalign.mod.dtd">
+%NCBI_Seqalign_module;
+
+<!ENTITY % NCBI_Seqfeat_module PUBLIC "-//NCBI//NCBI Seqfeat Module//EN" "NCBI_Seqfeat.mod.dtd">
+%NCBI_Seqfeat_module;
+
+<!ENTITY % NCBI_Seqloc_module PUBLIC "-//NCBI//NCBI Seqloc Module//EN" "NCBI_Seqloc.mod.dtd">
+%NCBI_Seqloc_module;
+
+<!ENTITY % NCBI_Seqres_module PUBLIC "-//NCBI//NCBI Seqres Module//EN" "NCBI_Seqres.mod.dtd">
+%NCBI_Seqres_module;
+
+<!ENTITY % NCBI_Seqset_module PUBLIC "-//NCBI//NCBI Seqset Module//EN" "NCBI_Seqset.mod.dtd">
+%NCBI_Seqset_module;
+
+<!ENTITY % NCBI_Sequence_module PUBLIC "-//NCBI//NCBI Sequence Module//EN" "NCBI_Sequence.mod.dtd">
+%NCBI_Sequence_module;
+
+<!ENTITY % NCBI_Submit_module PUBLIC "-//NCBI//NCBI Submit Module//EN" "NCBI_Submit.mod.dtd">
+%NCBI_Submit_module;
+
+<!ENTITY % NCBI_TSeq_module PUBLIC "-//NCBI//NCBI TSeq Module//EN" "NCBI_TSeq.mod.dtd">
+%NCBI_TSeq_module;
+
+<!ENTITY % NCBI_TxInit_module PUBLIC "-//NCBI//NCBI TxInit Module//EN" "NCBI_TxInit.mod.dtd">
+%NCBI_TxInit_module;
+
+<!ENTITY % NCBI_Variation_module PUBLIC "-//NCBI//NCBI Variation Module//EN" "NCBI_Variation.mod.dtd">
+%NCBI_Variation_module;
+
+<!ENTITY % NSE_module PUBLIC "-//NCBI//NSE Module//EN" "NSE.mod.dtd">
+%NSE_module;
+
+<!ENTITY % OMSSA_module PUBLIC "-//NCBI//OMSSA Module//EN" "OMSSA.mod.dtd">
+%OMSSA_module;
+
+<!ENTITY % PDB_General_module PUBLIC "-//NCBI//PDB General Module//EN" "PDB_General.mod.dtd">
+%PDB_General_module;
+
+<!ENTITY % PIR_General_module PUBLIC "-//NCBI//PIR General Module//EN" "PIR_General.mod.dtd">
+%PIR_General_module;
+
+<!ENTITY % PRF_General_module PUBLIC "-//NCBI//PRF General Module//EN" "PRF_General.mod.dtd">
+%PRF_General_module;
+
+<!ENTITY % SP_General_module PUBLIC "-//NCBI//SP General Module//EN" "SP_General.mod.dtd">
+%SP_General_module;
+

@@ -5,9 +5,6 @@
 
 """Tests for SearchIO BlastIO parsers."""
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 import os
 import unittest
 

@@ -1145,10 +1145,7 @@ class BranchColor(object):
             >>> bc.to_hex()
             '#0cc864'
         """
-        return '#' + hex(
-                self.red * (16**4)
-                + self.green * (16**2)
-                + self.blue)[2:].zfill(6)
+        return "#%02x%02x%02x" % (self.red, self.green, self.blue)
 
     def to_rgb(self):
         """Return a tuple of RGB values (0 to 255) representing this color.

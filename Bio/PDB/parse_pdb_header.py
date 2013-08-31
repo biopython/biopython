@@ -23,8 +23,6 @@
 
 """Parse the header of a PDB file."""
 
-# For 'with' on Python 2.5/Jython 2.5
-from __future__ import with_statement
 import re
 
 from Bio import File
@@ -268,6 +266,6 @@ if __name__=='__main__':
 
     # print the dictionary
     for k, y in data_dict.iteritems():
-        print "-"*40
-        print k
-        print y
+        print("-"*40)
+        print(k)
+        print(y)

@@ -99,8 +99,8 @@ We recommend GCC as the C compiler, this is usually available as part
 of the standard set of packages on any Unix or Linux system.
 
 \subsection{Mac OS X}
-Please install Apple's XCode suite - \emph{including} the optional
-Mac OS 10.4 SDK which includes important header files. 
+Please install Apple's XCode suite from the App Store, and then from
+the Xcode options also install the optional command line utilities.
 
 \subsection{Windows}
 We recommend you install Biopython and its dependencies using the
@@ -124,11 +124,11 @@ to use support it).
 Upgrading bug-fix releases (for example. 2.6.1 to 2.6.2) 
 is incredibly easy and won't require any re-installation of libraries.
 
-Upgrading between versions (e.g. 2.5 to 2.6) is more time consuming since you
+Upgrading between versions (e.g. 2.6 to 2.7) is more time consuming since you
 need to re-install all libraries you have added to python.
 
-We do not yet officially support Python 3, although we are testing with
-Python 3.1 and 3.2 and most things work. Python 3.0 will not be supported.
+As of Biopython 1.62 we officially support Python 3, specifically Python 3.3.
+Python 3.0, 3.1 and 3.2 will not be supported.
 
 Let's get started with installation on various platforms.
 
@@ -136,23 +136,22 @@ Let's get started with installation on various platforms.
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
-latest stable python release is 2.6.2, which is available from
-\ahrefurl{\url{http://www.python.org/download/releases/2.6.2/}}. This page contains links
+latest stable Python 2 release is 2.7.5, which is available from
+\ahrefurl{\url{http://www.python.org/download/releases/2.7.5/}}. This page contains links
 to all released files for the given release. For UNIX, we'll want to use
-the tarred and gzipped file, which is called \verb|Python-2.6.2.tgz| at
+the tarred and gzipped file, which is called \verb|Python-2.7.5.tgz| at
 the time of this writing.
 
-Download this file and then unpack it with the following commands:
+Download this file and then unpack it with the following command:
 
 \begin{verbatim}
-$ gunzip Python-2.6.2.tgz 
-$ tar -xvpf Python-2.6.2.tar 
+$ tar -zxvf Python-2.7.5.tar.gz
 \end{verbatim}
 
 Then enter into the created directory:
 
 \begin{verbatim}
-$ cd Python-2.6
+$ cd Python-2.7
 \end{verbatim}
 
 Now, start the build process by configuring everything to your system:
@@ -171,7 +170,7 @@ Finally, you'll need to have root permissions on the system and then
 install everything:
 
 \begin{verbatim}
-# make install
+$ make install
 \end{verbatim}
 
 If there were no errors and everything worked correctly, you should now
@@ -180,8 +179,8 @@ python interpreter:
 
 \begin{verbatim}
 $ python
-Python 2.6.2 (...)
-[GCC 3.3.3] on cygwin
+Python 2.7.5 (...)
+...
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{verbatim}
@@ -216,8 +215,8 @@ Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
 installer. At the current time, you'd go to
-\ahrefurl{\url{http://www.python.org/download/releases/2.6.2/}} and download
-\verb|Python-2.6.2.msi|. 
+\ahrefurl{\url{http://www.python.org/download/releases/2.7.5/}} and download
+\verb|Python-2.7.5.msi|. 
 
 The installer is an executable program, so you only need to double click
 it to run it. Then just follow the friendly instructions. On all newer Windows
@@ -230,6 +229,8 @@ Apple includes python on Mac OS X, and while you can use this many people have
 preferred to install the latest version of python as well in parallel. We refer
 you to the \ahrefurl{\url{http://www.python.org}} for more details, although
 otherwise the UNIX instructions apply.
+
+(See note above about installing XCode to get the compiler tools.)
 
 \section{Installing Biopython dependencies}
 
@@ -259,15 +260,15 @@ You should download the \verb|tar.gz| file, and follow the standard python
 build process. Note you will need a C compiler installed (see above):
 
 \begin{verbatim}
-> tar -xzvpf numpy-1.1.1.tar.gz
-> cd numpy-1.1.1/
-> python setup.py build
+$ tar -zxvf numpy-1.7.1.tar.gz
+$ cd numpy-1.7.1/
+$ python setup.py build
 \end{verbatim}
 
 Once it is built, you should become root, and then install it:
 
 \begin{verbatim}
-> python setup.py install
+$ python setup.py install
 \end{verbatim}
 
 One important note if you use an package system and not installing
@@ -280,8 +281,8 @@ and make sure to install this as well as the basic package.
 \subsubsection{Windows systems}
 
 We recommend using the NumPy provided windows installers for your installed
-version of python. For python 2.5, at the current time this would be
-\verb|numpy-1.3.0-win32-superpack-python2.5.exe|. You should follow the 
+version of python. For Python 2.7, at the current time this would be
+\verb|numpy-1.7.1-win32-superpack-python2.7.exe|. You should follow the 
 now-standard procedure of downloading the installer, double
 clicking it and then following the installation instructions. As before,
 you will need to have administrator permissions to do this.
@@ -292,10 +293,10 @@ To make sure everything went okay during the install, fire up the python
 interpreter and ensure you can import NumPy without any errors:
 
 \begin{verbatim}
-> python2.5
-Python 2.5.2 (r252:60911, Apr 27 2008, 11:46:35) 
-[GCC 4.2.3 (Debian 4.2.3-3)] on linux2
-Type ``help'', ``copyright'', ``credits'' or ``license'' for more information.
+$ python2.7
+Python 2.7.4 (default, Apr  8 2013, 15:01:09) 
+[GCC 4.4.6 20120305 (Red Hat 4.4.6-4)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
 >>> import numpy
 >>>
 \end{verbatim}
@@ -359,9 +360,9 @@ If reportlab is installed correctly, you should be able to do the
 following:
 
 \begin{verbatim}
-$ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
-[GCC 3.3.3] on cygwin
+$ python2.7
+Python 2.7.4 (default, Apr  8 2013, 15:01:09) 
+[GCC 4.4.6 20120305 (Red Hat 4.4.6-4)] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from reportlab.graphics import renderPDF
 >>>
@@ -467,14 +468,14 @@ Another simple option is to use the Python package index
 command:
 
 \begin{verbatim}
-easy_install -f http://biopython.org/DIST/ biopython
+$ easy_install -f http://biopython.org/DIST/ biopython
 \end{verbatim}
 
 If Python is installed in the standard location, you will need administrator
 privileges to do this; the \verb|sudo| command works well:
 
 \begin{verbatim}
-sudo easy_install -f http://biopython.org/DIST/ biopython
+$ sudo easy_install -f http://biopython.org/DIST/ biopython
 \end{verbatim}
 
 % FreeBSD port not up to date
@@ -496,7 +497,7 @@ sudo easy_install -f http://biopython.org/DIST/ biopython
 Instead of installing from source, on Mac OS X you can also use the fink package manager, see \ahrefurl{\url{http://fink.sf.net}}. Fink should take care of downloading the source code and installing all needed packages for Biopython, including Python itself. Once you have installed fink, you can install biopython using:
 
 \begin{verbatim}
-fink install biopython-pyXX
+$ fink install biopython-pyXX
 \end{verbatim}
 
 \noindent where XX is the python version you would like to use. Currently, python 2.4, 2.5, and 2.6 are available through fink on Mac OS X 10.4, so you would have to replace XX with 24, 25, or 26, respectively. Most likely, you will have to enable the unstable tree of fink in order to install the most recent versions of the package, see also this item in the Fink FAQ: \url{http://fink.sourceforge.net/faq/usage-fink.php#unstable}. Note that 'unstable' doesn't mean that a package won't work, but only that there has not been feedback to the fink team from users.
@@ -517,7 +518,7 @@ Installing Biopython from a RPM package should be much the same process as used 
 To install it, you should just need to do:
 
 \begin{verbatim}
-rpm -i your_biopython.rpm
+$ rpm -i your_biopython.rpm
 \end{verbatim}
 
 To see what you installed try doing \verb|rpm -qpl your_biopython.rpm| which will list all of the installed files.
@@ -582,7 +583,7 @@ If this worked properly, then it looks like Biopython is in a happy place where 
 If you didn't do this earlier, you should also all of our tests. To do this, you just need to be in the source code installation directory and type:
 
 \begin{verbatim}
-python setup.py test
+$ python setup.py test
 \end{verbatim}
 
 You can also run them by typing \verb|python run_tests.py| in the Tests sub directory.
@@ -596,11 +597,11 @@ Congratulations!
 Note that Biopython includes support for interfacing with or parsing the output from a number of third party command line tools.  These are not required to install Biopython, but may be of interest.  This includes:
 
 \begin{itemize}
-\item NCBI Standalone BLAST, which can used with the \verb|Bio.Blast| module.
+\item NCBI Standalone BLAST, which can used with the \verb|Bio.Blast| module and parsed with the \verb|Bio.SearchIO| module.
 \item EMBOSS tools, which can be invoked using the \verb|Bio.Emboss| module.  The \verb|Bio.AlignIO| module can also parse some alignment formats output by the EMBOSS suite.
-\item ClustalW, which can be invoked using the \verb|Bio.Clustalw| module.
+\item ClustalW, which can be parsed using \verb|Bio.AlignIO| and invoked using the \verb|Bio.Align.Applications| module.
 \item SIMCOAL2 and FDist tools for population genetics can be used via the \verb|Bio.PopGen| module.
-\item Bill Pearson's FASTA tools output can be parsed using the \verb|Bio.AlignIO| module.
+\item Bill Pearson's FASTA tools output can be parsed using the \verb|Bio.AlignIO| and \verb|Bio.SearchIO| module.
 \item Wise2 includes the useful tool dnal.
 \end{itemize}
 

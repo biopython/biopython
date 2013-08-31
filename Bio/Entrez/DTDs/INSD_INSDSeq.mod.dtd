@@ -1,0 +1,491 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "insdseq.asn"
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "INSD-INSDSeq"
+================================================= -->
+
+<!--
+$Revision: 192674 $
+************************************************************************
+
+ ASN.1 and XML for the components of a GenBank/EMBL/DDBJ sequence record
+ The International Nucleotide Sequence Database (INSD) collaboration
+ Version 1.6, 25 May 2010
+
+************************************************************************
+-->
+
+<!--
+  INSDSeq provides the elements of a sequence as presented in the
+    GenBank/EMBL/DDBJ-style flatfile formats, with a small amount of
+    additional structure.
+    Although this single perspective of the three flatfile formats
+    provides a useful simplification, it hides to some extent the
+    details of the actual data underlying those formats. Nevertheless,
+    the XML version of INSD-Seq is being provided with
+    the hopes that it will prove useful to those who bulk-process
+    sequence data at the flatfile-format level of detail. Further 
+    documentation regarding the content and conventions of those formats 
+    can be found at:
+
+    URLs for the DDBJ, EMBL, and GenBank Feature Table Document:
+    http://www.ddbj.nig.ac.jp/FT/full_index.html
+    http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
+    http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
+
+    URLs for DDBJ, EMBL, and GenBank Release Notes :
+    ftp://ftp.ddbj.nig.ac.jp/database/ddbj/ddbjrel.txt
+    http://www.ebi.ac.uk/embl/Documentation/Release_notes/current/relnotes.html
+    ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt
+
+    Because INSDSeq is a compromise, a number of pragmatic decisions have
+    been made:
+
+  In pursuit of simplicity and familiarity a number of fields do not
+    have full substructure defined here where there is already a
+    standard flatfile format string. For example:
+
+   Dates:      DD-MON-YYYY (eg 10-JUN-2003)
+
+   Author:     LastName, Initials  (eg Smith, J.N.)
+            or Lastname Initials   (eg Smith J.N.)
+
+   Journal:    JournalName Volume (issue), page-range (year)
+            or JournalName Volume(issue):page-range(year)
+            eg Appl. Environ. Microbiol. 61 (4), 1646-1648 (1995)
+               Appl. Environ. Microbiol. 61(4):1646-1648(1995).
+
+  FeatureLocations are representated as in the flatfile feature table,
+    but FeatureIntervals may also be provided as a convenience
+
+  FeatureQualifiers are represented as in the flatfile feature table.
+
+  Primary has a string that represents a table to construct
+    a third party (TPA) sequence.
+
+  other-seqids can have strings with the "vertical bar format" sequence
+    identifiers used in BLAST for example, when they are non-INSD types.
+
+  Currently in flatfile format you only see Accession numbers, but there 
+    are others, like patents, submitter clone names, etc which will 
+    appear here
+
+  There are also a number of elements that could have been more exactly
+    specified, but in the interest of simplicity have been simply left as
+    optional. For example:
+
+  All publicly accessible sequence records in INSDSeq format will
+    include accession and accession.version. However, these elements are 
+    optional in optional in INSDSeq so that this format can also be used   
+    for non-public sequence data, prior to the assignment of accessions and 
+    version numbers. In such cases, records will have only "other-seqids".
+
+  sequences will normally all have "sequence" filled in. But contig records
+    will have a "join" statement in the "contig" slot, and no "sequence".
+    We also may consider a retrieval option with no sequence of any kind
+    and no feature table to quickly check minimal values.
+
+  Four (optional) elements are specific to records represented via the EMBL
+    sequence database: INSDSeq_update-release, INSDSeq_create-release,
+    INSDSeq_entry-version, and INSDSeq_database-reference.
+
+  One (optional) element is specific to records originating at the GenBank
+    and DDBJ sequence databases: INSDSeq_segment.
+
+********
+-->
+<!ELEMENT INSDSet (INSDSeq*)>
+
+
+<!ELEMENT INSDSeq (
+        INSDSeq_locus, 
+        INSDSeq_length, 
+        INSDSeq_strandedness?, 
+        INSDSeq_moltype, 
+        INSDSeq_topology?, 
+        INSDSeq_division, 
+        INSDSeq_update-date, 
+        INSDSeq_create-date?, 
+        INSDSeq_update-release?, 
+        INSDSeq_create-release?, 
+        INSDSeq_definition, 
+        INSDSeq_primary-accession?, 
+        INSDSeq_entry-version?, 
+        INSDSeq_accession-version?, 
+        INSDSeq_other-seqids?, 
+        INSDSeq_secondary-accessions?, 
+        INSDSeq_project?, 
+        INSDSeq_keywords?, 
+        INSDSeq_segment?, 
+        INSDSeq_source?, 
+        INSDSeq_organism?, 
+        INSDSeq_taxonomy?, 
+        INSDSeq_references?, 
+        INSDSeq_comment?, 
+        INSDSeq_comment-set?, 
+        INSDSeq_struc-comments?, 
+        INSDSeq_primary?, 
+        INSDSeq_source-db?, 
+        INSDSeq_database-reference?, 
+        INSDSeq_feature-table?, 
+        INSDSeq_feature-set?, 
+        INSDSeq_sequence?, 
+        INSDSeq_contig?, 
+        INSDSeq_alt-seq?)>
+
+<!ELEMENT INSDSeq_locus (#PCDATA)>
+
+<!ELEMENT INSDSeq_length (%INTEGER;)>
+
+<!ELEMENT INSDSeq_strandedness (#PCDATA)>
+
+<!ELEMENT INSDSeq_moltype (#PCDATA)>
+
+<!ELEMENT INSDSeq_topology (#PCDATA)>
+
+<!ELEMENT INSDSeq_division (#PCDATA)>
+
+<!ELEMENT INSDSeq_update-date (#PCDATA)>
+
+<!ELEMENT INSDSeq_create-date (#PCDATA)>
+
+<!ELEMENT INSDSeq_update-release (#PCDATA)>
+
+<!ELEMENT INSDSeq_create-release (#PCDATA)>
+
+<!ELEMENT INSDSeq_definition (#PCDATA)>
+
+<!ELEMENT INSDSeq_primary-accession (#PCDATA)>
+
+<!ELEMENT INSDSeq_entry-version (#PCDATA)>
+
+<!ELEMENT INSDSeq_accession-version (#PCDATA)>
+
+<!ELEMENT INSDSeq_other-seqids (INSDSeqid*)>
+
+<!ELEMENT INSDSeq_secondary-accessions (INSDSecondary-accn*)>
+
+<!ELEMENT INSDSeq_project (#PCDATA)>
+
+<!ELEMENT INSDSeq_keywords (INSDKeyword*)>
+
+<!ELEMENT INSDSeq_segment (#PCDATA)>
+
+<!ELEMENT INSDSeq_source (#PCDATA)>
+
+<!ELEMENT INSDSeq_organism (#PCDATA)>
+
+<!ELEMENT INSDSeq_taxonomy (#PCDATA)>
+
+<!ELEMENT INSDSeq_references (INSDReference*)>
+
+<!ELEMENT INSDSeq_comment (#PCDATA)>
+
+<!ELEMENT INSDSeq_comment-set (INSDComment*)>
+
+<!ELEMENT INSDSeq_struc-comments (INSDStrucComment*)>
+
+<!ELEMENT INSDSeq_primary (#PCDATA)>
+
+<!ELEMENT INSDSeq_source-db (#PCDATA)>
+
+<!ELEMENT INSDSeq_database-reference (#PCDATA)>
+
+<!ELEMENT INSDSeq_feature-table (INSDFeature*)>
+
+<!ELEMENT INSDSeq_feature-set (INSDFeatureSet*)>
+
+<!-- Optional for contig, wgs, etc. -->
+<!ELEMENT INSDSeq_sequence (#PCDATA)>
+
+<!ELEMENT INSDSeq_contig (#PCDATA)>
+
+<!ELEMENT INSDSeq_alt-seq (INSDAltSeqData*)>
+
+
+<!ELEMENT INSDSeqid (#PCDATA)>
+
+
+<!ELEMENT INSDSecondary-accn (#PCDATA)>
+
+
+<!ELEMENT INSDKeyword (#PCDATA)>
+
+<!--
+ INSDReference_position contains a string value indicating the
+ basepair span(s) to which a reference applies. The allowable
+ formats are:
+ 
+   X..Y  : Where X and Y are integers separated by two periods,
+           X >= 1 , Y <= sequence length, and X <= Y 
+
+           Multiple basepair spans can exist, separated by a
+           semi-colon and a space. For example : 10..20; 100..500
+             
+   sites : The string literal 'sites', indicating that a reference
+           provides sequence annotation information, but the specific
+           basepair spans are either not captured, or were too numerous
+           to record.
+ 
+           The 'sites' literal string is singly occuring, and
+            cannot be used in conjunction with any X..Y basepair spans.
+ 
+   References that lack an INSDReference_position element apply
+   to the entire sequence.
+-->
+<!ELEMENT INSDReference (
+        INSDReference_reference, 
+        INSDReference_position?, 
+        INSDReference_authors?, 
+        INSDReference_consortium?, 
+        INSDReference_title?, 
+        INSDReference_journal, 
+        INSDReference_xref?, 
+        INSDReference_pubmed?, 
+        INSDReference_remark?)>
+
+<!ELEMENT INSDReference_reference (#PCDATA)>
+
+<!ELEMENT INSDReference_position (#PCDATA)>
+
+<!ELEMENT INSDReference_authors (INSDAuthor*)>
+
+<!ELEMENT INSDReference_consortium (#PCDATA)>
+
+<!ELEMENT INSDReference_title (#PCDATA)>
+
+<!ELEMENT INSDReference_journal (#PCDATA)>
+
+<!ELEMENT INSDReference_xref (INSDXref*)>
+
+<!ELEMENT INSDReference_pubmed (%INTEGER;)>
+
+<!ELEMENT INSDReference_remark (#PCDATA)>
+
+
+<!ELEMENT INSDAuthor (#PCDATA)>
+
+<!--
+ INSDXref provides a method for referring to records in
+ other databases. INSDXref_dbname is a string value that
+ provides the name of the database, and INSDXref_dbname
+ is a string value that provides the record's identifier
+ in that database.
+-->
+<!ELEMENT INSDXref (
+        INSDXref_dbname, 
+        INSDXref_id)>
+
+<!ELEMENT INSDXref_dbname (#PCDATA)>
+
+<!ELEMENT INSDXref_id (#PCDATA)>
+
+
+<!ELEMENT INSDComment (
+        INSDComment_type?, 
+        INSDComment_paragraphs)>
+
+<!ELEMENT INSDComment_type (#PCDATA)>
+
+<!ELEMENT INSDComment_paragraphs (INSDCommentParagraph*)>
+
+
+<!ELEMENT INSDCommentParagraph (
+        INSDCommentParagraph_items)>
+
+<!ELEMENT INSDCommentParagraph_items (INSDCommentItem*)>
+
+
+<!ELEMENT INSDCommentItem (
+        INSDCommentItem_value?, 
+        INSDCommentItem_url?)>
+
+<!ELEMENT INSDCommentItem_value (#PCDATA)>
+
+<!ELEMENT INSDCommentItem_url (#PCDATA)>
+
+
+<!ELEMENT INSDStrucComment (
+        INSDStrucComment_name?, 
+        INSDStrucComment_items)>
+
+<!ELEMENT INSDStrucComment_name (#PCDATA)>
+
+<!ELEMENT INSDStrucComment_items (INSDStrucCommentItem*)>
+
+
+<!ELEMENT INSDStrucCommentItem (
+        INSDStrucCommentItem_tag?, 
+        INSDStrucCommentItem_value?, 
+        INSDStrucCommentItem_url?)>
+
+<!ELEMENT INSDStrucCommentItem_tag (#PCDATA)>
+
+<!ELEMENT INSDStrucCommentItem_value (#PCDATA)>
+
+<!ELEMENT INSDStrucCommentItem_url (#PCDATA)>
+
+<!--
+ INSDFeature_operator contains a string value describing
+ the relationship among a set of INSDInterval within
+ INSDFeature_intervals. The allowable formats are:
+ 
+   join :  The string literal 'join' indicates that the
+           INSDInterval intervals are biologically joined
+           together into a contiguous molecule.
+ 
+   order : The string literal 'order' indicates that the
+           INSDInterval intervals are in the presented
+           order, but they are not necessarily contiguous.
+ 
+   Either 'join' or 'order' is required if INSDFeature_intervals
+   is comprised of more than one INSDInterval .
+-->
+<!ELEMENT INSDFeatureSet (
+        INSDFeatureSet_annot-source?, 
+        INSDFeatureSet_features)>
+
+<!ELEMENT INSDFeatureSet_annot-source (#PCDATA)>
+
+<!ELEMENT INSDFeatureSet_features (INSDFeature*)>
+
+
+<!ELEMENT INSDFeature (
+        INSDFeature_key, 
+        INSDFeature_location, 
+        INSDFeature_intervals?, 
+        INSDFeature_operator?, 
+        INSDFeature_partial5?, 
+        INSDFeature_partial3?, 
+        INSDFeature_quals?, 
+        INSDFeature_xrefs?)>
+
+<!ELEMENT INSDFeature_key (#PCDATA)>
+
+<!ELEMENT INSDFeature_location (#PCDATA)>
+
+<!ELEMENT INSDFeature_intervals (INSDInterval*)>
+
+<!ELEMENT INSDFeature_operator (#PCDATA)>
+
+<!ELEMENT INSDFeature_partial5 EMPTY>
+<!ATTLIST INSDFeature_partial5 value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT INSDFeature_partial3 EMPTY>
+<!ATTLIST INSDFeature_partial3 value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT INSDFeature_quals (INSDQualifier*)>
+
+<!ELEMENT INSDFeature_xrefs (INSDXref*)>
+
+<!--
+ INSDInterval_iscomp is a boolean indicating whether
+ an INSDInterval_from / INSDInterval_to location
+ represents a location on the complement strand.
+ When INSDInterval_iscomp is TRUE, it essentially
+ confirms that a 'from' value which is greater than
+ a 'to' value is intentional, because the location
+ is on the opposite strand of the presented sequence.
+ INSDInterval_interbp is a boolean indicating whether
+ a feature (such as a restriction site) is located
+ between two adjacent basepairs. When INSDInterval_iscomp
+ is TRUE, the 'from' and 'to' values must differ by
+ exactly one base.
+-->
+<!ELEMENT INSDInterval (
+        INSDInterval_from?, 
+        INSDInterval_to?, 
+        INSDInterval_point?, 
+        INSDInterval_iscomp?, 
+        INSDInterval_interbp?, 
+        INSDInterval_accession)>
+
+<!ELEMENT INSDInterval_from (%INTEGER;)>
+
+<!ELEMENT INSDInterval_to (%INTEGER;)>
+
+<!ELEMENT INSDInterval_point (%INTEGER;)>
+
+<!ELEMENT INSDInterval_iscomp EMPTY>
+<!ATTLIST INSDInterval_iscomp value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT INSDInterval_interbp EMPTY>
+<!ATTLIST INSDInterval_interbp value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT INSDInterval_accession (#PCDATA)>
+
+
+<!ELEMENT INSDQualifier (
+        INSDQualifier_name, 
+        INSDQualifier_value?)>
+
+<!ELEMENT INSDQualifier_name (#PCDATA)>
+
+<!ELEMENT INSDQualifier_value (#PCDATA)>
+
+
+<!ELEMENT INSDAltSeqData (
+        INSDAltSeqData_name, 
+        INSDAltSeqData_items?)>
+
+<!--
+ e.g., CON-division-join, WGS-contig-range,
+ WGS-scaffold-range, MGA/CAGE-range, genome
+-->
+<!ELEMENT INSDAltSeqData_name (#PCDATA)>
+
+<!ELEMENT INSDAltSeqData_items (INSDAltSeqItem*)>
+
+
+<!ELEMENT INSDAltSeqItem (
+        INSDAltSeqItem_interval?, 
+        INSDAltSeqItem_isgap?, 
+        INSDAltSeqItem_gap-length?, 
+        INSDAltSeqItem_gap-type?, 
+        INSDAltSeqItem_gap-linkage?, 
+        INSDAltSeqItem_gap-comment?, 
+        INSDAltSeqItem_first-accn?, 
+        INSDAltSeqItem_last-accn?, 
+        INSDAltSeqItem_value?)>
+<!--
+ INSDInterval_iscomp is a boolean indicating whether
+ an INSDInterval_from / INSDInterval_to location
+ represents a location on the complement strand.
+ When INSDInterval_iscomp is TRUE, it essentially
+ confirms that a 'from' value which is greater than
+ a 'to' value is intentional, because the location
+ is on the opposite strand of the presented sequence.
+ INSDInterval_interbp is a boolean indicating whether
+ a feature (such as a restriction site) is located
+ between two adjacent basepairs. When INSDInterval_iscomp
+ is TRUE, the 'from' and 'to' values must differ by
+ exactly one base.
+-->
+<!ELEMENT INSDAltSeqItem_interval (INSDInterval)>
+
+<!ELEMENT INSDAltSeqItem_isgap EMPTY>
+<!ATTLIST INSDAltSeqItem_isgap value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT INSDAltSeqItem_gap-length (%INTEGER;)>
+
+<!ELEMENT INSDAltSeqItem_gap-type (#PCDATA)>
+
+<!ELEMENT INSDAltSeqItem_gap-linkage (#PCDATA)>
+
+<!ELEMENT INSDAltSeqItem_gap-comment (#PCDATA)>
+
+<!ELEMENT INSDAltSeqItem_first-accn (#PCDATA)>
+
+<!ELEMENT INSDAltSeqItem_last-accn (#PCDATA)>
+
+<!ELEMENT INSDAltSeqItem_value (#PCDATA)>
+

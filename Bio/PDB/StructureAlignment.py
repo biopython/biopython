@@ -7,7 +7,7 @@
 file.
 """
 
-from Bio.SCOP.Raf import to_one_letter_code
+from Bio.Data import SCOPData
 
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
@@ -78,7 +78,7 @@ class StructureAlignment(object):
     def _test_equivalence(self, r1, aa1):
         "Test if aa in sequence fits aa in structure."
         resname=r1.get_resname()
-        resname=to_one_letter_code[resname]
+        resname=SCOPData.protein_letters_3to1[resname]
         assert(aa1==resname)
 
     def get_maps(self):
@@ -103,10 +103,10 @@ if __name__=="__main__":
     from Bio.PDB import PDBParser
 
     if len(sys.argv) != 4:
-        print "Expects three arguments,"
-        print " - FASTA alignment filename (expect two sequences)"
-        print " - PDB file one"
-        print " - PDB file two"
+        print("Expects three arguments,")
+        print(" - FASTA alignment filename (expect two sequences)")
+        print(" - PDB file one")
+        print(" - PDB file two")
         sys.exit()
 
     # The alignment

@@ -879,7 +879,7 @@ for n in ambiguous_generic_by_id:
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
         try:
-            print ambiguous_dna_by_id[n].forward_table["TRA"]
+            print(ambiguous_dna_by_id[n].forward_table["TRA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass

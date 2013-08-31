@@ -155,7 +155,7 @@ def compare_feature(old_f, new_f):
         try:
             assert str(old_sub.location) == str(new_sub.location), \
                "%s -> %s" % (str(old_sub.location), str(new_sub.location))
-        except AssertionError, e:
+        except AssertionError as e:
             if isinstance(old_sub.location.start, ExactPosition) and \
                isinstance(old_sub.location.end, ExactPosition):
                 # Its not a problem with fuzzy locations, re-raise

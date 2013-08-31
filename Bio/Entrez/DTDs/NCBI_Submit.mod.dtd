@@ -1,0 +1,156 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "submit.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Submit"
+================================================= -->
+
+<!--
+$Revision: 6.1 $
+********************************************************************
+
+  Direct Submission of Sequence Data
+  James Ostell, 1991
+
+  This is a trial specification for direct submission of sequence
+    data worked out between NCBI and EMBL
+  Later revised to reflect work with GenBank and Integrated database
+
+  Version 3.0, 1994
+    This is the official NCBI sequence submission format now.
+
+********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Seq-submit,
+          Contact-info -->
+
+<!-- Elements referenced from other modules:
+          Cit-sub,
+          Author FROM NCBI-Biblio,
+          Date,
+          Object-id FROM NCBI-General,
+          Seq-annot FROM NCBI-Sequence,
+          Seq-id FROM NCBI-Seqloc,
+          Seq-entry FROM NCBI-Seqset -->
+<!-- ============================================ -->
+
+<!-- deletions of entries -->
+<!ELEMENT Seq-submit (
+        Seq-submit_sub, 
+        Seq-submit_data)>
+
+<!ELEMENT Seq-submit_sub (Submit-block)>
+
+<!ELEMENT Seq-submit_data (
+        Seq-submit_data_entrys | 
+        Seq-submit_data_annots | 
+        Seq-submit_data_delete)>
+
+<!-- sequence(s) -->
+<!ELEMENT Seq-submit_data_entrys (Seq-entry*)>
+
+<!-- annotation(s) -->
+<!ELEMENT Seq-submit_data_annots (Seq-annot*)>
+
+<!ELEMENT Seq-submit_data_delete (Seq-id*)>
+
+
+<!ELEMENT Submit-block (
+        Submit-block_contact, 
+        Submit-block_cit, 
+        Submit-block_hup?, 
+        Submit-block_reldate?, 
+        Submit-block_subtype?, 
+        Submit-block_tool?, 
+        Submit-block_user-tag?, 
+        Submit-block_comment?)>
+
+<!-- who to contact -->
+<!ELEMENT Submit-block_contact (Contact-info)>
+
+<!-- citation for this submission -->
+<!ELEMENT Submit-block_cit (Cit-sub)>
+
+<!-- hold until publish -->
+<!ELEMENT Submit-block_hup EMPTY>
+<!ATTLIST Submit-block_hup value ( true | false ) "false" >
+
+
+<!-- release by date -->
+<!ELEMENT Submit-block_reldate (Date)>
+<!-- type of submission -->
+<!ELEMENT Submit-block_subtype (%INTEGER;)>
+
+<!--
+    new	-  new data
+    update	-  update by author
+    revision	-  3rd party (non-author) update
+-->
+<!ATTLIST Submit-block_subtype value (
+        new |
+        update |
+        revision |
+        other
+        ) #IMPLIED >
+
+
+<!-- tool used to make submission -->
+<!ELEMENT Submit-block_tool (#PCDATA)>
+
+<!-- user supplied id for this submission -->
+<!ELEMENT Submit-block_user-tag (#PCDATA)>
+
+<!-- user comments/advice to database -->
+<!ELEMENT Submit-block_comment (#PCDATA)>
+
+<!-- who to contact to discuss the submission -->
+<!ELEMENT Contact-info (
+        Contact-info_name?, 
+        Contact-info_address?, 
+        Contact-info_phone?, 
+        Contact-info_fax?, 
+        Contact-info_email?, 
+        Contact-info_telex?, 
+        Contact-info_owner-id?, 
+        Contact-info_password?, 
+        Contact-info_last-name?, 
+        Contact-info_first-name?, 
+        Contact-info_middle-initial?, 
+        Contact-info_contact?)>
+
+<!-- OBSOLETE: will be removed -->
+<!ELEMENT Contact-info_name (#PCDATA)>
+
+<!ELEMENT Contact-info_address (Contact-info_address_E*)>
+
+
+<!ELEMENT Contact-info_address_E (#PCDATA)>
+
+<!ELEMENT Contact-info_phone (#PCDATA)>
+
+<!ELEMENT Contact-info_fax (#PCDATA)>
+
+<!ELEMENT Contact-info_email (#PCDATA)>
+
+<!ELEMENT Contact-info_telex (#PCDATA)>
+
+<!-- for owner accounts -->
+<!ELEMENT Contact-info_owner-id (Object-id)>
+
+<!ELEMENT Contact-info_password (%OCTETS;)>
+
+<!-- structured to replace name above -->
+<!ELEMENT Contact-info_last-name (#PCDATA)>
+
+<!ELEMENT Contact-info_first-name (#PCDATA)>
+
+<!ELEMENT Contact-info_middle-initial (#PCDATA)>
+
+<!-- WARNING: this will replace the above -->
+<!ELEMENT Contact-info_contact (Author)>
+

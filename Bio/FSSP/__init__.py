@@ -266,7 +266,7 @@ def read_fssp(fssp_handle):
             align_dict[key].add_align_list(align_list)
             curline = fssp_handle.readline()
             if not curline:
-                print 'EOFEOFEOF'
+                print('EOFEOFEOF')
                 raise EOFError
     for i in align_dict.itervalues():
         i.pos_align_list2dict()

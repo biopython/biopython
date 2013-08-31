@@ -7,7 +7,9 @@
 import os
 import unittest
 
+from Bio.Alphabet import IUPAC
 from Bio import motifs
+from Bio.motifs.matrix import _isnan
 from Bio.Seq import Seq
 
 
@@ -33,7 +35,6 @@ class MotifTestsBasic(unittest.TestCase):
     def test_alignace_parsing(self):
         """Test if Bio.motifs can parse AlignAce output files.
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/alignace.out")
         record = motifs.parse(handle, "AlignAce")
         handle.close()
@@ -418,7 +419,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_1(self):
         """Test if Bio.motifs can parse MEME output files (first test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.out")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.5.7')
@@ -529,7 +529,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_2(self):
         """Test if Bio.motifs can parse MEME output files (second test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.dna.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -648,7 +647,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_3(self):
         """Test if Bio.motifs can parse MEME output files (third test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.protein.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1039,7 +1037,6 @@ class TestMEME(unittest.TestCase):
     def test_meme_parser_4(self):
         """Test if Bio.motifs can parse MEME output files (fourth test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/meme.protein.tcm.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1345,7 +1342,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_1(self):
         """Test if Bio.motifs can parse MAST output files (first test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/mast.dna.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1380,7 +1376,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_2(self):
         """Test if Bio.motifs can parse MAST output files (second test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/mast.protein.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1467,7 +1462,6 @@ class TestMAST(unittest.TestCase):
     def test_mast_parser_3(self):
         """Test if Bio.motifs can parse MAST output files (third test)
         """
-        from Bio.Alphabet import IUPAC
         handle = open("motifs/mast.protein.tcm.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1630,13 +1624,42 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
 
+    def test_with_alt_alphabet(self):
+        """Test motif search using alternative instance of alphabet."""
+        self.s = Seq(str(self.s), IUPAC.IUPACUnambiguousDNA())
+        self.test_simple()
+
+    def test_with_mixed_case(self):
+        """Test if Bio.motifs PWM scoring works with mixed case."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        #Note we're breaking Seq/Alphabet expectations here:
+        result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT", self.m.alphabet))
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5], -25.18009186, places=5)
+
+    def test_with_bad_char(self):
+        """Test if Bio.motifs PWM scoring works with unexpected letters like N."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = pssm.calculate(Seq("ACGTGTGCGTAGTGCGTN", self.m.alphabet))
+        self.assertEqual(7, len(result))
+        self.assertAlmostEqual(result[0], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5], -25.18009186, places=5)
+        self.assertTrue(_isnan(result[6]), "Expected nan, not %r" % result[6])
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-
-
-
-
-
-

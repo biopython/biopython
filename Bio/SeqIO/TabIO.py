@@ -93,7 +93,7 @@ class TabWriter(SequentialSequenceWriter):
 
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
     from StringIO import StringIO
 
     #This example has a trailing blank line which should be ignored
@@ -109,4 +109,4 @@ if __name__ == "__main__":
         #Good!
         pass
 
-    print "Done"
+    print("Done")

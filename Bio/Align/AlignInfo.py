@@ -684,7 +684,7 @@ def print_info_content(summary_info,fout=None,rep_record=0):
                    summary_info.ic_vector[pos]))
 
 if __name__ == "__main__":
-    print "Quick test"
+    print("Quick test")
     from Bio import AlignIO
     from Bio.Align.Generic import Alignment
 
@@ -696,41 +696,41 @@ if __name__ == "__main__":
 
     alignment = AlignIO.read(open(filename), format)
     for record in alignment:
-        print str(record.seq)
-    print "="*alignment.get_alignment_length()
+        print(str(record.seq))
+    print("="*alignment.get_alignment_length())
 
     summary = SummaryInfo(alignment)
     consensus = summary.dumb_consensus(ambiguous="N")
-    print consensus
+    print(consensus)
     consensus = summary.gap_consensus(ambiguous="N")
-    print consensus
+    print(consensus)
     print
-    print summary.pos_specific_score_matrix(chars_to_ignore=['-'],
-                                            axis_seq=consensus)
+    print(summary.pos_specific_score_matrix(chars_to_ignore=['-'],
+                                            axis_seq=consensus))
     print
     #Have a generic alphabet, without a declared gap char, so must tell
     #provide the frequencies and chars to ignore explicitly.
-    print summary.information_content(e_freq_table=expected,
-                                      chars_to_ignore=['-'])
+    print(summary.information_content(e_freq_table=expected,
+                                      chars_to_ignore=['-']))
     print
-    print "Trying a protein sequence with gaps and stops"
+    print("Trying a protein sequence with gaps and stops")
 
     alpha = Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein, "-"), "*")
     a = Alignment(alpha)
     a.add_sequence("ID001", "MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-")
     a.add_sequence("ID002", "MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*")
     a.add_sequence("ID003", "MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*")
-    print a
-    print "="*a.get_alignment_length()
+    print(a)
+    print("="*a.get_alignment_length())
 
     s = SummaryInfo(a)
     c = s.dumb_consensus(ambiguous="X")
-    print c
+    print(c)
     c = s.gap_consensus(ambiguous="X")
-    print c
+    print(c)
     print
-    print s.pos_specific_score_matrix(chars_to_ignore=['-', '*'], axis_seq=c)
+    print(s.pos_specific_score_matrix(chars_to_ignore=['-', '*'], axis_seq=c))
 
-    print s.information_content(chars_to_ignore=['-', '*'])
+    print(s.information_content(chars_to_ignore=['-', '*']))
 
-    print "Done"
+    print("Done")

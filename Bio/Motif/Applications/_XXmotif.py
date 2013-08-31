@@ -158,16 +158,24 @@ class XXmotifCommandline(AbstractCommandline):
                    "expected end position for motif occurrences relative to anchor point (--localization)",
                    checker_function = lambda x: isinstance(x, int),
                    equate = False),
+
+          # XXmotif wrapper options
+          _Switch(["--XXmasker", "masker"],
+                   "mask the input sequences for homology, repeats and low complexity regions"),
+          _Switch(["--XXmasker-pos", "maskerpos"],
+                   "mask only the positive set for homology, repeats and low complexity regions"),
+          _Switch(["--no-graphics", "nographics"],
+                   "run XXmotif without graphical output"),
           ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running XXmotif doctests..."
+    print("Running XXmotif doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 
 if __name__ == "__main__":

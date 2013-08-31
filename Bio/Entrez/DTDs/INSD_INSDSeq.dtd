@@ -1,0 +1,17 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "insdseq.asn"
+     ::DATATOOL:: by application DATATOOL version 1.5.0
+     ::DATATOOL:: on 06/06/2006 23:03:48
+     ============================================ -->
+
+<!-- INSD_INSDSeq.dtd
+  This file is built from a series of basic modules.
+  The actual ELEMENT and ENTITY declarations are in the modules.
+  This file is used to put them together.
+-->
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % INSD_INSDSeq_module PUBLIC "-//NCBI//INSD INSDSeq Module//EN" "INSD_INSDSeq.mod.dtd">
+%INSD_INSDSeq_module;

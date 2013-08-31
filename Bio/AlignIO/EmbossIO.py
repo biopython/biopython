@@ -188,7 +188,7 @@ class EmbossIterator(AlignmentIterator):
                 #Just a spacer?
                 pass
             else:
-                print line
+                print(line)
                 assert False
 
             line = handle.readline()
@@ -221,7 +221,7 @@ class EmbossIterator(AlignmentIterator):
 
 
 if __name__ == "__main__":
-    print "Running a quick self-test"
+    print("Running a quick self-test")
 
     #http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
     simple_example = \
@@ -616,4 +616,4 @@ asis             311 -----------------    311
     assert [r.id for r in alignments[0]] \
            == ["asis", "asis"]
 
-    print "Done"
+    print("Done")

@@ -81,7 +81,8 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe) + " -d=Fasta/fa01")
+        self.assertEqual(str(cmdline),
+                         _escape_filename(prank_exe) + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
@@ -93,19 +94,27 @@ class PrankApplication(unittest.TestCase):
         """
         records = list(SeqIO.parse(self.infile1, "fasta"))
         #Try using keyword argument,
-        cmdline = PrankCommandline(prank_exe, d=self.infile1, noxml=True)
+        cmdline = PrankCommandline(prank_exe, d=self.infile1)
         #Try using a property,
         cmdline.d = self.infile1
         cmdline.f = 17  # NEXUS format
-        cmdline.set_parameter("notree", True)
+        cmdline.set_parameter("dots", True)
         self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
-                         " -d=Fasta/fa01 -f=17 -noxml -notree")
+                         " -d=Fasta/fa01 -f=17 -dots")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
         self.assertTrue("Total time" in stdout)
         self.assertEqual(stderr, "")
         try:
-            align = AlignIO.read("output.2.nex", "nexus")
+            if os.path.isfile("output.best.nex"):
+                # Prank v.130820 and perhaps earlier use ".best.*" output names
+                nex_fname = "output.best.nex"
+            elif os.path.isfile("output.2.nex"):
+                # Older Prank versions use ".2.*" output names
+                nex_fname = "output.2.nex"
+            else:
+                raise RuntimeError("Can't find PRANK's NEXUS output (*.nex)")
+            align = AlignIO.read(nex_fname, "nexus")
             for old, new in zip(records, align):
                 #Old versions of Prank reduced name to 9 chars
                 self.assertTrue(old.id == new.id or old.id[:9] == new.id)
@@ -121,8 +130,6 @@ class PrankApplication(unittest.TestCase):
         """Round-trip with complex command line."""
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        cmdline.set_parameter("-noxml", True)
-        cmdline.set_parameter("notree", True)
         cmdline.set_parameter("-gaprate", 0.321)
         cmdline.set_parameter("gapext", 0.6)
         cmdline.set_parameter("-dots", 1)  # i.e. True
@@ -132,8 +139,8 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("-once", True)
         cmdline.realbranches = True
         self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
-                         " -d=Fasta/fa01 -noxml" +
-                         " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" +
+                         " -d=Fasta/fa01" +
+                         " -dots -gaprate=0.321 -gapext=0.6 -kappa=3" +
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
@@ -161,7 +168,8 @@ class PrankConversion(unittest.TestCase):
                          + ' -convert')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
-        self.assertTrue(("PRANK: converting '%s' to '%s'" % (self.input, filename))
+        self.assertTrue("PRANK" in message, message)
+        self.assertTrue(("converting '%s' to '%s'" % (self.input, filename))
                         in message, message)
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))

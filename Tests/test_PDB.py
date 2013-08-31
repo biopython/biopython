@@ -1,5 +1,6 @@
-# Copyright 2009 by Eric Talevich.  All rights reserved.
-# Revisions copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Eric Talevich.  All rights reserved.
+# Revisions copyright 2009-2013 by Peter Cock.  All rights reserved.
+# Revisions copyright 2013 Lenna X. Peterson. All rights reserved.
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
@@ -17,8 +18,9 @@ from StringIO import StringIO
 
 try:
     import numpy
-    from numpy import dot  # Missing on PyPy's micronumpy
+    from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
+    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -31,6 +33,7 @@ from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
+from Bio.PDB import make_dssp_dict
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -99,6 +102,20 @@ class A_ExceptionTest(unittest.TestCase):
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
         self.assertRaises(PDBConstructionException,
                 parser.get_structure, "example", StringIO(data))
+
+    def test_4_occupancy(self):
+        """Parse file with missing occupancy"""
+        permissive = PDBParser(PERMISSIVE=True)
+        structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+        atoms = structure[0]['A'][(' ', 152, ' ')]
+        # Blank occupancy behavior set in Bio/PDB/PDBParser
+        self.assertEqual(atoms['N'].get_occupancy(), None)
+        self.assertEqual(atoms['CA'].get_occupancy(), 1.0)
+        self.assertEqual(atoms['C'].get_occupancy(), 0.0)
+
+        strict = PDBParser(PERMISSIVE=False)
+        self.assertRaises(PDBConstructionException,
+                          strict.get_structure, "test", "PDB/occupancy.pdb")
 
 
 class HeaderTests(unittest.TestCase):
@@ -678,6 +695,7 @@ class ParseReal(unittest.TestCase):
         finally:
             os.remove(filename)
 
+
 class WriteTest(unittest.TestCase):
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
@@ -767,6 +785,27 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(nresidues, 70)
         finally:
             os.remove(filename)
+
+    def test_pdbio_missing_occupancy(self):
+        """Write PDB file with missing occupancy"""
+
+        from Bio import BiopythonWarning
+        warnings.simplefilter('ignore', BiopythonWarning)
+
+        io = PDBIO()
+        structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
+        io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("test", filename)
+            atoms = struct2[0]['A'][(' ', 152, ' ')]
+            self.assertEqual(atoms['N'].get_occupancy(), None)
+        finally:
+            os.remove(filename)
+            warnings.filters.pop()
+
 
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
@@ -876,6 +915,33 @@ class Atom_Element(unittest.TestCase):
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
 
+    def test_hydrogens(self):
+
+        def quick_assign(fullname):
+            return Atom.Atom(fullname.strip(), None, None, None, None,
+                             fullname, None).element
+
+        pdb_elements = dict(
+            H=(
+                ' H  ', ' HA ', ' HB ', ' HD1', ' HD2', ' HE ', ' HE1', ' HE2',
+                ' HE3', ' HG ', ' HG1', ' HH ', ' HH2', ' HZ ', ' HZ2', ' HZ3',
+                '1H  ', '1HA ', '1HB ', '1HD ', '1HD1', '1HD2', '1HE ', '1HE2',
+                '1HG ', '1HG1', '1HG2', '1HH1', '1HH2', '1HZ ', '2H  ', '2HA ',
+                '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
+                '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
+                '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21',
+            ),
+            O=(' OH ',),
+            C=(' CH2',),
+            N=(' NH1', ' NH2'),
+        )
+
+        for element, atom_names in pdb_elements.iteritems():
+            for fullname in atom_names:
+                e = quick_assign(fullname)
+                #warnings.warn("%s %s" % (fullname, e))
+                self.assertEqual(e, element)
+
 
 class IterationTests(unittest.TestCase):
 
@@ -914,6 +980,7 @@ class IterationTests(unittest.TestCase):
 #        print nums
 #
 # -------------------------------------------------------------
+
 
 class TransformTests(unittest.TestCase):
 
@@ -981,6 +1048,23 @@ class CopyTests(unittest.TestCase):
             ee = e.copy()
             self.assertFalse(e is ee)
             self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+
+
+class DsspTests(unittest.TestCase):
+    """Tests for DSSP parsing etc which don't need the binary tool.
+
+    See also test_DSSP_tool.py for run time testing with the tool.
+    """
+    def test_DSSP_file(self):
+        """Test parsing of pregenerated DSSP"""
+        dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
+        self.assertEqual(len(dssp), 130)
+
+    def test_DSSP_noheader_file(self):
+        """Test parsing of pregenerated DSSP missing header information"""
+        # New DSSP prints a line containing only whitespace and "."
+        dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
+        self.assertEqual(len(dssp), 130)
 
 
 if __name__ == '__main__':

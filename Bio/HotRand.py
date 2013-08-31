@@ -42,7 +42,7 @@ class HotCache(object):
         cache = self.hot_cache
         numbytes = num_digits / 2
         if( len( cache ) % numbytes != 0 ):
-            print 'len_cache is %d' % len( cache )
+            print('len_cache is %d' % len( cache ))
             raise ValueError
         if( cache == '' ):
             self.fill_hot_cache()
@@ -68,7 +68,7 @@ class HotRandom(object):
 if( __name__ == '__main__' ):
     hot_random = HotRandom()
     for j in range( 0, 130 ):
-        print hot_random.hot_rand( 25 )
+        print(hot_random.hot_rand( 25 ))
     nums = [ '0000', 'abcd', '1234', '5555', '4321', 'aaaa', 'ffff' ]
     for num in nums:
-        print hex_convert( num )
+        print(hex_convert( num ))

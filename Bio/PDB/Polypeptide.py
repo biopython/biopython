@@ -51,8 +51,8 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 import warnings
 
 from Bio.Alphabet import generic_protein
+from Bio.Data import SCOPData
 from Bio.Seq import Seq
-from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Vector import calc_dihedral, calc_angle
 
@@ -181,7 +181,7 @@ def is_aa(residue, standard=False):
     if standard:
         return residue in d3_to_index
     else:
-        return residue in to_one_letter_code
+        return residue in SCOPData.protein_letters_3to1
 
 
 class Polypeptide(list):
@@ -279,7 +279,7 @@ class Polypeptide(list):
         """
         s=""
         for res in self:
-            s += to_one_letter_code.get(res.get_resname(), 'X')
+            s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
         seq=Seq(s, generic_protein)
         return seq
 
@@ -460,13 +460,13 @@ if __name__=="__main__":
 
     ppb=PPBuilder()
 
-    print "C-N"
+    print("C-N")
     for pp in ppb.build_peptides(s):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]["A"]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
 
     for pp in ppb.build_peptides(s):
         for phi, psi in pp.get_phi_psi_list():
@@ -474,10 +474,10 @@ if __name__=="__main__":
 
     ppb=CaPPBuilder()
 
-    print "CA-CA"
+    print("CA-CA")
     for pp in ppb.build_peptides(s):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]["A"]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
