@@ -7,6 +7,7 @@
 
 import logging
 import unittest
+import StringIO
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
@@ -118,21 +119,35 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     def setUp(self):
         self.aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
         calculator = DistanceCalculator('blosum62')
-        dm = calculator.get_distance(self.aln)
-        #logging.info("DistanceMatrix:\n" + str(dm))
-        self.constructor = DistanceTreeConstructor(dm)
+        self.dm = calculator.get_distance(self.aln)
+        self.constructor = DistanceTreeConstructor(calculator)
 
     def test_upgma(self):
-        tree = self.constructor.upgma()
+        tree = self.constructor.upgma(self.dm)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        #logging.info("UPGMA Tree:\n" + str(tree))
-        Phylo.write(tree, './TreeConstruction/upgma.tre', 'newick')
+        tree_file = StringIO.StringIO()
+        Phylo.write(tree, tree_file, 'newick')
+        ref_tree = open('./TreeConstruction/upgma.tre')
+        self.assertEqual(tree_file.getvalue(), ref_tree.readline())
+        ref_tree.close()
 
     def test_nj(self):
-        tree = self.constructor.nj()
+        tree = self.constructor.nj(self.dm)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        #logging.info("NJ Tree:\n" + str(tree))
-        Phylo.write(tree, './TreeConstruction/nj.tre', 'newick')
+        tree_file = StringIO.StringIO()
+        Phylo.write(tree, tree_file, 'newick')
+        ref_tree = open('./TreeConstruction/nj.tre')
+        self.assertEqual(tree_file.getvalue(), ref_tree.readline())
+        ref_tree.close()
+
+    def test_built_tree(self):
+        tree = self.constructor.build_tree(self.aln)
+        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        tree_file = StringIO.StringIO()
+        Phylo.write(tree, tree_file, 'newick')
+        ref_tree = open('./TreeConstruction/nj.tre')
+        self.assertEqual(tree_file.getvalue(), ref_tree.readline())
+        ref_tree.close()
 
 class ParsimonyScorerTest(unittest.TestCase):
     """Test ParsimonyScorer"""
@@ -217,11 +232,11 @@ class ParsimonyTreeConstructorTest(unittest.TestCase):
         matrix = Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)
-        constructor = ParsimonyTreeConstructor(aln, searcher, tree1)
-        best_tree = constructor.build_tree()
+        constructor = ParsimonyTreeConstructor(searcher, tree1)
+        best_tree = constructor.build_tree(aln)
         Phylo.write(best_tree, './TreeConstruction/pars1.tre', 'newick')
         constructor.starting_tree = tree2
-        best_tree = constructor.build_tree()
+        best_tree = constructor.build_tree(aln)
         Phylo.write(best_tree, './TreeConstruction/pars2.tre', 'newick')
 
 if __name__ == '__main__':

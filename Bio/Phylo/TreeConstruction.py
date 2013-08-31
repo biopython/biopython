@@ -307,8 +307,6 @@ class DistanceCalculator(object):
     Currently only scoring matrices are used.
 
     :Parameters:
-        msa : MultipleSeqAlignment
-            DNA or Protein multiple sequence alignment.  
         model : str
             Name of the model matrix to be used to calculate distance.
             The attribute `dna_matrices` contains the available model
@@ -424,7 +422,13 @@ class DistanceCalculator(object):
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
-        """Return a DistanceMatrix for MSA object"""
+        """Return a DistanceMatrix for MSA object
+
+        :Parameters:
+            msa : MultipleSeqAlignment
+                DNA or Protein multiple sequence alignment.  
+
+        """
 
         if not isinstance(msa, MultipleSeqAlignment):
             raise TypeError("Must provide a MultipleSeqAlignment object.")
@@ -447,9 +451,9 @@ class DistanceCalculator(object):
 class TreeContructor(object):
     """Base class for all tree constructor."""
 
-    def build_tree(self):
-        """Caller to built the tree. This should be implemented
-        in subclass"""
+    def build_tree(self, msa):
+        """Caller to built the tree from a MultipleSeqAlignment object.
+        This should be implemented in subclass"""
         raise NotImplementedError("Method not implemented!")
 
 
@@ -457,18 +461,21 @@ class DistanceTreeConstructor(TreeContructor):
     """Distance based tree constructor.
 
     :Parameters:
-        distance_matrix : DistanceMatrix
-            The distance matrix for tree construction.
+        method : str
+            Distance tree construction method, 'nj'(default) or 'upgma'. 
+        distance_calculator : DistanceCalculator
+            The distance matrix calculator for multiple sequence alignment.
+            It must be provided if `build_tree` will be called.
 
     Example
     --------
 
     >>> from TreeConstruction import DistanceTreeConstructor
-    >>> constructor = DistanceTreeConstructor(dm)
+    >>> constructor = DistanceTreeConstructor()
 
     UPGMA Tree: 
 
-    >>> upgmatree = constructor.upgma()
+    >>> upgmatree = constructor.upgma(dm)
     >>> print upgmatree
     Tree(rooted=True)
         Clade(name='Inner4')
@@ -483,7 +490,7 @@ class DistanceTreeConstructor(TreeContructor):
 
     NJ Tree:
 
-    >>> njtree = constructor.nj()
+    >>> njtree = constructor.nj(dm)
     >>> print njtree
     Tree(rooted=False)
         Clade(name='Inner3')
@@ -497,17 +504,45 @@ class DistanceTreeConstructor(TreeContructor):
 
 
     """
-    def __init__(self, distance_matrix):
-        if isinstance(distance_matrix, DistanceMatrix):
-            self.distance_matrix = distance_matrix
+
+    methods = ['nj', 'upgma']
+
+    def __init__(self, distance_calculator=None, method="nj"):
+        if distance_calculator == None or isinstance(distance_calculator, DistanceCalculator):
+            self.distance_calculator = distance_calculator
         else:
+            raise TypeError("Must provide a DistanceCalculator object.")
+        if isinstance(method, str) and method in self.methods:
+            self.method = method
+        else:
+            raise TypeError("Bad method: " + method + ". Available methods: " + ", ".join(self.methods))
+        
+    def build_tree(self, msa):
+        if self.distance_calculator:
+            dm = self.distance_calculator.get_distance(msa)
+            tree = None
+            if self.method == 'upgma':
+                tree = self.upgma(dm)
+            else:
+                tree = self.nj(dm)
+            return tree
+        else:
+            raise TypeError("Must provide a DistanceCalculator object.")
+
+    def upgma(self, distance_matrix):
+        """Construct and return an UPGMA(Unweighted Pair Group Method
+        with Arithmetic mean) tree.
+        
+        :Parameters:
+            distance_matrix : DistanceMatrix
+                The distance matrix for tree construction.
+        """
+
+        if not isinstance(distance_matrix, DistanceMatrix):
             raise TypeError("Must provide a DistanceMatrix object.")
 
-    def upgma(self):
-        """Construct and return an UPGMA(Unweighted Pair Group Method
-        with Arithmetic mean) tree."""
         # make a copy of the distance matrix to be used
-        dm = copy.deepcopy(self.distance_matrix)
+        dm = copy.deepcopy(distance_matrix)
         # init terminal clades
         clades = [BaseTree.Clade(None, name) for name in dm.names]
         # init minimum index
@@ -557,11 +592,19 @@ class DistanceTreeConstructor(TreeContructor):
             del dm[min_i]
         return BaseTree.Tree(inner_clade)
 
-    def nj(self):
-        """Construct and return an Neighbor Joining tree."""
+    def nj(self, distance_matrix):
+        """Construct and return an Neighbor Joining tree.
+
+        :Parameters:
+            distance_matrix : DistanceMatrix
+                The distance matrix for tree construction.
+        """
+
+        if not isinstance(distance_matrix, DistanceMatrix):
+            raise TypeError("Must provide a DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
-        dm = copy.deepcopy(self.distance_matrix)
+        dm = copy.deepcopy(distance_matrix)
         # init terminal clades
         clades = [BaseTree.Clade(None, name) for name in dm.names]
         # init node distance
@@ -933,8 +976,8 @@ class ParsimonyTreeConstructor(TreeContructor):
     >>> from TreeConstruction import *
     >>> scorer = ParsimonyScorer()
     >>> searcher = NNITreeSearcher(scorer)
-    >>> constructor = ParsimonyTreeConstructor(aln, searcher, starting_tree)
-    >>> pars_tree = constructor.build_tree()
+    >>> constructor = ParsimonyTreeConstructor(searcher, starting_tree)
+    >>> pars_tree = constructor.build_tree(aln)
     >>> print pars_tree
     Tree(weight=1.0, rooted=True)
         Clade(branch_length=0.0)
@@ -947,10 +990,9 @@ class ParsimonyTreeConstructor(TreeContructor):
                     Clade(branch_length=0.07477, name='Beta')
                 Clade(branch_length=0.29231, name='Alpha')
     """
-    def __init__(self, alignment, searcher, starting_tree=None):
-        self.alignment = alignment
+    def __init__(self, searcher, starting_tree=None):
         self.searcher = searcher
         self.starting_tree = starting_tree
 
-    def build_tree(self):
-        return self.searcher.search(self.starting_tree, self.alignment)
+    def build_tree(self, alignment):
+        return self.searcher.search(self.starting_tree, alignment)
