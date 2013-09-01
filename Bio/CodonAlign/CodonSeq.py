@@ -10,6 +10,7 @@ deal with sequences in CodonAlignment in biopython.
 
 """
 from __future__ import division
+from itertools import permutations
 from math import log
 
 from Bio.Seq import Seq
@@ -365,15 +366,22 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                           )
     seq1_codon_lst = _get_codon_list(codon_seq1)
     seq2_codon_lst = _get_codon_list(codon_seq2)
+    # remove gaps in seq_codon_lst
+    seq1 = []
+    seq2 = []
+    for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+        if '---' not in (i, j):
+            seq1.append(i)
+            seq2.append(j)
     if method == "NG86":
-        S_sites1, N_sites1 = _count_site_NG86(seq1_codon_lst, 
+        S_sites1, N_sites1 = _count_site_NG86(seq1,
                                               codon_table=codon_table, k=k)
-        S_sites2, N_sites2 = _count_site_NG86(seq2_codon_lst,
+        S_sites2, N_sites2 = _count_site_NG86(seq2,
                                               codon_table=codon_table, k=k)
         S_sites = (S_sites1 + S_sites2) / 2.0
         N_sites = (N_sites1 + N_sites2) / 2.0
         SN = [0, 0]
-        for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+        for i, j in zip(seq1, seq2):
             SN = [m+n for m,n in zip(SN, _count_diff_NG86(
                                                      i, j, 
                                                      codon_table=codon_table)
@@ -391,7 +399,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         fold0 = [0, 0]
         fold2 = [0, 0]
         fold4 = [0, 0]
-        for codon in seq1_codon_lst + seq2_codon_lst:
+        for codon in seq1 + seq2:
             fold_num = codon_fold_dict[codon]
             for f in fold_num:
                 if f == '0':
@@ -403,7 +411,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         L = [sum(fold0)/2.0, sum(fold2)/2.0, sum(fold4)/2.0]
         # count number of differences in different degenerate classes
         PQ = [0] * 6 # with P0, P2, P4, Q0, Q2, Q4 in each position
-        for codon1, codon2 in zip(seq1_codon_lst, seq2_codon_lst):
+        for codon1, codon2 in zip(seq1, seq2):
             if (codon1 == "---" or codon2 == "---") or codon1 == codon2:
                 continue
             else:
@@ -431,7 +439,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         codon_fold_dict = _get_codon_fold(codon_table)
         fold0_cnt = Counter()
         fold4_cnt = Counter()
-        for codon in seq1_codon_lst + seq2_codon_lst:
+        for codon in seq1 + seq2:
             # count sites at different codon position
             if codon != '---':
                 fcodon[0][codon[0]] += 1
@@ -452,7 +460,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         # TODO:
         # the initial kappa is different from what yn00 gives,
         # try to find the problem.
-        TV = _get_TV(seq1_codon_lst, seq2_codon_lst, codon_table=codon_table)
+        TV = _get_TV(seq1, seq2, codon_table=codon_table)
         k04 = (_get_kappa_t(fold0_cnt, TV), _get_kappa_t(fold4_cnt, TV))
         kappa = (f0_total*k04[0]+f4_total*k04[1])/(f0_total+f4_total)
         kappa = 2.4285
@@ -464,18 +472,17 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
             if 'U' not in i:
                 pi[i] = 0
-        for i in seq1_codon_lst+seq2_codon_lst:
+        for i in seq1 + seq2:
             pi[i] += 1
-        S_sites1, N_sites1, bfreqSN1 = _count_site_YN00(
-                                                seq1_codon_lst, seq2_codon_lst,
-                                                pi, k=kappa,
-                                                codon_table=codon_table)
-        S_sites2, N_sites2, bfreqSN2 = _count_site_YN00(
-                                                seq2_codon_lst, seq1_codon_lst,
-                                                pi, k=kappa,
-                                                codon_table=codon_table)
+        S_sites1, N_sites1, bfreqSN1 = _count_site_YN00(seq1, seq2, pi,
+                                                        k=kappa,
+                                                        codon_table=codon_table)
+        S_sites2, N_sites2, bfreqSN2 = _count_site_YN00(seq2, seq1, pi,
+                                                        k=kappa,
+                                                        codon_table=codon_table)
         N_sites = (N_sites1+N_sites2)/2
         S_sites = (S_sites1+S_sites2)/2
+        #print S_sites, N_sites
         bfreqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},
                    {'A': 0, 'T': 0, 'C': 0, 'G': 0}]
         for i in range(2):
@@ -483,7 +490,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                 bfreqSN[i][b] = (bfreqSN1[i][b]+bfreqSN2[i][b])/2
         # use NG86 method to get initial t and w
         SN = [0, 0]
-        for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+        for i, j in zip(seq1, seq2):
             SN = [m+n for m,n in zip(SN, _count_diff_NG86(
                                                      i, j, 
                                                      codon_table=codon_table)
@@ -506,13 +513,13 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
             TV = [0, 0, 0, 0] # synonymous/nonsynonymous transition/transvertion
             sites = [0, 0]
             codon_npath = {}
-            for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+            for i, j in zip(seq1, seq2):
                 if i != '---' and j != '---':
                     codon_npath.setdefault((i, j), 0)
                     codon_npath[(i, j)] += 1
             for i in codon_npath:
-                res = _count_diff_YN00(i[0], i[1], P, codon_lst, codon_table)
-                TV = [m+n*codon_npath[i] for m,n in zip(TV, res['TV'])]
+                tv = _count_diff_YN00(i[0], i[1], P, codon_lst, codon_table)
+                TV = [m+n*codon_npath[i] for m,n in zip(TV, tv)]
             TV = (TV[0]/S_sites, TV[1]/S_sites), (TV[2]/N_sites, TV[3]/N_sites)
             # according to the DistanceF84() function of yn00.c in paml,
             # the t (e.q. 10) appears in PMID: 10666704 is dS and dN
@@ -532,7 +539,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
                   {'A': 0, 'G': 0, 'C': 0, 'T': 0},
                   {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
-        for i in seq1_codon_lst + seq2_codon_lst:
+        for i in seq1 + seq2:
             if i != '---':
                 fcodon[0][i[0]] += 1
                 fcodon[1][i[1]] += 1
@@ -544,7 +551,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
             if 'U' not in i:
                 pi[i] = fcodon[0][i[0]]*fcodon[1][i[1]]*fcodon[2][i[2]]
-        for i, j in zip(seq1_codon_lst, seq2_codon_lst):
+        for i, j in zip(seq1, seq2):
             #if i != j and ('---' not in (i, j)):
             if '---' not in (i, j):
                 codon_cnt[(i,j)] += 1
@@ -737,10 +744,25 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                                                       weight=0.5))
                      ]
         elif len(diff_pos) == 3:
-            # we are now in the most complex situation
-            # I don't want to think about this.
-            # the substitution is considered non-synonymous (modify!!!)
-            SN[1] += 1
+            codon2_aa = codon_table.forward_table[codon2]
+            paths = list(permutations([0, 1, 2], 3))
+            tmp_codon = []
+            for p in paths:
+                tmp1 = codon1[:p[0]] + codon2[p[0]] + codon1[p[0]+1:]
+                tmp2 = tmp1[:p[1]] + codon2[p[1]] + tmp1[p[1]+1:]
+                tmp_codon.append((tmp1, tmp2))
+                SN = [i+j for i,j in zip(SN, compare_codon(codon1, tmp1,
+                                                           codon_table,
+                                                           weight=0.5/3))
+                      ]
+                SN = [i+j for i,j in zip(SN, compare_codon(tmp1,   tmp2,
+                                                           codon_table,
+                                                           weight=0.5/3))
+                      ]
+                SN = [i+j for i,j in zip(SN, compare_codon(tmp2, codon2,
+                                                           codon_table,
+                                                           weight=0.5/3))
+                      ]
     return SN
         
 
@@ -869,7 +891,7 @@ def _get_kappa_t(pi, TV, t=False):
         (1-TV[1]/(2*pi['Y']*pi['R']))-TV[0])/\
         (2*(pi['T']*pi['C']/pi['Y']+pi['A']*pi['G']/pi['R']))
     B = 1 - TV[1]/(2*pi['Y']*pi['R'])
-    a = -0.5*log(A)
+    a = -0.5*log(A) # this seems to be an error in YANG's original paper
     b = -0.5*log(B)
     kappaF84 = a/b-1
     if t is False:
@@ -962,7 +984,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     TV = [0, 0, 0, 0] # transition and transvertion counts (synonymous and nonsynonymous)
     site = 0
     if codon1 == '---' or codon2 == '---':
-        return {'TV': [0, 0, 0, 0], 'site': [0, 0]}
+        return TV
     base_tuple = ('A', 'C', 'G', 'T')
     if not all([i in base_tuple for i in codon1]):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
@@ -973,7 +995,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
                            "(Codon is consist of "
                            "A, T, C or G)".format(codon2))
     if codon1 == codon2:
-        return {'TV': [0, 0, 0, 0], 'site': [0, 0]}
+        return TV
     else:
         diff_pos = []
         for i, k in enumerate(zip(codon1, codon2)):
@@ -1022,21 +1044,46 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
             path_prob = [2*i/sum(path_prob) for i in path_prob]
             for n, i in enumerate(diff_pos):
                 temp_codon = codon1[:i] + codon2[i] + codon1[i+1:]
-                TV = [p+q for p,q in zip(TV,count_TV(codon1, temp_codon, i, codon_table, weight=path_prob[n]/2))]
-                TV = [p+q for p,q in zip(TV,count_TV(codon1, temp_codon, i, codon_table, weight=path_prob[n]/2))]
+                TV = [p+q for p,q in zip(TV,count_TV(codon1, temp_codon, i,
+                                                     codon_table,
+                                                     weight=path_prob[n]/2))
+                      ]
+                TV = [p+q for p,q in zip(TV,count_TV(codon1, temp_codon, i,
+                                                     codon_table,
+                                                     weight=path_prob[n]/2))
+                      ]
         elif len(diff_pos) == 3:
-            # we are now in the most complex situation
-            # the substitution is considered non-synonymous (modify!!!)
-            #SN[1] += 1
-            #TV = [m+n for m,n in zip(TV,[1*0.3, 1*0.7, 2*0.3, 2*0.7])] # this is only an approximation (modify!!!)
-            pass
+            codon2_aa = codon_table.forward_table[codon2]
+            paths = list(permutations([0, 1, 2], 3))
+            path_prob = []
+            tmp_codon = []
+            for p in paths:
+                tmp1 = codon1[:p[0]] + codon2[p[0]] + codon1[p[0]+1:]
+                tmp2 = tmp1[:p[1]] + codon2[p[1]] + tmp1[p[1]+1:]
+                tmp_codon.append((tmp1, tmp2))
+                codon_idx = map(codon_lst.index, [codon1, tmp1, tmp2, codon2])
+                prob = (P[codon_idx[0], codon_idx[1]],
+                        P[codon_idx[1], codon_idx[2]],
+                        P[codon_idx[2], codon_idx[3]])
+                path_prob.append(prob[0]*prob[1]*prob[2])
+            path_prob = [3*i/sum(path_prob) for i in path_prob]
+            for i, j, k in zip(tmp_codon, path_prob, paths):
+                TV = [p+q for p,q in zip(TV, count_TV(codon1, i[0], k[0],
+                                                      codon_table, weight=j/3))
+                      ]
+                TV = [p+q for p,q in zip(TV, count_TV(i[0],   i[1], k[1],
+                                                      codon_table, weight=j/3))
+                      ]
+                TV = [p+q for p,q in zip(TV, count_TV(i[1], codon2, k[1],
+                                                      codon_table, weight=j/3))
+                      ]
         if codon1 in codon_table.stop_codons or codon2 in codon_table.stop_codons:
             site = [0, 3]
         elif codon_table.forward_table[codon1] == codon_table.forward_table[codon2]:
             site = [3, 0]
         else:
             site = [0, 3]
-    return {'TV': TV, 'site': site}
+    return TV
 
 
 #################################################################
