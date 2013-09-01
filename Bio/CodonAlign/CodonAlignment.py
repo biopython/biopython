@@ -15,7 +15,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
 from CodonAlphabet import default_codon_table, default_codon_alphabet
-from CodonSeq import CodonSeq
+from CodonSeq import CodonSeq, cal_dn_ds
 
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
@@ -82,6 +82,24 @@ class CodonAlignment(MultipleSeqAlignment):
         alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for \
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
+
+    def get_dn_ds_matrix(self, method="NG86"):
+        from numpy import zeros
+        size = len(self._records)
+        dN = zeros((size, size))
+        dS = zeros((size, size))
+        for i in range(size):
+            for j in range(i):
+                if i != j:
+                    rec1 = self._records[i].seq
+                    rec2 = self._records[j].seq
+                    dn, ds = cal_dn_ds(rec1, rec2, method=method)
+                    dN[i,j] = dn
+                    dN[j,i] = dn
+                    dS[i,j] = ds
+                    dS[j,i] = ds
+        return dN, dS
+
 
 def toCodonAlignment(align, alphabet=default_codon_alphabet):
     """Function to convert a MultipleSeqAlignment to CodonAlignment.
