@@ -658,14 +658,6 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                                        "alignment in anyway".format(nucl.id))
                 codon_seq += this_codon
                 aa_num += 1
-            if len(codon_seq) - t != 3:
-                print len(codon_seq) - t
-                print codon_seq[-6:]
-                print "catch it"
-            t = len(codon_seq)
-        if len(codon_seq) != 3*len(pro.seq):
-            print len(codon_seq), 3*len(pro.seq)
-            print "How was it possible!!"
         return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet,
                          rf_table=rf_table), id=nucl.id)
 
