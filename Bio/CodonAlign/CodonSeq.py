@@ -108,28 +108,6 @@ class CodonSeq(Seq):
     def __getitem__(self, index):
         # TODO: handle alphabet elegantly
         return Seq(self._data[index], alphabet=generic_dna)
-#        seqlst = range(len(self._data))
-#        # full_rf_table of self
-#        full_rf_table = self.get_full_rf_table()
-#        # full rf_table of sliced record (output)
-#        rf_table_full = []
-#        rf_table_full = [i for i in seqlst[index] if i in full_rf_table]
-#        rf_table_full = [i-full_rf_table[0] for i in rf_table_full]
-#        # brute way to force rf_table_full back to rf_table
-#        # more elegant way for this?
-#        shift = 0
-#        rf_table = []
-#        for pos in rf_table_full:
-#            if self._data[pos:pos+3] == '---':
-#                shift += 3
-#            else:
-#                rf_table.append(pos-shift)
-#        try:
-#            return CodonSeq(self._data[index], self.alphabet,
-#                            rf_table=rf_table)
-#        except:
-#            # adjust alphabet
-#            return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
         """get the `index`-th codon from the self.seq
