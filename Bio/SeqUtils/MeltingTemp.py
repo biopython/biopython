@@ -106,13 +106,13 @@ Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC         CGTTCCaAAGATGTGGGCATGAGCTTAC
            ::::::X:::::::::::::::::::::   or    ::::::X:::::::::::::::::::::
 Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
 
-    >>> round(mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC'), 2)
+    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC')
     60.32
-    >>> round(mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
-    ...          c_seq='GCAAGGCTTCTACACCCGTACTCGAATG'), 2)
+    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
+    ...                    c_seq='GCAAGGCTTCTACACCCGTACTCGAATG')
     55.39
-    >>> round(mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC', shift=1,
-    ...         c_seq='TGCAAGGCTTCTACACCCGTACTCGAATGC'), 2)
+    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC', shift=1,
+    ...                   c_seq='TGCAAGGCTTCTACACCCGTACTCGAATGC')
     55.69
 
 Make your own tables, or update/extend existing tables. E.g., add values for
@@ -121,11 +121,11 @@ by '1':
     >>> mytable = mt.make_table(oldtable=mt.DNA_NN3,
     ...                         values={'A1/T1':(-6.608, -17.235),
     ...                         '1A/1T':(-6.893, -15.923)})
-    >>> round(mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC'), 2)
+    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC')
     60.32
-    >>> round(mt.Tm_NN('CGTTCCA1AGATGTGGGCATGAGCTTAC', nn_table=mytable,
-    ...                 check=False), 2)  # 'check' must be false, otherwise
-    ...                                   # '1' would be discarded.
+    >>> print '%0.2f' % mt.Tm_NN('CGTTCCA1AGATGTGGGCATGAGCTTAC',
+    ...                           nn_table=mytable, check=False)
+    ... # 'check' must be False, otherwise '1' would be discarded
     62.53
 
 """
@@ -362,9 +362,9 @@ def make_table(oldtable=None, values=None):
     >>> table = DNA_NN2                               # Sugimoto '96
     >>> table['init']
     (0.6, -9.0)
-    >>> newtable = make_table(oldtable=DNA_NN2, values={'init': (0, 0), \
-                              'init_A/T': (2.3, 4.1), \
-                              'init_G/C': (0.1, -2.8)})
+    >>> newtable = make_table(oldtable=DNA_NN2, values={'init': (0, 0), 
+    ...                       'init_A/T': (2.3, 4.1),
+    ...                       'init_G/C': (0.1, -2.8)})
     >>> newtable['init']
     (0, 0)
 
@@ -458,13 +458,14 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     Examples:
         >>> from Bio.SeqUtils import MeltingTemp as mt
-        >>> round(mt.salt_correction(Na=50, method=1), 2)
-        -21.6
-        >>> round(mt.salt_correction(Na=50, method=2), 2)
+        >>> print '%0.2f' % mt.salt_correction(Na=50, method=1)
+        -21.60
+        >>> print '%0.2f' % mt.salt_correction(Na=50, method=2)
         -21.85
-        >>> round(mt.salt_correction(Na=100, Tris=20, method=2), 2)
+        >>> print '%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2)
         -16.45
-        >>> round(mt.salt_correction(Na=100, Tris=20, Mg=1.5, method=2), 2)
+        >>> print '%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5,
+        ...                                    method=2)
         -10.99
 
     """
@@ -560,11 +561,12 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> mt.chem_correction(70)
         70
-        >>> mt.chem_correction(70, DMSO=3)
+        >>> print '%0.2f' % mt.chem_correction(70, DMSO=3)
         67.75
-        >>> mt.chem_correction(70, fmd=5)
+        >>> print '%0.2f' % mt.chem_correction(70, fmd=5)
         66.75
-        >>> round(mt.chem_correction(70, fmdmethod=2, fmd=1.25, GC=50), 2)
+        >>> print '%0.2f' % mt.chem_correction(70, fmdmethod=2, fmd=1.25,
+        ...                                    GC=50)
         66.68
 
     """
