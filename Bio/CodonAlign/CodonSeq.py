@@ -285,9 +285,9 @@ def _get_codon_list(codonseq):
     """get a list of codons according to full_rf_table for counting
     (PRIVATE).
     """
-    if not isinstance(codonseq, CodonSeq):
-        raise TypeError("_get_codon_list accept a CodonSeq object "
-                        "({0} detected)".format(type(codonseq)))
+    #if not isinstance(codonseq, CodonSeq):
+    #    raise TypeError("_get_codon_list accept a CodonSeq object "
+    #                    "({0} detected)".format(type(codonseq)))
     full_rf_table = codonseq.get_full_rf_table()
     codon_lst = []
     for i, k in enumerate(full_rf_table):
@@ -326,10 +326,6 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         pass
     elif all([isinstance(codon_seq1, SeqRecord), 
              isinstance(codon_seq2, SeqRecord)]):
-        assert isinstance(codon_seq1.seq, CodonSeq), \
-                "cal_dn_ds accepts SeqRecords that contain CodonSeq!"
-        assert isinstance(codon_seq2.seq, CodonSeq), \
-                "cal_dn_ds accepts SeqRecords that contain CodonSeq!"
         codon_seq1 = codon_seq1.seq
         codon_seq2 = codon_seq2.seq
     else:
@@ -348,7 +344,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     seq1 = []
     seq2 = []
     for i, j in zip(seq1_codon_lst, seq2_codon_lst):
-        if '---' not in (i, j):
+        if (not '-' in i) and (not '-' in j):
             seq1.append(i)
             seq2.append(j)
     if method == "NG86":
@@ -360,6 +356,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         N_sites = (N_sites1 + N_sites2) / 2.0
         SN = [0, 0]
         for i, j in zip(seq1, seq2):
+            print i, j
             SN = [m+n for m,n in zip(SN, _count_diff_NG86(
                                                      i, j, 
                                                      codon_table=codon_table)
