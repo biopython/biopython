@@ -590,6 +590,7 @@ class DistanceTreeConstructor(TreeContructor):
             dm.names[min_j] = "Inner" + str(inner_count)
 
             del dm[min_i]
+        inner_clade.branch_length = 0
         return BaseTree.Tree(inner_clade)
 
     def nj(self, distance_matrix):
@@ -660,11 +661,13 @@ class DistanceTreeConstructor(TreeContructor):
         # set the last clade as one of the child of the inner_clade
         root = None
         if clades[0] == inner_clade:
+            clades[0].branch_length = 0
             clades[1].branch_length = dm[1, 0]
             clades[0].clades.append(clades[1])
             root = clades[0]
         else:
             clades[0].branch_length = dm[1, 0]
+            clades[1].branch_length = 0
             clades[1].clades.append(clades[0])
             root = clades[1]
 
