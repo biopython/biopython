@@ -9,8 +9,12 @@
     tree searching and some common consensus algorithms such as strict, 
     majority rule and adam consensus.
 """
+
+import random
+
 from ast import literal_eval
 from Bio.Phylo import BaseTree
+from Bio import Phylo
 
 class BitString(str):
     """Assistant class of binary string data used for storing and
@@ -207,6 +211,7 @@ class BitString(str):
 
 def strict_consensus(trees):
     """Search stric consensus tree from multiple trees"""
+    Phylo.write(trees, '/home/yeyanbo/con1.tre', 'newick')
     terms = trees[0].get_terminals()
     bitstr_counts = _count_clades(trees)
     # store bitstrs for strict clades
@@ -410,10 +415,10 @@ def _count_clades(trees):
             if bitstr in bitstrs.keys():
                 time, sum_bl = bitstrs[bitstr]
                 time += 1
-                sum_bl += clade.branch_length
+                sum_bl += clade.branch_length or 0
                 bitstrs[bitstr] = (time, sum_bl)
             else:
-                bitstrs[bitstr] = (1, clade.branch_length)
+                bitstrs[bitstr] = (1, clade.branch_length or 0)
     return bitstrs
 
 
@@ -438,3 +443,41 @@ def get_support(target_tree, trees):
                 c.confidence = (t + 1) * 100.0 / size
                 bitstrs[bitstr] = (c, t + 1)
     return target_tree
+
+
+def bootstrap(msa, times):
+    """get a list of bootstrap replicates of a multiple sequence
+    alignment object"""
+
+    length = len(msa[0])
+    msas = []
+
+    for i in range(times):
+        item = None
+        for j in range(length):
+            col = random.randint(0, length - 1)
+            if not item:
+                item = msa[:,col:col + 1]
+            else:
+                item += msa[:,col:col + 1]
+        msas.append(item)
+
+    return msas
+
+
+def bootstrap_trees(msa, times, tree_constructor):
+    """get a list of bootstrap replicate trees for a multiple 
+    sequence alignment"""
+
+    msas = bootstrap(msa, times)
+    trees = []
+    for aln in msas:
+        tree = tree_constructor.build_tree(aln)
+        trees.append(tree)
+    return trees
+
+
+def bootstrap_consensus(msa, times, tree_constructor, consensus):
+    trees = bootstrap_trees(msa, times, tree_constructor)
+    tree = consensus(trees)
+    return tree
