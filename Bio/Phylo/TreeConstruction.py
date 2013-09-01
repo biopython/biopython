@@ -658,14 +658,17 @@ class DistanceTreeConstructor(TreeContructor):
             del dm[min_i]
 
         # set the last clade as one of the child of the inner_clade
+        root = None
         if clades[0] == inner_clade:
             clades[1].branch_length = dm[1, 0]
             clades[0].clades.append(clades[1])
+            root = clades[0]
         else:
             clades[0].branch_length = dm[1, 0]
             clades[1].clades.append(clades[0])
+            root = clades[1]
 
-        return BaseTree.Tree(clades[0], rooted=False)
+        return BaseTree.Tree(root, rooted=False)
 
     def _height_of(self, clade):
         """calculate height of the clade -- the longest path to one of
@@ -942,8 +945,6 @@ class ParsimonyTreeConstructor(TreeContructor):
     """Parsimony tree constructor.
 
     :Parameters:
-        alignment: MultipleSeqAlignment
-            multiple sequence alignment to calculate parsimony tree.
         searcher: TreeSearcher
             tree searcher to search the best parsimony tree.
         starting_tree: Tree
@@ -995,4 +996,9 @@ class ParsimonyTreeConstructor(TreeContructor):
         self.starting_tree = starting_tree
 
     def build_tree(self, alignment):
+        """
+        :Parameters:
+            alignment: MultipleSeqAlignment
+                multiple sequence alignment to calculate parsimony tree.
+        """
         return self.searcher.search(self.starting_tree, alignment)
