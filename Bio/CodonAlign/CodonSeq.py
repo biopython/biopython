@@ -389,8 +389,14 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                   ]
         ps = SN[0] / S_sites
         pn = SN[1] / N_sites
-        dS = -3.0/4*log(1-4.0/3*ps)
-        dN = -3.0/4*log(1-4.0/3*pn)
+        if ps < 3/4:
+            dS = -3.0/4*log(1-4.0/3*ps)
+        else:
+            dS = -1
+        if pn < 3/4:
+            dN = -3.0/4*log(1-4.0/3*pn)
+        else:
+            dN = -1
         return dN, dS
     elif method == "LWL85":
         # Nomenclature is according to PMID (3916709)
