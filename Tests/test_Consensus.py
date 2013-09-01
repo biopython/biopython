@@ -6,7 +6,11 @@
 """Unit tests for the Bio.Phylo.Consensus module."""
 import unittest
 import StringIO
+from Bio import AlignIO
 from Bio import Phylo
+from Bio.Phylo import BaseTree
+from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo import Consensus
 from Bio.Phylo.Consensus import *
 
@@ -112,6 +116,32 @@ class ConsensusTest(unittest.TestCase):
         self.assertEqual(clade.confidence, 3 * 100.0 / 3)
         clade = support_tree.common_ancestor([support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")])
         self.assertEqual(clade.confidence, 2 * 100.0 / 3)
+
+class BootstrapTest(unittest.TestCase):
+    """Test for bootstrap methods"""
+
+    def setUp(self):
+        self.msa = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+
+    def test_bootstrap(self):
+        msa_list = bootstrap(self.msa, 100)
+        self.assertEqual(len(msa_list), 100)
+        self.assertEqual(len(msa_list[0]), len(self.msa))
+        self.assertEqual(len(msa_list[0][0]), len(self.msa[0]))
+
+    def test_bootstrap_trees(self):
+        calculator = DistanceCalculator('blosum62')
+        constructor = DistanceTreeConstructor(calculator)
+        trees = bootstrap_trees(self.msa, 100, constructor)
+        self.assertEqual(len(trees), 100)
+        self.assertTrue(isinstance(trees[0], BaseTree.Tree))
+
+    def test_bootstrap_consensus(self):
+        calculator = DistanceCalculator('blosum62')
+        constructor = DistanceTreeConstructor(calculator , 'nj')
+        tree = bootstrap_consensus(self.msa, 100, constructor, majority_consensus)
+        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        Phylo.write(tree, './TreeConstruction/bootstrap_consensus.tre', 'newick')
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
