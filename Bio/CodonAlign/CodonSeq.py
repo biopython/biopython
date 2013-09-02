@@ -89,9 +89,9 @@ class CodonSeq(Seq):
                                      " alphabet "
                                      "({0})! ".format(self._data[i:i+3]))
         else:
-            if gap_char in self._data:
-                assert  len(self) % 3 == 0, \
-                        "Gapped sequence length is not a triple number"
+            #if gap_char in self._data:
+            #    assert  len(self) % 3 == 0, \
+            #            "Gapped sequence length is not a triple number"
             assert isinstance(rf_table, (tuple, list)), \
                     "rf_table should be a tuple or list object"
             assert all(isinstance(i, int) for i in rf_table), \
@@ -356,7 +356,6 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         N_sites = (N_sites1 + N_sites2) / 2.0
         SN = [0, 0]
         for i, j in zip(seq1, seq2):
-            print i, j
             SN = [m+n for m,n in zip(SN, _count_diff_NG86(
                                                      i, j, 
                                                      codon_table=codon_table)
@@ -463,7 +462,6 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                                                         codon_table=codon_table)
         N_sites = (N_sites1+N_sites2)/2
         S_sites = (S_sites1+S_sites2)/2
-        #print S_sites, N_sites
         bfreqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},
                    {'A': 0, 'T': 0, 'C': 0, 'G': 0}]
         for i in range(2):
