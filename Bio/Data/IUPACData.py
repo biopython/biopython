@@ -138,21 +138,38 @@ def _make_ranges(mydict):
         d[key] = (value, value)
     return d
 
-# From bioperl's SeqStats.pm
+# Average masses of monophosphate deoxy nucleotides
 unambiguous_dna_weights = {
-    "A": 347.,
-    "C": 323.,
-    "G": 363.,
-    "T": 322.,
+    "A": 331.22,
+    "C": 307.20,
+    "G": 347.22,
+    "T": 322.21
     }
+
+# Monoisotopic masses of monophospate deoxy nucleotides
+monoisotopic_unambiguous_dna_weights = {
+    "A": 331.07,
+    "C": 307.06,
+    "G": 347.06,
+    "T": 322.06
+    }
+
 unambiguous_dna_weight_ranges = _make_ranges(unambiguous_dna_weights)
 
 unambiguous_rna_weights = {
-    "A": unambiguous_dna_weights["A"] + 16.,  # 16 for the oxygen
-    "C": unambiguous_dna_weights["C"] + 16.,
-    "G": unambiguous_dna_weights["G"] + 16.,
-    "U": 340.,
+    "A": 347.22,
+    "C": 323.20,
+    "G": 363.22,
+    "U": 324.18
 }
+
+monoisotopic_unambiguous_rna_weights = {
+    "A": 347.06,
+    "C": 323.05,
+    "G": 363.06,
+    "U": 324.04
+}
+
 unambiguous_rna_weight_ranges = _make_ranges(unambiguous_rna_weights)
 
 
@@ -193,13 +210,13 @@ protein_weights = {
     "L": 131.18,
     "M": 149.21,
     "N": 132.12,
-    #"O": 0.0, # Needs to be recorded!
+    "O": 255.31, 
     "P": 115.13,
     "Q": 146.15,
     "R": 174.20,
     "S": 105.09,
     "T": 119.12,
-    #"U": 168.05, # To be confirmed
+    "U": 168.05, 
     "V": 117.15,
     "W": 204.23,
     "Y": 181.19
@@ -218,11 +235,13 @@ monoisotopic_protein_weights = {
     "L": 131.09,
     "M": 149.05,
     "N": 132.05,
+    "O": 255.16,
     "P": 115.06,
     "Q": 146.07,
     "R": 174.11,
     "S": 105.04,
     "T": 119.06,
+    "U": 167.96,
     "V": 117.08,
     "W": 204.09,
     "Y": 181.07,
@@ -255,6 +274,7 @@ extended_protein_values = {
     "X": "ACDEFGHIKLMNPQRSTVWY",
     #TODO - Include U and O in the possible values of X?
     #This could alter the extended_protein_weight_ranges ...
+    #by MP: Won't do this, because they are so rare.
     "Y": "Y",
     "Z": "QE",
 }

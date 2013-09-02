@@ -165,12 +165,33 @@ def xGC_skew(seq, window=1000, zoom=100,
     canvas.configure(scrollregion=canvas.bbox(ALL))
 
 
-def molecular_weight(seq):
-    """Calculate the molecular weight of a DNA sequence."""
-    if isinstance(seq, str):
-        seq = Seq(seq, IUPAC.unambiguous_dna)
-    weight_table = IUPACData.unambiguous_dna_weights
-    return sum(weight_table[x] for x in seq)
+def molecular_weight(seq, type='DNA', double_stranded=False):
+    # Rewritten by Markus Piotrowski
+    """Calculate the molecular weight of a DNA, RNA or protein sequence."""
+    seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
+
+    if type == 'DNA':
+        weight_table = IUPACData.unambiguous_dna_weights
+    elif type == 'RNA':
+        weight_table = IUPACData.unambiguous_rna_weights
+    elif type == 'protein':
+        weight_table = IUPACData.protein_weights
+    else:
+        raise ValueError('allowed types are DNA, RNA or protein')
+
+    try:
+        weight = sum(weight_table[x] for x in seq) - (len(seq)-1) * 18.02
+    except KeyError as e:
+        raise ValueError('%s is not a valid unambiguous letter for the ' %e +
+                         'chosen sequence type (DNA, RNA or protein)')
+    except:
+        raise
+
+    if type in ('DNA', 'RNA') and double_stranded:
+        seq = str(Seq(seq).complement())
+        weight += sum(weight_table[x] for x in seq) - (len(seq)-1) * 18.02
+
+    return weight
 
 
 def nt_search(seq, subseq):
