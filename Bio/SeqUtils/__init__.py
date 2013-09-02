@@ -15,6 +15,7 @@ import re
 from math import pi, sin, cos
 
 from Bio.Seq import Seq
+from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
@@ -170,14 +171,6 @@ def xGC_skew(seq, window=1000, zoom=100,
     canvas.configure(scrollregion=canvas.bbox(tkinter.ALL))
 
 
-def molecular_weight(seq):
-    """Calculate the molecular weight of a DNA sequence."""
-    if isinstance(seq, str):
-        seq = Seq(seq, IUPAC.unambiguous_dna)
-    weight_table = IUPACData.unambiguous_dna_weights
-    return sum(weight_table[x] for x in seq)
-
-
 def nt_search(seq, subseq):
     """Search for a DNA subseq in sequence.
 
@@ -318,6 +311,104 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 # Mixed ???
 ######################
 # {{{
+
+
+def molecular_weight(seq, seq_type='Seq', double_stranded=False, circular=False,
+                     monoisotopic=False):
+    """Calculates the molecular weight of a DNA, RNA or protein sequence.
+
+    Only unambiguous letters are allowed. Nucleotid sequences are assumed to
+    have a 5' phosphate.
+
+    seq: String or Biopyhton sequence object
+    seq_type: DNA, RNA, protein or Seq (=default). 'Seq': derive sequence type
+              from the sequence object's alphabet.  
+    double_stranded: Calculate the mass for the double stranded molecule?
+    circular: Is the molecule circular (has no ends)?
+    monoisotopic: Use the monoisotopic mass tables?
+
+    If seq_type ='Seq' and seq is a string or a sequence object with no special
+    alphabet (generic alphabet) then it is suggested that the sequence is DNA
+    (for backward compatibility).
+    """
+    # Rewritten by Markus Piotrowski, 2014
+    
+    # Find the alphabet type
+    tmp_type = ''
+    if isinstance(seq, Seq):
+        base_alphabet = Alphabet._get_base_alphabet(seq.alphabet)
+        if isinstance(base_alphabet, Alphabet.DNAAlphabet):
+            tmp_type = 'DNA'
+        elif isinstance(base_alphabet, Alphabet.RNAAlphabet):
+            tmp_type = 'RNA'
+        elif isinstance(base_alphabet, Alphabet.ProteinAlphabet):
+            tmp_type = 'protein'
+        elif isinstance(base_alphabet, Alphabet.ThreeLetterProtein):
+            tmp_type = 'protein'
+            # Convert to one-letter sequence. Have to use a string for seq1  
+            seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
+        elif isinstance(base_alphabet, Alphabet.Alphabet):
+            pass
+        else:
+            raise ValueError('%s is not a valid alphabet for mass'
+                             %base_alphabet + 'calculations.')
+
+    if seq_type != 'Seq':
+        if tmp_type and tmp_type !=seq_type:
+            raise ValueError('seq_type=%s contradicts %s alphabet'
+                                 %(seq_type, tmp_type))
+    else:
+        if not tmp_type:
+            seq_type = 'DNA'
+        else:
+            seq_type = tmp_type
+        if isinstance(seq, str):
+           seq_type = 'DNA'
+            
+    seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
+
+    if seq_type == 'DNA':
+        if monoisotopic:
+            weight_table = IUPACData.monoisotopic_unambiguous_dna_weights
+        else:
+            weight_table = IUPACData.unambiguous_dna_weights
+    elif seq_type == 'RNA':
+        if monoisotopic:
+            weight_table = IUPACData.monoisotopic_unambiguous_rna_weights
+        else:
+            weight_table = IUPACData.unambiguous_rna_weights
+    elif seq_type == 'protein':
+        if monoisotopic:
+            weight_table = IUPACData.monoisotopic_protein_weights
+        else:
+            weight_table = IUPACData.protein_weights
+    else:
+        raise ValueError('allowed seq_types are DNA, RNA or protein')
+
+    if monoisotopic:
+        water = 18.010565
+    else:
+        water = 18.0153
+
+    try:
+        weight = sum(weight_table[x] for x in seq) - (len(seq)-1) * water
+        if circular:
+            weight -= water
+    except KeyError as e:
+        raise ValueError('%s is not a valid unambiguous letter for %s'
+                         %(e, seq_type))
+    except:
+        raise
+
+    if seq_type in ('DNA', 'RNA') and double_stranded:
+        seq = str(Seq(seq).complement())
+        weight += sum(weight_table[x] for x in seq) - (len(seq)-1) * water
+        if circular:
+            weight -= water
+    elif seq_type == 'protein' and double_stranded:
+        raise ValueError('double-stranded proteins await their discovery') 
+
+    return weight
 
 
 def six_frame_translations(seq, genetic_code=1):
