@@ -177,7 +177,7 @@ Support for parsing and indexing:
 
  - exonerate-text   - Exonerate plain text output.
  - exonerate-vulgar - Exonerate vulgar line.
- - exonerate-text   - Exonerate cigar line.
+ - exonerate-cigar  - Exonerate cigar line.
  - fasta-m10        - Bill Pearson's FASTA -m 10 output.
  - hmmer3-text      - HMMER3 regular text output format. Supported HMMER3
                       subprograms are hmmscan, hmmsearch, and phmmer.
