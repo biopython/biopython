@@ -186,12 +186,7 @@ class StringMethodTests(unittest.TestCase):
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
-
-        try:
-            self.assertTrue("ABCDE".startswith(("ABE","OBE","ABC")))
-        except TypeError:
-            #Base string only supports this on Python 2.5+, skip this
-            return
+        self.assertTrue("ABCDE".startswith(("ABE","OBE","ABC")))
 
         #Now check with a tuple of sub sequences
         for example1 in self._examples:
@@ -214,12 +209,7 @@ class StringMethodTests(unittest.TestCase):
     def test_str_endswith(self):
         """Check matches the python string endswith method."""
         self._test_method("endswith", start_end=True)
-
-        try:
-            self.assertTrue("ABCDE".endswith(("ABE","OBE","CDE")))
-        except TypeError:
-            #Base string only supports this on Python 2.5+, skip this
-            return
+        self.assertTrue("ABCDE".endswith(("ABE","OBE","CDE")))
 
         #Now check with a tuple of sub sequences
         for example1 in self._examples:
