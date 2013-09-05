@@ -1,4 +1,4 @@
-# Copyright 2010-2011 by Peter Cock.
+# Copyright 2010-2013 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -178,7 +178,6 @@ class BgzfTests(unittest.TestCase):
         self.assertFalse(h.isatty())
         self.assertEqual(h.fileno(), h._handle.fileno())
         for start, raw_len, data_start, data_len in blocks:
-            #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
@@ -193,7 +192,6 @@ class BgzfTests(unittest.TestCase):
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         for start, raw_len, data_start, data_len in blocks[::-1]:
-            #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
