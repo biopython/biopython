@@ -38,7 +38,16 @@ import doctest
 import distutils.util
 import gc
 from io import BytesIO
-from StringIO import StringIO
+
+# Note, we want to be able to call run_tests.py BEFORE
+# Biopython is installed, so we can't use this:
+# from Bio._py3k import StringIO
+try:
+    #Python 2 (byte strings)
+    from StringIO import StringIO
+except ImportError:
+    #Python 3 (unicode strings)
+    from io import StringIO
 
 
 def is_pypy():
