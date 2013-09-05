@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 28 August 2013 (Biopython 1.62+)}
+\date{Last Update -- 5 September 2013 (Biopython 1.62+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -246,15 +246,6 @@ and HTML formats
   \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.pdf}
   \end{itemize}
   
-  \item \emph{Which ``Numerical Python'' do I need?} \\
-  For Biopython 1.48 or earlier, you needed the old Numeric module.
-  For Biopython 1.49 onwards, you need the newer NumPy instead.
-  Both Numeric and NumPy can be installed on the same machine fine.
-  See also: \url{http://numpy.scipy.org/}
-
-  \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
-  You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
-
   \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
   You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
   If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
@@ -262,21 +253,9 @@ and HTML formats
   \item \emph{Why doesn't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
   You need Biopython 1.51 or later.
 
-  \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
-  You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been removed - and this is why the import ``works''.
-
-  \item \emph{Why doesn't} \verb|Bio.SeqIO.read()| \emph{work? The module imports fine but there is no read function!} \\
-  You need Biopython 1.45 or later.  Or, use \texttt{Bio.SeqIO.parse(...).next()} instead.
-
-  \item \emph{Why isn't} \verb|Bio.AlignIO| \emph{present? The module import fails!} \\
-  You need Biopython 1.46 or later.
-
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
   Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
   
-  \item \emph{Why don't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{input functions let me provide a sequence alphabet?} \\
-  You need Biopython 1.49 or later.
-
   \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
   You need Biopython 1.54 or later, or just use handles explicitly (see Section~\ref{sec:appendix-handles}).
   It is especially important to remember to close output handles explicitly after writing your data.
@@ -292,12 +271,8 @@ and HTML formats
   If you aren't using the latest version of Biopython, you could try upgrading.
   However, we (and the NCBI) recommend you use the XML output instead, which is designed to be read by a computer program.
 
-  \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
-  You need Biopython 1.46 or later.
-
   \item \emph{Why doesn't} \verb|Bio.Entrez.parse()| \emph{work? The module imports fine but there is no parse function!} \\
   You need Biopython 1.52 or later.
-
 
   \item \emph{Why has my script using} \verb|Bio.Entrez.efetch()| \emph{stopped working?} \\
   This could be due to NCBI changes in February 2012 introducing EFetch 2.0.
