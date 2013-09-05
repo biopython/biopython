@@ -264,7 +264,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(4, counter)
 
     def test_30_hmmscan_002(self):
@@ -273,7 +273,7 @@ class HmmerscanCases(unittest.TestCase):
         tab_file = get_file('tab_30_hmmscan_002.out')
         qresults = parse(tab_file, FMT)
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
 
     def test_30_hmmscan_003(self):
         "Test parsing hmmer3-tab, hmmscan 3.0, single query, single hit, single hsp (tab_30_hmmscan_003)"
@@ -309,7 +309,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.2, hsp.bias)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
@@ -366,7 +366,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
 

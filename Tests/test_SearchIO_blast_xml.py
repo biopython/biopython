@@ -107,7 +107,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_001(self):
@@ -273,7 +273,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_xml_2226_blastn_002(self):
@@ -311,7 +311,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual([], list(qresult.hits))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_003(self):
@@ -379,7 +379,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_004(self):
@@ -473,7 +473,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_005(self):
@@ -622,7 +622,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('||| |||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
 
@@ -712,7 +712,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2218_blastp_001(self):
@@ -795,7 +795,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('T +A C  + +V I+++   +W+++     H+  V  + WAP', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2218_blastp_002(self):
@@ -846,7 +846,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_xml_2218L_blastp_001(self):
@@ -883,7 +883,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2222_blastp_001(self):
@@ -1131,7 +1131,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_xml_2226_blastp_002(self):
@@ -1172,7 +1172,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastp_003(self):
@@ -1238,7 +1238,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastp_004(self):
@@ -1343,7 +1343,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastp_005(self):
@@ -1504,7 +1504,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
 
@@ -1588,7 +1588,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('+ +NS  +  A+  N+   SSSG K++ +K     +KS +  + H++  IN+   +K  KEH VV +', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2222_blastx_001(self):
@@ -1764,7 +1764,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_xml_2226_blastx_002(self):
@@ -1802,7 +1802,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastx_003(self):
@@ -1906,7 +1906,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastx_004(self):
@@ -2029,7 +2029,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('V  AGVQW +L   QPPP  FK FS LS  SSWD R  PPCL+ FVFL+ETGF HVGQAGL+   SG+  A ASQS GI GVSH   P C+', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
 
@@ -2116,7 +2116,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('L  KV +VTG  +G+G A+AV  GQ  +KVVVNY ++ E A +V  EI+     AI ++ DV   + V  L++ AV+ FG LD++ +NAG+           +  VPS +E  +E      +++V   N  G F  +REA ++  E    G +I  SS    +   P    Y+ SKG +      LA++   K I VN + PGAI T +          N E F D +', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_001(self):
@@ -2276,7 +2276,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_xml_2226_tblastn_002(self):
@@ -2312,7 +2312,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(-1, qresult.stat_entropy)
         self.assertEqual(0, len(qresult))
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_003(self):
@@ -2374,7 +2374,7 @@ class TblastnXmlCases(unittest.TestCase):
 
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_004(self):
@@ -2476,7 +2476,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS', str(hsp.hit.seq))
         self.assertEqual('GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS', hsp.aln_annotation['homology'])
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_005(self):
@@ -2635,7 +2635,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
 
@@ -2723,7 +2723,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('PL K H +FQ S+ FY+ C+  + +QLL', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastx_001(self):
@@ -2843,7 +2843,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_xml_2226_tblastx_002(self):
@@ -2879,7 +2879,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(-1, qresult.stat_entropy)
         self.assertEqual(0, len(qresult))
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastx_003(self):
@@ -2982,7 +2982,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastx_004(self):
@@ -3106,7 +3106,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
 

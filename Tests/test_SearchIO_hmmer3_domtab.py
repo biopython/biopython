@@ -365,7 +365,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.77, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(4, counter)
 
     def test_domtab_30_hmmscan_002(self):
@@ -374,7 +374,7 @@ class HmmerscanCases(unittest.TestCase):
         tab_file = get_file('domtab_30_hmmscan_002.out')
         qresults = parse(tab_file, self.fmt)
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
 
     def test_domtab_30_hmmscan_003(self):
         "Test parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_003)"
@@ -416,7 +416,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_domtab_30_hmmscan_004(self):
@@ -484,7 +484,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.71, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
 

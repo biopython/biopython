@@ -523,7 +523,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(5, counter)
 
     def test_30_hmmscan_002(self):
@@ -545,7 +545,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_003(self):
@@ -605,7 +605,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
@@ -697,7 +697,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_005(self):
@@ -846,7 +846,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_006(self):
@@ -1070,7 +1070,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_007(self):
@@ -1256,7 +1256,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.77, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_008(self):
@@ -1405,7 +1405,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
 
@@ -1462,7 +1462,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmsearch_002(self):
@@ -1611,7 +1611,7 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, qresults.next, )
+        #self.assertRaises(StopIteration, next, qresults)
         #self.assertEqual(1, counter)
 
     def test_30_hmmsearch_003(self):
@@ -1728,7 +1728,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, qresults.next, )
+        #self.assertRaises(StopIteration, next, qresults)
         #self.assertEqual(1, counter)
 
     def test_30_hmmsearch_004(self):
@@ -1877,7 +1877,7 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, qresults.next, )
+        #self.assertRaises(StopIteration, next, qresults)
         #self.assertEqual(1, counter)
 
     def test_30_hmmsearch_005(self):
@@ -2038,7 +2038,7 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
 
