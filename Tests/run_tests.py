@@ -250,8 +250,8 @@ def main(argv):
         if args[arg_num][-3:] == ".py":
             args[arg_num] = args[arg_num][:-3]
 
-    print "Python version:", sys.version
-    print "Operating system:", os.name, sys.platform
+    print("Python version: %s" % sys.version)
+    print("Operating system: %s %s" % (os.name, sys.platform))
 
     # run the tests
     runner = TestRunner(args, verbosity)
