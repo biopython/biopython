@@ -136,7 +136,19 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                 "Install NetworkX if you want to use to_networkx.")
 
     G = to_networkx(tree)
-    Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
+    try:
+        # NetworkX version 1.8 or later (2013-01-20)
+        Gi = networkx.convert_node_labels_to_integers(G,
+                                label_attribute='label')
+        int_labels = {}
+        for integer, nodeattrs in Gi.node.iteritems():
+            int_labels[nodeattrs['label']] = integer
+    except TypeError:
+        # Older NetworkX versions (before 1.8)
+        Gi = networkx.convert_node_labels_to_integers(G,
+                                discard_old_labels=False)
+        int_labels = Gi.node_labels
+
     try:
         posi = networkx.graphviz_layout(Gi, prog, args=args)
     except ImportError:
@@ -144,6 +156,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                 "Install PyGraphviz or pydot if you want to use draw_graphviz.")
 
     def get_label_mapping(G, selection):
+        """Apply the user-specified node relabeling."""
         for node in G.nodes():
             if (selection is None) or (node in selection):
                 try:
@@ -167,7 +180,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                            e[2].get('width', 1.0) or 1.0
                            for e in G.edges(data=True)]
 
-    posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
+    posn = dict((n, posi[int_labels[n]]) for n in G)
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
