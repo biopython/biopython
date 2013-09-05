@@ -112,7 +112,7 @@ keep the output 100% identical to the input). For example,
     >>> record_dict = SeqIO.index("Fasta/f002", "fasta")
     >>> len(record_dict)
     3
-    >>> print record_dict.get_raw("gi|1348917|gb|G26685|G26685").decode()
+    >>> print record_dict.get_raw("gi|1348917|gb|G26685|G26685").decode().replace('\\r\\n', '\\n')
     >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
     CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATCTTACTCTTTC
     ATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTTTACAGATGTGAAACTTTCAA

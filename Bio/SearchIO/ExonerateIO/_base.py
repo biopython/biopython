@@ -254,7 +254,7 @@ class _BaseExonerateParser(object):
     def _parse_alignment_header(self):
         # read all header lines and store them
         aln_header = []
-        while not self.line == '\n':
+        while not (self.line == '\n' or self.line == '\r\n' or self.line == '\r'):
             aln_header.append(self.line.strip())
             self.line = self.handle.readline()
         # then parse them

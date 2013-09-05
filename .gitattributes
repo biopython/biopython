@@ -1,0 +1,5 @@
+# Files used in test_bgzf, need to be treated binary to keep proper line endings
+Tests/GenBank/cor6_6.gb binary
+Tests/Quality/example.fastq binary
+Tests/GenBank/NC_000932.gb binary
+Tests/Blast/wnts.xml binary

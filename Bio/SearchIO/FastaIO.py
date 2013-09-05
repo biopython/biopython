@@ -120,7 +120,7 @@ __all__ = ['FastaM10Parser', 'FastaM10Indexer']
 # regex for program name
 _RE_FLAVS = re.compile(r't?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search')
 # regex for sequence ID and length
-_PTR_ID_DESC_SEQLEN = r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)$'
+_PTR_ID_DESC_SEQLEN = r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\r?$'
 _RE_ID_DESC_SEQLEN = re.compile(_PTR_ID_DESC_SEQLEN)
 _RE_ID_DESC_SEQLEN_IDX = re.compile(_as_bytes(_PTR_ID_DESC_SEQLEN))
 # regex for qresult, hit, or hsp attribute value
@@ -379,7 +379,7 @@ class FastaM10Parser(object):
                     parsed_hsp['hit']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
                     hsp.aln_annotation['homology'] += \
-                            self.line.strip('\n')
+                            self.line.strip('\n').strip('\r')
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
                 hit = Hit(hsp_list)
@@ -477,7 +477,7 @@ class FastaM10Parser(object):
                     parsed_hsp['query']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
                     hsp.fragment.aln_annotation['homology'] += \
-                            self.line.strip('\n')
+                            self.line.strip('\n').strip('\r')
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)
@@ -505,7 +505,6 @@ class FastaM10Indexer(SearchIndexer):
             line = handle.readline()
             peekline = handle.peekline()
             end_offset = handle.tell()
-
             if not line.startswith(query_mark) and query_mark in line:
                 regx = re.search(_RE_ID_DESC_SEQLEN_IDX, line)
                 qresult_key = _bytes_to_string(regx.group(1))
