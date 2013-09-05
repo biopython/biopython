@@ -7,15 +7,7 @@ import colorsys
 from math import pi
 import os
 import unittest
-
-try:
-    from cmath import rect
-except ImportError:
-    #This was added in Python 2.6, fallback for Python 2.5:
-    from math import sin, cos
-
-    def rect(r, phi):
-        return r * (cos(phi) + sin(phi)*1j)
+from cmath import rect
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
