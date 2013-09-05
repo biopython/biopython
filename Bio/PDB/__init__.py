@@ -39,9 +39,6 @@ from PDBIO import PDBIO, Select
 # from a list of Atoms.
 import Selection
 
-# Superimpose atom sets
-from Superimposer import Superimposer
-
 # 3D vector class
 from Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
 from Vector import vector_to_axis, m2rotaxis, rotaxis2m
@@ -60,8 +57,14 @@ from ResidueDepth import ResidueDepth, get_surface
 # Calculation of Half Sphere Solvent Exposure
 from HSExposure import HSExposureCA, HSExposureCB, ExposureCN
 
-# Kolodny et al.'s backbone libraries
-from FragmentMapper import FragmentMapper
+try:
+    # Superimpose atom sets
+    from Superimposer import Superimposer
+    # Kolodny et al.'s backbone libraries
+    from FragmentMapper import FragmentMapper
+except:
+    # Problem with pypy, don't support for numpy.linalg
+    pass
 
 # Write out chain(start-end) to PDB file
 from Dice import extract
