@@ -39,7 +39,10 @@ class Record(object):
     annotation_update A tuple of (date, release).
 
     description       Free-format description.
-    gene_name         Gene name.  See userman.txt for description.
+    gene_name         A dictionary: {'Name':              list of str,
+                                     'Synonyms':          list of list of str,
+                                     'OrderedLocusNames': list of list of str,
+                                     'ORFNames':          list of list of str}
     organism          The source of the sequence.
     organelle         The origin of the sequence.
     organism_classification  The taxonomy classification.  List of strings.
@@ -71,7 +74,10 @@ class Record(object):
         self.annotation_update = None
 
         self.description = []
-        self.gene_name = ''
+        self.gene_name = {'Name': [],
+                          'Synonyms': [[]],
+                          'OrderedLocusNames': [[]],
+                          'ORFNames': [[]]}
         self.organism = []
         self.organelle = ''
         self.organism_classification = []
@@ -136,6 +142,7 @@ def read(handle):
 def _read(handle):
     record = None
     unread = ""
+    last_token = None
     for line in handle:
         #This is for Python 3 to cope with a binary handle (byte strings),
         #or a text handle (unicode strings):
@@ -164,9 +171,7 @@ def _read(handle):
         elif key == 'DE':
             record.description.append(value.strip())
         elif key == 'GN':
-            if record.gene_name:
-                record.gene_name += " "
-            record.gene_name += value
+            last_token = _read_gn(record, value, last_token)
         elif key == 'OS':
             record.organism.append(value)
         elif key == 'OG':
@@ -248,6 +253,40 @@ def _read(handle):
             raise ValueError("Unknown keyword '%s' found" % key)
     if record:
         raise ValueError("Unexpected end of stream.")
+
+
+def _read_gn(record, value, last_token):
+    cols = value.rstrip(';').split('; ')
+    for i, token in enumerate(cols):
+        if token.startswith('Name='):
+            record.gene_name['Name'].append(token[5:])
+            last_token = None
+        elif token.startswith('Synonyms='):
+            syns = _split_gn_token(token, 9)
+            record.gene_name['Synonyms'][-1].extend(syns)
+            last_token = 'Synonyms'
+        elif token.startswith('OrderedLocusNames='):
+            olns = _split_gn_token(token, 18)
+            record.gene_name['OrderedLocusNames'][-1].extend(olns)
+            last_token = 'OrderedLocusNames'
+        elif token.startswith('ORFNames='):
+            orfns = _split_gn_token(token, 9)
+            record.gene_name['ORFNames'][-1].extend(orfns)
+            last_token = 'ORFNames'
+        elif value.startswith('and'):
+            record.gene_name['Synonyms'].append([])
+            record.gene_name['OrderedLocusNames'].append([])
+            record.gene_name['ORFNames'].append([])
+        elif i == 0 and last_token:  # Line split at comma. Continue from last token
+            straggler = _split_gn_token(token, 0)
+            record.gene_name[last_token][-1].extend(straggler)
+        else:
+            ValueError("Could not parse unrecognised GN token: {0}".format(token))
+    return last_token
+
+
+def _split_gn_token(token, split_loc):
+    return token[split_loc:].rstrip(',').split(', ')
 
 
 def _read_id(record, line):
