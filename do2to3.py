@@ -28,6 +28,7 @@ if sys.version_info[0] < 3:
 
 import shutil
 import os
+import time
 import lib2to3.main
 from io import StringIO
 
@@ -35,10 +36,12 @@ from io import StringIO
 def run2to3(filenames):
     stderr = sys.stderr
     handle = StringIO()
+    times = []
     try:
         #Want to capture stderr (otherwise too noisy)
         sys.stderr = handle
         while filenames:
+            start = time.time()
             filename = filenames.pop(0)
             print("Converting %s" % filename)
             #TODO - Configurable options per file?
@@ -58,6 +61,7 @@ def run2to3(filenames):
                 os.remove(filename)  # Don't want a half edited file!
                 raise RuntimeError("Error %i from 2to3 (doctests) on %s"
                                    % (e, filename))
+            times.append((time.time() - start, filename))
     except KeyboardInterrupt:
         sys.stderr = stderr
         sys.stderr.write("Interrupted during %s\n" % filename)
@@ -70,6 +74,11 @@ def run2to3(filenames):
     finally:
         #Restore stderr
         sys.stderr = stderr
+    times.sort()
+    if times[-1][0] > 2.0:
+        print("Note: Slowest files to convert were:")
+        for taken, filename in times[-5:]:
+            print("Converting %s took %0.1fs" % (filename, taken))
 
 
 def do_update(py2folder, py3folder, verbose=False):
