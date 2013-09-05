@@ -4,23 +4,17 @@
 # as part of this package.
 
 import os
+import warnings
+from StringIO import StringIO
+from io import BytesIO
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
-from StringIO import StringIO
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
-
-try:
-    #This is in Python 2.6+, but we need it on Python 3
-    from io import BytesIO
-except ImportError:
-    BytesIO = StringIO
-
-import warnings
 
 # TODO - Convert this to using unittest, and check desired warnings
 # are issued. Used to do that by capturing warnings to stdout and

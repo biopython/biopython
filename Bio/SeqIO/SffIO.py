@@ -1188,11 +1188,7 @@ if __name__ == "__main__":
     assert index1 == index2
     assert len(index1) == len(list(SffIterator(open(filename, "rb"))))
     from StringIO import StringIO
-    try:
-        #This is in Python 2.6+, and is essential on Python 3
-        from io import BytesIO
-    except ImportError:
-        BytesIO = StringIO
+    from io import BytesIO
     assert len(index1) == len(
         list(SffIterator(BytesIO(open(filename, "rb").read()))))
 

@@ -18,13 +18,9 @@ import unittest
 import tempfile
 import gzip
 from StringIO import StringIO
-try:
-    #This is in Python 2.6+, but we need it on Python 3
-    from io import BytesIO
-except ImportError:
-    BytesIO = StringIO
-from Bio._py3k import _as_bytes, _bytes_to_string
+from io import BytesIO
 
+from Bio._py3k import _as_bytes, _bytes_to_string
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO

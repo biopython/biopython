@@ -10,11 +10,7 @@ import unittest
 import warnings
 
 from StringIO import StringIO
-try:
-    #This is in Python 2.6+, but we need it on Python 3
-    from io import BytesIO
-except ImportError:
-    BytesIO = StringIO
+from io import BytesIO
 
 from Bio import BiopythonWarning
 from Bio.Alphabet import generic_dna

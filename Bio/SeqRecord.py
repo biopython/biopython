@@ -675,6 +675,9 @@ class SeqRecord(object):
         Python 2.6/3.0.  The format_spec should be a lower case string
         supported by Bio.SeqIO as an output file format. See also the
         SeqRecord's format() method.
+
+        Under Python 3 please note that for binary formats a bytes
+        string is returned, otherwise a (unicode) string is returned.
         """
         if not format_spec:
             #Follow python convention and default to using __str__
@@ -682,14 +685,8 @@ class SeqRecord(object):
         from Bio import SeqIO
         if format_spec in SeqIO._BinaryFormats:
             #Return bytes on Python 3
-            try:
-                #This is in Python 2.6+, but we need it on Python 3
-                from io import BytesIO
-                handle = BytesIO()
-            except ImportError:
-                #Must be on Python 2.5 or older
-                from StringIO import StringIO
-                handle = StringIO()
+            from io import BytesIO
+            handle = BytesIO()
         else:
             from StringIO import StringIO
             handle = StringIO()

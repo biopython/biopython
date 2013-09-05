@@ -5,20 +5,15 @@
 
 import os
 import unittest
+from io import BytesIO
+from StringIO import StringIO
 
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
-from StringIO import StringIO
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
-
-try:
-    #This is in Python 2.6+, but we need it on Python 3
-    from io import BytesIO
-except ImportError:
-    BytesIO = StringIO
 
 
 #List of formats including alignment only file formats we can read AND write.

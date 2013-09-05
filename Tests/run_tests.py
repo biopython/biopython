@@ -28,7 +28,6 @@ VERBOSITY = 0
 
 # standard modules
 import sys
-import cStringIO
 import os
 import re
 import getopt
@@ -38,6 +37,9 @@ import unittest
 import doctest
 import distutils.util
 import gc
+from io import BytesIO
+from StringIO import StringIO
+
 
 def is_pypy():
     import platform
@@ -145,11 +147,6 @@ def _have_bug17666():
     3.2.4 and 3.3.1 only.
     """
     import gzip
-    try:
-        from io import BytesIO
-    except ImportError:
-        #Python 2.5 fall back
-        from StringIO import StringIO as BytesIO
     #Would like to use byte literal here:
     bgzf_eof = "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
                "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
@@ -376,14 +373,14 @@ class TestRunner(unittest.TextTestRunner):
         if "doctest" in self.tests:
             self.tests.remove("doctest")
             self.tests.extend(DOCTEST_MODULES)
-        stream = cStringIO.StringIO()
+        stream = StringIO()
         unittest.TextTestRunner.__init__(self, stream,
                 verbosity=verbosity)
 
     def runTest(self, name):
         from Bio import MissingExternalDependencyError
         result = self._makeResult()
-        output = cStringIO.StringIO()
+        output = StringIO()
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
         global system_lang

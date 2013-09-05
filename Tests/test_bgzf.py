@@ -24,11 +24,7 @@ def _have_bug17666():
     Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
     3.2.4 and 3.3.1 only.
     """
-    try:
-        #This is in Python 2.6+, but we need it on Python 3
-        from io import BytesIO
-    except ImportError:
-        from StringIO import StringIO as BytesIO
+    from io import BytesIO
     h = gzip.GzipFile(fileobj=BytesIO(bgzf._bgzf_eof))
     try:
         data = h.read()
