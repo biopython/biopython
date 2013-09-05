@@ -81,12 +81,12 @@ def _test_write_factory(source):
     def test_write(self):
         """Parse, rewrite and retest an example file."""
         with open(filename, 'rb') as infile:
-            t1 = NeXMLIO.Parser(infile).parse().next()
+            t1 = next(NeXMLIO.Parser(infile).parse())
         with open(DUMMY, 'w+b') as outfile:
             NeXMLIO.write([t1], outfile)
         
         with open(DUMMY, 'rb') as infile:
-            t2 = NeXMLIO.Parser(infile).parse().next()
+            t2 = next(NeXMLIO.Parser(infile).parse())
         
         def assert_property(prop_name):
             p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals() if getattr(n, prop_name)])

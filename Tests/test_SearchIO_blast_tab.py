@@ -64,7 +64,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
@@ -109,7 +109,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
@@ -169,7 +169,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
@@ -224,7 +224,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
@@ -275,7 +275,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -285,7 +285,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -333,7 +333,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -386,7 +386,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -406,7 +406,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -464,7 +464,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -518,7 +518,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('<unknown program>', qresult.program)
@@ -546,7 +546,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('<unknown program>', qresult.program)
@@ -580,7 +580,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -590,7 +590,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -622,7 +622,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -660,7 +660,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -670,7 +670,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -748,7 +748,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, hsp.hit_frame)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -830,7 +830,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -841,7 +841,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -852,7 +852,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(3, len(qresult))
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -873,7 +873,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, fields="qseq std sseq")
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('<unknown program>', qresult.program)

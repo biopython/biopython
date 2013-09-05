@@ -166,7 +166,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
         """Return a list of distances between adjacent terminals."""
         def generate_pairs(self):
             pairs = itertools.tee(self)
-            pairs[1].next()
+            next(pairs[1]) # Advance second iterator one step
             return itertools.izip(pairs[0], pairs[1])
         return [self.distance(*i) for i in
                 generate_pairs(self.find_clades(terminal=True))]

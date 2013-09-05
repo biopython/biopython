@@ -31,7 +31,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -42,7 +42,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -91,7 +91,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test third result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -172,7 +172,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test fourth result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -310,7 +310,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test fifth result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -534,7 +534,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -556,7 +556,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -616,7 +616,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -708,7 +708,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -857,7 +857,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -1081,7 +1081,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -1267,7 +1267,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -1416,7 +1416,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('SCO3574', qresult.id)
         self.assertEqual(5, len(qresult.hits))
@@ -1451,7 +1451,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1472,7 +1472,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1621,7 +1621,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1738,7 +1738,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1888,7 +1888,7 @@ class HmmersearchCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1899,7 +1899,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)

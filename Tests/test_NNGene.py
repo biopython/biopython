@@ -241,7 +241,7 @@ class MotifFinderTest(unittest.TestCase):
                                    alphabet=IUPAC.unambiguous_dna)
             while 1:
                 try:
-                    seq_record = iterator.next()
+                    seq_record = next(iterator)
                 except StopIteration:
                     break
                 if seq_record is None:

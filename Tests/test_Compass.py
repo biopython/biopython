@@ -46,24 +46,24 @@ class CompassTest(unittest.TestCase):
     def testCompassIteratorEasy(self):
         handle = open(self.test_files[0])
         records = Compass.parse(handle)
-        com_record = records.next()
+        com_record = next(records)
         self.assertEqual("60456.blo.gz.aln", com_record.query)
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
     def testCompassIteratorHard(self):
         handle = open(self.test_files[1])
         records = Compass.parse(handle)
 
-        com_record = records.next()
+        com_record = next(records)
         self.assertEqual("allscop//14982.blo.gz.aln", com_record.hit)
         self.assertEqual(float('1.01e+03'), com_record.evalue)
 
-        com_record = records.next()
+        com_record = next(records)
         self.assertEqual("allscop//14983.blo.gz.aln", com_record.hit)
         self.assertEqual(float('1.01e+03'), com_record.evalue)
 
-        com_record = records.next()
+        com_record = next(records)
         self.assertEqual("allscop//14984.blo.gz.aln", com_record.hit)
         self.assertEqual(float('5.75e+02'), com_record.evalue)
 
@@ -73,15 +73,15 @@ class CompassTest(unittest.TestCase):
         handle = open(self.test_files[1])
         records = Compass.parse(handle)
 
-        com_record = records.next()
+        com_record = next(records)
         self.assertEqual(178, com_record.query_start)
         self.assertEqual("KKDLEEIAD", com_record.query_aln)
         self.assertEqual(9, com_record.hit_start)
         self.assertEqual("QAAVQAVTA", com_record.hit_aln)
         self.assertEqual("++ ++++++", com_record.positives)
 
-        com_record = records.next()
-        com_record = records.next()
+        com_record = next(records)
+        com_record = next(records)
         self.assertEqual(371, com_record.query_start)
         self.assertEqual("LEEAMDRMER~~~V", com_record.query_aln)
         self.assertEqual(76, com_record.hit_start)
@@ -93,7 +93,7 @@ class CompassTest(unittest.TestCase):
     def testAlignmentParsingTwo(self):
         handle = open(self.test_files[0])
         records = Compass.parse(handle)
-        com_record = records.next()
+        com_record = next(records)
         self.assertEqual(2, com_record.query_start)
         self.assertEqual(2, com_record.hit_start)
         self.assertEqual("LKERKL", com_record.hit_aln[-6:])

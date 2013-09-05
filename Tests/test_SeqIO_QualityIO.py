@@ -138,17 +138,17 @@ class TestFastqErrors(unittest.TestCase):
             handle = open(filename, "rU")
             records = SeqIO.parse(handle, format)
             for i in range(good_count):
-                record = records.next()  # Make sure no errors!
+                record = next(records)  # Make sure no errors!
                 self.assertTrue(isinstance(record, SeqRecord))
-            self.assertRaises(ValueError, records.next)
+            self.assertRaises(ValueError, next, records)
             handle.close()
 
     def check_general_fails(self, filename, good_count):
         handle = open(filename, "rU")
         tuples = QualityIO.FastqGeneralIterator(handle)
         for i in range(good_count):
-            title, seq, qual = tuples.next()  # Make sure no errors!
-        self.assertRaises(ValueError, tuples.next)
+            title, seq, qual = next(tuples)  # Make sure no errors!
+        self.assertRaises(ValueError, next, tuples)
         handle.close()
 
     def check_general_passes(self, filename, record_count):

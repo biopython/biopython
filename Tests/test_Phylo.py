@@ -236,7 +236,7 @@ class MixinTests(unittest.TestCase):
         self.assertTrue(isinstance(octo[0], PhyloXML.Clade))
         self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
         # string filter
-        dee = self.phylogenies[10].find_clades('D').next()
+        dee = next(self.phylogenies[10].find_clades('D'))
         self.assertEqual(dee.name, 'D')
 
     def test_find_terminal(self):

@@ -63,8 +63,8 @@ for parser in all_parsers:
         handle = open(filename, 'r')
         iterator = GenBank.Iterator(handle, parser)
 
-        while 1:
-            cur_record = iterator.next()
+        while True:
+            cur_record = next(iterator)
 
             if cur_record is None:
                 break
@@ -163,8 +163,8 @@ def t_write_format():
         compare_iterator = GenBank.Iterator(compare_handle)
 
         while 1:
-            cur_record = iterator.next()
-            compare_record = compare_iterator.next()
+            cur_record = next(iterator)
+            compare_record = next(compare_iterator)
 
             if cur_record is None or compare_record is None:
                 break
@@ -188,7 +188,7 @@ def t_cleaning_features():
     handle = open(os.path.join("GenBank", "arab1.gb"))
     iterator = GenBank.Iterator(handle, parser)
 
-    first_record = iterator.next()
+    first_record = next(iterator)
 
     # test for cleaning of translation
     translation_feature = first_record.features[1]

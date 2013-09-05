@@ -13446,7 +13446,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -13807,7 +13807,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 59)
         self.assertAlmostEqual(record.blast_cutoff[1], 27.3)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -14029,7 +14029,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 58)
         self.assertAlmostEqual(record.blast_cutoff[1], 26.9)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record, None)
         handle.close()
 
@@ -14040,7 +14040,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -14064,7 +14064,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2202L_blastn_002(self):
@@ -14074,7 +14074,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -14098,7 +14098,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2208L_psiblast_001(self):
@@ -14188,7 +14188,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.15')
         self.assertEqual(record.date, "Oct-15-2006")
@@ -14199,7 +14199,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 1573298872)
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2220L_blastx_001(self):
@@ -14209,7 +14209,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14237,7 +14237,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(a.title, ">" + b[0])
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2220L_blastx_002(self):
@@ -14247,7 +14247,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14259,7 +14259,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14271,7 +14271,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14283,7 +14283,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14315,7 +14315,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[1].hsps[1].align_length, 23)
         self.assertEqual(record.alignments[1].hsps[1].identities, (12,23))
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14327,7 +14327,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14339,7 +14339,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14351,7 +14351,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2221L_blastp_001(self):
@@ -14361,7 +14361,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.21')
         self.assertEqual(record.date, "Jun-14-2009")
@@ -14374,7 +14374,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.21')
         self.assertEqual(record.date, "Jun-14-2009")
@@ -14387,7 +14387,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.21')
         self.assertEqual(record.date, "Jun-14-2009")
@@ -14400,7 +14400,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2222L_blastx_001(self):
@@ -14410,7 +14410,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14423,7 +14423,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14436,7 +14436,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14448,7 +14448,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14461,7 +14461,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14474,7 +14474,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14487,7 +14487,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14500,7 +14500,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2222_blastx_001(self):
@@ -14510,7 +14510,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14523,7 +14523,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14537,7 +14537,7 @@ class TestNCBITextParser(unittest.TestCase):
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14549,7 +14549,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14562,7 +14562,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14576,7 +14576,7 @@ class TestNCBITextParser(unittest.TestCase):
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14589,7 +14589,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14602,7 +14602,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastn_001(self):
@@ -14612,7 +14612,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14623,7 +14623,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastn_002(self):
@@ -14633,7 +14633,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
@@ -14646,7 +14646,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastn_003(self):
@@ -14656,7 +14656,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
@@ -14672,7 +14672,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastp_001(self):
@@ -14682,7 +14682,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTP')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14693,7 +14693,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastp_002(self):
@@ -14703,7 +14703,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTP')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus\nsubtilis subsp. subtilis str. 168]')
@@ -14716,7 +14716,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastp_003(self):
@@ -14726,7 +14726,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTP')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "gi|11464971:4-101 pleckstrin [Mus musculus]")
@@ -14742,7 +14742,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 2)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastx_001(self):
@@ -14752,7 +14752,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14771,7 +14771,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
@@ -14784,7 +14784,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastx_003(self):
@@ -14794,7 +14794,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
@@ -14810,7 +14810,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 2)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastn_001(self):
@@ -14820,7 +14820,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14831,7 +14831,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastn_002(self):
@@ -14841,7 +14841,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus\nsubtilis subsp. subtilis str. 168]')
@@ -14854,7 +14854,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastn_003(self):
@@ -14864,7 +14864,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "gi|11464971:4-101 pleckstrin [Mus musculus]")
@@ -14880,7 +14880,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 2)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastx_001(self):
@@ -14890,7 +14890,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14901,7 +14901,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastx_002(self):
@@ -14911,7 +14911,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
@@ -14924,7 +14924,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastx_003(self):
@@ -14934,7 +14934,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
@@ -14950,7 +14950,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 3)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
 

@@ -44,9 +44,9 @@ def read_single_with_titles(filename, alphabet):
     global title_to_ids
     handle = open(filename)
     iterator = FastaIterator(handle, alphabet, title_to_ids)
-    record = iterator.next()
+    record = next(iterator)
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     handle.close()

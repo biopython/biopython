@@ -32,7 +32,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
@@ -65,7 +65,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
 
         # second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|126362951:116-221', qresult.id)
@@ -123,7 +123,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.71, hsp.acc_avg)
 
         # third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
@@ -212,7 +212,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.85, hsp.acc_avg)
 
         # fourth qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(5, len(qresult))
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
@@ -383,7 +383,7 @@ class HmmerscanCases(unittest.TestCase):
         qresults = parse(tab_file, self.fmt)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
@@ -426,7 +426,7 @@ class HmmerscanCases(unittest.TestCase):
         qresults = parse(tab_file, self.fmt)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|126362951:116-221', qresult.id)
@@ -501,7 +501,7 @@ class HmmersearchCases(unittest.TestCase):
         # first qresult
         # we only want to check the coordinate switch actually
         # so checking the first hsp of the first hit of the qresult is enough
-        qresult = qresults.next()
+        qresult = next(qresults)
         self.assertEqual(7, len(qresult))
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.accession)

@@ -17,7 +17,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_21(self):
         """Test parsing hmmpfam 2.1 file (text_21_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_21_hmmpfam_001.out"), self.fmt)
-        res = results.next()
+        res = next(results)
         self.assertEqual('roa1_drome', res.id)
         self.assertEqual('<unknown description>', res.description)
         self.assertEqual('hmmpfam', res.program)
@@ -70,7 +70,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_22(self):
         """Test parsing hmmpfam 2.2 file (text_22_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_22_hmmpfam_001.out"), self.fmt)
-        res = results.next()
+        res = next(results)
         self.assertEqual('gi|1522636|gb|AAC37060.1|', res.id)
         self.assertEqual('M. jannaschii predicted coding region MJECS02 [Methanococcus jannaschii]', res.description)
         self.assertEqual('[none]', res.accession)
@@ -108,7 +108,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_23(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_001.out"), self.fmt)
-        res = results.next()
+        res = next(results)
         self.assertEqual('gi|90819130|dbj|BAE92499.1|', res.id)
         self.assertEqual('glutamate synthase [Porphyra yezoensis]', res.description)
         self.assertEqual('[none]', res.accession)
@@ -156,12 +156,12 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_23_no_match(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_002.out)"""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_002.out"), self.fmt)
-        res = results.next()
+        res = next(results)
 
         self.assertEqual('SEQ0001', res.id)
         self.assertEqual(0, len(res.hits))
 
-        res = results.next()
+        res = next(results)
 
         self.assertEqual('SEQ0002', res.id)
         self.assertEqual(0, len(res.hits))
@@ -169,7 +169,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_23_missing_consensus(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_003.out)"""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_003.out"), self.fmt)
-        res = results.next()
+        res = next(results)
 
         self.assertEqual('small_input', res.id)
         self.assertEqual('[none]', res.description)

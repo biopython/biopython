@@ -236,7 +236,7 @@ class TreeTests(unittest.TestCase):
         #Because we short circult interation, must close handle explicitly
         #to avoid a ResourceWarning
         handle = open(EX_DOLLO)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
         bchars = tree.clade[0,0].binary_characters
         self.assertTrue(isinstance(bchars, PX.BinaryCharacters))
@@ -265,7 +265,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Confidence objects."""
         #Because we short circult interation, must close handle explicitly
         handle = open(EX_MADE)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
         self.assertEqual(tree.name, 'testing confidence')
         for conf, type, val in zip(tree.confidences,
@@ -334,7 +334,7 @@ class TreeTests(unittest.TestCase):
         """
         #Because we short circult interation, must close handle explicitly
         handle = open(EX_APAF)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
         clade = tree.clade[0,0,0,0,0,0,0,0,0,0]
         darch = clade.sequences[0].domain_architecture
@@ -406,7 +406,7 @@ class TreeTests(unittest.TestCase):
         #Because we short circult interation, must close handle explicitly
         #to avoid a ResourceWarning
         handle = open(EX_DOLLO)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
         reference = tree.clade[0,0,0,0,0,0].references[0]
         self.assertTrue(isinstance(reference, PX.Reference))

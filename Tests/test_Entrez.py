@@ -4735,7 +4735,7 @@ class EFetchTest(unittest.TestCase):
         handle.close()
         handle = open('GenBank/NT_019265.gb', "rb")
         iterator = Entrez.parse(handle)
-        self.assertRaises(Parser.NotXMLError, iterator.next)
+        self.assertRaises(Parser.NotXMLError, next, iterator)
         handle.close()
 
     def test_fasta(self):
@@ -4747,7 +4747,7 @@ class EFetchTest(unittest.TestCase):
         handle.close()
         handle = open('Fasta/wisteria.nu', "rb")
         iterator = Entrez.parse(handle)
-        self.assertRaises(Parser.NotXMLError, iterator.next)
+        self.assertRaises(Parser.NotXMLError, next, iterator)
         handle.close()
 
     def test_pubmed_html(self):
@@ -4762,7 +4762,7 @@ class EFetchTest(unittest.TestCase):
         # Test if the error is also raised with Entrez.parse
         handle = open('Entrez/pubmed3.html', "rb")
         records = Entrez.parse(handle)
-        self.assertRaises(Parser.NotXMLError, records.next)
+        self.assertRaises(Parser.NotXMLError, next, records)
         handle.close()
 
     def test_xml_without_declaration(self):
@@ -4777,7 +4777,7 @@ class EFetchTest(unittest.TestCase):
         # Test if the error is also raised with Entrez.parse
         handle = open('Entrez/journals.xml', "rb")
         records = Entrez.parse(handle)
-        self.assertRaises(Parser.NotXMLError, records.next)
+        self.assertRaises(Parser.NotXMLError, next, records)
         handle.close()
 
 

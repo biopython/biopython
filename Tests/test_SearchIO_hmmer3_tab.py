@@ -31,7 +31,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
@@ -58,7 +58,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.2, hsp.bias)
 
         # second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|126362951:116-221', qresult.id)
@@ -105,7 +105,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
 
         # third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
@@ -152,7 +152,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.0, hsp.bias)
 
         # last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(5, len(qresult))
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
@@ -282,7 +282,7 @@ class HmmerscanCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
@@ -319,7 +319,7 @@ class HmmerscanCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|126362951:116-221', qresult.id)

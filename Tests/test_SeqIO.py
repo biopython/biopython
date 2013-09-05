@@ -449,7 +449,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     seq_iterator = SeqIO.parse(handle=h, format=t_format)
     while True:
         try:
-            record = seq_iterator.next()
+            record = next(seq_iterator)
         except StopIteration:
             break
         assert record is not None, "Should raise StopIteration not return None"
@@ -460,7 +460,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     h = open(t_filename,mode)
     seq_iterator = SeqIO.parse(handle=h, format=t_format)
     try:
-        record = seq_iterator.next()
+        record = next(seq_iterator)
     except StopIteration:
         record = None
     if record is not None:
@@ -480,7 +480,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         h = ForwardOnlyHandle(open(t_filename, mode))
     seq_iterator = SeqIO.parse(h, format=t_format)
     try:
-        record = seq_iterator.next()
+        record = next(seq_iterator)
     except StopIteration:
         record = None
     if record is not None:
@@ -593,7 +593,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         #These should all fail...
         h = open(t_filename,mode)
         try:
-            print(SeqIO.parse(h,t_format,given_alpha).next())
+            print(next(SeqIO.parse(h,t_format,given_alpha)))
             h.close()
             assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
                    % (repr(given_alpha), t_filename)

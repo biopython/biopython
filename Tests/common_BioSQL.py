@@ -686,7 +686,7 @@ class InDepthLoadTest(unittest.TestCase):
         """Make sure can't reimport existing records."""
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
         gb_handle = open(gb_file, "r")
-        record = SeqIO.parse(gb_handle, "gb").next()
+        record = next(SeqIO.parse(gb_handle, "gb"))
         gb_handle.close()
         #Should be in database already...
         db_record = self.db.lookup(accession = "X55053")

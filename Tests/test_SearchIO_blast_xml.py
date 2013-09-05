@@ -29,7 +29,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
@@ -116,7 +116,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -147,7 +147,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.description)
@@ -189,7 +189,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.description)
@@ -282,7 +282,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -320,7 +320,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -387,7 +387,7 @@ class BlastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
@@ -482,7 +482,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -513,7 +513,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription '
@@ -557,7 +557,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
@@ -633,7 +633,7 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
@@ -720,7 +720,7 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.18+', qresult.version)
@@ -803,7 +803,7 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -831,7 +831,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|129628|sp|P07175.1|PARA_AGRTU', qresult.id)
@@ -855,7 +855,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -891,7 +891,7 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.22+', qresult.version)
@@ -976,7 +976,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1008,7 +1008,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
@@ -1051,7 +1051,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -1140,7 +1140,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1181,7 +1181,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1247,7 +1247,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1352,7 +1352,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1384,7 +1384,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.description)
@@ -1424,7 +1424,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -1515,7 +1515,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
@@ -1596,7 +1596,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.22+', qresult.version)
@@ -1651,7 +1651,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1683,7 +1683,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
@@ -1772,7 +1772,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1810,7 +1810,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1915,7 +1915,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1947,7 +1947,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
@@ -2040,7 +2040,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
@@ -2125,7 +2125,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2156,7 +2156,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
@@ -2196,7 +2196,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -2284,7 +2284,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2320,7 +2320,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2382,7 +2382,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2485,7 +2485,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2516,7 +2516,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.description)
@@ -2555,7 +2555,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -2647,7 +2647,7 @@ class TblastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test the first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2732,7 +2732,7 @@ class TblastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2763,7 +2763,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.description)
@@ -2851,7 +2851,7 @@ class TblastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2887,7 +2887,7 @@ class TblastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2991,7 +2991,7 @@ class TblastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -3022,7 +3022,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.description)
@@ -3118,7 +3118,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test the Hit IDs only, since this is a special case

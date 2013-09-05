@@ -273,7 +273,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
     while True:
         try:
-            record = seq_iterator.next()
+            record = next(seq_iterator)
         except StopIteration:
             break
         assert record is not None, "Should raise StopIteration not return None"
@@ -282,7 +282,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     #Try a mixture of next() and list (a torture test!)
     seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
     try:
-        record = seq_iterator.next()
+        record = next(seq_iterator)
     except StopIteration:
         record = None
     if record is not None:
@@ -295,7 +295,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     #Try a mixture of next() and for loop (a torture test!)
     seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
     try:
-        record = seq_iterator.next()
+        record = next(seq_iterator)
     except StopIteration:
         record = None
     if record is not None:
