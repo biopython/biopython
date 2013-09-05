@@ -117,10 +117,10 @@ def _do_db_create():
         server.adaptor.cursor.execute(sql, ())
     except (server.module.OperationalError,
             server.module.Error,
-            server.module.DatabaseError), e:  # the database doesn't exist
+            server.module.DatabaseError) as e:  # the database doesn't exist
         pass
     except (server.module.IntegrityError,
-            server.module.ProgrammingError), e:  # ditto--perhaps
+            server.module.ProgrammingError) as e:  # ditto--perhaps
         if str(e).find('database "%s" does not exist' % TESTDB) == -1:
             raise
     # create a new database
