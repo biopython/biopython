@@ -146,6 +146,9 @@ def _have_bug17666():
     Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
     3.2.4 and 3.3.1 only.
     """
+    if os.name == 'java':
+        #Jython not affected
+        return False
     import gzip
     #Would like to use byte literal here:
     bgzf_eof = "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
