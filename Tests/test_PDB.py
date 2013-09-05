@@ -977,7 +977,7 @@ class IterationTests(unittest.TestCase):
 #        """Residues in a structure are renumbered."""
 #        self.structure.renumber_residues()
 #        nums = [resi.id[1] for resi in self.structure[0]['A'].child_list]
-#        print nums
+#        print(nums)
 #
 # -------------------------------------------------------------
 

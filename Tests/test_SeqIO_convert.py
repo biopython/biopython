@@ -79,7 +79,6 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         assert str(err1) == str(err2), \
                "Different failures, parse/write:\n%s\nconvert:\n%s" \
                % (err1, err2)
-    #print err
 
 
 #TODO - move this to a shared test module...

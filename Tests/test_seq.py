@@ -16,7 +16,7 @@ if sys.version_info[0] == 3:
 else:
     array_indicator = "c"
 
-print
+print("")
 print("Testing Seq")
 print("===========")
 
@@ -28,7 +28,7 @@ print(s[0])
 print(s[-1])
 print(str(s[3:5]))
 
-print "Reverse using -1 stride:", repr(s[::-1])
+print("Reverse using -1 stride: %r" % s[::-1])
 
 print("Extract every third nucleotide (slicing with stride 3):")
 print(repr(s[0::3]))
@@ -58,7 +58,7 @@ print(str(u.alphabet))
 from Bio.Seq import MutableSeq
 import array
 
-print
+print("")
 print("Testing MutableSeq")
 print("==================")
 
@@ -72,35 +72,35 @@ for test_seq in [string_seq]:
     print(repr(test_seq))
     print(str(test_seq))
     print(len(test_seq))
-    print(repr(test_seq.toseq()))
+    print("%r" % test_seq.toseq())
 
     print(test_seq[0])
-    print(repr(test_seq[1:5]))
+    print("%r" % test_seq[1:5])
 
     test_seq[1:3] = "GAT"
-    print "Set slice with string:", repr(test_seq)
+    print("Set slice with string: %r" % test_seq)
     test_seq[1:3] = test_seq[5:7]
-    print "Set slice with MutableSeq:", repr(test_seq)
+    print("Set slice with MutableSeq: %r" % test_seq)
     test_seq[1:3] = array.array(array_indicator, "GAT")
-    print "Set slice with array:", repr(test_seq)
+    print("Set slice with array: %r" % test_seq)
 
     test_seq[3] = "G"
-    print "Set item:", repr(test_seq)
+    print("Set item: %r" % test_seq)
 
     del test_seq[4:5]
-    print "Delete slice:", repr(test_seq)
+    print("Delete slice: %r" % test_seq)
     del test_seq[3]
-    print "Delete item:", repr(test_seq)
+    print("Delete item: %r" % test_seq)
 
     test_seq.append("C")
-    print "Append:", repr(test_seq)
+    print("Append: %r" % test_seq)
     test_seq.insert(4, "G")
-    print "Insert:", repr(test_seq)
+    print("Insert: %r" % test_seq)
 
-    print "Pop off the last item:", test_seq.pop()
+    print("Pop off the last item: %s" % test_seq.pop())
 
     test_seq.remove("G")
-    print "Removed Gs:", repr(test_seq)
+    print("Removed Gs: %r" % test_seq)
 
     try:
         test_seq.remove("Z")
@@ -108,20 +108,20 @@ for test_seq in [string_seq]:
     except ValueError:
         print("Expected value error and got it")
 
-    print "A count:", test_seq.count("A")
-    print "A index:", test_seq.index("A")
+    print("A count: %i" % test_seq.count("A"))
+    print("A index: %i" % test_seq.index("A"))
 
     test_seq.reverse()
-    print "Reversed Seq:", repr(test_seq)
+    print("Reversed Seq: %r" % test_seq)
 
-    print "Reverse using -1 stride:", repr(test_seq[::-1])
+    print("Reverse using -1 stride: %r" % test_seq[::-1])
 
     test_seq.extend("GAT")
     test_seq.extend(MutableSeq("TTT", IUPAC.ambiguous_dna))
-    print "Extended Seq:", repr(test_seq)
+    print("Extended Seq: %r" % test_seq)
 
     del test_seq[4:6:-1]
-    print "Delete stride slice:", repr(test_seq)
+    print("Delete stride slice: %r" % test_seq)
 
     print("Extract every third nucleotide (slicing with stride 3):")
     print(repr(test_seq[0::3]))
@@ -133,7 +133,7 @@ for test_seq in [string_seq]:
     print(repr(test_seq))
 
 ###########################################################################
-print
+print("")
 print("Testing Seq addition")
 print("====================")
 dna = [Seq.Seq("ATCG", IUPAC.ambiguous_dna),
@@ -217,7 +217,7 @@ for a in dna+rna+nuc:
             pass
 
 ###########################################################################
-print
+print("")
 print("Testing Seq string methods")
 print("==========================")
 for a in dna + rna + nuc + protein:
@@ -274,7 +274,7 @@ for a in dna + rna + nuc + protein:
 del a, alpha, chars, str_chars, test_chars
 del dna, rna, nuc, protein
 ###########################################################################
-print
+print("")
 print("Checking ambiguous complements")
 print("==============================")
 
@@ -294,25 +294,25 @@ def sorted_dict(d):
     return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v))
                               for k,v in sorted(d.iteritems()))
 
-print
-print "DNA Ambiguity mapping:", sorted_dict(ambiguous_dna_values)
-print "DNA Complement mapping:", sorted_dict(ambiguous_dna_complement)
+print("")
+print("DNA Ambiguity mapping: %s" % sorted_dict(ambiguous_dna_values))
+print("DNA Complement mapping: %s" % sorted_dict(ambiguous_dna_complement))
 for ambig_char, values in sorted(ambiguous_dna_values.iteritems()):
     compl_values = complement(values)
     print("%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char]))
     assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
 
-print
-print "RNA Ambiguity mapping:", sorted_dict(ambiguous_rna_values)
-print "RNA Complement mapping:", sorted_dict(ambiguous_rna_complement)
+print("")
+print("RNA Ambiguity mapping: %s" % sorted_dict(ambiguous_rna_values))
+print("RNA Complement mapping: %s" % sorted_dict(ambiguous_rna_complement))
 for ambig_char, values in sorted(ambiguous_rna_values.iteritems()):
     compl_values = complement(values).replace("T","U")  # need to help as no alphabet
     print("%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char]))
     assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
 
-print
+print("")
 print("Reverse complements:")
 for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
             Seq.Seq("".join(sorted(ambiguous_dna_values))),
@@ -326,7 +326,7 @@ for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
         assert str(sequence) \
            == str(Seq.reverse_complement(Seq.reverse_complement(sequence))), \
            "Dobule reverse complement didn't preserve the sequence!"
-print
+print("")
 
 ###########################################################################
 
@@ -373,7 +373,7 @@ for nucleotide_seq in test_seqs:
         if "T" in str(nucleotide_seq).upper():
             assert not isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
 
-print
+print("")
 print("Transcribe DNA into RNA")
 print("=======================")
 for nucleotide_seq in test_seqs:
@@ -407,7 +407,7 @@ for s in protein_seqs:
     except ValueError:
         pass
 
-print
+print("")
 print("Back-transcribe RNA into DNA")
 print("============================")
 for nucleotide_seq in test_seqs:
@@ -441,7 +441,7 @@ for s in protein_seqs:
     except ValueError:
         pass
 
-print
+print("")
 print("Reverse Complement")
 print("==================")
 for nucleotide_seq in test_seqs:
@@ -480,7 +480,7 @@ for s in protein_seqs:
     except ValueError:
         pass
 
-print
+print("")
 print("Translating")
 print("===========")
 for nucleotide_seq in test_seqs:
@@ -602,7 +602,7 @@ for c1 in ambig:
             #ambiguous protein mappings?
 del t,c1,c2,c3,ambig
 
-print
+print("")
 print("Seq's .complement() method")
 print("==========================")
 for nucleotide_seq in test_seqs:
@@ -617,7 +617,7 @@ for nucleotide_seq in test_seqs:
             print("%s -> %s" \
             % (repr(nucleotide_seq) , str(e)))
 
-print
+print("")
 print("Seq's .reverse_complement() method")
 print("==================================")
 for nucleotide_seq in test_seqs:

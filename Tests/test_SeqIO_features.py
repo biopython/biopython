@@ -10,6 +10,8 @@ and confirms they are consistent using our different parsers.
 """
 import os
 import unittest
+from StringIO import StringIO
+
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
@@ -18,7 +20,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, \
                            OneOfPosition,  WithinPosition
-from StringIO import StringIO
+
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
 
@@ -1022,7 +1024,7 @@ class NC_000932(unittest.TestCase):
                 pro = nuc.translate(table=self.table, cds=True)
             except TranslationError as e:
                 print(e)
-                print r.id, nuc, self.table
+                print("%r, %r, %r" % ( r.id, nuc, self.table))
                 print(f)
                 raise
             if pro[-1] == "*":

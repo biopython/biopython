@@ -70,7 +70,7 @@ def main(num_queens):
     if VERBOSE:
         print("Search started at %s and ended at %s" % (start_time, end_time))
         for orgm in unique_solutions:
-            print "We did it!", org
+            print("We did it! %s" % org)
             display_board(org.genome)
 
 
@@ -83,13 +83,13 @@ def display_board(genome):
     print('+-' + '--'*len(genome) + '+')
 
     for row in range(len(genome)):
-        print '|',
+        elements = []
         for genome_item in genome:
             if genome_item == row:
-                print 'Q',
+                elements.append('Q')
             else:
-                print '.',
-        print('|')
+                elements.append('.')
+        print('|' + ''.join(elements) + '|')
 
     print('+-' + '--'*len(genome) + '+')
 

@@ -113,8 +113,8 @@ def apply_to_window(sequence, window_size, function, step=None):
         results.append((middle, value)) # Add results to list
 
     # Check on last sequence
-    #print fragment
-    #print seq[-100:]
+    #print(fragment)
+    #print(seq[-100:])
     return results      # Return the list of (position, value) results
 
 
@@ -132,7 +132,7 @@ def calc_gc_content(sequence):
 
     if gc == 0:
         return 0
-    #print gc*100.0/(d['A'] +d['T'] + gc)
+    #print(gc*100.0/(d['A'] +d['T'] + gc))
     return gc*1./(d['A'] +d['T'] + gc)
 
 

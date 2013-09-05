@@ -72,10 +72,10 @@ for parser in all_parsers:
             if isinstance(parser, GenBank.FeatureParser):
                 print("***Record from %s with the FeatureParser" \
                       % filename.split(os.path.sep)[-1])
-                print "Seq:", repr(cur_record.seq)
-                print "Id:", cur_record.id
-                print "Name:", cur_record.name
-                print "Description", cur_record.description
+                print("Seq: %r" % cur_record.seq)
+                print("Id: %s" % cur_record.id)
+                print("Name: %s" % cur_record.name)
+                print("Description %s" % cur_record.description)
                 print("Annotations***")
                 ann_keys = cur_record.annotations.keys()
                 ann_keys.sort()
@@ -97,29 +97,25 @@ for parser in all_parsers:
                     else:
                         #Assuming no mixed strand examples...
                         assert feature.strand is not None
-                print "DB cross refs", cur_record.dbxrefs
+                print("DB cross refs %s" % cur_record.dbxrefs)
             elif isinstance(parser, GenBank.RecordParser):
                 print("***Record from %s with the RecordParser" \
                       % filename.split(os.path.sep)[-1])
                 print("sequence length: %i" % len(cur_record.sequence))
-                print "locus:", cur_record.locus
-                print "definition:", cur_record.definition
-                print "accession:", cur_record.accession
+                print("locus: %s" % cur_record.locus)
+                print("definition: %s" % cur_record.definition)
+                print("accession: %s" % cur_record.accession)
                 for reference in cur_record.references:
-                    print "reference title:", reference.title
+                    print("reference title: %s" % reference.title)
 
                 for feature in cur_record.features:
-                    print "feature key:", feature.key
-                    print "location:", feature.location
-                    print "num qualifiers:", len(feature.qualifiers)
+                    print("feature key: %s" % feature.key)
+                    print("location: %s" % feature.location)
+                    print("num qualifiers: %i" % len(feature.qualifiers))
                     for qualifier in feature.qualifiers:
-                        print "key:", qualifier.key, "value:", qualifier.value
+                        print("key: %s value: %s" % (qualifier.key, qualifier.value))
 
         handle.close()
-
-#The dictionaries code has been deprecated
-#print "Testing dictionaries..."
-#...
 
 # test writing GenBank format
 print("Testing writing GenBank format...")
@@ -162,7 +158,7 @@ def t_write_format():
         iterator = GenBank.Iterator(cur_handle, record_parser)
         compare_iterator = GenBank.Iterator(compare_handle)
 
-        while 1:
+        while True:
             cur_record = next(iterator)
             compare_record = next(compare_iterator)
 

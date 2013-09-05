@@ -36,7 +36,7 @@ else :
 for folder in likely_dirs:
     if not os.path.isdir(folder):
         continue
-    for name in wanted :
+    for name in wanted:
         if sys.platform=="win32":
             exe_name = os.path.join(folder, name+".exe")
         else:
@@ -58,8 +58,8 @@ for folder in likely_dirs:
             if name == "blast_formatter" and " -archive " not in output:
                 continue
             exe_names[name] = exe_name
-        #else :
-        #    print "Rejecting", exe_name
+        #else:
+        #    print("Rejecting %r" % exe_name)
         del exe_name, name
 
 #To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias

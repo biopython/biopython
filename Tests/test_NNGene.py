@@ -583,7 +583,7 @@ class SchemaFactoryTest(unittest.TestCase):
                                       alphabet=IUPAC.unambiguous_dna):
             schema_values = schema_coder.representation(seq_record.seq)
             if VERBOSE:
-                print "Schema values:", schema_values
+                print("Schema values: %s" % schema_values)
         fasta_handle.close()
 
 

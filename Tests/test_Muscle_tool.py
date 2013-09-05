@@ -170,8 +170,8 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(str(cmdline).rstrip(), "muscle -in Fasta/f002 -maxiters 2 -stable")
         result, out_handle, err_handle = generic_run(cmdline)
         #NOTE: generic_run has been removed from Biopython
-        print err_handle.read()
-        print out_handle.read()
+        print(err_handle.read())
+        print(out_handle.read())
         align = AlignIO.read(out_handle, "fasta")
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):

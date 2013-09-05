@@ -306,7 +306,7 @@ def alignment_summary(alignment, index=" "):
 
 
 def check_simple_write_read(records, indent=" "):
-    #print indent+"Checking we can write and then read back these records"
+    #print(indent+"Checking we can write and then read back these records")
     for format in test_write_read_alignment_formats:
         if format not in possible_unknown_seq_formats \
         and isinstance(records[0].seq, UnknownSeq) \

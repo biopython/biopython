@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 """test_align.py
 
@@ -76,15 +75,15 @@ alignment = AlignIO.read(os.path.join(test_dir, test_names[0]), "clustal",
 # test the base alignment stuff
 print('all_seqs...')
 for seq_record in alignment:
-    print 'description:', seq_record.description
-    print 'seq:', repr(seq_record.seq)
-print 'length:', alignment.get_alignment_length()
+    print('description: %s' % seq_record.description)
+    print('seq: %r' % seq_record.seq)
+print('length: %i' % alignment.get_alignment_length())
 
 print('Calculating summary information...')
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus()
 assert isinstance(consensus, Seq)
-print 'consensus:', repr(consensus)
+print('consensus: %r' % consensus)
 
 
 print('Replacement dictionary')
@@ -123,9 +122,9 @@ print('relative information: %0.2f' \
       % align_info.information_content(e_freq_table = e_freq_table,
                                        chars_to_ignore = ['N']))
 
-print 'Column 1:', align_info.get_column(1)
+print('Column 1: %s' % align_info.get_column(1))
 print('IC for column 1: %0.2f' % align_info.ic_vector[1])
-print 'Column 7:', align_info.get_column(7)
+print('Column 7: %s' % align_info.get_column(7))
 print('IC for column 7: %0.2f' % align_info.ic_vector[7])
 print('test print_info_content')
 AlignInfo.print_info_content(align_info)
@@ -139,14 +138,14 @@ alignment = AlignIO.read(to_parse, "fasta",
 # test the base alignment stuff
 print('all_seqs...')
 for seq_record in alignment:
-    print 'description:', seq_record.description
-    print 'seq:', repr(seq_record.seq)
+    print('description: %s' % seq_record.description)
+    print('seq: %r' % seq_record.seq)
 
-print 'length:', alignment.get_alignment_length()
+print('length: %i' % alignment.get_alignment_length())
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
 assert isinstance(consensus, Seq)
-print 'consensus:', repr(consensus)
+print('consensus: %r' % consensus)
 
 print(alignment)
 
@@ -165,7 +164,7 @@ print(alignment.format("clustal"))
 """
 # test to find a position in an original sequence given a
 # column position in an alignment
-print "Testing finding column positions..."
+print("Testing finding column positions...")
 alignment_info = ["GATC--CGATC--G",
                   "GA--CCCG-TC--G",
                   "GAT--CC--TC--G"]
