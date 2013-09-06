@@ -990,14 +990,14 @@ class LinearDrawer(AbstractDrawer):
             top += self.fragment_lines[fragment][0]
         except:     # Only called if the method screws up big time
             print("We've got a screw-up")
-            print self.start, self.end
+            print("%s %s" % (self.start, self.end))
             print(self.fragment_bases)
-            print x0, x1
+            print("%r %r" % (x0, x1))
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))
-            print 'FEATURE\n', feature
-            1/0
+            print('FEATURE\n%s' % feature)
+            raise
 
         # Distribution dictionary for various ways of drawing the feature
         draw_methods = {'BOX': self._draw_sigil_box,
