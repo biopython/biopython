@@ -72,7 +72,7 @@ def simple_matrix_print(matrix):
 
 # output results
 print(simple_matrix_print(y_on_x1))
-print
+print("")
 print(simple_matrix_print(y_on_x2))
-print
+print("")
 print("%.2f" % rms)

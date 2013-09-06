@@ -52,10 +52,9 @@ def stopping_criteria(num_iterations, validation_error, training_error):
     """
     if num_iterations % 100 == 0:
         if VERBOSE:
-            print "error:", validation_error
+            print("error: %s" % validation_error)
     if num_iterations >= 2000:
-        return 1
-
-    return 0
+        return True
+    return False
 
 main()
