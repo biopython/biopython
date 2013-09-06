@@ -14,7 +14,10 @@ Graphics.DisplayRepresentation classes.
 import os
 import sys
 import random
-import cStringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 import unittest
 
 from Bio import MissingPythonDependencyError
@@ -234,7 +237,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         # trick to write the properties to a string
         save_stdout = sys.stdout
-        new_stdout = cStringIO.StringIO()
+        new_stdout = StringIO()
         sys.stdout = new_stdout
 
         test_widget.dumpProperties()

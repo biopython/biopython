@@ -3,7 +3,10 @@
 """
 # standard library
 import os
-import cStringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 import warnings
 
 from Bio import BiopythonParserWarning
@@ -127,8 +130,8 @@ def do_comparison(good_record, test_record):
     Ths compares the two GenBank record, and will raise an AssertionError
     if two lines do not match, showing the non-matching lines.
     """
-    good_handle = cStringIO.StringIO(good_record)
-    test_handle = cStringIO.StringIO(test_record)
+    good_handle = StringIO(good_record)
+    test_handle = StringIO(test_record)
 
     while 1:
         good_line = good_handle.readline()

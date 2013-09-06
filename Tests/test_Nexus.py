@@ -1,7 +1,10 @@
 import os.path
 import unittest
 import tempfile
-import cStringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 import sys
 
 from Bio.Nexus import Nexus, Trees
@@ -315,13 +318,9 @@ usertype matrix_test stepmatrix=5
         t3.split(parent_id=t3.search_taxon('t9'))
         stdout = sys.stdout
         try:
-            sys.stdout = cStringIO.StringIO()
+            sys.stdout = StringIO()
             t3.display()
-            if sys.version_info[0] == 3:
-                output = sys.stdout.getvalue()
-            else:
-                sys.stdout.reset()
-                output = sys.stdout.read()
+            output = sys.stdout.getvalue()
         finally:
             sys.stdout = stdout
         expected = """\

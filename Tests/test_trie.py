@@ -17,6 +17,7 @@ except ImportError:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingPythonDependencyError(message)
 
+from StringIO import StringIO
 
 class TestTrie(unittest.TestCase):
 
@@ -67,7 +68,6 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(k, [])
 
     def test_save(self):
-        import StringIO
         trieobj = trie.trie()
         trieobj["foo"] = 1
         k = trieobj.keys()
@@ -95,7 +95,7 @@ class TestTrie(unittest.TestCase):
         x = y.items()
         x.sort()
         self.assertEqual(x,[(('foo', 1, 0), 1), (('hello', '55a', 4), 6)])
-        h = StringIO.StringIO()
+        h = StringIO()
         trie.save(h, trieobj)
         h.seek(0)
         trieobj = trie.load(h)
