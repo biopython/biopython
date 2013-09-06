@@ -43,8 +43,8 @@ if sys.platform == "win32":
             if bwa_exe:
                 break
 else:
-    import commands
-    output = commands.getoutput("bwa")
+    from Bio._py3k import getoutput
+    output = getoutput("bwa")
 
     #Since "not found" may be in another language, try and be sure this is
     #really the bwa tool's output

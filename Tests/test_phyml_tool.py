@@ -21,8 +21,8 @@ if sys.platform=="win32":
     raise MissingExternalDependencyError(
         "Testing PhyML on Windows not supported yet")
 else:
-    import commands
-    output = commands.getoutput("phyml --version")
+    from Bio._py3k import getoutput
+    output = getoutput("phyml --version")
     if "not found" not in output and "20" in output:
         phyml_exe = "phyml"
 

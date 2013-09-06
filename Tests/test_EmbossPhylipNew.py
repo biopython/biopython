@@ -33,10 +33,10 @@ if "EMBOSS_ROOT" in os.environ:
                 exes[name] = os.path.join(path, name+".exe")
     del path, name
 if sys.platform!="win32":
-    import commands
+    from Bio._py3k import getoutput
     for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
-        output = commands.getoutput("%s -help" % name)
+        output = getoutput("%s -help" % name)
         if "not found" not in output and "not recognized" not in output:
             exes[name] = name
         del output

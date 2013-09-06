@@ -18,8 +18,8 @@ probcons_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("PROBCONS not available on Windows")
 else:
-    import commands
-    output = commands.getoutput("probcons")
+    from Bio._py3k import getoutput
+    output = getoutput("probcons")
     if "not found" not in output and "probcons" in output.lower():
         probcons_exe = "probcons"
 

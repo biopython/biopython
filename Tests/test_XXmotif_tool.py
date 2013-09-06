@@ -23,8 +23,8 @@ if sys.platform == "win32":
     # TODO
     raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
 else:
-    import commands
-    output = commands.getoutput("XXmotif")
+    from Bio._py3k import getoutput
+    output = getoutput("XXmotif")
     if output.find("== XXmotif version") != -1:
         xxmotif_exe = "XXmotif"
 

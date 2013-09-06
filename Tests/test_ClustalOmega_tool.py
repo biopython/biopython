@@ -25,8 +25,8 @@ if sys.platform=="win32":
     #TODO
     raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
 else:
-    import commands
-    output = commands.getoutput("clustalo --help")
+    from Bio._py3k import getoutput
+    output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
 

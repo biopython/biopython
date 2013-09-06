@@ -45,8 +45,8 @@ if sys.platform=="win32":
         if muscle_exe:
             break
 else:
-    import commands
-    output = commands.getoutput("muscle -version")
+    from Bio._py3k import getoutput
+    output = getoutput("muscle -version")
     #Since "not found" may be in another language, try and be sure this is
     #really the MUSCLE tool's output
     if "not found" not in output and "MUSCLE" in output \

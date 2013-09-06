@@ -45,9 +45,9 @@ if sys.platform == "win32":
             if fasttree_exe:
                 break
 else:
-    import commands
+    from Bio._py3k import getoutput
     # Checking the -help argument
-    output = commands.getoutput("fasttree -help")
+    output = getoutput("fasttree -help")
     # Since "is not recognized" may be in another language, try and be sure this
     # is really the fasttree tool's output
     fasttree_found = False
