@@ -79,6 +79,9 @@ if sys.version_info[0] >= 3:
     #On Python 3, can depend on OrderedDict being present:
     from collections import OrderedDict
 
+    #On Python 3, this will be a unicode StringIO
+    from io import StringIO
+
 else:
     #Python 2 code
 
@@ -119,6 +122,14 @@ else:
         except ImportError:
             #Use our bundled copy instead
             from _ordereddict import OrderedDict
+
+    # On Python 2 this will be a (bytes) string based handle.
+    # Note this doesn't work as it is unicode based:
+    # from io import StringIO
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from StringIO import StringIO
 
 
 if sys.platform == "win32":
