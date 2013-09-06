@@ -90,7 +90,7 @@ def real_test():
                 "Check zip encoder installed for PIL and ReportLab renderPM")
         else:
             raise err
-    except RenderPMError, err :
+    except RenderPMError as err:
         if str(err).startswith("Can't setFont(") :
             #TODO - can we raise the error BEFORE the unit test function
             #is run? That way it can be skipped in run_tests.py
