@@ -9,7 +9,10 @@ import os
 import unittest
 import warnings
 
-from StringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 from io import BytesIO
 
 from Bio import BiopythonWarning
@@ -337,7 +340,7 @@ class TestQual(unittest.TestCase):
     def test_qual_out(self):
         """Check FASTQ to QUAL output"""
         records = SeqIO.parse("Quality/example.fastq", "fastq")
-        h = StringIO("")
+        h = StringIO()
         SeqIO.write(records, h, "qual")
         with open("Quality/example.qual") as expected:
             self.assertEqual(h.getvalue(), expected.read())
@@ -351,7 +354,7 @@ class TestQual(unittest.TestCase):
     def test_fasta_out(self):
         """Check FASTQ to FASTA output"""
         records = SeqIO.parse("Quality/example.fastq", "fastq")
-        h = StringIO("")
+        h = StringIO()
         SeqIO.write(records, h, "fasta")
         with open("Quality/example.fasta") as expected:
             self.assertEqual(h.getvalue(), expected.read())
@@ -394,7 +397,7 @@ class TestReadWrite(unittest.TestCase):
         """Read and write back simple example with upper case 2000bp read"""
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here", "ACGT"*500, "!@a~"*500)
-        handle = StringIO("")
+        handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
 
@@ -402,7 +405,7 @@ class TestReadWrite(unittest.TestCase):
         """Read and write back simple example with mixed case 1000bp read"""
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here", "ACGTNncgta"*100, "abcd!!efgh"*100)
-        handle = StringIO("")
+        handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
 
@@ -413,7 +416,7 @@ class TestReadWrite(unittest.TestCase):
                % ("id descr goes here",
                   ambiguous_dna_letters.upper(),
                   "".join(chr(33+q) for q in range(len(ambiguous_dna_letters))))
-        handle = StringIO("")
+        handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
         #Now in lower case...
@@ -421,7 +424,7 @@ class TestReadWrite(unittest.TestCase):
                % ("id descr goes here",
                   ambiguous_dna_letters.lower(),
                   "".join(chr(33+q) for q in range(len(ambiguous_dna_letters))))
-        handle = StringIO("")
+        handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
 
@@ -432,7 +435,7 @@ class TestReadWrite(unittest.TestCase):
                % ("id descr goes here",
                   ambiguous_rna_letters.upper(),
                   "".join(chr(33+q) for q in range(len(ambiguous_rna_letters))))
-        handle = StringIO("")
+        handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
         #Now in lower case...
@@ -440,7 +443,7 @@ class TestReadWrite(unittest.TestCase):
                % ("id descr goes here",
                   ambiguous_rna_letters.lower(),
                   "".join(chr(33+q) for q in range(len(ambiguous_rna_letters))))
-        handle = StringIO("")
+        handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
 
@@ -648,7 +651,7 @@ class MappingTests(unittest.TestCase):
         expected_sol = [min(62,int(round(QualityIO.solexa_quality_from_phred(q))))
                         for q in range(0,94)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
-        out_handle = StringIO("")
+        out_handle = StringIO()
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
         warnings.simplefilter('ignore', BiopythonWarning)
@@ -671,7 +674,7 @@ class MappingTests(unittest.TestCase):
         expected_phred = [round(QualityIO.phred_quality_from_solexa(q))
                           for q in range(-5,63)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
-        out_handle = StringIO("")
+        out_handle = StringIO()
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
         warnings.simplefilter('ignore', BiopythonWarning)
@@ -690,7 +693,7 @@ class MappingTests(unittest.TestCase):
         qual = "".join(chr(33+q) for q in range(0,94))
         expected_phred = [min(62,q) for q in range(0,94)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
-        out_handle = StringIO("")
+        out_handle = StringIO()
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
         warnings.simplefilter('ignore', BiopythonWarning)
@@ -709,7 +712,7 @@ class MappingTests(unittest.TestCase):
         qual = "".join(chr(64+q) for q in range(0,63))
         expected_phred = range(63)
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
-        out_handle = StringIO("")
+        out_handle = StringIO()
         SeqIO.write(SeqIO.parse(in_handle, "fastq-illumina"),
                     out_handle, "fastq-sanger")
         out_handle.seek(0)
