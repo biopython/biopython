@@ -4,7 +4,7 @@ DT   15-FEB-2000 (Rel. 39, Created)
 DT   15-FEB-2000 (Rel. 39, Last sequence update)
 DT   15-FEB-2000 (Rel. 39, Last annotation update)
 DE   CLAUDIN-1 (SENESCENCE-ASSOCIATED EPITHELIAL MEMBRANE PROTEIN).
-GN   CLDN1 OR CLD1 OR SEMP1.
+GN   Name=CLDN1; Synonyms=CLD1, SEMP1;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
 OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.

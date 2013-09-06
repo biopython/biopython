@@ -4,7 +4,7 @@ DT   01-NOV-1991 (Rel. 20, Created)
 DT   15-DEC-1998 (Rel. 37, Last sequence update)
 DT   15-DEC-1998 (Rel. 37, Last annotation update)
 DE   NAPHTHALENE 1,2-DIOXYGENASE SYSTEM FERREDOXIN COMPONENT.
-GN   NDOA OR NAHAB OR DOXA OR NDOC1.
+GN   Name=NDOA; Synonyms=NAHAB, DOXA, NDOC1;
 OS   Pseudomonas putida, and Pseudomonas sp. (strain C18).
 OG   Plasmid pDTG1, and Plasmid NAH7.
 OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonas group;

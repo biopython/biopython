@@ -245,7 +245,7 @@ class ReadTest(unittest.TestCase):
         self.db.lookup(accession = "X62281")
         try:
             self.db.lookup(accession = "Not real")
-            raise Assertionerror("No problem on fake id retrieval")
+            raise AssertionError("No problem on fake id retrieval")
         except IndexError:
             pass
         self.db.lookup(display_id = "ATKIN2")

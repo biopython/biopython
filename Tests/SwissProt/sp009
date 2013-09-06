@@ -4,7 +4,7 @@ DT   15-JUL-1999 (Rel. 38, Created)
 DT   15-JUL-1999 (Rel. 38, Last sequence update)
 DT   15-JUL-1999 (Rel. 38, Last annotation update)
 DE   CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
-GN   CHS3.
+GN   Name=CHS3;
 OS   Bromheadia finlaysoniana (Orchid).
 OC   Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
 OC   Magnoliophyta; Liliopsida; Asparagales; Orchidaceae; Bromheadia.

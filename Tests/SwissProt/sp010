@@ -4,7 +4,7 @@ DT   01-NOV-1997 (Rel. 35, Created)
 DT   01-OCT-2000 (Rel. 40, Last sequence update)
 DT   01-OCT-2000 (Rel. 40, Last annotation update)
 DE   5-HYDROXYTRYPTAMINE 4 RECEPTOR (5-HT-4) (SEROTONIN RECEPTOR) (5-HT4).
-GN   HTR4.
+GN   Name=HTR4;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.

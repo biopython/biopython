@@ -4,7 +4,7 @@ DT   01-OCT-1989 (Rel. 12, Created)
 DT   15-DEC-1998 (Rel. 37, Last sequence update)
 DT   15-DEC-1998 (Rel. 37, Last annotation update)
 DE   PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).
-GN   PSBL.
+GN   Name=PSBL;
 OS   Oryza sativa (Rice), Nicotiana tabacum (Common tobacco),
 OS   Hordeum vulgare (Barley), Triticum aestivum (Wheat),
 OS   Secale cereale (Rye), Zea mays (Maize), Pisum sativum (Garden pea),

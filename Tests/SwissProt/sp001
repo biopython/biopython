@@ -4,7 +4,7 @@ DT   15-JUL-1999 (Rel. 38, Created)
 DT   15-JUL-1999 (Rel. 38, Last sequence update)
 DT   15-JUL-1999 (Rel. 38, Last annotation update)
 DE   N33 PROTEIN.
-GN   N33.
+GN   Name=N33;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
 OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.

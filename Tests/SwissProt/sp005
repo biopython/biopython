@@ -4,7 +4,7 @@ DT   01-MAR-1992 (Rel. 21, Created)
 DT   01-MAR-1992 (Rel. 21, Last sequence update)
 DT   15-JUL-1999 (Rel. 38, Last annotation update)
 DE   NADH-UBIQUINONE OXIDOREDUCTASE CHAIN 3 (EC 1.6.5.3).
-GN   MTND3 OR ND3 OR NADH3.
+GN   Name=MTND3; Synonyms=ND3, NADH3;
 OS   Balaenoptera physalus (Finback whale) (Common rorqual), and
 OS   Balaenoptera musculus (Blue whale).
 OG   Mitochondrion.

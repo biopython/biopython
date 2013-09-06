@@ -5,7 +5,7 @@ DT   01-APR-1990 (Rel. 14, Last sequence update)
 DT   01-OCT-2000 (Rel. 40, Last annotation update)
 DE   LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R)
 DE   (LSH-R) (LUTEINIZING HORMONE RECEPTOR).
-GN   LHCGR.
+GN   Name=LHCGR;
 OS   Rattus norvegicus (Rat).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.

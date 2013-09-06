@@ -5,7 +5,7 @@ DT   21-JUL-1986 (Rel. 01, Created)
 DT   13-AUG-1987 (Rel. 05, Last sequence update)
 DT   15-FEB-2000 (Rel. 39, Last annotation update)
 DE   HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN PRECURSOR.
-GN   HLA-A OR HLAA.
+GN   Name=HLA-A; Synonyms=HLAA;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
 OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
