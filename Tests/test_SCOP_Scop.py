@@ -8,7 +8,7 @@
 """Unit test for Scop"""
 
 import unittest
-from StringIO import *
+from Bio._py3k import StringIO
 
 from Bio.SCOP import *
 

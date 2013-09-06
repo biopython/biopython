@@ -7,7 +7,7 @@
 """
 
 import unittest
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 import requires_internet
 requires_internet.check()

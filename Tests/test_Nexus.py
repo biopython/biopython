@@ -9,10 +9,7 @@
 import os.path
 import unittest
 import tempfile
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from Bio._py3k import StringIO
 import sys
 
 from Bio.Nexus import Nexus, Trees

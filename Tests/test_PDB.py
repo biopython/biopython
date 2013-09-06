@@ -14,7 +14,7 @@ import os
 import tempfile
 import unittest
 import warnings
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 try:
     import numpy

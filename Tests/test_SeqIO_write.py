@@ -6,7 +6,7 @@
 import os
 import unittest
 from io import BytesIO
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio import SeqIO
 from Bio import AlignIO

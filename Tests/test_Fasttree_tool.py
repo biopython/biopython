@@ -11,7 +11,7 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import itertools
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio import SeqIO
 from Bio import Phylo

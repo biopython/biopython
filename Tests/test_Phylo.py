@@ -7,7 +7,7 @@
 
 import sys
 import unittest
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio import Phylo
 from Bio.Phylo import PhyloXML, NewickIO

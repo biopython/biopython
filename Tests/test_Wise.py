@@ -5,7 +5,6 @@
 
 __version__ = "$Revision: 1.11 $"
 
-import cStringIO
 import doctest
 import sys
 import unittest
@@ -14,13 +13,15 @@ if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
 import requires_wise
 
+from Bio._py3k import StringIO
+
 from Bio import Wise
 
 
 class TestWiseDryRun(unittest.TestCase):
     def setUp(self):
         self.old_stdout = sys.stdout
-        sys.stdout = cStringIO.StringIO()
+        sys.stdout = StringIO()
 
     def test_dnal(self):
         """Call dnal, and do a trivial check on its output."""

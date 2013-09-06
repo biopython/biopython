@@ -6,7 +6,7 @@
 import os.path
 import unittest
 import shutil
-from StringIO import StringIO
+from Bio._py3k import StringIO
 import tempfile
 
 from Bio import File

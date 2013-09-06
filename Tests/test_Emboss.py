@@ -8,7 +8,7 @@ import os
 import sys
 import unittest
 import subprocess
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
 from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline

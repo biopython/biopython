@@ -10,7 +10,7 @@ and confirms they are consistent using our different parsers.
 """
 import os
 import unittest
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO

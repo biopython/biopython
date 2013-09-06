@@ -14,10 +14,7 @@ Graphics.DisplayRepresentation classes.
 import os
 import sys
 import random
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from Bio._py3k import StringIO
 import unittest
 
 from Bio import MissingPythonDependencyError

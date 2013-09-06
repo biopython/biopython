@@ -4,7 +4,7 @@
 # as part of this package.
 
 import string
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio import File
 from Bio import ParserSupport
 

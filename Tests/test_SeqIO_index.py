@@ -17,10 +17,9 @@ import os
 import unittest
 import tempfile
 import gzip
-from StringIO import StringIO
 from io import BytesIO
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO

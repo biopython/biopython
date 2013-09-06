@@ -17,7 +17,7 @@ except ImportError:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingPythonDependencyError(message)
 
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 class TestTrie(unittest.TestCase):
 

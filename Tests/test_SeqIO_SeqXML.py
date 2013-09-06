@@ -8,7 +8,7 @@ import sys
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 test_files = {
     "dna" : ["SeqXML/dna_example.xml",4],

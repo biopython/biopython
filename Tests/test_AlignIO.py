@@ -4,7 +4,7 @@
 # as part of this package.
 
 import os
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Generic import Alignment

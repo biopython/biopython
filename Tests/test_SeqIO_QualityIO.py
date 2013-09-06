@@ -9,10 +9,7 @@ import os
 import unittest
 import warnings
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from Bio._py3k import StringIO
 from io import BytesIO
 
 from Bio import BiopythonWarning
