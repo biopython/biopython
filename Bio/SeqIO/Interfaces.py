@@ -13,6 +13,7 @@ from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
+# TODO - Review self.next() method for Python 3 support...
 
 class SequenceIterator(object):
     """Base class for building SeqRecord iterators.

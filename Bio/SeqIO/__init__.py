@@ -48,10 +48,11 @@ record.  Alternatively, use this with a handle when downloading a single
 record from the internet.
 
 However, if you just want the first record from a file containing multiple
-record, use the iterator's next() method:
+record, use the next() function on the iterator (or under Python 2, the
+iterator's next() method):
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.parse("Fasta/f002", "fasta").next()
+    >>> record = next(SeqIO.parse("Fasta/f002", "fasta"))
     >>> print record.id, len(record)
     gi|1348912|gb|G26680|G26680 633
 
@@ -590,7 +591,7 @@ def read(handle, format, alphabet=None):
     shown in the example above).  Instead use:
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.parse("GenBank/cor6_6.gb", "genbank").next()
+    >>> record = next(SeqIO.parse("GenBank/cor6_6.gb", "genbank"))
     >>> print "First record's ID", record.id
     First record's ID X55053.1
 
@@ -599,13 +600,13 @@ def read(handle, format, alphabet=None):
     """
     iterator = parse(handle, format, alphabet)
     try:
-        first = iterator.next()
+        first = next(iterator)
     except StopIteration:
         first = None
     if first is None:
         raise ValueError("No records found in handle")
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     if second is not None:

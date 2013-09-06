@@ -47,16 +47,15 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         if alphabet is None:
             def _parse(handle):
                 """Dynamically generated parser function (PRIVATE)."""
-                return i(handle).next()
+                return next(i(handle))
         else:
             #TODO - Detect alphabet support ONCE at __init__
             def _parse(handle):
                 """Dynamically generated parser function (PRIVATE)."""
                 try:
-                    return i(handle, alphabet=alphabet).next()
+                    return next(i(handle, alphabet=alphabet))
                 except TypeError:
-                    return SeqIO._force_alphabet(i(handle),
-                                                 alphabet).next()
+                    return next(SeqIO._force_alphabet(i(handle), alphabet))
         self._parse = _parse
 
     def get(self, offset):
@@ -421,7 +420,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         </uniprot>
         """ % _bytes_to_string(self.get_raw(offset))
         #TODO - For consistency, this function should not accept a string:
-        return SeqIO.UniprotIO.UniprotIterator(data).next()
+        return next(SeqIO.UniprotIO.UniprotIterator(data))
 
 
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):

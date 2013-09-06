@@ -409,7 +409,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     >>> from Bio import AlignIO
     >>> filename = "Emboss/needle.txt"
     >>> format = "emboss"
-    >>> alignment = AlignIO.parse(filename, format).next()
+    >>> alignment = next(AlignIO.parse(filename, format))
     >>> print "First alignment has length", alignment.get_alignment_length()
     First alignment has length 124
 
@@ -418,13 +418,13 @@ def read(handle, format, seq_count=None, alphabet=None):
     """
     iterator = parse(handle, format, seq_count, alphabet)
     try:
-        first = iterator.next()
+        first = next(iterator)
     except StopIteration:
         first = None
     if first is None:
         raise ValueError("No records found in handle")
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     if second is not None:

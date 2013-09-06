@@ -353,12 +353,12 @@ def read(handle, format=None, **kwargs):
     generator = parse(handle, format, **kwargs)
 
     try:
-        first = generator.next()
+        first = next(generator)
     except StopIteration:
         raise ValueError("No query results found in handle")
     else:
         try:
-            second = generator.next()
+            second = next(generator)
         except StopIteration:
             second = None
 

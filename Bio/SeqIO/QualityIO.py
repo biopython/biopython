@@ -1781,11 +1781,11 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     #It would also not catch any extra records found in only one file.
     while True:
         try:
-            f_rec = fasta_iter.next()
+            f_rec = next(fasta_iter)
         except StopIteration:
             f_rec = None
         try:
-            q_rec = qual_iter.next()
+            q_rec = next(qual_iter)
         except StopIteration:
             q_rec = None
         if f_rec is None and q_rec is None:

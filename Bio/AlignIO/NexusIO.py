@@ -75,7 +75,7 @@ class NexusWriter(AlignmentWriter):
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
-            first_alignment = align_iter.next()
+            first_alignment = next(align_iter)
         except StopIteration:
             first_alignment = None
         if first_alignment is None:
@@ -84,7 +84,7 @@ class NexusWriter(AlignmentWriter):
 
         #Check there is only one alignment...
         try:
-            second_alignment = align_iter.next()
+            second_alignment = next(align_iter)
         except StopIteration:
             second_alignment = None
         if second_alignment is not None:

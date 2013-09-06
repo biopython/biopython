@@ -11,6 +11,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from Bio.Alphabet import single_letter_alphabet
 
+# TODO - Review self.next() method for Python 3 support...
 
 class AlignmentIterator(object):
     """Base class for building MultipleSeqAlignment iterators.

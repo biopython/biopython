@@ -942,7 +942,7 @@ class SffWriter(SequenceWriter):
         #Get the first record in order to find the flow information
         #we will need for the header.
         try:
-            record = records.next()
+            record = next(records)
         except StopIteration:
             record = None
         if record is None:
