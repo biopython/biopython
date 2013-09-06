@@ -4,8 +4,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#TODO: factor out this module with SeqIO's _index to stay DRY
-
 """Custom indexing for Bio.SearchIO objects."""
 
 from StringIO import StringIO
