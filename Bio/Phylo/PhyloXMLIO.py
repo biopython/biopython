@@ -284,7 +284,7 @@ class Parser(object):
     def __init__(self, file):
         # Get an iterable context for XML parsing events
         context = iter(ElementTree.iterparse(file, events=('start', 'end')))
-        event, root = context.next()
+        event, root = next(context)
         self.root = root
         self.context = context
 

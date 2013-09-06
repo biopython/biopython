@@ -60,11 +60,11 @@ def read(file, format, **kwargs):
     """
     try:
         tree_gen = parse(file, format, **kwargs)
-        tree = tree_gen.next()
+        tree = next(tree_gen)
     except StopIteration:
         raise ValueError("There are no trees in this file.")
     try:
-        tree_gen.next()
+        next(tree_gen)
     except StopIteration:
         return tree
     else:

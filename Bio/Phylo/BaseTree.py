@@ -277,7 +277,7 @@ class TreeMixin(object):
         """
         hits = self.find_elements(*args, **kwargs)
         try:
-            return hits.next()
+            return next(hits)
         except StopIteration:
             return None
 
@@ -320,7 +320,7 @@ class TreeMixin(object):
         >>> from Bio.Phylo.IO import PhyloXMIO
         >>> phx = PhyloXMLIO.read('phyloxml_examples.xml')
         >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
-        >>> matches.next()
+        >>> next(matches)
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """

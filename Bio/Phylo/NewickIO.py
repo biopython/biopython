@@ -186,7 +186,7 @@ class Parser(object):
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
-            next_token = tokens.next()
+            next_token = next(tokens)
             raise NewickError('Text after semicolon in Newick tree: %s'
                               % next_token.group())
         except StopIteration:

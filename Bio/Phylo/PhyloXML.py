@@ -223,7 +223,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             return False
         seqs = self._filter_search(is_aligned_seq, 'preorder', True)
         try:
-            first_seq = seqs.next()
+            first_seq = next(seqs)
         except StopIteration:
             # No aligned sequences were found --> empty MSA
             return MultipleSeqAlignment([])

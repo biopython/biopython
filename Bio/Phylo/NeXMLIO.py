@@ -180,14 +180,16 @@ class Parser(object):
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
                     rooted = False
-                    possible_roots = (node.attrib['id'] for node in nodes if node.attrib['id'] in srcs and not node.attrib['id'] in tars)
-                    root = possible_roots.next()
+                    possible_roots = (node.attrib['id'] for node in nodes
+                                      if node.attrib['id'] in srcs
+                                      and not node.attrib['id'] in tars)
+                    root = next(possible_roots)
                 else:
                     rooted = True
                     
                 yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
-                
-            
+
+
     @classmethod
     def _make_tree(cls, node, node_dict, children):
         '''Return a NeXML.Clade, and calls itself recursively for each child, 
