@@ -1116,7 +1116,7 @@ class ImgtWriter(EmblWriter):
 if __name__ == "__main__":
     print("Quick self test")
     import os
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     def compare_record(old, new):
         if old.id != new.id and old.name != new.name:

@@ -37,7 +37,8 @@ except ImportError:
     #Python 3, see http://bugs.python.org/issue8206
     InstanceType = object
 from types import MethodType
-import StringIO
+
+from Bio._py3k import StringIO
 
 from Bio import File
 
@@ -59,7 +60,7 @@ class AbstractParser(object):
         raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
-        return self.parse(StringIO.StringIO(string))
+        return self.parse(StringIO(string))
 
     def parse_file(self, filename):
         h = open(filename)

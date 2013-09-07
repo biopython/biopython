@@ -94,7 +94,7 @@ class TabWriter(SequentialSequenceWriter):
 
 if __name__ == "__main__":
     print("Running quick self test")
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     #This example has a trailing blank line which should be ignored
     handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")

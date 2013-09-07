@@ -24,8 +24,7 @@ temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
 """
 
 import re
-from StringIO import StringIO
-
+from Bio._py3k import StringIO
 from Bio._py3k import _bytes_to_string, _as_bytes
 
 from Bio import SeqIO

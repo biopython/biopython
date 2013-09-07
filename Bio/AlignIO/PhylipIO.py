@@ -497,7 +497,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
            LREALNKAFA EMRADGTYEK LAKKYFDFDV YGG---
 """
 
-    from cStringIO import StringIO
+    from Bio._py3k import StringIO
     handle = StringIO(phylip_text)
     count = 0
     for alignment in PhylipIterator(handle):

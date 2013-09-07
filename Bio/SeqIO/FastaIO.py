@@ -251,7 +251,7 @@ if __name__ == "__main__":
         assert count > 0
         print(str(record.__class__))
 
-    from cStringIO import StringIO
+    from Bio._py3k import StringIO
     print("--------")
     print("FastaIterator (empty input file)")
     #Just to make sure no errors happen

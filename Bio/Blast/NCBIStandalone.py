@@ -56,7 +56,7 @@ from Bio import BiopythonDeprecationWarning
 
 import os
 import re
-import StringIO
+from Bio._py3k import StringIO
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -1682,7 +1682,7 @@ class Iterator(object):
 
         data = ''.join(lines)
         if self._parser is not None:
-            return self._parser.parse(StringIO.StringIO(data))
+            return self._parser.parse(StringIO(data))
         return data
 
     def __iter__(self):
@@ -2192,7 +2192,7 @@ class BlastErrorParser(AbstractParser):
         results = handle.read()
 
         try:
-            self._scanner.feed(StringIO.StringIO(results), self._consumer)
+            self._scanner.feed(StringIO(results), self._consumer)
         except ValueError:
             # if we have a bad_report_file, save the info to it first
             if self._bad_report_handle:
@@ -2201,7 +2201,7 @@ class BlastErrorParser(AbstractParser):
 
             # now we want to try and diagnose the error
             self._diagnose_error(
-                StringIO.StringIO(results), self._consumer.data)
+                StringIO(results), self._consumer.data)
 
             # if we got here we can't figure out the problem
             # so we should pass along the syntax error we got

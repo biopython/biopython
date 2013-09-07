@@ -12,7 +12,7 @@ See: http://www.nexml.org
 """
 __docformat__ = "restructuredtext en"
 
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import NeXML
 from xml.dom import minidom

@@ -21,7 +21,7 @@ them to a file.
 
 __docformat__ = "restructuredtext en"
 
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import CDAO
 from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri

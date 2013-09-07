@@ -6,7 +6,7 @@
 
 """Custom indexing for Bio.SearchIO objects."""
 
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio._py3k import _bytes_to_string
 from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access

@@ -688,7 +688,7 @@ class SeqRecord(object):
             from io import BytesIO
             handle = BytesIO()
         else:
-            from StringIO import StringIO
+            from Bio._py3k import StringIO
             handle = StringIO()
         SeqIO.write(self, handle, format_spec)
         return handle.getvalue()

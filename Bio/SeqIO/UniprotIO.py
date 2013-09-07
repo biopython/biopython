@@ -21,10 +21,8 @@ from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from Bio._py3k import StringIO
+
 
 #For speed try to use cElementTree rather than ElementTree
 try:

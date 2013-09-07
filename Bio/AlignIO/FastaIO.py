@@ -592,7 +592,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
 
 """
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     alignments = list(FastaM10Iterator(StringIO(simple_example)))
     assert len(alignments) == 4, len(alignments)

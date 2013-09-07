@@ -12,7 +12,7 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 __docformat__ = "restructuredtext en"
 
 import re
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import Newick
 

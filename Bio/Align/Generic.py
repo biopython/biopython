@@ -170,7 +170,7 @@ class Alignment(object):
         string supported by Bio.AlignIO as an output file format.
         See also the alignment's format() method."""
         if format_spec:
-            from StringIO import StringIO
+            from Bio._py3k import StringIO
             from Bio import AlignIO
             handle = StringIO()
             AlignIO.write([self], handle, format_spec)

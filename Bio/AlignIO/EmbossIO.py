@@ -579,7 +579,7 @@ asis             311 -----------------    311
 #---------------------------------------
 #---------------------------------------"""
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     alignments = list(EmbossIterator(StringIO(pair_example)))
     assert len(alignments) == 1

@@ -1408,7 +1408,7 @@ class GenBankScanner(InsdcScanner):
             raise ValueError("Problem in misc lines before sequence")
 
 if __name__ == "__main__":
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     gbk_example = \
         """LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999

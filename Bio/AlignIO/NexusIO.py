@@ -136,7 +136,7 @@ class NexusWriter(AlignmentWriter):
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
 if __name__ == "__main__":
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
     print("Quick self test")
     print
     print("Repeated names without a TAXA block")

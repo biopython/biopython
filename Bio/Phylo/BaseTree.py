@@ -912,7 +912,7 @@ class Tree(TreeElement, TreeMixin):
             as an output file format.
         """
         if format_spec:
-            from StringIO import StringIO
+            from Bio._py3k import StringIO
             from Bio.Phylo import _io
             handle = StringIO()
             _io.write([self], handle, format_spec)

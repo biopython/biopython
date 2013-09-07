@@ -15,11 +15,7 @@ Functions:
 qblast        Do a BLAST search using the QBLAST API.
 """
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
-
+from Bio._py3k import StringIO
 from Bio._py3k import _as_string, _as_bytes
 
 

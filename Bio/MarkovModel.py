@@ -61,8 +61,8 @@ class MarkovModel(object):
         self.p_emission = p_emission
 
     def __str__(self):
-        import StringIO
-        handle = StringIO.StringIO()
+        from Bio._py3k import StringIO
+        handle = StringIO()
         save(self, handle)
         handle.seek(0)
         return handle.read()

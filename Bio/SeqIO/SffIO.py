@@ -1187,7 +1187,7 @@ if __name__ == "__main__":
     index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
     assert index1 == index2
     assert len(index1) == len(list(SffIterator(open(filename, "rb"))))
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
     from io import BytesIO
     assert len(index1) == len(
         list(SffIterator(BytesIO(open(filename, "rb").read()))))

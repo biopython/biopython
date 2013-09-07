@@ -21,7 +21,7 @@ The DSSP codes for secondary structure used here are:
 """
 
 import re
-from StringIO import StringIO
+from Bio._py3k import StringIO
 import subprocess
 
 from Bio.Data import SCOPData

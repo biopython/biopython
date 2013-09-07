@@ -408,7 +408,7 @@ if __name__ == "__main__":
     fileHandle = open("Tests/SeqXML/protein_example.xml", "r")
     records = list(SeqIO.parse(fileHandle, "seqxml"))
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
     stringHandle = StringIO()
 
     SeqIO.write(records, stringHandle, "seqxml")

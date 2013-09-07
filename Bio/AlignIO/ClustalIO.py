@@ -343,7 +343,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 
 """
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     alignments = list(ClustalIterator(StringIO(aln_example1)))
     assert 1 == len(alignments)
