@@ -50,7 +50,7 @@ class ClaTests(unittest.TestCase):
                                         in actual_hierarchy)
                 self.assertEqual(len(actual_hierarchy),
                                   len(expected_hierarchy))
-                for key, actual_value in actual_hierarchy.iteritems():
+                for key, actual_value in actual_hierarchy.items():
                     self.assertEqual(actual_value, expected_hierarchy[key])
         finally:
             f.close()
