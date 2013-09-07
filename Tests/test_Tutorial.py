@@ -3,6 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+# This will apply to all the doctests too:
+from __future__ import print_function
+
 import unittest
 import doctest
 import os
@@ -14,9 +17,15 @@ warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
-    rt = refactor.RefactoringTool(refactor.get_fixers_from_package("lib2to3.fixes"))
-    assert rt.refactor_docstring(">>> print 2+2\n4\n", "example") == \
-           ">>> print(2+2)\n4\n"
+    fixers = refactor.get_fixers_from_package("lib2to3.fixes")
+    fixers.remove("lib2to3.fixes.fix_print") # Already using print function
+    rt = refactor.RefactoringTool(fixers)
+    assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == \
+                                 ">>> print(2+2)\n4\n"
+    assert rt.refactor_docstring('>>> print("Two plus two is", 2+2)\n'
+                                 'Two plus two is 4\n', "example2") == \
+                                 '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
+
 
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
 if not os.path.isfile(tutorial) and sys.version_info[0] >= 3:
@@ -117,6 +126,7 @@ for name, example, folder, deps in extract_doctests(tutorial):
         continue
 
     if sys.version_info[0] >= 3:
+        example = ">>> from __future__ import print_function\n" + example
         example = rt.refactor_docstring(example, name)
 
     def funct(n, d, f):
