@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+# Revisions copyright 2011-2013 by Peter Cock. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Test the Location code located in SeqFeature.py
 
 This checks to be sure fuzzy and non-fuzzy representations of locations

@@ -1,3 +1,11 @@
+# Copyright 2003-2004 by Iddo Friedberg.  All rights reserved.
+# Revisions copyright 2008-2010 by Peter Cock. All rights reserved.
+# Revisions copyright 2012 by Matt Fenwick. All rights reserved.
+# Revisions copyright 2012 by Kai Blin. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import unittest
 from Bio.SeqUtils import ProtParam, ProtParamData
 

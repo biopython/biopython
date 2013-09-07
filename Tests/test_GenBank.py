@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+# Copyright 2001-2004 by Brad Chapman.  All rights reserved.
+# Revisions copyright 2007-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2013 by Kai Blin. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Test the GenBank parser and make sure everything is working smoothly.
 """
 # standard library

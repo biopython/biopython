@@ -1,8 +1,10 @@
-# Copyright 2013 by Nate Sutton.  Based on test_Clustalw_tool.py by
-# Peter Cock.  Example code used from Biopython's Phylo cookbook by
-# Eric Talevich.  All rights reserved.  This code is part of the
-# Biopython distribution and governed by its license.  Please see
-# the LICENSE file that should have been included as part of this package.
+# Copyright 2013 by Nate Sutton.  All rights reserved.
+# Based on test_Clustalw_tool.py by Peter Cock.
+# Example code used from Biopython's Phylo cookbook by Eric Talevich.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 from Bio import MissingExternalDependencyError
 

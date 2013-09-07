@@ -1,3 +1,11 @@
+# Copyright 2005 by Iddo Friedberg.  All rights reserved.
+# Revisions copyright 2006-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2008 by Frank Kauff. All rights reserved.
+# Revisions copyright 2009 by Michiel de Hoon. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import os.path
 import unittest
 import tempfile
