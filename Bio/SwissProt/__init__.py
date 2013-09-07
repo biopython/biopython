@@ -278,8 +278,13 @@ def _read_gn(record, value, last_token):
             record.gene_name['OrderedLocusNames'].append([])
             record.gene_name['ORFNames'].append([])
         elif i == 0 and last_token:  # Line split at comma. Continue from last token
-            straggler = _split_gn_token(token, 0)
-            record.gene_name[last_token][-1].extend(straggler)
+                straggler = _split_gn_token(token, 0)
+                record.gene_name[last_token][-1].extend(straggler)
+        elif i == 0 and not last_token and token[-1] == '.':  # Old style UniProt file
+            old_style = token.rstrip('.').split(' OR ')
+            record.gene_name['Name'].append(old_style[0])
+            if len(old_style) > 1:
+                record.gene_name['Synonyms'][-1].extend(old_style[1:])
         else:
             ValueError("Could not parse unrecognised GN token: {0}".format(token))
     return last_token
