@@ -6,13 +6,18 @@
 """Bio.SearchIO parser for BLAST+ plain text output formats.
 
 At the moment this is a wrapper around Biopython's NCBIStandalone text
-parser.
+parser (which is now deprecated).
 
 """
 
 from Bio.Alphabet import generic_dna, generic_protein
-from Bio.Blast import NCBIStandalone
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.Blast import NCBIStandalone
 
 
 __all__ = ['BlastTextParser']
