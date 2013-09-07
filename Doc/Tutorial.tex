@@ -181,7 +181,6 @@ For Windows we provide pre-compiled click-and-run installers, while for Unix and
 operating systems you must install from source as described in the included README file.
 This is usually as simple as the standard commands:
 
-
 \begin{verbatim}
 python setup.py build
 python setup.py test
@@ -218,6 +217,41 @@ and HTML formats
   \item \emph{How should I capitalize ``Biopython''?  Is ``BioPython'' OK?} \\
   The correct capitalization is ``Biopython'', not ``BioPython'' (even though
   that would have matched BioPerl, BioJava and BioRuby).
+
+  \item \emph{What is going wrong with my print commands?}
+  This tutorial now uses the Python 3 style print \emph{function}.
+  As of Biopython 1.62, we support both Python 2 and Python 3.
+  The most obvious language difference is the print \emph{statement}
+  in Python 2 became a print \emph{function} in Python 3.
+
+  For example, this will only work under Python 2:
+
+\begin{verbatim}
+>>> print "Hello World!"
+Hello World!
+\end{verbatim}
+
+  If you try that on Python 3 you'll get a \verb|SyntaxError|.
+  Under Python 3 you must write:
+
+%doctest
+\begin{verbatim}
+>>> print("Hello World!")
+Hello World!
+\end{verbatim}
+
+  Surprisingly that will also work on Python 2 -- but only for simple
+  examples printing one thing. In general you need to add this magic
+  line to the start of your Python scripts to use the print function
+  under Python 2.6 and 2.7:
+
+\begin{verbatim}
+from __future__ import print_function
+\end{verbatim}
+
+  If you forget to add this magic import, under Python 2 you'll see
+  extra brackets produced by trying to use the print function when
+  Python 3 is interpretting it as a print statement.
 
   \item \emph{How do I find out what version of Biopython I have installed?} \\
   Use this:
