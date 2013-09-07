@@ -6,7 +6,12 @@
 import string
 from Bio._py3k import StringIO
 from Bio import File
-from Bio import ParserSupport
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio import ParserSupport
 
 # pyUnit
 

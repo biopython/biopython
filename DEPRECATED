@@ -109,8 +109,11 @@ blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
 Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
-which was declared obsolete in Release 1.54. For some time now, both the NCBI
-and Biopython have encouraged people to parse the XML output instead.
+which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
+
+For some time now, both the NCBI and Biopython have encouraged people to
+parse the XML output instead, however Bio.SearchIO will initially attempt
+to support plain text BLAST output.
 
 Bio.Blast.Applications
 ======================
@@ -551,7 +554,8 @@ method get_seq_by_num were deprecated in Release 1.57.
 
 Bio.ParserSupport
 =================
-Bio.ParserSupport was declared obsolete in Release 1.59.
+Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
+Release 1.63.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.

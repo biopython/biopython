@@ -5,7 +5,7 @@
 # Patches by Mike Poidinger to support multiple databases.
 # Updated by Peter Cock in 2007 to do a better job on BLAST 2.2.15
 
-"""Code for calling standalone BLAST and parsing plain text output (OBSOLETE).
+"""Code for calling standalone BLAST and parsing plain text output (DEPRECATED).
 
 Rather than parsing the human readable plain text BLAST output (which seems to
 change with every update to BLAST), we and the NBCI recommend you parse the
@@ -39,9 +39,9 @@ _DatabaseReportConsumer  Consumes database report information.
 _ParametersConsumer      Consumes parameters information.
 
 Functions:
-blastall        Execute blastall (OBSOLETE).
-blastpgp        Execute blastpgp (OBSOLETE).
-rpsblast        Execute rpsblast (OBSOLETE).
+blastall        Execute blastall.
+blastpgp        Execute blastpgp.
+rpsblast        Execute rpsblast.
 
 For calling the BLAST command line tools, we encourage you to use the
 command line wrappers in Bio.Blast.Applications - the three functions
@@ -49,10 +49,10 @@ blastall, blastpgp and rpsblast are considered to be obsolete now, and
 are likely to be deprecated and then removed in future releases.
 """
 
-import warnings
-warnings.warn("The plain text parser in this module still works at the time of writing, but is considered obsolete and updating it to cope with the latest versions of BLAST is not a priority for us.", PendingDeprecationWarning)
-
 from Bio import BiopythonDeprecationWarning
+import warnings
+warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
+              "parsing BLAST output instead.", BiopythonDeprecationWarning)
 
 import os
 import re
@@ -1789,7 +1789,6 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
-    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", BiopythonDeprecationWarning)
     from Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
     cline.set_parameter(att2param['program'], program)
@@ -1872,8 +1871,6 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
     align_infile        Input alignment file for PSI-BLAST restart.
     """
-
-    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
@@ -1992,8 +1989,6 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
                         omitted standard output is used (which you can access
                         from the returned handles).
     """
-
-    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {

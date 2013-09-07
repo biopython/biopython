@@ -3,16 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code to support writing parsers (OBSOLETE).
-
-
+"""Code to support writing parsers (DEPRECATED).
 
 Classes:
 AbstractParser         Base class for parsers.
 AbstractConsumer       Base class of all Consumers.
 TaggingConsumer        Consumer that tags output with its event.  For debugging
 EventGenerator         Generate Biopython Events from Martel XML output
-                       (note that Martel is now DEPRECATED)
+                       (note that Martel has been removed)
 
 Functions:
 safe_readline          Read a line from a handle, with check for EOF.
@@ -25,10 +23,10 @@ is_blank_line          Test whether a line is blank.
 
 """
 
-
+from Bio import BiopythonDeprecationWarning
 import warnings
-warnings.warn("The module Bio.ParserSupport is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
-
+warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
+              "future release of Biopython.", BiopythonDeprecationWarning)
 
 import sys
 try:

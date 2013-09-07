@@ -5,7 +5,12 @@
 
 import os
 import unittest
-from Bio.Blast import NCBIStandalone
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.Blast import NCBIStandalone
 
 
 class TestBlastRecord(unittest.TestCase):
