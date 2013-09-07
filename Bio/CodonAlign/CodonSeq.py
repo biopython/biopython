@@ -304,6 +304,10 @@ def _get_codon_list(codonseq):
                 codon_lst.append(str(this_codon.ungap()))
         elif str(codonseq[int(k):int(k)+3]) == "---":
             codon_lst.append("---")
+        else:
+            # this may be problematic, as normally no codon shoud
+            # fall into this condition
+            codon_lst.append(codonseq[int(k):int(k)+3])
     return codon_lst
 
 
