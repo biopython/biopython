@@ -8,6 +8,7 @@
 import sys
 import unittest
 from Bio._py3k import StringIO
+from io import BytesIO
 
 from Bio import Phylo
 from Bio.Phylo import PhyloXML, NewickIO
@@ -87,12 +88,8 @@ class IOTests(unittest.TestCase):
     def test_convert(self):
         """Convert a tree between all supported formats."""
         mem_file_1 = StringIO()
+        mem_file_2 = BytesIO()
         mem_file_3 = StringIO()
-        if sys.version_info[0] == 3:
-            from io import BytesIO
-            mem_file_2 = BytesIO()
-        else:
-            mem_file_2 = StringIO()
         Phylo.convert(EX_NEWICK, 'newick', mem_file_1, 'nexus')
         mem_file_1.seek(0)
         Phylo.convert(mem_file_1, 'nexus', mem_file_2, 'phyloxml')
