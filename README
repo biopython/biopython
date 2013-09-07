@@ -6,8 +6,9 @@ available Python tools for computational molecular biology.
 
 Our user-centric documentation is hosted on http://biopython.org including
 the main Biopython Tutorial and Cookbook:
- * HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
- * PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+
+* HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
+* PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 This README file is intended primarily for people interested in working
 with the Biopython source code, either one of the releases from the
@@ -30,7 +31,7 @@ For the impatient
 =================
 
 To build and install Biopython, download and unzip the source code, go to this
-directory at the command line, and type:
+directory at the command line, and type::
 
     python setup.py build
     python setup.py test
@@ -127,7 +128,7 @@ Windows users should use the appropriate provided installation package
 from our website (each is specific to a different Python version).
 
 Installation from source should be as simple as going to the Biopython
-source code directory, and typing:
+source code directory, and typing::
 
     python setup.py build
     python setup.py test
@@ -138,8 +139,9 @@ Substitute `python` with your specific version, for example `python3`,
 
 If you need to do additional configuration, e.g. changing the base
 directory, please type `python setup.py`, or see the documentation here:
- * HTML - http://biopython.org/DIST/docs/install/Installation.html
- * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
+
+* HTML - http://biopython.org/DIST/docs/install/Installation.html
+* PDF - http://biopython.org/DIST/docs/install/Installation.pdf
 
 
 Testing
@@ -147,11 +149,11 @@ Testing
 
 Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
-directory and type:
+directory and type::
 
     python setup.py test
 
-Do not panic if you see messages warning of skipped tests:
+Do not panic if you see messages warning of skipped tests::
 
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
 
@@ -188,8 +190,8 @@ bug database and our mailing lists to see if it has already been reported
 (and hopefully fixed), and if not please do report the bug. We can't fix
 problems we don't know about ;)
 
- * Old issue tracker: https://redmine.open-bio.org/projects/biopython
- * Current issue tracker: https://github.com/biopython/biopython/issues
+* Old issue tracker: https://redmine.open-bio.org/projects/biopython
+* Current issue tracker: https://github.com/biopython/biopython/issues
 
 If you suspect the problem lies within a parser, it is likely that the data
 format has changed and broken the parsing code.  (The text BLAST and GenBank
@@ -203,15 +205,15 @@ as released code, and may contain new dependencies.
 Finally, you can send a bug report to the bug database or the mailing list at
 biopython@biopython.org.  In the bug report, please let us know:
 
- 1. Which operating system and hardware (32 bit or 64 bit) you are using
- 2. Python version
- 3. Biopython version (or git version/date)
- 4. Traceback that occurs (the full error message)
+1. Which operating system and hardware (32 bit or 64 bit) you are using
+2. Python version
+3. Biopython version (or git commit/date)
+4. Traceback that occurs (the full error message)
 
-    And also ideally:
+And also ideally:
 
- 5. Example code that breaks
- 6. A data file that causes the problem
+5. Example code that breaks
+6. A data file that causes the problem
 
 
 Contributing, Bug Reports
@@ -233,10 +235,10 @@ Distribution Structure
 - NEWS        -- Release notes and news.
 - LICENSE     -- What you can do with the code.
 - CONTRIB     -- An (incomplete) list of people who helped Biopython in
-                 one way or another.
+  one way or another.
 - DEPRECATED  -- Contains information about modules in Biopython that are
-                 removed or no longer recommended for use, and how to update
-                 code that uses those modules.
+  removed or no longer recommended for use, and how to update
+  code that uses those modules.
 - MANIFEST.in -- Tells distutils what files to distribute.
 - setup.py    -- Installation file.
 - Bio/        -- The main code base code.
