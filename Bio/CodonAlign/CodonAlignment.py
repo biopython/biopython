@@ -70,6 +70,26 @@ class CodonAlignment(MultipleSeqAlignment):
             lines.append(self._str_line(self._records[-1], length=60))
         return "\n".join(lines)
 
+    def __getitem__(self, index):
+        """Return a CodonAlignment object for single indexing
+        """
+        if isinstance(index, int):
+            return self._records[index]
+        elif isinstance(index, slice):
+            return CodonAlignment(self._records[index], self._alphabet)
+        elif len(index) != 2:
+            raise TypeError("Invalid index type.")
+        # Handle double indexing
+        row_index, col_index = index
+        if isinstance(row_index, int):
+            return self._records[row_index][col_index]
+        elif isinstance(col_index, int):
+            return "".join(str(rec[col_index]) for rec in \
+                                                    self._records[row_index])
+        else:
+            return MultipleSeqAlignment((rec[col_index] for rec in \
+                                                    self._records[row_index]),
+                                         self._alphabet)
 
     def get_aln_length(self):
         return self.get_alignment_length() / 3
@@ -111,6 +131,19 @@ def toCodonAlignment(align, alphabet=default_codon_alphabet):
              for i in align._records]
     return CodonAlignment(rec, alphabet=align._alphabet)
 
+
+def mktest(codon_aln1, codon_aln2, codon_table=default_codon_table,
+        alpha=0.05):
+    """McDonald-Kreitman test for neutrality
+    """
+    if not isinstance(codon_aln1, CodonAlignment) or \
+            not isinstance(codon_aln2, CodonAlignment):
+        raise TypeError("mktest accept two CodonAlignment object ({0}, {1} "
+                        "detected)".format(type(codon_aln1), type(codon_aln2))
+                        )
+    if codon_aln1.get_alignment_length() != codon_aln2.get_alignment_length():
+        raise RuntimeError("Two CodonAlignment object for mktest should be of"
+                           " equal length.")
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
