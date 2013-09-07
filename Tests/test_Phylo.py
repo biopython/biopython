@@ -165,8 +165,8 @@ class TreeTests(unittest.TestCase):
             # Root is bifurcating
             self.assertEqual(len(tree.root.clades), 2)
             # Deepest tips under each child of the root are equally deep
-            deep_dist_0 = max(tree.clade[0].depths().itervalues())
-            deep_dist_1 = max(tree.clade[1].depths().itervalues())
+            deep_dist_0 = max(tree.clade[0].depths().values())
+            deep_dist_1 = max(tree.clade[1].depths().values())
             self.assertAlmostEqual(deep_dist_0, deep_dist_1)
 
     # Magic method

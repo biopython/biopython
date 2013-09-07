@@ -292,12 +292,12 @@ def complement(sequence):
 def sorted_dict(d):
     """A sorted repr of a dictionary."""
     return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v))
-                              for k,v in sorted(d.iteritems()))
+                              for k,v in sorted(d.items()))
 
 print("")
 print("DNA Ambiguity mapping: %s" % sorted_dict(ambiguous_dna_values))
 print("DNA Complement mapping: %s" % sorted_dict(ambiguous_dna_complement))
-for ambig_char, values in sorted(ambiguous_dna_values.iteritems()):
+for ambig_char, values in sorted(ambiguous_dna_values.items()):
     compl_values = complement(values)
     print("%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char]))
@@ -306,7 +306,7 @@ for ambig_char, values in sorted(ambiguous_dna_values.iteritems()):
 print("")
 print("RNA Ambiguity mapping: %s" % sorted_dict(ambiguous_rna_values))
 print("RNA Complement mapping: %s" % sorted_dict(ambiguous_rna_complement))
-for ambig_char, values in sorted(ambiguous_rna_values.iteritems()):
+for ambig_char, values in sorted(ambiguous_rna_values.items()):
     compl_values = complement(values).replace("T","U")  # need to help as no alphabet
     print("%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char]))

@@ -138,7 +138,7 @@ class HeaderTests(unittest.TestCase):
                 'release_date': '1998-10-14',
                 'structure_method': 'x-ray diffraction',
                 }
-        for key, expect in known_strings.iteritems():
+        for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
     def test_fibril(self):
@@ -156,7 +156,7 @@ class HeaderTests(unittest.TestCase):
                 'release_date': '2005-11-22',
                 'structure_method': 'solution nmr',
                 }
-        for key, expect in known_strings.iteritems():
+        for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
 
@@ -936,7 +936,7 @@ class Atom_Element(unittest.TestCase):
             N=(' NH1', ' NH2'),
         )
 
-        for element, atom_names in pdb_elements.iteritems():
+        for element, atom_names in pdb_elements.items():
             for fullname in atom_names:
                 e = quick_assign(fullname)
                 #warnings.warn("%s %s" % (fullname, e))
