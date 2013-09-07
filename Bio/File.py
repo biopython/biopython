@@ -18,7 +18,6 @@ use.
 import codecs
 import os
 import contextlib
-import StringIO
 import itertools
 
 try:
