@@ -147,10 +147,10 @@ def compare_attrs(obj_a, obj_b, attrs):
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
-            keys_a, values_a = val_a.keys(), val_a.values()
-            keys_b, values_b = val_b.keys(), val_b.values()
-            # sort all values and keys
-            [x.sort() for x in (keys_a, values_a, keys_b, values_b)]
+            keys_a = sorted(val_a.keys())
+            values_a = sorted(val_a.values())
+            keys_b = sorted(val_b.keys())
+            values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
                     values_b)
