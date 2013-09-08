@@ -334,4 +334,4 @@ if __name__ == "__main__":
     xe=train(xcar, ycar, user_functions)
     for xv, yv in zip(xcar, ycar):
         xc=classify(xe, xv)
-        print 'Pred:', xv, 'gives', xc, 'y is', yv
+        print('Pred: %s gives %s y is %s' % (xv, xc, yv))
