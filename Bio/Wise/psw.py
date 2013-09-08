@@ -11,8 +11,6 @@
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
-__version__ = "$Revision: 1.5 $"
-
 import os
 import re
 import sys

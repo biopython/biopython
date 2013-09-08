@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__version__ = "$Revision: 1.11 $"
-
 import doctest
 import sys
 import unittest

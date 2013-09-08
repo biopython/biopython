@@ -23,9 +23,6 @@
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.13 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
-
 import sys
 
 from Bio import MissingPythonDependencyError
