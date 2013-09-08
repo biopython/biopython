@@ -3,15 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Maximum Entropy code.
+
+Uses Improved Iterative Scaling.
 """
-Maximum Entropy code.
-
-Uses Improved Iterative Scaling:
-XXX ref
-
-# XXX need to define terminology
-
-"""
+#TODO Define terminology
 
 import numpy
 

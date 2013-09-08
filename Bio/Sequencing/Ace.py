@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Parser for ACE files output by PHRAP.
+"""Parser for ACE files output by PHRAP.
 
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)

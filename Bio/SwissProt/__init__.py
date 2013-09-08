@@ -2,9 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module provides code to work with the sprotXX.dat file from
-SwissProt.
+"""Code to work with the sprotXX.dat file from SwissProt.
+
 http://www.expasy.ch/sprot/sprot-top.html
 
 Tested with:

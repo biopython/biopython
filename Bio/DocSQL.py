@@ -5,8 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Bio.DocSQL: easy access to DB API databases.
+"""Bio.DocSQL: easy access to DB API databases.
 
 >>> import os
 >>> import MySQLdb

@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Hold GEO data in a straightforward format.
+"""Hold GEO data in a straightforward format.
 
 classes:
 o Record - All of the information in an GEO record.
