@@ -76,9 +76,9 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         handle = ...
         for a in AlignIO.parse(handle, "fasta-m10"):
             assert len(a) == 2, "Should be pairwise!"
-            print "Alignment length %i" % a.get_alignment_length()
+            print("Alignment length %i" % a.get_alignment_length())
             for record in a:
-                print record.seq, record.name, record.id
+                print("%s %s %s" % (record.seq, record.name, record.id))
 
     Note that this is not a full blown parser for all the information
     in the FASTA output - for example, most of the header and all of the
@@ -125,10 +125,10 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             print(tool)
             print(query_seq)
             print(query_tags)
-            print q, len(q)
+            print("%s %i" % (q, len(q)))
             print(match_seq)
             print(match_tags)
-            print m, len(m)
+            print("%s %i" % (m, len(m)))
             print(handle.name)
             raise err
 
@@ -601,7 +601,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
               % (len(a), a.get_alignment_length()))
         for r in a:
             print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
-        #print a.annotations
+        #print(a.annotations)
     print("Done")
 
     import os
@@ -610,7 +610,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
     files.sort()
     for filename in files:
         if os.path.splitext(filename)[-1] == ".m10":
-            print
+            print("")
             print(filename)
             print("=" * len(filename))
             for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):

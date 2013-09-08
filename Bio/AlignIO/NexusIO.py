@@ -157,10 +157,10 @@ if __name__ == "__main__":
     for a in NexusIterator(handle):
         print(a)
         for r in a:
-            print repr(r.seq), r.name, r.id
+            print("%r %s %s" % (r.seq, r.name, r.id))
     print("Done")
 
-    print
+    print("")
     print("Repeated names with a TAXA block")
     handle = StringIO("""#NEXUS
     [TITLE: NoName]
@@ -187,13 +187,13 @@ if __name__ == "__main__":
     for a in NexusIterator(handle):
         print(a)
         for r in a:
-            print repr(r.seq), r.name, r.id
+            print("%r %s %s" % (r.seq, r.name, r.id))
     print("Done")
-    print
+    print("")
     print("Reading an empty file")
     assert 0 == len(list(NexusIterator(StringIO())))
     print("Done")
-    print
+    print("")
     print("Writing...")
 
     handle = StringIO()
