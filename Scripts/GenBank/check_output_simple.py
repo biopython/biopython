@@ -32,10 +32,10 @@ while 1:
         break
 
     print("***Record")
-    print "Seq:", cur_record.seq
-    print "Id:", cur_record.id
-    print "Name:", cur_record.name
-    print "Description", cur_record.description
+    print("Seq: %s" % cur_record.seq)
+    print("Id: %s" % cur_record.id)
+    print("Name: %s" % cur_record.name)
+    print("Description: %s" % cur_record.description)
     print("Annotations****")
     for annotation_key in cur_record.annotations.keys():
         if annotation_key != 'references':

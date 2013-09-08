@@ -327,7 +327,7 @@ if __name__ == "__main__":
 
     for r in d:
         print(r)
-    print "Handled", len(d), "residues"
+    print("Handled %i residues" % len(d))
     print(d.keys())
     if ('A', 1) in d:
         print(d[('A', 1)])

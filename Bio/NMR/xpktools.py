@@ -127,7 +127,7 @@ def _try_open_read(fn):
     try:
         infile = open(fn, 'r')
     except IOError as e:
-        print "file", fn, "could not be opened for reading - quitting."
+        print("file %s could not be opened for reading - quitting." % fn)
         sys.exit(0)
     return infile
 
@@ -137,7 +137,7 @@ def _try_open_write(fn):
     try:
         infile = open(fn, 'w')
     except IOError as e:
-        print "file", fn, "could not be opened for writing - quitting."
+        print("file %s could not be opened for writing - quitting." % fn)
         sys.exit(0)
     return infile
 

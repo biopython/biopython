@@ -108,7 +108,7 @@ def parse(iterable):
     for line in iterable:
         try:
             if os.environ["WISE_PY_DEBUG"]:
-                print line,
+                print(line)
         except KeyError:
             pass
 

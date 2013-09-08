@@ -333,7 +333,7 @@ if __name__=="__main__":
     dih=calc_dihedral(v1, v2, v3, v4)
     # Test dihedral sign
     assert(dih>0)
-    print "DIHEDRAL ", dih
+    print("DIHEDRAL %f" % dih)
 
     ref=refmat(v1, v3)
     rot=rotmat(v1, v3)

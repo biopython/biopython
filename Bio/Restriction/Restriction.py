@@ -2265,7 +2265,7 @@ class Analysis(RestrictionBatch, PrintFormat):
          Limit the search to the enzymes named in list_of_names."""
         for i, enzyme in enumerate(names):
             if not enzyme in AllEnzymes:
-                print "no data for the enzyme:", str(name)
+                print("no data for the enzyme: %s" % name)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence)

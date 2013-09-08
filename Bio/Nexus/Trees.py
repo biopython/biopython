@@ -362,7 +362,7 @@ class Tree(Nodes.Chain):
                 print(node)
                 print(self.node(node).succ)
                 for n in self.node(node).succ:
-                    print n, self.set_subtree(n)
+                    print("%s %s" % (n, self.set_subtree(n)))
                 print([self.set_subtree(n) for n in self.node(node).succ])
                 raise
 
@@ -553,7 +553,7 @@ class Tree(Nodes.Chain):
                 table.append((str(i),tx,str(n.prev),str(n.succ),
                              blength, sum_blength, support, comment))
         print('\n'.join(['%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table]))
-        print '\nRoot: ',self.root
+        print('\nRoot:  %s' % self.root)
 
     def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None,ignore_comments=True):
         """Return a paup compatible tree line."""
@@ -713,7 +713,7 @@ class Tree(Nodes.Chain):
 
         self.unroot()
         # now we find the branch that connects outgroup and ingroup
-        #print self.node(outgroup_node).prev
+        #print(self.node(outgroup_node).prev)
         for i,b in enumerate(self.unrooted):
             if outgroup_node in b[:2] and self.node(outgroup_node).prev in b[:2]:
                 root_branch=self.unrooted.pop(i)
@@ -798,7 +798,7 @@ def consensus(trees, threshold=0.5,outgroup=None):
     for t in trees:
         c+=1
         #if c%100==0:
-        #    print c
+        #    print(c)
         if alltaxa!=set(t.get_taxa()):
             raise TreeError('Trees for consensus must contain the same taxa')
         t.root_with_outgroup(outgroup=outgroup)
@@ -834,11 +834,11 @@ def consensus(trees, threshold=0.5,outgroup=None):
     consensus_ids.sort(lambda x,y:len(consensus.node(x).data.taxon)-len(consensus.node(y).data.taxon))
     # now we just have to hook each node to the next smallest node that includes all taxa of the current
     for i,current in enumerate(consensus_ids[:-1]): # skip the last one which is the root
-        #print '----'
-        #print 'current: ',consensus.node(current).data.taxon
+        #print('----')
+        #print('current: %s' % consensus.node(current).data.taxon)
         # search remaining nodes
         for parent in consensus_ids[i+1:]:
-            #print 'parent: ',consensus.node(parent).data.taxon
+            #print('parent: %s' % consensus.node(parent).data.taxon)
             if consensus.node(parent).data.taxon.issuperset(consensus.node(current).data.taxon):
                 break
         else:

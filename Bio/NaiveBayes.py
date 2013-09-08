@@ -230,6 +230,6 @@ if __name__ == "__main__":
 
     carmodel = train(xcar, ycar)
     carresult = classify(carmodel, ['Red', 'Sports', 'Domestic'])
-    print 'Is Yes?', carresult
+    print('Is Yes? %s' % carresult)
     carresult = classify(carmodel, ['Red', 'SUV', 'Domestic'])
-    print 'Is No?', carresult
+    print('Is No? %s' % carresult)

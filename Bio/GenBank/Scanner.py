@@ -119,7 +119,7 @@ class InsdcScanner(object):
                     print("Found header table")
                 break
             #if line[:self.HEADER_WIDTH]==self.FEATURE_START_MARKER[:self.HEADER_WIDTH]:
-            #    if self.debug : print "Found header table (?)"
+            #    if self.debug : print("Found header table (?)")
             #    break
             if line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
                 if self.debug:
@@ -304,13 +304,13 @@ class InsdcScanner(object):
                         qualifiers.append((key, value))
                     else:
                         #Unquoted
-                        #if debug : print "Unquoted line %s:%s" % (key,value)
+                        #if debug : print("Unquoted line %s:%s" % (key,value))
                         qualifiers.append((key, value))
                 else:
                     #Unquoted continuation
                     assert len(qualifiers) > 0
                     assert key == qualifiers[-1][0]
-                    #if debug : print "Unquoted Cont %s:%s" % (key, line)
+                    #if debug : print("Unquoted Cont %s:%s" % (key, line))
                     if qualifiers[-1][1] is None:
                         raise StopIteration
                     qualifiers[-1] = (key, qualifiers[-1][1] + "\n" + line)
@@ -1746,25 +1746,25 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
     print("=================")
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example), do_features=False):
-        print record.id, record.name, record.description
+        print("%s %s %s" % (record.id, record.name, record.description))
         print(record.seq)
 
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example), do_features=True):
-        print record.id, record.name, record.description
+        print("%s %s %s" % (record.id, record.name, record.description))
         print(record.seq)
 
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example2), do_features=False):
-        print record.id, record.name, record.description
+        print("%s %s %s" % (record.id, record.name, record.description))
         print(record.seq)
 
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example2), do_features=True):
-        print record.id, record.name, record.description
+        print("%s %s %s" % (record.id, record.name, record.description))
         print(record.seq)
 
-    print
+    print("")
     print("EMBL CDS Iteration")
     print("==================")
 
@@ -1772,10 +1772,10 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
     for record in e.parse_cds_features(StringIO(embl_example)):
         print(record)
 
-    print
+    print("")
     print("EMBL Iteration")
     print("==============")
     e = EmblScanner()
     for record in e.parse_records(StringIO(embl_example), do_features=True):
-        print record.id, record.name, record.description
+        print("%s %s %s" % (record.id, record.name, record.description))
         print(record.seq)

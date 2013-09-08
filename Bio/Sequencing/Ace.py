@@ -42,7 +42,7 @@ see _RecordConsumer for details.
         from Bio.Sequencing import Ace
         contigs=Ace.parse(open('my_ace_file.ace'))
         for contig in contigs:
-            print contig.name
+            print(contig.name)
             ...
 
 Please note that for memory efficiency, when using the iterator approach, only one

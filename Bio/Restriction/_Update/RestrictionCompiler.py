@@ -473,7 +473,7 @@ class DictionaryBuilder(object):
 
         update = os.getcwd()
         results = open(os.path.join(update, 'Restriction_Dictionary.py'), 'w')
-        print 'Writing the dictionary containing the new Restriction classes.\t',
+        print('Writing the dictionary containing the new Restriction classes...')
         results.write(start)
         results.write('rest_dict = {}\n')
         for name in sorted(classdict) :
@@ -485,7 +485,7 @@ class DictionaryBuilder(object):
             results.write("rest_dict[%s] = _temp()\n" % repr(name))
             results.write("\n")
         print('OK.\n')
-        print 'Writing the dictionary containing the suppliers data.\t\t',
+        print('Writing the dictionary containing the suppliers data...')
         results.write('suppliers = {}\n')
         for name in sorted(suppliersdict) :
             results.write("def _temp():\n")
@@ -496,7 +496,7 @@ class DictionaryBuilder(object):
             results.write("suppliers[%s] = _temp()\n" % repr(name))
             results.write("\n")
         print('OK.\n')
-        print 'Writing the dictionary containing the Restriction types.\t',
+        print('Writing the dictionary containing the Restriction types...')
         results.write('typedict = {}\n')
         for name in sorted(typedict) :
             results.write("def _temp():\n")
@@ -748,7 +748,7 @@ class DictionaryBuilder(object):
             \nWARNING : %s cut twice with different overhang length each time.\
             \n\tUnable to deal with this behaviour. \
             \n\tThis enzyme will not be included in the database. Sorry.' %name)
-            print '\tChecking :',
+            print('\tChecking...')
             raise OverhangError
         if 0 <= fst5 <= size and 0 <= fst3 <= size:
             #
@@ -968,8 +968,7 @@ class DictionaryBuilder(object):
                     #
                     #   deal with TaqII and its two sites.
                     #
-                    print '\nWARNING :',
-                    print name, 'has two different sites.\n'
+                    print('\nWARNING : %s has two different sites.\n' % name)
                     other = line[0].replace("-","_")
                     dna = DNA(line[1])
                     sense1 = regex(str(dna))

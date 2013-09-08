@@ -105,11 +105,11 @@ class _XMLparser(ContentHandler):
         if hasattr(self, method):
             eval("self.%s()" % method)
             if self._debug > 2:
-                print "NCBIXML: Parsed:  " + method, self._value
+                print("NCBIXML: Parsed:  %s %s" % (method, self._value))
         elif self._debug > 1:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                print "NCBIXML: Ignored: " + method, self._value
+                print("NCBIXML: Ignored: %s %s" % (method, self._value))
                 self._debug_ignore_list.append(method)
 
         # Reset character buffer
@@ -694,13 +694,13 @@ if __name__ == '__main__':
 
     for r in r_list:
         # Small test
-        print 'Blast of', r.query
+        print('Blast of %s' % r.query)
         print('Found %s alignments with a total of %s HSPs' % (len(r.alignments),
                   reduce(lambda a,b: a+b,
                          [len(a.hsps) for a in r.alignments])))
 
         for al in r.alignments:
-            print al.title[:50], al.length, 'bp', len(al.hsps), 'HSPs'
+            print("%s %i bp %i HSPs" % (al.title[:50], al.length, len(al.hsps)))
 
         # Cookbook example
         E_VALUE_THRESH = 0.04
@@ -708,9 +708,9 @@ if __name__ == '__main__':
             for hsp in alignment.hsps:
                 if hsp.expect < E_VALUE_THRESH:
                     print('*****')
-                    print 'sequence', alignment.title
-                    print 'length', alignment.length
-                    print 'e value', hsp.expect
+                    print('sequence %s' % alignment.title)
+                    print('length %i' % alignment.length)
+                    print('e value %f' % hsp.expect)
                     print(hsp.query[:75] + '...')
                     print(hsp.match[:75] + '...')
                     print(hsp.sbjct[:75] + '...')

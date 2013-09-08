@@ -337,8 +337,8 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             score_only)
     score_matrix, trace_matrix = x
 
-    #print "SCORE"; print_matrix(score_matrix)
-    #print "TRACEBACK"; print_matrix(trace_matrix)
+    #print("SCORE %s" % print_matrix(score_matrix))
+    #print("TRACEBACK %s" % print_matrix(trace_matrix))
 
     # Look for the proper starting point.  Get a list of all possible
     # starting points.

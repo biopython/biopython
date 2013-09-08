@@ -50,13 +50,12 @@ class RebaseUpdate(FancyURLopener):
         return
 
     def getfiles(self, *files):
-        print '\n',
         for file in self.update(*files):
-            print 'copying', file
+            print('copying %s' % file)
             fn = os.path.basename(file)
             #filename = os.path.join(Rebase, fn)
             filename = os.path.join(os.getcwd(), fn)
-            print 'to', filename
+            print('to %s' % filename)
             self.retrieve(file, filename)
         self.close()
         return

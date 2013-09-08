@@ -311,4 +311,4 @@ if __name__ == "__main__":
                 for a in r:
                     p = a.get_parent()
                     if not p is r:
-                        print p, r
+                        print("%s %s" % (p, r))

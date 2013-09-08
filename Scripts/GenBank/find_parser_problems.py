@@ -33,7 +33,7 @@ while 1:
             cur_record = iterator.next()
             have_record = 1
         except GenBank.ParserFailureError as msg:
-            print "Parsing Problem:", msg
+            print("Parsing Problem: %s" % msg)
             sys.exit()
 
     if cur_record is None:
@@ -43,11 +43,11 @@ while 1:
 
     if verbose:
         print("***Record")
-        print "Seq:", cur_record.seq
-        print "Id:", cur_record.id
-        print "Name:", cur_record.name
-        print "Description", cur_record.description
-        print "Annotations", cur_record.annotations
+        print("Seq: %s" % cur_record.seq)
+        print("Id: %s" % cur_record.id)
+        print("Name: %s" % cur_record.name)
+        print("Description: %s" % cur_record.description)
+        print("Annotations: %s" % cur_record.annotations)
         print("Feaures")
         for feature in cur_record.features:
             print(feature)

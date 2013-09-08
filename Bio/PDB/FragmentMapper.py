@@ -323,16 +323,12 @@ if __name__=="__main__":
 
     import sys
 
-    p=PDBParser()
-    s=p.get_structure("X", sys.argv[1])
-
-    m=s[0]
-    fm=FragmentMapper(m, 10, 5, "levitt_data")
+    p = PDBParser()
+    s = p.get_structure("X", sys.argv[1])
+    m = s[0]
+    fm = FragmentMapper(m, 10, 5, "levitt_data")
 
     for r in Selection.unfold_entities(m, "R"):
-
-        print r,
+        print("%s:" % r)
         if r in fm:
             print(fm[r])
-        else:
-            print

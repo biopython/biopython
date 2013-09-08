@@ -189,10 +189,10 @@ def search_iter(db, query, limit=None, batch=100):
     prev_ids = []  # Just cache the last batch for error checking
     while remain:
         batch = min(batch, remain)
-        #print "%r left, asking for %r" % (remain, batch)
+        #print("%r left, asking for %r" % (remain, batch))
         ids = search(db, query, offset, batch).read().strip().split()
         assert len(ids) == batch, "Got %i, expected %i" % (len(ids), batch)
-        #print "offset %i, %s ... %s" % (offset, ids[0], ids[-1])
+        #print("offset %i, %s ... %s" % (offset, ids[0], ids[-1]))
         if ids == prev_ids:
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
@@ -264,7 +264,7 @@ def search(db, query, offset=None, limit=None, format=None):
         raise ValueError("Expect BOTH offset AND limit to be provided (or neither)")
     if format:
         url += "." + format
-    #print url
+    #print(url)
     return _open(url)
 
 

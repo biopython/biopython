@@ -470,7 +470,7 @@ if __name__=="__main__":
 
     for pp in ppb.build_peptides(s):
         for phi, psi in pp.get_phi_psi_list():
-            print phi, psi
+            print("%f %f" % (phi, psi))
 
     ppb=CaPPBuilder()
 

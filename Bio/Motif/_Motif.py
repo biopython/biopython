@@ -32,11 +32,12 @@ class Motif(object):
         self.name=""
 
     def _check_length(self, len):
+        # TODO - Change parameter name (len clashes with built in function)?
         if self.length is None:
             self.length = len
         elif self.length != len:
-            print "len",self.length,self.instances, len
-            raise ValueError("You can't change the length of the motif")
+            raise ValueError("You can't change the length of the motif "
+                             "%r %r %r" % (self.length, self.instances, len))
 
     def _check_alphabet(self,alphabet):
         if self.alphabet is None:

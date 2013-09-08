@@ -385,7 +385,7 @@ def _sff_do_slow_index(handle):
             if handle.read(padding).count(_null) != padding:
                 raise ValueError("Post quality %i byte padding region contained data"
                                  % padding)
-        #print read, name, record_offset
+        #print("%s %s %i" % (read, name, record_offset))
         yield name, record_offset
     if handle.tell() % 8 != 0:
         raise ValueError(
@@ -1258,10 +1258,10 @@ if __name__ == "__main__":
 
     for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
                                    qual_no_trim, fasta_trim, qual_trim):
-        #print
+        #print("")
         print(s.id)
-        #print s.seq
-        #print s.letter_annotations["phred_quality"]
+        #print(s.seq)
+        #print(s.letter_annotations["phred_quality"])
 
         assert s.id == f.id == q.id
         assert str(s.seq) == str(f.seq)
@@ -1420,8 +1420,8 @@ if __name__ == "__main__":
     for old, new in zip(records, records2):
         assert str(old.seq)==str(new.seq)
     try:
-        print ReadRocheXmlManifest(
-            open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb"))
+        print(ReadRocheXmlManifest(
+            open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
         assert False, "Should fail!"
     except ValueError:
         pass

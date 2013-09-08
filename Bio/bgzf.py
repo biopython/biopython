@@ -702,7 +702,7 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
-        #print "Saving %i bytes" % len(block)
+        #print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
         #Giving a negative window bits means no gzip/zlib headers, -15 used in samtools
@@ -740,11 +740,11 @@ class BgzfWriter(object):
         #block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
-            #print "Cached %r" % data
+            #print("Cached %r" % data)
             self._buffer += data
             return
         else:
-            #print "Got %r, writing out some data..." % data
+            #print("Got %r, writing out some data..." % data)
             self._buffer += data
             while len(self._buffer) >= 65536:
                 self._write_block(self._buffer[:65536])
@@ -789,16 +789,16 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         print("Call this with no arguments and pipe uncompressed data in on stdin")
         print("and it will produce BGZF compressed data on stdout. e.g.")
-        print
+        print("")
         print("./bgzf.py < example.fastq > example.fastq.bgz")
-        print
+        print("")
         print("The extension convention of *.bgz is to distinugish these from *.gz")
         print("used for standard gzipped files without the block structure of BGZF.")
         print("You can use the standard gunzip command to decompress BGZF files,")
         print("if it complains about the extension try something like this:")
-        print
+        print("")
         print("cat example.fastq.bgz | gunzip > example.fastq")
-        print
+        print("")
         print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 

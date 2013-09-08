@@ -554,7 +554,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 raise ValueError("Problem with quality section")
             yield _bytes_to_string(id), start_offset, length
             start_offset = end_offset
-        #print "EOF"
+        #print("EOF")
 
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
