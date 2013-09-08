@@ -810,9 +810,9 @@ class AutoSeqIOTests(unittest.TestCase):
 
         iterator = SeqIO.parse(handle=open(t_filename, "r"), format=t_format)
         for record in iterator:
-            #print " - %s, %s" % (checksum_summary(record), record.id)
+            #print(" - %s, %s" % (checksum_summary(record), record.id))
             key = record.name
-            #print " - Retrieving by name/display_id '%s'," % key,
+            #print(" - Retrieving by name/display_id '%s'," % key)
             db_rec = db.lookup(name=key)
             compare_record(record, db_rec)
             db_rec = db.lookup(display_id=key)
@@ -820,7 +820,7 @@ class AutoSeqIOTests(unittest.TestCase):
 
             key = record.id
             if key.count(".") == 1 and key.split(".")[1].isdigit():
-                #print " - Retrieving by version '%s'," % key,
+                #print(" - Retrieving by version '%s'," % key)
                 db_rec = db.lookup(version=key)
                 compare_record(record, db_rec)
 
@@ -829,14 +829,14 @@ class AutoSeqIOTests(unittest.TestCase):
                 key = record.annotations["accessions"][0]
                 assert key, "Blank accession in annotation %s" % repr(record.annotations)
                 if key != record.id:
-                    #print " - Retrieving by accession '%s'," % key,
+                    #print(" - Retrieving by accession '%s'," % key)
                     db_rec = db.lookup(accession=key)
                     compare_record(record, db_rec)
 
             if "gi" in record.annotations:
                 key = record.annotations['gi']
                 if key != record.id:
-                    #print " - Retrieving by GI '%s'," % key,
+                    #print(" - Retrieving by GI '%s'," % key)
                     db_rec = db.lookup(primary_id=key)
                     compare_record(record, db_rec)
 

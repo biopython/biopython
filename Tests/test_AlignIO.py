@@ -101,7 +101,7 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
 
 
 def check_simple_write_read(alignments, indent=" "):
-    #print indent+"Checking we can write and then read back these alignments"
+    #print(indent+"Checking we can write and then read back these alignments")
     for format in test_write_read_align_with_seq_count:
         records_per_alignment = len(alignments[0])
         for a in alignments:
@@ -315,10 +315,10 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             alignment = AlignIO.read(open(t_filename), t_format)
             assert False, "Bio.AlignIO.read(...) should have failed"
         except ValueError:
-            #Expected to fail
+            # Expected to fail
             pass
 
-    #Print the alignment
+    # Show the alignment
     for i,alignment in enumerate(alignments):
         if i < 3 or i+1 == t_count:
             print(" Alignment %i, with %i sequences of length %i" \
@@ -329,12 +329,12 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         elif i==3:
             print(" ...")
 
-    #Check AlignInfo.SummaryInfo likes the alignment
+    # Check AlignInfo.SummaryInfo likes the alignment
     summary = AlignInfo.SummaryInfo(alignment)
     dumb_consensus = summary.dumb_consensus()
     #gap_consensus = summary.gap_consensus()
     if t_format != "nexus":
-        #Hack for bug 2535
+        # Hack for bug 2535
         pssm = summary.pos_specific_score_matrix()
         rep_dict = summary.replacement_dictionary()
         try:
@@ -345,7 +345,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             pass
 
     if t_count==1 and t_format not in ["nexus","emboss","fasta-m10"]:
-        #print " Trying to read a triple concatenation of the input file"
+        #print(" Trying to read a triple concatenation of the input file")
         data = open(t_filename,"r").read()
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)

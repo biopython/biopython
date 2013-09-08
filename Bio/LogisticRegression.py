@@ -99,8 +99,8 @@ def train(xs, ys, update_fn=None, typecode=None):
         Xtyp = numpy.dot(Xt, y-p)         # Calculate the first derivative.
         XtWX = numpy.dot(numpy.dot(Xt, W), X)   # Calculate the second derivative.
         #u, s, vt = singular_value_decomposition(XtWX)
-        #print "U", u
-        #print "S", s
+        #print("U %s" % u)
+        #print("S %s" % s)
         delta = numpy.linalg.solve(XtWX, Xtyp)
         if numpy.fabs(stepsize-1.0) > 0.001:
             delta = delta * stepsize

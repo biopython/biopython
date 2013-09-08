@@ -501,7 +501,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             #Create the index
             con = _sqlite.connect(index_filename)
             self._con = con
-            #print "Creating index"
+            #print("Creating index")
             # Sqlite PRAGMA settings for speed
             con.execute("PRAGMA synchronous=OFF")
             con.execute("PRAGMA locking_mode=EXCLUSIVE")
@@ -534,8 +534,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     batch = list(itertools.islice(offset_iter, 100))
                     if not batch:
                         break
-                    #print "Inserting batch of %i offsets, %s ... %s" \
-                    # % (len(batch), batch[0][0], batch[-1][0])
+                    #print("Inserting batch of %i offsets, %s ... %s" \
+                    # % (len(batch), batch[0][0], batch[-1][0]))
                     con.executemany(
                         "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
                         batch)
@@ -546,7 +546,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 else:
                     random_access_proxy._handle.close()
             self._length = count
-            #print "About to index %i entries" % count
+            #print("About to index %i entries" % count)
             try:
                 con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                             "key_index ON offset_data(key);")
@@ -559,7 +559,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
                         (count, "count"))
             con.commit()
-            #print "Index created"
+            #print("Index created")
         self._proxies = random_access_proxies
         self._max_open = max_open
         self._index_filename = index_filename

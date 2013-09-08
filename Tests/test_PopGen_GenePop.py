@@ -34,17 +34,17 @@ class AppTest(unittest.TestCase):
         """
         ctrl = GenePopController()
         pop_iter, locus_iter = ctrl.calc_allele_genotype_freqs("PopGen" + os.sep + "big.gen")
-        #print pop, loci
+        #print("%s %s" % (pop, loci))
         #for popc in pop_iter:
         #    pop_name, loci_content = popc
-        #    print pop_name
+        #    print(pop_name)
         #    for locus in loci_content.keys():
         #        geno_list, hets, freq_fis = loci_content[locus]
-        #        print locus
-        #        print hets
-        #        print freq_fis
-        #        print geno_list
-        #    print
+        #        print(locus)
+        #        print(hets)
+        #        print(freq_fis)
+        #        print(geno_list)
+        #    print("")
 
     def test_calc_diversities_fis_with_identity(self):
         """Test calculations of diversities ...
