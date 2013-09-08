@@ -69,8 +69,8 @@ class DB_Index:
                     db[acc] = value
                     id, acc, start, stop = None, None, None, None
                 except:
-                    print 'AARRGGGG', start, stop, type(start), type(stop)
-                    print id, acc
+                    print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
+                    print("%s %s" % (id, acc))
 
         db.close()
         fid.close()
@@ -132,7 +132,7 @@ class DB_Index:
 
     def Get_Kingdom(self, id):
         res = self.Get_Taxonomy(id)
-        #print id, res
+        #print("%s %s" % (id, res))
         if not res:
             return "U"
         kd = string.strip(string.split(res, ";")[0])
@@ -145,7 +145,7 @@ class DB_Index:
         elif kd == "Viridae" or kd == "Viruses":
             return "V"
         else:
-            print kd, "UNKNOWN"
+            print("%s UNKNOWN" % kd)
             return "U"
 
     def Get_Gene(self, id):
@@ -302,5 +302,5 @@ if __name__ == '__main__':
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)
     for id in ids:
-        #print db_index.Get(id)
+        #print(db_index.Get(id))
         print(func(id))
