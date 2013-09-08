@@ -1676,7 +1676,7 @@ class Nexus(object):
         newcharlabels={}
         if exclude:
             exclude.sort()
-            exclude.append(sys.maxint)
+            exclude.append(sys.maxsize)
             excount=0
             for c in labels:
                 if not c in exclude:
@@ -1685,7 +1685,7 @@ class Nexus(object):
                     newcharlabels[c-excount]=self.charlabels[c]
         elif insert:
             insert.sort()
-            insert.append(sys.maxint)
+            insert.append(sys.maxsize)
             icount=0
             for c in labels:
                 while c>=insert[icount]:

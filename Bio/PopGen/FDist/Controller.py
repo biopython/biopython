@@ -19,11 +19,6 @@ from random import randint
 from time import strftime, clock
 #from logging import debug
 
-if sys.version_info[0] == 3:
-    maxint = sys.maxsize
-else:
-    maxint = sys.maxint
-
 
 def my_float(f):
     #Because of Jython, mostly
@@ -119,7 +114,7 @@ class FDistController(object):
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
-            inf.write(str(randint(-maxint + 1, maxint - 1)) + '\n')
+            inf.write(str(randint(-sys.maxsize + 1, sys.maxsize - 1)) + '\n')
         inf.write('8\n')
         inf.close()
 
