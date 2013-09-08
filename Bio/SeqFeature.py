@@ -389,7 +389,7 @@ class SeqFeature(object):
         >>> f = SeqFeature(FeatureLocation(5,10), type="domain", strand=-1)
         >>> len(f)
         5
-        >>> for i in f: print i
+        >>> for i in f: print(i)
         9
         8
         7
@@ -422,7 +422,7 @@ class SeqFeature(object):
         >>> record = SeqIO.read("GenBank/NC_000932.gb", "gb")
         >>> for f in record.features:
         ...     if 1750 in f:
-        ...         print f.type, f.location
+        ...         print("%s %s" % (f.type, f.location))
         source [0:154478](+)
         gene [1716:4347](-)
         tRNA join{[4310:4347](-), [1716:1751](-)}
@@ -435,7 +435,7 @@ class SeqFeature(object):
 
         >>> for f in record.features:
         ...     if 1760 in f:
-        ...         print f.type, f.location
+        ...         print("%s %s" % (f.type, f.location))
         source [0:154478](+)
         gene [1716:4347](-)
 
@@ -527,13 +527,13 @@ class FeatureLocation(object):
 
     >>> from Bio.SeqFeature import FeatureLocation
     >>> f = FeatureLocation(122, 150)
-    >>> print f
+    >>> print(f)
     [122:150]
-    >>> print f.start
+    >>> print(f.start)
     122
-    >>> print f.end
+    >>> print(f.end)
     150
-    >>> print f.strand
+    >>> print(f.strand)
     None
 
     Note the strand defaults to None. If you are working with nucleotide
@@ -541,9 +541,9 @@ class FeatureLocation(object):
 
     >>> from Bio.SeqFeature import FeatureLocation
     >>> f = FeatureLocation(122, 150, strand=+1)
-    >>> print f
+    >>> print(f)
     [122:150](+)
-    >>> print f.strand
+    >>> print(f.strand)
     1
 
     Note that for a parent sequence of length n, the FeatureLocation
@@ -554,13 +554,13 @@ class FeatureLocation(object):
 
     >>> from Bio.SeqFeature import FeatureLocation
     >>> r = FeatureLocation(122, 150, strand=-1)
-    >>> print r
+    >>> print(r)
     [122:150](-)
-    >>> print r.start
+    >>> print(r.start)
     122
-    >>> print r.end
+    >>> print(r.end)
     150
-    >>> print r.strand
+    >>> print(r.strand)
     -1
 
     i.e. Rather than thinking of the 'start' and 'end' biologically in a
@@ -588,14 +588,14 @@ class FeatureLocation(object):
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> loc = FeatureLocation(5, 10, strand=-1)
-        >>> print loc
+        >>> print(loc)
         [5:10](-)
 
         Explicit form:
 
         >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
         >>> loc = FeatureLocation(ExactPosition(5), ExactPosition(10), strand=-1)
-        >>> print loc
+        >>> print(loc)
         [5:10](-)
 
         Other fuzzy positions are used similarly,
@@ -603,7 +603,7 @@ class FeatureLocation(object):
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
         >>> loc2 = FeatureLocation(BeforePosition(5), AfterPosition(10), strand=-1)
-        >>> print loc2
+        >>> print(loc2)
         [<5:>10](-)
 
         For nucleotide features you will also want to specify the strand,
@@ -613,9 +613,9 @@ class FeatureLocation(object):
         proteins.
 
         >>> loc = FeatureLocation(5, 10, strand=+1)
-        >>> print loc
+        >>> print(loc)
         [5:10](+)
-        >>> print loc.strand
+        >>> print(loc.strand)
         1
 
         Normally feature locations are given relative to the parent
@@ -623,9 +623,9 @@ class FeatureLocation(object):
         be given with the optional ref and db_ref strings:
 
         >>> loc = FeatureLocation(105172, 108462, ref="AL391218.9", strand=1)
-        >>> print loc
+        >>> print(loc)
         AL391218.9[105172:108462](+)
-        >>> print loc.ref
+        >>> print(loc.ref)
         AL391218.9
 
         """
@@ -702,20 +702,20 @@ class FeatureLocation(object):
         >>> f1 = FeatureLocation(5,10)
         >>> f2 = FeatureLocation(20,30)
         >>> combined = f1 + f2
-        >>> print combined
+        >>> print(combined)
         join{[5:10], [20:30]}
 
         This is thus equivalent to:
 
         >>> from Bio.SeqFeature import CompoundLocation
         >>> join = CompoundLocation([f1, f2])
-        >>> print join
+        >>> print(join)
         join{[5:10], [20:30]}
 
         You can also use sum(...) in this way:
 
         >>> join = sum([f1, f2])
-        >>> print join
+        >>> print(join)
         join{[5:10], [20:30]}
 
         Furthermore, you can combine a FeatureLocation with a CompoundLocation
@@ -724,11 +724,11 @@ class FeatureLocation(object):
         Separately, adding an integer will give a new FeatureLocation with
         its start and end offset by that amount. For example:
 
-        >>> print f1
+        >>> print(f1)
         [5:10]
-        >>> print f1 + 100
+        >>> print(f1 + 100)
         [105:110]
-        >>> print 200 + f1
+        >>> print(200 + f1)
         [205:210]
 
         This can be useful when editing annotation.
@@ -803,7 +803,7 @@ class FeatureLocation(object):
         >>> loc = FeatureLocation(BeforePosition(5),AfterPosition(10))
         >>> len(loc)
         5
-        >>> for i in loc: print i
+        >>> for i in loc: print(i)
         5
         6
         7
@@ -934,7 +934,7 @@ class CompoundLocation(object):
         >>> f = CompoundLocation([f1, f2])
         >>> len(f) == len(f1) + len(f2) == 39 == len(list(f))
         True
-        >>> print f.operator
+        >>> print(f.operator)
         join
         >>> 5 in f
         False
@@ -949,7 +949,7 @@ class CompoundLocation(object):
 
         >>> f = CompoundLocation([FeatureLocation(3, 6, strand=+1),
         ...                       FeatureLocation(10, 13, strand=-1)])
-        >>> print f.strand
+        >>> print(f.strand)
         None
         >>> len(f)
         6
@@ -1056,32 +1056,32 @@ class CompoundLocation(object):
 
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
         >>> f1 = FeatureLocation(15,17) + FeatureLocation(20,30)
-        >>> print f1
+        >>> print(f1)
         join{[15:17], [20:30]}
 
         You can add another FeatureLocation:
 
-        >>> print f1 + FeatureLocation(40,50)
+        >>> print(f1 + FeatureLocation(40,50))
         join{[15:17], [20:30], [40:50]}
-        >>> print FeatureLocation(5,10) + f1
+        >>> print(FeatureLocation(5,10) + f1)
         join{[5:10], [15:17], [20:30]}
 
         You can also add another CompoundLocation:
 
         >>> f2 = FeatureLocation(40,50) + FeatureLocation(60,70)
-        >>> print f2
+        >>> print(f2)
         join{[40:50], [60:70]}
-        >>> print f1 + f2
+        >>> print(f1 + f2)
         join{[15:17], [20:30], [40:50], [60:70]}
 
         Also, as with the FeatureLocation, adding an integer shifts the
         location's co-ordinates by that offset:
 
-        >>> print f1 + 100
+        >>> print(f1 + 100)
         join{[115:117], [120:130]}
-        >>> print 200 + f1
+        >>> print(200 + f1)
         join{[215:217], [220:230]}
-        >>> print f1 + (-5)
+        >>> print(f1 + (-5))
         join{[10:12], [15:25]}
         """
         if isinstance(other, FeatureLocation):
@@ -1232,7 +1232,7 @@ class ExactPosition(int, AbstractPosition):
     >>> p = ExactPosition(5)
     >>> p
     ExactPosition(5)
-    >>> print p
+    >>> print(p)
     5
 
     >>> isinstance(p, AbstractPosition)
@@ -1336,7 +1336,7 @@ class WithinPosition(int, AbstractPosition):
     >>> p = WithinPosition(10,10,13)
     >>> p
     WithinPosition(10, left=10, right=13)
-    >>> print p
+    >>> print(p)
     (10.13)
     >>> int(p)
     10
@@ -1377,7 +1377,7 @@ class WithinPosition(int, AbstractPosition):
     >>> p2 = WithinPosition(13,10,13)
     >>> p2
     WithinPosition(13, left=10, right=13)
-    >>> print p2
+    >>> print(p2)
     (10.13)
     >>> int(p2)
     13
@@ -1460,7 +1460,7 @@ class BetweenPosition(int, AbstractPosition):
     >>> p = BetweenPosition(456, 123, 456)
     >>> p
     BetweenPosition(456, left=123, right=456)
-    >>> print p
+    >>> print(p)
     (123^456)
     >>> int(p)
     456
@@ -1560,7 +1560,7 @@ class BeforePosition(int, AbstractPosition):
     >>> p = BeforePosition(5)
     >>> p
     BeforePosition(5)
-    >>> print p
+    >>> print(p)
     <5
     >>> int(p)
     5
@@ -1623,7 +1623,7 @@ class AfterPosition(int, AbstractPosition):
     >>> p = AfterPosition(7)
     >>> p
     AfterPosition(7)
-    >>> print p
+    >>> print(p)
     >7
     >>> int(p)
     7

@@ -322,7 +322,7 @@ def six_frame_translations(seq, genetic_code=1):
     similar to DNA Striders six-frame translation
 
     >>> from Bio.SeqUtils import six_frame_translations
-    >>> print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
+    >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
     GC_Frame: a:5 t:0 g:8 c:5 
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
@@ -397,7 +397,7 @@ def quick_FASTA_reader(file):
 
     >>> seqs = quick_FASTA_reader("Fasta/dups.fasta")
     >>> for title, sequence in seqs:
-    ...     print title, sequence
+    ...     print("%s %s" % (title, sequence))
     alpha ACGTA
     beta CGTC
     gamma CCGCC

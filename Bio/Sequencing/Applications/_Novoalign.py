@@ -4,6 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the short read aligner Novoalign by Novocraft."""
+
 import types
 from Bio.Application import _Option, AbstractCommandline
 
@@ -18,7 +19,7 @@ class NovoalignCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import NovoalignCommandline
     >>> novoalign_cline = NovoalignCommandline(database='some_db',
     ...                                        readfile='some_seq.txt')
-    >>> print novoalign_cline
+    >>> print(novoalign_cline)
     novoalign -d some_db -f some_seq.txt
 
     As with all the Biopython application wrappers, you can also add or
@@ -28,7 +29,7 @@ class NovoalignCommandline(AbstractCommandline):
     >>> novoalign_cline.r_method='0.99' # limited valid values
     >>> novoalign_cline.fragment = '250 20' # must be given as a string
     >>> novoalign_cline.miRNA = 100
-    >>> print novoalign_cline
+    >>> print(novoalign_cline)
     novoalign -d some_db -f some_seq.txt -F PRBnSEQ -r 0.99 -i 250 20 -m 100
 
     You would typically run the command line with novoalign_cline() or via

@@ -21,7 +21,7 @@ class BwaIndexCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import BwaIndexCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> index_cmd = BwaIndexCommandline(infile=reference_genome, algorithm="bwtsw")
-    >>> print index_cmd
+    >>> print(index_cmd)
     bwa index -a bwtsw /path/to/reference_genome.fasta
 
     You would typically run the command using index_cmd() or via the
@@ -73,7 +73,7 @@ class BwaAlignCommandline(AbstractCommandline):
     >>> output_sai_file = "/path/to/read_1.sai"
     >>> read_group="@RG\tID:foo\tSM:bar"
     >>> align_cmd = BwaAlignCommandline(reference=reference_genome, read_file=read_file)
-    >>> print align_cmd
+    >>> print(align_cmd)
     bwa aln /path/to/reference_genome.fasta /path/to/read_1.fq
 
     You would typically run the command line using align_cmd(stdout=output_sai_file)
@@ -186,7 +186,7 @@ class BwaSamseCommandline(AbstractCommandline):
     >>> output_sam_file = "/path/to/read_1.sam"
     >>> samse_cmd = BwaSamseCommandline(reference=reference_genome,
     ...                                 read_file=read_file, sai_file=sai_file)
-    >>> print samse_cmd
+    >>> print(samse_cmd)
     bwa samse /path/to/reference_genome.fasta /path/to/read_1.sai /path/to/read_1.fq
 
     You would typically run the command line using samse_cmd(stdout=output_sam_file)
@@ -238,7 +238,7 @@ class BwaSampeCommandline(AbstractCommandline):
     ...                                 sai_file1=sai_file1, sai_file2=sai_file2,
     ...                                 read_file1=read_file1, read_file2=read_file2,
     ...                                 r=read_group)
-    >>> print sampe_cmd
+    >>> print(sampe_cmd)
     bwa sampe /path/to/reference_genome.fasta /path/to/read_1.sai /path/to/read_2.sai /path/to/read_1.fq /path/to/read_2.fq -r @RG       ID:foo  SM:bar
 
     You would typically run the command line using sampe_cmd(stdout=output_sam_file)
@@ -303,10 +303,10 @@ class BwaBwaswCommandline(AbstractCommandline):
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
     >>> bwasw_cmd = BwaBwaswCommandline(reference=reference_genome, read_file=read_file)
-    >>> print bwasw_cmd
+    >>> print(bwasw_cmd)
     bwa bwasw /path/to/reference_genome.fasta /path/to/read_1.fq
 
-    You would typically run the command line using bwasw_cmd() or via the                                                                              
+    You would typically run the command line using bwasw_cmd() or via the
     Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="bwa", **kwargs):

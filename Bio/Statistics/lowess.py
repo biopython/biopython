@@ -59,7 +59,7 @@ def lowess(x, y, f=2. / 3., iter=3):
     >>> result = lowess(x, y)
     >>> len(result)
     50
-    >>> print "[%0.2f, ..., %0.2f]" % (result[0], result[-1])
+    >>> print("[%0.2f, ..., %0.2f]" % (result[0], result[-1]))
     [4.85, ..., 84.98]
     """
     n = len(x)

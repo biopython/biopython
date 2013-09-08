@@ -12,7 +12,7 @@ Simple example with multiple chains,
     >>> structure = PDBParser().get_structure('2BEG', 'PDB/2BEG.pdb')
     >>> ppb=PPBuilder()
     >>> for pp in ppb.build_peptides(structure):
-    ...     print pp.get_sequence()
+    ...     print(pp.get_sequence())
     LVFFAEDVGSNKGAIIGLMVGGVVIA
     LVFFAEDVGSNKGAIIGLMVGGVVIA
     LVFFAEDVGSNKGAIIGLMVGGVVIA
@@ -27,7 +27,7 @@ in this case selenomethionine (MSE):
     >>> structure = PDBParser().get_structure('1A8O', 'PDB/1A8O.pdb')
     >>> ppb=PPBuilder()
     >>> for pp in ppb.build_peptides(structure):
-    ...     print pp.get_sequence()
+    ...     print(pp.get_sequence())
     DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW
     TETLLVQNANPDCKTILKALGPGATLEE
     TACQG
@@ -35,10 +35,10 @@ in this case selenomethionine (MSE):
 If you want to, you can include non-standard amino acids in the peptides:
 
     >>> for pp in ppb.build_peptides(structure, aa_only=False):
-    ...     print pp.get_sequence()
-    ...     print pp.get_sequence()[0], pp[0].get_resname()
-    ...     print pp.get_sequence()[-7], pp[-7].get_resname()
-    ...     print pp.get_sequence()[-6], pp[-6].get_resname()
+    ...     print(pp.get_sequence())
+    ...     print("%s %s" % (pp.get_sequence()[0], pp[0].get_resname()))
+    ...     print("%s %s" % (pp.get_sequence()[-7], pp[-7].get_resname()))
+    ...     print("%s %s" % (pp.get_sequence()[-6], pp[-6].get_resname()))
     MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG
     M MSE
     M MSE
@@ -351,9 +351,9 @@ class _PPBuilder:
         for chain in chain_list:
             chain_it=iter(chain)
             try:
-                prev_res = chain_it.next()
+                prev_res = next(chain_it)
                 while not accept(prev_res, aa_only):
-                    prev_res = chain_it.next()
+                    prev_res = next(chain_it)
             except StopIteration:
                 #No interesting residues at all in this chain
                 continue
@@ -481,3 +481,4 @@ if __name__=="__main__":
         print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]["A"]):
         print(pp.get_sequence())
+
