@@ -3,16 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""
-This modules allows for asynchronous execution of Fdist and
-  spliting of loads.
+"""Asynchronous execution of Fdist and spliting of loads.
 
 FDistAsync Allows for the execution of FDist.
 
 SplitFDist splits a single Fdist execution in several, taking advantage
-    of multi-core architectures.
-
+of multi-core architectures.
 """
 
 import os

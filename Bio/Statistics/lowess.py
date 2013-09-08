@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module implements the Lowess function for nonparametric regression.
+"""Implements the Lowess function for nonparametric regression.
 
 Functions:
 lowess        Fit a smooth nonparametric regression curve to a scatterplot.

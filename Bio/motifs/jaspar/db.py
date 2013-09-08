@@ -2,10 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This modules requires MySQLdb to be installed.
+"""Provides read access to a JASPAR5 formatted database.
 
-Provides read access to a JASPAR5 formatted database.
+This modules requires MySQLdb to be installed.
 
 Example, substitute the your database credentials as
 appropriate:

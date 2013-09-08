@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with Medline.
+"""Code to work with Medline from the NCBI.
 
 Classes:
 Record           A dictionary holding Medline data.

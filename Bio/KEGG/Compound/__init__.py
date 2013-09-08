@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the KEGG Ligand/Compound database.
+"""Code to work with the KEGG Ligand/Compound database.
 
 Functions:
 parse - Returns an iterator giving Record objects.

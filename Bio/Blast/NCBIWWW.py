@@ -6,7 +6,8 @@
 # Patched by Brad Chapman.
 # Chris Wroe added modifications for work in myGrid
 
-"""
+"""Code to invoke the NCBI BLAST server over the internet.
+
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI.
 http://blast.ncbi.nlm.nih.gov/

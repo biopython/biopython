@@ -5,7 +5,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
+"""Classes for generic sequence alignment.
+
 Contains classes to deal with generic sequence alignment stuff not
 specific to a particular program or format.
 
