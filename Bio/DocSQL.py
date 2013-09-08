@@ -137,8 +137,8 @@ class IterationCursor(object):
         self.cursor = connection.cursor()
         self.row_class = query.row_class
         if query.diagnostics:
-            print >>sys.stderr, query.statement
-            print >>sys.stderr, query.params
+            sys.stderr.write("Query statement: %s\n" % query.statement)
+            sys.stderr.write("Query params: %s\n" % query.params)
         self.cursor.execute(query.statement, query.params)
 
     def next(self):

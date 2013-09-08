@@ -72,7 +72,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
              ["help", "usage", "pdb=", "output=", "input="])
     except getopt.GetoptError:
-        # print help information and exit:
+        # show help information and exit:
         usage()
         sys.exit(2)
 
@@ -95,8 +95,7 @@ def main():
             pdb_url = a
 
     if len(args) < 2:
-        print >> sys.stderr, \
-             "Not enough arguments. Try --help for more details."
+        sys.stderr.write("Not enough arguments. Try --help for more details.\n")
         sys.exit(2)
 
     raf_url = args[0]
@@ -124,7 +123,7 @@ def main():
             pdbid = id[1:5]
             s = pdbid[0:1]
             if s == '0' or s == 's':
-                print >> sys.stderr, "No coordinates for domain " + id
+                sys.stderr.write("No coordinates for domain %s\n" % id)
                 continue
 
             if output is None:
@@ -148,7 +147,7 @@ def main():
                     finally:
                         f.close()
                 except (IOError, KeyError, RuntimeError) as e:
-                    print >> sys.stderr, "I cannot do SCOP domain ", id, ":", e
+                    sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
             finally:
                 out_handle.close()
     finally:
