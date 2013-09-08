@@ -77,7 +77,7 @@ def test_blast_output(outfile):
     if 1:
         print("No parser specified.  I'll try to choose one for you based")
         print("on the format of the output file.")
-        print
+        print("")
 
         parser_class = choose_parser(outfile)
         print("It looks like you have given output that should be parsed")
@@ -88,7 +88,7 @@ def test_blast_output(outfile):
         raise NotImplementedError
         parser_class = NCBIWWW.BlastParser
         print("Using %s to parse the file." % parser_class.__name__)
-    print
+    print("")
 
     scanner_class = parser_class()._scanner.__class__
     consumer_class = parser_class()._consumer.__class__
@@ -108,11 +108,11 @@ def test_blast_output(outfile):
         print("Parsing succeeded, no problems detected.")
         print("However, you should check to make sure the following scanner")
         print("trace looks reasonable.")
-        print
+        print("")
         parser_class()._scanner.feed(
             open(outfile), ParserSupport.TaggingConsumer())
         return 0
-    print
+    print("")
 
     print("Alright.  Let me try and figure out where in the parser the")
     print("problem occurred...")
@@ -140,7 +140,7 @@ def test_blast_output(outfile):
         print("    %s" % err_text)
         print("This output caused an %s to be raised with the" % etype)
         print("information %r." % exception_info)
-    print
+    print("")
 
     print("Let me find the line in the file that triggers the problem...")
     parser = parser_class()
@@ -171,7 +171,7 @@ def test_blast_output(outfile):
         s = "%s%*d %s" % (prefix, ndigits, linenum, line)
         s = s[:80]
         print(s)
-    print
+    print("")
 
     if class_found == scanner_class:
         print("Problems in %s are most likely caused by changed formats." % \
@@ -180,7 +180,7 @@ def test_blast_output(outfile):
               (err_line, class_found.__module__))
         print("Perhaps the scanner needs to be made more lenient by accepting")
         print("the changed format?")
-        print
+        print("")
 
         if VERBOSITY <= 0:
             print("For more help, you can run this script in verbose mode")
@@ -188,7 +188,7 @@ def test_blast_output(outfile):
             print("identifies each line.")
         else:
             print("OK, let's see what the scanner's doing!")
-            print
+            print("")
             print("*" * 20 + " BEGIN SCANNER TRACE " + "*" * 20)
             try:
                 parser_class()._scanner.feed(
@@ -196,7 +196,7 @@ def test_blast_output(outfile):
             except etype as x:
                 pass
             print("*" * 20 + " END SCANNER TRACE " + "*" * 20)
-        print
+        print("")
 
     elif class_found == consumer_class:
         print("Problems in %s can be caused by two things:" % \
@@ -218,14 +218,14 @@ if __name__ == '__main__':
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "hpnov")
     except getopt.error as x:
-        print >>sys.stderr, x
+        sys.stderr.write("%s\n" % x)
         sys.exit(-1)
     if len(args) != 1:
-        print >>sys.stderr, USAGE
+        sys.stderr.write(USAGE)
         sys.exit(-1)
     TESTFILE, = args
     if not os.path.exists(TESTFILE):
-        print >>sys.stderr, "I could not find file: %s" % TESTFILE
+        sys.stderr.write("I could not find file: %s\n" % TESTFILE)
         sys.exit(-1)
 
     PROTEIN = NUCLEOTIDE = OUTPUT = None
@@ -244,9 +244,9 @@ if __name__ == '__main__':
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:
         OUTPUT = 1
-        #print >>sys.stderr, "Exactly one of -p, -n, or -o should be specified."
+        #sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
         #sys.exit(-1)
     if PROTEIN or NUCLEOTIDE:
-        print >>sys.stderr, "-p and -n not implemented yet"
+        sys.stderr.write("-p and -n not implemented yet\n")
         sys.exit(-1)
     test_blast_output(TESTFILE)

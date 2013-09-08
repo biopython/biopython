@@ -25,7 +25,7 @@ parser = GenBank.ErrorParser(feature_parser)
 handle = open(sys.argv[1], 'r')
 iterator = GenBank.Iterator(handle, parser, has_header=1)
 
-while 1:
+while True:
     have_record = 0
 
     while have_record == 0:
@@ -39,7 +39,7 @@ while 1:
     if cur_record is None:
         break
 
-    print "Successfully parsed record", cur_record.id
+    print("Successfully parsed record %s" % cur_record.id)
 
     if verbose:
         print("***Record")

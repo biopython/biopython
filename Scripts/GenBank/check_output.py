@@ -69,7 +69,7 @@ def write_format(file):
         if cur_record is None or compare_record is None:
             break
 
-        # print "\tTesting for %s" % cur_record.version
+        # print("\tTesting for %s" % cur_record.version)
 
         output_record = str(cur_record) + "\n"
         try:

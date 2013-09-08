@@ -5,7 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
+"""Download PDB Chemical Component Dictionary and generate dict.
+
 Download and parse PDB Chemical Component Dictionary,
 then write out dict for to_one_letter_code.
 """
@@ -42,7 +43,7 @@ fh = gzip.open(gzname, 'rb')
 
 # write extracted file to disk (not necessary)
 #with open(cifname, 'wb') as cifh:
-    #print "Extracting file..."
+    #print("Extracting file...")
     #cifh.write(fh.read())
 
 # The following code written by Hongbo Zhu

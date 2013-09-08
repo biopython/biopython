@@ -82,7 +82,7 @@ class BlastWorker(threading.Thread):
         del self.queue
 
     def run(self):
-        print 'running', self.com
+        print('running %s' % self.com)
         os.system(self.com)
         self.finished = 1
 

@@ -4,6 +4,7 @@
 # as part of this package.
 """Implementation of sequence motifs (PRIVATE).
 """
+
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
@@ -306,7 +307,7 @@ class Motif(object):
         min_o=-1
         d_s=[]
         for offset in range(-self.length+1,other.length):
-            #print "%2.3d"%offset,
+            #print("%2.3d"%offset)
             if offset<0:
                 d = self.dist_dpq_at(other,-offset)
                 overlap = self.length+offset
@@ -314,16 +315,16 @@ class Motif(object):
                 d = other.dist_dpq_at(self,offset)
                 overlap = other.length-offset
             overlap = min(self.length,other.length,overlap)
-            out = self.length+other.length-2*overlap
-            #print d,1.0*(overlap+out)/overlap,d*(overlap+out)/overlap
+            out = self.length+other.length - 2*overlap
+            #print("%f %f %f" % (d,1.0*(overlap+out)/overlap,d*(overlap+out)/overlap))
             #d = d/(2*overlap)
             d = (d/(out+overlap))*(2*overlap+out)/(2*overlap)
-            #print d
-            d_s.append((offset,d))
-            if min_d> d:
-                min_d=d
-                min_o=-offset
-        return min_d,min_o#,d_s
+            #print(d)
+            d_s.append((offset, d))
+            if min_d > d:
+                min_d = d
+                min_o = -offset
+        return min_d, min_o #,d_s
             
     def dist_dpq_at(self,other,offset):
         """
@@ -471,12 +472,12 @@ class Motif(object):
             #if there is a letter in the beginning, ignore it
             if ln[0]==i:
                 ln=ln[1:]
-            #print ln
+            #print(ln)
             try:
                 self.counts[i]=map(int,ln)
             except ValueError: #not integers
                 self.counts[i]=map(float,ln) #map(lambda s: int(100*float(s)),ln)
-            #print counts[i]
+            #print(counts[i])
         
         s = sum(self.counts[nuc][0] for nuc in letters)
         l = len(self.counts[letters[0]])
@@ -504,15 +505,15 @@ class Motif(object):
             for n in self.alphabet.letters:
                 col[i] = col[i]+ (n*(self.counts[n][i]))
             if len(col[i])<s:
-                print "WARNING, column too short",len(col[i]),s
+                print("WARNING, column too short %i %i" % (len(col[i]),s))
                 col[i]+=(alpha*s)[:(s-len(col[i]))]
-            #print i,col[i]
+            #print("column %i, %s" % (i, col[i]))
         #iterate over instances
         for i in range(s): 
             inst="" #start with empty seq
             for j in range(self.length): #iterate over positions
                 inst+=col[j][i]
-            #print i,inst
+            #print("%i %s" % (i,inst)
             inst=Seq(inst,self.alphabet)                
             self.add_instance(inst)
         return self.instances

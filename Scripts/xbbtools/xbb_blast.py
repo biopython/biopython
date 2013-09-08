@@ -99,7 +99,6 @@ class BlastIt:
 
     def Update(self):
         self.notepad.update()
-        #print '.',
         self.notepad.after(1, self.Update)
 
     def oldRun(self):
