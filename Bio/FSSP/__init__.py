@@ -91,7 +91,7 @@ class FSSPSumRec(object):
     def __init__(self, in_str):
         self.raw = in_str
         in_rec = in_str.strip().split()
-        # print in_rec
+        # print(in_rec)
         self.nr = int(in_rec[0][:-1])
         self.pdb1 = in_rec[1][:4]
         if len(in_rec[1]) == 4:
@@ -128,7 +128,7 @@ class FSSPSumRec(object):
 
 class FSSPAlignRec(object):
     def __init__(self, in_fff_rec):
-        # print in_fff_rec
+        # print(in_fff_rec)
         self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
         self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
         self.chain_id = in_fff_rec[fssp_rec.align.chain_id]
@@ -246,7 +246,7 @@ def read_fssp(fssp_handle):
             curline = fssp_handle.readline()
         if not alignments_title.match(curline):
             if equiv_title.match(curline):
-                # print "Reached equiv_title"
+                # print("Reached equiv_title")
                 break
             else:
                 raise ValueError('Bad FSSP file: no alignments title record found')

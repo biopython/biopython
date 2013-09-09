@@ -519,7 +519,7 @@ def read_text_matrix(data_file):
     alphabet = table[0]
     j = 0
     for rec in table[1:]:
-        # print j
+        # print(j)
         row = alphabet[j]
         # row = rec[0]
         if re.compile('[A-z\*]').match(rec[0]):
@@ -611,7 +611,7 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     sum_mat.make_entropy()
     mat_1.make_entropy()
     mat_2.make_entropy()
-    # print mat_1.entropy, mat_2.entropy
+    # print(mat_1.entropy, mat_2.entropy)
     dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
 
@@ -652,10 +652,10 @@ def two_mat_print(mat_1, mat_2, f=None, alphabet=None, factor_1=1, factor_2=1,
                     key = (i, j)
                 mat_2_key = [alphabet[len_alphabet-alphabet.index(key[0])-1],
                     alphabet[len_alphabet-alphabet.index(key[1])-1]]
-                # print mat_2_key
+                # print(mat_2_key)
                 mat_2_key.sort()
                 mat_2_key = tuple(mat_2_key)
-                # print key, "||",  mat_2_key
+                # print("%s||%s" % (key, mat_2_key)
                 print_mat[key] = mat_2[mat_2_key]
                 print_mat[(key[1], key[0])] = mat_1[key]
     for i in alphabet:

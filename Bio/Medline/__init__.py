@@ -107,9 +107,10 @@ def parse(handle):
         handle = open("mymedlinefile")
         records = Medline.parse(handle)
         for record in record:
-            print record['TI']
+            print(record['TI'])
 
     """
+    #TODO - Turn that into a working doctest
     # These keys point to string values
     textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
                 "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
@@ -161,8 +162,9 @@ def read(handle):
         from Bio import Medline
         handle = open("mymedlinefile")
         record = Medline.read(handle)
-        print record['TI']
+        print(record['TI'])
 
     """
+    #TODO - Turn that into a working doctest
     records = parse(handle)
     return records.next()

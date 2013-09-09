@@ -6,16 +6,17 @@
 Example,
 
 X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
-print X.count_amino_acids()
-print X.get_amino_acids_percent()
-print X.molecular_weight()
-print X.aromaticity()
-print X.instability_index()
-print X.flexibility()
-print X.isoelectric_point()
-print X.secondary_structure_fraction()
-print X.protein_scale(ProtParamData.kd, 9, 0.4)
+print(X.count_amino_acids())
+print(X.get_amino_acids_percent())
+print(X.molecular_weight())
+print(X.aromaticity())
+print(X.instability_index())
+print(X.flexibility())
+print(X.isoelectric_point())
+print(X.secondary_structure_fraction())
+print(X.protein_scale(ProtParamData.kd, 9, 0.4))
 """
+#TODO - Turn that into a working doctest
 
 import sys
 import ProtParamData  # Local

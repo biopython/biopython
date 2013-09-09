@@ -314,7 +314,7 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    #print url
+    #print(url)
     try:
         if post:
             handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))

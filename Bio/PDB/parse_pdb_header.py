@@ -155,7 +155,7 @@ def _parse_pdb_header_list(header):
         key = h[:6].strip()
         #tail=re.sub("\A\w+\s+\d*\s*","",h)
         tail = h[10:].strip()
-        # print key+":"+tail
+        # print("%s:%s" % (key, tail)
 
         # From here, all the keys from the header are being parsed
         if key=="TITLE":
@@ -193,7 +193,7 @@ def _parse_pdb_header_list(header):
         elif key=="SOURCE":
             tt=re.sub("\;\s*\Z","",_chop_end_codes(tail)).lower()
             tok=tt.split(":")
-            # print tok
+            # print(tok)
             if len(tok)>=2:
                 ckey=tok[0]
                 cval=re.sub("\A\s*","",tok[1])
@@ -227,7 +227,7 @@ def _parse_pdb_header_list(header):
             if rr is not None:
                 dict['release_date']=_format_date(_nice_case(rr.group()))
         elif key=="JRNL":
-            # print key,tail
+            # print("%s:%s" % (key, tail))
             if 'journal' in dict:
                 dict['journal']+=tail
             else:
@@ -245,10 +245,10 @@ def _parse_pdb_header_list(header):
                 try:
                     dict['resolution']=float(r)
                 except:
-                    #print 'nonstandard resolution',r
+                    #print('nonstandard resolution %r' % r)
                     dict['resolution']=None
         else:
-            # print key
+            # print(key)
             pass
     if dict['structure_method']=='unknown':
         if dict['resolution']>0.0:
