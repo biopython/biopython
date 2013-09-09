@@ -320,8 +320,6 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
         if not line.strip() == '# STOCKHOLM 1.0':
             raise ValueError("Did not find STOCKHOLM header")
-            #import sys
-            #print >> sys.stderr, 'Warning file does not start with STOCKHOLM 1.0'
 
         # Note: If this file follows the PFAM conventions, there should be
         # a line containing the number of sequences, e.g. "#=GF SQ 67"

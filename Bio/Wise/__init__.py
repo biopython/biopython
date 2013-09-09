@@ -98,13 +98,13 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
                                        quiet)
 
     if debug:
-        print >>sys.stderr, cmdline_str
+        sys.stderr.write("%s\n" % cmdline_str)
 
     status = os.system(cmdline_str) >> 8
 
     if status > 1:
         if kbyte != 0: # possible memory problem; could be None
-            print >>sys.stderr, "INFO trying again with the linear model"
+            sys.stderr.write("INFO trying again with the linear model\n")
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
             raise OSError("%s returned %s" % (" ".join(cmdline), status))
