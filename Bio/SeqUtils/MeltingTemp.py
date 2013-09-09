@@ -56,30 +56,30 @@ Examples:
     >>> from Bio.Seq import Seq
     >>> mystring = 'CGTTCCAAAGATGTGGGCATGAGCTTAC'
     >>> myseq = Seq(mystring)
-    >>> print '%0.2f' % mt.Tm_Wallace(mystring)
+    >>> print('%0.2f' % mt.Tm_Wallace(mystring))
     84.00
-    >>> print '%0.2f' % mt.Tm_Wallace(myseq)
+    >>> print('%0.2f' % mt.Tm_Wallace(myseq))
     84.00
-    >>> print '%0.2f' % mt.Tm_GC(myseq)
+    >>> print('%0.2f' % mt.Tm_GC(myseq))
     58.73
-    >>> print '%0.2f' % mt.Tm_NN(myseq)
+    >>> print('%0.2f' % mt.Tm_NN(myseq))
     60.32
 
 Tm_NN with default values gives same result as 'old' Tm_staluc. However, values
 differ for RNA, since Tm_staluc had some errors for RNA calculation. These
 errors have been fixed in this version.
-    
+
 New Tm_NN can do slightly more:
 Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
-    >>> print '%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1)  # Breslauer '86
+    >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1))  # Breslauer '86
     72.19
-    >>> print '%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN2)  # Sugimoto '96
+    >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN2))  # Sugimoto '96
     65.47
 
 Several types of salc correction (for Tm_NN and Tm_GC):
     >>> for saltcorr in range(1,8):
-    ...     print 'Type: %d,' % saltcorr,
-    ...     print 'Tm: %0.2f' % mt.Tm_NN(myseq, saltcorr=saltcorr)
+    ...     print('Type: %d,' % saltcorr),
+    ...     print('Tm: %0.2f' % mt.Tm_NN(myseq, saltcorr=saltcorr))
     ...
     Type: 1, Tm: 54.27
     Type: 2, Tm: 54.02
@@ -91,14 +91,14 @@ Several types of salc correction (for Tm_NN and Tm_GC):
 
 Correction for other monovalent cations (K+, Tris), Mg2+ and dNTPs according
 to von Ahsen et al. (2001) or Owczarzy et al. (2008) (for Tm_NN and Tm_GC):
-    >>> print '%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10)
+    >>> print('%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10))
     60.79
-    >>> print '%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5)
+    >>> print('%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5))
     67.39
-    >>> print '%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5, saltcorr=7)
+    >>> print('%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5, saltcorr=7))
     66.81
-    >>> print '%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5, dNTPs=0.6,
-    ...                          saltcorr=7)
+    >>> print('%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5, dNTPs=0.6,
+    ...                          saltcorr=7))
     66.04
 
 Dangling ends and mismatches, e.g.:
@@ -106,13 +106,13 @@ Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC         CGTTCCaAAGATGTGGGCATGAGCTTAC
            ::::::X:::::::::::::::::::::   or    ::::::X:::::::::::::::::::::
 Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
 
-    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC')
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC'))
     60.32
-    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
-    ...                    c_seq='GCAAGGCTTCTACACCCGTACTCGAATG')
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
+    ...                    c_seq='GCAAGGCTTCTACACCCGTACTCGAATG'))
     55.39
-    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC', shift=1,
-    ...                   c_seq='TGCAAGGCTTCTACACCCGTACTCGAATGC')
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC', shift=1,
+    ...                   c_seq='TGCAAGGCTTCTACACCCGTACTCGAATGC'))
     55.69
 
 Make your own tables, or update/extend existing tables. E.g., add values for
@@ -121,10 +121,10 @@ by '1':
     >>> mytable = mt.make_table(oldtable=mt.DNA_NN3,
     ...                         values={'A1/T1':(-6.608, -17.235),
     ...                         '1A/1T':(-6.893, -15.923)})
-    >>> print '%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC')
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC'))
     60.32
-    >>> print '%0.2f' % mt.Tm_NN('CGTTCCA1AGATGTGGGCATGAGCTTAC',
-    ...                           nn_table=mytable, check=False)
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCA1AGATGTGGGCATGAGCTTAC',
+    ...                           nn_table=mytable, check=False))
     ... # 'check' must be False, otherwise '1' would be discarded
     62.53
 
@@ -360,17 +360,17 @@ def make_table(oldtable=None, values=None):
 
     >>> from Bio.SeqUtils.MeltingTemp import make_table, DNA_NN2
     >>> table = DNA_NN2                               # Sugimoto '96
-    >>> table['init']
-    (0.6, -9.0)
-    >>> newtable = make_table(oldtable=DNA_NN2, values={'init': (0, 0), 
+    >>> table['init_A/T']
+    (0, 0)
+    >>> newtable = make_table(oldtable=DNA_NN2, values={'init': (0, 0),
     ...                       'init_A/T': (2.3, 4.1),
     ...                       'init_G/C': (0.1, -2.8)})
-    >>> newtable['init']
-    (0, 0)
+    >>> newtable['init_A/T']
+    (2.3, 4.1)
 
     """
     if oldtable is None:
-        table = {'init': (0, 0), 'initA/T': (0, 0), 'initG/C': (0, 0),
+        table = {'init': (0, 0), 'init_A/T': (0, 0), 'init_G/C': (0, 0),
                  'init_oneG/C': (0, 0), 'init_allA/T': (0, 0),
                  'init_5T/A': (0, 0), 'sym': (0, 0), 'AA/TT': (0, 0),
                  'AT/TA': (0, 0), 'TA/AT': (0, 0), 'CA/GT': (0, 0),
@@ -458,14 +458,14 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     Examples:
         >>> from Bio.SeqUtils import MeltingTemp as mt
-        >>> print '%0.2f' % mt.salt_correction(Na=50, method=1)
+        >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
         -21.60
-        >>> print '%0.2f' % mt.salt_correction(Na=50, method=2)
+        >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
         -21.85
-        >>> print '%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2)
+        >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
         -16.45
-        >>> print '%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5,
-        ...                                    method=2)
+        >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5,
+        ...                                    method=2))
         -10.99
 
     """
@@ -474,7 +474,6 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
                          'GC content or sequence length).')
     if seq:
         seq = str(seq)
-    #print 'Method: ' + str(method)
     corr = 0
     if not method:
         return corr
@@ -487,7 +486,6 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
             # [Mg2+], free Mg2+ is considered not to be relevant.
             Mon += 120*math.sqrt(Mg-dNTPs)
     mon = Mon*1e-3
-    #print 'Mon: ' + str(Mon)
     # Note: math.log = ln(), math.log10 = log()
     if method in range(1, 7) and not mon:
         raise ValueError('Total ion concentration of zero is not allowed in ' +
@@ -503,8 +501,8 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     if method == 5:
         corr = 0.368 * (len(seq)-1) * math.log(mon)
     if method == 6:
-        corr = (4.29*SeqUtils.GC(seq)/100 - 3.95) * \
-               1e-5*math.log(mon) + 9.40e-6*math.log(mon)**2
+        corr = (4.29*SeqUtils.GC(seq)/100 - 3.95) * 1e-5*math.log(mon) + \
+               9.40e-6*math.log(mon)**2
     if method == 7:
         a, b, c, d = 3.92, -0.911, 6.26, 1.42
         e, f, g = -48.2, 52.5, 8.31
@@ -516,8 +514,6 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
                   math.sqrt((ka*dntps - ka*mg + 1.0)**2 + 4.0*ka*mg))/(2.0*ka)
         if Mon > 0:
             R = math.sqrt(mg)/mon
-            #print 'R: ' + str(R)
-            #print '%GC: ' + str(SeqUtils.GC(seq)/100)
             if R < 0.22:
                 corr = (4.29*SeqUtils.GC(seq)/100 - 3.95) * \
                        1e-5*math.log(mon) + 9.40e-6*math.log(mon)**2
@@ -561,12 +557,12 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> mt.chem_correction(70)
         70
-        >>> print '%0.2f' % mt.chem_correction(70, DMSO=3)
+        >>> print('%0.2f' % mt.chem_correction(70, DMSO=3))
         67.75
-        >>> print '%0.2f' % mt.chem_correction(70, fmd=5)
+        >>> print('%0.2f' % mt.chem_correction(70, fmd=5))
         66.75
-        >>> print '%0.2f' % mt.chem_correction(70, fmdmethod=2, fmd=1.25,
-        ...                                    GC=50)
+        >>> print('%0.2f' % mt.chem_correction(70, fmdmethod=2, fmd=1.25,
+        ...                                    GC=50))
         66.68
 
     """
@@ -638,8 +634,8 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
     in the sequence. Note that this mismatch correction is a rough estimate.
 
     >>> from Bio.SeqUtils import MeltingTemp as mt
-    >>> round (mt.Tm_GC('CTGCTGATXGCACGAGGTTATGG', valueset=2), 2)
-    69.2
+    >>> print("%0.2f" % mt.Tm_GC('CTGCTGATXGCACGAGGTTATGG', valueset=2))
+    69.20
 
     Arguments:
     valueset: A few often cited variants are included:
@@ -880,11 +876,9 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     if SeqUtils.GC(seq) == 0:
         deltaH += nn_table['init_allA/T'][dH]
         deltaS += nn_table['init_allA/T'][dS]
-        #print 'Init all_AT: ' + str(deltaH) + ', ' + str(deltaS)
     else:
         deltaH += nn_table['init_oneG/C'][dH]
         deltaS += nn_table['init_oneG/C'][dS]
-        #print 'Init one_GC: ' + str(deltaH) + ', ' + str(deltaS)
 
     # Type: Penalty if 5' end is T
     if seq.startswith('T'):
@@ -902,7 +896,6 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     deltaS += nn_table['init_A/T'][dS] * AT
     deltaH += nn_table['init_G/C'][dH] * GC
     deltaS += nn_table['init_G/C'][dS] * GC
-    #print 'Init total: ' + str(deltaH) + ', ' + str(deltaS)
 
     # Finally, the 'zipping'
     for basenumber in range(len(tmpseq)-1):
@@ -935,20 +928,16 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
         deltaH += nn_table['sym'][dH]
         deltaS += nn_table['sym'][dS]
     R = 1.987  # universal gas constant in Cal/degrees C*Mol
-    #print 'dH: ' + str(deltaH)
-    #print 'dS bsc: ' + str(deltaS)
     if saltcorr:
         corr = salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs,
                                method=saltcorr, seq=seq)
     if saltcorr == 5:
         deltaS += corr
-        #print 'dS asc: ' + str(deltaS)
     Tm = (1000*deltaH)/(deltaS + (R*(math.log(k)))) - 273.15
     if saltcorr in (1, 2, 3, 4):
         Tm += corr
     if saltcorr in (6, 7):
         # Tm = 1/(1/Tm + corr)
-        #print Tm
         Tm = (1/(1/(Tm+273.15) + corr)-273.15)
 
     return Tm
@@ -970,9 +959,9 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
 
     Example:
 
-    >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA')
+    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
     59.87
-    >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True)
+    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True))
     77.90
 
     """
@@ -989,13 +978,13 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     else:
         raise ValueError("rna=%r not supported" % rna)
 
-    
+
 def _test():
     """Run the module's doctests (PRIVATE)."""
     import doctest
-    print "Running doctests..."
+    print("Running doctests...")
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()
