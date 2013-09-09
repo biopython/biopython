@@ -60,7 +60,7 @@ def get_yes_or_no(question, default):
         default_str = 'n'
 
     while True:
-        print ("%s %s:" % (question, option_str))
+        print("%s %s:" % (question, option_str))
         if sys.version_info[0] == 3:
             response = input().lower()
         else:
@@ -69,7 +69,7 @@ def get_yes_or_no(question, default):
             response = default_str
         if response[0] in ['y', 'n']:
             break
-        print ("Please answer y or n.")
+        print("Please answer y or n.")
     return response[0] == 'y'
 
 
@@ -169,7 +169,7 @@ def check_dependencies():
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
-    print ("""
+    print("""
 Numerical Python (NumPy) is not installed.
 
 This package is required for many Biopython features.  Please install
