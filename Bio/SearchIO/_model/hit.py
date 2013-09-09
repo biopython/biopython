@@ -28,7 +28,7 @@ class Hit(_BaseSearchObject):
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
     >>> hit = qresult[3]
-    >>> print hit
+    >>> print(hit)
     Query: 33211
            mir_1
       Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -57,7 +57,7 @@ class Hit(_BaseSearchObject):
     Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
     >>> hit[:1]
     Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 hsps)
-    >>> print hit[1:]
+    >>> print(hit[1:])
     Query: 33211
            mir_1
       Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -80,7 +80,7 @@ class Hit(_BaseSearchObject):
     2
     >>> len(filtered_hit)
     1
-    >>> print filtered_hit
+    >>> print(filtered_hit)
     Query: 33211
            mir_1
       Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -321,7 +321,7 @@ class Hit(_BaseSearchObject):
         2
         >>> len(filtered_hit)
         1
-        >>> print filtered_hit
+        >>> print(filtered_hit)
         Query: 33211
                mir_1
           Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -404,3 +404,4 @@ class Hit(_BaseSearchObject):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

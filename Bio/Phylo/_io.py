@@ -44,7 +44,7 @@ def parse(file, format, **kwargs):
 
     >>> trees = parse('../../Tests/PhyloXML/apaf.xml', 'phyloxml')
     >>> for tree in trees:
-    ...     print tree.rooted
+    ...     print(tree.rooted)
     True
     """
     with File.as_handle(file, 'r') as fp:
@@ -86,3 +86,4 @@ def convert(in_file, in_format, out_file, out_format, parse_args={}, **kwargs):
     """Convert between two tree file formats."""
     trees = parse(in_file, in_format, **parse_args)
     return write(trees, out_file, out_format, **kwargs)
+

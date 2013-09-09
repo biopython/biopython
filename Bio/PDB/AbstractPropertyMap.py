@@ -99,7 +99,7 @@ class AbstractPropertyMap(object):
 
         Example:
             >>> for (res, property) in iter(map):
-            ...     print res, property
+            ...     print(res, property)
 
         @return: iterator
         """
@@ -133,3 +133,4 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
         if isinstance(res_id, int):
             ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
         return ent_id
+

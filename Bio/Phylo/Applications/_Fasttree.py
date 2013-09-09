@@ -38,10 +38,10 @@ class FastTreeCommandline(AbstractCommandline):
     >>> import _Fasttree
     >>> fasttree_exe = r"C:\FasttreeWin32\fasttree.exe"
     >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input=r'C:\Input\ExampleAlignment.fsa', out='C:\Output\ExampleTree.tree')
-    >>> print cmd
+    >>> print(cmd)
     >>> out, err = cmd()
-    >>> print out
-    >>> print err
+    >>> print(out)
+    >>> print(err)
 
     Usage advice:
     the only parameters needed are (fasttree_exe, input='<InputFile>' out='<OutputFile>')
@@ -500,3 +500,4 @@ class FastTreeCommandline(AbstractCommandline):
                 ]
 
         AbstractCommandline.__init__(self, cmd, **kwargs)
+

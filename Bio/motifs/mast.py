@@ -22,10 +22,10 @@ class Record(list):
     >>> from Bio import motifs
     >>> record = motifs.parse(f, 'MAST')
     >>> motif = record[0]
-    >>> print motif.name
+    >>> print(motif.name)
     1
     >>> motif = record['1']
-    >>> print motif.name
+    >>> print(motif.name)
     1
     """
 
@@ -159,3 +159,4 @@ def __read_section_iii(record, handle):
     for line in handle:
         if line.strip():
             break
+

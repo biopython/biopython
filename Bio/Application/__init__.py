@@ -59,7 +59,7 @@ class ApplicationError(_ProcessCalledError):
     >>> err = ApplicationError(-11, "helloworld", "", "Some error text")
     >>> err.returncode, err.cmd, err.stdout, err.stderr
     (-11, 'helloworld', '', 'Some error text')
-    >>> print err
+    >>> print(err)
     Command 'helloworld' returned non-zero exit status -11, 'Some error text'
 
     """
@@ -134,7 +134,7 @@ class AbstractCommandline(object):
     >>> water_cmd.asequence = "asis:ACCCGGGCGCGGT"
     >>> water_cmd.bsequence = "asis:ACCCGAGCGCGGT"
     >>> water_cmd.outfile = "temp_water.txt"
-    >>> print water_cmd
+    >>> print(water_cmd)
     water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
     >>> water_cmd
     WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
@@ -156,7 +156,7 @@ class AbstractCommandline(object):
     ...                              asequence="asis:ACCCGGGCGCGGT",
     ...                              bsequence="asis:ACCCGAGCGCGGT",
     ...                              outfile="temp_water.txt")
-    >>> print water_cmd
+    >>> print(water_cmd)
     "C:\Program Files\EMBOSS\water.exe" -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
 
     Notice that since the path name includes a space it has automatically
@@ -264,7 +264,7 @@ class AbstractCommandline(object):
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
-        >>> print cline
+        >>> print(cline)
         water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> str(cline)
         'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5'
@@ -286,7 +286,7 @@ class AbstractCommandline(object):
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
-        >>> print cline
+        >>> print(cline)
         water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
@@ -386,7 +386,7 @@ class AbstractCommandline(object):
         Traceback (most recent call last):
         ...
         ValueError: Option name csequence was not found.
-        >>> print cline
+        >>> print(cline)
         water -stdout -asequence=a.fasta -bsequence=b.fasta -gapopen=10 -gapextend=0.5
 
         This workaround uses a whitelist of object attributes, and sets the
@@ -675,9 +675,9 @@ def _escape_filename(filename):
 
     Note this will not add quotes if they are already included:
 
-    >>> print _escape_filename('example with spaces')
+    >>> print(_escape_filename('example with spaces'))
     "example with spaces"
-    >>> print _escape_filename('"example with spaces"')
+    >>> print(_escape_filename('"example with spaces"'))
     "example with spaces"
     """
     #Is adding the following helpful
@@ -711,3 +711,4 @@ def _test():
 if __name__ == "__main__":
     #Run the doctests
     _test()
+

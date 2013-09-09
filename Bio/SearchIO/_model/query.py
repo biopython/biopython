@@ -31,7 +31,7 @@ class QueryResult(_BaseSearchObject):
 
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-    >>> print qresult
+    >>> print(qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -77,7 +77,7 @@ class QueryResult(_BaseSearchObject):
     100
     >>> len(sliced_qresult)
     3
-    >>> print sliced_qresult
+    >>> print(sliced_qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -134,7 +134,7 @@ class QueryResult(_BaseSearchObject):
     ...     hit.id = hit.id.split('|')[3]
     ...     return hit
     >>> mapped_qresult = qresult.hit_map(renamer)
-    >>> print mapped_qresult
+    >>> print(mapped_qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -476,7 +476,7 @@ class QueryResult(_BaseSearchObject):
         >>> filtered = qresult.hit_filter(desc_filter)
         >>> len(filtered)
         39
-        >>> print filtered[:4]
+        >>> print(filtered[:4])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -516,7 +516,7 @@ class QueryResult(_BaseSearchObject):
 
         >>> from Bio import SearchIO
         >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-        >>> print qresult[:8]
+        >>> print(qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -535,7 +535,7 @@ class QueryResult(_BaseSearchObject):
 
         >>> top_hsp = lambda hit: hit[:1]
         >>> mapped_qresult = qresult.hit_map(top_hsp)
-        >>> print mapped_qresult[:8]
+        >>> print(mapped_qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -611,8 +611,8 @@ class QueryResult(_BaseSearchObject):
         >>> len(qresult)
         100
         >>> for hit in qresult[:5]:
-        ...     print hit.id
-        ...
+        ...     print(hit.id)
+        ... 
         gi|262205317|ref|NR_030195.1|
         gi|301171311|ref|NR_035856.1|
         gi|270133242|ref|NR_032573.1|
@@ -711,3 +711,4 @@ class QueryResult(_BaseSearchObject):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

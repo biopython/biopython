@@ -26,7 +26,7 @@ appropriate:
     >>> 
     >>> 
     >>> ets1 = jdb.fetch_motif_by_id('MA0098')
-    >>> print ets1
+    >>> print(ets1)
     TF name ETS1
     Matrix ID   MA0098.1
     Collection  CORE
@@ -729,3 +729,4 @@ class JASPAR5(object):
             return True
 
         return False
+

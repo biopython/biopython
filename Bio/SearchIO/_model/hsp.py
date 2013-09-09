@@ -45,7 +45,7 @@ class HSP(_BaseHSP):
     >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
     >>> blast_hsp
     HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
-    >>> print blast_hsp
+    >>> print(blast_hsp)
           Query: 33211 mir_1
             Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
     Query range: [1:61] (1)
@@ -66,7 +66,7 @@ class HSP(_BaseHSP):
     >>> blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
     >>> blat_hsp
     HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
-    >>> print blat_hsp
+    >>> print(blat_hsp)
           Query: blat_1 <unknown description>
             Hit: chr11 <unknown description>
     Query range: [42:67] (-1)
@@ -93,7 +93,7 @@ class HSP(_BaseHSP):
     access a single fragment in an HSP using its integer index:
 
     >>> blat_fragment = blat_hsp[0]
-    >>> print blat_fragment
+    >>> print(blat_fragment)
           Query: blat_1 <unknown description>
             Hit: chr11 <unknown description>
     Query range: [61:67] (-1)
@@ -105,7 +105,7 @@ class HSP(_BaseHSP):
     This applies to HSPs objects with a single fragment as well:
 
     >>> blast_fragment = blast_hsp[0]
-    >>> print blast_fragment
+    >>> print(blast_fragment)
           Query: 33211 mir_1
             Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
     Query range: [1:61] (1)
@@ -630,7 +630,7 @@ class HSPFragment(_BaseHSP):
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
     >>> fragment = qresult[0][0][0]   # first hit, first hsp, first fragment
-    >>> print fragment
+    >>> print(fragment)
           Query: 33211 mir_1
             Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
     Query range: [0:61] (1)
@@ -643,7 +643,7 @@ class HSPFragment(_BaseHSP):
     # the query sequence is a SeqRecord object
     >>> fragment.query.__class__
     <class 'Bio.SeqRecord.SeqRecord'>
-    >>> print fragment.query
+    >>> print(fragment.query)
     ID: 33211
     Name: aligned query sequence
     Description: mir_1
@@ -653,7 +653,7 @@ class HSPFragment(_BaseHSP):
     # the hit sequence is a SeqRecord object as well
     >>> fragment.hit.__class__
     <class 'Bio.SeqRecord.SeqRecord'>
-    >>> print fragment.hit
+    >>> print(fragment.hit)
     ID: gi|262205317|ref|NR_030195.1|
     Name: aligned hit sequence
     Description: Homo sapiens microRNA 520b (MIR520B), microRNA
@@ -663,7 +663,7 @@ class HSPFragment(_BaseHSP):
     # when both query and hit are present, we get a MultipleSeqAlignment object
     >>> fragment.aln.__class__
     <class 'Bio.Align.MultipleSeqAlignment'>
-    >>> print fragment.aln
+    >>> print(fragment.aln)
     DNAAlphabet() alignment with 2 rows and 61 columns
     CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 33211
     CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
@@ -1067,3 +1067,4 @@ class HSPFragment(_BaseHSP):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

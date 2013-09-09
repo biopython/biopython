@@ -19,7 +19,7 @@ def read(handle):
     >>> record = MEME.parse(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
-    ...         print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
+    ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
 
     """
     record = Record()
@@ -98,10 +98,10 @@ class Record(list):
     >>> from Bio import motifs
     >>> record = motifs.parse(f, 'MEME')
     >>> motif = record[0]
-    >>> print motif.name
+    >>> print(motif.name)
     Motif 1
     >>> motif = record['Motif 1']
-    >>> print motif.name
+    >>> print(motif.name)
     Motif 1
     """
 
@@ -321,3 +321,4 @@ def __skip_unused_lines(handle):
         raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
     if not line.startswith('***'):
         raise ValueError("Line does not start with '***':\n%s" % line)
+

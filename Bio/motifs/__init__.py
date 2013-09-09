@@ -40,7 +40,7 @@ def parse(handle, format):
 
     >>> from Bio import motifs
     >>> for m in motifs.parse(open("Motif/alignace.out"),"AlignAce"):
-    ...     print m.consensus
+    ...     print(m.consensus)
     TCTACGATTGAG
     CTGCAGCTAGCTACGAGTGAG
     GTGCTCTAAGCATAGTAGGCG
@@ -517,3 +517,4 @@ def write(motifs, format):
         return transfac.write(motifs)
     else:
         raise ValueError("Unknown format type %s" % format)
+

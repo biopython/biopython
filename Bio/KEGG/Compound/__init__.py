@@ -133,8 +133,8 @@ def parse(handle):
 
     >>> handle = open("KEGG/compound.sample")
     >>> for record in parse(handle):
-    ...     print record.entry, record.name[0]
-    ...
+    ...     print("%s %s" % (record.entry, record.name[0]))
+    ... 
     C00023 Iron
     C00017 Protein
     C00099 beta-Alanine
@@ -203,3 +203,4 @@ def parse(handle):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+
