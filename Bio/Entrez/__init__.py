@@ -57,7 +57,7 @@ parse        Parses the XML results returned by those of the above functions
              >>> records = Entrez.parse(handle)
              >>> for record in records:
              ...     # each record is a Python dictionary or list.
-             ...     print record['MedlineCitation']['Article']['ArticleTitle']
+             ...     print(record['MedlineCitation']['Article']['ArticleTitle'])
              Biopython: freely available Python tools for computational molecular biology and bioinformatics.
              PDB file parser and structure class implemented in Python.
              >>> handle.close()
@@ -118,7 +118,7 @@ def efetch(db, **keywords):
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
     >>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
-    >>> print handle.readline().strip()
+    >>> print(handle.readline().strip())
     LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
     >>> handle.close()
 
@@ -205,7 +205,7 @@ def elink(**keywds):
     >>> handle = Entrez.elink(dbfrom="pubmed", id=pmid, linkname="pubmed_pubmed")
     >>> record = Entrez.read(handle)
     >>> handle.close()
-    >>> print record[0]["LinkSetDb"][0]["LinkName"]
+    >>> print(record[0]["LinkSetDb"][0]["LinkName"])
     pubmed_pubmed
     >>> linked = [link["Id"] for link in record[0]["LinkSetDb"][0]["Link"]]
     >>> "17121776" in linked
@@ -267,9 +267,9 @@ def esummary(**keywds):
     >>> handle = Entrez.esummary(db="journals", id="30367")
     >>> record = Entrez.read(handle)
     >>> handle.close()
-    >>> print record[0]["Id"]
+    >>> print(record[0]["Id"])
     30367
-    >>> print record[0]["Title"]
+    >>> print(record[0]["Title"])
     Computational biology and chemistry
 
     """
@@ -303,7 +303,7 @@ def egquery(**keywds):
     >>> handle.close()
     >>> for row in record["eGQueryResult"]:
     ...     if "pmc" in row["DbName"]:
-    ...         print row["Count"] > 60
+    ...         print(row["Count"] > 60)
     True
 
     """
@@ -330,9 +330,9 @@ def espell(**keywds):
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
     >>> record = Entrez.read(Entrez.espell(term="biopythooon"))
-    >>> print record["Query"]
+    >>> print(record["Query"])
     biopythooon
-    >>> print record["CorrectedQuery"]
+    >>> print(record["CorrectedQuery"])
     biopython
 
     """

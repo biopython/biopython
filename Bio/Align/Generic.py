@@ -45,7 +45,7 @@ class Alignment(object):
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
-        >>> print align
+        >>> print(align)
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
@@ -85,7 +85,7 @@ class Alignment(object):
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
-        >>> print align
+        >>> print(align)
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
@@ -142,7 +142,7 @@ class Alignment(object):
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
-        >>> print align.format("fasta")
+        >>> print(align.format("fasta"))
         >Alpha
         ACTGCTAGCTAG
         >Beta
@@ -150,7 +150,7 @@ class Alignment(object):
         >Gamma
         ACTGCTAGATAG
         <BLANKLINE>
-        >>> print align.format("phylip")
+        >>> print(align.format("phylip"))
          3 12
         Alpha      ACTGCTAGCT AG
         Beta       ACT-CTAGCT AG
@@ -209,8 +209,8 @@ class Alignment(object):
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> for record in align:
-        ...    print record.id
-        ...    print record.seq
+        ...    print(record.id)
+        ...    print(record.seq)
         Alpha
         ACTGCTAGCTAG
         Beta
@@ -370,17 +370,17 @@ class Alignment(object):
         index (think of the alignment as a list of SeqRecord objects here):
 
         >>> first_record = align[0]
-        >>> print first_record.id, first_record.seq
+        >>> print("%s %s" % (first_record.id, first_record.seq))
         Alpha ACTGCTAGCTAG
         >>> last_record = align[-1]
-        >>> print last_record.id, last_record.seq
+        >>> print("%s %s" % (last_record.id, last_record.seq))
         Epsilon ACTGCTTGATAG
 
         You can also access use python's slice notation to create a sub-alignment
         containing only some of the SeqRecord objects:
 
         >>> sub_alignment = align[2:5]
-        >>> print sub_alignment
+        >>> print(sub_alignment)
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
         ACTGCTAGATAG Gamma
         ACTGCTTGCTAG Delta
@@ -390,7 +390,7 @@ class Alignment(object):
         can be used to select every second sequence:
 
         >>> sub_alignment = align[::2]
-        >>> print sub_alignment
+        >>> print(sub_alignment)
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACTGCTAGATAG Gamma
@@ -399,7 +399,7 @@ class Alignment(object):
         Or to get a copy of the alignment with the rows in reverse order:
 
         >>> rev_alignment = align[::-1]
-        >>> print rev_alignment
+        >>> print(rev_alignment)
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 5 rows and 12 columns
         ACTGCTTGATAG Epsilon
         ACTGCTTGCTAG Delta

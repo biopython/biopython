@@ -21,7 +21,7 @@ class XXmotifCommandline(AbstractCommandline):
     >>> out_dir = "results"
     >>> in_file = "sequences.fasta"
     >>> xxmotif_cline = XXmotifCommandline(outdir=out_dir, seqfile=in_file, revcomp=True)
-    >>> print xxmotif_cline
+    >>> print(xxmotif_cline)
     XXmotif results sequences.fasta --revcomp
 
     You would typically run the command line with xxmotif_cline() or via

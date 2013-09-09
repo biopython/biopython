@@ -23,7 +23,7 @@ class DialignCommandline(AbstractCommandline):
     >>> from Bio.Align.Applications import DialignCommandline
     >>> dialign_cline = DialignCommandline(input="unaligned.fasta",
     ...                                    fn="aligned", fa=True)
-    >>> print dialign_cline
+    >>> print(dialign_cline)
     dialign2-2 -fa -fn aligned unaligned.fasta
 
     You would typically run the command line with dialign_cline() or via

@@ -61,7 +61,7 @@ def parse(handle,format):
 
     >>> from Bio import Motif
     >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
-    ...     print motif.consensus()
+    ...     print(motif.consensus())
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
     GTGCCCTAAGCATACTAGGCG

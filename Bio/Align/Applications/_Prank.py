@@ -27,7 +27,7 @@ class PrankCommandline(AbstractCommandline):
     ...                                o="aligned", #prefix only!
     ...                                f=8, #FASTA output
     ...                                notree=True, noxml=True)
-    >>> print prank_cline
+    >>> print(prank_cline)
     prank -d=unaligned.fasta -o=aligned -f=8 -noxml -notree
 
     You would typically run the command line with prank_cline() or via

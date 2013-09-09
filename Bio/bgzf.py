@@ -93,13 +93,13 @@ standard Python library gzip) because they contain a function called open
 i.e. Suppose you do this:
 
 >>> from Bio.bgzf import *
->>> print open.__module__
+>>> print(open.__module__)
 Bio.bgzf
 
 Or,
 
 >>> from gzip import *
->>> print open.__module__
+>>> print(open.__module__)
 gzip
 
 Notice that the open function has been replaced. You can "fix" this if you
@@ -110,7 +110,7 @@ need to by importing the built-in open function:
 However, what we recommend instead is to use the explicit namespace, e.g.
 
 >>> from Bio import bgzf
->>> print bgzf.open.__module__
+>>> print(bgzf.open.__module__)
 Bio.bgzf
 
 
@@ -136,20 +136,20 @@ attention to the file offsets which will be explained below:
 
 >>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "r")
 >>> assert 0 == handle.tell()
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
 LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009
 >>> assert 80 == handle.tell()
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
 DEFINITION  Arabidopsis thaliana chloroplast, complete genome.
 >>> assert 143 == handle.tell()
 >>> data = handle.read(70000)
 >>> assert 987828735 == handle.tell()
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
 f="GeneID:844718"
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
      CDS             complement(join(84337..84771,85454..85843))
 >>> offset = handle.seek(make_virtual_offset(55074, 126))
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
     68521 tatgtcattc gaaattgtat aaagacaact cctatttaat agagctattt gtgcaagtat
 >>> handle.close()
 
@@ -158,7 +158,7 @@ brings us to the key point about BGZF, which is the block structure:
 
 >>> handle = open("GenBank/NC_000932.gb.bgz", "rb")
 >>> for values in BgzfBlocks(handle):
-...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
 Raw start 0, raw length 15073; data start 0, data length 65536
 Raw start 15073, raw length 17857; data start 65536, data length 65536
 Raw start 32930, raw length 22144; data start 131072, data length 65536
@@ -187,9 +187,9 @@ does not always hold) and starting at byte 126 of the fourth block
 offset of 55074 and the offset within the block of 126 to get the
 BGZF virtual offset.
 
->>> print 55074 << 16 | 126
+>>> print(55074 << 16 | 126)
 3609329790
->>> print bgzf.make_virtual_offset(55074, 126)
+>>> print(bgzf.make_virtual_offset(55074, 126))
 3609329790
 
 Thus for this BGZF file, decompressed position 196734 corresponds
@@ -216,7 +216,7 @@ you want to index BGZF compressed sequence files:
 >>> handle = BgzfReader("GenBank/NC_000932.gb.bgz")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
->>> print record.id
+>>> print(record.id)
 NC_000932.1
 
 """
@@ -320,7 +320,7 @@ def BgzfBlocks(handle):
     >>> from __builtin__ import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 18239; data start 0, data length 65536
     Raw start 18239, raw length 18223; data start 65536, data length 65536
     Raw start 36462, raw length 18017; data start 131072, data length 65536
@@ -342,7 +342,7 @@ def BgzfBlocks(handle):
 
     >>> handle = open("SamBam/ex1_refresh.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 53; data start 0, data length 38
     Raw start 53, raw length 18195; data start 38, data length 65434
     Raw start 18248, raw length 18190; data start 65472, data length 65409
@@ -361,7 +361,7 @@ def BgzfBlocks(handle):
 
     >>> handle = open("SamBam/ex1_header.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 104; data start 0, data length 103
     Raw start 104, raw length 18195; data start 103, data length 65434
     Raw start 18299, raw length 18190; data start 65537, data length 65409
@@ -441,7 +441,7 @@ class BgzfReader(object):
     >>> from __builtin__ import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 18239; data start 0, data length 65536
     Raw start 18239, raw length 18223; data start 65536, data length 65536
     Raw start 36462, raw length 18017; data start 131072, data length 65536

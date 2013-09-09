@@ -26,7 +26,7 @@ def SimpleFastaParser(handle):
     identifier (the first word) and comment or description.
 
     >>> for values in SimpleFastaParser(open("Fasta/dups.fasta")):
-    ...     print values
+    ...     print(values)
     ('alpha', 'ACGTA')
     ('beta', 'CGTC')
     ('gamma', 'CCGCC')
@@ -84,7 +84,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     with no custom handling of the title lines:
 
     >>> for record in FastaIterator(open("Fasta/dups.fasta")):
-    ...     print record.id
+    ...     print(record.id)
     alpha
     beta
     gamma
@@ -96,7 +96,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     >>> def take_upper(title):
     ...     return title.split(None,1)[0].upper(), "", title
     >>> for record in FastaIterator(open("Fasta/dups.fasta"), title2ids=take_upper):
-    ...     print record.id
+    ...     print(record.id)
     ALPHA
     BETA
     GAMMA

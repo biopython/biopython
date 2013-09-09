@@ -675,9 +675,9 @@ def _escape_filename(filename):
 
     Note this will not add quotes if they are already included:
 
-    >>> print(_escape_filename('example with spaces'))
+    >>> print((_escape_filename('example with spaces')))
     "example with spaces"
-    >>> print(_escape_filename('"example with spaces"'))
+    >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
     """
     #Is adding the following helpful

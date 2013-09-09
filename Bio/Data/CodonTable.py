@@ -66,8 +66,8 @@ class CodonTable(object):
 
         e.g.
         >>> import Bio.Data.CodonTable
-        >>> print Bio.Data.CodonTable.standard_dna_table
-        >>> print Bio.Data.CodonTable.generic_by_id[1]
+        >>> print(Bio.Data.CodonTable.standard_dna_table)
+        >>> print(Bio.Data.CodonTable.generic_by_id[1])
         """
 
         if self.id:

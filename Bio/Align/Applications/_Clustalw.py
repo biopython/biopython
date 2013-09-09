@@ -21,7 +21,7 @@ class ClustalwCommandline(AbstractCommandline):
     >>> from Bio.Align.Applications import ClustalwCommandline
     >>> in_file = "unaligned.fasta"
     >>> clustalw_cline = ClustalwCommandline("clustalw2", infile=in_file)
-    >>> print clustalw_cline
+    >>> print(clustalw_cline)
     clustalw2 -infile=unaligned.fasta
 
     You would typically run the command line with clustalw_cline() or via

@@ -28,7 +28,7 @@ class TCoffeeCommandline(AbstractCommandline):
     >>> tcoffee_cline = TCoffeeCommandline(infile="unaligned.fasta",
     ...                                    output="clustalw",
     ...                                    outfile="aligned.aln")
-    >>> print tcoffee_cline
+    >>> print(tcoffee_cline)
     t_coffee -output clustalw -infile unaligned.fasta -outfile aligned.aln
 
     You would typically run the command line with tcoffee_cline() or via

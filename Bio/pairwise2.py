@@ -55,7 +55,7 @@ Some examples:
     # for mismatches or gaps.
     >>> from Bio.pairwise2 import format_alignment
     >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -69,7 +69,7 @@ Some examples:
 
     # Same thing as before, but with a local alignment.
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     ||||
     AC-G-
@@ -84,7 +84,7 @@ Some examples:
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
     >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -99,7 +99,7 @@ Some examples:
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
     >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -117,7 +117,7 @@ Biopython ( Bio.SubsMat -> MatrixInfo ).
     >>> from Bio.SubsMat import MatrixInfo as matlist
     >>> matrix = matlist.blosum62
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     KEVLA
     |||||
     -EVL-

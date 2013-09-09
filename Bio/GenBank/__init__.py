@@ -156,7 +156,7 @@ def _pos(pos_str, offset=0):
     >>> p = _pos("<5")
     >>> p
     BeforePosition(5)
-    >>> print p
+    >>> print(p)
     <5
     >>> int(p)
     5
@@ -169,7 +169,7 @@ def _pos(pos_str, offset=0):
     >>> p = _pos("one-of(5,8,11)")
     >>> p
     OneOfPosition(11, choices=[ExactPosition(5), ExactPosition(8), ExactPosition(11)])
-    >>> print p
+    >>> print(p)
     one-of(5,8,11)
     >>> int(p)
     11
@@ -182,7 +182,7 @@ def _pos(pos_str, offset=0):
     >>> p = _pos("<5", -1)
     >>> p
     BeforePosition(4)
-    >>> print p
+    >>> print(p)
     <4
     >>> int(p)
     4
@@ -1469,7 +1469,7 @@ def parse(handle):
     >>> from Bio import GenBank
     >>> handle = open("GenBank/NC_000932.gb")
     >>> for record in GenBank.parse(handle):
-    ...     print record.accession
+    ...     print(record.accession)
     ['NC_000932']
     >>> handle.close()
 
@@ -1485,7 +1485,7 @@ def read(handle):
     >>> from Bio import GenBank
     >>> handle = open("GenBank/NC_000932.gb")
     >>> record = GenBank.read(handle)
-    >>> print record.accession
+    >>> print(record.accession)
     ['NC_000932']
     >>> handle.close()
 
