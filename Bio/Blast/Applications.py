@@ -32,6 +32,8 @@ Camacho et al. BLAST+: architecture and applications
 BMC Bioinformatics 2009, 10:421
 doi:10.1186/1471-2105-10-421
 """
+from __future__ import print_function
+
 from Bio import BiopythonDeprecationWarning
 
 from Bio.Application import _Option, AbstractCommandline, _Switch

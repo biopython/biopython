@@ -31,6 +31,8 @@ http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
+from __future__ import print_function
+
 import string
 
 from Bio.Seq import Seq

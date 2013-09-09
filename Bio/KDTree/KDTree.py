@@ -13,6 +13,8 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
+from __future__ import print_function
+
 from numpy import sum, sqrt, array
 from numpy.random import random
 

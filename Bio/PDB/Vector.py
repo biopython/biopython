@@ -5,6 +5,8 @@
 
 """Vector class, including rotation-related functions."""
 
+from __future__ import print_function
+
 import numpy
 
 

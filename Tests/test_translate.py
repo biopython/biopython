@@ -1,6 +1,8 @@
 # Make sure the translation functions work.
 # Start simple - unambiguous DNA to unambiguous protein
 
+from __future__ import print_function
+
 from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC

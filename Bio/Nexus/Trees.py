@@ -12,6 +12,8 @@ common ancestors,...) and to manipulate trees (reroot trees, split terminal
 nodes).
 """
 
+from __future__ import print_function
+
 import random
 import sys
 import Nodes

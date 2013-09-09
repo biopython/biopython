@@ -34,6 +34,8 @@
 # IMPORTS
 
 # ReportLab
+from __future__ import print_function
+
 from reportlab.pdfbase import _fontdata
 from reportlab.lib import colors
 

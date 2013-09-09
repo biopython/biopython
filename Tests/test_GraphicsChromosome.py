@@ -11,6 +11,8 @@ This tests the Graphics.BasicChromosome classes and the
 Graphics.DisplayRepresentation classes.
 """
 # standard library
+from __future__ import print_function
+
 import os
 import sys
 import random

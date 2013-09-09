@@ -5,6 +5,8 @@
 
 """Bio.SearchIO object to model a single database hit."""
 
+from __future__ import print_function
+
 from itertools import chain
 
 from Bio._utils import getattr_str, trim_str

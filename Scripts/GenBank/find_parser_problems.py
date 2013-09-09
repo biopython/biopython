@@ -8,6 +8,8 @@ Usage:
 find_parser_problems.py <GenBank file to parse>
 """
 # standard library
+from __future__ import print_function
+
 import sys
 
 # GenBank

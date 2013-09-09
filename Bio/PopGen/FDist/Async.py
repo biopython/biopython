@@ -11,6 +11,8 @@ SplitFDist splits a single Fdist execution in several, taking advantage
 of multi-core architectures.
 """
 
+from __future__ import print_function
+
 import os
 import shutil
 import thread

@@ -6,6 +6,8 @@
 # as part of this package.
 """Command line wrapper for the motif finding program XXmotif."""
 
+from __future__ import print_function
+
 import os
 from Bio.Application import AbstractCommandline, _Option, _Switch, _Argument
 

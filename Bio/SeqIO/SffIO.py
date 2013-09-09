@@ -219,6 +219,8 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
 
+from __future__ import print_function
+
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
 from Bio.Seq import Seq

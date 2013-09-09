@@ -23,6 +23,8 @@
 CreatePeople(message=Success)
 """
 
+from __future__ import print_function
+
 import sys
 
 from Bio import MissingPythonDependencyError

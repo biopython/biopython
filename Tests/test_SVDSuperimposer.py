@@ -3,6 +3,8 @@
 # as part of this package.
 
 #TODO - Don't use "from XXX import *"
+from __future__ import print_function
+
 try:
     from numpy import *
     from numpy import dot  # missing in old PyPy's micronumpy

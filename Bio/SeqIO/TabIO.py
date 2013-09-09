@@ -31,6 +31,8 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 example above.
 """
 
+from __future__ import print_function
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

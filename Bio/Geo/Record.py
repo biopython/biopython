@@ -13,6 +13,8 @@ See http://www.ncbi.nlm.nih.gov/geo/
 """
 
 
+from __future__ import print_function
+
 class Record(object):
     """Hold GEO information in a format similar to the original record.
 

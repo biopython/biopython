@@ -8,6 +8,8 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
+from __future__ import print_function
+
 import os
 import unittest
 from Bio._py3k import StringIO

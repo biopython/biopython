@@ -5,6 +5,8 @@ This code is described in great detail in the BLAST section of the Biopython
 documentation.
 """
 # standard library
+from __future__ import print_function
+
 try:
     #Python 2
     from StringIO import StringIO

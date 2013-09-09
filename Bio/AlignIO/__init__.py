@@ -121,6 +121,8 @@ same length.
 """
 
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # not just plaintext
 
 #TODO

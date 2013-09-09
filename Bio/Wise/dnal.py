@@ -11,6 +11,8 @@
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
+from __future__ import print_function
+
 import commands
 import itertools
 import re

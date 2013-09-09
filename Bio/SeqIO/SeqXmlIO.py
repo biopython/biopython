@@ -12,6 +12,8 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), http://dx.doi.org/10.1093/bib/bbr025
 """
 
+from __future__ import print_function
+
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.dom import pulldom

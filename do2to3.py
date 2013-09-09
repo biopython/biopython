@@ -21,6 +21,8 @@ NOTE - This is intended to be run under Python 3 (not under Python 2), but
 care has been taken to make it run under Python 2 enough to give a clear error
 message. In particular, this meant avoiding with statements etc.
 """
+from __future__ import print_function
+
 import sys
 if sys.version_info[0] < 3:
     sys.stderr.write("Please run this under Python 3\n")

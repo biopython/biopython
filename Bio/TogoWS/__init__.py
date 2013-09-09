@@ -30,6 +30,8 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
+from __future__ import print_function
+
 import urllib
 import urllib2
 import time

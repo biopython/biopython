@@ -5,6 +5,8 @@
 
 """Turn an mmCIF file into a dictionary."""
 
+from __future__ import print_function
+
 import shlex
 
 class MMCIF2Dict(dict):

@@ -26,6 +26,8 @@ classify       Classify an observation into a class.
 
 """
 
+from __future__ import print_function
+
 import numpy
 
 

@@ -2,6 +2,8 @@
 """Example of generating a substitution matrix from an alignment.
 """
 # standard library
+from __future__ import print_function
+
 import sys
 
 # Biopython

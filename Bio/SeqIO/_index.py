@@ -23,6 +23,8 @@ sequencing. If this is an issue later on, storing the keys and offsets in a
 temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
 """
 
+from __future__ import print_function
+
 import re
 from Bio._py3k import StringIO
 from Bio._py3k import _bytes_to_string, _as_bytes

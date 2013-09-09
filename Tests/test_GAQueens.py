@@ -17,6 +17,8 @@ queens you want to try to calculate this for.
 When called as part of the Biopython unit test suite, 5 queens are used.
 """
 # standard library
+from __future__ import print_function
+
 import sys
 import random
 import time

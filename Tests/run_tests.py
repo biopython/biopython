@@ -24,6 +24,8 @@ By default, all tests are run.
 """
 
 # The default verbosity (not verbose)
+from __future__ import print_function
+
 VERBOSITY = 0
 
 # standard modules

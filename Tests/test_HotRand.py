@@ -2,6 +2,8 @@
 """Tests HotRand.
 """
 # standard library
+from __future__ import print_function
+
 import unittest
 import warnings
 

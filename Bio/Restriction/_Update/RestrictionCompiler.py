@@ -37,6 +37,8 @@ The Rebase files are in the emboss format:
 ### is a 3 digit number. The first digit is the year and the two last the month.
 """
 
+from __future__ import print_function
+
 import os
 import itertools
 import time

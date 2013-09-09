@@ -20,6 +20,8 @@ parse              Read multiple SwissProt records
 
 """
 
+from __future__ import print_function
+
 from Bio._py3k import _as_string
 
 

@@ -20,6 +20,8 @@ The DSSP codes for secondary structure used here are:
     - -        None
 """
 
+from __future__ import print_function
+
 import re
 from Bio._py3k import StringIO
 import subprocess

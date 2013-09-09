@@ -48,6 +48,8 @@ In this case the selenomethionines (the first and also seventh and sixth from
 last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
+from __future__ import print_function
+
 import warnings
 
 from Bio.Alphabet import generic_protein

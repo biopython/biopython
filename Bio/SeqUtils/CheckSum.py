@@ -10,6 +10,8 @@
 # crc32, crc64, gcg, and seguid
 # crc64 is adapted from BioPerl
 
+from __future__ import print_function
+
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 

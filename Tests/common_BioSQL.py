@@ -4,6 +4,8 @@
 """Tests for dealing with storage of biopython objects in a relational db.
 """
 # standard library
+from __future__ import print_function
+
 import os
 import platform
 import unittest

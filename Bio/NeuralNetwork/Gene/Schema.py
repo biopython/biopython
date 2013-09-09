@@ -11,6 +11,8 @@ character can be anything. This helps us condense a whole ton of
 motifs or signatures.
 """
 # standard modules
+from __future__ import print_function
+
 import random
 import re
 

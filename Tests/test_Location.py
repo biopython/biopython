@@ -9,6 +9,8 @@
 This checks to be sure fuzzy and non-fuzzy representations of locations
 are working properly.
 """
+from __future__ import print_function
+
 from Bio import SeqFeature
 
 # --- test fuzzy representations

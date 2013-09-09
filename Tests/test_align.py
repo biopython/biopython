@@ -15,6 +15,8 @@ o Reading and Writing fasta format
 o Converting between formats"""
 
 # standard library
+from __future__ import print_function
+
 import os
 
 # biopython

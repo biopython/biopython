@@ -19,6 +19,8 @@ approach to regression analysis by local fitting", Journal of the American
 Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 """
 
+from __future__ import print_function
+
 import numpy
 
 try:

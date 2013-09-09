@@ -4,6 +4,8 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blast.py
 
+from __future__ import print_function
+
 import glob
 import os
 import sys

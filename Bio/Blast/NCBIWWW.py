@@ -16,6 +16,8 @@ Functions:
 qblast        Do a BLAST search using the QBLAST API.
 """
 
+from __future__ import print_function
+
 from Bio._py3k import StringIO
 from Bio._py3k import _as_string, _as_bytes
 

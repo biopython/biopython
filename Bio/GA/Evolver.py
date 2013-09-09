@@ -4,6 +4,8 @@ Evolver classes manage a population of individuals, and are responsible
 for taking care of the transition from one generation to the next.
 """
 # standard modules
+from __future__ import print_function
+
 import sys
 
 

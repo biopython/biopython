@@ -128,6 +128,8 @@ secondary structure string here, are also sliced:
     >>> print(sub_record.letter_annotations['secondary_structure'])
     -------<<<
 """
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # not just plaintext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

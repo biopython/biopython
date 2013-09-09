@@ -5,6 +5,8 @@
 """Implementation of sequence motifs (PRIVATE).
 """
 
+from __future__ import print_function
+
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC

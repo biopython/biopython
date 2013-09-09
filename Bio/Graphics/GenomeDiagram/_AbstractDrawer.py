@@ -40,6 +40,8 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.graphics.shapes import *

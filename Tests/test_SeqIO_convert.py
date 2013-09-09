@@ -4,6 +4,8 @@
 # as part of this package.
 
 """Unit tests for Bio.SeqIO.convert(...) function."""
+from __future__ import print_function
+
 import unittest
 import warnings
 from Bio.Seq import UnknownSeq

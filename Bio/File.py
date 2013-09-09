@@ -15,6 +15,8 @@ Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
 use.
 """
+from __future__ import print_function
+
 import codecs
 import os
 import contextlib

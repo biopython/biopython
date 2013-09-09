@@ -23,6 +23,8 @@ Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology
 1998 Oct;16(10):939-45.
 
 """
+from __future__ import print_function
+
 from Bio.Application import AbstractCommandline, _Option, _Argument
 
 import warnings

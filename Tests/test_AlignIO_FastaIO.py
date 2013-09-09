@@ -7,6 +7,8 @@
 Created to check for any regressions from my new implementation of the
 parser.
 """
+from __future__ import print_function
+
 import os
 from Bio import AlignIO
 

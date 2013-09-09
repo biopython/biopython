@@ -4,6 +4,8 @@
 This is a very basic test of Neural Network functionality.
 """
 # Neural Network code we'll be using
+from __future__ import print_function
+
 from Bio.NeuralNetwork.Training import TrainingExample
 from Bio.NeuralNetwork.BackPropagation import Layer
 from Bio.NeuralNetwork.BackPropagation.Network import BasicNetwork

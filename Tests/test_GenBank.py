@@ -9,6 +9,8 @@
 """Test the GenBank parser and make sure everything is working smoothly.
 """
 # standard library
+from __future__ import print_function
+
 import os
 from Bio._py3k import StringIO
 import warnings

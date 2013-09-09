@@ -20,6 +20,8 @@
 
 """ Access the PDB over the internet (e.g. to download structures). """
 
+from __future__ import print_function
+
 import contextlib
 import gzip
 import os

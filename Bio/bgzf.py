@@ -221,6 +221,8 @@ NC_000932.1
 
 """
 
+from __future__ import print_function
+
 import zlib
 import struct
 import __builtin__  # to access the usual open function

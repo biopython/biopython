@@ -49,6 +49,8 @@ blastall, blastpgp and rpsblast are considered to be obsolete now, and
 are likely to be deprecated and then removed in future releases.
 """
 
+from __future__ import print_function
+
 from Bio import BiopythonDeprecationWarning
 import warnings
 warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "

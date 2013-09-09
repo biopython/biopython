@@ -26,6 +26,8 @@ protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
                         include chemically modified residues.
 """
 
+from __future__ import print_function
+
 from copy import copy
 
 from Bio.Data.SCOPData import protein_letters_3to1

@@ -10,6 +10,8 @@ functions: read_fssp(file_handle): reads an fssp file into the records. Returns 
 tuple of two instances.
 mult_align: returns a Biopython alignment object
 """
+from __future__ import print_function
+
 import re
 import fssp_rec
 from Bio.Align import Generic

@@ -1,6 +1,8 @@
 """Tests the basic functionality of the GEO parsers.
 """
 
+from __future__ import print_function
+
 import os
 import sys
 

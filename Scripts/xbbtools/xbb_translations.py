@@ -4,6 +4,8 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_translations.py
 
+from __future__ import print_function
+
 import sys
 import time
 

@@ -23,6 +23,8 @@
 
 """Parse the header of a PDB file."""
 
+from __future__ import print_function
+
 import re
 
 from Bio import File

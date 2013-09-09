@@ -18,6 +18,8 @@ print(X.protein_scale(ProtParamData.kd, 9, 0.4))
 """
 #TODO - Turn that into a working doctest
 
+from __future__ import print_function
+
 import sys
 import ProtParamData  # Local
 import IsoelectricPoint  # Local

@@ -8,6 +8,8 @@
 # as part of this package.
 #
 
+from __future__ import print_function
+
 import re
 from Bio.Restriction import RanaConfig as RanaConf
 

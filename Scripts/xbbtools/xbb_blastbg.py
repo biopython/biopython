@@ -4,6 +4,8 @@
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_blastbg.py
 
+from __future__ import print_function
+
 import commands
 import posix
 import posixpath

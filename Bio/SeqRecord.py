@@ -7,6 +7,8 @@
 # as part of this package.
 """Represent a Sequence Record, a sequence with annotation."""
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Simple markup to show doctests nicely
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL

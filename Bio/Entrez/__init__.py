@@ -68,6 +68,8 @@ parse        Parses the XML results returned by those of the above functions
 _open        Internally used function.
 
 """
+from __future__ import print_function
+
 import urllib
 import urllib2
 import time

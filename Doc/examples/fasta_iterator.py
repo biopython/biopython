@@ -1,5 +1,7 @@
 """Example using Bio.SeqIO to parse a FASTA file."""
 
+from __future__ import print_function
+
 from Bio import SeqIO
 
 

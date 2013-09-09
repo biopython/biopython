@@ -11,6 +11,8 @@ See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
 
+from __future__ import print_function
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped

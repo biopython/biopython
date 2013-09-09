@@ -49,6 +49,8 @@ o OneOfPosition - Specify a position where the location can be multiple position
 o UnknownPosition - Represents missing information like '?' in UniProt.
 """
 
+from __future__ import print_function
+
 from Bio.Seq import MutableSeq, reverse_complement
 
 

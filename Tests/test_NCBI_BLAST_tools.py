@@ -7,6 +7,8 @@
 # database, and if it finds them then do some standalone blast searches
 # using Bio.Blast.NCBIStandalone to call the command line tool.
 
+from __future__ import print_function
+
 import os
 import sys
 import subprocess

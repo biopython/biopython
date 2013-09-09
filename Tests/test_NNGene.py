@@ -10,6 +10,8 @@ This exercises the Motif, Schema and Signature methods of representing
 genes, as well as generic Pattern methods.
 """
 # standard library
+from __future__ import print_function
+
 import os
 import unittest
 

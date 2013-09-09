@@ -52,6 +52,8 @@ Or,
 Note these examples only show the first 50 bases to keep the output short.
 """
 
+from __future__ import print_function
+
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter

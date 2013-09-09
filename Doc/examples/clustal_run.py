@@ -5,6 +5,8 @@ Example code to show how to create a clustalw command line, run clustalw
 and parse the results into an object that can be dealt with easily."""
 # standard library
 
+from __future__ import print_function
+
 import os
 import sys
 import subprocess

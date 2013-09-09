@@ -4,6 +4,8 @@
 # as part of this package.
 
 
+from __future__ import print_function
+
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 

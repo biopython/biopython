@@ -5,6 +5,8 @@
 
 """Bio.SearchIO object to model search results from a single query."""
 
+from __future__ import print_function
+
 from copy import deepcopy
 from itertools import chain
 

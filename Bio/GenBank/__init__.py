@@ -38,6 +38,8 @@ LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
 """
+from __future__ import print_function
+
 import re
 
 # other Biopython stuff

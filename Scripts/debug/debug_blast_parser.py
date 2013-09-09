@@ -5,6 +5,8 @@
 # - Let user specify a sequence file to BLAST on the net.
 # - Script should help debug connection to NCBI website.
 
+from __future__ import print_function
+
 import os
 import re
 import sys

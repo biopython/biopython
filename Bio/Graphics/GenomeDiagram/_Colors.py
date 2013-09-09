@@ -21,6 +21,8 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.lib import colors
 
 

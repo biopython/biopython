@@ -21,6 +21,8 @@ mailing list and ask for help.  See:
 
 http://biopython.org/wiki/Mailing_lists
 """
+from __future__ import print_function
+
 import sys
 import os
 import shutil

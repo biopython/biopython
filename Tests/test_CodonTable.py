@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import ambiguous_generic_by_id, ambiguous_generic_by_name
 from Bio.Data.CodonTable import ambiguous_rna_by_id, ambiguous_dna_by_id

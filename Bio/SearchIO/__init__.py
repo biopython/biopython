@@ -194,6 +194,8 @@ of the format's documentation.
 
 """
 
+from __future__ import print_function
+
 __docformat__ = 'epytext en'
 
 import sys

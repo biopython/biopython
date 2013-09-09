@@ -31,6 +31,8 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
 
+from __future__ import print_function
+
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet

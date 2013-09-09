@@ -8,6 +8,8 @@
 This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
 """
 
+from __future__ import print_function
+
 __docformat__ = "restructuredtext en"
 
 from Bio import File

@@ -13,6 +13,8 @@ Classes:
 Record               -- Holds the information from a KEGG Enzyme record.
 """
 
+from __future__ import print_function
+
 from Bio.KEGG import _write_kegg
 from Bio.KEGG import _wrap_kegg
 

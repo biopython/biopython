@@ -13,6 +13,8 @@ for efficient compression and decompression. Here we take a similar
 approach.
 """
 
+from __future__ import print_function
+
 import os
 import lzma
 import struct

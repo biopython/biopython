@@ -260,6 +260,8 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 making up each alignment as SeqRecords.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # not just plaintext
 
 #TODO

@@ -6,6 +6,8 @@
 """Tests the basic functionality of the KEGG parsers.
 """
 
+from __future__ import print_function
+
 import os
 
 from Bio.KEGG import Enzyme

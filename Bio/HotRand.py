@@ -8,6 +8,8 @@
    support biosimulations that rely on random numbers.
 """
 
+from __future__ import print_function
+
 import urllib
 from Bio import BiopythonDeprecationWarning
 import warnings

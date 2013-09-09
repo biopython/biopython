@@ -7,6 +7,8 @@
 
 
 
+from __future__ import print_function
+
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
         self.property_dict=property_dict

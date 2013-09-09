@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program PRANK.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline

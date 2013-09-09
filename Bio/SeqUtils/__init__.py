@@ -9,6 +9,8 @@
 
 """Miscellaneous functions for dealing with sequences."""
 
+from __future__ import print_function
+
 import re
 from math import pi, sin, cos
 

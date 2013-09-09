@@ -4,6 +4,8 @@
 # as part of this package.
 
 """Unittests for the Seq objects."""
+from __future__ import print_function
+
 import unittest
 import sys
 if sys.version_info[0] == 3:

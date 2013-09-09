@@ -11,6 +11,8 @@
 
 You are expected to use this module via the Bio.SeqIO functions."""
 
+from __future__ import print_function
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

@@ -12,6 +12,8 @@ These classes follow the AbstractCommandline interfaces for running
 programs.
 """
 
+from __future__ import print_function
+
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 

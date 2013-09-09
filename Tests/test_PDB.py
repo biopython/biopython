@@ -10,6 +10,8 @@
 # as part of this package.
 
 """Unit tests for the Bio.PDB module."""
+from __future__ import print_function
+
 import os
 import tempfile
 import unittest

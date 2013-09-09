@@ -8,6 +8,8 @@
 #        provides methods for extracting data by the field name
 #        which is listed in the last line of the peaklist header.
 
+from __future__ import print_function
+
 import sys
 
 # * * * * * INITIALIZATIONS * * * * *
