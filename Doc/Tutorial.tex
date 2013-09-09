@@ -604,7 +604,7 @@ In many ways, we can deal with Seq objects as if they were normal Python strings
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GATCG", IUPAC.unambiguous_dna)
 >>> for index, letter in enumerate(my_seq):
-...     print(index, letter)
+...     print("%i %s" % (index, letter))
 0 G
 1 A
 2 T
@@ -1916,7 +1916,7 @@ check all the features one by one in a loop:
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> for feature in record.features:
 ...     if my_snp in feature:
-...         print(feature.type, feature.qualifiers.get('db_xref'))
+...         print("%s %s" % (feature.type, feature.qualifiers.get('db_xref')))
 ...
 source ['taxon:229193']
 gene ['GeneID:2767712']
@@ -2374,7 +2374,7 @@ Consider this example record:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
->>> print(record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations))
+>>> print("%s %i %i %i %i" % (record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)))
 NC_005816.1 9609 41 1 11
 \end{verbatim}
 
@@ -2384,7 +2384,7 @@ how most of the annotation is dropped (but not the features):
 %cont-doctest
 \begin{verbatim}
 >>> rc = record.reverse_complement(id="TESTING")
->>> print(rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations))
+>>> print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)))
 TESTING 9609 41 0 0
 \end{verbatim}
 
@@ -3705,7 +3705,7 @@ Did you notice in the raw file above that several of the sequences include datab
 \begin{verbatim}
 >>> for record in alignment:
 ...     if record.dbxrefs:
-...         print(record.id, record.dbxrefs)
+...         print("%s %s" % (record.id, record.dbxrefs))
 COATB_BPIKE/30-81 ['PDB; 1ifl ; 1-52;']
 COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
 Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
@@ -5981,7 +5981,7 @@ the \verb|reverse| flag to \verb|True| so that we sort in descending order.
 %cont-doctest
 \begin{verbatim}
 >>> for hit in blast_qresult[:5]:   # id and sequence length of the first five hits
-...     print(hit.id, hit.seq_len)
+...     print("%s %i" % (hit.id, hit.seq_len))
 ...
 gi|262205317|ref|NR_030195.1| 61
 gi|301171311|ref|NR_035856.1| 60
@@ -5992,7 +5992,7 @@ gi|301171267|ref|NR_035851.1| 80
 >>> sort_key = lambda hit: hit.seq_len
 >>> sorted_qresult = blast_qresult.sort(key=sort_key, reverse=True, in_place=False)
 >>> for hit in sorted_qresult[:5]:
-...     print(hit.id, hit.seq_len)
+...     print("%s %i" % (hit.id, hit.seq_len))
 ...
 gi|397513516|ref|XM_003827011.1| 6002
 gi|390332045|ref|XM_776818.2| 4082
@@ -6045,7 +6045,7 @@ that only have one HSP:
 >>> len(filtered_qresult)   # no. of hits after filtering
 37
 >>> for hit in filtered_qresult[:5]:    # quick check for the hit lengths
-...     print(hit.id, len(hit.hsps))
+...     print("%s %i" % (hit.id, len(hit.hsps)))
 gi|301171322|ref|NR_035857.1| 2
 gi|262205330|ref|NR_030198.1| 2
 gi|301171447|ref|NR_035871.1| 2
@@ -12471,7 +12471,7 @@ the true instances of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.instances.search(test_seq):
-...     print(pos, seq)
+...     print("%i %s" % (pos, seq))
 ... 
 0 TACAC
 10 TACAA
@@ -12481,7 +12481,7 @@ We can do the same with the reverse complement (to find instances on the complem
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in r.instances.search(test_seq):
-...     print(pos, seq)
+...     print("%i %s" % (pos, seq))
 ... 
 6 GCATT
 20 GCATT
