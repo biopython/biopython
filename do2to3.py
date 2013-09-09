@@ -45,7 +45,7 @@ def run2to3(filenames):
             filename = filenames.pop(0)
             print("Converting %s" % filename)
             #TODO - Configurable options per file?
-            args = ["--nofix=long", "--no-diffs", "-n", "-w"]
+            args = ["--nofix=long","--nofix=print", "--no-diffs", "-n", "-w"]
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
                 sys.stderr = stderr
