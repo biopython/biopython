@@ -211,7 +211,6 @@ class BitString(str):
 
 def strict_consensus(trees):
     """Search stric consensus tree from multiple trees"""
-    Phylo.write(trees, '/home/yeyanbo/con1.tre', 'newick')
     terms = trees[0].get_terminals()
     bitstr_counts = _count_clades(trees)
     # store bitstrs for strict clades
@@ -446,13 +445,20 @@ def get_support(target_tree, trees):
 
 
 def bootstrap(msa, times):
-    """get a list of bootstrap replicates of a multiple sequence
-    alignment object"""
+    """yield a series of bootstrap replicates from a multiple sequence
+    alignment object
+    
+    :Parameters:
+        msa: MultipleSeqAlignment
+            multiple sequence alignment to generate replicates.
+        times: int
+            number of bootstrap times.
+    """
 
     length = len(msa[0])
-    msas = []
-
-    for i in range(times):
+    i = 0
+    while i < times:
+        i += 1
         item = None
         for j in range(length):
             col = random.randint(0, length - 1)
@@ -460,24 +466,44 @@ def bootstrap(msa, times):
                 item = msa[:,col:col + 1]
             else:
                 item += msa[:,col:col + 1]
-        msas.append(item)
-
-    return msas
+        yield item
 
 
 def bootstrap_trees(msa, times, tree_constructor):
-    """get a list of bootstrap replicate trees for a multiple 
-    sequence alignment"""
+    """yield a series of bootstrap replicate trees from a multiple 
+    sequence alignment.
+
+    :Parameters:
+        msa: MultipleSeqAlignment
+            multiple sequence alignment to generate replicates.
+        times: int
+            number of bootstrap times.
+        tree_constructor: TreeConstructor
+            tree constructor to be used to build trees.
+    """
 
     msas = bootstrap(msa, times)
-    trees = []
     for aln in msas:
         tree = tree_constructor.build_tree(aln)
-        trees.append(tree)
-    return trees
+        yield tree
 
 
 def bootstrap_consensus(msa, times, tree_constructor, consensus):
+    """get the consensus tree of a series of bootstrap trees for
+    a multiple sequence alignment
+
+    :Parameters:
+            msa: MultipleSeqAlignment
+                multiple sequence alignment to generate replicates.
+            times: int
+                number of bootstrap times.
+            tree_constructor: TreeConstructor
+                tree constructor to be used to build trees.
+            consensus: function
+                consensus method in this module
+    """
+
+
     trees = bootstrap_trees(msa, times, tree_constructor)
-    tree = consensus(trees)
+    tree = consensus(list(trees))
     return tree

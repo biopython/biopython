@@ -124,7 +124,7 @@ class BootstrapTest(unittest.TestCase):
         self.msa = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
 
     def test_bootstrap(self):
-        msa_list = bootstrap(self.msa, 100)
+        msa_list = list(bootstrap(self.msa, 100))
         self.assertEqual(len(msa_list), 100)
         self.assertEqual(len(msa_list[0]), len(self.msa))
         self.assertEqual(len(msa_list[0][0]), len(self.msa[0]))
@@ -132,7 +132,7 @@ class BootstrapTest(unittest.TestCase):
     def test_bootstrap_trees(self):
         calculator = DistanceCalculator('blosum62')
         constructor = DistanceTreeConstructor(calculator)
-        trees = bootstrap_trees(self.msa, 100, constructor)
+        trees = list(bootstrap_trees(self.msa, 100, constructor))
         self.assertEqual(len(trees), 100)
         self.assertTrue(isinstance(trees[0], BaseTree.Tree))
 
