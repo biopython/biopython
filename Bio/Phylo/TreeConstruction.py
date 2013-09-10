@@ -353,11 +353,6 @@ class DistanceCalculator(object):
 
     dna_alphabet = ['A', 'T', 'C', 'G']
 
-    # Identity scoring matrix
-    identity = [[ 1],
-                [ 0,  1],
-                [ 0,  0,  1],
-                [ 0,  0,  0,  1]]
     # BLAST nucleic acid scoring matrix
     blastn = [[ 5],
               [-4,  5],
@@ -373,7 +368,7 @@ class DistanceCalculator(object):
     protein_alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
 
     # matrices available
-    dna_matrices = {'identity': identity, 'blastn': blastn, 'trans': trans}
+    dna_matrices = {'blastn': blastn, 'trans': trans}
     protein_matrices = {'benner6': benner6, 'benner22': benner22, 'benner74': benner74, 'blosum100': blosum100,
                       'blosum30': blosum30, 'blosum35': blosum35, 'blosum40': blosum40, 'blosum45': blosum45,
                       'blosum50': blosum50, 'blosum55': blosum55, 'blosum60': blosum60, 'blosum62': blosum62,
@@ -386,38 +381,49 @@ class DistanceCalculator(object):
                       'pam90': pam90, 'rao': rao, 'risler': risler, 'structure': structure
                      }
 
-    def __init__(self, model):
+    def __init__(self, model='identity'):
         """Initialize with a distance model"""
 
         dna_keys = self.dna_matrices.keys()
         protein_keys = self.protein_matrices.keys()
-        if model in dna_keys:
+        if model == 'identity':
+            self.scoring_matrix = None
+        elif model in dna_keys:
             self.scoring_matrix = Matrix(self.dna_alphabet, self.dna_matrices[model])
         elif model in protein_keys:
             self.scoring_matrix = self._build_protein_matrix(self.protein_matrices[model])
         else:
-            raise ValueError("Model not supported. Available models: " + ", ".join(dna_keys + protein_keys))
+            raise ValueError("Model not supported. Available models: identity, " + ", ".join(dna_keys + protein_keys))
 
     def _pairwise(self, seq1, seq2):
         """Calculate pairwise distance from two sequences"""
-        max_score1 = 0
-        max_score2 = 0
         score = 0
-        skip_letters = ['-', '*']
-        for i in range(0, len(seq1)):
-            l1 = seq1[i]
-            l2 = seq2[i]
-            if l1 in skip_letters or l2 in skip_letters:
-                continue
-            if l1 not in self.scoring_matrix.names:
-                raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'" % (l1, seq1.id, i))
-            if l2 not in self.scoring_matrix.names:
-                raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'" % (l2, seq2.id, i))
-            max_score1 += self.scoring_matrix[l1, l1]
-            max_score2 += self.scoring_matrix[l2, l2]
-            score += self.scoring_matrix[l1, l2]
+        max_score = 0
+        if self.scoring_matrix:
+            max_score1 = 0
+            max_score2 = 0
+            skip_letters = ['-', '*']
+            for i in range(0, len(seq1)):
+                l1 = seq1[i]
+                l2 = seq2[i]
+                if l1 in skip_letters or l2 in skip_letters:
+                    continue
+                if l1 not in self.scoring_matrix.names:
+                    raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'" % (l1, seq1.id, i))
+                if l2 not in self.scoring_matrix.names:
+                    raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'" % (l2, seq2.id, i))
+                max_score1 += self.scoring_matrix[l1, l1]
+                max_score2 += self.scoring_matrix[l2, l2]
+                score += self.scoring_matrix[l1, l2]
 
-        max_score = max_score1 > max_score2 and max_score1 or max_score2
+            max_score = max_score1 > max_score2 and max_score1 or max_score2
+        else:
+            for i in range(0, len(seq1)):
+                l1 = seq1[i]
+                l2 = seq2[i]
+                if l1 == l2:
+                    score += 1
+            max_score = len(seq1)
 
         return 1 - (score * 1.0 / max_score)
 
@@ -448,7 +454,7 @@ class DistanceCalculator(object):
         return protein_matrix
 
 
-class TreeContructor(object):
+class TreeConstructor(object):
     """Base class for all tree constructor."""
 
     def build_tree(self, msa):
@@ -457,7 +463,7 @@ class TreeContructor(object):
         raise NotImplementedError("Method not implemented!")
 
 
-class DistanceTreeConstructor(TreeContructor):
+class DistanceTreeConstructor(TreeConstructor):
     """Distance based tree constructor.
 
     :Parameters:
@@ -745,7 +751,7 @@ class NNITreeSearcher(TreeSearcher):
                     best_score = score
                     best_tree = t
             # stop if no smaller score exist
-            if best_score == temp:
+            if best_score >= temp:
                 break
         return best_tree
 
@@ -944,7 +950,7 @@ class ParsimonyScorer(Scorer):
             score = score + score_i
         return score
 
-class ParsimonyTreeConstructor(TreeContructor):
+class ParsimonyTreeConstructor(TreeConstructor):
     """Parsimony tree constructor.
 
     :Parameters:
@@ -1004,4 +1010,9 @@ class ParsimonyTreeConstructor(TreeContructor):
             alignment: MultipleSeqAlignment
                 multiple sequence alignment to calculate parsimony tree.
         """
+        # if starting_tree is none, 
+        # create a upgma tree with 'identity' scoring matrix
+        if self.starting_tree is None:
+            dtc = DistanceTreeConstructor(DistanceCalculator("identity"), "upgma")
+            self.starting_tree = dtc.build_tree(alignment)
         return self.searcher.search(self.starting_tree, alignment)

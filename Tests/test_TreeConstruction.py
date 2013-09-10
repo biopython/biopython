@@ -238,6 +238,9 @@ class ParsimonyTreeConstructorTest(unittest.TestCase):
         constructor.starting_tree = tree2
         best_tree = constructor.build_tree(aln)
         Phylo.write(best_tree, './TreeConstruction/pars2.tre', 'newick')
+        constructor.starting_tree = None
+        best_tree = constructor.build_tree(aln)
+        Phylo.write(best_tree, './TreeConstruction/pars3.tre', 'newick')
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
