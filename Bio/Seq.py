@@ -1773,7 +1773,7 @@ class MutableSeq(object):
             d = ambiguous_dna_complement
         c = dict([(x.lower(), y.lower()) for x, y in d.iteritems()])
         d.update(c)
-        self.data = map(lambda c: d[c], self.data)
+        self.data = [d[c] for c in self.data]
         self.data = array.array(self.array_indicator, self.data)
 
     def reverse_complement(self):
