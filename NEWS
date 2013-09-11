@@ -17,9 +17,10 @@ Python 2.5, 2.6 and 3.3 only (including alternative implementations like PyPy
 and Jython). This has allowed a lot of code clean-up, wider use of context
 managers (with statements), and other work to improve our Python 3 support.
 
-The Biopython Tutorial & Cookbook now uses the Python 3 style print function
-in place of the Python 2 style print statement. This language feature is
-available under Python 2.6 and 2.7 via:
+The Biopython Tutorial & Cookbook, and the docstring examples in the source
+code, now use the Python 3 style print function in place of the Python 2
+style print statement. This language feature is available under Python 2.6
+and 2.7 via:
 
     from __future__ import print_function
 
