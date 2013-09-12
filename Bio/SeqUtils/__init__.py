@@ -9,6 +9,8 @@
 
 """Miscellaneous functions for dealing with sequences."""
 
+from __future__ import print_function
+
 import re
 from math import pi, sin, cos
 
@@ -166,8 +168,8 @@ def xGC_skew(seq, window=1000, zoom=100,
 
 
 def molecular_weight(seq, type='DNA', double_stranded=False):
+    """Calculates the molecular weight of a DNA, RNA or protein sequence."""
     # Rewritten by Markus Piotrowski
-    """Calculate the molecular weight of a DNA, RNA or protein sequence."""
     seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
 
     if type == 'DNA':
@@ -343,7 +345,7 @@ def six_frame_translations(seq, genetic_code=1):
     similar to DNA Striders six-frame translation
 
     >>> from Bio.SeqUtils import six_frame_translations
-    >>> print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
+    >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
     GC_Frame: a:5 t:0 g:8 c:5 
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
@@ -418,7 +420,7 @@ def quick_FASTA_reader(file):
 
     >>> seqs = quick_FASTA_reader("Fasta/dups.fasta")
     >>> for title, sequence in seqs:
-    ...     print title, sequence
+    ...     print("%s %s" % (title, sequence))
     alpha ACGTA
     beta CGTC
     gamma CCGCC
