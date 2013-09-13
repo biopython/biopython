@@ -94,9 +94,8 @@ be installed after Biopython.
   it later if needed.
 
 - matplotlib, see http://matplotlib.org/ (optional)
-  The Bio.Phylo uses this package to plot phylogenetic trees. As with
-  ReportLab, you can install this at any time to enable the plotting
-  functionality.
+  Bio.Phylo uses this package to plot phylogenetic trees. As with ReportLab,
+  you can install this at any time to enable the plotting functionality.
 
 - networkx, see http://networkx.lanl.gov/ (optional) and
   pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
@@ -104,6 +103,10 @@ be installed after Biopython.
   These packages are used for certain niche functions in Bio.Phylo.
   Again, they are only needed to enable these functions and can be installed
   later if needed.
+
+- rdflib, see https://github.com/RDFLib/rdflib (optional)
+  This package is used in the CDAO parser under Bio.Phylo, and can be installed
+  as needed.
 
 - psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
