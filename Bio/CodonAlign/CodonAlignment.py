@@ -122,16 +122,15 @@ class CodonAlignment(MultipleSeqAlignment):
                     dS[j,i] = ds
         return dN, dS
 
-
-def toCodonAlignment(align, alphabet=default_codon_alphabet):
-    """Function to convert a MultipleSeqAlignment to CodonAlignment.
-    It is the user's responsibility to ensure all the requirement
-    needed by CodonAlignment is met.
-
-    """
-    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
-             for i in align._records]
-    return CodonAlignment(rec, alphabet=align._alphabet)
+    @classmethod
+    def toCodonAlignment(cls, align, alphabet=default_codon_alphabet):
+        """Function to convert a MultipleSeqAlignment to CodonAlignment.
+        It is the user's responsibility to ensure all the requirement
+        needed by CodonAlignment is met.
+        """
+        rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+                 for i in align._records]
+        return cls(rec, alphabet=alphabet)
 
 
 def mktest(codon_alns, codon_table=default_codon_table,
@@ -248,7 +247,7 @@ def _dijkstra(graph, start, end):
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
     However, an abvious bug in
         if D[child_node] >(<) D[node] + child_value:
-    are fixed.
+    is fixed.
     This function will return the distance between start and end.
 
     Dijkstra's algorithm Python implementation.
