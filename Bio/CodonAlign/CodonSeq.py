@@ -312,7 +312,7 @@ def _get_codon_list(codonseq):
 
 
 def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
-              codon_table=default_codon_table, k=1):
+              codon_table=default_codon_table, k=1, cfreq=None):
     """Function to calculate the dN and dS of the given two CodonSeq
     or SeqRecord that contain CodonSeq objects.
 
@@ -324,6 +324,9 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     
     Arguments:
         - w  - transition/transvertion ratio
+        - cfreq - Current codon frequency vector can only be specified
+                    when you are using ML method. Possible ways of
+                    getting cfreq are: F1x4, F3x4 and F61.
     """
     if all([isinstance(codon_seq1, CodonSeq), 
            isinstance(codon_seq2, CodonSeq)]):
@@ -342,6 +345,16 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                                len(codon_seq1.get_full_rf_table()), 
                                len(codon_seq2.get_full_rf_table()))
                           )
+    if cfreq is None:
+        cfreq = 'F3x4'
+    elif cfreq is not None and method != 'ML':
+        raise RuntimeError("cfreq can only be specified when you "
+                           "are using ML method")
+    if cfreq not in ('F1x4', 'F3x4', 'F61'):
+        import warnings
+        warnings.warn("Unknown cfreq ({0}). Only F1x4, F3x4 and F61 are "
+                     "acceptable. Use F3x4 in the following.".format(cfreq))
+        cfreq = 'F3x4'
     seq1_codon_lst = _get_codon_list(codon_seq1)
     seq2_codon_lst = _get_codon_list(codon_seq2)
     # remove gaps in seq_codon_lst
@@ -403,7 +416,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                                                 codon1,
                                                 codon2,
                                                 fold_dict=codon_fold_dict)
-                                         )]
+                                          )]
         PQ = [i/j for i, j in zip(PQ, L*2)]
         P = PQ[:3]
         Q = PQ[3:]
@@ -518,22 +531,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         from collections import Counter
         from scipy.optimize import minimize
         codon_cnt = Counter()
-        # three codon position
-        fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                  {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                  {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
-        for i in seq1 + seq2:
-            if i != '---':
-                fcodon[0][i[0]] += 1
-                fcodon[1][i[1]] += 1
-                fcodon[2][i[2]] += 1
-        for i in range(3):
-            tot = sum(fcodon[i].values())
-            fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
-        pi = {}
-        for i in codon_table.forward_table.keys() + codon_table.stop_codons:
-            if 'U' not in i:
-                pi[i] = fcodon[0][i[0]]*fcodon[1][i[1]]*fcodon[2][i[2]]
+        pi = _get_pi(seq1, seq2, cmethod=cfreq, codon_table=codon_table)
         for i, j in zip(seq1, seq2):
             #if i != j and ('---' not in (i, j)):
             if '---' not in (i, j):
@@ -1072,6 +1070,52 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
 #################################################################
 #  private functions for Maximum Likelihood method
 #################################################################
+
+def _get_pi(seq1, seq2, cmethod="F3x4", codon_table=default_codon_table):
+    """Obtain codon frequency dict (pi) from two codon list (PRIVATE).
+    This function is designed for ML method. Available counting methods
+    (cmethod) are F1x4, F3x4 and F64.
+    """
+    #TODO:
+    # Stop codon should not be allowed according to Yang.
+    # Try to modify this!
+    pi = {}
+    if cmethod == 'F1x4':
+        fcodon = {'A': 0, 'G': 0, 'C': 0, 'T': 0}
+        for i in seq1 + seq2:
+            if i != '---':
+                for c in i: fcodon[c] += 1
+        tot = sum(fcodon.values())
+        fcodon = {j: k/tot for j, k in fcodon.items()}
+        for i in codon_table.forward_table.keys() + codon_table.stop_codons:
+            if 'U' not in i:
+                pi[i] = fcodon[i[0]]*fcodon[i[1]]*fcodon[i[2]]
+    elif cmethod == 'F3x4':
+        # three codon position
+        fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
+                  {'A': 0, 'G': 0, 'C': 0, 'T': 0},
+                  {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
+        for i in seq1 + seq2:
+            if i != '---':
+                fcodon[0][i[0]] += 1
+                fcodon[1][i[1]] += 1
+                fcodon[2][i[2]] += 1
+        for i in range(3):
+            tot = sum(fcodon[i].values())
+            fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
+        for i in codon_table.forward_table.keys() + codon_table.stop_codons:
+            if 'U' not in i:
+                pi[i] = fcodon[0][i[0]]*fcodon[1][i[1]]*fcodon[2][i[2]]
+    elif cmethod == 'F61':
+        for i in codon_table.forward_table.keys() + codon_table.stop_codons:
+            if 'U' not in i:
+                pi[i] = 0.1
+        for i in seq1 + seq2:
+            if i != '---': pi[i] += 1
+        tot = sum(pi.values())
+        pi = {j: k/tot for j, k in pi.items()}
+    return pi
+
 
 def _q(i, j, pi, k, w, codon_table=default_codon_table):
     """Q matrix for codon substitution.
