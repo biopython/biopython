@@ -364,243 +364,45 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         if (not '-' in i) and (not '-' in j):
             seq1.append(i)
             seq2.append(j)
-    if method == "NG86":
-        S_sites1, N_sites1 = _count_site_NG86(seq1,
-                                              codon_table=codon_table, k=k)
-        S_sites2, N_sites2 = _count_site_NG86(seq2,
-                                              codon_table=codon_table, k=k)
-        S_sites = (S_sites1 + S_sites2) / 2.0
-        N_sites = (N_sites1 + N_sites2) / 2.0
-        SN = [0, 0]
-        for i, j in zip(seq1, seq2):
-            SN = [m+n for m,n in zip(SN, _count_diff_NG86(
-                                                     i, j, 
-                                                     codon_table=codon_table)
-                                     )
-                  ]
-        ps = SN[0] / S_sites
-        pn = SN[1] / N_sites
-        if ps < 3/4:
-            dS = -3.0/4*log(1-4.0/3*ps)
-        else:
-            dS = -1
-        if pn < 3/4:
-            dN = -3.0/4*log(1-4.0/3*pn)
-        else:
-            dN = -1
-        return dN, dS
-    elif method == "LWL85":
-        # Nomenclature is according to PMID (3916709)
-        codon_fold_dict = _get_codon_fold(codon_table)
-        # count number of sites in different degenerate classes
-        fold0 = [0, 0]
-        fold2 = [0, 0]
-        fold4 = [0, 0]
-        for codon in seq1 + seq2:
-            fold_num = codon_fold_dict[codon]
-            for f in fold_num:
-                if f == '0':
-                    fold0[0] += 1
-                elif f == '2':
-                    fold2[0] += 1
-                elif f == '4':
-                    fold4[0] += 1
-        L = [sum(fold0)/2.0, sum(fold2)/2.0, sum(fold4)/2.0]
-        # count number of differences in different degenerate classes
-        PQ = [0] * 6 # with P0, P2, P4, Q0, Q2, Q4 in each position
-        for codon1, codon2 in zip(seq1, seq2):
-            if (codon1 == "---" or codon2 == "---") or codon1 == codon2:
-                continue
-            else:
-                PQ = [i+j for i, j in zip(PQ, _diff_codon(
-                                                codon1,
-                                                codon2,
-                                                fold_dict=codon_fold_dict)
-                                          )]
-        PQ = [i/j for i, j in zip(PQ, L*2)]
-        P = PQ[:3]
-        Q = PQ[3:]
-        A = [(1./2)*log(1./(1-2*i-j)) - (1./4)*log(1./(1-2*j)) \
-                for i, j in zip(P, Q)]
-        B = [(1./2)*log(1./(1-2*i)) for i in Q]
-        dS = 3*(L[2]*A[1]+L[2]*(A[2]+B[2]))/(L[1]+3*L[2])
-        dN = 3*(L[2]*B[1]+L[0]*(A[0]+B[0]))/(2*L[1]+3*L[0])
-        return dN, dS
-    elif method == "YN00":
-        # nomenclature is according to PMID: 10666704
-        from collections import Counter
-        from scipy.linalg import expm
-        fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                  {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                  {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
-        codon_fold_dict = _get_codon_fold(codon_table)
-        fold0_cnt = Counter()
-        fold4_cnt = Counter()
-        for codon in seq1 + seq2:
-            # count sites at different codon position
-            if codon != '---':
-                fcodon[0][codon[0]] += 1
-                fcodon[1][codon[1]] += 1
-                fcodon[2][codon[2]] += 1
-            # count sites in different degenerate fold class
-            fold_num = codon_fold_dict[codon]
-            for i, f in enumerate(fold_num):
-                if f == '0':
-                    fold0_cnt[codon[i]] += 1
-                elif f == '4':
-                    fold4_cnt[codon[i]] += 1
-        f0_total = sum(fold0_cnt.values())
-        f4_total = sum(fold4_cnt.values())
-        for i, j in zip(fold0_cnt, fold4_cnt):
-            fold0_cnt[i] = fold0_cnt[i]/f0_total
-            fold4_cnt[i] = fold4_cnt[i]/f4_total
-        # TODO:
-        # the initial kappa is different from what yn00 gives,
-        # try to find the problem.
-        TV = _get_TV(seq1, seq2, codon_table=codon_table)
-        k04 = (_get_kappa_t(fold0_cnt, TV), _get_kappa_t(fold4_cnt, TV))
-        kappa = (f0_total*k04[0]+f4_total*k04[1])/(f0_total+f4_total)
-        kappa = 2.4285
-        # count synonymous sites and non-synonymous sites
-        for i in range(3):
-            tot = sum(fcodon[i].values())
-            fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
-        pi = Counter()
-        for i in codon_table.forward_table.keys() + codon_table.stop_codons:
-            if 'U' not in i:
-                pi[i] = 0
-        for i in seq1 + seq2:
-            pi[i] += 1
-        S_sites1, N_sites1, bfreqSN1 = _count_site_YN00(seq1, seq2, pi,
-                                                        k=kappa,
-                                                        codon_table=codon_table)
-        S_sites2, N_sites2, bfreqSN2 = _count_site_YN00(seq2, seq1, pi,
-                                                        k=kappa,
-                                                        codon_table=codon_table)
-        N_sites = (N_sites1+N_sites2)/2
-        S_sites = (S_sites1+S_sites2)/2
-        bfreqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},
-                   {'A': 0, 'T': 0, 'C': 0, 'G': 0}]
-        for i in range(2):
-            for b in ('A', 'T', 'C', 'G'):
-                bfreqSN[i][b] = (bfreqSN1[i][b]+bfreqSN2[i][b])/2
-        # use NG86 method to get initial t and w
-        SN = [0, 0]
-        for i, j in zip(seq1, seq2):
-            SN = [m+n for m,n in zip(SN, _count_diff_NG86(
-                                                     i, j, 
-                                                     codon_table=codon_table)
-                                     )
-                  ]
-        ps = SN[0] / S_sites
-        pn = SN[1] / N_sites
-        p  = sum(SN) / (S_sites + N_sites)
-        w = log(1-4.0/3*pn) / log(1-4.0/3*ps)
-        t = -3/4*log(1-4/3*p)
-        tolerance = 1e-5
-        dSdN_pre = [0, 0]
-        for temp in range(20):
-            # count synonymous and nonsynonymous differences under kappa, w, t
-            codon_lst = [i for i in \
-                    codon_table.forward_table.keys() + codon_table.stop_codons \
-                    if 'U' not in i]
-            Q = _get_Q(pi, k, w, codon_lst, codon_table)
-            P = expm(Q*t)
-            TV = [0, 0, 0, 0] # synonymous/nonsynonymous transition/transvertion
-            sites = [0, 0]
-            codon_npath = {}
-            for i, j in zip(seq1, seq2):
-                if i != '---' and j != '---':
-                    codon_npath.setdefault((i, j), 0)
-                    codon_npath[(i, j)] += 1
-            for i in codon_npath:
-                tv = _count_diff_YN00(i[0], i[1], P, codon_lst, codon_table)
-                TV = [m+n*codon_npath[i] for m,n in zip(TV, tv)]
-            TV = (TV[0]/S_sites, TV[1]/S_sites), (TV[2]/N_sites, TV[3]/N_sites)
-            # according to the DistanceF84() function of yn00.c in paml,
-            # the t (e.q. 10) appears in PMID: 10666704 is dS and dN
-            dSdN = []
-            for f, tv in zip(bfreqSN, TV):
-                dSdN.append(_get_kappa_t(f, tv, t=True))
-            t = dSdN[0]*3*S_sites/(S_sites+N_sites)+dSdN[1]*3*N_sites/(S_sites+N_sites)
-            w = dSdN[1]/dSdN[0]
-            if all(map(lambda x: x<tolerance, [abs(i-j) for i,j in zip(dSdN, dSdN_pre)])):
-                return dSdN[1], dSdN[0] # dN, dS
-            dSdN_pre = dSdN
-    elif method == "ML":
-        from collections import Counter
-        from scipy.optimize import minimize
-        codon_cnt = Counter()
-        pi = _get_pi(seq1, seq2, cmethod=cfreq, codon_table=codon_table)
-        for i, j in zip(seq1, seq2):
-            #if i != j and ('---' not in (i, j)):
-            if '---' not in (i, j):
-                codon_cnt[(i,j)] += 1
-        codon_lst = [i for i in \
-                codon_table.forward_table.keys() + codon_table.stop_codons \
-                if 'U' not in i]
-        # apply optimization
-        def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst,
-                 codon_table=codon_table):
-            """params = [t, k, w]"""
-            return -_likelihood_func(
-                        params[0], params[1], params[2], pi,
-                        codon_cnt, codon_lst=codon_lst,
-                        codon_table=codon_table)
-        # count sites
-        opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
-                           bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)),
-                           tol=1e-5)
-        t, k, w = opt_res.x
-        Q = _get_Q(pi, k, w, codon_lst, codon_table)
-        Sd = Nd = 0
-        for i, c1 in enumerate(codon_lst):
-            for j, c2 in enumerate(codon_lst):
-                if i != j:
-                    try:
-                        if codon_table.forward_table[c1] == \
-                                codon_table.forward_table[c2]:
-                            # synonymous count
-                            Sd += pi[c1] * Q[i, j]
-                        else:
-                            # nonsynonymous count
-                            Nd += pi[c1] * Q[i, j]
-                    except:
-                        # This is probably due to stop codons
-                        pass
-        Sd *= t
-        Nd *= t
-        # count differences (with w fixed to 1)
-        opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B',
-                           bounds=((1e-10, 20), (1e-10, 20), (1, 1)),
-                           tol=1e-5)
-        t, k, w = opt_res.x
-        Q = _get_Q(pi, k, w, codon_lst, codon_table)
-        rhoS = rhoN = 0
-        for i, c1 in enumerate(codon_lst):
-            for j, c2 in enumerate(codon_lst):
-                if i != j:
-                    try:
-                        if codon_table.forward_table[c1] == \
-                                codon_table.forward_table[c2]:
-                            # synonymous count
-                            rhoS += pi[c1] * Q[i, j]
-                        else:
-                            # nonsynonymous count
-                            rhoN += pi[c1] * Q[i, j]
-                    except:
-                        # This is probably due to stop codons
-                        pass
-        rhoS *= 3
-        rhoN *= 3
-        dN = Nd/rhoN
-        dS = Sd/rhoS
-        return dN, dS
+    dnds_func = {'ML': _ml, 'NG86': _ng86, 'LWL85': _lwl85, 'YN00': _yn00}
+    if method == "ML":
+        return dnds_func[method](seq1, seq2, cfreq, codon_table)
+    else:
+        return dnds_func[method](seq1, seq2, k, codon_table)
 
 
 #################################################################
 #  private functions for NG86 method
 #################################################################
+
+def _ng86(seq1, seq2, k, codon_table):
+    """Main function for NG86 method (PRIVATE).
+    """
+    S_sites1, N_sites1 = _count_site_NG86(seq1,
+                                          codon_table=codon_table, k=k)
+    S_sites2, N_sites2 = _count_site_NG86(seq2,
+                                          codon_table=codon_table, k=k)
+    S_sites = (S_sites1 + S_sites2) / 2.0
+    N_sites = (N_sites1 + N_sites2) / 2.0
+    SN = [0, 0]
+    for i, j in zip(seq1, seq2):
+        SN = [m+n for m,n in zip(SN, _count_diff_NG86(
+                                                 i, j, 
+                                                 codon_table=codon_table)
+                                 )
+              ]
+    ps = SN[0] / S_sites
+    pn = SN[1] / N_sites
+    if ps < 3/4:
+        dS = -3.0/4*log(1-4.0/3*ps)
+    else:
+        dS = -1
+    if pn < 3/4:
+        dN = -3.0/4*log(1-4.0/3*pn)
+    else:
+        dN = -1
+    return dN, dS
+
 
 def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
     """count synonymous and non-synonymous sites of a list of codons
@@ -751,6 +553,47 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
 #  private functions for LWL85 method
 #################################################################
 
+def _lwl85(seq1, seq2, k, codon_table):
+    """Main function fo LWL85 method (PRIVATE).
+    """
+    # Nomenclature is according to PMID (3916709)
+    codon_fold_dict = _get_codon_fold(codon_table)
+    # count number of sites in different degenerate classes
+    fold0 = [0, 0]
+    fold2 = [0, 0]
+    fold4 = [0, 0]
+    for codon in seq1 + seq2:
+        fold_num = codon_fold_dict[codon]
+        for f in fold_num:
+            if f == '0':
+                fold0[0] += 1
+            elif f == '2':
+                fold2[0] += 1
+            elif f == '4':
+                fold4[0] += 1
+    L = [sum(fold0)/2.0, sum(fold2)/2.0, sum(fold4)/2.0]
+    # count number of differences in different degenerate classes
+    PQ = [0] * 6 # with P0, P2, P4, Q0, Q2, Q4 in each position
+    for codon1, codon2 in zip(seq1, seq2):
+        if (codon1 == "---" or codon2 == "---") or codon1 == codon2:
+            continue
+        else:
+            PQ = [i+j for i, j in zip(PQ, _diff_codon(
+                                            codon1,
+                                            codon2,
+                                            fold_dict=codon_fold_dict)
+                                      )]
+    PQ = [i/j for i, j in zip(PQ, L*2)]
+    P = PQ[:3]
+    Q = PQ[3:]
+    A = [(1./2)*log(1./(1-2*i-j)) - (1./4)*log(1./(1-2*j)) \
+            for i, j in zip(P, Q)]
+    B = [(1./2)*log(1./(1-2*i)) for i in Q]
+    dS = 3*(L[2]*A[1]+L[2]*(A[2]+B[2]))/(L[1]+3*L[2])
+    dN = 3*(L[2]*B[1]+L[0]*(A[0]+B[0]))/(2*L[1]+3*L[0])
+    return dN, dS
+
+
 def _get_codon_fold(codon_table):
     """function to classify different position in a codon into
     different fold (PRIVATE).
@@ -834,6 +677,111 @@ def _diff_codon(codon1, codon2, fold_dict):
 #################################################################
 #  private functions for YN00 method
 #################################################################
+
+def _yn00(seq1, seq2, k, codon_table):
+    """Main function for yn00 method (PRIVATE).
+    """
+    # nomenclature is according to PMID: 10666704
+    from collections import Counter
+    from scipy.linalg import expm
+    fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
+              {'A': 0, 'G': 0, 'C': 0, 'T': 0},
+              {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
+    codon_fold_dict = _get_codon_fold(codon_table)
+    fold0_cnt = Counter()
+    fold4_cnt = Counter()
+    for codon in seq1 + seq2:
+        # count sites at different codon position
+        if codon != '---':
+            fcodon[0][codon[0]] += 1
+            fcodon[1][codon[1]] += 1
+            fcodon[2][codon[2]] += 1
+        # count sites in different degenerate fold class
+        fold_num = codon_fold_dict[codon]
+        for i, f in enumerate(fold_num):
+            if f == '0':
+                fold0_cnt[codon[i]] += 1
+            elif f == '4':
+                fold4_cnt[codon[i]] += 1
+    f0_total = sum(fold0_cnt.values())
+    f4_total = sum(fold4_cnt.values())
+    for i, j in zip(fold0_cnt, fold4_cnt):
+        fold0_cnt[i] = fold0_cnt[i]/f0_total
+        fold4_cnt[i] = fold4_cnt[i]/f4_total
+    # TODO:
+    # the initial kappa is different from what yn00 gives,
+    # try to find the problem.
+    TV = _get_TV(seq1, seq2, codon_table=codon_table)
+    k04 = (_get_kappa_t(fold0_cnt, TV), _get_kappa_t(fold4_cnt, TV))
+    kappa = (f0_total*k04[0]+f4_total*k04[1])/(f0_total+f4_total)
+    #kappa = 2.4285
+    # count synonymous sites and non-synonymous sites
+    for i in range(3):
+        tot = sum(fcodon[i].values())
+        fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
+    pi = Counter()
+    for i in codon_table.forward_table.keys() + codon_table.stop_codons:
+        if 'U' not in i:
+            pi[i] = 0
+    for i in seq1 + seq2:
+        pi[i] += 1
+    S_sites1, N_sites1, bfreqSN1 = _count_site_YN00(seq1, seq2, pi,
+                                                    k=kappa,
+                                                    codon_table=codon_table)
+    S_sites2, N_sites2, bfreqSN2 = _count_site_YN00(seq2, seq1, pi,
+                                                    k=kappa,
+                                                    codon_table=codon_table)
+    N_sites = (N_sites1+N_sites2)/2
+    S_sites = (S_sites1+S_sites2)/2
+    bfreqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},
+               {'A': 0, 'T': 0, 'C': 0, 'G': 0}]
+    for i in range(2):
+        for b in ('A', 'T', 'C', 'G'):
+            bfreqSN[i][b] = (bfreqSN1[i][b]+bfreqSN2[i][b])/2
+    # use NG86 method to get initial t and w
+    SN = [0, 0]
+    for i, j in zip(seq1, seq2):
+        SN = [m+n for m,n in zip(SN, _count_diff_NG86(
+                                                 i, j, 
+                                                 codon_table=codon_table)
+                                 )
+              ]
+    ps = SN[0] / S_sites
+    pn = SN[1] / N_sites
+    p  = sum(SN) / (S_sites + N_sites)
+    w = log(1-4.0/3*pn) / log(1-4.0/3*ps)
+    t = -3/4*log(1-4/3*p)
+    tolerance = 1e-5
+    dSdN_pre = [0, 0]
+    for temp in range(20):
+        # count synonymous and nonsynonymous differences under kappa, w, t
+        codon_lst = [i for i in \
+                codon_table.forward_table.keys() + codon_table.stop_codons \
+                if 'U' not in i]
+        Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
+        P = expm(Q*t)
+        TV = [0, 0, 0, 0] # synonymous/nonsynonymous transition/transvertion
+        sites = [0, 0]
+        codon_npath = {}
+        for i, j in zip(seq1, seq2):
+            if i != '---' and j != '---':
+                codon_npath.setdefault((i, j), 0)
+                codon_npath[(i, j)] += 1
+        for i in codon_npath:
+            tv = _count_diff_YN00(i[0], i[1], P, codon_lst, codon_table)
+            TV = [m+n*codon_npath[i] for m,n in zip(TV, tv)]
+        TV = (TV[0]/S_sites, TV[1]/S_sites), (TV[2]/N_sites, TV[3]/N_sites)
+        # according to the DistanceF84() function of yn00.c in paml,
+        # the t (e.q. 10) appears in PMID: 10666704 is dS and dN
+        dSdN = []
+        for f, tv in zip(bfreqSN, TV):
+            dSdN.append(_get_kappa_t(f, tv, t=True))
+        t = dSdN[0]*3*S_sites/(S_sites+N_sites)+dSdN[1]*3*N_sites/(S_sites+N_sites)
+        w = dSdN[1]/dSdN[0]
+        if all(map(lambda x: x<tolerance, [abs(i-j) for i,j in zip(dSdN, dSdN_pre)])):
+            return dSdN[1], dSdN[0] # dN, dS
+        dSdN_pre = dSdN
+
 
 def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
     """
@@ -1071,10 +1019,83 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
 #  private functions for Maximum Likelihood method
 #################################################################
 
-def _get_pi(seq1, seq2, cmethod="F3x4", codon_table=default_codon_table):
+def _ml(seq1, seq2, cmethod, codon_table):
+    """Main function for ML method (PRIVATE).
+    """
+    from collections import Counter
+    from scipy.optimize import minimize
+    codon_cnt = Counter()
+    pi = _get_pi(seq1, seq2, cmethod, codon_table=codon_table)
+    for i, j in zip(seq1, seq2):
+        #if i != j and ('---' not in (i, j)):
+        if '---' not in (i, j):
+            codon_cnt[(i,j)] += 1
+    codon_lst = [i for i in \
+            codon_table.forward_table.keys() + codon_table.stop_codons \
+            if 'U' not in i]
+    # apply optimization
+    def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst,
+             codon_table=codon_table):
+        """params = [t, k, w]"""
+        return -_likelihood_func(
+                    params[0], params[1], params[2], pi,
+                    codon_cnt, codon_lst=codon_lst,
+                    codon_table=codon_table)
+    # count sites
+    opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
+                       bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)),
+                       tol=1e-5)
+    t, k, w = opt_res.x
+    Q = _get_Q(pi, k, w, codon_lst, codon_table)
+    Sd = Nd = 0
+    for i, c1 in enumerate(codon_lst):
+        for j, c2 in enumerate(codon_lst):
+            if i != j:
+                try:
+                    if codon_table.forward_table[c1] == \
+                            codon_table.forward_table[c2]:
+                        # synonymous count
+                        Sd += pi[c1] * Q[i, j]
+                    else:
+                        # nonsynonymous count
+                        Nd += pi[c1] * Q[i, j]
+                except:
+                    # This is probably due to stop codons
+                    pass
+    Sd *= t
+    Nd *= t
+    # count differences (with w fixed to 1)
+    opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B',
+                       bounds=((1e-10, 20), (1e-10, 20), (1, 1)),
+                       tol=1e-5)
+    t, k, w = opt_res.x
+    Q = _get_Q(pi, k, w, codon_lst, codon_table)
+    rhoS = rhoN = 0
+    for i, c1 in enumerate(codon_lst):
+        for j, c2 in enumerate(codon_lst):
+            if i != j:
+                try:
+                    if codon_table.forward_table[c1] == \
+                            codon_table.forward_table[c2]:
+                        # synonymous count
+                        rhoS += pi[c1] * Q[i, j]
+                    else:
+                        # nonsynonymous count
+                        rhoN += pi[c1] * Q[i, j]
+                except:
+                    # This is probably due to stop codons
+                    pass
+    rhoS *= 3
+    rhoN *= 3
+    dN = Nd/rhoN
+    dS = Sd/rhoS
+    return dN, dS
+
+
+def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
     """Obtain codon frequency dict (pi) from two codon list (PRIVATE).
     This function is designed for ML method. Available counting methods
-    (cmethod) are F1x4, F3x4 and F64.
+    (cfreq) are F1x4, F3x4 and F64.
     """
     #TODO:
     # Stop codon should not be allowed according to Yang.
