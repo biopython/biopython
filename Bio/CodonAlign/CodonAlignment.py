@@ -94,7 +94,7 @@ class CodonAlignment(MultipleSeqAlignment):
                                          self._alphabet)
 
     def get_aln_length(self):
-        return self.get_alignment_length() / 3
+        return self.get_alignment_length() // 3
 
     def toMultipleSeqAlignment(self):
         """Return a MultipleSeqAlignment containing all the
@@ -145,14 +145,13 @@ def mktest(codon_alns, codon_table=default_codon_table,
     Return the p-value of test result
     """
     from CodonSeq import _get_codon_list
-    instance = [isinstance(i, CodonAlignment) for i in codon_alns]
-    if not all(instance):
+    if not all([isinstance(i, CodonAlignment) for i in codon_alns]):
         raise TypeError("mktest accept CodonAlignment list.")
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
     if len(set(codon_aln_len)) != 1:
         raise RuntimeError("CodonAlignment object for mktest should be of"
                            " equal length.")
-    codon_num = int(codon_aln_len[0]/3)
+    codon_num = codon_aln_len[0]//3
     # prepare codon_dict (taking stop codon as an extra amino acid)
     codon_dict = codon_table.forward_table
     for stop in codon_table.stop_codons:
@@ -330,7 +329,8 @@ def _count_replacement(codon_set, G):
 
 def _prim(G):
     """Prim's algorithm to find minimum spanning tree. Code is adapted
-    from http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
+    from
+      http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
     (PRIVATE).
     """
     from math import floor
@@ -389,7 +389,8 @@ def _G_test(site_counts):
     # TODO:
     #   Apply continuity correction for Chi-square test.
     from math import log
-    from scipy.stats import chi2
+    #from scipy.stats import chi2
+    from chisq import chisqprob
     G = 0
     tot = sum(site_counts)
     tot_syn = site_counts[0] + site_counts[2]
@@ -401,7 +402,8 @@ def _G_test(site_counts):
     for obs, ex in zip(site_counts, exp):
         G += obs*log(obs/ex)
     G *= 2
-    return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
+    #return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
+    return chisqprob(G, 1)
 
 
 if __name__ == "__main__":
