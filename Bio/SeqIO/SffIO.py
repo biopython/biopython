@@ -878,17 +878,64 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
                                    key_sequence,
                                    alphabet,
                                    trim)
-    #The following is not essential, but avoids confusing error messages
-    #for the user if they try and re-parse the same handle.
-    if index_offset and handle.tell() == index_offset:
+    _check_eof(handle, index_offset, index_length)
+
+
+def _check_eof(handle, index_offset, index_length):
+    """Check final padding is OK (8 byte alignment) and file ends (PRIVATE).
+
+    Will attempt to spot apparent SFF file concatenation and give an error.
+
+    Will not attempt to seek, only moves the handle forward.
+    """
+    offset = handle.tell()
+    extra = b""
+    padding = 0
+
+    if index_offset and offset <= index_offset:
+        # Index block then end of file...
+        if offset < index_offset:
+            raise ValueError("Gap of %i bytes after final record end %i, "
+                             "before %i where index starts?"
+                             % (index_offset - offset, offset, index_offset))
+        # Doing read to jump the index rather than a seek
+        # in case this is a network handle or similar 
+        handle.read(index_offset + index_length - offset)
         offset = index_offset + index_length
-        if offset % 8:
-            offset += 8 - (offset % 8)
-        assert offset % 8 == 0
-        handle.seek(offset)
-    #Should now be at the end of the file...
-    if handle.read(1):
-        raise ValueError("Additional data at end of SFF file")
+        assert offset == handle.tell(), \
+            "Wanted %i, got %i, index is %i to %i" \
+            % (offset, handle.tell(), index_offset, index_offset + index_length)
+
+    if offset % 8:
+        padding = 8 - (offset % 8)
+        extra = handle.read(padding)
+
+    if padding >= 4 and extra[-4:] == _sff:
+        #Seen this in one user supplied file, should have been
+        #four bytes of null padding but was actually .sff and
+        #the start of a new concatenated SFF file!
+        raise ValueError("Your SFF file is invalid, post index %i byte "
+                         "null padding region ended '.sff' which could "
+                         "be the start of a concatenated SFF file? "
+                         "See offset %i" % (padding, offset))
+    if extra.count(_null) != padding:
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post index %i byte "
+                      "null padding region contained data." % padding,
+                      BiopythonParserWarning)
+
+    offset = handle.tell()
+    assert offset % 8 == 0
+    # Should now be at the end of the file...
+    extra = handle.read(4)
+    if extra == _sff:
+        raise ValueError("Additional data at end of SFF file, "
+                         "perhaps multiple SFF files concatenated? "
+                         "See offset %i" % offset)
+    elif extra:
+        raise ValueError("Additional data at end of SFF file, "
+                         "see offset %i" % offset)
 
 
 #This is a generator function!
