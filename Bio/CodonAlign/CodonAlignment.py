@@ -242,6 +242,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
 
 def _dijkstra(graph, start, end):
     """
+    Dijkstra's algorithm Python implementation.
     Algorithm adapted from
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
     However, an abvious bug in
@@ -249,29 +250,21 @@ def _dijkstra(graph, start, end):
     is fixed.
     This function will return the distance between start and end.
 
-    Dijkstra's algorithm Python implementation.
-
     Arguments:
         graph: Dictionnary of dictionnary (keys are vertices).
         start: Start vertex.
         end: End vertex.
-
     Output:
         List of vertices from the beggining to the end.
     """
-
     D = {} # Final distances dict
     P = {} # Predecessor dict
-
     # Fill the dicts with default values
     for node in graph.keys():
         D[node] = 100 # Vertices are unreachable
         P[node] = "" # Vertices have no predecessors
-
     D[start] = 0 # The start vertex needs no move
-
     unseen_nodes = graph.keys() # All nodes are unseen
-
     while len(unseen_nodes) > 0:
         # Select the node with the lowest value in D (final distance)
         shortest = None
@@ -283,19 +276,17 @@ def _dijkstra(graph, start, end):
             elif D[temp_node] < shortest:
                 shortest = D[temp_node]
                 node = temp_node
-
         # Remove the selected node from unseen_nodes
         unseen_nodes.remove(node)
-
         # For each child (ie: connected vertex) of the current node
         for child_node, child_value in graph[node].items():
             if D[child_node] > D[node] + child_value:
                 D[child_node] = D[node] + child_value
                 # To go to child_node, you have to go through node
                 P[child_node] = node
+        if node == end: break
     # Set a clean path
     path = []
-
     # We begin from the end
     node = end
     distance = 0
@@ -306,7 +297,6 @@ def _dijkstra(graph, start, end):
             node = P[node] # The current node becomes its predecessor
         else:
             break
-
     path.insert(0, start) # Finally, insert the start vertex
     for i in range(len(path)-1):
         distance += graph[path[i]][path[i+1]]
@@ -384,7 +374,6 @@ def _G_test(site_counts):
 
     >>> round(_G_test([17, 7, 42, 2]), 7)
     0.004924
-
     """
     # TODO:
     #   Apply continuity correction for Chi-square test.
