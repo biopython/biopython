@@ -372,7 +372,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
 
 
 #################################################################
-#  private functions for NG86 method
+#              private functions for NG86 method
 #################################################################
 
 def _ng86(seq1, seq2, k, codon_table):
@@ -550,7 +550,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
         
 
 #################################################################
-#  private functions for LWL85 method
+#               private functions for LWL85 method
 #################################################################
 
 def _lwl85(seq1, seq2, k, codon_table):
@@ -675,7 +675,7 @@ def _diff_codon(codon1, codon2, fold_dict):
 
 
 #################################################################
-#  private functions for YN00 method
+#               private functions for YN00 method
 #################################################################
 
 def _yn00(seq1, seq2, k, codon_table):
@@ -741,14 +741,14 @@ def _yn00(seq1, seq2, k, codon_table):
     # use NG86 method to get initial t and w
     SN = [0, 0]
     for i, j in zip(seq1, seq2):
-        SN = [m+n for m,n in zip(SN, _count_diff_NG86(
-                                                 i, j, 
-                                                 codon_table=codon_table)
-                                 )
+        SN = [m+n for m, n in zip(SN, _count_diff_NG86(
+                                                  i, j, 
+                                                  codon_table=codon_table)
+                                  )
               ]
     ps = SN[0] / S_sites
     pn = SN[1] / N_sites
-    p  = sum(SN) / (S_sites + N_sites)
+    p  = sum(SN) / (S_sites+N_sites)
     w = log(1-4.0/3*pn) / log(1-4.0/3*ps)
     t = -3/4*log(1-4/3*p)
     tolerance = 1e-5
@@ -810,7 +810,7 @@ def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
 
 
 def _get_kappa_t(pi, TV, t=False):
-    """The following formula and variable name are according to
+    """The following formula and variable names are according to
     PMID: 10666704
     """
     pi['Y'] = pi['T'] + pi['C']
@@ -1016,7 +1016,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
 
 
 #################################################################
-#  private functions for Maximum Likelihood method
+#        private functions for Maximum Likelihood method
 #################################################################
 
 def _ml(seq1, seq2, cmethod, codon_table):

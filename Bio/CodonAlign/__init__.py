@@ -13,7 +13,7 @@ from itertools import izip
 from Bio.SeqRecord import SeqRecord
 
 from CodonSeq import CodonSeq
-from CodonAlignment import CodonAlignment, toCodonAlignment
+from CodonAlignment import CodonAlignment
 from CodonAlphabet import CodonAlphabet
 from CodonAlphabet import default_codon_table, default_codon_alphabet
 from CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
@@ -63,13 +63,13 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
 
     # check the type of object of pro_align
     if not isinstance(pro_align, MultipleSeqAlignment):
-        raise TypeError("the first argument should be a "
-                        "MultipleSeqAlignment object")
+        raise TypeError("the first argument should be a MultipleSeqAlignment "
+                        "object")
     # check the alphabet of pro_align
     for pro in pro_align:
         if not isinstance(pro.seq.alphabet, ProteinAlphabet):
-            raise TypeError("Alphabet Error!\nThe input alignment "
-                            "should be a *PROTEIN* alignment")
+            raise TypeError("Alphabet Error!\nThe input alignment should be "
+                            "a *PROTEIN* alignment")
     # check whether the number of seqs in pro_align and nucl_seqs is
     # the same
     pro_num = len(pro_align)
@@ -152,7 +152,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     codon_aln = []
     shift = None
     for pair in pro_nucl_pair:
-        # Beaware that the following span corresponds to a ungapped
+        # Beaware that the following span corresponds to an ungapped
         # nucleotide sequence.
         corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char,
                                 codon_table=codon_table,
@@ -175,15 +175,15 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
         return CodonAlignment(codon_aln, alphabet=alphabet)
 
 
-def toCodonAlignment(align, alphabet=default_codon_alphabet):
-    """Function to convert a MultipleSeqAlignment to CodonAlignment.
-    It is the user's responsibility to ensure all the requirement
-    needed by CodonAlignment is met.
-
-    """
-    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet),
-                     id=i.id) for i in align._records]
-    return CodonAlignment(rec, alphabet=align._alphabet)
+#def toCodonAlignment(align, alphabet=default_codon_alphabet):
+#    """Function to convert a MultipleSeqAlignment to CodonAlignment.
+#    It is the user's responsibility to ensure all the requirement
+#    needed by CodonAlignment is met.
+#
+#    """
+#    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet),
+#                     id=i.id) for i in align._records]
+#    return CodonAlignment(rec, alphabet=align._alphabet)
 
 
 def _codons2re(codons):
@@ -571,7 +571,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                 codon_seq += this_codon
                 aa_num += 1
             else:
-                this_codon = nucl_seq._data[(span[0] + 3*aa_num):(span[0]+3*(aa_num+1))]
+                this_codon = nucl_seq._data[(span[0] + 3*aa_num):
+                                            (span[0]+3*(aa_num+1))]
                 if not str(Seq(this_codon.upper()).translate()) == aa:
                     max_score -= 1
                     warnings.warn("%s(%s %d) does not correspond to %s(%s)"
@@ -606,7 +607,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                 rf_table.append(i)
                 rf_table.append(i+3-shift_val)
                 i = shift_pos[shift_index][1]
-            elif i in shift_start and m_groupdict[shift_start.index(i)].islower():
+            elif i in shift_start and \
+                    m_groupdict[shift_start.index(i)].islower():
                 i = shift_pos[shift_start.index(i)][1]
             if i >= match.end():
                 break
@@ -698,7 +700,8 @@ def _align_shift_recs(recs):
             break
         for j, k in enumerate(col_rf_lst):
             add_lst.append((j, int(k)))
-            if isinstance(k, float) and recs[j].seq._data[int(k):int(k)+3] != "---":
+            if isinstance(k, float) and \
+                    recs[j].seq._data[int(k):int(k)+3] != "---":
                 m, p = find_next_int(k, full_rf_table_lst[j])
                 if (m-k) % 3 != 0:
                     gap_num = 3 - (m - k) % 3
@@ -706,10 +709,12 @@ def _align_shift_recs(recs):
                     gap_num = 0
                 if gap_num != 0:
                     gaps = '-'*int(gap_num)
-                    seq = recs[j].seq._data[:int(k)] + gaps + recs[j].seq._data[int(k):]
+                    seq = recs[j].seq._data[:int(k)] + gaps + \
+                            recs[j].seq._data[int(k):]
                     full_rf_table = full_rf_table_lst[j]
                     bp = full_rf_table.index(k)
-                    full_rf_table = full_rf_table[:bp] + [v+int(gap_num) for v in full_rf_table[bp+1:]]
+                    full_rf_table = full_rf_table[:bp] + \
+                            [v+int(gap_num) for v in full_rf_table[bp+1:]]
                     full_rf_table_lst[j] = full_rf_table
                     recs[j].seq = CodonSeq(seq,
                                            rf_table=recs[j].seq.rf_table,
@@ -717,17 +722,18 @@ def _align_shift_recs(recs):
                 add_lst.pop()
                 gap_num += m-k
                 i += p - 1
-        tt = int(full_rf_table_lst[4][38])
         if len(add_lst) != rec_num:
             for j, k in add_lst:
                 gaps = "-"*int(gap_num)
-                seq = recs[j].seq._data[:int(k)] + gaps + recs[j].seq._data[int(k):]
+                seq = recs[j].seq._data[:int(k)] + gaps + \
+                        recs[j].seq._data[int(k):]
                 full_rf_table = full_rf_table_lst[j]
                 bp = full_rf_table.index(k)
                 inter_rf = []
                 for t in filter(lambda x: x%3==0, range(len(gaps))):
                     inter_rf.append(k+t+3.0)
-                full_rf_table = full_rf_table[:bp] + inter_rf + [v+int(gap_num) for v in full_rf_table[bp:]]
+                full_rf_table = full_rf_table[:bp] + inter_rf + \
+                        [v+int(gap_num) for v in full_rf_table[bp:]]
                 full_rf_table_lst[j] = full_rf_table
                 recs[j].seq = CodonSeq(seq,
                                        rf_table=recs[j].seq.rf_table,
