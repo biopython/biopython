@@ -5,7 +5,6 @@
 
 """Unit tests for the Bio.Phylo.TreeConstruction module."""
 
-import logging
 import unittest
 import StringIO
 from Bio import AlignIO
@@ -20,7 +19,6 @@ from Bio.Phylo.TreeConstruction import ParsimonyScorer
 from Bio.Phylo.TreeConstruction import NNITreeSearcher
 from Bio.Phylo.TreeConstruction import ParsimonyTreeConstructor
 
-logging.basicConfig(filename='./TreeConstruction/test.log', level=logging.DEBUG)
 
 class DistanceMatrixTest(unittest.TestCase):
     """Test for DistanceMatrix construction and manipulation"""

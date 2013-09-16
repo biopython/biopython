@@ -40,6 +40,7 @@ class BitStringTest(unittest.TestCase):
         self.assertTrue(bitstr2.iscompatible(bitstr4))
         self.assertTrue(bitstr3.iscompatible(bitstr4))
 
+
 class ConsensusTest(unittest.TestCase):
     """Test for consensus methods"""
 
@@ -92,6 +93,7 @@ class ConsensusTest(unittest.TestCase):
         ref_trees = open('./TreeConstruction/adam_refs.tre')
         # three trees
         consensus_tree = adam_consensus(self.trees)
+        #tree_file = '/home/yeyanbo/adam.tres'
         tree_file = StringIO.StringIO()
         Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertEqual(tree_file.getvalue(), ref_trees.readline())
@@ -116,6 +118,7 @@ class ConsensusTest(unittest.TestCase):
         self.assertEqual(clade.confidence, 3 * 100.0 / 3)
         clade = support_tree.common_ancestor([support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")])
         self.assertEqual(clade.confidence, 2 * 100.0 / 3)
+
 
 class BootstrapTest(unittest.TestCase):
     """Test for bootstrap methods"""
@@ -142,6 +145,7 @@ class BootstrapTest(unittest.TestCase):
         tree = bootstrap_consensus(self.msa, 100, constructor, majority_consensus)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
         Phylo.write(tree, './TreeConstruction/bootstrap_consensus.tre', 'newick')
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
