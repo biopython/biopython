@@ -210,7 +210,12 @@ class BitString(str):
 
 
 def strict_consensus(trees):
-    """Search stric consensus tree from multiple trees"""
+    """Search stric consensus tree from multiple trees
+
+    :Parameters:
+        trees: list
+            list of trees to produce consensus tree.
+    """
     terms = trees[0].get_terminals()
     bitstr_counts = _count_clades(trees)
     # store bitstrs for strict clades
@@ -263,6 +268,10 @@ def majority_consensus(trees, cutoff=0):
     of the provided trees is a binary tree). The branch length of each consensus
     clade in the result consensus tree is the average length of all counts
     for that clade.
+
+    :Parameters:
+        trees: list
+            list of trees to produce consensus tree.
     """
     terms = trees[0].get_terminals()
     bitstr_counts = _count_clades(trees)
@@ -347,12 +356,18 @@ def majority_consensus(trees, cutoff=0):
 
 
 def adam_consensus(trees):
-    """Search Adam Consensus tree from multiple trees"""
+    """Search Adam Consensus tree from multiple trees
+
+    :Parameters:
+        trees: list
+            list of trees to produce consensus tree.
+    """
     clades = [tree.root for tree in trees]
     return BaseTree.Tree(root=_part(clades), rooted=True)
 
 
 def _part(clades):
+    """recursive function of adam consensus algorithm"""
     new_clade = None
     terms = [term for term in clades[0].get_terminals()]
     term_names = [term.name for term in clades[0].get_terminals()]
@@ -381,8 +396,19 @@ def _part(clades):
                         to_add.add(bs & bitstr ^ bitstr)
                         to_add.add(bs & bitstr ^ bs)
                         to_remove.add(bs)
-                bitstrs = bitstrs | to_add
+                #bitstrs = bitstrs | to_add
                 bitstrs = bitstrs ^ to_remove
+                if to_add:    
+                    to_add = list(to_add)
+                    to_add.sort(key=lambda bs: bs.count('1'))
+                    for ta in to_add:
+                        independent = True
+                        for bs in bitstrs:
+                            if not ta.independent(bs):
+                                independent = False
+                                break
+                        if independent:
+                            bitstrs.add(ta)
         new_clade = BaseTree.Clade()
         for bitstr in bitstrs:
             indices = bitstr.index_one()
@@ -395,9 +421,37 @@ def _part(clades):
                 new_clade.clades.append(bifur_clade)
             elif len(indices) > 2:
                 part_names = [term_names[i] for i in indices]
-                next_clades = [clade.common_ancestor([clade.find_any(name=name) for name in part_names]) for clade in clades]
+                next_clades=[]
+                for clade in clades:
+                    next_clades.append(_sub_clade(clade, part_names))
+                # next_clades = [clade.common_ancestor([clade.find_any(name=name) for name in part_names]) for clade in clades]
                 new_clade.clades.append(_part(next_clades))
     return new_clade
+
+def _sub_clade(clade, term_names):
+    """extract a compatible subclade that only contains the given terminal names
+    """
+    term_clades = [clade.find_any(name=name) for name in term_names]
+    sub_clade = clade.common_ancestor(term_clades)
+    ca_terms = sub_clade.get_terminals()
+    if len(term_names) != len(ca_terms):
+        temp_clade = BaseTree.Clade()
+        temp_clade.clades.extend(term_clades)
+        for c in sub_clade.get_nonterminals(order="preorder"):
+            if c == sub_clade.root:
+                continue
+            childs = set(c.get_terminals()) & set(term_clades)
+            if childs:
+                for tc in temp_clade.get_nonterminals(order="preorder"):
+                    tc_childs = set(tc.clades)
+                    tc_new_clades = tc_childs - childs
+                    if childs.issubset(tc_childs) and tc_new_clades:
+                        tc.clades = list(tc_new_clades)
+                        child_clade = BaseTree.Clade()
+                        child_clade.clades.extend(list(childs))
+                        tc.clades.append(child_clade)
+        sub_clade = temp_clade
+    return sub_clade
 
 
 def _count_clades(trees):
@@ -423,7 +477,13 @@ def _count_clades(trees):
 
 def get_support(target_tree, trees):
     """Calculate branch support given a target tree and a list of bootstrap
-    replicate trees"""
+    replicate trees
+
+    :Parameters:
+        target_tree: Tree
+        trees: list
+            list of trees calculate branch support.
+    """
     term_names = [term.name for term in target_tree.get_terminals()]
     bitstrs = {}
     size = len(trees)
@@ -500,7 +560,8 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
             tree_constructor: TreeConstructor
                 tree constructor to be used to build trees.
             consensus: function
-                consensus method in this module
+                consensus method in this module: `strict_consensus`, 
+                `majority_consensus`, `adam_consensus`.
     """
 
 
