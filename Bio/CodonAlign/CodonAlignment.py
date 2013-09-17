@@ -17,7 +17,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
 from CodonAlphabet import default_codon_table, default_codon_alphabet
-from CodonSeq import _get_codon_list, CodonSeq
+from CodonSeq import _get_codon_list, CodonSeq, cal_dn_ds
 
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
@@ -106,24 +106,54 @@ class CodonAlignment(MultipleSeqAlignment):
         return MultipleSeqAlignment(alignments)
 
     def get_dn_ds_matrix(self, method="NG86"):
-        from numpy import zeros
+        """Available methods include NG86, LWL85, YN00 and ML.
+        """
+        from Bio.Phylo.TreeConstruction import DistanceMatrix
+        names = [i.id for i in self._records]
         size = len(self._records)
-        dN = zeros((size, size))
-        dS = zeros((size, size))
+        dn_matrix = []
+        ds_matrix = []
         for i in range(size):
-            for j in range(i):
+            dn_matrix.append([])
+            ds_matrix.append([])
+            for j in range(i+1):
                 if i != j:
-                    rec1 = self._records[i].seq
-                    rec2 = self._records[j].seq
-                    dn, ds = cal_dn_ds(rec1, rec2, method=method)
-                    dN[i,j] = dn
-                    dN[j,i] = dn
-                    dS[i,j] = ds
-                    dS[j,i] = ds
-        return dN, dS
+                    dn, ds = cal_dn_ds(self._records[i], self._records[j],
+                                       method=method)
+                    dn_matrix[i].append(dn)
+                    ds_matrix[i].append(ds)
+                else:
+                    dn_matrix[i].append(0.0)
+                    ds_matrix[i].append(0.0)
+        dn_dm = DistanceMatrix(names, matrix=dn_matrix)
+        ds_dm = DistanceMatrix(names, matrix=ds_matrix)
+        return dn_dm, ds_dm
+
+    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
+        """Method for constructing dn tree and ds tree.
+        Argument:
+            -   dn_ds_method - Available methods include NG86, LWL85, YN00
+                               and ML.
+            -   tree_method  - Available methods include UPGMA and NJ.
+        """
+        from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method)
+        dn_constructor = DistanceTreeConstructor()
+        ds_constructor = DistanceTreeConstructor()
+        if tree_method == "UPGMA":
+            dn_tree = dn_constructor.upgma(dn_dm)
+            ds_tree = ds_constructor.upgma(ds_dm)
+        elif tree_method == "NJ":
+            dn_tree = dn_constructor.nj(dn_dm)
+            ds_tree = ds_constructor.nj(ds_dm)
+        else:
+            raise RuntimeError("Unkown tree method ({0}). Only NJ and UPGMA "
+                               "are accepted.".format(tree_method))
+        return dn_tree, ds_tree
+
 
     @classmethod
-    def toCodonAlignment(cls, align, alphabet=default_codon_alphabet):
+    def from_msa(cls, align, alphabet=default_codon_alphabet):
         """Function to convert a MultipleSeqAlignment to CodonAlignment.
         It is the user's responsibility to ensure all the requirement
         needed by CodonAlignment is met.
@@ -133,8 +163,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return cls(rec, alphabet=alphabet)
 
 
-def mktest(codon_alns, codon_table=default_codon_table,
-        alpha=0.05):
+def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     """McDonald-Kreitman test for neutrality (PMID: 1904993) This method
     counts changes rather than sites (http://mkt.uab.es/mkt/help_mkt.asp).
     Arguments:
@@ -235,7 +264,8 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
                 nonsyn_G[codon1][codon2] = 0
                 G[codon1][codon2] = 0
             else:
-                nonsyn_G[codon1][codon2] = _dijkstra(graph_nonsyn, codon1, codon2)
+                nonsyn_G[codon1][codon2] = _dijkstra(graph_nonsyn, codon1,
+                                                     codon2)
                 G[codon1][codon2] = _dijkstra(graph, codon1, codon2)
     return G, nonsyn_G
 
@@ -337,12 +367,10 @@ def _prim(G):
     for n1, n2, c in edges:
         conn[n1].append((c, n1, n2))
         conn[n2].append((c, n2, n1))
- 
-    mst = []
+    mst = [] # minimum spanning tree
     used = set(nodes[0])
     usable_edges = conn[nodes[0]][:]
     heapify(usable_edges)
- 
     while usable_edges:
         cost, n1, n2 = heappop(usable_edges)
         if n2 not in used:
@@ -366,6 +394,7 @@ def _get_subgraph(codons, G):
         for j in codons:
             if i != j: subgraph[i][j] = G[i][j]
     return subgraph
+
 
 def _G_test(site_counts):
     """G test for 2x2 contingency table (PRIVATE).
