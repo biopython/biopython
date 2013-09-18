@@ -1,4 +1,4 @@
-# Copyright 2013 by Zheng Ruan.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com).
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -35,7 +35,7 @@ class CodonAlignment(MultipleSeqAlignment):
     AAAAGGTGG Gamma
 
     """
-    def __init__(self, records, name=None, alphabet=default_codon_alphabet):
+    def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
 
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
 
@@ -150,7 +150,6 @@ class CodonAlignment(MultipleSeqAlignment):
             raise RuntimeError("Unkown tree method ({0}). Only NJ and UPGMA "
                                "are accepted.".format(tree_method))
         return dn_tree, ds_tree
-
 
     @classmethod
     def from_msa(cls, align, alphabet=default_codon_alphabet):

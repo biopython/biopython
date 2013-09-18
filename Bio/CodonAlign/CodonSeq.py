@@ -1,4 +1,4 @@
-# Copyright 2013 by Zheng Ruan.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmai.com).
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -57,7 +57,7 @@ class CodonSeq(Seq):
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
-    def __init__(self, data, alphabet=default_codon_alphabet, \
+    def __init__(self, data='', alphabet=default_codon_alphabet, \
             gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
@@ -129,7 +129,7 @@ class CodonSeq(Seq):
         # The idea of the code below is to first map the slice
         # to amino acid sequence and then transform it into 
         # codon sequence.
-            aa_index = range(len(self)/3)
+            aa_index = range(len(self)//3)
             def cslice(p):
                 aa_slice = aa_index[p]
                 codon_slice = ''
@@ -233,35 +233,13 @@ class CodonSeq(Seq):
                 pass
         return full_rf_table
 
-    def _get_full_rf_table(self):
-        full_rf_table = []
-        accum = 0
-        for i in filter(lambda x: x%3==0, range(len(self))):
-            if self._data[i:i+3] == self.gap_char*3:
-                full_rf_table.append(i)
-            elif self._data[i:i+3] in self.alphabet.letters:
-                full_rf_table.append(i)
-                accum += 1
-            else:
-                # TODO: think about the last codon
-                try:
-                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
-                except IndexError:
-                    continue
-                if nxt_shift < 0:
-                    full_rf_table.append(i)
-                    accum += 1
-                elif nxt_shift == 0:
-                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
-                    if pre_shift <= 0:
-                        raise RuntimeError("Unexpected Codon %s", 
-                                           self._data[i:i+3])
-                    else:
-                        pass
-                elif nxt_shift > 0:
-                    pass
-        return full_rf_table
-
+    def full_translate(self, codon_table=default_codon_table, stop_symbol="*"):
+        """Apply full translation with gaps considered.
+        """
+        full_rf_table = self.get_full_rf_table()
+        return self.translate(codon_table=codon_table, stop_symbol=stop_symbol,
+                              rf_table=full_rf_table, ungap_seq=False)
+        
     def ungap(self, gap=None):
         if hasattr(self.alphabet, "gap_char"):
             if not gap:
@@ -279,6 +257,13 @@ class CodonSeq(Seq):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return CodonSeq(str(self._data).replace(gap, ""), alpha,
                         rf_table=self.rf_table)
+
+    @classmethod
+    def from_seq(cls, seq, alphabet=default_codon_alphabet, rf_table=None):
+        if rf_table is None:
+            return cls(seq._data, alphabet=alphabet)
+        else:
+            return cls(seq._data, alphabet=alphabet, rf_table=rf_table)
 
 
 def _get_codon_list(codonseq):
@@ -394,11 +379,11 @@ def _ng86(seq1, seq2, k, codon_table):
     ps = SN[0] / S_sites
     pn = SN[1] / N_sites
     if ps < 3/4:
-        dS = -3.0/4*log(1-4.0/3*ps)
+        dS = abs(-3.0/4*log(1-4.0/3*ps))
     else:
         dS = -1
     if pn < 3/4:
-        dN = -3.0/4*log(1-4.0/3*pn)
+        dN = abs(-3.0/4*log(1-4.0/3*pn))
     else:
         dN = -1
     return dN, dS
