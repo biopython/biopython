@@ -1,4 +1,4 @@
-# Copyright 2013 by Zheng Ruan.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com).
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -13,6 +13,7 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 
 from itertools import izip
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
@@ -46,7 +47,6 @@ class CodonAlphabet(Alphabet):
     name = ''
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.names[0])
-
 
 
 def get_codon_alphabet(codon_table, gap_char="-"):

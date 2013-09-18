@@ -1,4 +1,4 @@
-# Copyright 2013 by Zheng Ruan.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com).
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -36,6 +36,22 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
      - frameshift - whether to appply frameshift detection
 
     Return a CodonAlignment object
+    
+    >>> from Bio.Alphabet import IUPAC
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Align import MultipleSeqAlignment
+    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG', 
+    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
+    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG', 
+    ...    alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+    >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
+    >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
+    >>> aln = MultipleSeqAlignment([pro1, pro2])
+    >>> codon_aln = build(aln, [seq1, seq2])
+    >>> print codon_aln
+    CodonAlphabet() CodonAlignment with 2 rows and 69 columns (23 codons)
+    TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
+    TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
 
     >>> from Bio.Alphabet import IUPAC
     >>> from Bio.Seq import Seq
@@ -70,6 +86,8 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
         if not isinstance(pro.seq.alphabet, ProteinAlphabet):
             raise TypeError("Alphabet Error!\nThe input alignment should be "
                             "a *PROTEIN* alignment")
+    if alphabet is None:
+        alphabet = _get_codon_alphabet(codon_table, gap_char=gap_char)
     # check whether the number of seqs in pro_align and nucl_seqs is
     # the same
     pro_num = len(pro_align)
@@ -83,8 +101,6 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                              "({0}) than the Number of Nucleotide SeqRecords "
                              "({1}) are found!".format(pro_num, nucl_num))
 
-        if alphabet is None:
-            alphabet = _get_codon_alphabet(codon_table, gap_char=gap_char)
         # Determine the protein sequences and nucl sequences
         # correspondance. If nucl_seqs is a list, tuple or read by
         # SeqIO.parse(), we assume the order of sequences in pro_align
@@ -175,17 +191,6 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
         return CodonAlignment(codon_aln, alphabet=alphabet)
 
 
-#def toCodonAlignment(align, alphabet=default_codon_alphabet):
-#    """Function to convert a MultipleSeqAlignment to CodonAlignment.
-#    It is the user's responsibility to ensure all the requirement
-#    needed by CodonAlignment is met.
-#
-#    """
-#    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet),
-#                     id=i.id) for i in align._records]
-#    return CodonAlignment(rec, alphabet=align._alphabet)
-
-
 def _codons2re(codons):
     """Generate regular expression based on a given list of codons
     """
@@ -218,7 +223,6 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     aa2codon = {}
     for codon, aa in codon_table.forward_table.iteritems():
         aa2codon.setdefault(aa, []).append(codon)
-
     for aa, codons in aa2codon.items():
         aa2codon[aa] = _codons2re(codons)
     aa2codon[stop] = _codons2re(codon_table.stop_codons)
@@ -572,7 +576,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                 aa_num += 1
             else:
                 this_codon = nucl_seq._data[(span[0] + 3*aa_num):
-                                            (span[0]+3*(aa_num+1))]
+                                            (span[0] + 3*(aa_num+1))]
                 if not str(Seq(this_codon.upper()).translate()) == aa:
                     max_score -= 1
                     warnings.warn("%s(%s %d) does not correspond to %s(%s)"
@@ -742,6 +746,18 @@ def _align_shift_recs(recs):
     return recs
 
 
+def toCodonAlignment(align, alphabet=default_codon_alphabet):
+    """Function to convert a MultipleSeqAlignment to CodonAlignment.
+    It is the user's responsibility to ensure all the requirement
+    needed by CodonAlignment is met.
+
+    """
+    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+            for i in align._records]
+    return CodonAlignment(rec, alphabet=align._alphabet)
+
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

@@ -24,6 +24,7 @@ TEST_ALIGN_FILE6 = [('CodonAlign/egfr_nucl.fa', 'CodonAlign/egfr_pro.aln', 'Codo
 temp_dir = tempfile.mkdtemp()
 
 class TestCodonSeq(unittest.TestCase):
+
     def test_seq(self):
         codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0,3,6,9,12])
         self.assertEqual(len(codonseq1), 18)
@@ -39,6 +40,7 @@ class TestCodonSeq(unittest.TestCase):
         self.assertTrue(isinstance(codonseq1.toSeq(), Seq))
 
 class TestCodonAlignment(unittest.TestCase):
+
     def setUp(self):
         codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', CodonAlign.default_codon_alphabet)
         codonseq2 = CodonAlign.CodonSeq('AAGTTT---TTTGGGCCC', CodonAlign.default_codon_alphabet)
@@ -56,6 +58,7 @@ class TestCodonAlignment(unittest.TestCase):
         self.assertTrue(isinstance(codonAlign.toMultipleSeqAlignment(), MultipleSeqAlignment))
 
 class TestBuildAndIO(unittest.TestCase):
+
     def setUp(self):
         self.aln_file = [TEST_ALIGN_FILE1,
                          TEST_ALIGN_FILE2,
@@ -89,36 +92,8 @@ class TestBuildAndIO(unittest.TestCase):
             aln = i.toMultipleSeqAlignment()
             AlignIO.write(aln, temp_dir + '/aln' + str(n) + '.clw', 'clustal')
 
-class Test_build(unittest.TestCase):
-    def setUp(self):
-        # Test set 1
-        seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG', \
-                alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-        seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG', \
-                alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-        pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
-        pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
-        aln1 = MultipleSeqAlignment([pro1, pro2])
-        self.aln1 = aln1
-        self.seqlist1 = [seq1, seq2]
-        # Test set 2
-        #                      M  K  K  H  E L(F)L  C  Q  G  T  S  N  K  L  T  Q(L)L  G  T  F  E  D  H  F  L  S  L  Q  R  M  F  N  N  C  E  V  V  
-        seq3 = SeqRecord(Seq('ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-        #seq4 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAA TGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-        seq4 = SeqRecord(Seq('ATGAAAAAGCACGAGTTCTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAATGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-        #seq5 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCC  TTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro3')
-        seq5 = SeqRecord(Seq('ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro3')
-        pro3 = SeqRecord(Seq('MKKHELLCQGTSNKLTQLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL', alphabet=IUPAC.protein), id='pro1')
-        pro4 = SeqRecord(Seq('MKKHEFLCQGTSNKLTQLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL', alphabet=IUPAC.protein), id='pro2')
-        pro5 = SeqRecord(Seq('MKKHELLCQGTSNKLTLLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL', alphabet=IUPAC.protein), id='pro3')
-        aln2 = MultipleSeqAlignment([pro3, pro4, pro5])
-        self.aln2 = aln2
-        self.seqlist2 = [seq3, seq4, seq5]
-    
-    def test_build(self):
-        codon_aln1 = CodonAlign.build(self.aln1, self.seqlist1)
-        codon_aln2 = CodonAlign.build(self.aln2, self.seqlist2)
-        
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
+        
