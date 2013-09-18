@@ -57,7 +57,7 @@ class CodonSeq(Seq):
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
-    def __init__(self, data, alphabet=default_codon_alphabet, \
+    def __init__(self, data='', alphabet=default_codon_alphabet, \
             gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
@@ -234,6 +234,8 @@ class CodonSeq(Seq):
         return full_rf_table
 
     def full_translate(self, codon_table=default_codon_table, stop_symbol="*"):
+        """Apply full translation with gaps considered.
+        """
         full_rf_table = self.get_full_rf_table()
         return self.translate(codon_table=codon_table, stop_symbol=stop_symbol,
                               rf_table=full_rf_table, ungap_seq=False)
@@ -255,6 +257,13 @@ class CodonSeq(Seq):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return CodonSeq(str(self._data).replace(gap, ""), alpha,
                         rf_table=self.rf_table)
+
+    @classmethod
+    def from_seq(cls, seq, alphabet=default_codon_alphabet, rf_table=None):
+        if rf_table is None:
+            return cls(seq._data, alphabet=alphabet)
+        else:
+            return cls(seq._data, alphabet=alphabet, rf_table=rf_table)
 
 
 def _get_codon_list(codonseq):
