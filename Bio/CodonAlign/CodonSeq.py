@@ -1,4 +1,4 @@
-# Copyright 2013 by Zheng Ruan.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmai.com).
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -129,7 +129,7 @@ class CodonSeq(Seq):
         # The idea of the code below is to first map the slice
         # to amino acid sequence and then transform it into 
         # codon sequence.
-            aa_index = range(len(self)/3)
+            aa_index = range(len(self)//3)
             def cslice(p):
                 aa_slice = aa_index[p]
                 codon_slice = ''
