@@ -233,35 +233,11 @@ class CodonSeq(Seq):
                 pass
         return full_rf_table
 
-    def _get_full_rf_table(self):
-        full_rf_table = []
-        accum = 0
-        for i in filter(lambda x: x%3==0, range(len(self))):
-            if self._data[i:i+3] == self.gap_char*3:
-                full_rf_table.append(i)
-            elif self._data[i:i+3] in self.alphabet.letters:
-                full_rf_table.append(i)
-                accum += 1
-            else:
-                # TODO: think about the last codon
-                try:
-                    nxt_shift = self.rf_table[accum+1]-self.rf_table[accum]-3
-                except IndexError:
-                    continue
-                if nxt_shift < 0:
-                    full_rf_table.append(i)
-                    accum += 1
-                elif nxt_shift == 0:
-                    pre_shift = self.rf_table[accum]-self.rf_table[accum-1]-3
-                    if pre_shift <= 0:
-                        raise RuntimeError("Unexpected Codon %s", 
-                                           self._data[i:i+3])
-                    else:
-                        pass
-                elif nxt_shift > 0:
-                    pass
-        return full_rf_table
-
+    def full_translate(self, codon_table=default_codon_table, stop_symbol="*"):
+        full_rf_table = self.get_full_rf_table()
+        return self.translate(codon_table=codon_table, stop_symbol=stop_symbol,
+                              rf_table=full_rf_table, ungap_seq=False)
+        
     def ungap(self, gap=None):
         if hasattr(self.alphabet, "gap_char"):
             if not gap:
@@ -394,11 +370,11 @@ def _ng86(seq1, seq2, k, codon_table):
     ps = SN[0] / S_sites
     pn = SN[1] / N_sites
     if ps < 3/4:
-        dS = -3.0/4*log(1-4.0/3*ps)
+        dS = abs(-3.0/4*log(1-4.0/3*ps))
     else:
         dS = -1
     if pn < 3/4:
-        dN = -3.0/4*log(1-4.0/3*pn)
+        dN = abs(-3.0/4*log(1-4.0/3*pn))
     else:
         dN = -1
     return dN, dS
