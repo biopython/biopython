@@ -215,9 +215,9 @@ def _indent(elem, level=0):
 
 
 def _str2bool(text):
-    if text == 'true':
+    if text == 'true' or text=='1':
         return True
-    if text == 'false':
+    if text == 'false' or text=='0':
         return False
     raise ValueError('String could not be converted to boolean: ' + text)
 
