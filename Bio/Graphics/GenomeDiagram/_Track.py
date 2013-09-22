@@ -90,7 +90,7 @@ class Track(object):
                                 labels on the grey track
 
         o greytrack_font_rotation   Int describing the angle through which to
-                                    rotate the grey track labels
+                                    rotate the grey track labels (Linear only)
 
         o greytrack_font_color     colors.Color describing the color to draw
                                     the grey track labels
@@ -168,7 +168,7 @@ class Track(object):
                                     labels on the grey track
 
             o greytrack_font_rotation   Int describing the angle through which to
-                                        rotate the grey track labels
+                                        rotate the grey track labels (Linear only)
 
             o greytrack_font_color     colors.Color describing the color to draw
                                        the grey track labels (overridden by
