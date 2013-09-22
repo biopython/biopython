@@ -381,19 +381,22 @@ class DistanceCalculator(object):
                       'pam90': pam90, 'rao': rao, 'risler': risler, 'structure': structure
                      }
 
+    dna_models = dna_matrices.keys()
+    protein_models = protein_matrices.keys()
+
+    models = ['identity'] + dna_models + protein_models
+
     def __init__(self, model='identity'):
         """Initialize with a distance model"""
 
-        dna_keys = self.dna_matrices.keys()
-        protein_keys = self.protein_matrices.keys()
         if model == 'identity':
             self.scoring_matrix = None
-        elif model in dna_keys:
+        elif model in dna_models:
             self.scoring_matrix = Matrix(self.dna_alphabet, self.dna_matrices[model])
-        elif model in protein_keys:
+        elif model in protein_models:
             self.scoring_matrix = self._build_protein_matrix(self.protein_matrices[model])
         else:
-            raise ValueError("Model not supported. Available models: identity, " + ", ".join(dna_keys + protein_keys))
+            raise ValueError("Model not supported. Available models: " + ", ".join(models))
 
     def _pairwise(self, seq1, seq2):
         """Calculate pairwise distance from two sequences"""
