@@ -250,9 +250,8 @@ def _sff_file_header(handle):
     Returns a tuple of values from the header (header_length, index_offset,
     index_length, number_of_reads, flows_per_read, flow_chars, key_sequence)
 
-    >>> handle = open("Roche/greek.sff", "rb")
-    >>> values = _sff_file_header(handle)
-    >>> handle.close()
+    >>> with open("Roche/greek.sff", "rb") as handle:
+    ...     values = _sff_file_header(handle)
     >>> print(values[0])
     840
     >>> print(values[1])
@@ -812,9 +811,9 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
 
     You can also call it directly:
 
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SffIterator(handle):
-    ...     print("%s %i" % (record.id, len(record)))
+    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+    ...     for record in SffIterator(handle):
+    ...         print("%s %i" % (record.id, len(record)))
     E3MFGYR02JWQ7T 265
     E3MFGYR02JA6IL 271
     E3MFGYR02JHD4H 310
@@ -825,13 +824,12 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     E3MFGYR02HHZ8O 221
     E3MFGYR02GPGB1 269
     E3MFGYR02F7Z7G 219
-    >>> handle.close()
 
     Or, with the trim option:
 
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SffIterator(handle, trim=True):
-    ...     print("%s %i" % (record.id, len(record)))
+    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+    ...     for record in SffIterator(handle, trim=True):
+    ...         print("%s %i" % (record.id, len(record)))
     E3MFGYR02JWQ7T 260
     E3MFGYR02JA6IL 265
     E3MFGYR02JHD4H 292
@@ -842,10 +840,8 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     E3MFGYR02HHZ8O 150
     E3MFGYR02GPGB1 221
     E3MFGYR02F7Z7G 130
-    >>> handle.close()
 
     """
-    #TODO - Once drop Python 2.5, update doctest to use 'with' to close handle
     if isinstance(Alphabet._get_base_alphabet(alphabet),
                   Alphabet.ProteinAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold proteins.")
@@ -1354,11 +1350,10 @@ if __name__ == "__main__":
     assert data == handle.getvalue()
     #Check 100% identical to the original:
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    original = open(filename, "rb").read()
-    assert len(data) == len(original)
-    assert data == original
-    del data
-    handle.close()
+    with open(filename, "rb").read() as original:
+        assert len(data) == len(original)
+        assert data == original
+        del data
 
     print("-" * 50)
     filename = "../../Tests/Roche/greek.sff"
@@ -1373,16 +1368,16 @@ if __name__ == "__main__":
     except ValueError:
         pass
 
-    handle = open(filename, "rb")
-    for record in SffIterator(handle):
-        pass
-    try:
+    with open(filename, "rb") as handle:
         for record in SffIterator(handle):
-            print(record.id)
-        assert False, "Should have failed"
-    except ValueError as err:
-        print("Checking what happens on re-reading a handle:")
-        print(err)
+            pass
+        try:
+            for record in SffIterator(handle):
+                print(record.id)
+            assert False, "Should have failed"
+        except ValueError as err:
+            print("Checking what happens on re-reading a handle:")
+            print(err)
 
     """
     #Ugly code to make test files...
@@ -1466,24 +1461,23 @@ if __name__ == "__main__":
     #Ugly bit of code to make a fake index at end
     records = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
-    out_handle = open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "w")
-    w = SffWriter(out_handle, index=False, xml=None)
-    #Fake the header...
-    w._number_of_reads = len(records)
-    w._index_start = 0
-    w._index_length = 0
-    w._key_sequence = records[0].annotations["flow_key"]
-    w._flow_chars = records[0].annotations["flow_chars"]
-    w._number_of_flows_per_read = len(w._flow_chars)
-    w.write_header()
-    for record in records:
-        w.write_record(record)
-    w._index_start = out_handle.tell()
-    w._index_length = len(index)
-    out_handle.write(index)
-    out_handle.seek(0)
-    w.write_header() #this time with index info
-    out_handle.close()
+    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "w") as out_handle:
+        w = SffWriter(out_handle, index=False, xml=None)
+        #Fake the header...
+        w._number_of_reads = len(records)
+        w._index_start = 0
+        w._index_length = 0
+        w._key_sequence = records[0].annotations["flow_key"]
+        w._flow_chars = records[0].annotations["flow_chars"]
+        w._number_of_flows_per_read = len(w._flow_chars)
+        w.write_header()
+        for record in records:
+            w.write_record(record)
+        w._index_start = out_handle.tell()
+        w._index_length = len(index)
+        out_handle.write(index)
+        out_handle.seek(0)
+        w.write_header() #this time with index info
     records2 = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     for old, new in zip(records, records2):

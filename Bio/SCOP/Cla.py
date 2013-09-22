@@ -99,8 +99,7 @@ class Index(dict):
         """
         dict.__init__(self)
         self.filename = filename
-        f = open(self.filename, "rU")
-        try:
+        with open(self.filename, "rU") as f:
             position = 0
             while True:
                 line = f.readline()
@@ -113,18 +112,13 @@ class Index(dict):
                 if key is not None:
                     self[key] = position
                 position = f.tell()
-        finally:
-            f.close()
 
     def __getitem__(self, key):
         """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
-        f = open(self.filename, "rU")
-        try:
+        with open(self.filename, "rU") as f:
             f.seek(position)
             line = f.readline()
             record = Record(line)
-        finally:
-            f.close()
         return record

@@ -55,16 +55,15 @@ def _read_vertex_array(filename):
     """
     Read the vertex list into a Numeric array.
     """
-    fp=open(filename, "r")
-    vertex_list=[]
-    for l in fp.readlines():
-        sl=l.split()
-        if not len(sl)==9:
-            # skip header
-            continue
-        vl = [float(x) for x in sl[0:3]]
-        vertex_list.append(vl)
-    fp.close()
+    with open(filename, "r") as fp:
+        vertex_list=[]
+        for l in fp.readlines():
+            sl=l.split()
+            if not len(sl)==9:
+                # skip header
+                continue
+            vl = [float(x) for x in sl[0:3]]
+            vertex_list.append(vl)
     return numpy.array(vertex_list)
 
 

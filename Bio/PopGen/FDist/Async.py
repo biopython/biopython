@@ -113,9 +113,8 @@ class SplitFDist(object):
                 fst, files = self.async.done[done]
                 del self.async.done[done]
                 out_dat = files['out.dat']
-                f = open(self.data_dir + os.sep + 'out.dat', 'a')
-                f.writelines(out_dat.readlines())
-                f.close()
+                with open(self.data_dir + os.sep + 'out.dat', 'a') as f:
+                    f.writelines(out_dat.readlines())
                 out_dat.close()
                 self.async.access_ds.release()
                 for file in os.listdir(self.parts[done]):

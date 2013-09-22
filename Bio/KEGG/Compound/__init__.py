@@ -133,9 +133,9 @@ def parse(handle):
     example, using one of the example KEGG files in the Biopython
     test suite,
 
-    >>> handle = open("KEGG/compound.sample")
-    >>> for record in parse(handle):
-    ...     print("%s %s" % (record.entry, record.name[0]))
+    >>> with open("KEGG/compound.sample") as handle:
+    ...     for record in parse(handle):
+    ...         print("%s %s" % (record.entry, record.name[0]))
     ... 
     C00023 Iron
     C00017 Protein
@@ -145,7 +145,6 @@ def parse(handle):
     C00348 Undecaprenyl phosphate
     C00349 2-Methyl-3-oxopropanoate
     C01386 NH2Mec
-    >>> handle.close()
 
     """
     record = Record()

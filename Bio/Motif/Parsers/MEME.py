@@ -20,9 +20,9 @@ def read(handle):
     
     Example:
     
-    >>> f = open("meme.output.txt")
     >>> from Bio.Motif.Parsers import MEME
-    >>> record = MEME.read(f)
+    >>> with open("meme.output.txt") as f:
+    ...     record = MEME.read(f)
     >>> for motif in record.motifs:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)

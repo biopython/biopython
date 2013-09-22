@@ -61,11 +61,8 @@ class AbstractParser(object):
         return self.parse(StringIO(string))
 
     def parse_file(self, filename):
-        h = open(filename)
-        try:
+        with open(filename) as h:
             retval = self.parse(h)
-        finally:
-            h.close()
         return retval
 
 

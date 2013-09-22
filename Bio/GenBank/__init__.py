@@ -1480,11 +1480,10 @@ def parse(handle):
     """Iterate over GenBank formatted entries as Record objects.
 
     >>> from Bio import GenBank
-    >>> handle = open("GenBank/NC_000932.gb")
-    >>> for record in GenBank.parse(handle):
-    ...     print(record.accession)
+    >>> with open("GenBank/NC_000932.gb") as handle:
+    ...     for record in GenBank.parse(handle):
+    ...         print(record.accession)
     ['NC_000932']
-    >>> handle.close()
 
     To get SeqRecord objects use Bio.SeqIO.parse(..., format="gb")
     instead.
@@ -1496,11 +1495,10 @@ def read(handle):
     """Read a handle containing a single GenBank entry as a Record object.
 
     >>> from Bio import GenBank
-    >>> handle = open("GenBank/NC_000932.gb")
-    >>> record = GenBank.read(handle)
-    >>> print(record.accession)
+    >>> with open("GenBank/NC_000932.gb") as handle:
+    ...     record = GenBank.read(handle)
+    ...     print(record.accession)
     ['NC_000932']
-    >>> handle.close()
 
     To get a SeqRecord object use Bio.SeqIO.read(..., format="gb")
     instead.

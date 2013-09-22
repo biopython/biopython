@@ -42,9 +42,8 @@ class MafftCommandline(AbstractCommandline):
     want to save to a file and then parse, e.g.::
 
         stdout, stderr = mafft_cline()
-        handle = open("aligned.fasta", "w")
-        handle.write(stdout)
-        handle.close()
+        with open("aligned.fasta", "w") as handle:
+            handle.write(stdout)
         from Bio import AlignIO
         align = AlignIO.read("aligned.fasta", "fasta")
 

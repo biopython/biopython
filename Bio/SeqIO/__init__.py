@@ -206,9 +206,8 @@ Or, using a handle::
 
     from Bio import SeqIO
     records = ...
-    handle = open("example.faa", "w")
-    SeqIO.write(records, handle, "fasta")
-    handle.close()
+    with open("example.faa", "w") as handle:
+        SeqIO.write(records, handle, "fasta")
 
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.

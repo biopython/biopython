@@ -20,9 +20,9 @@ class Record(list):
     motifs in the record by their index. Alternatively, you can find a motif
     by its name:
 
-    >>> f = open("mast.output.txt")
     >>> from Bio import motifs
-    >>> record = motifs.parse(f, 'MAST')
+    >>> with open("mast.output.txt") as f:
+    ...     record = motifs.parse(f, 'MAST')
     >>> motif = record[0]
     >>> print(motif.name)
     1

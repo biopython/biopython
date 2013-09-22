@@ -197,10 +197,9 @@ If you wanted to, you could read in this FASTQ file, and save it as a QUAL file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
-    >>> out_handle = open("Quality/temp.qual", "w")
-    >>> SeqIO.write(record_iterator, out_handle, "qual")
+    >>> with open("Quality/temp.qual", "w") as out_handle:
+    ...     SeqIO.write(record_iterator, out_handle, "qual")
     3
-    >>> out_handle.close()
 
 You can of course read in a QUAL file, such as the one we just created:
 
@@ -867,10 +866,10 @@ def FastqGeneralIterator(handle):
     Using this tricky example file as input, this short bit of code demonstrates
     what this parsing function would return:
 
-    >>> handle = open("Quality/tricky.fastq", "rU")
-    >>> for (title, sequence, quality) in FastqGeneralIterator(handle):
-    ...     print(title)
-    ...     print("%s %s" % (sequence, quality))
+    >>> with open("Quality/tricky.fastq", "rU") as handle:
+    ...     for (title, sequence, quality) in FastqGeneralIterator(handle):
+    ...         print(title)
+    ...         print("%s %s" % (sequence, quality))
     ... 
     071113_EAS56_0053:1:1:998:236
     TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA IIIIIIIIIIIIIIIIIIIIIIIIIIIIICII+III
@@ -880,7 +879,6 @@ def FastqGeneralIterator(handle):
     TGTTCTGAAGGAAGGTGTGCGTGCGTGTGTGTGTGT IIIIIIIIIIIICIIGIIIII>IAIIIE65I=II:6
     071113_EAS56_0053:1:3:990:501
     TGGGAGGTTTTATGTGGAAAGCAGCAATGTACAAGA IIIIIII.IIIIII1@44@-7.%<&+/$/%4(++(%
-    >>> handle.close()
 
     Finally we note that some sources state that the quality string should
     start with "!" (which using the PHRED mapping means the first letter always
@@ -998,25 +996,23 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     Using this module directly you might run:
 
-    >>> handle = open("Quality/example.fastq", "rU")
-    >>> for record in FastqPhredIterator(handle):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.fastq", "rU") as handle:
+    ...     for record in FastqPhredIterator(handle):
+    ...         print("%s %s" % (record.id, record.seq))
     EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
     EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
-    >>> handle.close()
 
     Typically however, you would call this via Bio.SeqIO instead with "fastq"
     (or "fastq-sanger") as the format:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Quality/example.fastq", "rU")
-    >>> for record in SeqIO.parse(handle, "fastq"):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.fastq", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "fastq"):
+    ...         print("%s %s" % (record.id, record.seq))
     EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
     EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
-    >>> handle.close()
 
     If you want to look at the qualities, they are record in each record's
     per-letter-annotation dictionary as a simple list of integers:
@@ -1094,29 +1090,27 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
 
     Using this module directly you might run:
 
-    >>> handle = open("Quality/solexa_example.fastq", "rU")
-    >>> for record in FastqSolexaIterator(handle):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/solexa_example.fastq", "rU") as handle:
+    ...     for record in FastqSolexaIterator(handle):
+    ...         print("%s %s" % (record.id, record.seq))
     SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA
     SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA
     SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG
     SLXA-B3_649_FC8437_R1_1_1_362_549 GGAAACAAAGTTTTTCTCAACATAG
     SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA
-    >>> handle.close()
 
     Typically however, you would call this via Bio.SeqIO instead with
     "fastq-solexa" as the format:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Quality/solexa_example.fastq", "rU")
-    >>> for record in SeqIO.parse(handle, "fastq-solexa"):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/solexa_example.fastq", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "fastq-solexa"):
+    ...         print("%s %s" % (record.id, record.seq))
     SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA
     SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA
     SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG
     SLXA-B3_649_FC8437_R1_1_1_362_549 GGAAACAAAGTTTTTCTCAACATAG
     SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA
-    >>> handle.close()
 
     If you want to look at the qualities, they are recorded in each record's
     per-letter-annotation dictionary as a simple list of integers:
@@ -1145,9 +1139,8 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
     use the Bio.SeqIO.read() function:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Quality/solexa_faked.fastq", "rU")
-    >>> record = SeqIO.read(handle, "fastq-solexa")
-    >>> handle.close()
+    >>> with open("Quality/solexa_faked.fastq", "rU") as handle:
+    ...     record = SeqIO.read(handle, "fastq-solexa")
     >>> print("%s %s" % (record.id, record.seq))
     slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     >>> print(record.letter_annotations["solexa_quality"])
@@ -1284,25 +1277,23 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     Using this module directly you might run:
 
-    >>> handle = open("Quality/example.qual", "rU")
-    >>> for record in QualPhredIterator(handle):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.qual", "rU") as handle:
+    ...     for record in QualPhredIterator(handle):
+    ...         print("%s %s" % (record.id, record.seq))
     EAS54_6_R1_2_1_413_324 ?????????????????????????
     EAS54_6_R1_2_1_540_792 ?????????????????????????
     EAS54_6_R1_2_1_443_348 ?????????????????????????
-    >>> handle.close()
 
     Typically however, you would call this via Bio.SeqIO instead with "qual"
     as the format:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Quality/example.qual", "rU")
-    >>> for record in SeqIO.parse(handle, "qual"):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.qual", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "qual"):
+    ...         print("%s %s" % (record.id, record.seq))
     EAS54_6_R1_2_1_413_324 ?????????????????????????
     EAS54_6_R1_2_1_540_792 ?????????????????????????
     EAS54_6_R1_2_1_443_348 ?????????????????????????
-    >>> handle.close()
 
     Becase QUAL files don't contain the sequence string itself, the seq
     property is set to an UnknownSeq object.  As no alphabet was given, this
@@ -1313,13 +1304,12 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     >>> from Bio import SeqIO
     >>> from Bio.Alphabet import generic_dna
-    >>> handle = open("Quality/example.qual", "rU")
-    >>> for record in SeqIO.parse(handle, "qual", alphabet=generic_dna):
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.qual", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "qual", alphabet=generic_dna):
+    ...         print("%s %s" % (record.id, record.seq))
     EAS54_6_R1_2_1_413_324 NNNNNNNNNNNNNNNNNNNNNNNNN
     EAS54_6_R1_2_1_540_792 NNNNNNNNNNNNNNNNNNNNNNNNN
     EAS54_6_R1_2_1_443_348 NNNNNNNNNNNNNNNNNNNNNNNNN
-    >>> handle.close()
 
     However, the quality scores themselves are available as a list of integers
     in each record's per-letter-annotation:
@@ -1397,10 +1387,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
-    >>> out_handle = open("Quality/temp.fastq", "w")
-    >>> SeqIO.write(record_iterator, out_handle, "fastq")
+    >>> with open("Quality/temp.fastq", "w") as out_handle:
+    ...     SeqIO.write(record_iterator, out_handle, "fastq")
     3
-    >>> out_handle.close()
 
     You might want to do this if the original file included extra line breaks,
     which while valid may not be supported by all tools.  The output file from
@@ -1414,10 +1403,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
-    >>> out_handle = open("Quality/temp.fastq", "w")
-    >>> SeqIO.write(record_iterator, out_handle, "fastq")
+    >>> with open("Quality/temp.fastq", "w") as out_handle:
+    ...     SeqIO.write(record_iterator, out_handle, "fastq")
     5
-    >>> out_handle.close()
 
     This code is also called if you use the .format("fastq") method of a
     SeqRecord, or .format("fastq-sanger") if you prefer that alias.
@@ -1472,10 +1460,9 @@ class QualPhredWriter(SequentialSequenceWriter):
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
-    >>> out_handle = open("Quality/temp.qual", "w")
-    >>> SeqIO.write(record_iterator, out_handle, "qual")
+    >>> with open("Quality/temp.qual", "w") as out_handle:
+    ...     SeqIO.write(record_iterator, out_handle, "qual")
     3
-    >>> out_handle.close()
 
     This code is also called if you use the .format("qual") method of a
     SeqRecord.
@@ -1592,10 +1579,9 @@ class FastqSolexaWriter(SequentialSequenceWriter):
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
-    >>> out_handle = open("Quality/temp.fastq", "w")
-    >>> SeqIO.write(record_iterator, out_handle, "fastq-solexa")
+    >>> with open("Quality/temp.fastq", "w") as out_handle:
+    ...     SeqIO.write(record_iterator, out_handle, "fastq-solexa")
     5
-    >>> out_handle.close()
 
     You might want to do this if the original file included extra line breaks,
     which (while valid) may not be supported by all tools.  The output file
@@ -1762,10 +1748,9 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     >>> from Bio import SeqIO
     >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
     ...                                    open("Quality/example.qual", "rU"))
-    >>> out_handle = open("Quality/temp.fastq", "w")
-    >>> SeqIO.write(rec_iter, out_handle, "fastq")
+    >>> with open("Quality/temp.fastq", "w") as out_handle:
+    ...     SeqIO.write(rec_iter, out_handle, "fastq")
     3
-    >>> out_handle.close()
 
     And don't forget to clean up the temp file if you don't need it anymore:
 

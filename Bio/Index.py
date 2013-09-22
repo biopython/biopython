@@ -92,16 +92,16 @@ class _InMemoryIndex(dict):
 
         # Load the database if it exists
         if os.path.exists(indexname):
-            handle = open(indexname)
-            version = self._toobj(handle.readline().rstrip())
-            if version != self.__version:
-                raise IOError("Version %s doesn't match my version %s"
-                              % (version, self.__version))
-            for line in handle:
-                key, value = line.split()
-                key, value = self._toobj(key), self._toobj(value)
-                self[key] = value
-            self.__changed = 0
+            with open(indexname) as handle:
+                version = self._toobj(handle.readline().rstrip())
+                if version != self.__version:
+                    raise IOError("Version %s doesn't match my version %s"
+                                  % (version, self.__version))
+                for line in handle:
+                    key, value = line.split()
+                    key, value = self._toobj(key), self._toobj(value)
+                    self[key] = value
+                self.__changed = 0
 
     def update(self, dict):
         self.__changed = 1
@@ -121,12 +121,11 @@ class _InMemoryIndex(dict):
 
     def __del__(self):
         if self.__changed:
-            handle = open(self._indexname, 'w')
-            handle.write("%s\n" % self._tostr(self.__version))
-            for key, value in self.items():
-                handle.write("%s %s\n" %
-                             (self._tostr(key), self._tostr(value)))
-            handle.close()
+            with open(self._indexname, 'w') as handle:
+                handle.write("%s\n" % self._tostr(self.__version))
+                for key, value in self.items():
+                    handle.write("%s %s\n" %
+                                 (self._tostr(key), self._tostr(value)))
 
     def _tostr(self, obj):
         # I need a representation of the object that's saveable to

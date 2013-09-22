@@ -64,27 +64,26 @@ def _read_fragments(size, length, dir="."):
     @type dir: string
     """
     filename=(dir+"/"+_FRAGMENT_FILE) % (size, length)
-    fp=open(filename, "r")
-    flist=[]
-    # ID of fragment=rank in spec file
-    fid=0
-    for l in fp.readlines():
-                # skip comment and blank lines
-        if l[0]=="*" or l[0]=="\n":
-            continue
-        sl=l.split()
-        if sl[1]=="------":
-            # Start of fragment definition
-            f=Fragment(length, fid)
-            flist.append(f)
-            # increase fragment id (rank)
-            fid+=1
-            continue
-        # Add CA coord to Fragment
-        coord = numpy.array([float(x) for x in sl[0:3]])
-        # XXX= dummy residue name
-        f.add_residue("XXX", coord)
-    fp.close()
+    with open(filename, "r") as fp:
+        flist=[]
+        # ID of fragment=rank in spec file
+        fid=0
+        for l in fp.readlines():
+                    # skip comment and blank lines
+            if l[0]=="*" or l[0]=="\n":
+                continue
+            sl=l.split()
+            if sl[1]=="------":
+                # Start of fragment definition
+                f=Fragment(length, fid)
+                flist.append(f)
+                # increase fragment id (rank)
+                fid+=1
+                continue
+            # Add CA coord to Fragment
+            coord = numpy.array([float(x) for x in sl[0:3]])
+            # XXX= dummy residue name
+            f.add_residue("XXX", coord)
     return flist
 
 

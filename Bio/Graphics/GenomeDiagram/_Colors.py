@@ -110,20 +110,20 @@ class ColorTranslator(object):
             Reads information from a file containing color information and
             stores it internally
         """
-        lines = open(filename, 'r').readlines()
-        for line in lines:
-            data = line.strip().split('\t')
-            try:
-                label = int(data[0])
-                red, green, blue = int(data[1]), int(data[2]), int(data[3])
-                if len(data) > 4:
-                    comment = data[4]
-                else:
-                    comment = ""
-                self._colorscheme[label] = (self.int255_color((red, green, blue)),
-                                             comment)
-            except:
-                raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
+        with open(filename, 'r').readlines() as lines:
+            for line in lines:
+                data = line.strip().split('\t')
+                try:
+                    label = int(data[0])
+                    red, green, blue = int(data[1]), int(data[2]), int(data[3])
+                    if len(data) > 4:
+                        comment = data[4]
+                    else:
+                        comment = ""
+                    self._colorscheme[label] = (self.int255_color((red, green, blue)),
+                                                 comment)
+                except:
+                    raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
 
     def get_artemis_colorscheme(self):
         """ get_artemis_colorscheme(self)

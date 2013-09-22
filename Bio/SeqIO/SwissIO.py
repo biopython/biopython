@@ -151,14 +151,13 @@ if __name__ == "__main__":
         print("Missing test file %s" % example_filename)
     else:
         #Try parsing it!
-        handle = open(example_filename)
-        records = SwissIterator(handle)
-        for record in records:
-            print(record.name)
-            print(record.id)
-            print(record.annotations['keywords'])
-            print(repr(record.annotations['organism']))
-            print(str(record.seq)[:20] + "...")
-            for f in record.features:
-                print(f)
-        handle.close()
+        with open(example_filename) as handle:
+            records = SwissIterator(handle)
+            for record in records:
+                print(record.name)
+                print(record.id)
+                print(record.annotations['keywords'])
+                print(repr(record.annotations['organism']))
+                print(str(record.seq)[:20] + "...")
+                for f in record.features:
+                    print(f)

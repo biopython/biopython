@@ -1227,9 +1227,8 @@ if __name__ == "__main__":
             continue
         print(filename)
 
-        handle = open("../../Tests/GenBank/%s" % filename)
-        records = list(GenBankIterator(handle))
-        handle.close()
+        with open("../../Tests/GenBank/%s" % filename) as handle:
+            records = list(GenBankIterator(handle))
 
         check_genbank_writer(records)
         check_embl_writer(records)
@@ -1239,9 +1238,8 @@ if __name__ == "__main__":
             continue
         print(filename)
 
-        handle = open("../../Tests/EMBL/%s" % filename)
-        records = list(EmblIterator(handle))
-        handle.close()
+        with open("../../Tests/EMBL/%s" % filename) as handle:
+            records = list(EmblIterator(handle))
 
         check_genbank_writer(records)
         check_embl_writer(records)
@@ -1252,8 +1250,7 @@ if __name__ == "__main__":
             continue
         print(filename)
 
-        handle = open("../../Tests/SwissProt/%s" % filename)
-        records = list(SeqIO.parse(handle, "swiss"))
-        handle.close()
+        with open("../../Tests/SwissProt/%s" % filename) as handle:
+            records = list(SeqIO.parse(handle, "swiss"))
 
         check_genbank_writer(records)

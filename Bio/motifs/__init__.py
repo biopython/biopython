@@ -476,11 +476,9 @@ The same rules are used by TRANSFAC."""
         data = urlencode(values)
         req = Request(url, data)
         response = urlopen(req)
-        f = open(fname,"w")
-        im = response.read()
-
-        f.write(im)
-        f.close()
+        with open(fname,"w") as f:
+            im = response.read()
+            f.write(im)
 
     def format(self, format):
         """Returns a string representation of the Motif in a given format

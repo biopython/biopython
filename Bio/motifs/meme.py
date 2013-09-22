@@ -16,9 +16,9 @@ def read(handle):
 
     Example:
 
-    >>> f = open("meme.output.txt")
     >>> from Bio.Motif import MEME
-    >>> record = MEME.parse(f)
+    >>> with open("meme.output.txt") as f:
+    ...     record = MEME.parse(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
@@ -96,9 +96,9 @@ class Record(list):
     motifs in the record by their index. Alternatively, you can find a motif
     by its name:
 
-    >>> f = open("meme.output.txt")
     >>> from Bio import motifs
-    >>> record = motifs.parse(f, 'MEME')
+    >>> with open("meme.output.txt") as f:
+    ...     record = motifs.parse(f, 'MEME')
     >>> motif = record[0]
     >>> print(motif.name)
     Motif 1
