@@ -598,8 +598,11 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     if padding:
         padding = 8 - padding
         if handle.read(padding).count(_null) != padding:
-            raise ValueError("Post quality %i byte padding region contained data"
-                             % padding)
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Your SFF file is invalid, post quality %i "
+                          "byte padding region contained data" % padding,
+                          BiopythonParserWarning)
     #Follow Roche and apply most aggressive of qual and adapter clipping.
     #Note Roche seems to ignore adapter clip fields when writing SFF,
     #and uses just the quality clipping values for any clipping.
@@ -721,8 +724,11 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     padding = read_header_length - read_header_size - 8 - name_length
     pad = handle.read(padding)
     if pad.count(_null) != padding:
-        raise ValueError("Post name %i byte padding region contained data"
-                         % padding)
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post name %i "
+                      "byte padding region contained data" % padding,
+                      BiopythonParserWarning)
     raw += pad
     #now the flowgram values, flowgram index, bases and qualities
     raw += handle.read(read_flow_size + seq_len * 3)
@@ -732,8 +738,11 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
         padding = 8 - padding
         pad = handle.read(padding)
         if pad.count(_null) != padding:
-            raise ValueError("Post quality %i byte padding region contained data"
-                             % padding)
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Your SFF file is invalid, post quality %i "
+                          "byte padding region contained data" % padding,
+                          BiopythonParserWarning)
         raw += pad
     #Return the raw bytes
     return raw
