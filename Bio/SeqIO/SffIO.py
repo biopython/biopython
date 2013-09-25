@@ -386,8 +386,11 @@ def _sff_do_slow_index(handle):
         if padding:
             padding = 8 - padding
             if handle.read(padding).count(_null) != padding:
-                raise ValueError("Post quality %i byte padding region contained data"
-                                 % padding)
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Your SFF file is invalid, post quality %i "
+                              "byte padding region contained data" % padding,
+                              BiopythonParserWarning)
         #print("%s %s %i" % (read, name, record_offset))
         yield name, record_offset
     if handle.tell() % 8 != 0:
@@ -578,8 +581,11 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     name = _bytes_to_string(handle.read(name_length))
     padding = read_header_length - read_header_size - name_length
     if handle.read(padding).count(_null) != padding:
-        raise ValueError("Post name %i byte padding region contained data"
-                         % padding)
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post name %i "
+                      "byte padding region contained data" % padding,
+                      BiopythonParserWarning)
     #now the flowgram values, flowgram index, bases and qualities
     #NOTE - assuming flowgram_format==1, which means struct type H
     flow_values = handle.read(read_flow_size)  # unpack later if needed
