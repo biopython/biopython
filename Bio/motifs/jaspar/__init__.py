@@ -310,7 +310,7 @@ def calculate_pseudocounts(motif):
     # number of instances.
     total = 0
     for i in xrange(motif.length):
-        total += sum([float(motif.counts[letter][i]) for letter in alphabet.letters])
+        total += sum(float(motif.counts[letter][i]) for letter in alphabet.letters)
 
     avg_nb_instances = total / motif.length
     sq_nb_instances = math.sqrt(avg_nb_instances)

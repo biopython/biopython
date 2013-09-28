@@ -627,7 +627,7 @@ class DictionaryBuilder(object):
             #   nothing to be done
             #
             print('\n Using the files : %s'% ', '.join(emboss_now))
-            return tuple([open(os.path.join(base, n)) for n in emboss_now])
+            return tuple(open(os.path.join(base, n)) for n in emboss_now)
         else:
             #
             #   may be download the files.
@@ -642,7 +642,7 @@ class DictionaryBuilder(object):
                 updt.close()
                 print('\n Update complete. Creating the dictionaries.\n')
                 print('\n Using the files : %s'% ', '.join(emboss_now))
-                return tuple([open(os.path.join(base, n)) for n in emboss_now])
+                return tuple(open(os.path.join(base, n)) for n in emboss_now)
             else:
                 #
                 #   we will use the last files found without updating.

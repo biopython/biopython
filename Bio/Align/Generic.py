@@ -99,9 +99,9 @@ class Alignment(object):
         lines = ["%s alignment with %i rows and %i columns"
                  % (str(self._alphabet), rows, self.get_alignment_length())]
         if rows <= 20:
-            lines.extend([self._str_line(rec) for rec in self._records])
+            lines.extend(self._str_line(rec) for rec in self._records)
         else:
-            lines.extend([self._str_line(rec) for rec in self._records[:18]])
+            lines.extend(self._str_line(rec) for rec in self._records[:18])
             lines.append("...")
             lines.append(self._str_line(self._records[-1]))
         return "\n".join(lines)

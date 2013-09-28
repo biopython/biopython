@@ -710,7 +710,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         "Project:28471" as part of this transition.
         """
         content = content.replace("GenomeProject:", "Project:")
-        self.data.dbxrefs.extend([p for p in content.split() if p])
+        self.data.dbxrefs.extend(p for p in content.split() if p)
 
     def dblink(self, content):
         """Store DBLINK cross references as dbxrefs in our record object.
@@ -1288,7 +1288,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.keywords = self._split_keywords(content)
 
     def project(self, content):
-        self.data.projects.extend([p for p in content.split() if p])
+        self.data.projects.extend(p for p in content.split() if p)
 
     def dblink(self, content):
         self.data.dblinks.append(content)

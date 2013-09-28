@@ -284,7 +284,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
     def __init__(self, alphabet, counts):
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in xrange(self.length):
-            total = sum([float(self[letter][i]) for letter in alphabet.letters])
+            total = sum(float(self[letter][i]) for letter in alphabet.letters)
             for letter in alphabet.letters:
                 self[letter][i] /= total
         for letter in alphabet.letters:
@@ -417,7 +417,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         score = 0.0
         letters = self._letters
         for position in xrange(0,self.length):
-            score += max([self[letter][position] for letter in letters])
+            score += max(self[letter][position] for letter in letters)
         return score
 
     @property
@@ -429,7 +429,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         score = 0.0
         letters = self._letters
         for position in xrange(0,self.length):
-            score += min([self[letter][position] for letter in letters])
+            score += min(self[letter][position] for letter in letters)
         return score
 
     @property
@@ -519,9 +519,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             yi = [other[letter,pos] for letter in letters]
             sx += sum(xi)
             sy += sum(yi)
-            sxx += sum([x*x for x in xi])
-            sxy += sum([x*y for x,y in zip(xi,yi)])
-            syy += sum([y*y for y in yi])
+            sxx += sum(x*x for x in xi)
+            sxy += sum(x*y for x,y in zip(xi,yi))
+            syy += sum(y*y for y in yi)
         sx /= norm
         sy /= norm
         sxx /= norm

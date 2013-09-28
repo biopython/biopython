@@ -154,7 +154,7 @@ from Bio.Restriction.Restriction import *
 ##    #
 ##    #   First eval the bases.
 ##    #
-##    bases = tuple([eval(x) for x in bases])
+##    bases = tuple(eval(x) for x in bases)
 ##    #
 ##    #   now create the particular value of RestrictionType for the classes
 ##    #   in enzymes.

@@ -95,7 +95,7 @@ def _stitch_rows(raw_rows):
     # (i.e. alignments with codons using cdna2genome model)
     # by creating additional rows to contain the codons
     try:
-        max_len = max([len(x) for x in raw_rows])
+        max_len = max(len(x) for x in raw_rows)
         for row in raw_rows:
             assert len(row) == max_len
     except AssertionError:

@@ -432,8 +432,8 @@ class Diagram(object):
             Return a sorted list of levels occupied by tracks that are not
             explicitly hidden
         """
-        drawn_levels = sorted([key for key in self.tracks.keys() if
-                        not self.tracks[key].hide]) # get list of shown levels
+        drawn_levels = sorted(key for key in self.tracks.keys() if
+                              not self.tracks[key].hide) # get list of shown levels
         return drawn_levels
 
     def range(self):

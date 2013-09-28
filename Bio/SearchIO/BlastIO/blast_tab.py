@@ -672,8 +672,8 @@ class BlastTabWriter(object):
                 if not self.has_comments:
                     qresult_counter += 1
                 hit_counter += len(qresult)
-                hsp_counter += sum([len(hit) for hit in qresult])
-                frag_counter += sum([len(hit.fragments) for hit in qresult])
+                hsp_counter += sum(len(hit) for hit in qresult)
+                frag_counter += sum(len(hit.fragments) for hit in qresult)
             # if it's commented and there are no hits in the qresult, we still
             # increment the counter
             if self.has_comments:

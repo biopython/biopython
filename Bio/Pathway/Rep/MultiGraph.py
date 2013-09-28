@@ -72,7 +72,7 @@ class MultiGraph(object):
 
     def children(self, parent):
         """Returns a list of unique children for parent."""
-        return sorted(set([x[0] for x in self.child_edges(parent)]))
+        return sorted(set(x[0] for x in self.child_edges(parent)))
 
     def edges(self, label):
         """Returns a list of all the edges with this label."""
@@ -101,7 +101,7 @@ class MultiGraph(object):
 
     def parents(self, child):
         """Returns a list of unique parents for child."""
-        return sorted(set([x[0] for x in self.parent_edges(child)]))
+        return sorted(set(x[0] for x in self.parent_edges(child)))
 
     def remove_node(self, node):
         """Removes node and all edges connected to it."""

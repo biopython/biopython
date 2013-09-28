@@ -1363,7 +1363,7 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
                 break
             if line[0] == ">":
                 break
-            qualities.extend([int(word) for word in line.split()])
+            qualities.extend(int(word) for word in line.split())
             line = handle.readline()
 
         if qualities and min(qualities) < 0:

@@ -224,13 +224,13 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     #we don't want to include:
     c1_list = sorted(letter for (letter, meanings)
                in ambiguous_nucleotide_values.iteritems()
-               if set([codon[0] for codon in codons]).issuperset(set(meanings)))
+               if set(codon[0] for codon in codons).issuperset(set(meanings)))
     c2_list = sorted(letter for (letter, meanings)
                in ambiguous_nucleotide_values.iteritems()
-               if set([codon[1] for codon in codons]).issuperset(set(meanings)))
+               if set(codon[1] for codon in codons).issuperset(set(meanings)))
     c3_list = sorted(letter for (letter, meanings)
                in ambiguous_nucleotide_values.iteritems()
-               if set([codon[2] for codon in codons]).issuperset(set(meanings)))
+               if set(codon[2] for codon in codons).issuperset(set(meanings)))
     #candidates is a list (not a set) to preserve the iteration order
     candidates = []
     for c1 in c1_list:

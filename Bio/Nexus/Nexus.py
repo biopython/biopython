@@ -251,7 +251,7 @@ def get_start_end(sequence, skiplist=['-','?']):
 
 def _sort_keys_by_values(p):
     """Returns a sorted list of keys of p sorted by values of p."""
-    startpos=sorted([(p[pn],pn) for pn in p if p[pn]])
+    startpos = sorted((p[pn], pn) for pn in p if p[pn])
     # parenthisis added because of py3k
     return (zip(*startpos))[1]
 
@@ -274,7 +274,7 @@ def _unique_label(previous_labels,label):
 
 def _seqmatrix2strmatrix(matrix):
     """Converts a Seq-object matrix to a plain sequence-string matrix."""
-    return dict([(t, str(matrix[t])) for t in matrix])
+    return dict((t, str(matrix[t])) for t in matrix)
 
 
 def _compact4nexus(orig_list):
@@ -323,7 +323,7 @@ def combine(matrices):
         return None
     name=matrices[0][0]
     combined=copy.deepcopy(matrices[0][1]) # initiate with copy of first matrix
-    mixed_datatypes=(len(set([n[1].datatype for n in matrices]))>1)
+    mixed_datatypes = (len(set(n[1].datatype for n in matrices)) > 1)
     if mixed_datatypes:
         combined.datatype='None'    # dealing with mixed matrices is application specific. You take care of that yourself!
     #    raise NexusError('Matrices must be of same datatype')
@@ -474,7 +474,7 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
             raise NexusError('Missing closing parenthesis in: '+seq)
         elif closing<opening:
             raise NexusError('Missing opening parenthesis in: '+seq)
-        ambig=sorted([x for x in seq[opening+1:closing]])
+        ambig = sorted(seq[opening+1:closing])
         ambig=''.join(ambig)
         ambig_code=rev_ambig_values[ambig.upper()]
         if ambig!=ambig.upper():
@@ -720,7 +720,7 @@ class Nexus(object):
             rev=dict((i[1],i[0]) for i in self.ambiguous_values.iteritems() if i[0]!='X')
             self.rev_ambiguous_values={}
             for (k,v) in rev.iteritems():
-                key=sorted([c for c in k])
+                key = sorted(c for c in k)
                 self.rev_ambiguous_values[''.join(key)]=v
         #overwrite symbols for datype rna,dna,nucleotide
         if self.datatype in ['dna','rna','nucleotide']:
@@ -782,7 +782,7 @@ class Nexus(object):
         """Check for presence of taxon in self.taxlabels."""
         # According to NEXUS standard, underscores shall be treated as spaces...,
         # so checking for identity is more difficult
-        nextaxa=dict([(t.replace(' ','_'),t) for t in self.taxlabels])
+        nextaxa=dict((t.replace(' ','_'), t) for t in self.taxlabels)
         nexid=taxon.replace(' ','_')
         return nextaxa.get(nexid)
 
@@ -1220,7 +1220,7 @@ class Nexus(object):
             pfilenames={}
             for p in charpartition:
                 total_exclude=[]+exclude
-                total_exclude.extend([c for c in range(self.nchar) if c not in charpartition[p]])
+                total_exclude.extend(c for c in range(self.nchar) if c not in charpartition[p])
                 total_exclude=_make_unique(total_exclude)
                 pcomment=comment+'\nPartition: '+p+'\n'
                 dot=filename.rfind('.')
@@ -1524,7 +1524,7 @@ class Nexus(object):
                 if c not in cstatus:
                     cstatus.append(c)
             else:
-                cstatus.extend([b for b in self.ambiguous_values[c] if b not in cstatus])
+                cstatus.extend(b for b in self.ambiguous_values[c] if b not in cstatus)
         if self.missing in cstatus and narrow and len(cstatus)>1:
             cstatus=[c for c in cstatus if c!=self.missing]
         cstatus.sort()
@@ -1559,12 +1559,12 @@ class Nexus(object):
             zipped_m=zip(*m)
             sitesm=[s for i,s in enumerate(zipped_m) if i not in exclude]
             if sitesm==[]:
-                return dict([(t,Seq('',self.alphabet)) for t in undelete])
+                return dict((t, Seq('', self.alphabet)) for t in undelete)
             else:
                 m = [Seq(s, self.alphabet) for s in (''.join(x) for x in zip(*sitesm))]
                 return dict(zip(undelete,m))
         else:
-            return dict([(t,matrix[t]) for t in self.taxlabels if t in matrix and t not in delete])
+            return dict((t, matrix[t]) for t in self.taxlabels if t in matrix and t not in delete)
 
     def bootstrap(self,matrix=None,delete=[],exclude=[]):
         """Return a bootstrapped matrix."""
@@ -1649,8 +1649,6 @@ class Nexus(object):
         else:
             sitesm=[]
         sitesm[pos:pos]=[['-']*len(self.taxlabels)]*n
-        # #self.matrix=dict([(taxon,Seq(map(''.join,zip(*sitesm))[i],self.alphabet)) for\
-        #        i,taxon in enumerate(self.taxlabels)])
         mapped = [''.join(x) for x in zip(*sitesm)]
         listed=[(taxon,Seq(mapped[i],self.alphabet)) for i,taxon in enumerate(self.taxlabels)]
         self.matrix=dict(listed)

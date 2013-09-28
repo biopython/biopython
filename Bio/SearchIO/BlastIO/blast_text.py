@@ -106,7 +106,7 @@ class BlastTextParser(object):
                     for seqtrio in zip(bhsp.query, bhsp.sbjct, bhsp.match):
                         qchar, hchar, mchar = seqtrio
                         if qchar == ' ' or hchar == ' ':
-                            assert all([' ' == x for x in seqtrio])
+                            assert all(' ' == x for x in seqtrio)
                         else:
                             qseq += qchar
                             hseq += hchar

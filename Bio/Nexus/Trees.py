@@ -359,7 +359,7 @@ class Tree(Nodes.Chain):
             return self.node(node).data.taxon
         else:
             try:
-                return frozenset([self.set_subtree(n) for n in self.node(node).succ])
+                return frozenset(self.set_subtree(n) for n in self.node(node).succ)
             except:
                 print(node)
                 print(self.node(node).succ)
@@ -600,7 +600,7 @@ class Tree(Nodes.Chain):
         def ladderize_nodes(nodes,ladderize=None):
             """Sorts node numbers according to the number of terminal nodes."""
             if ladderize in ['left','LEFT','right','RIGHT']:
-                succnode_terminals=sorted([(self.count_terminals(node=n),n) for n in nodes])
+                succnode_terminals = sorted((self.count_terminals(node=n), n) for n in nodes)
                 if (ladderize=='right' or ladderize=='RIGHT'):
                     succnode_terminals.reverse()
                 if succnode_terminals:
@@ -761,9 +761,9 @@ class Tree(Nodes.Chain):
         # no outgroup specified: use the smallest clade of the root
         if outgroup is None:
             try:
-                succnodes=self.node(self.root).succ
-                smallest=min([(len(self.get_taxa(n)),n) for n in succnodes])
-                outgroup=self.get_taxa(smallest[1])
+                succnodes = self.node(self.root).succ
+                smallest = min((len(self.get_taxa(n)), n) for n in succnodes)
+                outgroup = self.get_taxa(smallest[1])
             except:
                 raise TreeError("Error determining outgroup.")
         else: # root with user specified outgroup

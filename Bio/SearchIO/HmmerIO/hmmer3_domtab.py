@@ -217,8 +217,8 @@ class Hmmer3DomtabHmmhitWriter(object):
                     handle.write(self._build_row(qresult))
                     qresult_counter += 1
                     hit_counter += len(qresult)
-                    hsp_counter += sum([len(hit) for hit in qresult])
-                    frag_counter += sum([len(hit.fragments) for hit in qresult])
+                    hsp_counter += sum(len(hit) for hit in qresult)
+                    frag_counter += sum(len(hit.fragments) for hit in qresult)
 
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 

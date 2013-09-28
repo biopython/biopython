@@ -106,7 +106,7 @@ class Graph(object):
 
     def parents(self, child):
         """Returns a list of unique parents for child."""
-        return sorted(set([x[0] for x in self.parent_edges(child)]))
+        return sorted(set(x[0] for x in self.parent_edges(child)))
 
     def remove_node(self, node):
         """Removes node and all edges connected to it."""

@@ -266,7 +266,7 @@ class HSP(_BaseHSP):
         # check that all fragments contain the same IDs, descriptions, alphabet
         for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description', 'alphabet'):
-            if len(set([getattr(frag, attr) for frag in fragments])) != 1:
+            if len(set(getattr(frag, attr) for frag in fragments)) != 1:
                 raise ValueError("HSP object can not contain fragments with "
                         "more than one %s." % attr)
 
@@ -386,7 +386,7 @@ class HSP(_BaseHSP):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
         # query / hit length
-        return sum([frg.aln_span for frg in self.fragments])
+        return sum(frg.aln_span for frg in self.fragments)
 
     aln_span = property(fget=_aln_span_get,
             doc="""Total number of columns in all HSPFragment objects.""")

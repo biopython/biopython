@@ -126,7 +126,7 @@ def all_pairs(singles):
     singles = list(singles)
     while singles:
         suitor = singles.pop(0) # if sorted, stay sorted
-        pairs.extend([(suitor, single) for single in singles])
+        pairs.extend((suitor, single) for single in singles)
 
     return pairs
 
