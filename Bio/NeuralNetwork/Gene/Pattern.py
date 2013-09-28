@@ -90,7 +90,7 @@ class PatternIO(object):
             if self._alphabet is not None:
                 # make single patterns (not signatures) into lists, so we
                 # can check signatures and single patterns the same
-                if isinstance(cur_pattern, tuple):
+                if not isinstance(cur_pattern, tuple):
                     test_pattern = [cur_pattern]
                 else:
                     test_pattern = cur_pattern
