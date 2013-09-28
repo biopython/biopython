@@ -408,8 +408,8 @@ class DictionaryBuilder(object):
         #
         tdct = {}
         for klass in TypeCompiler().buildtype():
-            exec klass.__name__ +'= klass'
-            exec "tdct['"+klass.__name__+"'] = klass"
+            exec(klass.__name__ +'= klass')
+            exec("tdct['"+klass.__name__+"'] = klass")
 
         #
         #   Now we build the enzymes from enzymedict
@@ -546,7 +546,7 @@ class DictionaryBuilder(object):
         #
         new = os.path.join(update_folder, 'Restriction_Dictionary.py')
         try:
-            execfile(new)
+            exec(compile(open(new).read(), new, 'exec'))
             print('\
             \n\tThe new file seems ok. Proceeding with the installation.')
         except SyntaxError:
