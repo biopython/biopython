@@ -20,7 +20,7 @@ assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],IUPACData.ambiguous_dna_value
 
 
 #Basic sanity test,
-for n in ambiguous_generic_by_id.keys():
+for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
     if n != 23 :
