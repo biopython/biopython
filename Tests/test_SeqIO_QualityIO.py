@@ -100,7 +100,7 @@ def compare_record(old, new, truncate=None):
         if truncate:
             converted = [min(q,truncate) for q in converted]
         if converted != new.letter_annotations["solexa_quality"]:
-            print
+            print("")
             print(old.letter_annotations["phred_quality"])
             print(converted)
             print(new.letter_annotations["solexa_quality"])
