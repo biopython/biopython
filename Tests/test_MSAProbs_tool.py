@@ -12,6 +12,7 @@ from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Align.Applications import MSAProbsCommandline
 from Bio.Application import ApplicationError
+from Bio._py3k import getoutput
 
 #################################################################
 
@@ -23,8 +24,7 @@ if sys.platform == "win32":
     #TODO
     raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
 else:
-    import commands
-    output = commands.getoutput("msaprobs -version")
+    output = getoutput("msaprobs -version")
     if output.startswith("MSAPROBS version"):
         msaprobs_exe = "msaprobs"
 
