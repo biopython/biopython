@@ -81,7 +81,7 @@ def _read_fragments(size, length, dir="."):
             fid+=1
             continue
         # Add CA coord to Fragment
-        coord=numpy.array(map(float, sl[0:3]))
+        coord = numpy.array([float(x) for x in sl[0:3]])
         # XXX= dummy residue name
         f.add_residue("XXX", coord)
     fp.close()

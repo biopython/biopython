@@ -78,7 +78,7 @@ class Chain(object):
             residues = residues.replace('*', ' ')
             residues = residues.strip()
             elements = residues.split()
-            self.data = map(Hetero, elements)
+            self.data = [Hetero(x) for x in elements]
         elif isinstance(residues, list):
             for element in residues:
                 if not isinstance(element, Hetero):

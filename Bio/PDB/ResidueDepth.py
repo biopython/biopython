@@ -62,7 +62,7 @@ def _read_vertex_array(filename):
         if not len(sl)==9:
             # skip header
             continue
-        vl=map(float, sl[0:3])
+        vl = [float(x) for x in sl[0:3]]
         vertex_list.append(vl)
     fp.close()
     return numpy.array(vertex_list)

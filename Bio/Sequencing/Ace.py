@@ -77,11 +77,11 @@ class qa(object):
         self.align_clipping_start = None
         self.align_clipping_end = None
         if line:
-            header = map(eval, line.split()[1:])
-            self.qual_clipping_start = header[0]
-            self.qual_clipping_end = header[1]
-            self.align_clipping_start = header[2]
-            self.align_clipping_end = header[3]
+            header = line.split()
+            self.qual_clipping_start = int(header[1])
+            self.qual_clipping_end = int(header[2])
+            self.align_clipping_start = int(header[3])
+            self.align_clipping_end = int(header[4])
 
 
 class ds(object):
@@ -96,7 +96,7 @@ class ds(object):
         self.direction = ''
         if line:
             tags = ['CHROMAT_FILE', 'PHD_FILE', 'TIME', 'CHEM', 'DYE', 'TEMPLATE', 'DIRECTION']
-            poss = map(line.find, tags)
+            poss = [line.find(x) for x in tags]
             tagpos = dict(zip(poss, tags))
             if -1 in tagpos:
                 del tagpos[-1]
@@ -295,7 +295,7 @@ def parse(handle):
         for line in handle:
             if not line.strip():
                 break
-            record.quality.extend(map(int, line.split()))
+            record.quality.extend(int(x) for x in line.split())
 
         for line in handle:
             if line.strip():
@@ -539,7 +539,8 @@ def read(handle):
         raise ValueError("File does not start with 'AS'.")
 
     words = line.split()
-    record.ncontigs, record.nreads = map(int, words[1:3])
+    record.ncontigs = int(words[1])
+    record.nreads = int(words[2])
 
     # now read all the records
     record.contigs = list(parse(handle))

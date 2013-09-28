@@ -257,8 +257,7 @@ class FDistController(object):
         try:
             while l != '':
                 conf_lines.append(
-                    tuple(map(lambda x: my_float(x),
-                              l.rstrip().split(' '))))
+                    tuple(my_float(x) for x in l.rstrip().split(' ')))
                 l = f.readline()
         except ValueError:
             f.close()
@@ -289,8 +288,6 @@ class FDistController(object):
         proc.communicate('data_fst_outfile ' + out_file +
                          ' out.dat\n' + str(smooth) + '\n')
         pvf = open(data_dir + os.sep + out_file, 'r')
-        result = map(lambda x: tuple(map(lambda y:
-                                         my_float(y), x.rstrip().split(' '))),
-                     pvf.readlines())
+        result = [tuple(my_float(y) for y in x.rstrip().split(' ')) for x in pvf.readlines()]
         pvf.close()
         return result

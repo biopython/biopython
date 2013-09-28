@@ -1423,7 +1423,9 @@ class Nexus(object):
                     newpartition[sn]=nsp
             if newpartition:
                 setsb.append('taxpartition %s = %s' % (safename(n),
-                ', '.join(['%s: %s' % (safename(sn),' '.join(map(safename,newpartition[sn]))) for sn in names if sn in newpartition])))
+                             ', '.join(['%s: %s' % (safename(sn),
+                                                    ' '.join(safename(x) for x in newpartition[sn]))
+                                        for sn in names if sn in newpartition])))
         # add 'end' and return everything
         setsb.append('end;\n')
         if len(setsb)==2: # begin and end only
@@ -1556,8 +1558,7 @@ class Nexus(object):
             if sitesm==[]:
                 return dict([(t,Seq('',self.alphabet)) for t in undelete])
             else:
-                zipped_sitesm=zip(*sitesm)
-                m=[Seq(s,self.alphabet) for s in map(''.join,zipped_sitesm)]
+                m = [Seq(s, self.alphabet) for s in (''.join(x) for x in zip(*sitesm))]
                 return dict(zip(undelete,m))
         else:
             return dict([(t,matrix[t]) for t in self.taxlabels if t in matrix and t not in delete])
@@ -1579,7 +1580,7 @@ class Nexus(object):
         else:
             sitesm=zip(*[cm[t] for t in undelete])
         bootstrapsitesm=[sitesm[random.randint(0,len(sitesm)-1)] for i in range(len(sitesm))]
-        bootstrapseqs=map(''.join,zip(*bootstrapsitesm))
+        bootstrapseqs = [''.join(x) for x in zip(*bootstrapsitesm)]
         if seqobjects:
             bootstrapseqs=[Seq(s,alphabet) for s in bootstrapseqs]
         return dict(zip(undelete,bootstrapseqs))
@@ -1647,8 +1648,7 @@ class Nexus(object):
         sitesm[pos:pos]=[['-']*len(self.taxlabels)]*n
         # #self.matrix=dict([(taxon,Seq(map(''.join,zip(*sitesm))[i],self.alphabet)) for\
         #        i,taxon in enumerate(self.taxlabels)])
-        zipped=zip(*sitesm)
-        mapped=map(''.join,zipped)
+        mapped = [''.join(x) for x in zip(*sitesm)]
         listed=[(taxon,Seq(mapped[i],self.alphabet)) for i,taxon in enumerate(self.taxlabels)]
         self.matrix=dict(listed)
         self.nchar+=n

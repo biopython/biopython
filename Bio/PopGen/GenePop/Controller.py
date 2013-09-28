@@ -42,7 +42,7 @@ def _read_allele_freq_table(f):
             return None, None
         l = f.readline()
     alleles = filter(lambda x: x != '', f.readline().rstrip().split(" "))
-    alleles = map(lambda x: _gp_int(x), alleles)
+    alleles = [_gp_int(x) for x in alleles]
     l = f.readline().rstrip()
     table = []
     while l != "":
@@ -50,7 +50,7 @@ def _read_allele_freq_table(f):
         try:
             table.append(
                 (line[0],
-                map(lambda x: _gp_float(x), line[1:-1]),
+                [_gp_float(x) for x in line[1:-1]],
                 _gp_int(line[-1])))
         except ValueError:
             table.append(
@@ -85,8 +85,7 @@ def _read_triangle_matrix(f):
     l = f.readline().rstrip()
     while l != "":
         matrix.append(
-            map(lambda x: _gp_float(x),
-                filter(lambda y: y != "", l.split(" "))))
+            [_gp_float(x) for x in filter(lambda y: y != "", l.split(" "))])
         l = f.readline().rstrip()
     return matrix
 
@@ -206,8 +205,8 @@ class _GenePopCommandline(AbstractCommandline):
 
         Example set_menu([6,1]) = get all F statistics (menu 6.1)
         """
-        self.set_parameter("command", "MenuOptions="+
-                ".".join(map(lambda x:str(x),option_list)))
+        self.set_parameter("command", "MenuOptions=" +
+                           ".".join(str(x) for x in option_list))
 
     def set_input(self, fname):
         """Sets the input file name.
@@ -328,8 +327,7 @@ class GenePopController(object):
         f.readline()
         f.readline()
         l = f.readline().rstrip()
-        p, se, switches = tuple(map(lambda x: _gp_float(x),
-            filter(lambda y: y != "",l.split(" "))))
+        p, se, switches = tuple(_gp_float(x) for x in filter(lambda y: y != "",l.split(" ")))
         f.close()
         return pop_p, loc_p, (p, se, switches)
 
@@ -708,8 +706,8 @@ class GenePopController(object):
                     self.stream.readline()
                     fis_table = _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
                     self.stream.readline()
-                    avg_qinter, avg_fis = tuple(map(lambda x: _gp_float(x),
-                        filter(lambda y:y != "", self.stream.readline().split(" "))))
+                    avg_qinter, avg_fis = tuple(_gp_float(x) for x in
+                                                filter(lambda y:y != "", self.stream.readline().split(" ")))
                     return locus, fis_table, avg_qinter, avg_fis
                 l = self.stream.readline()
             self.done = True
