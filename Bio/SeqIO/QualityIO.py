@@ -1780,8 +1780,8 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     qual_iter = QualPhredIterator(qual_handle, alphabet=alphabet,
                                   title2ids=title2ids)
 
-    #Using zip(...) would create a list loading everything into memory!
-    #It would also not catch any extra records found in only one file.
+    #Using (Python 3 style) zip wouldn't load everything into memory,
+    #but also would not catch any extra records found in only one file.
     while True:
         try:
             f_rec = next(fasta_iter)
