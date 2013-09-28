@@ -337,7 +337,8 @@ class xbb_widget:
         genes = quick_FASTA_reader(file)
         self.insert_sequence(genes[0])
 
-    def insert_sequence(self, (name, sequence)):
+    def insert_sequence(self, name_sequence):
+        (name, sequence) = name_sequence
         self.sequence_id.delete(0.0, END)
         self.sequence_id.insert(END, sequence.upper())
         self.fix_sequence()
