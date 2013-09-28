@@ -34,6 +34,22 @@ import time
 import lib2to3.main
 from io import StringIO
 
+def avoid_bug19111(filename):
+    """Avoid this bug: http://bugs.python.org/issue19111"""
+    #Faster if we only write out the file if it needed changing
+    lines = list(open(filename, "rU"))
+    fix = False
+    for line in lines:
+        if line.startswith("from future_builtins import "):
+            fix = True
+            break
+    if not fix:
+        return
+    print("Applying issue 19111 fix to %s" % filename)
+    lines = [l for l in lines if not l.startswith("from future_builtins import ")]
+    with open(filename, "w") as h:
+        for l in lines:
+            h.write(l)
 
 def run2to3(filenames):
     stderr = sys.stderr
@@ -64,6 +80,7 @@ def run2to3(filenames):
                 raise RuntimeError("Error %i from 2to3 (doctests) on %s"
                                    % (e, filename))
             times.append((time.time() - start, filename))
+            avoid_bug19111(filename)
     except KeyboardInterrupt:
         sys.stderr = stderr
         sys.stderr.write("Interrupted during %s\n" % filename)
