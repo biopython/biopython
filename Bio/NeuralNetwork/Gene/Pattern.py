@@ -76,7 +76,7 @@ class PatternIO(object):
         """
         all_patterns = []
 
-        while 1:
+        while True:
             cur_line = input_handle.readline()
 
             if not(cur_line):
@@ -90,7 +90,7 @@ class PatternIO(object):
             if self._alphabet is not None:
                 # make single patterns (not signatures) into lists, so we
                 # can check signatures and single patterns the same
-                if type(cur_pattern) != type(tuple([])):
+                if isinstance(cur_pattern, tuple):
                     test_pattern = [cur_pattern]
                 else:
                     test_pattern = cur_pattern
