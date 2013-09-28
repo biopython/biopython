@@ -281,7 +281,7 @@ class newenzyme(object):
         cls.__bases__ = cls.bases
         cls.charac = (cls.fst5, cls.fst3, cls.scd5, cls.scd3, cls.site)
         if not target[2] and cls.suppl:
-            supp = ', '.join([suppliersdict[s][0] for s in cls.suppl])
+            supp = ', '.join(suppliersdict[s][0] for s in cls.suppl)
             print('WARNING : It seems that %s is both commercially available\
             \n\tand its characteristics are unknown. \
             \n\tThis seems counter-intuitive.\

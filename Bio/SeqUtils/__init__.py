@@ -253,7 +253,7 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
             custom_map.items())
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
-    return ''.join([threecode.get(aa, undef_code) for aa in seq])
+    return ''.join(threecode.get(aa, undef_code) for aa in seq)
 
 
 def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
@@ -306,7 +306,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     # add the given termination codon code and custom maps
     onecode.update((k.upper(), v) for (k, v) in custom_map.iteritems())
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
-    return ''.join([onecode.get(aa.upper(), undef_code) for aa in seqlist])
+    return ''.join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 
 
 # }}}

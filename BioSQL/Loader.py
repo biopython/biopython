@@ -322,7 +322,7 @@ class DatabaseLoader:
                 return " " + letter.lower()
             else:
                 return letter
-        answer = "".join([add_space(letter) for letter in entrez_name]).strip()
+        answer = "".join(add_space(letter) for letter in entrez_name).strip()
         assert answer == answer.lower()
         return answer
 

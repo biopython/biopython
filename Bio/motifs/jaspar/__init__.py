@@ -127,7 +127,7 @@ class Record(list):
         self.version = None
 
     def __str__(self):
-        return "\n".join([str(the_motif) for the_motif in self])
+        return "\n".join(str(the_motif) for the_motif in self)
 
     def to_dict(self):
         """

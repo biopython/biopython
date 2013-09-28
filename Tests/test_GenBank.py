@@ -145,13 +145,13 @@ def do_comparison(good_record, test_record):
         if not(good_line) and not(test_line):
             break
         if not(good_line):
-            raise AssertionError("Extra info in Test: `%s`" % test_line)
+            raise AssertionError("Extra info in Test: %r" % test_line)
         if not(test_line):
-            raise AssertionError("Extra info in Expected: `%s`" % good_line)
-        test_normalized = ' '.join([x for x in test_line.split() if x])
-        good_normalized = ' '.join([x for x in good_line.split() if x])
+            raise AssertionError("Extra info in Expected: %r" % good_line)
+        test_normalized = ' '.join(x for x in test_line.split() if x)
+        good_normalized = ' '.join(x for x in good_line.split() if x)
         assert test_normalized == good_normalized, \
-               "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
+               "Expected does not match Test.\nExpect: %r\nTest:   %r\n" % \
                (good_line, test_line)
 
 

@@ -120,9 +120,7 @@ def SwissIterator(handle):
             annotations['references'] = []
             for reference in swiss_record.references:
                 feature = SeqFeature.Reference()
-                feature.comment = " ".join(["%s=%s;" % (key, value)
-                                            for key, value
-                                            in reference.comments])
+                feature.comment = " ".join("%s=%s;" % k_v for k_v in reference.comments)
                 for key, value in reference.references:
                     if key == 'PubMed':
                         feature.pubmed_id = value

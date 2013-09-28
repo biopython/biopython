@@ -88,7 +88,7 @@ class Codeml(Paml):
                         # NSsites is stored in Python as a list but in the
                         # control file it is specified as a series of numbers
                         # separated by spaces.
-                        NSsites = " ".join([str(site) for site in option[1]])
+                        NSsites = " ".join(str(site) for site in option[1])
                         ctl_handle.write("%s = %s\n" % (option[0], NSsites))
                     else:
                         ctl_handle.write("%s = %s\n" % (option[0], option[1]))
@@ -153,7 +153,7 @@ class Codeml(Paml):
                 # NSsites is stored in Python as a list but in the
                 # control file it is specified as a series of numbers
                 # separated by spaces.
-                NSsites = " ".join([str(site) for site in option[1]])
+                NSsites = " ".join(str(site) for site in option[1])
                 print("%s = %s" % (option[0], NSsites))
             else:
                 print("%s = %s" % (option[0], option[1]))

@@ -102,7 +102,7 @@ def open_database(driver="MySQLdb", **kwargs):
             elif "db" in kw:
                 kw["dbname"] = kw["db"]
                 del kw["db"]
-            dsn = ' '.join(['='.join(i) for i in kw.items()])
+            dsn = ' '.join('='.join(i) for i in kw.items())
             conn = connect(dsn)
 
     if os.name == "java":

@@ -893,10 +893,10 @@ class TranslationTests(unittest.TestCase):
         return True
 
     def translate_all_codons(self, letters):
-        sequence = Seq("".join([c1+c3+c3
-                       for c1 in letters
-                       for c2 in letters
-                       for c3 in letters]),
+        sequence = Seq("".join(c1+c3+c3
+                               for c1 in letters
+                               for c2 in letters
+                               for c3 in letters),
                        generic_nucleotide)
         self.check(sequence)
 

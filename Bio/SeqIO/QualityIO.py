@@ -620,8 +620,8 @@ def _get_sanger_quality_str(record):
     else:
         #Try and use the precomputed mapping:
         try:
-            return "".join([_phred_to_sanger_quality_str[qp]
-                            for qp in qualities])
+            return "".join(_phred_to_sanger_quality_str[qp]
+                           for qp in qualities)
         except KeyError:
             #Could be a float, or a None in the list, or a high value.
             pass
@@ -631,8 +631,8 @@ def _get_sanger_quality_str(record):
             warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ",
                           BiopythonWarning)
         #This will apply the truncation at 93, giving max ASCII 126
-        return "".join([chr(min(126, int(round(qp)) + SANGER_SCORE_OFFSET))
-                        for qp in qualities])
+        return "".join(chr(min(126, int(round(qp)) + SANGER_SCORE_OFFSET))
+                       for qp in qualities)
     #Fall back on the Solexa scores...
     try:
         qualities = record.letter_annotations["solexa_quality"]
@@ -642,8 +642,8 @@ def _get_sanger_quality_str(record):
                          % record.id)
     #Try and use the precomputed mapping:
     try:
-        return "".join([_solexa_to_sanger_quality_str[qs]
-                        for qs in qualities])
+        return "".join(_solexa_to_sanger_quality_str[qs]
+                       for qs in qualities)
     except KeyError:
         #Either no PHRED scores, or something odd like a float or None
         pass
@@ -655,8 +655,8 @@ def _get_sanger_quality_str(record):
         warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ",
                       BiopythonWarning)
     #This will apply the truncation at 93, giving max ASCII 126
-    return "".join([chr(min(126, int(round(phred_quality_from_solexa(qs))) + SANGER_SCORE_OFFSET))
-                    for qs in qualities])
+    return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SANGER_SCORE_OFFSET))
+                   for qs in qualities)
 
 #Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
@@ -688,8 +688,8 @@ def _get_illumina_quality_str(record):
     else:
         #Try and use the precomputed mapping:
         try:
-            return "".join([_phred_to_illumina_quality_str[qp]
-                            for qp in qualities])
+            return "".join(_phred_to_illumina_quality_str[qp]
+                           for qp in qualities)
         except KeyError:
             #Could be a float, or a None in the list, or a high value.
             pass
@@ -699,8 +699,8 @@ def _get_illumina_quality_str(record):
             warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ",
                           BiopythonWarning)
         #This will apply the truncation at 62, giving max ASCII 126
-        return "".join([chr(min(126, int(round(qp)) + SOLEXA_SCORE_OFFSET))
-                        for qp in qualities])
+        return "".join(chr(min(126, int(round(qp)) + SOLEXA_SCORE_OFFSET))
+                       for qp in qualities)
     #Fall back on the Solexa scores...
     try:
         qualities = record.letter_annotations["solexa_quality"]
@@ -710,8 +710,8 @@ def _get_illumina_quality_str(record):
                          % record.id)
     #Try and use the precomputed mapping:
     try:
-        return "".join([_solexa_to_illumina_quality_str[qs]
-                        for qs in qualities])
+        return "".join(_solexa_to_illumina_quality_str[qs]
+                       for qs in qualities)
     except KeyError:
         #Either no PHRED scores, or something odd like a float or None
         pass
@@ -723,8 +723,8 @@ def _get_illumina_quality_str(record):
         warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ",
                       BiopythonWarning)
     #This will apply the truncation at 62, giving max ASCII 126
-    return "".join([chr(min(126, int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
-                    for qs in qualities])
+    return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
+                   for qs in qualities)
 
 #Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
@@ -757,8 +757,8 @@ def _get_solexa_quality_str(record):
     else:
         #Try and use the precomputed mapping:
         try:
-            return "".join([_solexa_to_solexa_quality_str[qs]
-                            for qs in qualities])
+            return "".join(_solexa_to_solexa_quality_str[qs]
+                           for qs in qualities)
         except KeyError:
             #Could be a float, or a None in the list, or a high value.
             pass
@@ -768,8 +768,8 @@ def _get_solexa_quality_str(record):
             warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ",
                           BiopythonWarning)
         #This will apply the truncation at 62, giving max ASCII 126
-        return "".join([chr(min(126, int(round(qs)) + SOLEXA_SCORE_OFFSET))
-                        for qs in qualities])
+        return "".join(chr(min(126, int(round(qs)) + SOLEXA_SCORE_OFFSET))
+                       for qs in qualities)
     #Fall back on the PHRED scores...
     try:
         qualities = record.letter_annotations["phred_quality"]
@@ -779,8 +779,8 @@ def _get_solexa_quality_str(record):
                          % record.id)
     #Try and use the precomputed mapping:
     try:
-        return "".join([_phred_to_solexa_quality_str[qp]
-                        for qp in qualities])
+        return "".join(_phred_to_solexa_quality_str[qp]
+                       for qp in qualities)
     except KeyError:
         #Either no PHRED scores, or something odd like a float or None
         #or too big to be in the cache
@@ -792,10 +792,8 @@ def _get_solexa_quality_str(record):
     if max(qualities) >= 62.5:
         warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ",
                       BiopythonWarning)
-    return "".join([chr(min(126,
-                            int(round(solexa_quality_from_phred(qp))) +
-                            SOLEXA_SCORE_OFFSET))
-                    for qp in qualities])
+    return "".join(chr(min(126, int(round(solexa_quality_from_phred(qp))) + SOLEXA_SCORE_OFFSET))
+                   for qp in qualities)
 
 
 #TODO - Default to nucleotide or even DNA?

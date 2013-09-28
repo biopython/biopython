@@ -405,7 +405,7 @@ class PrintFormat(object):
         several, Join = '', ''.join
         for name, sites in ls:
             stringsite = ''
-            l = Join((', '.join([str(site) for site in sites]), '.'))
+            l = Join((', '.join(str(site) for site in sites), '.'))
             if len(l) > linesize:
                 #
                 #   cut where appropriate and add the indentation

@@ -29,7 +29,7 @@ def simple_LCC(s):
 
 
 def windowed_LCC(s):
-    return ", ".join(["%0.2f" % v for v in lcc_mult(s, 20)])
+    return ", ".join("%0.2f" % v for v in lcc_mult(s, 20))
 
 
 class SeqUtilsTests(unittest.TestCase):

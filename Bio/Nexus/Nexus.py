@@ -212,7 +212,7 @@ def safename(name,mrbayes=False):
     """
     if mrbayes:
         safe=name.replace(' ','_')
-        safe=''.join([c for c in safe if c in MRBAYESSAFE])
+        safe=''.join(c for c in safe if c in MRBAYESSAFE)
     else:
         safe=name.replace("'","''")
         if set(safe).intersection(set(WHITESPACE+PUNCTUATION)):
@@ -1313,23 +1313,25 @@ class Nexus(object):
             #if self.taxlabels:
             #    fh.write('taxlabels '+' '.join(self.taxlabels)+';\n')
             if self.charlabels:
-                newcharlabels=self._adjust_charlabels(exclude=exclude)
-                clkeys=sorted(newcharlabels)
-                fh.write('charlabels '+', '.join(["%s %s" % (k+1,safename(newcharlabels[k])) for k in clkeys])+';\n')
+                newcharlabels = self._adjust_charlabels(exclude=exclude)
+                clkeys = sorted(newcharlabels)
+                fh.write('charlabels '
+                         + ', '.join("%s %s" % (k+1,safename(newcharlabels[k])) for k in clkeys)
+                         + ';\n')
             fh.write('matrix\n')
             if not blocksize:
                 if interleave:
-                    blocksize=70
+                    blocksize = 70
                 else:
-                    blocksize=self.nchar
+                    blocksize = self.nchar
             # delete deleted taxa and ecxclude excluded characters...
-            namelength=max([len(safename(t,mrbayes=mrbayes)) for t in undelete])
+            namelength = max(len(safename(t,mrbayes=mrbayes)) for t in undelete)
             if interleave_by_partition:
                 # interleave by partitions, but adjust partitions with regard to excluded characters
-                seek=0
+                seek = 0
                 for p in names:
                     fh.write('[%s: %s]\n' % (interleave_by_partition,p))
-                    if len(newpartition[p])>0:
+                    if len(newpartition[p]) > 0:
                         for taxon in undelete:
                             fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
                             fh.write(cropped_matrix[taxon][seek:seek+len(newpartition[p])]+'\n')
@@ -1412,7 +1414,8 @@ class Nexus(object):
                 else:
                     command='charpartition'
                 setsb.append('%s %s = %s' % (command,safename(n),
-                ', '.join(['%s: %s' % (sn,_compact4nexus(newpartition[sn])) for sn in names if sn in newpartition])))
+                                             ', '.join('%s: %s' % (sn,_compact4nexus(newpartition[sn]))
+                                                       for sn in names if sn in newpartition)))
         # now write charpartititions, much easier than charpartitions
         for n,p in self.taxpartitions.iteritems():
             names=_sort_keys_by_values(p)
@@ -1423,9 +1426,9 @@ class Nexus(object):
                     newpartition[sn]=nsp
             if newpartition:
                 setsb.append('taxpartition %s = %s' % (safename(n),
-                             ', '.join(['%s: %s' % (safename(sn),
-                                                    ' '.join(safename(x) for x in newpartition[sn]))
-                                        for sn in names if sn in newpartition])))
+                             ', '.join('%s: %s' % (safename(sn),
+                                                   ' '.join(safename(x) for x in newpartition[sn]))
+                                       for sn in names if sn in newpartition)))
         # add 'end' and return everything
         setsb.append('end;\n')
         if len(setsb)==2: # begin and end only

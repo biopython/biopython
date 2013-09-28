@@ -124,7 +124,7 @@ def yn00(vers=None, verbose=False):
 
 
 def print_usage():
-    versions = ", ".join([vers.replace("_", ".") for vers in VERSIONS])
+    versions = ", ".join(vers.replace("_", ".") for vers in VERSIONS)
     usage = \
 '''Usage: gen_results.py [-v] PROGRAM [VERSION]
 Generate result files to be used in Bio.Phylo.PAML unit tests.

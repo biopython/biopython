@@ -126,8 +126,8 @@ def _insdc_feature_position_string(pos, offset=0):
         return ">%i" % (pos.position + offset)
     elif isinstance(pos, SeqFeature.OneOfPosition):
         return "one-of(%s)" \
-               % ",".join([_insdc_feature_position_string(p, offset)
-                           for p in pos.position_choices])
+               % ",".join(_insdc_feature_position_string(p, offset)
+                          for p in pos.position_choices)
     elif isinstance(pos, SeqFeature.AbstractPosition):
         raise NotImplementedError("Please report this as a bug in Biopython.")
     else:
@@ -265,9 +265,9 @@ def _insdc_feature_location_string(feature, rec_length):
     #        assert f.strand == +1
     #This covers typical forward strand features, and also an evil mixed strand:
     assert feature.location_operator != ""
-    return  "%s(%s)" % (feature.location_operator,
-                        ",".join([_insdc_feature_location_string(f, rec_length)
-                                  for f in feature._sub_features]))
+    return "%s(%s)" % (feature.location_operator,
+                       ",".join(_insdc_feature_location_string(f, rec_length)
+                                for f in feature._sub_features))
 
 
 class _InsdcWriter(SequentialSequenceWriter):

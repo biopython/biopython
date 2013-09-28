@@ -91,19 +91,16 @@ class CodonTable(object):
             letters = "UCAG"
 
         #Build the table...
-        answer=answer + "\n\n  |" + "|".join(
-            ["  %s      " % c2 for c2 in letters]
-            ) + "|"
-        answer=answer + "\n--+" \
-               + "+".join(["---------" for c2 in letters]) + "+--"
+        answer += "\n\n  |" + "|".join("  %s      " % c2 for c2 in letters) + "|"
+        answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
         for c1 in letters:
             for c3 in letters:
                 line = c1 + " |"
                 for c2 in letters:
                     codon = c1+c2+c3
-                    line = line + " %s" % codon
+                    line += " %s" % codon
                     if codon in self.stop_codons:
-                        line = line + " Stop|"
+                        line += " Stop|"
                     else:
                         try:
                             amino = self.forward_table[codon]
@@ -112,13 +109,12 @@ class CodonTable(object):
                         except TranslationError:
                             amino = "?"
                         if codon in self.start_codons:
-                            line = line + " %s(s)|" % amino
+                            line += " %s(s)|" % amino
                         else:
-                            line = line + " %s   |" % amino
-                line = line + " " + c3
-                answer = answer + "\n"+ line
-            answer=answer + "\n--+" \
-                  + "+".join(["---------" for c2 in letters]) + "+--"
+                            line += " %s   |" % amino
+                line += " " + c3
+                answer += "\n"+ line
+            answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
         return answer
 
 

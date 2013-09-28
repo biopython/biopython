@@ -62,15 +62,9 @@ def simple_matrix_print(matrix):
     versions of the underlying libraries or the compilation options
     they used).
     """
+    return "[%s]" % "\n ".join("[%s]" % " ".join("% 1.4f" % v for v in row)
+                               for row in matrix)
 
-    #This uses a fancy double nested list expression.
-    #If and when Biopython requires Python 2.4 or later,
-    #it would be slightly nicer to use generator expressions.
-    return "[" \
-    + "\n ".join(["["
-                 + " ".join(["% 1.4f" % val for val in row])
-                 + "]" for row in matrix]) \
-    + "]"
 
 # output results
 print(simple_matrix_print(y_on_x1))

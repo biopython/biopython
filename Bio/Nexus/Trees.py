@@ -554,7 +554,7 @@ class Tree(Nodes.Chain):
                     comment='-'
                 table.append((str(i),tx,str(n.prev),str(n.succ),
                              blength, sum_blength, support, comment))
-        print('\n'.join(['%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table]))
+        print('\n'.join('%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table))
         print('\nRoot:  %s' % self.root)
 
     def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None,ignore_comments=True):

@@ -838,7 +838,7 @@ class BlastTabWriter(object):
         # qresults without hits don't show the Fields comment
         if qres:
             comments.append('# Fields: %s' %
-                    ', '.join([inv_field_map[field] for field in self.fields]))
+                            ', '.join(inv_field_map[field] for field in self.fields))
         comments.append('# %i hits found' % len(qres))
 
         return '\n'.join(comments) + '\n'

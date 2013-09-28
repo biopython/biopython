@@ -705,13 +705,13 @@ class Motif(object):
         
         """
         if letters is None:
-            letters=self.alphabet.letters
+            letters = self.alphabet.letters
         self._pwm_is_current=False
-        pwm=self.pwm(laplace=False)
-        res=""
+        pwm = self.pwm(laplace=False)
+        res = ""
         for i in range(self.length):
-            res+="\t".join([str(pwm[i][a]) for a in letters])
-            res+="\n"
+            res += "\t".join(str(pwm[i][a]) for a in letters)
+            res += "\n"
         return res
     
     def _to_horizontal_matrix(self,letters=None,normalized=True):
@@ -719,21 +719,21 @@ class Motif(object):
         
         """
         if letters is None:
-            letters=self.alphabet.letters
-        res=""
+            letters = self.alphabet.letters
+        res = ""
         if normalized: #output PWM
             self._pwm_is_current=False
             mat=self.pwm(laplace=False)
             for a in letters:
-                res+="\t".join([str(mat[i][a]) for i in range(self.length)])
-                res+="\n"
+                res += "\t".join(str(mat[i][a]) for i in range(self.length))
+                res += "\n"
         else: #output counts
             if not self.has_counts:
                 self.make_counts_from_instances()
-            mat=self.counts
+            mat = self.counts
             for a in letters:
-                res+="\t".join([str(mat[a][i]) for i in range(self.length)])
-                res+="\n"
+                res += "\t".join(str(mat[a][i]) for i in range(self.length))
+                res += "\n"
         return res
 
     def _to_jaspar_pfm(self):
