@@ -481,7 +481,7 @@ class DatabaseLoader:
                 "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
                 " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
         taxon_id = self.adaptor.last_id("taxon")
-        assert isinstance(taxon_id, int) or isinstance(taxon_id, long), repr(taxon_id)
+        assert isinstance(taxon_id, (int, long)), repr(taxon_id)
         # ... and its name in taxon_name
         scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
         if scientific_name:
