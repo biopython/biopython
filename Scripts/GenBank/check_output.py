@@ -65,8 +65,8 @@ def write_format(file):
     compare_iterator = GenBank.Iterator(compare_handle)
 
     while True:
-        cur_record = iterator.next()
-        compare_record = compare_iterator.next()
+        cur_record = next(iterator)
+        compare_record = next(compare_iterator)
 
         if cur_record is None or compare_record is None:
             break

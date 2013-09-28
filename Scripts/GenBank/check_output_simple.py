@@ -28,7 +28,7 @@ handle = open(sys.argv[1], 'r')
 iterator = GenBank.Iterator(handle, parser)
 
 while True:
-    cur_record = iterator.next()
+    cur_record = next(iterator)
 
     if not(cur_record):
         break
