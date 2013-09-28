@@ -12,7 +12,6 @@
 
 from __future__ import print_function
 
-import commands
 import re
 import sys
 import os
