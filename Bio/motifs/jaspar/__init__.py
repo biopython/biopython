@@ -204,7 +204,7 @@ def _read_pfm(handle):
         #if there is a letter in the beginning, ignore it
         if words[0] == letter:
             words = words[1:]
-        counts[letter] = map(float, words)
+        counts[letter] = [float(x) for x in words]
 
     motif = Motif(matrix_id=None, name=None, alphabet=alphabet, counts=counts)
     motif.mask = "*" * motif.length
@@ -287,7 +287,7 @@ def _read_jaspar(handle):
 
             words = counts_str.split()
 
-            counts[letter] = map(float, words)
+            counts[letter] = [float(x) for x in words]
 
             row_count += 1
 

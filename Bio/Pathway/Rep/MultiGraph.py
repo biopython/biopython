@@ -33,14 +33,14 @@ class MultiGraph(object):
         keys = sorted(self._adjacency_list.keys())
         for key in keys:
             values = sorted(self._adjacency_list[key])
-            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
+            s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
         edgenum = reduce(lambda x,y: x+y,
-                         map(len, self._adjacency_list.values()))
+                         [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<MultiGraph: " + \
                str(nodenum) + " node(s), " + \

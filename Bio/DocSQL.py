@@ -164,7 +164,7 @@ class QuerySingle(Query, QueryRow):
 class QueryAll(list, Query):
     def __init__(self, *args, **keywds):
         Query.__init__(self, *args, **keywds)
-        list.__init__(self, map(self.process_row, self.cursor().fetchall()))
+        list.__init__(self, [self.process_row(r) for r in self.cursor().fetchall()])
 
     def process_row(self, row):
         return row

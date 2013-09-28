@@ -116,8 +116,8 @@ def cmp_sccs(sccs1, sccs2):
     if s1[0] != s2[0]:
         return _cmp(s1[0], s2[0])
 
-    s1 = list(map(int, s1[1:]))
-    s2 = list(map(int, s2[1:]))
+    s1 = [int(x) for x in s1[1:]]
+    s2 = [int(x) for x in  s2[1:]]
 
     return _cmp(s1,s2)
 
@@ -569,7 +569,7 @@ class Node(object):
         if self.scop is None:
             return self.children
         else:
-            return map( self.scop.getNodeBySunid, self.children )
+            return [self.scop.getNodeBySunid(x) for x in self.children]
 
     def getParent(self):
         """Return the parent of this Node"""
@@ -779,7 +779,7 @@ class Astral(object):
             file_handle.close()
 
         doms = filter( lambda a: a[0]=='d', doms )
-        doms = map( self.scop.getDomainBySid, doms )
+        doms = [self.scop.getDomainBySid(x) for x in doms]
         return doms
 
     def getAstralDomainsFromSQL(self, column):
@@ -788,7 +788,7 @@ class Astral(object):
         cur = self.db_handle.cursor()
         cur.execute("SELECT sid FROM astral WHERE "+column+"=1")
         data = cur.fetchall()
-        data = map( lambda x: self.scop.getDomainBySid(x[0]), data)
+        data = [self.scop.getDomainBySid(x[0]) for x in data]
 
         return data
 

@@ -175,8 +175,7 @@ def _gen_loci(stream, loci):
     stream.write('//Per Block: Data type, No. of loci, Recombination rate to the right-side locus, plus optional parameters\n')
     for locus in loci:
         stream.write(' '.join([locus[0]] +
-            map(lambda x: str(x), list(locus[1])
-        )) + '\n')
+            [str(x) for x in list(locus[1])]) + '\n')
 
 
 def get_chr_template(stream, chrs):

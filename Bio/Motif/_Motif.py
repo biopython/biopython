@@ -445,17 +445,17 @@ class Motif(object):
         """
 
         self.counts = {}
-        self.has_counts=True
+        self.has_counts = True
         if letters is None:
-            letters=self.alphabet.letters
-        self.length=0
+            letters = self.alphabet.letters
+        self.length = 0
         for i in letters:
-            self.counts[i]=[]
+            self.counts[i] = []
         for ln in stream.readlines():
-            rec=map(float,ln.strip().split())
-            for k,v in zip(letters,rec):
+            rec = [float(x) for x in ln.strip().split()]
+            for k,v in zip(letters, rec):
                 self.counts[k].append(v)
-            self.length+=1
+            self.length += 1
         self.set_mask("*"*self.length)
         if make_instances is True:
             self.make_instances_from_counts()
@@ -472,13 +472,13 @@ class Motif(object):
         for i in letters:
             ln = stream.readline().strip().split()
             #if there is a letter in the beginning, ignore it
-            if ln[0]==i:
-                ln=ln[1:]
+            if ln[0] == i:
+                ln = ln[1:]
             #print(ln)
             try:
-                self.counts[i]=map(int,ln)
+                self.counts[i] = [int(x) for x in ln]
             except ValueError: #not integers
-                self.counts[i]=map(float,ln) #map(lambda s: int(100*float(s)),ln)
+                self.counts[i] = [float(x) for x in ln]
             #print(counts[i])
         
         s = sum(self.counts[nuc][0] for nuc in letters)
@@ -496,27 +496,27 @@ class Motif(object):
         In case the sums of counts are different for different columnes, the
         shorter columns are padded with background.
         """
-        alpha="".join(self.alphabet.letters)
+        alpha = "".join(self.alphabet.letters)
         #col[i] is a column taken from aligned motif instances
-        col=[]
-        self.has_instances=True
-        self.instances=[]
-        s = sum(map(lambda nuc: self.counts[nuc][0],self.alphabet.letters))
+        col = []
+        self.has_instances = True
+        self.instances = []
+        s = sum(self.counts[nuc][0] for nuc in self.alphabet.letters)
         for i in range(self.length):
             col.append("")
             for n in self.alphabet.letters:
-                col[i] = col[i]+ (n*(self.counts[n][i]))
-            if len(col[i])<s:
-                print("WARNING, column too short %i %i" % (len(col[i]),s))
-                col[i]+=(alpha*s)[:(s-len(col[i]))]
+                col[i] = col[i] + n*(self.counts[n][i])
+            if len(col[i]) < s:
+                print("WARNING, column too short %i %i" % (len(col[i]), s))
+                col[i] += (alpha*s)[:(s-len(col[i]))]
             #print("column %i, %s" % (i, col[i]))
         #iterate over instances
         for i in range(s): 
-            inst="" #start with empty seq
+            inst = "" #start with empty seq
             for j in range(self.length): #iterate over positions
-                inst+=col[j][i]
+                inst += col[j][i]
             #print("%i %s" % (i,inst)
-            inst=Seq(inst,self.alphabet)                
+            inst = Seq(inst, self.alphabet)                
             self.add_instance(inst)
         return self.instances
 

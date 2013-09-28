@@ -93,7 +93,7 @@ class DB_Index:
             values = self.db[id]
         except:
             return None
-        start, stop = map(int, string.split(values))
+        start, stop = [int(x) for x in values.split()]
         self.fid.seek(start)
         txt = self.fid.read(stop - start)
         return txt

@@ -159,9 +159,7 @@ class UndoHandle(object):
         return line
 
     def tell(self):
-        lengths = map(len, self._saved)
-        sum = reduce(lambda x, y: x+y, lengths, 0)
-        return self._handle.tell() - sum
+        return self._handle.tell() - sum(len(line) for line in self._saved)
 
     def seek(self, *args):
         self._saved = []

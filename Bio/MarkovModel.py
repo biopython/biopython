@@ -100,14 +100,14 @@ def load(handle):
     line = _readline_and_check_start(handle, "TRANSITION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
-        mm.p_transition[i,:] = map(float, line.split()[1:])
+        mm.p_transition[i,:] = [float(v) for v in line.split()[1:]]
 
     # Load the emission.
     mm.p_emission = numpy.zeros((N, M))
     line = _readline_and_check_start(handle, "EMISSION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
-        mm.p_emission[i,:] = map(float, line.split()[1:])
+        mm.p_emission[i,:] = [float(v) for v in line.split()[1:]]
 
     return mm
 
@@ -123,12 +123,10 @@ def save(mm, handle):
         w("  %s: %g\n" % (mm.states[i], mm.p_initial[i]))
     w("TRANSITION:\n")
     for i in range(len(mm.p_transition)):
-        x = map(str, mm.p_transition[i])
-        w("  %s: %s\n" % (mm.states[i], ' '.join(x)))
+        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_transition[i])))
     w("EMISSION:\n")
     for i in range(len(mm.p_emission)):
-        x = map(str, mm.p_emission[i])
-        w("  %s: %s\n" % (mm.states[i], ' '.join(x)))
+        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_emission[i])))
 
 
 # XXX allow them to specify starting points
@@ -182,7 +180,7 @@ def train_bw(states, alphabet, training_data,
         training_outputs.append([indexes[x] for x in outputs])
 
     # Do some sanity checking on the outputs.
-    lengths = map(len, training_outputs)
+    lengths = [len(x) for x in training_outputs]
     if min(lengths) == 0:
         raise ValueError("I got training data with outputs of length 0")
 
@@ -218,8 +216,9 @@ def _baum_welch(N, M, training_outputs,
         p_emission = _copy_and_check(p_emission, (N,M))
 
     # Do all the calculations in log space to avoid underflows.
-    lp_initial, lp_transition, lp_emission = map(
-        numpy.log, (p_initial, p_transition, p_emission))
+    lp_initial = numpy.log(p_initial)
+    lp_transition = numpy.log(p_transition)
+    lp_emission = numpy.log(p_emission)
     if pseudo_initial is not None:
         lpseudo_initial = numpy.log(pseudo_initial)
     else:
@@ -255,7 +254,7 @@ def _baum_welch(N, M, training_outputs,
                            % MAX_ITERATIONS)
 
     # Return everything back in normal space.
-    return map(numpy.exp, (lp_initial, lp_transition, lp_emission))
+    return [numpy.exp(x) for x in (lp_initial, lp_transition, lp_emission)]
 
 
 def _baum_welch_one(N, M, outputs,
@@ -485,10 +484,9 @@ def find_states(markov_model, output):
 
     # _viterbi does calculations in log space.  Add a tiny bit to the
     # matrices so that the logs will not break.
-    x = mm.p_initial + VERY_SMALL_NUMBER
-    y = mm.p_transition + VERY_SMALL_NUMBER
-    z = mm.p_emission + VERY_SMALL_NUMBER
-    lp_initial, lp_transition, lp_emission = map(numpy.log, (x, y, z))
+    lp_initial = numpy.log(mm.p_initial + VERY_SMALL_NUMBER)
+    lp_transition = numpy.log(mm.p_transition + VERY_SMALL_NUMBER)
+    lp_emission = numpy.log(mm.p_emission + VERY_SMALL_NUMBER)
     # Change output into a list of indexes into the alphabet.
     indexes = itemindex(mm.alphabet)
     output = [indexes[x] for x in output]

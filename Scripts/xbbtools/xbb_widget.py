@@ -426,7 +426,7 @@ GC=%f
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
-        seq = map(None, re.sub('[^A-Z]', '', seq))
+        seq = list(re.sub('[^A-Z]', '', seq))
         seq.reverse()
         seq = ''.join(seq)
 

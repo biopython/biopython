@@ -455,17 +455,17 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
 
     def _identifier_split(self, identifier):
-        """Returns (name,start,end) string tuple from an identier."""
+        """Returns (name, start, end) string tuple from an identier."""
         if '/' in identifier:
             name, start_end = identifier.rsplit("/", 1)
             if start_end.count("-") == 1:
                 try:
-                    start, end = map(int, start_end.split("-"))
-                    return (name, start, end)
+                    start, end = start_end.split("-")
+                    return name, int(start), int(end)
                 except ValueError:
                     # Non-integers after final '/' - fall through
                     pass
-        return (identifier, None, None)
+        return identifier, None, None
 
     def _get_meta_data(self, identifier, meta_dict):
         """Takes an itentifier and returns dict of all meta-data matching it.

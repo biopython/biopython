@@ -37,7 +37,7 @@ def read(handle):
         if record.data_org==0:
             for j in range(record.num_pops):
                 line_comp = str(next(handle)).rstrip().split(' ')
-                pop_dist = map(lambda x: int(x), line_comp)
+                pop_dist = [int(x) for x in line_comp]
                 pops_data.append(pop_dist)
         else:
             raise NotImplementedError('1/alleles by rows not implemented')

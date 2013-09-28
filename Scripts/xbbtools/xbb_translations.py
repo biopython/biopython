@@ -69,7 +69,7 @@ class xbb_translations:
             subseq = seq[i:i+60]
             p = i/3
             res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  '.join(map(None, protein[p:p+20])) + '\n'
+            res += '  '.join(protein[p:p+20]) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
 
@@ -97,16 +97,16 @@ class xbb_translations:
             p = i/3
             # + frames
             res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
-            res += ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
-            res += '  '.join(map(None, frames[1][p:p+20])) + '\n'
+            res += '  ' + '  '.join(frames[3][p:p+20]) + '\n'
+            res += ' ' + '  '.join(frames[2][p:p+20]) + '\n'
+            res += '  '.join(frames[1][p:p+20]) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
             res += csubseq.lower() + '\n'
             # - frames
-            res += '  '.join(map(None, frames[-2][p:p+20])) + ' \n'
-            res += ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
-            res += '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
+            res += '  '.join(frames[-2][p:p+20]) + ' \n'
+            res += ' ' + '  '.join(frames[-1][p:p+20]) + '\n'
+            res += '  ' + '  '.join(frames[-3][p:p+20]) + '\n\n'
 
         return res
 

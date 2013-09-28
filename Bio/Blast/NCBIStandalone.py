@@ -1312,15 +1312,13 @@ class _DatabaseReportConsumer(object):
         self._dr.num_sequences_in_database.append(_safe_int(sequences))
 
     def ka_params(self, line):
-        x = line.split()
-        self._dr.ka_params = map(_safe_float, x)
+        self._dr.ka_params = [_safe_float(x) for x in line.split()]
 
     def gapped(self, line):
         self._dr.gapped = 1
 
     def ka_params_gap(self, line):
-        x = line.split()
-        self._dr.ka_params_gap = map(_safe_float, x)
+        self._dr.ka_params_gap = [_safe_float(x) for x in line.split()]
 
     def end_database_report(self):
         pass
@@ -1334,9 +1332,8 @@ class _ParametersConsumer(object):
         self._params.matrix = line[8:].rstrip()
 
     def gap_penalties(self, line):
-        x = _get_cols(
-            line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})
-        self._params.gap_penalties = map(_safe_float, x)
+        self._params.gap_penalties = [_safe_float(x) for x in _get_cols(
+            line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})]
 
     def num_hits(self, line):
         if '1st pass' in line:

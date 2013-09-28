@@ -42,8 +42,8 @@ class BlastIt:
             pass
         nin.extend(glob.glob('*.nin'))
 
-        self.pin = map(lambda x: os.path.splitext(x)[0], pin)
-        self.nin = map(lambda x: os.path.splitext(x)[0], nin)
+        self.pin = [os.path.splitext(x)[0] for x in pin]
+        self.nin = [os.path.splitext(x)[0] for x in nin]
 
     def Choices(self):
         self.GetBlasts()

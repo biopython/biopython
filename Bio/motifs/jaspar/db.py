@@ -420,7 +420,7 @@ class JASPAR5(object):
             for row in rows:
                 base_counts.append(row[0])
 
-            counts[base] = map(float, base_counts)
+            counts[base] = [float(x) for x in base_counts]
 
         return matrix.GenericPositionMatrix(dna, counts)
 

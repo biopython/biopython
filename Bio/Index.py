@@ -135,13 +135,11 @@ class _InMemoryIndex(dict):
         # relatively fast.
         s = cPickle.dumps(obj)
         intlist = array.array('b', s)
-        strlist = map(str, intlist)
-        return ','.join(strlist)
+        return ','.join(str(i) for i in intlist)
 
     def _toobj(self, str):
-        intlist = map(int, str.split(','))
+        intlist = [int(i) for i in str.split(',')]
         intlist = array.array('b', intlist)
-        strlist = map(chr, intlist)
-        return cPickle.loads(''.join(strlist))
+        return cPickle.loads(''.join(chr(i) for i in intlist))
 
 Index = _InMemoryIndex

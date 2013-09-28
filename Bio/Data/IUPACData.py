@@ -164,7 +164,7 @@ def _make_ambiguous_ranges(mydict, weight_table):
         if len(values) == 1 and values[0] not in weight_table:
             continue
 
-        weights = map(weight_table.get, values)
+        weights = [weight_table.get(x) for x in values]
         range_d[letter] = (min(weights), max(weights))
         total_w = 0.0
         for w in weights:

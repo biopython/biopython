@@ -164,7 +164,7 @@ def PdbAtomIterator(handle):
             for i, pregap, postgap in gaps:
                 if postgap > pregap:
                     gapsize = postgap - pregap - 1
-                    res_out.extend(map(restype, residues[prev_idx:i]))
+                    res_out.extend(restype(x) for x in  residues[prev_idx:i])
                     prev_idx = i
                     res_out.append('X'*gapsize)
                 else:
@@ -172,14 +172,14 @@ def PdbAtomIterator(handle):
                                   UserWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
-                    res_out.extend(map(restype, residues[prev_idx:i]))
+                    res_out.extend(restype(x) for x in residues[prev_idx:i])
                     break
             else:
                 # Last segment
-                res_out.extend(map(restype, residues[prev_idx:]))
+                res_out.extend(restype(x) for x in residues[prev_idx:])
         else:
             # No gaps
-            res_out = map(restype, residues)
+            res_out = [restype(x) for x in residues]
         record_id = "%s:%s" % (pdb_id, chn_id)
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)

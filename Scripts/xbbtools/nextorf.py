@@ -260,7 +260,7 @@ if __name__ == '__main__':
     show_help = len(sys.argv) <= 1
 
     shorts = 'hv'
-    longs = map(lambda x: x + '=', options.keys()) + ['help']
+    longs = [x + '=' for x in options.keys()] + ['help']
 
     optlist, args = getopt.getopt(args, shorts, longs)
     if show_help:

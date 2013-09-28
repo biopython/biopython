@@ -557,7 +557,7 @@ class QueryResult(_BaseSearchObject):
         """
         hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
-            hits = map(func, hits)
+            hits = [func(x) for x in hits]
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj

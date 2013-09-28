@@ -39,7 +39,7 @@ def GC(seq):
     Note that this will return zero for an empty sequence.
     """
     try:
-        gc = sum(map(seq.count, ['G', 'C', 'g', 'c', 'S', 's']))
+        gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
         return gc*100.0/len(seq)
     except ZeroDivisionError:
         return 0.0
@@ -369,16 +369,16 @@ def six_frame_translations(seq, genetic_code=1):
         csubseq = comp[i:i+60]
         p = i//3
         res += '%d/%d\n' % (i+1, i/3+1)
-        res += '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
-        res += ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
-        res += '  '.join(map(None, frames[1][p:p+20])) + '\n'
+        res += '  ' + '  '.join(frames[3][p:p+20]) + '\n'
+        res += ' ' + '  '.join(frames[2][p:p+20]) + '\n'
+        res += '  '.join(frames[1][p:p+20]) + '\n'
         # seq
         res += subseq.lower() + '%5d %%\n' % int(GC(subseq))
         res += csubseq.lower() + '\n'
         # - frames
-        res += '  '.join(map(None, frames[-2][p:p+20])) +' \n'
-        res += ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
-        res += '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
+        res += '  '.join(frames[-2][p:p+20]) +' \n'
+        res += ' ' + '  '.join(frames[-1][p:p+20]) + '\n'
+        res += '  ' + '  '.join(frames[-3][p:p+20]) + '\n\n'
     return res
 
 # }}}

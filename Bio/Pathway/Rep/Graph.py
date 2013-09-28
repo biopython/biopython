@@ -35,14 +35,14 @@ class Graph(object):
         for key in keys:
             values = sorted([(x,self._edge_map[(key,x)])
                       for x in self._adjacency_list[key].list()])
-            s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
+            s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list.keys())
         edgenum = reduce(lambda x,y: x+y,
-                         map(len, self._adjacency_list.values()))
+                         [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map.keys())
         return "<Graph: " + \
                str(nodenum) + " node(s), " + \
