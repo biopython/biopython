@@ -19,6 +19,7 @@ EX_NEWICK = 'Nexus/int_node_labels.nwk'
 EX_NEWICK2 = 'Nexus/test.new'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
 EX_NEXUS2 = 'Nexus/bats.nex'
+EX_NEXUS_BOM= 'Nexus/ByteOrderMarkFile.nwk'
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
@@ -44,7 +45,8 @@ class IOTests(unittest.TestCase):
         
         tree = Phylo.read(EX_NEXUS2, 'nexus')
         self.assertEqual(len(tree.get_terminals()), 658)
-
+    def test_unicode_exception(self):
+        self.assertRaises(NewickIO.NewickError, Phylo.read,EX_NEXUS_BOM,"newick")
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
         trees = list(Phylo.parse(EX_NEXUS, 'nexus'))
