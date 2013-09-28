@@ -723,7 +723,7 @@ class BgzfWriter(object):
         else:
             crc = struct.pack("<I", crc)
         bsize = struct.pack("<H", len(compressed)+25)  # includes -1
-        crc = struct.pack("<I", zlib.crc32(block) & 0xffffffffL)
+        crc = struct.pack("<I", zlib.crc32(block) & 0xffffffff)
         uncompressed_length = struct.pack("<I", len(block))
         #Fixed 16 bytes,
         # gzip magic bytes (4) mod time (4),
