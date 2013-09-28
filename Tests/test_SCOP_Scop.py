@@ -8,6 +8,7 @@
 """Unit test for Scop"""
 
 from __future__ import print_function
+from future_builtins import zip
 
 import unittest
 from Bio._py3k import StringIO

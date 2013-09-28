@@ -5,6 +5,8 @@
 
 """Bio.SearchIO parser for Exonerate vulgar output format."""
 
+from future_builtins import zip
+
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
@@ -102,8 +104,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
                 hstarts, hends = hends, hstarts
 
     # set start and end ranges
-    hsp['query_ranges'] = zip(qstarts, qends)
-    hsp['hit_ranges'] = zip(hstarts, hends)
+    hsp['query_ranges'] = list(zip(qstarts, qends))
+    hsp['hit_ranges'] = list(zip(hstarts, hends))
     return hsp
 
 

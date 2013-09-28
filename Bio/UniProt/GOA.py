@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from future_builtins import zip
+
 import copy
 import sys
 

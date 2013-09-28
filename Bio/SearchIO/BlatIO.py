@@ -177,6 +177,7 @@ Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
 """
+from future_builtins import zip
 
 import re
 from math import log
@@ -308,10 +309,10 @@ def _create_hsp(hid, qid, psl):
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-    query_range_all = zip(qstarts, [x + y for x, y in
-            zip(qstarts, psl['blocksizes'])])
-    hit_range_all = zip(hstarts, [x + y for x, y in
-            zip(hstarts, psl['blocksizes'])])
+    query_range_all = list(zip(qstarts, [x + y for x, y in
+                                         zip(qstarts, psl['blocksizes'])]))
+    hit_range_all = list(zip(hstarts, [x + y for x, y in
+                                       zip(hstarts, psl['blocksizes'])]))
     # check length of sequences and coordinates, all must match
     if 'tseqs' in psl and 'qseqs' in psl:
         assert len(psl['tseqs']) == len(psl['qseqs']) == \

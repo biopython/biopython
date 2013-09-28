@@ -5,6 +5,8 @@
 
 """Bio.SearchIO parser for Exonerate plain text output format."""
 
+from future_builtins import zip
+
 import re
 from itertools import chain
 
@@ -81,10 +83,10 @@ def _get_inter_coords(coords, strand=1):
     if strand == -1:
         sorted_coords = [(max(a, b), min(a, b)) for a, b in coords]
         inter_coords = list(chain(*sorted_coords))[1:-1]
-        return zip(inter_coords[1::2], inter_coords[::2])
+        return list(zip(inter_coords[1::2], inter_coords[::2]))
     else:
         inter_coords = list(chain(*coords))[1:-1]
-        return zip(inter_coords[::2], inter_coords[1::2])
+        return list(zip(inter_coords[::2], inter_coords[1::2]))
 
 
 def _stitch_rows(raw_rows):

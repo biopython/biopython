@@ -16,6 +16,8 @@ http://www.appliedbiosystem.com/support/software_community/ABIF_File_Format.pdf
 
 __docformat__ = "epytext en"
 
+from future_builtins import zip
+
 import datetime
 import struct
 

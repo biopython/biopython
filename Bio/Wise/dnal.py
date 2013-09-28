@@ -12,6 +12,7 @@
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
 from __future__ import print_function
+from future_builtins import zip
 
 import commands
 import itertools
@@ -67,7 +68,7 @@ def _get_coords(filename):
     if end_line is None: # sequence is too short
         return [(0, 0), (0, 0)]
 
-    return zip(*map(_alb_line2coords, [start_line, end_line])) # returns [(start0, end0), (start1, end1)]
+    return list(zip(*map(_alb_line2coords, [start_line, end_line]))) # returns [(start0, end0), (start1, end1)]
 
 
 def _any(seq, pred=bool):

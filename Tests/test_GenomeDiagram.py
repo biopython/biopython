@@ -5,11 +5,8 @@
 """Tests for GenomeDiagram general functionality.
 """
 
-##########
-# IMPORTS
-
-# Builtins
 from __future__ import print_function
+from future_builtins import zip
 
 import os
 import unittest
@@ -245,7 +242,7 @@ class GraphTest(unittest.TestCase):
         for data_values, name, color in zip([data1,data2,data3],
                                             ["sin", "cos", "2sin2"],
                                             ["red","green","blue"]):
-            data = zip(range(points), data_values)
+            data = list(zip(range(points), data_values))
             gds_data.new_graph(data, "", style="line",
                                color = color, altcolor = color,
                                center = 0)

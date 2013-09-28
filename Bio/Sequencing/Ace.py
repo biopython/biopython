@@ -53,8 +53,8 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
 
-
 from __future__ import print_function
+from future_builtins import zip
 
 class rd(object):
     """RD (reads), store a read with its name, sequence etc.

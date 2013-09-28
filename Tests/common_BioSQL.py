@@ -3,8 +3,8 @@
 # as part of this package.
 """Tests for dealing with storage of biopython objects in a relational db.
 """
-# standard library
 from __future__ import print_function
+from future_builtins import zip
 
 import os
 import platform
@@ -229,7 +229,7 @@ class ReadTest(unittest.TestCase):
         self.assertEqual(l, len(list(db.iteritems())))
         self.assertEqual(l, len(list(db.iterkeys())))
         self.assertEqual(l, len(list(db.itervalues())))
-        for (k1, r1), (k2, r2) in zip(zip(keys, items), db.iteritems()):
+        for (k1, r1), (k2, r2) in zip(list(zip(keys, items)), db.iteritems()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
         for k in keys:
