@@ -7,4 +7,4 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf).
 """
 
-from KDTree import KDTree
+from .KDTree import KDTree

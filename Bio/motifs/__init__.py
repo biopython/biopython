@@ -208,7 +208,7 @@ class Motif(object):
     A class representing sequence motifs.
     """
     def __init__(self, alphabet=None, instances=None, counts=None):
-        import matrix
+        from . import matrix
         from Bio.Alphabet import IUPAC
         self.name=""
         if counts is not None and instances is not None:

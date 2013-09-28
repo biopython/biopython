@@ -7,8 +7,8 @@ from __future__ import print_function
 
 import os
 import os.path
-from _paml import Paml, _relpath
-import _parse_codeml
+from ._paml import Paml, _relpath
+from . import _parse_codeml
 
 
 class CodemlError(EnvironmentError):

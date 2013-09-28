@@ -21,7 +21,7 @@ from Bio import Alphabet
 from Bio.Seq import MutableSeq
 
 # neural network libraries
-from Pattern import PatternRepository
+from .Pattern import PatternRepository
 
 # genetic algorithm libraries
 from Bio.GA import Organism

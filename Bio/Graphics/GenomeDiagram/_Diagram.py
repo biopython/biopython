@@ -36,9 +36,9 @@ except ImportError:
     renderPM=None
 
 # GenomeDiagram
-from _LinearDrawer import LinearDrawer
-from _CircularDrawer import CircularDrawer
-from _Track import Track
+from ._LinearDrawer import LinearDrawer
+from ._CircularDrawer import CircularDrawer
+from ._Track import Track
 
 from Bio.Graphics import _write
 

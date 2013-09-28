@@ -5,8 +5,8 @@
 
 import os
 import os.path
-from _paml import Paml, _relpath
-import _parse_baseml
+from ._paml import Paml, _relpath
+from . import _parse_baseml
 
 
 class BasemlError(EnvironmentError):

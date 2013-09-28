@@ -10,7 +10,7 @@ This version will run Sincoal2 (if necessary) Asynchrously.
 
 import os
 
-import Cache
+from . import Cache
 
 
 class SimCoalCache(Cache.SimCoalCache):

@@ -53,10 +53,10 @@ from __future__ import print_function
 import os
 import re
 
-import Des
-import Cla
-import Hie
-import Residues
+from . import Des
+from . import Cla
+from . import Hie
+from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 

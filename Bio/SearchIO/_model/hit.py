@@ -12,8 +12,8 @@ from itertools import chain
 from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import allitems, optionalcascade
 
-from _base import _BaseSearchObject
-from hsp import HSP
+from ._base import _BaseSearchObject
+from .hsp import HSP
 
 
 class Hit(_BaseSearchObject):

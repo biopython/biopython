@@ -11,7 +11,7 @@ import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 
-from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
+from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
 
 __all__ = ['ExonerateVulgarParser', 'ExonerateVulgarIndexer']

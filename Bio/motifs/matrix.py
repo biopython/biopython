@@ -533,7 +533,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def distribution(self, background=None, precision=10**3):
         """calculate the distribution of the scores at the given precision."""
-        from thresholds import ScoreDistribution
+        from .thresholds import ScoreDistribution
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:

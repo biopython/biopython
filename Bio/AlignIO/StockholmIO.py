@@ -134,7 +134,7 @@ __docformat__ = "epytext en"  # not just plaintext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class StockholmWriter(SequentialAlignmentWriter):

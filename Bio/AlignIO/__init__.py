@@ -144,12 +144,12 @@ from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
-import StockholmIO
-import ClustalIO
-import NexusIO
-import PhylipIO
-import EmbossIO
-import FastaIO
+from . import StockholmIO
+from . import ClustalIO
+from . import NexusIO
+from . import PhylipIO
+from . import EmbossIO
+from . import FastaIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.

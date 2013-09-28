@@ -17,7 +17,7 @@ from __future__ import print_function
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class EmbossWriter(SequentialAlignmentWriter):

@@ -23,7 +23,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Interfaces import SequentialSequenceWriter
+from .Interfaces import SequentialSequenceWriter
 
 
 class XMLRecordIterator:

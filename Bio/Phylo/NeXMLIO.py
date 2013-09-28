@@ -17,7 +17,7 @@ from Bio._py3k import StringIO
 from Bio.Phylo import NeXML
 from xml.dom import minidom
 import sys
-from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
+from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
 
 #For speed try to use cElementTree rather than ElementTree

@@ -9,7 +9,7 @@ to the next generation.
 import random
 
 # local modules
-from Abstract import AbstractSelection
+from .Abstract import AbstractSelection
 
 
 class TournamentSelection(AbstractSelection):

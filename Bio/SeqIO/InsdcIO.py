@@ -36,7 +36,7 @@ from __future__ import print_function
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
-from Interfaces import SequentialSequenceWriter
+from .Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
 from Bio._py3k import _is_int_or_long

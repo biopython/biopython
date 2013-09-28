@@ -9,7 +9,7 @@
 http://www.ncbi.nlm.nih.gov/geo/
 """
 
-import Record
+from . import Record
 
 
 def _read_key_value(line):

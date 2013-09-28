@@ -12,7 +12,7 @@ from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from _base import _BaseHmmerTextIndexer
+from ._base import _BaseHmmerTextIndexer
 
 __all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
 

@@ -24,7 +24,7 @@ __docformat__ = "restructuredtext en"
 from Bio._py3k import StringIO
 
 from Bio.Phylo import CDAO
-from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
+from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 import urlparse
 

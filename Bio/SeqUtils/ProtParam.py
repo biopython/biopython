@@ -21,8 +21,8 @@ print(X.protein_scale(ProtParamData.kd, 9, 0.4))
 from __future__ import print_function
 
 import sys
-import ProtParamData  # Local
-import IsoelectricPoint  # Local
+from . import ProtParamData  # Local
+from . import IsoelectricPoint  # Local
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData

@@ -85,7 +85,7 @@ def _open_for_random_access(filename):
     and index_db functions.
     """
     handle = open(filename, "rb")
-    import bgzf
+    from . import bgzf
     try:
         return bgzf.BgzfReader(mode="rb", fileobj=handle)
     except ValueError as e:

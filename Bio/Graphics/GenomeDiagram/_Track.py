@@ -33,8 +33,8 @@ from __future__ import print_function
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from _FeatureSet import FeatureSet
-from _GraphSet import GraphSet
+from ._FeatureSet import FeatureSet
+from ._GraphSet import GraphSet
 
 
 class Track(object):
@@ -380,8 +380,8 @@ if __name__ == '__main__':
 
     # test code
     from Bio import SeqIO
-    from _FeatureSet import FeatureSet
-    from _GraphSet import GraphSet
+    from ._FeatureSet import FeatureSet
+    from ._GraphSet import GraphSet
     from random import normalvariate
 
     genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')

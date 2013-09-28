@@ -314,20 +314,20 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
-import AbiIO
-import AceIO
-import FastaIO
-import IgIO  # IntelliGenetics or MASE format
-import InsdcIO  # EMBL and GenBank
-import PdbIO
-import PhdIO
-import PirIO
-import SeqXmlIO
-import SffIO
-import SwissIO
-import TabIO
-import QualityIO  # FastQ and qual files
-import UniprotIO
+from . import AbiIO
+from . import AceIO
+from . import FastaIO
+from . import IgIO  # IntelliGenetics or MASE format
+from . import InsdcIO  # EMBL and GenBank
+from . import PdbIO
+from . import PhdIO
+from . import PirIO
+from . import SeqXmlIO
+from . import SffIO
+from . import SwissIO
+from . import TabIO
+from . import QualityIO  # FastQ and qual files
+from . import UniprotIO
 
 
 #Convention for format names is "mainname-subtype" in lower case.
@@ -796,7 +796,7 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess # Lazy import
+    from ._index import _FormatToRandomAccess # Lazy import
     from Bio.File import _IndexedSeqFileDict
     try:
         proxy_class = _FormatToRandomAccess[format]
@@ -874,7 +874,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess  # Lazy import
+    from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (index_filename, filenames, format, alphabet, key_function)
@@ -934,7 +934,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
-    from _convert import _handle_convert  # Lazy import
+    from ._convert import _handle_convert  # Lazy import
     with as_handle(in_file, in_mode) as in_handle:
         with as_handle(out_file, out_mode) as out_handle:
             count = _handle_convert(in_handle, in_format,

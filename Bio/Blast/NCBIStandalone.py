@@ -1788,7 +1788,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
-    from Applications import BlastallCommandline
+    from .Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
     cline.set_parameter(att2param['program'], program)
     cline.set_parameter(att2param['database'], database)
@@ -1917,7 +1917,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
         'matrix_outfile' : '-Q',
         'align_infile' : '-B',
         }
-    from Applications import BlastpgpCommandline
+    from .Applications import BlastpgpCommandline
     cline = BlastpgpCommandline(blastcmd)
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
@@ -2020,7 +2020,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
         'align_outfile' : '-o',
         }
 
-    from Applications import RpsBlastCommandline
+    from .Applications import RpsBlastCommandline
     cline = RpsBlastCommandline(blastcmd)
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)

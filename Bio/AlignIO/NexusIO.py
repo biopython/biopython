@@ -18,7 +18,7 @@ from __future__ import print_function
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentWriter
+from .Interfaces import AlignmentWriter
 from Bio import Alphabet
 
 #You can get a couple of example files here:

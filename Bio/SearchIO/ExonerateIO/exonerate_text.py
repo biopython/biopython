@@ -13,9 +13,9 @@ from itertools import chain
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_protein
 
-from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
+from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
-from exonerate_vulgar import parse_vulgar_comp, _RE_VULGAR
+from .exonerate_vulgar import parse_vulgar_comp, _RE_VULGAR
 
 
 __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']

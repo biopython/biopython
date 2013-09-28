@@ -40,7 +40,7 @@ from reportlab.pdfbase import _fontdata
 from reportlab.lib import colors
 
 # GenomeDiagram
-from _Feature import Feature
+from ._Feature import Feature
 
 # Builtins
 import re

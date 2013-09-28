@@ -20,10 +20,10 @@ from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
 # GenomeDiagram imports
-from _AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
-from _AbstractDrawer import _stroke_and_fill_colors
-from _FeatureSet import FeatureSet
-from _GraphSet import GraphSet
+from ._AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
+from ._AbstractDrawer import _stroke_and_fill_colors
+from ._FeatureSet import FeatureSet
+from ._GraphSet import GraphSet
 
 from math import ceil, pi, cos, sin, asin
 

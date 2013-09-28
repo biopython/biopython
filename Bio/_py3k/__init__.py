@@ -121,7 +121,7 @@ else:
             from ordereddict import OrderedDict
         except ImportError:
             #Use our bundled copy instead
-            from _ordereddict import OrderedDict
+            from ._ordereddict import OrderedDict
 
     # On Python 2 this will be a (bytes) string based handle.
     # Note this doesn't work as it is unicode based:

@@ -12,7 +12,7 @@ from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
 
 # local modules
-from Pattern import PatternRepository
+from .Pattern import PatternRepository
 
 
 class MotifFinder(object):

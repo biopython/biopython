@@ -364,7 +364,7 @@ def read(handle, validate=True):
     (if any) of each element in a dictionary my_element.attributes, and
     the tag name in my_element.tag.
     """
-    from Parser import DataHandler
+    from .Parser import DataHandler
     handler = DataHandler(validate)
     record = handler.read(handle)
     return record
@@ -396,7 +396,7 @@ def parse(handle, validate=True):
     (if any) of each element in a dictionary my_element.attributes, and
     the tag name in my_element.tag.
     """
-    from Parser import DataHandler
+    from .Parser import DataHandler
     handler = DataHandler(validate)
     records = handler.parse(handle)
     return records

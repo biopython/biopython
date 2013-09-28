@@ -14,8 +14,8 @@ from Bio._py3k import OrderedDict
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 
-from _base import _BaseSearchObject
-from hit import Hit
+from ._base import _BaseSearchObject
+from .hit import Hit
 
 
 class QueryResult(_BaseSearchObject):

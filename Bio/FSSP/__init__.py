@@ -13,7 +13,7 @@ mult_align: returns a Biopython alignment object
 from __future__ import print_function
 
 import re
-import fssp_rec
+from . import fssp_rec
 from Bio.Align import Generic
 from Bio import Alphabet
 fff_rec = fssp_rec.fff_rec

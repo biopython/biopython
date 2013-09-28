@@ -20,7 +20,7 @@ from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
         fragcascade
 
-from _base import _BaseHSP
+from ._base import _BaseHSP
 
 
 class HSP(_BaseHSP):

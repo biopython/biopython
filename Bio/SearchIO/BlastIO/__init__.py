@@ -395,9 +395,9 @@ The blast-text parser provides the following object attributes:
 
 """
 
-from blast_tab import *
-from blast_xml import *
-from blast_text import *
+from .blast_tab import *
+from .blast_xml import *
+from .blast_text import *
 
 
 # if not used as a module, run the doctest

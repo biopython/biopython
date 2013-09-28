@@ -16,7 +16,7 @@ in the training data.
 import math
 
 # local stuff
-from DynamicProgramming import ScaledDPAlgorithms
+from .DynamicProgramming import ScaledDPAlgorithms
 
 
 class TrainingSequence(object):

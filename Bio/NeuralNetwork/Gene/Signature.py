@@ -11,7 +11,7 @@ from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
 
 # local stuff
-from Pattern import PatternRepository
+from .Pattern import PatternRepository
 
 
 class SignatureFinder(object):

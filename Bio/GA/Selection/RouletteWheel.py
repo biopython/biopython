@@ -9,7 +9,7 @@ import random
 import copy
 
 # local modules
-from Abstract import AbstractSelection
+from .Abstract import AbstractSelection
 
 
 class RouletteWheelSelection(AbstractSelection):

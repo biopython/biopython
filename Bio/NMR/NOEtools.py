@@ -6,7 +6,7 @@
 #    peaklist with predicted crosspeaks directly from the
 #    input assignment peaklist.
 
-import xpktools
+from . import xpktools
 
 
 def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):

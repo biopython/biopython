@@ -15,7 +15,7 @@ The DOM files for older releases can be found
 "elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
 """
 
-from Residues import Residues
+from .Residues import Residues
 
 
 class Record(object):

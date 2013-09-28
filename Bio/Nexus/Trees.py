@@ -16,7 +16,7 @@ from __future__ import print_function
 
 import random
 import sys
-import Nodes
+from . import Nodes
 
 PRECISION_BRANCHLENGTH=6
 PRECISION_SUPPORT=6

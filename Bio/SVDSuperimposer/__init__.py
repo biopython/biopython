@@ -5,4 +5,4 @@ eg. useful to superimpose crystal structures. SVD stands for singular
 value decomposition, which is used in the algorithm.
 """
 
-from SVDSuperimposer import *
+from .SVDSuperimposer import *

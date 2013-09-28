@@ -17,9 +17,9 @@ import os
 
 from Bio import BiopythonDeprecationWarning
 
-import BioSeq
-import Loader
-import DBUtils
+from . import BioSeq
+from . import Loader
+from . import DBUtils
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
