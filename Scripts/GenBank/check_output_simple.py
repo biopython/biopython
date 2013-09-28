@@ -27,7 +27,7 @@ handle = open(sys.argv[1], 'r')
 
 iterator = GenBank.Iterator(handle, parser)
 
-while 1:
+while True:
     cur_record = iterator.next()
 
     if not(cur_record):

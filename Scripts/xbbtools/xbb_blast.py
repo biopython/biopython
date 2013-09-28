@@ -112,7 +112,7 @@ class BlastIt:
 
         print(self.command)
         self.pipe = posix.popen(self.command)
-        while 1:
+        while True:
             try:
                 char = self.pipe.read(1)
                 self.notepad.insert(END, char)

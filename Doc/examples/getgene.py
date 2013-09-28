@@ -49,7 +49,7 @@ class DB_Index:
 
         db['datafile'] = os.path.abspath(infile)
 
-        while 1:
+        while True:
             line = fid.readline()
             if not line or not len(line):
                 break

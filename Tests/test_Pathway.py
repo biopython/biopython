@@ -42,8 +42,7 @@ class GraphTestCase(unittest.TestCase):
         a.add_node('a')
         self.assertEqual(a.nodes(), ['a'], "duplicate node added")
         a.add_node('b')
-        l = a.nodes()
-        l.sort()
+        l = sorted(a.nodes())
         self.assertEqual(l, ['a', 'b'], "second node not added")
 
     def testEdges(self):
@@ -54,8 +53,7 @@ class GraphTestCase(unittest.TestCase):
         self.assertEqual(a.parent_edges('a'), [('b','label2')])  # , "incorrect parent edges")
         a.add_edge('b','c','label3')
         self.assertEqual(a.parent_edges('c'), [('b','label3')])  # , "incorrect parent edges")
-        l = a.children('b')
-        l.sort()
+        l = sorted(a.children('b'))
         self.assertEqual(l, ['a', 'c'], "incorrect children")
         self.assertEqual(a.children('d'), [], "incorrect children for singleton")
         self.assertEqual(a.parents('a'), ['b'], "incorrect parents")
@@ -104,8 +102,7 @@ class MultiGraphTestCase(unittest.TestCase):
         a.add_node('a')
         self.assertEqual(a.nodes(), ['a'], "duplicate node added")
         a.add_node('b')
-        l = a.nodes()
-        l.sort()
+        l = sorted(a.nodes())
         self.assertEqual(l, ['a', 'b'], "second node not added")
 
     def testEdges(self):
@@ -113,8 +110,7 @@ class MultiGraphTestCase(unittest.TestCase):
         a.add_edge('a','b','label1')
         self.assertEqual(a.child_edges('a'), [('b','label1')])  # , "incorrect child edges")
         a.add_edge('a','b','label2')
-        l = a.child_edges('a')
-        l.sort()
+        l = sorted(a.child_edges('a'))
         self.assertEqual(l, [('b','label1'),('b','label2')])  # , "incorrect child edges")
         a.add_edge('b','a','label2')
         self.assertEqual(a.parent_edges('a'), [('b','label2')])  # , "incorrect parent edges")

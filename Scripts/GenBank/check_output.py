@@ -29,7 +29,7 @@ def do_comparison(good_record, test_record):
     good_handle = cStringIO.StringIO(good_record)
     test_handle = cStringIO.StringIO(test_record)
 
-    while 1:
+    while True:
         good_line = good_handle.readline()
         test_line = test_handle.readline()
 
@@ -64,7 +64,7 @@ def write_format(file):
     iterator = GenBank.Iterator(cur_handle, record_parser)
     compare_iterator = GenBank.Iterator(compare_handle)
 
-    while 1:
+    while True:
         cur_record = iterator.next()
         compare_record = compare_iterator.next()
 

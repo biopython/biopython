@@ -138,7 +138,7 @@ def do_comparison(good_record, test_record):
     good_handle = StringIO(good_record)
     test_handle = StringIO(test_record)
 
-    while 1:
+    while True:
         good_line = good_handle.readline()
         test_line = test_handle.readline()
 

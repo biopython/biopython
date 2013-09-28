@@ -241,7 +241,7 @@ class MotifFinderTest(unittest.TestCase):
 
             iterator = SeqIO.parse(handle, "fasta",
                                    alphabet=IUPAC.unambiguous_dna)
-            while 1:
+            while True:
                 try:
                     seq_record = next(iterator)
                 except StopIteration:

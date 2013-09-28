@@ -219,7 +219,7 @@ class QueensRepair:
         # check if we should repair or not
         repair_chance = random.random()
         if repair_chance <= self._repair_prob:
-            while 1:
+            while True:
                 # get the duplicated items we need to work on
                 duplicated_items = self._get_duplicates(organism.genome)
 

@@ -65,7 +65,7 @@ class DNAsearch:
     def SearchAll(self):
         pos = -1
         positions = []
-        while 1:
+        while True:
             m = self._Search(pos + 1)
             if not m:
                 break

@@ -85,7 +85,7 @@ class AppTest(unittest.TestCase):
         ctrl = GenePopController()
         (allFis, allFst, allFit), itr = ctrl.calc_fst_all("PopGen" + os.sep + "haplo.gen")
         litr = list(itr)
-        assert not type(allFst) == int
+        assert not isinstance(allFst, int)
         assert len(litr) == 37
         assert litr[36][0] == "Locus37"
 

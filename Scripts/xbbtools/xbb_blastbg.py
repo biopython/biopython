@@ -41,7 +41,7 @@ class BlastDisplayer:
         # open the oufile and displays new appended text
         fid = open(self.outfile)
         size = 0
-        while 1:
+        while True:
             if self.worker.finished:
                 break
             fid.seek(size)
