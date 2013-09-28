@@ -69,7 +69,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         cline = MSAProbsCommandline(msaprobs_exe, infile=input_file)
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
                             "non-zero exit status" in str(err))
@@ -84,7 +84,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         cline = MSAProbsCommandline(msaprobs_exe, infile=input_file)
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertEqual(err.returncode, 139)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
@@ -96,7 +96,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         cline = MSAProbsCommandline(msaprobs_exe, infile=input_file)
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertEqual(err.returncode, 1)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
