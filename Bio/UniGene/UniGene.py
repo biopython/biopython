@@ -65,7 +65,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
         else:
             uhandle = Bio.File.UndoHandle(handle)
         text = ''
-        while 1:
+        while True:
             line = uhandle.readline()
             line = string.strip( line )
             if( line == '' ):

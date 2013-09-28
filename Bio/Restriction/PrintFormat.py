@@ -293,8 +293,7 @@ class PrintFormat(object):
         """
         if not ls:
             return title
-        resultKeys = [str(x) for x,y in ls]
-        resultKeys.sort()
+        resultKeys = sorted([str(x) for x,y in ls])
         map = title or ''
         enzymemap = {}
         for (enzyme, cut) in ls:

@@ -120,8 +120,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
     pops.append(curr_pop)
     fd_rec.num_pops = num_pops
     for loci_pos in range(num_loci):
-        alleles = list(loci[loci_pos])
-        alleles.sort()
+        alleles = sorted(loci[loci_pos])
         loci_rec = [len(alleles), []]
         for pop in pops:
             pop_rec = []

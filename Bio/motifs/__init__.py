@@ -466,7 +466,7 @@ The same rules are used by TRANSFAC."""
                   'color4': '',
                   }
         for k,v in kwds.iteritems():
-            if type(values[k])==bool:
+            if isinstance(values[k], bool):
                 if not v:
                     v = ""
             values[k]=str(v)

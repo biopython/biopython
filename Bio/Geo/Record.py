@@ -40,8 +40,7 @@ class Record(object):
         output = ''
         output = output + 'GEO Type: %s\n' % self.entity_type
         output = output + 'GEO Id: %s\n' % self.entity_id
-        att_keys = self.entity_attributes.keys()
-        att_keys.sort()
+        att_keys = sorted(self.entity_attributes.keys())
         for key in att_keys:
             contents = self.entity_attributes[ key ]
             if isinstance(contents, list):

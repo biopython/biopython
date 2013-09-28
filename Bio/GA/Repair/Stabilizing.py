@@ -42,7 +42,7 @@ class AmbiguousRepair(object):
         new_org = organism.copy()
 
         # start getting rid of ambiguous items
-        while 1:
+        while True:
             # first find all of the ambigous items
             seq_genome = new_org.genome.toseq()
             all_ambiguous = self._ambig_finder.find_ambiguous(str(seq_genome))

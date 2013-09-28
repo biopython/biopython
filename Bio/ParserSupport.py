@@ -297,7 +297,7 @@ def read_and_call_while(uhandle, method, **keywds):
 
     """
     nlines = 0
-    while 1:
+    while True:
         line = safe_readline(uhandle)
         # If I've failed the condition, then stop reading the line.
         if _fails_conditions(*(line,), **keywds):
@@ -319,7 +319,7 @@ def read_and_call_until(uhandle, method, **keywds):
 
     """
     nlines = 0
-    while 1:
+    while True:
         line = safe_readline(uhandle)
         # If I've met the condition, then stop reading the line.
         if not _fails_conditions(*(line,), **keywds):

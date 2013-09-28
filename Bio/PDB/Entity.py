@@ -280,9 +280,8 @@ class DisorderedEntityWrapper(object):
 
     def disordered_get_id_list(self):
         "Return a list of id's."
-        l=self.child_dict.keys()
+        l=sorted(self.child_dict.keys())
         # sort id list alphabetically
-        l.sort()
         return l
 
     def disordered_get(self, id=None):

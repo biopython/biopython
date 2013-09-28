@@ -44,7 +44,7 @@ def parse(handle):
                 continue
             key, value = _read_key_value(line)
             if key in record.entity_attributes:
-                if type(record.entity_attributes[key])==list:
+                if isinstance(record.entity_attributes[key], list):
                     record.entity_attributes[key].append(value)
                 else:
                     existing = record.entity_attributes[key]

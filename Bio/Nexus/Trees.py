@@ -118,7 +118,7 @@ class Tree(Nodes.Chain):
         for st in tree:
             nd=self.dataclass()
             nd = self._add_nodedata(nd, st)
-            if type(st[0])==list: # it's a subtree
+            if isinstance(st[0], list): # it's a subtree
                 sn=Nodes.Node(nd)
                 self.add(sn,parent_id)
                 self._add_subtree(sn.id,st[0])
@@ -434,7 +434,7 @@ class Tree(Nodes.Chain):
         else:
             taxon_set=set(taxon_list)
         node_id=self.root
-        while 1:
+        while True:
             subclade_taxa=set(self.get_taxa(node_id))
             if subclade_taxa==taxon_set:                                        # are we there?
                 return node_id
@@ -600,8 +600,7 @@ class Tree(Nodes.Chain):
         def ladderize_nodes(nodes,ladderize=None):
             """Sorts node numbers according to the number of terminal nodes."""
             if ladderize in ['left','LEFT','right','RIGHT']:
-                succnode_terminals=[(self.count_terminals(node=n),n) for n in nodes]
-                succnode_terminals.sort()
+                succnode_terminals=sorted([(self.count_terminals(node=n),n) for n in nodes])
                 if (ladderize=='right' or ladderize=='RIGHT'):
                     succnode_terminals.reverse()
                 if succnode_terminals:
@@ -805,8 +804,7 @@ def consensus(trees, threshold=0.5,outgroup=None):
             raise TreeError('Trees for consensus must contain the same taxa')
         t.root_with_outgroup(outgroup=outgroup)
         for st_node in t._walk(t.root):
-            subclade_taxa=t.get_taxa(st_node)
-            subclade_taxa.sort()
+            subclade_taxa=sorted(t.get_taxa(st_node))
             subclade_taxa=str(subclade_taxa) # lists are not hashable
             if subclade_taxa in clades:
                 clades[subclade_taxa]+=float(t.weight)/total

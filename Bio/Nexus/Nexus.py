@@ -251,16 +251,14 @@ def get_start_end(sequence, skiplist=['-','?']):
 
 def _sort_keys_by_values(p):
     """Returns a sorted list of keys of p sorted by values of p."""
-    startpos=[(p[pn],pn) for pn in p if p[pn]]
-    startpos.sort()
+    startpos=sorted([(p[pn],pn) for pn in p if p[pn]])
     # parenthisis added because of py3k
     return (zip(*startpos))[1]
 
 
 def _make_unique(l):
     """Check that all values in list are unique and return a pruned and sorted list."""
-    l=list(set(l))
-    l.sort()
+    l=sorted(set(l))
     return l
 
 
@@ -286,8 +284,7 @@ def _compact4nexus(orig_list):
 
     if not orig_list:
         return ''
-    orig_list=list(set(orig_list))
-    orig_list.sort()
+    orig_list=sorted(set(orig_list))
     shortlist=[]
     clist=orig_list[:]
     clist.append(clist[-1]+.5) # dummy value makes it easier
@@ -477,8 +474,7 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
             raise NexusError('Missing closing parenthesis in: '+seq)
         elif closing<opening:
             raise NexusError('Missing opening parenthesis in: '+seq)
-        ambig=[x for x in seq[opening+1:closing]]
-        ambig.sort()
+        ambig=sorted([x for x in seq[opening+1:closing]])
         ambig=''.join(ambig)
         ambig_code=rev_ambig_values[ambig.upper()]
         if ambig!=ambig.upper():
@@ -613,7 +609,7 @@ class Nexus(object):
                 pass
         # now loop through blocks (we parse only data in known blocks, thus ignoring non-block commands
         nexus_block_gen = self._get_nexus_block(commandlines)
-        while 1:
+        while True:
             try:
                 title, contents = nexus_block_gen.next()
             except StopIteration:
@@ -724,8 +720,7 @@ class Nexus(object):
             rev=dict((i[1],i[0]) for i in self.ambiguous_values.iteritems() if i[0]!='X')
             self.rev_ambiguous_values={}
             for (k,v) in rev.iteritems():
-                key=[c for c in k]
-                key.sort()
+                key=sorted([c for c in k])
                 self.rev_ambiguous_values[''.join(key)]=v
         #overwrite symbols for datype rna,dna,nucleotide
         if self.datatype in ['dna','rna','nucleotide']:
@@ -833,7 +828,7 @@ class Nexus(object):
         #eliminate empty lines and leading/trailing whitespace
         lines=[l.strip() for l in options.split('\n') if l.strip()!='']
         lineiter=iter(lines)
-        while 1:
+        while True:
             try:
                 l=lineiter.next()
             except StopIteration:
@@ -876,7 +871,7 @@ class Nexus(object):
                 refseq=iupac_seq
             else:
                 if self.matchchar:
-                    while 1:
+                    while True:
                         p=str(iupac_seq).find(self.matchchar)
                         if p==-1:
                             break
@@ -908,8 +903,7 @@ class Nexus(object):
                                  % (self.nchar, len(self.matrix[taxon]),taxon))
         #check that taxlabels is identical with matrix.keys. If not, it's a problem
         matrixkeys=sorted(self.matrix)
-        taxlabelssort=self.taxlabels[:]
-        taxlabelssort.sort()
+        taxlabelssort=sorted(self.taxlabels[:])
         assert matrixkeys==taxlabelssort,"ERROR: TAXLABELS must be identical with MATRIX. Please Report this as a bug, and send in data file."
 
     def _translate(self,options):
@@ -1118,7 +1112,7 @@ class Nexus(object):
                                 step=int(options_buffer.next_word())         # get backslash and step
                             plain_list.extend(range(start,end+1,step))
                         else:
-                            if type(start)==list or type(end)==list:
+                            if isinstance(start, list) or isinstance(end, list):
                                 raise NexusError('Name if character sets not allowed in range definition: %s'
                                                  % identifier)
                             start=self.taxlabels.index(start)
@@ -1126,7 +1120,7 @@ class Nexus(object):
                             taxrange=self.taxlabels[start:end+1]
                             plain_list.extend(taxrange)
                     else:
-                        if type(start)==list:           # start was the name of charset or taxset
+                        if isinstance(start, list):           # start was the name of charset or taxset
                             plain_list.extend(start)
                         else:                           # start was an ordinary identifier
                             plain_list.append(start)

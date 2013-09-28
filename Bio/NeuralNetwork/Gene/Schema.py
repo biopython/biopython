@@ -652,7 +652,7 @@ class SchemaFactory(object):
         # doesn't match any old schema
         num_tries = 0
 
-        while 1:
+        while True:
             # pick a motif to work from and make a schema from it
             cur_motif = random.choice(motif_list)
 
@@ -706,7 +706,7 @@ class SchemaFactory(object):
         new_schema_list = list(motif)
         for add_ambiguous in range(num_ambiguous):
             # add an ambiguous position in a new place in the motif
-            while 1:
+            while True:
                 ambig_pos = random.choice(range(len(new_schema_list)))
 
                 # only add a position if it isn't already ambiguous

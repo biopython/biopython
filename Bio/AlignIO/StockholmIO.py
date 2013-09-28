@@ -334,7 +334,7 @@ class StockholmIterator(AlignmentIterator):
         gr = {}
         gf = {}
         passed_end_alignment = False
-        while 1:
+        while True:
             line = self.handle.readline()
             if not line:
                 break  # end of file

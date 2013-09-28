@@ -355,7 +355,7 @@ class Motif(object):
         If the last line contains asterisks it is used for setting mask
         """
         
-        while 1:
+        while True:
             ln = stream.readline()
             if "*" in ln:
                 self.set_mask(ln.strip("\n\c"))

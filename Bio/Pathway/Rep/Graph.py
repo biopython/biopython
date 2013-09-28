@@ -31,12 +31,10 @@ class Graph(object):
     def __repr__(self):
         """Returns an unique string representation of this graph."""
         s = "<Graph: "
-        keys = self._adjacency_list.keys()
-        keys.sort()
+        keys = sorted(self._adjacency_list.keys())
         for key in keys:
-            values = [(x,self._edge_map[(key,x)])
-                      for x in self._adjacency_list[key].list()]
-            values.sort()
+            values = sorted([(x,self._edge_map[(key,x)])
+                      for x in self._adjacency_list[key].list()])
             s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
         return s + ">"
 

@@ -179,7 +179,7 @@ class _Scanner(object):
                                 consumer.reference, start='Reference'):
             # References are normally multiline terminated by a blank line
             # (or, based on the old code, the RID line)
-            while 1:
+            while True:
                 line = uhandle.readline()
                 if is_blank_line(line):
                     consumer.noevent(line)
@@ -437,7 +437,7 @@ class _Scanner(object):
         self._scan_alignment_header(uhandle, consumer)
 
         # Scan a bunch of score/alignment pairs.
-        while 1:
+        while True:
             if self._eof(uhandle):
                 #Shouldn't have issued that _scan_alignment_header event...
                 break
@@ -459,7 +459,7 @@ class _Scanner(object):
         #  ...
         # Length=428
         read_and_call(uhandle, consumer.title, start='>')
-        while 1:
+        while True:
             line = safe_readline(uhandle)
             if line.lstrip().startswith('Length =') \
             or line.lstrip().startswith('Length='):
@@ -507,7 +507,7 @@ class _Scanner(object):
         # Sbjct: 70 PNIIQLKD 77
         #
 
-        while 1:
+        while True:
             # Blastn adds an extra line filled with spaces before Query
             attempt_read_and_call(uhandle, consumer.noevent, start='     ')
             read_and_call(uhandle, consumer.query, start='Query')
@@ -529,7 +529,7 @@ class _Scanner(object):
 
     def _scan_masterslave_alignment(self, uhandle, consumer):
         consumer.start_alignment()
-        while 1:
+        while True:
             line = safe_readline(uhandle)
             # Check to see whether I'm finished reading the alignment.
             # This is indicated by 1) database section, 2) next psi-blast
@@ -1648,7 +1648,7 @@ class Iterator(object):
         """
         lines = []
         query = False
-        while 1:
+        while True:
             line = self._uhandle.readline()
             if not line:
                 break

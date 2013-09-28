@@ -608,8 +608,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
 
     import os
     path = "../../Tests/Fasta/"
-    files = [f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10"]
-    files.sort()
+    files = sorted([f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10"])
     for filename in files:
         if os.path.splitext(filename)[-1] == ".m10":
             print("")

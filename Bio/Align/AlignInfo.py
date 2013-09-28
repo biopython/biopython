@@ -318,8 +318,7 @@ class SummaryInfo(object):
                 #Note the built in set does not have a union_update
                 #which was provided by the sets module's Set
                 set_letters = set_letters.union(record.seq)
-            list_letters = list(set_letters)
-            list_letters.sort()
+            list_letters = sorted(set_letters)
             all_letters = "".join(list_letters)
         return all_letters
 
@@ -649,8 +648,7 @@ class PSSM(object):
 
     def __str__(self):
         out = " "
-        all_residues = self.pssm[0][1].keys()
-        all_residues.sort()
+        all_residues = sorted(self.pssm[0][1].keys())
 
         # first print out the top header
         for res in all_residues:
@@ -679,8 +677,7 @@ def print_info_content(summary_info,fout=None,rep_record=0):
     if not summary_info.ic_vector:
         summary_info.information_content()
     rep_sequence = summary_info.alignment._records[rep_record].seq
-    positions = summary_info.ic_vector.keys()
-    positions.sort()
+    positions = sorted(summary_info.ic_vector.keys())
     for pos in positions:
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
                    summary_info.ic_vector[pos]))

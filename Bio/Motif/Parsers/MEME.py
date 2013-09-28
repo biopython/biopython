@@ -74,7 +74,7 @@ class MEMEMotif (Motif):
         self.evalue = 0.0
     
     def _numoccurrences (self, number):
-        if type(number) == int:
+        if isinstance(number, int):
             self.num_occurrences = number
         else:
             number = int(number)
@@ -101,7 +101,7 @@ class MEMEMotif (Motif):
         self.add_instance(inst)
     
     def _evalue (self, evalue):
-        if type(evalue) == float:
+        if isinstance(evalue, float):
             self.evalue = evalue
         else:
             evalue = float(evalue)

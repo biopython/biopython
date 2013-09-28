@@ -335,8 +335,7 @@ class Diagram(object):
         if track_level not in self.tracks:     # No track at that level
             self.tracks[track_level] = track   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = self.get_levels() # Get list of occupied levels...
-            occupied_levels.sort()              # ...sort it...
+            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse it (highest first)
             for val in occupied_levels:
                 # If track value >= that to be added
@@ -360,8 +359,7 @@ class Diagram(object):
         if track_level not in self.tracks:        # No track at that level
             self.tracks[track_level] = newtrack   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = self.get_levels() # Get list of occupied levels...
-            occupied_levels.sort()              # ...sort it...
+            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse (highest first)...
             for val in occupied_levels:
                 if val >= track_level:        # Track value >= that to be added
@@ -425,8 +423,7 @@ class Diagram(object):
 
             Return a sorted list of levels occupied by tracks in the diagram
         """
-        levels = self.tracks.keys()
-        levels.sort()
+        levels = sorted(self.tracks.keys())
         return levels
 
     def get_drawn_levels(self):
@@ -435,9 +432,8 @@ class Diagram(object):
             Return a sorted list of levels occupied by tracks that are not
             explicitly hidden
         """
-        drawn_levels = [key for key in self.tracks.keys() if
-                        not self.tracks[key].hide] # get list of shown levels
-        drawn_levels.sort()
+        drawn_levels = sorted([key for key in self.tracks.keys() if
+                        not self.tracks[key].hide]) # get list of shown levels
         return drawn_levels
 
     def range(self):

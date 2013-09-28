@@ -35,7 +35,7 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
 
     cur_position = 0
     # while we still have more than seq_length characters to print
-    while 1:
+    while True:
         if (cur_position + seq_length) < len(emissions):
             extension = seq_length
         else:

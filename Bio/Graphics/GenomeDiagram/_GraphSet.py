@@ -143,8 +143,7 @@ class GraphSet(object):
             Return a list of all graphs in the graph set, sorted by id (for
             reliable stacking...)
         """
-        ids = self._graphs.keys()
-        ids.sort()
+        ids = sorted(self._graphs.keys())
         return [self._graphs[id] for id in ids]
 
     def get_ids(self):

@@ -184,8 +184,7 @@ class FSSPAlignDict(dict):
     # Returns a sequence string
     def sequence(self, num):
         s = ''
-        sorted_pos_nums = self.abs_res_dict.keys()
-        sorted_pos_nums.sort()
+        sorted_pos_nums = sorted(self.abs_res_dict.keys())
         for i in sorted_pos_nums:
             s += self.abs(i).pos_align_dict[num].aa
         return s
@@ -197,8 +196,7 @@ class FSSPAlignDict(dict):
         for fssp_rec in self.itervalues():
             for j in fssp_rec.pos_align_dict:
                 mult_align_dict[j] += fssp_rec.pos_align_dict[j].aa
-        seq_order = mult_align_dict.keys()
-        seq_order.sort()
+        seq_order = sorted(mult_align_dict.keys())
         out_str = ''
         for i in seq_order:
             out_str += '> %d\n' % i

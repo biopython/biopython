@@ -104,8 +104,7 @@ class AbstractTrainer(object):
         calculation.
         """
         # get an ordered list of all items
-        all_ordered = counts.keys()
-        all_ordered.sort()
+        all_ordered = sorted(counts.keys())
 
         ml_estimation = {}
 
@@ -191,7 +190,7 @@ class BaumWelchTrainer(AbstractTrainer):
         prev_log_likelihood = None
         num_iterations = 1
 
-        while 1:
+        while True:
             transition_count = self._markov_model.get_blank_transitions()
             emission_count = self._markov_model.get_blank_emissions()
 

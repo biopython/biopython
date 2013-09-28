@@ -475,8 +475,7 @@ class AbstractCut(RestrictionType):
     @classmethod
     def all_suppliers(self):
         """RE.all_suppliers -> print all the suppliers of R"""
-        supply = [x[0] for x in suppliers_dict.itervalues()]
-        supply.sort()
+        supply = sorted([x[0] for x in suppliers_dict.itervalues()])
         print(",\n".join(supply))
         return
 
@@ -536,8 +535,7 @@ class AbstractCut(RestrictionType):
         neoschizomer <=> same site, different position of restriction."""
         if not batch:
             batch = AllEnzymes
-        r = [x for x in batch if self >> x]
-        r.sort()
+        r = sorted([x for x in batch if self >> x])
         return r
 
     @classmethod
@@ -1082,8 +1080,7 @@ class Blunt(AbstractCut):
         list of all the enzymes that share compatible end with RE."""
         if not batch:
             batch = AllEnzymes
-        r = [x for x in iter(AllEnzymes) if x.is_blunt()]
-        r.sort()
+        r = sorted([x for x in iter(AllEnzymes) if x.is_blunt()])
         return r
 
     @staticmethod
@@ -1203,8 +1200,7 @@ class Ov5(AbstractCut):
         list of all the enzymes that share compatible end with RE."""
         if not batch:
             batch = AllEnzymes
-        r = [x for x in iter(AllEnzymes) if x.is_5overhang() and x % self]
-        r.sort()
+        r = sorted([x for x in iter(AllEnzymes) if x.is_5overhang() and x % self])
         return r
 
     @classmethod
@@ -1327,8 +1323,7 @@ class Ov3(AbstractCut):
         list of all the enzymes that share compatible end with RE."""
         if not batch:
             batch = AllEnzymes
-        r = [x for x in iter(AllEnzymes) if x.is_3overhang() and x % self]
-        r.sort()
+        r = sorted([x for x in iter(AllEnzymes) if x.is_3overhang() and x % self])
         return r
 
     @classmethod
@@ -1924,8 +1919,7 @@ class RestrictionBatch(set):
 
         return a sorted list of the suppliers which have been used to
         create the batch."""
-        suppl_list = [suppliers_dict[x][0] for x in self.suppliers]
-        suppl_list.sort()
+        suppl_list = sorted([suppliers_dict[x][0] for x in self.suppliers])
         return suppl_list
 
     def __iadd__(self, other):
@@ -2013,8 +2007,7 @@ class RestrictionBatch(set):
         """B.elements() -> tuple.
 
         give all the names of the enzymes in B sorted alphabetically."""
-        l = [str(e) for e in self]
-        l.sort()
+        l = sorted([str(e) for e in self])
         return l
 
     def as_string(self):

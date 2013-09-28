@@ -769,7 +769,7 @@ class Astral(object):
         if not file_handle:
             file_handle = open(filename)
         doms = []
-        while 1:
+        while True:
             line = file_handle.readline()
             if not line:
                 break

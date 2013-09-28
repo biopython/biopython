@@ -170,8 +170,7 @@ class GraphData(object):
             Returns the (minimum, lowerQ, medianQ, upperQ, maximum) values as
             a tuple
         """
-        data = self.data.values()
-        data.sort()
+        data = sorted(self.data.values())
         datalen = len(data)
         return(data[0], data[datalen//4], data[datalen//2],
                data[3*datalen//4], data[-1])
@@ -182,8 +181,7 @@ class GraphData(object):
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
         """
-        positions = self.data.keys()
-        positions.sort()
+        positions = sorted(self.data.keys())
         # Return first and last positions in graph
         #print len(self.data)
         return (positions[0], positions[-1])
@@ -240,8 +238,7 @@ class GraphData(object):
             high = index.stop
             if index.step is not None and index.step != 1:
                 raise ValueError
-            positions = self.data.keys()
-            positions.sort()
+            positions = sorted(self.data.keys())
             outlist = []
             for pos in positions:
                 if pos >= low and pos <=high:

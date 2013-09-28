@@ -45,7 +45,7 @@ class StructureAlignment(object):
             aa2=column[sj]
             if aa1!="-":
                 # Position in seq1 is not -
-                while 1:
+                while True:
                     # Loop until an aa is found
                     r1=rl1[p1]
                     p1=p1+1
@@ -56,7 +56,7 @@ class StructureAlignment(object):
                 r1=None
             if aa2!="-":
                 # Position in seq2 is not -
-                while 1:
+                while True:
                     # Loop until an aa is found
                     r2=rl2[p2]
                     p2=p2+1
