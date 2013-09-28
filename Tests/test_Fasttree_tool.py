@@ -84,7 +84,7 @@ except ApplicationError as err:
            "Cannot open input file" in str(err) or \
            "non-zero exit status" in str(err), str(err)
 
-print
+print("")
 print("Single sequence")
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
@@ -100,7 +100,7 @@ except ApplicationError as err:
     print("Failed (good)")
     #assert str(err) == "No records found in handle", str(err)
 
-print
+print("")
 print("Invalid sequence")
 input_file = "Medline/pubmed_result1.txt"
 assert os.path.isfile(input_file)
@@ -122,7 +122,7 @@ except ApplicationError as err:
            or "non-zero exit status " in str(err), str(err)
 
 #################################################################
-print
+print("")
 print("Checking normal situations")
 print("==========================")
 
@@ -146,7 +146,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     out, err = cline()
     assert err.strip().startswith("FastTree")
 
-    print
+    print("")
     print("Checking generation of tree terminals")
     tree = Phylo.read(StringIO(out), 'newick')
 
@@ -164,7 +164,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     assert len(names) > 0.0
     print("Success")
 
-    print
+    print("")
     print("Checking distances between tree terminals")
     def terminal_neighbor_dists(self):
         """Return a list of distances between adjacent terminals."""
@@ -180,5 +180,5 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
 
     print("Success")
 
-print
+print("")
 print("Done")
