@@ -327,17 +327,17 @@ if __name__=="__main__":
     hse=HSExposureCA(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
-    print
+    print("")
 
     hse=HSExposureCB(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
-    print
+    print("")
 
     hse=ExposureCN(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
-    print
+    print("")
 
     for c in model:
         for r in c:

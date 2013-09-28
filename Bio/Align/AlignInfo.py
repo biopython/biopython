@@ -703,15 +703,15 @@ if __name__ == "__main__":
     print(consensus)
     consensus = summary.gap_consensus(ambiguous="N")
     print(consensus)
-    print
+    print("")
     print(summary.pos_specific_score_matrix(chars_to_ignore=['-'],
                                             axis_seq=consensus))
-    print
+    print("")
     #Have a generic alphabet, without a declared gap char, so must tell
     #provide the frequencies and chars to ignore explicitly.
     print(summary.information_content(e_freq_table=expected,
                                       chars_to_ignore=['-']))
-    print
+    print("")
     print("Trying a protein sequence with gaps and stops")
 
     alpha = Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein, "-"), "*")
@@ -727,7 +727,7 @@ if __name__ == "__main__":
     print(c)
     c = s.gap_consensus(ambiguous="X")
     print(c)
-    print
+    print("")
     print(s.pos_specific_score_matrix(chars_to_ignore=['-', '*'], axis_seq=c))
 
     print(s.information_content(chars_to_ignore=['-', '*']))

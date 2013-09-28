@@ -415,10 +415,10 @@ if __name__ == "__main__":
 
     SeqIO.write(records, stringHandle, "seqxml")
     SeqIO.write(records, sys.stdout, "seqxml")
-    print
+    print("")
 
     stringHandle.seek(0)
     records = list(SeqIO.parse(stringHandle, "seqxml"))
 
     SeqIO.write(records, sys.stdout, "seqxml")
-    print
+    print("")

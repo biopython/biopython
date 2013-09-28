@@ -93,7 +93,7 @@ if __name__ == "__main__":
     if os.path.isdir(path):
         for filename in os.listdir(path):
             if os.path.splitext(filename)[-1] == ".txt":
-                print
+                print("")
                 print(filename)
                 print("-" * len(filename))
                 handle = open(os.path.join(path, filename))

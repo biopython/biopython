@@ -139,7 +139,7 @@ class NexusWriter(AlignmentWriter):
 if __name__ == "__main__":
     from Bio._py3k import StringIO
     print("Quick self test")
-    print
+    print("")
     print("Repeated names without a TAXA block")
     handle = StringIO("""#NEXUS
     [TITLE: NoName]

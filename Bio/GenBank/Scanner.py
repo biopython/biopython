@@ -1743,7 +1743,7 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
                                        tags2id=('gene', 'locus_tag', 'product')):
         print(record)
 
-    print
+    print("")
     print("GenBank Iteration")
     print("=================")
     g = GenBankScanner()

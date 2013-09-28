@@ -2150,7 +2150,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         """
         if not dct:
             dct = self.mapping
-        print
+        print("")
         return PrintFormat.print_that(self, dct, title, s1)
 
     def change(self, **what):

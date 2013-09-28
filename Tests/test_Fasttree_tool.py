@@ -134,7 +134,7 @@ handle.close()
 
 for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"))
-    print
+    print("")
     print("Calling fasttree on %s (with %i records)" \
           % (repr(input_file), len(input_records)))
 
