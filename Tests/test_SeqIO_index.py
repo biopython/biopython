@@ -17,6 +17,7 @@ import os
 import unittest
 import tempfile
 import gzip
+import warnings
 from io import BytesIO
 
 from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
@@ -28,6 +29,7 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 try:
     from test_bgzf import _have_bug17666
@@ -291,8 +293,16 @@ class IndexDictTests(unittest.TestCase):
             h.close()
             id_list = [rec.id.lower() for rec in
                        SeqIO.parse(filename, format, alphabet)]
-        rec_dict = SeqIO.index(filename, format, alphabet,
-                               key_function = lambda x : x.lower())
+
+        if format in ["sff"]:
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', BiopythonParserWarning)
+                rec_dict = SeqIO.index(filename, format, alphabet,
+                                       key_function = lambda x : x.lower())
+        else:
+            rec_dict = SeqIO.index(filename, format, alphabet,
+                                   key_function = lambda x : x.lower())
+
         self.assertEqual(set(id_list), set(rec_dict.keys()))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
