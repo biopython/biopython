@@ -32,11 +32,13 @@ from Bio import File
 
 #Use this regular expression to test the property names are going to
 #be valid as Python properties or arguments
-_re_prop_name = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*")
+_re_prop_name = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 assert _re_prop_name.match("t")
 assert _re_prop_name.match("test")
 assert _re_prop_name.match("_test") is None # we don't want private names
 assert _re_prop_name.match("-test") is None
+assert _re_prop_name.match("any-hyphen") is None
+assert _re_prop_name.match("underscore_ok")
 assert _re_prop_name.match("test_name")
 assert _re_prop_name.match("test2")
 #These are reserved names in Python itself,
