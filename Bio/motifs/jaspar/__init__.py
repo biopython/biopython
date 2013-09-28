@@ -227,7 +227,7 @@ def _read_sites(handle):
             break
         # line contains the header ">...."
         # now read the actual sequence
-        line = handle.next()
+        line = next(handle)
         instance = ""
         for c in line.strip():
             if c == c.upper():

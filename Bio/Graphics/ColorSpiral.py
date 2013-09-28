@@ -189,5 +189,5 @@ def get_color_dict(l, **kwargs):
     colors = cs.get_colors(len(l))
     dict = {}
     for item in l:
-        dict[item] = colors.next()
+        dict[item] = next(colors)
     return dict

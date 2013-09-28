@@ -16,7 +16,7 @@ class MMCIF2Dict(dict):
         loop_flag = False
         key = None
         tokens = self._tokenize(handle)
-        token = tokens.next()
+        token = next(tokens)
         self[token[0:5]]=token[5:]
         for token in tokens:
             if token=="loop_":

@@ -264,12 +264,12 @@ class InsdcScanner(object):
         #Skip any blank lines
         iterator = iter(filter(None, lines))
         try:
-            line = iterator.next()
+            line = next(iterator)
 
             feature_location = line.strip()
             while feature_location[-1:] == ",":
                 #Multiline location, still more to come!
-                line = iterator.next()
+                line = next(iterator)
                 feature_location += line.strip()
 
             qualifiers = []
@@ -300,7 +300,7 @@ class InsdcScanner(object):
                         #Quoted...
                         value_list = [value]
                         while value_list[-1][-1] != '"':
-                            value_list.append(iterator.next())
+                            value_list.append(next(iterator))
                         value = '\n'.join(value_list)
                         #DO NOT remove the quotes...
                         qualifiers.append((key, value))
@@ -799,7 +799,7 @@ class EmblScanner(InsdcScanner):
                     line = line[5:].strip()
                     contig_location = line
                     while True:
-                        line = line_iter.next()
+                        line = next(line_iter)
                         if not line:
                             break
                         elif line.startswith("CO   "):
@@ -1233,7 +1233,7 @@ class GenBankScanner(InsdcScanner):
         lines.append("")  # helps avoid getting StopIteration all the time
         line_iter = iter(lines)
         try:
-            line = line_iter.next()
+            line = next(line_iter)
             while True:
                 if not line:
                     break
@@ -1254,7 +1254,7 @@ class GenBankScanner(InsdcScanner):
                         consumer.version(data.split(' GI:')[0])
                         consumer.gi(data.split(' GI:')[1])
                     #Read in the next line!
-                    line = line_iter.next()
+                    line = next(line_iter)
                 elif line_type == 'REFERENCE':
                     if self.debug > 1:
                         print("Found reference [" + data + "]")
@@ -1272,7 +1272,7 @@ class GenBankScanner(InsdcScanner):
 
                     #Read in the next line, and see if its more of the reference:
                     while True:
-                        line = line_iter.next()
+                        line = next(line_iter)
                         if line[:GENBANK_INDENT] == GENBANK_SPACER:
                             #Add this continuation to the data string
                             data += " " + line[GENBANK_INDENT:]
@@ -1307,7 +1307,7 @@ class GenBankScanner(InsdcScanner):
                     organism_data = data
                     lineage_data = ""
                     while True:
-                        line = line_iter.next()
+                        line = next(line_iter)
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             if lineage_data or ";" in line:
                                 lineage_data += " " + line[GENBANK_INDENT:]
@@ -1329,7 +1329,7 @@ class GenBankScanner(InsdcScanner):
                     comment_list = []
                     comment_list.append(data)
                     while True:
-                        line = line_iter.next()
+                        line = next(line_iter)
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             data = line[GENBANK_INDENT:]
                             comment_list.append(data)
@@ -1344,7 +1344,7 @@ class GenBankScanner(InsdcScanner):
                     #Its a semi-automatic entry!
                     #Now, this may be a multi line entry...
                     while True:
-                        line = line_iter.next()
+                        line = next(line_iter)
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             data += ' ' + line[GENBANK_INDENT:]
                         else:
@@ -1356,7 +1356,7 @@ class GenBankScanner(InsdcScanner):
                     if self.debug:
                         print("Ignoring GenBank header line:\n" % line)
                     #Read in next line
-                    line = line_iter.next()
+                    line = next(line_iter)
         except StopIteration:
             raise ValueError("Problem in header")
 
@@ -1390,7 +1390,7 @@ class GenBankScanner(InsdcScanner):
                     line = line[6:].strip()
                     contig_location = line
                     while True:
-                        line = line_iter.next()
+                        line = next(line_iter)
                         if not line:
                             break
                         elif line[:GENBANK_INDENT] == GENBANK_SPACER:

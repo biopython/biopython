@@ -19,9 +19,9 @@ class Record(list):
 def read(handle):
     """read(handle)"""
     record = Record()
-    line = handle.next()
+    line = next(handle)
     record.version = line.strip()
-    line = handle.next()
+    line = next(handle)
     record.command = line.strip()
     for line in handle:
         line = line.strip()

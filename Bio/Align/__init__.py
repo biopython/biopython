@@ -234,7 +234,7 @@ class MultipleSeqAlignment(_Alignment):
             #Take the first record's length
             records = iter(records)  # records arg could be list or iterator
             try:
-                rec = records.next()
+                rec = next(records)
             except StopIteration:
                 #Special case, no records
                 return

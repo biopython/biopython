@@ -21,8 +21,8 @@ class Record(object):
 def read(handle):
     """read(handle)"""
     record = Record()
-    record.ver = handle.next()
-    record.cmd_line = handle.next()
+    record.ver = next(handle)
+    record.cmd_line = next(handle)
     for line in handle:
         if line.strip() == "":
             pass

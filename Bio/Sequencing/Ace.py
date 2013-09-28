@@ -274,7 +274,7 @@ def parse(handle):
             while True:
                 if line.startswith('CO'):
                     break
-                line = handle.next()
+                line = next(handle)
         except StopIteration:
             return
 
@@ -306,7 +306,7 @@ def parse(handle):
                 break
             record.af.append(af(line))
             try:
-                line = handle.next()
+                line = next(handle)
             except StopIteration:
                 raise ValueError("Unexpected end of AF block")
 
@@ -314,7 +314,7 @@ def parse(handle):
             if line.strip():
                 break
             try:
-                line = handle.next()
+                line = next(handle)
             except StopIteration:
                 raise ValueError("Unexpected end of file")
 
@@ -323,7 +323,7 @@ def parse(handle):
                 break
             record.bs.append(bs(line))
             try:
-                line = handle.next()
+                line = next(handle)
             except StopIteration:
                 raise ValueError("Failed to find end of BS block")
 
@@ -341,7 +341,7 @@ def parse(handle):
                     # If I've met the condition, then stop reading the line.
                     if line.startswith("RD "):
                         break
-                    line = handle.next()
+                    line = next(handle)
             except StopIteration:
                 raise ValueError("Failed to find RD line")
 
@@ -378,7 +378,7 @@ def parse(handle):
                     while True:
                         if line.strip():
                             break
-                        line = handle.next()
+                        line = next(handle)
                 except StopIteration:
                     # file ends here
                     break
@@ -418,7 +418,7 @@ def parse(handle):
                     if record.wa is None:
                         record.wa = []
                     try:
-                        line = handle.next()
+                        line = next(handle)
                     except StopIteration:
                         raise ValueError("Failed to read WA block")
                     record.wa.append(wa(line))
@@ -432,7 +432,7 @@ def parse(handle):
                     if record.ct is None:
                         record.ct = []
                     try:
-                        line = handle.next()
+                        line = next(handle)
                     except StopIteration:
                         raise ValueError("Failed to read CT block")
                     record.ct.append(ct(line))
@@ -530,7 +530,7 @@ def read(handle):
     record = ACEFileRecord()
 
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Premature end of file")
 

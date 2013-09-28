@@ -49,7 +49,7 @@ def read(handle):
         record.append(motif)
         __skip_unused_lines(handle)
         try:
-            line = handle.next()
+            line = next(handle)
         except StopIteration:
             raise ValueError('Unexpected end of stream: Expected to find new motif, or the summary of motifs')
         if line.startswith("SUMMARY OF MOTIFS"):
@@ -145,13 +145,13 @@ def __read_datafile(record, handle):
     else:
         raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
     if not line.startswith('DATAFILE'):
@@ -163,7 +163,7 @@ def __read_datafile(record, handle):
 
 def __read_alphabet(record, handle):
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'ALPHABET'")
     if not line.startswith('ALPHABET'):
@@ -179,13 +179,13 @@ def __read_alphabet(record, handle):
 
 def __read_sequences(record, handle):
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'Sequence name'")
     if not line.startswith('Sequence name'):
         raise ValueError("Line does not start with 'Sequence name':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '----'")
     if not line.startswith('----'):
@@ -236,19 +236,19 @@ def __read_motif_name(handle):
 
 def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError('Unexpected end of stream: Failed to find motif sequences')
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'Sequence name'")
     if not line.startswith('Sequence name'):
         raise ValueError("Line does not start with 'Sequence name':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError('Unexpected end of stream: Failed to find motif sequences')
     if not line.startswith('---'):
@@ -305,13 +305,13 @@ def __skip_unused_lines(handle):
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'Time'")
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError('Unexpected end of stream: Expected to find blank line')
     if line.strip():
         raise ValueError("Expected blank line, but got:\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
     if not line.startswith('***'):

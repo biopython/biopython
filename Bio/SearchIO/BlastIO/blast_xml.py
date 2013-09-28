@@ -568,7 +568,7 @@ class BlastXmlIndexer(SearchIndexer):
         generator = self._parser(handle, **self._kwargs)
         generator._meta = self._meta
         generator._fallback = self._fallback
-        return iter(generator).next()
+        return next(iter(generator))
 
     def get_raw(self, offset):
         qend_mark = self.qend_mark
