@@ -180,7 +180,7 @@ def do_update(py2folder, py3folder, verbose=False):
                     print("Updated %s" % new)
     if to_convert:
         print("Have %i python files to convert" % len(to_convert))
-        run2to3(to_convert)
+        run2to3(sorted(to_convert))
 
 
 def main(python2_source, python3_source,
