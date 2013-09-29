@@ -79,13 +79,14 @@ def get_yes_or_no(question, default):
 if sys.version_info[:2] < (2, 6):
     print("Biopython requires Python 2.6 or later (or python 3.3 or later). "
           "Python %d.%d detected" % sys.version_info[:2])
-    sys.exit(-1)
-elif sys.version_info[:2] == (3, 0):
-    print("Biopython will not work on Python 3.0, please try Python 3.3 or later")
+    sys.exit(1)
+elif sys.version_info[:2] == (3, 0) or sys.version_info[:2] == (3, 1):
+    print("Biopython will not work on Python 3.0 or 3.1, please try Python 3.3 or later")
     sys.exit(1)
 elif sys.version_info[0] == 3:
     if sys.version_info[:2] < (3, 3):
         #TODO - Turn off old buildbots/travis and make this an error?
+        #May want to wait until PyPy3 targets 3.3 instead of 3.2
         print("WARNING - For Python 3, we strongly recommend Python 3.3 or later.")
     if sys.version_info == (3, 3, 1) and sys.implementation == "cpython":
         print("WARNING - Rather than Python 3.3.1, we recommend Python 3.3.0, or 3.3.2, or later.")
