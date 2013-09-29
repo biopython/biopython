@@ -59,10 +59,12 @@ def run2to3(filenames):
         #Want to capture stderr (otherwise too noisy)
         sys.stderr = handle
         while filenames:
-            start = time.time()
             filename = filenames.pop(0)
-            print("Converting %s" % filename)
+            #Remove 'from future_builtins import ...' due to bug 19111,
+            avoid_bug19111(filename)
             #TODO - Configurable options per file?
+            print("Converting %s" % filename)
+            start = time.time()
             args = ["--nofix=long","--nofix=print", "--no-diffs", "-n", "-w"]
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
@@ -170,9 +172,6 @@ def do_update(py2folder, py3folder, verbose=False):
                    % (os.stat(old).st_mtime, os.stat(new).st_mtime,
                       abs(os.stat(old).st_mtime - os.stat(new).st_mtime))
             if f.endswith(".py"):
-                #Remove 'from future_builtins import ...' due to bug 19111,
-                avoid_bug19111(new)
-                #Also run 2to3 on it
                 to_convert.append(new)
                 if verbose:
                     print("Will convert %s" % new)
