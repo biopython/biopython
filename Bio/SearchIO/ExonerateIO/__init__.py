@@ -240,9 +240,9 @@ and fragments compared to 'exonerate-vulgar' or 'exonerate-text'.
 # - Cigar and vulgar parsing results will most likely be different, due to the
 #   different type of data stored by both formats
 
-from .exonerate_text import *
-from .exonerate_vulgar import *
-from .exonerate_cigar import *
+from .exonerate_text import ExonerateTextParser, ExonerateTextIndexer
+from .exonerate_vulgar import ExonerateVulgarParser, ExonerateVulgarIndexer
+from .exonerate_cigar import ExonerateCigarParser, ExonerateCigarIndexer
 
 
 # if not used as a module, run the doctest
