@@ -39,7 +39,7 @@ while True:
     print("Name: %s" % cur_record.name)
     print("Description: %s" % cur_record.description)
     print("Annotations****")
-    for annotation_key in cur_record.annotations.keys():
+    for annotation_key in cur_record.annotations:
         if annotation_key != 'references':
             print("Key: %s" % annotation_key)
             print("Value: %s" % cur_record.annotations[annotation_key])

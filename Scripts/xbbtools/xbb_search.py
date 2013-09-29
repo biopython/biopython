@@ -24,9 +24,9 @@ class DNAsearch:
 
     def init_alphabet(self):
         self.alphabet = ambiguous_dna_values
-        other = ''.join(self.alphabet.keys())
+        other = ''.join(self.alphabet)
         self.alphabet['N'] = self.alphabet['N'] + other
-        for key in self.alphabet.keys():
+        for key in self.alphabet:
             if key == 'N':
                 continue
             if key in self.alphabet[key]:

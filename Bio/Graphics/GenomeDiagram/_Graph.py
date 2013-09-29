@@ -148,7 +148,7 @@ class GraphData(object):
             Return data as a list of sorted (position, value) tuples
         """
         data = []
-        for xval in self.data.keys():
+        for xval in self.data:
             yval = self.data[xval]
             data.append((xval, yval))
         data.sort()
@@ -181,7 +181,7 @@ class GraphData(object):
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
         """
-        positions = sorted(self.data.keys())
+        positions = sorted(self.data) # i.e. dict keys
         # Return first and last positions in graph
         #print len(self.data)
         return (positions[0], positions[-1])
@@ -238,9 +238,8 @@ class GraphData(object):
             high = index.stop
             if index.step is not None and index.step != 1:
                 raise ValueError
-            positions = sorted(self.data.keys())
             outlist = []
-            for pos in positions:
+            for pos in sorted(self.data):
                 if pos >= low and pos <=high:
                     outlist.append((pos, self.data[pos]))
             return outlist

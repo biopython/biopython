@@ -123,8 +123,8 @@ _COLUMN_FRAG = {
     'qseq': ('query', str),
     'sseq': ('hit', str),
 }
-_SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() +
-        _COLUMN_HSP.keys() + _COLUMN_FRAG.keys())
+_SUPPORTED_FIELDS = set(list(_COLUMN_QRESULT) + list(_COLUMN_HIT) +
+                        list(_COLUMN_HSP) + list(_COLUMN_FRAG))
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above

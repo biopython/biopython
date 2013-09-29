@@ -191,7 +191,7 @@ class MarkovModelBuilder(object):
         self.initial_prob = copy.copy(initial_prob)
 
         # ensure that all referenced states are valid
-        for state in initial_prob.iterkeys():
+        for state in initial_prob:
             assert state in self._state_alphabet.letters, \
                    "State %s was not found in the sequence alphabet" % state
 
@@ -264,7 +264,7 @@ class MarkovModelBuilder(object):
                             "allow_transition or allow_all_transitions first.")
 
         transitions_from = _calculate_from_transitions(self.transition_prob)
-        for from_state in transitions_from.keys():
+        for from_state in transitions_from:
             freqs = _gen_random_array(len(transitions_from[from_state]))
             for to_state in transitions_from[from_state]:
                 self.transition_prob[(from_state, to_state)] = freqs.pop()
@@ -282,7 +282,7 @@ class MarkovModelBuilder(object):
                             "Allow some or all emissions.")
 
         emissions = _calculate_emissions(self.emission_prob)
-        for state in emissions.iterkeys():
+        for state in emissions:
             freqs = _gen_random_array(len(emissions[state]))
             for symbol in emissions[state]:
                 self.emission_prob[(state, symbol)] = freqs.pop()

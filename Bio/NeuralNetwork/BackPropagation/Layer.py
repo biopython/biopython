@@ -104,7 +104,7 @@ class InputLayer(AbstractLayer):
         o inputs -- A list of inputs into the network -- this must be
         equal to the number of nodes in the layer.
         """
-        if len(inputs) != len(self.values.keys()) - 1:
+        if len(inputs) != len(self.values) - 1:
             raise ValueError("Inputs do not match input layer nodes.")
 
         # set the node values from the inputs

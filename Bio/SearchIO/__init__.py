@@ -384,7 +384,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> from Bio import SearchIO
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> search_dict = SearchIO.to_dict(qresults)
-    >>> sorted(search_dict.keys())
+    >>> sorted(search_dict)
     ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']
     >>> search_dict['gi|156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
@@ -398,7 +398,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> key_func = lambda qresult: qresult.id.split('|')[1]
     >>> search_dict = SearchIO.to_dict(qresults, key_func)
-    >>> sorted(search_dict.keys())
+    >>> sorted(search_dict)
     ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
     >>> search_dict['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
@@ -443,7 +443,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml')
     >>> search_idx
     SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=None)
-    >>> sorted(search_idx.keys())
+    >>> sorted(search_idx)
     ['gi|156630997:105-1160', 'gi|195230749:301-1383', ..., 'gi|53729353:216-1313']
     >>> search_idx['gi|195230749:301-1383']
     QueryResult(id='gi|195230749:301-1383', 5 hits)
@@ -469,7 +469,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml', key_func)
     >>> search_idx
     SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=<function <lambda> at ...>)
-    >>> sorted(search_idx.keys())
+    >>> sorted(search_idx)
     ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
     >>> search_idx['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
@@ -514,7 +514,7 @@ def index_db(index_filename, filenames=None, format=None,
 
     >>> from Bio import SearchIO
     >>> db_idx = SearchIO.index_db(':memory:', 'Blast/mirna.xml', 'blast-xml')
-    >>> sorted(db_idx.keys())
+    >>> sorted(db_idx)
     ['33211', '33212', '33213']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
@@ -526,7 +526,7 @@ def index_db(index_filename, filenames=None, format=None,
     >>> from Bio import SearchIO
     >>> files = ['Blast/mirna.xml', 'Blast/wnts.xml']
     >>> db_idx = SearchIO.index_db(':memory:', files, 'blast-xml')
-    >>> sorted(db_idx.keys())
+    >>> sorted(db_idx)
     ['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)

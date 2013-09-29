@@ -30,8 +30,7 @@ class MultiGraph(object):
     def __repr__(self):
         """Returns an unique string representation of this graph."""
         s = "<MultiGraph: "
-        keys = sorted(self._adjacency_list.keys())
-        for key in keys:
+        for key in sorted(self._adjacency_list):
             values = sorted(self._adjacency_list[key])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"

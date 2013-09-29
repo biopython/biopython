@@ -196,7 +196,7 @@ def _abi_parse_header(header, handle):
         # only parse desired dirs
         key = _bytes_to_string(dir_entry[0])
         key += str(dir_entry[1])
-        if key in (list(_EXTRACT.keys()) + _SPCTAGS):
+        if key in (list(_EXTRACT) + _SPCTAGS):
             tag_name = _bytes_to_string(dir_entry[0])
             tag_number = dir_entry[1]
             elem_code = dir_entry[2]

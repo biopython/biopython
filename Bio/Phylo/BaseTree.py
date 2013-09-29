@@ -260,7 +260,7 @@ class TreeMixin(object):
             order_func = order_opts[order]
         except KeyError:
             raise ValueError("Invalid order '%s'; must be one of: %s"
-                             % (order, tuple(order_opts.keys())))
+                             % (order, tuple(order_opts)))
         if follow_attrs:
             get_children = _sorted_attrs
             root = self

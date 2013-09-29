@@ -239,16 +239,14 @@ class Crystal(object):
 
     def __repr__(self):
         output = ''
-        keys = sorted(self.data.keys())
-        for key in keys:
-            output = output + '%s : %s\n' % (key, self.data[ key ])
+        for key in sorted(self.data):
+            output += '%s : %s\n' % (key, self.data[key])
         return output
 
     def __str__(self):
         output = ''
-        keys = sorted(self.data.keys())
-        for key in keys:
-            output = output + '%s : %s\n' % (key, self.data[ key ])
+        for key in sorted(self.data):
+            output += '%s : %s\n' % (key, self.data[key])
         return output
 
     def tostring(self):
@@ -264,7 +262,7 @@ class Crystal(object):
         if isinstance(item, Chain):
             self.data[key] = item
         elif isinstance(item, str):
-            self.data[ key ] = Chain(item)
+            self.data[key] = Chain(item)
         else:
             raise TypeError
 

@@ -18,7 +18,7 @@ from Bio.Align import MultipleSeqAlignment
 
 #List of formats including alignment only file formats we can read AND write.
 #We don't care about the order
-test_write_read_alignment_formats = sorted(SeqIO._FormatToWriter.keys())
+test_write_read_alignment_formats = sorted(SeqIO._FormatToWriter)
 for format in sorted(AlignIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
         test_write_read_alignment_formats.append(format)

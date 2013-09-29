@@ -790,7 +790,7 @@ class AutoSeqIOTests(unittest.TestCase):
                                               passwd=DBPASSWD,
                                               host=DBHOST, db=TESTDB)
         self.server = server
-        if db_name not in server.keys():
+        if db_name not in server:
             self.db = server.new_database(db_name)
             server.commit()
         self.db = self.server[db_name]

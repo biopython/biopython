@@ -31,8 +31,7 @@ class Graph(object):
     def __repr__(self):
         """Returns an unique string representation of this graph."""
         s = "<Graph: "
-        keys = sorted(self._adjacency_list.keys())
-        for key in keys:
+        for key in sorted(self._adjacency_list):
             values = sorted([(x,self._edge_map[(key,x)])
                       for x in self._adjacency_list[key].list()])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
@@ -40,10 +39,10 @@ class Graph(object):
 
     def __str__(self):
         """Returns a concise string description of this graph."""
-        nodenum = len(self._adjacency_list.keys())
+        nodenum = len(self._adjacency_list)
         edgenum = reduce(lambda x,y: x+y,
                          [len(v) for v in self._adjacency_list.values()])
-        labelnum = len(self._label_map.keys())
+        labelnum = len(self._label_map)
         return "<Graph: " + \
                str(nodenum) + " node(s), " + \
                str(edgenum) + " edge(s), " + \

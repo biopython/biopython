@@ -28,7 +28,7 @@ def get_processor(format, mapping):
                     format)
         else:
             raise ValueError("Unknown format %r. Supported formats are "
-                    "%r" % (format, "', '".join(mapping.keys())))
+                    "%r" % (format, "', '".join(mapping)))
 
     mod_name, obj_name = obj_info
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])

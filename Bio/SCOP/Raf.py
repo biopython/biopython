@@ -284,7 +284,7 @@ class SeqMap(object):
                             resFound[key] = res
 
         if len(resSet) != len(resFound):
-            #for k in resFound.keys():
+            #for k in resFound:
             #    del resSet[k]
             #print(resSet)
 

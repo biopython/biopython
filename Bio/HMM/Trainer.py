@@ -104,7 +104,7 @@ class AbstractTrainer(object):
         calculation.
         """
         # get an ordered list of all items
-        all_ordered = sorted(counts.keys())
+        all_ordered = sorted(counts)
 
         ml_estimation = {}
 

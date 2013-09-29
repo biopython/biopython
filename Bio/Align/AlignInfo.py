@@ -648,7 +648,7 @@ class PSSM(object):
 
     def __str__(self):
         out = " "
-        all_residues = sorted(self.pssm[0][1].keys())
+        all_residues = sorted(self.pssm[0][1])
 
         # first print out the top header
         for res in all_residues:
@@ -677,8 +677,7 @@ def print_info_content(summary_info,fout=None,rep_record=0):
     if not summary_info.ic_vector:
         summary_info.information_content()
     rep_sequence = summary_info.alignment._records[rep_record].seq
-    positions = sorted(summary_info.ic_vector.keys())
-    for pos in positions:
+    for pos in sorted(summary_info.ic_vector):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
                    summary_info.ic_vector[pos]))
 

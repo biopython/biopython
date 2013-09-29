@@ -30,7 +30,7 @@ class _BaseSearchObject(object):
 
         """
         # list of attribute names we don't want to transfer
-        for attr in self.__dict__.keys():
+        for attr in self.__dict__:
             if attr not in self._NON_STICKY_ATTRS:
                 setattr(obj, attr, self.__dict__[attr])
 

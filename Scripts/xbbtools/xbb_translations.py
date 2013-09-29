@@ -122,5 +122,5 @@ if __name__ == '__main__':
     print('============================================================')
     print(test.gcframe(s))
 
-#    for i in Translate.unambiguous_dna_by_id.keys():
+#    for i in Translate.unambiguous_dna_by_id:
 #        print(Translate.unambiguous_dna_by_id[i].table.names[0])

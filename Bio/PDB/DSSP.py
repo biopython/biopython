@@ -335,4 +335,4 @@ if __name__ == "__main__":
         print(d[('A', 1)])
         print(s[0]['A'][1].xtra)
     # Secondary structure
-    print(''.join(d[key][1] for key in d.keys()))
+    print(''.join(d[key][1] for key in d))

@@ -31,7 +31,7 @@ f.write("...Done\n")
 # sum_ge_15, align_ge_15 = FSSPTools.filter(sum_rec, align_rec, 'pID', 15,100)
 
 # f.write("\nnumber of records filtered in: %d\n" % len(sum_ge_15))
-# k = sorted(sum_ge_15.keys())
+# k = sorted(sum_ge_15)
 # f.write("\nRecords filtered in %s\n" % k)
 # Pickling takes too long.. remove from test.
 # f.write("\nLet's Pickle this\n")
@@ -43,12 +43,9 @@ name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
 f.write("\nname list %s\n" % str(name_list))
 sum_newnames, align_newnames = FSSPTools.name_filter(sum_rec, align_rec,
                                                      name_list)
-
-ks = sorted(sum_newnames.keys())
-for key in ks:
+for key in sorted(sum_newnames):
     f.write("%s : %s\n" % (key, sum_newnames[key]))
 
-dict = align_newnames['0P168'].pos_align_dict
-ks = sorted(dict.keys())
-for key in ks:
-    f.write("%s : %s\n" % (key, dict[key]))
+new_dict = align_newnames['0P168'].pos_align_dict
+for key in sorted(new_dict):
+    f.write("%s : %s\n" % (key, new_dict[key]))

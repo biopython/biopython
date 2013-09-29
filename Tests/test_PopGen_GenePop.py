@@ -40,7 +40,7 @@ class AppTest(unittest.TestCase):
         #for popc in pop_iter:
         #    pop_name, loci_content = popc
         #    print(pop_name)
-        #    for locus in loci_content.keys():
+        #    for locus in loci_content:
         #        geno_list, hets, freq_fis = loci_content[locus]
         #        print(locus)
         #        print(hets)

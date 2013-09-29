@@ -140,8 +140,8 @@ class Codeml(Paml):
                                 except:
                                     converted_value = value
                             temp_options[option] = converted_value
-        for option in self._options.keys():
-            if option in temp_options.keys():
+        for option in self._options:
+            if option in temp_options:
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None

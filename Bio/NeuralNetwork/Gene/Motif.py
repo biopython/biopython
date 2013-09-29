@@ -201,7 +201,7 @@ class MotifCoder(object):
         # as long as we have some motifs present, normalize them
         # otherwise we'll just return 0 for everything
         if max_count > 0:
-            for motif in seq_motifs.keys():
+            for motif in seq_motifs:
                 seq_motifs[motif] = (float(seq_motifs[motif] - min_count)
                                      / float(max_count))
 

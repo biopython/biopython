@@ -86,7 +86,7 @@ for parser in all_parsers:
                 print("Name: %s" % cur_record.name)
                 print("Description %s" % cur_record.description)
                 print("Annotations***")
-                ann_keys = sorted(cur_record.annotations.keys())
+                ann_keys = sorted(cur_record.annotations)
                 for ann_key in ann_keys:
                     if ann_key != 'references':
                         print("Key: %s" % ann_key)

@@ -199,8 +199,7 @@ class SeqMat(dict):
         self.relative_entropy = 0
 
     def _correct_matrix(self):
-        keylist = self.keys()
-        for key in keylist:
+        for key in self:
             if key[0] > key[1]:
                 self[(key[1], key[0])] = self[key]
                 del self[key]
@@ -535,7 +534,7 @@ def read_text_matrix(data_file):
             i += 1
         j += 1
     # delete entries with an asterisk
-    for i in matrix.keys():
+    for i in matrix:
         if '*' in i:
             del(matrix[i])
     ret_mat = SeqMat(matrix)

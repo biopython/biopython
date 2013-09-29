@@ -66,9 +66,9 @@ class IsoelectricPoint(object):
         neg_pKs = dict(negative_pKs)
         nterm = self.sequence[0]
         cterm = self.sequence[-1]
-        if nterm in pKnterminal.keys():
+        if nterm in pKnterminal:
             pos_pKs['Nterm'] = pKnterminal[nterm]
-        if cterm in pKcterminal.keys():
+        if cterm in pKcterminal:
             neg_pKs['Cterm'] = pKcterminal[cterm]
 
         # Bracket between pH1 and pH2

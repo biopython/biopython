@@ -259,7 +259,7 @@ if __name__ == '__main__':
     show_help = len(sys.argv) <= 1
 
     shorts = 'hv'
-    longs = [x + '=' for x in options.keys()] + ['help']
+    longs = [x + '=' for x in options] + ['help']
 
     optlist, args = getopt.getopt(args, shorts, longs)
     if show_help:
@@ -269,7 +269,7 @@ if __name__ == '__main__':
         if arg[0] == '-h' or arg[0] == '--help':
             help()
             sys.exit(0)
-        for key in options.keys():
+        for key in options:
             if arg[1].lower() == 'no':
                 arg[1] = 0
             elif arg[1].lower() == 'yes':

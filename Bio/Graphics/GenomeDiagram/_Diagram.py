@@ -423,8 +423,7 @@ class Diagram(object):
 
             Return a sorted list of levels occupied by tracks in the diagram
         """
-        levels = sorted(self.tracks.keys())
-        return levels
+        return sorted(self.tracks)
 
     def get_drawn_levels(self):
         """ get_drawn_levels(self) -> [int, int, ...]
@@ -432,9 +431,7 @@ class Diagram(object):
             Return a sorted list of levels occupied by tracks that are not
             explicitly hidden
         """
-        drawn_levels = sorted(key for key in self.tracks.keys() if
-                              not self.tracks[key].hide) # get list of shown levels
-        return drawn_levels
+        return sorted(key for key in self.tracks if not self.tracks[key].hide)
 
     def range(self):
         """ range(self) -> (int, int)

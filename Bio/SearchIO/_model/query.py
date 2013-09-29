@@ -270,7 +270,7 @@ class QueryResult(_BaseSearchObject):
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.keys():
+            for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):

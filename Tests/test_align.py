@@ -95,7 +95,7 @@ print('consensus: %r' % consensus)
 
 
 print('Replacement dictionary')
-ks = sorted(align_info.replacement_dictionary(['N']).keys())
+ks = sorted(align_info.replacement_dictionary(['N']))
 for key in ks:
     print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
 

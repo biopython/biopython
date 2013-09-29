@@ -49,7 +49,7 @@ class RouletteWheelSelection(AbstractSelection):
         # set up the current probabilities for selecting organisms
         # from the population
         prob_wheel = self._set_up_wheel(population)
-        probs = sorted(prob_wheel.keys())
+        probs = sorted(prob_wheel)
 
         # now create the new population with the same size as the original
         new_population = []
