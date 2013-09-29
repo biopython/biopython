@@ -80,7 +80,6 @@ def run2to3(filenames):
                 raise RuntimeError("Error %i from 2to3 (doctests) on %s"
                                    % (e, filename))
             times.append((time.time() - start, filename))
-            avoid_bug19111(filename)
     except KeyboardInterrupt:
         sys.stderr = stderr
         sys.stderr.write("Interrupted during %s\n" % filename)
@@ -171,6 +170,8 @@ def do_update(py2folder, py3folder, verbose=False):
                    % (os.stat(old).st_mtime, os.stat(new).st_mtime,
                       abs(os.stat(old).st_mtime - os.stat(new).st_mtime))
             if f.endswith(".py"):
+                #Remove 'from future_builtins import ...' due to bug 19111,
+                avoid_bug19111(new)
                 #Also run 2to3 on it
                 to_convert.append(new)
                 if verbose:
