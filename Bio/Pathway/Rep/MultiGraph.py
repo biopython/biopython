@@ -28,7 +28,7 @@ class MultiGraph(object):
         return not self.__eq__(g)
 
     def __repr__(self):
-        """Returns an unique string representation of this graph."""
+        """Returns a unique string representation of this graph."""
         s = "<MultiGraph: "
         for key in sorted(self._adjacency_list):
             values = sorted(self._adjacency_list[key])

@@ -29,7 +29,7 @@ class Graph(object):
         return not self.__eq__(g)
 
     def __repr__(self):
-        """Returns an unique string representation of this graph."""
+        """Returns a unique string representation of this graph."""
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
             values = sorted([(x,self._edge_map[(key,x)])
