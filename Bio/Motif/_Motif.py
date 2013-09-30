@@ -626,8 +626,11 @@ class Motif(object):
         requires an internet connection.
         The parameters from **kwds are passed directly to the weblogo server.
         """
-        import urllib
-        import urllib2
+
+        from Bio._py3k.urllib.request import urlopen
+        from Bio._py3k.urllib.parse import urlencode
+        from Bio._py3k.urllib.request import Request
+
         al= self._to_fasta()
         url = 'http://weblogo.berkeley.edu/logo.cgi'
         values = {'sequence': al,
@@ -665,10 +668,10 @@ class Motif(object):
         for k, v in kwds.iteritems():
             values[k]=str(v)
             
-        data = urllib.urlencode(values)
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        f=open(fname, "w")
+        data = urlencode(values)
+        req = Request(url, data)
+        response = urlopen(req)
+        f=open(fname,"w")
         im=response.read()
         
         f.write(im)

@@ -17,7 +17,8 @@ from __future__ import print_function
 import requires_internet
 requires_internet.check()
 from Bio import MissingExternalDependencyError
-from urllib2 import HTTPError
+
+from Bio._py3k.urllib.error import HTTPError
 
 #We want to test these:
 from Bio.Blast import NCBIWWW
