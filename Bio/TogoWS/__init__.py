@@ -317,13 +317,10 @@ def _open(url, post=None):
         _open.previous = current
 
     #print(url)
-    try:
-        if post:
-            handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))
-        else:
-            handle = urllib2.urlopen(url)
-    except urllib2.HTTPError as exception:
-        raise exception
+    if post:
+        handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))
+    else:
+        handle = urllib2.urlopen(url)
 
     #We now trust TogoWS to have set an HTTP error code, that
     #suffices for my current unit tests. Previously we would
