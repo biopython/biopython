@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Provide trainers which estimate parameters based on training sequences.
 
 These should be used to 'train' a Markov Model prior to actually using

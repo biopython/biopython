@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Example using Bio.SeqIO to parse a FASTA file."""
 
 from __future__ import print_function

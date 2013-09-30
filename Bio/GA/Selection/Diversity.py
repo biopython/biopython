@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Select individuals into a new population trying to maintain diversity.
 
 This selection mechanism seeks to try and get both high fitness levels

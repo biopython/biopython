@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Generic functionality useful for all gene representations.
 
 This module contains classes which can be used for all the different

@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Extract information from alignment objects.
 
 In order to try and avoid huge alignment objects with tons of functions,

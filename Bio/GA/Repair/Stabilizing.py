@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Methods for performing repairs that will Stabilize genomes.
 
 These methods perform repair to keep chromosomes from drifting too far in

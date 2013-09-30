@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Parser for FSSP files, used in a database of protein fold classifications.
 
 This is a module to handle FSSP files. For now it parses only the header,

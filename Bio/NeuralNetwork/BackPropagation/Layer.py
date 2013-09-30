@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Model a single layer in a nueral network.
 
 These classes deal with a layers in the neural network (ie. the input layer,

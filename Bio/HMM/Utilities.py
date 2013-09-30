@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Generic functions which are useful for working with HMMs.
 
 This just collects general functions which you might like to use in

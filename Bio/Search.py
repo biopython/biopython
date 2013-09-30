@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 import warnings
 from Bio import BiopythonDeprecationWarning
 warnings.warn("Long obsolete module Bio/Search.py is deprecated.",

@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Evolution Strategies for a Population.
 
 Evolver classes manage a population of individuals, and are responsible

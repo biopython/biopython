@@ -16,7 +16,8 @@ from __future__ import print_function
 import os
 import sys
 import time
-from urllib import FancyURLopener
+
+from Bio._py3k.urllib.request import FancyURLopener
 
 from Bio.Restriction.RanaConfig import *
 
