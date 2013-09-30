@@ -890,13 +890,10 @@ def _open(cgi, params={}, get=1):
     import urllib2
     # Open a handle to SCOP.
     options = urllib.urlencode(params)
-    try:
-        if get:  # do a GET
-            if options:
-                cgi += "?" + options
-            handle = urllib2.urlopen(cgi)
-        else:    # do a POST
-            handle = urllib2.urlopen(cgi, data=options)
-    except urllib2.HTTPError as exception:
-        raise exception
+    if get:  # do a GET
+        if options:
+            cgi += "?" + options
+        handle = urllib2.urlopen(cgi)
+    else:    # do a POST
+        handle = urllib2.urlopen(cgi, data=options)
     return handle
