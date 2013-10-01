@@ -14,7 +14,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.SVDSuperimposer.")
 
-from Bio.SVDSuperimposer import *
+from Bio.SVDSuperimposer import SVDSuperimposer
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 
