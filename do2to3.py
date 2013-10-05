@@ -65,7 +65,12 @@ def run2to3(filenames):
             #TODO - Configurable options per file?
             print("Converting %s" % filename)
             start = time.time()
-            args = ["--nofix=long","--nofix=print", "--no-diffs", "-n", "-w"]
+            args = ["--nofix=long",
+                    "--nofix=print", #Not using old print statement
+                    "--nofix=reduce", #Using 'from functools import reduce'
+                    "--nofix=execfile", #Not using old exec statement
+                    "--nofix=imports", #sibling imports as relative imports
+                    "--no-diffs", "-n", "-w"]
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
                 sys.stderr = stderr
