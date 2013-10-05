@@ -75,7 +75,7 @@ def run2to3(filenames):
                     #"--fix=exec", -- we avoid the exec statement
                     #"--fix=execfile", -- we avoid execfile
                     #"--fix=exitfunc", -- we avoid sys.exitfunc
-                    "--fix=filter",
+                    #"--fix=filter", -- no longer needed
                     #"--fix=funcattrs", -- not needed
                     "--fix=future",
                     #"--fix=getcwdu", -- we avoid the os.getcwdu function
