@@ -97,7 +97,7 @@ def run2to3(filenames):
                     "--fix=next",
                     "--fix=nonzero",
                     #"--fix=numliterals", -- already applied
-                    "--fix=operator",
+                    #"--fix=operator", -- not needed
                     #"--fix=paren", -- already applied
                     #"--fix=print", -- we avoid the print statement
                     #"--fix=raise", -- we avoid old style raise exception
@@ -105,7 +105,7 @@ def run2to3(filenames):
                     #"--fix=reduce", -- already using 'from functools import reduce'
                     #"--fix=renames", -- already switched sys.maxint to sys.maxsize
                     #"--fix=repr", -- we avoid the old style back-ticks
-                    "--fix=set_literal",
+                    #"--fix=set_literal", -- optional, and not backward compatible
                     "--fix=standarderror",
                     #"--fix=sys_exc", -- we're not using the deprecated sys.exc_* functions
                     #"--fix=throw", -- we're not used this part of the generator API
