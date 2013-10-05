@@ -24,8 +24,6 @@ def iterlen(items):
     5
     >>> iterlen(iter("abcde"))
     5
-    >>> iterlen(xrange(5))
-    5
 
     """
     try:
