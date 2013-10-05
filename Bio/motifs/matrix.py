@@ -7,6 +7,9 @@ and position-specific scoring matrices.
 """
 
 import math
+
+from Bio._py3k import range
+
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
@@ -231,7 +234,7 @@ Compute the fraction GC content.
         alphabet = self.alphabet
         gc_total = 0.0
         total = 0.0
-        for i in xrange(self.length):
+        for i in range(self.length):
             for letter in alphabet.letters:
                 if letter in 'CG':
                     gc_total += self[letter][i]
@@ -272,7 +275,7 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
         else:
             for letter in self.alphabet.letters:
                 counts[letter] = [float(pseudocounts)] * self.length
-        for i in xrange(self.length):
+        for i in range(self.length):
             for letter in self.alphabet.letters:
                 counts[letter][i] += self[letter][i]
         # Actual normalization is done in the PositionWeightMatrix initializer
@@ -283,7 +286,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
 
     def __init__(self, alphabet, counts):
         GenericPositionMatrix.__init__(self, alphabet, counts)
-        for i in xrange(self.length):
+        for i in range(self.length):
             total = sum(float(self[letter][i]) for letter in alphabet.letters)
             for letter in alphabet.letters:
                 self[letter][i] /= total
@@ -369,9 +372,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             # use the slower Python code otherwise
             #The C code handles mixed case so Python version must too:
             sequence = sequence.upper()
-            for i in xrange(n-m+1):
+            for i in range(n-m+1):
                 score = 0.0
-                for position in xrange(m):
+                for position in range(m):
                     letter = sequence[i+position]
                     try:
                         score += self[letter][position]
@@ -398,7 +401,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         m = self.length
         if both:
             rc = self.reverse_complement()
-        for position in xrange(0, n-m+1):
+        for position in range(0, n-m+1):
             s = sequence[position:position+m]
             score = self.calculate(s)
             if score > threshold:
@@ -416,7 +419,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self._letters
-        for position in xrange(0, self.length):
+        for position in range(0, self.length):
             score += max(self[letter][position] for letter in letters)
         return score
 
@@ -428,7 +431,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self._letters
-        for position in xrange(0, self.length):
+        for position in range(0, self.length):
             score += min(self[letter][position] for letter in letters)
         return score
 

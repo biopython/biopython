@@ -19,6 +19,8 @@ from xml.sax.xmlreader import AttributesImpl
 from xml.dom import pulldom
 from xml.sax import SAXParseException
 
+from Bio._py3k import range
+
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
@@ -92,7 +94,8 @@ class XMLRecordIterator:
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary."""
 
-        return dict((node.attributes.item(i).name, node.attributes.item(i).value) for i in xrange(node.attributes.length))
+        return dict((node.attributes.item(i).name, node.attributes.item(i).value)
+                    for i in range(node.attributes.length))
 
 
 class SeqXmlIterator(XMLRecordIterator):

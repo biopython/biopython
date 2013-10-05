@@ -15,6 +15,8 @@ Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 
 from __future__ import print_function
 
+from Bio._py3k import range
+
 import math
 
 
@@ -189,7 +191,7 @@ class Instances(list):
         """
         a generator function, returning found positions of motif instances in a given sequence
         """
-        for pos in xrange(0, len(sequence)-self.length+1):
+        for pos in range(0, len(sequence)-self.length+1):
             for instance in self:
                 if str(instance) == str(sequence[pos:pos+self.length]):
                     yield(pos, instance)
@@ -319,7 +321,7 @@ class Motif(object):
             text += str(self.instances)
 
         if masked:
-            for i in xrange(self.length):
+            for i in range(self.length):
                 if self.__mask[i]:
                     text += "*"
                 else:

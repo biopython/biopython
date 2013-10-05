@@ -20,6 +20,8 @@ import array
 import sys
 import warnings
 
+from Bio._py3k import range
+
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
@@ -1971,7 +1973,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                       "Explicitly trim the sequence or add trailing N before "
                       "translation. This may become an error in future.",
                       BiopythonWarning)
-    for i in xrange(0, n-n%3, 3):
+    for i in range(0, n - n%3, 3):
         codon = sequence[i:i+3]
         try:
             amino_acids.append(forward_table[codon])

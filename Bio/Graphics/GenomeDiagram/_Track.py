@@ -27,10 +27,11 @@
 
 """
 
-# ReportLab imports
 from __future__ import print_function
 
 from reportlab.lib import colors
+
+from Bio._py3k import range
 
 # GenomeDiagram imports
 from ._FeatureSet import FeatureSet
@@ -399,7 +400,7 @@ if __name__ == '__main__':
     gdt.add_set(gdfs2)
 
     graphdata = []
-    for pos in xrange(1, len(genbank_entry.seq), 1000):
+    for pos in range(1, len(genbank_entry.seq), 1000):
         graphdata.append((pos, normalvariate(0.5, 0.1)))
     gdgs = GraphSet(2, 'test data')
     gdgs.add_graph(graphdata, 'Test Data')

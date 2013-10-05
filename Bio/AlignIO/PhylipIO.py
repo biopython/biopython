@@ -35,6 +35,8 @@ from __future__ import print_function
 
 import string
 
+from Bio._py3k import range
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -221,7 +223,7 @@ class PhylipIterator(AlignmentIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-        for i in xrange(number_of_seqs):
+        for i in range(number_of_seqs):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
@@ -246,7 +248,7 @@ class PhylipIterator(AlignmentIterator):
                 break
 
             #print "New block..."
-            for i in xrange(number_of_seqs):
+            for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -406,7 +408,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-        for i in xrange(number_of_seqs):
+        for i in range(number_of_seqs):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)

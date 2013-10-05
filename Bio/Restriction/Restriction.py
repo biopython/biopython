@@ -81,6 +81,7 @@
 from __future__ import print_function
 from Bio._py3k import zip
 from Bio._py3k import filter
+from Bio._py3k import range
 
 import re
 import itertools
@@ -1010,7 +1011,7 @@ class Blunt(AbstractCut):
                 #
                 #   if more than one site add them.
                 #
-                fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
+                fragments += [d[r[x]:r[x+1]] for x in range(length)]
             #
             #   LAST site to END of the sequence.
             #
@@ -1028,7 +1029,7 @@ class Blunt(AbstractCut):
             #
             #   add the others.
             #
-            fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
+            fragments += [d[r[x]:r[x+1]] for x in range(length)]
         return tuple(fragments)
     catalyze = catalyse
 
@@ -1130,7 +1131,7 @@ class Ov5(AbstractCut):
                 #
                 #   if more than one site add them.
                 #
-                fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
+                fragments += [d[r[x]:r[x+1]] for x in range(length)]
             #
             #   LAST site to END of the sequence.
             #
@@ -1148,7 +1149,7 @@ class Ov5(AbstractCut):
             #
             #   add the others.
             #
-            fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
+            fragments += [d[r[x]:r[x+1]] for x in range(length)]
         return tuple(fragments)
     catalyze = catalyse
 
@@ -1253,7 +1254,7 @@ class Ov3(AbstractCut):
                 #
                 #   if more than one site add them.
                 #
-                fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
+                fragments += [d[r[x]:r[x+1]] for x in range(length)]
             #
             #   LAST site to END of the sequence.
             #
@@ -1271,7 +1272,7 @@ class Ov3(AbstractCut):
             #
             #   add the others.
             #
-            fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
+            fragments += [d[r[x]:r[x+1]] for x in range(length)]
         return tuple(fragments)
     catalyze = catalyse
 
