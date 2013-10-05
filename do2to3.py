@@ -69,7 +69,7 @@ def run2to3(filenames):
                     #"--fix=apply", -- we avoid the apply function
                     "--fix=basestring",
                     #"--fix=buffer", -- we avoid the buffer command
-                    "--fix=callable",
+                    #"--fix=callable", -- not needed for Python 3.2+
                     "--fix=dict",
                     #"--fix=except", -- we avoid old style exceptions
                     #"--fix=exec", -- we avoid the exec statement
