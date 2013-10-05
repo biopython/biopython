@@ -10,6 +10,9 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "restructuredtext en"
 
+from future_builtins import zip
+from future_builtins import filter
+
 import collections
 import copy
 import itertools
@@ -267,7 +270,7 @@ class TreeMixin(object):
         else:
             get_children = lambda elem: elem.clades
             root = self.root
-        return itertools.ifilter(filter_func, order_func(root, get_children))
+        return filter(filter_func, order_func(root, get_children))
 
     def find_any(self, *args, **kwargs):
         """Return the first element found by find_elements(), or None.
@@ -413,7 +416,7 @@ class TreeMixin(object):
             if p is None:
                 raise ValueError("target %s is not in this tree" % repr(t))
         mrca = self.root
-        for level in itertools.izip(*paths):
+        for level in zip(*paths):
             ref = level[0]
             for other in level[1:]:
                 if ref is not other:

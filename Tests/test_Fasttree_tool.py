@@ -7,6 +7,7 @@
 # as part of this package.
 
 from __future__ import print_function
+from future_builtins import zip
 
 from Bio import MissingExternalDependencyError
 
@@ -171,7 +172,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
         def generate_pairs(self):
             pairs = itertools.tee(self)
             next(pairs[1]) # Advance second iterator one step
-            return itertools.izip(pairs[0], pairs[1])
+            return zip(pairs[0], pairs[1])
         return [self.distance(*i) for i in
                 generate_pairs(self.find_clades(terminal=True))]
 

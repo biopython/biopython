@@ -80,6 +80,7 @@
 
 from __future__ import print_function
 from future_builtins import zip
+from future_builtins import filter
 
 import re
 import itertools
@@ -1897,7 +1898,7 @@ class RestrictionBatch(set):
 
         the new batch will contains only the enzymes for which
         func return True."""
-        d = [x for x in itertools.ifilter(func, self)]
+        d = [x for x in filter(func, self)]
         new = RestrictionBatch()
         new._data = dict(zip(d, [True]*len(d)))
         return new
@@ -1999,7 +2000,7 @@ class RestrictionBatch(set):
                 else:
                     continue
             return True
-        d = [k for k in itertools.ifilter(splittest, self)]
+        d = [k for k in filter(splittest, self)]
         new = RestrictionBatch()
         new._data = dict(zip(d, [True]*len(d)))
         return new
