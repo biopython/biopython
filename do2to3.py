@@ -223,6 +223,9 @@ def do_update(py2folder, py3folder, verbose=False):
                    "Modified time not copied! %0.8f vs %0.8f, diff %f" \
                    % (os.stat(old).st_mtime, os.stat(new).st_mtime,
                       abs(os.stat(old).st_mtime - os.stat(new).st_mtime))
+            if dirpath == "./Bio/_py3k":
+                #Don't convert these!
+                continue
             if f.endswith(".py"):
                 to_convert.append(new)
                 if verbose:
