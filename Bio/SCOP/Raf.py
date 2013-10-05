@@ -269,7 +269,7 @@ class SeqMap(object):
             resSet[(chainid, resid)] = r
 
         resFound = {}
-        for line in pdb_handle.xreadlines():
+        for line in pdb_handle:
             if line.startswith("ATOM  ") or line.startswith("HETATM"):
                 chainid = line[21:22]
                 resid = line[22:27].strip()

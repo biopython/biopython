@@ -112,10 +112,10 @@ def main():
     if input is None:
         sids = args[2:]
     elif input == '-':
-        sids = sys.stdin.xreadlines()
+        sids = sys.stdin
     else:
         in_handle = open(input)
-        sids = in_handle.xreadlines()
+        sids = in_handle
 
     try:
         for sid in sids:
