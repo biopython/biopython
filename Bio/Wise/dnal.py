@@ -12,14 +12,15 @@
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
 from __future__ import print_function
-from future_builtins import zip
-from future_builtins import map
 
 import itertools
 import re
 
 #Importing with leading underscore as not intended to be exposed
 from Bio._py3k import getoutput as _getoutput
+from Bio._py3k.builtins import zip
+from Bio._py3k.builtins import map
+
 from Bio import Wise
 
 _SCORE_MATCH = 4

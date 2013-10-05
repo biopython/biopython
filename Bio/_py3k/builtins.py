@@ -38,6 +38,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     #Code for Python 3
+    #Note if this is processed with 2to3 it will break!
     from builtins import open, zip, map, filter, range
 else:
     #Code for Python 2
