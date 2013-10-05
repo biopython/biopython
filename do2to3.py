@@ -90,7 +90,7 @@ def run2to3(filenames):
                     "--fix=itertools",
                     "--fix=itertools_imports",
                     #"--fix=long",
-                    "--fix=map",
+                    #"--fix=map", -- not needed anymore
                     #"--fix=metaclass", -- we're not using this
                     #"--fix=methodattrs", -- we're not using these
                     #"--fix=ne", -- not needed
