@@ -76,7 +76,7 @@ def run2to3(filenames):
                     #"--fix=execfile", -- we avoid execfile
                     #"--fix=exitfunc", -- we avoid sys.exitfunc
                     "--fix=filter",
-                    "--fix=funcattrs",
+                    #"--fix=funcattrs", -- not needed
                     "--fix=future",
                     #"--fix=getcwdu", -- we avoid the os.getcwdu function
                     "--fix=has_key",
@@ -93,7 +93,7 @@ def run2to3(filenames):
                     "--fix=map",
                     #"--fix=metaclass", -- we're not using this
                     #"--fix=methodattrs", -- we're not using these
-                    "--fix=ne",
+                    #"--fix=ne", -- not needed
                     "--fix=next",
                     "--fix=nonzero",
                     #"--fix=numliterals", -- already applied
@@ -106,7 +106,7 @@ def run2to3(filenames):
                     #"--fix=renames", -- already switched sys.maxint to sys.maxsize
                     #"--fix=repr", -- we avoid the old style back-ticks
                     #"--fix=set_literal", -- optional, and not backward compatible
-                    "--fix=standarderror",
+                    #"--fix=standarderror", -- not needed
                     #"--fix=sys_exc", -- we're not using the deprecated sys.exc_* functions
                     #"--fix=throw", -- we're not used this part of the generator API
                     #"--fix=tuple_params", -- already applied
