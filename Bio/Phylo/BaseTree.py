@@ -1122,11 +1122,8 @@ class BranchColor(object):
                 len(hexstr) == 7
                 ), "need a 24-bit hexadecimal string, e.g. #000000"
 
-        def unpack(cc):
-            return int('0x'+cc, base=16)
-
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
-        return cls(*map(unpack, RGB))
+        return cls(*[int('0x'+cc, base=16) for cc in RGB])
 
     @classmethod
     def from_name(cls, colorname):
