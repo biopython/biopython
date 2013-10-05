@@ -116,7 +116,7 @@ def run2to3(filenames):
                     #"--fix=ws_comma", -- optional fixer
                     "--fix=xrange",
                     #"--fix=xreadlines", -- already applied
-                    "--fix=zip",
+                    #"--fix=zip", -- not needed anymore
                     "-n", "-w"]
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
