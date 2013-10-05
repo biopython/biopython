@@ -1508,7 +1508,7 @@ a string, list or tuple) which has the same length as the sequence:
 
 %cont-doctest
 \begin{verbatim}
->>> simple_seq_r.letter_annotations["phred_quality"] = [40,40,38,30]
+>>> simple_seq_r.letter_annotations["phred_quality"] = [40, 40, 38, 30]
 >>> print(simple_seq_r.letter_annotations)
 {'phred_quality': [40, 40, 38, 30]}
 >>> print(simple_seq_r.letter_annotations["phred_quality"])
@@ -1917,7 +1917,7 @@ check all the features one by one in a loop:
 >>> for feature in record.features:
 ...     if my_snp in feature:
 ...         print("%s %s" % (feature.type, feature.qualifiers.get('db_xref')))
-...
+... 
 source ['taxon:229193']
 gene ['GeneID:2767712']
 CDS ['GI:45478716', 'GeneID:2767712']
@@ -4237,7 +4237,7 @@ matrix or array objects won't be surprised at this - you use a double index.
 
 %cont-doctest
 \begin{verbatim}
->>> print(alignment[2,6])
+>>> print(alignment[2, 6])
 T
 \end{verbatim}
 
@@ -4253,7 +4253,7 @@ You can pull out a single column as a string like this:
 
 %cont-doctest
 \begin{verbatim}
->>> print(alignment[:,6])
+>>> print(alignment[:, 6])
 TTT---T
 \end{verbatim}
 
@@ -4262,7 +4262,7 @@ three rows we extracted earlier, but take just their first six columns:
 
 %cont-doctest
 \begin{verbatim}
->>> print(alignment[3:6,:6])
+>>> print(alignment[3:6, :6])
 SingleLetterAlphabet() alignment with 3 rows and 6 columns
 AEGDDP COATB_BPM13/24-72
 AEGDDP COATB_BPZJ2/1-49
@@ -4273,7 +4273,7 @@ Leaving the first index as \verb|:| means take all the rows:
 
 %cont-doctest
 \begin{verbatim}
->>> print(alignment[:,:6])
+>>> print(alignment[:, :6])
 SingleLetterAlphabet() alignment with 7 rows and 6 columns
 AEPNAA COATB_BPIKE/30-81
 AEPNAA Q9T0Q8_BPIKE/1-52
@@ -4289,7 +4289,7 @@ This brings us to a neat way to remove a section. Notice columns
 
 %cont-doctest
 \begin{verbatim}
->>> print(alignment[:,6:9])
+>>> print(alignment[:, 6:9])
 SingleLetterAlphabet() alignment with 7 rows and 3 columns
 TNY COATB_BPIKE/30-81
 TNY Q9T0Q8_BPIKE/1-52
@@ -4304,7 +4304,7 @@ TSQ COATB_BPIF1/22-73
 
 %cont-doctest
 \begin{verbatim}
->>> print(alignment[:,9:])
+>>> print(alignment[:, 9:])
 SingleLetterAlphabet() alignment with 7 rows and 43 columns
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
@@ -4320,7 +4320,7 @@ by column. This lets you do this as a way to remove a block of columns:
 
 %cont-doctest
 \begin{verbatim}
->>> edited = alignment[:,:6] + alignment[:,9:]
+>>> edited = alignment[:, :6] + alignment[:, 9:]
 >>> print(edited)
 SingleLetterAlphabet() alignment with 7 rows and 49 columns
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
@@ -5982,7 +5982,7 @@ the \verb|reverse| flag to \verb|True| so that we sort in descending order.
 \begin{verbatim}
 >>> for hit in blast_qresult[:5]:   # id and sequence length of the first five hits
 ...     print("%s %i" % (hit.id, hit.seq_len))
-...
+... 
 gi|262205317|ref|NR_030195.1| 61
 gi|301171311|ref|NR_035856.1| 60
 gi|270133242|ref|NR_032573.1| 85
@@ -5993,7 +5993,7 @@ gi|301171267|ref|NR_035851.1| 80
 >>> sorted_qresult = blast_qresult.sort(key=sort_key, reverse=True, in_place=False)
 >>> for hit in sorted_qresult[:5]:
 ...     print("%s %i" % (hit.id, hit.seq_len))
-...
+... 
 gi|397513516|ref|XM_003827011.1| 6002
 gi|390332045|ref|XM_776818.2| 4082
 gi|390332043|ref|XM_003723358.1| 4079
@@ -6976,7 +6976,7 @@ search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
 find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nucleotide",term="Cypripedioideae[Orgn] AND matK[Gene]")
+>>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 '25'
@@ -7163,7 +7163,7 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb", retmode="text")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
 >>> print(record)
@@ -7301,7 +7301,7 @@ In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``B
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
 ...     print(row["DbName"], row["Count"])
-...
+... 
 pubmed 6
 pmc 62
 journals 0
@@ -7480,7 +7480,7 @@ Optionally, you can instruct the parser to skip such tags instead of raising a V
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
->>> record = Entrez.read(handle,validate=False)
+>>> record = Entrez.read(handle, validate=False)
 >>>
 \end{verbatim}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
@@ -7565,7 +7565,7 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed",term="biopython")
+>>> handle = Entrez.esearch(db="pubmed", term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
 ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
@@ -7573,7 +7573,7 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
 \begin{verbatim}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db="pubmed",id=idlist,rettype="medline",retmode="text")
+>>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
 \end{verbatim}
 Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline records in plain-text Medline format. Now we use \verb+Bio.Medline+ to parse these records:
 \begin{verbatim}
@@ -7593,7 +7593,7 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 For comparison, here we show an example using the XML format:
 \begin{verbatim}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db="pubmed",id=idlist,rettype="medline",retmode="xml")
+>>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
 >>> records = Entrez.read(handle)
 >>> for record in records:
 ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
@@ -7636,7 +7636,7 @@ You can search the ``gds'' database (GEO datasets) with ESearch:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="gds",term="GSE16")
+>>> handle = Entrez.esearch(db="gds", term="GSE16")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 2
@@ -8251,7 +8251,7 @@ We can now print out some information about this record:
 >>> for ref in record.references:
 ...     print("authors:", ref.authors)
 ...     print("title:", ref.title)
-...
+... 
 authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
@@ -8757,7 +8757,7 @@ The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
 \begin{verbatim}
->>> file = open(filename,'r')
+>>> file = open(filename, 'r')
 >>> header_dict = parse_pdb_header(file)
 >>> file.close()
 \end{verbatim}
@@ -8836,7 +8836,7 @@ out glycine residues:
 ...             return True
 ...         else:
 ...             return False
-...
+... 
 >>> io = PDBIO()
 >>> io.set_structure(s)
 >>> io.save('gly_only.pdb', GlySelect())
@@ -9403,7 +9403,7 @@ For more info, see the API documentation.
 ...                 model_id = model.get_id()
 ...                 chain_id = chain.get_id()
 ...                 print(model_id, chain_id, resname, resseq)
-...
+... 
 \end{verbatim}
 
 \subsubsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
@@ -10664,7 +10664,7 @@ entries, we can jump directly to that position in the tree by indexing it.  Here
 \verb|[0,1]| refers to the second child of the first child of the root.
 
 \begin{verbatim}
->>> tree.clade[0,1].color = "blue"
+>>> tree.clade[0, 1].color = "blue"
 \end{verbatim}
 
 Finally, show our work (see Fig. \ref{fig:phylo-color-draw}):
@@ -11494,17 +11494,17 @@ but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
 %cont-doctest
 \begin{verbatim}
->>> m.counts['T',0]
+>>> m.counts['T', 0]
 4
->>> m.counts['T',2]
+>>> m.counts['T', 2]
 2
->>> m.counts['T',3]
+>>> m.counts['T', 3]
 0
 \end{verbatim}
 You can also directly access columns of the counts matrix
 %Don't doctest this as dictionary order is platform dependent:
 \begin{verbatim}
->>> m.counts[:,3]
+>>> m.counts[:, 3]
 {'A': 2, 'C': 2, 'T': 0, 'G': 3}
 \end{verbatim}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
@@ -11691,7 +11691,7 @@ For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix
 We can create a motif for this count matrix as follows:
 %cont-doctest
 \begin{verbatim}
->>> srf = motifs.read(open("SRF.pfm"),"pfm")
+>>> srf = motifs.read(open("SRF.pfm"), "pfm")
 >>> print(srf.counts)
         0      1      2      3      4      5      6      7      8      9     10     11
 A:   2.00   9.00   0.00   1.00  32.00   3.00  46.00   1.00  43.00  15.00   2.00   2.00
@@ -12459,7 +12459,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 
 %cont-doctest
 \begin{verbatim}
->>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA",m.alphabet)
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
 >>> len(test_seq)
 26
 \end{verbatim}
@@ -12470,7 +12470,7 @@ The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 %cont-doctest
 \begin{verbatim}
->>> for pos,seq in m.instances.search(test_seq):
+>>> for pos, seq in m.instances.search(test_seq):
 ...     print("%i %s" % (pos, seq))
 ... 
 0 TACAC
@@ -12480,7 +12480,7 @@ the true instances of the motif:
 We can do the same with the reverse complement (to find instances on the complementary strand):
 %cont-doctest
 \begin{verbatim}
->>> for pos,seq in r.instances.search(test_seq):
+>>> for pos, seq in r.instances.search(test_seq):
 ...     print("%i %s" % (pos, seq))
 ... 
 6 GCATT
@@ -12589,7 +12589,7 @@ instances with balanced threshold with rate of $1000$.
 >>> threshold = distribution.threshold_fpr(0.01)
 >>> print("%5.3f" % threshold)
 4.009
->>> for position, score in pssm.search(test_seq,threshold=threshold):
+>>> for position, score in pssm.search(test_seq, threshold=threshold):
 ...     print("Position %d: score = %5.3f" % (position, score))
 ... 
 Position 0: score = 5.622
@@ -12637,7 +12637,7 @@ The negative infinities appear here because the corresponding entry in the frequ
 \begin{verbatim}
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
-...
+... 
 A: 0.00
 C: 0.00
 G: 0.00
@@ -12649,7 +12649,7 @@ If you change the \verb+.pseudocounts+ attribute, the position-frequency matrix 
 >>> motif.pseudocounts = 3.0
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
-...
+... 
 A: 3.00
 C: 3.00
 G: 3.00
@@ -12683,7 +12683,7 @@ The position-specific scoring matrix depends on the background distribution, whi
 \begin{verbatim}
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
-...
+... 
 A: 0.25
 C: 0.25
 G: 0.25
@@ -12707,7 +12707,7 @@ Setting \verb+motif.background+ to \verb+None+ resets it to a uniform distributi
 >>> motif.background = None
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
-...
+... 
 A: 0.25
 C: 0.25
 G: 0.25
@@ -12719,7 +12719,7 @@ If you set \verb+motif.background+ equal to a single value, it will be interpret
 >>> motif.background = 0.8
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
-...
+... 
 A: 0.10
 C: 0.40
 G: 0.40
@@ -12886,7 +12886,7 @@ with the following code:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> motifsA = motifs.parse(open("alignace.out"),"alignace")
+>>> motifsA = motifs.parse(open("alignace.out"), "alignace")
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -12913,14 +12913,14 @@ shown below (other parameters can be specified as keyword parameters):
 >>> command="/opt/bin/AlignACE"
 >>> input_file="test.fa"
 >>> from Bio.motifs.applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command,input=input_file,gcback=0.6,numcols=10)
->>> stdout,stderr= cmd()
+>>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
+>>> stdout, stderr= cmd()
 \end{verbatim}
 
 Since AlignAce prints all of its output to standard output, you can get
 to your motifs by parsing the first part of the result:
 \begin{verbatim}
->>> motifs = motifs.parse(stdout,"alignace")
+>>> motifs = motifs.parse(stdout, "alignace")
 \end{verbatim}
 
 
@@ -12967,10 +12967,10 @@ This is for now just an empty container, so let's add some sequences to our newl
 %cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
->>> m.add_instance(Seq("TATAA",m.alphabet))
->>> m.add_instance(Seq("TATTA",m.alphabet))
->>> m.add_instance(Seq("TATAA",m.alphabet))
->>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+>>> m.add_instance(Seq("TATTA", m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
 \end{verbatim}
 Now we have a full \verb|Motif| instance, so we can try to get some
 basic information about it. Let's start with length and consensus
@@ -13089,12 +13089,12 @@ let's look at how we can import JASPAR motifs from instances:
 %doctest ../Tests/Motif
 \begin{verbatim}
 >>> from Bio import Motif
->>> arnt = Motif.read(open("Arnt.sites"),"jaspar-sites")
+>>> arnt = Motif.read(open("Arnt.sites"), "jaspar-sites")
 \end{verbatim}
 and from a count matrix:
 %cont-doctest
 \begin{verbatim}
->>> srf = Motif.read(open("SRF.pfm"),"jaspar-pfm")
+>>> srf = Motif.read(open("SRF.pfm"), "jaspar-pfm")
 \end{verbatim}
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
@@ -13188,7 +13188,7 @@ test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 \begin{verbatim}
->>> for pos,seq in m.search_instances(test_seq):
+>>> for pos, seq in m.search_instances(test_seq):
 ...     print(pos, seq.tostring())
 ... 
 10 TATAA
@@ -13197,7 +13197,7 @@ the true instances of the motif:
 \end{verbatim}
 We can do the same with the reverse complement (to find instances on the complementary strand):
 \begin{verbatim}
->>> for pos,seq in m.reverse_complement().search_instances(test_seq):
+>>> for pos, seq in m.reverse_complement().search_instances(test_seq):
 ...     print(pos, seq.tostring())
 ... 
 12 TAATA
@@ -13206,7 +13206,7 @@ We can do the same with the reverse complement (to find instances on the complem
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=5.0):
+>>> for pos, score in m.search_pwm(test_seq, threshold=5.0):
 ...     print(pos, score)
 ... 
 10 8.44065060871
@@ -13227,7 +13227,7 @@ distribution of scores for a given motif. Since the space for a score
 distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
 \begin{verbatim}
->>> sd = Motif.score_distribution(m,precision=10**4)
+>>> sd = Motif.score_distribution(m, precision=10**4)
 \end{verbatim}
 The sd object can be used to determine a number of different thresholds.
 
@@ -13258,7 +13258,7 @@ For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=sd.threshold_balanced(1000)):
+>>> for pos, score in m.search_pwm(test_seq, threshold=sd.threshold_balanced(1000)):
 ...     print(pos, score)
 ... 
 10 8.44065060871
@@ -13294,7 +13294,7 @@ motifs.
 To show how these functions work, let us first load another motif,
 which is similar to our test motif \verb|m|:
 \begin{verbatim}
->>> ubx=Motif.read(open("Ubx.pfm"),"jaspar-pfm")
+>>> ubx=Motif.read(open("Ubx.pfm"), "jaspar-pfm")
 <Bio.Motif.Motif.Motif object at 0xc29b90>
 >>> ubx.consensus()
 Seq('TAAT', IUPACUnambiguousDNA())
@@ -13356,7 +13356,7 @@ favorite parameters and saved the output in the file
 running the following piece of code:
 
 \begin{verbatim}
->>> motifsM = list(Motif.parse(open("meme.out"),"MEME"))
+>>> motifsM = list(Motif.parse(open("meme.out"), "MEME"))
 >>> motifsM
 [<Bio.Motif.MEMEMotif.MEMEMotif object at 0xc356b0>]
 \end{verbatim}
@@ -13396,7 +13396,7 @@ your output in the file \verb|alignace.out|. You can parse your output
 with the following code:
 
 \begin{verbatim}
->>> motifsA=list(Motif.parse(open("alignace.out"),"AlignAce"))
+>>> motifsA=list(Motif.parse(open("alignace.out"), "AlignAce"))
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -13421,8 +13421,8 @@ shown below (other parameters can be specified as keyword parameters):
 >>> command="/opt/bin/AlignACE"
 >>> input_file="test.fa"
 >>> from Bio.Motif.Applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command,input=input_file,gcback=0.6,numcols=10)
->>> stdout,stderr= cmd()
+>>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
+>>> stdout, stderr= cmd()
 \end{verbatim}
 
 Since AlignAce prints all its output to standard output, you can get
@@ -13852,16 +13852,16 @@ To create a new \verb|Node| object, we need to specify \verb|left| and \verb|rig
 
 \begin{verbatim}
 >>> from Bio.Cluster import Node
->>> Node(2,3)
+>>> Node(2, 3)
 (2, 3): 0
->>> Node(2,3,0.91)
+>>> Node(2, 3, 0.91)
 (2, 3): 0.91
 \end{verbatim}
 
 The attributes \verb|left|, \verb|right|, and \verb|distance| of an existing \verb|Node| object can be modified directly:
 
 \begin{verbatim}
->>> node = Node(4,5)
+>>> node = Node(4, 5)
 >>> node.left = 6
 >>> node.right = 2
 >>> node.distance = 0.73
@@ -13874,7 +13874,7 @@ The Python class \verb|Tree| represents a full hierarchical clustering solution.
 
 \begin{verbatim}
 >>> from Bio.Cluster import Node, Tree
->>> nodes = [Node(1,2,0.2), Node(0,3,0.5), Node(-2,4,0.6), Node(-1,-3,0.9)]
+>>> nodes = [Node(1, 2, 0.2), Node(0, 3, 0.5), Node(-2, 4, 0.6), Node(-1, -3, 0.9)]
 >>> tree = Tree(nodes)
 >>> print(tree)
 (1, 2): 0.2
@@ -13886,7 +13886,7 @@ The Python class \verb|Tree| represents a full hierarchical clustering solution.
 The \verb|Tree| initializer checks if the list of nodes is a valid hierarchical clustering result:
 
 \begin{verbatim}
->>> nodes = [Node(1,2,0.2), Node(0,2,0.5)]
+>>> nodes = [Node(1, 2, 0.2), Node(0, 2, 0.5)]
 >>> Tree(nodes)
 Traceback (most recent call last):
   File "<stdin>", line 1, in ?
@@ -13896,7 +13896,7 @@ ValueError: Inconsistent tree
 Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 
 \begin{verbatim}
->>> nodes = [Node(1,2,0.2), Node(0,-1,0.5)]
+>>> nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5)]
 >>> tree = Tree(nodes)
 >>> tree[0]
 (1, 2): 0.2
@@ -13909,13 +13909,13 @@ Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 As a \verb|Tree| object is read-only, we cannot change individual nodes in a \verb|Tree| object. However, we can convert the tree to a list of nodes, modify this list, and create a new tree from this list:
 
 \begin{verbatim}
->>> tree = Tree([Node(1,2,0.1), Node(0,-1,0.5), Node(-2,3,0.9)])
+>>> tree = Tree([Node(1, 2, 0.1), Node(0, -1, 0.5), Node(-2, 3, 0.9)])
 >>> print(tree)
 (1, 2): 0.1
 (0, -1): 0.5
 (-2, 3): 0.9
 >>> nodes = tree[:]
->>> nodes[0] = Node(0,1,0.2)
+>>> nodes[0] = Node(0, 1, 0.2)
 >>> nodes[1].left = 2
 >>> tree = Tree(nodes)
 >>> print(tree)
@@ -14570,7 +14570,7 @@ Gene pair & Intergene distance $x_1$ & Gene expression score $x_2$ \\
 
 The logistic regression model classifies {\it yxcE}, {\it yxcD} as belonging to the same operon (class OP), while {\it yxiB}, {\it yxiA} are predicted to belong to different operons:
 \begin{verbatim}
->>> print("yxcE, yxcD:", LogisticRegression.classify(model, [6,-173.143442352]))
+>>> print("yxcE, yxcD:", LogisticRegression.classify(model, [6, -173.143442352]))
 yxcE, yxcD: 1
 >>> print("yxiB, yxiA:", LogisticRegression.classify(model, [309, -271.005880394]))
 yxiB, yxiA: 0
@@ -14579,7 +14579,7 @@ yxiB, yxiA: 0
 
 To find out how confident we can be in these predictions, we can call the \verb+calculate+ function to obtain the probabilities (equations (\ref{eq:OP}) and \ref{eq:NOP}) for class OP and NOP. For {\it yxcE}, {\it yxcD} we find
 \begin{verbatim}
->>> q, p = LogisticRegression.calculate(model, [6,-173.143442352])
+>>> q, p = LogisticRegression.calculate(model, [6, -173.143442352])
 >>> print("class OP: probability =", p, "class NOP: probability =", q)
 class OP: probability = 0.993242163503 class NOP: probability = 0.00675783649744
 \end{verbatim}
@@ -14688,7 +14688,7 @@ The \verb+classify+ function lets us specify both a distance function and a weig
 ...    assert len(x2)==2
 ...    distance = abs(x1[0]-x2[0]) + abs(x1[1]-x2[1])
 ...    return distance
-...
+... 
 >>> x = [6, -173.143442352]
 >>> print("yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock))
 yxcE, yxcD: 1
@@ -14701,7 +14701,7 @@ The weight function can be used for weighted voting. For example, we may want to
 ...    assert len(x1)==2
 ...    assert len(x2)==2
 ...    return exp(-abs(x1[0]-x2[0]) - abs(x1[1]-x2[1]))
-...
+... 
 >>> x = [6, -173.143442352]
 >>> print("yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight))
 yxcE, yxcD: 1
@@ -15952,7 +15952,7 @@ This file contains one and only one record, so we can read it in as a
 %doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> original_rec = SeqIO.read("NC_005816.gb","genbank")
+>>> original_rec = SeqIO.read("NC_005816.gb", "genbank")
 \end{verbatim}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
@@ -16670,7 +16670,7 @@ NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 %doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO 
->>> record = SeqIO.read("NC_005816.fna","fasta")
+>>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> table = 11
 >>> min_pro_len = 100
 \end{verbatim}
@@ -18098,7 +18098,7 @@ The expected frequency table can (and generally should) be generated from the ob
 
 \begin{verbatim}
 >>> exp_freq_table = SubsMat._exp_freq_table_from_obs_freq(OFM)
->>> EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
+>>> EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
 \end{verbatim}
 
 But you can supply your own \verb|exp_freq_table|, if you wish
@@ -18218,8 +18218,8 @@ Any one of the following may be done to geerate the frequency table (ftab):
 
 \begin{verbatim}
 >>> from SubsMat import *
->>> ftab = FreqTable.FreqTable(my_frequency_dictionary,FreqTable.FREQ)
->>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
+>>> ftab = FreqTable.FreqTable(my_frequency_dictionary, FreqTable.FREQ)
+>>> ftab = FreqTable.FreqTable(my_count_dictionary, FreqTable.COUNT)
 >>> ftab = FreqTable.read_count(open('myCountFile'))
 >>> ftab = FreqTable.read_frequency(open('myFrequencyFile'))
 \end{verbatim}
@@ -18532,3 +18532,4 @@ Alok Saldanha: ``Java Treeview---extensible visualization of microarray data''. 
 \href{http://dx.doi.org/10.1093/bioinformatics/bth349}{http://dx.doi.org/10.1093/bioinformatics/bth349}
 \end{thebibliography}
 \end{document}
+
