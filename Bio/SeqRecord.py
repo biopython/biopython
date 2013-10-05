@@ -343,7 +343,7 @@ class SeqRecord(object):
         ...                 id="1JOY", name="EnvZ",
         ...                 description="Homodimeric domain of EnvZ from E. coli")
         >>> rec.letter_annotations["secondary_structure"] = "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
-        >>> rec.features.append(SeqFeature(FeatureLocation(20,21),
+        >>> rec.features.append(SeqFeature(FeatureLocation(20, 21),
         ...                     type = "Site"))
 
         Now let's have a quick look at the full record,
@@ -504,7 +504,7 @@ class SeqRecord(object):
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print(rec.letter_annotations.keys())
         ['solexa_quality']
-        >>> for nuc, qual in zip(rec,rec.letter_annotations["solexa_quality"]):
+        >>> for nuc, qual in zip(rec, rec.letter_annotations["solexa_quality"]):
         ...     if qual > 35:
         ...         print("%s %i" % (nuc, qual))
         A 40
@@ -876,7 +876,7 @@ class SeqRecord(object):
         >>> from Bio.SeqRecord import SeqRecord
         >>> record = SeqRecord(Seq("acgtACGT", generic_dna), id="Test",
         ...                    description = "Made up for this example")
-        >>> record.letter_annotations["phred_quality"] = [1,2,3,4,5,6,7,8]
+        >>> record.letter_annotations["phred_quality"] = [1, 2, 3, 4, 5, 6, 7, 8]
         >>> print(record.upper().format("fastq"))
         @Test Made up for this example
         ACGTACGT
@@ -1118,4 +1118,5 @@ class SeqRecord(object):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+
 

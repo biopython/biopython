@@ -156,8 +156,8 @@ class Entity(object):
         Apply rotation and translation to the atomic coordinates.
 
         Example:
-                >>> rotation=rotmat(pi, Vector(1,0,0))
-                >>> translation=array((0,0,1), 'f')
+                >>> rotation=rotmat(pi, Vector(1, 0, 0))
+                >>> translation=array((0, 0, 1), 'f')
                 >>> entity.transform(rotation, translation)
 
         @param rot: A right multiplying rotation matrix
@@ -295,3 +295,4 @@ class DisorderedEntityWrapper(object):
     def disordered_get_list(self):
         "Return list of children."
         return self.child_dict.values()
+

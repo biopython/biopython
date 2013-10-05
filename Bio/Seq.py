@@ -484,7 +484,7 @@ class Seq(object):
         False
         >>> my_rna.startswith("AUG", 3)
         True
-        >>> my_rna.startswith(("UCC","UCA","UCG"),1)
+        >>> my_rna.startswith(("UCC", "UCA", "UCG"), 1)
         True
         """
         #If it has one, check the alphabet:
@@ -515,7 +515,7 @@ class Seq(object):
         False
         >>> my_rna.endswith("AUG", 0, 18)
         True
-        >>> my_rna.endswith(("UCC","UCA","UUG"))
+        >>> my_rna.endswith(("UCC", "UCA", "UUG"))
         True
         """
         #If it has one, check the alphabet:
@@ -550,12 +550,12 @@ class Seq(object):
         Seq('VMAIVMGR*KGAR*L', HasStopCodon(ExtendedIUPACProtein(), '*'))
         >>> my_aa.split("*")
         [Seq('VMAIVMGR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('KGAR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('L', HasStopCodon(ExtendedIUPACProtein(), '*'))]
-        >>> my_aa.split("*",1)
+        >>> my_aa.split("*", 1)
         [Seq('VMAIVMGR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('KGAR*L', HasStopCodon(ExtendedIUPACProtein(), '*'))]
 
         See also the rsplit method:
 
-        >>> my_aa.rsplit("*",1)
+        >>> my_aa.rsplit("*", 1)
         [Seq('VMAIVMGR*KGAR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('L', HasStopCodon(ExtendedIUPACProtein(), '*'))]
         """
         #If it has one, check the alphabet:
@@ -1433,7 +1433,7 @@ class UnknownSeq(Seq):
 
         >>> from Bio.Seq import UnknownSeq
         >>> from Bio.Alphabet import Gapped, generic_dna
-        >>> my_dna = UnknownSeq(20, Gapped(generic_dna,"-"))
+        >>> my_dna = UnknownSeq(20, Gapped(generic_dna, "-"))
         >>> my_dna
         UnknownSeq(20, alphabet = Gapped(DNAAlphabet(), '-'), character = 'N')
         >>> my_dna.ungap()
@@ -1444,7 +1444,7 @@ class UnknownSeq(Seq):
         If the UnknownSeq is using the gap character, then an empty Seq is
         returned:
 
-        >>> my_gap = UnknownSeq(20, Gapped(generic_dna,"-"), character="-")
+        >>> my_gap = UnknownSeq(20, Gapped(generic_dna, "-"), character="-")
         >>> my_gap
         UnknownSeq(20, alphabet = Gapped(DNAAlphabet(), '-'), character = '-')
         >>> my_gap.ungap()
@@ -2129,3 +2129,4 @@ def _test():
 
 if __name__ == "__main__":
     _test()
+

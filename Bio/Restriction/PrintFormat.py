@@ -31,7 +31,7 @@ Usage:
     >>> handle.close()
     >>> dct = AllEnzymes.search(pBR322.seq)
     >>> new = PrintFormat()
-    >>> new.print_that(dct, '\n my pBR322 analysis\n\n','\n no site :\n\n')
+    >>> new.print_that(dct, '\n my pBR322 analysis\n\n', '\n no site :\n\n')
 
      my pBR322 analysis
 
@@ -417,3 +417,4 @@ class PrintFormat(object):
             into = Join((into,
                          str(name).ljust(self.NameWidth), ' :  ', stringsite, '\n'))
         return into
+

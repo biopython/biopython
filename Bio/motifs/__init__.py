@@ -41,7 +41,7 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import motifs
-    >>> for m in motifs.parse(open("Motif/alignace.out"),"AlignAce"):
+    >>> for m in motifs.parse(open("Motif/alignace.out"), "AlignAce"):
     ...     print(m.consensus)
     TCTACGATTGAG
     CTGCAGCTAGCTACGAGTGAG
@@ -100,7 +100,7 @@ def read(handle, format):
     Or a single-motif MEME file,
 
     >>> from Bio import motifs
-    >>> m = motifs.read(open("motifs/meme.out"),"meme")
+    >>> m = motifs.read(open("motifs/meme.out"), "meme")
     >>> m.consensus
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -108,7 +108,7 @@ def read(handle, format):
     an exception is raised:
 
     >>> from Bio import motifs
-    >>> motif = motifs.read(open("motifs/alignace.out"),"AlignAce")
+    >>> motif = motifs.read(open("motifs/alignace.out"), "AlignAce")
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -118,7 +118,7 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import motifs
-    >>> record = motifs.parse(open("motifs/alignace.out"),"alignace")
+    >>> record = motifs.parse(open("motifs/alignace.out"), "alignace")
     >>> motif = record[0]
     >>> motif.consensus
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
@@ -519,4 +519,5 @@ def write(motifs, format):
         return transfac.write(motifs)
     else:
         raise ValueError("Unknown format type %s" % format)
+
 

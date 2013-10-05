@@ -96,7 +96,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     However, you can supply a title2ids function to alter this:
 
     >>> def take_upper(title):
-    ...     return title.split(None,1)[0].upper(), "", title
+    ...     return title.split(None, 1)[0].upper(), "", title
     >>> for record in FastaIterator(open("Fasta/dups.fasta"), title2ids=take_upper):
     ...     print(record.id)
     ALPHA
@@ -264,3 +264,4 @@ if __name__ == "__main__":
     assert count == 0
 
     print("Done")
+

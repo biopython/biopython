@@ -330,7 +330,7 @@ class SeqFeature(object):
         >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
-        >>> f = SeqFeature(FeatureLocation(8,15), type="domain")
+        >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> f.extract(seq)
         Seq('VALIVIC', ProteinAlphabet())
 
@@ -359,7 +359,7 @@ class SeqFeature(object):
         >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
-        >>> f = SeqFeature(FeatureLocation(8,15), type="domain")
+        >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> len(f)
         7
         >>> f.extract(seq)
@@ -388,7 +388,7 @@ class SeqFeature(object):
         along the feature using the parent sequence coordinates:
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f = SeqFeature(FeatureLocation(5,10), type="domain", strand=-1)
+        >>> f = SeqFeature(FeatureLocation(5, 10), type="domain", strand=-1)
         >>> len(f)
         5
         >>> for i in f: print(i)
@@ -411,7 +411,7 @@ class SeqFeature(object):
         """Check if an integer position is within the feature.
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f = SeqFeature(FeatureLocation(5,10), type="domain", strand=-1)
+        >>> f = SeqFeature(FeatureLocation(5, 10), type="domain", strand=-1)
         >>> len(f)
         5
         >>> [i for i in range(15) if i in f]
@@ -446,7 +446,7 @@ class SeqFeature(object):
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition
-        >>> f = SeqFeature(FeatureLocation(BeforePosition(3),8), type="domain")
+        >>> f = SeqFeature(FeatureLocation(BeforePosition(3), 8), type="domain")
         >>> len(f)
         5
         >>> [i for i in range(10) if i in f]
@@ -701,8 +701,8 @@ class FeatureLocation(object):
         You can add two feature locations to make a join CompoundLocation:
 
         >>> from Bio.SeqFeature import FeatureLocation
-        >>> f1 = FeatureLocation(5,10)
-        >>> f2 = FeatureLocation(20,30)
+        >>> f1 = FeatureLocation(5, 10)
+        >>> f2 = FeatureLocation(20, 30)
         >>> combined = f1 + f2
         >>> print(combined)
         join{[5:10], [20:30]}
@@ -770,7 +770,7 @@ class FeatureLocation(object):
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc = FeatureLocation(BeforePosition(5),AfterPosition(10))
+        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10))
         >>> len(loc)
         5
         """
@@ -783,7 +783,7 @@ class FeatureLocation(object):
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc = FeatureLocation(BeforePosition(5),AfterPosition(10))
+        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10))
         >>> len(loc)
         5
         >>> [i for i in range(15) if i in loc]
@@ -802,7 +802,7 @@ class FeatureLocation(object):
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc = FeatureLocation(BeforePosition(5),AfterPosition(10))
+        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10))
         >>> len(loc)
         5
         >>> for i in loc: print(i)
@@ -1029,8 +1029,8 @@ class CompoundLocation(object):
         for mixed strands, this returns None.
 
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
-        >>> f1 = FeatureLocation(15,17, strand=1)
-        >>> f2 = FeatureLocation(20,30, strand=-1)
+        >>> f1 = FeatureLocation(15, 17, strand=1)
+        >>> f2 = FeatureLocation(20, 30, strand=-1)
         >>> f = f1 + f2
         >>> f1.strand
         1
@@ -1057,20 +1057,20 @@ class CompoundLocation(object):
         """Combine locations, or shift the location by an integer offset.
 
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
-        >>> f1 = FeatureLocation(15,17) + FeatureLocation(20,30)
+        >>> f1 = FeatureLocation(15, 17) + FeatureLocation(20, 30)
         >>> print(f1)
         join{[15:17], [20:30]}
 
         You can add another FeatureLocation:
 
-        >>> print(f1 + FeatureLocation(40,50))
+        >>> print(f1 + FeatureLocation(40, 50))
         join{[15:17], [20:30], [40:50]}
-        >>> print(FeatureLocation(5,10) + f1)
+        >>> print(FeatureLocation(5, 10) + f1)
         join{[5:10], [15:17], [20:30]}
 
         You can also add another CompoundLocation:
 
-        >>> f2 = FeatureLocation(40,50) + FeatureLocation(60,70)
+        >>> f2 = FeatureLocation(40, 50) + FeatureLocation(60, 70)
         >>> print(f2)
         join{[40:50], [60:70]}
         >>> print(f1 + f2)
@@ -1335,7 +1335,7 @@ class WithinPosition(int, AbstractPosition):
     and 4. Since this is a start coordinate, it should acts like
     it is at position 1 (or in Python counting, 0).
 
-    >>> p = WithinPosition(10,10,13)
+    >>> p = WithinPosition(10, 10, 13)
     >>> p
     WithinPosition(10, left=10, right=13)
     >>> print(p)
@@ -1348,7 +1348,7 @@ class WithinPosition(int, AbstractPosition):
 
     >>> p == 10
     True
-    >>> p in [9,10,11]
+    >>> p in [9, 10, 11]
     True
     >>> p < 11
     True
@@ -1376,7 +1376,7 @@ class WithinPosition(int, AbstractPosition):
 
     If this were an end point, you would want the position to be 13:
 
-    >>> p2 = WithinPosition(13,10,13)
+    >>> p2 = WithinPosition(13, 10, 13)
     >>> p2
     WithinPosition(13, left=10, right=13)
     >>> print(p2)
@@ -1797,3 +1797,4 @@ class PositionGap(object):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

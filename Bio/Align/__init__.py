@@ -69,12 +69,12 @@ class MultipleSeqAlignment(_Alignment):
 
     And extract columns as strings:
 
-    >>> print(align[:,1])
+    >>> print(align[:, 1])
     AAAAAAA
 
     Or, take just the first ten columns as a sub-alignment:
 
-    >>> print(align[:,:10])
+    >>> print(align[:, :10])
     SingleLetterAlphabet() alignment with 7 rows and 10 columns
     TATACATTAA gi|6273285|gb|AF191659.1|AF191
     TATACATTAA gi|6273284|gb|AF191658.1|AF191
@@ -88,7 +88,7 @@ class MultipleSeqAlignment(_Alignment):
     remove a section of the alignment. For example, taking just the first
     and last ten columns:
 
-    >>> print(align[:,:10] + align[:,-10:])
+    >>> print(align[:, :10] + align[:, -10:])
     SingleLetterAlphabet() alignment with 7 rows and 20 columns
     TATACATTAAGTGTACCAGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAGTGTACCAGA gi|6273284|gb|AF191658.1|AF191
@@ -472,7 +472,7 @@ class MultipleSeqAlignment(_Alignment):
         You can also use two indices to specify both rows and columns. Using simple
         integers gives you the entry as a single character string. e.g.
 
-        >>> align[3,4]
+        >>> align[3, 4]
         'C'
 
         This is equivalent to:
@@ -487,17 +487,17 @@ class MultipleSeqAlignment(_Alignment):
 
         To get a single column (as a string) use this syntax:
 
-        >>> align[:,4]
+        >>> align[:, 4]
         'CCGCG'
 
         Or, to get part of a column,
 
-        >>> align[1:3,4]
+        >>> align[1:3, 4]
         'CG'
 
         However, in general you get a sub-alignment,
 
-        >>> print(align[1:5,3:6])
+        >>> print(align[1:5, 3:6])
         DNAAlphabet() alignment with 4 rows and 3 columns
         -CG Beta
         AGG Gamma
@@ -648,4 +648,5 @@ class MultipleSeqAlignment(_Alignment):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+
 

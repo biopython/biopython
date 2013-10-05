@@ -62,7 +62,7 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import Motif
-    >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
+    >>> for motif in Motif.parse(open("Motif/alignace.out"), "AlignAce"):
     ...     print(motif.consensus())
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
@@ -103,14 +103,14 @@ def read(handle, format):
     reading a pfm file:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
+    >>> motif = Motif.read(open("Motif/SRF.pfm"), "jaspar-pfm")
     >>> motif.consensus()
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import Motif
-    >>> motif =  Motif.read(open("Motif/meme.out"),"MEME")
+    >>> motif =  Motif.read(open("Motif/meme.out"), "MEME")
     >>> motif.consensus()
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -118,7 +118,7 @@ def read(handle, format):
     an exception is raised:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/alignace.out"),"AlignAce")
+    >>> motif = Motif.read(open("Motif/alignace.out"), "AlignAce")
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -128,7 +128,7 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import Motif
-    >>> motif = Motif.parse(open("Motif/alignace.out"),"AlignAce").next()
+    >>> motif = Motif.parse(open("Motif/alignace.out"), "AlignAce").next()
     >>> motif.consensus()
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
@@ -171,3 +171,4 @@ def _test():
 if __name__ == "__main__":
     #Run the doctests
     _test()
+

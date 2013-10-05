@@ -262,8 +262,8 @@ class Atom(object):
         Apply rotation and translation to the atomic coordinates.
 
         Example:
-                >>> rotation=rotmat(pi, Vector(1,0,0))
-                >>> translation=array((0,0,1), 'f')
+                >>> rotation=rotmat(pi, Vector(1, 0, 0))
+                >>> translation=array((0, 0, 1), 'f')
                 >>> atom.transform(rotation, translation)
 
         @param rot: A right multiplying rotation matrix
@@ -333,3 +333,4 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy>self.last_occupancy:
             self.last_occupancy=occupancy
             self.disordered_select(altloc)
+

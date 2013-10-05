@@ -177,7 +177,7 @@ degenerate bit of this pretend primer):
 
     >>> from Bio import SeqIO
     >>> records = (record for record in
-    ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff","sff")
+    ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
     ...            if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
     >>> count = SeqIO.write(records, "temp_filtered.sff", "sff")
     >>> print("Selected %i records" % count)
@@ -195,7 +195,7 @@ is just to adjust the left clip position!
     ...             record.annotations["clip_qual_left"] += len(primer)
     ...             yield record
     >>> records = SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
-    >>> count = SeqIO.write(filter_and_trim(records,"AAAGA"),
+    >>> count = SeqIO.write(filter_and_trim(records, "AAAGA"),
     ...                     "temp_filtered.sff", "sff")
     >>> print("Selected %i records" % count)
     Selected 2 records
@@ -1495,4 +1495,5 @@ if __name__ == "__main__":
     """
 
     print("Done")
+
 

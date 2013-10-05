@@ -260,9 +260,9 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     within_block_offset within the (decompressed) block (unsigned
     16 bit integer).
 
-    >>> make_virtual_offset(0,0)
+    >>> make_virtual_offset(0, 0)
     0
-    >>> make_virtual_offset(0,1)
+    >>> make_virtual_offset(0, 1)
     1
     >>> make_virtual_offset(0, 2**16 - 1)
     65535
@@ -271,21 +271,21 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     ...
     ValueError: Require 0 <= within_block_offset < 2**16, got 65536
 
-    >>> 65536 == make_virtual_offset(1,0)
+    >>> 65536 == make_virtual_offset(1, 0)
     True
-    >>> 65537 == make_virtual_offset(1,1)
+    >>> 65537 == make_virtual_offset(1, 1)
     True
     >>> 131071 == make_virtual_offset(1, 2**16 - 1)
     True
 
-    >>> 6553600000 == make_virtual_offset(100000,0)
+    >>> 6553600000 == make_virtual_offset(100000, 0)
     True
-    >>> 6553600001 == make_virtual_offset(100000,1)
+    >>> 6553600001 == make_virtual_offset(100000, 1)
     True
-    >>> 6553600010 == make_virtual_offset(100000,10)
+    >>> 6553600010 == make_virtual_offset(100000, 10)
     True
 
-    >>> make_virtual_offset(2**48,0)
+    >>> make_virtual_offset(2**48, 0)
     Traceback (most recent call last):
     ...
     ValueError: Require 0 <= block_start_offset < 2**48, got 281474976710656
@@ -814,3 +814,4 @@ if __name__ == "__main__":
     #Doing close with write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")
+

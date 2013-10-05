@@ -78,7 +78,7 @@ def rotaxis2m(theta, vector):
 
     Example:
 
-        >>> m=rotaxis(pi, Vector(1,0,0))
+        >>> m=rotaxis(pi, Vector(1, 0, 0))
         >>> rotated_vector=any_vector.left_multiply(m)
 
     @type theta: float
@@ -119,7 +119,7 @@ def refmat(p, q):
     Return a (left multiplying) matrix that mirrors p onto q.
 
     Example:
-        >>> mirror=refmat(p,q)
+        >>> mirror=refmat(p, q)
         >>> qq=p.left_multiply(mirror)
         >>> print(q)
         >>> print(qq) # q and qq should be the same
@@ -145,7 +145,7 @@ def rotmat(p, q):
     Return a (left multiplying) matrix that rotates p onto q.
 
     Example:
-        >>> r=rotmat(p,q)
+        >>> r=rotmat(p, q)
         >>> print(q)
         >>> print(p.left_multiply(r))
 
@@ -389,3 +389,4 @@ if __name__=="__main__":
     print(angle-cangle)
     print(axis-caxis)
     print("")
+

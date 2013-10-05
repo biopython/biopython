@@ -366,7 +366,7 @@ class Alignment(object):
         >>> align.add_sequence("Beta",   "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma",  "ACTGCTAGATAG")
         >>> align.add_sequence("Delta",  "ACTGCTTGCTAG")
-        >>> align.add_sequence("Epsilon","ACTGCTTGATAG")
+        >>> align.add_sequence("Epsilon", "ACTGCTTGATAG")
 
         You can access a row of the alignment as a SeqRecord using an integer
         index (think of the alignment as a list of SeqRecord objects here):
@@ -440,3 +440,4 @@ def _test():
 
 if __name__ == "__main__":
     _test()
+

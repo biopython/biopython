@@ -280,7 +280,7 @@ We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
 or FASTQ format we need to provide some quality scores. These are held as a
 list of integers (one for each base) in the letter_annotations dictionary:
 
-    >>> test.letter_annotations["phred_quality"] = [0,1,2,3,4,5,10,20,30,40]
+    >>> test.letter_annotations["phred_quality"] = [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
     >>> print(test.format("qual"))
     >Test Made up!
     0 1 2 3 4 5 10 20 30 40
@@ -330,7 +330,7 @@ format to consider which encodes Solexa scores instead of PHRED scores.
 First let's see what Biopython says if we convert the PHRED scores into Solexa
 scores (rounding to one decimal place):
 
-    >>> for q in [0,1,2,3,4,5,10,20,30,40]:
+    >>> for q in [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]:
     ...     print("PHRED %i maps to Solexa %0.1f" % (q, solexa_quality_from_phred(q)))
     PHRED 0 maps to Solexa -5.0
     PHRED 1 maps to Solexa -5.0
@@ -427,25 +427,25 @@ def solexa_quality_from_phred(phred_quality):
     Note this function will return a floating point number, it is up to you to
     round this to the nearest integer if appropriate.  e.g.
 
-    >>> print("%0.2f" % round(solexa_quality_from_phred(80),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(80), 2))
     80.00
-    >>> print("%0.2f" % round(solexa_quality_from_phred(50),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(50), 2))
     50.00
-    >>> print("%0.2f" % round(solexa_quality_from_phred(20),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(20), 2))
     19.96
-    >>> print("%0.2f" % round(solexa_quality_from_phred(10),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(10), 2))
     9.54
-    >>> print("%0.2f" % round(solexa_quality_from_phred(5),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(5), 2))
     3.35
-    >>> print("%0.2f" % round(solexa_quality_from_phred(4),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(4), 2))
     1.80
-    >>> print("%0.2f" % round(solexa_quality_from_phred(3),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(3), 2))
     -0.02
-    >>> print("%0.2f" % round(solexa_quality_from_phred(2),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(2), 2))
     -2.33
-    >>> print("%0.2f" % round(solexa_quality_from_phred(1),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(1), 2))
     -5.00
-    >>> print("%0.2f" % round(solexa_quality_from_phred(0),2))
+    >>> print("%0.2f" % round(solexa_quality_from_phred(0), 2))
     -5.00
 
     Notice that for high quality reads PHRED and Solexa scores are numerically
@@ -491,15 +491,15 @@ def phred_quality_from_solexa(solexa_quality):
     This will return a floating point number, it is up to you to round this to
     the nearest integer if appropriate.  e.g.
 
-    >>> print("%0.2f" % round(phred_quality_from_solexa(80),2))
+    >>> print("%0.2f" % round(phred_quality_from_solexa(80), 2))
     80.00
-    >>> print("%0.2f" % round(phred_quality_from_solexa(20),2))
+    >>> print("%0.2f" % round(phred_quality_from_solexa(20), 2))
     20.04
-    >>> print("%0.2f" % round(phred_quality_from_solexa(10),2))
+    >>> print("%0.2f" % round(phred_quality_from_solexa(10), 2))
     10.41
-    >>> print("%0.2f" % round(phred_quality_from_solexa(0),2))
+    >>> print("%0.2f" % round(phred_quality_from_solexa(0), 2))
     3.01
-    >>> print("%0.2f" % round(phred_quality_from_solexa(-5),2))
+    >>> print("%0.2f" % round(phred_quality_from_solexa(-5), 2))
     1.19
 
     Note that a solexa_quality less then -5 is not expected, will trigger a
@@ -555,7 +555,7 @@ def _get_sanger_quality_str(record):
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
     >>> r = SeqRecord(Seq("ACGTAN"), id="Test",
-    ...               letter_annotations = {"phred_quality":[50,40,30,20,10,0]})
+    ...               letter_annotations = {"phred_quality":[50, 40, 30, 20, 10, 0]})
     >>> _get_sanger_quality_str(r)
     'SI?5+!'
 
@@ -565,14 +565,14 @@ def _get_sanger_quality_str(record):
     it has to do the appropriate rounding - which is slower:
 
     >>> r2 = SeqRecord(Seq("ACGTAN"), id="Test2",
-    ...      letter_annotations = {"phred_quality":[50.0,40.05,29.99,20,9.55,0.01]})
+    ...      letter_annotations = {"phred_quality":[50.0, 40.05, 29.99, 20, 9.55, 0.01]})
     >>> _get_sanger_quality_str(r2)
     'SI?5+!'
 
     If your scores include a None value, this raises an exception:
 
     >>> r3 = SeqRecord(Seq("ACGTAN"), id="Test3",
-    ...               letter_annotations = {"phred_quality":[50,40,30,20,10,None]})
+    ...               letter_annotations = {"phred_quality":[50, 40, 30, 20, 10, None]})
     >>> _get_sanger_quality_str(r3)
     Traceback (most recent call last):
        ...
@@ -582,8 +582,8 @@ def _get_sanger_quality_str(record):
     scores are used in preference:
 
     >>> r4 = SeqRecord(Seq("ACGTAN"), id="Test4",
-    ...               letter_annotations = {"phred_quality":[50,40,30,20,10,0],
-    ...                                     "solexa_quality":[-5,-4,0,None,0,40]})
+    ...               letter_annotations = {"phred_quality":[50, 40, 30, 20, 10, 0],
+    ...                                     "solexa_quality":[-5, -4, 0, None, 0, 40]})
     >>> _get_sanger_quality_str(r4)
     'SI?5+!'
 
@@ -591,7 +591,7 @@ def _get_sanger_quality_str(record):
     instead (after the approriate conversion):
 
     >>> r5 = SeqRecord(Seq("ACGTAN"), id="Test5",
-    ...      letter_annotations = {"solexa_quality":[40,30,20,10,0,-5]})
+    ...      letter_annotations = {"solexa_quality":[40, 30, 20, 10, 0, -5]})
     >>> _get_sanger_quality_str(r5)
     'I?5+$"'
 
@@ -599,7 +599,7 @@ def _get_sanger_quality_str(record):
     this very fast. You can still use approximate floating point scores:
 
     >>> r6 = SeqRecord(Seq("ACGTAN"), id="Test6",
-    ...      letter_annotations = {"solexa_quality":[40.1,29.7,20.01,10,0.0,-4.9]})
+    ...      letter_annotations = {"solexa_quality":[40.1, 29.7, 20.01, 10, 0.0, -4.9]})
     >>> _get_sanger_quality_str(r6)
     'I?5+$"'
 
@@ -871,7 +871,7 @@ def FastqGeneralIterator(handle):
     >>> for (title, sequence, quality) in FastqGeneralIterator(handle):
     ...     print(title)
     ...     print("%s %s" % (sequence, quality))
-    ...
+    ... 
     071113_EAS56_0053:1:1:998:236
     TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA IIIIIIIIIIIIIIIIIIIIIIIIIIIIICII+III
     071113_EAS56_0053:1:1:182:712
@@ -1812,4 +1812,5 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)
+
 
