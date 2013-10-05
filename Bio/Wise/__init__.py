@@ -68,7 +68,8 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     """
     Returns a filehandle
     """
-    assert len(pair) == 2
+    if not pair or len(pair) == 2:
+        raise ValueError("Expected pair of values, not %r" % pair)
 
     output_file = tempfile.NamedTemporaryFile(mode='r')
     input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
