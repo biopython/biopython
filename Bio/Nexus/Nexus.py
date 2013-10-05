@@ -10,7 +10,9 @@ Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 from __future__ import print_function
+
 from Bio._py3k import zip
+from Bio._py3k import range
 
 from functools import reduce
 import copy
@@ -352,7 +354,7 @@ def combine(matrices):
         del combined.taxsets[tn]
     # previous partitions usually don't make much sense in combined matrix
     # just initiate one new partition parted by single matrices
-    combined.charpartitions = {'combined':{name:range(combined.nchar)}}
+    combined.charpartitions = {'combined':{name:list(range(combined.nchar))}}
     for n, m in matrices[1:]:    # add all other matrices
         both = [t for t in combined.taxlabels if t in m.taxlabels]
         combined_only = [t for t in combined.taxlabels if t not in both]
@@ -376,7 +378,7 @@ def combine(matrices):
             combined.taxsets.update(dict(('%s.%s' % (n, tn), ts)
                                          for tn, ts in m.taxsets.items()))
         # update new charpartition
-        combined.charpartitions['combined'][n] = range(combined.nchar, combined.nchar+m.nchar)
+        combined.charpartitions['combined'][n] = list(range(combined.nchar, combined.nchar+m.nchar))
         # update charlabels
         if m.charlabels:
             if not combined.charlabels:
@@ -1659,7 +1661,7 @@ class Nexus(object):
                     if leftgreedy or (i>0 and set[i-1]==c-1):
                         addpos = i
             if addpos > 0:
-                set[addpos:addpos] = range(x, x+d)
+                set[addpos:addpos] = list(range(x, x+d))
             return set
 
         if pos < 0 or pos > self.nchar:

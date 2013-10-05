@@ -36,6 +36,8 @@ and for the drastic (n can be arbitrary to the length of the genome!):
 # standard modules
 import random
 
+from Bio._py3k import range
+
 
 class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.
@@ -174,7 +176,7 @@ class InterleaveCrossover(GeneralPointCrossover):
         GeneralPointCrossover.__init__(self, 0, crossover_prob)
 
     def _generate_locs(self, bound):
-        return range(-1, bound+1)
+        return list(range(-1, bound+1))
 
     def _crossover( self, x, no, locs ):
         s = no[ x ].genome[ 0:1 ]

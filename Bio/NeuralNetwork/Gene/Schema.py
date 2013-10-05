@@ -21,7 +21,8 @@ from __future__ import print_function
 import random
 import re
 
-# biopython
+from Bio._py3k import range
+
 from Bio import Alphabet
 from Bio.Seq import MutableSeq
 
@@ -712,7 +713,7 @@ class SchemaFactory(object):
         for add_ambiguous in range(num_ambiguous):
             # add an ambiguous position in a new place in the motif
             while True:
-                ambig_pos = random.choice(range(len(new_schema_list)))
+                ambig_pos = random.choice(list(range(len(new_schema_list))))
 
                 # only add a position if it isn't already ambiguous
                 # otherwise, we'll try again

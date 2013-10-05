@@ -9,6 +9,8 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
+from Bio._py3k import range
+
 
 class AbstractDPAlgorithms(object):
     """An abstract class to calculate forward and backward probabilities.
@@ -142,7 +144,7 @@ class AbstractDPAlgorithms(object):
         # -- recursion
         # first loop over the training sequence backwards
         # Recursion step: (i = L - 1 ... 1)
-        all_indexes = range(len(self._seq.emissions) - 1)
+        all_indexes = list(range(len(self._seq.emissions) - 1))
         all_indexes.reverse()
         for i in all_indexes:
             # now loop over the letters in the state path
