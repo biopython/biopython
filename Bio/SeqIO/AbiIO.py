@@ -16,8 +16,6 @@ http://www.appliedbiosystem.com/support/software_community/ABIF_File_Format.pdf
 
 __docformat__ = "epytext en"
 
-from future_builtins import zip
-
 import datetime
 import struct
 
@@ -27,7 +25,9 @@ from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from Bio._py3k import _bytes_to_string, _as_bytes
+from Bio._py3k import zip
 
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number

@@ -79,8 +79,8 @@
         """
 
 from __future__ import print_function
-from future_builtins import zip
-from future_builtins import filter
+from Bio._py3k import zip
+from Bio._py3k import filter
 
 import re
 import itertools

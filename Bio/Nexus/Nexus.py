@@ -10,7 +10,7 @@ Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 from __future__ import print_function
-from future_builtins import zip
+from Bio._py3k import zip
 
 from functools import reduce
 import copy

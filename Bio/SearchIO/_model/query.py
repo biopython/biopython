@@ -6,12 +6,13 @@
 """Bio.SearchIO object to model search results from a single query."""
 
 from __future__ import print_function
-from future_builtins import filter
 
 from copy import deepcopy
 from itertools import chain
 
 from Bio._py3k import OrderedDict
+from Bio._py3k import filter
+
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 

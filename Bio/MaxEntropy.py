@@ -10,8 +10,9 @@ Uses Improved Iterative Scaling.
 #TODO Define terminology
 
 from __future__ import print_function
-from future_builtins import map
 from functools import reduce
+
+from Bio._py3k import map
 
 import numpy
 
