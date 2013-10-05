@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-from future_builtins import zip
-
-import copy
-import sys
-
+# Copyright 2013 by Iddo Friedberg idoerg@gmail.com
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Parsers for the GAF, GPA and GPI formats from UniProt-GOA.
 
 Uniprot-GOA README + GAF format description:
@@ -16,13 +16,11 @@ ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_association_readme
 
 gp_information (GPI format) README:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
-
-(c) 2013 Iddo Friedberg idoerg@gmail.com
-http://iddo-friedberg.net
-Distributed under Biopython license.
-
 """
+from future_builtins import zip
 
+import copy
+import sys
 
 # GAF: GO Annotation Format
 #
