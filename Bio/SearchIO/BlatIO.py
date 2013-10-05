@@ -205,11 +205,10 @@ def _list_from_csv(csv_string, caster=None):
     caster -- Cast function to use on each list item.
 
     """
-    filtered = (x for x in filter(None, csv_string.split(',')))
     if caster is None:
-        return list(filtered)
+        return [x for x in csv_string.split(',') if x]
     else:
-        return [caster(x) for x in filtered]
+        return [caster(x) for x in csv_string.split(',') if x]
 
 
 def _reorient_starts(starts, blksizes, seqlen, strand):
@@ -400,7 +399,7 @@ class BlatPslParser(object):
     def _parse_row(self):
         """Returns a dictionary of parsed column values."""
         assert self.line
-        cols = filter(None, self.line.strip().split('\t'))
+        cols = [x for x in self.line.strip().split('\t') if x]
         self._validate_cols(cols)
 
         psl = {}
@@ -540,11 +539,11 @@ class BlatPslIndexer(SearchIndexer):
         while True:
             end_offset = handle.tell()
 
-            cols = line.strip().split(tab_char)
+            cols = [x for x in line.strip().split(tab_char) if x]
             if qresult_key is None:
-                qresult_key = list(filter(None, cols))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = list(filter(None, cols))[query_id_idx]
+                curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
                     yield _bytes_to_string(qresult_key), start_offset, \
@@ -571,11 +570,11 @@ class BlatPslIndexer(SearchIndexer):
             line = handle.readline()
             if not line:
                 break
-            cols = line.strip().split(tab_char)
+            cols = [x for x in line.strip().split(tab_char) if x]
             if qresult_key is None:
-                qresult_key = list(filter(None, cols))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = list(filter(None, cols))[query_id_idx]
+                curr_key = cols[query_id_idx]
                 if curr_key != qresult_key:
                     break
             qresult_raw += line

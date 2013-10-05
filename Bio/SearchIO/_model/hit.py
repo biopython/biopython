@@ -6,6 +6,7 @@
 """Bio.SearchIO object to model a single database hit."""
 
 from __future__ import print_function
+from future_builtins import filter
 
 from itertools import chain
 
@@ -334,7 +335,7 @@ class Hit(_BaseSearchObject):
                   0   8.9e-20     100.47      60           [1:61]                [13:73]
 
         """
-        hsps = filter(func, self.hsps)
+        hsps = list(filter(func, self.hsps))
         if hsps:
             obj = self.__class__(hsps)
             self._transfer_attrs(obj)

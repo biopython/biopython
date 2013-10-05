@@ -182,7 +182,7 @@ class Hmmer3TextParser(object):
                 return hit_list
             # entering hit results row
             # parse the columns into a list
-            row = filter(None, self.line.strip().split(' '))
+            row = [x for x in self.line.strip().split(' ') if x]
             # join the description words if it's >1 word
             if len(row) > 10:
                 row[9] = ' '.join(row[9:])
@@ -248,7 +248,7 @@ class Hmmer3TextParser(object):
                     hit_list.append(hit)
                     break
 
-                parsed = filter(None, self.line.strip().split(' '))
+                parsed = [x for x in self.line.strip().split(' ') if x]
                 assert len(parsed) == 16
                 # parsed column order:
                 # index, is_included, bitscore, bias, evalue_cond, evalue

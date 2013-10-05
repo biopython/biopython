@@ -6,6 +6,7 @@
 """Bio.SearchIO object to model search results from a single query."""
 
 from __future__ import print_function
+from future_builtsin import filter
 
 from copy import deepcopy
 from itertools import chain
@@ -500,7 +501,7 @@ class QueryResult(_BaseSearchObject):
             True
 
         """
-        hits = filter(func, self.hits)
+        hits = list(filter(func, self.hits))
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -567,12 +568,12 @@ class QueryResult(_BaseSearchObject):
         function.
 
         `hsp_filter` is the same as `hit_filter`, except that it filters
-        directly on each HSP object in every Hit. If a the filtering removes
-        all HSP object in a given Hit, the entire Hit will be discarded. This
+        directly on each HSP object in every Hit. If the filtering removes
+        all HSP objects in a given Hit, the entire Hit will be discarded. This
         will result in the QueryResult having less Hit after filtering.
 
         """
-        hits = filter(None, (hit.filter(func) for hit in self.hits))
+        hits = [x for x in (hit.filter(func) for hit in self.hits) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -585,7 +586,7 @@ class QueryResult(_BaseSearchObject):
         function to all HSP objects in every Hit, instead of the Hit objects.
 
         """
-        hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
+        hits = [x for x in (hit.map(func) for hit in list(self.hits)[:]) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj

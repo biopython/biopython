@@ -36,7 +36,7 @@ class Hmmer3TabParser(object):
 
     def _parse_row(self):
         """Returns a dictionary of parsed row values."""
-        cols = filter(None, self.line.strip().split(' '))
+        cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
         if len(cols) > 19:
@@ -174,11 +174,11 @@ class Hmmer3TabIndexer(SearchIndexer):
             if not line:
                 break
 
-            cols = line.strip().split(split_mark)
+            cols = [x for x in line.strip().split(split_mark) if x]
             if qresult_key is None:
-                qresult_key = list(filter(None, cols))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = list(filter(None, cols))[query_id_idx]
+                curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
@@ -206,7 +206,7 @@ class Hmmer3TabIndexer(SearchIndexer):
             line = handle.readline()
             if not line:
                 break
-            cols = list(filter(None, line.strip().split(split_mark)))
+            cols = [x for x in line.strip().split(split_mark) if x]
             if qresult_key is None:
                 qresult_key = cols[query_id_idx]
             else:
