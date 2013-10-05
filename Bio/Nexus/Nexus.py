@@ -10,6 +10,7 @@ Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 from __future__ import print_function
+from future_builtins import zip
 
 from functools import reduce
 import copy
@@ -252,15 +253,12 @@ def get_start_end(sequence, skiplist=['-', '?']):
 
 def _sort_keys_by_values(p):
     """Returns a sorted list of keys of p sorted by values of p."""
-    startpos = sorted((p[pn], pn) for pn in p if p[pn])
-    # parenthisis added because of py3k
-    return (zip(*startpos))[1]
+    return sorted((pn for pn in p if p[pn]), key = lambda pn: p[pn])
 
 
 def _make_unique(l):
     """Check that all values in list are unique and return a pruned and sorted list."""
-    l=sorted(set(l))
-    return l
+    return sorted(set(l))
 
 
 def _unique_label(previous_labels, label):
@@ -1548,18 +1546,17 @@ class Nexus(object):
     def crop_matrix(self,matrix=None, delete=[], exclude=[]):
         """Return a matrix without deleted taxa and excluded characters."""
         if not matrix:
-            matrix=self.matrix
+            matrix = self.matrix
         if [t for t in delete if not self._check_taxlabels(t)]:
             raise NexusError('Unknown taxa: %s'
                              % ', '.join(set(delete).difference(self.taxlabels)))
-        if exclude!=[]:
-            undelete=[t for t in self.taxlabels if t in matrix and t not in delete]
+        if exclude != []:
+            undelete = [t for t in self.taxlabels if t in matrix and t not in delete]
             if not undelete:
                 return {}
-            m=[str(matrix[k]) for k in undelete]
-            zipped_m=zip(*m)
-            sitesm=[s for i, s in enumerate(zipped_m) if i not in exclude]
-            if sitesm==[]:
+            m = [str(matrix[k]) for k in undelete]
+            sitesm = [s for i, s in enumerate(zip(*m)) if i not in exclude]
+            if sitesm == []:
                 return dict((t, Seq('', self.alphabet)) for t in undelete)
             else:
                 m = [Seq(s, self.alphabet) for s in (''.join(x) for x in zip(*sitesm))]
@@ -1571,22 +1568,22 @@ class Nexus(object):
         """Return a bootstrapped matrix."""
         if not matrix:
             matrix=self.matrix
-        seqobjects=isinstance(matrix[matrix.keys()[0]], Seq)         # remember if Seq objects
-        cm=self.crop_matrix(delete=delete, exclude=exclude)          # crop data out
+        seqobjects = isinstance(matrix[matrix.keys()[0]], Seq)      # remember if Seq objects
+        cm = self.crop_matrix(delete=delete, exclude=exclude)       # crop data out
         if not cm:                                                  # everything deleted?
             return {}
-        elif len(cm[cm.keys()[0]])==0:                              # everything excluded?
+        elif len(cm[cm.keys()[0]]) == 0:                            # everything excluded?
             return cm
         undelete=[t for t in self.taxlabels if t in cm]
         if seqobjects:
-            sitesm=zip(*[str(cm[t]) for t in undelete])
-            alphabet=matrix[matrix.keys()[0]].alphabet
+            sitesm = list(zip(*[str(cm[t]) for t in undelete]))
+            alphabet = matrix[matrix.keys()[0]].alphabet
         else:
-            sitesm=zip(*[cm[t] for t in undelete])
-        bootstrapsitesm=[sitesm[random.randint(0, len(sitesm)-1)] for i in range(len(sitesm))]
+            sitesm = list(zip(*[cm[t] for t in undelete]))
+        bootstrapsitesm = [sitesm[random.randint(0, len(sitesm)-1)] for i in range(len(sitesm))]
         bootstrapseqs = [''.join(x) for x in zip(*bootstrapsitesm)]
         if seqobjects:
-            bootstrapseqs=[Seq(s, alphabet) for s in bootstrapseqs]
+            bootstrapseqs = [Seq(s, alphabet) for s in bootstrapseqs]
         return dict(zip(undelete, bootstrapseqs))
 
     def add_sequence(self, name, sequence):
@@ -1640,28 +1637,24 @@ class Nexus(object):
                 set[addpos:addpos]=range(x, x+d)
             return set
 
-        if pos<0 or pos>self.nchar:
+        if pos < 0 or pos > self.nchar:
             raise NexusError('Illegal gap position: %d' % pos)
-        if n==0:
+        if n == 0:
             return
-        if self.taxlabels:
-            #python 2.3 does not support zip(*[])
-            sitesm=zip(*[str(self.matrix[t]) for t in self.taxlabels])
-        else:
-            sitesm=[]
-        sitesm[pos:pos]=[['-']*len(self.taxlabels)]*n
+        sitesm = list(zip(*[str(self.matrix[t]) for t in self.taxlabels]))
+        sitesm[pos:pos] = [['-']*len(self.taxlabels)] * n
         mapped = [''.join(x) for x in zip(*sitesm)]
-        listed=[(taxon, Seq(mapped[i], self.alphabet)) for i, taxon in enumerate(self.taxlabels)]
-        self.matrix=dict(listed)
-        self.nchar+=n
+        listed = [(taxon, Seq(mapped[i], self.alphabet)) for i, taxon in enumerate(self.taxlabels)]
+        self.matrix = dict(listed)
+        self.nchar += n
         # now adjust character sets
         for i, s in self.charsets.iteritems():
-            self.charsets[i]=_adjust(s, pos, n, leftgreedy=leftgreedy)
+            self.charsets[i] = _adjust(s, pos, n, leftgreedy=leftgreedy)
         for p in self.charpartitions:
             for sp, s in self.charpartitions[p].iteritems():
-                self.charpartitions[p][sp]=_adjust(s, pos, n, leftgreedy=leftgreedy)
+                self.charpartitions[p][sp] = _adjust(s, pos, n, leftgreedy=leftgreedy)
         # now adjust character state labels
-        self.charlabels=self._adjust_charlabels(insert=[pos]*n)
+        self.charlabels = self._adjust_charlabels(insert=[pos]*n)
         return self.charlabels
 
     def _adjust_charlabels(self,exclude=None,insert=None):
@@ -1702,9 +1695,8 @@ class Nexus(object):
         gap=set(self.gap)
         if include_missing:
             gap.add(self.missing)
-        sitesm=zip(*[str(self.matrix[t]) for t in self.taxlabels])
-        gaponly=[i for i, site in enumerate(sitesm) if set(site).issubset(gap)]
-        return gaponly
+        sitesm = zip(*[str(self.matrix[t]) for t in self.taxlabels])
+        return [i for i, site in enumerate(sitesm) if set(site).issubset(gap)]
 
     def terminal_gap_to_missing(self,missing=None,skip_n=True):
         """Replaces all terminal gaps with missing character.
