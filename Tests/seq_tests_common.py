@@ -1,6 +1,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+from Bio._py3k import range
+
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
@@ -210,7 +212,7 @@ def compare_sequence(old, new):
     #this takes far far far too long to run!
     #Test both positive and negative indices
     if ln < 50:
-        indices = range(-ln, ln)
+        indices = list(range(-ln, ln))
     else:
         #A selection of end cases, and the mid point
         indices = [-ln, -ln+1, -(ln//2), -1, 0, 1, ln//2, ln-2, ln-1]

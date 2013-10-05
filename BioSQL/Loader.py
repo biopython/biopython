@@ -27,6 +27,7 @@ from Bio import Entrez
 from Bio.Seq import UnknownSeq
 
 from Bio._py3k import _is_int_or_long
+from Bio._py3k import range
 
 
 class DatabaseLoader:
@@ -58,7 +59,7 @@ class DatabaseLoader:
         self._load_comment(record, bioentry_id)
         self._load_dbxrefs(record, bioentry_id)
         references = record.annotations.get('references', ())
-        for reference, rank in zip(references, range(len(references))):
+        for reference, rank in zip(references, list(range(len(references)))):
             self._load_reference(reference, rank, bioentry_id)
         self._load_annotations(record, bioentry_id)
         for seq_feature_num in range(len(record.features)):
