@@ -34,22 +34,6 @@ import time
 import lib2to3.main
 from io import StringIO
 
-def avoid_bug19111(filename):
-    """Avoid this bug: http://bugs.python.org/issue19111"""
-    #Faster if we only write out the file if it needed changing
-    lines = list(open(filename, "rU"))
-    fix = False
-    for line in lines:
-        if line.startswith("from future_builtins import "):
-            fix = True
-            break
-    if not fix:
-        return
-    print("Applying issue 19111 fix to %s" % filename)
-    lines = [l for l in lines if not l.startswith("from future_builtins import ")]
-    with open(filename, "w") as h:
-        for l in lines:
-            h.write(l)
 
 def run2to3(filenames):
     stderr = sys.stderr
@@ -60,8 +44,6 @@ def run2to3(filenames):
         sys.stderr = handle
         while filenames:
             filename = filenames.pop(0)
-            #Remove 'from future_builtins import ...' due to bug 19111,
-            avoid_bug19111(filename)
             #TODO - Configurable options per file?
             print("Converting %s" % filename)
             start = time.time()
