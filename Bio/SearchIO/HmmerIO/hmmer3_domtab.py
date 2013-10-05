@@ -20,7 +20,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
     def _parse_row(self):
         """Returns a dictionary of parsed row values."""
         assert self.line
-        cols = filter(None, self.line.strip().split(' '))
+        cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 23, we have extra description columns
         # combine them all into one string in the 19th column
         if len(cols) > 23:

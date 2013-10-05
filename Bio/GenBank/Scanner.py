@@ -262,7 +262,7 @@ class InsdcScanner(object):
         Note that no whitespace is removed.
         """
         #Skip any blank lines
-        iterator = iter(filter(None, lines))
+        iterator = (x for x in lines if x)
         try:
             line = next(iterator)
 
@@ -1229,7 +1229,7 @@ class GenBankScanner(InsdcScanner):
         #VERSION (version and gi)
         #REFERENCE (eference_num and reference_bases)
         #ORGANISM (organism and taxonomy)
-        lines = filter(None, lines)
+        lines = [_f for _f in lines if _f]
         lines.append("")  # helps avoid getting StopIteration all the time
         line_iter = iter(lines)
         try:

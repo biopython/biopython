@@ -778,7 +778,7 @@ class Astral(object):
         if filename:
             file_handle.close()
 
-        doms = filter( lambda a: a[0]=='d', doms )
+        doms = [a for a in doms if a[0]=='d']
         doms = [self.scop.getDomainBySid(x) for x in doms]
         return doms
 

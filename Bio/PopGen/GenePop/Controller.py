@@ -41,12 +41,12 @@ def _read_allele_freq_table(f):
         if 'No data' in l:
             return None, None
         l = f.readline()
-    alleles = filter(lambda x: x != '', f.readline().rstrip().split(" "))
+    alleles = [x for x in f.readline().rstrip().split(" ") if x != '']
     alleles = [_gp_int(x) for x in alleles]
     l = f.readline().rstrip()
     table = []
     while l != "":
-        line = filter(lambda x: x != '', l.split(" "))
+        line = [x for x in l.split(" ") if x != '']
         try:
             table.append(
                 (line[0],
@@ -68,7 +68,7 @@ def _read_table(f, funs):
         l = f.readline().rstrip()
     l = f.readline().rstrip()
     while '===' not in l and '---' not in l and l != "":
-        toks = filter(lambda x: x != "", l.split(" "))
+        toks = [x for x in l.split(" ") if x != ""]
         line = []
         for i in range(len(toks)):
             try:
@@ -85,7 +85,7 @@ def _read_triangle_matrix(f):
     l = f.readline().rstrip()
     while l != "":
         matrix.append(
-            [_gp_float(x) for x in filter(lambda y: y != "", l.split(" "))])
+            [_gp_float(x) for x in [y for y in l.split(" ") if y != ""]])
         l = f.readline().rstrip()
     return matrix
 
@@ -95,10 +95,10 @@ def _read_headed_triangle_matrix(f):
     header = f.readline().rstrip()
     if '---' in header or '===' in header:
         header = f.readline().rstrip()
-    nlines = len(filter(lambda x:x != '', header.split(' '))) - 1
+    nlines = len([x for x in header.split(' ') if x != '']) - 1
     for line_pop in range(nlines):
         l = f.readline().rstrip()
-        vals = filter(lambda x:x != '', l.split(' ')[1:])
+        vals = [x for x in l.split(' ')[1:] if x != '']
         clean_vals = []
         for val in vals:
             try:
@@ -327,7 +327,7 @@ class GenePopController(object):
         f.readline()
         f.readline()
         l = f.readline().rstrip()
-        p, se, switches = tuple(_gp_float(x) for x in filter(lambda y: y != "", l.split(" ")))
+        p, se, switches = tuple(_gp_float(x) for x in [y for y in l.split(" ") if y != ""])
         f.close()
         return pop_p, loc_p, (p, se, switches)
 
@@ -445,7 +445,7 @@ class GenePopController(object):
             if l == "":
                 self.done = True
                 raise StopIteration
-            toks = filter(lambda x: x != "", l.split(" "))
+            toks = [x for x in l.split(" ") if x != ""]
             pop, locus1, locus2 = toks[0], toks[1], toks[2]
             if not hasattr(self, "start_locus1"):
                 start_locus1, start_locus2 = locus1, locus2
@@ -462,7 +462,7 @@ class GenePopController(object):
             if l == "":
                 self.done = True
                 raise StopIteration
-            toks = filter(lambda x: x != "", l.split(" "))
+            toks = [x for x in l.split(" ") if x != ""]
             locus1, locus2 = toks[0], toks[2]
             try:
                 chi2, df, p = _gp_float(toks[3]), _gp_int(toks[4]), _gp_float(toks[5])
@@ -646,8 +646,7 @@ class GenePopController(object):
                 freq_fis={}
                 overall_fis = None
                 while "----" not in l:
-                    vals = filter(lambda x: x!='',
-                            l.rstrip().split(' '))
+                    vals = [x for x in l.rstrip().split(' ') if x!='']
                     if vals[0]=="Tot":
                         overall_fis = _gp_int(vals[1]), \
                                 _gp_float(vals[2]), _gp_float(vals[3])
@@ -707,7 +706,7 @@ class GenePopController(object):
                     fis_table = _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
                     self.stream.readline()
                     avg_qinter, avg_fis = tuple(_gp_float(x) for x in
-                                                filter(lambda y:y != "", self.stream.readline().split(" ")))
+                                                [y for y in self.stream.readline().split(" ") if y != ""])
                     return locus, fis_table, avg_qinter, avg_fis
                 l = self.stream.readline()
             self.done = True
@@ -745,7 +744,7 @@ class GenePopController(object):
         l = f.readline()
         while l != '':
             if l.startswith('           All:'):
-                toks=filter(lambda x:x!="", l.rstrip().split(' '))
+                toks = [x for x in l.rstrip().split(' ') if x != ""]
                 try:
                     allFis = _gp_float(toks[1])
                 except ValueError:

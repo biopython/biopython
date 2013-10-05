@@ -333,8 +333,7 @@ class FastaM10Parser(object):
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
                     self.line = self.handle.readline()
-                    qresult.target = list(filter(None,
-                            self.line.split(' ')))[1].strip()
+                    qresult.target = [x for x in self.line.split(' ') if x][1].strip()
                     if desc is not None:
                         qresult.description = desc
                     # set values from preamble

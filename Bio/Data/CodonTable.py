@@ -77,7 +77,7 @@ class CodonTable(object):
         else:
             answer = "Table ID unknown"
         if self.names:
-            answer += " " + ", ".join(filter(None, self.names))
+            answer += " " + ", ".join([x for x in self.names if x])
 
         #Use the main four letters (and the conventional ordering)
         #even for ambiguous tables

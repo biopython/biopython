@@ -562,9 +562,7 @@ class _BaseGenBankConsumer(object):
         """Replace multiple spaces in the passed text with single spaces.
         """
         # get rid of excessive spaces
-        text_parts = text.split(" ")
-        text_parts = filter(None, text_parts)
-        return ' '.join(text_parts)
+        return ' '.join(x for x in text.split(" ") if x)
 
     def _remove_spaces(self, text):
         """Remove all spaces from the passed text.

@@ -162,7 +162,7 @@ class PhylipIterator(AlignmentIterator):
 
     def _is_header(self, line):
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             return False  # First line should have two integers
         try:
@@ -200,7 +200,7 @@ class PhylipIterator(AlignmentIterator):
         if not line:
             raise StopIteration
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
@@ -385,7 +385,7 @@ class SequentialPhylipIterator(PhylipIterator):
         if not line:
             raise StopIteration
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
