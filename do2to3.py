@@ -65,12 +65,59 @@ def run2to3(filenames):
             #TODO - Configurable options per file?
             print("Converting %s" % filename)
             start = time.time()
-            args = ["--nofix=long",
-                    "--nofix=print", #Not using old print statement
-                    "--nofix=reduce", #Using 'from functools import reduce'
-                    "--nofix=execfile", #Not using old exec statement
-                    "--nofix=imports", #sibling imports as relative imports
-                    "--no-diffs", "-n", "-w"]
+            args = ["--no-diffs",
+                    "--fix=apply",
+                    "--fix=basestring",
+                    "--fix=buffer",
+                    "--fix=callable",
+                    "--fix=dict",
+                    "--fix=except",
+                    #"--fix=exec", -- we avoid the exec statement
+                    "--fix=execfile",
+                    "--fix=exitfunc",
+                    "--fix=filter",
+                    "--fix=funcattrs",
+                    "--fix=future",
+                    "--fix=getcwdu",
+                    "--fix=has_key",
+                    "--fix=idioms",
+                    "--fix=import",
+                    "--fix=imports",
+                    "--fix=imports2",
+                    "--fix=input",
+                    "--fix=intern",
+                    "--fix=isinstance",
+                    "--fix=itertools",
+                    "--fix=itertools_imports",
+                    #"--fix=long",
+                    "--fix=map",
+                    "--fix=metaclass",
+                    "--fix=methodattrs",
+                    "--fix=ne",
+                    "--fix=next",
+                    "--fix=nonzero",
+                    "--fix=numliterals",
+                    "--fix=operator",
+                    "--fix=paren",
+                    #"--fix=print",  -- we avoid the print statement
+                    "--fix=raise",
+                    "--fix=raw_input",
+                    #"--fix=reduce", -- already using 'from functools import reduce'
+                    "--fix=renames",
+                    #"--fix=repr", -- we avoid the old style back-ticks
+                    "--fix=set_literal",
+                    "--fix=standarderror",
+                    "--fix=sys_exc",
+                    "--fix=throw",
+                    "--fix=tuple_params",
+                    "--fix=types",
+                    "--fix=unicode",
+                    "--fix=urllib",
+                    #"--fix=ws_comma", -- optional fixer
+                    "--fix=xrange",
+                    "--fix=xreadlines",
+                    "--fix=zip",
+                    "-n", "-w"]
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
                 sys.stderr = stderr
