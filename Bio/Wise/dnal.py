@@ -13,6 +13,7 @@
 
 from __future__ import print_function
 from future_builtins import zip
+from future_builtins import map
 
 import commands
 import itertools
