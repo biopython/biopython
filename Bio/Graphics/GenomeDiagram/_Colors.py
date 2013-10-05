@@ -147,7 +147,7 @@ class ColorTranslator(object):
             value = int(value)
         except ValueError:
             if value.count('.'):                           # dot-delimited
-                value = int(artemis_color.split('.',1)[0]) # Use only first integer
+                value = int(artemis_color.split('.', 1)[0]) # Use only first integer
             else:
                 raise
         if value in self._artemis_colorscheme:

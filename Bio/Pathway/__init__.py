@@ -101,7 +101,7 @@ class Reaction(object):
     def __repr__(self):
         """Returns a debugging string representation of self."""
         return "Reaction(" + \
-               ",".join(map(repr,[self.reactants,
+               ",".join(map(repr, [self.reactants,
                                   self.catalysts,
                                   self.data,
                                   self.reversible])) + ")"
@@ -164,7 +164,7 @@ class System(object):
 
     def __repr__(self):
         """Returns a debugging string representation of self."""
-        return "System(" + ",".join(map(repr,self.__reactions)) + ")"
+        return "System(" + ",".join(map(repr, self.__reactions)) + ")"
 
     def __str__(self):
         """Returns a string representation of self."""
@@ -190,7 +190,7 @@ class System(object):
 
     def species(self):
         """Returns a list of the species in this system."""
-        return sorted(set(reduce(lambda s,x: s + x,
+        return sorted(set(reduce(lambda s, x: s + x,
                           [x.species() for x in self.reactions()], [])))
 
     def stochiometry(self):

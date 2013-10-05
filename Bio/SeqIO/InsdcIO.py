@@ -336,7 +336,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
         location = _insdc_location_string(feature.location, record_length)
-        f_type = feature.type.replace(" ","_")
+        f_type = feature.type.replace(" ", "_")
         line = (self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT] \
                + self._wrap_location(location) + "\n"
         self.handle.write(line)

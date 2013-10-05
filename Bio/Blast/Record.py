@@ -238,7 +238,7 @@ class MultipleAlignment(object):
                 n += 1
 
         generic = Generic.Alignment(alphabet)
-        for (name,seq) in zip(seq_names,seq_parts):
+        for (name, seq) in zip(seq_names, seq_parts):
             generic.add_sequence(name, seq)
 
         return generic

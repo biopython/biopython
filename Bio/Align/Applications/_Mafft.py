@@ -80,7 +80,7 @@ class MafftCommandline(AbstractCommandline):
     Last checked against version: MAFFT v6.717b (2009/12/03)
     """
     def __init__(self, cmd="mafft", **kwargs):
-        BLOSUM_MATRICES = ["30","45","62","80"]
+        BLOSUM_MATRICES = ["30", "45", "62", "80"]
         self.parameters = \
             [
             #**** Algorithm ****

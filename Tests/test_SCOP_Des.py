@@ -47,7 +47,7 @@ class DesTests(unittest.TestCase):
     def testRecord(self):
         """Test one record in detail"""
         recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
-        recFields = (49268,'sp','b.1.2.1','','Human (Homo sapiens)')
+        recFields = (49268, 'sp', 'b.1.2.1', '', 'Human (Homo sapiens)')
 
         record = Des.Record(recLine)
         self.assertEqual(record.sunid, recFields[0])

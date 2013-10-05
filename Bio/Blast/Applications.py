@@ -457,15 +457,15 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                     "(differs from classic BLAST which used 7 for XML).",
                     equate=False),
                     #TODO - Document and test the column options
-            _Switch(["-show_gis","show_gis"],
+            _Switch(["-show_gis", "show_gis"],
                     "Show NCBI GIs in deflines?"),
-            _Option(["-num_descriptions","num_descriptions"],
+            _Option(["-num_descriptions", "num_descriptions"],
                     """Number of database sequences to show one-line descriptions for.
 
                     Integer argument (at least zero). Default is 500.
                     See also num_alignments.""",
                     equate=False),
-            _Option(["-num_alignments","num_alignments"],
+            _Option(["-num_alignments", "num_alignments"],
                     """Number of database sequences to show num_alignments for.
 
                     Integer argument (at least zero). Default is 200.
@@ -493,7 +493,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible."
-                                         % (a,b))
+                                         % (a, b))
 
 
 class _NcbiblastCommandline(_NcbibaseblastCommandline):
@@ -520,7 +520,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-evalue", "evalue"],
                     "Expectation value cutoff.",
                     equate=False),
-            _Option(["-word_size","word_size"],
+            _Option(["-word_size", "word_size"],
                     """Word size for wordfinder algorithm.
 
                     Integer. Minimum 2.""",
@@ -699,7 +699,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
     def _validate(self):
         incompatibles = {"subject_loc":["db", "gilist", "negative_gilist", "seqidlist", "remote"],
-                         "culling_limit":["best_hit_overhang","best_hit_score_edge"],
+                         "culling_limit":["best_hit_overhang", "best_hit_score_edge"],
                          "subject":["db", "gilist", "negative_gilist", "seqidlist"]}
         self._validate_incompatibilities(incompatibles)
         _NcbiblastCommandline._validate(self)
@@ -891,7 +891,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
                     Allowed values: 'coding', 'coding_and_optimal' or 'optimal'
                     Requires: template_length.""",
-                    checker_function=lambda value : value in ['coding', 'coding_and_optimal','optimal'],
+                    checker_function=lambda value : value in ['coding', 'coding_and_optimal', 'optimal'],
                     equate=False),
             _Option(["-template_length", "template_length"],
                     """Discontiguous MegaBLAST template length (integer).
@@ -899,7 +899,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Allowed values: 16, 18, 21
 
                     Requires: template_type.""",
-                    checker_function=lambda value : value in [16,18,21,'16','18','21'],
+                    checker_function=lambda value : value in [16, 18, 21, '16', '18', '21'],
                     equate=False),
             #Extension options:
             _Switch(["-no_greedy", "no_greedy"],
@@ -1268,10 +1268,10 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"num_iterations":["remote"],
-                         "in_msa":["in_pssm", "query"],
-                         "in_pssm":["in_msa","query","phi_pattern"],
-                         "ignore_msa_master":["msa_master_idx", "in_pssm",
+        incompatibles = {"num_iterations": ["remote"],
+                         "in_msa": ["in_pssm", "query"],
+                         "in_pssm": ["in_msa", "query", "phi_pattern"],
+                         "ignore_msa_master": ["msa_master_idx", "in_pssm",
                                  "query", "query_loc", "phi_pattern"],
                          }
         self._validate_incompatibilities(incompatibles)
@@ -1348,7 +1348,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"culling_limit":["best_hit_overhang","best_hit_score_edge"]}
+        incompatibles = {"culling_limit":["best_hit_overhang", "best_hit_score_edge"]}
         self._validate_incompatibilities(incompatibles)
         _NcbiblastCommandline._validate(self)
 

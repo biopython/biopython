@@ -23,7 +23,7 @@ class TestMedline(unittest.TestCase):
         self.assertEqual(record["PUBM"], "Print")
         self.assertEqual(record["IS"], "1467-5463 (Print)")
         self.assertEqual(record["VI"], "3")
-        self.assertEqual(record["IP"] , "3")
+        self.assertEqual(record["IP"], "3")
         self.assertEqual(record["DP"], "2002 Sep")
         self.assertEqual(record["TI"], "The Bio* toolkits--a brief overview.")
         self.assertEqual(record["PG"], "296-302")

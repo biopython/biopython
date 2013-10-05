@@ -32,32 +32,32 @@ test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 # list of formats, exception type, exception message).
 test_records = [
     ([], "zero records", {}),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma"),
-      SeqRecord(Seq("DITHGVG",Alphabet.generic_protein), id="delta")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma"),
+      SeqRecord(Seq("DITHGVG", Alphabet.generic_protein), id="delta")],
      "three peptides of different lengths", []),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma")],
      "three proteins alignment", []),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",Alphabet.generic_dna), id="X"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",Alphabet.generic_dna), id="Y"),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",Alphabet.generic_dna), id="Z")],
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", Alphabet.generic_dna), id="X"),
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", Alphabet.generic_dna), id="Y"),
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
      "three DNA sequence alignment", []),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",Alphabet.generic_dna), id="X",
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", Alphabet.generic_dna), id="X",
                 name="The\nMystery\rSequece:\r\nX"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",Alphabet.generic_dna), id="Y",
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", Alphabet.generic_dna), id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",Alphabet.generic_dna), id="Z")],
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
      "3 DNA seq alignment with CR/LF in name/descr",
       [(["genbank"], ValueError, r"Locus identifier 'The\nMystery\rSequece:\r\nX' is too long")]),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record",
-     [(["stockholm"],ValueError,"Duplicate record identifier: Beta"),
-      (["phylip","phylip-relaxed","phylip-sequential"],ValueError,"Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
+     [(["stockholm"], ValueError, "Duplicate record identifier: Beta"),
+      (["phylip", "phylip-relaxed", "phylip-sequential"], ValueError, "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
@@ -144,7 +144,7 @@ for (records, descr, errs) in test_records:
             f.__doc__ = "%s for %s" % (format, descr)
             return f
         setattr(WriterTests,
-                "test_%s_%s" % (format, descr.replace(" ","_")),
+                "test_%s_%s" % (format, descr.replace(" ", "_")),
                 funct(records, format, descr))
         #Replace the method with an error specific one?
         for err_formats, err_type, err_msg in errs:
@@ -155,7 +155,7 @@ for (records, descr, errs) in test_records:
                     f.__doc__ = "%s for %s" % (format, descr)
                     return f
                 setattr(WriterTests,
-                        "test_%s_%s" % (format, descr.replace(" ","_")),
+                        "test_%s_%s" % (format, descr.replace(" ", "_")),
                         funct_e(records, format, descr, err_type, err_msg))
                 break
         del funct

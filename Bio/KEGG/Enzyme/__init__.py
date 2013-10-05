@@ -21,17 +21,17 @@ from Bio.KEGG import _wrap_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 rxn_wrap = [0, "",
-            (" + ","",1,1),
-            (" = ","",1,1),
-            (" ","$",1,1),
-            ("-","$",1,1)]
+            (" + ", "", 1, 1),
+            (" = ", "", 1, 1),
+            (" ", "$", 1, 1),
+            ("-", "$", 1, 1)]
 name_wrap = [0, "",
-             (" ","$",1,1),
-             ("-","$",1,1)]
+             (" ", "$", 1, 1),
+             ("-", "$", 1, 1)]
 id_wrap = lambda indent : [indent, "",
-                           (" ","",1,0)]
+                           (" ", "", 1, 0)]
 struct_wrap = lambda indent : [indent, "",
-                               ("  ","",1,1)]
+                               ("  ", "", 1, 1)]
 
 
 class Record(object):
@@ -264,7 +264,7 @@ def parse(handle):
             record.effector.append(data.strip(";"))
         elif keyword=="GENES       ":
             if data[3:5]==': ':
-                key, values = data.split(":",1)
+                key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
                 record.genes.append(row)
@@ -282,11 +282,11 @@ def parse(handle):
             record.name.append(data.strip(";"))
         elif keyword=="PATHWAY     ":
             if data[:5]=='PATH:':
-                _, map_num, name = data.split(None,2)
+                _, map_num, name = data.split(None, 2)
                 pathway = ('PATH', map_num, name)
                 record.pathway.append(pathway)
             else:
-                ec_num, name = data.split(None,1)
+                ec_num, name = data.split(None, 1)
                 pathway = 'PATH', ec_num, name
                 record.pathway.append(pathway)
         elif keyword=="PRODUCT     ":

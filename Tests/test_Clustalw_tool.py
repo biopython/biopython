@@ -117,7 +117,7 @@ class ClustalWTestCase(unittest.TestCase):
         align = AlignIO.read(cline.outfile, "clustal")
         #The length of the alignment will depend on the version of clustalw
         #(clustalw 2.1 and clustalw 1.83 are certainly different).
-        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile,"clustal"))
+        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
             self.assertTrue(str(record.seq) == str(output_records[record.id].seq))

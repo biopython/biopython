@@ -70,7 +70,7 @@ _nodetype_to_code= { 'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
 
 nodeCodeOrder = [ 'ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px' ]
 
-astralBibIds = [10,20,25,30,35,40,50,70,90,95,100]
+astralBibIds = [10, 20, 25, 30, 35, 40, 50, 70, 90, 95, 100]
 
 astralEvs = [10, 5, 1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 1e-4, 1e-5, 1e-10, 1e-15,
              1e-20, 1e-25, 1e-50]
@@ -89,7 +89,7 @@ try:
     #See if the cmp function exists (will on Python 2)
     _cmp = cmp
 except NameError:
-    def _cmp(a,b):
+    def _cmp(a, b):
         """Implementation of cmp(x,y) for Python 3 (PRIVATE).
 
         Based on Python 3 docs which say if you really need the cmp()
@@ -119,7 +119,7 @@ def cmp_sccs(sccs1, sccs2):
     s1 = [int(x) for x in s1[1:]]
     s2 = [int(x) for x in  s2[1:]]
 
-    return _cmp(s1,s2)
+    return _cmp(s1, s2)
 
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
@@ -155,7 +155,7 @@ def parse_domain(str):
 
 
 def _open_scop_file(scop_dir_path, version, filetype):
-    filename = "dir.%s.scop.txt_%s" % (filetype,version)
+    filename = "dir.%s.scop.txt_%s" % (filetype, version)
     handle = open(os.path.join( scop_dir_path, filename))
     return handle
 
@@ -369,12 +369,12 @@ class Scop(object):
                 cur.execute("select sid, residues, pdbid from cla where sunid=%s",
                                sunid)
 
-                [n.sid,n.residues,pdbid] = cur.fetchone()
+                [n.sid, n.residues, pdbid] = cur.fetchone()
                 n.residues = Residues.Residues(n.residues)
                 n.residues.pdbid=pdbid
                 self._sidDict[n.sid] = n
 
-            [n.sunid,n.type,n.sccs,n.description] = data
+            [n.sunid, n.type, n.sccs, n.description] = data
 
             if data[1] != 'ro':
                 cur.execute("SELECT parent FROM hie WHERE child=%s", sunid)
@@ -410,7 +410,7 @@ class Scop(object):
         # SQL cla table knows nothing about 'ro'
         if node.type == 'ro':
             for c in node.getChildren():
-                for d in self.getDescendentsFromSQL(c,type):
+                for d in self.getDescendentsFromSQL(c, type):
                     des_list.append(d)
             return des_list
 
@@ -423,7 +423,7 @@ class Scop(object):
             for d in data:
                 if int(d[0]) not in self._sunidDict:
                     n = Node(scop=self)
-                    [n.sunid,n.type,n.sccs,n.description] = d
+                    [n.sunid, n.type, n.sccs, n.description] = d
                     n.sunid=int(n.sunid)
                     self._sunidDict[n.sunid] = n
 
@@ -449,7 +449,7 @@ class Scop(object):
                     n = Domain(scop=self)
                     #[n.sunid, n.sid, n.pdbid, n.residues, n.sccs, n.type,
                     #n.description,n.parent] = data
-                    [n.sunid,n.sid, pdbid,n.residues,n.sccs,n.type,n.description,
+                    [n.sunid, n.sid, pdbid, n.residues, n.sccs, n.type, n.description,
                      n.parent] = d[0:8]
                     n.residues = Residues.Residues(n.residues)
                     n.residues.pdbid = pdbid
@@ -587,7 +587,7 @@ class Node(object):
 
         nodes = [self]
         if self.scop:
-            return self.scop.getDescendentsFromSQL(self,node_type)
+            return self.scop.getDescendentsFromSQL(self, node_type)
         while nodes[0].type != node_type:
             if nodes[0].type == 'px':
                 return [] # Fell of the bottom of the hierarchy
@@ -606,7 +606,7 @@ class Node(object):
             node_type = _nodetype_to_code[node_type]
 
         if self.scop:
-            return self.scop.getAscendentFromSQL(self,node_type)
+            return self.scop.getAscendentFromSQL(self, node_type)
         else:
             n = self
             if n.type == node_type:
@@ -629,7 +629,7 @@ class Domain(Node):
                   of PDB atoms that make up this domain.
     """
     def __init__(self,scop=None):
-        Node.__init__(self,scop=scop)
+        Node.__init__(self, scop=scop)
         self.sid = ''
         self.residues = None
 
@@ -730,7 +730,7 @@ class Astral(object):
         self.IdDatasets = {}
         self.IdDatahash = {}
 
-    def domainsClusteredByEv(self,id):
+    def domainsClusteredByEv(self, id):
         """get domains clustered by evalue"""
         if id not in self.EvDatasets:
             if self.db_handle:
@@ -741,13 +741,13 @@ class Astral(object):
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id] ,
+                filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id],
                                                   self.version)
-                filename = os.path.join(self.path,filename)
+                filename = os.path.join(self.path, filename)
                 self.EvDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.EvDatasets[id]
 
-    def domainsClusteredById(self,id):
+    def domainsClusteredById(self, id):
         """get domains clustered by percent id"""
         if id not in self.IdDatasets:
             if self.db_handle:
@@ -758,7 +758,7 @@ class Astral(object):
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
                 filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
-                filename = os.path.join(self.path,filename)
+                filename = os.path.join(self.path, filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
 
@@ -792,7 +792,7 @@ class Astral(object):
 
         return data
 
-    def getSeqBySid(self,domain):
+    def getSeqBySid(self, domain):
         """get the seq record of a given domain from its sid"""
         if self.db_handle is None:
             return self.fasta_dict[domain].seq
@@ -801,11 +801,11 @@ class Astral(object):
             cur.execute("SELECT seq FROM astral WHERE sid=%s", domain)
             return Seq(cur.fetchone()[0])
 
-    def getSeq(self,domain):
+    def getSeq(self, domain):
         """Return seq associated with domain"""
         return self.getSeqBySid(domain.sid)
 
-    def hashedDomainsById(self,id):
+    def hashedDomainsById(self, id):
         """Get domains clustered by sequence identity in a dict"""
         if id not in self.IdDatahash:
             self.IdDatahash[id] = {}
@@ -813,7 +813,7 @@ class Astral(object):
                 self.IdDatahash[id][d] = 1
         return self.IdDatahash[id]
 
-    def hashedDomainsByEv(self,id):
+    def hashedDomainsByEv(self, id):
         """Get domains clustered by evalue in a dict"""
         if id not in self.EvDatahash:
             self.EvDatahash[id] = {}
@@ -821,11 +821,11 @@ class Astral(object):
                 self.EvDatahash[id][d] = 1
         return self.EvDatahash[id]
 
-    def isDomainInId(self,dom,id):
+    def isDomainInId(self, dom, id):
         """Returns true if the domain is in the astral clusters for percent ID"""
         return dom in self.hashedDomainsById(id)
 
-    def isDomainInEv(self,dom,id):
+    def isDomainInEv(self, dom, id):
         """Returns true if the domain is in the ASTRAL clusters for evalues"""
         return dom in self.hashedDomainsByEv(id)
 

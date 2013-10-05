@@ -382,7 +382,7 @@ def register_ncbi_table(name, alt_name, id,
     """Turns codon table data into objects, and stores them in the dictionaries (PRIVATE)."""
     #In most cases names are divided by "; ", however there is also
     #'Bacterial and Plant Plastid' (which used to be just 'Bacterial')
-    names = [x.strip() for x in name.replace(" and ","; ").split("; ")]
+    names = [x.strip() for x in name.replace(" and ", "; ").split("; ")]
 
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
                             stop_codons)

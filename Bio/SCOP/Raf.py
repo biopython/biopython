@@ -82,7 +82,7 @@ class SeqMapIndex(dict):
 
     def __getitem__(self, key):
         """ Return an item from the indexed file. """
-        position = dict.__getitem__(self,key)
+        position = dict.__getitem__(self, key)
 
         f = open(self.filename, "rU")
         try:
@@ -105,7 +105,7 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags =(('_','',''),) # All residues of unnamed chain
+            frags =(('_', '', ''),) # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
@@ -266,7 +266,7 @@ class SeqMap(object):
             if chainid == '_':
                 chainid = ' '
             resid = r.resid
-            resSet[(chainid,resid)] = r
+            resSet[(chainid, resid)] = r
 
         resFound = {}
         for line in pdb_handle.xreadlines():

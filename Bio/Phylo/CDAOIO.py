@@ -263,7 +263,7 @@ class Writer(object):
         
         if tree_uri: handle.write('@base <%s>\n' % tree_uri)
         for k, v in self.prefixes.items():
-            handle.write('@prefix %s: <%s> .\n' % (k,v))
+            handle.write('@prefix %s: <%s> .\n' % (k, v))
 
         handle.write('<%s> a owl:Ontology .\n' % self.prefixes['cdao'])
             

@@ -419,12 +419,12 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
         elif (use_linecollection==True and orientation=='horizontal'):
             horizontal_linecollections.append(mpcollections.LineCollection(
-            [[(x_start,y_here), (x_here,y_here)]], color=color, lw=lw),)
+            [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw),)
         elif (use_linecollection==False and orientation=='vertical'):
             axes.vlines(x_here, y_bot, y_top, color=color)
         elif (use_linecollection==True and orientation=='vertical'):
             vertical_linecollections.append(mpcollections.LineCollection(
-            [[(x_here,y_bot), (x_here,y_top)]], color=color, lw=lw),)
+            [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw),)
 
     def draw_clade(clade, x_start, color, lw):
         """Recursively draw a tree, down from the given clade."""

@@ -157,7 +157,7 @@ def __read_datafile(record, handle):
     if not line.startswith('DATAFILE'):
         raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
     line = line.strip()
-    line = line.replace('DATAFILE= ','')
+    line = line.replace('DATAFILE= ', '')
     record.datafile = line
 
 
@@ -169,7 +169,7 @@ def __read_alphabet(record, handle):
     if not line.startswith('ALPHABET'):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
     line = line.strip()
-    line = line.replace('ALPHABET= ','')
+    line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
         al = IUPAC.unambiguous_dna
     else:
@@ -209,7 +209,7 @@ def __read_command(record, handle):
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'command'")
     line = line.strip()
-    line = line.replace('command: ','')
+    line = line.replace('command: ', '')
     record.command = line
 
 

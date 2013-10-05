@@ -156,7 +156,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
                         contents.append( text )
                     else:
                         self.queue[ self.master_key ][ self.key_waiting ] = \
-                            [ contents , text ]
+                            [ contents, text ]
                 except:
                     self.queue[ self.master_key ][ self.key_waiting ] = text
 

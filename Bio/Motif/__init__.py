@@ -31,8 +31,8 @@ from Bio.Motif.Parsers.AlignAce import read as _AlignAce_read
 from Bio.Motif.Parsers.MEME import read as _MEME_read
 from Bio.Motif.Thresholds import ScoreDistribution
 
-_parsers={"AlignAce" : _AlignAce_read,
-          "MEME" : _MEME_read,
+_parsers={"AlignAce": _AlignAce_read,
+          "MEME": _MEME_read,
           }
 
 def _from_pfm(handle):
@@ -47,7 +47,7 @@ _readers={"jaspar-pfm": _from_pfm,
 
 
           
-def parse(handle,format):
+def parse(handle, format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats:
@@ -95,7 +95,7 @@ def parse(handle,format):
         for m in parser(handle).motifs:
             yield m
 
-def read(handle,format):
+def read(handle, format):
     """Reads a motif from a handle using a specified file-format.
 
     This supports the same formats as Bio.Motif.parse(), but
@@ -159,10 +159,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print("Runing doctests...")
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir

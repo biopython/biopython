@@ -66,14 +66,14 @@ class TestLogisticRegression(unittest.TestCase):
 
     def test_classify(self):
         model = LogisticRegression.train(xs, ys)
-        result = LogisticRegression.classify(model, [6,-173.143442352])
+        result = LogisticRegression.classify(model, [6, -173.143442352])
         self.assertEqual(result, 1)
         result = LogisticRegression.classify(model, [309, -271.005880394])
         self.assertEqual(result, 0)
 
     def test_calculate_probability(self):
         model = LogisticRegression.train(xs, ys)
-        q, p = LogisticRegression.calculate(model, [6,-173.143442352])
+        q, p = LogisticRegression.calculate(model, [6, -173.143442352])
         self.assertAlmostEqual(p, 0.993242, places=6)
         self.assertAlmostEqual(q, 0.006758, places=6)
         q, p = LogisticRegression.calculate(model, [309, -271.005880394])

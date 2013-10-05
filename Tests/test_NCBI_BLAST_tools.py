@@ -182,7 +182,7 @@ class CheckCompleteArgList(unittest.TestCase):
             assert index != -1
             name = stdoutdata[:index]
             if " " in name:
-                name = name.split(None,1)[0]
+                name = name.split(None, 1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index+1:]
 
@@ -209,8 +209,8 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "tblastx":
             #These appear to have been removed in BLAST 2.2.23+
             #(which seems a bit odd - TODO - check with NCBI?)
-            extra = extra.difference(["-gapextend","-gapopen",
-                                      "-xdrop_gap","-xdrop_gap_final"])
+            extra = extra.difference(["-gapextend", "-gapopen",
+                                      "-xdrop_gap", "-xdrop_gap_final"])
         if exe_name in ["rpsblast", "rpstblastn"]:
             #These appear to have been removed in BLAST 2.2.24+
             #(which seems a bit odd - TODO - check with NCBI?)

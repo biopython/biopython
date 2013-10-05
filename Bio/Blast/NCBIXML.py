@@ -662,7 +662,7 @@ def parse(handle, debug=0):
                 # one XML file for each query!
 
                 # Finish the old file:
-                text, pending = (text+pending).split("\n" + XML_START,1)
+                text, pending = (text+pending).split("\n" + XML_START, 1)
                 pending = XML_START + pending
 
                 expat_parser.Parse(text, True) # End of XML record
@@ -699,7 +699,7 @@ if __name__ == '__main__':
         # Small test
         print('Blast of %s' % r.query)
         print('Found %s alignments with a total of %s HSPs' % (len(r.alignments),
-                  reduce(lambda a,b: a+b,
+                  reduce(lambda a, b: a+b,
                          [len(a.hsps) for a in r.alignments])))
 
         for al in r.alignments:

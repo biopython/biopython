@@ -333,7 +333,7 @@ class Alignment(object):
 
         self._records.append(new_record)
 
-    def get_column(self,col):
+    def get_column(self, col):
         """Returns a string containing a given column.
 
         e.g.

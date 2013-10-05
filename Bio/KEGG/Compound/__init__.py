@@ -22,12 +22,12 @@ from Bio.KEGG import _wrap_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 name_wrap = [0, "",
-             (" ","$",1,1),
-             ("-","$",1,1)]
+             (" ", "$", 1, 1),
+             ("-", "$", 1, 1)]
 id_wrap = lambda indent : [indent, "",
-                           (" ","",1,0)]
+                           (" ", "", 1, 0)]
 struct_wrap = lambda indent : [indent, "",
-                               ("  ","",1,1)]
+                               ("  ", "", 1, 1)]
 
 
 class Record(object):
@@ -175,7 +175,7 @@ def parse(handle):
                 record.enzyme.append(enzyme)
         elif keyword=="PATHWAY     ":
             if data[:5]=='PATH:':
-                path, map, name = data.split(None,2)
+                path, map, name = data.split(None, 2)
                 pathway = (path[:-1], map, name)
                 record.pathway.append(pathway)
             else:

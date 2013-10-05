@@ -98,7 +98,7 @@ class Statistics(object):
         if _any([self.matches, self.mismatches, self.gaps, self.extensions]):
             self.coords = _get_coords(filename)
         else:
-            self.coords = [(0, 0), (0,0)]
+            self.coords = [(0, 0), (0, 0)]
 
     def identity_fraction(self):
         return self.matches/(self.matches+self.mismatches)

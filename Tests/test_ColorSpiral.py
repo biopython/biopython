@@ -32,7 +32,7 @@ class SpiralTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed on HSV spiral."""
     def setUp(self):
         """Set up canvas for drawing"""
-        output_filename = os.path.join("Graphics","spiral_test.pdf")
+        output_filename = os.path.join("Graphics", "spiral_test.pdf")
         self.c = Canvas(output_filename, pagesize=A4)
         # co-ordinates of the centre of the canvas
         self.x_0, self.y_0 = 0.5 * A4[0], 0.5 * A4[1]
@@ -72,7 +72,7 @@ class SquareTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed in a square, with jitter."""
     def setUp(self):
         """Set up canvas for drawing"""
-        output_filename = os.path.join("Graphics","square_test.pdf")
+        output_filename = os.path.join("Graphics", "square_test.pdf")
         self.c = Canvas(output_filename, pagesize=(500, 500))
 
     def test_colorspiral(self):

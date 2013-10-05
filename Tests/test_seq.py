@@ -149,7 +149,7 @@ rna = [Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
        Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
        Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
        "UGCAU"]
-nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide),"UUUTTTACG"]
+nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide), "UUUTTTACG"]
 protein = [Seq.Seq("ATCGPK", IUPAC.protein),
            Seq.Seq("atcGPK", Alphabet.generic_protein),
            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
@@ -181,13 +181,13 @@ for a in dna:
     for b in rna:
         try:
             c=a+b
-            assert (isinstance(a,str) or isinstance(b,str)), \
+            assert (isinstance(a, str) or isinstance(b, str)), \
                    "DNA+RNA addition should fail!"
         except TypeError:
             pass
         try:
             c=b+a
-            assert (isinstance(a,str) or isinstance(b,str)), \
+            assert (isinstance(a, str) or isinstance(b, str)), \
                    "RNA+DNA addition should fail!"
         except TypeError:
             pass
@@ -201,7 +201,7 @@ for a in protein:
     for b in nuc+dna+rna:
         try:
             c=a+b
-            assert (isinstance(a,str) or isinstance(b,str)), \
+            assert (isinstance(a, str) or isinstance(b, str)), \
                    "Protein+Nucleotide addition should fail!"
         except TypeError:
             pass
@@ -213,7 +213,7 @@ for a in dna+rna+nuc:
     for b in protein:
         try:
             c=a+b
-            assert (isinstance(a,str) or isinstance(b,str)), \
+            assert (isinstance(a, str) or isinstance(b, str)), \
                    "Nucleotide+Protein addition should fail!"
         except TypeError:
             pass
@@ -240,8 +240,8 @@ for a in dna + rna + nuc + protein:
         test_chars.append(Seq.Seq("A", Alphabet.generic_nucleotide))
     if isinstance(alpha, Alphabet.ProteinAlphabet):
         test_chars.append(Seq.Seq("K", Alphabet.generic_protein))
-        test_chars.append(Seq.Seq("K-", Alphabet.Gapped(Alphabet.generic_protein,"-")))
-        test_chars.append(Seq.Seq("K@", Alphabet.Gapped(IUPAC.protein,"@")))
+        test_chars.append(Seq.Seq("K-", Alphabet.Gapped(Alphabet.generic_protein, "-")))
+        test_chars.append(Seq.Seq("K@", Alphabet.Gapped(IUPAC.protein, "@")))
         #Setup a clashing alphabet sequence
         b = Seq.Seq("-", Alphabet.generic_nucleotide)
     else:
@@ -258,17 +258,17 @@ for a in dna + rna + nuc + protein:
         assert str(a.lstrip(chars)) == str(a).lstrip(str_chars)
         assert str(a.rstrip(chars)) == str(a).rstrip(str_chars)
         assert a.find(chars) == str(a).find(str_chars)
-        assert a.find(chars,2,-2) == str(a).find(str_chars,2,-2)
+        assert a.find(chars, 2, -2) == str(a).find(str_chars, 2, -2)
         assert a.rfind(chars) == str(a).rfind(str_chars)
-        assert a.rfind(chars,2,-2) == str(a).rfind(str_chars,2,-2)
+        assert a.rfind(chars, 2, -2) == str(a).rfind(str_chars, 2, -2)
         assert a.count(chars) == str(a).count(str_chars)
-        assert a.count(chars,2,-2) == str(a).count(str_chars,2,-2)
+        assert a.count(chars, 2, -2) == str(a).count(str_chars, 2, -2)
         #Now check splits
         assert [str(x) for x in a.split(chars)] \
                == str(a).split(str(chars))
         assert [str(x) for x in a.rsplit(chars)] \
                == str(a).rsplit(str(chars))
-        for max_sep in [0,1,2,999]:
+        for max_sep in [0, 1, 2, 999]:
             assert [str(x) for x in a.split(chars, max_sep)] \
                    == str(a).split(str(chars), max_sep)
             assert [str(x) for x in a.rsplit(chars, max_sep)] \
@@ -293,8 +293,8 @@ def complement(sequence):
 
 def sorted_dict(d):
     """A sorted repr of a dictionary."""
-    return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v))
-                              for k,v in sorted(d.items()))
+    return "{%s}" % ", ".join("%s: %s" % (repr(k), repr(v))
+                              for k, v in sorted(d.items()))
 
 print("")
 print("DNA Ambiguity mapping: %s" % sorted_dict(ambiguous_dna_values))
@@ -309,7 +309,7 @@ print("")
 print("RNA Ambiguity mapping: %s" % sorted_dict(ambiguous_rna_values))
 print("RNA Complement mapping: %s" % sorted_dict(ambiguous_rna_complement))
 for ambig_char, values in sorted(ambiguous_rna_values.items()):
-    compl_values = complement(values).replace("T","U")  # need to help as no alphabet
+    compl_values = complement(values).replace("T", "U")  # need to help as no alphabet
     print("%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char]))
     assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
@@ -320,8 +320,8 @@ for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
             Seq.Seq("".join(sorted(ambiguous_dna_values))),
             Seq.Seq("".join(sorted(ambiguous_rna_values)), Alphabet.generic_rna),
             Seq.Seq("".join(sorted(ambiguous_dna_values)), Alphabet.generic_dna),
-            Seq.Seq("".join(sorted(ambiguous_rna_values)).replace("X",""), IUPAC.IUPACAmbiguousRNA()),
-            Seq.Seq("".join(sorted(ambiguous_dna_values)).replace("X",""), IUPAC.IUPACAmbiguousDNA()),
+            Seq.Seq("".join(sorted(ambiguous_rna_values)).replace("X", ""), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("".join(sorted(ambiguous_dna_values)).replace("X", ""), IUPAC.IUPACAmbiguousDNA()),
             Seq.Seq("AWGAARCKG")]:  # Note no U or T
         print("%s -> %s" \
               % (repr(sequence), repr(Seq.reverse_complement(sequence))))
@@ -332,7 +332,7 @@ print("")
 
 ###########################################################################
 
-test_seqs = [s,t,u,
+test_seqs = [s, t, u,
              Seq.Seq("ATGAAACTG"),
              "ATGAAACtg",
              #TODO - Fix ambiguous translation
@@ -350,7 +350,7 @@ test_seqs = [s,t,u,
              Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
              Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
              Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
-             Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna,"=")),
+             Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna, "=")),
              Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
              Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
              Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
@@ -381,13 +381,13 @@ print("=======================")
 for nucleotide_seq in test_seqs:
     try:
         expected = Seq.transcribe(nucleotide_seq)
-        assert str(nucleotide_seq).replace("t","u").replace("T","U") == str(expected)
+        assert str(nucleotide_seq).replace("t", "u").replace("T", "U") == str(expected)
         print("%s -> %s" \
-        % (repr(nucleotide_seq) , repr(expected)))
+        % (repr(nucleotide_seq), repr(expected)))
     except ValueError as e:
         expected = None
         print("%s -> %s" \
-        % (repr(nucleotide_seq) , str(e)))
+        % (repr(nucleotide_seq), str(e)))
     #Now test the Seq object's method
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
@@ -415,13 +415,13 @@ print("============================")
 for nucleotide_seq in test_seqs:
     try:
         expected = Seq.back_transcribe(nucleotide_seq)
-        assert str(nucleotide_seq).replace("u","t").replace("U","T") == str(expected)
+        assert str(nucleotide_seq).replace("u", "t").replace("U", "T") == str(expected)
         print("%s -> %s" \
-        % (repr(nucleotide_seq) , repr(expected)))
+        % (repr(nucleotide_seq), repr(expected)))
     except ValueError as e:
         expected = None
         print("%s -> %s" \
-        % (repr(nucleotide_seq) , str(e)))
+        % (repr(nucleotide_seq), str(e)))
     #Now test the Seq object's method
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
@@ -450,11 +450,11 @@ for nucleotide_seq in test_seqs:
     try:
         expected = Seq.reverse_complement(nucleotide_seq)
         print("%s\n-> %s" \
-        % (repr(nucleotide_seq) , repr(expected)))
+        % (repr(nucleotide_seq), repr(expected)))
     except ValueError as e:
         expected = None
         print("%s\n-> %s" \
-        % (repr(nucleotide_seq) , str(e)))
+        % (repr(nucleotide_seq), str(e)))
     #Now test the Seq object's method
     #(The MutualSeq object acts in place)
     if isinstance(nucleotide_seq, Seq.Seq):
@@ -602,7 +602,7 @@ for c1 in ambig:
                 assert values == set(t)
             #TODO - Use the Bio.Data.IUPACData module for the
             #ambiguous protein mappings?
-del t,c1,c2,c3,ambig
+del t, c1, c2, c3, ambig
 
 print("")
 print("Seq's .complement() method")
@@ -611,13 +611,13 @@ for nucleotide_seq in test_seqs:
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
             print("%s -> %s" \
-            % (repr(nucleotide_seq) , repr(nucleotide_seq.complement())))
+            % (repr(nucleotide_seq), repr(nucleotide_seq.complement())))
             assert str(nucleotide_seq.complement()) \
                 == str(Seq.reverse_complement(nucleotide_seq))[::-1], \
                 "Bio.Seq function and method disagree!"
         except ValueError as e:
             print("%s -> %s" \
-            % (repr(nucleotide_seq) , str(e)))
+            % (repr(nucleotide_seq), str(e)))
 
 print("")
 print("Seq's .reverse_complement() method")
@@ -626,10 +626,10 @@ for nucleotide_seq in test_seqs:
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
             print("%s -> %s" \
-            % (repr(nucleotide_seq) , repr(nucleotide_seq.reverse_complement())))
+            % (repr(nucleotide_seq), repr(nucleotide_seq.reverse_complement())))
             assert str(nucleotide_seq.reverse_complement()) \
                 == str(Seq.reverse_complement(nucleotide_seq)), \
                 "Bio.Seq function and method disagree!"
         except ValueError as e:
             print("%s -> %s" \
-            % (repr(nucleotide_seq) , str(e)))
+            % (repr(nucleotide_seq), str(e)))

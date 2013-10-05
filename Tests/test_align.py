@@ -50,7 +50,7 @@ assert alignment[0].id == "mixed"
 assert alignment[1].id == "lower"
 assert alignment[2].id == "upper"
 for (col, letter) in enumerate(letters):
-    assert alignment[:,col] == letter + letter.lower() + letter.upper()
+    assert alignment[:, col] == letter + letter.lower() + letter.upper()
 #Check row extractions:
 assert alignment[0].id == "mixed"
 assert alignment[-1].id == "upper"

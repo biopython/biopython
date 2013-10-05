@@ -75,7 +75,7 @@ class Record(object):
         else:
             s.append("-")
         s.append(self.description)
-        return "\t".join(map(str,s)) + "\n"
+        return "\t".join(map(str, s)) + "\n"
 
 
 def parse(handle):

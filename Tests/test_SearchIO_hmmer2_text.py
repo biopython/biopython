@@ -418,7 +418,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(337, hsp.query_end)
         self.assertEqual('[]', hsp.query_endtype)
         self.assertEqual('lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr', str(hsp.query.seq)[:40])
-        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi',str(hsp.query.seq)[-40:])
+        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+P+++DWRe kg  VtpVK+QG qCGSCWAFSa g lEg+',
                 str(hsp.aln_annotation['homology'])[:40])
@@ -428,7 +428,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(332, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
         self.assertEqual('IPKTVDWRE-KG-CVTPVKNQG-QCGSCWAFSASGCLEGQ', str(hsp.hit.seq)[:40])
-        self.assertEqual('LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI',str(hsp.hit.seq)[-40:])
+        self.assertEqual('LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI', str(hsp.hit.seq)[-40:])
         self.assertEqual(337, len(hsp.hit.seq))
 
         # last hit
@@ -453,7 +453,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(337, hsp.query_end)
         self.assertEqual('[]', hsp.query_endtype)
         self.assertEqual('lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr', str(hsp.query.seq)[:40])
-        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi',str(hsp.query.seq)[-40:])
+        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+Pe +DWR+ kg aVtpVK+QG +CGSCWAFSav ++Eg+',
                 str(hsp.aln_annotation['homology'])[:40])
@@ -463,7 +463,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(343, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
         self.assertEqual('IPEYVDWRQ-KG-AVTPVKNQG-SCGSCWAFSAVVTIEGI', str(hsp.hit.seq)[:40])
-        self.assertEqual('LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV',str(hsp.hit.seq)[-40:])
+        self.assertEqual('LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV', str(hsp.hit.seq)[-40:])
         self.assertEqual(337, len(hsp.hit.seq))
 
 

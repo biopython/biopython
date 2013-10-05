@@ -51,7 +51,7 @@ def write_read(filename, in_format, out_format):
     SeqIO.write(records, handle, out_format)
     handle.seek(0)
     #Now load it back and check it agrees,
-    records2 = list(SeqIO.parse(handle,out_format))
+    records2 = list(SeqIO.parse(handle, out_format))
     compare_records(records, records2, truncation_expected(out_format))
 
 
@@ -78,16 +78,16 @@ def compare_record(old, new, truncate=None):
     if "phred_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations \
     and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"]:
-        if truncate and [min(q,truncate) for q in old.letter_annotations["phred_quality"]] == \
-                        [min(q,truncate) for q in new.letter_annotations["phred_quality"]]:
+        if truncate and [min(q, truncate) for q in old.letter_annotations["phred_quality"]] == \
+                        [min(q, truncate) for q in new.letter_annotations["phred_quality"]]:
             pass
         else:
             raise ValuerError("Mismatch in phred_quality")
     if "solexa_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations \
     and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"]:
-        if truncate and [min(q,truncate) for q in old.letter_annotations["solexa_quality"]] == \
-                        [min(q,truncate) for q in new.letter_annotations["solexa_quality"]]:
+        if truncate and [min(q, truncate) for q in old.letter_annotations["solexa_quality"]] == \
+                        [min(q, truncate) for q in new.letter_annotations["solexa_quality"]]:
             pass
         else:
             raise ValueError("Mismatch in phred_quality")
@@ -98,7 +98,7 @@ def compare_record(old, new, truncate=None):
         converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
-            converted = [min(q,truncate) for q in converted]
+            converted = [min(q, truncate) for q in converted]
         if converted != new.letter_annotations["solexa_quality"]:
             print("")
             print(old.letter_annotations["phred_quality"])
@@ -112,7 +112,7 @@ def compare_record(old, new, truncate=None):
         converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
-            converted = [min(q,truncate) for q in converted]
+            converted = [min(q, truncate) for q in converted]
         if converted != new.letter_annotations["phred_quality"]:
             print(old.letter_annotations["solexa_quality"])
             print(converted)
@@ -126,7 +126,7 @@ def compare_records(old_list, new_list, truncate_qual=None):
     if len(old_list) != len(new_list):
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list):
-        if not compare_record(old,new,truncate_qual):
+        if not compare_record(old, new, truncate_qual):
             return False
     return True
 
@@ -191,9 +191,9 @@ tests = [("diff_ids", 2),
          ("trunc_at_plus", 4),
          ("trunc_at_qual", 4)]
 for base_name, good_count in tests:
-    def funct(name,c):
-        f = lambda x : x.check_all_fail("Quality/error_%s.fastq" % name,c)
-        f.__doc__ = "Reject FASTQ with %s" % name.replace("_"," ")
+    def funct(name, c):
+        f = lambda x : x.check_all_fail("Quality/error_%s.fastq" % name, c)
+        f.__doc__ = "Reject FASTQ with %s" % name.replace("_", " ")
         return f
     setattr(TestFastqErrors, "test_%s" % (base_name),
             funct(base_name, good_count))
@@ -209,9 +209,9 @@ tests = [("del", 3, 5),
          ("tab", 4, 5),
          ("null", 0, 5)]
 for base_name, good_count, full_count in tests:
-    def funct(name,c1,c2):
-        f = lambda x : x.check_qual_char("Quality/error_qual_%s.fastq"%name,c1,c2)
-        f.__doc__ = "Reject FASTQ with %s in quality" % name.replace("_"," ")
+    def funct(name, c1, c2):
+        f = lambda x : x.check_qual_char("Quality/error_qual_%s.fastq"%name, c1, c2)
+        f.__doc__ = "Reject FASTQ with %s in quality" % name.replace("_", " ")
         return f
     setattr(TestFastqErrors, "test_qual_%s" % (base_name),
             funct(base_name, good_count, full_count))
@@ -309,8 +309,8 @@ tests = [("illumina_full_range", "illumina"),
 for base_name, variant in tests:
     assert variant in ["sanger", "solexa", "illumina"]
 
-    def funct(bn,var):
-        f = lambda x : x.simple_check(bn,var)
+    def funct(bn, var):
+        f = lambda x : x.simple_check(bn, var)
         f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
         return f
 
@@ -325,7 +325,7 @@ class TestQual(unittest.TestCase):
         """Check FASTQ parsing matches FASTA+QUAL parsing"""
         with open("Quality/example.fasta") as f:
             with open("Quality/example.qual") as q:
-                records1 = list(QualityIO.PairedFastaQualIterator(f,q ))
+                records1 = list(QualityIO.PairedFastaQualIterator(f, q ))
         records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         self.assertTrue(compare_records(records1, records2))
 
@@ -452,21 +452,21 @@ class TestWriteRead(unittest.TestCase):
     def test_generated(self):
         """Write and read back odd SeqRecord objects"""
         record1 = SeqRecord(Seq("ACGT"*500, generic_dna),  id="Test", description="Long "*500,
-                           letter_annotations={"phred_quality":[40,30,20,10]*500})
+                           letter_annotations={"phred_quality":[40, 30, 20, 10]*500})
         record2 = SeqRecord(MutableSeq("NGGC"*1000),  id="Mut", description="very "*1000+"long",
-                           letter_annotations={"phred_quality":[0,5,5,10]*1000})
-        record3 = SeqRecord(UnknownSeq(2000,character="N"),  id="Unk", description="l"+("o"*1000)+"ng",
-                           letter_annotations={"phred_quality":[0,1]*1000})
+                           letter_annotations={"phred_quality":[0, 5, 5, 10]*1000})
+        record3 = SeqRecord(UnknownSeq(2000, character="N"),  id="Unk", description="l"+("o"*1000)+"ng",
+                           letter_annotations={"phred_quality":[0, 1]*1000})
         record4 = SeqRecord(Seq("ACGT"*500),  id="no_descr", description="", name="",
-                           letter_annotations={"phred_quality":[40,50,60,62]*500})
-        record5 = SeqRecord(Seq("",generic_dna),  id="empty_p", description="(could have been trimmed lots)",
+                           letter_annotations={"phred_quality":[40, 50, 60, 62]*500})
+        record5 = SeqRecord(Seq("", generic_dna),  id="empty_p", description="(could have been trimmed lots)",
                            letter_annotations={"phred_quality":[]})
         record6 = SeqRecord(Seq(""),  id="empty_s", description="(could have been trimmed lots)",
                            letter_annotations={"solexa_quality":[]})
         record7 = SeqRecord(Seq("ACNN"*500),  id="Test_Sol", description="Long "*500,
-                           letter_annotations={"solexa_quality":[40,30,0,-5]*500})
+                           letter_annotations={"solexa_quality":[40, 30, 0, -5]*500})
         record8 = SeqRecord(Seq("ACGT"),  id="HighQual", description="With very large qualities that even Sanger FASTQ can't hold!",
-                           letter_annotations={"solexa_quality":[0,10,100,1000]})
+                           letter_annotations={"solexa_quality":[0, 10, 100, 1000]})
         #TODO - Record with no identifier?
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
         #TODO - Have a Biopython defined "DataLossWarning?"
@@ -499,7 +499,7 @@ class TestWriteRead(unittest.TestCase):
         #TODO - On Python 2.6+ we can check this warning is really triggered
         warnings.simplefilter('ignore', BiopythonWarning)
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
-                   ["fastq-solexa","fastq-illumina"])
+                   ["fastq-solexa", "fastq-illumina"])
         warnings.filters.pop()
 
     def test_sanger_faked(self):
@@ -617,7 +617,7 @@ class MappingTests(unittest.TestCase):
         self.assertEqual(6, round(QualityIO.solexa_quality_from_phred(7)))
         self.assertEqual(7, round(QualityIO.solexa_quality_from_phred(8)))
         self.assertEqual(8, round(QualityIO.solexa_quality_from_phred(9)))
-        for i in range(10,100):
+        for i in range(10, 100):
             self.assertEqual(i, round(QualityIO.solexa_quality_from_phred(i)))
 
     def test_phred_quality_from_solexa(self):
@@ -637,7 +637,7 @@ class MappingTests(unittest.TestCase):
         self.assertEqual(8, round(QualityIO.phred_quality_from_solexa(7)))
         self.assertEqual(9, round(QualityIO.phred_quality_from_solexa(8)))
         self.assertEqual(10, round(QualityIO.phred_quality_from_solexa(9)))
-        for i in range(10,100):
+        for i in range(10, 100):
             self.assertEqual(i, round(QualityIO.phred_quality_from_solexa(i)))
 
     def test_sanger_to_solexa(self):
@@ -646,10 +646,10 @@ class MappingTests(unittest.TestCase):
         #solexa_quality_from_phred function directly. For speed it uses a
         #cached dictionary of the mappings.
         seq = "N"*94
-        qual = "".join(chr(33+q) for q in range(0,94))
-        expected_sol = [min(62,int(round(QualityIO.solexa_quality_from_phred(q))))
-                        for q in range(0,94)]
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        qual = "".join(chr(33+q) for q in range(0, 94))
+        expected_sol = [min(62, int(round(QualityIO.solexa_quality_from_phred(q))))
+                        for q in range(0, 94)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
@@ -669,10 +669,10 @@ class MappingTests(unittest.TestCase):
         #solexa_quality_from_phred function directly. For speed it uses a
         #cached dictionary of the mappings.
         seq = "N"*68
-        qual = "".join(chr(64+q) for q in range(-5,63))
+        qual = "".join(chr(64+q) for q in range(-5, 63))
         expected_phred = [round(QualityIO.phred_quality_from_solexa(q))
-                          for q in range(-5,63)]
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+                          for q in range(-5, 63)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
@@ -689,9 +689,9 @@ class MappingTests(unittest.TestCase):
     def test_sanger_to_illumina(self):
         """Mapping check for FASTQ Sanger (0 to 93) to Illumina (0 to 62)"""
         seq = "N"*94
-        qual = "".join(chr(33+q) for q in range(0,94))
-        expected_phred = [min(62,q) for q in range(0,94)]
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        qual = "".join(chr(33+q) for q in range(0, 94))
+        expected_phred = [min(62, q) for q in range(0, 94)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
@@ -708,9 +708,9 @@ class MappingTests(unittest.TestCase):
     def test_illumina_to_sanger(self):
         """Mapping check for FASTQ Illumina (0 to 62) to Sanger (0 to 62)"""
         seq = "N"*63
-        qual = "".join(chr(64+q) for q in range(0,63))
+        qual = "".join(chr(64+q) for q in range(0, 63))
         expected_phred = range(63)
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
         SeqIO.write(SeqIO.parse(in_handle, "fastq-illumina"),
                     out_handle, "fastq-sanger")

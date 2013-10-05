@@ -40,7 +40,7 @@ class MultiGraph(object):
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x,y: x+y,
+        edgenum = reduce(lambda x, y: x+y,
                          [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<MultiGraph: " + \
@@ -63,7 +63,7 @@ class MultiGraph(object):
         self._adjacency_list[source].add(edge)
         if label not in self._label_map:
             self._label_map[label] = set()
-        self._label_map[label].add((source,to))
+        self._label_map[label].add((source, to))
 
     def child_edges(self, parent):
         """Returns a list of (child, label) pairs for parent."""

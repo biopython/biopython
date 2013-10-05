@@ -67,7 +67,7 @@ class ClaTests(unittest.TestCase):
         record = Cla.Record(recLine)
         self.assertEqual(record.sid, 'd1dan.1')
         self.assertEqual(record.residues.pdbid, '1dan')
-        self.assertEqual(record.residues.fragments, (('T','',''),('U','91','106')))
+        self.assertEqual(record.residues.fragments, (('T', '', ''), ('U', '91', '106')))
         self.assertEqual(record.sccs, 'b.1.2.1')
         self.assertEqual(record.sunid, 21953)
         self.assertEqual(record.hierarchy, {'cl' : 48724,

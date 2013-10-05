@@ -40,38 +40,38 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
-           _Switch(["-auto","auto"],
+           _Switch(["-auto", "auto"],
                    """Turn off prompts.
 
                    Automatic mode disables prompting, so we recommend you set
                    this argument all the time when calling an EMBOSS tool from
                    Biopython.
                    """),
-           _Switch(["-stdout","stdout"],
+           _Switch(["-stdout", "stdout"],
                    "Write standard output."),
-           _Switch(["-filter","filter"],
+           _Switch(["-filter", "filter"],
                    "Read standard input, write standard output."),
-           _Switch(["-options","options"],
+           _Switch(["-options", "options"],
                    """Prompt for standard and additional values.
 
                    If you are calling an EMBOSS tool from within Biopython,
                    we DO NOT recommend using this option.
                    """),
-           _Switch(["-debug","debug"],
+           _Switch(["-debug", "debug"],
                    "Write debug output to program.dbg."),
-           _Switch(["-verbose","verbose"],
+           _Switch(["-verbose", "verbose"],
                    "Report some/full command line options"),
-           _Switch(["-help","help"],
+           _Switch(["-help", "help"],
                    """Report command line options.
 
                    More information on associated and general qualifiers can
                    be found with -help -verbose
                    """),
-           _Switch(["-warning","warning"],
+           _Switch(["-warning", "warning"],
                    "Report warnings."),
-           _Switch(["-error","error"],
+           _Switch(["-error", "error"],
                    "Report errors."),
-           _Switch(["-die","die"],
+           _Switch(["-die", "die"],
                    "Report dying program messages."),
             ]
         try:
@@ -96,7 +96,7 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
-            _Option(["-outfile","outfile"],
+            _Option(["-outfile", "outfile"],
                     "Output filename",
                     filename=True),
             ]
@@ -153,56 +153,56 @@ class Primer3Commandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="eprimer3", **kwargs):
         self.parameters = [
-           _Option(["-sequence","sequence"],
+           _Option(["-sequence", "sequence"],
                    "Sequence to choose primers from.",
                    is_required=True),
-           _Option(["-task","task"],
+           _Option(["-task", "task"],
                    "Tell eprimer3 what task to perform."),
-           _Option(["-hybridprobe","hybridprobe"],
+           _Option(["-hybridprobe", "hybridprobe"],
                    "Find an internal oligo to use as a hyb probe."),
-           _Option(["-numreturn","numreturn"],
+           _Option(["-numreturn", "numreturn"],
                    "Maximum number of primer pairs to return."),
-           _Option(["-includedregion","includedregion"],
+           _Option(["-includedregion", "includedregion"],
                    "Subregion of the sequence in which to pick primers."),
-           _Option(["-target","target"],
+           _Option(["-target", "target"],
                    "Sequence to target for flanking primers."),
-           _Option(["-excludedregion","excludedregion"],
+           _Option(["-excludedregion", "excludedregion"],
                    "Regions to exclude from primer picking."),
-           _Option(["-forwardinput","forwardinput"],
+           _Option(["-forwardinput", "forwardinput"],
                    "Sequence of a forward primer to check."),
-           _Option(["-reverseinput","reverseinput"],
+           _Option(["-reverseinput", "reverseinput"],
                    "Sequence of a reverse primer to check."),
-           _Option(["-gcclamp","gcclamp"],
+           _Option(["-gcclamp", "gcclamp"],
                    "The required number of Gs and Cs at the 3' of each primer."),
-           _Option(["-osize","osize"],
+           _Option(["-osize", "osize"],
                    "Optimum length of a primer oligo."),
-           _Option(["-minsize","minsize"],
+           _Option(["-minsize", "minsize"],
                    "Minimum length of a primer oligo."),
-           _Option(["-maxsize","maxsize"],
+           _Option(["-maxsize", "maxsize"],
                    "Maximum length of a primer oligo."),
-           _Option(["-otm","otm"],
+           _Option(["-otm", "otm"],
                    "Optimum melting temperature for a primer oligo."),
-           _Option(["-mintm","mintm"],
+           _Option(["-mintm", "mintm"],
                    "Minimum melting temperature for a primer oligo."),
-           _Option(["-maxtm","maxtm"],
+           _Option(["-maxtm", "maxtm"],
                    "Maximum melting temperature for a primer oligo."),
-           _Option(["-maxdifftm","maxdifftm"],
+           _Option(["-maxdifftm", "maxdifftm"],
                    "Maximum difference in melting temperatures between "
                    "forward and reverse primers."),
-           _Option(["-ogcpercent","ogcpercent"],
+           _Option(["-ogcpercent", "ogcpercent"],
                    "Optimum GC% for a primer."),
-           _Option(["-mingc","mingc"],
+           _Option(["-mingc", "mingc"],
                    "Minimum GC% for a primer."),
-           _Option(["-maxgc","maxgc"],
+           _Option(["-maxgc", "maxgc"],
                    "Maximum GC% for a primer."),
-           _Option(["-saltconc","saltconc"],
+           _Option(["-saltconc", "saltconc"],
                    "Millimolar salt concentration in the PCR."),
-           _Option(["-dnaconc","dnaconc"],
+           _Option(["-dnaconc", "dnaconc"],
                    "Nanomolar concentration of annealing oligos in the PCR."),
-           _Option(["-maxpolyx","maxpolyx"],
+           _Option(["-maxpolyx", "maxpolyx"],
                    "Maximum allowable mononucleotide repeat length in a primer."),
            #Primer length:
-           _Option(["-productosize","productosize"],
+           _Option(["-productosize", "productosize"],
                    """Optimum size for the PCR product (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -psizeopt
@@ -212,7 +212,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -productosize
                    """),
-           _Option(["-productsizerange","productsizerange"],
+           _Option(["-productsizerange", "productsizerange"],
                    """Acceptable range of length for the PCR product (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -prange
@@ -223,7 +223,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    Option added in EMBOSS 6.1.0, replacing -productsizerange
                    """),
            #Primer temperature:
-           _Option(["-productotm","productotm"],
+           _Option(["-productotm", "productotm"],
                    """Optimum melting temperature for the PCR product (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -ptmopt
@@ -233,7 +233,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -productotm
                    """),
-           _Option(["-productmintm","productmintm"],
+           _Option(["-productmintm", "productmintm"],
                    """Minimum allowed melting temperature for the amplicon (OBSOLETE)
 
                    Option replaced in EMBOSS 6.1.0 by -ptmmin
@@ -243,7 +243,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -productmintm
                    """),
-           _Option(["-productmaxtm","productmaxtm"],
+           _Option(["-productmaxtm", "productmaxtm"],
                    """Maximum allowed melting temperature for the amplicon (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -ptmmax
@@ -264,10 +264,10 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option replaced in EMBOSS 6.1.0 by -oexcluderegion.
                    """),
-           _Option(["-oligoinput","oligoinput"],
+           _Option(["-oligoinput", "oligoinput"],
                    "Sequence of the internal oligo."),
            #Oligo length:
-           _Option(["-oligosize","oligosize"],
+           _Option(["-oligosize", "oligosize"],
                    """Optimum length of internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -osizeopt.
@@ -277,7 +277,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replaces -oligosize
                    """),
-           _Option(["-oligominsize","oligominsize"],
+           _Option(["-oligominsize", "oligominsize"],
                    """Minimum length of internal oligo (OBSOLETE)."),
 
                    Option replaced in EMBOSS 6.1.0 by -ominsize.
@@ -287,7 +287,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replaces -oligominsize
                    """),
-           _Option(["-oligomaxsize","oligomaxsize"],
+           _Option(["-oligomaxsize", "oligomaxsize"],
                    """Maximum length of internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -omaxsize.
@@ -298,7 +298,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    Option added in EMBOSS 6.1.0, replaces -oligomaxsize
                    """),
            #Oligo GC temperature:
-           _Option(["-oligotm","oligotm"],
+           _Option(["-oligotm", "oligotm"],
                    """Optimum melting temperature of internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -otmopt.
@@ -308,7 +308,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0.
                    """),
-           _Option(["-oligomintm","oligomintm"],
+           _Option(["-oligomintm", "oligomintm"],
                    """Minimum melting temperature of internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -otmmin.
@@ -318,7 +318,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligomintm
                    """),
-           _Option(["-oligomaxtm","oligomaxtm"],
+           _Option(["-oligomaxtm", "oligomaxtm"],
                    """Maximum melting temperature of internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -otmmax.
@@ -329,7 +329,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    Option added in EMBOSS 6.1.0, replacing -oligomaxtm
                    """),
            #Oligo GC percent:
-           _Option(["-oligoogcpercent","oligoogcpercent"],
+           _Option(["-oligoogcpercent", "oligoogcpercent"],
                    """Optimum GC% for internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -ogcopt.
@@ -339,7 +339,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligoogcpercent
                    """),
-           _Option(["-oligomingc","oligomingc"],
+           _Option(["-oligomingc", "oligomingc"],
                    """Minimum GC% for internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -ogcmin.
@@ -349,7 +349,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligomingc
                    """),
-           _Option(["-oligomaxgc","oligomaxgc"],
+           _Option(["-oligomaxgc", "oligomaxgc"],
                    """Maximum GC% for internal oligo.
 
                    Option replaced in EMBOSS 6.1.0 by -ogcmax
@@ -360,7 +360,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    Option added in EMBOSS 6.1.0, replacing -oligomaxgc
                    """),
            #Oligo salt concentration:
-           _Option(["-oligosaltconc","oligosaltconc"],
+           _Option(["-oligosaltconc", "oligosaltconc"],
                    """Millimolar concentration of salt in the hybridisation."),
 
                    Option replaced in EMBOSS 6.1.0 by -osaltconc
@@ -370,7 +370,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligosaltconc
                    """),
-           _Option(["-oligodnaconc","oligodnaconc"],
+           _Option(["-oligodnaconc", "oligodnaconc"],
                    """Nanomolar concentration of internal oligo in the hybridisation.
 
                    Option replaced in EMBOSS 6.1.0 by -odnaconc
@@ -381,7 +381,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    Option added in EMBOSS 6.1.0, replacing -oligodnaconc
                    """),
            #Oligo self complementarity
-           _Option(["-oligoselfany","oligoselfany"],
+           _Option(["-oligoselfany", "oligoselfany"],
                    """Maximum allowable alignment score for self-complementarity (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -oanyself
@@ -391,7 +391,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligoselfany
                    """),
-           _Option(["-oligoselfend","oligoselfend"],
+           _Option(["-oligoselfend", "oligoselfend"],
                    """Maximum allowable 3`-anchored global alignment score "
                    for self-complementarity (OBSOLETE).
 
@@ -402,7 +402,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligoselfend
                    """),
-           _Option(["-oligomaxpolyx","oligomaxpolyx"],
+           _Option(["-oligomaxpolyx", "oligomaxpolyx"],
                    """Maximum length of mononucleotide repeat in internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -opolyxmax
@@ -412,12 +412,12 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxpolyx
                    """),
-           _Option(["-mispriminglibraryfile","mispriminglibraryfile"],
+           _Option(["-mispriminglibraryfile", "mispriminglibraryfile"],
                     "File containing library of sequences to avoid amplifying"),
-           _Option(["-maxmispriming","maxmispriming"],
+           _Option(["-maxmispriming", "maxmispriming"],
                    "Maximum allowed similarity of primers to sequences in "
                    "library specified by -mispriminglibrary"),
-           _Option(["-oligomaxmishyb","oligomaxmishyb"],
+           _Option(["-oligomaxmishyb", "oligomaxmishyb"],
                    """Maximum alignment score for hybridisation of internal oligo to
                    library specified by -oligomishyblibraryfile (OBSOLETE).
 
@@ -440,7 +440,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligomishyblibraryfile
                    """),
-           _Option(["-explainflag","explainflag"],
+           _Option(["-explainflag", "explainflag"],
                    "Produce output tags with eprimer3 statistics"),
            ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
@@ -451,25 +451,25 @@ class PrimerSearchCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="primersearch", **kwargs):
         self.parameters = [
-          _Option(["-seqall","-sequences","sequences","seqall"],
+          _Option(["-seqall", "-sequences", "sequences", "seqall"],
                   "Sequence to look for the primer pairs in.",
                   is_required=True),
                   #When this wrapper was written primersearch used -sequences
                   #as the argument name. Since at least EMBOSS 5.0 (and
                   #perhaps earlier) this has been -seqall instead.
-          _Option(["-infile","-primers","primers","infile"],
+          _Option(["-infile", "-primers", "primers", "infile"],
                   "File containing the primer pairs to search for.",
                   filename=True,
                   is_required=True),
                   #When this wrapper was written primersearch used -primers
                   #as the argument name. Since at least EMBOSS 5.0 (and
                   #perhaps earlier) this has been -infile instead.
-          _Option(["-mismatchpercent","mismatchpercent"],
+          _Option(["-mismatchpercent", "mismatchpercent"],
                   "Allowed percentage mismatch (any integer value, default 0).",
                   is_required=True),
-          _Option(["-snucleotide","snucleotide"],
+          _Option(["-snucleotide", "snucleotide"],
                   "Sequences are nucleotide (boolean)"),
-          _Option(["-sprotein","sprotein"],
+          _Option(["-sprotein", "sprotein"],
                   "Sequences are protein (boolean)"),
           ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
@@ -496,7 +496,7 @@ class FDNADistCommandline(_EmbossCommandLine):
                  "number of rate catergories (1-9)"),
         _Option(["-rate", "rate"],
                  "rate for each category"),
-        _Option(["-categories","categories"],
+        _Option(["-categories", "categories"],
                  "File of substitution rate categories"),
         _Option(["-weights", "weights"],
                  "weights file"),
@@ -556,7 +556,7 @@ class FNeighborCommandline(_EmbossCommandLine):
                  "is martrix [S]quare pr [u]pper or [l]ower"),
         _Option(["-treetype", "treetype"],
                  "nj or UPGMA tree (n/u)"),
-        _Option(["-outgrno","outgrno" ],
+        _Option(["-outgrno", "outgrno" ],
                  "taxon to use as OG"),
         _Option(["-jumble", "jumble"],
                  "randommise input order (Y/n)"),
@@ -716,7 +716,7 @@ class FProtDistCommandline(_EmbossCommandLine):
                  "number of rate catergories (1-9)"),
         _Option(["-rate", "rate"],
                  "rate for each category"),
-        _Option(["-catergories","catergories"],
+        _Option(["-catergories", "catergories"],
                  "file of rates"),
         _Option(["-weights", "weights"],
                  "weights file"),
@@ -773,34 +773,34 @@ class WaterCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="water", **kwargs):
         self.parameters = [
-         _Option(["-asequence","asequence"],
+         _Option(["-asequence", "asequence"],
                  "First sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-bsequence","bsequence"],
+         _Option(["-bsequence", "bsequence"],
                  "Second sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-gapopen","gapopen"],
+         _Option(["-gapopen", "gapopen"],
                  "Gap open penalty",
                  is_required=True),
-         _Option(["-gapextend","gapextend"],
+         _Option(["-gapextend", "gapextend"],
                  "Gap extension penalty",
                  is_required=True),
-         _Option(["-datafile","datafile"],
+         _Option(["-datafile", "datafile"],
                  "Matrix file",
                  filename=True),
          _Switch(["-nobrief", "nobrief"],
                  "Display extended identity and similarity"),
          _Switch(["-brief", "brief"],
                  "Display brief identity and similarity"),
-         _Option(["-similarity","similarity"],
+         _Option(["-similarity", "similarity"],
                  "Display percent identity and similarity"),
-         _Option(["-snucleotide","snucleotide"],
+         _Option(["-snucleotide", "snucleotide"],
                  "Sequences are nucleotide (boolean)"),
-         _Option(["-sprotein","sprotein"],
+         _Option(["-sprotein", "sprotein"],
                  "Sequences are protein (boolean)"),
-         _Option(["-aformat","aformat"],
+         _Option(["-aformat", "aformat"],
                  "Display output in a different specified output format")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -810,21 +810,21 @@ class NeedleCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="needle", **kwargs):
         self.parameters = [
-         _Option(["-asequence","asequence"],
+         _Option(["-asequence", "asequence"],
                  "First sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-bsequence","bsequence"],
+         _Option(["-bsequence", "bsequence"],
                   "Second sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-gapopen","gapopen"],
+         _Option(["-gapopen", "gapopen"],
                  "Gap open penalty",
                  is_required=True),
-         _Option(["-gapextend","gapextend"],
+         _Option(["-gapextend", "gapextend"],
                  "Gap extension penalty",
                  is_required=True),
-         _Option(["-datafile","datafile"],
+         _Option(["-datafile", "datafile"],
                  "Matrix file",
                  filename=True),
          _Option(["-endweight", "endweight"],
@@ -838,13 +838,13 @@ class NeedleCommandline(_EmbossCommandLine):
                  "Display extended identity and similarity"),
          _Switch(["-brief", "brief"],
                  "Display brief identity and similarity"),
-         _Option(["-similarity","similarity"],
+         _Option(["-similarity", "similarity"],
                  "Display percent identity and similarity"),
-         _Option(["-snucleotide","snucleotide"],
+         _Option(["-snucleotide", "snucleotide"],
                  "Sequences are nucleotide (boolean)"),
-         _Option(["-sprotein","sprotein"],
+         _Option(["-sprotein", "sprotein"],
                  "Sequences are protein (boolean)"),
-         _Option(["-aformat","aformat"],
+         _Option(["-aformat", "aformat"],
                  "Display output in a different specified output format")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -854,24 +854,24 @@ class NeedleallCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="needleall", **kwargs):
         self.parameters = [
-         _Option(["-asequence","asequence"],
+         _Option(["-asequence", "asequence"],
                  "First sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-bsequence","bsequence"],
+         _Option(["-bsequence", "bsequence"],
                   "Second sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-gapopen","gapopen"],
+         _Option(["-gapopen", "gapopen"],
                  "Gap open penalty",
                  is_required=True),
-         _Option(["-gapextend","gapextend"],
+         _Option(["-gapextend", "gapextend"],
                  "Gap extension penalty",
                  is_required=True),
-         _Option(["-datafile","datafile"],
+         _Option(["-datafile", "datafile"],
                  "Matrix file",
                  filename=True),
-         _Option(["-minscore","minscore"],
+         _Option(["-minscore", "minscore"],
                  "Exclude alignments with scores below this threshold score."),
          _Option(["-errorfile", "errorfile"],
                  "Error file to be written to."),
@@ -886,13 +886,13 @@ class NeedleallCommandline(_EmbossCommandLine):
                  "Display extended identity and similarity"),
          _Switch(["-brief", "brief"],
                  "Display brief identity and similarity"),
-         _Option(["-similarity","similarity"],
+         _Option(["-similarity", "similarity"],
                  "Display percent identity and similarity"),
-         _Option(["-snucleotide","snucleotide"],
+         _Option(["-snucleotide", "snucleotide"],
                  "Sequences are nucleotide (boolean)"),
-         _Option(["-sprotein","sprotein"],
+         _Option(["-sprotein", "sprotein"],
                  "Sequences are protein (boolean)"),
-         _Option(["-aformat","aformat"],
+         _Option(["-aformat", "aformat"],
                  "Display output in a different specified output format")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -902,30 +902,30 @@ class StretcherCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="stretcher", **kwargs):
         self.parameters = [
-         _Option(["-asequence","asequence"],
+         _Option(["-asequence", "asequence"],
                  "First sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-bsequence","bsequence"],
+         _Option(["-bsequence", "bsequence"],
                   "Second sequence to align",
                  filename=True,
                  is_required=True),
-         _Option(["-gapopen","gapopen"],
+         _Option(["-gapopen", "gapopen"],
                  "Gap open penalty",
                  is_required=True,
                  checker_function=lambda value: isinstance(value, int)),
-         _Option(["-gapextend","gapextend"],
+         _Option(["-gapextend", "gapextend"],
                  "Gap extension penalty",
                  is_required=True,
                  checker_function=lambda value: isinstance(value, int)),
-         _Option(["-datafile","datafile"],
+         _Option(["-datafile", "datafile"],
                  "Matrix file",
                  filename=True),
-         _Option(["-snucleotide","snucleotide"],
+         _Option(["-snucleotide", "snucleotide"],
                  "Sequences are nucleotide (boolean)"),
-         _Option(["-sprotein","sprotein"],
+         _Option(["-sprotein", "sprotein"],
                  "Sequences are protein (boolean)"),
-         _Option(["-aformat","aformat"],
+         _Option(["-aformat", "aformat"],
                  "Display output in a different specified output format")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -935,18 +935,18 @@ class FuzznucCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="fuzznuc", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"],
+         _Option(["-sequence", "sequence"],
                  "Sequence database USA",
                  is_required=True),
-         _Option(["-pattern","pattern"],
+         _Option(["-pattern", "pattern"],
                  "Search pattern, using standard IUPAC one-letter codes",
                  is_required=True),
-         _Option(["-mismatch","mismatch"],
+         _Option(["-mismatch", "mismatch"],
                  "Number of mismatches",
                  is_required=True),
-         _Option(["-complement","complement"],
+         _Option(["-complement", "complement"],
                  "Search complementary strand"),
-         _Option(["-rformat","rformat"],
+         _Option(["-rformat", "rformat"],
                  "Specify the report format to output in.")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -956,44 +956,44 @@ class Est2GenomeCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="est2genome", **kwargs):
         self.parameters = [
-         _Option(["-est","est"],
+         _Option(["-est", "est"],
                  "EST sequence(s)",
                  is_required=True),
-         _Option(["-genome","genome"],
+         _Option(["-genome", "genome"],
                  "Genomic sequence",
                  is_required=True),
-         _Option(["-match","match"],
+         _Option(["-match", "match"],
                  "Score for matching two bases"),
-         _Option(["-mismatch","mismatch"],
+         _Option(["-mismatch", "mismatch"],
                  "Cost for mismatching two bases"),
-         _Option(["-gappenalty","gappenalty"],
+         _Option(["-gappenalty", "gappenalty"],
                  "Cost for deleting a single base in either sequence, "
                  "excluding introns"),
-         _Option(["-intronpenalty","intronpenalty"],
+         _Option(["-intronpenalty", "intronpenalty"],
                  "Cost for an intron, independent of length."),
-         _Option(["-splicepenalty","splicepenalty"],
+         _Option(["-splicepenalty", "splicepenalty"],
                  "Cost for an intron, independent of length "
                  "and starting/ending on donor-acceptor sites"),
-         _Option(["-minscore","minscore"],
+         _Option(["-minscore", "minscore"],
                  "Exclude alignments with scores below this threshold score."),
-         _Option(["-reverse","reverse"],
+         _Option(["-reverse", "reverse"],
                  "Reverse the orientation of the EST sequence"),
-         _Option(["-splice","splice"],
+         _Option(["-splice", "splice"],
                  "Use donor and acceptor splice sites."),
-         _Option(["-mode","mode"],
+         _Option(["-mode", "mode"],
                  "This determines the comparion mode. 'both', 'forward' "
                  "'reverse'"),
-         _Option(["-best","best"],
+         _Option(["-best", "best"],
                  "You can print out all comparisons instead of just the best"),
-         _Option(["-space","space"],
+         _Option(["-space", "space"],
                  "for linear-space recursion."),
-         _Option(["-shuffle","shuffle"],
+         _Option(["-shuffle", "shuffle"],
                  "Shuffle"),
-         _Option(["-seed","seed"],
+         _Option(["-seed", "seed"],
                  "Random number seed"),
-         _Option(["-align","align"],
+         _Option(["-align", "align"],
                  "Show the alignment."),
-         _Option(["-width","width"],
+         _Option(["-width", "width"],
                  "Alignment width")
         ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
@@ -1004,23 +1004,23 @@ class ETandemCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="etandem", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"],
+         _Option(["-sequence", "sequence"],
                  "Sequence",
                  filename=True,
                  is_required=True),
-         _Option(["-minrepeat","minrepeat"],
+         _Option(["-minrepeat", "minrepeat"],
                  "Minimum repeat size",
                  is_required=True),
-         _Option(["-maxrepeat","maxrepeat"],
+         _Option(["-maxrepeat", "maxrepeat"],
                  "Maximum repeat size",
                  is_required=True),
-         _Option(["-threshold","threshold"],
+         _Option(["-threshold", "threshold"],
                  "Threshold score"),
-         _Option(["-mismatch","mismatch"],
+         _Option(["-mismatch", "mismatch"],
                    "Allow N as a mismatch"),
-         _Option(["-uniform","uniform"],
+         _Option(["-uniform", "uniform"],
                    "Allow uniform consensus"),
-         _Option(["-rformat","rformat"],
+         _Option(["-rformat", "rformat"],
                  "Output report format")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -1030,24 +1030,24 @@ class EInvertedCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="einverted", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"],
+         _Option(["-sequence", "sequence"],
                  "Sequence",
                  filename=True,
                  is_required=True),
-         _Option(["-gap","gap"],
+         _Option(["-gap", "gap"],
                  "Gap penalty",
                  filename=True,
                  is_required=True),
-         _Option(["-threshold","threshold"],
+         _Option(["-threshold", "threshold"],
                  "Minimum score threshold",
                  is_required=True),
-         _Option(["-match","match"],
+         _Option(["-match", "match"],
                  "Match score",
                  is_required=True),
-         _Option(["-mismatch","mismatch"],
+         _Option(["-mismatch", "mismatch"],
                  "Mismatch score",
                  is_required=True),
-         _Option(["-maxrepeat","maxrepeat"],
+         _Option(["-maxrepeat", "maxrepeat"],
                  "Maximum separation between the start and end of repeat"),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
@@ -1058,23 +1058,23 @@ class PalindromeCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="palindrome", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"],
+         _Option(["-sequence", "sequence"],
                  "Sequence",
                  filename=True,
                  is_required=True),
-         _Option(["-minpallen","minpallen"],
+         _Option(["-minpallen", "minpallen"],
                  "Minimum palindrome length",
                  is_required=True),
-         _Option(["-maxpallen","maxpallen"],
+         _Option(["-maxpallen", "maxpallen"],
                  "Maximum palindrome length",
                  is_required=True),
-         _Option(["-gaplimit","gaplimit"],
+         _Option(["-gaplimit", "gaplimit"],
                  "Maximum gap between repeats",
                  is_required=True),
-         _Option(["-nummismatches","nummismatches"],
+         _Option(["-nummismatches", "nummismatches"],
                  "Number of mismatches allowed",
                  is_required=True),
-         _Option(["-overlap","overlap"],
+         _Option(["-overlap", "overlap"],
                  "Report overlapping matches",
                  is_required=True),
          ]
@@ -1086,19 +1086,19 @@ class TranalignCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="tranalign", **kwargs):
         self.parameters = [
-         _Option(["-asequence","asequence"],
+         _Option(["-asequence", "asequence"],
                  "Nucleotide sequences to be aligned.",
                  filename=True,
                  is_required=True),
-         _Option(["-bsequence","bsequence"],
+         _Option(["-bsequence", "bsequence"],
                  "Protein sequence alignment",
                  filename=True,
                  is_required=True),
-         _Option(["-outseq","outseq"],
+         _Option(["-outseq", "outseq"],
                  "Output sequence file.",
                  filename=True,
                  is_required=True),
-         _Option(["-table","table"],
+         _Option(["-table", "table"],
                  "Code to use")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -1108,26 +1108,26 @@ class DiffseqCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="diffseq", **kwargs):
         self.parameters = [
-         _Option(["-asequence","asequence"],
+         _Option(["-asequence", "asequence"],
                  "First sequence to compare",
                  filename=True,
                  is_required=True),
-         _Option(["-bsequence","bsequence"],
+         _Option(["-bsequence", "bsequence"],
                  "Second sequence to compare",
                  filename=True,
                  is_required=True),
-         _Option(["-wordsize","wordsize"],
+         _Option(["-wordsize", "wordsize"],
                  "Word size to use for comparisons (10 default)",
                  is_required=True),
-         _Option(["-aoutfeat","aoutfeat"],
+         _Option(["-aoutfeat", "aoutfeat"],
                  "File for output of first sequence's features",
                  filename=True,
                  is_required=True),
-         _Option(["-boutfeat","boutfeat"],
+         _Option(["-boutfeat", "boutfeat"],
                  "File for output of second sequence's features",
                  filename=True,
                  is_required=True),
-         _Option(["-rformat","rformat"],
+         _Option(["-rformat", "rformat"],
                  "Output report file format")
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
@@ -1149,32 +1149,32 @@ class IepCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="iep", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"],
+         _Option(["-sequence", "sequence"],
                 "Protein sequence(s) filename",
                  filename=True,
                  is_required=True),
-         _Option(["-amino","amino"],
+         _Option(["-amino", "amino"],
                  """Number of N-termini
 
                  Integer 0 (default) or more.
                  """),
-         _Option(["-carboxyl","carboxyl"],
+         _Option(["-carboxyl", "carboxyl"],
                  """Number of C-termini
 
                  Integer 0 (default) or more.
                  """),
-         _Option(["-lysinemodified","lysinemodified"],
+         _Option(["-lysinemodified", "lysinemodified"],
                  """Number of modified lysines
 
                  Integer 0 (default) or more.
                  """),
-         _Option(["-disulphides","disulphides"],
+         _Option(["-disulphides", "disulphides"],
                  """Number of disulphide bridges
 
                  Integer 0 (default) or more.
                  """),
          #Should we implement the -termini switch as well?
-         _Option(["-notermini","notermini"],
+         _Option(["-notermini", "notermini"],
                  "Exclude (True) or include (False) charge at N and C terminus."),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
@@ -1194,15 +1194,15 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
     """
     def __init__(self, cmd="seqret", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"],
+         _Option(["-sequence", "sequence"],
                  "Input sequence(s) filename",
                  filename=True),
-         _Option(["-outseq","outseq"],
+         _Option(["-outseq", "outseq"],
                  "Output sequence file.",
                  filename=True),
-         _Option(["-sformat","sformat"],
+         _Option(["-sformat", "sformat"],
                  "Input sequence(s) format (e.g. fasta, genbank)"),
-         _Option(["-osformat","osformat"],
+         _Option(["-osformat", "osformat"],
                  "Output sequence(s) format (e.g. fasta, genbank)"),
          ]
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
@@ -1240,7 +1240,7 @@ class SeqmatchallCommandline(_EmbossCommandLine):
                   is_required=True),
           _Option(["-wordsize", "wordsize"],
                   "Word size (Integer 2 or more, default 4)"),
-          _Option(["-aformat","aformat"],
+          _Option(["-aformat", "aformat"],
                   "Display output in a different specified output format"),
         ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)

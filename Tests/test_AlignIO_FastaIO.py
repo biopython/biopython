@@ -28,7 +28,7 @@ test_files = [
     ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output006.m10'),
     ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
-    ("fasta-m10", 2, 12,'Fasta/output008.m10'),
+    ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
     ]
 
 #Main tests...
@@ -40,7 +40,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    alignments = list(AlignIO.parse(handle=open(t_filename,"r"), format=t_format))
+    alignments = list(AlignIO.parse(handle=open(t_filename, "r"), format=t_format))
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
@@ -49,7 +49,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             % (t_per, len(alignment))
 
     #Print the alignment
-    for i,alignment in enumerate(alignments):
+    for i, alignment in enumerate(alignments):
         print("="*78)
         print("Alignment %i, with %i sequences of length %i" \
               % (i,

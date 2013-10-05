@@ -124,7 +124,7 @@ class Atom(object):
         @type other: L{Atom}
         """
         diff=self.coord-other.coord
-        return numpy.sqrt(numpy.dot(diff,diff))
+        return numpy.sqrt(numpy.dot(diff, diff))
 
     # set methods
 
@@ -281,8 +281,8 @@ class Atom(object):
         @return: coordinates as 3D vector
         @rtype: Vector
         """
-        x,y,z=self.coord
-        return Vector(x,y,z)
+        x, y, z=self.coord
+        return Vector(x, y, z)
 
     def copy(self):
         """

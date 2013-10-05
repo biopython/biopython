@@ -843,7 +843,7 @@ class BlastXmlWriter(object):
         """Adjusts output to mimic native BLAST+ XML as much as possible."""
 
         # adjust coordinates
-        if attr in ('query_start' ,'query_end' ,'hit_start', 'hit_end',
+        if attr in ('query_start', 'query_end', 'hit_start', 'hit_end',
                 'pattern_start', 'pattern_end'):
             content = getattr(hsp, attr) + 1
             if '_start' in attr:

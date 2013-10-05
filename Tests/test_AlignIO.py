@@ -32,8 +32,8 @@ test_files = [
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
     ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
     ("clustal", 2, 1, 'Clustalw/odd_consensus.aln'),
-    ("clustal",20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
-    ("clustal",20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
+    ("clustal", 20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
+    ("clustal", 20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
 #Following examples are also used in test_GFF.py
     ("fasta", 3, 1, 'GFF/multi.fna'),  # Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py
@@ -43,9 +43,9 @@ test_files = [
     ("stockholm", 6, 1, 'Stockholm/funny.sth'),
     ("phylip", 6, 1, 'Phylip/reference_dna.phy'),
     ("phylip", 6, 1, 'Phylip/reference_dna2.phy'),
-    ("phylip",10, 1, 'Phylip/hennigian.phy'),
-    ("phylip",10, 1, 'Phylip/horses.phy'),
-    ("phylip",10, 1, 'Phylip/random.phy'),
+    ("phylip", 10, 1, 'Phylip/hennigian.phy'),
+    ("phylip", 10, 1, 'Phylip/horses.phy'),
+    ("phylip", 10, 1, 'Phylip/random.phy'),
     ("phylip", 3, 1, 'Phylip/interlaced.phy'),
     ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
     ("phylip-relaxed", 12, 1, 'ExtendedPhylip/primates.phyx'),
@@ -65,7 +65,7 @@ test_files = [
     ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output006.m10'),
     ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
-    ("fasta-m10", 2, 12,'Fasta/output008.m10'),
+    ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1,  'NBRF/clustalw.pir'),
     ]
@@ -87,17 +87,17 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
         #Show each sequence row horizontally
         for record in alignment:
             answer.append("%s%s %s"
-            % (index,str_summary(str(record.seq)),record.id))
+            % (index, str_summary(str(record.seq)), record.id))
     else:
         #Show each sequence row vertically
-        for i in range(min(5,alignment_len)):
-            answer.append(index + str_summary(alignment[:,i])
+        for i in range(min(5, alignment_len)):
+            answer.append(index + str_summary(alignment[:, i])
                                 + " alignment column %i" % i)
         if alignment_len > 5:
             i = alignment_len - 1
             answer.append(index + str_summary("|" * rec_count)
                                 + " ...")
-            answer.append(index + str_summary(alignment[:,i])
+            answer.append(index + str_summary(alignment[:, i])
                                 + " alignment column %i" % i)
     return "\n".join(answer)
 
@@ -172,7 +172,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
     for a1, a2 in zip(alignments, alignments2):
         assert a1.get_alignment_length() == a2.get_alignment_length()
         assert len(a1) == len(a2)
-        for r1, r2 in zip(a1,a2):
+        for r1, r2 in zip(a1, a2):
             #Check the bare minimum (ID and sequence) as
             #many formats can't store more than that.
 
@@ -182,16 +182,16 @@ def simple_alignment_comparison(alignments, alignments2, format):
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
             if format in ["phylip", "phylip-sequential"]:
-                assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
+                assert r1.id.replace("[", "").replace("]", "")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="phylip-relaxed":
                 assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
                         "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="clustal":
-                assert r1.id.replace(" ","_")[:30] == r2.id, \
+                assert r1.id.replace(" ", "_")[:30] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="stockholm":
-                assert r1.id.replace(" ","_") == r2.id, \
+                assert r1.id.replace(" ", "_") == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="fasta":
                 assert r1.id.split()[0] == r2.id
@@ -237,7 +237,7 @@ for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
            % t_format
 
 #Check writers reject non-alignments
-list_of_records = list(AlignIO.read(open("Clustalw/opuntia.aln"),"clustal"))
+list_of_records = list(AlignIO.read(open("Clustalw/opuntia.aln"), "clustal"))
 for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
@@ -256,7 +256,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    alignments = list(AlignIO.parse(handle=open(t_filename,"r"), format=t_format))
+    alignments = list(AlignIO.parse(handle=open(t_filename, "r"), format=t_format))
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
@@ -272,7 +272,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
 
     #Try using the iterator with the next() method
     alignments3 = []
-    seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
+    seq_iterator = AlignIO.parse(handle=open(t_filename, "r"), format=t_format)
     while True:
         try:
             record = next(seq_iterator)
@@ -282,7 +282,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         alignments3.append(record)
 
     #Try a mixture of next() and list (a torture test!)
-    seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
+    seq_iterator = AlignIO.parse(handle=open(t_filename, "r"), format=t_format)
     try:
         record = next(seq_iterator)
     except StopIteration:
@@ -295,7 +295,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert len(alignments4) == t_count
 
     #Try a mixture of next() and for loop (a torture test!)
-    seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
+    seq_iterator = AlignIO.parse(handle=open(t_filename, "r"), format=t_format)
     try:
         record = next(seq_iterator)
     except StopIteration:
@@ -321,7 +321,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             pass
 
     # Show the alignment
-    for i,alignment in enumerate(alignments):
+    for i, alignment in enumerate(alignments):
         if i < 3 or i+1 == t_count:
             print(" Alignment %i, with %i sequences of length %i" \
                   % (i,
@@ -346,9 +346,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
                 raise e
             pass
 
-    if t_count==1 and t_format not in ["nexus","emboss","fasta-m10"]:
+    if t_count==1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
         #print(" Trying to read a triple concatenation of the input file")
-        data = open(t_filename,"r").read()
+        data = open(t_filename, "r").read()
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)
         handle.seek(0)

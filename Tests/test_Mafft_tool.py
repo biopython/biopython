@@ -53,8 +53,8 @@ def check_mafft_version(mafft_exe):
         index = output.find(marker)
         if index == -1:
             continue
-        version = output[index+len(marker):].strip().split(None,1)[0]
-        major = int(version.split(".",1)[0])
+        version = output[index+len(marker):].strip().split(None, 1)[0]
+        major = int(version.split(".", 1)[0])
         if major < 6:
             raise MissingExternalDependencyError("Test requires MAFFT v6 or "
                                                  "later (found %s)." % version)

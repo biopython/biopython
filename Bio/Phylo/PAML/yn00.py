@@ -66,7 +66,7 @@ class Yn00(Paml):
             ctl_handle = open(ctl_file)
             for line in ctl_handle:
                 line = line.strip()
-                uncommented = line.split("*",1)[0]
+                uncommented = line.split("*", 1)[0]
                 if uncommented != "":
                     if "=" not in uncommented:
                         ctl_handle.close()

@@ -88,7 +88,7 @@ print("")
 print("Single sequence")
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
-assert len(list(SeqIO.parse(input_file,"fasta")))==1
+assert len(list(SeqIO.parse(input_file, "fasta")))==1
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
@@ -129,11 +129,11 @@ print("==========================")
 #Create a temp fasta file with a space in the name
 temp_filename_with_spaces = "Clustalw/temp horses.fasta"
 handle = open(temp_filename_with_spaces, "w")
-SeqIO.write(SeqIO.parse("Phylip/hennigian.phy","phylip"), handle, "fasta")
+SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
 handle.close()
 
 for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
-    input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"))
+    input_records = SeqIO.to_dict(SeqIO.parse(input_file, "fasta"))
     print("")
     print("Calling fasttree on %s (with %i records)" \
           % (repr(input_file), len(input_records)))

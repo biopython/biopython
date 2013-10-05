@@ -184,7 +184,7 @@ class newenzyme(object):
             #
             #   => undefined enzymes, nothing to be done.
             #
-            cls.bases += ('NoCut','Unknown', 'NotDefined')
+            cls.bases += ('NoCut', 'Unknown', 'NotDefined')
             cls.fst5 = None
             cls.fst3 = None
             cls.scd5 = None
@@ -318,7 +318,7 @@ class TypeCompiler(object):
         #   emboss_*.403 AspCNI is unknown and commercially available.
         #   So now do not remove the most obvious.
         #
-        types = [(p,c,o,d,m,co,baT[0],baT[1])
+        types = [(p, c, o, d, m, co, baT[0], baT[1])
                  for p in paT for c in cuT for o in ovT
                  for d in deT for m in meT for co in coT]
         n= 1
@@ -344,10 +344,10 @@ class TypeCompiler(object):
 
             class klass(type):
                 def __new__(cls):
-                    return type.__new__(cls, 'type%i'%n,ty,dct)
+                    return type.__new__(cls, 'type%i'%n, ty, dct)
 
                 def __init__(cls):
-                    super(klass, cls).__init__('type%i'%n,ty,dct)
+                    super(klass, cls).__init__('type%i'%n, ty, dct)
 
             yield klass()
             n+=1
@@ -448,13 +448,13 @@ class DictionaryBuilder(object):
             classdict[name] = dct
 
             commonattr = ['fst5', 'fst3', 'scd5', 'scd3', 'substrat',
-                          'ovhg', 'ovhgseq','results', 'dna']
+                          'ovhg', 'ovhgseq', 'results', 'dna']
             if typename in typedict:
                 typedict[typename][1].append(name)
             else:
                 enzlst= []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict([(k,v) for k,v in tydct.iteritems() if k in commonattr])
+                tydct = dict([(k, v) for k, v in tydct.iteritems() if k in commonattr])
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__['suppl']:
@@ -612,7 +612,7 @@ class DictionaryBuilder(object):
         #
         #   first check if we have the last update:
         #
-        emboss_now = ['.'.join((x,LocalTime())) for x in embossnames]
+        emboss_now = ['.'.join((x, LocalTime())) for x in embossnames]
         update_needed = False
         #dircontent = os.listdir(config.Rebase) #    local database content
         dircontent = os.listdir(os.getcwd())
@@ -689,22 +689,22 @@ class DictionaryBuilder(object):
             files = [(name, name+'.%s'%number) for name in embossnames]
             strmess = '\nLast EMBOSS files found are :\n'
             try:
-                for name,file in files:
+                for name, file in files:
                     if os.path.isfile(os.path.join(base, file)):
                         strmess += '\t%s.\n'%file
                     else:
                         raise ValueError
                 print(strmess)
-                emboss_e = open(os.path.join(base, 'emboss_e.%s'%number),'r')
-                emboss_r = open(os.path.join(base, 'emboss_r.%s'%number),'r')
-                emboss_s = open(os.path.join(base, 'emboss_s.%s'%number),'r')
+                emboss_e = open(os.path.join(base, 'emboss_e.%s'%number), 'r')
+                emboss_r = open(os.path.join(base, 'emboss_r.%s'%number), 'r')
+                emboss_s = open(os.path.join(base, 'emboss_s.%s'%number), 'r')
                 return emboss_e, emboss_r, emboss_s
             except ValueError:
                 continue
 
     def parseline(self, line):
         line = [line[0]]+[line[1].upper()]+[int(i) for i in line[2:9]]+line[9:]
-        name = line[0].replace("-","_")
+        name = line[0].replace("-", "_")
         site = line[1]  # sequence of the recognition site
         dna = DNA(site)
         size = line[2]  # size of the recognition site
@@ -901,14 +901,14 @@ class DictionaryBuilder(object):
         #
         #   remove the heading of the file.
         #
-        return [l for l in itertools.dropwhile(lambda l:l.startswith('#'),file)]
+        return [l for l in itertools.dropwhile(lambda l:l.startswith('#'), file)]
 
     def getblock(self, file, index):
         #
         #   emboss_r.txt, separation between blocks is //
         #
         take = itertools.takewhile
-        block = [l for l in take(lambda l :not l.startswith('//'),file[index:])]
+        block = [l for l in take(lambda l :not l.startswith('//'), file[index:])]
         index += len(block)+1
         return block, index
 
@@ -966,13 +966,13 @@ class DictionaryBuilder(object):
                     continue
                 #Hyphens can't be used as a Python name, nor as a
                 #group name in a regular expression.
-                name = name.replace("-","_")
+                name = name.replace("-", "_")
                 if name in enzymedict:
                     #
                     #   deal with TaqII and its two sites.
                     #
                     print('\nWARNING : %s has two different sites.\n' % name)
-                    other = line[0].replace("-","_")
+                    other = line[0].replace("-", "_")
                     dna = DNA(line[1])
                     sense1 = regex(str(dna))
                     antisense1 = regex(Antiparallel(dna))

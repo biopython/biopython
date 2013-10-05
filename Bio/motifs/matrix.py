@@ -398,7 +398,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         m = self.length
         if both:
             rc = self.reverse_complement()
-        for position in xrange(0,n-m+1):
+        for position in xrange(0, n-m+1):
             s = sequence[position:position+m]
             score = self.calculate(s)
             if score > threshold:
@@ -416,7 +416,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self._letters
-        for position in xrange(0,self.length):
+        for position in xrange(0, self.length):
             score += max(self[letter][position] for letter in letters)
         return score
 
@@ -428,7 +428,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self._letters
-        for position in xrange(0,self.length):
+        for position in xrange(0, self.length):
             score += min(self[letter][position] for letter in letters)
         return score
 
@@ -448,13 +448,13 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         sx = 0.0
         for i in range(self.length):
             for letter in self._letters:
-                logodds = self[letter,i]
+                logodds = self[letter, i]
                 if _isnan(logodds):
                     continue
                 if _isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
-                p = b * math.pow(2,logodds)
+                p = b * math.pow(2, logodds)
                 sx += p * logodds
         return sx
 
@@ -472,13 +472,13 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sx = 0.0
             sxx = 0.0
             for letter in self._letters:
-                logodds = self[letter,i]
+                logodds = self[letter, i]
                 if _isnan(logodds):
                     continue
                 if _isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
-                p = b * math.pow(2,logodds)
+                p = b * math.pow(2, logodds)
                 sx += p*logodds
                 sxx += p*logodds*logodds
             sxx -= sx*sx
@@ -504,7 +504,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             if max_p<p:
                 max_p=p
                 max_o=-offset
-        return 1-max_p,max_o
+        return 1-max_p, max_o
 
     def dist_pearson_at(self, other, offset):
         letters = self._letters
@@ -513,14 +513,14 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         sxx = 0.0  # \sum x^2
         sxy = 0.0  # \sum x \cdot y
         syy = 0.0  # \sum y^2
-        norm=max(self.length,offset+other.length)*len(letters)
+        norm=max(self.length, offset+other.length)*len(letters)
         for pos in range(min(self.length-offset, other.length)):
-            xi = [self[letter,pos+offset] for letter in letters]
-            yi = [other[letter,pos] for letter in letters]
+            xi = [self[letter, pos+offset] for letter in letters]
+            yi = [other[letter, pos] for letter in letters]
             sx += sum(xi)
             sy += sum(yi)
             sxx += sum(x*x for x in xi)
-            sxy += sum(x*y for x,y in zip(xi,yi))
+            sxy += sum(x*y for x, y in zip(xi, yi))
             syy += sum(y*y for y in yi)
         sx /= norm
         sy /= norm

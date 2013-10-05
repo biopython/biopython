@@ -45,7 +45,7 @@ class UniformCrossover(object):
         # determine if we have a crossover
         crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
-            minlen = min(len(new_org_1.genome),len(new_org_2.genome))
+            minlen = min(len(new_org_1.genome), len(new_org_2.genome))
             for i in range( minlen ):
                 uniform_chance = random.random()
                 if uniform_chance <= self._uniform_prob:

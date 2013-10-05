@@ -255,7 +255,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
     fstart = hsp['%s_start' % seq_type]
     # fend is fstart + number of residues in the sequence, minus gaps
     fend = fstart + len(
-            hsp[seq_type][0].replace('-','').replace('>',
+            hsp[seq_type][0].replace('-', '').replace('>',
             '').replace('<', '')) * seq_step
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
@@ -313,7 +313,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         hit = header['hit']
         hsp = header['hsp']
         # check for values that must have been set by previous methods
-        for val_name in ('query_start', 'query_end' ,'hit_start', 'hit_end',
+        for val_name in ('query_start', 'query_end', 'hit_start', 'hit_end',
                 'query_strand', 'hit_strand'):
             assert val_name in hsp, hsp
 

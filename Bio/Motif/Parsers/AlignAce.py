@@ -44,7 +44,7 @@ def read(handle):
         elif line[:3]=="MAP":
             record.current_motif.score = float(line.split()[-1])
         elif len(line.split("\t"))==4:
-            seq = Seq(line.split("\t")[0],IUPAC.unambiguous_dna)
+            seq = Seq(line.split("\t")[0], IUPAC.unambiguous_dna)
             record.current_motif.add_instance(seq)
         elif "*" in line:
             record.current_motif.set_mask(line.strip("\n\c"))

@@ -18,7 +18,7 @@ handle.close()
 f.write("...1cnv.fssp read\n")
 for i in ["author", "compnd", "database", "header", "nalign",
           "pdbid", "seqlength", "source"]:
-    f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec,i))))
+    f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec, i))))
 f.write("\nlen(sum_rec) = %d; head_rec.nalign = %d\n" %
         (len(sum_rec), head_rec.nalign))
 f.write("The above two numbers should be the same\n")

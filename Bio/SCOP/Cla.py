@@ -71,7 +71,7 @@ class Record(object):
         s.append(','.join('='.join((key, str(value))) for key, value
                           in self.hierarchy.iteritems()))
 
-        return "\t".join(map(str,s)) + "\n"
+        return "\t".join(map(str, s)) + "\n"
 
 
 def parse(handle):
@@ -118,7 +118,7 @@ class Index(dict):
 
     def __getitem__(self, key):
         """Return an item from the indexed file."""
-        position = dict.__getitem__(self,key)
+        position = dict.__getitem__(self, key)
 
         f = open(self.filename, "rU")
         try:

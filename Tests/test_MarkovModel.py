@@ -215,7 +215,7 @@ class TestMarkovModel(unittest.TestCase):
         states = MarkovModel.find_states(markov_model, "TTAGCAGTGCG")
         self.assertEqual(len(states), 1)
         state_list, state_float = states[0]
-        self.assertEqual(state_list, ['N','R','R','R','R','R','R','R','R','R','R'])
+        self.assertEqual(state_list, ['N', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R'])
 
     def test_topcoder5(self):
         # N

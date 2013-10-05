@@ -90,7 +90,7 @@ class TestTrie(unittest.TestCase):
         for z in x:
             y[z] = y.get(z, 0) + 1
         x = sorted(y.items())
-        self.assertEqual(x,[(('foo', 1, 0), 1), (('hello', '55a', 4), 6)])
+        self.assertEqual(x, [(('foo', 1, 0), 1), (('hello', '55a', 4), 6)])
         h = StringIO()
         trie.save(h, trieobj)
         h.seek(0)

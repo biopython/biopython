@@ -58,7 +58,7 @@ class Record(object):
     def __str__(self):
         s = []
         s.append(self.sid)
-        s.append(str(self.residues).replace(" ","\t") )
+        s.append(str(self.residues).replace(" ", "\t") )
         s.append(self.hierarchy)
         return "\t".join(s) + "\n"
 

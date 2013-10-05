@@ -28,39 +28,39 @@ Distributed under Biopython license.
 #
 # GAF version 2.0
 
-GAF20FIELDS = ['DB' , 
-        'DB_Object_ID' , 
-        'DB_Object_Symbol' , 
-        'Qualifier' , 
-        'GO_ID' , 
-        'DB:Reference' , 
-        'Evidence' , 
-        'With' , 
+GAF20FIELDS = ['DB', 
+        'DB_Object_ID', 
+        'DB_Object_Symbol', 
+        'Qualifier', 
+        'GO_ID', 
+        'DB:Reference', 
+        'Evidence', 
+        'With', 
         'Aspect',
-        'DB_Object_Name' , 
-        'Synonym' , 
-        'DB_Object_Type' , 
-        'Taxon_ID' , 
-        'Date' , 
-        'Assigned_By' , 
-        'Annotation_Extension' , 
+        'DB_Object_Name', 
+        'Synonym', 
+        'DB_Object_Type', 
+        'Taxon_ID', 
+        'Date', 
+        'Assigned_By', 
+        'Annotation_Extension', 
         'Gene_Product_Form_ID']
 
 # GAF version 1.0
-GAF10FIELDS = ['DB' , 
-        'DB_Object_ID' , 
-        'DB_Object_Symbol' , 
-        'Qualifier' , 
-        'GO_ID' , 
-        'DB:Reference' , 
-        'Evidence' , 
-        'With' , 
+GAF10FIELDS = ['DB', 
+        'DB_Object_ID', 
+        'DB_Object_Symbol', 
+        'Qualifier', 
+        'GO_ID', 
+        'DB:Reference', 
+        'Evidence', 
+        'With', 
         'Aspect',
-        'DB_Object_Name' , 
-        'Synonym' , 
-        'DB_Object_Type' , 
-        'Taxon_ID' , 
-        'Date' , 
+        'DB_Object_Name', 
+        'Synonym', 
+        'DB_Object_Type', 
+        'Taxon_ID', 
+        'Date', 
         'Assigned_By'] 
 
 
@@ -399,7 +399,7 @@ if __name__ == '__main__':
     Write only S. cerevisiae records, but remove all
     records with IEA evidence
     """
-    banned = {'Evidence': set(['IEA','EXP'])}
+    banned = {'Evidence': set(['IEA', 'EXP'])}
     allowed = {'Taxon_ID': set(['taxon:4932'])}
     for inrec in gafiterator(open(sys.argv[1])):
         if record_has(inrec, allowed) and \

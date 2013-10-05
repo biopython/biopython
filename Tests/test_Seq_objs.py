@@ -111,8 +111,8 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 str2 = str(example2)
 
-                i = getattr(example1,method_name)(str2)
-                j = getattr(str1,method_name)(str2)
+                i = getattr(example1, method_name)(str2)
+                j = getattr(str1, method_name)(str2)
                 if pre_comp_function:
                     i = pre_comp_function(i)
                     j = pre_comp_function(j)
@@ -125,8 +125,8 @@ class StringMethodTests(unittest.TestCase):
                                         j))
 
                 try:
-                    i = getattr(example1,method_name)(example2)
-                    j = getattr(str1,method_name)(str2)
+                    i = getattr(example1, method_name)(example2)
+                    j = getattr(str1, method_name)(str2)
                     if pre_comp_function:
                         i = pre_comp_function(i)
                         j = pre_comp_function(j)
@@ -143,8 +143,8 @@ class StringMethodTests(unittest.TestCase):
 
                 if start_end:
                     for start in self._start_end_values:
-                        i = getattr(example1,method_name)(str2, start)
-                        j = getattr(str1,method_name)(str2, start)
+                        i = getattr(example1, method_name)(str2, start)
+                        j = getattr(str1, method_name)(str2, start)
                         if pre_comp_function:
                             i = pre_comp_function(i)
                             j = pre_comp_function(j)
@@ -158,8 +158,8 @@ class StringMethodTests(unittest.TestCase):
                                                 j))
 
                         for end in self._start_end_values:
-                            i = getattr(example1,method_name)(str2, start, end)
-                            j = getattr(str1,method_name)(str2, start, end)
+                            i = getattr(example1, method_name)(str2, start, end)
+                            j = getattr(str1, method_name)(str2, start, end)
                             if pre_comp_function:
                                 i = pre_comp_function(i)
                                 j = pre_comp_function(j)
@@ -188,7 +188,7 @@ class StringMethodTests(unittest.TestCase):
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
-        self.assertTrue("ABCDE".startswith(("ABE","OBE","ABC")))
+        self.assertTrue("ABCDE".startswith(("ABE", "OBE", "ABC")))
 
         #Now check with a tuple of sub sequences
         for example1 in self._examples:
@@ -196,22 +196,22 @@ class StringMethodTests(unittest.TestCase):
                 #e.g. MutableSeq does not support this
                 continue
             subs = tuple([example1[start:start+2] for start
-                          in range(0, len(example1)-2,3)])
+                          in range(0, len(example1)-2, 3)])
             subs_str = tuple([str(s) for s in subs])
 
             self.assertEqual(str(example1).startswith(subs_str),
                              example1.startswith(subs))
             self.assertEqual(str(example1).startswith(subs_str),
                              example1.startswith(subs_str))  # strings!
-            self.assertEqual(str(example1).startswith(subs_str,3),
-                             example1.startswith(subs,3))
-            self.assertEqual(str(example1).startswith(subs_str,2,6),
-                             example1.startswith(subs,2,6))
+            self.assertEqual(str(example1).startswith(subs_str, 3),
+                             example1.startswith(subs, 3))
+            self.assertEqual(str(example1).startswith(subs_str, 2, 6),
+                             example1.startswith(subs, 2, 6))
 
     def test_str_endswith(self):
         """Check matches the python string endswith method."""
         self._test_method("endswith", start_end=True)
-        self.assertTrue("ABCDE".endswith(("ABE","OBE","CDE")))
+        self.assertTrue("ABCDE".endswith(("ABE", "OBE", "CDE")))
 
         #Now check with a tuple of sub sequences
         for example1 in self._examples:
@@ -219,17 +219,17 @@ class StringMethodTests(unittest.TestCase):
                 #e.g. MutableSeq does not support this
                 continue
             subs = tuple([example1[start:start+2] for start
-                          in range(0, len(example1)-2,3)])
+                          in range(0, len(example1)-2, 3)])
             subs_str = tuple([str(s) for s in subs])
 
             self.assertEqual(str(example1).endswith(subs_str),
                              example1.endswith(subs))
             self.assertEqual(str(example1).startswith(subs_str),
                              example1.startswith(subs_str))  # strings!
-            self.assertEqual(str(example1).endswith(subs_str,3),
-                             example1.endswith(subs,3))
-            self.assertEqual(str(example1).endswith(subs_str,2,6),
-                             example1.endswith(subs,2,6))
+            self.assertEqual(str(example1).endswith(subs_str, 3),
+                             example1.endswith(subs, 3))
+            self.assertEqual(str(example1).endswith(subs_str, 2, 6),
+                             example1.endswith(subs, 2, 6))
 
     def test_str_strip(self):
         """Check matches the python string strip method."""
@@ -293,7 +293,7 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(example1[i:]), str1[i:])
                 for j in self._start_end_values:
                     self.assertEqual(str(example1[i:j]), str1[i:j])
-                    for step in range(-3,4):
+                    for step in range(-3, 4):
                         if step == 0:
                             try:
                                 print(example1[i:j:step])
@@ -347,13 +347,13 @@ class StringMethodTests(unittest.TestCase):
             #This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
             or example1.alphabet==generic_rna:
-                mapping = maketrans("ACGUacgu","UGCAugca")
+                mapping = maketrans("ACGUacgu", "UGCAugca")
             elif "T" in str1 or "t" in str1 \
             or example1.alphabet==generic_dna \
             or example1.alphabet==generic_nucleotide:
-                mapping = maketrans("ACGTacgt","TGCAtgca")
+                mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
-                mapping = maketrans("CGcg","GCgc")
+                mapping = maketrans("CGcg", "GCgc")
             else :
                 #TODO - look at alphabet?
                 raise ValueError(example1)
@@ -375,13 +375,13 @@ class StringMethodTests(unittest.TestCase):
             #This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
             or example1.alphabet==generic_rna:
-                mapping = maketrans("ACGUacgu","UGCAugca")
+                mapping = maketrans("ACGUacgu", "UGCAugca")
             elif "T" in str1 or "t" in str1 \
             or example1.alphabet==generic_dna \
             or example1.alphabet==generic_nucleotide:
-                mapping = maketrans("ACGTacgt","TGCAtgca")
+                mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
-                mapping = maketrans("CGcg","GCgc")
+                mapping = maketrans("CGcg", "GCgc")
             else :
                 #TODO - look at alphabet?
                 continue
@@ -406,7 +406,7 @@ class StringMethodTests(unittest.TestCase):
                 if len(str1) % 3 != 0:
                     #TODO - Check for or silence the expected warning?
                     continue
-                self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
+                self.assertEqual(str1.replace("T", "U").replace("t", "u"), str(tran))
                 self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
 
     def test_the_back_transcription(self):
@@ -424,7 +424,7 @@ class StringMethodTests(unittest.TestCase):
                         continue
                     raise e
                 str1 = str(example1)
-                self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
+                self.assertEqual(str1.replace("U", "T").replace("u", "t"), str(tran))
                 self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
 
     def test_the_translate(self):

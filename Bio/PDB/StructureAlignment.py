@@ -130,5 +130,5 @@ if __name__=="__main__":
     al=StructureAlignment(fa, m1, m2)
 
     # Print aligned pairs (r is None if gap)
-    for (r1,r2) in al.get_iterator():
+    for (r1, r2) in al.get_iterator():
         print("%s %s" % (r1, r2))

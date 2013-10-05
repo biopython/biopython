@@ -80,14 +80,14 @@ class MEMEMotif (Motif):
             number = int(number)
             self.num_occurrences = number
 
-    def get_instance_by_name (self,name):
+    def get_instance_by_name (self, name):
         for i in self.instances:
             if i.sequence_name == name:
                 return i
         return None
 
     def add_instance_from_values (self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
-        inst = MEMEInstance(sequence,self.alphabet)
+        inst = MEMEInstance(sequence, self.alphabet)
         inst._pvalue(pvalue)
         inst._seqname(name)
         inst._start(start)
@@ -127,11 +127,11 @@ class MEMEInstance(Seq.Seq):
     def _motifname (self, name):
         self.motif_name = name
     
-    def _start (self,start):
+    def _start (self, start):
         start = int(start)
         self.start = start
     
-    def _pvalue (self,pval):
+    def _pvalue (self, pval):
         pval = float(pval)
         self.pvalue = pval
     
@@ -201,7 +201,7 @@ def __read_datafile(record, handle):
     if not line.startswith('DATAFILE'):
         raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
     line = line.strip()
-    line = line.replace('DATAFILE= ','')
+    line = line.replace('DATAFILE= ', '')
     record.datafile = line
 
 
@@ -213,7 +213,7 @@ def __read_alphabet(record, handle):
     if not line.startswith('ALPHABET'):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
     line = line.strip()
-    line = line.replace('ALPHABET= ','')
+    line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
         al = IUPAC.unambiguous_dna
     else:
@@ -253,7 +253,7 @@ def __read_command(record, handle):
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'command'")
     line = line.strip()
-    line = line.replace('command: ','')
+    line = line.replace('command: ', '')
     record.command = line
 
 

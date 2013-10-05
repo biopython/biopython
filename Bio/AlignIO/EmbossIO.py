@@ -165,9 +165,9 @@ class EmbossIterator(AlignmentIterator):
                     if start == end:
                         assert seq.replace("-", "") == "", line
                     else:
-                        assert start - seq_starts[index] == len(seqs[index].replace("-","")), \
+                        assert start - seq_starts[index] == len(seqs[index].replace("-", "")), \
                         "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
-                            % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
+                            % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
                                start, line)
 
                     seqs[index] += seq

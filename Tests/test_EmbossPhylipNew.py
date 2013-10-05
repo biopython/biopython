@@ -19,7 +19,7 @@ from Bio.Emboss.Applications import FTreeDistCommandline, FDNAParsCommandline
 #Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
-exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist','fprotpars','fconsense',
+exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist', 'fprotpars', 'fconsense',
                'fseqboot', 'ftreedist', 'fdnapars']
 exes = dict()  # Dictionary mapping from names to exe locations
 
@@ -65,7 +65,7 @@ def write_AlignIO_protein():
 
 def clean_up():
     """Delete tests files (to be used as tearDown() function in test fixtures)"""
-    for filename in ["test_file", "Phylip/opuntia.phy","Phylip/hedgehog.phy"]:
+    for filename in ["test_file", "Phylip/opuntia.phy", "Phylip/hedgehog.phy"]:
         if os.path.isfile(filename):
             os.remove(filename)
 
@@ -279,7 +279,7 @@ class TreeComparisonTests(unittest.TestCase):
         taxa1 = tree1.get_taxa()
         for tree in parse_trees("Phylip/horses.tree"):
             taxa2 = tree.get_taxa()
-            self.assertEqual(sorted(taxa1),sorted(taxa2))
+            self.assertEqual(sorted(taxa1), sorted(taxa2))
 
     def test_ftreedist(self):
         """Calculate the distance between trees with ftreedist"""

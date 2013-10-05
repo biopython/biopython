@@ -67,7 +67,7 @@ _between_location = r"\d+\^\d+"
 _within_position = r"\(\d+\.\d+\)"
 _re_within_position = re.compile(_within_position)
 _within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" \
-                   % (_within_position,_within_position)
+                   % (_within_position, _within_position)
 assert _re_within_position.match("(3.9)")
 assert re.compile(_within_location).match("(3.9)..10")
 assert re.compile(_within_location).match("26..(30.33)")
@@ -76,7 +76,7 @@ assert re.compile(_within_location).match("(13.19)..(20.28)")
 _oneof_position = r"one\-of\(\d+(,\d+)+\)"
 _re_oneof_position = re.compile(_oneof_position)
 _oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" \
-                   % (_oneof_position,_oneof_position)
+                   % (_oneof_position, _oneof_position)
 assert _re_oneof_position.match("one-of(6,9)")
 assert re.compile(_oneof_location).match("one-of(6,9)..101")
 assert re.compile(_oneof_location).match("one-of(6,9)..one-of(101,104)")
@@ -205,7 +205,7 @@ def _pos(pos_str, offset=0):
     elif pos_str.startswith(">"):
         return SeqFeature.AfterPosition(int(pos_str[1:])+offset)
     elif _re_within_position.match(pos_str):
-        s,e = pos_str[1:-1].split(".")
+        s, e = pos_str[1:-1].split(".")
         s = int(s) + offset
         e = int(e) + offset
         if offset == -1:
@@ -286,7 +286,7 @@ def _loc(loc_str, expected_seq_length, strand):
             #e.g. "123"
             s = loc_str
             e = loc_str
-    return SeqFeature.FeatureLocation(_pos(s,-1), _pos(e), strand)
+    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand)
 
 
 def _split_compound_loc(compound_loc):
@@ -511,7 +511,7 @@ class _BaseGenBankConsumer(object):
         """
         # first replace all line feeds with spaces
         # Also, EMBL style accessions are split with ';'
-        accession = accession_string.replace("\n", " ").replace(";"," ")
+        accession = accession_string.replace("\n", " ").replace(";", " ")
 
         return [x.strip() for x in accession.split() if x.strip()]
 
@@ -674,7 +674,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['wgs'] = content.split('-')
 
     def add_wgs_scafld(self, content):
-        self.data.annotations.setdefault('wgs_scafld',[]).append(content.split('-'))
+        self.data.annotations.setdefault('wgs_scafld', []).append(content.split('-'))
 
     def nid(self, content):
         self.data.annotations['nid'] = content
@@ -1349,11 +1349,11 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def comment(self, content):
         self.data.comment += "\n".join(content)
 
-    def primary_ref_line(self,content):
+    def primary_ref_line(self, content):
         """Data for the PRIMARY line"""
         self.data.primary.append(content)
 
-    def primary(self,content):
+    def primary(self, content):
         pass
 
     def features_line(self, content):
@@ -1514,10 +1514,10 @@ def _test():
     """Run the Bio.GenBank module's doctests."""
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print("Running doctests...")
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir

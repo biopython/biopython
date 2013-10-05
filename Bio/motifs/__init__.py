@@ -189,10 +189,10 @@ class Instances(list):
         """
         a generator function, returning found positions of motif instances in a given sequence
         """
-        for pos in xrange(0,len(sequence)-self.length+1):
+        for pos in xrange(0, len(sequence)-self.length+1):
             for instance in self:
                 if str(instance) == str(sequence[pos:pos+self.length]):
-                    yield(pos,instance)
+                    yield(pos, instance)
                     break # no other instance will fit (we don't want to return multiple hits)
     def reverse_complement(self):
         instances = Instances(alphabet=self.alphabet)
@@ -429,30 +429,30 @@ The same rules are used by TRANSFAC."""
         import urllib2
         frequencies = self.format('transfac')
         url = 'http://weblogo.threeplusone.com/create.cgi'
-        values = {'sequences' : frequencies,
-                  'format' : format.lower(),
-                  'stack_width' : 'medium',
-                  'stack_per_line' : '40',
-                  'alphabet' : 'alphabet_dna',
-                  'ignore_lower_case' : True,
-                  'unit_name' : "bits",
-                  'first_index' : '1',
-                  'logo_start' : '1',
+        values = {'sequences': frequencies,
+                  'format': format.lower(),
+                  'stack_width': 'medium',
+                  'stack_per_line': '40',
+                  'alphabet': 'alphabet_dna',
+                  'ignore_lower_case': True,
+                  'unit_name': "bits",
+                  'first_index': '1',
+                  'logo_start': '1',
                   'logo_end': str(self.length),
-                  'composition' : "comp_auto",
-                  'percentCG' : '',
-                  'scale_width' : True,
-                  'show_errorbars' : True,
-                  'logo_title' : '',
-                  'logo_label' : '',
+                  'composition': "comp_auto",
+                  'percentCG': '',
+                  'scale_width': True,
+                  'show_errorbars': True,
+                  'logo_title': '',
+                  'logo_label': '',
                   'show_xaxis': True,
                   'xaxis_label': '',
                   'show_yaxis': True,
                   'yaxis_label': '',
                   'yaxis_scale': 'auto',
-                  'yaxis_tic_interval' : '1.0',
-                  'show_ends' : True,
-                  'show_fineprint' : True,
+                  'yaxis_tic_interval': '1.0',
+                  'show_ends': True,
+                  'show_fineprint': True,
                   'color_scheme': 'color_auto',
                   'symbols0': '',
                   'symbols1': '',
@@ -465,7 +465,7 @@ The same rules are used by TRANSFAC."""
                   'color3': '',
                   'color4': '',
                   }
-        for k,v in kwds.iteritems():
+        for k, v in kwds.iteritems():
             if isinstance(values[k], bool):
                 if not v:
                     v = ""
@@ -474,7 +474,7 @@ The same rules are used by TRANSFAC."""
         data = urllib.urlencode(values)
         req = urllib2.Request(url, data)
         response = urllib2.urlopen(req)
-        f = open(fname,"w")
+        f = open(fname, "w")
         im = response.read()
 
         f.write(im)

@@ -133,7 +133,7 @@ class NexusTest1(unittest.TestCase):
         # and exporting adjusted sets
         f1=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f1,
-                           delete=['t1','t7'],
+                           delete=['t1', 't7'],
                            exclude=n.invert(n.charsets['big']))
         f1.seek(0)
         nf1=Nexus.Nexus(f1)
@@ -206,7 +206,7 @@ class NexusTest1(unittest.TestCase):
         f2=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f2,
                            delete=['t2_the_name'],
-                           exclude=range(3,40,4))
+                           exclude=range(3, 40, 4))
         f2.seek(0)
         nf2=Nexus.Nexus(f2)
         self.assertEqual(os.path.normpath(nf2.filename),
@@ -316,10 +316,10 @@ usertype matrix_test stepmatrix=5
         n=Nexus.Nexus(self.handle)
         t3=n.trees[2]
         t2=n.trees[2]
-        t3.root_with_outgroup(['t1','t5'])
+        t3.root_with_outgroup(['t1', 't5'])
         self.assertEqual(str(t3), "tree tree1 = (((((('one should be punished, for (that)!','isn''that [a] strange name?'),'t2 the name'),t8,t9),t6),t7),(t5,t1));")
-        self.assertEqual(t3.is_monophyletic(['t8','t9','t6','t7']), -1)
-        self.assertEqual(t3.is_monophyletic(['t1','t5']), 13)
+        self.assertEqual(t3.is_monophyletic(['t8', 't9', 't6', 't7']), -1)
+        self.assertEqual(t3.is_monophyletic(['t1', 't5']), 13)
         t3.split(parent_id=t3.search_taxon('t9'))
         stdout = sys.stdout
         try:
@@ -355,7 +355,7 @@ Root:  16
         for l1, l2 in zip(output.split("\n"), expected.split("\n")):
             self.assertEqual(l1, l2)
         self.assertEqual(output, expected)
-        self.assertEqual(t3.is_compatible(t2,threshold=0.3), [])
+        self.assertEqual(t3.is_compatible(t2, threshold=0.3), [])
 
     def test_internal_node_labels(self):
         """Handle text labels on internal nodes.

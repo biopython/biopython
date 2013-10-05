@@ -142,7 +142,7 @@ for name, example, folder, deps in extract_doctests(tutorial):
         return method
 
     setattr(TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ","_"),
+            "doctest_%s" % name.replace(" ", "_"),
             funct(name, example, folder))
     del funct
 

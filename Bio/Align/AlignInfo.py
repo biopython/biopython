@@ -262,8 +262,8 @@ class SummaryInfo(object):
                 rep_dict = self._pair_replacement(
                     self.alignment._records[rec_num1].seq,
                     self.alignment._records[rec_num2].seq,
-                    self.alignment._records[rec_num1].annotations.get('weight',1.0),
-                    self.alignment._records[rec_num2].annotations.get('weight',1.0),
+                    self.alignment._records[rec_num1].annotations.get('weight', 1.0),
+                    self.alignment._records[rec_num2].annotations.get('weight', 1.0),
                     rep_dict, skip_items)
 
         return rep_dict
@@ -348,7 +348,7 @@ class SummaryInfo(object):
         # and drop it out
         if isinstance(self.alignment._alphabet, Alphabet.Gapped):
             skip_items.append(self.alignment._alphabet.gap_char)
-            all_letters = all_letters.replace(self.alignment._alphabet.gap_char,'')
+            all_letters = all_letters.replace(self.alignment._alphabet.gap_char, '')
 
         # now create the dictionary
         for first_letter in all_letters:
@@ -534,7 +534,7 @@ class SummaryInfo(object):
         for record in all_records:
             try:
                 if record.seq[residue_num] not in to_ignore:
-                    weight = record.annotations.get('weight',1.0)
+                    weight = record.annotations.get('weight', 1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
             # getting a key error means we've got a problem with the alphabet
@@ -604,7 +604,7 @@ class SummaryInfo(object):
                 total_info += letter_info
         return total_info
 
-    def get_column(self,col):
+    def get_column(self, col):
         return self.alignment.get_column(col)
 
 

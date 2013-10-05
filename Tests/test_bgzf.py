@@ -112,7 +112,7 @@ class BgzfTests(unittest.TestCase):
                 old = _as_string(old)
             h.close()
 
-            for cache in [1,10]:
+            for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 if "b" in mode:
                     new = _empty_bytes_string.join(line for line in h)
@@ -128,7 +128,7 @@ class BgzfTests(unittest.TestCase):
     def check_by_char(self, old_file, new_file, old_gzip=False):
         for mode in ["r", "rb"]:
             if old_gzip:
-                h = gzip.open(old_file,mode)
+                h = gzip.open(old_file, mode)
             else:
                 h = open(old_file, mode)
             old = h.read()
@@ -140,7 +140,7 @@ class BgzfTests(unittest.TestCase):
                 old = _as_string(old)
             h.close()
 
-            for cache in [1,10]:
+            for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 temp = []
                 while True:
@@ -178,7 +178,7 @@ class BgzfTests(unittest.TestCase):
         self.assertFalse(h.isatty())
         self.assertEqual(h.fileno(), h._handle.fileno())
         for start, raw_len, data_start, data_len in blocks:
-            h.seek(bgzf.make_virtual_offset(start,0))
+            h.seek(bgzf.make_virtual_offset(start, 0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
             #self.assertEqual(start + raw_len, h._handle.tell())
@@ -192,7 +192,7 @@ class BgzfTests(unittest.TestCase):
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         for start, raw_len, data_start, data_len in blocks[::-1]:
-            h.seek(bgzf.make_virtual_offset(start,0))
+            h.seek(bgzf.make_virtual_offset(start, 0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
             #self.assertEqual(start + raw_len, h._handle.tell())

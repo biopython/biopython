@@ -34,7 +34,7 @@ class Graph(object):
         """Returns a unique string representation of this graph."""
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
-            values = sorted([(x,self._edge_map[(key,x)])
+            values = sorted([(x, self._edge_map[(key, x)])
                       for x in self._adjacency_list[key].list()])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
@@ -42,7 +42,7 @@ class Graph(object):
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x,y: x+y,
+        edgenum = reduce(lambda x, y: x+y,
                          [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<Graph: " + \
@@ -61,19 +61,19 @@ class Graph(object):
             raise ValueError("Unknown <from> node: " + str(source))
         if to not in self._adjacency_list:
             raise ValueError("Unknown <to> node: " + str(to))
-        if (source,to) in self._edge_map:
+        if (source, to) in self._edge_map:
             raise ValueError(str(source) + " -> " + str(to) + " exists")
         self._adjacency_list[source].add(to)
         if label not in self._label_map:
             self._label_map[label] = set()
-        self._label_map[label].add((source,to))
-        self._edge_map[(source,to)] = label
+        self._label_map[label].add((source, to))
+        self._edge_map[(source, to)] = label
 
     def child_edges(self, parent):
         """Returns a list of (child, label) pairs for parent."""
         if parent not in self._adjacency_list:
             raise ValueError("Unknown <parent> node: " + str(parent))
-        return [(x, self._edge_map[(parent,x)])
+        return [(x, self._edge_map[(parent, x)])
                 for x in sorted(self._adjacency_list[parent])]
 
     def children(self, parent):

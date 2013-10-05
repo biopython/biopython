@@ -22,10 +22,10 @@ from Bio.HotRand import HotRandom
 def are_items_in_range( a, high, low ):
     for j in range( 0, len( a ) ):
         if( a[ j ] > high ):
-            print('a[ %d ] is %d' % ( j , a[ j ] ))
+            print('a[ %d ] is %d' % ( j, a[ j ] ))
             return 0
         if( a[ j ] < low ):
-            print('a[ %d ] is %d' % ( j , a[ j ] ))
+            print('a[ %d ] is %d' % ( j, a[ j ] ))
             return 0
     return 1
 
@@ -45,17 +45,17 @@ class RandomSequenceTest(unittest.TestCase):
         for j in range( 0, 200 ):
             rand_num = hot_random.hot_rand( 91, 37 )
             rand_seq.append( rand_num )
-        assert are_items_in_range( rand_seq, 91, 37 ) , "Got an out of range number"
+        assert are_items_in_range( rand_seq, 91, 37 ), "Got an out of range number"
         rand_seq = []
         for j in range( 0, 200 ):
             rand_num = hot_random.hot_rand( 19, 0 )
             rand_seq.append( rand_num )
-        assert are_items_in_range( rand_seq, 19, 0 ) , "Got an out of range number"
+        assert are_items_in_range( rand_seq, 19, 0 ), "Got an out of range number"
         rand_seq = []
         for j in range( 0, 200 ):
             rand_num = hot_random.hot_rand( 61, 4 )
             rand_seq.append( rand_num )
-        assert are_items_in_range( rand_seq, 61, 4 ) , "Got an out of range number"
+        assert are_items_in_range( rand_seq, 61, 4 ), "Got an out of range number"
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

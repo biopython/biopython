@@ -144,7 +144,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(["-score", "-SCORE", "SCORE", "score"],
                     "Either: PERCENT or ABSOLUTE",
                     checker_function=lambda x: x in ["percent", "PERCENT",
-                                                     "absolute","ABSOLUTE"]),
+                                                     "absolute", "ABSOLUTE"]),
             # ***Slow Pairwise Alignments:***
             _Option(["-pwmatrix", "-PWMATRIX", "PWMATRIX", "pwmatrix"],
                     "Protein weight matrix=BLOSUM, PAM, GONNET, ID or filename",

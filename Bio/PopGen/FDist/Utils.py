@@ -108,7 +108,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
                 for al in lParser[1][loci_pos]:
                     if al is not None:
                         loci[loci_pos].add(al)
-                        curr_pop[loci_pos][al]= curr_pop[loci_pos].get(al,0)+1
+                        curr_pop[loci_pos][al]= curr_pop[loci_pos].get(al, 0)+1
         else:
             pops.append(curr_pop)
             num_pops += 1

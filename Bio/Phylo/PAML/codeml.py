@@ -103,7 +103,7 @@ class Codeml(Paml):
             with open(ctl_file) as ctl_handle:
                 for line in ctl_handle:
                     line = line.strip()
-                    uncommented = line.split("*",1)[0]
+                    uncommented = line.split("*", 1)[0]
                     if uncommented != "":
                         if "=" not in uncommented:
                             raise AttributeError(

@@ -121,7 +121,7 @@ def _hw_func(stream, is_locus, has_fisher = False):
             stream.readline()
             stream.readline()
             stream.readline()
-            table = _read_table(stream,[str,_gp_float,_gp_float,_gp_float,_gp_float,_gp_int,str])
+            table = _read_table(stream, [str, _gp_float, _gp_float, _gp_float, _gp_float, _gp_int, str])
             #loci might mean pop if hook="Locus "
             loci = {}
             for entry in table:
@@ -327,7 +327,7 @@ class GenePopController(object):
         f.readline()
         f.readline()
         l = f.readline().rstrip()
-        p, se, switches = tuple(_gp_float(x) for x in filter(lambda y: y != "",l.split(" ")))
+        p, se, switches = tuple(_gp_float(x) for x in filter(lambda y: y != "", l.split(" ")))
         f.close()
         return pop_p, loc_p, (p, se, switches)
 
@@ -566,7 +566,7 @@ class GenePopController(object):
 
         Will create a file called fname.INF
         """
-        self._run_genepop(["INF"], [5,1], fname)
+        self._run_genepop(["INF"], [5, 1], fname)
         #First pass, general information
         #num_loci = None
         #num_pops = None
@@ -620,7 +620,7 @@ class GenePopController(object):
                     l = self.stream.readline()
 
                 while l != "\n":
-                    m2 = re.match(" +([0-9]+) , ([0-9]+) *([0-9]+) *(.+)",l)
+                    m2 = re.match(" +([0-9]+) , ([0-9]+) *([0-9]+) *(.+)", l)
                     if m2 is not None:
                         geno_list.append((_gp_int(m2.group(1)), _gp_int(m2.group(2)),
                             _gp_int(m2.group(3)), _gp_float(m2.group(4))))
@@ -682,7 +682,7 @@ class GenePopController(object):
         return (pop_iter, locus_iter)
 
     def _calc_diversities_fis(self, fname, ext):
-        self._run_genepop([ext], [5,2], fname)
+        self._run_genepop([ext], [5, 2], fname)
         f = open(fname + ext)
         l = f.readline()
         while l != "":
@@ -740,7 +740,7 @@ class GenePopController(object):
 
         This does not return the genotype frequencies.
         """
-        self._run_genepop([".FST"], [6,1], fname)
+        self._run_genepop([".FST"], [6, 1], fname)
         f = open(fname + ".FST")
         l = f.readline()
         while l != '':
@@ -799,11 +799,11 @@ class GenePopController(object):
             self.stream.close()
             self.done = True
             raise StopIteration
-        return (allFis, allFst, allFit), _FileIterator(proc , f, fname + ".FST")
+        return (allFis, allFst, allFit), _FileIterator(proc, f, fname + ".FST")
 
     #6.2
     def calc_fst_pair(self, fname):
-        self._run_genepop([".ST2", ".MIG"], [6,2], fname)
+        self._run_genepop([".ST2", ".MIG"], [6, 2], fname)
         f = open(fname + ".ST2")
         l = f.readline()
         while l != "":
@@ -841,11 +841,11 @@ class GenePopController(object):
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
         """Calculates isolation by distance statistics
         """
-        self._run_genepop([".GRA", ".MIG", ".ISO"], [6,sub],
+        self._run_genepop([".GRA", ".MIG", ".ISO"], [6, sub],
             fname, opts = {
-            "MinimalDistance" : min_dist,
-            "GeographicScale" : scale,
-            "IsolBDstatistic" : stat,
+            "MinimalDistance": min_dist,
+            "GeographicScale": scale,
+            "IsolBDstatistic": stat,
             })
         f = open(fname + ".ISO")
         f.readline()

@@ -194,7 +194,7 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, baseml.read, self.results_file)
 
     def testParseAllVersions(self):
-        folder = os.path.join("PAML","Results", "baseml", "versions")
+        folder = os.path.join("PAML", "Results", "baseml", "versions")
         for results_file in os.listdir(folder):
             file_path = os.path.join(folder, results_file)
             if os.path.isfile(file_path) and results_file[:6] == "baseml":

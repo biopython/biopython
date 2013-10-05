@@ -293,11 +293,11 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 #Output was copy and pasted to the script, see above.
                 #Continue test using SeqFeature objects!
                 #To test colours from the qualifiers,
-                for i,f in enumerate(features):
+                for i, f in enumerate(features):
                     f.qualifiers['color'] = [str(i % 16)]
             else:
-                features = [(start,end,strand,label,color)
-                            for (start,end,strand,label) in features]
+                features = [(start, end, strand, label, color)
+                            for (start, end, strand, label) in features]
             #I haven't found a nice source of data for real Arabidopsis
             #cytobands, so these three are made up at random!
             cytobands = []

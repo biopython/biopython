@@ -34,9 +34,9 @@ def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal=""
     for l in inl:
-        if re.search("\AJRNL",l):
+        if re.search("\AJRNL", l):
             journal+=l[19:72].lower()
-    journal=re.sub("\s\s+"," ",journal)
+    journal=re.sub("\s\s+", " ", journal)
     return journal
 
 
@@ -46,10 +46,10 @@ def _get_references(inl):
     references=[]
     actref=""
     for l in inl:
-        if re.search("\AREMARK   1",l):
-            if re.search("\AREMARK   1 REFERENCE",l):
+        if re.search("\AREMARK   1", l):
+            if re.search("\AREMARK   1 REFERENCE", l):
                 if actref!="":
-                    actref=re.sub("\s\s+"," ",actref)
+                    actref=re.sub("\s\s+", " ", actref)
                     if actref!=" ":
                         references.append(actref)
                     actref=""
@@ -57,7 +57,7 @@ def _get_references(inl):
                 actref+=l[19:72].lower()
 
     if actref!="":
-        actref=re.sub("\s\s+"," ",actref)
+        actref=re.sub("\s\s+", " ", actref)
         if actref!=" ":
             references.append(actref)
     return references
@@ -73,8 +73,8 @@ def _format_date(pdb_date):
     else:
         century=1900
     date=str(century+year)+"-"
-    all_months=['xxx','Jan','Feb','Mar','Apr','May','Jun','Jul',
-    'Aug','Sep','Oct','Nov','Dec']
+    all_months=['xxx', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+    'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     month=str(all_months.index(pdb_date[3:6]))
     if len(month)==1:
         month = '0'+month
@@ -84,12 +84,12 @@ def _format_date(pdb_date):
 
 def _chop_end_codes(line):
     """Chops lines ending with  '     1CSA  14' and the like."""
-    return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z","",line)
+    return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z", "", line)
 
 
 def _chop_end_misc(line):
     """Chops lines ending with  '     14-JUL-97  1CSA' and the like."""
-    return re.sub("\s\s\s\s+.*\Z","",line)
+    return re.sub("\s\s\s\s+.*\Z", "", line)
 
 
 def _nice_case(line):
@@ -152,7 +152,7 @@ def _parse_pdb_header_list(header):
     last_src_key="misc"
 
     for hh in header:
-        h=re.sub("[\s\n\r]*\Z","",hh) # chop linebreaks off
+        h=re.sub("[\s\n\r]*\Z", "", hh) # chop linebreaks off
         #key=re.sub("\s.+\s*","",h)
         key = h[:6].strip()
         #tail=re.sub("\A\w+\s+\d*\s*","",h)
@@ -167,22 +167,22 @@ def _parse_pdb_header_list(header):
             else:
                 dict['name']=name
         elif key=="HEADER":
-            rr=re.search("\d\d-\w\w\w-\d\d",tail)
+            rr=re.search("\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
                 dict['deposition_date']=_format_date(_nice_case(rr.group()))
             head=_chop_end_misc(tail).lower()
             dict['head']=head
         elif key=="COMPND":
-            tt=re.sub("\;\s*\Z","",_chop_end_codes(tail)).lower()
+            tt=re.sub("\;\s*\Z", "", _chop_end_codes(tail)).lower()
             # look for E.C. numbers in COMPND lines
-            rec = re.search('\d+\.\d+\.\d+\.\d+',tt)
+            rec = re.search('\d+\.\d+\.\d+\.\d+', tt)
             if rec:
                 dict['compound'][comp_molid]['ec_number']=rec.group()
-                tt=re.sub("\((e\.c\.)*\d+\.\d+\.\d+\.\d+\)","",tt)
+                tt=re.sub("\((e\.c\.)*\d+\.\d+\.\d+\.\d+\)", "", tt)
             tok=tt.split(":")
             if len(tok)>=2:
                 ckey=tok[0]
-                cval=re.sub("\A\s*","",tok[1])
+                cval=re.sub("\A\s*", "", tok[1])
                 if ckey=='mol_id':
                     dict['compound'][cval]={'misc':''}
                     comp_molid=cval
@@ -193,12 +193,12 @@ def _parse_pdb_header_list(header):
             else:
                 dict['compound'][comp_molid][last_comp_key]+=tok[0]+" "
         elif key=="SOURCE":
-            tt=re.sub("\;\s*\Z","",_chop_end_codes(tail)).lower()
+            tt=re.sub("\;\s*\Z", "", _chop_end_codes(tail)).lower()
             tok=tt.split(":")
             # print(tok)
             if len(tok)>=2:
                 ckey=tok[0]
-                cval=re.sub("\A\s*","",tok[1])
+                cval=re.sub("\A\s*", "", tok[1])
                 if ckey=='mol_id':
                     dict['source'][cval]={'misc':''}
                     comp_molid=cval
@@ -217,7 +217,7 @@ def _parse_pdb_header_list(header):
         elif key=="EXPDTA":
             expd=_chop_end_codes(tail)
             # chop junk at end of lines for some structures
-            expd=re.sub('\s\s\s\s\s\s\s.*\Z','',expd)
+            expd=re.sub('\s\s\s\s\s\s\s.*\Z', '', expd)
             # if re.search('\Anmr',expd,re.IGNORECASE): expd='nmr'
             # if re.search('x-ray diffraction',expd,re.IGNORECASE): expd='x-ray diffraction'
             dict['structure_method']=expd.lower()
@@ -225,7 +225,7 @@ def _parse_pdb_header_list(header):
             # make Annotation entries out of these!!!
             pass
         elif key=="REVDAT":
-            rr=re.search("\d\d-\w\w\w-\d\d",tail)
+            rr=re.search("\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
                 dict['release_date']=_format_date(_nice_case(rr.group()))
         elif key=="JRNL":
@@ -241,9 +241,9 @@ def _parse_pdb_header_list(header):
             else:
                 dict['author']=auth
         elif key=="REMARK":
-            if re.search("REMARK   2 RESOLUTION.",hh):
-                r=_chop_end_codes(re.sub("REMARK   2 RESOLUTION.",'',hh))
-                r=re.sub("\s+ANGSTROM.*","",r)
+            if re.search("REMARK   2 RESOLUTION.", hh):
+                r=_chop_end_codes(re.sub("REMARK   2 RESOLUTION.", '', hh))
+                r=re.sub("\s+ANGSTROM.*", "", r)
                 try:
                     dict['resolution']=float(r)
                 except:
@@ -262,7 +262,7 @@ if __name__=='__main__':
     # some data and returns it as a dictionary.
     import sys
     filename = sys.argv[1]
-    handle = open(filename,'r')
+    handle = open(filename, 'r')
     data_dict = parse_pdb_header(handle)
     handle.close()
 

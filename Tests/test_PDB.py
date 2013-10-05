@@ -953,7 +953,7 @@ class IterationTests(unittest.TestCase):
     def test_get_chains(self):
         """Yields chains from different models separately."""
         chains = [chain.id for chain in self.struc.get_chains()]
-        self.assertEqual(chains, ['A','A', 'B', ' '])
+        self.assertEqual(chains, ['A', 'A', 'B', ' '])
 
     def test_get_residues(self):
         """Yields all residues from all models."""
@@ -1001,7 +1001,7 @@ class TransformTests(unittest.TestCase):
         """
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
-        total_pos = numpy.array((0.0,0.0,0.0))
+        total_pos = numpy.array((0.0, 0.0, 0.0))
         total_count = 0
         for p in o.get_list():
             pos, count = self.get_total_pos(p)
@@ -1019,8 +1019,8 @@ class TransformTests(unittest.TestCase):
     def test_transform(self):
         """Transform entities (rotation and translation)."""
         for o in (self.s, self.m, self.c, self.r, self.a):
-            rotation = rotmat(Vector(1,3,5), Vector(1,0,0))
-            translation=numpy.array((2.4,0,1), 'f')
+            rotation = rotmat(Vector(1, 3, 5), Vector(1, 0, 0))
+            translation=numpy.array((2.4, 0, 1), 'f')
             oldpos = self.get_pos(o)
             o.transform(rotation, translation)
             newpos = self.get_pos(o)

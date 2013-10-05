@@ -345,7 +345,7 @@ class TogoEntry(unittest.TestCase):
     def test_uniprot_swiss(self):
         """Bio.TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])"""
         #Returns "swiss" format:
-        handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])
+        handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN", "A1AG1_MOUSE"])
         record1, record2 = SeqIO.parse(handle, "swiss")
         handle.close()
 

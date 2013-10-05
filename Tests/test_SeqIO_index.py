@@ -235,7 +235,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(len(keys), len(rec_dict))
         #Make sure boolean evaluation works
         self.assertEqual(bool(keys), bool(rec_dict))
-        for key,id in zip(keys, ids):
+        for key, id in zip(keys, ids):
             self.assertTrue(key in rec_dict)
             self.assertEqual(id, rec_dict[key].id)
             self.assertEqual(id, rec_dict.get(key).id)
@@ -427,33 +427,33 @@ for filename, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename, None)]
     if do_bgzf and os.path.isfile(filename + ".bgz"):
-        tasks.append((filename + ".bgz","bgzf"))
+        tasks.append((filename + ".bgz", "bgzf"))
     for filename, comp in tasks:
 
-        def funct(fn,fmt,alpha,c):
+        def funct(fn, fmt, alpha, c):
             f = lambda x : x.simple_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
-                    % (format, filename.replace("/","_").replace(".","_")),
+                    % (format, filename.replace("/", "_").replace(".", "_")),
                 funct(filename, format, alphabet, comp))
         del funct
 
-        def funct(fn,fmt,alpha,c):
+        def funct(fn, fmt, alpha, c):
             f = lambda x : x.key_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
-                    % (format, filename.replace("/","_").replace(".","_")),
+                    % (format, filename.replace("/", "_").replace(".", "_")),
                 funct(filename, format, alphabet, comp))
         del funct
 
-        def funct(fn,fmt,alpha,c):
+        def funct(fn, fmt, alpha, c):
             f = lambda x : x.get_raw_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
-                    % (format, filename.replace("/","_").replace(".","_")),
+                    % (format, filename.replace("/", "_").replace(".", "_")),
                 funct(filename, format, alphabet, comp))
         del funct
 

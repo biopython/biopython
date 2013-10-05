@@ -10,7 +10,7 @@ Returns a BlastTableRec instance
 
 
 class BlastTableEntry(object):
-    def __init__(self,in_rec):
+    def __init__(self, in_rec):
         bt_fields = in_rec.split()
         self.qid = bt_fields[0].split('|')
         self.sid = bt_fields[1].split('|')
@@ -83,7 +83,7 @@ class BlastTableReader(object):
     def _consume_header(self, inline):
         for keyword in reader_keywords:
             if keyword in inline:
-                in_header = self._Parse('_parse_%s' % reader_keywords[keyword],inline)
+                in_header = self._Parse('_parse_%s' % reader_keywords[keyword], inline)
                 break
         return in_header
 
@@ -110,4 +110,4 @@ class BlastTableReader(object):
         return 0
 
     def _Parse(self, method_name, inline):
-        return getattr(self,method_name)(inline)
+        return getattr(self, method_name)(inline)
