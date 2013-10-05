@@ -12,6 +12,7 @@ The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
 """
 
 import copy
+from functools import reduce
 
 
 class CrystalError(Exception):

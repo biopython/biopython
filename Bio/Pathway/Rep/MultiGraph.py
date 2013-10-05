@@ -5,6 +5,8 @@
 
 # get set abstraction for graph representation
 
+from functools import reduce
+
 
 #TODO - Subclass graph?
 class MultiGraph(object):

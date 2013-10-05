@@ -5,6 +5,8 @@
 
 # get set abstraction for graph representation
 
+from functools import reduce
+
 
 class Graph(object):
     """A directed graph abstraction with labeled edges."""

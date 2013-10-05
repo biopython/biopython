@@ -30,6 +30,8 @@ Note: This module should be regarded as a prototype only. API changes are likely
       Comments and feature requests are most welcome.
 """
 
+from functools import reduce
+
 from Bio.Pathway.Rep.MultiGraph import *
 
 

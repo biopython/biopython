@@ -7,6 +7,7 @@ from __future__ import print_function
 
 from os import sep
 import re
+from functools import reduce
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir
 

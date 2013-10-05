@@ -44,6 +44,7 @@ import itertools
 import time
 import sys
 import shutil
+from functools import reduce
 
 from Bio.Seq import Seq
 
