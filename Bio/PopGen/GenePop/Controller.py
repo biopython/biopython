@@ -144,9 +144,14 @@ class _FileIterator:
        The generator function is expected to yield a tuple, while
        consuming input
     """
-    def __init__(self, func, stream, fname):
+    def __init__(self, func, fname, handle=None):
         self.func = func
-        self.stream = stream
+        if handle is None:
+            self.stream = open(fname)
+        else:
+            # For special cases where calling code wants to
+            # seek into the file before starting:
+            self.stream = handle
         self.fname = fname
         self.done = False
 
@@ -278,12 +283,11 @@ class GenePopController(object):
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
         self._run_genepop([ext], [1, type], fname, opts)
-        f = open(fname + ext)
 
         def hw_func(self):
             return _hw_func(self.stream, False)
 
-        return _FileIterator(hw_func, f, fname + ext)
+        return _FileIterator(hw_func, fname + ext)
 
     def _test_global_hz_both(self, fname, type, ext, enum_test = True,
                              dememorization = 10000, batches = 20,
@@ -389,9 +393,8 @@ class GenePopController(object):
             return _hw_func(self.stream, False, True)
 
         shutil.copyfile(fname+".P", fname+".P2")
-        f1 = open(fname + ".P")
-        f2 = open(fname + ".P2")
-        return _FileIterator(hw_prob_loci_func, f1, fname + ".P"), _FileIterator(hw_prob_pop_func, f2, fname + ".P2")
+
+        return _FileIterator(hw_prob_loci_func, fname + ".P"), _FileIterator(hw_prob_pop_func, fname + ".P2")
 
     #1.4
     def test_global_hz_deficiency(self, fname, enum_test = True,
@@ -481,7 +484,7 @@ class GenePopController(object):
             l = f2.readline()
         while "----" not in l:
             l = f2.readline()
-        return _FileIterator(ld_pop_func, f1, fname+".DIS"), _FileIterator(ld_func, f2, fname + ".DI2")
+        return _FileIterator(ld_pop_func, fname+".DIS", f1), _FileIterator(ld_func, fname + ".DI2", f2)
 
     #2.2
     def create_contingency_tables(self, fname):
@@ -673,11 +676,9 @@ class GenePopController(object):
             self.done = True
             raise StopIteration
 
-        popf = open(fname + ".INF")
         shutil.copyfile(fname + ".INF", fname + ".IN2")
-        locf = open(fname + ".IN2")
-        pop_iter = _FileIterator(pop_parser, popf, fname + ".INF")
-        locus_iter = _FileIterator(locus_parser, locf, fname + ".IN2")
+        pop_iter = _FileIterator(pop_parser, fname + ".INF")
+        locus_iter = _FileIterator(locus_parser, fname + ".IN2")
         return (pop_iter, locus_iter)
 
     def _calc_diversities_fis(self, fname, ext):
@@ -712,8 +713,7 @@ class GenePopController(object):
             self.done = True
             raise StopIteration
 
-        dvf = open(fname + ext)
-        return _FileIterator(fis_func, dvf, fname + ext), avg_fis, avg_Qintra
+        return _FileIterator(fis_func, fname + ext), avg_fis, avg_Qintra
 
     #5.2
     def calc_diversities_fis_with_identity(self, fname):
@@ -759,7 +759,6 @@ class GenePopController(object):
                     allFit = None
             l = f.readline()
         f.close()
-        f = open(fname + ".FST")
 
         def proc(self):
             if hasattr(self, "last_line"):
@@ -798,7 +797,7 @@ class GenePopController(object):
             self.stream.close()
             self.done = True
             raise StopIteration
-        return (allFis, allFst, allFit), _FileIterator(proc, f, fname + ".FST")
+        return (allFis, allFst, allFit), _FileIterator(proc, fname + ".FST")
 
     #6.2
     def calc_fst_pair(self, fname):
@@ -825,9 +824,8 @@ class GenePopController(object):
             self.done = True
             raise StopIteration
 
-        stf = open(fname + ".ST2")
         os.remove(fname + ".MIG")
-        return _FileIterator(loci_func, stf, fname + ".ST2"), avg_fst
+        return _FileIterator(loci_func, fname + ".ST2"), avg_fst
 
     #6.3
     def calc_rho_all(self, fname):
