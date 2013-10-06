@@ -24,6 +24,11 @@ and 2.7 via:
 
     from __future__ import print_function
 
+In addition to the documentation change, Biopython now uses the Python 3
+style print function internally. This along with many other small changes
+means that when installing from source under Python 3 the (automated)
+conversion using 2to3 is now much faster (less fixers need to be run).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
