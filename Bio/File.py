@@ -22,6 +22,8 @@ import os
 import contextlib
 import itertools
 
+from Bio._py3k.builtins import basestring
+
 try:
     from collections import UserDict as _dict_base
 except ImportError:

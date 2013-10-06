@@ -12,6 +12,7 @@ __docformat__ = "restructuredtext en"
 
 from Bio._py3k.builtins import zip
 from Bio._py3k.builtins import filter
+from Bio._py3k.builtins import basestring
 
 import collections
 import copy

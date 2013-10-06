@@ -20,6 +20,7 @@ from xml.dom import pulldom
 from xml.sax import SAXParseException
 
 from Bio._py3k.builtins import range
+from Bio._py3k.builtins import basestring
 
 from Bio import Alphabet
 from Bio.Seq import Seq

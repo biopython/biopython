@@ -10,6 +10,7 @@ import platform
 import unittest
 from Bio._py3k import StringIO
 from Bio._py3k.builtins import zip
+from Bio._py3k.builtins import basestring
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!

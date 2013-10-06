@@ -20,6 +20,7 @@ The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
 """
 from __future__ import print_function
+from Bio._py3k.builtins import basestring
 
 import os
 import sys

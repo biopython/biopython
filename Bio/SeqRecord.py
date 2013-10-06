@@ -9,6 +9,8 @@
 
 from __future__ import print_function
 
+from Bio._py3k.builtins import basestring
+
 __docformat__ = "epytext en"  # Simple markup to show doctests nicely
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL

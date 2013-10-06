@@ -2,6 +2,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 from Bio._py3k.builtins import range
+from Bio._py3k.builtins import basestring
 
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
