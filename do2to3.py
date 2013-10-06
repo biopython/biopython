@@ -49,7 +49,7 @@ def run2to3(filenames):
             start = time.time()
             args = ["--no-diffs",
                     #"--fix=apply", -- we avoid the apply function
-                    "--fix=basestring",
+                    #"--fix=basestring", -- handled via Bio._py3k
                     #"--fix=buffer", -- we avoid the buffer command
                     #"--fix=callable", -- not needed for Python 3.2+
                     #"--fix=dict", -- we avoid needing this with list(dict.items()) etc
