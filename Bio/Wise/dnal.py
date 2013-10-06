@@ -15,7 +15,6 @@ from __future__ import print_function
 from future_builtins import zip
 from future_builtins import map
 
-import itertools
 import re
 
 #Importing with leading underscore as not intended to be exposed
@@ -75,7 +74,7 @@ def _get_coords(filename):
 
 def _any(seq, pred=bool):
     "Returns True if pred(x) is True at least one element in the iterable"
-    return True in itertools.imap(pred, seq)
+    return True in map(pred, seq)
 
 
 class Statistics(object):
