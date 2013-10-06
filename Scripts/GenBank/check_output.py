@@ -13,8 +13,14 @@ from __future__ import print_function
 
 import sys
 import os
-import cStringIO
 import gzip
+
+try:
+    #Python 2
+    from StringIO import StringIO
+except ImportError:
+    #Python 3
+    from io import StringIO
 
 # biopython
 from Bio import GenBank
@@ -26,8 +32,8 @@ def do_comparison(good_record, test_record):
     Ths compares the two GenBank record, and will raise an AssertionError
     if two lines do not match, showing the non-matching lines.
     """
-    good_handle = cStringIO.StringIO(good_record)
-    test_handle = cStringIO.StringIO(test_record)
+    good_handle = StringIO(good_record)
+    test_handle = StringIO(test_record)
 
     while True:
         good_line = good_handle.readline()
