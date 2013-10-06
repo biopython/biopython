@@ -40,9 +40,13 @@ if sys.version_info[0] >= 3:
     #Code for Python 3
     #Note if this is processed with 2to3 it will break!
     from builtins import open, zip, map, filter, range
+
+    #Lots of our Python 2 code uses isinstance(x, basestring)
+    #which after 2to3 becomes isinstance(x, str)
+    basestring = str
 else:
     #Code for Python 2
-    from __builtin__ import open
+    from __builtin__ import open, basestring
 
     #Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
