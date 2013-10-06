@@ -9,13 +9,15 @@ to use iterator based zip, map and filter:
 
     from future_builtins import zip
 
-There is no similar option for range yet, other than:
+There is no similar option for range or input yet, other than:
 
     range = xrange
+    input = raw_input
 
 or:
 
     from __builtin__ import xrange as range
+    from __builtin__ import raw_input as input
 
 Under Python 3 this imports need to be removed. Also, deliberate
 importing of built in functions like open changes from Python 2:
@@ -29,7 +31,9 @@ to this under Python 3:
 Instead, we can do this under either Python 2 or 3:
 
     from Bio._py3k.builtins import open
-    from Bio._py3k.builtins import zip
+    from Bio._py3k.builtins import zip, map, filter
+    from Bio._py3k.builtins import range
+    from Bio._py3k.builtins import input
 
 Once we drop support for Python 2, the whole of Bio._py3k will
 go away.
@@ -39,7 +43,7 @@ import sys
 if sys.version_info[0] >= 3:
     #Code for Python 3
     #Note if this is processed with 2to3 it will break!
-    from builtins import open, zip, map, filter, range
+    from builtins import open, zip, map, filter, range, input
 
     #Lots of our Python 2 code uses isinstance(x, basestring)
     #which after 2to3 becomes isinstance(x, str)
@@ -51,3 +55,4 @@ else:
     #Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
     from __builtin__ import xrange as range
+    from __builtin__ import raw_input as input
