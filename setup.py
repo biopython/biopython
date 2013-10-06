@@ -358,6 +358,7 @@ PACKAGES = [
     'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
+    'Bio._py3k.urllib',
     #Other top level packages,
     'BioSQL',
     ]

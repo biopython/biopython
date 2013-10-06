@@ -886,14 +886,14 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
-    import urllib
-    import urllib2
+    from Bio._py3k.urllib.parse import urlencode
+    from Bio._py3k.urllib.request import urlopen
     # Open a handle to SCOP.
-    options = urllib.urlencode(params)
+    options = urlencode(params)
     if get:  # do a GET
         if options:
             cgi += "?" + options
-        handle = urllib2.urlopen(cgi)
+        handle = urlopen(cgi)
     else:    # do a POST
-        handle = urllib2.urlopen(cgi, data=options)
+        handle = urlopen(cgi, data=options)
     return handle

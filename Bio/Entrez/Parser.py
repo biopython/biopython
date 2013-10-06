@@ -37,9 +37,11 @@ be used directly.
 
 import os.path
 import urlparse
-import urllib
 import warnings
 from xml.parsers import expat
+
+#Importing these functions with leading underscore as not intended for reuse
+from Bio._py3k.urllib.request import urlopen as _urlopen
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
@@ -521,7 +523,7 @@ Proceeding to access the DTD file through the internet...
 """ % (filename, filename, url, self.global_dtd_dir, self.local_dtd_dir, filename)
             warnings.warn(message)
             try:
-                handle = urllib.urlopen(url)
+                handle = _urlopen(url)
             except IOError:
                 raise RuntimeException("Failed to access %s at %s" % (filename, url))
 
