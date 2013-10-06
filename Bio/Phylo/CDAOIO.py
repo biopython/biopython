@@ -26,7 +26,6 @@ from Bio._py3k import StringIO
 from Bio.Phylo import CDAO
 from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
-import urlparse
 
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
