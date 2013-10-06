@@ -40,6 +40,7 @@ from .Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
 from Bio._py3k import _is_int_or_long
+from Bio._py3k import basestring
 
 # NOTE
 # ====

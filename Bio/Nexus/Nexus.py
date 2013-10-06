@@ -13,6 +13,7 @@ from __future__ import print_function
 
 from Bio._py3k import zip
 from Bio._py3k import range
+from Bio._py3k import basestring
 
 from functools import reduce
 import copy

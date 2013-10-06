@@ -28,6 +28,7 @@ from Bio.Seq import UnknownSeq
 
 from Bio._py3k import _is_int_or_long
 from Bio._py3k import range
+from Bio._py3k import basestring
 
 
 class DatabaseLoader:

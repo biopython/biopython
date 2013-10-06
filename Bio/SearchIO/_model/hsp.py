@@ -6,6 +6,7 @@
 """Bio.SearchIO objects to model high scoring regions between query and hit."""
 
 from __future__ import print_function
+from Bio._py3k import basestring
 
 import warnings
 from operator import ge, le

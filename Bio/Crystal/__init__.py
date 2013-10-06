@@ -15,6 +15,8 @@ import copy
 from functools import reduce
 
 from Bio._py3k import map
+from Bio._py3k import basestring
+
 
 class CrystalError(Exception):
     pass

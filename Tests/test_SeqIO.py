@@ -4,6 +4,7 @@
 # as part of this package.
 
 from __future__ import print_function
+from Bio._py3k import basestring
 
 import os
 import warnings

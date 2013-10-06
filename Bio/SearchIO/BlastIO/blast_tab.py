@@ -8,6 +8,8 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import basestring
+
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
