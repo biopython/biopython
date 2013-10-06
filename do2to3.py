@@ -34,22 +34,6 @@ import time
 import lib2to3.main
 from io import StringIO
 
-def avoid_bug19111(filename):
-    """Avoid this bug: http://bugs.python.org/issue19111"""
-    #Faster if we only write out the file if it needed changing
-    lines = list(open(filename, "rU"))
-    fix = False
-    for line in lines:
-        if line.startswith("from future_builtins import "):
-            fix = True
-            break
-    if not fix:
-        return
-    print("Applying issue 19111 fix to %s" % filename)
-    lines = [l for l in lines if not l.startswith("from future_builtins import ")]
-    with open(filename, "w") as h:
-        for l in lines:
-            h.write(l)
 
 def run2to3(filenames):
     stderr = sys.stderr
@@ -60,14 +44,12 @@ def run2to3(filenames):
         sys.stderr = handle
         while filenames:
             filename = filenames.pop(0)
-            #Remove 'from future_builtins import ...' due to bug 19111,
-            avoid_bug19111(filename)
             #TODO - Configurable options per file?
             print("Converting %s" % filename)
             start = time.time()
             args = ["--no-diffs",
                     #"--fix=apply", -- we avoid the apply function
-                    "--fix=basestring",
+                    #"--fix=basestring", -- handled via Bio._py3k.builtins
                     #"--fix=buffer", -- we avoid the buffer command
                     #"--fix=callable", -- not needed for Python 3.2+
                     "--fix=dict",
@@ -84,7 +66,7 @@ def run2to3(filenames):
                     "--fix=import",
                     "--fix=imports",
                     #"--fix=imports2",
-                    #"--fix=input", -- we avoid the input function
+                    #"--fix=input", -- we avoid the Python 2 input function
                     #"--fix=intern", -- we're not using the intern function
                     "--fix=isinstance",
                     "--fix=itertools",
@@ -101,7 +83,7 @@ def run2to3(filenames):
                     #"--fix=paren", -- already applied
                     #"--fix=print", -- we avoid the print statement
                     #"--fix=raise", -- we avoid old style raise exception
-                    "--fix=raw_input",
+                    #"--fix=raw_input", -- handled via Bio._py3k.builtins.input
                     #"--fix=reduce", -- already using 'from functools import reduce'
                     #"--fix=renames", -- already switched sys.maxint to sys.maxsize
                     #"--fix=repr", -- we avoid the old style back-ticks
@@ -114,7 +96,7 @@ def run2to3(filenames):
                     "--fix=unicode",
                     "--fix=urllib",
                     #"--fix=ws_comma", -- optional fixer
-                    "--fix=xrange",
+                    #"--fix=xrange", -- not needed anymore
                     #"--fix=xreadlines", -- already applied
                     #"--fix=zip", -- not needed anymore
                     "-n", "-w"]

@@ -225,9 +225,9 @@ from __future__ import print_function
 
 import zlib
 import struct
-import __builtin__  # to access the usual open function
 
 from Bio._py3k import _as_bytes, _as_string
+from Bio._py3k.builtins import open as _open
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 #but need to use bytes on Python 3
@@ -515,7 +515,7 @@ class BgzfReader(object):
             if "w" in mode.lower() \
             or "a" in mode.lower():
                 raise ValueError("Must use read mode (default), not write or append mode")
-            handle = __builtin__.open(filename, "rb")
+            handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
         if self._text:
             self._newline = "\n"
@@ -695,9 +695,9 @@ class BgzfWriter(object):
             and "a" not in mode.lower():
                 raise ValueError("Must use write or append mode, not %r" % mode)
             if "a" in mode.lower():
-                handle = __builtin__.open(filename, "ab")
+                handle = _open(filename, "ab")
             else:
-                handle = __builtin__.open(filename, "wb")
+                handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
         self._handle = handle
         self._buffer = b""

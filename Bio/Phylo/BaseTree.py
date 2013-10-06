@@ -10,8 +10,9 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "restructuredtext en"
 
-from future_builtins import zip
-from future_builtins import filter
+from Bio._py3k.builtins import zip
+from Bio._py3k.builtins import filter
+from Bio._py3k.builtins import basestring
 
 import collections
 import copy
