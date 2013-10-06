@@ -103,10 +103,7 @@ else:
 
     def _is_int_or_long(i):
         """Check if the value is an integer or long."""
-        #If the 2to3 long fixer is enabled (which it is by default), this
-        #will be changed to "isinstance(i, int) or isinstance(i, int)"
-        #but that doesn't matter.
-        return isinstance(i, int) or isinstance(i, long)
+        return isinstance(i, (int, long))
 
     def _binary_to_string_handle(handle):
         """Treat a binary handle like a text handle."""
