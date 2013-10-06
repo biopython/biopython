@@ -15,10 +15,11 @@ from __future__ import print_function
 from future_builtins import zip
 from future_builtins import map
 
-import commands
 import itertools
 import re
 
+#Importing with leading underscore as not intended to be exposed
+from Bio._py3k import getoutput as _getoutput
 from Bio import Wise
 
 _SCORE_MATCH = 4
@@ -42,7 +43,7 @@ _CMDLINE_FGREP_COUNT = "fgrep -c '%s' %s"
 
 
 def _fgrep_count(pattern, file):
-    return int(commands.getoutput(_CMDLINE_FGREP_COUNT % (pattern, file)))
+    return int(_getoutput(_CMDLINE_FGREP_COUNT % (pattern, file)))
 
 _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 
