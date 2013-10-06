@@ -315,7 +315,7 @@ class Diagram(object):
         #just uses a cStringIO or StringIO handle with the drawToFile method.
         #In order to put all our complicated file format specific code in one
         #place we'll just use a StringIO handle here:
-        from StringIO import StringIO
+        from Bio._py3k import StringIO
         handle = StringIO()
         self.write(handle, output, dpi)
         return handle.getvalue()
