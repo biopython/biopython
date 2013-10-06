@@ -6,7 +6,6 @@
 
 from __future__ import print_function
 
-import commands
 import posix
 import posixpath
 import os

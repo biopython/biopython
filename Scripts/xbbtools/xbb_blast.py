@@ -10,7 +10,6 @@ import glob
 import os
 import sys
 from threading import *
-import commands
 from Tkinter import *
 import Pmw
 sys.path.insert(0, '.')

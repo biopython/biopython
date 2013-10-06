@@ -4,7 +4,6 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_search.py
 
-import commands
 import os
 import re
 import sys
