@@ -109,20 +109,23 @@ def GC_skew(seq, window=100):
 def xGC_skew(seq, window=1000, zoom=100,
                          r=300, px=100, py=100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
-    from Tkinter import Scrollbar, Canvas, BOTTOM, BOTH, ALL, \
-                        VERTICAL, HORIZONTAL, RIGHT, LEFT, X, Y
-    yscroll = Scrollbar(orient=VERTICAL)
-    xscroll = Scrollbar(orient=HORIZONTAL)
-    canvas = Canvas(yscrollcommand=yscroll.set,
-                    xscrollcommand=xscroll.set, background='white')
+    try:
+        import Tkinter as tkinter # Python 2
+    except ImportError:
+        import tkinter # Python 3
+
+    yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
+    xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
+    canvas = tkinter.Canvas(yscrollcommand=yscroll.set,
+                            xscrollcommand=xscroll.set, background='white')
     win = canvas.winfo_toplevel()
     win.geometry('700x700')
 
     yscroll.config(command=canvas.yview)
     xscroll.config(command=canvas.xview)
-    yscroll.pack(side=RIGHT, fill=Y)
-    xscroll.pack(side=BOTTOM, fill=X)
-    canvas.pack(fill=BOTH, side=LEFT, expand=1)
+    yscroll.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+    xscroll.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+    canvas.pack(fill=tkinter.BOTH, side=tkinter.LEFT, expand=1)
     canvas.update()
 
     X0, Y0 = r + px, r + py
@@ -164,7 +167,7 @@ def xGC_skew(seq, window=1000, zoom=100,
         canvas.update()
         start += window
 
-    canvas.configure(scrollregion=canvas.bbox(ALL))
+    canvas.configure(scrollregion=canvas.bbox(tkinter.ALL))
 
 
 def molecular_weight(seq):
