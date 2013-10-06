@@ -7,6 +7,8 @@
 
 from __future__ import print_function
 
+from Bio._py3k import input as _input
+
 import shlex
 
 class MMCIF2Dict(dict):
@@ -77,7 +79,7 @@ if __name__=="__main__":
     entry = ""
     print("Now type a key ('q' to end, 'k' for a list of all keys):")
     while(entry != "q"):
-        entry = raw_input("MMCIF dictionary key ==> ")
+        entry = _input("MMCIF dictionary key ==> ")
         if entry == "q":
             sys.exit()
         if entry == "k":
