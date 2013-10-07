@@ -15,7 +15,7 @@ from __future__ import print_function
 
 import os
 import shutil
-import thread
+import threading
 from time import sleep
 from Bio.PopGen.Async import Local
 from Bio.PopGen.FDist.Controller import FDistController
@@ -25,7 +25,7 @@ class FDistAsync(FDistController):
     """Asynchronous FDist execution.
     """
 
-    def __init__(self, fdist_dir = "", ext = None):
+    def __init__(self, fdist_dir="", ext=None):
         """Constructor.
 
         Parameters:
@@ -55,9 +55,9 @@ class FDistAsync(FDistController):
         beta = parameters.get('beta', (0.25, 0.25))
         max_freq = parameters.get('max_freq', 0.99)
         fst = self.run_fdist(npops, nsamples, fst, sample_size,
-            mut, num_sims, data_dir,
-            is_dominant, theta, beta,
-            max_freq)
+                             mut, num_sims, data_dir,
+                             is_dominant, theta, beta,
+                             max_freq)
         output_files = {}
         output_files['out.dat'] = open(data_dir + os.sep + 'out.dat', 'r')
         return fst, output_files
@@ -74,8 +74,8 @@ class SplitFDist(object):
        Each SplitFDist object can only be used to run a single FDist
        simulation.
     """
-    def __init__(self, report_fun = None,
-                 num_thr = 2, split_size = 1000, fdist_dir = '', ext = None):
+    def __init__(self, report_fun=None,
+                 num_thr=2, split_size=1000, fdist_dir='', ext=None):
         """Constructor.
 
            Parameters:
@@ -121,7 +121,6 @@ class SplitFDist(object):
                 for file in os.listdir(self.parts[done]):
                     os.remove(self.parts[done] + os.sep + file)
                 os.rmdir(self.parts[done])
-                #print fst, out_dat
                 if self.report_fun:
                     self.report_fun(fst)
             self.async.access_ds.acquire()
@@ -129,9 +128,6 @@ class SplitFDist(object):
                and len(self.async.done) == 0:
                 break
             self.async.access_ds.release()
-            #print 'R', self.async.running
-            #print 'W', self.async.waiting
-            #print 'R', self.async.running
 
     def acquire(self):
         """Allows the external acquisition of the lock.
@@ -145,9 +141,9 @@ class SplitFDist(object):
 
     #You can only run a fdist case at a time
     def run_fdist(self, npops, nsamples, fst, sample_size,
-                  mut = 0, num_sims = 20000, data_dir='.',
-                  is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
-                  max_freq = 0.99):
+                  mut=0, num_sims=20000, data_dir='.',
+                  is_dominant=False, theta=0.06, beta=(0.25, 0.25),
+                  max_freq=0.99):
         """Runs FDist.
 
            Parameters can be seen on FDistController.run_fdist.
@@ -155,7 +151,7 @@ class SplitFDist(object):
            It will split a single execution in several parts and
            create separated data directories.
         """
-        num_parts = num_sims/self.split_size
+        num_parts = num_sims // self.split_size
         self.parts = {}
         self.data_dir = data_dir
         for directory in range(num_parts):
@@ -180,4 +176,4 @@ class SplitFDist(object):
                 'max_freq'    : max_freq
             }, {})
             self.parts[id] = full_path
-        thread.start_new_thread(self.monitor, ())
+        threading.Thread(target=self.monitor).run()
