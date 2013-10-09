@@ -46,7 +46,7 @@ class IOTests(unittest.TestCase):
         tree = Phylo.read(EX_NEXUS2, 'nexus')
         self.assertEqual(len(tree.get_terminals()), 658)
     def test_unicode_exception(self):
-        self.assertRaises(NewickIO.NewickError, Phylo.read,(EX_NEXUS_BOM,"newick"))
+        self.assertRaises(NewickIO.NewickError, Phylo.read,EX_NEXUS_BOM,"newick")
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
         trees = list(Phylo.parse(EX_NEXUS, 'nexus'))
