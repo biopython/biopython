@@ -33,7 +33,7 @@ class QueryResult(_BaseSearchObject):
     invoking `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
     >>> print(qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
@@ -470,7 +470,7 @@ class QueryResult(_BaseSearchObject):
         description begins with the string 'Homo sapiens', case sensitive:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> def desc_filter(hit):
         ...     return hit.description.startswith('Homo sapiens')
         ...
@@ -518,7 +518,7 @@ class QueryResult(_BaseSearchObject):
         HSPs in a Hit except for the first one:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> print(qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
@@ -610,7 +610,7 @@ class QueryResult(_BaseSearchObject):
         integer index or hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> len(qresult)
         100
         >>> for hit in qresult[:5]:
@@ -662,7 +662,7 @@ class QueryResult(_BaseSearchObject):
         correlated with search rank) of a given hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> qresult.index('gi|301171259|ref|NR_035850.1|')
         7
 
@@ -714,4 +714,3 @@ class QueryResult(_BaseSearchObject):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

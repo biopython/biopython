@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -10,9 +10,10 @@ use this module.  It provides base classes to try and simplify things.
 
 from __future__ import print_function
 
+import sys # for checking if Python 2
+
 from Bio.Alphabet import single_letter_alphabet
 
-# TODO - Review self.next() method for Python 3 support...
 
 class AlignmentIterator(object):
     """Base class for building MultipleSeqAlignment iterators.
@@ -45,7 +46,7 @@ class AlignmentIterator(object):
         # or if additional arguments are required.          #
         #####################################################
 
-    def next(self):
+    def __next__(self):
         """Return the next alignment in the file.
 
         This method should be replaced by any derived class to do something
@@ -56,6 +57,16 @@ class AlignmentIterator(object):
         # into your individual alignments and convert these #
         # into MultipleSeqAlignment objects.                #
         #####################################################
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
 
     def __iter__(self):
         """Iterate over the entries as MultipleSeqAlignment objects.
@@ -69,7 +80,7 @@ class AlignmentIterator(object):
                 print record.id
                 print record.seq
         myFile.close()"""
-        return iter(self.next, None)
+        return iter(self.__next__, None)
 
 
 class AlignmentWriter(object):

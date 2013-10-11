@@ -1,4 +1,4 @@
-# Copyright 2006-2011 by Peter Cock.  All rights reserved.
+# Copyright 2006-2013 by Peter Cock.  All rights reserved.
 # Revisions copyright 2011 Brandon Invergo. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -186,7 +186,7 @@ class PhylipIterator(AlignmentIterator):
         seq = line[self.id_width:].strip().replace(' ', '')
         return seq_id, seq
 
-    def next(self):
+    def __next__(self):
         handle = self.handle
 
         try:
@@ -371,7 +371,7 @@ class SequentialPhylipIterator(PhylipIterator):
     the next. According to the PHYLIP documentation for input file formatting,
     newlines and spaces may optionally be entered at any point in the sequences.
     """
-    def next(self):
+    def __next__(self):
         handle = self.handle
 
         try:

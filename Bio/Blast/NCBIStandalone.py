@@ -1636,7 +1636,7 @@ class Iterator(object):
         self._parser = parser
         self._header = []
 
-    def next(self):
+    def __next__(self):
         """next(self) -> object
 
         Return the next Blast record from the file.  If no more records,
@@ -1684,8 +1684,18 @@ class Iterator(object):
             return self._parser.parse(StringIO(data))
         return data
 
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
+
     def __iter__(self):
-        return iter(self.next, None)
+        return iter(self.__next__, None)
 
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):

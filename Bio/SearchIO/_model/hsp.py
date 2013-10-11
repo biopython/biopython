@@ -43,7 +43,7 @@ class HSP(_BaseHSP):
     search:
 
     >>> from Bio import SearchIO
-    >>> blast_qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> blast_qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
     >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
     >>> blast_hsp
     HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
@@ -630,7 +630,7 @@ class HSPFragment(_BaseHSP):
     SeqRecord objects (see SeqRecord):
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
     >>> fragment = qresult[0][0][0]   # first hit, first hsp, first fragment
     >>> print(fragment)
           Query: 33211 mir_1
@@ -1069,4 +1069,3 @@ class HSPFragment(_BaseHSP):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

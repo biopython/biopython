@@ -196,14 +196,14 @@ space-separated strings.
     # pass the custom column names as a Python list
     >>> fname = 'Blast/tab_2226_tblastn_009.txt'
     >>> custom_fields = ['qseqid', 'sseqid']
-    >>> qresult = SearchIO.parse(fname, 'blast-tab', fields=custom_fields).next()
+    >>> qresult = next(SearchIO.parse(fname, 'blast-tab', fields=custom_fields))
     >>> qresult
     QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 
     # pass the custom column names as a space-separated string
     >>> fname = 'Blast/tab_2226_tblastn_009.txt'
     >>> custom_fields = 'qseqid sseqid'
-    >>> qresult = SearchIO.parse(fname, 'blast-tab', fields=custom_fields).next()
+    >>> qresult = next(SearchIO.parse(fname, 'blast-tab', fields=custom_fields))
     >>> qresult
     QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2010-2011 by Peter Cock.
+# Copyright 2010-2013 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -223,6 +223,7 @@ NC_000932.1
 
 from __future__ import print_function
 
+import sys # to detect when under Python 2
 import zlib
 import struct
 import __builtin__  # to access the usual open function
@@ -659,11 +660,21 @@ class BgzfReader(object):
             #assert data.endswith(self._newline)
             return data
 
-    def next(self):
+    def __next__(self):
         line = self.readline()
         if not line:
             raise StopIteration
         return line
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
 
     def __iter__(self):
         return self

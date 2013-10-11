@@ -193,7 +193,7 @@ there are any frameshifts in your alignment:
 
     >>> from Bio import SearchIO
     >>> fname = 'Exonerate/exn_22_m_coding2coding_fshifts.exn'
-    >>> qresult = SearchIO.parse(fname, 'exonerate-text').next()
+    >>> qresult = next(SearchIO.parse(fname, 'exonerate-text'))
     >>> hsp = qresult[0][0]      # first hit, first hsp
     >>> hsp
     HSP(...)

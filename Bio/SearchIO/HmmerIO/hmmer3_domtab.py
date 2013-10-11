@@ -205,7 +205,7 @@ class Hmmer3DomtabHmmhitWriter(object):
         qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
         try:
-            first_qresult = qresults.next()
+            first_qresult = next(qresults)
         except StopIteration:
             handle.write(self._build_header())
         else:

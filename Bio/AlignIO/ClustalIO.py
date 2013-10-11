@@ -1,4 +1,4 @@
-# Copyright 2006-2010 by Peter Cock.  All rights reserved.
+# Copyright 2006-2013 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -84,7 +84,7 @@ class ClustalWriter(SequentialAlignmentWriter):
 class ClustalIterator(AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    def next(self):
+    def __next__(self):
         handle = self.handle
         try:
             #Header we saved from when we were parsing

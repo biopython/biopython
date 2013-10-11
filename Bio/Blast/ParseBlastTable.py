@@ -55,7 +55,7 @@ class BlastTableReader(object):
         self._n = 0
         self._in_header = 1
 
-    def next(self):
+    def __next__(self):
         self.table_record = BlastTableRec()
         self._n += 1
         inline = self._lookahead
@@ -75,6 +75,16 @@ class BlastTableReader(object):
         self._lookahead = inline
         self._in_header = 1
         return self.table_record
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
 
     def _consume_entry(self, inline):
         current_entry = BlastTableEntry(inline)

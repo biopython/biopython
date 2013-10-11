@@ -41,8 +41,8 @@ class EasyController(object):
         else:
             loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname, ".P")
         for i in range(pop_pos-1):
-            hw_res.next()
-        return hw_res.next()
+            next(hw_res)
+        return next(hw_res)
 
     def test_hw_global(self, test_type = "deficiency", enum_test = True,
                        dememorization = 10000, batches = 20, iterations = 5000):

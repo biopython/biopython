@@ -689,7 +689,7 @@ class BlastXmlWriter(object):
             self.frag_counter = 0, 0, 0, 0
 
         # get the first qresult, since the preamble requires its attr values
-        first_qresult = qresults.next()
+        first_qresult = next(qresults)
         # start the XML document, set the root element, and create the preamble
         xml.startDocument()
         xml.startParent('BlastOutput')

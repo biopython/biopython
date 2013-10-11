@@ -65,15 +65,25 @@ class CharBuffer(object):
         else:
             return None
 
-    def next(self):
+    def __next__(self):
         if self.buffer:
             return self.buffer.pop(0)
         else:
             return None
 
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
+
     def next_nonwhitespace(self):
         while True:
-            p=self.next()
+            p=next(self)
             if p is None:
                 break
             if p not in WHITESPACE:
@@ -121,17 +131,17 @@ class CharBuffer(object):
         while True:
             c=self.peek()
             if c==quoted:                                      # a quote?
-                word.append(self.next())                    # store quote
+                word.append(next(self))                    # store quote
                 if self.peek()==quoted:                        # double quote
-                    skip=self.next()                        # skip second quote
+                    skip=next(self)                        # skip second quote
                 elif quoted:                                # second single quote ends word
                     break
             elif quoted:
-                word.append(self.next())                              # if quoted, then add anything
+                word.append(next(self))                              # if quoted, then add anything
             elif not c or c in PUNCTUATION or c in WHITESPACE:        # if not quoted and special character, stop
                 break
             else:
-                word.append(self.next())                    # standard character
+                word.append(next(self))                    # standard character
         return ''.join(word)
 
     def rest(self):
@@ -403,11 +413,11 @@ def _kill_comments_and_break_lines(text):
     speciallevel=False
     commlevel=0
     #Parse with one character look ahead (for special comments)
-    t2 = contents.next()
+    t2 = next(contents)
     while True:
         t = t2
         try:
-            t2 = contents.next()
+            t2 = next(contents)
         except StopIteration:
             t2 = None
         if t is None:
@@ -610,7 +620,7 @@ class Nexus(object):
         nexus_block_gen = self._get_nexus_block(commandlines)
         while True:
             try:
-                title, contents = nexus_block_gen.next()
+                title, contents = next(nexus_block_gen)
             except StopIteration:
                 break
             if title in KNOWN_NEXUS_BLOCKS:
@@ -829,7 +839,7 @@ class Nexus(object):
         lineiter=iter(lines)
         while True:
             try:
-                l=lineiter.next()
+                l=next(lineiter)
             except StopIteration:
                 if taxcount<self.ntax:
                     raise NexusError('Not enough taxa in matrix.')
@@ -857,12 +867,12 @@ class Nexus(object):
                 if l:
                     chars=''.join(l.split())
                 else:
-                    chars=''.join(lineiter.next().split())
+                    chars=''.join(next(lineiter).split())
             else:
                 #non-interleaved matrix
                 chars=''.join(l.split())
                 while len(chars)<self.nchar:
-                    l=lineiter.next()
+                    l=next(lineiter)
                     chars+=''.join(l.split())
             iupac_seq=Seq(_replace_parenthesized_ambigs(chars, self.rev_ambiguous_values), self.alphabet)
             #first taxon has the reference sequence if matchhar is used
@@ -941,13 +951,13 @@ class Nexus(object):
         weight=1.0
         while opts.peek_nonwhitespace()=='[':
             open=opts.next_nonwhitespace()
-            symbol=opts.next()
+            symbol=next(opts)
             if symbol!='&':
                 raise NexusError('Illegal special comment [%s...] in tree description: %s'
                                  % (symbol, options[:50]))
-            special=opts.next()
+            special=next(opts)
             value=opts.next_until(']')
-            closing=opts.next()
+            closing=next(opts)
             if special=='R':
                 rooted=True
             elif special=='U':
@@ -992,7 +1002,7 @@ class Nexus(object):
         # this is rather unelegant, but we have to avoid double-parsing and potential change of special nexus-words
         sub=''
         while True:
-            w=opts.next()
+            w=next(opts)
             if w is None or (w==',' and not quotelevel):
                 subname, subindices=self._get_indices(sub, set_type=TAXSET, separator=':')
                 taxpartition[subname]=_make_unique(subindices)
@@ -1035,7 +1045,7 @@ class Nexus(object):
         # subpartitons separated by commas - which unfortunately could be part of a quoted identifier...
         sub=''
         while True:
-            w=opts.next()
+            w=next(opts)
             if w is None or (w==',' and not quotelevel):
                 subname, subindices=self._get_indices(sub, set_type=CHARSET, separator=':')
                 charpartition[subname]=_make_unique(subindices)

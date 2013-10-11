@@ -128,7 +128,7 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import Motif
-    >>> motif = Motif.parse(open("Motif/alignace.out"), "AlignAce").next()
+    >>> motif = next(Motif.parse(open("Motif/alignace.out"), "AlignAce"))
     >>> motif.consensus()
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
@@ -171,4 +171,3 @@ def _test():
 if __name__ == "__main__":
     #Run the doctests
     _test()
-

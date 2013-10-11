@@ -1,5 +1,6 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# Copyright 2009-2012 by Peter Cock. All rights reserved.
+# Copyright 2009-2013 by Peter Cock. All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -19,6 +20,7 @@ from __future__ import print_function
 
 import codecs
 import os
+import sys
 import contextlib
 import itertools
 
@@ -112,11 +114,21 @@ class UndoHandle(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         next = self.readline()
         if not next:
             raise StopIteration
         return next
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
 
     def readlines(self, *args, **keywds):
         lines = self._saved + self._handle.readlines(*args, **keywds)

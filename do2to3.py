@@ -94,7 +94,7 @@ def run2to3(filenames):
                     #"--fix=metaclass", -- we're not using this
                     #"--fix=methodattrs", -- we're not using these
                     #"--fix=ne", -- not needed
-                    "--fix=next",
+                    #"--fix=next", -- applied manually with deprecated aliases put in place
                     "--fix=nonzero",
                     #"--fix=numliterals", -- already applied
                     #"--fix=operator", -- not needed

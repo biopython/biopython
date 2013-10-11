@@ -29,7 +29,7 @@ class Hit(_BaseSearchObject):
     To have a quick look at a Hit and its contents, invoke `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
     >>> hit = qresult[3]
     >>> print(hit)
     Query: 33211
@@ -316,7 +316,7 @@ class Hit(_BaseSearchObject):
         than 60:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> hit = qresult[3]
         >>> evalue_filter = lambda hsp: hsp.bitscore > 60
         >>> filtered_hit = hit.filter(evalue_filter)
@@ -407,4 +407,3 @@ class Hit(_BaseSearchObject):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

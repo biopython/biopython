@@ -139,8 +139,18 @@ class IterationCursor(object):
             sys.stderr.write("Query params: %s\n" % query.params)
         self.cursor.execute(query.statement, query.params)
 
-    def next(self):
+    def __next__(self):
         return self.row_class(self.cursor)
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
+                          "the .next() method is deprecated and will be removed in a "
+                          "future release of Biopython.", BiopythonDeprecationWarning)
+            return self.__next__()
 
 
 class QuerySingle(Query, QueryRow):
