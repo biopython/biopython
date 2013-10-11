@@ -72,11 +72,6 @@ def _get_coords(filename):
     return list(zip(*map(_alb_line2coords, [start_line, end_line]))) # returns [(start0, end0), (start1, end1)]
 
 
-def _any(seq, pred=bool):
-    "Returns True if pred(x) is True at least one element in the iterable"
-    return True in map(pred, seq)
-
-
 class Statistics(object):
     """
     Calculate statistics from an ALB report
@@ -96,7 +91,7 @@ class Statistics(object):
                       gap*self.gaps +
                       extension*self.extensions)
 
-        if _any([self.matches, self.mismatches, self.gaps, self.extensions]):
+        if self.matches or self.mismatches or self.gaps or self.extensions:
             self.coords = _get_coords(filename)
         else:
             self.coords = [(0, 0), (0, 0)]
