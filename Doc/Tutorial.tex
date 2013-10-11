@@ -320,7 +320,7 @@ from __future__ import print_function
   and they do not match the QBLAST defaults anymore. Check things like the gap penalties and expectation threshold.
 
   \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
-  You need Biopython 1.50 or later.  Or, use \texttt{Bio.Blast.NCBIXML.parse(...).next()} instead.
+  You need Biopython 1.50 or later.  Or, use \texttt{next(Bio.Blast.NCBIXML.parse(...))} instead.
   
   \item \emph{Why doesn't my} \verb|SeqRecord| \emph{object have a} \verb|letter_annotations| \emph{attribute?} \\
   Per-letter-annotation support was added in Biopython 1.50.
@@ -2463,31 +2463,31 @@ In the above examples, we have usually used a for loop to iterate over all the r
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns \verb|SeqRecord| objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
-Instead of using a for loop, can also use the \verb|.next()| method of an iterator to step through the entries, like this:
+Instead of using a for loop, can also use the \verb|next()| function on an iterator to step through the entries, like this:
 
 \begin{verbatim}
 from Bio import SeqIO
 record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 
-first_record = record_iterator.next()
+first_record = next(record_iterator)
 print(first_record.id)
 print(first_record.description)
 
-second_record = record_iterator.next()
+second_record = next(record_iterator)
 print(second_record.id)
 print(second_record.description)
 \end{verbatim}
 
-Note that if you try and use \verb|.next()| and there are no more results, you'll get the special \verb|StopIteration| exception.
+Note that if you try to use \verb|next()| and there are no more results, you'll get the special \verb|StopIteration| exception.
 
 One special case to consider is when your sequence files have multiple records, but you only want the first one.  In this situation the following code is very concise:
 
 \begin{verbatim}
 from Bio import SeqIO
-first_record  = SeqIO.parse("ls_orchid.gbk", "genbank").next()
+first_record = next(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{verbatim}
 
-A word of warning here -- using the \verb|.next()| method like this will silently ignore any additional records in the file.
+A word of warning here -- using the \verb|next()| function like this will silently ignore any additional records in the file.
 If your files have {\it one and only one} record, like some of the online examples later in this chapter, or a GenBank file for a single chromosome, then use the new \verb|Bio.SeqIO.read()| function instead.
 This will check there are no extra unexpected records present.
 
@@ -2538,7 +2538,7 @@ Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, w
 \begin{verbatim}
 from Bio import SeqIO
 record_iterator = SeqIO.parse("ls_orchid.gbk", "genbank")
-first_record = record_iterator.next()
+first_record = next(record_iterator)
 print(first_record)
 \end{verbatim}
 
@@ -5519,7 +5519,7 @@ Each call to next will return a new record that we can deal with. Now we can ite
 ...                 print(hsp.sbjct[0:75] + dots)
 \end{verbatim}
 
-%Notice that \verb|b_iterator.next()| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existence of a record.
+%Notice that \verb|next(b_iterator)| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existence of a record.
 
 The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
 
@@ -5564,7 +5564,7 @@ We can read these records one a time, but now we can catch and deal with errors 
 ...     print("LowQualityBlastError detected in id %s" % info[1])
 \end{verbatim}
 
-The \verb|.next()| method is normally called indirectly via a \verb|for|-loop.
+The \verb|next()| functionality is normally called indirectly via a \verb|for|-loop.
 Right now the \verb|BlastErrorParser| can generate the following errors:
 
 \begin{itemize}
@@ -16952,8 +16952,8 @@ the first two from our orchid FASTA file \href{http://biopython.org/DIST/docs/tu
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
 record_iterator = SeqIO.parse(handle, "fasta")
-rec_one = record_iterator.next()
-rec_two = record_iterator.next()
+rec_one = next(record_iterator)
+rec_two = next(record_iterator)
 handle.close()
 \end{verbatim}
 
