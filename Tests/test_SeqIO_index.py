@@ -254,9 +254,6 @@ class IndexDictTests(unittest.TestCase):
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
-            #Now check non-defined methods...
-            self.assertRaises(NotImplementedError, rec_dict.items)
-            self.assertRaises(NotImplementedError, rec_dict.values)
         else:
             #Python 3
             assert not hasattr(rec_dict, "iteritems")

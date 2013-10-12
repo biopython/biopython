@@ -291,37 +291,34 @@ class _IndexedSeqFileDict(_dict_base):
         """How many records are there?"""
         return len(self._offsets)
 
+    def items(self):
+        """Iterate over the (key, SeqRecord) items.
+
+        This tries to act like a Python 3 dictionary, and does not return
+        a list of (key, value) pairs due to memory concerns.
+        """
+        for key in self.__iter__():
+            yield key, self.__getitem__(key)
+
+    def values(self):
+        """Iterate over the SeqRecord items.
+
+        This tries to act like a Python 3 dictionary, and does not return
+        a list of value due to memory concerns.
+        """
+        for key in self.__iter__():
+            yield self.__getitem__(key)
+
+    def keys(self):
+        """Iterate over the keys.
+
+        This tries to act like a Python 3 dictionary, and does not return
+        a list of keys due to memory concerns.
+        """
+        return self.__iter__()
+
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems but not items etc
-        def values(self):
-            """Would be a list of the SeqRecord objects, but not implemented.
-
-            In general you can be indexing very very large files, with millions
-            of sequences. Loading all these into memory at once as SeqRecord
-            objects would (probably) use up all the RAM. Therefore we simply
-            don't support this dictionary method.
-            """
-            raise NotImplementedError("Due to memory concerns, when indexing a "
-                                      "sequence file you cannot access all the "
-                                      "records at once.")
-
-        def items(self):
-            """Would be a list of the (key, SeqRecord) tuples, but not implemented.
-
-            In general you can be indexing very very large files, with millions
-            of sequences. Loading all these into memory at once as SeqRecord
-            objects would (probably) use up all the RAM. Therefore we simply
-            don't support this dictionary method.
-            """
-            raise NotImplementedError("Due to memory concerns, when indexing a "
-                                      "sequence file you cannot access all the "
-                                      "records at once.")
-
-        def keys(self):
-            """Return a list of all the keys (SeqRecord identifiers)."""
-            #TODO - Stick a warning in here for large lists? Or just refuse?
-            return self._offsets.keys()
-
+        #Python 2, also define iteritems etc
         def itervalues(self):
             """Iterate over the SeqRecord) items."""
             for key in self.__iter__():
@@ -333,22 +330,6 @@ class _IndexedSeqFileDict(_dict_base):
                 yield key, self.__getitem__(key)
 
         def iterkeys(self):
-            """Iterate over the keys."""
-            return self.__iter__()
-
-    else:
-        #Python 3 - define items and values as iterators
-        def items(self):
-            """Iterate over the (key, SeqRecord) items."""
-            for key in self.__iter__():
-                yield key, self.__getitem__(key)
-
-        def values(self):
-            """Iterate over the SeqRecord items."""
-            for key in self.__iter__():
-                yield self.__getitem__(key)
-
-        def keys(self):
             """Iterate over the keys."""
             return self.__iter__()
 
