@@ -26,8 +26,9 @@ class BlastnTabCases(unittest.TestCase):
     def test_tab_2228_tblastx_001(self):
         "Test parsing TBLASTX 2.2.28+ tabular output (tab_2228_tblastx_001)"
         tab_file = get_file('tab_2228_tblastx_001.txt')
-        qresults = list(parse(tab_file, FMT, fields=all_fields.values(),
-            comments=True))
+        qresults = list(parse(tab_file, FMT,
+                              fields=list(all_fields.values()),
+                              comments=True))
 
         # this a single query, with 192 hits and 243 hsps
         self.assertEqual(1, len(qresults))

@@ -374,8 +374,8 @@ class Parser(object):
             'reference':    'references',
             'property':     'properties',
             }
-    _clade_tracked_tags = set(_clade_complex_types + _clade_list_types.keys()
-                              + ['branch_length', 'name', 'node_id', 'width'])
+    _clade_tracked_tags = set(_clade_complex_types).union(_clade_list_types.keys()).union(
+                                             ['branch_length', 'name', 'node_id', 'width'])
 
     def _parse_clade(self, parent):
         """Parse a Clade node and its children, recursively."""

@@ -612,7 +612,7 @@ class SchemaFactory(object):
         assert total_count > 0, "Expected to have motifs to match"
         while (float(matched_count) / float(total_count)) < motif_percent:
             new_schema, matching_motifs = \
-                        self._get_unique_schema(schema_info.keys(),
+                        self._get_unique_schema(list(schema_info.keys()),
                                                 all_motifs, num_ambiguous)
 
             # get the number of counts for the new schema and clean up

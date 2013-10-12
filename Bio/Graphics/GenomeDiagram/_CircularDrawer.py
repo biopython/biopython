@@ -494,8 +494,8 @@ class CircularDrawer(AbstractDrawer):
         if self.end < endB:
             endB = self.end
 
-        trackobjA = cross_link._trackA(self._parent.tracks.values())
-        trackobjB = cross_link._trackB(self._parent.tracks.values())
+        trackobjA = cross_link._trackA(list(self._parent.tracks.values()))
+        trackobjB = cross_link._trackB(list(self._parent.tracks.values()))
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:

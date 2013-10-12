@@ -14,13 +14,11 @@ o SummaryInfo
 o PSSM
 """
 
-# standard library
 from __future__ import print_function
 
 import math
 import sys
 
-# biopython modules
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
@@ -581,8 +579,8 @@ class SummaryInfo(object):
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
                                      "do not match observed %s"
-                                     % (e_freq_table.keys(),
-                                        obs_freq.keys() - [gap_char]))
+                                     % (list(e_freq_table.keys()),
+                                        list(obs_freq.keys()) - [gap_char]))
 
         total_info = 0.0
 

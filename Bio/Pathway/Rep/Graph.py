@@ -88,11 +88,11 @@ class Graph(object):
 
     def labels(self):
         """Returns a list of all the edge labels in this graph."""
-        return self._label_map.keys()
+        return list(self._label_map.keys())
 
     def nodes(self):
         """Returns a list of the nodes in this graph."""
-        return self._adjacency_list.keys()
+        return list(self._adjacency_list.keys())
 
     def parent_edges(self, child):
         """Returns a list of (parent, label) pairs for child."""

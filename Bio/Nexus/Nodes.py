@@ -38,7 +38,7 @@ class Chain(object):
 
     def all_ids(self):
         """Return a list of all node ids."""
-        return self.chain.keys()
+        return list(self.chain.keys())
 
     def add(self,node,prev=None):
         """Attaches node to another."""

@@ -770,6 +770,7 @@ class Events(PhyloElement):
         return [v for v in self.__dict__.itervalues() if v is not None]
 
     def __len__(self):
+        #TODO - Better way to do this?
         return len(self.values())
 
     def __getitem__(self, key):

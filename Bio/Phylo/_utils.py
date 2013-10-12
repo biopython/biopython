@@ -170,7 +170,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         labels = dict(get_label_mapping(G, set(kwargs['nodelist'])))
     else:
         labels = dict(get_label_mapping(G, None))
-    kwargs['nodelist'] = labels.keys()
+    kwargs['nodelist'] = list(labels.keys())
     if 'edge_color' not in kwargs:
         kwargs['edge_color'] = [isinstance(e[2], dict) and
                                 e[2].get('color', 'k') or 'k'

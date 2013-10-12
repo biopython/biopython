@@ -294,5 +294,5 @@ class DisorderedEntityWrapper(object):
 
     def disordered_get_list(self):
         "Return list of children."
-        return self.child_dict.values()
+        return list(self.child_dict.values())
 

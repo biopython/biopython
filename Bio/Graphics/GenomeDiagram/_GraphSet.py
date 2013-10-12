@@ -150,7 +150,7 @@ class GraphSet(object):
 
             Return a list of all ids for the graph set
         """
-        return self._graphs.keys()
+        return list(self._graphs.keys())
 
     def range(self):
         """ range(self) -> (int, int)
@@ -172,7 +172,7 @@ class GraphSet(object):
         """
         data = []
         for graph in self._graphs.values():
-            data += graph.data.values()
+            data += list(graph.data.values())
         data.sort()
         datalen = len(data)
         return(data[0], data[datalen/4], data[datalen/2],

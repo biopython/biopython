@@ -32,10 +32,10 @@ protein_letters_1to3  = {
     'S': 'Ser', 'T': 'Thr', 'V': 'Val', 'W': 'Trp',
     'Y': 'Tyr',
 }
-protein_letters_1to3_extended = dict(protein_letters_1to3.items() + {
+protein_letters_1to3_extended = dict(list(protein_letters_1to3.items()) + list({
     'B': 'Asx', 'X': 'Xaa', 'Z': 'Glx', 'J': 'Xle',
     'U': 'Sel', 'O': 'Pyl',
-}.items())
+}.items()))
 
 protein_letters_3to1 = dict((x[1], x[0]) for x in
                             protein_letters_1to3.items())

@@ -106,7 +106,7 @@ class SplitFDist(object):
         while(True):
             sleep(1)
             self.async.access_ds.acquire()
-            keys = self.async.done.keys()[:]
+            keys = list(self.async.done.keys()) #copy it
             self.async.access_ds.release()
             for done in keys:
                 self.async.access_ds.acquire()

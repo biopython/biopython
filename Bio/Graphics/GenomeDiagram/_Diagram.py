@@ -382,7 +382,7 @@ class Diagram(object):
 
             Returns a list of the tracks contained in the diagram
         """
-        return self.tracks.values()
+        return list(self.tracks.values())
 
     def move_track(self, from_level, to_level):
         """ move_track(self, from_level, to_level)

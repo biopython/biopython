@@ -815,8 +815,7 @@ class BlastTabWriter(object):
         comments = []
         # inverse mapping of the long-short name map, required
         # for writing comments
-        inv_field_map = dict((value, key) for key, value in
-                _LONG_SHORT_MAP.items())
+        inv_field_map = dict((v, k) for k, v in _LONG_SHORT_MAP.items())
 
         # try to anticipate qress without version
         if not hasattr(qres, 'version'):

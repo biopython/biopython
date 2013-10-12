@@ -726,7 +726,7 @@ class LinearDrawer(AbstractDrawer):
         # several parts, and one or more of those parts may end up being
         # drawn on a non-existent fragment.  So we check that the start and
         # end fragments do actually exist in terms of the drawing
-        allowed_fragments = self.fragment_limits.keys()
+        allowed_fragments = list(self.fragment_limits.keys())
         if start_fragment in allowed_fragments and end_fragment in allowed_fragments:
             #print feature.name, feature.start, feature.end, start_offset, end_offset
             if start_fragment == end_fragment:  # Feature is found on one fragment
@@ -785,8 +785,8 @@ class LinearDrawer(AbstractDrawer):
         if self.end < endB:
             endB = self.end
 
-        trackobjA = cross_link._trackA(self._parent.tracks.values())
-        trackobjB = cross_link._trackB(self._parent.tracks.values())
+        trackobjA = cross_link._trackA(list(self._parent.tracks.values()))
+        trackobjB = cross_link._trackB(list(self._parent.tracks.values()))
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
@@ -820,7 +820,7 @@ class LinearDrawer(AbstractDrawer):
 
         strokecolor, fillcolor = _stroke_and_fill_colors(cross_link.color, cross_link.border)
 
-        allowed_fragments = self.fragment_limits.keys()
+        allowed_fragments = list(self.fragment_limits.keys())
 
         start_fragmentA, start_offsetA = self.canvas_location(startA)
         end_fragmentA, end_offsetA = self.canvas_location(endA)

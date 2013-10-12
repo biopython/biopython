@@ -249,8 +249,8 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
-    threecode = dict(IUPACData.protein_letters_1to3_extended.items() +
-            custom_map.items())
+    threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
+                     list(custom_map.items()))
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
     return ''.join(threecode.get(aa, undef_code) for aa in seq)
@@ -302,7 +302,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
     onecode = dict((k.upper(), v) for k, v in
-            IUPACData.protein_letters_3to1_extended.items())
+                   IUPACData.protein_letters_3to1_extended.iteritems())
     # add the given termination codon code and custom maps
     onecode.update((k.upper(), v) for (k, v) in custom_map.iteritems())
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
