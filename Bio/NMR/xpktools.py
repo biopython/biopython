@@ -233,12 +233,6 @@ def data_table(fn_list, datalabel, keyatom):
     return outlist
 
 
-def _sort_keys(dictionary):
-    keys = dictionary.keys()
-    sorted_keys = keys.sort()
-    return sorted_keys
-
-
 def _read_dicts(fn_list, keyatom):
     # Read multiple files into a list of residue dictionaries
     dict_list = []
