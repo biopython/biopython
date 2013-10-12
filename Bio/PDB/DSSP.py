@@ -186,7 +186,7 @@ class DSSP(AbstractResiduePropertyMap):
         >>> model = structure[0]
         >>> dssp = DSSP(model, "1MOT.pdb")
         >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-        >>> a_key = dssp.keys()[2]
+        >>> a_key = list(dssp.keys())[2]
         >>> # residue object, secondary structure, solvent accessibility,
         >>> # relative accessiblity, phi, psi
         >>> dssp[a_key]

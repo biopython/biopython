@@ -68,9 +68,9 @@ class TestTrie(unittest.TestCase):
     def test_save(self):
         trieobj = trie.trie()
         trieobj["foo"] = 1
-        k = trieobj.keys()
+        k = list(trieobj.keys())
         self.assertEqual(k, ["foo"])
-        v = trieobj.values()
+        v = list(trieobj.values())
         self.assertEqual(v, [1])
         self.assertEqual(trieobj.get("bar", 99), 99)
         trieobj["hello"] = '55a'
@@ -95,7 +95,7 @@ class TestTrie(unittest.TestCase):
         trie.save(h, trieobj)
         h.seek(0)
         trieobj = trie.load(h)
-        k = trieobj.keys()
+        k = list(trieobj.keys())
         self.assertTrue("foo" in k)
         self.assertTrue("hello" in k)
         self.assertEqual(repr(trieobj["foo"]), '1')

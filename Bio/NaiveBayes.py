@@ -158,7 +158,7 @@ def train(training_set, results, priors=None, typecode=None):
         nb.classes = list(set(results))
     else:
         class_freq = _contents(results)
-        nb.classes = class_freq.keys()
+        nb.classes = list(class_freq.keys())
         percs = class_freq
     nb.classes.sort()   # keep it tidy
 

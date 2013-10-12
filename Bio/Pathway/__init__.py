@@ -144,7 +144,7 @@ class Reaction(object):
 
     def species(self):
         """Returns a list of all Species involved in self."""
-        return self.reactants.keys()
+        return list(self.reactants.keys())
 
 
 class System(object):

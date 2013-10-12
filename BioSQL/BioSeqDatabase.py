@@ -547,7 +547,7 @@ class BioSeqDatabase:
         warnings.warn("Use bio_seq_database.keys() instead of "
                       "bio_seq_database.get_all_primary_ids()",
                       BiopythonDeprecationWarning)
-        return self.keys()
+        return list(self.keys())
 
     def __getitem__(self, key):
         return BioSeq.DBSeqRecord(self.adaptor, key)
@@ -631,10 +631,10 @@ class BioSeqDatabase:
     def lookup(self, **kwargs):
         if len(kwargs) != 1:
             raise TypeError("single key/value parameter expected")
-        k, v = kwargs.items()[0]
+        k, v = list(kwargs.items())[0]
         if k not in _allowed_lookups:
-            raise TypeError("lookup() expects one of %s, not %r" %
-                            (repr(_allowed_lookups.keys())[1:-1], repr(k)))
+            raise TypeError("lookup() expects one of %r, not %r" %
+                            (list(_allowed_lookups.keys()), k))
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
         seqid = lookup_func(self.dbid, v)

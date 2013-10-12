@@ -111,7 +111,7 @@ class EasyController(object):
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         pop_iter = list(pop_iter)
-        return pop_iter[pop_pos][1][locus_name][2].keys()
+        return list(pop_iter[pop_pos][1][locus_name][2].keys())
 
     def get_alleles_all_pops(self, locus_name):
         """Returns the alleles for a certain population and locus.

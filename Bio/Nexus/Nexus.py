@@ -897,7 +897,7 @@ class Nexus(object):
             #add sequence to matrix
             if first_matrix_block:
                 self.unaltered_taxlabels.append(id)
-                id = _unique_label(self.matrix.keys(), id)
+                id = _unique_label(list(self.matrix.keys()), id)
                 self.matrix[id] = iupac_seq
                 self.taxlabels.append(id)
             else:
@@ -1029,7 +1029,7 @@ class Nexus(object):
         the name CodonPositions and the partitions N,1,2,3
         """
 
-        prev_partitions = self.charpartitions.keys()
+        prev_partitions = list(self.charpartitions.keys())
         self._charpartition(options)
         # mcclade calls it CodonPositions, but you never know...
         codonname = [n for n in self.charpartitions if n not in prev_partitions]
@@ -1593,16 +1593,16 @@ class Nexus(object):
         """Return a bootstrapped matrix."""
         if not matrix:
             matrix = self.matrix
-        seqobjects = isinstance(matrix[matrix.keys()[0]], Seq)      # remember if Seq objects
+        seqobjects = isinstance(matrix[list(matrix.keys())[0]], Seq) # remember if Seq objects
         cm = self.crop_matrix(delete=delete, exclude=exclude)       # crop data out
         if not cm:                                                  # everything deleted?
             return {}
-        elif len(cm[cm.keys()[0]]) == 0:                            # everything excluded?
+        elif not cm[list(cm.keys())[0]]:                            # everything excluded?
             return cm
         undelete = [t for t in self.taxlabels if t in cm]
         if seqobjects:
             sitesm = list(zip(*[str(cm[t]) for t in undelete]))
-            alphabet = matrix[matrix.keys()[0]].alphabet
+            alphabet = matrix[list(matrix.keys())[0]].alphabet
         else:
             sitesm = list(zip(*[cm[t] for t in undelete]))
         bootstrapsitesm = [sitesm[random.randint(0, len(sitesm)-1)] for i in range(len(sitesm))]

@@ -12,15 +12,15 @@ db = server["embl_rod"]
 
 # -- do the fasta-only timing part
 start_time = time.time()
-all_records = db.items()
-for junk_id, record in all_records:
+num_records = 0
+for junk_id, record in db.items():
+    num_records += 1
     sequence = record.seq.data
     d = record.description
     i = record.id
     n = record.name
 
 end_time = time.time()
-num_records = len(all_records)
 elapsed_time = end_time - start_time
 print("Fasta")
 print("\tDid %s records in %s seconds for\n\t%f records per second" % \
@@ -28,8 +28,9 @@ print("\tDid %s records in %s seconds for\n\t%f records per second" % \
 
 # -- do the "EMBL" timing part
 start_time = time.time()
-all_records = db.items()
-for junk_id, record in all_records:
+num_records = 0
+for junk_id, record in db.items():
+    num_records += 1
     sequence = record.seq.data
     d = record.description
     i = record.id
@@ -40,7 +41,6 @@ for junk_id, record in all_records:
     species = record.species
     keywords = record.keywords
 end_time = time.time()
-num_records = len(all_records)
 elapsed_time = end_time - start_time
 print("EMBL")
 print("\tDid %s records in %s seconds for\n\t%f records per second" % \

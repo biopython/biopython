@@ -424,7 +424,7 @@ class StockholmIterator(AlignmentIterator):
                 raise ValueError("Found %i records in this alignment, told to expect %i"
                                  % (len(ids), self.records_per_alignment))
 
-            alignment_length = len(seqs.values()[0])
+            alignment_length = len(list(seqs.values())[0])
             records = []  # Alignment obj will put them all in a list anyway
             for id in ids:
                 seq = seqs[id]

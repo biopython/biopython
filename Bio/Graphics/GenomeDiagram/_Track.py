@@ -303,14 +303,14 @@ class Track(object):
 
             Return the sets contained in this track
         """
-        return self._sets.values()
+        return list(self._sets.values())
 
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return the ids of all sets contained in this track
         """
-        return self._sets.keys()
+        return list(self._sets.keys())
 
     def range(self):
         """ range(self) -> (int, int)

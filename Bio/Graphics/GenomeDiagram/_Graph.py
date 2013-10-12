@@ -191,7 +191,7 @@ class GraphData(object):
 
             Returns the mean value for the data points
         """
-        data = self.data.values()
+        data = list(self.data.values())
         sum = 0.
         for item in data:
             sum += float(item)
@@ -202,7 +202,7 @@ class GraphData(object):
 
             Returns the sample standard deviation for the data
         """
-        data = self.data.values()
+        data = list(self.data.values())
         m = self.mean()
         runtotal = 0.
         for entry in data:

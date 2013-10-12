@@ -7,7 +7,6 @@
 # as part of this package.
 """Represent a Sequence Record, a sequence with annotation."""
 
-from __future__ import print_function
 
 __docformat__ = "epytext en"  # Simple markup to show doctests nicely
 
@@ -255,7 +254,7 @@ class SeqRecord(object):
         >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print("%s %s" % (record.id, record.seq))
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(record.letter_annotations.keys())
+        >>> print(list(record.letter_annotations.keys()))
         ['solexa_quality']
         >>> print(record.letter_annotations["solexa_quality"])
         [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
@@ -502,7 +501,7 @@ class SeqRecord(object):
         >>> rec = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print("%s %s" % (rec.id, rec.seq))
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(rec.letter_annotations.keys())
+        >>> print(list(rec.letter_annotations.keys()))
         ['solexa_quality']
         >>> for nuc, qual in zip(rec, rec.letter_annotations["solexa_quality"]):
         ...     if qual > 35:
@@ -738,13 +737,13 @@ class SeqRecord(object):
         >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print("%s %s" % (record.id, record.seq))
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(record.letter_annotations.keys())
+        >>> print(list(record.letter_annotations.keys()))
         ['solexa_quality']
 
         >>> new = record + "ACT"
         >>> print("%s %s" % (new.id, new.seq))
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNNACT
-        >>> print(new.letter_annotations.keys())
+        >>> print(list(new.letter_annotations.keys()))
         []
 
         The new record will attempt to combine the annotation, but for any
@@ -844,13 +843,13 @@ class SeqRecord(object):
         >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print("%s %s" % (record.id, record.seq))
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(record.letter_annotations.keys())
+        >>> print(list(record.letter_annotations.keys()))
         ['solexa_quality']
 
         >>> new = "ACT" + record
         >>> print("%s %s" % (new.id, new.seq))
         slxa_0001_1_0001_01 ACTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(new.letter_annotations.keys())
+        >>> print(list(new.letter_annotations.keys()))
         []
         """
         if isinstance(other, SeqRecord):
@@ -967,7 +966,7 @@ class SeqRecord(object):
         >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
         >>> print("%s %s" % (record.id, record.seq))
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(record.letter_annotations.keys())
+        >>> print(list(record.letter_annotations.keys()))
         ['solexa_quality']
         >>> print(record.letter_annotations["solexa_quality"])
         [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]

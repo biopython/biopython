@@ -95,9 +95,9 @@ class CheckIndex(unittest.TestCase):
 
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""
-    attrs_a = obj_a.__dict__.keys()
-    attrs_b = obj_b.__dict__.keys()
-    diff = set(attrs_a).symmetric_difference(set(attrs_b))
+    attrs_a = set(obj_a.__dict__.keys())
+    attrs_b = set(obj_b.__dict__.keys())
+    diff = attrs_a.symmetric_difference(attrs_b)
     privates = len([x for x in diff if x.startswith('_')])
     return len(diff) - privates
 
