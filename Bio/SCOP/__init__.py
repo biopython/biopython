@@ -312,27 +312,21 @@ class Scop(object):
 
     def write_hie(self, handle):
         """Build an HIE SCOP parsable file from this object"""
-        nodes = self._sunidDict.values()
         # We order nodes to ease comparison with original file
-        nodes.sort(key = lambda n: n.sunid)
-        for n in nodes:
+        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
             handle.write(str(n.toHieRecord()))
 
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object"""
-        nodes = self._sunidDict.values()
         # Origional SCOP file is not ordered?
-        nodes.sort(key = lambda n: n.sunid)
-        for n in nodes:
+        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
     def write_cla(self, handle):
         """Build a CLA SCOP parsable file from this object"""
-        nodes = self._sidDict.values()
         # We order nodes to ease comparison with original file
-        nodes.sort(key = lambda n: n.sunid)
-        for n in nodes:
+        for n in sorted(self._sidDict.values(), key=lambda n: n.sunid):
             handle.write(str(n.toClaRecord()))
 
     def getDomainFromSQL(self, sunid=None, sid=None):
