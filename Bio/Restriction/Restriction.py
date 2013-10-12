@@ -1775,10 +1775,8 @@ class Commercially_available(AbstractCut):
     @classmethod
     def suppliers(self):
         """RE.suppliers() -> print the suppliers of RE."""
-        supply = suppliers_dict.items()
-        for k, v in supply:
-            if k in self.suppl:
-                print(v[0]+',')
+        for s in self.suppliers_dict():
+            print(s + ',')
         return
 
     @classmethod
