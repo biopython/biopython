@@ -652,7 +652,7 @@ def to_dict(sequences, key_function=None):
     >>> format = "genbank"
     >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(filename, format),
     ...               key_function = lambda rec : seguid(rec.seq))
-    >>> for key, record in sorted(seguid_dict.iteritems()):
+    >>> for key, record in sorted(seguid_dict.items()):
     ...     print("%s %s" % (key, record.id))
     /wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1
     BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1

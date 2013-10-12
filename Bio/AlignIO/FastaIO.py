@@ -142,9 +142,9 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         alignment._annotations = {}
 
         #Want to record both the query header tags, and the alignment tags.
-        for key, value in header_tags.iteritems():
+        for key, value in header_tags.items():
             alignment._annotations[key] = value
-        for key, value in align_tags.iteritems():
+        for key, value in align_tags.items():
             alignment._annotations[key] = value
 
         #Query

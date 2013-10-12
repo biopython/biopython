@@ -283,7 +283,7 @@ class Motif(object):
         for i in range(max(self.length, offset+other.length)):
             f1=self[i]
             f2=other[i-offset]
-            for n, b in self.background.iteritems():
+            for n, b in self.background.items():
                 s+=b*f1[n]*f2[n]
         return s/i
 
@@ -662,7 +662,7 @@ class Motif(object):
                   'color6': 'orange',
                   'color1': 'black',
                   }
-        for k, v in kwds.iteritems():
+        for k, v in kwds.items():
             values[k]=str(v)
             
         data = urllib.urlencode(values)

@@ -197,7 +197,7 @@ class FSSPAlignDict(dict):
         mult_align_dict = {}
         for j in self.abs(1).pos_align_dict:
             mult_align_dict[j] = ''
-        for fssp_rec in self.itervalues():
+        for fssp_rec in self.values():
             for j in fssp_rec.pos_align_dict:
                 mult_align_dict[j] += fssp_rec.pos_align_dict[j].aa
         out_str = ''
@@ -271,7 +271,7 @@ def read_fssp(fssp_handle):
             if not curline:
                 print('EOFEOFEOF')
                 raise EOFError
-    for i in align_dict.itervalues():
+    for i in align_dict.values():
         i.pos_align_list2dict()
         del i.PosAlignList
     align_dict.build_resnum_list()

@@ -503,7 +503,7 @@ class SummaryInfo(object):
 
             info_content[residue_num] = column_score
         # sum up the score
-        total_info = sum(info_content.itervalues())
+        total_info = sum(info_content.values())
         # fill in the ic_vector member: holds IC for each column
         for i in info_content:
             self.ic_vector[i] = info_content[i]

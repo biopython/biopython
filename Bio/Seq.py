@@ -1771,7 +1771,7 @@ class MutableSeq(object):
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        c = dict([(x.lower(), y.lower()) for x, y in d.iteritems()])
+        c = dict([(x.lower(), y.lower()) for x, y in d.items()])
         d.update(c)
         self.data = [d[c] for c in self.data]
         self.data = array.array(self.array_indicator, self.data)

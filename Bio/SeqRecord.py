@@ -83,7 +83,7 @@ class _RestrictedDict(dict):
 
     def update(self, new_dict):
         #Force this to go via our strict __setitem__ method
-        for (key, value) in new_dict.iteritems():
+        for (key, value) in new_dict.items():
             self[key] = value
 
 
@@ -434,7 +434,7 @@ class SeqRecord(object):
 
             #Don't copy the annotation dict and dbxefs list,
             #they may not apply to a subsequence.
-            #answer.annotations = dict(self.annotations.iteritems())
+            #answer.annotations = dict(self.annotations.items())
             #answer.dbxrefs = self.dbxrefs[:]
             #TODO - Review this in light of adding SeqRecord objects?
 
@@ -457,7 +457,7 @@ class SeqRecord(object):
 
             #Slice all the values to match the sliced sequence
             #(this should also work with strides, even negative strides):
-            for key, value in self.letter_annotations.iteritems():
+            for key, value in self.letter_annotations.items():
                 answer._per_letter_annotations[key] = value[index]
 
             return answer
@@ -823,11 +823,11 @@ class SeqRecord(object):
             answer.name = self.name
         if self.description == other.description:
             answer.description = self.description
-        for k, v in self.annotations.iteritems():
+        for k, v in self.annotations.items():
             if k in other.annotations and other.annotations[k] == v:
                 answer.annotations[k] = v
         #Can append matching per-letter-annotation
-        for k, v in self.letter_annotations.iteritems():
+        for k, v in self.letter_annotations.items():
             if k in other.letter_annotations:
                 answer.letter_annotations[k] = v + other.letter_annotations[k]
         return answer
@@ -1109,7 +1109,7 @@ class SeqRecord(object):
             answer.letter_annotations = letter_annotations
         elif letter_annotations:
             #Copy the old per letter annotations, reversing them
-            for key, value in self.letter_annotations.iteritems():
+            for key, value in self.letter_annotations.items():
                 answer._per_letter_annotations[key] = value[::-1]
         return answer
 

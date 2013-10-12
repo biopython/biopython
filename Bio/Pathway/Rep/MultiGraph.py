@@ -94,7 +94,7 @@ class MultiGraph(object):
         if child not in self._adjacency_list:
             raise ValueError("Unknown <child> node: " + str(child))
         parents = []
-        for parent, children in self._adjacency_list.iteritems():
+        for parent, children in self._adjacency_list.items():
             for x in children:
                 if x[0] is child:
                     parents.append((parent, x[1]))

@@ -240,7 +240,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 % (seq_name, self.clean(xref)))
 
         #GS = other per sequence annotation
-        for key, value in record.annotations.iteritems():
+        for key, value in record.annotations.items():
             if key in self.pfam_gs_mapping:
                 data = self.clean(str(value))
                 if data:
@@ -254,7 +254,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 pass
 
         #GR = per row per column sequence annotation
-        for key, value in record.letter_annotations.iteritems():
+        for key, value in record.letter_annotations.items():
             if key in self.pfam_gr_mapping and len(str(value)) == len(record.seq):
                 data = self.clean(str(value))
                 if data:

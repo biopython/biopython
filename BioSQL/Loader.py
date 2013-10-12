@@ -391,7 +391,7 @@ class DatabaseLoader:
                 species_names = [("scientific name",
                                   taxonomic_record[0]["ScientificName"])]
                 try:
-                    for name_class, names in taxonomic_record[0]["OtherNames"].iteritems():
+                    for name_class, names in taxonomic_record[0]["OtherNames"].items():
                         name_class = self._fix_name_class(name_class)
                         if not isinstance(names, list):
                             #The Entrez parser seems to return single entry
@@ -655,7 +655,7 @@ class DatabaseLoader:
                    "(bioentry_id, term_id, value, rank)" \
                    " VALUES (%s, %s, %s, %s)"
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
-        for key, value in record.annotations.iteritems():
+        for key, value in record.annotations.items():
             if key in ["references", "comment", "ncbi_taxid", "date"]:
                 #Handled separately
                 continue

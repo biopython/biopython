@@ -241,7 +241,7 @@ class AbstractCommandline(object):
                        "argument value required." % p.names[0]
             prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop)  # magic!
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             self.set_parameter(key, value)
 
     def _validate(self):
