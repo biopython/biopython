@@ -141,7 +141,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         Gi = networkx.convert_node_labels_to_integers(G,
                                 label_attribute='label')
         int_labels = {}
-        for integer, nodeattrs in Gi.node.iteritems():
+        for integer, nodeattrs in Gi.node.items():
             int_labels[nodeattrs['label']] = integer
     except TypeError:
         # Older NetworkX versions (before 1.8)
@@ -216,14 +216,14 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
         """Create a mapping of each clade to its column position."""
         depths = tree.depths()
         # If there are no branch lengths, assume unit branch lengths
-        if not max(depths.itervalues()):
+        if not max(depths.values()):
             depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
         cols_per_branch_unit = ((drawing_width - fudge_margin)
-                                / float(max(depths.itervalues())))
+                                / float(max(depths.values())))
         return dict((clade, int(round(blen*cols_per_branch_unit + 0.5)))
-                    for clade, blen in depths.iteritems())
+                    for clade, blen in depths.items())
 
     def get_row_positions(tree):
         positions = dict((taxon, 2*idx) for idx, taxon in enumerate(taxa))
@@ -370,7 +370,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         """
         depths = tree.depths()
         # If there are no branch lengths, assume unit branch lengths
-        if not max(depths.itervalues()):
+        if not max(depths.values()):
             depths = tree.depths(unit_branch_lengths=True)
         return depths
 
@@ -474,14 +474,14 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     axes.set_xlabel('branch length')
     axes.set_ylabel('taxa')
     # Add margins around the tree to prevent overlapping the axes
-    xmax = max(x_posns.itervalues())
+    xmax = max(x_posns.values())
     axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
-    axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
+    axes.set_ylim(max(y_posns.values()) + 0.8, 0.2)
 
     # Parse and process key word arguments as pyplot options
-    for key, value in kwargs.iteritems():
+    for key, value in kwargs.items():
         try:
             # Check that the pyplot option input is iterable, as required
             [i for i in value]

@@ -341,7 +341,7 @@ class _InsdcWriter(SequentialSequenceWriter):
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
-        for key, values in feature.qualifiers.iteritems():
+        for key, values in feature.qualifiers.items():
             if isinstance(values, list) or isinstance(values, tuple):
                 for value in values:
                     self._write_feature_qualifier(key, value)

@@ -290,7 +290,7 @@ class SeqFeature(object):
                             type = self.type,
                             location_operator = self.location_operator,
                             id = self.id,
-                            qualifiers = dict(self.qualifiers.iteritems()))
+                            qualifiers = dict(self.qualifiers.items()))
         #This is to avoid the deprecation warning:
         answer._sub_features = [f._shift(offset) for f in self._sub_features]
         return answer
@@ -309,7 +309,7 @@ class SeqFeature(object):
                             type = self.type,
                             location_operator = self.location_operator,
                             id = self.id,
-                            qualifiers = dict(self.qualifiers.iteritems()))
+                            qualifiers = dict(self.qualifiers.items()))
         #This is to avoid the deprecation warning: 
         answer._sub_features = [f._flip(length) for f in self._sub_features[::-1]]
         return answer

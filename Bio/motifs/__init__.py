@@ -465,7 +465,7 @@ The same rules are used by TRANSFAC."""
                   'color3': '',
                   'color4': '',
                   }
-        for k, v in kwds.iteritems():
+        for k, v in kwds.items():
             if isinstance(values[k], bool):
                 if not v:
                     v = ""

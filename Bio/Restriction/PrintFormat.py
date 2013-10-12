@@ -112,7 +112,7 @@ class PrintFormat(object):
         if not dct:
             dct = self.results
         ls, nc = [], []
-        for k, v in dct.iteritems():
+        for k, v in dct.items():
             if v:
                 ls.append((k, v))
             else:

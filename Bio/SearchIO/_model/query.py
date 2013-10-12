@@ -231,17 +231,17 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
-            for hit in self._items.itervalues():
+            for hit in self._items.values():
                 yield hit
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.iterkeys():
+            for hit_id in self._items.keys():
                 yield hit_id
 
         def iteritems(self):
             """Returns an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():
+            for item in self._items.items():
                 yield item
 
     else:

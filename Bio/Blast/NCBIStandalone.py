@@ -1804,7 +1804,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems():
+    for key, value in keywds.items():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -1932,7 +1932,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems():
+    for key, value in keywds.items():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -2035,7 +2035,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems():
+    for key, value in keywds.items():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -2139,7 +2139,7 @@ def _security_check_parameters(param_dict):
     for appending a command line), or ">", "<" or "|" (redirection)
     and if any are found raises an exception.
     """
-    for key, value in param_dict.iteritems():
+    for key, value in param_dict.items():
         str_value = str(value) # Could easily be an int or a float
         for bad_str in [";", "&&", ">", "<", "|"]:
             if bad_str in str_value:

@@ -74,7 +74,7 @@ class Reaction(object):
         # enforce invariants on reactants:
         self.reactants = reactants.copy()
         # loop over original, edit the copy
-        for r, value in reactants.iteritems():
+        for r, value in reactants.items():
             if value == 0:
                 del self.reactants[r]
         self.catalysts = sorted(set(catalysts))

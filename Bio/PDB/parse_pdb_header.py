@@ -267,7 +267,7 @@ if __name__=='__main__':
     handle.close()
 
     # print the dictionary
-    for k, y in data_dict.iteritems():
+    for k, y in data_dict.items():
         print("-"*40)
         print(k)
         print(y)

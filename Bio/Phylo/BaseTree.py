@@ -60,7 +60,7 @@ def _sorted_attrs(elem):
     singles = []
     lists = []
     # Sort attributes for consistent results
-    for attrname, child in sorted(elem.__dict__.iteritems(),
+    for attrname, child in sorted(elem.__dict__.items(),
                                   key=lambda kv: kv[0]):
         if child is None:
             continue
@@ -118,7 +118,7 @@ def _attribute_matcher(kwargs):
                 return False
         else:
             kwa_copy = kwargs
-        for key, pattern in kwa_copy.iteritems():
+        for key, pattern in kwa_copy.items():
             # Nodes must match all other specified attributes
             if not hasattr(node, key):
                 return False
@@ -233,7 +233,7 @@ class TreeElement(object):
             return "%s=%s" % (key, val)
         return u'%s(%s)' % (self.__class__.__name__,
                             ', '.join(pair_as_kwarg_string(key, val)
-                                  for key, val in self.__dict__.iteritems()
+                                  for key, val in self.__dict__.items()
                                   if val is not None and
                                   type(val) in (str, int, float, bool, unicode)
                                   ))
@@ -874,7 +874,7 @@ class Tree(TreeElement, TreeMixin):
         tips = self.get_terminals()
         for tip in tips:
             self.root_with_outgroup(tip)
-            new_max = max(self.depths().iteritems(), key=lambda nd: nd[1])
+            new_max = max(self.depths().items(), key=lambda nd: nd[1])
             if new_max[1] > max_distance:
                 tip1 = tip
                 tip2 = new_max[0]

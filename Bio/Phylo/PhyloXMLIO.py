@@ -50,7 +50,7 @@ except AttributeError:
     def register_namespace(prefix, uri):
         ElementTree._namespace_map[uri] = prefix
 
-for prefix, uri in NAMESPACES.iteritems():
+for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
 

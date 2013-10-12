@@ -429,7 +429,7 @@ class DictionaryBuilder(object):
             bases = cls.bases
             clsbases = tuple([eval(x) for x in bases])
             typestuff = ''
-            for n, t in tdct.iteritems():
+            for n, t in tdct.items():
                 #
                 #   if the bases are the same. it is the right type.
                 #   create the enzyme and remember the type
@@ -454,7 +454,7 @@ class DictionaryBuilder(object):
             else:
                 enzlst= []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict([(k, v) for k, v in tydct.iteritems() if k in commonattr])
+                tydct = dict([(k, v) for k, v in tydct.items() if k in commonattr])
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__['suppl']:
@@ -482,7 +482,7 @@ class DictionaryBuilder(object):
         for name in sorted(classdict) :
             results.write("def _temp():\n")
             results.write("    return {\n")
-            for key, value in classdict[name].iteritems() :
+            for key, value in classdict[name].items() :
                 results.write("        %s : %s,\n" % (repr(key), repr(value)))
             results.write("    }\n")
             results.write("rest_dict[%s] = _temp()\n" % repr(name))

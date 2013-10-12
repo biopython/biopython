@@ -75,7 +75,7 @@ def PdbSeqresIterator(handle):
                                     'db_acc': db_acc, 'db_id_code': db_id_code})
         # ENH: 'SEQADV' 'MODRES'
 
-    for chn_id, residues in sorted(chains.iteritems()):
+    for chn_id, residues in sorted(chains.items()):
         record = SeqRecord(Seq(''.join(residues), generic_protein))
         record.annotations = {"chain": chn_id}
         if chn_id in metadata:
@@ -143,7 +143,7 @@ def PdbAtomIterator(handle):
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
     model = struct[0]
-    for chn_id, chain in sorted(model.child_dict.iteritems()):
+    for chn_id, chain in sorted(model.child_dict.items()):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [res for res in chain.get_unpacked_list()
                     if seq1(res.get_resname().upper(),

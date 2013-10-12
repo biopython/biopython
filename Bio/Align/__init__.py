@@ -390,7 +390,7 @@ class MultipleSeqAlignment(_Alignment):
         merged = (left+right for left, right in zip(self, other))
         # Take any common annotation:
         annotations = dict()
-        for k, v in self.annotations.iteritems():
+        for k, v in self.annotations.items():
             if k in other.annotations and other.annotations[k] == v:
                 annotations[k] = v
         return MultipleSeqAlignment(merged, alpha, annotations)

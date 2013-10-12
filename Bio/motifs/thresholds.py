@@ -38,7 +38,7 @@ class ScoreDistribution(object):
                 mo_new=[0.0]*self.n_points
                 bg_new=[0.0]*self.n_points
                 lo = pssm[:, position]
-                for letter, score in lo.iteritems():
+                for letter, score in lo.items():
                     bg = background[letter]
                     mo = pow(2, pssm[letter, position]) * bg
                     d=self._index_diff(score)
@@ -57,7 +57,7 @@ class ScoreDistribution(object):
     def modify(self, scores, mo_probs, bg_probs):
         mo_new=[0.0]*self.n_points
         bg_new=[0.0]*self.n_points
-        for k, v in scores.iteritems():
+        for k, v in scores.items():
             d=self._index_diff(v)
             for i in range(self.n_points):
                 mo_new[self._add(i, d)]+=self.mo_density[i]*mo_probs[k]

@@ -99,7 +99,7 @@ class Graph(object):
         if child not in self._adjacency_list:
             raise ValueError("Unknown <child> node: " + str(child))
         parents = []
-        for parent, children in self._adjacency_list.iteritems():
+        for parent, children in self._adjacency_list.items():
             for x in children:
                 if x is child:
                     parents.append((parent, self._edge_map[(parent, child)]))

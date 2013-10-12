@@ -238,7 +238,7 @@ class SeqMat(dict):
         result = {}
         for letter in self.alphabet.letters:
             result[letter] = 0.0
-        for pair, value in self.iteritems():
+        for pair, value in self.items():
             i1, i2 = pair
             if i1 == i2:
                 result[i1] += value
@@ -377,7 +377,7 @@ class SubstitutionMatrix(SeqMat):
         """Calculate and return the relative entropy with respect to an
         observed frequency matrix"""
         relative_entropy = 0.
-        for key, value in self.iteritems():
+        for key, value in self.items():
             if value > EPSILON:
                 relative_entropy += obs_freq_mat[key] * log(value)
         relative_entropy /= log(2)
@@ -391,7 +391,7 @@ class LogOddsMatrix(SeqMat):
         """Calculate and return the relative entropy with respect to an
         observed frequency matrix"""
         relative_entropy = 0.
-        for key, value in self.iteritems():
+        for key, value in self.items():
             relative_entropy += obs_freq_mat[key] * value / log(2)
         return relative_entropy
 
@@ -465,7 +465,7 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
     minimum log-odds value of the matrix in entries containing -999
     """
     lo_mat = LogOddsMatrix(subs_mat)
-    for key, value in subs_mat.iteritems():
+    for key, value in subs_mat.items():
         if value < EPSILON:
             lo_mat[key] = -999
         else:

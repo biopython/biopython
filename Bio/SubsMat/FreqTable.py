@@ -57,7 +57,7 @@ class FreqTable(dict):
 
     def _freq_from_count(self):
         total = float(sum(self.count.values()))
-        for i, v in self.count.iteritems():
+        for i, v in self.count.items():
             self[i] = v / total
 
     def _alphabet_from_input(self):

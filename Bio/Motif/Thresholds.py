@@ -36,7 +36,7 @@ class ScoreDistribution(object):
     def modify(self, scores, mo_probs, bg_probs):
         mo_new=[0.0]*self.n_points
         bg_new=[0.0]*self.n_points
-        for k, v in scores.iteritems():
+        for k, v in scores.items():
             d=self._index_diff(v)
             for i in range(self.n_points):
                 mo_new[self._add(i, d)]+=self.mo_density[i]*mo_probs[k]

@@ -136,7 +136,7 @@ from Bio.Restriction.Restriction import *
 ###
 ##CommOnly    = RestrictionBatch()    # commercial enzymes
 ##NonComm     = RestrictionBatch()    # not available commercially
-##for TYPE, (bases, enzymes) in typedict.iteritems():
+##for TYPE, (bases, enzymes) in typedict.items():
 ##    #
 ##    #   The keys are the pseudo-types TYPE (stored as type1, type2...)
 ##    #   The names are not important and are only present to differentiate

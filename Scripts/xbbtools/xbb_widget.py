@@ -69,7 +69,7 @@ class xbb_widget:
     def init_variables(self):
         self.seqwidth = 60
         self.translation_tables = {}
-        for i, table in CodonTable.unambiguous_dna_by_id.iteritems():
+        for i, table in CodonTable.unambiguous_dna_by_id.items():
             self.translation_tables[table.names[0]] = i
         self.translator = xbb_translations()
 
