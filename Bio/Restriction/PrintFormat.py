@@ -302,8 +302,7 @@ class PrintFormat(object):
                     enzymemap[c].append(str(enzyme))
                 else:
                     enzymemap[c] = [str(enzyme)]
-        mapping = enzymemap.keys()
-        mapping.sort()
+        mapping = sorted(enzymemap.keys())
         cutloc = {}
         x, counter, length = 0, 0, len(self.sequence)
         for x in xrange(60, length, 60):
