@@ -8,11 +8,11 @@ import os
 import re
 import sys
 sys.path.insert(0, '.')
+
 from Tkinter import *
 from tkColorChooser import askcolor
-from Bio.Data.IUPACData import ambiguous_dna_values
-import re
 
+from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
 
 
