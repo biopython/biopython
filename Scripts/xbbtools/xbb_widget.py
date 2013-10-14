@@ -15,8 +15,15 @@ import re
 import sys
 import time
 
-from Tkinter import *
-from tkFileDialog import askopenfilename, asksaveasfilename
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
+try:
+    import tkFileDialog as filedialog # Python 2
+except ImportError:
+    from tkinter import filedialog # Python 3
 
 sys.path.insert(0, '.')
 from xbb_utils import *
@@ -330,7 +337,7 @@ class xbb_widget:
 
     def open(self, file=None):
         if not file:
-            file = askopenfilename()
+            file = filedialog.askopenfilename()
         if not file:
             return
         with open(file) as handle:

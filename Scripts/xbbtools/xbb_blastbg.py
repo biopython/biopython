@@ -11,10 +11,20 @@ import posixpath
 import os
 import sys
 sys.path.insert(0, '.')
-import Queue
+
+try:
+    import Queue as queue # Python 2
+except ImportError:
+    import queue # Python 3
+
 import tempfile
 import threading
-from Tkinter import *
+
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
 from xbb_utils import NotePad
 
 
@@ -70,12 +80,12 @@ class BlastWorker(threading.Thread):
 
     def __init__(self, command):
         self.com = command
-        queue = Queue.Queue(0)
-        self.queue = queue
+        q = queue.Queue(0)
+        self.queue = q
         threading.Thread.__init__(self)
         self.finished = 0
-        print(dir(queue))
-        print(queue.queue)
+        print(dir(q))
+        print(q.queue)
 
     def shutdown(self):
         # GRRRR How do I explicitely kill a thread ???????

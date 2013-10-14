@@ -10,7 +10,12 @@ import sys
 import time
 
 sys.path.insert(0, '.')
-from Tkinter import *
+
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
 
 from Bio.Seq import reverse_complement, translate
 from Bio.SeqUtils import GC

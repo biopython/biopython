@@ -6,8 +6,16 @@
 
 import sys
 sys.path.insert(0, '.')
-from Tkinter import *
-from FileDialog import SaveFileDialog
+
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
+try:
+    import tkFileDialog as filedialog # Python 2
+except ImportError:
+    from tkinter import filedialog # Python 3
 
 
 class NotePad(Toplevel):
@@ -34,7 +42,7 @@ class NotePad(Toplevel):
         self.tid.insert(start, txt)
 
     def save(self):
-        fd = SaveFileDialog(self)
+        fd = filedialog.SaveFileDialog(self)
         file = fd.go(key="test")
         if file:
             fid = open(file, 'w')
