@@ -419,11 +419,9 @@ def quick_FASTA_reader(file):
     If you want to use simple strings, use the function SimpleFastaParser
     added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
     """
-    handle = open(file)
-    entries = []
     from Bio.SeqIO.FastaIO import SimpleFastaParser
-    for title, sequence in SimpleFastaParser(handle):
-        entries.append((title, sequence))
+    handle = open(file)
+    entries = list(SimpleFastaParser(handle))
     handle.close()
     return entries
 
