@@ -25,8 +25,7 @@ from xbb_blast import BlastIt
 from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
 from Bio.Data import CodonTable
-from Bio.SeqUtils import quick_FASTA_reader
-
+from Bio.SeqIO.FastaIO import SimpleFastaParser
 
 class xbb_widget:
     def __init__(self, parent=None):
@@ -334,8 +333,8 @@ class xbb_widget:
             file = askopenfilename()
         if not file:
             return
-        genes = quick_FASTA_reader(file)
-        self.insert_sequence(genes[0])
+        with open(file) as handle:
+            self.insert_sequence(next(SimpleFastaParser(handle)))
 
     def insert_sequence(self, name_sequence):
         (name, sequence) = name_sequence
