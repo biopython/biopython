@@ -665,7 +665,6 @@ class Nexus(object):
             try:
                 getattr(self, '_'+line.command)(line.options)
             except AttributeError:
-                raise
                 raise NexusError('Unknown command: %s ' % line.command)
 
     def _title(self, options):
