@@ -482,8 +482,7 @@ def _replace_parenthesized_ambigs(seq, rev_ambig_values):
             raise NexusError('Missing closing parenthesis in: '+seq)
         elif closing<opening:
             raise NexusError('Missing opening parenthesis in: '+seq)
-        ambig = sorted(seq[opening+1:closing])
-        ambig=''.join(ambig)
+        ambig = ''.join(sorted(seq[opening+1:closing]))
         ambig_code=rev_ambig_values[ambig.upper()]
         if ambig!=ambig.upper():
             ambig_code=ambig_code.lower()
