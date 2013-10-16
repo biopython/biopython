@@ -157,8 +157,7 @@ class StepMatrix(object):
 
     def __init__(self, symbols, gap):
         self.data={}
-        self.symbols=[s for s in symbols]
-        self.symbols.sort()
+        self.symbols = sorted(symbols)
         if gap:
             self.symbols.append(gap)
         for x in self.symbols:
