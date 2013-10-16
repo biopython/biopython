@@ -710,15 +710,16 @@ class Nexus(object):
         if 'datatype' in options:
             self.datatype = options['datatype'].lower()
             if self.datatype == 'dna' or self.datatype == 'nucleotide':
-                self.alphabet = copy.deepcopy(IUPAC.ambiguous_dna)
+                self.alphabet = IUPAC.IUPACAmbiguousDNA() # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_dna_values.copy()
                 self.unambiguous_letters = IUPACData.unambiguous_dna_letters
             elif self.datatype == 'rna':
-                self.alphabet = copy.deepcopy(IUPAC.ambiguous_rna)
+                self.alphabet = IUPAC.IUPACAmbiguousDNA() # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_rna_values.copy()
                 self.unambiguous_letters = IUPACData.unambiguous_rna_letters
             elif self.datatype == 'protein':
-                self.alphabet = copy.deepcopy(IUPAC.protein)
+                #TODO - Should this not be ExtendedIUPACProtein?
+                self.alphabet = IUPAC.IUPACProtein() # fresh instance
                 self.ambiguous_values = {'B':'DN', 'Z':'EQ', 'X':IUPACData.protein_letters}
                 # that's how PAUP handles it
                 self.unambiguous_letters = IUPACData.protein_letters + '*'  # stop-codon
