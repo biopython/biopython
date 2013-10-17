@@ -808,24 +808,19 @@ class Nexus(object):
         self.charlabels = {}
         opts = CharBuffer(options)
         while True:
-            try:
-                # get id and state
-                w = opts.next_word()
-                if w is None: # McClade saves and reads charlabel-lists with terminal comma?!
-                    break
-                identifier = self._resolve(w, set_type=CHARSET)
-                state = quotestrip(opts.next_word())
-                self.charlabels[identifier] = state
-                # check for comma or end of command
-                c = opts.next_nonwhitespace()
-                if c is None:
-                    break
-                elif c != ',':
-                    raise NexusError('Missing \',\' in line %s.' % options)
-            except NexusError:
-                raise
-            except:
-                raise NexusError('Format error in line %s.' % options)
+            # get id and state
+            w = opts.next_word()
+            if w is None: # McClade saves and reads charlabel-lists with terminal comma?!
+                break
+            identifier = self._resolve(w, set_type=CHARSET)
+            state = quotestrip(opts.next_word())
+            self.charlabels[identifier] = state
+            # check for comma or end of command
+            c = opts.next_nonwhitespace()
+            if c is None:
+                break
+            elif c != ',':
+                raise NexusError('Missing \',\' in line %s.' % options)
 
     def _charstatelabels(self, options):
         # warning: charstatelabels supports only charlabels-syntax!
