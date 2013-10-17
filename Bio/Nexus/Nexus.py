@@ -46,7 +46,10 @@ class NexusError(Exception):
 
 
 class CharBuffer(object):
-    """Helps reading NEXUS-words and characters from a buffer."""
+    """Helps reading NEXUS-words and characters from a buffer (semi-PRIVATE).
+
+    This class is not intended for public use (any more).
+    """
     def __init__(self, string):
         if string:
             self.buffer = list(string)
@@ -75,11 +78,6 @@ class CharBuffer(object):
     if sys.version_info[0] < 3:
         def next(self):
             """Deprecated Python 2 style alias for Python 3 style __next__ method."""
-            import warnings
-            from Bio import BiopythonDeprecationWarning
-            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
-                          "the .next() method is deprecated and will be removed in a "
-                          "future release of Biopython.", BiopythonDeprecationWarning)
             return self.__next__()
 
     def next_nonwhitespace(self):
