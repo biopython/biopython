@@ -13,7 +13,7 @@ The latest news is at the top of this file.
 (In progress, not released yet) Biopython 1.63
 
 Note this release does *not* support Python 2.5 (or Jython 2.5). It supports
-Python 2.5, 2.6 and 3.3 only (including alternative implementations like PyPy
+Python 2.6, 2.7 and 3.3 only (including alternative implementations like PyPy
 and Jython). This has allowed a lot of code clean-up, wider use of context
 managers (with statements), and other work to improve our Python 3 support.
 
