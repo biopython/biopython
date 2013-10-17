@@ -135,7 +135,7 @@ class FastaWriter(SequentialSequenceWriter):
                  Use zero (or None) for no wrapping, giving a single
                  long line for the sequence.
         record2title - Optional function to return the text to be
-                 used for the title line of each record.  By default the
+                 used for the title line of each record.  By default
                  a combination of the record.id and record.description
                  is used.  If the record.description starts with the
                  record.id, then just the record.description is used.
