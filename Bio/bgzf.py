@@ -175,7 +175,7 @@ it is possible your BGZF file is incomplete.
 
 By reading ahead 70,000 bytes we moved into the second BGZF block,
 and at that point the BGZF virtual offsets start to look different
-a simple offset into the decompressed data as exposed by the gzip
+to a simple offset into the decompressed data as exposed by the gzip
 library.
 
 As an example, consider seeking to the decompressed position 196734.
