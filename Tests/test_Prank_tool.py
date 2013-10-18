@@ -179,7 +179,7 @@ class PrankConversion(unittest.TestCase):
             for record in old:
                 record.id = record.id[:10]
         new = AlignIO.read(filename, format)
-        assert len(old) == len(new)
+        self.assertEqual(len(old), len(new))
         for old_r, new_r in zip(old, new):
             self.assertEqual(old_r.id, new_r.id)
             self.assertEqual(str(old_r.seq), str(new_r.seq))

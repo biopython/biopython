@@ -363,16 +363,20 @@ Root:  16
         ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
                "TT1:25.000000)Taxaceae:90.000000;"
         tree = Trees.Tree(ts1b)
-        assert self._get_flat_nodes(tree) == [('Taxaceae', 90.0, None, None),
-                ('Cephalotaxus', 125.0, None, None), ('TT1', 25.0, None, None),
-                ('Taxus', 100.0, None, None), ('Torreya', 100.0, None, None)]
+        self.assertEqual(self._get_flat_nodes(tree), [('Taxaceae', 90.0, None, None),
+                                                      ('Cephalotaxus', 125.0, None, None),
+                                                      ('TT1', 25.0, None, None),
+                                                      ('Taxus', 100.0, None, None),
+                                                      ('Torreya', 100.0, None, None)])
 
         ts1c = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
                 "25.000000)90.000000;"
         tree = Trees.Tree(ts1c)
-        assert self._get_flat_nodes(tree) == [(None, 90.0, None, None),
-                ('Cephalotaxus', 125.0, None, None), (None, 25.0, None, None),
-                ('Taxus', 100.0, None, None), ('Torreya', 100.0, None, None)]
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 90.0, None, None),
+                                                      ('Cephalotaxus', 125.0, None, None),
+                                                      (None, 25.0, None, None),
+                                                      ('Taxus', 100.0, None, None),
+                                                      ('Torreya', 100.0, None, None)])
 
         ts2 = "(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"\
           "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"\

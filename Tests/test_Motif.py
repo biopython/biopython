@@ -400,13 +400,13 @@ class MotifTestsBasic(unittest.TestCase):
         """Test to be sure that Motif can parse pfm  files.
         """
         motif= Motif.read(self.PFMin, "jaspar-pfm")
-        assert motif.length==12
+        self.assertEqual(motif.length, 12)
 
     def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
         motif= Motif.read(self.SITESin, "jaspar-sites")
-        assert motif.length==6
+        self.assertEqual(motif.length, 6)
 
     def test_FAoutput(self):
         """Ensure that we can write proper FASTA output files.
