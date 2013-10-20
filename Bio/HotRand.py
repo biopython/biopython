@@ -10,7 +10,10 @@
 
 from __future__ import print_function
 
-import urllib
+#Importing these functions with leading underscore as not intended for reuse
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import urlencode as _urlencode
+
 from Bio import BiopythonDeprecationWarning
 import warnings
 warnings.warn("The HotRand module is deprecated and likely to be removed in a future release of Biopython. Please use an alternative RNG.", BiopythonDeprecationWarning)
@@ -35,8 +38,8 @@ class HotCache(object):
         self.fill_hot_cache()
 
     def fill_hot_cache(self):
-        url = self.url + urllib.urlencode(self.query)
-        fh = urllib.urlopen(url)
+        url = self.url + _urlencode(self.query)
+        fh = _urlopen(url)
         self.hot_cache = fh.read()
         fh.close()
 

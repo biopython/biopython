@@ -427,8 +427,8 @@ The same rules are used by TRANSFAC."""
             'color4': '',
 
         """
-        import urllib
-        import urllib2
+        from Bio._py3k import urlopen, urlencode, Request
+
         frequencies = self.format('transfac')
         url = 'http://weblogo.threeplusone.com/create.cgi'
         values = {'sequences': frequencies,
@@ -473,10 +473,10 @@ The same rules are used by TRANSFAC."""
                     v = ""
             values[k]=str(v)
 
-        data = urllib.urlencode(values)
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        f = open(fname, "w")
+        data = urlencode(values)
+        req = Request(url, data)
+        response = urlopen(req)
+        f = open(fname,"w")
         im = response.read()
 
         f.write(im)
