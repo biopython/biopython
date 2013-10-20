@@ -86,7 +86,7 @@ def run2to3(filenames):
                     #"--fix=imports2",
                     #"--fix=input", -- we avoid the input function
                     #"--fix=intern", -- we're not using the intern function
-                    "--fix=isinstance",
+                    #"--fix=isinstance", -- not needed anymore
                     "--fix=itertools",
                     "--fix=itertools_imports",
                     #"--fix=long",
