@@ -10,7 +10,11 @@ from __future__ import print_function
 
 import getopt
 import sys
-import urllib
+
+try:
+    from urllib.request import urlretrieve as _urlretrieve # Python 3
+except ImportError:
+    from urllib import urlretrieve as _urlretrieve # Python 2
 
 from Bio.SCOP import *
 
@@ -65,7 +69,7 @@ def open_pdb(pdbid, pdb_url=None):
     if pdb_url is None:
         pdb_url = default_pdb_url
     url = pdb_url % pdbid
-    fn, header = urllib.urlretrieve(url)
+    fn, header = _urlretrieve(url)
     return open(fn)
 
 
@@ -103,10 +107,10 @@ def main():
     raf_url = args[0]
     cla_url = args[1]
 
-    (raf_filename, headers) = urllib.urlretrieve(raf_url)
+    (raf_filename, headers) = _urlretrieve(raf_url)
     seqMapIndex = Raf.SeqMapIndex(raf_filename)
 
-    (cla_filename, headers) = urllib.urlretrieve(cla_url)
+    (cla_filename, headers) = _urlretrieve(cla_url)
     claIndex = Cla.Index(cla_filename)
 
     if input is None:

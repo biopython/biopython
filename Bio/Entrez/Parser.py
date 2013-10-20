@@ -36,10 +36,16 @@ be used directly.
 
 
 import os.path
-import urlparse
-import urllib
 import warnings
 from xml.parsers import expat
+
+#Importing these functions with leading underscore as not intended for reuse
+try:
+    from urllib.request import urlopen as _urlopen # Python 3
+    from urllib.parse import urlparse as _urlparse # Python 3
+except ImportError:
+    from urllib import urlopen as _urlopen # Python 2
+    from urlparse import urlparse as _urlparse # Python 2
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
@@ -460,7 +466,7 @@ class DataHandler(object):
         DTD results in much faster parsing. If the DTD is not found locally,
         we try to download it. If new DTDs become available from NCBI,
         putting them in Bio/Entrez/DTDs will allow the parser to see them."""
-        urlinfo = urlparse.urlparse(systemId)
+        urlinfo = _urlparse(systemId)
         #Following attribute requires Python 2.5+
         #if urlinfo.scheme=='http':
         if urlinfo[0]=='http':
@@ -521,7 +527,7 @@ Proceeding to access the DTD file through the internet...
 """ % (filename, filename, url, self.global_dtd_dir, self.local_dtd_dir, filename)
             warnings.warn(message)
             try:
-                handle = urllib.urlopen(url)
+                handle = _urlopen(url)
             except IOError:
                 raise RuntimeException("Failed to access %s at %s" % (filename, url))
 

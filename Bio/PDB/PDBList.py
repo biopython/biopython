@@ -26,8 +26,14 @@ import contextlib
 import gzip
 import os
 import shutil
-import urllib
-from urllib2 import urlopen as _urlopen  # urllib made too many FTP conn's
+
+#Importing these functions with leading underscore as not intended for reuse
+try:
+    from urllib.request import urlopen as _urlopen # Python 3
+    from urllib.request import urlretrieve as _urlretrieve # Python 3
+except ImportError:
+    from urllib2 import urlopen as _urlopen # Python 2
+    from urllib import urlretrieve as _urlretrieve # Python 2
 
 
 class PDBList(object):
@@ -209,7 +215,7 @@ class PDBList(object):
 
         # Retrieve the file
         print("Downloading PDB structure '%s'..." % pdb_code)
-        urllib.urlretrieve(url, filename)
+        _urlretrieve(url, filename)
 
         # Uncompress the archive, delete when done
         #Can't use context manager with gzip.open until Python 2.7
@@ -300,7 +306,7 @@ class PDBList(object):
         """
         print("Retrieving sequence file (takes about 15 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
-        urllib.urlretrieve(url, savefile)
+        _urlretrieve(url, savefile)
 
 
 if __name__ == '__main__':

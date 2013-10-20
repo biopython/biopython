@@ -3,7 +3,14 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-import urllib
+#Importing these functions with leading underscore as not intended for reuse
+try:
+    from urllib.request import urlopen as _urlopen # Python 3
+    from urllib.parse import urlencode as _urlencode # Python 3
+except ImportError:
+    from urllib import urlopen as _urlopen # Python 2
+    from urllib import urlencode as _urlencode # Python 2
+
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 
@@ -45,9 +52,9 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
     for key, value in keywords.iteritems():
         if value is not None:
             parameters[key] = value
-    command = urllib.urlencode(parameters)
+    command = _urlencode(parameters)
     url = "%s/cgi-bin/prosite/PSScan.cgi?%s" % (mirror, command)
-    handle = urllib.urlopen(url)
+    handle = _urlopen(url)
     return handle
 
 

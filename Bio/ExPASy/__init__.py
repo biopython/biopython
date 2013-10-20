@@ -17,7 +17,13 @@ sprot_search_ful  Interface to the sprot-search-ful CGI script.
 sprot_search_de   Interface to the sprot-search-de CGI script.
 """
 
-import urllib
+#Importing these functions with leading underscore as not intended for reuse
+try:
+    from urllib.request import urlopen as _urlopen # Python 3
+    from urllib.parse import urlencode as _urlencode # Python 3
+except ImportError:
+    from urllib import urlopen as _urlopen # Python 2
+    from urllib import urlencode as _urlencode # Python 2
 
 
 def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
@@ -31,8 +37,7 @@ def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     'There is no PROSITE documentation entry XXX. Please try again.'
     """
     # Open a handle to ExPASy.
-    handle = urllib.urlopen("%s?%s" % (cgi, id))
-    return handle
+    return _urlopen("%s?%s" % (cgi, id))
 
 
 def get_prosite_entry(id,
@@ -46,8 +51,7 @@ def get_prosite_entry(id,
     containing this line:
     'There is currently no PROSITE entry for XXX. Please try again.'
     """
-    handle = urllib.urlopen("%s?%s" % (cgi, id))
-    return handle
+    return _urlopen("%s?%s" % (cgi, id))
 
 
 def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
@@ -59,8 +63,7 @@ def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
 
     For a non-existing key, ExPASy returns nothing.
     """
-    handle = urllib.urlopen("%s?%s" % (cgi, id))
-    return handle
+    return _urlopen("%s?%s" % (cgi, id))
 
 
 def get_sprot_raw(id):
@@ -69,7 +72,7 @@ def get_sprot_raw(id):
     For an ID of XXX, fetches http://www.uniprot.org/uniprot/XXX.txt
     (as per the http://www.expasy.ch/expasy_urls.html documentation).
     """
-    return urllib.urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
+    return _urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
 
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
@@ -87,9 +90,9 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
         variables['S'] = 'on'
     if trembl:
         variables['T'] = 'on'
-    options = urllib.urlencode(variables)
+    options = _urlencode(variables)
     fullcgi = "%s?%s" % (cgi, options)
-    handle = urllib.urlopen(fullcgi)
+    handle = _urlopen(fullcgi)
     return handle
 
 
@@ -107,7 +110,7 @@ def sprot_search_de(text, swissprot=1, trembl=None,
         variables['S'] = 'on'
     if trembl:
         variables['T'] = 'on'
-    options = urllib.urlencode(variables)
+    options = _urlencode(variables)
     fullcgi = "%s?%s" % (cgi, options)
-    handle = urllib.urlopen(fullcgi)
+    handle = _urlopen(fullcgi)
     return handle
