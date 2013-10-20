@@ -21,7 +21,8 @@ def byte_concat(text):
     numbytes = len(text)
     for i in range(0, numbytes):
         val = val * 256
-        val += ord(text[i])
+        # Slice trick for Python 2 and 3 to get single char (byte) string:
+        val += ord(text[i:i+1])
     return val
 
 
@@ -41,7 +42,8 @@ class HotCache(object):
 
     def next_num(self, num_digits=4):
         cache = self.hot_cache
-        numbytes = num_digits / 2
+        # Must explicitly use integer division on python 3
+        numbytes = num_digits // 2
         if len(cache) % numbytes != 0:
             print('len_cache is %d' % len(cache))
             raise ValueError
