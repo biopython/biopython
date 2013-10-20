@@ -79,7 +79,7 @@ def run2to3(filenames):
                     #"--fix=funcattrs", -- not needed
                     "--fix=future",
                     #"--fix=getcwdu", -- we avoid the os.getcwdu function
-                    "--fix=has_key",
+                    #"--fix=has_key", -- already applied
                     #"--fix=idioms", -- Optional, breaks alignment.sort() --> sorted(alignment)
                     #"--fix=import", -- already applied
                     "--fix=imports",
