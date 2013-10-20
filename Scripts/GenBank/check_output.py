@@ -16,11 +16,9 @@ import os
 import gzip
 
 try:
-    #Python 2
-    from StringIO import StringIO
+    from StringIO import StringIO # Python 2
 except ImportError:
-    #Python 3
-    from io import StringIO
+    from io import StringIO # Python 3
 
 # biopython
 from Bio import GenBank
