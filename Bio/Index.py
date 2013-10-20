@@ -16,9 +16,12 @@ _InMemoryIndex  An in-memory Index class.
 """
 import os
 import array
-import cPickle
 import shelve
 
+try:
+    import cPickle as pickle # Only available under Python 2
+except ImportError:
+    import pickle # Python 3
 
 class _ShelveIndex(dict):
     """An index file wrapped around shelve.
@@ -133,13 +136,13 @@ class _InMemoryIndex(dict):
         # the integers into strings and join them together with commas.
         # It's not the most efficient way of storing things, but it's
         # relatively fast.
-        s = cPickle.dumps(obj)
+        s = pickle.dumps(obj)
         intlist = array.array('b', s)
         return ','.join(str(i) for i in intlist)
 
     def _toobj(self, str):
         intlist = [int(i) for i in str.split(',')]
         intlist = array.array('b', intlist)
-        return cPickle.loads(''.join(chr(i) for i in intlist))
+        return pickle.loads(''.join(chr(i) for i in intlist))
 
 Index = _InMemoryIndex
