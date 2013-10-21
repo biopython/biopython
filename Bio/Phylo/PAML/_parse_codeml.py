@@ -337,7 +337,7 @@ def parse_model(lines, results):
             float_model_params = []
             for param in model_params:
                 float_model_params.append((param[0], _nan_float(param[1])))
-            parameters = dict(parameters.items() + float_model_params)
+            parameters.update(dict(float_model_params))
     if len(parameters) > 0:
         results["parameters"] = parameters
     return results
