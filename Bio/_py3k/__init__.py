@@ -12,10 +12,12 @@ to use iterator based zip, map and filter:
 There is no similar option for range yet, other than:
 
     range = xrange
+    input = raw_input
 
 or:
 
     from __builtin__ import xrange as range
+    from __builtin__ import raw_input as input
 
 Under Python 3 this imports need to be removed. Also, deliberate
 importing of built in functions like open changes from Python 2:
@@ -38,7 +40,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     #Code for Python 3
-    from builtins import open, zip, map, filter, range
+    from builtins import open, zip, map, filter, range, input
 
     import codecs
 
@@ -125,6 +127,7 @@ else:
     #Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
     from __builtin__ import xrange as range
+    from __builtin__ import raw_input as input
 
     _bytes_to_string = lambda b: b # bytes to string, i.e. do nothing
     _string_to_bytes = lambda s: str(s) # str (or unicode) to bytes string
