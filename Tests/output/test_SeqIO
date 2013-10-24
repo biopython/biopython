@@ -2230,6 +2230,46 @@ Testing reading embl format file EMBL/epo_prt_selection.embl
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
  Failed: Sequences must all be the same length
+Testing reading embl format file EMBL/patents.embl
+ ID and Name='NRP00000001',
+ Seq='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX', length=358
+ ID and Name='NRP00000002',
+ Seq='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX', length=65
+ ID and Name='NRP00210944',
+ Seq='XXXXXXXXXXXXXXXXXXXXXXXXX', length=25
+ ID and Name='NRP00210945',
+ Seq='XXXXXXXXXXXXXXXXXXXXXXXXX', length=25
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).
+ Checking can write/read as 'seqxml' format
+ Failed: Sequence type is UnknownSeq but SeqXML requires sequence
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-sequential' format
+ Failed: Sequences must all be the same length
 Testing reading embl format file EMBL/TRBG361.embl
  ID = 'X56734.1', Name='X56734',
  Seq='AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA', length=1859

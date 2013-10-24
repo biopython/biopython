@@ -149,6 +149,7 @@ test_files = [
     ("genbank", False, 'GenBank/NP_416719.gbwithparts', 1),
 #Following files are currently only used here or in test_SeqIO_index.py:
     ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
+    ("embl",   False, 'EMBL/patents.embl', 4), # more proteins, but no seq
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited2.embl', 1), #Partial ID line
