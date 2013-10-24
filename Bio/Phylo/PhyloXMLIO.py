@@ -21,6 +21,7 @@ __docformat__ = "restructuredtext en"
 import sys
 
 from Bio._py3k import basestring
+from Bio._py3k import unicode
 
 from Bio.Phylo import PhyloXML as PX
 

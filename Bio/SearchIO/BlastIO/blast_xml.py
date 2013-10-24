@@ -24,7 +24,7 @@ except ImportError:
     from xml.etree import ElementTree as ElementTree
 
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes, _bytes_to_string, unicode
 _empty_bytes_string = _as_bytes("")
 
 from Bio.Alphabet import generic_dna, generic_protein
