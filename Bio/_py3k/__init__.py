@@ -47,6 +47,7 @@ if sys.version_info[0] >= 3:
     #Lots of our Python 2 code uses isinstance(x, basestring)
     #which after 2to3 becomes isinstance(x, str)
     basestring = str
+    unicode = str
 
     _bytes_to_string = lambda b: b.decode() # bytes to unicode string
     _string_to_bytes = lambda s: s.encode() # unicode string to bytes
@@ -127,7 +128,7 @@ if sys.version_info[0] >= 3:
 
 else:
     #Python 2 code
-    from __builtin__ import open, basestring
+    from __builtin__ import open, basestring, unicode
 
     #Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
