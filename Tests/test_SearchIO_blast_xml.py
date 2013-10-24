@@ -9,12 +9,17 @@
 import os
 import unittest
 
+from Bio._py3k import _as_unicode
 from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
 FMT = 'blast-xml'
 
+REFERENCE = (u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, '
+             u'Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), '
+             u'"Gapped BLAST and PSI-BLAST: a new generation of protein database '
+             u'search programs", Nucleic Acids Res. 25:3389-3402.')
 
 def get_file(filename):
     """Returns the path of a test file."""
@@ -33,7 +38,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual(1, qresult.param_score_match)
         self.assertEqual(-3, qresult.param_score_mismatch)
@@ -637,7 +642,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -724,7 +729,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('2.2.18+', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual(11, qresult.param_gap_open)
@@ -808,8 +813,7 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test meta variables, only for the first one
         self.assertEqual('2.2.18+', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(0.01, qresult.param_evalue_threshold)
         self.assertEqual(11, qresult.param_gap_open)
@@ -1519,7 +1523,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2044,7 +2048,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(0.001, qresult.param_evalue_threshold)
         self.assertEqual(11, qresult.param_gap_open)
@@ -2652,7 +2656,7 @@ class TblastxXmlCases(unittest.TestCase):
 
         # test meta variables, only for the first one
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM80', qresult.param_matrix)
         self.assertEqual(1, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
