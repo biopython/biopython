@@ -38,15 +38,7 @@ from io import StringIO
 #keys are filenames (with leading ./ prefix),
 #values are a list of 2to3 fixer names (strings):
 troublesome = {
-    "./Bio/Phylo/BaseTree.py": ["unicode"],
-    "./Bio/Entrez/Parser.py": ["unicode"],
-    "./Bio/Phylo/PhyloXMLIO.py": ["unicode"],
-    "./Bio/SearchIO/BlastIO/blast_xml.py": ["unicode"],
-    "./BioSQL/BioSeq.py": ["unicode"],
-    "./Tests/test_Entrez.py": ["unicode"],
-    "./Tests/test_PhyloXML.py": ["unicode"],
-    "./Tests/test_SearchIO_blast_xml.py": ["unicode"],
-    "./Tests/test_SeqIO_SeqXML.py": ["unicode"],
+#e.g.  "./Bio/Seq.py": ["future"],
 }
 
 
