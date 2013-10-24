@@ -609,10 +609,29 @@ class EmblScanner(InsdcScanner):
             #Looks like the semi colon separated style introduced in 2006
             self._feed_first_line_new(consumer, line)
         elif line[self.HEADER_WIDTH:].count(";") == 3:
-            #Looks like the pre 2006 style
-            self._feed_first_line_old(consumer, line)
+            if line.rstrip().endswith(" SQ"):
+                #EMBL-bank patent data
+                self._feed_first_line_patents(consumer,line)
+            else:
+                #Looks like the pre 2006 style
+                self._feed_first_line_old(consumer, line)
         else:
             raise ValueError('Did not recognise the ID line layout:\n' + line)
+
+    def _feed_first_line_patents(self, consumer, line):
+        #Either Non-Redundant Level 1 database records,
+        #ID <accession>; <molecule type>; <non-redundant level 1>; <cluster size L1>
+        #e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
+        #
+        #Or, Non-Redundant Level 2 database records:
+        #ID <L2-accession>; <molecule type>; <non-redundant level 2>; <cluster size L2>
+        #e.g. ID   NRP0000016E; PRT; NR2; 5 SQ
+        fields = line[self.HEADER_WIDTH:].rstrip()[:-3].split(";")
+        assert len(fields) == 4
+        consumer.locus(fields[0])
+        consumer.residue_type(fields[1])
+        consumer.data_file_division(fields[2])
+        #TODO - Record cluster size?
 
     def _feed_first_line_old(self, consumer, line):
         #Expects an ID line in the style before 2006, e.g.
@@ -681,7 +700,7 @@ class EmblScanner(InsdcScanner):
     def _feed_seq_length(self, consumer, text):
         length_parts = text.split()
         assert len(length_parts) == 2, "Invalid sequence length string %r" % text
-        assert length_parts[1].upper() in ["BP", "BP.", "AA."]
+        assert length_parts[1].upper() in ["BP", "BP.", "AA", "AA."]
         consumer.size(length_parts[0])
 
     def _feed_header_lines(self, consumer, lines):
@@ -808,6 +827,14 @@ class EmblScanner(InsdcScanner):
                         else:
                             raise ValueError('Expected CO (contig) continuation line, got:\n' + line)
                     consumer.contig_location(contig_location)
+                if line.startswith("SQ   Sequence "):
+                    #e.g.
+                    #SQ   Sequence 219 BP; 82 A; 48 C; 33 G; 45 T; 11 other;
+                    #
+                    #Or, EMBL-bank patent, e.g.
+                    #SQ   Sequence 465 AA; 3963407aa91d3a0d622fec679a4524e0; MD5;
+                    self._feed_seq_length(consumer, line[14:].rstrip().rstrip(";").split(";", 1)[0])
+                    #TODO - Record the checksum etc?
             return
         except StopIteration:
             raise ValueError("Problem in misc lines before sequence")

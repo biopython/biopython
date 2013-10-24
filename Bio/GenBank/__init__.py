@@ -1214,7 +1214,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     seq_alphabet = IUPAC.ambiguous_dna
                 else:
                     seq_alphabet = IUPAC.ambiguous_rna
-            elif 'PROTEIN' in self._seq_type.upper():
+            elif 'PROTEIN' in self._seq_type.upper() \
+            or self._seq_type == "PRT": # PRT is used in EMBL-bank for patents
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
