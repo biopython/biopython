@@ -64,7 +64,7 @@ def run2to3(filenames):
                     #"--fix=has_key", -- already applied
                     #"--fix=idioms", -- Optional, breaks alignment.sort() --> sorted(alignment)
                     #"--fix=import", -- already applied
-                    "--fix=imports",
+                    #"--fix=imports", -- no longer needed, largely via Bio._py3k
                     #"--fix=imports2",
                     #"--fix=input", -- we avoid the Python 2 input function
                     #"--fix=intern", -- we're not using the intern function
