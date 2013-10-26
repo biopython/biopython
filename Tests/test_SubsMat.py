@@ -10,7 +10,11 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.SubsMat.")
 
-import cPickle
+try:
+    import cPickle as pickle # Only available on Python 3
+except ImportError:
+    import pickle
+
 import sys
 import os
 from Bio import SubsMat
@@ -31,7 +35,7 @@ for i in ftab_prot.alphabet.letters:
 pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
 #Don't want to use text mode on Python 3,
 with open(pickle_file, 'rb') as handle:
-    acc_rep_mat = cPickle.load(handle)
+    acc_rep_mat = pickle.load(handle)
 acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
 obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
 ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)

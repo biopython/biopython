@@ -32,10 +32,18 @@ http://soapy.sourceforge.net/
 
 from __future__ import print_function
 
-import urllib
-import urllib2
 import time
 from Bio._py3k import _binary_to_string_handle, _as_bytes
+
+#Importing these functions with leading underscore as not intended for reuse
+try:
+    from urllib.request import urlopen as _urlopen
+    from urllib.parse import urlencode as _urlencode
+    from urllib.parse import quote as _quote
+except ImportError:
+    from urllib2 import urlopen as _urlopen
+    from urllib import urlencode as _urlencode
+    from urllib import quote as _quote
 
 #Constant
 _BASE_URL = "http://togows.dbcls.jp"
@@ -128,7 +136,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, urllib.quote(id))
+    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
     if field:
         url += "/" + field
     if format:
@@ -156,7 +164,7 @@ def search_count(db, query):
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
     handle = _open(_BASE_URL + "/search/%s/%s/count"
-                   % (db, urllib.quote(query)))
+                   % (db, _quote(query)))
     count = int(handle.read().strip())
     handle.close()
     return count
@@ -247,7 +255,7 @@ def search(db, query, offset=None, limit=None, format=None):
         import warnings
         warnings.warn("TogoWS search does not explicitly support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
-    url = _BASE_URL + "/search/%s/%s" % (db, urllib.quote(query))
+    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -318,9 +326,9 @@ def _open(url, post=None):
 
     #print(url)
     if post:
-        handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))
+        handle = _urlopen(url, _as_bytes(_urlencode(post)))
     else:
-        handle = urllib2.urlopen(url)
+        handle = _urlopen(url)
 
     #We now trust TogoWS to have set an HTTP error code, that
     #suffices for my current unit tests. Previously we would

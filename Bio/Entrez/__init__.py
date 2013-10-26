@@ -70,11 +70,19 @@ _open        Internally used function.
 """
 from __future__ import print_function
 
-import urllib
-import urllib2
 import time
 import warnings
 import os.path
+
+#Importing these functions with leading underscore as not intended for reuse
+try:
+    from urllib.request import urlopen as _urlopen # Python 3
+    from urllib.parse import urlencode as _urlencode # Python 3
+    from urllib.error import HTTPError as _HTTPError # Python 3
+except ImportError:
+    from urllib2 import urlopen as _urlopen # Python 2
+    from urllib import urlencode as _urlencode # Python 2
+    from urllib2 import HTTPError as _HTTPError # Python 2
 
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
@@ -448,17 +456,17 @@ In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
     # Open a handle to Entrez.
-    options = urllib.urlencode(params, doseq=True)
+    options = _urlencode(params, doseq=True)
     #print cgi + "?" + options
     try:
         if post:
             #HTTP POST
-            handle = urllib2.urlopen(cgi, data=_as_bytes(options))
+            handle = _urlopen(cgi, data=_as_bytes(options))
         else:
             #HTTP GET
             cgi += "?" + options
-            handle = urllib2.urlopen(cgi)
-    except urllib2.HTTPError as exception:
+            handle = _urlopen(cgi)
+    except _HTTPError as exception:
         raise exception
 
     return _binary_to_string_handle(handle)
