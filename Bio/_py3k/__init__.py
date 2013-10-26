@@ -120,6 +120,11 @@ if sys.version_info[0] >= 3:
     #On Python 3, this will be a unicode StringIO
     from io import StringIO
 
+    #On Python 3 urllib, urllib2, and urlparse were merged:
+    from urllib.request import urlopen, Request, urlretrieve, urlparse
+    from urllib.parse import urlencode, quote
+    from urllib.error import HTTPError
+
 else:
     #Python 2 code
     from __builtin__ import open, basestring
@@ -171,6 +176,17 @@ else:
         from cStringIO import StringIO
     except ImportError:
         from StringIO import StringIO
+
+    #Under urllib.request on Python 3:
+    from urllib2 import urlopen, Request
+    from urllib import urlretrieve
+    from urlparse import urlparse
+
+    #Under urllib.parse on Python 3:
+    from urllib import urlencode, quote
+
+    #Under urllib.error on Python 3:
+    from urllib2 import HTTPError
 
 
 if sys.platform == "win32":
