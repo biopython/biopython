@@ -31,7 +31,7 @@ available under Python 2.6 and 2.7.
 In addition to the documentation changes, Biopython now uses the Python 3
 style print and next functions internally. This along with many other small
 changes means that when installing from source under Python 3 the (automated)
-conversion using 2to3 is now much faster (less fixers need to be run).
+conversion using 2to3 is now *much* faster as only a few files need changing.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
