@@ -94,7 +94,7 @@ def run2to3(filenames):
                     #"--fix=tuple_params", -- already applied
                     #"--fix=types",
                     "--fix=unicode",
-                    "--fix=urllib",
+                    #"--fix=urllib", -- handled via Bio._py3k
                     #"--fix=ws_comma", -- optional fixer
                     #"--fix=xrange", -- not needed anymore
                     #"--fix=xreadlines", -- already applied
