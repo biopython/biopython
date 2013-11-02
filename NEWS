@@ -12,10 +12,9 @@ The latest news is at the top of this file.
 
 (In progress, not released yet) Biopython 1.63
 
-Note this release does *not* support Python 2.5 (or Jython 2.5). It supports
-Python 2.6, 2.7 and 3.3 only (including alternative implementations like PyPy
-and Jython). This has allowed a lot of code clean-up, wider use of context
-managers (with statements), and other work to improve our Python 3 support.
+This release of Biopython supports Python 2.6 and 2.7, and also Python 3.3
+without needing the 2to3 conversion library. This was made possible by
+dropping support for Python 2.5 (and Jython 2.5).
 
 The Biopython Tutorial & Cookbook, and the docstring examples in the source
 code, now use the Python 3 style print function in place of the Python 2
@@ -27,11 +26,6 @@ and 2.7 via:
 Similarly we now use the Python 3 style built-in next function in place of
 the Python 2 style iterators' .next() method. This language feature is also
 available under Python 2.6 and 2.7.
-
-In addition to the documentation changes, Biopython now uses the Python 3
-style print and next functions internally. This along with many other small
-changes means that when installing from source under Python 3 the (automated)
-conversion using 2to3 is now *much* faster as only a few files need changing.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:

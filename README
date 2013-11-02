@@ -50,15 +50,9 @@ Biopython under Python 3.3 as well.
 
 Biopython is currently supported and tested on the following Python verions:
 
-- Python 2.6, 2.7 -- see http://www.python.org
+- Python 2.6, 2.7, 3.3 -- see http://www.python.org
 
   This is the currently the primary development platform for Biopython.
-
-- Python 3.3 -- see http://www.python.org
-
-  Under Python 3 our setup.py script calls the 2to3 library automatically
-  to convert our Python 2 code into Python 3 code. Most of the Biopython
-  modules are available under Python 3 (but not yet all).
 
 - PyPy 1.9, 2.0, 2.1 -- see http://www.pypy.org
 
