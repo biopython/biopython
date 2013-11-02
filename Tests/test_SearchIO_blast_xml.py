@@ -5,11 +5,9 @@
 
 """Tests for SearchIO BlastIO parsers."""
 
-
 import os
 import unittest
 
-from Bio._py3k import _as_unicode
 from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
