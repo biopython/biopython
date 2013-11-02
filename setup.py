@@ -84,31 +84,6 @@ elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
     print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
-elif sys.version_info[0] == 3:
-    import do2to3
-    python3_source = "build/py%i.%i" % sys.version_info[:2]
-    if "clean" in sys.argv:
-        if os.path.isdir(python3_source):
-            shutil.rmtree(python3_source)
-        del python3_source  # so we don't try to change to it below
-    else:
-        if not os.path.isdir("build"):
-            os.mkdir("build")
-        do2to3.main(".", python3_source)
-    # Ugly hack to make pip work with Python 3, from 2to3 numpy setup:
-    # https://github.com/numpy/numpy/blob/bb726ca19f434f5055c0efceefe48d89469fcbbe/setup.py#L172
-    # Explanation: pip messes with __file__ which interacts badly with the
-    # change in directory due to the 2to3 conversion. Therefore we restore
-    # __file__ to what it would have been otherwise.
-    local_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-    global __file__
-    __file__ = os.path.join(os.curdir, os.path.basename(__file__))
-    if '--egg-base' in sys.argv:
-        # Change pip-egg-info entry to absolute path, so pip can find it
-        # after changing directory.
-        idx = sys.argv.index('--egg-base')
-        if sys.argv[idx + 1] == 'pip-egg-info':
-            sys.argv[idx + 1] = os.path.join(local_path, 'pip-egg-info')
 
 
 def check_dependencies_once():
