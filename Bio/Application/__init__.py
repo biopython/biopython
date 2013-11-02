@@ -22,6 +22,7 @@ Python module subprocess.
 from __future__ import print_function
 
 import os
+import platform
 import sys
 import subprocess
 import re
@@ -471,11 +472,23 @@ class AbstractCommandline(object):
         #
         #Using universal newlines is important on Python 3, this
         #gives unicode handles rather than bytes handles.
+
+	#Windows 7 and 8 want shell = True
+	#platform is easier to understand that sys to determine
+	#windows version
+	if sys.platform != "win32":
+	    use_shell = True
+	else:
+	    win_ver = platform.win32_ver()
+	    if win_ver in ["7", "8"]:
+	        use_shell = True
+	    else:
+	        use_shell = False
         child_process = subprocess.Popen(str(self), stdin=subprocess.PIPE,
                                          stdout=stdout_arg, stderr=stderr_arg,
                                          universal_newlines=True,
                                          cwd=cwd, env=env,
-                                         shell=(sys.platform!="win32"))
+                                         shell=use_shell)
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
         if not stdout:
