@@ -476,14 +476,14 @@ class AbstractCommandline(object):
 	#Windows 7 and 8 want shell = True
 	#platform is easier to understand that sys to determine
 	#windows version
-	if sys.platform != "win32":
-	    use_shell = True
-	else:
-	    win_ver = platform.win32_ver()[0]
-	    if win_ver in ["7", "8"]:
-	        use_shell = True
-	    else:
-	        use_shell = False
+        if sys.platform != "win32":
+            use_shell = True
+        else:
+            win_ver = platform.win32_ver()[0]
+            if win_ver in ["7", "8"]:
+                use_shell = True
+            else:
+                use_shell = False
         child_process = subprocess.Popen(str(self), stdin=subprocess.PIPE,
                                          stdout=stdout_arg, stderr=stderr_arg,
                                          universal_newlines=True,
