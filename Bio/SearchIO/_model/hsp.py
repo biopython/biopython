@@ -289,8 +289,12 @@ class HSP(_BaseHSP):
     def __len__(self):
         return len(self._items)
 
-    def __nonzero__(self):
+    #Python 3:
+    def __bool__(self):
         return bool(self._items)
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __str__(self):
 

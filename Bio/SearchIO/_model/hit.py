@@ -149,8 +149,12 @@ class Hit(_BaseSearchObject):
     def __len__(self):
         return len(self.hsps)
 
-    def __nonzero__(self):
+    #Python 3:
+    def __bool__(self):
         return bool(self.hsps)
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __contains__(self, hsp):
         return hsp in self._items

@@ -1017,14 +1017,17 @@ class Clade(TreeElement, TreeMixin):
         """Number of clades directy under the root."""
         return len(self.clades)
 
-    def __nonzero__(self):
-        """Boolean value of an instance of this class.
+    #Python 3:
+    def __bool__(self):
+        """Boolean value of an instance of this class (True).
 
         NB: If this method is not defined, but ``__len__``  is, then the object
         is considered true if the result of ``__len__()`` is nonzero. We want
         Clade instances to always be considered True.
         """
         return True
+    #Python 2:
+    __nonzero__ = __bool__
 
     def __str__(self):
         if self.name:

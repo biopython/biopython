@@ -34,13 +34,11 @@ import time
 import lib2to3.main
 from io import StringIO
 
+#Dictionary of troublesome files needing 2to3,
+#keys are filenames (with leading ./ prefix),
+#values are a list of 2to3 fixer names (strings):
 troublesome = {
-    "./Bio/SeqFeature.py": ["nonzero"],
-    "./Bio/SeqRecord.py": ["nonzero"],
-    "./Bio/Phylo/BaseTree.py": ["nonzero", "unicode"],
-    "./Bio/SearchIO/_model/hit.py": ["nonzero"],
-    "./Bio/SearchIO/_model/hsp.py": ["nonzero"],
-    "./Bio/SearchIO/_model/query.py": ["nonzero"],
+    "./Bio/Phylo/BaseTree.py": ["unicode"],
     "./Bio/Entrez/Parser.py": ["unicode"],
     "./Bio/Phylo/PhyloXMLIO.py": ["unicode"],
     "./Bio/SearchIO/BlastIO/blast_xml.py": ["unicode"],

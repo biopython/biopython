@@ -338,8 +338,9 @@ class SeqFeature(object):
         """
         return self.location.extract(parent_sequence)
     
-    def __nonzero__(self):
-        """Returns True regardless of the length of the feature.
+    #Python 3:
+    def __bool__(self):
+        """Boolean value of an instance of this class (True).
 
         This behaviour is for backwards compatibility, since until the
         __len__ method was added, a SeqFeature always evaluated as True.
@@ -351,6 +352,9 @@ class SeqFeature(object):
         length is zero (in order to better match normal python behaviour)!
         """
         return True
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __len__(self):
         """Returns the length of the region described by a feature.

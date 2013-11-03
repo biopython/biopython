@@ -711,8 +711,9 @@ class SeqRecord(object):
         """
         return len(self.seq)
 
-    def __nonzero__(self):
-        """Returns True regardless of the length of the sequence.
+    #Python 3:
+    def __bool__(self):
+        """Boolean value of an instance of this class (True).
 
         This behaviour is for backwards compatibility, since until the
         __len__ method was added, a SeqRecord always evaluated as True.
@@ -725,6 +726,9 @@ class SeqRecord(object):
         object behaviour)!
         """
         return True
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
