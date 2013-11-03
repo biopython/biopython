@@ -172,7 +172,7 @@ def do_update(py2folder, py3folder, verbose=False):
             if dirpath == "./Bio/_py3k":
                 #Don't convert these!
                 continue
-            f = os.path.join(dirpath, f)
+            f = os.path.join(dirpath, f).replace(os.path.sep, "/")
             if f in troublesome:
                 to_convert.append((new, troublesome[f]))
                 if verbose:
