@@ -34,90 +34,36 @@ import time
 import lib2to3.main
 from io import StringIO
 
-def avoid_bug19111(filename):
-    """Avoid this bug: http://bugs.python.org/issue19111"""
-    #Faster if we only write out the file if it needed changing
-    lines = list(open(filename, "rU"))
-    fix = False
-    for line in lines:
-        if line.startswith("from future_builtins import "):
-            fix = True
-            break
-    if not fix:
-        return
-    print("Applying issue 19111 fix to %s" % filename)
-    lines = [l for l in lines if not l.startswith("from future_builtins import ")]
-    with open(filename, "w") as h:
-        for l in lines:
-            h.write(l)
+troublesome = {
+    "./Bio/SeqFeature.py": ["nonzero"],
+    "./Bio/SeqRecord.py": ["nonzero"],
+    "./Bio/Phylo/BaseTree.py": ["nonzero", "unicode"],
+    "./Bio/SearchIO/_model/hit.py": ["nonzero"],
+    "./Bio/SearchIO/_model/hsp.py": ["nonzero"],
+    "./Bio/SearchIO/_model/query.py": ["nonzero"],
+    "./Bio/Entrez/Parser.py": ["unicode"],
+    "./Bio/Phylo/PhyloXMLIO.py": ["unicode"],
+    "./Bio/SearchIO/BlastIO/blast_xml.py": ["unicode"],
+    "./BioSQL/BioSeq.py": ["unicode"],
+    "./Tests/test_Entrez.py": ["unicode"],
+    "./Tests/test_PhyloXML.py": ["unicode"],
+    "./Tests/test_SearchIO_blast_xml.py": ["unicode"],
+    "./Tests/test_SeqIO_SeqXML.py": ["unicode"],
+}
 
-def run2to3(filenames):
+
+def run2to3(filenames_and_fixers):
     stderr = sys.stderr
     handle = StringIO()
     times = []
     try:
         #Want to capture stderr (otherwise too noisy)
         sys.stderr = handle
-        while filenames:
-            filename = filenames.pop(0)
-            #Remove 'from future_builtins import ...' due to bug 19111,
-            avoid_bug19111(filename)
-            #TODO - Configurable options per file?
+        while filenames_and_fixers:
+            filename, fixers = filenames_and_fixers.pop(0)
             print("Converting %s" % filename)
             start = time.time()
-            args = ["--no-diffs",
-                    #"--fix=apply", -- we avoid the apply function
-                    "--fix=basestring",
-                    #"--fix=buffer", -- we avoid the buffer command
-                    #"--fix=callable", -- not needed for Python 3.2+
-                    #"--fix=dict", -- we avoid needing this with list(dict.items()) etc
-                    #"--fix=except", -- we avoid old style exceptions
-                    #"--fix=exec", -- we avoid the exec statement
-                    #"--fix=execfile", -- we avoid execfile
-                    #"--fix=exitfunc", -- we avoid sys.exitfunc
-                    #"--fix=filter", -- no longer needed
-                    #"--fix=funcattrs", -- not needed
-                    "--fix=future",
-                    #"--fix=getcwdu", -- we avoid the os.getcwdu function
-                    #"--fix=has_key", -- already applied
-                    #"--fix=idioms", -- Optional, breaks alignment.sort() --> sorted(alignment)
-                    #"--fix=import", -- already applied
-                    "--fix=imports",
-                    #"--fix=imports2",
-                    #"--fix=input", -- we avoid the input function
-                    #"--fix=intern", -- we're not using the intern function
-                    #"--fix=isinstance", -- not needed anymore
-                    "--fix=itertools",
-                    "--fix=itertools_imports",
-                    #"--fix=long",
-                    #"--fix=map", -- not needed anymore
-                    #"--fix=metaclass", -- we're not using this
-                    #"--fix=methodattrs", -- we're not using these
-                    #"--fix=ne", -- not needed
-                    #"--fix=next", -- applied manually with deprecated aliases put in place
-                    "--fix=nonzero",
-                    #"--fix=numliterals", -- already applied
-                    #"--fix=operator", -- not needed
-                    #"--fix=paren", -- already applied
-                    #"--fix=print", -- we avoid the print statement
-                    #"--fix=raise", -- we avoid old style raise exception
-                    "--fix=raw_input",
-                    #"--fix=reduce", -- already using 'from functools import reduce'
-                    #"--fix=renames", -- already switched sys.maxint to sys.maxsize
-                    #"--fix=repr", -- we avoid the old style back-ticks
-                    #"--fix=set_literal", -- optional, and not backward compatible
-                    #"--fix=standarderror", -- not needed
-                    #"--fix=sys_exc", -- we're not using the deprecated sys.exc_* functions
-                    #"--fix=throw", -- we're not used this part of the generator API
-                    #"--fix=tuple_params", -- already applied
-                    #"--fix=types",
-                    "--fix=unicode",
-                    "--fix=urllib",
-                    #"--fix=ws_comma", -- optional fixer
-                    "--fix=xrange",
-                    #"--fix=xreadlines", -- already applied
-                    #"--fix=zip", -- not needed anymore
-                    "-n", "-w"]
+            args = ["-n", "-w", "--no-diffs", "--fix=future"] + ["--fix=%s" % f for f in fixers]
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
                 sys.stderr = stderr
@@ -226,10 +172,14 @@ def do_update(py2folder, py3folder, verbose=False):
             if dirpath == "./Bio/_py3k":
                 #Don't convert these!
                 continue
-            if f.endswith(".py"):
-                to_convert.append(new)
+            f = os.path.join(dirpath, f)
+            if f in troublesome:
+                to_convert.append((new, troublesome[f]))
                 if verbose:
                     print("Will convert %s" % new)
+            elif f.endswith(".py"):
+                if verbose:
+                    print("Updated %s (does not need 2to3)" % new)
             else:
                 if verbose:
                     print("Updated %s" % new)

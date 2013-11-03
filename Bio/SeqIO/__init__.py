@@ -261,6 +261,7 @@ making up each alignment as SeqRecords.
 """
 
 from __future__ import print_function
+from Bio._py3k import basestring
 
 __docformat__ = "epytext en"  # not just plaintext
 
@@ -488,7 +489,11 @@ def parse(handle, format, alphabet=None):
 
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
+    >>> try:
+    ...     from StringIO import StringIO # Python 2
+    ... except ImportError:
+    ...     from io import StringIO # Python 3
+    ...
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
     ...     print("%s %s" % (record.id, record.seq))
     Alpha ACCGGATGTA
@@ -907,7 +912,11 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     For example, going from a filename to a handle:
 
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
+    >>> try:
+    ...     from StringIO import StringIO # Python 2
+    ... except ImportError:
+    ...     from io import StringIO # Python 3
+    ...
     >>> handle = StringIO("")
     >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "fasta")
     3
@@ -946,4 +955,3 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

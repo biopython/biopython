@@ -11,9 +11,11 @@ is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
 The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
 """
 
-from future_builtins import map
 import copy
 from functools import reduce
+
+from Bio._py3k import map
+from Bio._py3k import basestring
 
 
 class CrystalError(Exception):

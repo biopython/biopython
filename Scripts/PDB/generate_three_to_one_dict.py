@@ -16,8 +16,9 @@ from __future__ import print_function
 import gzip
 import inspect
 import os
-import urllib
 import warnings
+
+from Bio._py3k import urlopen as _urlopen
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 
@@ -26,7 +27,7 @@ gzname = os.path.basename(url)
 # extract name of cif file (split by sep, remove last, rejoin)
 cifname = os.extsep.join(gzname.split(os.extsep)[:-1])
 
-url_handle = urllib.urlopen(url)
+url_handle = urlopen(url)
 
 with open(gzname, 'wb') as gzh:
     print("Downloading file... (approx. 29 MB)")

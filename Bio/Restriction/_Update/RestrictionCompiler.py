@@ -39,6 +39,8 @@ The Rebase files are in the emboss format:
 
 from __future__ import print_function
 
+from Bio._py3k import input as _input
+
 import os
 import itertools
 import time
@@ -635,7 +637,7 @@ class DictionaryBuilder(object):
             #
             print('\n The rebase files are more than one month old.\
             \n Would you like to update them before proceeding?(y/n)')
-            r = raw_input(' update [n] >>> ')
+            r = _input(' update [n] >>> ')
             if r in ['y', 'yes', 'Y', 'Yes']:
                 updt = RebaseUpdate(self.rebase_pass, self.proxy)
                 updt.openRebase()

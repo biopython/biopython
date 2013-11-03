@@ -27,6 +27,7 @@ protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
 """
 
 from __future__ import print_function
+from Bio._py3k import basestring
 
 from copy import copy
 

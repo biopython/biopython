@@ -12,6 +12,8 @@ hidden layers and the output layer).
 import math
 import random
 
+from Bio._py3k import range
+
 
 def logistic_function(value):
     """Transform the value with the logistic function.
@@ -42,7 +44,7 @@ class AbstractLayer(object):
         else:
             lower_range = 1
 
-        self.nodes = range(lower_range, num_nodes + 1)
+        self.nodes = list(range(lower_range, num_nodes + 1))
 
         self.weights = {}
 

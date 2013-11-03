@@ -6,9 +6,10 @@
 """Bio.SearchIO object to model a single database hit."""
 
 from __future__ import print_function
-from future_builtins import filter
 
 from itertools import chain
+
+from Bio._py3k import filter
 
 from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import allitems, optionalcascade

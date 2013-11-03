@@ -14,10 +14,11 @@ Goals:
 """
 from __future__ import print_function
 
+from Bio._py3k import HTTPError
+
 import requires_internet
 requires_internet.check()
 from Bio import MissingExternalDependencyError
-from urllib2 import HTTPError
 
 #We want to test these:
 from Bio.Blast import NCBIWWW

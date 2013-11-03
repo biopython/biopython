@@ -42,6 +42,8 @@
 # ReportLab imports
 from __future__ import print_function
 
+from Bio._py3k import range
+
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.graphics.shapes import *
@@ -302,7 +304,7 @@ def intermediate_points(start, end, graph_data):
     newdata.append((start, graph_data[0][0]+(graph_data[1][0]-graph_data[0][0])/2.,
                     graph_data[0][1]))
     # add middle set
-    for index in xrange(1, len(graph_data)-1):
+    for index in range(1, len(graph_data)-1):
         lastxval, lastyval = graph_data[index-1]
         xval, yval = graph_data[index]
         nextxval, nextyval = graph_data[index+1]

@@ -17,10 +17,11 @@ ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_association_readme
 gp_information (GPI format) README:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
 """
-from future_builtins import zip
 
 import copy
 import sys
+
+from Bio._py3k import zip
 
 # GAF: GO Annotation Format
 #

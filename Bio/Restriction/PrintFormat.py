@@ -11,6 +11,9 @@
 from __future__ import print_function
 
 import re
+
+from Bio._py3k import range
+
 from Bio.Restriction import RanaConfig as RanaConf
 
 """
@@ -305,7 +308,7 @@ class PrintFormat(object):
         mapping = sorted(enzymemap.keys())
         cutloc = {}
         x, counter, length = 0, 0, len(self.sequence)
-        for x in xrange(60, length, 60):
+        for x in range(60, length, 60):
             counter = x - 60
             l=[]
             for key in mapping:
@@ -323,7 +326,7 @@ class PrintFormat(object):
         base, counter = 0, 0
         emptyline = ' ' * 60
         Join = ''.join
-        for base in xrange(60, length, 60):
+        for base in range(60, length, 60):
             counter = base - 60
             line = emptyline
             for key in cutloc[counter]:

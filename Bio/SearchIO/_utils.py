@@ -2,8 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Common SearchIO utility functions."""
+
+from Bio._py3k import basestring
 
 
 def get_processor(format, mapping):

@@ -7,6 +7,8 @@
 
 from __future__ import print_function
 
+from Bio._py3k import range
+
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
@@ -94,7 +96,7 @@ class Motif(object):
             return self._pwm
         #we need to compute new pwm
         self._pwm = []
-        for i in xrange(self.length):
+        for i in range(self.length):
             dict = {}
             #filling the dict with 0's
             for letter in self.alphabet.letters:
@@ -128,7 +130,7 @@ class Motif(object):
         #we need to compute new pwm
         self._log_odds = []
         pwm=self.pwm(laplace)
-        for i in xrange(self.length):
+        for i in range(self.length):
             d = {}
             for a in self.alphabet.letters:
                     d[a]=math.log(pwm[i][a]/self.background[a], 2)
@@ -175,7 +177,7 @@ class Motif(object):
         """
         if not self.has_instances:
             raise ValueError ("This motif has no instances")
-        for pos in xrange(0, len(sequence)-self.length+1):
+        for pos in range(0, len(sequence)-self.length+1):
             for instance in self.instances:
                 if instance.tostring()==sequence[pos:pos+self.length].tostring():
                     yield(pos, instance)
@@ -187,7 +189,7 @@ class Motif(object):
         """
         lo=self.log_odds()
         score = 0.0
-        for pos in xrange(self.length):
+        for pos in range(self.length):
             a = sequence[position+pos]
             if not masked or self.mask[pos]:
                 try:
@@ -209,7 +211,7 @@ class Motif(object):
             rc = self.reverse_complement()
             
         sequence=sequence.tostring().upper()
-        for pos in xrange(0, len(sequence)-self.length+1):
+        for pos in range(0, len(sequence)-self.length+1):
             score = self.score_hit(sequence, pos, normalized, masked)
             if score > threshold:
                 yield (pos, score)
@@ -370,7 +372,7 @@ class Motif(object):
             str = str + inst.tostring() + "\n"
 
         if masked:
-            for i in xrange(self.length):
+            for i in range(self.length):
                 if self.mask[i]:
                     str = str + "*"
                 else:
@@ -626,8 +628,8 @@ class Motif(object):
         requires an internet connection.
         The parameters from **kwds are passed directly to the weblogo server.
         """
-        import urllib
-        import urllib2
+        from Bio._py3k import urlopen, urlencode, Request
+
         al= self._to_fasta()
         url = 'http://weblogo.berkeley.edu/logo.cgi'
         values = {'sequence': al,
@@ -665,10 +667,10 @@ class Motif(object):
         for k, v in kwds.items():
             values[k]=str(v)
             
-        data = urllib.urlencode(values)
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        f=open(fname, "w")
+        data = urlencode(values)
+        req = Request(url, data)
+        response = urlopen(req)
+        f=open(fname,"w")
         im=response.read()
         
         f.write(im)
@@ -799,9 +801,9 @@ class Motif(object):
         s = len(sequence)
         n = s - m + 1
         result = [None] * n
-        for i in xrange(n):
+        for i in range(n):
             score = 0.0
-            for j in xrange(m):
+            for j in range(m):
                 c = sequence[i+j]
                 temp = logodds[j].get(c)
                 if temp is None:

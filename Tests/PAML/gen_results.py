@@ -3,11 +3,12 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-
 from __future__ import print_function
 
 import os.path
 import sys
+
+from Bio._py3k import range
 
 
 VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7"]
@@ -59,8 +60,8 @@ def baseml(vers=None, verbose=False):
         versions = [vers]
     else:
         versions = VERSIONS
-    tests = [("model", range(0, 9)), ("nhomo", [1, 3, 4]),
-            ("nparK", range(1, 5)), ("alpha1rho1", None), ("SE", None)]
+    tests = [("model", list(range(0, 9))), ("nhomo", [1, 3, 4]),
+            ("nparK", list(range(1, 5))), ("alpha1rho1", None), ("SE", None)]
     alignment = os.path.join("Alignments", "alignment.phylip")
     tree = os.path.join("Trees", "species.tree")
     for test in tests:

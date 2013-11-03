@@ -7,6 +7,8 @@ from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
 import math
 
+from Bio._py3k import range
+
 from Bio import motifs
 
 
@@ -309,7 +311,7 @@ def calculate_pseudocounts(motif):
     # It is possible to have unequal column sums so use the average
     # number of instances.
     total = 0
-    for i in xrange(motif.length):
+    for i in range(motif.length):
         total += sum(float(motif.counts[letter][i]) for letter in alphabet.letters)
 
     avg_nb_instances = total / motif.length

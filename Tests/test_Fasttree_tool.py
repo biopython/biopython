@@ -7,7 +7,6 @@
 # as part of this package.
 
 from __future__ import print_function
-from future_builtins import zip
 
 from Bio import MissingExternalDependencyError
 
@@ -15,6 +14,7 @@ import sys
 import os
 import itertools
 from Bio._py3k import StringIO
+from Bio._py3k import zip
 
 from Bio import SeqIO
 from Bio import Phylo

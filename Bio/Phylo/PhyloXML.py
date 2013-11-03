@@ -17,6 +17,8 @@ __docformat__ = "restructuredtext en"
 import re
 import warnings
 
+from Bio._py3k import basestring
+
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq

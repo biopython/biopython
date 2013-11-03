@@ -11,6 +11,8 @@ from string import ascii_letters
 
 import numpy
 
+from Bio._py3k import range
+
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBExceptions import PDBConstructionException
@@ -75,7 +77,7 @@ class MMCIFParser(object):
         # so serial_id means the Model ID specified in the file
         current_model_id = 0
         current_serial_id = 0
-        for i in xrange(0, len(atom_id_list)):
+        for i in range(0, len(atom_id_list)):
             x=x_list[i]
             y=y_list[i]
             z=z_list[i]

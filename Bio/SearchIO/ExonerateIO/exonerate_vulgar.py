@@ -5,11 +5,10 @@
 
 """Bio.SearchIO parser for Exonerate vulgar output format."""
 
-from future_builtins import zip
-
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import zip
 
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 

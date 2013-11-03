@@ -19,6 +19,8 @@ from reportlab.lib import colors
 from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
+from Bio._py3k import range
+
 # GenomeDiagram imports
 from ._AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
 from ._AbstractDrawer import _stroke_and_fill_colors
@@ -822,7 +824,7 @@ class CircularDrawer(AbstractDrawer):
             for set in track.get_sets():
                 if set.__class__ is GraphSet:
                     # Y-axis
-                    for n in xrange(7):
+                    for n in range(7):
                         angle = n * 1.0471975511965976
                         if angle < startangle or endangle < angle:
                             continue

@@ -177,12 +177,12 @@ Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
 """
-from future_builtins import zip
-
 import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import zip
+
 from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment

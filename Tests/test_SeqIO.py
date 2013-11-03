@@ -4,14 +4,19 @@
 # as part of this package.
 
 from __future__ import print_function
+from Bio._py3k import basestring
 
 import os
 import warnings
 
-# Can't use cStringIO, quoting the documentation,
-#   "Unlike the StringIO module, this module is not able to accept
-#    Unicode strings that cannot be encoded as plain ASCII strings."
-from StringIO import StringIO
+try:
+    from StringIO import StringIO # Python 2
+    # Can't use cStringIO, quoting the documentation,
+    #   "Unlike the StringIO module, this module is not able to accept
+    #    Unicode strings that cannot be encoded as plain ASCII strings."
+    # Therefore can't use from Bio._py3k import StringIO
+except ImportError:
+    from io import StringIO # Python 3
 from io import BytesIO
 
 from Bio import BiopythonWarning

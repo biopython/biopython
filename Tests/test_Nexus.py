@@ -9,8 +9,9 @@
 import os.path
 import unittest
 import tempfile
-from Bio._py3k import StringIO
 import sys
+from Bio._py3k import StringIO
+from Bio._py3k import range
 
 from Bio.Nexus import Nexus, Trees
 
@@ -206,7 +207,7 @@ class NexusTest1(unittest.TestCase):
         f2=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f2,
                            delete=['t2_the_name'],
-                           exclude=range(3, 40, 4))
+                           exclude=list(range(3, 40, 4)))
         f2.seek(0)
         nf2=Nexus.Nexus(f2)
         self.assertEqual(os.path.normpath(nf2.filename),

@@ -7,7 +7,7 @@ from Bio import FSSP
 from Bio.FSSP import FSSPTools
 import sys
 import os
-import cPickle
+#import pickle
 
 test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
@@ -36,7 +36,7 @@ f.write("...Done\n")
 # Pickling takes too long.. remove from test.
 # f.write("\nLet's Pickle this\n")
 # dump_file = os.path.join('FSSP', 'mydump.pik')
-# cPickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
+# pickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
 
 f.write("\nFilter by name\n")
 name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']

@@ -13,7 +13,8 @@ import random
 #TODO - Take advantage of defaultdict once Python 2.4 is dead?
 #from collections import defaultdict
 
-# biopython
+from Bio._py3k import range
+
 from Bio.Seq import MutableSeq
 
 
@@ -622,7 +623,7 @@ class HiddenMarkovModel(object):
         # --- traceback
         traceback_seq = MutableSeq('', state_alphabet)
 
-        loop_seq = range(1, len(sequence))
+        loop_seq = list(range(1, len(sequence)))
         loop_seq.reverse()
 
         # last_state is the last state in the most probable state sequence.

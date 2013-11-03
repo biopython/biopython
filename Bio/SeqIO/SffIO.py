@@ -130,7 +130,11 @@ You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
 
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
+    >>> try:
+    ...     from StringIO import StringIO # Python 2
+    ... except ImportError:
+    ...     from io import StringIO # Python 3
+    ...
     >>> out_handle = StringIO()
     >>> count = SeqIO.convert("Roche/E3MFGYR02_random_10_reads.sff", "sff",
     ...                       out_handle, "fastq")

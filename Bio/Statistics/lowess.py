@@ -21,6 +21,8 @@ Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 
 from __future__ import print_function
 
+from Bio._py3k import range
+
 import numpy
 
 try:
@@ -73,7 +75,7 @@ def lowess(x, y, f=2. / 3., iter=3):
     yest = numpy.zeros(n)
     delta = numpy.ones(n)
     for iteration in range(iter):
-        for i in xrange(n):
+        for i in range(n):
             weights = delta * w[:, i]
             weights_mul_x = weights * x
             b1 = numpy.dot(weights, y)
