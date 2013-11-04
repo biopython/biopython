@@ -27,13 +27,17 @@ class CheckRaw(unittest.TestCase):
         """Index filename using **kwargs, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
-        self.assertEqual(raw, idx.get_raw(id))
+        # Anticipate cases where the raw string and/or file uses different
+        # newline characters ~ we set everything to \n.
+        self.assertEqual(raw.replace(b'\r\n', b'\n'),
+                idx.get_raw(id).replace(b'\r\n', b'\n'))
         idx.close()
 
         #Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
-            self.assertEqual(raw, idx.get_raw(id))
+            self.assertEqual(raw.replace(b'\r\n', b'\n'),
+                    idx.get_raw(id).replace(b'\r\n', b'\n'))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
