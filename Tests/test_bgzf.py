@@ -264,8 +264,12 @@ class BgzfTests(unittest.TestCase):
         self.check_random("Blast/wnts.xml.bgz")
 
     def test_random_example_fastq(self):
-        """Check random access to Quality/example.fastq.bgz"""
+        """Check random access to Quality/example.fastq.bgz (Unix newlines)"""
         self.check_random("Quality/example.fastq.bgz")
+
+    def test_random_example_dos_fastq(self):
+        """Check random access to Quality/example_dos.fastq.bgz (DOS newlines)"""
+        self.check_random("Quality/example_dos.fastq.bgz")
 
     def test_random_example_cor6(self):
         """Check random access to GenBank/cor6_6.gb.bgz"""
