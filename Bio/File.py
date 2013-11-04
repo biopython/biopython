@@ -124,12 +124,7 @@ class UndoHandle(object):
 
     if sys.version_info[0] < 3:
         def next(self):
-            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
-            import warnings
-            from Bio import BiopythonDeprecationWarning
-            warnings.warn("Please use next(my_iterator) instead of my_iterator.next(), "
-                          "the .next() method is deprecated and will be removed in a "
-                          "future release of Biopython.", BiopythonDeprecationWarning)
+            """Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
 
     def readlines(self, *args, **keywds):
