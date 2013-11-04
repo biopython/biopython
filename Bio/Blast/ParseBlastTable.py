@@ -8,6 +8,7 @@ the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 
+import sys
 
 class BlastTableEntry(object):
     def __init__(self, in_rec):
