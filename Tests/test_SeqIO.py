@@ -206,7 +206,8 @@ test_files = [
 #Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
     ("qual",  False, 'Quality/example.qual',  3),
-    ("fastq", True, 'Quality/example.fastq', 3),
+    ("fastq", True, 'Quality/example.fastq', 3), #Unix new lines
+    ("fastq", True, 'Quality/example_dos.fastq', 3), #DOS/Windows new lines
     ("fastq", True, 'Quality/tricky.fastq', 4),
     ("fastq", False, 'Quality/sanger_faked.fastq', 1),
     ("fastq", False, 'Quality/sanger_93.fastq', 1),

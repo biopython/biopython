@@ -373,8 +373,9 @@ tests = [
     ("Ace/consed_sample.ace", "ace", None),
     ("Ace/seq.cap.ace", "ace", generic_dna),
     ("Quality/wrapping_original_sanger.fastq", "fastq", None),
-    ("Quality/example.fastq", "fastq", None),
+    ("Quality/example.fastq", "fastq", None), #Unix newlines
     ("Quality/example.fastq", "fastq-sanger", generic_dna),
+    ("Quality/example_dos.fastq", "fastq", None), #DOS/Windows newlines
     ("Quality/tricky.fastq", "fastq", generic_nucleotide),
     ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
     ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
