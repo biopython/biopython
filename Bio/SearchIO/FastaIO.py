@@ -119,8 +119,8 @@ __all__ = ['FastaM10Parser', 'FastaM10Indexer']
 # precompile regex patterns
 # regex for program name
 _RE_FLAVS = re.compile(r't?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search')
-# regex for sequence ID and length
-_PTR_ID_DESC_SEQLEN = r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)$'
+# regex for sequence ID and length ~ deals with both \n and \r\n
+_PTR_ID_DESC_SEQLEN = r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\s*$'
 _RE_ID_DESC_SEQLEN = re.compile(_PTR_ID_DESC_SEQLEN)
 _RE_ID_DESC_SEQLEN_IDX = re.compile(_as_bytes(_PTR_ID_DESC_SEQLEN))
 # regex for qresult, hit, or hsp attribute value

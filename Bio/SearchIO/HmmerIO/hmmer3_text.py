@@ -89,7 +89,7 @@ class Hmmer3TextParser(object):
                 regx = re.search(_RE_OPT, self.line)
                 # if target in regx.group(1), then we store the key as target
                 if 'target' in regx.group(1):
-                    meta['target'] = regx.group(2)
+                    meta['target'] = regx.group(2).strip()
                 else:
                     meta[regx.group(1)] = regx.group(2)
 

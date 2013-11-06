@@ -154,7 +154,8 @@ class ExonerateVulgarParser(_BaseExonerateParser):
         # cast score into int
         hsp['score'] = int(hsp['score'])
         # store vulgar line and parse it
-        hsp['vulgar_comp'] = vulgars.group(10)
+        # rstrip to remove line endings (otherwise gives errors in Windows)
+        hsp['vulgar_comp'] = vulgars.group(10).rstrip()
         hsp = parse_vulgar_comp(hsp, hsp['vulgar_comp'])
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
