@@ -225,7 +225,6 @@ def read_fssp(fssp_handle):
     header = FSSPHeader()
     sum_dict = FSSPSumDict()
     align_dict = FSSPAlignDict()
-    # fssp_handle=open(fssp_handlename)
     curline = fssp_handle.readline()
     while not summary_title.match(curline):
         # Still in title

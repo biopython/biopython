@@ -203,9 +203,9 @@ def parse(handle):
     example, using one of the example KEGG files in the Biopython
     test suite,
 
-    >>> handle = open("KEGG/enzyme.sample")
-    >>> for record in parse(handle):
-    ...     print("%s %s" % (record.entry, record.name[0]))
+    >>> with open("KEGG/enzyme.sample") as handle:
+    ...     for record in parse(handle):
+    ...         print("%s %s" % (record.entry, record.name[0]))
     ... 
     1.1.1.1 Alcohol dehydrogenase
     1.1.1.62 Estradiol 17beta-dehydrogenase
@@ -215,7 +215,6 @@ def parse(handle):
     2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
     3.1.1.6 Acetylesterase
     2.7.2.1 Acetate kinase
-    >>> handle.close()
 
     """
     record = Record()

@@ -196,9 +196,8 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
-    handle = open(results_file)
-    lines = handle.readlines()
-    handle.close()
+    with open(results_file) as handle:
+        lines = handle.readlines()
     (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
             results)
     results = _parse_codeml.parse_nssites(lines, results, multi_models,

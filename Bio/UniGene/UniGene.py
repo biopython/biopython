@@ -198,8 +198,8 @@ class UniGeneParser( sgmllib.SGMLParser ):
 
 
 if( __name__ == '__main__' ):
-    handle = open( 'Hs13225.htm')
-    undo_handle = Bio.File.UndoHandle( handle )
-    unigene_parser = UniGeneParser()
-    unigene_parser.parse( handle )
-    unigene_parser.print_tags()
+    with open( 'Hs13225.htm') as handle:
+        undo_handle = Bio.File.UndoHandle( handle )
+        unigene_parser = UniGeneParser()
+        unigene_parser.parse( handle )
+        unigene_parser.print_tags()

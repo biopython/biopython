@@ -423,9 +423,8 @@ def quick_FASTA_reader(file):
     added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
     """
     from Bio.SeqIO.FastaIO import SimpleFastaParser
-    handle = open(file)
-    entries = list(SimpleFastaParser(handle))
-    handle.close()
+    with open(file) as handle:
+        entries = list(SimpleFastaParser(handle))
     return entries
 
 

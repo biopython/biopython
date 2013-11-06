@@ -14,38 +14,37 @@ import shlex
 class MMCIF2Dict(dict):
 
     def __init__(self, filename):
-        handle = open(filename)
-        loop_flag = False
-        key = None
-        tokens = self._tokenize(handle)
-        token = next(tokens)
-        self[token[0:5]]=token[5:]
-        for token in tokens:
-            if token=="loop_":
-                loop_flag = True
-                keys = []
-                i = 0
-                n = 0
-                continue
-            elif loop_flag:
-                if token.startswith("_"):
-                    if i > 0:
-                        loop_flag = False
-                    else:
-                        self[token] = []
-                        keys.append(token)
-                        n += 1
-                        continue
-                else:
-                    self[keys[i%n]].append(token)
-                    i+=1
+        with open(filename) as handle:
+            loop_flag = False
+            key = None
+            tokens = self._tokenize(handle)
+            token = next(tokens)
+            self[token[0:5]]=token[5:]
+            for token in tokens:
+                if token=="loop_":
+                    loop_flag = True
+                    keys = []
+                    i = 0
+                    n = 0
                     continue
-            if key is None:
-                key = token
-            else:
-                self[key] = token
-                key = None
-        handle.close()
+                elif loop_flag:
+                    if token.startswith("_"):
+                        if i > 0:
+                            loop_flag = False
+                        else:
+                            self[token] = []
+                            keys.append(token)
+                            n += 1
+                            continue
+                    else:
+                        self[keys[i%n]].append(token)
+                        i+=1
+                        continue
+                if key is None:
+                    key = token
+                else:
+                    self[key] = token
+                    key = None
 
     def _tokenize(self, handle):
         for line in handle:

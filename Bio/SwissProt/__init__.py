@@ -554,12 +554,11 @@ if __name__ == "__main__":
     else:
         #Try parsing it!
 
-        handle = open(example_filename)
-        records = parse(handle)
-        for record in records:
-            print(record.entry_name)
-            print(",".join(record.accessions))
-            print(record.keywords)
-            print(repr(record.organism))
-            print(record.sequence[:20] + "...")
-        handle.close()
+        with open(example_filename) as handle:
+            records = parse(handle)
+            for record in records:
+                print(record.entry_name)
+                print(",".join(record.accessions))
+                print(record.keywords)
+                print(repr(record.organism))
+                print(record.sequence[:20] + "...")

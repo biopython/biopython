@@ -262,9 +262,8 @@ if __name__=='__main__':
     # some data and returns it as a dictionary.
     import sys
     filename = sys.argv[1]
-    handle = open(filename, 'r')
-    data_dict = parse_pdb_header(handle)
-    handle.close()
+    with open(filename, 'r') as handle:
+        data_dict = parse_pdb_header(handle)
 
     # print the dictionary
     for k, y in data_dict.items():

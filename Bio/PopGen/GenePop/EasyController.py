@@ -28,9 +28,8 @@ class EasyController(object):
         self.__allele_frequency = {}  # More caches like this needed!
 
     def get_basic_info(self):
-        f=open(self._fname)
-        rec = GenePop.read(f)
-        f.close()
+        with open(self._fname) as f:
+            rec = GenePop.read(f)
         return rec.pop_list, rec.loci_list
 
     def test_hw_pop(self, pop_pos, test_type = "probability"):

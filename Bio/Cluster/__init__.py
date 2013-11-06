@@ -71,44 +71,43 @@ def _savetree(jobname, tree, order, transpose):
         extension = ".atr"
         keyword = "ARRY"
     nnodes = len(tree)
-    outputfile = open(jobname+extension, "w")
-    nodeindex = 0
-    nodeID = [''] * nnodes
-    nodecounts = numpy.zeros(nnodes, int)
-    nodeorder = numpy.zeros(nnodes)
-    nodedist = numpy.array([node.distance for node in tree])
-    for nodeindex in range(nnodes):
-        min1 = tree[nodeindex].left
-        min2 = tree[nodeindex].right
-        nodeID[nodeindex] = "NODE%dX" % (nodeindex+1)
-        outputfile.write(nodeID[nodeindex])
-        outputfile.write("\t")
-        if min1 < 0:
-            index1 = -min1-1
-            order1 = nodeorder[index1]
-            counts1 = nodecounts[index1]
-            outputfile.write(nodeID[index1]+"\t")
-            nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
-        else:
-            order1 = order[min1]
-            counts1 = 1
-            outputfile.write("%s%dX\t" % (keyword, min1))
-        if min2 < 0:
-            index2 = -min2-1
-            order2 = nodeorder[index2]
-            counts2 = nodecounts[index2]
-            outputfile.write(nodeID[index2]+"\t")
-            nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
-        else:
-            order2 = order[min2]
-            counts2 = 1
-            outputfile.write("%s%dX\t" % (keyword, min2))
-        outputfile.write(str(1.0-nodedist[nodeindex]))
-        outputfile.write("\n")
-        counts = counts1 + counts2
-        nodecounts[nodeindex] = counts
-        nodeorder[nodeindex] = (counts1*order1+counts2*order2) / counts
-    outputfile.close()
+    with open(jobname+extension, "w") as outputfile:
+        nodeindex = 0
+        nodeID = [''] * nnodes
+        nodecounts = numpy.zeros(nnodes, int)
+        nodeorder = numpy.zeros(nnodes)
+        nodedist = numpy.array([node.distance for node in tree])
+        for nodeindex in range(nnodes):
+            min1 = tree[nodeindex].left
+            min2 = tree[nodeindex].right
+            nodeID[nodeindex] = "NODE%dX" % (nodeindex+1)
+            outputfile.write(nodeID[nodeindex])
+            outputfile.write("\t")
+            if min1 < 0:
+                index1 = -min1-1
+                order1 = nodeorder[index1]
+                counts1 = nodecounts[index1]
+                outputfile.write(nodeID[index1]+"\t")
+                nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
+            else:
+                order1 = order[min1]
+                counts1 = 1
+                outputfile.write("%s%dX\t" % (keyword, min1))
+            if min2 < 0:
+                index2 = -min2-1
+                order2 = nodeorder[index2]
+                counts2 = nodecounts[index2]
+                outputfile.write(nodeID[index2]+"\t")
+                nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
+            else:
+                order2 = order[min2]
+                counts2 = 1
+                outputfile.write("%s%dX\t" % (keyword, min2))
+            outputfile.write(str(1.0-nodedist[nodeindex]))
+            outputfile.write("\n")
+            counts = counts1 + counts2
+            nodecounts[nodeindex] = counts
+            nodeorder[nodeindex] = (counts1*order1+counts2*order2) / counts
     # Now set up order based on the tree structure
     index = _treesort(order, nodeorder, nodecounts, tree)
     return index
@@ -553,24 +552,20 @@ expclusters=None:  For hierarchical clustering results, expclusters
         else:
             label = "ARRAY"
             names = self.expid
-        try:
-            outputfile = open(filename, "w")
-        except IOError:
-            raise IOError("Unable to open output file")
-        outputfile.write(label + "\tGROUP\n")
-        index = numpy.argsort(order)
-        n = len(names)
-        sortedindex = numpy.zeros(n, int)
-        counter = 0
-        cluster = 0
-        while counter < n:
-            for j in index:
-                if clusterids[j] == cluster:
-                    outputfile.write("%s\t%s\n" % (names[j], cluster))
-                    sortedindex[counter] = j
-                    counter += 1
-            cluster += 1
-        outputfile.close()
+        with open(filename, "w") as outputfile:
+            outputfile.write(label + "\tGROUP\n")
+            index = numpy.argsort(order)
+            n = len(names)
+            sortedindex = numpy.zeros(n, int)
+            counter = 0
+            cluster = 0
+            while counter < n:
+                for j in index:
+                    if clusterids[j] == cluster:
+                        outputfile.write("%s\t%s\n" % (names[j], cluster))
+                        sortedindex[counter] = j
+                        counter += 1
+                cluster += 1
         return sortedindex
 
     def _savedata(self, jobname, gid, aid, geneindex, expindex):
@@ -580,56 +575,52 @@ expclusters=None:  For hierarchical clustering results, expclusters
         else:
             genename = self.genename
         (ngenes, nexps) = numpy.shape(self.data)
-        try:
-            outputfile = open(jobname+'.cdt', 'w')
-        except IOError:
-            raise IOError("Unable to open output file")
-        if self.mask is not None:
-            mask = self.mask
-        else:
-            mask = numpy.ones((ngenes, nexps), int)
-        if self.gweight is not None:
-            gweight = self.gweight
-        else:
-            gweight = numpy.ones(ngenes)
-        if self.eweight is not None:
-            eweight = self.eweight
-        else:
-            eweight = numpy.ones(nexps)
-        if gid:
-            outputfile.write('GID\t')
-        outputfile.write(self.uniqid)
-        outputfile.write('\tNAME\tGWEIGHT')
-        # Now add headers for data columns.
-        for j in expindex:
-            outputfile.write('\t%s' % self.expid[j])
-        outputfile.write('\n')
-        if aid:
-            outputfile.write("AID")
+        with open(jobname+'.cdt', 'w') as outputfile:
+            if self.mask is not None:
+                mask = self.mask
+            else:
+                mask = numpy.ones((ngenes, nexps), int)
+            if self.gweight is not None:
+                gweight = self.gweight
+            else:
+                gweight = numpy.ones(ngenes)
+            if self.eweight is not None:
+                eweight = self.eweight
+            else:
+                eweight = numpy.ones(nexps)
+            if gid:
+                outputfile.write('GID\t')
+            outputfile.write(self.uniqid)
+            outputfile.write('\tNAME\tGWEIGHT')
+            # Now add headers for data columns.
+            for j in expindex:
+                outputfile.write('\t%s' % self.expid[j])
+            outputfile.write('\n')
+            if aid:
+                outputfile.write("AID")
+                if gid:
+                    outputfile.write('\t')
+                outputfile.write("\t\t")
+                for j in expindex:
+                    outputfile.write('\tARRY%dX' % j)
+                outputfile.write('\n')
+            outputfile.write('EWEIGHT')
             if gid:
                 outputfile.write('\t')
-            outputfile.write("\t\t")
+            outputfile.write('\t\t')
             for j in expindex:
-                outputfile.write('\tARRY%dX' % j)
+                outputfile.write('\t%f' % eweight[j])
             outputfile.write('\n')
-        outputfile.write('EWEIGHT')
-        if gid:
-            outputfile.write('\t')
-        outputfile.write('\t\t')
-        for j in expindex:
-            outputfile.write('\t%f' % eweight[j])
-        outputfile.write('\n')
-        for i in geneindex:
-            if gid:
-                outputfile.write('GENE%dX\t' % i)
-            outputfile.write("%s\t%s\t%f" %
-                             (self.geneid[i], genename[i], gweight[i]))
-            for j in expindex:
-                outputfile.write('\t')
-                if mask[i, j]:
-                    outputfile.write(str(self.data[i, j]))
-            outputfile.write('\n')
-        outputfile.close()
+            for i in geneindex:
+                if gid:
+                    outputfile.write('GENE%dX\t' % i)
+                outputfile.write("%s\t%s\t%f" %
+                                 (self.geneid[i], genename[i], gweight[i]))
+                for j in expindex:
+                    outputfile.write('\t')
+                    if mask[i, j]:
+                        outputfile.write(str(self.data[i, j]))
+                outputfile.write('\n')
 
 
 def read(handle):

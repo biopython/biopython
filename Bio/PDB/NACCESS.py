@@ -61,13 +61,11 @@ def run_naccess(model, pdb_file, probe_size = None, z_slice = None,
 
     # get the output, then delete the temp directory
     rsa_file = tmp_pdb_file[:-4] + '.rsa'
-    rf = open(rsa_file)
-    rsa_data = rf.readlines()
-    rf.close()
+    with open(rsa_file) as rf:
+        rsa_data = rf.readlines()
     asa_file = tmp_pdb_file[:-4] + '.asa'
-    af = open(asa_file)
-    asa_data = af.readlines()
-    af.close()
+    with open(asa_file) as af:
+        asa_data = af.readlines()
     os.chdir(old_dir)
     os.system('rm -rf %s >& /dev/null' % tmp_path)
     return rsa_data, asa_data

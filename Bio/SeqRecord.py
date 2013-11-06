@@ -757,9 +757,8 @@ class SeqRecord(object):
         annotation.
 
         >>> from Bio import SeqIO
-        >>> handle = open("GenBank/pBAD30.gb")
-        >>> plasmid = SeqIO.read(handle, "gb")
-        >>> handle.close()
+        >>> with open("GenBank/pBAD30.gb") as handle:
+        ...     plasmid = SeqIO.read(handle, "gb")
         >>> print("%s %i" % (plasmid.id, len(plasmid)))
         pBAD30 4923
 
@@ -994,9 +993,8 @@ class SeqRecord(object):
         in it...
 
         >>> from Bio import SeqIO
-        >>> handle = open("GenBank/pBAD30.gb")
-        >>> plasmid = SeqIO.read(handle, "gb")
-        >>> handle.close()
+        >>> with open("GenBank/pBAD30.gb") as handle:
+        ...     plasmid = SeqIO.read(handle, "gb")
         >>> print("%s %i" % (plasmid.id, len(plasmid)))
         pBAD30 4923
         >>> plasmid.seq

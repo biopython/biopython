@@ -182,9 +182,8 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
-    handle = open(results_file)
-    lines = handle.readlines()
-    handle.close()
+    with open(results_file) as handle:
+        lines = handle.readlines()
     (results, num_params) = _parse_baseml.parse_basics(lines, results)
     results = _parse_baseml.parse_parameters(lines, results, num_params)
     if results.get("version") is None:

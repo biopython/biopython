@@ -73,13 +73,13 @@ class AlignmentIterator(object):
 
         Example usage for (concatenated) PHYLIP files:
 
-        myFile = open("many.phy","r")
-        for alignment in PhylipIterator(myFile):
-            print "New alignment:"
-            for record in alignment:
-                print record.id
-                print record.seq
-        myFile.close()"""
+        with open("many.phy","r") as myFile:
+            for alignment in PhylipIterator(myFile):
+                print "New alignment:"
+                for record in alignment:
+                    print record.id
+                    print record.seq
+        """
         return iter(self.__next__, None)
 
 

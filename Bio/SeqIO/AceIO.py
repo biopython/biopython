@@ -32,10 +32,10 @@ def AceIterator(handle):
     letter_annotations dictionary under the "phred_quality" key.
 
     >>> from Bio import SeqIO
-    >>> handle = open("Ace/consed_sample.ace", "rU")
-    >>> for record in SeqIO.parse(handle, "ace"):
-    ...     print("%s %s... %i" % (record.id, record.seq[:10], len(record)))
-    ...     print(max(record.letter_annotations["phred_quality"]))
+    >>> with open("Ace/consed_sample.ace", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "ace"):
+    ...         print("%s %s... %i" % (record.id, record.seq[:10], len(record)))
+    ...         print(max(record.letter_annotations["phred_quality"]))
     Contig1 agccccgggc... 1475
     90
 
@@ -47,11 +47,11 @@ def AceIterator(handle):
     prevented output of the gapped sequence as FASTQ format.
 
     >>> from Bio import SeqIO
-    >>> handle = open("Ace/contig1.ace", "rU")
-    >>> for record in SeqIO.parse(handle, "ace"):
-    ...     print("%s ...%s..." % (record.id, record.seq[85:95]))
-    ...     print(record.letter_annotations["phred_quality"][85:95])
-    ...     print(max(record.letter_annotations["phred_quality"]))
+    >>> with open("Ace/contig1.ace", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "ace"):
+    ...         print("%s ...%s..." % (record.id, record.seq[85:95]))
+    ...         print(record.letter_annotations["phred_quality"][85:95])
+    ...         print(max(record.letter_annotations["phred_quality"]))
     Contig1 ...AGAGG-ATGC...
     [57, 57, 54, 57, 57, 0, 57, 72, 72, 72]
     90

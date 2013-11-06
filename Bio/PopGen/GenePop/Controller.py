@@ -324,27 +324,26 @@ class GenePopController(object):
         def hw_pop_func(self):
             return _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
 
-        f1 = open(fname + ext)
-        l = f1.readline()
-        while "by population" not in l:
+        with open(fname + ext) as f1:
             l = f1.readline()
-        pop_p = _read_table(f1, [str, _gp_float, _gp_float, _gp_float])
-        f2 = open(fname + ext)
-        l = f2.readline()
-        while "by locus" not in l:
+            while "by population" not in l:
+                l = f1.readline()
+            pop_p = _read_table(f1, [str, _gp_float, _gp_float, _gp_float])
+        with open(fname + ext) as f2:
             l = f2.readline()
-        loc_p = _read_table(f2, [str, _gp_float, _gp_float, _gp_float])
-        f = open(fname + ext)
-        l = f.readline()
-        while "all locus" not in l:
+            while "by locus" not in l:
+                l = f2.readline()
+            loc_p = _read_table(f2, [str, _gp_float, _gp_float, _gp_float])
+        with open(fname + ext) as f:
             l = f.readline()
-        f.readline()
-        f.readline()
-        f.readline()
-        f.readline()
-        l = f.readline().rstrip()
-        p, se, switches = tuple(_gp_float(x) for x in [y for y in l.split(" ") if y != ""])
-        f.close()
+            while "all locus" not in l:
+                l = f.readline()
+            f.readline()
+            f.readline()
+            f.readline()
+            f.readline()
+            l = f.readline().rstrip()
+            p, se, switches = tuple(_gp_float(x) for x in [y for y in l.split(" ") if y != ""])
         return pop_p, loc_p, (p, se, switches)
 
     #1.1
@@ -525,9 +524,8 @@ class GenePopController(object):
     #4
     def estimate_nm(self, fname):
         self._run_genepop(["PRI"], [4], fname)
-        f = open(fname + ".PRI")
-        lines = f.readlines() # Small file, it is ok
-        f.close()
+        with open(fname + ".PRI") as f:
+            lines = f.readlines() # Small file, it is ok
         for line in lines:
             m = re.search("Mean sample size: ([.0-9]+)", line)
             if m is not None:
@@ -585,17 +583,16 @@ class GenePopController(object):
         #First pass, general information
         #num_loci = None
         #num_pops = None
-        #f = open(fname + ".INF")
-        #l = f.readline()
-        #while (num_loci is None or num_pops is None) and l != '':
-        #    m = re.search("Number of populations detected : ([0-9+])", l)
-        #    if m is not None:
-        #        num_pops = _gp_int(m.group(1))
-        #    m = re.search("Number of loci detected        : ([0-9+])", l)
-        #    if m is not None:
-        #        num_loci = _gp_int(m.group(1))
-        #    l = f.readline()
-        #f.close()
+        #with open(fname + ".INF") as f:
+            #l = f.readline()
+            #while (num_loci is None or num_pops is None) and l != '':
+               #m = re.search("Number of populations detected : ([0-9+])", l)
+               #if m is not None:
+                   #num_pops = _gp_int(m.group(1))
+               #m = re.search("Number of loci detected        : ([0-9+])", l)
+               #if m is not None:
+                   #num_loci = _gp_int(m.group(1))
+               #l = f.readline()
 
         def pop_parser(self):
             if hasattr(self, "old_line"):
@@ -695,15 +692,14 @@ class GenePopController(object):
 
     def _calc_diversities_fis(self, fname, ext):
         self._run_genepop([ext], [5, 2], fname)
-        f = open(fname + ext)
-        l = f.readline()
-        while l != "":
-            l = l.rstrip()
-            if l.startswith("Statistics per sample over all loci with at least two individuals typed"):
-                avg_fis = _read_table(f, [str, _gp_float, _gp_float, _gp_float])
-                avg_Qintra = _read_table(f, [str, _gp_float])
+        with open(fname + ext) as f:
             l = f.readline()
-        f.close()
+            while l != "":
+                l = l.rstrip()
+                if l.startswith("Statistics per sample over all loci with at least two individuals typed"):
+                    avg_fis = _read_table(f, [str, _gp_float, _gp_float, _gp_float])
+                    avg_Qintra = _read_table(f, [str, _gp_float])
+                l = f.readline()
 
         def fis_func(self):
             l = self.stream.readline()
@@ -752,25 +748,24 @@ class GenePopController(object):
         This does not return the genotype frequencies.
         """
         self._run_genepop([".FST"], [6, 1], fname)
-        f = open(fname + ".FST")
-        l = f.readline()
-        while l != '':
-            if l.startswith('           All:'):
-                toks = [x for x in l.rstrip().split(' ') if x != ""]
-                try:
-                    allFis = _gp_float(toks[1])
-                except ValueError:
-                    allFis = None
-                try:
-                    allFst = _gp_float(toks[2])
-                except ValueError:
-                    allFst = None
-                try:
-                    allFit = _gp_float(toks[3])
-                except ValueError:
-                    allFit = None
+        with open(fname + ".FST") as f:
             l = f.readline()
-        f.close()
+            while l != '':
+                if l.startswith('           All:'):
+                    toks = [x for x in l.rstrip().split(' ') if x != ""]
+                    try:
+                        allFis = _gp_float(toks[1])
+                    except ValueError:
+                        allFis = None
+                    try:
+                        allFst = _gp_float(toks[2])
+                    except ValueError:
+                        allFst = None
+                    try:
+                        allFit = _gp_float(toks[3])
+                    except ValueError:
+                        allFit = None
+                l = f.readline()
 
         def proc(self):
             if hasattr(self, "last_line"):
@@ -814,14 +809,13 @@ class GenePopController(object):
     #6.2
     def calc_fst_pair(self, fname):
         self._run_genepop([".ST2", ".MIG"], [6, 2], fname)
-        f = open(fname + ".ST2")
-        l = f.readline()
-        while l != "":
-            l = l.rstrip()
-            if l.startswith("Estimates for all loci"):
-                avg_fst = _read_headed_triangle_matrix(f)
+        with open(fname + ".ST2") as f:
             l = f.readline()
-        f.close()
+            while l != "":
+                l = l.rstrip()
+                if l.startswith("Estimates for all loci"):
+                    avg_fst = _read_headed_triangle_matrix(f)
+                l = f.readline()
 
         def loci_func(self):
             l = self.stream.readline()
@@ -856,27 +850,26 @@ class GenePopController(object):
             "GeographicScale": scale,
             "IsolBDstatistic": stat,
             })
-        f = open(fname + ".ISO")
-        f.readline()
-        f.readline()
-        f.readline()
-        f.readline()
-        estimate = _read_triangle_matrix(f)
-        f.readline()
-        f.readline()
-        distance = _read_triangle_matrix(f)
-        f.readline()
-        match = re.match("a = (.+), b = (.+)", f.readline().rstrip())
-        a = _gp_float(match.group(1))
-        b = _gp_float(match.group(2))
-        f.readline()
-        f.readline()
-        match = re.match(" b=(.+)", f.readline().rstrip())
-        bb = _gp_float(match.group(1))
-        match = re.match(".*\[(.+)  ;  (.+)\]", f.readline().rstrip())
-        bblow = _gp_float(match.group(1))
-        bbhigh = _gp_float(match.group(2))
-        f.close()
+        with open(fname + ".ISO") as f:
+            f.readline()
+            f.readline()
+            f.readline()
+            f.readline()
+            estimate = _read_triangle_matrix(f)
+            f.readline()
+            f.readline()
+            distance = _read_triangle_matrix(f)
+            f.readline()
+            match = re.match("a = (.+), b = (.+)", f.readline().rstrip())
+            a = _gp_float(match.group(1))
+            b = _gp_float(match.group(2))
+            f.readline()
+            f.readline()
+            match = re.match(" b=(.+)", f.readline().rstrip())
+            bb = _gp_float(match.group(1))
+            match = re.match(".*\[(.+)  ;  (.+)\]", f.readline().rstrip())
+            bblow = _gp_float(match.group(1))
+            bbhigh = _gp_float(match.group(2))
         os.remove(fname + ".MIG")
         os.remove(fname + ".GRA")
         os.remove(fname + ".ISO")

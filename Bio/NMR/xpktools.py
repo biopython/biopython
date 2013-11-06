@@ -49,23 +49,18 @@ class Peaklist(object):
     # The data lines are available as a list
     def __init__(self, infn):
 
-        self.data = []    # init the data line list
+        with open(infn, 'r') as infile:
 
-        infile = open(infn, 'r')
+            # Read in the header lines
+            self.firstline = infile.readline().split("\012")[0]
+            self.axislabels = infile.readline().split("\012")[0]
+            self.dataset = infile.readline().split("\012")[0]
+            self.sw = infile.readline().split("\012")[0]
+            self.sf = infile.readline().split("\012")[0]
+            self.datalabels = infile.readline().split("\012")[0]
 
-        # Read in the header lines
-        self.firstline = infile.readline().split("\012")[0]
-        self.axislabels = infile.readline().split("\012")[0]
-        self.dataset = infile.readline().split("\012")[0]
-        self.sw = infile.readline().split("\012")[0]
-        self.sf = infile.readline().split("\012")[0]
-        self.datalabels = infile.readline().split("\012")[0]
-
-        # Read in the data lines to a list
-        line = infile.readline()
-        while line:
-            self.data.append(line.split("\012")[0])
-        line = infile.readline()
+            # Read in the data lines to a list
+            self.data = [line.split("\012")[0] for line in infile]
 
     def residue_dict(self, index):
         # Generate a dictionary idexed by residue number or a nucleus
@@ -108,40 +103,19 @@ class Peaklist(object):
         return self.dict
 
     def write_header(self, outfn):
-        outfile = _try_open_write(outfn)
-        outfile.write(self.firstline)
-        outfile.write("\012")
-        outfile.write(self.axislabels)
-        outfile.write("\012")
-        outfile.write(self.dataset)
-        outfile.write("\012")
-        outfile.write(self.sw)
-        outfile.write("\012")
-        outfile.write(self.sf)
-        outfile.write("\012")
-        outfile.write(self.datalabels)
-        outfile.write("\012")
-        outfile.close()
-
-
-def _try_open_read(fn):
-    # Try to open a file for reading.  Exit on IOError
-    try:
-        infile = open(fn, 'r')
-    except IOError as e:
-        print("file %s could not be opened for reading - quitting." % fn)
-        sys.exit(0)
-    return infile
-
-
-def _try_open_write(fn):
-    # Try to open a file for writing.  Exit on IOError
-    try:
-        infile = open(fn, 'w')
-    except IOError as e:
-        print("file %s could not be opened for writing - quitting." % fn)
-        sys.exit(0)
-    return infile
+        with open(outfn, 'wb') as outfile:
+            outfile.write(self.firstline)
+            outfile.write("\012")
+            outfile.write(self.axislabels)
+            outfile.write("\012")
+            outfile.write(self.dataset)
+            outfile.write("\012")
+            outfile.write(self.sw)
+            outfile.write("\012")
+            outfile.write(self.sf)
+            outfile.write("\012")
+            outfile.write(self.datalabels)
+            outfile.write("\012")
 
 
 def replace_entry(line, fieldn, newentry):

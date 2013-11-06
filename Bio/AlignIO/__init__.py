@@ -65,9 +65,8 @@ If using a handle make sure to close it to flush the data to the disk::
 
     from Bio import AlignIO
     alignments = ...
-    handle = open("example.faa", "w")
-    count = SeqIO.write(alignments, handle, "fasta")
-    handle.close()
+    with open("example.faa", "w") as handle:
+        count = SeqIO.write(alignments, handle, "fasta")
 
 In general, you are expected to call this function once (with all your
 alignments) and then close the file handle.  However, for file formats

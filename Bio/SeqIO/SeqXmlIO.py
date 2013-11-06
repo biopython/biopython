@@ -411,8 +411,8 @@ if __name__ == "__main__":
     from Bio import SeqIO
     import sys
 
-    fileHandle = open("Tests/SeqXML/protein_example.xml", "r")
-    records = list(SeqIO.parse(fileHandle, "seqxml"))
+    with open("Tests/SeqXML/protein_example.xml", "r") as fileHandle:
+        records = list(SeqIO.parse(fileHandle, "seqxml"))
 
     from Bio._py3k import StringIO
     stringHandle = StringIO()

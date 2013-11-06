@@ -96,10 +96,9 @@ if __name__ == "__main__":
                 print("")
                 print(filename)
                 print("-" * len(filename))
-                handle = open(os.path.join(path, filename))
-                for record in IgIterator(handle):
-                    print("%s %i" % (record.id, len(record)))
-                handle.close()
+                with open(os.path.join(path, filename)) as handle:
+                    for record in IgIterator(handle):
+                        print("%s %i" % (record.id, len(record)))
         print("Done")
     else:
         print("Could not find input files")

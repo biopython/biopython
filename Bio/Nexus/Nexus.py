@@ -1465,12 +1465,11 @@ class Nexus(object):
                 filename = '.'.join(self.filename.split('.')[:-1])+'.fas'
             else:
                 filename = self.filename+'.fas'
-        fh = open(filename, 'w')
-        for taxon in self.taxlabels:
-            fh.write('>' + safename(taxon) + '\n')
-            for i in range(0, len(str(self.matrix[taxon])), width):
-                fh.write(str(self.matrix[taxon])[i:i+width] + '\n')
-        fh.close()
+        with open(filename, 'w') as fh:
+            for taxon in self.taxlabels:
+                fh.write('>' + safename(taxon) + '\n')
+                for i in range(0, len(str(self.matrix[taxon])), width):
+                    fh.write(str(self.matrix[taxon])[i:i+width] + '\n')
         return filename
 
     def export_phylip(self, filename=None):
@@ -1483,11 +1482,10 @@ class Nexus(object):
                 filename = '.'.join(self.filename.split('.')[:-1])+'.phy'
             else:
                 filename = self.filename+'.phy'
-        fh = open(filename, 'w')
-        fh.write('%d %d\n' % (self.ntax, self.nchar))
-        for taxon in self.taxlabels:
-            fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
-        fh.close()
+        with open(filename, 'w') as fh:
+            fh.write('%d %d\n' % (self.ntax, self.nchar))
+            for taxon in self.taxlabels:
+                fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
         return filename
 
     def constant(self, matrix=None, delete=[], exclude=[]):

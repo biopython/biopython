@@ -670,11 +670,9 @@ class Motif(object):
         data = urlencode(values)
         req = Request(url, data)
         response = urlopen(req)
-        f=open(fname,"w")
-        im=response.read()
-        
-        f.write(im)
-        f.close()
+        with open(fname,"w") as f:
+            im=response.read()
+            f.write(im)
   
 
     def _to_transfac(self):
