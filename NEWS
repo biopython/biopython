@@ -10,11 +10,15 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.63
+(In progress, not released yet) Biopython 1.63 beta
 
-This release of Biopython supports Python 2.6 and 2.7, and also Python 3.3
-without needing the 2to3 conversion library. This was made possible by
-dropping support for Python 2.5 (and Jython 2.5).
+This is a beta release for testing purposes, the main reason for a
+beta version is the large amount of changes imposed by the removal of
+the 2to3 library previously required for the support of Python 3.X.
+This was made possible by dropping Python 2.5 (and Jython 2.5).
+
+This release of Biopython supports Python 2.6 and 2.7, and also Python
+3.3.
 
 The Biopython Tutorial & Cookbook, and the docstring examples in the source
 code, now use the Python 3 style print function in place of the Python 2
