@@ -150,7 +150,7 @@ it before you install Biopython. You can install Biopython anyway, but
 anything dependent on NumPy will not work. If you do this, and later
 install NumPy, you should then re-install Biopython.
 
-You can find NumPy at http://numpy.scipy.org
+You can find NumPy at http://www.numpy.org
 """)
     # exit automatically if running as part of some script
     # (e.g. PyPM, ActiveState's Python Package Manager)

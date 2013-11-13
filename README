@@ -75,7 +75,7 @@ Depending on which parts of Biopython you plan to use, there are a
 number of other optional Python dependencies - which can in general
 be installed after Biopython.
 
-- NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
+- NumPy, see http://www.numpy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
   think you might need these modules, then please install NumPy first BEFORE
