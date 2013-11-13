@@ -10,7 +10,14 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.63 beta
+(In progress, not released yet) Biopython 1.63
+
+This release supports Python 3.3 onwards without conversion via the 2to3
+library. See the Biopython 1.63 beta release notes below for details.
+
+===================================================================
+
+12 November 2013: Biopython 1.63 beta released.
 
 This is a beta release for testing purposes, the main reason for a
 beta version is the large amount of changes imposed by the removal of
