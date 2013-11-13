@@ -378,7 +378,7 @@ class FastaM10Parser(object):
                     parsed_hsp['hit']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
                     hsp.aln_annotation['homology'] += \
-                            self.line.strip('\n')
+                            self.line.strip('\r\n')
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
                 hit = Hit(hsp_list)
