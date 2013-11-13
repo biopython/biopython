@@ -476,7 +476,7 @@ class FastaM10Parser(object):
                     parsed_hsp['query']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
                     hsp.fragment.aln_annotation['homology'] += \
-                            self.line.strip('\n')
+                            self.line.strip('\r\n')
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)
