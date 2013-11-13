@@ -125,6 +125,9 @@ _RE_ID_DESC_SEQLEN = re.compile(_PTR_ID_DESC_SEQLEN)
 _RE_ID_DESC_SEQLEN_IDX = re.compile(_as_bytes(_PTR_ID_DESC_SEQLEN))
 # regex for qresult, hit, or hsp attribute value
 _RE_ATTR = re.compile(r'^; [a-z]+(_[ \w-]+):\s+(.*)$')
+# regex for capturing excess start and end sequences in alignments
+_RE_START_EXC = re.compile(r'^-*')
+_RE_END_EXC = re.compile(r'-*$')
 
 # attribute name mappings
 _HSP_ATTR_MAP = {
@@ -176,10 +179,26 @@ def _set_hsp_seqs(hsp, parsed, program):
 
     """
     # get aligned sequences and check if they have equal lengths
+    start = 0
     for seq_type in ('hit', 'query'):
         if 'tfast' not in program:
-            parsed[seq_type]['seq'] = _extract_alignment(parsed[seq_type])
-    assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), parsed
+            pseq = parsed[seq_type]
+            # adjust start and end coordinates based on the amount of
+            # filler characters
+            start, stop = _get_aln_slice_coords(pseq)
+            start_adj = len(re.search(_RE_START_EXC, pseq['seq']).group(0))
+            stop_adj = len(re.search(_RE_END_EXC, pseq['seq']).group(0))
+            start = start + start_adj
+            stop = stop + start_adj - stop_adj
+            parsed[seq_type]['seq'] = pseq['seq'][start:stop]
+    assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), "%r %r" \
+            % (len(parsed['query']['seq']), len(parsed['hit']['seq']))
+    if 'homology' in hsp.aln_annotation:
+        # only using 'start' since FASTA seems to have trimmed the 'excess'
+        # end part
+        hsp.aln_annotation['homology'] = hsp.aln_annotation['homology'][start:]
+        # hit or query works equally well here
+        assert len(hsp.aln_annotation['homology']) == len(parsed['hit']['seq'])
 
     # query and hit sequence types must be the same
     assert parsed['query']['_type'] == parsed['hit']['_type']
@@ -208,7 +227,7 @@ def _set_hsp_seqs(hsp, parsed, program):
             setattr(hsp.fragment, seq_type + '_strand', 0)
 
 
-def _extract_alignment(parsed_hsp):
+def _get_aln_slice_coords(parsed_hsp):
     """Helper function for the main parsing code.
 
     To get the actual pairwise alignment sequences, we must first
@@ -237,7 +256,7 @@ def _extract_alignment(parsed_hsp):
     assert 0 <= start and start < stop and stop <= len(seq_stripped), \
            "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
            % (seq, start, stop, parsed_hsp)
-    return seq_stripped[start:stop]
+    return start, stop
 
 
 class FastaM10Parser(object):
