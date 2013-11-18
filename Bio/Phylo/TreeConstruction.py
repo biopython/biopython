@@ -12,7 +12,7 @@ from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat.MatrixInfo import *
 
-class Matrix(object):
+class _Matrix(object):
     """A base class for distance matrix or scoring matrix that accepts
     a list of names and a lower triangular matrix.
 
@@ -35,12 +35,12 @@ class Matrix(object):
     Example
     -------
 
-    >>> from Bio.Phylo.TreeConstruction import Matrix
+    >>> from Bio.Phylo.TreeConstruction import _Matrix
     >>> names = ['Alpha', 'Beta', 'Gamma', 'Delta']
     >>> matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
-    >>> m = Matrix(names, matrix)
+    >>> m = _Matrix(names, matrix)
     >>> m
-    Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])
+    _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])
     
     You can use two indices to get or assign an element in the matrix.
     
@@ -67,13 +67,13 @@ class Matrix(object):
     Also you can delete or insert a column&row of elemets by index.
 
     >>> m
-    Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
+    _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
     >>> del m['Alpha']
     >>> m
-    Matrix(names=['Beta', 'Gamma', 'Delta'], matrix=[[0], [4, 0], [5, 6, 0]])
+    _Matrix(names=['Beta', 'Gamma', 'Delta'], matrix=[[0], [4, 0], [5, 6, 0]])
     >>> m.insert('Alpha', [0, 7, 8, 9] , 0)
     >>> m
-    Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
+    _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
 
     """
 
@@ -111,7 +111,7 @@ class Matrix(object):
 
     def __getitem__(self, item):
         """Access value(s) by the index(s) or name(s).
-        For a Matrix object 'dm':
+        For a _Matrix object 'dm':
         dm[i]                   get a value list from the given 'i' to others;
         dm[i, j]                get the value between 'i' and 'j';
         dm['name']              map name to index first
@@ -279,18 +279,18 @@ class Matrix(object):
         return matrix_string
 
 
-class DistanceMatrix(Matrix):
+class _DistanceMatrix(_Matrix):
     """Distance matrix class that can be used for distance based tree
      algorithms.
     All diagonal elements will be zero no matter what the users provide.
     """
 
     def __init__(self, names, matrix=None):
-        Matrix.__init__(self, names, matrix)
+        _Matrix.__init__(self, names, matrix)
         self._set_zero_diagonal()
 
     def __setitem__(self, item, value):
-        Matrix.__setitem__(self, item, value)
+        _Matrix.__setitem__(self, item, value)
         self._set_zero_diagonal()
 
     def _set_zero_diagonal(self):
@@ -391,9 +391,9 @@ class DistanceCalculator(object):
 
         if model == 'identity':
             self.scoring_matrix = None
-        elif model in dna_models:
-            self.scoring_matrix = Matrix(self.dna_alphabet, self.dna_matrices[model])
-        elif model in protein_models:
+        elif model in self.dna_models:
+            self.scoring_matrix = _Matrix(self.dna_alphabet, self.dna_matrices[model])
+        elif model in self.protein_models:
             self.scoring_matrix = self._build_protein_matrix(self.protein_matrices[model])
         else:
             raise ValueError("Model not supported. Available models: " + ", ".join(models))
@@ -431,7 +431,7 @@ class DistanceCalculator(object):
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
-        """Return a DistanceMatrix for MSA object
+        """Return a _DistanceMatrix for MSA object
 
         :Parameters:
             msa : MultipleSeqAlignment
@@ -443,14 +443,14 @@ class DistanceCalculator(object):
             raise TypeError("Must provide a MultipleSeqAlignment object.")
 
         names = [s.id for s in msa]
-        dm = DistanceMatrix(names)
+        dm = _DistanceMatrix(names)
         for seq1, seq2 in itertools.combinations(msa, 2):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
 
     def _build_protein_matrix(self, subsmat):
-        """Convert matrix from SubsMat format to Matrix object"""
-        protein_matrix = Matrix(self.protein_alphabet)
+        """Convert matrix from SubsMat format to _Matrix object"""
+        protein_matrix = _Matrix(self.protein_alphabet)
         for k, v in subsmat.items():
             aa1, aa2 = k
             protein_matrix[aa1, aa2] = v
@@ -543,12 +543,12 @@ class DistanceTreeConstructor(TreeConstructor):
         with Arithmetic mean) tree.
         
         :Parameters:
-            distance_matrix : DistanceMatrix
+            distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
         """
 
-        if not isinstance(distance_matrix, DistanceMatrix):
-            raise TypeError("Must provide a DistanceMatrix object.")
+        if not isinstance(distance_matrix, _DistanceMatrix):
+            raise TypeError("Must provide a _DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)
@@ -606,12 +606,12 @@ class DistanceTreeConstructor(TreeConstructor):
         """Construct and return an Neighbor Joining tree.
 
         :Parameters:
-            distance_matrix : DistanceMatrix
+            distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
         """
 
-        if not isinstance(distance_matrix, DistanceMatrix):
-            raise TypeError("Must provide a DistanceMatrix object.")
+        if not isinstance(distance_matrix, _DistanceMatrix):
+            raise TypeError("Must provide a _DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)
@@ -867,14 +867,14 @@ class ParsimonyScorer(Scorer):
     See ParsimonyTreeConstructor for usage.
 
     :Parameters:
-        matrix: Matrix
+        matrix: _Matrix
             scoring matrix used in parsimony score calculation.
     """
     def __init__(self, matrix=None):
-        if not matrix or isinstance(matrix, Matrix):
+        if not matrix or isinstance(matrix, _Matrix):
             self.matrix = matrix
         else:
-            raise TypeError("Must provide a Matrix object.")
+            raise TypeError("Must provide a _Matrix object.")
 
     def get_score(self, tree, alignment):
         """Calculate and return the parsimony score given a tree and
