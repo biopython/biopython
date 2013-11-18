@@ -5,7 +5,7 @@
 
 """ Classes and methods for finding consensus trees.
     
-    This module contains a ``BitString`` class to assist the consensus
+    This module contains a ``_BitString`` class to assist the consensus
     tree searching and some common consensus algorithms such as strict, 
     majority rule and adam consensus.
 """
@@ -16,12 +16,12 @@ from ast import literal_eval
 from Bio.Phylo import BaseTree
 from Bio import Phylo
 
-class BitString(str):
+class _BitString(str):
     """Assistant class of binary string data used for storing and
      counting compatible clades in consensus tree searching. It includes
      some binary manipulation(&|^~) methods.
 
-    BitString is a sub-class of ``str`` object that only accepts two
+    _BitString is a sub-class of ``str`` object that only accepts two
     characters('0' and '1'), with additional functions for binary-like
     manipulation(&|^~). It is used to count and store the clades in
     multiple trees in consensus tree searching. During counting, the
@@ -34,7 +34,7 @@ class BitString(str):
         tree1: (((A, B), C),(D, E))
         tree2: ((A, (B, C)),(D, E))
 
-    For both trees, a BitString object '11111' will represent their
+    For both trees, a _BitString object '11111' will represent their
     root clade. Each '1' stands for the terminal clade in the list
     [A, B, C, D, E](the order might not be the same, it's determined
     by the ``get_terminal`` method of the first tree provided). For
@@ -44,16 +44,16 @@ class BitString(str):
     represents clade (D, E) in both trees. 
 
     So, with the ``_count_clades`` function in this module, finnally we
-    can get the clade counts and their BitString representation as 
+    can get the clade counts and their _BitString representation as 
     follows(the root and terminals are omitted):
 
-        clade   BitString   count
+        clade   _BitString   count
         ABC     '11100'     2
         DE      '00011'     2
         AB      '11000'     1
         BC      '01100'     1
 
-    To get the BitString representation of a clade, we can use the following
+    To get the _BitString representation of a clade, we can use the following
     code snippet:
 
         # suppose we are provided with a tree list, the first thing to do is 
@@ -63,8 +63,8 @@ class BitString(str):
         clade_term_names = [term.name for term in clade.get_terminals()]
         # then create a boolean list 
         boolvals = [name in clade_term_names for name in term_names]
-        # create the string version and pass it to BitString  
-        bitstr = BitString(''.join(map(str, map(int, boolvals))))
+        # create the string version and pass it to _BitString  
+        bitstr = _BitString(''.join(map(str, map(int, boolvals))))
 
     To convert back:
         
@@ -82,18 +82,18 @@ class BitString(str):
     Example
     -------
 
-    >>> from Bio.Phylo.Consensus import BitString
-    >>> bitstr1 = BitString('11111')
-    >>> bitstr2 = BitString('11100')
-    >>> bitstr3 = BitString('01101')
+    >>> from Bio.Phylo.Consensus import _BitString
+    >>> bitstr1 = _BitString('11111')
+    >>> bitstr2 = _BitString('11100')
+    >>> bitstr3 = _BitString('01101')
     >>> bitstr1
-    BitString('11111')
+    _BitString('11111')
     >>> bitstr2 & bitstr3
-    BitString('01100')
+    _BitString('01100')
     >>> bitstr2 | bitstr3
-    BitString('11101')
+    _BitString('11101')
     >>> bitstr2 ^ bitstr3
-    BitString('10001')
+    _BitString('10001')
     >>> bitstr2.index_one()
     [0, 1, 2]
     >>> bitstr3.index_one()
@@ -127,41 +127,41 @@ class BitString(str):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
         resultint = selfint & otherint
-        return BitString(bin(resultint)[2:].zfill(len(self)))
+        return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __or__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
         resultint = selfint | otherint
-        return BitString(bin(resultint)[2:].zfill(len(self)))
+        return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __xor__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
         resultint = selfint ^ otherint
-        return BitString(bin(resultint)[2:].zfill(len(self)))
+        return _BitString(bin(resultint)[2:].zfill(len(self)))
 
 
     def __rand__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
         resultint =  otherint & selfint
-        return BitString(bin(resultint)[2:].zfill(len(self)))
+        return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __ror__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
         resultint = otherint | selfint
-        return BitString(bin(resultint)[2:].zfill(len(self)))
+        return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __rxor__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
         resultint = otherint ^ selfint
-        return BitString(bin(resultint)[2:].zfill(len(self)))
+        return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __repr__(self):
-        return 'BitString(' + str.__repr__(self) + ')'
+        return '_BitString(' + str.__repr__(self) + ')'
 
     def index_one(self):
         """Return a list of positions where the element is '1'"""
@@ -177,8 +177,8 @@ class BitString(str):
         Examples:
             "011011" contains "011000", "011001", "000011"
         
-        Be careful, "011011" also contains "000000". Actually, all BitString
-        objects contain all-zero BitString of the same length. 
+        Be careful, "011011" also contains "000000". Actually, all _BitString
+        objects contain all-zero _BitString of the same length. 
         """
         xorbit = self ^ other
         if xorbit.count('1') == self.count('1') - other.count('1'):
@@ -191,7 +191,7 @@ class BitString(str):
         That is to say the bitstr1.index_one() and bitstr2.index_one() have
         no intersection.
 
-        Be careful, all BitString objects are independent of all-zero BitString
+        Be careful, all _BitString objects are independent of all-zero _BitString
         of the same length. 
         """
         xorbit = self ^ other
@@ -374,12 +374,12 @@ def _part(clades):
     if len(terms) == 1 or len(terms) == 2:
         new_clade = clades[0]
     else:
-        bitstrs = set([BitString('1' * len(terms))])
+        bitstrs = set([_BitString('1' * len(terms))])
         for clade in clades:
             for childs in clade.clades:
                 clade_term_names = [term.name for term in childs.get_terminals()]
                 boolvals = [name in clade_term_names for name in term_names]
-                bitstr = BitString(''.join(map(str, map(int, boolvals))))
+                bitstr = _BitString(''.join(map(str, map(int, boolvals))))
                 to_remove = set()
                 to_add = set()
                 for bs in bitstrs:
@@ -464,7 +464,7 @@ def _count_clades(trees):
         for clade in tree.get_nonterminals():
             clade_term_names = [term.name for term in clade.get_terminals()]
             boolvals = [name in clade_term_names for name in term_names]
-            bitstr = BitString(''.join(map(str, map(int, boolvals))))
+            bitstr = _BitString(''.join(map(str, map(int, boolvals))))
             if bitstr in bitstrs.keys():
                 time, sum_bl = bitstrs[bitstr]
                 time += 1
@@ -490,13 +490,13 @@ def get_support(target_tree, trees):
     for clade in target_tree.get_nonterminals():
         clade_term_names = [term.name for term in clade.get_terminals()]
         boolvals = [name in clade_term_names for name in term_names]
-        bitstr = BitString(''.join(map(str, map(int, boolvals))))
+        bitstr = _BitString(''.join(map(str, map(int, boolvals))))
         bitstrs[bitstr] = (clade, 0)
     for tree in trees:
         for clade in tree.get_nonterminals():
             clade_term_names = [term.name for term in clade.get_terminals()]
             boolvals = [name in clade_term_names for name in term_names]
-            bitstr = BitString(''.join(map(str, map(int, boolvals))))
+            bitstr = _BitString(''.join(map(str, map(int, boolvals))))
             if bitstr in bitstrs.keys():
                 c,t = bitstrs[bitstr]
                 c.confidence = (t + 1) * 100.0 / size

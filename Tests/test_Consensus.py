@@ -13,19 +13,20 @@ from Bio.Phylo.TreeConstruction import DistanceCalculator
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo import Consensus
 from Bio.Phylo.Consensus import *
+from Bio.Phylo.Consensus import _BitString
 
 
 class BitStringTest(unittest.TestCase):
-    """Test for BitString class"""
+    """Test for _BitString class"""
     def test_bitstring(self):
-        bitstr1 = BitString('0011')
-        bitstr2 = BitString('0101')
-        bitstr3 = BitString('0001')
-        bitstr4 = BitString('0010')
-        self.assertRaises(TypeError, BitString, '10O1')
-        self.assertEqual(bitstr1 & bitstr2, BitString('0001'))
-        self.assertEqual(bitstr1 | bitstr2, BitString('0111'))
-        self.assertEqual(bitstr1 ^ bitstr2, BitString('0110'))
+        bitstr1 = _BitString('0011')
+        bitstr2 = _BitString('0101')
+        bitstr3 = _BitString('0001')
+        bitstr4 = _BitString('0010')
+        self.assertRaises(TypeError, _BitString, '10O1')
+        self.assertEqual(bitstr1 & bitstr2, _BitString('0001'))
+        self.assertEqual(bitstr1 | bitstr2, _BitString('0111'))
+        self.assertEqual(bitstr1 ^ bitstr2, _BitString('0110'))
         self.assertFalse(bitstr1.contains(bitstr2))
         self.assertTrue(bitstr1.contains(bitstr1))
         self.assertTrue(bitstr1.contains(bitstr3))
@@ -50,12 +51,12 @@ class ConsensusTest(unittest.TestCase):
     def test_count_clades(self):
         bitstr_counts = Consensus._count_clades(self.trees)
         self.assertEqual(len(bitstr_counts), 6)
-        self.assertEqual(bitstr_counts[BitString('11111')][0], 3)
-        self.assertEqual(bitstr_counts[BitString('11000')][0], 2)
-        self.assertEqual(bitstr_counts[BitString('00111')][0], 3)
-        self.assertEqual(bitstr_counts[BitString('00110')][0], 2)
-        self.assertEqual(bitstr_counts[BitString('00011')][0], 1)
-        self.assertEqual(bitstr_counts[BitString('01111')][0], 1)
+        self.assertEqual(bitstr_counts[_BitString('11111')][0], 3)
+        self.assertEqual(bitstr_counts[_BitString('11000')][0], 2)
+        self.assertEqual(bitstr_counts[_BitString('00111')][0], 3)
+        self.assertEqual(bitstr_counts[_BitString('00110')][0], 2)
+        self.assertEqual(bitstr_counts[_BitString('00011')][0], 1)
+        self.assertEqual(bitstr_counts[_BitString('01111')][0], 1)
 
     def test_strict_consensus(self):
         ref_trees = open('./TreeConstruction/strict_refs.tre')
