@@ -36,6 +36,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
+from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -1068,6 +1069,22 @@ class DsspTests(unittest.TestCase):
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
 
+class NACCESSTests(unittest.TestCase):
+    """Tests for NACCESS parsing etc which don't need the binary tool.
+
+    See also test_NACCESS_tool.py for run time testing with the tool.
+    """
+    def test_NACCESS_rsa_file(self):
+        """Test parsing of pregenerated rsa NACCESS file"""
+        with open("PDB/1A8O.rsa") as rsa:
+            naccess = process_rsa_data(rsa)
+        self.assertEqual(len(naccess), 66)
+
+    def test_NACCESS_asa_file(self):
+        """Test parsing of pregenerated asa NACCESS file"""
+        with open("PDB/1A8O.asa") as asa:
+            naccess = process_asa_data(asa)
+        self.assertEqual(len(naccess), 524)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
