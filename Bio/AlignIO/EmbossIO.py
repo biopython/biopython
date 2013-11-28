@@ -147,7 +147,7 @@ class EmbossIterator(AlignmentIterator):
                             start = int(start) - 1
                             end = int(end)
                     else:
-                        assert seq.replace("-", "") != ""
+                        assert seq.replace("-", "") != "", repr(line)
                         start = int(start) - 1  # python counting
                         end = int(end)
 
