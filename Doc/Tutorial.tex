@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 28 September 2013 (Biopython 1.63b+)}
+\date{Last Update -- 1 December 2013 (Biopython 1.63b+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5113,39 +5113,15 @@ it setup right takes some effort:
 \end{itemize}
 
 \noindent
-To further confuse matters there are at least four different standalone BLAST packages,
+To further confuse matters there are several different BLAST packages available,
 and there are also other tools which can produce imitation BLAST output files, such as BLAT.
-
-\subsection{Standalone NCBI ``legacy'' BLAST}
-
-\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
-{NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
-\verb|rpsblast|. This was the most widely used standalone BLAST tool up until its replacement
-BLAST+ was released by the NCBI.
-
-The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
-like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
-functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
-be deprecated and eventually removed from Biopython as people move over to the replacement
-BLAST+ suite.
-
-To try and avoid confusion, we will not cover calling these old tools from Biopython
-in this tutorial. Have a look at the older edition of this tutorial included with
-Biopython 1.52 if you are curious (look at the Tutorial PDF or HTML file in the Doc
-directory within \texttt{biopython-1.52.tar.gz} or \texttt{biopython-1.52.zip}).
 
 \subsection{Standalone NCBI BLAST+}
 
+The ``new''
 \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
-{NCBI ``new'' BLAST+} was released in 2009. This replaces the old NCBI ``legacy'' BLAST
-package. The \verb|Bio.Blast.Applications| module has wrappers for these ``new'' tools
-like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
-(which all used to be handled by \verb|blastall|), \verb|psiblast|
-(replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
-(which replace the old \verb|rpsblast|).
-We don't include a wrapper for the \verb|makeblastdb| used in BLAST+ to build a
-local BLAST database from FASTA file, nor the equivalent tool \verb|formatdb| in
-``legacy'' BLAST.
+{NCBI BLAST+} suite was released in 2009. This replaces the old NCBI ``legacy'' BLAST
+package (see below).
 
 This section will show briefly how to use these tools from within Python. If you have
 already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
@@ -5194,13 +5170,24 @@ contains seven sequences, so the BLAST XML output should contain multiple result
 Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
 Section~\ref{sec:parsing-blast}.
 
-\subsection{WU-BLAST and AB-BLAST}
+\subsection{Other versions of BLAST}
+
+NCBI BLAST+ (written in C++) was first released in 2009 as a replacement for
+the original NCBI ``legacy'' BLAST (written in C) which is no longer being updated.
+There were a lot of changes -- the old version had a single core command line
+tool \verb|blastall| which covered multiple different BLAST search types (which
+are now separate commands in BLAST+), and all the command line options
+were renamed.
+Biopython's wrappers for the NCBI ``legacy'' BLAST tools have been deprecated
+and will be removed in a future release.
+To try to avoid confusion, we do not cover calling these old tools from Biopython
+in this tutorial.
 
 You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
 (WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
 BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
-the command line tools \verb|wu-blastall| and \verb|ab-blastall|.
-
+the command line tools \verb|wu-blastall| and \verb|ab-blastall|, which mimicked
+\verb|blastall| from the NCBI ``legacy'' BLAST stuie.
 Biopython does not currently provide wrappers for calling these tools, but should be able
 to parse any NCBI compatible output from them.
 
