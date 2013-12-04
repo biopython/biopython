@@ -17,7 +17,11 @@ import os
 import sys
 import time
 
-from Bio._py3k.urllib.request import FancyURLopener
+try:
+    from urllib import FancyURLopener
+except ImportError:
+    #Python 3
+    from urllib.request import FancyURLopener
 
 from Bio.Restriction.RanaConfig import *
 
