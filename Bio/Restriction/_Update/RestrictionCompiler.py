@@ -705,7 +705,7 @@ class DictionaryBuilder(object):
 
     def parseline(self, line):
         line = [line[0]]+[line[1].upper()]+[int(i) for i in line[2:9]]+line[9:]
-        name = line[0].replace("-", "_")
+        name = line[0].replace("-", "_").replace(".", "_")
         site = line[1]  # sequence of the recognition site
         dna = Seq(site, generic_dna)
         size = line[2]  # size of the recognition site
@@ -965,15 +965,15 @@ class DictionaryBuilder(object):
                         print('Unfortunately, %s is commercially available.\n'%n)
 
                     continue
-                #Hyphens can't be used as a Python name, nor as a
-                #group name in a regular expression.
-                name = name.replace("-", "_")
+                #Hyphens and dots can't be used as a Python name, nor as a
+                #group name in a regular expression. e.g. 'CviKI-1', 'R2.BceSIV'
+                name = name.replace("-", "_").replace(".", "_")
                 if name in enzymedict:
                     #
                     #   deal with TaqII and its two sites.
                     #
                     print('\nWARNING : %s has two different sites.\n' % name)
-                    other = line[0].replace("-", "_")
+                    other = line[0].replace("-", "_").replace(".", "_")
                     dna = Seq(line[1], generic_dna)
                     sense1 = regex(dna)
                     antisense1 = regex(str(dna.reverse_complement()))
