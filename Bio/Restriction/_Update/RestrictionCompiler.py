@@ -485,7 +485,7 @@ class DictionaryBuilder(object):
                 results.write("def _temp():\n")
                 results.write("    return {\n")
                 for key, value in classdict[name].items() :
-                    results.write("        %s : %s,\n" % (repr(key), repr(value)))
+                    results.write("        %s: %s,\n" % (repr(key), repr(value)))
                 results.write("    }\n")
                 results.write("rest_dict[%s] = _temp()\n" % repr(name))
                 results.write("\n")
