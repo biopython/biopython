@@ -26,7 +26,7 @@
 #   'suppliers' which map the name of the suppliers to their abbreviation.
 #
 
-"""Convert a serie of Rebase files into a Restriction_Dictionary.py module.
+"""Convert a series of Rebase files into a Restriction_Dictionary.py module.
 
 The Rebase files are in the emboss format:
 
@@ -34,7 +34,16 @@ The Rebase files are in the emboss format:
     emboss_r.###    -> contains general information about the enzymes.
     emboss_s.###    -> contains information about the suppliers.
 
-### is a 3 digit number. The first digit is the year and the two last the month.
+Here ### is the 3 digit number REBASE release number (e.g. 312). The first
+digit is the last digit of the year (e.g. 3 for 2013) and the two last the
+month (e.g. 12 for December).
+
+These files used to be available by FTP allowing automated fetching, but
+currently only this HTML page seems to work and requires manual download
+and renaming of the files: http://rebase.neb.com/rebase/rebase.f37.html
+
+This Python file is intended to be used via the scripts Scripts/Restriction/*.py
+only.
 """
 
 from __future__ import print_function
@@ -49,6 +58,7 @@ import shutil
 from functools import reduce
 
 from Bio.Seq import Seq
+from Bio.Alphabet import generic_dna
 
 import Bio.Restriction.Restriction
 from Bio.Restriction.Restriction import AbstractCut, RestrictionType, NoCut, OneCut
@@ -60,9 +70,7 @@ from Bio.Restriction.Restriction import Commercially_available, Not_available
 import Bio.Restriction.RanaConfig as config
 from Bio.Restriction._Update.Update import RebaseUpdate
 from Bio.Restriction.Restriction import *
-from Bio.Restriction.DNAUtils import antiparallel
 
-DNA=Seq
 dna_alphabet = {'A':'A', 'C':'C', 'G':'G', 'T':'T',
                 'R':'AG', 'Y':'CT', 'W':'AT', 'S':'CG', 'M':'AC', 'K':'GT',
                 'H':'ACT', 'B':'CGT', 'V':'ACG', 'D':'AGT',
@@ -108,7 +116,7 @@ def regex(site):
     Construct a regular expression from a DNA sequence.
     i.e.:
         site = 'ABCGN'   -> 'A[CGT]CG.'"""
-    reg_ex = site
+    reg_ex = str(site)
     for base in reg_ex:
         if base in ('A', 'T', 'C', 'G', 'a', 'c', 'g', 't'):
             pass
@@ -121,20 +129,12 @@ def regex(site):
     return reg_ex
 
 
-def Antiparallel(sequence):
-    """Antiparallel(sequence) -> string.
-
-    returns a string which represents the reverse complementary strand of
-    a DNA sequence."""
-    return antiparallel(str(sequence))
-
-
 def is_palindrom(sequence):
     """is_palindrom(sequence) -> bool.
 
     True is the sequence is a palindrom.
-    sequence is a DNA object."""
-    return sequence == DNA(Antiparallel(sequence))
+    sequence is a Seq object."""
+    return str(sequence) == str(sequence.reverse_complement())
 
 
 def LocalTime():
@@ -707,7 +707,7 @@ class DictionaryBuilder(object):
         line = [line[0]]+[line[1].upper()]+[int(i) for i in line[2:9]]+line[9:]
         name = line[0].replace("-", "_")
         site = line[1]  # sequence of the recognition site
-        dna = DNA(site)
+        dna = Seq(site, generic_dna)
         size = line[2]  # size of the recognition site
         #
         #   Calculate the overhang.
@@ -881,7 +881,7 @@ class DictionaryBuilder(object):
             line.append(False)
             sense = ''.join(['(?P<', name, '>', regex(site.upper()), ')'])
             antisense = ''.join(['(?P<', name, '_as>',
-                                 regex(Antiparallel(dna)), ')'])
+                                 regex(dna.reverse_complement()), ')'])
             rg = sense + '|' + antisense
         #
         #   exact frequency of the site. (ie freq(N) == 1, ...)
@@ -974,12 +974,12 @@ class DictionaryBuilder(object):
                     #
                     print('\nWARNING : %s has two different sites.\n' % name)
                     other = line[0].replace("-", "_")
-                    dna = DNA(line[1])
-                    sense1 = regex(str(dna))
-                    antisense1 = regex(Antiparallel(dna))
-                    dna = DNA(enzymedict[other][0])
-                    sense2 = regex(str(dna))
-                    antisense2 = regex(Antiparallel(dna))
+                    dna = Seq(line[1], generic_dna)
+                    sense1 = regex(dna)
+                    antisense1 = regex(str(dna.reverse_complement()))
+                    dna = Seq(enzymedict[other][0], generic_dna)
+                    sense2 = regex(dna)
+                    antisense2 = regex(dna.reverse_complement())
                     sense = '(?P<'+other+'>'+sense1+'|'+sense2+')'
                     antisense = '(?P<'+other+'_as>'+antisense1+'|'+antisense2 + ')'
                     reg = sense + '|' + antisense
