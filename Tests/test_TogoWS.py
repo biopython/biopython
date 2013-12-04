@@ -51,7 +51,7 @@ class TogoFields(unittest.TestCase):
         """Check supported fields for pubmed database"""
         fields = set(TogoWS._get_entry_fields("pubmed"))
         self.assertTrue(fields.issuperset(['abstract', 'au', 'authors',
-                                           'doi', 'mesh', 'so', 'ti',
+                                           'doi', 'mesh', 'so',
                                            'title']), fields)
 
     def test_ncbi_protein(self):
@@ -111,13 +111,13 @@ class TogoEntry(unittest.TestCase):
                                       'Kawashima S', 'Katayama T', 'Araki M',
                                       'Hirakawa M'])
 
-    def test_pubmed_16381885_ti(self):
-        """Bio.TogoWS.entry("pubmed", "16381885", field="ti")"""
-        handle = TogoWS.entry("pubmed", "16381885", field="ti")
-        data = handle.read().strip()
-        handle.close()
-        self.assertEqual(data,
-             'From genomics to chemical genomics: new developments in KEGG.')
+    #def test_pubmed_16381885_ti(self):
+    #    """Bio.TogoWS.entry("pubmed", "16381885", field="ti")"""
+    #    handle = TogoWS.entry("pubmed", "16381885", field="ti")
+    #    data = handle.read().strip()
+    #    handle.close()
+    #    self.assertEqual(data,
+    #         'From genomics to chemical genomics: new developments in KEGG.')
 
     def test_pubmed_16381885_title(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")"""
