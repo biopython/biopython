@@ -114,6 +114,11 @@ def entry(db, id, format=None, field=None):
         except KeyError:
             fields = _get_entry_fields(db)
             _entry_db_fields[db] = fields
+        if db == "pubmed" and field == "ti" and "title" in fields:
+            #Backwards compatibility fix for TogoWS change Nov/Dec 2013
+            field = "title"
+            import warnings
+            warnings.warn("TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead.")
         if field not in fields:
             raise ValueError("TogoWS entry fetch does not explicitly support "
                              "field '%s' for database '%s'. Only: %s"
