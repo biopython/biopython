@@ -38,8 +38,9 @@ Here ### is the 3 digit number REBASE release number (e.g. 312). The first
 digit is the last digit of the year (e.g. 3 for 2013) and the two last the
 month (e.g. 12 for December).
 
-These files used to be available by FTP allowing automated fetching, but
-currently only this HTML page seems to work and requires manual download
+There files are available by FTP from ftp://ftp.neb.com/pub/rebase/ which
+should allow automated fetching (the the update code and RanaConfig.py).
+In addition there are links on this HTML page which requires manual download
 and renaming of the files: http://rebase.neb.com/rebase/rebase.f37.html
 
 This Python file is intended to be used via the scripts Scripts/Restriction/*.py
