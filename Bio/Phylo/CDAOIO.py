@@ -33,8 +33,9 @@ class CDAOError(Exception):
 
 try:
     import rdflib
-    if rdflib.__version__.startswith("2."):
-        raise CDAOError('Support for CDAO tree format requires RDFlib v3 or later (not v2).')
+    rdfver = rdflib.__version__
+    if rdfver[0] in ["1", "2"] or (rdfver in ["3.0.0", "3.1.0", "3.2.0"]):
+        raise CDAOError('Support for CDAO tree format requires RDFlib v3.2.1 or later.')
 except ImportError:
     raise CDAOError('Support for CDAO tree format requires RDFlib.')
 
