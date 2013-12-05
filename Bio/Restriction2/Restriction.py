@@ -11,6 +11,7 @@ from __future__ import division, print_function
 from collections import namedtuple
 import re
 
+from ..Seq import Seq
 from . import RestrictionDB
 
 
@@ -22,21 +23,6 @@ _codes = {"A": "A", "C": "C", "G": "G", "T": "T",
 _complement = {"A": "T", "C": "G", "G": "C", "T": "A",
                "R": "Y", "Y": "R", "M": "K", "K": "M", "S": "S", "W": "W",
                "B": "D", "D": "B", "H": "V", "V": "H", "N": "N"}
-
-
-class Seq(str):
-    """A DNA sequence object, including linear/circular information.
-    """
-
-    def __new__(cls, s, circular=False):
-        self = super(Seq, cls).__new__(Seq, s)
-        self.circular = circular
-        return self
-
-    @property
-    def reverse_complement(self):
-        return Seq("".join(_complement[base] for base in reversed(self)),
-                   self.circular)
 
 
 class Restriction(namedtuple("Restriction",
@@ -169,14 +155,15 @@ class Restriction(namedtuple("Restriction",
             f *= 4 / len(_codes[b])
         return f
 
-    def search(self, seq):
+    def search(self, seq, circular=False):
         """List in order the indices after which an enzyme cuts on a + strand.
         """
-        if seq.circular:
+        seq = str(seq)
+        if circular:
             seq += seq[:len(self.site) - 1]
         regexp_pos = "".join("[" + _codes[b] + "]" for b in self.site)
         regexp_neg = "".join("[" + _codes[b] + "]"
-                             for b in Seq(self.site).reverse_complement)
+                             for b in Seq(self.site).reverse_complement())
         matches = [match.start() + cut_pos
                    for match in re.finditer(regexp_pos, seq)
                    for cut_pos, cut_neg in self.cuts]
@@ -186,16 +173,16 @@ class Restriction(namedtuple("Restriction",
                         for cut_pos, cut_neg in self.cuts]
         return sorted(matches)
 
-    def catalyze(self, seq):
+    def catalyze(self, seq, circular=False):
         """List the + strands obtained by a digest.
         """
         fragments = []
         previdx = 0
-        for idx in self.search(seq):
+        for idx in self.search(seq, circular):
             fragments.append(seq[previdx:idx])
             previdx = idx
         fragments.append(seq[previdx:])
-        if seq.circular:
+        if circular:
             fragments[0] = fragments[-1] + fragments[0]
             fragments.pop()
         return fragments
