@@ -305,7 +305,6 @@ PACKAGES = [
     'Bio.PopGen.GenePop',
     'Bio.PopGen.SimCoal',
     'Bio.Restriction',
-    'Bio.Restriction._Update',
     'Bio.SCOP',
     'Bio.SearchIO',
     'Bio.SearchIO._model',
