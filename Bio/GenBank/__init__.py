@@ -103,6 +103,7 @@ _re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
                                  % (_possibly_complemented_complex_location,
                                     _possibly_complemented_complex_location))
 
+
 assert _re_simple_location.match("104..160")
 assert not _re_simple_location.match("68451760..68452073^68452074")
 assert not _re_simple_location.match("<104..>160")
@@ -140,6 +141,11 @@ assert not _re_complex_location.match("join(complement(149815..150200),complemen
 assert not _re_simple_compound.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
 assert not _re_complex_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
 assert not _re_simple_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
+
+_solo_bond = re.compile("bond\(%s\)" % _solo_location)
+assert _solo_bond.match("bond(196)")
+assert _solo_bond.search("bond(196)")
+assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
 
 
 def _pos(pos_str, offset=0):
@@ -996,6 +1002,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                               int(e),
                                                               strand)
             return
+
+        if _solo_bond.search(location_line):
+            #e.g. bond(196)
+            #e.g. join(bond(284),bond(305),bond(309),bond(305))
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Dropping bond qualifier in feature location", BiopythonParserWarning)
+            #There ought to be a better way to do this...
+            for x in _solo_bond.finditer(location_line):
+                x = x.group()
+                location_line = location_line.replace(x, x[5:-1])
 
         if _re_simple_compound.match(location_line):
             #e.g. join(<123..456,480..>500)
