@@ -999,8 +999,8 @@ class CompoundLocation(object):
             if not isinstance(loc, FeatureLocation):
                 raise ValueError("CompoundLocation should be given a list of "
                                  "FeatureLocation objects, not %s" % loc.__class__)
-        if len(self.parts) < 2:
-            raise ValueError("CompoundLocation should have at least 2 parts")
+        if len(parts) < 2:
+            raise ValueError("CompoundLocation should have at least 2 parts, not %r" % parts)
 
     def __str__(self):
         """Returns a representation of the location (with python counting)."""
