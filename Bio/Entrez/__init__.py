@@ -441,10 +441,9 @@ def _open(cgi, params={}, post=False):
             warnings.warn("""
 Email address is not specified.
 
-To make use of NCBI's E-utilities, NCBI strongly recommends you to specify
-your email address with each request. From June 1, 2010, this will be
-mandatory. As an example, if your email address is A.N.Other@example.com, you
-can specify it as follows:
+To make use of NCBI's E-utilities, NCBI requires you to specify your
+email address with each request.  As an example, if your email address
+is A.N.Other@example.com, you can specify it as follows:
    from Bio import Entrez
    Entrez.email = 'A.N.Other@example.com'
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
