@@ -145,16 +145,21 @@ class Test_dn_ds(unittest.TestCase):
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='LWL85')
         self.assertEqual(round(dN, 5), 0.02031)
         self.assertEqual(round(dS, 5), 0.01639)
-        dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
-        self.assertEqual(round(dN, 5), 0.01982)
-        self.assertEqual(round(dS, 5), 0.02216)
         try:
             from scipy.linalg import expm
+            dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
+            self.assertEqual(round(dN, 5), 0.01982)
+            self.assertEqual(round(dS, 5), 0.02216)
+        except ImportError:
+            warnings.warn('Importing scipy.linalg.expm failed. Skip testing ML method for dN/dS estimation')
+            pass
+        try:
+            from scipy.optimize import minimize
             dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
             self.assertEqual(round(dN, 5), 0.01939)
             self.assertEqual(round(dS, 5), 0.02172)
         except ImportError:
-            warnings.warn('Importing scipy.linalg.expm failed. Skip testing ML method for dN/dS estimation')
+            warnings.warn('Importing scipy.optimize.minimize failed. Skip testing ML method for dN/dS estimation')
             pass
 
 class Test_MK(unittest.TestCase):
