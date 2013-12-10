@@ -538,7 +538,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         at_char = _as_bytes("@")
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
-            raise ValueError("Problem with FASTQ @ line:\n%s" % repr(line))
+            raise ValueError("Problem with FASTQ @ line:\n%r" % line)
         while line:
             #assert line[0]=="@"
             #This record seems OK (so far)
@@ -568,7 +568,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                     end_offset = handle.tell()
                     line = handle.readline()
                     if line and line[0:1] != at_char:
-                        raise ValueError("Problem with line %s" % repr(line))
+                        raise ValueError("Problem with line %r" % line)
                     break
                 else:
                     line = handle.readline()
@@ -590,7 +590,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         at_char = _as_bytes("@")
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
-            raise ValueError("Problem with FASTQ @ line:\n%s" % repr(line))
+            raise ValueError("Problem with FASTQ @ line:\n%r" % line)
         #Find the seq line(s)
         seq_len = 0
         while line:
@@ -615,7 +615,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 #Should be end of record...
                 line = handle.readline()
                 if line and line[0:1] != at_char:
-                    raise ValueError("Problem with line %s" % repr(line))
+                    raise ValueError("Problem with line %r" % line)
                 break
             else:
                 line = handle.readline()
