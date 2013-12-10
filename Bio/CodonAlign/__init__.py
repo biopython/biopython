@@ -125,7 +125,8 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                 from Bio import SeqIO
                 nucl_seqs = SeqIO.to_dict(nucl_seqs)
             elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
-                nucl_seqs = {i.id: i for i in nucl_seqs}
+                nucl_seeq = dict((i.id, i) for i in nucl_seqs)
+                #nucl_seqs = {i.id: i for i in nucl_seqs}
             elif nucl_seqs.__class__.__name__ in \
                     ("_IndexedSeqFileDict", "dict"):
                 pass
