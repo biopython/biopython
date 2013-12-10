@@ -5,14 +5,16 @@
 
 """Unit tests for the CodonAlign modules.
 """
+import warnings
+import tempfile
+import unittest
 
 from Bio import CodonAlign, SeqIO, AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio.Align import MultipleSeqAlignment
-import tempfile
-import unittest
+
 
 TEST_ALIGN_FILE1 = [('CodonAlign/nucl1.fa', 'CodonAlign/pro1.aln'), 'parse']
 TEST_ALIGN_FILE2 = [('CodonAlign/nucl2.fa', 'CodonAlign/pro2.aln'), 'parse']
@@ -58,7 +60,6 @@ class TestCodonAlignment(unittest.TestCase):
 
 class TestBuildAndIO(unittest.TestCase):
     def setUp(self):
-        import warnings
         self.aln_file = [TEST_ALIGN_FILE1,
                          TEST_ALIGN_FILE2,
                          TEST_ALIGN_FILE3,
@@ -147,9 +148,14 @@ class Test_dn_ds(unittest.TestCase):
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
         self.assertEqual(round(dN, 5), 0.01982)
         self.assertEqual(round(dS, 5), 0.02216)
-        dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
-        self.assertEqual(round(dN, 5), 0.01939)
-        self.assertEqual(round(dS, 5), 0.02172)
+        try:
+            from scipy.linalg import expm
+            dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
+            self.assertEqual(round(dN, 5), 0.01939)
+            self.assertEqual(round(dS, 5), 0.02172)
+        except ImportError:
+            warnings.warn('Importing scipy.linalg.expm failed. Skip testing ML method for dN/dS estimation')
+            pass
 
 class Test_MK(unittest.TestCase):
     def test_mk(self):
