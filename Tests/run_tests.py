@@ -90,6 +90,7 @@ DOCTEST_MODULES = [
                    "Bio.Alphabet",
                    "Bio.Application",
                    "Bio.bgzf",
+                   "Bio.CodonAlign",
                    "Bio.Blast.Applications",
                    "Bio.Emboss.Applications",
                    "Bio.GenBank",
