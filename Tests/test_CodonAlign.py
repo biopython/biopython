@@ -58,6 +58,7 @@ class TestCodonAlignment(unittest.TestCase):
 
 class TestBuildAndIO(unittest.TestCase):
     def setUp(self):
+        import warnings
         self.aln_file = [TEST_ALIGN_FILE1,
                          TEST_ALIGN_FILE2,
                          TEST_ALIGN_FILE3,
@@ -69,16 +70,22 @@ class TestBuildAndIO(unittest.TestCase):
             if i[1] == 'parse':
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
-                caln = CodonAlign.build(prot, nucl, alphabet=CodonAlign.default_codon_alphabet)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    caln = CodonAlign.build(prot, nucl, alphabet=CodonAlign.default_codon_alphabet)
             elif i[1] == 'index':
                 nucl = SeqIO.index(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
-                caln = CodonAlign.build(prot, nucl, alphabet=CodonAlign.default_codon_alphabet, max_score=20)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    caln = CodonAlign.build(prot, nucl, alphabet=CodonAlign.default_codon_alphabet, max_score=20)
             elif i[1] == 'id':
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
                 id = {i.split()[0]: i.split()[1] for i in open(i[0][2]).readlines()}
-                caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
             alns.append(caln)
         self.alns = alns
 
