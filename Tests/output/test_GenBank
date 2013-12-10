@@ -3466,6 +3466,406 @@ qualifiers:
     Key: organism, Value: ['Streptomyces avermitilis']
 
 DB cross refs []
+***Record from 1MRR_A.gp with the FeatureParser
+Seq: Seq('AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL', IUPACProtein())
+Id: 1MRR_A
+Name: 1MRR_A
+Description Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization.
+Annotations***
+Key: accessions
+Value: ['1MRR_A']
+Key: comment
+Value: 1 Ribonucleotide Reductase R1 Protein.
+Key: data_file_division
+Value: BCT
+Key: date
+Value: 10-OCT-2012
+Key: db_source
+Value: pdb: molecule 1MRR, chain 65, release Aug 28, 2012; deposition: Jul 28, 1992; class: Reductase(Acting On Ch2); source: Mmdb_id: 50351, Pdb_id 1: 1MRR; Exp. method: X-Ray Diffraction.
+Key: gi
+Value: 494379
+Key: keywords
+Value: ['']
+Key: organism
+Value: Escherichia coli
+References*
+location: [0:375]
+authors: Nordlund,P., Sjoberg,B.M. and Eklund,H.
+title: Three-dimensional structure of the free radical protein of ribonucleotide reductase
+journal: Nature 345 (6276), 593-598 (1990)
+medline id: 
+pubmed id: 2190093
+comment: 
+
+location: [0:375]
+authors: Atta,M., Nordlund,P., Aberg,A., Eklund,H. and Fontecave,M.
+title: Substitution of manganese for iron in ribonucleotide reductase from Escherichia coli. Spectroscopic and crystallographic characterization
+journal: J. Biol. Chem. 267 (29), 20682-20688 (1992)
+medline id: 
+pubmed id: 1328209
+comment: 
+
+location: [0:375]
+authors: Eklund,H. and Nordlund,P.
+title: Direct Submission
+journal: Submitted (28-JUL-1992)
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: Escherichia coli
+Key: taxonomy
+Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Escherichia']
+Feaures
+type: source
+location: [0:375]
+qualifiers: 
+    Key: db_xref, Value: ['taxon:562']
+    Key: organism, Value: ['Escherichia coli']
+
+type: Region
+location: [27:340]
+qualifiers: 
+    Key: db_xref, Value: ['CDD:153108']
+    Key: note, Value: ['Ribonucleotide Reductase, R2/beta subunit, ferritin-like diiron-binding domain; cd01049']
+    Key: region_name, Value: ['RNRR2']
+
+type: SecStr
+location: [34:46]
+qualifiers: 
+    Key: note, Value: ['helix 1']
+    Key: sec_str_type, Value: ['helix']
+
+type: Site
+location: order{[36:37], [43:44], [108:110], [112:113], [115:117], [119:120], [122:123], [136:138], [140:141]}
+qualifiers: 
+    Key: db_xref, Value: ['CDD:153108']
+    Key: note, Value: ['dimer interface [polypeptide binding]']
+    Key: site_type, Value: ['other']
+Sub-Features
+type: Site
+location: [36:37]
+qualifiers: 
+
+type: Site
+location: [43:44]
+qualifiers: 
+
+type: Site
+location: [108:110]
+qualifiers: 
+
+type: Site
+location: [112:113]
+qualifiers: 
+
+type: Site
+location: [115:117]
+qualifiers: 
+
+type: Site
+location: [119:120]
+qualifiers: 
+
+type: Site
+location: [122:123]
+qualifiers: 
+
+type: Site
+location: [136:138]
+qualifiers: 
+
+type: Site
+location: [140:141]
+qualifiers: 
+
+
+type: Site
+location: order{[47:48], [83:84], [114:115], [117:118], [121:122], [235:237], [240:241]}
+qualifiers: 
+    Key: db_xref, Value: ['CDD:153108']
+    Key: note, Value: ['putative radical transfer pathway']
+    Key: site_type, Value: ['other']
+Sub-Features
+type: Site
+location: [47:48]
+qualifiers: 
+
+type: Site
+location: [83:84]
+qualifiers: 
+
+type: Site
+location: [114:115]
+qualifiers: 
+
+type: Site
+location: [117:118]
+qualifiers: 
+
+type: Site
+location: [121:122]
+qualifiers: 
+
+type: Site
+location: [235:237]
+qualifiers: 
+
+type: Site
+location: [240:241]
+qualifiers: 
+
+
+type: SecStr
+location: [56:65]
+qualifiers: 
+    Key: note, Value: ['helix 2']
+    Key: sec_str_type, Value: ['helix']
+
+type: SecStr
+location: [66:87]
+qualifiers: 
+    Key: note, Value: ['helix 3']
+    Key: sec_str_type, Value: ['helix']
+
+type: Site
+location: order{[83:84], [114:115], [117:118], [203:204], [237:238], [240:241]}
+qualifiers: 
+    Key: db_xref, Value: ['CDD:153108']
+    Key: note, Value: ['diiron center [ion binding]']
+    Key: site_type, Value: ['other']
+Sub-Features
+type: Site
+location: [83:84]
+qualifiers: 
+
+type: Site
+location: [114:115]
+qualifiers: 
+
+type: Site
+location: [117:118]
+qualifiers: 
+
+type: Site
+location: [203:204]
+qualifiers: 
+
+type: Site
+location: [237:238]
+qualifiers: 
+
+type: Site
+location: [240:241]
+qualifiers: 
+
+
+type: Het
+location: join{[83:84], [114:115], [117:118], [237:238]}
+qualifiers: 
+    Key: heterogen, Value: ['( MN,1000 )']
+Sub-Features
+type: Het
+location: [83:84]
+qualifiers: 
+
+type: Het
+location: [114:115]
+qualifiers: 
+
+type: Het
+location: [117:118]
+qualifiers: 
+
+type: Het
+location: [237:238]
+qualifiers: 
+
+
+type: SecStr
+location: [101:129]
+qualifiers: 
+    Key: note, Value: ['helix 4']
+    Key: sec_str_type, Value: ['helix']
+
+type: Het
+location: join{[114:115], [203:204], [237:238], [240:241]}
+qualifiers: 
+    Key: heterogen, Value: ['( MN,1001 )']
+Sub-Features
+type: Het
+location: [114:115]
+qualifiers: 
+
+type: Het
+location: [203:204]
+qualifiers: 
+
+type: Het
+location: [237:238]
+qualifiers: 
+
+type: Het
+location: [240:241]
+qualifiers: 
+
+
+type: Site
+location: [121:122]
+qualifiers: 
+    Key: db_xref, Value: ['CDD:153108']
+    Key: note, Value: ['tyrosyl radical']
+    Key: site_type, Value: ['other']
+
+type: SecStr
+location: [132:140]
+qualifiers: 
+    Key: note, Value: ['helix 5']
+    Key: sec_str_type, Value: ['helix']
+
+type: SecStr
+location: [142:151]
+qualifiers: 
+    Key: note, Value: ['helix 6']
+    Key: sec_str_type, Value: ['helix']
+
+type: SecStr
+location: [152:169]
+qualifiers: 
+    Key: note, Value: ['helix 7']
+    Key: sec_str_type, Value: ['helix']
+
+type: SecStr
+location: [171:177]
+qualifiers: 
+    Key: note, Value: ['strand 1']
+    Key: sec_str_type, Value: ['sheet']
+
+type: SecStr
+location: [179:185]
+qualifiers: 
+    Key: note, Value: ['strand 2']
+    Key: sec_str_type, Value: ['sheet']
+
+type: SecStr
+location: [185:216]
+qualifiers: 
+    Key: note, Value: ['helix 8']
+    Key: sec_str_type, Value: ['helix']
+
+type: Het
+location: join{[193:194], [271:272]}
+qualifiers: 
+    Key: heterogen, Value: ['( HG,1003 )']
+Sub-Features
+type: Het
+location: [193:194]
+qualifiers: 
+
+type: Het
+location: [271:272]
+qualifiers: 
+
+
+type: Het
+location: [195:196]
+qualifiers: 
+    Key: heterogen, Value: ['( HG,1005 )']
+
+type: Het
+location: join{[195:196], [195:196]}
+qualifiers: 
+    Key: heterogen, Value: ['( HG,1002 )']
+Sub-Features
+type: Het
+location: [195:196]
+qualifiers: 
+
+type: Het
+location: [195:196]
+qualifiers: 
+
+
+type: Het
+location: join{[209:210], [213:214], [213:214]}
+qualifiers: 
+    Key: heterogen, Value: ['( HG,1004 )']
+Sub-Features
+type: Het
+location: [209:210]
+qualifiers: 
+
+type: Het
+location: [213:214]
+qualifiers: 
+
+type: Het
+location: [213:214]
+qualifiers: 
+
+
+type: SecStr
+location: [224:253]
+qualifiers: 
+    Key: note, Value: ['helix 9']
+    Key: sec_str_type, Value: ['helix']
+
+type: SecStr
+location: [259:269]
+qualifiers: 
+    Key: note, Value: ['helix 10']
+    Key: sec_str_type, Value: ['helix']
+
+type: Bond
+location: bond{[267:268], [271:272]}
+qualifiers: 
+    Key: bond_type, Value: ['disulfide']
+Sub-Features
+type: Bond
+location: [267:268]
+qualifiers: 
+
+type: Bond
+location: [271:272]
+qualifiers: 
+
+
+type: SecStr
+location: [269:285]
+qualifiers: 
+    Key: note, Value: ['helix 11']
+    Key: sec_str_type, Value: ['helix']
+
+type: Het
+location: join{[283:284], [304:305], [308:309], [304:305]}
+qualifiers: 
+    Key: heterogen, Value: ['( HG,1006 )']
+Sub-Features
+type: Het
+location: [283:284]
+qualifiers: 
+
+type: Het
+location: [304:305]
+qualifiers: 
+
+type: Het
+location: [308:309]
+qualifiers: 
+
+type: Het
+location: [304:305]
+qualifiers: 
+
+
+type: SecStr
+location: [300:319]
+qualifiers: 
+    Key: note, Value: ['helix 12']
+    Key: sec_str_type, Value: ['helix']
+
+DB cross refs []
 ***Record from noref.gb with the RecordParser
 sequence length: 1622
 locus: NM_006141
@@ -4826,6 +5226,151 @@ num qualifiers: 3
 key: /organism= value: "Streptomyces avermitilis"
 key: /mol_type= value: "genomic DNA"
 key: /db_xref= value: "taxon:33903"
+***Record from 1MRR_A.gp with the RecordParser
+sequence length: 375
+locus: 1MRR_A
+definition: Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization.
+accession: ['1MRR_A']
+reference title: Three-dimensional structure of the free radical protein of ribonucleotide reductase
+reference title: Substitution of manganese for iron in ribonucleotide reductase from Escherichia coli. Spectroscopic and crystallographic characterization
+reference title: Direct Submission
+feature key: source
+location: 1..375
+num qualifiers: 2
+key: /organism= value: "Escherichia coli"
+key: /db_xref= value: "taxon:562"
+feature key: Region
+location: 28..340
+num qualifiers: 3
+key: /region_name= value: "RNRR2"
+key: /note= value: "Ribonucleotide Reductase, R2/beta subunit, ferritin-like diiron-binding domain; cd01049"
+key: /db_xref= value: "CDD:153108"
+feature key: SecStr
+location: 35..46
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 1"
+feature key: Site
+location: order(37,44,109..110,113,116..117,120,123,137..138,141)
+num qualifiers: 3
+key: /site_type= value: "other"
+key: /note= value: "dimer interface [polypeptide binding]"
+key: /db_xref= value: "CDD:153108"
+feature key: Site
+location: order(48,84,115,118,122,236..237,241)
+num qualifiers: 3
+key: /site_type= value: "other"
+key: /note= value: "putative radical transfer pathway"
+key: /db_xref= value: "CDD:153108"
+feature key: SecStr
+location: 57..65
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 2"
+feature key: SecStr
+location: 67..87
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 3"
+feature key: Site
+location: order(84,115,118,204,238,241)
+num qualifiers: 3
+key: /site_type= value: "other"
+key: /note= value: "diiron center [ion binding]"
+key: /db_xref= value: "CDD:153108"
+feature key: Het
+location: join(bond(84),bond(115),bond(118),bond(238))
+num qualifiers: 1
+key: /heterogen= value: "( MN,1000 )"
+feature key: SecStr
+location: 102..129
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 4"
+feature key: Het
+location: join(bond(115),bond(204),bond(238),bond(241))
+num qualifiers: 1
+key: /heterogen= value: "( MN,1001 )"
+feature key: Site
+location: 122
+num qualifiers: 3
+key: /site_type= value: "other"
+key: /note= value: "tyrosyl radical"
+key: /db_xref= value: "CDD:153108"
+feature key: SecStr
+location: 133..140
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 5"
+feature key: SecStr
+location: 143..151
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 6"
+feature key: SecStr
+location: 153..169
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 7"
+feature key: SecStr
+location: 172..177
+num qualifiers: 2
+key: /sec_str_type= value: "sheet"
+key: /note= value: "strand 1"
+feature key: SecStr
+location: 180..185
+num qualifiers: 2
+key: /sec_str_type= value: "sheet"
+key: /note= value: "strand 2"
+feature key: SecStr
+location: 186..216
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 8"
+feature key: Het
+location: join(bond(194),bond(272))
+num qualifiers: 1
+key: /heterogen= value: "( HG,1003 )"
+feature key: Het
+location: bond(196)
+num qualifiers: 1
+key: /heterogen= value: "( HG,1005 )"
+feature key: Het
+location: join(bond(196),bond(196))
+num qualifiers: 1
+key: /heterogen= value: "( HG,1002 )"
+feature key: Het
+location: join(bond(210),bond(214),bond(214))
+num qualifiers: 1
+key: /heterogen= value: "( HG,1004 )"
+feature key: SecStr
+location: 225..253
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 9"
+feature key: SecStr
+location: 260..269
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 10"
+feature key: Bond
+location: bond(268,272)
+num qualifiers: 1
+key: /bond_type= value: "disulfide"
+feature key: SecStr
+location: 270..285
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 11"
+feature key: Het
+location: join(bond(284),bond(305),bond(309),bond(305))
+num qualifiers: 1
+key: /heterogen= value: "( HG,1006 )"
+feature key: SecStr
+location: 301..319
+num qualifiers: 2
+key: /sec_str_type= value: "helix"
+key: /note= value: "helix 12"
 Testing writing GenBank format...
 Testing GenBank writing for noref.gb...
 	Testing for NM_006141.1
