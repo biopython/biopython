@@ -559,6 +559,11 @@ class FastqRandomAccess(SeqFileRandomAccess):
             qual_len = 0
             while line:
                 if seq_len == qual_len:
+                    if seq_len == 0:
+                        #Special case, quality line should be just "\n"
+                        line = handle.readline()
+                        if line.strip():
+                            raise ValueError("Expected blank quality line, not %r" % line)
                     #Should be end of record...
                     end_offset = handle.tell()
                     line = handle.readline()
@@ -601,6 +606,12 @@ class FastqRandomAccess(SeqFileRandomAccess):
         qual_len = 0
         while line:
             if seq_len == qual_len:
+                if seq_len == 0:
+                    #Special case, quality line should be just "\n"                                                                                                                      
+                    line = handle.readline()
+                    if line.strip():
+                        raise ValueError("Expected blank quality line, not %r" % line)
+                    data += line
                 #Should be end of record...
                 line = handle.readline()
                 if line and line[0:1] != at_char:
