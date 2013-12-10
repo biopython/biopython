@@ -563,7 +563,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                     end_offset = handle.tell()
                     line = handle.readline()
                     if line and line[0:1] != at_char:
-                        ValueError("Problem with line %s" % repr(line))
+                        raise ValueError("Problem with line %s" % repr(line))
                     break
                 else:
                     line = handle.readline()
@@ -604,7 +604,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 #Should be end of record...
                 line = handle.readline()
                 if line and line[0:1] != at_char:
-                    ValueError("Problem with line %s" % repr(line))
+                    raise ValueError("Problem with line %s" % repr(line))
                 break
             else:
                 line = handle.readline()
