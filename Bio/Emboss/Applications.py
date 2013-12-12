@@ -181,7 +181,15 @@ class Primer3Commandline(_EmbossCommandLine):
            _Option(["-maxsize", "maxsize"],
                    "Maximum length of a primer oligo."),
            _Option(["-otm", "otm"],
-                   "Optimum melting temperature for a primer oligo."),
+                   """Melting temperature for primer oligo (OBSOLETE).
+
+                   Option replaced in EMBOSS 6.6.0 by -opttm
+                   """),
+           _Option(["-opttm", "opttm"],
+                   """Optimum melting temperature for a primer oligo.
+
+                   Option added in EMBOSS 6.6.0, replacing -otm
+                   """),
            _Option(["-mintm", "mintm"],
                    "Minimum melting temperature for a primer oligo."),
            _Option(["-maxtm", "maxtm"],
