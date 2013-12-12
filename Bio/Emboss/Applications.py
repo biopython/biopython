@@ -180,7 +180,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Minimum length of a primer oligo."),
            _Option(["-maxsize", "maxsize"],
                    "Maximum length of a primer oligo."),
-           _Option(["-otm", "otm"],
+           _Option(["-opttm", "opttm"],
                    "Optimum melting temperature for a primer oligo."),
            _Option(["-mintm", "mintm"],
                    "Minimum melting temperature for a primer oligo."),
