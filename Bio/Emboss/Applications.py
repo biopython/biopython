@@ -201,12 +201,13 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Nanomolar concentration of annealing oligos in the PCR."),
            _Option(["-maxpolyx", "maxpolyx"],
                    "Maximum allowable mononucleotide repeat length in a primer."),
-           #Primer length:
+            # Primer melting temperature
            _Option(["-otm", "otm"],
                    """Melting temperature for primer oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.6.0 by -opttm
                    """),
+           #Primer length:
            _Option(["-productosize", "productosize"],
                    """Optimum size for the PCR product (OBSOLETE).
 
