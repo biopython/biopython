@@ -372,7 +372,7 @@ class DistanceCalculator(object):
     protein_models = MatrixInfo.available_matrices
     protein_matrices = dict((name, getattr(MatrixInfo, name)) for name in protein_models)
 
-    dna_models = dna_matrices.keys()
+    dna_models = list(dna_matrices.keys())
 
     models = ['identity'] + dna_models + protein_models
 
