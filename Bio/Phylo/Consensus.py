@@ -275,7 +275,7 @@ def majority_consensus(trees, cutoff=0):
     """
     terms = trees[0].get_terminals()
     bitstr_counts = _count_clades(trees)
-    bitstrs = bitstr_counts.keys()
+    bitstrs = list(bitstr_counts.keys())
     # sort bitstrs from higher count to lower
     bitstrs.sort(key=lambda bitstr: (bitstr_counts[bitstr][0], bitstr.count('1')), reverse=True)
     root = BaseTree.Clade()
@@ -297,7 +297,7 @@ def majority_consensus(trees, cutoff=0):
         clade.clades.extend(clade_terms)
         clade.confidence = confidence
         clade.branch_length = bitstr_counts[bitstr][1] * 1.0 / bitstr_counts[bitstr][0]
-        bsckeys = bitstr_clades.keys()
+        bsckeys = list(bitstr_clades.keys())
         bsckeys.sort(key=lambda bs: bs.count('1'), reverse=True)
 
         # check if current clade is compatible with previous clades and
@@ -465,7 +465,7 @@ def _count_clades(trees):
             clade_term_names = [term.name for term in clade.get_terminals()]
             boolvals = [name in clade_term_names for name in term_names]
             bitstr = _BitString(''.join(map(str, map(int, boolvals))))
-            if bitstr in bitstrs.keys():
+            if bitstr in list(bitstrs.keys()):
                 time, sum_bl = bitstrs[bitstr]
                 time += 1
                 sum_bl += clade.branch_length or 0
@@ -497,7 +497,7 @@ def get_support(target_tree, trees):
             clade_term_names = [term.name for term in clade.get_terminals()]
             boolvals = [name in clade_term_names for name in term_names]
             bitstr = _BitString(''.join(map(str, map(int, boolvals))))
-            if bitstr in bitstrs.keys():
+            if bitstr in list(bitstrs.keys()):
                 c,t = bitstrs[bitstr]
                 c.confidence = (t + 1) * 100.0 / size
                 bitstrs[bitstr] = (c, t + 1)
