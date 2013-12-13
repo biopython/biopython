@@ -180,7 +180,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Minimum length of a primer oligo."),
            _Option(["-maxsize", "maxsize"],
                    "Maximum length of a primer oligo."),
-           _Option(["-otm", "otm"],
+           _Option(["-opttm", "opttm"],
                    "Optimum melting temperature for a primer oligo."),
            _Option(["-mintm", "mintm"],
                    "Minimum melting temperature for a primer oligo."),
@@ -201,6 +201,12 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Nanomolar concentration of annealing oligos in the PCR."),
            _Option(["-maxpolyx", "maxpolyx"],
                    "Maximum allowable mononucleotide repeat length in a primer."),
+            # Primer melting temperature
+           _Option(["-otm", "otm"],
+                   """Melting temperature for primer oligo (OBSOLETE).
+
+                   Option replaced in EMBOSS 6.6.0 by -opttm
+                   """),
            #Primer length:
            _Option(["-productosize", "productosize"],
                    """Optimum size for the PCR product (OBSOLETE).
