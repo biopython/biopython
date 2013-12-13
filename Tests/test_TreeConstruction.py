@@ -6,7 +6,7 @@
 """Unit tests for the Bio.Phylo.TreeConstruction module."""
 
 import unittest
-import StringIO
+from Bio._py3k import StringIO
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
@@ -123,7 +123,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     def test_upgma(self):
         tree = self.constructor.upgma(self.dm)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        tree_file = StringIO.StringIO()
+        tree_file = StringIO()
         Phylo.write(tree, tree_file, 'newick')
         ref_tree = open('./TreeConstruction/upgma.tre')
         self.assertEqual(tree_file.getvalue(), ref_tree.readline())
@@ -132,7 +132,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     def test_nj(self):
         tree = self.constructor.nj(self.dm)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        tree_file = StringIO.StringIO()
+        tree_file = StringIO()
         Phylo.write(tree, tree_file, 'newick')
         ref_tree = open('./TreeConstruction/nj.tre')
         self.assertEqual(tree_file.getvalue(), ref_tree.readline())
@@ -141,7 +141,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
     def test_built_tree(self):
         tree = self.constructor.build_tree(self.aln)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        tree_file = StringIO.StringIO()
+        tree_file = StringIO()
         Phylo.write(tree, tree_file, 'newick')
         ref_tree = open('./TreeConstruction/nj.tre')
         self.assertEqual(tree_file.getvalue(), ref_tree.readline())
