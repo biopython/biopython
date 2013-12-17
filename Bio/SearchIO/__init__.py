@@ -544,6 +544,9 @@ def index_db(index_filename, filenames=None, format=None,
 
     BGZF compressed files are supported, and detected automatically. Ordinary
     GZIP compressed files are not supported.
+
+    See also Bio.SearchIO.index(), Bio.SearchIO.to_dict(), and the Python module
+    glob which is useful for building lists of files.  
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)

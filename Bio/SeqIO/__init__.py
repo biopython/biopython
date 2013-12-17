@@ -894,7 +894,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     BGZF compressed files are supported, and detected automatically. Ordinary
     GZIP compressed files are not supported.
 
-    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
+    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
+    glob which is useful for building lists of files.
     """
     #Try and give helpful error messages:
     if not isinstance(index_filename, basestring):
