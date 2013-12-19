@@ -11,6 +11,11 @@ import copy
 from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
+from Bio import _py3k
+
+
+def _is_numeric(x):
+    return _py3k._is_int_or_long(x) or isinstance(x, (float, complex))
 
 class _Matrix(object):
     """A base class for distance matrix or scoring matrix that accepts
@@ -96,7 +101,7 @@ class _Matrix(object):
             self.matrix = matrix
         else:
             # check if all elements are numbers
-            if isinstance(matrix, list) and all(isinstance(l, list) for l in matrix) and all(isinstance(n, (int, long, float, complex)) for n in [item for sublist in matrix for item in sublist]):
+            if isinstance(matrix, list) and all(isinstance(l, list) for l in matrix) and all(_is_numeric(n) for n in [item for sublist in matrix for item in sublist]):
                 # check if the same length with names
                 if len(matrix) == len(names):
                     # check if is lower triangle format
@@ -181,7 +186,7 @@ class _Matrix(object):
             if index > len(self) - 1:
                 raise IndexError("Index out of range.")
             # check and assign value
-            if isinstance(value, list) and all(isinstance(n, (int, long, float, complex)) for n in value):
+            if isinstance(value, list) and all(_is_numeric(n) for n in value):
                 if len(value) == len(self):
                     for i in range(0, index):
                         self.matrix[index][i] = value[i]
@@ -210,7 +215,7 @@ class _Matrix(object):
             if row_index > len(self) - 1 or col_index > len(self) - 1:
                 raise IndexError("Index out of range.")
             # check and assign value
-            if isinstance(value, (int, long, float, complex)):
+            if _is_numeric(value):
                 if row_index > col_index:
                     self.matrix[row_index][col_index] = value
                 else:
