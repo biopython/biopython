@@ -5,6 +5,7 @@
 
 """Unit tests for the CodonAlign modules.
 """
+import sys
 import warnings
 import tempfile
 import unittest
@@ -83,7 +84,7 @@ class TestBuildAndIO(unittest.TestCase):
             elif i[1] == 'id':
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
-                id = {i.split()[0]: i.split()[1] for i in open(i[0][2]).readlines()}
+                id = dict((i.split()[0], i.split()[1]) for i in open(i[0][2]).readlines())
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
                     caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
@@ -131,7 +132,7 @@ class Test_dn_ds(unittest.TestCase):
     def setUp(self):
         nucl = SeqIO.parse(TEST_ALIGN_FILE6[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
         prot = AlignIO.read(TEST_ALIGN_FILE6[0][1], 'clustal', alphabet=IUPAC.protein)
-        id_corr = {i.split()[0]: i.split()[1] for i in open(TEST_ALIGN_FILE6[0][2]).readlines()}
+        id_corr = dict((i.split()[0], i.split()[1]) for i in open(TEST_ALIGN_FILE6[0][2]).readlines())
         aln = CodonAlign.build(prot, nucl, corr_dict=id_corr, alphabet=CodonAlign.default_codon_alphabet)
         self.aln = aln
 
@@ -164,11 +165,17 @@ class Test_dn_ds(unittest.TestCase):
 
 class Test_MK(unittest.TestCase):
     def test_mk(self):
-        from Bio.CodonAlign.CodonAlignment import mktest
-        p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
-        pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
-        codon_aln = CodonAlign.build(pro_aln, p)
-        self.assertEqual(round(mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 5), 0.00206)
+        ver = sys.version_info
+        if ver[0] == 2 and ver[1] == 6:
+            warnings.warn('Python 2.6 detected. Skip testing MK method')
+            pass
+        else:
+            from Bio.CodonAlign.CodonAlignment import mktest
+            p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
+            pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
+            codon_aln = CodonAlign.build(pro_aln, p)
+            self.assertEqual(round(mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 5), 0.00206)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
