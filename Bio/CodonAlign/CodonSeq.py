@@ -703,7 +703,7 @@ def _yn00(seq1, seq2, k, codon_table):
     # count synonymous sites and non-synonymous sites
     for i in range(3):
         tot = sum(fcodon[i].values())
-        fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
+        fcodon[i] = dict((j, k/tot) for j, k in fcodon[i].items())
     pi = Counter()
     for i in codon_table.forward_table.keys() + codon_table.stop_codons:
         if 'U' not in i:
@@ -1092,7 +1092,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
             if i != '---':
                 for c in i: fcodon[c] += 1
         tot = sum(fcodon.values())
-        fcodon = {j: k/tot for j, k in fcodon.items()}
+        fcodon = dict((j, k/tot) for j, k in fcodon.items())
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
             if 'U' not in i:
                 pi[i] = fcodon[i[0]]*fcodon[i[1]]*fcodon[i[2]]
@@ -1108,7 +1108,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
                 fcodon[2][i[2]] += 1
         for i in range(3):
             tot = sum(fcodon[i].values())
-            fcodon[i] = {j: k/tot for j, k in fcodon[i].items()}
+            fcodon[i] = dict((j, k/tot) for j, k in fcodon[i].items())
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
             if 'U' not in i:
                 pi[i] = fcodon[0][i[0]]*fcodon[1][i[1]]*fcodon[2][i[2]]
@@ -1119,7 +1119,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
         for i in seq1 + seq2:
             if i != '---': pi[i] += 1
         tot = sum(pi.values())
-        pi = {j: k/tot for j, k in pi.items()}
+        pi = dict((j, k/tot) for j, k in pi.items())
     return pi
 
 
