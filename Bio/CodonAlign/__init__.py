@@ -12,11 +12,11 @@ from itertools import izip
 
 from Bio.SeqRecord import SeqRecord
 
-from CodonSeq import CodonSeq
-from CodonAlignment import CodonAlignment
-from CodonAlphabet import CodonAlphabet
-from CodonAlphabet import default_codon_table, default_codon_alphabet
-from CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
+from Bio.CodonAlign.CodonSeq import CodonSeq
+from Bio.CodonAlign.CodonAlignment import CodonAlignment
+from Bio.CodonAlign.CodonAlphabet import CodonAlphabet
+from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alphabet
+from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
 
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
@@ -212,10 +212,18 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]
     >>> t = _get_aa_regex(p)
-    >>> print t['A']
-    GC[ACUTG]
-    >>> print t['L']
-    [CUT][UT][ACUTG]
+    >>> print(t['A'][0])
+    G
+    >>> print(t['A'][1])
+    C
+    >>> print(sorted(list(t['A'][2:])))
+    ['A', 'C', 'G', 'T', 'U', '[', ']']
+    >>> print(sorted(list(t['L'][:5])))
+    ['C', 'T', 'U', '[', ']']
+    >>> print(sorted(list(t['L'][5:9])))
+    ['T', 'U', '[', ']']
+    >>> print(sorted(list(t['L'][9:])))
+    ['A', 'C', 'G', 'T', 'U', '[', ']']
 
     """
     from Bio.Data.CodonTable import CodonTable
@@ -223,7 +231,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
         raise TypeError("Input table is not a instance of "
                         "Bio.Data.CodonTable object")
     aa2codon = {}
-    for codon, aa in codon_table.forward_table.iteritems():
+    for codon, aa in codon_table.forward_table.items():
         aa2codon.setdefault(aa, []).append(codon)
     for aa, codons in aa2codon.items():
         aa2codon[aa] = _codons2re(codons)
@@ -507,7 +515,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
             elif m == 0:
                 aas.append(i)
         return aas
-    scodon = map(get_aa_from_codonre, (aa2re[aa1], aa2re[aa2]))
+    scodon = list(map(get_aa_from_codonre, (aa2re[aa1], aa2re[aa2])))
     if shift_val == 1:
         intersect = ''.join(set(scodon[0][2]) & set(scodon[1][0]))
         scodonre = '(?P<' + reid + '>'
@@ -595,7 +603,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
         shift_pos = deque([])
         shift_start = []
         match = span_mode[2]
-        m_groupdict = match.groupdict().keys()
+        m_groupdict = list(match.groupdict().keys())
         # backward frameshift
         for i in m_groupdict:
             shift_pos.append(match.span(i))

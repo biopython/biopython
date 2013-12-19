@@ -19,7 +19,7 @@ from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
 from Bio.Alphabet import generic_dna, _ungap
 from Bio.Data.CodonTable import generic_by_id
 
-from CodonAlphabet import default_codon_alphabet, default_codon_table
+from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_table
 
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
@@ -78,8 +78,8 @@ class CodonSeq(Seq):
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
             assert len(self) % 3 == 0, "Sequence length is not a triple number"
-            self.rf_table = filter(lambda x: x%3 == 0,
-                                   range(len(seq_ungapped)))
+            self.rf_table = list(filter(lambda x: x%3 == 0,
+                                        range(len(seq_ungapped))))
             # check alphabet
             # Not use Alphabet._verify_alphabet function because it 
             # only works for single alphabet

@@ -12,7 +12,10 @@ alphabet for CodonSeq class.
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 
-from itertools import izip
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -50,7 +53,7 @@ class CodonAlphabet(Alphabet):
 
 
 def get_codon_alphabet(codon_table, gap_char="-"):
-    letters = codon_table.forward_table.keys()
+    letters = list(codon_table.forward_table.keys())
     letters.extend(codon_table.stop_codons)
     letters.extend(codon_table.start_codons)
     if gap_char:
