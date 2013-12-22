@@ -479,8 +479,9 @@ class DataHandler(object):
             handle = open(path, "wb")
         except IOError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
-        handle.write(text)
-        handle.close()
+        else:
+            handle.write(text)
+            handle.close()
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """The purpose of this function is to load the DTD locally, instead
