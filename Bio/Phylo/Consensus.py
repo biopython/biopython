@@ -568,3 +568,27 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
     trees = bootstrap_trees(msa, times, tree_constructor)
     tree = consensus(list(trees))
     return tree
+
+
+def _bitstrs(tree):
+    bitstrs = set()
+    term_names = [term.name for term in tree.get_terminals()]
+    term_names.sort()
+    for clade in tree.get_nonterminals():
+        clade_term_names = [term.name for term in clade.get_terminals()]
+        boolvals = [name in clade_term_names for name in term_names]  
+        bitstr = _BitString(''.join(map(str, map(int, boolvals))))
+        bitstrs.add(bitstr)
+    return bitstrs
+    
+def compare(tree1, tree2):
+    term_names1 =  [term.name for term in tree1.get_terminals()]
+    term_names2 =  [term.name for term in tree2.get_terminals()]
+    # false if terminals are not the same 
+    if set(term_names1) != set(term_names2):
+        return False
+    # true if BitStrings are the same
+    if _bitstrs(tree1) == _bitstrs(tree2):
+        return True
+    else:
+        return False
