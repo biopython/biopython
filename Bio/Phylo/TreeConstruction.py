@@ -105,7 +105,7 @@ class _Matrix(object):
                 # check if the same length with names
                 if len(matrix) == len(names):
                     # check if is lower triangle format
-                    if [len(m) for m in matrix] == range(1, len(self) + 1):
+                    if [len(m) for m in matrix] == list(range(1, len(self) + 1)):
                         self.matrix = matrix
                     else:
                         raise ValueError("'matrix' should be in lower triangle format")
