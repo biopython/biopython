@@ -36,7 +36,7 @@ be used directly.
 
 
 import os
-import warnings
+import warning
 from xml.parsers import expat
 
 #Importing these functions with leading underscore as not intended for reuse
@@ -474,11 +474,10 @@ class DataHandler(object):
 
     def save_dtd_file(self, filename, text):
         path = os.path.join(DataHandler.local_dtd_dir, filename)
-        warnings.warn("Saving %s to %s" % (filename, path))
         try:
             handle = open(path, "wb")
         except IOError:
-            warnings.warn("Failed to save %s at %s" % (filename, path))
+            warning.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
             handle.close()
@@ -515,7 +514,6 @@ class DataHandler(object):
         if not handle:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
-            warnings.warn("Downloading %s from %s" % (filename, url))
             from Bio._py3k import StringIO
             try:
                 handle = _urlopen(url)
