@@ -36,7 +36,7 @@ be used directly.
 
 
 import os
-import warning
+import warnings
 from xml.parsers import expat
 
 #Importing these functions with leading underscore as not intended for reuse
@@ -477,7 +477,7 @@ class DataHandler(object):
         try:
             handle = open(path, "wb")
         except IOError:
-            warning.warn("Failed to save %s at %s" % (filename, path))
+            warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
             handle.close()
