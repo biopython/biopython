@@ -8,8 +8,11 @@
 
 import sys
 import re
+import warnings
 from itertools import chain
 from xml.sax.saxutils import XMLGenerator, escape
+
+from Bio import BiopythonParserWarning
 
 
 #For speed try to use cElementTree rather than ElementTree
@@ -290,6 +293,11 @@ class BlastXmlParser(object):
                     if hit:
                         # need to keep track of hit IDs, since there could be duplicates,
                         if hit.id in key_list:
+                            warnings.warn("Adding hit with BLAST-generated ID "
+                                    "%r since hit ID %r is already present "
+                                    "in query %r. Your BLAST database may contain "
+                                    "duplicate entries." %
+                                    (hit._blast_id, hit.id, query_id), BiopythonParserWarning)
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
                             hit.description = '%s %s' % (hit.id, hit.description)

@@ -7,7 +7,9 @@
 
 import os
 import unittest
+import warnings
 
+from Bio import BiopythonParserWarning
 from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
@@ -3119,8 +3121,11 @@ class BlastXmlSpecialCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        # test each qresult's attributes
-        qresult = next(qresults)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            qresult = next(qresults)
+            assert len(w) == 1
+            assert issubclass(w[-1].category, BiopythonParserWarning)
         counter += 1
 
         # test the Hit IDs only, since this is a special case
