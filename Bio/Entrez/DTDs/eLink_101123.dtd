@@ -1,6 +1,6 @@
 <!--    
                 This is the Current DTD for Entrez eLink
-$Id: eLink_101123.dtd 213694 2010-11-24 20:37:47Z fialkov $
+$Id: eLink_101123.dtd 349314 2012-01-09 23:26:00Z fialkov $
 -->
 <!-- ================================================================= -->
 
@@ -82,7 +82,7 @@ $Id: eLink_101123.dtd 213694 2010-11-24 20:37:47Z fialkov $
 
 <!-- Common -->
 <!ELEMENT	LinkSet		(DbFrom, 
-				((IdList?, (LinkSetDb*  |  (LinkSetDbHistory*, WebEnv))) | IdUrlList | IdCheckList | ERROR)  
+				((IdList?, ((ERROR?, LinkSetDb)*  |  (LinkSetDbHistory*, WebEnv))) | IdUrlList | IdCheckList | ERROR), ERROR?  
 				)>
 
 <!ELEMENT	eLinkResult	(LinkSet*, ERROR?)>

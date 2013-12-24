@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "gbseq.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 08/02/2010 23:05:14
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 12/18/2013 23:04:02
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 192669 $
+$Revision: 413850 $
 *********************************************************
 
  ASN.1 and XML for the components of a GenBank format sequence
@@ -98,17 +98,17 @@ $Revision: 192669 $
 
 
 <!ELEMENT GBSeq (
-        GBSeq_locus, 
+        GBSeq_locus?, 
         GBSeq_length, 
         GBSeq_strandedness?, 
         GBSeq_moltype, 
         GBSeq_topology?, 
-        GBSeq_division, 
-        GBSeq_update-date, 
+        GBSeq_division?, 
+        GBSeq_update-date?, 
         GBSeq_create-date?, 
         GBSeq_update-release?, 
         GBSeq_create-release?, 
-        GBSeq_definition, 
+        GBSeq_definition?, 
         GBSeq_primary-accession?, 
         GBSeq_entry-version?, 
         GBSeq_accession-version?, 
@@ -131,7 +131,8 @@ $Revision: 192669 $
         GBSeq_feature-set?, 
         GBSeq_sequence?, 
         GBSeq_contig?, 
-        GBSeq_alt-seq?)>
+        GBSeq_alt-seq?, 
+        GBSeq_xrefs?)>
 
 <!ELEMENT GBSeq_locus (#PCDATA)>
 
@@ -202,6 +203,8 @@ $Revision: 192669 $
 
 <!ELEMENT GBSeq_alt-seq (GBAltSeqData*)>
 
+<!ELEMENT GBSeq_xrefs (GBXref*)>
+
 
 <!ELEMENT GBSeqid (#PCDATA)>
 
@@ -263,19 +266,7 @@ $Revision: 192669 $
 <!ELEMENT GBComment_paragraphs (GBCommentParagraph*)>
 
 
-<!ELEMENT GBCommentParagraph (
-        GBCommentParagraph_items)>
-
-<!ELEMENT GBCommentParagraph_items (GBCommentItem*)>
-
-
-<!ELEMENT GBCommentItem (
-        GBCommentItem_value?, 
-        GBCommentItem_url?)>
-
-<!ELEMENT GBCommentItem_value (#PCDATA)>
-
-<!ELEMENT GBCommentItem_url (#PCDATA)>
+<!ELEMENT GBCommentParagraph (#PCDATA)>
 
 
 <!ELEMENT GBStrucComment (
