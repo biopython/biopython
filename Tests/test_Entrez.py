@@ -1913,7 +1913,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][0]['Link'][0]['Id'], '48820')
         self.assertEqual(record[0]["LinkSetDb"][1]['DbTo'], 'protein')
         self.assertEqual(record[0]["LinkSetDb"][1]['LinkName'], 'nuccore_protein_cds')
-	self.assertEqual(len(record[0]["LinkSetDb"][1]['Link']), 16)
+        self.assertEqual(len(record[0]["LinkSetDb"][1]['Link']), 16)
         self.assertEqual(record[0]["LinkSetDb"][1]['Link'][0]['Id'], "16950486")
         self.assertEqual(record[0]["LinkSetDb"][1]['Link'][1]['Id'], "16950485")
         self.assertEqual(record[0]["LinkSetDb"][1]['Link'][2]['Id'], "15145457")
