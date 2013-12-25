@@ -3122,10 +3122,9 @@ class BlastXmlSpecialCases(unittest.TestCase):
         counter = 0
 
         with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+            warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
             assert len(w) == 1
-            assert issubclass(w[-1].category, BiopythonParserWarning)
         counter += 1
 
         # test the Hit IDs only, since this is a special case
