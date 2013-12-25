@@ -584,11 +584,4 @@ def _bitstrs(tree):
 def compare(tree1, tree2):
     term_names1 =  [term.name for term in tree1.get_terminals()]
     term_names2 =  [term.name for term in tree2.get_terminals()]
-    # false if terminals are not the same 
-    if set(term_names1) != set(term_names2):
-        return False
-    # true if BitStrings are the same
-    if _bitstrs(tree1) == _bitstrs(tree2):
-        return True
-    else:
-        return False
+    return (set(term_names1) == set(term_names2)) and (_bitstrs(tree1) == _bitstrs(tree2))
