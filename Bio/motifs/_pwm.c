@@ -1,4 +1,5 @@
 #include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include "numpy/arrayobject.h"
 
 
@@ -12,6 +13,7 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
     double score;
     int ok;
     PyObject* result;
+    PyArrayObject* array;
     float* p;
     npy_intp shape = (npy_intp)n;
     float nan = 0.0;
@@ -27,7 +29,8 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
         PyErr_SetString(PyExc_MemoryError, "failed to create output data");
         return NULL;
     }
-    p = PyArray_DATA(result);
+    p = PyArray_DATA((PyArrayObject*)result);
+    array = (PyArrayObject*)matrix;
     for (i = 0; i < n; i++)
     {
         score = 0.0;
@@ -39,16 +42,16 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
             {
                 case 'A':
                 case 'a':
-                    score += *((double*)PyArray_GETPTR2(matrix, j, 0)); break;
+                    score += *((double*)PyArray_GETPTR2(array, j, 0)); break;
                 case 'C':
                 case 'c':
-                    score += *((double*)PyArray_GETPTR2(matrix, j, 1)); break;
+                    score += *((double*)PyArray_GETPTR2(array, j, 1)); break;
                 case 'G':
                 case 'g':
-                    score += *((double*)PyArray_GETPTR2(matrix, j, 2)); break;
+                    score += *((double*)PyArray_GETPTR2(array, j, 2)); break;
                 case 'T':
                 case 't':
-                    score += *((double*)PyArray_GETPTR2(matrix, j, 3)); break;
+                    score += *((double*)PyArray_GETPTR2(array, j, 3)); break;
                 default:
                     ok = 0;
             }
@@ -76,33 +79,35 @@ py_calculate(PyObject* self, PyObject* args, PyObject* keywords)
     npy_intp m;
     int s;
     PyObject* result;
+    PyArrayObject* array;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "s#O&", kwlist,
                                     &sequence,
                                     &s,
                                     PyArray_Converter,
                                     &matrix)) return NULL;
 
-    if (PyArray_TYPE(matrix) != NPY_DOUBLE)
+    array = (PyArrayObject*) matrix;
+    if (PyArray_TYPE(array) != NPY_DOUBLE)
     {
         PyErr_SetString(PyExc_ValueError,
             "position-weight matrix should contain floating-point values");
         result = NULL;
     }
-    else if (PyArray_NDIM(matrix) != 2) /* Checking number of dimensions */
+    else if (PyArray_NDIM(array) != 2) /* Checking number of dimensions */
     {
         result = PyErr_Format(PyExc_ValueError,
             "position-weight matrix has incorrect rank (%d expected 2)",
-            PyArray_NDIM(matrix));
+            PyArray_NDIM(array));
     }
-    else if(PyArray_DIM(matrix, 1) != 4)
+    else if(PyArray_DIM(array, 1) != 4)
     {
         result = PyErr_Format(PyExc_ValueError,
             "position-weight matrix should have four columns (%" NPY_INTP_FMT
-            " columns found)", PyArray_DIM(matrix, 1));
+            " columns found)", PyArray_DIM(array, 1));
     }
     else
     {
-        m = PyArray_DIM(matrix, 0);
+        m = PyArray_DIM(array, 0);
         result = calculate(sequence, s, matrix, m);
     }
     Py_DECREF(matrix);
