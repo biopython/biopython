@@ -145,8 +145,8 @@ def qblast(program, database, sequence,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
-    # Poll NCBI until the results are ready.  Use a 3 second wait
-    delay = 3.0
+    # Poll NCBI until the results are ready.  Use a backoff delay from 2 - 120 second wait
+    delay = 2.0
     previous = time.time()
     while True:
         current = time.time()
@@ -156,6 +156,10 @@ def qblast(program, database, sequence,
             previous = current + wait
         else:
             previous = current
+        if delay + .5*delay <= 120:
+            delay += .5*delay
+        else:
+            delay = 120
 
         request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                            message,
