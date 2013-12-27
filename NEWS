@@ -10,6 +10,23 @@ The latest news is at the top of this file.
 
 ===================================================================
 
+(In progress, not yet released) Biopython 1.64
+
+Bio.Entrez will now automatically download and cache new NCBI DTD files for
+XML parsing under the user's home directory (using ``~/.biopython`` on
+Unix like systems, and ``$APPDATA/biopython`` on Windows).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Leighton Pritchard
+Michiel de Hoon
+Peter Cock
+Vincent Davis (first contribution)
+Wibowo 'Bow' Arindrarto
+
+===================================================================
+
 4 December 2013: Biopython 1.63 released.
 
 This release supports Python 3.3 onwards without conversion via the 2to3
