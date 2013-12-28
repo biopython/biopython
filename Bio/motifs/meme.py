@@ -12,13 +12,13 @@ from Bio import motifs
 
 
 def read(handle):
-    """Parses the text output of the MEME program into a MEME.Record object.
+    """Parses the text output of the MEME program into a meme.Record object.
 
     Example:
 
-    >>> from Bio.Motif import MEME
+    >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
-    ...     record = MEME.parse(f)
+    ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
@@ -89,10 +89,10 @@ class Instance(Seq.Seq):
 class Record(list):
     """A class for holding the results of a MEME run.
 
-    A MEME.Record is an object that holds the results from running
+    A meme.Record is an object that holds the results from running
     MEME. It implements no methods of its own.
 
-    The MEME.Record class inherits from list, so you can access individual
+    The meme.Record class inherits from list, so you can access individual
     motifs in the record by their index. Alternatively, you can find a motif
     by its name:
 
