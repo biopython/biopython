@@ -596,7 +596,7 @@ class _Switch(_AbstractParameter):
     "human readable" name describing the option in one word. This
     must be a valid Python identifer as it is used as the property
     name and as a keyword argument, and should therefore follow PEP8
-    naming. 
+    naming.
 
     o description -- a description of the option. This is used as
     the property docstring.
@@ -653,6 +653,7 @@ class _Argument(_AbstractParameter):
             return "%s " % _escape_filename(self.value)
         else:
             return "%s " % self.value
+
 
 class _ArgumentList(_Argument):
     def __str__(self):
