@@ -21,7 +21,7 @@ except ImportError:
     from StringIO import StringIO
 
 from Bio._py3k import _as_string, _as_bytes
-
+import os
 
 def qblast(program, database, sequence,
            auto_format=None,composition_based_statistics=None,
@@ -156,13 +156,16 @@ def qblast(program, database, sequence,
             previous = current + wait
         else:
             previous = current
-
+        #proxy = urllib2.ProxyHandler({'http': os.environ['http_proxy']})
+        #auth = urllib2.HTTPBasicAuthHandler()
+        #opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
+        #urllib2.install_opener(opener)
+        print "D"
         request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                                   message,
                                   {"User-Agent":"BiopythonClient"})
         handle = urllib2.urlopen(request)
         results = _as_string(handle.read())
-
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
         if results=="\n\n":
