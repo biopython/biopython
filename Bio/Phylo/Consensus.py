@@ -571,14 +571,14 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
 
 
 def _bitstrs(tree):
-    bitstrs = set()
+    bitstrs = {}
     term_names = [term.name for term in tree.get_terminals()]
     term_names.sort()
     for clade in tree.get_nonterminals():
         clade_term_names = [term.name for term in clade.get_terminals()]
         boolvals = [name in clade_term_names for name in term_names]  
         bitstr = _BitString(''.join(map(str, map(int, boolvals))))
-        bitstrs.add(bitstr)
+        bitstrs[bitstr] = clade.branch_length or 0.0
     return bitstrs
     
 def compare(tree1, tree2):
