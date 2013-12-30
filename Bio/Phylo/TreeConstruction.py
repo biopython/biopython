@@ -572,14 +572,14 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade2)
             #assign branch length
             if clade1.is_terminal():
-                clade1.branch_length = min_dist * 1.0 / 2
+                clade1.branch_length = round(min_dist * 1.0 / 2, 5)
             else:
-                clade1.branch_length = min_dist * 1.0 / 2 - self._height_of(clade1)
+                clade1.branch_length = round(min_dist * 1.0 / 2 - self._height_of(clade1), 5)
 
             if clade2.is_terminal():
-                clade2.branch_length = min_dist * 1.0 / 2
+                clade2.branch_length = round(min_dist * 1.0 / 2, 5)
             else:
-                clade2.branch_length = min_dist * 1.0 / 2 - self._height_of(clade2)
+                clade2.branch_length = round(min_dist * 1.0 / 2 - self._height_of(clade2), 5)
 
             # update node list
             clades[min_j] = inner_clade
@@ -645,8 +645,8 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
             #assign branch length
-            clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i] - node_dist[min_j]) / 2
-            clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
+            clade1.branch_length = round((dm[min_i, min_j] + node_dist[min_i] - node_dist[min_j]) / 2, 5)
+            clade2.branch_length = round(dm[min_i, min_j] - clade1.branch_length, 5)
 
             # update node list
             clades[min_j] = inner_clade
@@ -666,11 +666,11 @@ class DistanceTreeConstructor(TreeConstructor):
         root = None
         if clades[0] == inner_clade:
             clades[0].branch_length = 0
-            clades[1].branch_length = dm[1, 0]
+            clades[1].branch_length = round(dm[1, 0], 5)
             clades[0].clades.append(clades[1])
             root = clades[0]
         else:
-            clades[0].branch_length = dm[1, 0]
+            clades[0].branch_length = round(dm[1, 0], 5)
             clades[1].branch_length = 0
             clades[1].clades.append(clades[0])
             root = clades[1]
