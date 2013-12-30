@@ -58,7 +58,8 @@ def read(handle):
             if "=" in line:
                 continue
             words = line.split()
-            y, x = map(int, words[:2])
+            y = int(words[0])
+            x = int(words[1])
             record.intensities[x, y] = float(words[2])
             record.stdevs[x, y] = float(words[3])
             record.npix[x, y] = int(words[4])

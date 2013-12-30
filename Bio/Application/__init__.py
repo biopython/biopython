@@ -19,9 +19,12 @@ construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
 """
+from __future__ import print_function
+from Bio._py3k import basestring
+
 import os
+import platform
 import sys
-import StringIO
 import subprocess
 import re
 
@@ -31,11 +34,13 @@ from Bio import File
 
 #Use this regular expression to test the property names are going to
 #be valid as Python properties or arguments
-_re_prop_name = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*")
+_re_prop_name = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 assert _re_prop_name.match("t")
 assert _re_prop_name.match("test")
 assert _re_prop_name.match("_test") is None # we don't want private names
 assert _re_prop_name.match("-test") is None
+assert _re_prop_name.match("any-hyphen") is None
+assert _re_prop_name.match("underscore_ok")
 assert _re_prop_name.match("test_name")
 assert _re_prop_name.match("test2")
 #These are reserved names in Python itself,
@@ -60,7 +65,7 @@ class ApplicationError(_ProcessCalledError):
     >>> err = ApplicationError(-11, "helloworld", "", "Some error text")
     >>> err.returncode, err.cmd, err.stdout, err.stderr
     (-11, 'helloworld', '', 'Some error text')
-    >>> print err
+    >>> print(err)
     Command 'helloworld' returned non-zero exit status -11, 'Some error text'
 
     """
@@ -119,7 +124,8 @@ class AbstractCommandline(object):
     >>> cline
     WaterCommandline(cmd='water', gapextend=0.5)
 
-    Once you have set the parameters you need, turn the object into a string:
+    Once you have set the parameters you need, you can turn the object into
+    a string (e.g. to log the command):
 
     >>> str(cline)
     Traceback (most recent call last):
@@ -134,7 +140,7 @@ class AbstractCommandline(object):
     >>> water_cmd.asequence = "asis:ACCCGGGCGCGGT"
     >>> water_cmd.bsequence = "asis:ACCCGAGCGCGGT"
     >>> water_cmd.outfile = "temp_water.txt"
-    >>> print water_cmd
+    >>> print(water_cmd)
     water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
     >>> water_cmd
     WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
@@ -144,7 +150,28 @@ class AbstractCommandline(object):
     case where you just want to run the command and get the output:
 
     stdout, stderr = water_cmd()
+
+    Note that by default we assume the underlying tool is installed on the
+    system $PATH environment variable. This is normal under Linux/Unix, but
+    may need to be done manually under Windows. Alternatively, you can specify
+    the full path to the binary as the first argument (cmd):
+
+    >>> from Bio.Emboss.Applications import WaterCommandline
+    >>> water_cmd = WaterCommandline("C:\Program Files\EMBOSS\water.exe",
+    ...                              gapopen=10, gapextend=0.5,
+    ...                              asequence="asis:ACCCGGGCGCGGT",
+    ...                              bsequence="asis:ACCCGAGCGCGGT",
+    ...                              outfile="temp_water.txt")
+    >>> print(water_cmd)
+    "C:\Program Files\EMBOSS\water.exe" -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
+
+    Notice that since the path name includes a space it has automatically
+    been quoted.
+
     """
+    #TODO - Replace the above example since EMBOSS doesn't work properly
+    #if installed into a folder with a space like "C:\Program Files\EMBOSS"
+
     #Note the call example above is not a doctest as we can't handle EMBOSS
     #(or any other tool) being missing in the unit tests.
     def __init__(self, cmd, **kwargs):
@@ -173,6 +200,9 @@ class AbstractCommandline(object):
         #Create properties for each parameter at run time
         aliases = set()
         for p in parameters:
+            if not p.names:
+                assert isinstance(p, _StaticArgument), p
+                continue
             for name in p.names:
                 if name in aliases:
                     raise ValueError("Parameter alias %s multiply defined"
@@ -213,7 +243,7 @@ class AbstractCommandline(object):
                        "argument value required." % p.names[0]
             prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop)  # magic!
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             self.set_parameter(key, value)
 
     def _validate(self):
@@ -240,13 +270,13 @@ class AbstractCommandline(object):
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
-        >>> print cline
+        >>> print(cline)
         water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> str(cline)
         'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5'
         """
         self._validate()
-        commandline = "%s " % self.program_name
+        commandline = "%s " % _escape_filename(self.program_name)
         for parameter in self.parameters:
             if parameter.is_set:
                 #This will include a trailing space:
@@ -262,7 +292,7 @@ class AbstractCommandline(object):
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
-        >>> print cline
+        >>> print(cline)
         water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
@@ -300,7 +330,13 @@ class AbstractCommandline(object):
             raise ValueError("Option name %s was not found." % name)
 
     def set_parameter(self, name, value = None):
-        """Set a commandline option for a program.
+        """Set a commandline option for a program (OBSOLETE).
+
+        Every parameter is available via a property and as a named
+        keyword when creating the instance. Using either of these is
+        preferred to this legacy set_parameter method which is now
+        OBSOLETE, and likely to be DEPRECATED and later REMOVED in
+        future releases.
         """
         set_option = False
         for parameter in self.parameters:
@@ -356,7 +392,7 @@ class AbstractCommandline(object):
         Traceback (most recent call last):
         ...
         ValueError: Option name csequence was not found.
-        >>> print cline
+        >>> print(cline)
         water -stdout -asequence=a.fasta -bsequence=b.fasta -gapopen=10 -gapextend=0.5
 
         This workaround uses a whitelist of object attributes, and sets the
@@ -437,11 +473,23 @@ class AbstractCommandline(object):
         #
         #Using universal newlines is important on Python 3, this
         #gives unicode handles rather than bytes handles.
+
+	#Windows 7 and 8 want shell = True
+	#platform is easier to understand that sys to determine
+	#windows version
+        if sys.platform != "win32":
+            use_shell = True
+        else:
+            win_ver = platform.win32_ver()[0]
+            if win_ver in ["7", "8"]:
+                use_shell = True
+            else:
+                use_shell = False
         child_process = subprocess.Popen(str(self), stdin=subprocess.PIPE,
                                          stdout=stdout_arg, stderr=stderr_arg,
                                          universal_newlines=True,
                                          cwd=cwd, env=env,
-                                         shell=(sys.platform!="win32"))
+                                         shell=use_shell)
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
         if not stdout:
@@ -487,14 +535,17 @@ class _Option(_AbstractParameter):
 
     Attributes:
 
-    o names -- a list of string names by which the parameter can be
-    referenced (ie. ["-a", "--append", "append"]). The first name in
-    the list is considered to be the one that goes on the commandline,
-    for those parameters that print the option. The last name in the list
-    is assumed to be a "human readable" name describing the option in one
-    word.
+    o names -- a list of string names (typically two entries) by which
+    the parameter can be set via the legacy set_parameter method
+    (eg ["-a", "--append", "append"]). The first name in list is used
+    when building the command line. The last name in the list is a
+    "human readable" name describing the option in one word. This
+    must be a valid Python identifer as it is used as the property
+    name and as a keyword argument, and should therefore follow PEP8
+    naming.
 
-    o description -- a description of the option.
+    o description -- a description of the option. This is used as
+    the property docstring.
 
     o filename -- True if this argument is a filename and should be
     automatically quoted if it contains spaces.
@@ -555,14 +606,17 @@ class _Switch(_AbstractParameter):
     take a value, they are either included in the command string
     or omitted.
 
-    o names -- a list of string names by which the parameter can be
-    referenced (ie. ["-a", "--append", "append"]). The first name in
-    the list is considered to be the one that goes on the commandline,
-    for those parameters that print the option. The last name in the list
-    is assumed to be a "human readable" name describing the option in one
-    word.
+    o names -- a list of string names (typically two entries) by which
+    the parameter can be set via the legacy set_parameter method
+    (eg ["-a", "--append", "append"]). The first name in list is used
+    when building the command line. The last name in the list is a
+    "human readable" name describing the option in one word. This
+    must be a valid Python identifer as it is used as the property
+    name and as a keyword argument, and should therefore follow PEP8
+    naming. 
 
-    o description -- a description of the option.
+    o description -- a description of the option. This is used as
+    the property docstring.
 
     o is_set -- if the parameter has been set
 
@@ -588,9 +642,17 @@ class _Switch(_AbstractParameter):
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
+
+    The names argument should be a list containing one string.
+    This must be a valid Python identifer as it is used as the
+    property name and as a keyword argument, and should therefore
+    follow PEP8 naming.
     """
     def __init__(self, names, description, filename=False,
                  checker_function=None, is_required=False):
+        #if len(names) != 1:
+        #    raise ValueError("The names argument to _Argument should be a "
+        #                     "single entry list with a PEP8 property name.")
         self.names = names
         assert isinstance(description, basestring), \
                "%r for %s" % (description, names[-1])
@@ -610,14 +672,30 @@ class _Argument(_AbstractParameter):
             return "%s " % self.value
 
 
+class _StaticArgument(_AbstractParameter):
+    """Represent a static (read only) argument on a commandline.
+
+    This is not intended to be exposed as a named argument or
+    property of a command line wrapper object.
+    """
+    def __init__(self, value):
+        self.names = []
+        self.is_required = False
+        self.is_set = True
+        self.value = value
+
+    def __str__(self):
+        return "%s " % self.value
+
+
 def _escape_filename(filename):
     """Escape filenames with spaces by adding quotes (PRIVATE).
 
     Note this will not add quotes if they are already included:
 
-    >>> print _escape_filename('example with spaces')
+    >>> print((_escape_filename('example with spaces')))
     "example with spaces"
-    >>> print _escape_filename('"example with spaces"')
+    >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
     """
     #Is adding the following helpful
@@ -651,3 +729,4 @@ def _test():
 if __name__ == "__main__":
     #Run the doctests
     _test()
+

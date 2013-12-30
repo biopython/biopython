@@ -36,8 +36,7 @@ GA--T
 class TestPairwiseLocal(unittest.TestCase):
 
     def test_localxs(self):
-        aligns = pairwise2.align.localxs("AxBx", "zABz", -0.1, 0)
-        aligns.sort()
+        aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0))
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\

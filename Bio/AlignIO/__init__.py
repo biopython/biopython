@@ -27,7 +27,7 @@ alignment):
 
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Phylip/interlaced.phy", "phylip")
-    >>> print align
+    >>> print(align)
     SingleLetterAlphabet() alignment with 3 rows and 384 columns
     -----MKVILLFVLAVFTVFVSS---------------RGIPPE...I-- CYS1_DICDI
     MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTL...VAA ALEU_HORVU
@@ -41,7 +41,7 @@ into a list:
 
     >>> from Bio import AlignIO
     >>> alignments = list(AlignIO.parse("Emboss/needle.txt", "emboss"))
-    >>> print alignments[2]
+    >>> print(alignments[2])
     SingleLetterAlphabet() alignment with 2 rows and 120 columns
     -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKER...--- ref_rec
     LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHP...HKE gi|94967506|receiver
@@ -65,9 +65,8 @@ If using a handle make sure to close it to flush the data to the disk::
 
     from Bio import AlignIO
     alignments = ...
-    handle = open("example.faa", "w")
-    count = SeqIO.write(alignments, handle, "fasta")
-    handle.close()
+    with open("example.faa", "w") as handle:
+        count = SeqIO.write(alignments, handle, "fasta")
 
 In general, you are expected to call this function once (with all your
 alignments) and then close the file handle.  However, for file formats
@@ -120,8 +119,9 @@ You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 same length.
 """
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
+
+from __future__ import print_function
+from Bio._py3k import basestring
 
 __docformat__ = "epytext en"  # not just plaintext
 
@@ -144,12 +144,12 @@ from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
-import StockholmIO
-import ClustalIO
-import NexusIO
-import PhylipIO
-import EmbossIO
-import FastaIO
+from . import StockholmIO
+from . import ClustalIO
+from . import NexusIO
+from . import PhylipIO
+from . import EmbossIO
+from . import FastaIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
@@ -313,7 +313,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     >>> filename = "Emboss/needle.txt"
     >>> format = "emboss"
     >>> for alignment in AlignIO.parse(filename, format):
-    ...     print "Alignment of length", alignment.get_alignment_length()
+    ...     print("Alignment of length %i" % alignment.get_alignment_length())
     Alignment of length 124
     Alignment of length 119
     Alignment of length 120
@@ -392,7 +392,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     >>> filename = "Clustalw/protein.aln"
     >>> format = "clustal"
     >>> alignment = AlignIO.read(filename, format)
-    >>> print "Alignment of length", alignment.get_alignment_length()
+    >>> print("Alignment of length %i" % alignment.get_alignment_length())
     Alignment of length 411
 
     If however you want the first alignment from a file containing
@@ -411,8 +411,8 @@ def read(handle, format, seq_count=None, alphabet=None):
     >>> from Bio import AlignIO
     >>> filename = "Emboss/needle.txt"
     >>> format = "emboss"
-    >>> alignment = AlignIO.parse(filename, format).next()
-    >>> print "First alignment has length", alignment.get_alignment_length()
+    >>> alignment = next(AlignIO.parse(filename, format))
+    >>> print("First alignment has length %i" % alignment.get_alignment_length())
     First alignment has length 124
 
     You must use the Bio.AlignIO.parse() function if you want to read multiple
@@ -420,13 +420,13 @@ def read(handle, format, seq_count=None, alphabet=None):
     """
     iterator = parse(handle, format, seq_count, alphabet)
     try:
-        first = iterator.next()
+        first = next(iterator)
     except StopIteration:
         first = None
     if first is None:
         raise ValueError("No records found in handle")
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     if second is not None:
@@ -466,3 +466,4 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

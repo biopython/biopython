@@ -30,9 +30,11 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.lib import colors
 
-from _Graph import GraphData
+from ._Graph import GraphData
 
 
 class GraphSet(object):
@@ -141,16 +143,14 @@ class GraphSet(object):
             Return a list of all graphs in the graph set, sorted by id (for
             reliable stacking...)
         """
-        ids = self._graphs.keys()
-        ids.sort()
-        return [self._graphs[id] for id in ids]
+        return [self._graphs[id] for id in sorted(self._graphs)]
 
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return a list of all ids for the graph set
         """
-        return self._graphs.keys()
+        return list(self._graphs.keys())
 
     def range(self):
         """ range(self) -> (int, int)
@@ -172,7 +172,7 @@ class GraphSet(object):
         """
         data = []
         for graph in self._graphs.values():
-            data += graph.data.values()
+            data += list(graph.data.values())
         data.sort()
         datalen = len(data)
         return(data[0], data[datalen/4], data[datalen/2],
@@ -235,4 +235,4 @@ if __name__ == '__main__':
     gdgs.add_graph(testdata1, 'TestData 1')
     gdgs.add_graph(testdata2, 'TestData 2')
 
-    print gdgs
+    print(gdgs)

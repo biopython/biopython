@@ -18,8 +18,8 @@ if sys.platform=="win32":
     raise MissingExternalDependencyError(
           "Testing RAxML on Windows not supported yet")
 else:
-    import commands
-    output = commands.getoutput("raxmlHPC -v")
+    from Bio._py3k import getoutput
+    output = getoutput("raxmlHPC -v")
     if "not found" not in output and "This is RAxML" in output:
         raxml_exe = "raxmlHPC"
 if not raxml_exe:

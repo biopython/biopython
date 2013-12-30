@@ -7,7 +7,9 @@
 """
 This module provides code to work with FDist.
 
-See http://www.rubic.rdg.ac.uk/~mab/software.html .
+See http://www.rubic.rdg.ac.uk/~mab/software.html (old) and
+http://www.maths.bris.ac.uk/~mamab/ (new) for downloading the
+FDist tool by Mark Beaumont.
 
 Classes:
 Record           Holds FDist data.
@@ -25,17 +27,17 @@ def read(handle):
        handle is a file-like object that contains a FDist record.
     """
     record = Record()
-    record.data_org = int(str(handle.next()).rstrip())
-    record.num_pops = int(str(handle.next()).rstrip())
-    record.num_loci = int(str(handle.next()).rstrip())
+    record.data_org = int(str(next(handle)).rstrip())
+    record.num_pops = int(str(next(handle)).rstrip())
+    record.num_loci = int(str(next(handle)).rstrip())
     for i in range(record.num_loci):
-        handle.next()
-        num_alleles = int(str(handle.next()).rstrip())
+        next(handle)
+        num_alleles = int(str(next(handle)).rstrip())
         pops_data = []
         if record.data_org==0:
             for j in range(record.num_pops):
-                line_comp = str(handle.next()).rstrip().split(' ')
-                pop_dist = map(lambda x: int(x), line_comp)
+                line_comp = str(next(handle)).rstrip().split(' ')
+                pop_dist = [int(x) for x in line_comp]
                 pops_data.append(pop_dist)
         else:
             raise NotImplementedError('1/alleles by rows not implemented')

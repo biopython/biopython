@@ -1,4 +1,4 @@
-# Copyright 2010-2011 by Peter Cock.
+# Copyright 2010-2013 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -17,6 +17,28 @@ from Bio._py3k import _as_bytes, _as_string
 _empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
+
+def _have_bug17666():
+    """Debug function to check if Python's gzip is broken (PRIVATE).
+
+    Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
+    3.2.4 and 3.3.1 only.
+    """
+    from io import BytesIO
+    h = gzip.GzipFile(fileobj=BytesIO(bgzf._bgzf_eof))
+    try:
+        data = h.read()
+        h.close()
+        assert not data, "Should be zero length, not %i" % len(data)
+        return False
+    except TypeError as err:
+        #TypeError: integer argument expected, got 'tuple'
+        return True
+
+if _have_bug17666():
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError("Your Python has a broken gzip library, see "
+                                       "http://bugs.python.org/issue17666 for details")
 
 
 class BgzfTests(unittest.TestCase):
@@ -90,7 +112,7 @@ class BgzfTests(unittest.TestCase):
                 old = _as_string(old)
             h.close()
 
-            for cache in [1,10]:
+            for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 if "b" in mode:
                     new = _empty_bytes_string.join(line for line in h)
@@ -106,7 +128,7 @@ class BgzfTests(unittest.TestCase):
     def check_by_char(self, old_file, new_file, old_gzip=False):
         for mode in ["r", "rb"]:
             if old_gzip:
-                h = gzip.open(old_file,mode)
+                h = gzip.open(old_file, mode)
             else:
                 h = open(old_file, mode)
             old = h.read()
@@ -118,7 +140,7 @@ class BgzfTests(unittest.TestCase):
                 old = _as_string(old)
             h.close()
 
-            for cache in [1,10]:
+            for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 temp = []
                 while True:
@@ -156,8 +178,7 @@ class BgzfTests(unittest.TestCase):
         self.assertFalse(h.isatty())
         self.assertEqual(h.fileno(), h._handle.fileno())
         for start, raw_len, data_start, data_len in blocks:
-            #print start, raw_len, data_start, data_len
-            h.seek(bgzf.make_virtual_offset(start,0))
+            h.seek(bgzf.make_virtual_offset(start, 0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
             #self.assertEqual(start + raw_len, h._handle.tell())
@@ -171,8 +192,7 @@ class BgzfTests(unittest.TestCase):
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         for start, raw_len, data_start, data_len in blocks[::-1]:
-            #print start, raw_len, data_start, data_len
-            h.seek(bgzf.make_virtual_offset(start,0))
+            h.seek(bgzf.make_virtual_offset(start, 0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
             #self.assertEqual(start + raw_len, h._handle.tell())
@@ -244,8 +264,12 @@ class BgzfTests(unittest.TestCase):
         self.check_random("Blast/wnts.xml.bgz")
 
     def test_random_example_fastq(self):
-        """Check random access to Quality/example.fastq.bgz"""
+        """Check random access to Quality/example.fastq.bgz (Unix newlines)"""
         self.check_random("Quality/example.fastq.bgz")
+
+    def test_random_example_dos_fastq(self):
+        """Check random access to Quality/example_dos.fastq.bgz (DOS newlines)"""
+        self.check_random("Quality/example_dos.fastq.bgz")
 
     def test_random_example_cor6(self):
         """Check random access to GenBank/cor6_6.gb.bgz"""

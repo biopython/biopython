@@ -10,7 +10,7 @@ from itertools import chain
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
+from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
 class Hmmer3DomtabParser(Hmmer3TabParser):
@@ -20,7 +20,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
     def _parse_row(self):
         """Returns a dictionary of parsed row values."""
         assert self.line
-        cols = filter(None, self.line.strip().split(' '))
+        cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 23, we have extra description columns
         # combine them all into one string in the 19th column
         if len(cols) > 23:
@@ -139,7 +139,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
 
                 # create qresult and yield if we're at a new qresult or EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    qresult = QueryResult(hit_list, prev_qid)
                     for attr, value in prev['qresult'].items():
                         setattr(qresult, attr, value)
                     yield qresult
@@ -205,7 +205,7 @@ class Hmmer3DomtabHmmhitWriter(object):
         qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
         try:
-            first_qresult = qresults.next()
+            first_qresult = next(qresults)
         except StopIteration:
             handle.write(self._build_header())
         else:
@@ -217,8 +217,8 @@ class Hmmer3DomtabHmmhitWriter(object):
                     handle.write(self._build_row(qresult))
                     qresult_counter += 1
                     hit_counter += len(qresult)
-                    hsp_counter += sum([len(hit) for hit in qresult])
-                    frag_counter += sum([len(hit.fragments) for hit in qresult])
+                    hsp_counter += sum(len(hit) for hit in qresult)
+                    frag_counter += sum(len(hit.fragments) for hit in qresult)
 
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 

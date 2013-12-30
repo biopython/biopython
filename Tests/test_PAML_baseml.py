@@ -172,7 +172,8 @@ class ModTest(unittest.TestCase):
                         "fix_blength": None,
                         "method": 0}
         self.bml.read_ctl_file(self.ctl_file)
-        self.assertEqual(sorted(self.bml._options.keys()), sorted(target_options.keys()))
+        #Compare the dictionary keys:
+        self.assertEqual(sorted(self.bml._options), sorted(target_options))
         for key in target_options:
             self.assertEqual(self.bml._options[key], target_options[key],
                              "%s: %r vs %r"
@@ -193,7 +194,7 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, baseml.read, self.results_file)
 
     def testParseAllVersions(self):
-        folder = os.path.join("PAML","Results", "baseml", "versions")
+        folder = os.path.join("PAML", "Results", "baseml", "versions")
         for results_file in os.listdir(folder):
             file_path = os.path.join(folder, results_file)
             if os.path.isfile(file_path) and results_file[:6] == "baseml":

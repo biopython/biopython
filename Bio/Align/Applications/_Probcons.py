@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program PROBCONS.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
@@ -23,7 +25,7 @@ class ProbconsCommandline(AbstractCommandline):
     >>> from Bio.Align.Applications import ProbconsCommandline
     >>> probcons_cline = ProbconsCommandline(input="unaligned.fasta",
     ...                                      clustalw=True)
-    >>> print probcons_cline
+    >>> print(probcons_cline)
     probcons -clustalw unaligned.fasta
 
     You would typically run the command line with probcons_cline() or via
@@ -32,9 +34,8 @@ class ProbconsCommandline(AbstractCommandline):
     want to save to a file and then parse, e.g.::
 
         stdout, stderr = probcons_cline()
-        handle = open("aligned.aln", "w")
-        handle.write(stdout)
-        handle.close()
+        with open("aligned.aln", "w") as handle:
+            handle.write(stdout)
         from Bio import AlignIO
         align = AlignIO.read("aligned.fasta", "clustalw")
 
@@ -66,16 +67,16 @@ class ProbconsCommandline(AbstractCommandline):
                     "Use CLUSTALW output format instead of MFA"),
             _Option(["-c", "c", "--consistency", "consistency" ],
                     "Use 0 <= REPS <= 5 (default: 2) passes of consistency transformation",
-                    checker_function=lambda x: x in range(0,6),
+                    checker_function=lambda x: x in range(0, 6),
                     equate=False),
             _Option(["-ir", "--iterative-refinement", "iterative-refinement", "ir"],
                     "Use 0 <= REPS <= 1000 (default: 100) passes of "
                     "iterative-refinement",
-                    checker_function=lambda x: x in range(0,1001),
+                    checker_function=lambda x: x in range(0, 1001),
                     equate=False),
             _Option(["-pre", "--pre-training", "pre-training", "pre"],
                     "Use 0 <= REPS <= 20 (default: 0) rounds of pretraining",
-                    checker_function=lambda x: x in range(0,21),
+                    checker_function=lambda x: x in range(0, 21),
                     equate=False),
             _Switch(["-pairs", "pairs"],
                     "Generate all-pairs pairwise alignments"),
@@ -111,10 +112,10 @@ class ProbconsCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running modules doctests..."
+    print("Running modules doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

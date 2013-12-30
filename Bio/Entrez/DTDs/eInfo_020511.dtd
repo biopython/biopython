@@ -1,6 +1,6 @@
 <!--    
                 This is the Current DTD for Entrez eInfo
-$Id: eInfo_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
+$Id: eInfo_020511.dtd 393292 2013-03-22 21:30:47Z fialkov $
 -->
 <!-- ================================================================= -->
 
@@ -8,6 +8,7 @@ $Id: eInfo_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
 <!ELEMENT	Name		(#PCDATA)>	<!-- .+ -->
 <!ELEMENT	FullName	(#PCDATA)>	<!-- .+ -->
 <!ELEMENT	Description	(#PCDATA)>	<!-- .+ -->
+<!ELEMENT	DbBuild		(#PCDATA)>      <!-- .+ -->
 <!ELEMENT	TermCount	(#PCDATA)>	<!-- \d+ -->
 <!ELEMENT	Menu		(#PCDATA)>	<!-- .+ -->
 <!ELEMENT	DbTo		(#PCDATA)>	<!-- \S+ -->
@@ -22,6 +23,8 @@ $Id: eInfo_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
 <!ELEMENT	SingleToken	(#PCDATA)>	<!-- (Y|N) -->
 <!ELEMENT	Hierarchy	(#PCDATA)>	<!-- (Y|N) -->
 <!ELEMENT	IsHidden	(#PCDATA)>	<!-- (Y|N) -->
+<!ELEMENT       IsRangable      (#PCDATA)>      <!-- (Y|N) -->
+<!ELEMENT       IsTruncatable   (#PCDATA)>      <!-- (Y|N) -->
 
 
 <!ELEMENT	DbList		(DbName+)>
@@ -34,7 +37,9 @@ $Id: eInfo_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
 				IsNumerical,
 				SingleToken,
 				Hierarchy,
-                IsHidden)>
+                                IsHidden,
+                                IsRangable?,
+                IsTruncatable?)>
 
 <!ELEMENT	Link		(Name,Menu,Description,DbTo)>
 
@@ -46,6 +51,7 @@ $Id: eInfo_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
 <!ELEMENT	DbInfo		(DbName,
 				MenuName,
 				Description,
+				DbBuild?,
 				Count,
 				LastUpdate,
 				FieldList,

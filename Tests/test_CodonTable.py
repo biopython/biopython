@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import ambiguous_generic_by_id, ambiguous_generic_by_name
 from Bio.Data.CodonTable import ambiguous_rna_by_id, ambiguous_dna_by_id
@@ -10,15 +12,15 @@ from Bio.Data.CodonTable import unambiguous_rna_by_id
 from Bio.Data.CodonTable import list_ambiguous_codons, TranslationError
 
 #Check the extension of stop codons to include well defined ambiguous ones
-assert list_ambiguous_codons(['TGA', 'TAA'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
-assert list_ambiguous_codons(['TAG', 'TGA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
-assert list_ambiguous_codons(['TAG', 'TAA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
-assert list_ambiguous_codons(['UAG', 'UAA'],IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
-assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
+assert list_ambiguous_codons(['TGA', 'TAA'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
+assert list_ambiguous_codons(['TAG', 'TGA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
+assert list_ambiguous_codons(['TAG', 'TAA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
+assert list_ambiguous_codons(['UAG', 'UAA'], IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
+assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
 
 
 #Basic sanity test,
-for n in ambiguous_generic_by_id.keys():
+for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
     if n != 23 :
@@ -49,17 +51,17 @@ for n in ambiguous_generic_by_id.keys():
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
         try:
-            print ambiguous_dna_by_id[n].forward_table["TRA"]
+            print(ambiguous_dna_by_id[n].forward_table["TRA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_rna_by_id[n].forward_table["URA"]
+            print(ambiguous_rna_by_id[n].forward_table["URA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_generic_by_id[n].forward_table["URA"]
+            print(ambiguous_generic_by_id[n].forward_table["URA"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
@@ -72,22 +74,22 @@ for n in ambiguous_generic_by_id.keys():
     and "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
         try:
-            print ambiguous_dna_by_id[n].forward_table["TAR"]
+            print(ambiguous_dna_by_id[n].forward_table["TAR"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_rna_by_id[n].forward_table["UAR"]
+            print(ambiguous_rna_by_id[n].forward_table["UAR"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_generic_by_id[n].forward_table["UAR"]
+            print(ambiguous_generic_by_id[n].forward_table["UAR"])
             assert False, "Should be a stop only"
         except KeyError:
             pass
         try:
-            print ambiguous_generic_by_id[n].forward_table["URR"]
+            print(ambiguous_generic_by_id[n].forward_table["URR"])
             assert False, "Should be a stop OR an amino"
         except TranslationError:
             pass
@@ -125,4 +127,4 @@ assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Stan
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
 
-print "Done"
+print("Done")

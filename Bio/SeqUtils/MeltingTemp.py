@@ -6,6 +6,8 @@
 
 """Calculate the thermodynamic melting temperatures of nucleotide sequences."""
 
+from __future__ import print_function
+
 import math
 
 
@@ -21,9 +23,9 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
 
     Example:
 
-    >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA')
+    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
     59.87
-    >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True)
+    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True))
     68.14
 
     You can also use a Seq object instead of a string,
@@ -31,9 +33,9 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     >>> from Bio.Seq import Seq
     >>> from Bio.Alphabet import generic_nucleotide
     >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA', generic_nucleotide)
-    >>> print "%0.2f" % Tm_staluc(s)
+    >>> print("%0.2f" % Tm_staluc(s))
     59.87
-    >>> print "%0.2f" % Tm_staluc(s, rna=True)
+    >>> print("%0.2f" % Tm_staluc(s, rna=True))
     68.14
 
     """
@@ -97,7 +99,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
                 deltas += 10.5
             dhL = dh + deltah
             dsL = ds + deltas
-            # print "delta h=",dhL
+            # print("delta h=%f" % dhL)
             return dsL, dhL
         else:
             raise ValueError("rna = %r not supported" % rna)
@@ -170,17 +172,17 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
 
     ds = ds-0.368*(len(s)-1)*math.log(saltc/1e3)
     tm = ((1000* (-dh))/(-ds+(R * (math.log(k)))))-273.15
-    # print "ds="+str(ds)
-    # print "dh="+str(dh)
+    # print("ds=%f" % ds)
+    # print("dh=%f" % dh)
     return tm
 
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
     import doctest
-    print "Running doctests..."
+    print("Running doctests...")
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

@@ -25,7 +25,9 @@ from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from Bio._py3k import _bytes_to_string, _as_bytes
+from Bio._py3k import zip
 
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number
@@ -194,7 +196,7 @@ def _abi_parse_header(header, handle):
         # only parse desired dirs
         key = _bytes_to_string(dir_entry[0])
         key += str(dir_entry[1])
-        if key in (list(_EXTRACT.keys()) + _SPCTAGS):
+        if key in (list(_EXTRACT) + _SPCTAGS):
             tag_name = _bytes_to_string(dir_entry[0])
             tag_number = dir_entry[1]
             elem_code = dir_entry[2]
@@ -295,7 +297,7 @@ def _parse_tag_data(elem_code, elem_num, raw_data):
             return bool(data)
         elif elem_code == 18:
             return _bytes_to_string(data[1:])
-        elif self.elem_code == 19:
+        elif elem_code == 19:
             return _bytes_to_string(data[:-1])
         else:
             return data

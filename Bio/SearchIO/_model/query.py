@@ -5,15 +5,20 @@
 
 """Bio.SearchIO object to model search results from a single query."""
 
+from __future__ import print_function
+from Bio._py3k import basestring
+
 from copy import deepcopy
 from itertools import chain
 
 from Bio._py3k import OrderedDict
-from Bio._utils import trim_str
-from Bio.SearchIO._utils import partialcascade
+from Bio._py3k import filter
 
-from _base import _BaseSearchObject
-from hit import Hit
+from Bio._utils import trim_str
+from Bio.SearchIO._utils import optionalcascade
+
+from ._base import _BaseSearchObject
+from .hit import Hit
 
 
 class QueryResult(_BaseSearchObject):
@@ -30,8 +35,8 @@ class QueryResult(_BaseSearchObject):
     invoking `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-    >>> print qresult
+    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+    >>> print(qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -77,7 +82,7 @@ class QueryResult(_BaseSearchObject):
     100
     >>> len(sliced_qresult)
     3
-    >>> print sliced_qresult
+    >>> print(sliced_qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -134,7 +139,7 @@ class QueryResult(_BaseSearchObject):
     ...     hit.id = hit.id.split('|')[3]
     ...     return hit
     >>> mapped_qresult = qresult.hit_map(renamer)
-    >>> print mapped_qresult
+    >>> print(mapped_qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -180,7 +185,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items',)
 
-    def __init__(self, id='<unknown id>', hits=[],
+    def __init__(self, hits=[], id=None,
             hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
@@ -191,14 +196,11 @@ class QueryResult(_BaseSearchObject):
                             that return Hit object IDs.
 
         """
-        if id is None:
-            raise ValueError("Query ID string is required for QueryResult "
-                    "creation")
-
+        # default values
         self._id = id
         self._hit_key_function = hit_key_function
         self._items = OrderedDict()
-        self._description = '<unknown description>'
+        self._description = None
         self.program = '<unknown program>'
         self.target = '<unknown target>'
         self.version = '<unknown version>'
@@ -231,17 +233,17 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
-            for hit in self._items.itervalues():
+            for hit in self._items.values():
                 yield hit
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.iterkeys():
+            for hit_id in self._items.keys():
                 yield hit_id
 
         def iteritems(self):
             """Returns an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():
+            for item in self._items.items():
                 yield item
 
     else:
@@ -271,7 +273,7 @@ class QueryResult(_BaseSearchObject):
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.keys():
+            for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
@@ -287,8 +289,12 @@ class QueryResult(_BaseSearchObject):
     def __len__(self):
         return len(self._items)
 
-    def __nonzero__(self):
+    #Python 3:
+    def __bool__(self):
         return bool(self._items)
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __repr__(self):
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
@@ -343,7 +349,7 @@ class QueryResult(_BaseSearchObject):
             # should we return just a list of Hits instead of a full blown
             # QueryResult object if it's a slice?
             hits = list(self.hits)[hit_key]
-            obj = self.__class__(self.id, hits, self._hit_key_function)
+            obj = self.__class__(hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
@@ -362,9 +368,22 @@ class QueryResult(_BaseSearchObject):
         if not isinstance(hit, Hit):
             raise TypeError("QueryResult objects can only contain Hit objects.")
         # and it must have the same query ID as this object's ID
-        if hit.query_id != self.id:
-            raise ValueError("Expected Hit with query ID '%s', found '%s' "
-                    "instead." % (self.id, hit.query_id))
+        # unless it's the query ID is None (default for empty objects), in which
+        # case we want to use the hit's query ID as the query ID
+        if self.id is not None:
+            if hit.query_id != self.id:
+                raise ValueError("Expected Hit with query ID %r, found %r "
+                        "instead." % (self.id, hit.query_id))
+        else:
+            self.id = hit.query_id
+        # same thing with descriptions
+        if self.description is not None:
+            if hit.query_description != self.description:
+                raise ValueError("Expected Hit with query description %r, "
+                        "found %r instead." % (self.description,
+                        hit.query_description))
+        else:
+            self.description = hit.query_description
 
         self._items[hit_key] = hit
 
@@ -385,8 +404,8 @@ class QueryResult(_BaseSearchObject):
         return
 
     ## properties ##
-    id = partialcascade('_id', 'query_id', """QueryResult ID string""")
-    description = partialcascade('_description', 'query_description',
+    id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
+    description = optionalcascade('_description', 'query_description',
             """QueryResult description""")
 
     @property
@@ -457,7 +476,7 @@ class QueryResult(_BaseSearchObject):
         description begins with the string 'Homo sapiens', case sensitive:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> def desc_filter(hit):
         ...     return hit.description.startswith('Homo sapiens')
         ...
@@ -466,7 +485,7 @@ class QueryResult(_BaseSearchObject):
         >>> filtered = qresult.hit_filter(desc_filter)
         >>> len(filtered)
         39
-        >>> print filtered[:4]
+        >>> print(filtered[:4])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -488,8 +507,8 @@ class QueryResult(_BaseSearchObject):
             True
 
         """
-        hits = filter(func, self.hits)
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        hits = list(filter(func, self.hits))
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -505,8 +524,8 @@ class QueryResult(_BaseSearchObject):
         HSPs in a Hit except for the first one:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-        >>> print qresult[:8]
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+        >>> print(qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -525,7 +544,7 @@ class QueryResult(_BaseSearchObject):
 
         >>> top_hsp = lambda hit: hit[:1]
         >>> mapped_qresult = qresult.hit_map(top_hsp)
-        >>> print mapped_qresult[:8]
+        >>> print(mapped_qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -545,8 +564,8 @@ class QueryResult(_BaseSearchObject):
         """
         hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
-            hits = map(func, hits)
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+            hits = [func(x) for x in hits]
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -555,13 +574,13 @@ class QueryResult(_BaseSearchObject):
         function.
 
         `hsp_filter` is the same as `hit_filter`, except that it filters
-        directly on each HSP object in every Hit. If a the filtering removes
-        all HSP object in a given Hit, the entire Hit will be discarded. This
+        directly on each HSP object in every Hit. If the filtering removes
+        all HSP objects in a given Hit, the entire Hit will be discarded. This
         will result in the QueryResult having less Hit after filtering.
 
         """
-        hits = filter(None, (hit.filter(func) for hit in self.hits))
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        hits = [x for x in (hit.filter(func) for hit in self.hits) if x]
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -573,8 +592,8 @@ class QueryResult(_BaseSearchObject):
         function to all HSP objects in every Hit, instead of the Hit objects.
 
         """
-        hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
-        obj = self.__class__(self.id, hits, self._hit_key_function)
+        hits = [x for x in (hit.map(func) for hit in list(self.hits)[:]) if x]
+        obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -597,12 +616,12 @@ class QueryResult(_BaseSearchObject):
         integer index or hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> len(qresult)
         100
         >>> for hit in qresult[:5]:
-        ...     print hit.id
-        ...
+        ...     print(hit.id)
+        ... 
         gi|262205317|ref|NR_030195.1|
         gi|301171311|ref|NR_035856.1|
         gi|270133242|ref|NR_032573.1|
@@ -649,7 +668,7 @@ class QueryResult(_BaseSearchObject):
         correlated with search rank) of a given hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> qresult.index('gi|301171259|ref|NR_035850.1|')
         7
 
@@ -692,7 +711,7 @@ class QueryResult(_BaseSearchObject):
             self._items = new_hits
         # otherwise, return a new sorted QueryResult object
         else:
-            obj = self.__class__(self.id, sorted_hits, self._hit_key_function)
+            obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 

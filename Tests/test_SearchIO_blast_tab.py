@@ -5,9 +5,6 @@
 
 """Tests for SearchIO BlastIO parsers."""
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
-
 import os
 import unittest
 
@@ -29,8 +26,9 @@ class BlastnTabCases(unittest.TestCase):
     def test_tab_2228_tblastx_001(self):
         "Test parsing TBLASTX 2.2.28+ tabular output (tab_2228_tblastx_001)"
         tab_file = get_file('tab_2228_tblastx_001.txt')
-        qresults = list(parse(tab_file, FMT, fields=all_fields.values(),
-            comments=True))
+        qresults = list(parse(tab_file, FMT,
+                              fields=list(all_fields.values()),
+                              comments=True))
 
         # this a single query, with 192 hits and 243 hsps
         self.assertEqual(1, len(qresults))
@@ -67,7 +65,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
@@ -112,7 +110,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
@@ -152,7 +150,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(32.7, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_tab_2226_tblastn_002(self):
@@ -162,7 +160,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
 
     def test_tab_2226_tblastn_003(self):
         "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_003)"
@@ -172,7 +170,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
@@ -217,7 +215,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_tab_2226_tblastn_004(self):
@@ -227,7 +225,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
@@ -267,7 +265,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(32.7, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_tab_2226_tblastn_005(self):
@@ -278,7 +276,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -288,7 +286,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -336,7 +334,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -379,7 +377,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(32.7, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_tab_2226_tblastn_006(self):
@@ -389,7 +387,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -399,7 +397,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_tab_2226_tblastn_007(self):
@@ -409,7 +407,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -457,7 +455,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_tab_2226_tblastn_008(self):
@@ -467,7 +465,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -510,7 +508,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(32.7, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_tab_2226_tblastn_009(self):
@@ -521,7 +519,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('<unknown program>', qresult.program)
@@ -549,7 +547,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('<unknown program>', qresult.program)
@@ -572,7 +570,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_tab_2226_tblastn_010(self):
@@ -583,7 +581,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -593,7 +591,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -625,7 +623,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -652,7 +650,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(32.7, hsp.bitscore)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_tab_2226_tblastn_011(self):
@@ -663,7 +661,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -673,7 +671,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -751,7 +749,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, hsp.hit_frame)
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -822,7 +820,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(2, hsp.hit_frame)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_tab_2226_tblastn_012(self):
@@ -833,7 +831,7 @@ class BlastnTabCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -844,7 +842,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -855,7 +853,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(3, len(qresult))
 
         # test last qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
@@ -866,7 +864,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(5, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_tab_2226_tblastn_013(self):
@@ -876,7 +874,7 @@ class BlastnTabCases(unittest.TestCase):
         qresults = parse(xml_file, FMT, fields="qseq std sseq")
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('<unknown program>', qresult.program)
@@ -927,7 +925,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL', str(hsp.hit.seq))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
 

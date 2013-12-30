@@ -6,7 +6,7 @@
 #Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
-"""Sequence input/output as SeqRecord objects.
+r"""Sequence input/output as SeqRecord objects.
 
 Bio.SeqIO is also documented at U{http://biopython.org/wiki/SeqIO} and by
 a whole chapter in our tutorial:
@@ -21,7 +21,7 @@ and format string.  This returns an iterator giving SeqRecord objects:
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Fasta/f002", "fasta"):
-    ...     print record.id, len(record)
+    ...     print("%s %i" % (record.id, len(record)))
     gi|1348912|gb|G26680|G26680 633
     gi|1348917|gb|G26685|G26685 413
     gi|1592936|gb|G29385|G29385 471
@@ -38,7 +38,7 @@ raise an exception if there are no records or more than one record:
 
     >>> from Bio import SeqIO
     >>> record = SeqIO.read("Fasta/f001", "fasta")
-    >>> print record.id, len(record)
+    >>> print("%s %i" % (record.id, len(record)))
     gi|3318709|pdb|1A91| 79
 
 This style is useful when you expect a single record only (and would
@@ -48,11 +48,12 @@ record.  Alternatively, use this with a handle when downloading a single
 record from the internet.
 
 However, if you just want the first record from a file containing multiple
-record, use the iterator's next() method:
+record, use the next() function on the iterator (or under Python 2, the
+iterator's next() method):
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.parse("Fasta/f002", "fasta").next()
-    >>> print record.id, len(record)
+    >>> record = next(SeqIO.parse("Fasta/f002", "fasta"))
+    >>> print("%s %i" % (record.id, len(record)))
     gi|1348912|gb|G26680|G26680 633
 
 The above code will work as long as the file contains at least one record.
@@ -73,7 +74,7 @@ If you want random access to the records by number, turn this into a list:
     >>> records = list(SeqIO.parse("Fasta/f002", "fasta"))
     >>> len(records)
     3
-    >>> print records[1].id
+    >>> print(records[1].id)
     gi|1348917|gb|G26685|G26685
 
 If you want random access to the records by a key such as the record id,
@@ -83,7 +84,7 @@ turn the iterator into a dictionary:
     >>> record_dict = SeqIO.to_dict(SeqIO.parse("Fasta/f002", "fasta"))
     >>> len(record_dict)
     3
-    >>> print len(record_dict["gi|1348917|gb|G26685|G26685"])
+    >>> print(len(record_dict["gi|1348917|gb|G26685|G26685"]))
     413
 
 However, using list() or the to_dict() function will load all the records
@@ -95,7 +96,7 @@ providing dictionary like access to any record. For example,
     >>> record_dict = SeqIO.index("Fasta/f002", "fasta")
     >>> len(record_dict)
     3
-    >>> print len(record_dict["gi|1348917|gb|G26685|G26685"])
+    >>> print(len(record_dict["gi|1348917|gb|G26685|G26685"]))
     413
 
 Many but not all of the supported input file formats can be indexed like
@@ -112,7 +113,7 @@ keep the output 100% identical to the input). For example,
     >>> record_dict = SeqIO.index("Fasta/f002", "fasta")
     >>> len(record_dict)
     3
-    >>> print record_dict.get_raw("gi|1348917|gb|G26685|G26685").decode()
+    >>> print(record_dict.get_raw("gi|1348917|gb|G26685|G26685").decode())
     >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
     CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATCTTACTCTTTC
     ATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTTTACAGATGTGAAACTTTCAA
@@ -121,7 +122,7 @@ keep the output 100% identical to the input). For example,
     TCATATTACTNTAAGTTCTATAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGG
     AATTGNTTTGCCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
     <BLANKLINE>
-    >>> print record_dict["gi|1348917|gb|G26685|G26685"].format("fasta")
+    >>> print(record_dict["gi|1348917|gb|G26685|G26685"].format("fasta"))
     >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
     CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATC
     TTACTCTTTCATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTT
@@ -137,6 +138,42 @@ wrapping. Also note that under Python 3, the get_raw method will return a
 bytes string, hence the use of decode to turn it into a (unicode) string.
 This is uncessary on Python 2.
 
+Also note that the get_raw method will preserve the newline endings. This
+example FASTQ file uses Unix style endings (b"\n" only),
+
+    >>> from Bio import SeqIO
+    >>> fastq_dict = SeqIO.index("Quality/example.fastq", "fastq")
+    >>> len(fastq_dict)
+    3
+    >>> raw = fastq_dict.get_raw("EAS54_6_R1_2_1_540_792")
+    >>> raw.count(b"\n")
+    4
+    >>> raw.count(b"\r\n")
+    0
+    >>> b"\r" in raw
+    False
+    >>> len(raw)
+    78
+
+Here is the same file but using DOS/Windows new lines (b"\r\n" instead),
+
+    >>> from Bio import SeqIO
+    >>> fastq_dict = SeqIO.index("Quality/example_dos.fastq", "fastq")
+    >>> len(fastq_dict)
+    3
+    >>> raw = fastq_dict.get_raw("EAS54_6_R1_2_1_540_792")
+    >>> raw.count(b"\n")
+    4
+    >>> raw.count(b"\r\n")
+    4
+    >>> b"\r\n" in raw
+    True
+    >>> len(raw)
+    82
+
+Because this uses two bytes for each new line, the file is longer than
+the Unix equivalent with only one byte.
+
 
 Input - Alignments
 ==================
@@ -146,12 +183,13 @@ you a SeqRecord for each row of each alignment:
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Clustalw/hedgehog.aln", "clustal"):
-    ...     print record.id, len(record)
+    ...     print("%s %i" % (record.id, len(record)))
     gi|167877390|gb|EDS40773.1| 447
     gi|167234445|ref|NP_001107837. 447
     gi|74100009|gb|AAZ99217.1| 447
     gi|13990994|dbj|BAA33523.2| 447
     gi|56122354|gb|AAV74328.1| 447
+
 
 Output
 ======
@@ -168,9 +206,8 @@ Or, using a handle::
 
     from Bio import SeqIO
     records = ...
-    handle = open("example.faa", "w")
-    SeqIO.write(records, handle, "fasta")
-    handle.close()
+    with open("example.faa", "w") as handle:
+        SeqIO.write(records, handle, "fasta")
 
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.
@@ -259,8 +296,8 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 making up each alignment as SeqRecords.
 """
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
+from __future__ import print_function
+from Bio._py3k import basestring
 
 __docformat__ = "epytext en"  # not just plaintext
 
@@ -314,20 +351,20 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
-import AbiIO
-import AceIO
-import FastaIO
-import IgIO  # IntelliGenetics or MASE format
-import InsdcIO  # EMBL and GenBank
-import PdbIO
-import PhdIO
-import PirIO
-import SeqXmlIO
-import SffIO
-import SwissIO
-import TabIO
-import QualityIO  # FastQ and qual files
-import UniprotIO
+from . import AbiIO
+from . import AceIO
+from . import FastaIO
+from . import IgIO  # IntelliGenetics or MASE format
+from . import InsdcIO  # EMBL and GenBank
+from . import PdbIO
+from . import PhdIO
+from . import PirIO
+from . import SeqXmlIO
+from . import SffIO
+from . import SwissIO
+from . import TabIO
+from . import QualityIO  # FastQ and qual files
+from . import UniprotIO
 
 
 #Convention for format names is "mainname-subtype" in lower case.
@@ -462,9 +499,9 @@ def parse(handle, format, alphabet=None):
     >>> from Bio import SeqIO
     >>> filename = "Fasta/sweetpea.nu"
     >>> for record in SeqIO.parse(filename, "fasta"):
-    ...    print "ID", record.id
-    ...    print "Sequence length", len(record)
-    ...    print "Sequence alphabet", record.seq.alphabet
+    ...    print("ID %s" % record.id)
+    ...    print("Sequence length %i" % len(record))
+    ...    print("Sequence alphabet %s" % record.seq.alphabet)
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
     Sequence alphabet SingleLetterAlphabet()
@@ -476,9 +513,9 @@ def parse(handle, format, alphabet=None):
     >>> from Bio.Alphabet import generic_dna
     >>> filename = "Fasta/sweetpea.nu"
     >>> for record in SeqIO.parse(filename, "fasta", generic_dna):
-    ...    print "ID", record.id
-    ...    print "Sequence length", len(record)
-    ...    print "Sequence alphabet", record.seq.alphabet
+    ...    print("ID %s" % record.id)
+    ...    print("Sequence length %i" % len(record))
+    ...    print("Sequence alphabet %s" % record.seq.alphabet)
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
     Sequence alphabet DNAAlphabet()
@@ -488,9 +525,13 @@ def parse(handle, format, alphabet=None):
 
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
+    >>> try:
+    ...     from StringIO import StringIO # Python 2
+    ... except ImportError:
+    ...     from io import StringIO # Python 3
+    ...
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
-    ...     print record.id, record.seq
+    ...     print("%s %s" % (record.id, record.seq))
     Alpha ACCGGATGTA
     Beta AGGCTCGGTTA
 
@@ -572,11 +613,11 @@ def read(handle, format, alphabet=None):
 
     >>> from Bio import SeqIO
     >>> record = SeqIO.read("GenBank/arab1.gb", "genbank")
-    >>> print "ID", record.id
+    >>> print("ID %s" % record.id)
     ID AC007323.5
-    >>> print "Sequence length", len(record)
+    >>> print("Sequence length %i" % len(record))
     Sequence length 86436
-    >>> print "Sequence alphabet", record.seq.alphabet
+    >>> print("Sequence alphabet %s" % record.seq.alphabet)
     Sequence alphabet IUPACAmbiguousDNA()
 
     If the handle contains no records, or more than one record,
@@ -593,8 +634,8 @@ def read(handle, format, alphabet=None):
     shown in the example above).  Instead use:
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.parse("GenBank/cor6_6.gb", "genbank").next()
-    >>> print "First record's ID", record.id
+    >>> record = next(SeqIO.parse("GenBank/cor6_6.gb", "genbank"))
+    >>> print("First record's ID %s" % record.id)
     First record's ID X55053.1
 
     Use the Bio.SeqIO.parse(handle, format) function if you want
@@ -602,13 +643,13 @@ def read(handle, format, alphabet=None):
     """
     iterator = parse(handle, format, alphabet)
     try:
-        first = iterator.next()
+        first = next(iterator)
     except StopIteration:
         first = None
     if first is None:
         raise ValueError("No records found in handle")
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     if second is not None:
@@ -638,9 +679,9 @@ def to_dict(sequences, key_function=None):
     >>> filename = "GenBank/cor6_6.gb"
     >>> format = "genbank"
     >>> id_dict = SeqIO.to_dict(SeqIO.parse(filename, format))
-    >>> print sorted(id_dict)
+    >>> print(sorted(id_dict))
     ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
-    >>> print id_dict["L31939.1"].description
+    >>> print(id_dict["L31939.1"].description)
     Brassica rapa (clone bif72) kin mRNA, complete cds.
 
     A more complex example, using the key_function argument in order to
@@ -652,8 +693,8 @@ def to_dict(sequences, key_function=None):
     >>> format = "genbank"
     >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(filename, format),
     ...               key_function = lambda rec : seguid(rec.seq))
-    >>> for key, record in sorted(seguid_dict.iteritems()):
-    ...     print key, record.id
+    >>> for key, record in sorted(seguid_dict.items()):
+    ...     print("%s %s" % (key, record.id))
     /wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1
     BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1
     SabZaA4V2eLE9/2Fm5FnyYy07J4 X55053.1
@@ -698,13 +739,13 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> sorted(records)
     ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
-    >>> print records["EAS54_6_R1_2_1_540_792"].format("fasta")
+    >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
     >>> "EAS54_6_R1_2_1_540_792" in records
     True
-    >>> print records.get("Missing", None)
+    >>> print(records.get("Missing", None))
     None
 
     If the file is BGZF compressed, this is detected automatically. Ordinary
@@ -714,7 +755,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records = SeqIO.index("Quality/example.fastq.bgz", "fastq")
     >>> len(records)
     3
-    >>> print records["EAS54_6_R1_2_1_540_792"].seq
+    >>> print(records["EAS54_6_R1_2_1_540_792"].seq)
     TTGGCAGGCCAAGGCCGATGGATCA
 
     Note that this pseudo dictionary will not support all the methods of a
@@ -740,7 +781,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> sorted(records)
     ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
-    >>> print records["EAS54_6_R1_2_1_540_792"].format("fasta")
+    >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
@@ -759,7 +800,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> sorted(records)
     [(413, 324), (443, 348), (540, 792)]
-    >>> print records[(540, 792)].format("fasta")
+    >>> print(records[(540, 792)].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
@@ -767,7 +808,7 @@ def index(filename, format, alphabet=None, key_function=None):
     True
     >>> "EAS54_6_R1_2_1_540_792" in records
     False
-    >>> print records.get("Missing", None)
+    >>> print(records.get("Missing", None))
     None
 
     Another common use case would be indexing an NCBI style FASTA file,
@@ -796,7 +837,7 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess # Lazy import
+    from ._index import _FormatToRandomAccess # Lazy import
     from Bio.File import _IndexedSeqFileDict
     try:
         proxy_class = _FormatToRandomAccess[format]
@@ -853,7 +894,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     BGZF compressed files are supported, and detected automatically. Ordinary
     GZIP compressed files are not supported.
 
-    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
+    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
+    glob which is useful for building lists of files.
     """
     #Try and give helpful error messages:
     if not isinstance(index_filename, basestring):
@@ -874,7 +916,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess  # Lazy import
+    from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (index_filename, filenames, format, alphabet, key_function)
@@ -907,11 +949,15 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     For example, going from a filename to a handle:
 
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
+    >>> try:
+    ...     from StringIO import StringIO # Python 2
+    ... except ImportError:
+    ...     from io import StringIO # Python 3
+    ...
     >>> handle = StringIO("")
     >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "fasta")
     3
-    >>> print handle.getvalue()
+    >>> print(handle.getvalue())
     >EAS54_6_R1_2_1_413_324
     CCCTTCTTGTCTTCAGCGTTTCTCC
     >EAS54_6_R1_2_1_540_792
@@ -934,7 +980,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
-    from _convert import _handle_convert  # Lazy import
+    from ._convert import _handle_convert  # Lazy import
     with as_handle(in_file, in_mode) as in_handle:
         with as_handle(out_file, out_mode) as out_handle:
             count = _handle_convert(in_handle, in_format,

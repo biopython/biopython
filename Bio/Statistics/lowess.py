@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module implements the Lowess function for nonparametric regression.
+"""Implements the Lowess function for nonparametric regression.
 
 Functions:
 lowess        Fit a smooth nonparametric regression curve to a scatterplot.
@@ -20,13 +19,17 @@ approach to regression analysis by local fitting", Journal of the American
 Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 """
 
+from __future__ import print_function
+
+from Bio._py3k import range
+
 import numpy
 
 try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
     # in NumPy, as it does not require a full sort.
-except ImportError, x:
+except ImportError as x:
     # Use the median function in NumPy if Bio.Cluster is not available
     from numpy import median
 
@@ -60,7 +63,7 @@ def lowess(x, y, f=2. / 3., iter=3):
     >>> result = lowess(x, y)
     >>> len(result)
     50
-    >>> print "[%0.2f, ..., %0.2f]" % (result[0], result[-1])
+    >>> print("[%0.2f, ..., %0.2f]" % (result[0], result[-1]))
     [4.85, ..., 84.98]
     """
     n = len(x)
@@ -72,7 +75,7 @@ def lowess(x, y, f=2. / 3., iter=3):
     yest = numpy.zeros(n)
     delta = numpy.ones(n)
     for iteration in range(iter):
-        for i in xrange(n):
+        for i in range(n):
             weights = delta * w[:, i]
             weights_mul_x = weights * x
             b1 = numpy.dot(weights, y)
@@ -95,10 +98,10 @@ def lowess(x, y, f=2. / 3., iter=3):
 
 def _test():
     """Run the Bio.Statistics.lowess module's doctests."""
-    print "Running doctests..."
+    print("Running doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

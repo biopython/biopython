@@ -1,4 +1,12 @@
-import urllib
+# Copyright 2009 by Michiel de Hoon. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
+#Importing these functions with leading underscore as not intended for reuse
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import urlencode as _urlencode
+
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 
@@ -37,12 +45,12 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
     """
     parameters = {'seq': seq,
                   'output': output}
-    for key, value in keywords.iteritems():
+    for key, value in keywords.items():
         if value is not None:
             parameters[key] = value
-    command = urllib.urlencode(parameters)
+    command = _urlencode(parameters)
     url = "%s/cgi-bin/prosite/PSScan.cgi?%s" % (mirror, command)
-    handle = urllib.urlopen(url)
+    handle = _urlopen(url)
     return handle
 
 
@@ -71,7 +79,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if data[:5]!="<?xml":
+            if data[:5].decode('utf-8') != "<?xml":
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)

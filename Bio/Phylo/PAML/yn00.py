@@ -4,8 +4,8 @@
 # as part of this package.
 
 import os.path
-from _paml import Paml
-import _parse_yn00
+from ._paml import Paml
+from . import _parse_yn00
 
 #TODO - Restore use of with statement for closing handles automatically
 #after dropping Python 2.4
@@ -43,8 +43,7 @@ class Yn00(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        if True:  # Dummy statement to preserve indentation for diff
-            ctl_handle = open(self.ctl_file, 'w')
+        with open(self.ctl_file, 'w') as ctl_handle:
             ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
             ctl_handle.write("outfile = %s\n" % self._rel_out_file)
             for option in self._options.items():
@@ -54,7 +53,6 @@ class Yn00(Paml):
                     # commented out.
                     continue
                 ctl_handle.write("%s = %s\n" % (option[0], option[1]))
-            ctl_handle.close()
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the yn00 instance.
@@ -63,40 +61,37 @@ class Yn00(Paml):
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
         else:
-            ctl_handle = open(ctl_file)
-            for line in ctl_handle:
-                line = line.strip()
-                uncommented = line.split("*",1)[0]
-                if uncommented != "":
-                    if "=" not in uncommented:
-                        ctl_handle.close()
-                        raise AttributeError(
-                            "Malformed line in control file:\n%r" % line)
-                    (option, value) = uncommented.split("=")
-                    option = option.strip()
-                    value = value.strip()
-                    if option == "seqfile":
-                        self.alignment = value
-                    elif option == "outfile":
-                        self.out_file = value
-                    elif option not in self._options:
-                        ctl_handle.close()
-                        raise KeyError("Invalid option: %s" % option)
-                    else:
-                        if "." in value or "e-" in value:
-                            try:
-                                converted_value = float(value)
-                            except:
-                                converted_value = value
+            with open(ctl_file) as ctl_handle:
+                for line in ctl_handle:
+                    line = line.strip()
+                    uncommented = line.split("*", 1)[0]
+                    if uncommented != "":
+                        if "=" not in uncommented:
+                            raise AttributeError(
+                                "Malformed line in control file:\n%r" % line)
+                        (option, value) = uncommented.split("=")
+                        option = option.strip()
+                        value = value.strip()
+                        if option == "seqfile":
+                            self.alignment = value
+                        elif option == "outfile":
+                            self.out_file = value
+                        elif option not in self._options:
+                            raise KeyError("Invalid option: %s" % option)
                         else:
-                            try:
-                                converted_value = int(value)
-                            except:
-                                converted_value = value
-                        temp_options[option] = converted_value
-            ctl_handle.close()
-        for option in self._options.keys():
-            if option in temp_options.keys():
+                            if "." in value or "e-" in value:
+                                try:
+                                    converted_value = float(value)
+                                except:
+                                    converted_value = value
+                            else:
+                                try:
+                                    converted_value = int(value)
+                                except:
+                                    converted_value = value
+                            temp_options[option] = converted_value
+        for option in self._options:
+            if option in temp_options:
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
@@ -116,9 +111,8 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
-    handle = open(results_file)
-    lines = handle.readlines()
-    handle.close()
+    with open(results_file) as handle:
+        lines = handle.readlines()
     for line_num in range(len(lines)):
         line = lines[line_num]
         if "(A) Nei-Gojobori (1986) method" in line:

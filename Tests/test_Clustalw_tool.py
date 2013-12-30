@@ -7,6 +7,8 @@
 
 #TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
 #and *.aln where we have not requested an explicit name?
+from __future__ import print_function
+
 from Bio import MissingExternalDependencyError
 
 import sys
@@ -58,18 +60,18 @@ if sys.platform == "win32":
             if clustalw_exe:
                 break
 else:
-    import commands
+    from Bio._py3k import getoutput
     #Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
     #command, but this does cause them to quit cleanly.  Otherwise they prompt
     #the user for input (causing a lock up).
-    output = commands.getoutput("clustalw2 --version")
+    output = getoutput("clustalw2 --version")
     #Since "not found" may be in another language, try and be sure this is
     #really the clustalw tool's output
     if "not found" not in output and "CLUSTAL" in output \
     and "Multiple Sequence Alignments" in output:
         clustalw_exe = "clustalw2"
     if not clustalw_exe:
-        output = commands.getoutput("clustalw --version")
+        output = getoutput("clustalw --version")
         if "not found" not in output and "CLUSTAL" in output \
         and "Multiple Sequence Alignments" in output:
             clustalw_exe = "clustalw"
@@ -115,7 +117,7 @@ class ClustalWTestCase(unittest.TestCase):
         align = AlignIO.read(cline.outfile, "clustal")
         #The length of the alignment will depend on the version of clustalw
         #(clustalw 2.1 and clustalw 1.83 are certainly different).
-        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile,"clustal"))
+        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
             self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
@@ -142,7 +144,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
                             "non-zero exit status" in str(err))
@@ -158,12 +160,17 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-
-            #Zero return code is a possible bug in clustal?
-            self.add_file_to_clean(input_file + ".aln")
+            #Zero return code is a possible bug in clustalw 2.1?
             self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
-        except ApplicationError, err:
-            self.assertTrue(str(err) == "No records found in handle")
+        except ApplicationError as err:
+            #Good, non-zero return code indicating an error in clustalw
+            #e.g. Using clustalw 1.83 get:
+            #Command 'clustalw -infile=Fasta/f001' returned non-zero exit status 4
+            pass
+
+        if os.path.isfile(input_file + ".aln"):
+            #Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):
         """Test an input file containing an invalid sequence."""
@@ -173,7 +180,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             #Ideally we'd catch the return code and raise the specific
             #error for "invalid format", rather than just notice there
             #is not output file.
@@ -292,7 +299,7 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
             self.standard_test_procedure(cline)
             self.assertTrue(os.path.isfile(statistics_file))
         else:
-            print "Skipping ClustalW2 specific test."
+            print("Skipping ClustalW2 specific test.")
 
 
 if __name__ == "__main__":

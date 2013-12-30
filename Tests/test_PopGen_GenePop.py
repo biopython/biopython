@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import os
 import unittest
 
@@ -34,17 +36,17 @@ class AppTest(unittest.TestCase):
         """
         ctrl = GenePopController()
         pop_iter, locus_iter = ctrl.calc_allele_genotype_freqs("PopGen" + os.sep + "big.gen")
-        #print pop, loci
+        #print("%s %s" % (pop, loci))
         #for popc in pop_iter:
         #    pop_name, loci_content = popc
-        #    print pop_name
-        #    for locus in loci_content.keys():
+        #    print(pop_name)
+        #    for locus in loci_content:
         #        geno_list, hets, freq_fis = loci_content[locus]
-        #        print locus
-        #        print hets
-        #        print freq_fis
-        #        print geno_list
-        #    print
+        #        print(locus)
+        #        print(hets)
+        #        print(freq_fis)
+        #        print(geno_list)
+        #    print("")
 
     def test_calc_diversities_fis_with_identity(self):
         """Test calculations of diversities ...
@@ -83,7 +85,7 @@ class AppTest(unittest.TestCase):
         ctrl = GenePopController()
         (allFis, allFst, allFit), itr = ctrl.calc_fst_all("PopGen" + os.sep + "haplo.gen")
         litr = list(itr)
-        assert not type(allFst) == int
+        assert not isinstance(allFst, int)
         assert len(litr) == 37
         assert litr[36][0] == "Locus37"
 

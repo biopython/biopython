@@ -28,6 +28,8 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.lib import colors
 
 from math import sqrt
@@ -86,7 +88,7 @@ class GraphData(object):
     """
     def __init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen,
-                 center=None, colour=None, altcolour=None, centre=None):
+                 center=None, colour=None, altcolour=None):
         """__init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen)
 
@@ -107,8 +109,7 @@ class GraphData(object):
                        values (some styles only) (overridden by backwards
                        compatible argument with UK spelling, colour).
 
-            o center Value at which x-axis crosses y-axis (overridden by
-                     backwards comparible argument with UK spelling, centre).
+            o center Value at which x-axis crosses y-axis.
 
         """
 
@@ -117,8 +118,6 @@ class GraphData(object):
             color = colour
         if altcolour is not None:
             altcolor = altcolour
-        if centre is not None:
-            center = centre
 
         self.id = id            # Unique identifier for the graph
         self.data = {}          # holds values, keyed by sequence position
@@ -132,13 +131,6 @@ class GraphData(object):
         self.negcolor = altcolor  # Color to draw 'low' values
         self.linewidth = 2          # linewidth to use in line graphs
         self.center = center        # value at which x-axis crosses y-axis
-
-    @property
-    def centre(self):
-        """Backwards compatible alias for center (DEPRECATED)."""
-        warnings.warn("The .centre attribute is deprecated, use .center instead",
-                      Bio.BiopythonDeprecationWarning)
-        return self.center
 
     def set_data(self, data):
         """ set_data(self, data)
@@ -156,7 +148,7 @@ class GraphData(object):
             Return data as a list of sorted (position, value) tuples
         """
         data = []
-        for xval in self.data.keys():
+        for xval in self.data:
             yval = self.data[xval]
             data.append((xval, yval))
         data.sort()
@@ -178,8 +170,7 @@ class GraphData(object):
             Returns the (minimum, lowerQ, medianQ, upperQ, maximum) values as
             a tuple
         """
-        data = self.data.values()
-        data.sort()
+        data = sorted(self.data.values())
         datalen = len(data)
         return(data[0], data[datalen//4], data[datalen//2],
                data[3*datalen//4], data[-1])
@@ -190,8 +181,7 @@ class GraphData(object):
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
         """
-        positions = self.data.keys()
-        positions.sort()
+        positions = sorted(self.data) # i.e. dict keys
         # Return first and last positions in graph
         #print len(self.data)
         return (positions[0], positions[-1])
@@ -201,7 +191,7 @@ class GraphData(object):
 
             Returns the mean value for the data points
         """
-        data = self.data.values()
+        data = list(self.data.values())
         sum = 0.
         for item in data:
             sum += float(item)
@@ -212,7 +202,7 @@ class GraphData(object):
 
             Returns the sample standard deviation for the data
         """
-        data = self.data.values()
+        data = list(self.data.values())
         m = self.mean()
         runtotal = 0.
         for entry in data:
@@ -248,10 +238,8 @@ class GraphData(object):
             high = index.stop
             if index.step is not None and index.step != 1:
                 raise ValueError
-            positions = self.data.keys()
-            positions.sort()
             outlist = []
-            for pos in positions:
+            for pos in sorted(self.data):
                 if pos >= low and pos <=high:
                     outlist.append((pos, self.data[pos]))
             return outlist

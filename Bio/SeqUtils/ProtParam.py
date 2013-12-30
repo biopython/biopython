@@ -6,20 +6,23 @@
 Example,
 
 X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
-print X.count_amino_acids()
-print X.get_amino_acids_percent()
-print X.molecular_weight()
-print X.aromaticity()
-print X.instability_index()
-print X.flexibility()
-print X.isoelectric_point()
-print X.secondary_structure_fraction()
-print X.protein_scale(ProtParamData.kd, 9, 0.4)
+print(X.count_amino_acids())
+print(X.get_amino_acids_percent())
+print(X.molecular_weight())
+print(X.aromaticity())
+print(X.instability_index())
+print(X.flexibility())
+print(X.isoelectric_point())
+print(X.secondary_structure_fraction())
+print(X.protein_scale(ProtParamData.kd, 9, 0.4))
 """
+#TODO - Turn that into a working doctest
+
+from __future__ import print_function
 
 import sys
-import ProtParamData  # Local
-import IsoelectricPoint  # Local
+from . import ProtParamData  # Local
+from . import IsoelectricPoint  # Local
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
@@ -61,7 +64,7 @@ class ProteinAnalysis(object):
         It is not recalculated upon subsequent calls.
         """
         if self.amino_acids_content is None:
-            prot_dic = dict([(k, 0) for k in IUPACData.protein_letters])
+            prot_dic = dict((k, 0) for k in IUPACData.protein_letters)
             for aa in prot_dic:
                 prot_dic[aa] = self.sequence.count(aa)
 
@@ -121,7 +124,7 @@ class ProteinAnalysis(object):
         aromatic_aas = 'YWF'
         aa_percentages = self.get_amino_acids_percent()
 
-        aromaticity = sum([aa_percentages[aa] for aa in aromatic_aas])
+        aromaticity = sum(aa_percentages[aa] for aa in aromatic_aas)
 
         return aromaticity
 
@@ -285,8 +288,8 @@ class ProteinAnalysis(object):
         """
         aa_percentages = self.get_amino_acids_percent()
 
-        helix = sum([aa_percentages[r] for r in 'VIYFWL'])
-        turn  = sum([aa_percentages[r] for r in 'NPGS'])
-        sheet = sum([aa_percentages[r] for r in 'EMAL'])
+        helix = sum(aa_percentages[r] for r in 'VIYFWL')
+        turn  = sum(aa_percentages[r] for r in 'NPGS')
+        sheet = sum(aa_percentages[r] for r in 'EMAL')
 
         return helix, turn, sheet

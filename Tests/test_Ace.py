@@ -1,3 +1,10 @@
+# Copyright 2004 by Frank Kauff.  All rights reserved.
+# Revisions copyright 2008-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2009-2009 by Michiel de Hoon. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import unittest
 
 from Bio.Sequencing import Ace
@@ -497,7 +504,7 @@ class AceTestOne(unittest.TestCase):
         contigs=Ace.parse(self.handle)
 
         # First contig
-        contig = contigs.next()
+        contig = next(contigs)
         self.assertEqual(len(contig.reads), 2)
         self.assertEqual(contig.name, "Contig1")
         self.assertEqual(contig.nbases, 856)
@@ -576,7 +583,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].wr, None)
 
         # Second contig
-        contig = contigs.next()
+        contig = next(contigs)
         self.assertEqual(len(contig.reads), 14)
         self.assertEqual(contig.name, "Contig2")
         self.assertEqual(contig.nbases, 3296)
@@ -982,7 +989,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[13].wr[0].date, "040217:110357")
 
         # Make sure there are no more contigs
-        self.assertRaises(StopIteration, contigs.next)
+        self.assertRaises(StopIteration, next, contigs)
 
 
 class AceTestTwo(unittest.TestCase):
@@ -1166,7 +1173,7 @@ class AceTestTwo(unittest.TestCase):
         contigs=Ace.parse(self.handle)
 
         # First (and only) contig
-        contig = contigs.next()
+        contig = next(contigs)
 
         self.assertEqual(len(contig.reads), 6)
         self.assertEqual(contig.name, "Contig1")
@@ -1328,7 +1335,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[5].wr, None)
 
         # Make sure there are no more contigs
-        self.assertRaises(StopIteration, contigs.next)
+        self.assertRaises(StopIteration, next, contigs)
 
 
 class AceTestThree(unittest.TestCase):
@@ -1592,7 +1599,7 @@ class AceTestThree(unittest.TestCase):
         contigs=Ace.parse(self.handle)
 
         # First (and only) contig
-        contig = contigs.next()
+        contig = next(contigs)
 
         self.assertEqual(len(contig.reads), 8)
         self.assertEqual(contig.name, "Contig1")
@@ -1830,7 +1837,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[7].wr, None)
 
         # Make sure there are no more contigs
-        self.assertRaises(StopIteration, contigs.next)
+        self.assertRaises(StopIteration, next, contigs)
 
 
 if __name__ == "__main__":

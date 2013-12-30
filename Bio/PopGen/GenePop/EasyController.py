@@ -10,7 +10,7 @@ This interface is less efficient than the standard GenePopControler
 
 """
 
-from Controller import GenePopController
+from .Controller import GenePopController
 from Bio.PopGen import GenePop
 
 
@@ -28,9 +28,8 @@ class EasyController(object):
         self.__allele_frequency = {}  # More caches like this needed!
 
     def get_basic_info(self):
-        f=open(self._fname)
-        rec = GenePop.read(f)
-        f.close()
+        with open(self._fname) as f:
+            rec = GenePop.read(f)
         return rec.pop_list, rec.loci_list
 
     def test_hw_pop(self, pop_pos, test_type = "probability"):
@@ -41,8 +40,8 @@ class EasyController(object):
         else:
             loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname, ".P")
         for i in range(pop_pos-1):
-            hw_res.next()
-        return hw_res.next()
+            next(hw_res)
+        return next(hw_res)
 
     def test_hw_global(self, test_type = "deficiency", enum_test = True,
                        dememorization = 10000, batches = 20, iterations = 5000):
@@ -111,7 +110,7 @@ class EasyController(object):
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         pop_iter = list(pop_iter)
-        return pop_iter[pop_pos][1][locus_name][2].keys()
+        return list(pop_iter[pop_pos][1][locus_name][2].keys())
 
     def get_alleles_all_pops(self, locus_name):
         """Returns the alleles for a certain population and locus.

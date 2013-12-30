@@ -17,6 +17,8 @@ queens you want to try to calculate this for.
 When called as part of the Biopython unit test suite, 5 queens are used.
 """
 # standard library
+from __future__ import print_function
+
 import sys
 import random
 import time
@@ -38,16 +40,16 @@ VERBOSE = 0
 
 def main(num_queens):
 
-    print "Calculating for %s queens..." % num_queens
+    print("Calculating for %s queens..." % num_queens)
 
     num_orgs = 1000
-    print "Generating an initial population of %s organisms..." % num_orgs
+    print("Generating an initial population of %s organisms..." % num_orgs)
     queen_alphabet = QueensAlphabet(num_queens)
 
     start_population = Organism.random_population(queen_alphabet, num_queens,
                                                   num_orgs, queens_fitness)
 
-    print "Evolving the population and searching for a solution..."
+    print("Evolving the population and searching for a solution...")
 
     mutator = QueensMutation(mutation_rate = 0.05)
     crossover = QueensCrossover(queens_fitness, crossover_prob = .2,
@@ -68,9 +70,9 @@ def main(num_queens):
                 unique_solutions.append(org)
 
     if VERBOSE:
-        print "Search started at %s and ended at %s" % (start_time, end_time)
+        print("Search started at %s and ended at %s" % (start_time, end_time))
         for orgm in unique_solutions:
-            print "We did it!", org
+            print("We did it! %s" % org)
             display_board(org.genome)
 
 
@@ -80,18 +82,18 @@ def display_board(genome):
     Inspired by the display function in the queens.py solution to the N-queens
     problem in the Python demo scripts.
     """
-    print '+-' + '--'*len(genome) + '+'
+    print('+-' + '--'*len(genome) + '+')
 
     for row in range(len(genome)):
-        print '|',
+        elements = []
         for genome_item in genome:
             if genome_item == row:
-                print 'Q',
+                elements.append('Q')
             else:
-                print '.',
-        print '|'
+                elements.append('.')
+        print('|' + ''.join(elements) + '|')
 
-    print '+-' + '--'*len(genome) + '+'
+    print('+-' + '--'*len(genome) + '+')
 
 
 def queens_solved(organisms):
@@ -217,7 +219,7 @@ class QueensRepair:
         # check if we should repair or not
         repair_chance = random.random()
         if repair_chance <= self._repair_prob:
-            while 1:
+            while True:
                 # get the duplicated items we need to work on
                 duplicated_items = self._get_duplicates(organism.genome)
 
@@ -402,10 +404,10 @@ if __name__ == "__main__":
         num_queens = int(sys.argv[1])
         main(num_queens)
     else:
-        print "Usage:"
-        print "python test_GAQueens.py <Number of Queens to place>\n"
-        print "where <Number of Queens to place> is an optional parameter"
-        print "specifying how many queens you want to try to calculate"
-        print "this for. The default number of queens to place is 5."
-        print "Range 1 to 9 is supported."
+        print("Usage:")
+        print("python test_GAQueens.py <Number of Queens to place>\n")
+        print("where <Number of Queens to place> is an optional parameter")
+        print("specifying how many queens you want to try to calculate")
+        print("this for. The default number of queens to place is 5.")
+        print("Range 1 to 9 is supported.")
         sys.exit(1)

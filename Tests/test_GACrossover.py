@@ -130,7 +130,7 @@ class UniformTest(unittest.TestCase):
         self.assertEqual(str(new_org_1.genome).count("1"),
                          str(new_org_2.genome).count("2"),
                          "There should be equal, inverse distributions")
-        self.assertEqual(str(new_org_1.genome).count("2") ,
+        self.assertEqual(str(new_org_1.genome).count("2"),
                          str(new_org_2.genome).count("1"),
                          "There should be equal, inverse distributions")
 
@@ -181,7 +181,7 @@ class InterleaveTest(unittest.TestCase):
         self.assertEqual(str(new_org_1.genome).count("1"),
                          str(new_org_2.genome).count("2"),
                          "There should be equal, inverse distributions")
-        self.assertEqual(str(new_org_1.genome).count("2") ,
+        self.assertEqual(str(new_org_1.genome).count("2"),
                          str(new_org_2.genome).count("1"),
                          "There should be equal, inverse distributions")
 
@@ -225,8 +225,8 @@ class FourPointTest(unittest.TestCase):
         genome_2 = MutableSeq("22222", self.alphabet)
         self.org_2 = Organism(genome_2, test_fitness)
 
-        self.sym_crossover = GeneralPointCrossover(3,1.0)
-        self.asym_crossover = GeneralPointCrossover(4,1.0)
+        self.sym_crossover = GeneralPointCrossover(3, 1.0)
+        self.asym_crossover = GeneralPointCrossover(4, 1.0)
 
     def test_basic_crossover(self):
         """Test basic 4-point crossover functionality.
@@ -259,7 +259,7 @@ class FourPointTest(unittest.TestCase):
         self.assertEqual(str(new_org_1.genome).count("1"),
                          str(new_org_2.genome).count("2"),
                          "There should be equal, inverse distributions")
-        self.assertEqual(str(new_org_1.genome).count("2") ,
+        self.assertEqual(str(new_org_1.genome).count("2"),
                          str(new_org_2.genome).count("1"),
                          "There should be equal, inverse distributions")
 

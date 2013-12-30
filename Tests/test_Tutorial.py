@@ -1,3 +1,11 @@
+# Copyright 2011-2013 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+# This will apply to all the doctests too:
+from __future__ import print_function
+
 import unittest
 import doctest
 import os
@@ -9,9 +17,15 @@ warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
-    rt = refactor.RefactoringTool(refactor.get_fixers_from_package("lib2to3.fixes"))
-    assert rt.refactor_docstring(">>> print 2+2\n4\n", "example") == \
-           ">>> print(2+2)\n4\n"
+    fixers = refactor.get_fixers_from_package("lib2to3.fixes")
+    fixers.remove("lib2to3.fixes.fix_print") # Already using print function
+    rt = refactor.RefactoringTool(fixers)
+    assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == \
+                                 ">>> print(2+2)\n4\n"
+    assert rt.refactor_docstring('>>> print("Two plus two is", 2+2)\n'
+                                 'Two plus two is 4\n', "example2") == \
+                                 '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
+
 
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
 if not os.path.isfile(tutorial) and sys.version_info[0] >= 3:
@@ -33,7 +47,7 @@ def _extract(handle):
         line = handle.readline()
         if not line:
             if lines:
-                print "".join(lines[:30])
+                print("".join(lines[:30]))
                 raise ValueError("Didn't find end of test starting: %r", lines[0])
             else:
                 raise ValueError("Didn't find end of test!")
@@ -112,6 +126,7 @@ for name, example, folder, deps in extract_doctests(tutorial):
         continue
 
     if sys.version_info[0] >= 3:
+        example = ">>> from __future__ import print_function\n" + example
         example = rt.refactor_docstring(example, name)
 
     def funct(n, d, f):
@@ -127,7 +142,7 @@ for name, example, folder, deps in extract_doctests(tutorial):
         return method
 
     setattr(TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ","_"),
+            "doctest_%s" % name.replace(" ", "_"),
             funct(name, example, folder))
     del funct
 
@@ -159,13 +174,13 @@ class TutorialTestCase(unittest.TestCase):
 #This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
     if missing_deps:
-        print "Skipping tests needing the following:"
+        print("Skipping tests needing the following:")
         for dep in sorted(missing_deps):
-            print " - %s" % dep
-    print "Running Tutorial doctests..."
+            print(" - %s" % dep)
+    print("Running Tutorial doctests...")
     import doctest
     tests = doctest.testmod()
     if tests[0]:
         #Note on Python 2.5+ can use tests.failed rather than tests[0]
         raise RuntimeError("%i/%i tests failed" % tests)
-    print "Tests done"
+    print("Tests done")

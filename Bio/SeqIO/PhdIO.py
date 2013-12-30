@@ -17,24 +17,24 @@ from the Biopython unit tests:
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse(open("Phd/phd1"), "phd"):
-    ...     print record.id
-    ...     print record.seq[:10], "..."
-    ...     print record.letter_annotations["phred_quality"][:10], "..."
+    ...     print(record.id)
+    ...     print("%s..." % record.seq[:10])
+    ...     print("%s..." % record.letter_annotations["phred_quality"][:10])
     34_222_(80-A03-19).b.ab1
-    ctccgtcgga ...
-    [9, 9, 10, 19, 22, 37, 28, 28, 24, 22] ...
+    ctccgtcgga...
+    [9, 9, 10, 19, 22, 37, 28, 28, 24, 22]...
     425_103_(81-A03-19).g.ab1
-    cgggatccca ...
-    [14, 17, 22, 10, 10, 10, 15, 8, 8, 9] ...
+    cgggatccca...
+    [14, 17, 22, 10, 10, 10, 15, 8, 8, 9]...
     425_7_(71-A03-19).b.ab1
-    acataaatca ...
-    [10, 10, 10, 10, 8, 8, 6, 6, 6, 6] ...
+    acataaatca...
+    [10, 10, 10, 10, 8, 8, 6, 6, 6, 6]...
 
 Since PHRED files contain quality scores, you can save them as FASTQ or as
 QUAL files, for example using Bio.SeqIO.write(...), or simply with the format
 method of the SeqRecord object:
 
-    >>> print record[:50].format("fastq")
+    >>> print(record[:50].format("fastq"))
     @425_7_(71-A03-19).b.ab1
     acataaatcaaattactnaccaacacacaaaccngtctcgcgtagtggag
     +
@@ -43,7 +43,7 @@ method of the SeqRecord object:
 
 Or,
 
-    >>> print record[:50].format("qual")
+    >>> print(record[:50].format("qual"))
     >425_7_(71-A03-19).b.ab1
     10 10 10 10 8 8 6 6 6 6 8 7 6 6 6 8 3 0 3 6 6 6 8 6 6 6 6 7
     10 13 6 6 3 0 3 8 8 8 8 10 8 8 8 6 6 6 6 6 6 6
@@ -51,6 +51,8 @@ Or,
 
 Note these examples only show the first 50 bases to keep the output short.
 """
+
+from __future__ import print_function
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
@@ -150,3 +152,4 @@ class PhdWriter(SequentialSequenceWriter):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

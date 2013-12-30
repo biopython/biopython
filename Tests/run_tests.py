@@ -24,11 +24,12 @@ By default, all tests are run.
 """
 
 # The default verbosity (not verbose)
+from __future__ import print_function
+
 VERBOSITY = 0
 
 # standard modules
 import sys
-import cStringIO
 import os
 import re
 import getopt
@@ -38,6 +39,15 @@ import unittest
 import doctest
 import distutils.util
 import gc
+from io import BytesIO
+
+# Note, we want to be able to call run_tests.py BEFORE
+# Biopython is installed, so we can't use this:
+# from Bio._py3k import StringIO
+try:
+    from StringIO import StringIO # Python 2 (byte strings)
+except ImportError:
+    from io import StringIO # Python 3 (unicode strings)
 
 
 def is_pypy():
@@ -69,6 +79,7 @@ DOCTEST_MODULES = [
                    "Bio.Align.Generic",
                    "Bio.Align.Applications._Clustalw",
                    "Bio.Align.Applications._ClustalOmega",
+                   "Bio.Align.Applications._MSAProbs",
                    "Bio.Align.Applications._Mafft",
                    "Bio.Align.Applications._Muscle",
                    "Bio.Align.Applications._Probcons",
@@ -85,8 +96,6 @@ DOCTEST_MODULES = [
                    "Bio.KEGG.Compound",
                    "Bio.KEGG.Enzyme",
                    "Bio.Motif",
-                   "Bio.Motif.Applications._AlignAce",
-                   "Bio.Motif.Applications._XXmotif",
                    "Bio.motifs",
                    "Bio.motifs.applications._alignace",
                    "Bio.motifs.applications._xxmotif",
@@ -138,9 +147,39 @@ except ImportError:
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
 
+#Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
+def _have_bug17666():
+    """Debug function to check if Python's gzip is broken (PRIVATE).
+
+    Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
+    3.2.4 and 3.3.1 only.
+    """
+    if os.name == 'java':
+        #Jython not affected
+        return False
+    import gzip
+    #Would like to use byte literal here:
+    bgzf_eof = "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
+               "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+    if sys.version_info[0] >= 3:
+        import codecs
+        bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
+    h = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
+    try:
+        data = h.read()
+        h.close()
+        assert not data, "Should be zero length, not %i" % len(data)
+        return False
+    except TypeError as err:
+        #TypeError: integer argument expected, got 'tuple'
+        h.close()
+        return True
+if _have_bug17666():
+    DOCTEST_MODULES.remove("Bio.bgzf")
+
 #HACK: Since Python2.5 under Windows have slightly different str(float) output,
 #we're removing doctests that may fail because of this
-if sys.platform == "win32" and sys.version_info < (2,6):
+if sys.platform == "win32" and sys.version_info < (2, 6):
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hit")
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hsp")
 
@@ -175,9 +214,9 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
             "doctest", "help", "offline"])
-    except getopt.error, msg:
-        print msg
-        print __doc__
+    except getopt.error as msg:
+        print(msg)
+        print(__doc__)
         return 2
 
     verbosity = VERBOSITY
@@ -185,22 +224,22 @@ def main(argv):
     # deal with the options
     for o, a in opts:
         if o == "--help":
-            print __doc__
+            print(__doc__)
             return 0
         if o == "--offline":
-            print "Skipping any tests requiring internet access"
+            print("Skipping any tests requiring internet access")
             #This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
             #The check() function should now report internet not available
         if o == "-g" or o == "--generate":
             if len(args) > 1:
-                print "Only one argument (the test name) needed for generate"
-                print __doc__
+                print("Only one argument (the test name) needed for generate")
+                print(__doc__)
                 return 2
             elif len(args) == 0:
-                print "No test name specified to generate output for."
-                print __doc__
+                print("No test name specified to generate output for.")
+                print(__doc__)
                 return 2
             # strip off .py if it was included
             if args[0][-3:] == ".py":
@@ -219,8 +258,8 @@ def main(argv):
         if args[arg_num][-3:] == ".py":
             args[arg_num] = args[arg_num][:-3]
 
-    print "Python version:", sys.version
-    print "Operating system:", os.name, sys.platform
+    print("Python version: %s" % sys.version)
+    print("Operating system: %s %s" % (os.name, sys.platform))
 
     # run the tests
     runner = TestRunner(args, verbosity)
@@ -345,14 +384,14 @@ class TestRunner(unittest.TextTestRunner):
         if "doctest" in self.tests:
             self.tests.remove("doctest")
             self.tests.extend(DOCTEST_MODULES)
-        stream = cStringIO.StringIO()
+        stream = StringIO()
         unittest.TextTestRunner.__init__(self, stream,
                 verbosity=verbosity)
 
     def runTest(self, name):
         from Bio import MissingExternalDependencyError
         result = self._makeResult()
-        output = cStringIO.StringIO()
+        output = StringIO()
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
         global system_lang
@@ -398,10 +437,10 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("FAIL\n")
                 result.printErrors()
             return False
-        except MissingExternalDependencyError, msg:
+        except MissingExternalDependencyError as msg:
             sys.stderr.write("skipping. %s\n" % msg)
             return True
-        except Exception, msg:
+        except Exception as msg:
             # This happened during the import
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1+"\n")
@@ -409,7 +448,7 @@ class TestRunner(unittest.TextTestRunner):
             result.stream.write(result.separator2+"\n")
             result.stream.write(traceback.format_exc())
             return False
-        except KeyboardInterrupt, err:
+        except KeyboardInterrupt as err:
             # Want to allow this, and abort the test
             # (see below for special case)
             raise err

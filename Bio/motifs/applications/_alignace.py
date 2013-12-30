@@ -23,24 +23,35 @@ Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology
 1998 Oct;16(10):939-45.
 
 """
+from __future__ import print_function
+
 from Bio.Application import AbstractCommandline, _Option, _Argument
+
+import warnings
+from Bio import BiopythonDeprecationWarning
 
 
 class AlignAceCommandline(AbstractCommandline):
-    """Create a commandline for the AlignAce program.
+    """Create a commandline for the AlignAce program (DEPRECATED).
 
     Example:
 
-    >>> from Bio.Motif.Applications import AlignAceCommandline
+    >>> from Bio.motifs.applications import AlignAceCommandline
     >>> in_file = "sequences.fasta"
     >>> alignace_cline = AlignAceCommandline(infile=in_file, gcback=0.55)
-    >>> print alignace_cline
+    >>> print(alignace_cline)
     AlignACE -i sequences.fasta -gcback 0.55
 
     You would typically run the command line with alignace_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="AlignACE", **kwargs):
+        warnings.warn("""The AlignACE application wrapper is deprecated and
+                      is likely to be removed in a future release of Biopython,
+                      since an up to date version of the AlignACE software
+                      cannot be obtained anymore. If you have a copy of
+                      AlignACE 4, please consider contacting the Biopython
+                      developers.""", BiopythonDeprecationWarning)
         self.parameters = \
           [
             _Option(["-i", "infile"],
@@ -92,19 +103,23 @@ class CompareAceCommandline(AbstractCommandline):
 
     Example:
 
-    >>> from Bio.Motif.Applications import CompareAceCommandline
+    >>> from Bio.motifs.applications import CompareAceCommandline
     >>> m1_file = "sequences1.fasta"
     >>> m2_file = "sequences2.fasta"
     >>> compareace_cline = CompareAceCommandline(motif1=m1_file, motif2=m2_file)
-    >>> print compareace_cline
+    >>> print(compareace_cline)
     CompareACE sequences1.fasta sequences2.fasta
 
     You would typically run the command line with compareace_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="CompareACE", **kwargs):
-        import os.path
-
+        warnings.warn("""The CompareACE application wrapper is deprecated and
+                      is likely to be removed in a future release of Biopython,
+                      since an up to date version of the AlignACE software
+                      cannot be obtained anymore. If you have a copy of
+                      AlignACE 4, please consider contacting the Biopython
+                      developers.""", BiopythonDeprecationWarning)
         self.parameters = \
           [
             _Argument(["motif1"],
@@ -121,10 +136,10 @@ class CompareAceCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running AlignAce doctests..."
+    print("Running alignace doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 
 if __name__ == "__main__":

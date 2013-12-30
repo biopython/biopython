@@ -254,7 +254,8 @@ class _BaseExonerateParser(object):
     def _parse_alignment_header(self):
         # read all header lines and store them
         aln_header = []
-        while not self.line == '\n':
+        # header is everything before the first empty line
+        while self.line.strip():
             aln_header.append(self.line.strip())
             self.line = self.handle.readline()
         # then parse them
@@ -368,7 +369,7 @@ class _BaseExonerateParser(object):
                     hsp_list = []
 
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid)
+                    qresult = QueryResult(id=prev_qid)
                     for hit in hit_list:
                         # not using append since Exonerate may separate the
                         # same hit if it has different strands

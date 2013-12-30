@@ -27,7 +27,7 @@
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from _Colors import ColorTranslator
+from ._Colors import ColorTranslator
 
 
 class Feature(object):

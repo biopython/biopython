@@ -5,6 +5,8 @@
 
 """Fast atom neighbor lookup using a KD tree (implemented in C++)."""
 
+from __future__ import print_function
+
 import numpy
 
 from Bio.KDTree import KDTree
@@ -133,7 +135,5 @@ if __name__=="__main__":
     for i in range(0, 20):
         #Make a list of 100 atoms
         al = [Atom() for j in range(100)]
-
-        ns=NeighborSearch(al)
-
-        print "Found ", len(ns.search_all(5.0))
+        ns = NeighborSearch(al)
+        print("Found %i" % len(ns.search_all(5.0)))

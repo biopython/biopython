@@ -21,10 +21,8 @@ from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from Bio._py3k import StringIO
+
 
 #For speed try to use cElementTree rather than ElementTree
 try:
@@ -399,7 +397,7 @@ class Parser(object):
         def _parse_position(element, offset=0):
             try:
                 position = int(element.attrib['position']) + offset
-            except KeyError, err:
+            except KeyError as err:
                 position = None
             status = element.attrib.get('status', '')
             if status == 'unknown':

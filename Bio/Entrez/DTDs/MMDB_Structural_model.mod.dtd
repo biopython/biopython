@@ -1,0 +1,676 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "mmdb2.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "MMDB-Structural-model"
+================================================= -->
+
+<!--
+$Revision: 6.0 $
+**********************************************************************
+
+  Biological Macromolecule 3-D Structure Data Types for MMDB,
+                A Molecular Modeling Database
+
+  Definitions for structural models
+
+  By Hitomi Ohkawa, Jim Ostell, Chris Hogue and Steve Bryant 
+
+  National Center for Biotechnology Information
+  National Institutes of Health
+  Bethesda, MD 20894 USA
+
+  July, 1996
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Biostruc-model,
+          Model-id,
+          Model-coordinate-set-id -->
+
+<!-- Elements referenced from other modules:
+          Chem-graph-pntrs,
+          Atom-pntrs,
+          Chem-graph-alignment,
+          Sphere,
+          Cone,
+          Cylinder,
+          Brick,
+          Transform FROM MMDB-Features,
+          Biostruc-id FROM MMDB,
+          Pub FROM NCBI-Pub -->
+<!-- ============================================ -->
+
+<!--
+ A structural model maps chemical components into a measured three-
+ dimensional space. PDB-derived biostrucs generally contain 4 models, 
+ corresponding to "views" of the structure of a biomolecular assemble with 
+ increasing levels of complexity.  Model types indicate the complexity of the
+ view.  
+ The model named "NCBI all atom" represents a view suitable for most 
+ computational biology applications.  It provides complete atomic coordinate 
+ data for a "single best" model, omitting statistical disorder information 
+ and/or ensemble structure descriptions provided in the source PDB file.  
+ Construction of the single best model is based on the assumption that the 
+ contents of the "alternate conformation" field from pdb imply no correlation
+ among the occupancies of multiple sites assigned to sets of atoms: the best 
+ site is chosen only on the basis of highest occupancy. Note, however, that 
+ alternate conformation sets where correlation is implied are generally 
+ constrained in crystallographic refinement to have uniform occupancy, and 
+ will thus be selected as a set. For ensemble models the model which assigns 
+ coordinates to the most atoms is chosen.  If numbers of coordinates are the 
+ same, the model occurring first in the PDB file is selected.  The single 
+ best model includes complete coordinates for all nonpolymer components, but 
+ omits those classified as "solvent".  Model type is 3 for this model. 
+ The model named "NCBI backbone" represents a simple view intended for 
+ graphic displays and rapid transmission over a network.  It includes only 
+ alpha carbon or backbone phosphate coordinates for biopolymers. It is based 
+ on selection of alpha-carbon and backbone phosphate atoms from the "NCBI
+ all atom" model. The model type is set to 2.  An even simpler model gives 
+ only a cartoon representation, using cylinders corresponding to secondary 
+ structure elements.  This is named "NCBI vector", and has model type 1.
+ The models named "PDB Model 1", "PDB Model 2", etc. represent the complete
+ information provided by PDB, including full descriptions of statistical
+ disorder.  The name of the model is based on the contents of the PDB MODEL
+ record, with a default name of "PDB Model 1" for PDB files which contain 
+ only a single model.  Construction of these models is based on the 
+ assumption that contents of the PDB "alternate conformation" field are 
+ intended to imply correlation among the occupancies of atom sets flagged by
+ the same identifier.  The special flag " " (blank) is assumed to indicate 
+ sites occupied in all alternate conformations, and sites flagged otherwise,
+ together with " ", to indicate a distinct member of an ensemble of 
+ alternate conformations.  Note that construction of ensemble members 
+ according to these assumption requires two validation checks on PDB 
+ "alternate conformation" flags: they must be unique among sites assigned to 
+ the same atom, and that the special " " flag must occur only for unique
+ sites.  Sites which violate the first check are flagged as "u", for 
+ "unknown"; they are omitted from all ensemble definitions but are 
+ nontheless retained in the coordinate list.  Sites which violate the second
+ check are flagged "b" for "blank", and are included in an appropriately
+ named ensemble.  The model type for pdb all models is 4.
+ Note that in the MMDB database models are stored in the ASN.1 stream in
+ order of increasing model type value.  Since models occur as the last item
+ in a biostruc, parsers may avoid reading the entire stream if the desired
+ model is one of the simplified types, which occur first in the stream. This
+ can save considerable I/O time, particularly for large ensemble models from 
+ NMR determinations.
+-->
+<!ELEMENT Biostruc-model (
+        Biostruc-model_id, 
+        Biostruc-model_type, 
+        Biostruc-model_descr?, 
+        Biostruc-model_model-space?, 
+        Biostruc-model_model-coordinates?)>
+
+<!ELEMENT Biostruc-model_id (Model-id)>
+
+<!ELEMENT Biostruc-model_type (Model-type)>
+
+<!ELEMENT Biostruc-model_descr (Model-descr*)>
+<!--
+ The model space defines measurement units and any external reference frame.
+ Coordinates refer to a right-handed orthogonal system defined on axes 
+ tagged x, y and z in the coordinate and feature definitions of a biostruc.
+ Coordinates from PDB-derived structures are reported without change, in
+ angstrom units.  The units of temperature and occupancy factors are not
+ defined explicitly in PDB, but are inferred from their value range.
+-->
+<!ELEMENT Biostruc-model_model-space (Model-space)>
+
+<!ELEMENT Biostruc-model_model-coordinates (Model-coordinate-set*)>
+
+
+<!ELEMENT Model-id (%INTEGER;)>
+
+
+<!ELEMENT Model-type (%INTEGER;)>
+<!ATTLIST Model-type value (
+        ncbi-vector |
+        ncbi-backbone |
+        ncbi-all-atom |
+        pdb-model |
+        other
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Model-descr (
+        Model-descr_name | 
+        Model-descr_pdb-reso | 
+        Model-descr_pdb-method | 
+        Model-descr_pdb-comment | 
+        Model-descr_other-comment | 
+        Model-descr_attribution)>
+
+<!ELEMENT Model-descr_name (#PCDATA)>
+
+<!ELEMENT Model-descr_pdb-reso (#PCDATA)>
+
+<!ELEMENT Model-descr_pdb-method (#PCDATA)>
+
+<!ELEMENT Model-descr_pdb-comment (#PCDATA)>
+
+<!ELEMENT Model-descr_other-comment (#PCDATA)>
+
+<!ELEMENT Model-descr_attribution (Pub)>
+
+<!--
+ The model space defines measurement units and any external reference frame.
+ Coordinates refer to a right-handed orthogonal system defined on axes 
+ tagged x, y and z in the coordinate and feature definitions of a biostruc.
+ Coordinates from PDB-derived structures are reported without change, in
+ angstrom units.  The units of temperature and occupancy factors are not
+ defined explicitly in PDB, but are inferred from their value range.
+-->
+<!ELEMENT Model-space (
+        Model-space_coordinate-units, 
+        Model-space_thermal-factor-units?, 
+        Model-space_occupancy-factor-units?, 
+        Model-space_density-units?, 
+        Model-space_reference-frame?)>
+
+<!ELEMENT Model-space_coordinate-units %ENUM;>
+<!ATTLIST Model-space_coordinate-units value (
+        angstroms |
+        nanometers |
+        other |
+        unknown
+        ) #REQUIRED >
+
+
+<!ELEMENT Model-space_thermal-factor-units %ENUM;>
+<!ATTLIST Model-space_thermal-factor-units value (
+        b |
+        u |
+        other |
+        unknown
+        ) #REQUIRED >
+
+
+<!ELEMENT Model-space_occupancy-factor-units %ENUM;>
+<!ATTLIST Model-space_occupancy-factor-units value (
+        fractional |
+        electrons |
+        other |
+        unknown
+        ) #REQUIRED >
+
+
+<!ELEMENT Model-space_density-units %ENUM;>
+<!ATTLIST Model-space_density-units value (
+        electrons-per-unit-volume |
+        arbitrary-scale |
+        other |
+        unknown
+        ) #REQUIRED >
+
+<!--
+ An external reference frame is a pointer to another biostruc, with an 
+ optional operator to rotate and translate coordinates into its model space.
+ This item is intended for representation of homology-derived model 
+ structures, and is not present for structures from PDB.
+-->
+<!ELEMENT Model-space_reference-frame (Reference-frame)>
+
+<!--
+ An external reference frame is a pointer to another biostruc, with an 
+ optional operator to rotate and translate coordinates into its model space.
+ This item is intended for representation of homology-derived model 
+ structures, and is not present for structures from PDB.
+-->
+<!ELEMENT Reference-frame (
+        Reference-frame_biostruc-id, 
+        Reference-frame_rotation-translation?)>
+
+<!ELEMENT Reference-frame_biostruc-id (Biostruc-id)>
+
+<!ELEMENT Reference-frame_rotation-translation (Transform)>
+
+<!--
+ Atomic coordinates may be assigned literally or by reference to another
+ biostruc.  The reference coordinate type is used to represent homology-
+ derived model structures.  PDB-derived structures have literal coordinates.
+ Referenced coordinates identify another biostruc, any transformation to be 
+ applied to coordinates from that biostruc, and a mapping of the chemical
+ graph of the present biostruc onto that of the referenced biostruc.  They
+ give an "alignment" of atoms in the current biostruc with those in another,
+ from which the coordinates of matched atoms may be retrieved.  For non-
+ atomic models "alignment" may also be represented by molecule and residue
+ equivalence lists.  Referenced coordinates are a data item inteded for 
+ representation of homology models, with an explicit pointer to their source
+ information. They do not occur in PDB-derived models.
+-->
+<!ELEMENT Model-coordinate-set (
+        Model-coordinate-set_id?, 
+        Model-coordinate-set_descr?, 
+        Model-coordinate-set_coordinates)>
+
+<!ELEMENT Model-coordinate-set_id (Model-coordinate-set-id)>
+
+<!ELEMENT Model-coordinate-set_descr (Model-descr*)>
+
+<!ELEMENT Model-coordinate-set_coordinates (
+        Model-coordinate-set_coordinates_literal | 
+        Model-coordinate-set_coordinates_reference)>
+<!--
+ Literal coordinates map chemical components into the model space.  Three 
+ mapping types are allowed, atomic coordinate models, density-grid models,
+ and surface models. A model consists of a sequence of such coordinate sets, 
+ and may thus combine coordinate subsets which have a different source.  
+ PDB-derived models contain a single atomic coordinate set, as they by
+ definition represent information from a single source.
+-->
+<!ELEMENT Model-coordinate-set_coordinates_literal (Coordinates)>
+
+<!ELEMENT Model-coordinate-set_coordinates_reference (Chem-graph-alignment)>
+
+
+<!ELEMENT Model-coordinate-set-id (%INTEGER;)>
+
+<!--
+ Literal coordinates map chemical components into the model space.  Three 
+ mapping types are allowed, atomic coordinate models, density-grid models,
+ and surface models. A model consists of a sequence of such coordinate sets, 
+ and may thus combine coordinate subsets which have a different source.  
+ PDB-derived models contain a single atomic coordinate set, as they by
+ definition represent information from a single source.
+-->
+<!ELEMENT Coordinates (
+        Coordinates_atomic | 
+        Coordinates_surface | 
+        Coordinates_density)>
+<!--
+ Literal atomic coordinate values give location, occupancy and order
+ parameters, and a pointer to a specific atom defined in the biostruc graph.
+ Temperature and occupancy factors have their conventional crystallographic
+ definitions, with units defined in the model space declaration.  Atoms,
+ sites, temperature-factors, occupancies and alternate-conformation-ids
+ are parallel arrays, i.e. the have the same number of values as given by
+ number-of-points. Conformation ensembles represent distinct correlated-
+ disorder subsets of the coordinates.  They will be present only for certain 
+ "views" of PDB structures, as described above. Their derivation from PDB-
+ supplied "alternate-conformation" ids is described below. 
+-->
+<!ELEMENT Coordinates_atomic (Atomic-coordinates)>
+<!--
+ Literal surface coordinates define the chemical components whose structure
+ is described by a surface, and the surface itself.  The surface may be
+ either a regular geometric solid or a triangle-mesh of arbitrary shape.
+-->
+<!ELEMENT Coordinates_surface (Surface-coordinates)>
+<!--
+ Literal density coordinates define the chemical components whose structure
+ is described by a density grid, parameters of this grid, and density values.
+-->
+<!ELEMENT Coordinates_density (Density-coordinates)>
+
+<!--
+ Literal atomic coordinate values give location, occupancy and order
+ parameters, and a pointer to a specific atom defined in the biostruc graph.
+ Temperature and occupancy factors have their conventional crystallographic
+ definitions, with units defined in the model space declaration.  Atoms,
+ sites, temperature-factors, occupancies and alternate-conformation-ids
+ are parallel arrays, i.e. the have the same number of values as given by
+ number-of-points. Conformation ensembles represent distinct correlated-
+ disorder subsets of the coordinates.  They will be present only for certain 
+ "views" of PDB structures, as described above. Their derivation from PDB-
+ supplied "alternate-conformation" ids is described below. 
+-->
+<!ELEMENT Atomic-coordinates (
+        Atomic-coordinates_number-of-points, 
+        Atomic-coordinates_atoms, 
+        Atomic-coordinates_sites, 
+        Atomic-coordinates_temperature-factors?, 
+        Atomic-coordinates_occupancies?, 
+        Atomic-coordinates_alternate-conf-ids?, 
+        Atomic-coordinates_conf-ensembles?)>
+
+<!ELEMENT Atomic-coordinates_number-of-points (%INTEGER;)>
+
+<!ELEMENT Atomic-coordinates_atoms (Atom-pntrs)>
+<!--
+ The atoms whose location is described by each coordinate are identified
+ via a hierarchical pointer to the chemical graph of the biomolecular
+ assembly.  Coordinates may be matched with atoms in the chemical structure
+ by the values of the molecule, residue and atom id's given here,  which 
+ match exactly the items of the same type defined in Biostruc-graph.
+ Coordinates are given as integer values, with a scale factor to convert 
+ to real values for each x, y or z, in the units indicated in model-space.
+ Integer values must be divided by the the scale factor.  This use of integer
+ values reduces the ASN.1 stream size. The scale factors for temperature 
+ factors and occupancies are given separately, but must be used in the same 
+ fashion to produce properly scaled real values.
+-->
+<!ELEMENT Atomic-coordinates_sites (Model-space-points)>
+
+<!ELEMENT Atomic-coordinates_temperature-factors (Atomic-temperature-factors)>
+
+<!ELEMENT Atomic-coordinates_occupancies (Atomic-occupancies)>
+<!--
+ An alternate conformation id is optionally associated with each coordinate. 
+ Aside from corrections due to the validation checks described above, the 
+ contents of MMDB Alternate-conformation-ids are identical to the PDB 
+ "alternate conformation" field.
+-->
+<!ELEMENT Atomic-coordinates_alternate-conf-ids (Alternate-conformation-ids)>
+
+<!ELEMENT Atomic-coordinates_conf-ensembles (Conformation-ensemble*)>
+
+<!--
+ The atoms whose location is described by each coordinate are identified
+ via a hierarchical pointer to the chemical graph of the biomolecular
+ assembly.  Coordinates may be matched with atoms in the chemical structure
+ by the values of the molecule, residue and atom id's given here,  which 
+ match exactly the items of the same type defined in Biostruc-graph.
+ Coordinates are given as integer values, with a scale factor to convert 
+ to real values for each x, y or z, in the units indicated in model-space.
+ Integer values must be divided by the the scale factor.  This use of integer
+ values reduces the ASN.1 stream size. The scale factors for temperature 
+ factors and occupancies are given separately, but must be used in the same 
+ fashion to produce properly scaled real values.
+-->
+<!ELEMENT Model-space-points (
+        Model-space-points_scale-factor, 
+        Model-space-points_x, 
+        Model-space-points_y, 
+        Model-space-points_z)>
+
+<!ELEMENT Model-space-points_scale-factor (%INTEGER;)>
+
+<!ELEMENT Model-space-points_x (Model-space-points_x_E*)>
+
+
+<!ELEMENT Model-space-points_x_E (%INTEGER;)>
+
+<!ELEMENT Model-space-points_y (Model-space-points_y_E*)>
+
+
+<!ELEMENT Model-space-points_y_E (%INTEGER;)>
+
+<!ELEMENT Model-space-points_z (Model-space-points_z_E*)>
+
+
+<!ELEMENT Model-space-points_z_E (%INTEGER;)>
+
+
+<!ELEMENT Atomic-temperature-factors (
+        Atomic-temperature-factors_isotropic | 
+        Atomic-temperature-factors_anisotropic)>
+
+<!ELEMENT Atomic-temperature-factors_isotropic (Isotropic-temperature-factors)>
+
+<!ELEMENT Atomic-temperature-factors_anisotropic (Anisotropic-temperature-factors)>
+
+
+<!ELEMENT Isotropic-temperature-factors (
+        Isotropic-temperature-factors_scale-factor, 
+        Isotropic-temperature-factors_b)>
+
+<!ELEMENT Isotropic-temperature-factors_scale-factor (%INTEGER;)>
+
+<!ELEMENT Isotropic-temperature-factors_b (Isotropic-temperature-factors_b_E*)>
+
+
+<!ELEMENT Isotropic-temperature-factors_b_E (%INTEGER;)>
+
+
+<!ELEMENT Anisotropic-temperature-factors (
+        Anisotropic-temperature-factors_scale-factor, 
+        Anisotropic-temperature-factors_b-11, 
+        Anisotropic-temperature-factors_b-12, 
+        Anisotropic-temperature-factors_b-13, 
+        Anisotropic-temperature-factors_b-22, 
+        Anisotropic-temperature-factors_b-23, 
+        Anisotropic-temperature-factors_b-33)>
+
+<!ELEMENT Anisotropic-temperature-factors_scale-factor (%INTEGER;)>
+
+<!ELEMENT Anisotropic-temperature-factors_b-11 (Anisotropic-temperature-factors_b-11_E*)>
+
+
+<!ELEMENT Anisotropic-temperature-factors_b-11_E (%INTEGER;)>
+
+<!ELEMENT Anisotropic-temperature-factors_b-12 (Anisotropic-temperature-factors_b-12_E*)>
+
+
+<!ELEMENT Anisotropic-temperature-factors_b-12_E (%INTEGER;)>
+
+<!ELEMENT Anisotropic-temperature-factors_b-13 (Anisotropic-temperature-factors_b-13_E*)>
+
+
+<!ELEMENT Anisotropic-temperature-factors_b-13_E (%INTEGER;)>
+
+<!ELEMENT Anisotropic-temperature-factors_b-22 (Anisotropic-temperature-factors_b-22_E*)>
+
+
+<!ELEMENT Anisotropic-temperature-factors_b-22_E (%INTEGER;)>
+
+<!ELEMENT Anisotropic-temperature-factors_b-23 (Anisotropic-temperature-factors_b-23_E*)>
+
+
+<!ELEMENT Anisotropic-temperature-factors_b-23_E (%INTEGER;)>
+
+<!ELEMENT Anisotropic-temperature-factors_b-33 (Anisotropic-temperature-factors_b-33_E*)>
+
+
+<!ELEMENT Anisotropic-temperature-factors_b-33_E (%INTEGER;)>
+
+
+<!ELEMENT Atomic-occupancies (
+        Atomic-occupancies_scale-factor, 
+        Atomic-occupancies_o)>
+
+<!ELEMENT Atomic-occupancies_scale-factor (%INTEGER;)>
+
+<!ELEMENT Atomic-occupancies_o (Atomic-occupancies_o_E*)>
+
+
+<!ELEMENT Atomic-occupancies_o_E (%INTEGER;)>
+
+<!--
+ An alternate conformation id is optionally associated with each coordinate. 
+ Aside from corrections due to the validation checks described above, the 
+ contents of MMDB Alternate-conformation-ids are identical to the PDB 
+ "alternate conformation" field.
+-->
+<!ELEMENT Alternate-conformation-ids (Alternate-conformation-id*)>
+
+
+<!ELEMENT Alternate-conformation-id (#PCDATA)>
+
+<!--
+ Correlated disorder ensemble is defined by a set of alternate conformation 
+ id's which identify coordinates relevant to that ensemble. These are 
+ defined from the validated and corrected contents of the PDB "alternate
+ conformation" field as described above.  A given ensemble, for example, may
+ consist of atom sites flagged by " " and "A" Alternate-conformation-ids. 
+ Names for ensembles are constructed from these flags. This example would be
+ named, in its description, "PDB Ensemble blank plus A".
+ Note that this interpretation is consistent with common PDB usage of the 
+ "alternate conformation" field, but that PDB specifications do not formally
+ distinguish between correlated and uncorrelated disorder in crystallographic
+ models. Ensembles identified in MMDB thus may not correspond to the meaning
+ intended by PDB or the depositor.  No information is lost, however, and
+ if the intended meaning is known alternative ensemble descriptions may be
+ reconstructed directly from the Alternate-conformation-ids.
+ Note that correlated disorder as defined here is allowed within an atomic 
+ coordinate set but not between the multiple sets which may define a model. 
+ Multiple sets within the same model are intended as a means to represent 
+ assemblies modeled from different experimentally determined structures,
+ where correlated disorder between coordinate sets is not relevant.
+-->
+<!ELEMENT Conformation-ensemble (
+        Conformation-ensemble_name, 
+        Conformation-ensemble_alt-conf-ids)>
+
+<!ELEMENT Conformation-ensemble_name (#PCDATA)>
+
+<!ELEMENT Conformation-ensemble_alt-conf-ids (Alternate-conformation-id*)>
+
+<!--
+ Literal surface coordinates define the chemical components whose structure
+ is described by a surface, and the surface itself.  The surface may be
+ either a regular geometric solid or a triangle-mesh of arbitrary shape.
+-->
+<!ELEMENT Surface-coordinates (
+        Surface-coordinates_contents, 
+        Surface-coordinates_surface)>
+
+<!ELEMENT Surface-coordinates_contents (Chem-graph-pntrs)>
+
+<!ELEMENT Surface-coordinates_surface (
+        Surface-coordinates_surface_sphere | 
+        Surface-coordinates_surface_cone | 
+        Surface-coordinates_surface_cylinder | 
+        Surface-coordinates_surface_brick | 
+        Surface-coordinates_surface_tmesh | 
+        Surface-coordinates_surface_triangles)>
+
+<!ELEMENT Surface-coordinates_surface_sphere (Sphere)>
+
+<!ELEMENT Surface-coordinates_surface_cone (Cone)>
+
+<!ELEMENT Surface-coordinates_surface_cylinder (Cylinder)>
+
+<!ELEMENT Surface-coordinates_surface_brick (Brick)>
+
+<!ELEMENT Surface-coordinates_surface_tmesh (T-mesh)>
+
+<!ELEMENT Surface-coordinates_surface_triangles (Triangles)>
+
+
+<!ELEMENT T-mesh (
+        T-mesh_number-of-points, 
+        T-mesh_scale-factor, 
+        T-mesh_swap, 
+        T-mesh_x, 
+        T-mesh_y, 
+        T-mesh_z)>
+
+<!ELEMENT T-mesh_number-of-points (%INTEGER;)>
+
+<!ELEMENT T-mesh_scale-factor (%INTEGER;)>
+
+<!ELEMENT T-mesh_swap (T-mesh_swap_E*)>
+
+
+<!ELEMENT T-mesh_swap_E EMPTY>
+<!ATTLIST T-mesh_swap_E value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT T-mesh_x (T-mesh_x_E*)>
+
+
+<!ELEMENT T-mesh_x_E (%INTEGER;)>
+
+<!ELEMENT T-mesh_y (T-mesh_y_E*)>
+
+
+<!ELEMENT T-mesh_y_E (%INTEGER;)>
+
+<!ELEMENT T-mesh_z (T-mesh_z_E*)>
+
+
+<!ELEMENT T-mesh_z_E (%INTEGER;)>
+
+
+<!ELEMENT Triangles (
+        Triangles_number-of-points, 
+        Triangles_scale-factor, 
+        Triangles_x, 
+        Triangles_y, 
+        Triangles_z, 
+        Triangles_number-of-triangles, 
+        Triangles_v1, 
+        Triangles_v2, 
+        Triangles_v3)>
+
+<!ELEMENT Triangles_number-of-points (%INTEGER;)>
+
+<!ELEMENT Triangles_scale-factor (%INTEGER;)>
+
+<!ELEMENT Triangles_x (Triangles_x_E*)>
+
+
+<!ELEMENT Triangles_x_E (%INTEGER;)>
+
+<!ELEMENT Triangles_y (Triangles_y_E*)>
+
+
+<!ELEMENT Triangles_y_E (%INTEGER;)>
+
+<!ELEMENT Triangles_z (Triangles_z_E*)>
+
+
+<!ELEMENT Triangles_z_E (%INTEGER;)>
+
+<!ELEMENT Triangles_number-of-triangles (%INTEGER;)>
+
+<!ELEMENT Triangles_v1 (Triangles_v1_E*)>
+
+
+<!ELEMENT Triangles_v1_E (%INTEGER;)>
+
+<!ELEMENT Triangles_v2 (Triangles_v2_E*)>
+
+
+<!ELEMENT Triangles_v2_E (%INTEGER;)>
+
+<!ELEMENT Triangles_v3 (Triangles_v3_E*)>
+
+
+<!ELEMENT Triangles_v3_E (%INTEGER;)>
+
+<!--
+ Literal density coordinates define the chemical components whose structure
+ is described by a density grid, parameters of this grid, and density values.
+-->
+<!ELEMENT Density-coordinates (
+        Density-coordinates_contents, 
+        Density-coordinates_grid-corners, 
+        Density-coordinates_grid-steps-x, 
+        Density-coordinates_grid-steps-y, 
+        Density-coordinates_grid-steps-z, 
+        Density-coordinates_fastest-varying, 
+        Density-coordinates_slowest-varying, 
+        Density-coordinates_scale-factor, 
+        Density-coordinates_density)>
+
+<!ELEMENT Density-coordinates_contents (Chem-graph-pntrs)>
+
+<!ELEMENT Density-coordinates_grid-corners (Brick)>
+
+<!ELEMENT Density-coordinates_grid-steps-x (%INTEGER;)>
+
+<!ELEMENT Density-coordinates_grid-steps-y (%INTEGER;)>
+
+<!ELEMENT Density-coordinates_grid-steps-z (%INTEGER;)>
+
+<!ELEMENT Density-coordinates_fastest-varying %ENUM;>
+<!ATTLIST Density-coordinates_fastest-varying value (
+        x |
+        y |
+        z
+        ) #REQUIRED >
+
+
+<!ELEMENT Density-coordinates_slowest-varying %ENUM;>
+<!ATTLIST Density-coordinates_slowest-varying value (
+        x |
+        y |
+        z
+        ) #REQUIRED >
+
+
+<!ELEMENT Density-coordinates_scale-factor (%INTEGER;)>
+
+<!ELEMENT Density-coordinates_density (Density-coordinates_density_E*)>
+
+
+<!ELEMENT Density-coordinates_density_E (%INTEGER;)>
+

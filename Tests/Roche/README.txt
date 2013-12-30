@@ -30,3 +30,9 @@ for parsing the index block since the read names are different lengths:
 * greek.sff  - has an .srt1.00 style index
 * paired.sff - has an .mft1.00 style index and manifest
 
+Finally these file are concatenations of the greek.sff and paired.sff
+files with E3MFGYR02_no_manifest.sff (for testing this as a special
+error condition):
+
+* invalid_greek_E3MFGYR02.sff - Concatenating SFF files together
+* invalid_paired_E3MFGYR02.sff - Concatenating without 8 byte alignment

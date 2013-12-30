@@ -17,7 +17,7 @@ class TestUniGene(unittest.TestCase):
         records = UniGene.parse(handle)
 
         # First record
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.ID, "Eca.1")
         self.assertEqual(record.title, "Ribosomal protein L3")
         self.assertEqual(record.symbol, "RPL3")
@@ -690,7 +690,7 @@ class TestUniGene(unittest.TestCase):
         self.assertEqual(record.sequence[68].trace, "891192160")
 
         # Second record
-        record = records.next()
+        record = next(records)
 
         self.assertEqual(record.ID, "Eca.2425")
         self.assertEqual(record.title, "Immunoglobulin-like transcript 11 protein")
@@ -810,7 +810,7 @@ class TestUniGene(unittest.TestCase):
         self.assertEqual(record.sequence[8].trace, "891191801")
 
         # Make sure that there are no more records
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
 
         handle.close()
 

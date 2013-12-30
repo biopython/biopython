@@ -10,7 +10,7 @@ Support for asynchronous execution.
 '''
 
 import os
-import thread
+import threading
 
 
 class Async(object):
@@ -32,7 +32,7 @@ class Async(object):
         self.done = {}
         self.id = 0
         self.hooks = {}
-        self.access_ds = thread.allocate_lock()
+        self.access_ds = threading.Lock()
 
     def run_program(self, program, parameters, input_files):
         '''Runs a program.
@@ -96,7 +96,7 @@ class FileRetriever(object):
     '''
 
     def __init__(self):
-        self.file_list=[]
+        self.file_list = []
 
     def get_File_list(self):
         '''Returns the list of available files.
@@ -117,7 +117,7 @@ class DirectoryRetriever(FileRetriever):
         walk_list = os.walk(directory)
         for dir, dir_list, file_list in walk_list:
             for file in file_list:
-                self.file_list.append(file[len(directory)+1:])
+                self.file_list.append(file[len(directory) + 1:])
 
     def get_file(self, name):
         return open(self.directory + os.sep + name)

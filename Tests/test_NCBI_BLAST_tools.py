@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -7,16 +7,20 @@
 # database, and if it finds them then do some standalone blast searches
 # using Bio.Blast.NCBIStandalone to call the command line tool.
 
+from __future__ import print_function
+
 import os
 import sys
 import subprocess
 import unittest
 
+from Bio.Application import _escape_filename
 from Bio import MissingExternalDependencyError
 from Bio.Blast import Applications
 
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
+          "rpsblast+", #For Debian
           "rpsblast", "rpstblastn", "psiblast", "blast_formatter"]
 exe_names = {}
 
@@ -34,7 +38,7 @@ else :
 for folder in likely_dirs:
     if not os.path.isdir(folder):
         continue
-    for name in wanted :
+    for name in wanted:
         if sys.platform=="win32":
             exe_name = os.path.join(folder, name+".exe")
         else:
@@ -56,9 +60,15 @@ for folder in likely_dirs:
             if name == "blast_formatter" and " -archive " not in output:
                 continue
             exe_names[name] = exe_name
-        #else :
-        #    print "Rejecting", exe_name
+        #else:
+        #    print("Rejecting %r" % exe_name)
         del exe_name, name
+
+#To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias
+wanted.remove("rpsblast+")
+if "rpsblast+" in exe_names:
+    exe_names["rpsblast"] = exe_names["rpsblast+"]
+    del exe_names["rpsblast+"]
 
 #We can cope with blast_formatter being missing, only added in BLAST 2.2.24+
 if len(set(exe_names).difference(["blast_formatter"])) < len(wanted)-1 :
@@ -75,7 +85,7 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
-        self.assertEqual(str(cline), exe_names["blastp"]
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"])
                          + " -query Fasta/rose.pro -evalue 1"
                          + " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
@@ -105,7 +115,7 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
-        self.assertEqual(str(cline), exe_names["blastn"]
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"])
                          + " -query GenBank/NC_005816.ffn -evalue 0.000001"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
@@ -128,7 +138,7 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
-        self.assertEqual(str(cline), exe_names["tblastn"]
+        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"])
                          + " -query GenBank/NC_005816.faa -evalue 1e-6"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
@@ -172,7 +182,7 @@ class CheckCompleteArgList(unittest.TestCase):
             assert index != -1
             name = stdoutdata[:index]
             if " " in name:
-                name = name.split(None,1)[0]
+                name = name.split(None, 1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index+1:]
 
@@ -199,8 +209,8 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "tblastx":
             #These appear to have been removed in BLAST 2.2.23+
             #(which seems a bit odd - TODO - check with NCBI?)
-            extra = extra.difference(["-gapextend","-gapopen",
-                                      "-xdrop_gap","-xdrop_gap_final"])
+            extra = extra.difference(["-gapextend", "-gapopen",
+                                      "-xdrop_gap", "-xdrop_gap_final"])
         if exe_name in ["rpsblast", "rpstblastn"]:
             #These appear to have been removed in BLAST 2.2.24+
             #(which seems a bit odd - TODO - check with NCBI?)
@@ -219,7 +229,7 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-msa_master_idx" in extra and exe_name=="psiblast":
             #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-msa_master_idx")
-        if exe_name=="rpsblast":
+        if exe_name == "rpsblast":
             #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-best_hit_overhang",
                                       "-best_hit_score_edge",
@@ -227,13 +237,19 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
-        if exe_name=="blastx":
+        if "-ignore_msa_master" in extra and exe_name=="psiblast":
+            #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
+            extra.remove("-ignore_msa_master")                                        
+        if exe_name == "blastx":
             #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-comp_based_stats",
                                       "-use_sw_tback"])
         if exe_name in ["blastx", "tblastn"]:
             #Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
             extra = extra.difference(["-frame_shift_penalty"])
+        if exe_name == "rpsblast":
+            #New in BLAST 2.2.28+ so will look like extra args on old BLAST:
+            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
 
         if extra or missing:
             import warnings

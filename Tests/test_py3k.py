@@ -16,7 +16,7 @@ class ODTest(unittest.TestCase):
         d[5] = "five"
         d[1] = "one"
         d[3] = "three"
-        self.assertEqual(d.keys(), [5, 1, 3])
+        self.assertEqual(list(d.keys()), [5, 1, 3])
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

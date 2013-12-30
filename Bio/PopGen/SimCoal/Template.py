@@ -3,8 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 from os import sep
 import re
+from functools import reduce
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir
 
@@ -34,12 +37,11 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
             #reg = re.compile('\?' + name, re.MULTILINE)
             #template = re.sub(reg, str(val), template)
             template = template.replace('?'+name, str(val))
-        f = open(f_name + '.par', 'w')
-        #executed_template = template
-        executed_template = exec_template(template)
-        clean_template = executed_template.replace('\r\n','\n').replace('\n\n','\n')
-        f.write(clean_template)
-        f.close()
+        with open(f_name + '.par', 'w') as f:
+            #executed_template = template
+            executed_template = exec_template(template)
+            clean_template = executed_template.replace('\r\n', '\n').replace('\n\n', '\n')
+            f.write(clean_template)
         return [f_name]
     else:
         name, rng = para_list[0]
@@ -156,15 +158,15 @@ def get_demography_template(stream, model, tp_dir = None):
     '''
     if tp_dir is None:
         #Internal Template
-        f = open(sep.join([builtin_tpl_dir, model + '.par']), 'r')
+        filename = sep.join([builtin_tpl_dir, model + '.par'])
     else:
         #External template
-        f = open(sep.join([tp_dir, model + '.par']), 'r')
-    l = f.readline()
-    while l!='':
-        stream.write(l)
+        filename = sep.join([tp_dir, model + '.par'])
+    with open(filename, 'r') as f:
         l = f.readline()
-    f.close()
+        while l!='':
+            stream.write(l)
+            l = f.readline()
 
 
 def _gen_loci(stream, loci):
@@ -173,8 +175,7 @@ def _gen_loci(stream, loci):
     stream.write('//Per Block: Data type, No. of loci, Recombination rate to the right-side locus, plus optional parameters\n')
     for locus in loci:
         stream.write(' '.join([locus[0]] +
-            map(lambda x: str(x), list(locus[1])
-        )) + '\n')
+            [str(x) for x in list(locus[1])]) + '\n')
 
 
 def get_chr_template(stream, chrs):
@@ -217,13 +218,10 @@ def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=No
          get_demography_template, chrs from get_chr_template and
          params from generate_model).
     '''
-    stream = open(out_dir + sep + 'tmp.par', 'w')
-    get_demography_template(stream, model, tp_dir)
-    get_chr_template(stream, chrs)
-    stream.close()
-    #par_stream = open(out_dir + sep + 'tmp.par', 'r')
-    #print par_stream.read()
-    #par_stream.close()
-    par_stream = open(out_dir + sep + 'tmp.par', 'r')
-    generate_model(par_stream, model, params, out_dir = out_dir)
-    par_stream.close()
+    with open(out_dir + sep + 'tmp.par', 'w') as stream:
+        get_demography_template(stream, model, tp_dir)
+        get_chr_template(stream, chrs)
+    #with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
+        #print par_stream.read()
+    with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
+        generate_model(par_stream, model, params, out_dir = out_dir)

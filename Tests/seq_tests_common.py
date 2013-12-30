@@ -1,6 +1,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+from Bio._py3k import range
+from Bio._py3k import basestring
+
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
@@ -155,7 +159,7 @@ def compare_feature(old_f, new_f):
         try:
             assert str(old_sub.location) == str(new_sub.location), \
                "%s -> %s" % (str(old_sub.location), str(new_sub.location))
-        except AssertionError, e:
+        except AssertionError as e:
             if isinstance(old_sub.location.start, ExactPosition) and \
                isinstance(old_sub.location.end, ExactPosition):
                 # Its not a problem with fuzzy locations, re-raise
@@ -210,10 +214,10 @@ def compare_sequence(old, new):
     #this takes far far far too long to run!
     #Test both positive and negative indices
     if ln < 50:
-        indices = range(-ln,ln)
+        indices = list(range(-ln, ln))
     else:
         #A selection of end cases, and the mid point
-        indices = [-ln,-ln+1,-(ln//2),-1,0,1,ln//2,ln-2,ln-1]
+        indices = [-ln, -ln+1, -(ln//2), -1, 0, 1, ln//2, ln-2, ln-1]
 
     #Test element access,
     for i in indices:
@@ -233,7 +237,7 @@ def compare_sequence(old, new):
                    "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
             #Slicing with step of 1 should make no difference.
             #Slicing with step 3 might be useful for codons.
-            for step in [1,3]:
+            for step in [1, 3]:
                 expected = s[i:j:step]
                 assert expected == str(old[i:j:step])
                 assert expected == str(new[i:j:step])
@@ -314,8 +318,8 @@ def compare_record(old, new):
                 new_comment = " ".join(new.annotations[key])
             else:
                 new_comment = new.annotations[key]
-            old_comment = old_comment.replace("\n"," ").replace("  ", " ")
-            new_comment = new_comment.replace("\n"," ").replace("  ", " ")
+            old_comment = old_comment.replace("\n", " ").replace("  ", " ")
+            new_comment = new_comment.replace("\n", " ").replace("  ", " ")
             assert old_comment == new_comment, \
                 "Comment annotation changed by load/retrieve\n" \
                 "Was:%s\nNow:%s" \

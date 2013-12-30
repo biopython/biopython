@@ -23,8 +23,8 @@ if sys.platform == "win32":
     # TODO
     raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
 else:
-    import commands
-    output = commands.getoutput("XXmotif")
+    from Bio._py3k import getoutput
+    output = getoutput("XXmotif")
     if output.find("== XXmotif version") != -1:
         xxmotif_exe = "XXmotif"
 
@@ -92,7 +92,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertEqual(err.returncode, 255)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
@@ -106,7 +106,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
 
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertEqual(err.returncode, 255)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))

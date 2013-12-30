@@ -5,6 +5,8 @@
 
 """Superimpose two structures."""
 
+from __future__ import print_function
+
 import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
@@ -78,7 +80,7 @@ if __name__=="__main__":
 
     sup.set_atoms(fixed, moving)
 
-    print sup.rotran
-    print sup.rms
+    print(sup.rotran)
+    print(sup.rms)
 
     sup.apply(moving)

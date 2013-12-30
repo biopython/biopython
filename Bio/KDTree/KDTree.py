@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-KD tree data structure for searching N-dimensional vectors.
+"""KD tree data structure for searching N-dimensional vectors.
 
 The KD tree data structure can be used for all kinds of searches that
 involve N-dimensional vectors, e.g.  neighbor searches (find all points
@@ -13,6 +12,8 @@ that are within a certain radius of each other. See "Computational Geometry:
 Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
+
+from __future__ import print_function
 
 from numpy import sum, sqrt, array
 from numpy.random import random
@@ -54,9 +55,9 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     else:
         l2 = len(r)
     if l1 == l2:
-        print "Passed."
+        print("Passed.")
     else:
-        print "Not passed: %i != %i." % (l1, l2)
+        print("Not passed: %i != %i." % (l1, l2))
 
 
 def _test(nr_points, dim, bucket_size, radius):
@@ -87,9 +88,9 @@ def _test(nr_points, dim, bucket_size, radius):
         if _dist(p, center) <= radius:
             l2 = l2 + 1
     if l1 == l2:
-        print "Passed."
+        print("Passed.")
     else:
-        print "Not passed: %i != %i." % (l1, l2)
+        print("Not passed: %i != %i." % (l1, l2))
 
 
 class KDTree(object):
@@ -245,7 +246,7 @@ if __name__ == "__main__":
     indices = kdtree.all_get_indices()
     radii = kdtree.all_get_radii()
 
-    print "Found %i point pairs within radius %f." % (len(indices), query_radius)
+    print("Found %i point pairs within radius %f." % (len(indices), query_radius))
 
     # Do 10 individual queries
 
@@ -261,4 +262,4 @@ if __name__ == "__main__":
         radii = kdtree.get_radii()
 
         x, y, z = center
-        print "Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)
+        print("Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z))

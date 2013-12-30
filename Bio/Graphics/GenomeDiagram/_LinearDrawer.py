@@ -27,15 +27,17 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.graphics.shapes import *
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from _AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
-from _AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
-from _AbstractDrawer import intermediate_points, angle2trig
-from _FeatureSet import FeatureSet
-from _GraphSet import GraphSet
+from ._AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
+from ._AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
+from ._AbstractDrawer import intermediate_points, angle2trig
+from ._FeatureSet import FeatureSet
+from ._GraphSet import GraphSet
 
 from math import ceil
 
@@ -635,7 +637,7 @@ class LinearDrawer(AbstractDrawer):
             else:
                 x2 = self.xlim
             box = draw_box((x1, tbtm), (x2, ttop),  # Grey track bg
-                           colors.Color(0.96,0.96, 0.96))       # is just a box
+                           colors.Color(0.96, 0.96, 0.96))       # is just a box
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required
@@ -724,7 +726,7 @@ class LinearDrawer(AbstractDrawer):
         # several parts, and one or more of those parts may end up being
         # drawn on a non-existent fragment.  So we check that the start and
         # end fragments do actually exist in terms of the drawing
-        allowed_fragments = self.fragment_limits.keys()
+        allowed_fragments = list(self.fragment_limits.keys())
         if start_fragment in allowed_fragments and end_fragment in allowed_fragments:
             #print feature.name, feature.start, feature.end, start_offset, end_offset
             if start_fragment == end_fragment:  # Feature is found on one fragment
@@ -783,8 +785,8 @@ class LinearDrawer(AbstractDrawer):
         if self.end < endB:
             endB = self.end
 
-        trackobjA = cross_link._trackA(self._parent.tracks.values())
-        trackobjB = cross_link._trackB(self._parent.tracks.values())
+        trackobjA = cross_link._trackA(list(self._parent.tracks.values()))
+        trackobjB = cross_link._trackB(list(self._parent.tracks.values()))
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
@@ -818,7 +820,7 @@ class LinearDrawer(AbstractDrawer):
 
         strokecolor, fillcolor = _stroke_and_fill_colors(cross_link.color, cross_link.border)
 
-        allowed_fragments = self.fragment_limits.keys()
+        allowed_fragments = list(self.fragment_limits.keys())
 
         start_fragmentA, start_offsetA = self.canvas_location(startA)
         end_fragmentA, end_offsetA = self.canvas_location(endA)
@@ -895,14 +897,14 @@ class LinearDrawer(AbstractDrawer):
                     if fragment < start_fragmentB:
                         extra = [self.x0 + self.pagewidth, 0.5 * (yA + yB)]
                     else:
-                        extra = [self.x0 , 0.5 * (yA + yB)]
+                        extra = [self.x0, 0.5 * (yA + yB)]
                 else:
                     if fragment < start_fragmentB:
                         extra = [self.x0 + self.pagewidth, 0.7*yA + 0.3*yB,
                                  self.x0 + self.pagewidth, 0.3*yA + 0.7*yB]
                     else:
-                        extra = [self.x0 , 0.3*yA + 0.7*yB,
-                                 self.x0 , 0.7*yA + 0.3*yB]
+                        extra = [self.x0, 0.3*yA + 0.7*yB,
+                                 self.x0, 0.7*yA + 0.3*yB]
                 answer.append(Polygon([xAs, yA, xAe, yA] + extra,
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
@@ -915,14 +917,14 @@ class LinearDrawer(AbstractDrawer):
                     if fragment < start_fragmentA:
                         extra = [self.x0 + self.pagewidth, 0.5 * (yA + yB)]
                     else:
-                        extra = [self.x0 , 0.5 * (yA + yB)]
+                        extra = [self.x0, 0.5 * (yA + yB)]
                 else:
                     if fragment < start_fragmentA:
                         extra = [self.x0 + self.pagewidth, 0.3*yA + 0.7*yB,
                                  self.x0 + self.pagewidth, 0.7*yA + 0.3*yB]
                     else:
-                        extra = [self.x0 , 0.7*yA + 0.3*yB,
-                                 self.x0 , 0.3*yA + 0.7*yB]
+                        extra = [self.x0, 0.7*yA + 0.3*yB,
+                                 self.x0, 0.3*yA + 0.7*yB]
                 answer.append(Polygon([xBs, yB, xBe, yB] + extra,
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
@@ -989,15 +991,15 @@ class LinearDrawer(AbstractDrawer):
             ctr += self.fragment_lines[fragment][0]
             top += self.fragment_lines[fragment][0]
         except:     # Only called if the method screws up big time
-            print "We've got a screw-up"
-            print self.start, self.end
-            print self.fragment_bases
-            print x0, x1
+            print("We've got a screw-up")
+            print("%s %s" % (self.start, self.end))
+            print(self.fragment_bases)
+            print("%r %r" % (x0, x1))
             for locstart, locend in feature.locations:
-                print self.canvas_location(locstart)
-                print self.canvas_location(locend)
-            print 'FEATURE\n', feature
-            1/0
+                print(self.canvas_location(locstart))
+                print(self.canvas_location(locend))
+            print('FEATURE\n%s' % feature)
+            raise
 
         # Distribution dictionary for various ways of drawing the feature
         draw_methods = {'BOX': self._draw_sigil_box,
@@ -1094,7 +1096,7 @@ class LinearDrawer(AbstractDrawer):
 
         # Get graph data
         data_quartiles = graph.quartiles()
-        minval, maxval = data_quartiles[0],data_quartiles[4]
+        minval, maxval = data_quartiles[0], data_quartiles[4]
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = 0.5*(top-btm)
         datarange = maxval - minval
@@ -1164,7 +1166,7 @@ class LinearDrawer(AbstractDrawer):
 
         # Get graph data and information
         data_quartiles = graph.quartiles()
-        minval, maxval = data_quartiles[0],data_quartiles[4]
+        minval, maxval = data_quartiles[0], data_quartiles[4]
         midval = (maxval + minval)/2.    # mid is the value at the X-axis
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = (top-btm)
@@ -1242,7 +1244,7 @@ class LinearDrawer(AbstractDrawer):
 
         # Set the number of pixels per unit for the data
         data_quartiles = graph.quartiles()
-        minval, maxval = data_quartiles[0],data_quartiles[4]
+        minval, maxval = data_quartiles[0], data_quartiles[4]
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = 0.5*(top-btm)
         datarange = maxval - minval
@@ -1346,7 +1348,7 @@ class LinearDrawer(AbstractDrawer):
         else:
             y1 = bottom
             y2 = top
-        return draw_box((x1,y1), (x2,y2), **kwargs)
+        return draw_box((x1, y1), (x2, y2), **kwargs)
 
     def _draw_sigil_octo(self, bottom, center, top, x1, x2, strand, **kwargs):
         """Draw OCTO sigil, a box with the corners cut off."""
@@ -1359,7 +1361,7 @@ class LinearDrawer(AbstractDrawer):
         else:
             y1 = bottom
             y2 = top
-        return draw_cut_corner_box((x1,y1), (x2,y2), **kwargs)
+        return draw_cut_corner_box((x1, y1), (x2, y2), **kwargs)
 
     def _draw_sigil_jaggy(self, bottom, center, top, x1, x2, strand,
                           color, border=None, **kwargs):
@@ -1421,7 +1423,7 @@ class LinearDrawer(AbstractDrawer):
             y1 = bottom
             y2 = top
             orientation = "right"  # backward compatibility
-        return draw_arrow((x1,y1), (x2,y2), orientation=orientation, **kwargs)
+        return draw_arrow((x1, y1), (x2, y2), orientation=orientation, **kwargs)
 
     def _draw_sigil_big_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
         """Draw BIGARROW sigil, like ARROW but straddles the axis."""
@@ -1429,4 +1431,4 @@ class LinearDrawer(AbstractDrawer):
             orientation = "left"
         else:
             orientation = "right"
-        return draw_arrow((x1,bottom), (x2,top), orientation=orientation, **kwargs)
+        return draw_arrow((x1, bottom), (x2, top), orientation=orientation, **kwargs)

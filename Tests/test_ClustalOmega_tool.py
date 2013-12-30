@@ -25,8 +25,8 @@ if sys.platform=="win32":
     #TODO
     raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
 else:
-    import commands
-    output = commands.getoutput("clustalo --help")
+    from Bio._py3k import getoutput
+    output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
 
@@ -93,7 +93,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
                             "non-zero exit status" in str(err))
@@ -108,7 +108,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             self.assertTrue("contains 1 sequence, nothing to align" in str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
@@ -120,7 +120,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
         try:
             stdout, stderr = cline()
-        except ApplicationError, err:
+        except ApplicationError as err:
             #Ideally we'd catch the return code and raise the specific
             #error for "invalid format".
             self.assertTrue("Can't determine format of sequence file" in str(err))

@@ -1,0 +1,20 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.5.0
+     ::DATATOOL:: on 06/06/2006 23:03:48
+     ============================================ -->
+
+<!-- GenBank_General.dtd
+  This file is built from a series of basic modules.
+  The actual ELEMENT and ENTITY declarations are in the modules.
+  This file is used to put them together.
+-->
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % GenBank_General_module PUBLIC "-//NCBI//GenBank General Module//EN" "GenBank_General.mod.dtd">
+%GenBank_General_module;
+
+<!ENTITY % NCBI_General_module PUBLIC "-//NCBI//NCBI General Module//EN" "NCBI_General.mod.dtd">
+%NCBI_General_module;

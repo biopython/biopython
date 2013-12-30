@@ -18,8 +18,8 @@ if sys.platform=="win32":
     raise MissingExternalDependencyError(
         "Testing TCOFFEE on Windows not supported yet")
 else:
-    import commands
-    output = commands.getoutput("t_coffee -version")
+    from Bio._py3k import getoutput
+    output = getoutput("t_coffee -version")
     if "not found" not in output \
     and ("t_coffee" in output.lower() or "t-coffee" in output.lower()):
         t_coffee_exe = "t_coffee"
@@ -57,10 +57,10 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertTrue(stderr.strip().startswith("PROGRAM: T-COFFEE"))
         align = AlignIO.read(self.outfile1, "clustal")
         records = list(SeqIO.parse(self.infile1, "fasta"))
-        self.assertEqual(len(records),len(align))
+        self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_TCoffee_2(self):
         """Round-trip through app and read pir alignment from file
@@ -75,11 +75,11 @@ class TCoffeeApplication(unittest.TestCase):
         #Can get warnings in stderr output
         self.assertTrue("error" not in stderr.lower(), stderr)
         align = AlignIO.read(self.outfile3, "pir")
-        records = list(SeqIO.parse(self.infile1,"fasta"))
-        self.assertEqual(len(records),len(align))
+        records = list(SeqIO.parse(self.infile1, "fasta"))
+        self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_TCoffee_3(self):
         """Round-trip through app and read clustalw alignment from file
@@ -98,10 +98,10 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertTrue(stderr.strip().startswith("PROGRAM: T-COFFEE"))
         align = AlignIO.read(self.outfile4, "clustal")
         records = list(SeqIO.parse(self.infile1, "fasta"))
-        self.assertEqual(len(records),len(align))
+        self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

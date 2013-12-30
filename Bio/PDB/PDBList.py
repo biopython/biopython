@@ -20,15 +20,16 @@
 
 """ Access the PDB over the internet (e.g. to download structures). """
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
+from __future__ import print_function
 
 import contextlib
 import gzip
 import os
 import shutil
-import urllib
-from urllib2 import urlopen as _urlopen  # urllib made too many FTP conn's
+
+#Importing these functions with leading underscore as not intended for reuse
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import urlretrieve as _urlretrieve
 
 
 class PDBList(object):
@@ -125,7 +126,7 @@ class PDBList(object):
         PDB entries and some annotation to them.
         Returns a list of PDB codes in the index file.
         """
-        print "retrieving index file. Takes about 5 MB."
+        print("retrieving index file. Takes about 5 MB.")
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
         with contextlib.closing(_urlopen(url)) as handle:
             all_entries = [line[:4] for line in handle.readlines()[2:]
@@ -205,17 +206,19 @@ class PDBList(object):
         # Skip download if the file already exists
         if not self.overwrite:
             if os.path.exists(final_file):
-                print "Structure exists: '%s' " % final_file
+                print("Structure exists: '%s' " % final_file)
                 return final_file
 
         # Retrieve the file
-        print "Downloading PDB structure '%s'..." % pdb_code
-        urllib.urlretrieve(url, filename)
+        print("Downloading PDB structure '%s'..." % pdb_code)
+        _urlretrieve(url, filename)
 
         # Uncompress the archive, delete when done
-        with gzip.open(filename, 'rb') as gz:
-            with open(final_file, 'wb') as out:
-                out.writelines(gz)
+        #Can't use context manager with gzip.open until Python 2.7
+        gz = gzip.open(filename, 'rb')
+        with open(final_file, 'wb') as out:
+            out.writelines(gz)
+        gz.close()
         os.remove(filename)
 
         return final_file
@@ -236,7 +239,7 @@ class PDBList(object):
             try:
                 self.retrieve_pdb_file(pdb_code)
             except Exception:
-                print 'error %s\n' % pdb_code
+                print('error %s\n' % pdb_code)
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
@@ -257,11 +260,11 @@ class PDBList(object):
                 try:
                     shutil.move(old_file, new_file)
                 except Exception:
-                    print "Could not move %s to obsolete folder" % old_file
+                    print("Could not move %s to obsolete folder" % old_file)
             elif os.path.isfile(new_file):
-                print "Obsolete file %s already moved" % old_file
+                print("Obsolete file %s already moved" % old_file)
             else:
-                print "Obsolete file %s is missing" % old_file
+                print("Obsolete file %s is missing" % old_file)
 
     def download_entire_pdb(self, listfile=None):
         """Retrieve all PDB entries not present in the local PDB copy.
@@ -297,9 +300,9 @@ class PDBList(object):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
-        print "Retrieving sequence file (takes about 15 MB)."
+        print("Retrieving sequence file (takes about 15 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
-        urllib.urlretrieve(url, savefile)
+        _urlretrieve(url, savefile)
 
 
 if __name__ == '__main__':
@@ -322,7 +325,7 @@ if __name__ == '__main__':
        -d   A single directory will be used as <pdb_path>, not a tree.
        -o   Overwrite existing structure files.
     """
-    print doc
+    print(doc)
 
     if len(sys.argv) > 2:
         pdb_path = sys.argv[2]
@@ -342,7 +345,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == 'update':
             # update PDB
-            print "updating local PDB at " + pdb_path
+            print("updating local PDB at " + pdb_path)
             pl.update_pdb()
 
         elif sys.argv[1] == 'all':

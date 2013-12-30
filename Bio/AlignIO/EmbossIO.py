@@ -1,10 +1,9 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2013 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Bio.AlignIO support for the "emboss" alignment output from EMBOSS tools.
+"""Bio.AlignIO support for "emboss" alignment output from EMBOSS tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -13,10 +12,12 @@ This module contains a parser for the EMBOSS pairs/simple file format, for
 example from the alignret, water and needle tools.
 """
 
+from __future__ import print_function
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class EmbossWriter(SequentialAlignmentWriter):
@@ -66,7 +67,7 @@ class EmbossIterator(AlignmentIterator):
     call the "pairs" and "simple" formats.
     """
 
-    def next(self):
+    def __next__(self):
 
         handle = self.handle
 
@@ -146,7 +147,7 @@ class EmbossIterator(AlignmentIterator):
                             start = int(start) - 1
                             end = int(end)
                     else:
-                        assert seq.replace("-", "") != ""
+                        assert seq.replace("-", "") != "", repr(line)
                         start = int(start) - 1  # python counting
                         end = int(end)
 
@@ -164,9 +165,9 @@ class EmbossIterator(AlignmentIterator):
                     if start == end:
                         assert seq.replace("-", "") == "", line
                     else:
-                        assert start - seq_starts[index] == len(seqs[index].replace("-","")), \
+                        assert start - seq_starts[index] == len(seqs[index].replace("-", "")), \
                         "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
-                            % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
+                            % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
                                start, line)
 
                     seqs[index] += seq
@@ -188,7 +189,7 @@ class EmbossIterator(AlignmentIterator):
                 #Just a spacer?
                 pass
             else:
-                print line
+                print(line)
                 assert False
 
             line = handle.readline()
@@ -221,7 +222,7 @@ class EmbossIterator(AlignmentIterator):
 
 
 if __name__ == "__main__":
-    print "Running a quick self-test"
+    print("Running a quick self-test")
 
     #http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
     simple_example = \
@@ -579,7 +580,7 @@ asis             311 -----------------    311
 #---------------------------------------
 #---------------------------------------"""
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     alignments = list(EmbossIterator(StringIO(pair_example)))
     assert len(alignments) == 1
@@ -616,4 +617,4 @@ asis             311 -----------------    311
     assert [r.id for r in alignments[0]] \
            == ["asis", "asis"]
 
-    print "Done"
+    print("Done")

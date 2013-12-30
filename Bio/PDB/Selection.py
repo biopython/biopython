@@ -5,6 +5,8 @@
 
 """Selection of atoms, residues, etc."""
 
+from __future__ import print_function
+
 import itertools
 
 from Bio.PDB.Atom import Atom
@@ -79,9 +81,9 @@ def unfold_entities(entity_list, target_level):
 def _test():
     """Run the Bio.PDB.Selection module's doctests (PRIVATE)."""
     import doctest
-    print "Running doctests ..."
+    print("Running doctests ...")
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 
 if __name__ == "__main__":

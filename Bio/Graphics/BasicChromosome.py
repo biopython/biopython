@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Draw representations of organism chromosomes with added information.
 
 These classes are meant to model the drawing of pictures of chromosomes.

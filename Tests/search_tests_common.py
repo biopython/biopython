@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import os
 import gzip
 import unittest
@@ -25,18 +27,22 @@ class CheckRaw(unittest.TestCase):
         """Index filename using **kwargs, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
-        self.assertEqual(raw, idx.get_raw(id))
+        # Anticipate cases where the raw string and/or file uses different
+        # newline characters ~ we set everything to \n.
+        self.assertEqual(raw.replace(b'\r\n', b'\n'),
+                idx.get_raw(id).replace(b'\r\n', b'\n'))
         idx.close()
 
         #Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
-            self.assertEqual(raw, idx.get_raw(id))
+            self.assertEqual(raw.replace(b'\r\n', b'\n'),
+                    idx.get_raw(id).replace(b'\r\n', b'\n'))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
             #Do the tests again with the BGZF compressed file
-            print "[BONUS %s.bgz]" % filename
+            print("[BONUS %s.bgz]" % filename)
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
 
@@ -88,14 +94,14 @@ class CheckIndex(unittest.TestCase):
 
         if os.path.isfile(filename + ".bgz"):
             #Do the tests again with the BGZF compressed file
-            print "[BONUS %s.bgz]" % filename
+            print("[BONUS %s.bgz]" % filename)
             self.check_index(filename + ".bgz", format, **kwargs)
 
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""
-    attrs_a = obj_a.__dict__.keys()
-    attrs_b = obj_b.__dict__.keys()
-    diff = set(attrs_a).symmetric_difference(set(attrs_b))
+    attrs_a = set(obj_a.__dict__.keys())
+    attrs_b = set(obj_b.__dict__.keys())
+    diff = attrs_a.symmetric_difference(attrs_b)
     privates = len([x for x in diff if x.startswith('_')])
     return len(diff) - privates
 
@@ -147,10 +153,10 @@ def compare_attrs(obj_a, obj_b, attrs):
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
-            keys_a, values_a = val_a.keys(), val_a.values()
-            keys_b, values_b = val_b.keys(), val_b.values()
-            # sort all values and keys
-            [x.sort() for x in (keys_a, values_a, keys_b, values_b)]
+            keys_a = sorted(val_a.keys())
+            values_a = sorted(val_a.values())
+            keys_b = sorted(val_b.keys())
+            values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
                     values_b)

@@ -14,6 +14,8 @@ the sequences as SeqRecord objects.
 See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
 """
 
+from __future__ import print_function
+
 from Bio import Seq
 from Bio import SeqRecord
 from Bio import Alphabet
@@ -118,9 +120,7 @@ def SwissIterator(handle):
             annotations['references'] = []
             for reference in swiss_record.references:
                 feature = SeqFeature.Reference()
-                feature.comment = " ".join(["%s=%s;" % (key, value)
-                                            for key, value
-                                            in reference.comments])
+                feature.comment = " ".join("%s=%s;" % k_v for k_v in reference.comments)
                 for key, value in reference.references:
                     if key == 'PubMed':
                         feature.pubmed_id = value
@@ -142,23 +142,22 @@ def SwissIterator(handle):
         yield record
 
 if __name__ == "__main__":
-    print "Quick self test..."
+    print("Quick self test...")
 
     example_filename = "../../Tests/SwissProt/sp008"
 
     import os
     if not os.path.isfile(example_filename):
-        print "Missing test file %s" % example_filename
+        print("Missing test file %s" % example_filename)
     else:
         #Try parsing it!
-        handle = open(example_filename)
-        records = SwissIterator(handle)
-        for record in records:
-            print record.name
-            print record.id
-            print record.annotations['keywords']
-            print repr(record.annotations['organism'])
-            print str(record.seq)[:20] + "..."
-            for f in record.features:
-                print f
-        handle.close()
+        with open(example_filename) as handle:
+            records = SwissIterator(handle)
+            for record in records:
+                print(record.name)
+                print(record.id)
+                print(record.annotations['keywords'])
+                print(repr(record.annotations['organism']))
+                print(str(record.seq)[:20] + "...")
+                for f in record.features:
+                    print(f)

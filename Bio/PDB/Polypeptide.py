@@ -12,7 +12,7 @@ Simple example with multiple chains,
     >>> structure = PDBParser().get_structure('2BEG', 'PDB/2BEG.pdb')
     >>> ppb=PPBuilder()
     >>> for pp in ppb.build_peptides(structure):
-    ...     print pp.get_sequence()
+    ...     print(pp.get_sequence())
     LVFFAEDVGSNKGAIIGLMVGGVVIA
     LVFFAEDVGSNKGAIIGLMVGGVVIA
     LVFFAEDVGSNKGAIIGLMVGGVVIA
@@ -27,7 +27,7 @@ in this case selenomethionine (MSE):
     >>> structure = PDBParser().get_structure('1A8O', 'PDB/1A8O.pdb')
     >>> ppb=PPBuilder()
     >>> for pp in ppb.build_peptides(structure):
-    ...     print pp.get_sequence()
+    ...     print(pp.get_sequence())
     DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW
     TETLLVQNANPDCKTILKALGPGATLEE
     TACQG
@@ -35,10 +35,10 @@ in this case selenomethionine (MSE):
 If you want to, you can include non-standard amino acids in the peptides:
 
     >>> for pp in ppb.build_peptides(structure, aa_only=False):
-    ...     print pp.get_sequence()
-    ...     print pp.get_sequence()[0], pp[0].get_resname()
-    ...     print pp.get_sequence()[-7], pp[-7].get_resname()
-    ...     print pp.get_sequence()[-6], pp[-6].get_resname()
+    ...     print(pp.get_sequence())
+    ...     print("%s %s" % (pp.get_sequence()[0], pp[0].get_resname()))
+    ...     print("%s %s" % (pp.get_sequence()[-7], pp[-7].get_resname()))
+    ...     print("%s %s" % (pp.get_sequence()[-6], pp[-6].get_resname()))
     MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG
     M MSE
     M MSE
@@ -48,11 +48,14 @@ In this case the selenomethionines (the first and also seventh and sixth from
 last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
+from __future__ import print_function
+from Bio._py3k import basestring
+
 import warnings
 
 from Bio.Alphabet import generic_protein
+from Bio.Data import SCOPData
 from Bio.Seq import Seq
-from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Vector import calc_dihedral, calc_angle
 
@@ -181,7 +184,7 @@ def is_aa(residue, standard=False):
     if standard:
         return residue in d3_to_index
     else:
-        return residue in to_one_letter_code
+        return residue in SCOPData.protein_letters_3to1
 
 
 class Polypeptide(list):
@@ -279,7 +282,7 @@ class Polypeptide(list):
         """
         s=""
         for res in self:
-            s += to_one_letter_code.get(res.get_resname(), 'X')
+            s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
         seq=Seq(s, generic_protein)
         return seq
 
@@ -351,9 +354,9 @@ class _PPBuilder:
         for chain in chain_list:
             chain_it=iter(chain)
             try:
-                prev_res = chain_it.next()
+                prev_res = next(chain_it)
                 while not accept(prev_res, aa_only):
-                    prev_res = chain_it.next()
+                    prev_res = next(chain_it)
             except StopIteration:
                 #No interesting residues at all in this chain
                 continue
@@ -460,24 +463,25 @@ if __name__=="__main__":
 
     ppb=PPBuilder()
 
-    print "C-N"
+    print("C-N")
     for pp in ppb.build_peptides(s):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]["A"]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
 
     for pp in ppb.build_peptides(s):
         for phi, psi in pp.get_phi_psi_list():
-            print phi, psi
+            print("%f %f" % (phi, psi))
 
     ppb=CaPPBuilder()
 
-    print "CA-CA"
+    print("CA-CA")
     for pp in ppb.build_peptides(s):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
     for pp in ppb.build_peptides(s[0]["A"]):
-        print pp.get_sequence()
+        print(pp.get_sequence())
+

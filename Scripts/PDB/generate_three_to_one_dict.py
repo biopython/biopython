@@ -5,16 +5,20 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
+"""Download PDB Chemical Component Dictionary and generate dict.
+
 Download and parse PDB Chemical Component Dictionary,
 then write out dict for to_one_letter_code.
 """
 
+from __future__ import print_function
+
 import gzip
 import inspect
 import os
-import urllib
 import warnings
+
+from Bio._py3k import urlopen as _urlopen
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 
@@ -23,10 +27,10 @@ gzname = os.path.basename(url)
 # extract name of cif file (split by sep, remove last, rejoin)
 cifname = os.extsep.join(gzname.split(os.extsep)[:-1])
 
-url_handle = urllib.urlopen(url)
+url_handle = urlopen(url)
 
 with open(gzname, 'wb') as gzh:
-    print "Downloading file... (approx. 29 MB)"
+    print("Downloading file... (approx. 29 MB)")
     while True:
         data = url_handle.read(1024)
         if len(data) == 0:
@@ -42,7 +46,7 @@ fh = gzip.open(gzname, 'rb')
 
 # write extracted file to disk (not necessary)
 #with open(cifname, 'wb') as cifh:
-    #print "Extracting file..."
+    #print("Extracting file...")
     #cifh.write(fh.read())
 
 # The following code written by Hongbo Zhu

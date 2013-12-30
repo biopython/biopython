@@ -1,6 +1,8 @@
 #/usr/bin/env python
 """Small script to test timing of loading records into a BioSQL database.
 """
+from __future__ import print_function
+
 import time
 # set up the connection
 from Bio import GenBank
@@ -27,6 +29,6 @@ start_time = time.time()
 num_records = db.load(iterator)
 end_time = time.time()
 elapsed_time = end_time - start_time
-print "Loading"
-print "\tDid %s records in %s seconds for\n\t%f records per second" % \
-      (num_records, elapsed_time, float(num_records) / float(elapsed_time))
+print("Loading")
+print("\tDid %s records in %s seconds for\n\t%f records per second" % \
+      (num_records, elapsed_time, float(num_records) / float(elapsed_time)))

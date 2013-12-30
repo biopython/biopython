@@ -53,8 +53,9 @@ Some examples:
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
     # for mismatches or gaps.
+    >>> from Bio.pairwise2 import format_alignment
     >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -68,7 +69,7 @@ Some examples:
 
     # Same thing as before, but with a local alignment.
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     ||||
     AC-G-
@@ -83,7 +84,7 @@ Some examples:
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
     >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -98,7 +99,7 @@ Some examples:
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
     >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -116,7 +117,7 @@ Biopython ( Bio.SubsMat -> MatrixInfo ).
     >>> from Bio.SubsMat import MatrixInfo as matlist
     >>> matrix = matlist.blosum62
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     KEVLA
     |||||
     -EVL-
@@ -135,7 +136,9 @@ type help(pairwise2.align.localds) at the Python prompt.
 # - penalize_end_gaps: boolean
 #   Whether to count the gaps at the ends of an alignment.  By
 #   default, they are counted for global alignments but not for local
-#   ones.
+#   ones. Setting penalize_end_gaps to (boolean, boolean) allows you to
+#   specify for the two sequences separately whether gaps at the end of
+#   the alignment should be counted.
 # - gap_char: string
 #   Which character to use as a gap character in the alignment
 #   returned.  By default, uses '-'.
@@ -147,6 +150,8 @@ type help(pairwise2.align.localds) at the Python prompt.
 #   value of the function is the score.
 # - one_alignment_only: boolean
 #   Only recover one alignment.
+
+from __future__ import print_function
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
@@ -204,11 +209,11 @@ should return a gap penalty."""),
                         name[:-2], name[-2], name[-1]
             try:
                 match_args, match_doc = self.match2args[match_type]
-            except KeyError, x:
+            except KeyError as x:
                 raise AttributeError("unknown match type %r" % match_type)
             try:
                 penalty_args, penalty_doc = self.penalty2args[penalty_type]
-            except KeyError, x:
+            except KeyError as x:
                 raise AttributeError("unknown penalty type %r" % penalty_type)
 
             # Now get the names of the parameters to this function.
@@ -294,6 +299,13 @@ alignment occurs.
                 ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
+            value = keywds['penalize_end_gaps']
+            try:
+                n = len(value)
+            except TypeError:
+                keywds['penalize_end_gaps'] = tuple([value]*2)
+            else:
+                assert n==2
             return keywds
 
         def __call__(self, *args, **keywds):
@@ -327,8 +339,8 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             score_only)
     score_matrix, trace_matrix = x
 
-    #print "SCORE"; print_matrix(score_matrix)
-    #print "TRACEBACK"; print_matrix(trace_matrix)
+    #print("SCORE %s" % print_matrix(score_matrix))
+    #print("TRACEBACK %s" % print_matrix(trace_matrix))
 
     # Look for the proper starting point.  Get a list of all possible
     # starting points.
@@ -356,7 +368,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     # Recover the alignments and return them.
     x = _recover_alignments(
         sequenceA, sequenceB, starts, score_matrix, trace_matrix,
-        align_globally, penalize_end_gaps, gap_char, one_alignment_only)
+        align_globally, gap_char, one_alignment_only)
     return x
 
 
@@ -384,12 +396,12 @@ def _make_score_matrix_generic(
         # sequence A.  This is like opening up i gaps at the beginning
         # of sequence B.
         score = match_fn(sequenceA[i], sequenceB[0])
-        if penalize_end_gaps:
+        if penalize_end_gaps[1]:
             score += gap_B_fn(0, i)
         score_matrix[i][0] = score
     for i in range(1, lenB):
         score = match_fn(sequenceA[0], sequenceB[i])
-        if penalize_end_gaps:
+        if penalize_end_gaps[0]:
             score += gap_A_fn(0, i)
         score_matrix[0][i] = score
 
@@ -468,13 +480,13 @@ def _make_score_matrix_fast(
         # sequence A.  This is like opening up i gaps at the beginning
         # of sequence B.
         score = match_fn(sequenceA[i], sequenceB[0])
-        if penalize_end_gaps:
+        if penalize_end_gaps[1]:
             score += calc_affine_penalty(
                 i, open_B, extend_B, penalize_extend_when_opening)
         score_matrix[i][0] = score
     for i in range(1, lenB):
         score = match_fn(sequenceA[0], sequenceB[i])
-        if penalize_end_gaps:
+        if penalize_end_gaps[0]:
             score += calc_affine_penalty(
                 i, open_A, extend_A, penalize_extend_when_opening)
         score_matrix[0][i] = score
@@ -583,7 +595,7 @@ def _make_score_matrix_fast(
 
 def _recover_alignments(sequenceA, sequenceB, starts,
                         score_matrix, trace_matrix, align_globally,
-                        penalize_end_gaps, gap_char, one_alignment_only):
+                        gap_char, one_alignment_only):
     # Recover the alignments by following the traceback matrix.  This
     # is a recursive procedure, but it's implemented here iteratively
     # with a stack.
@@ -662,12 +674,8 @@ def _find_start(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
     # Return a list of (score, (row, col)) indicating every possible
     # place to start the tracebacks.
     if align_globally:
-        if penalize_end_gaps:
-            starts = _find_global_start(
-                sequenceA, sequenceB, score_matrix, gap_A_fn, gap_B_fn, 1)
-        else:
-            starts = _find_global_start(
-                sequenceA, sequenceB, score_matrix, None, None, 0)
+        starts = _find_global_start(
+            sequenceA, sequenceB, score_matrix, gap_A_fn, gap_B_fn, penalize_end_gaps)
     else:
         starts = _find_local_start(score_matrix)
     return starts
@@ -683,13 +691,13 @@ def _find_global_start(sequenceA, sequenceB,
     for row in range(nrows):
         # Find the score, penalizing end gaps if necessary.
         score = score_matrix[row][ncols-1]
-        if penalize_end_gaps:
+        if penalize_end_gaps[1]:
             score += gap_B_fn(ncols, nrows-row-1)
         positions.append((score, (row, ncols-1)))
     # Search all columns in the last row.
     for col in range(ncols-1):
         score = score_matrix[nrows-1][col]
-        if penalize_end_gaps:
+        if penalize_end_gaps[0]:
             score += gap_A_fn(nrows, ncols-col-1)
         positions.append((score, (nrows-1, col)))
     return positions
@@ -846,11 +854,11 @@ def print_matrix(matrix):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             matrixT[j].append(len(str(matrix[i][j])))
-    ndigits = map(max, matrixT)
+    ndigits = [max(x) for x in matrixT]
     for i in range(len(matrix)):
         #Using string formatting trick to add leading spaces,
-        print " ".join("%*s " % (ndigits[j], matrix[i][j])
-                       for j in range(len(matrix[i])))
+        print(" ".join("%*s " % (ndigits[j], matrix[i][j])
+                       for j in range(len(matrix[i]))))
 
 
 def format_alignment(align1, align2, score, begin, end):
@@ -877,10 +885,10 @@ except ImportError:
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running doctests..."
+    print("Running doctests...")
     import doctest
     doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

@@ -19,7 +19,7 @@ class PhdTestOne(unittest.TestCase):
         """Test phd1 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.name, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.description, "34_222_(80-A03-19).b.ab1")
@@ -43,25 +43,25 @@ class PhdTestOne(unittest.TestCase):
                          "+\n"
                          "IIJSVe\\\\XV\n")
         #Contig 2
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.name, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [14, 17, 22, 10, 10, 10, 15, 8, 8, 9])
         #Contig 3
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, '425_7_(71-A03-19).b.ab1')
         self.assertEqual(record.name, '425_7_(71-A03-19).b.ab1')
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [10, 10, 10, 10, 8, 8, 6, 6, 6, 6])
         # Make sure that no further records are found
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
 
     def test_check_record_parser(self):
         """Test phd1 file in detail."""
         records = Phd.parse(self.handle)
         # Record 1
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.file_name, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.comments['abi_thumbprint'], 0)
         self.assertEqual(record.comments['call_method'], "phred")
@@ -113,7 +113,7 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(str(record.seq_trimmed)[:10], 'cgtcggaaca')
         self.assertEqual(str(record.seq_trimmed)[-10:], 'tatttcggag')
         # Record 2
-        record = records.next()
+        record = next(records)
         center = len(record.sites)//2
         self.assertEqual(record.file_name, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.comments['abi_thumbprint'], 0)
@@ -165,7 +165,7 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(str(record.seq_trimmed)[:10], 'cctgatccga')
         self.assertEqual(str(record.seq_trimmed)[-10:], 'ggggccgcca')
         # Record 3
-        record = records.next()
+        record = next(records)
         center = len(record.sites)//2
         self.assertEqual(record.file_name, '425_7_(71-A03-19).b.ab1')
         self.assertEqual(record.comments['abi_thumbprint'], 0)
@@ -215,7 +215,7 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(str(record.seq)[:10], 'acataaatca')
         self.assertEqual(str(record.seq)[-10:], 'atctgctttn')
         # Make sure that no further records are found
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
 
 
 class PhdTestTwo(unittest.TestCase):
@@ -229,7 +229,7 @@ class PhdTestTwo(unittest.TestCase):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, "ML4924R")
         self.assertEqual(record.name, "ML4924R")
         self.assertEqual(record.description, "ML4924R")
@@ -246,7 +246,7 @@ class PhdTestTwo(unittest.TestCase):
         self.assertEqual(record[:10].format("fastq-illumina"),
                          "@ML4924R\nactttggtcg\n+\nFFFHHLRPNK\n")
         # Make sure that no further records are found
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
 
 
 class PhdTest454(unittest.TestCase):
@@ -260,7 +260,7 @@ class PhdTest454(unittest.TestCase):
         """Test phd_454 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.name, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.description, "EBE03TV04IHLTF.77-243 1")
@@ -286,7 +286,7 @@ class PhdTest454(unittest.TestCase):
                          "+\n"
                          "eeeeeeeeee\n")
         # Make sure that no further records are found
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
 
 
 class PhdTestSolexa(unittest.TestCase):
@@ -300,7 +300,7 @@ class PhdTestSolexa(unittest.TestCase):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.description, "HWI-EAS94_4_1_1_537_446 1")
@@ -331,7 +331,7 @@ class PhdTestSolexa(unittest.TestCase):
                          "+\n"
                          "^^^^^^^^^^^^^^^^^^^^\\W^^^^^^\\VHVGOOOJJKO\n")
         #Contig 2
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.description, "HWI-EAS94_4_1_1_602_99 1")
@@ -362,7 +362,7 @@ class PhdTestSolexa(unittest.TestCase):
                          "+\n"
                          "^^^^^^^^^^^^^^^^^^^^^^^^^^P^\\VVVNOOEJOJE\n")
         # Make sure that no further records are found
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

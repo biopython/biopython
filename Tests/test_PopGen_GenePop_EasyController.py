@@ -58,7 +58,7 @@ class AppTest(unittest.TestCase):
         """Test get alleles.
         """
         #Returns keys of a dict, so order is Python implementation dependent
-        self.assertEqual(set(self.ctrl.get_alleles(0,"Locus3")), set([3, 20]))
+        self.assertEqual(set(self.ctrl.get_alleles(0, "Locus3")), set([3, 20]))
 
     def test_get_alleles_all_pops(self):
         """Test get alleles for all populations.
@@ -68,21 +68,21 @@ class AppTest(unittest.TestCase):
     def test_get_fis(self):
         """Test get Fis.
         """
-        alleles, overall = self.ctrl.get_fis(0,"Locus2")
+        alleles, overall = self.ctrl.get_fis(0, "Locus2")
         self.assertEqual(alleles[3][0], 55)
         self.assertEqual(overall[0], 62)
 
     def test_get_allele_frequency(self):
         """Test allele frequency.
         """
-        tot_genes, alleles = self.ctrl.get_allele_frequency(0,"Locus2")
+        tot_genes, alleles = self.ctrl.get_allele_frequency(0, "Locus2")
         self.assertEqual(tot_genes, 62)
         self.assertTrue(abs(alleles[20] - 0.113) < 0.05)
 
     def test_get_genotype_count(self):
         """Test genotype count.
         """
-        self.assertEqual(len(self.ctrl.get_genotype_count(0,"Locus2")), 3)
+        self.assertEqual(len(self.ctrl.get_genotype_count(0, "Locus2")), 3)
 
     def test_estimate_nm(self):
         """Test Nm estimation.

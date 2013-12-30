@@ -1,5 +1,6 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# Copyright 2009-2012 by Peter Cock. All rights reserved.
+# Copyright 2009-2013 by Peter Cock. All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -15,13 +16,15 @@ Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
 use.
 """
-# For with statement in Python 2.5
-from __future__ import with_statement
+from __future__ import print_function
+
 import codecs
 import os
+import sys
 import contextlib
-import StringIO
 import itertools
+
+from Bio._py3k import basestring
 
 try:
     from collections import UserDict as _dict_base
@@ -86,10 +89,10 @@ def _open_for_random_access(filename):
     and index_db functions.
     """
     handle = open(filename, "rb")
-    import bgzf
+    from . import bgzf
     try:
         return bgzf.BgzfReader(mode="rb", fileobj=handle)
-    except ValueError, e:
+    except ValueError as e:
         assert "BGZF" in str(e)
         #Not a BGZF file after all, rewind to start:
         handle.seek(0)
@@ -113,11 +116,16 @@ class UndoHandle(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         next = self.readline()
         if not next:
             raise StopIteration
         return next
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Python 2 style alias for Python 3 style __next__ method."""
+            return self.__next__()
 
     def readlines(self, *args, **keywds):
         lines = self._saved + self._handle.readlines(*args, **keywds)
@@ -160,9 +168,7 @@ class UndoHandle(object):
         return line
 
     def tell(self):
-        lengths = map(len, self._saved)
-        sum = reduce(lambda x, y: x+y, lengths, 0)
-        return self._handle.tell() - sum
+        return self._handle.tell() - sum(len(line) for line in self._saved)
 
     def seek(self, *args):
         self._saved = []
@@ -271,7 +277,7 @@ class _IndexedSeqFileDict(_dict_base):
     def __str__(self):
         #TODO - How best to handle the __str__ for SeqIO and SearchIO?
         if self:
-            return "{%r : %s(...), ...}" % (self.keys()[0], self._obj_repr)
+            return "{%r : %s(...), ...}" % (list(self.keys())[0], self._obj_repr)
         else:
             return "{}"
 
@@ -282,37 +288,34 @@ class _IndexedSeqFileDict(_dict_base):
         """How many records are there?"""
         return len(self._offsets)
 
+    def items(self):
+        """Iterate over the (key, SeqRecord) items.
+
+        This tries to act like a Python 3 dictionary, and does not return
+        a list of (key, value) pairs due to memory concerns.
+        """
+        for key in self.__iter__():
+            yield key, self.__getitem__(key)
+
+    def values(self):
+        """Iterate over the SeqRecord items.
+
+        This tries to act like a Python 3 dictionary, and does not return
+        a list of value due to memory concerns.
+        """
+        for key in self.__iter__():
+            yield self.__getitem__(key)
+
+    def keys(self):
+        """Iterate over the keys.
+
+        This tries to act like a Python 3 dictionary, and does not return
+        a list of keys due to memory concerns.
+        """
+        return self.__iter__()
+
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems but not items etc
-        def values(self):
-            """Would be a list of the SeqRecord objects, but not implemented.
-
-            In general you can be indexing very very large files, with millions
-            of sequences. Loading all these into memory at once as SeqRecord
-            objects would (probably) use up all the RAM. Therefore we simply
-            don't support this dictionary method.
-            """
-            raise NotImplementedError("Due to memory concerns, when indexing a "
-                                      "sequence file you cannot access all the "
-                                      "records at once.")
-
-        def items(self):
-            """Would be a list of the (key, SeqRecord) tuples, but not implemented.
-
-            In general you can be indexing very very large files, with millions
-            of sequences. Loading all these into memory at once as SeqRecord
-            objects would (probably) use up all the RAM. Therefore we simply
-            don't support this dictionary method.
-            """
-            raise NotImplementedError("Due to memory concerns, when indexing a "
-                                      "sequence file you cannot access all the "
-                                      "records at once.")
-
-        def keys(self):
-            """Return a list of all the keys (SeqRecord identifiers)."""
-            #TODO - Stick a warning in here for large lists? Or just refuse?
-            return self._offsets.keys()
-
+        #Python 2, also define iteritems etc
         def itervalues(self):
             """Iterate over the SeqRecord) items."""
             for key in self.__iter__():
@@ -324,22 +327,6 @@ class _IndexedSeqFileDict(_dict_base):
                 yield key, self.__getitem__(key)
 
         def iterkeys(self):
-            """Iterate over the keys."""
-            return self.__iter__()
-
-    else:
-        #Python 3 - define items and values as iterators
-        def items(self):
-            """Iterate over the (key, SeqRecord) items."""
-            for key in self.__iter__():
-                yield key, self.__getitem__(key)
-
-        def values(self):
-            """Iterate over the SeqRecord items."""
-            for key in self.__iter__():
-                yield self.__getitem__(key)
-
-        def keys(self):
             """Iterate over the keys."""
             return self.__iter__()
 
@@ -487,7 +474,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 if filenames and filenames != self._filenames:
                     con.close()
                     raise ValueError("Index file has different filenames")
-            except _OperationalError, err:
+            except _OperationalError as err:
                 con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
             #Now we have the format (from the DB if not given to us),
@@ -504,7 +491,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             #Create the index
             con = _sqlite.connect(index_filename)
             self._con = con
-            #print "Creating index"
+            #print("Creating index")
             # Sqlite PRAGMA settings for speed
             con.execute("PRAGMA synchronous=OFF")
             con.execute("PRAGMA locking_mode=EXCLUSIVE")
@@ -537,8 +524,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     batch = list(itertools.islice(offset_iter, 100))
                     if not batch:
                         break
-                    #print "Inserting batch of %i offsets, %s ... %s" \
-                    # % (len(batch), batch[0][0], batch[-1][0])
+                    #print("Inserting batch of %i offsets, %s ... %s" \
+                    # % (len(batch), batch[0][0], batch[-1][0]))
                     con.executemany(
                         "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
                         batch)
@@ -549,11 +536,11 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 else:
                     random_access_proxy._handle.close()
             self._length = count
-            #print "About to index %i entries" % count
+            #print("About to index %i entries" % count)
             try:
                 con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                             "key_index ON offset_data(key);")
-            except _IntegrityError, err:
+            except _IntegrityError as err:
                 self._proxies = random_access_proxies
                 self.close()
                 con.close()
@@ -562,7 +549,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
                         (count, "count"))
             con.commit()
-            #print "Index created"
+            #print("Index created")
         self._proxies = random_access_proxies
         self._max_open = max_open
         self._index_filename = index_filename

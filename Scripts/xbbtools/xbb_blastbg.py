@@ -4,16 +4,27 @@
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_blastbg.py
 
-import commands
+from __future__ import print_function
+
 import posix
 import posixpath
 import os
 import sys
 sys.path.insert(0, '.')
-import Queue
+
+try:
+    import Queue as queue # Python 2
+except ImportError:
+    import queue # Python 3
+
 import tempfile
 import threading
-from Tkinter import *
+
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
 from xbb_utils import NotePad
 
 
@@ -39,7 +50,7 @@ class BlastDisplayer:
         # open the oufile and displays new appended text
         fid = open(self.outfile)
         size = 0
-        while 1:
+        while True:
             if self.worker.finished:
                 break
             fid.seek(size)
@@ -69,12 +80,12 @@ class BlastWorker(threading.Thread):
 
     def __init__(self, command):
         self.com = command
-        queue = Queue.Queue(0)
-        self.queue = queue
+        q = queue.Queue(0)
+        self.queue = q
         threading.Thread.__init__(self)
         self.finished = 0
-        print dir(queue)
-        print queue.queue
+        print(dir(q))
+        print(q.queue)
 
     def shutdown(self):
         # GRRRR How do I explicitely kill a thread ???????
@@ -82,7 +93,7 @@ class BlastWorker(threading.Thread):
         del self.queue
 
     def run(self):
-        print 'running', self.com
+        print('running %s' % self.com)
         os.system(self.com)
         self.finished = 1
 

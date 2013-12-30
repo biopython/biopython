@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Deal with Motifs or Signatures allowing ambiguity in the sequences.
 
 This class contains Schema which deal with Motifs and Signatures at
@@ -11,15 +16,18 @@ character can be anything. This helps us condense a whole ton of
 motifs or signatures.
 """
 # standard modules
+from __future__ import print_function
+
 import random
 import re
 
-# biopython
+from Bio._py3k import range
+
 from Bio import Alphabet
 from Bio.Seq import MutableSeq
 
 # neural network libraries
-from Pattern import PatternRepository
+from .Pattern import PatternRepository
 
 # genetic algorithm libraries
 from Bio.GA import Organism
@@ -605,7 +613,7 @@ class SchemaFactory(object):
         assert total_count > 0, "Expected to have motifs to match"
         while (float(matched_count) / float(total_count)) < motif_percent:
             new_schema, matching_motifs = \
-                        self._get_unique_schema(schema_info.keys(),
+                        self._get_unique_schema(list(schema_info.keys()),
                                                 all_motifs, num_ambiguous)
 
             # get the number of counts for the new schema and clean up
@@ -650,7 +658,7 @@ class SchemaFactory(object):
         # doesn't match any old schema
         num_tries = 0
 
-        while 1:
+        while True:
             # pick a motif to work from and make a schema from it
             cur_motif = random.choice(motif_list)
 
@@ -704,8 +712,8 @@ class SchemaFactory(object):
         new_schema_list = list(motif)
         for add_ambiguous in range(num_ambiguous):
             # add an ambiguous position in a new place in the motif
-            while 1:
-                ambig_pos = random.choice(range(len(new_schema_list)))
+            while True:
+                ambig_pos = random.choice(list(range(len(new_schema_list))))
 
                 # only add a position if it isn't already ambiguous
                 # otherwise, we'll try again

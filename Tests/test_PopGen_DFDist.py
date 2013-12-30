@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import os
 import shutil
 import tempfile
@@ -13,6 +15,16 @@ from Bio import MissingExternalDependencyError
 
 #Tests DFDist related code. Note: this case requires Dfdist (four binaries)
 #test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
+
+def is_pypy():
+    import platform
+    try:
+        if platform.python_implementation() == 'PyPy':
+            return True
+    except AttributeError:
+        #New in Python 2.6, not in Jython yet either
+        pass
+    return False
 
 wanted = dict()
 for path in os.environ['PATH'].split(os.pathsep):
@@ -28,6 +40,11 @@ if len(wanted) != 4:
     raise MissingExternalDependencyError(
         "Install Dfdist, Ddatacal, pv2 and cplot2 if you want to use DFDist with Bio.PopGen.FDist.")
 del wanted
+
+import sys
+if not is_pypy() and sys.version_info[0] == 3 and sys.version_info < (3, 2, 4):
+    raise MissingExternalDependencyError("Under Python 3, please use Python 3.2.4"
+               " onwards for this test - see http://bugs.python.org/issue16903")
 
 
 class AppTest(unittest.TestCase):
@@ -104,6 +121,6 @@ class AppTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print "Running fdist tests, which might take some time, please wait"
+    print("Running fdist tests, which might take some time, please wait")
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

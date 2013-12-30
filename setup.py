@@ -21,9 +21,20 @@ mailing list and ask for help.  See:
 
 http://biopython.org/wiki/Mailing_lists
 """
+from __future__ import print_function
+
 import sys
 import os
 import shutil
+
+from distutils.core import setup
+from distutils.core import Command
+from distutils.command.install import install
+from distutils.command.build_py import build_py
+from distutils.command.build_ext import build_ext
+from distutils.extension import Extension
+
+_CHECKED = None
 
 
 def is_pypy():
@@ -51,7 +62,7 @@ def get_yes_or_no(question, default):
         default_str = 'n'
 
     while True:
-        print ("%s %s:" % (question, option_str))
+        print("%s %s:" % (question, option_str))
         if sys.version_info[0] == 3:
             response = input().lower()
         else:
@@ -60,47 +71,19 @@ def get_yes_or_no(question, default):
             response = default_str
         if response[0] in ['y', 'n']:
             break
-        print ("Please answer y or n.")
+        print("Please answer y or n.")
     return response[0] == 'y'
 
+
 # Make sure we have the right Python version.
-if sys.version_info[:2] < (2, 5):
-    print("Biopython requires Python 2.5 or better (but not Python 3 "
-          "yet).  Python %d.%d detected" % sys.version_info[:2])
-    sys.exit(-1)
-elif sys.version_info[:2] == (2, 5):
-    print("WARNING - Biopython is dropping support for Python 2.5 after this release")
-elif sys.version_info[0] == 3:
-    print("WARNING - Biopython does not yet officially support Python 3")
-    import do2to3
-    python3_source = "build/py%i.%i" % sys.version_info[:2]
-    if "clean" in sys.argv:
-        if os.path.isdir(python3_source):
-            shutil.rmtree(python3_source)
-        del python3_source  # so we don't try to change to it below
-    else:
-        if not os.path.isdir("build"):
-            os.mkdir("build")
-        do2to3.main(".", python3_source)
-
-# use setuptools, falling back on core modules if not found
-try:
-    from setuptools import setup, Command
-    from setuptools.command.install import install
-    from setuptools.command.build_py import build_py
-    from setuptools.command.build_ext import build_ext
-    from setuptools.extension import Extension
-    _SETUPTOOLS = True
-except ImportError:
-    from distutils.core import setup
-    from distutils.core import Command
-    from distutils.command.install import install
-    from distutils.command.build_py import build_py
-    from distutils.command.build_ext import build_ext
-    from distutils.extension import Extension
-    _SETUPTOOLS = False
-
-_CHECKED = None
+if sys.version_info[:2] < (2, 6):
+    print("Biopython requires Python 2.6 or 2.7 (or Python 3.3 or later). "
+          "Python %d.%d detected" % sys.version_info[:2])
+    sys.exit(1)
+elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
+    print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
+          "Python %d.%d detected" % sys.version_info[:2])
+    sys.exit(1)
 
 
 def check_dependencies_once():
@@ -112,15 +95,9 @@ def check_dependencies_once():
     return _CHECKED
 
 
-def get_install_requires():
-    install_requires = []
-    # skip this with distutils (otherwise get a warning)
-    if not _SETUPTOOLS:
-        return []
-    # skip this with jython and pypy and ironpython
-    if os.name == "java" or is_pypy() or is_ironpython():
-        return []
-    # check for easy_install and pip
+def is_automated():
+    """Check for installation with easy_install or pip.
+    """
     is_automated = False
     # easy_install: --dist-dir option passed
     try:
@@ -135,14 +112,12 @@ def get_install_requires():
     if sys.argv in [["-c", "develop", "--no-deps"],
                     ["--no-deps", "-c", "develop"],
                     ["-c", "egg_info"]] \
-                    or "pip-egg-info" in sys.argv:
+                    or "pip-egg-info" in sys.argv \
+                    or sys.argv[:3] == ["-c", "install", "--record"] \
+                    or sys.argv[:4] == ['-c', 'install', '--single-version-externally-managed',
+                                        '--record']:
         is_automated = True
-    if is_automated:
-        global _CHECKED
-        if _CHECKED is None:
-            _CHECKED = True
-        install_requires.append("numpy >= 1.5.1")
-    return install_requires
+    return is_automated
 
 
 def check_dependencies():
@@ -158,7 +133,8 @@ def check_dependencies():
     # We only check for NumPy, as this is a compile time dependency
     if is_Numpy_installed():
         return True
-
+    if is_automated():
+        return True  # For automated builds go ahead with installed packages
     if os.name == 'java':
         return True  # NumPy is not avaliable for Jython (for now)
     if is_pypy():
@@ -166,7 +142,7 @@ def check_dependencies():
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
-    print ("""
+    print("""
 Numerical Python (NumPy) is not installed.
 
 This package is required for many Biopython features.  Please install
@@ -174,7 +150,7 @@ it before you install Biopython. You can install Biopython anyway, but
 anything dependent on NumPy will not work. If you do this, and later
 install NumPy, you should then re-install Biopython.
 
-You can find NumPy at http://numpy.scipy.org
+You can find NumPy at http://www.numpy.org
 """)
     # exit automatically if running as part of some script
     # (e.g. PyPM, ActiveState's Python Package Manager)
@@ -314,6 +290,7 @@ PACKAGES = [
     'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
+    'Bio.motifs.jaspar',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
@@ -328,7 +305,6 @@ PACKAGES = [
     'Bio.PopGen.GenePop',
     'Bio.PopGen.SimCoal',
     'Bio.Restriction',
-    'Bio.Restriction._Update',
     'Bio.SCOP',
     'Bio.SearchIO',
     'Bio.SearchIO._model',
@@ -348,6 +324,7 @@ PACKAGES = [
     'Bio.Phylo.Applications',
     'Bio.Phylo.PAML',
     'Bio.UniGene',
+    'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
     #Other top level packages,
@@ -367,22 +344,10 @@ if os.name == 'java':
 elif is_pypy() or is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
-elif sys.version_info[0] == 3:
-    # TODO - Must update our C extensions for Python 3
-    EXTENSIONS = [
-    Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c'],
-              include_dirs=["Bio"]
-              ),
-    Extension('Bio.Nexus.cnexus',
-              ['Bio/Nexus/cnexus.c']
-              ),
-    ]
 else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c'],
-              include_dirs=["Bio"]
               ),
     Extension('Bio.trie',
               ['Bio/triemodule.c',
@@ -463,9 +428,6 @@ setup_args = {
         'Bio.PopGen': ['SimCoal/data/*.par'],
          },
    }
-
-if _SETUPTOOLS:
-    setup_args["install_requires"] = get_install_requires()
 
 try:
     setup(**setup_args)

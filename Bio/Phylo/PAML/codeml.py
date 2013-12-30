@@ -3,13 +3,12 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-# For using with statement in Python 2.5 or Jython
-from __future__ import with_statement
+from __future__ import print_function
 
 import os
 import os.path
-from _paml import Paml, _relpath
-import _parse_codeml
+from ._paml import Paml, _relpath
+from . import _parse_codeml
 
 
 class CodemlError(EnvironmentError):
@@ -89,7 +88,7 @@ class Codeml(Paml):
                         # NSsites is stored in Python as a list but in the
                         # control file it is specified as a series of numbers
                         # separated by spaces.
-                        NSsites = " ".join([str(site) for site in option[1]])
+                        NSsites = " ".join(str(site) for site in option[1])
                         ctl_handle.write("%s = %s\n" % (option[0], NSsites))
                     else:
                         ctl_handle.write("%s = %s\n" % (option[0], option[1]))
@@ -104,7 +103,7 @@ class Codeml(Paml):
             with open(ctl_file) as ctl_handle:
                 for line in ctl_handle:
                     line = line.strip()
-                    uncommented = line.split("*",1)[0]
+                    uncommented = line.split("*", 1)[0]
                     if uncommented != "":
                         if "=" not in uncommented:
                             raise AttributeError(
@@ -141,8 +140,8 @@ class Codeml(Paml):
                                 except:
                                     converted_value = value
                             temp_options[option] = converted_value
-        for option in self._options.keys():
-            if option in temp_options.keys():
+        for option in self._options:
+            if option in temp_options:
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
@@ -154,10 +153,10 @@ class Codeml(Paml):
                 # NSsites is stored in Python as a list but in the
                 # control file it is specified as a series of numbers
                 # separated by spaces.
-                NSsites = " ".join([str(site) for site in option[1]])
-                print "%s = %s" % (option[0], NSsites)
+                NSsites = " ".join(str(site) for site in option[1])
+                print("%s = %s" % (option[0], NSsites))
             else:
-                print "%s = %s" % (option[0], option[1])
+                print("%s = %s" % (option[0], option[1]))
 
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.
@@ -197,9 +196,8 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
-    handle = open(results_file)
-    lines = handle.readlines()
-    handle.close()
+    with open(results_file) as handle:
+        lines = handle.readlines()
     (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
             results)
     results = _parse_codeml.parse_nssites(lines, results, multi_models,

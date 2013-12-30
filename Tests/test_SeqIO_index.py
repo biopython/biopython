@@ -17,14 +17,10 @@ import os
 import unittest
 import tempfile
 import gzip
-from StringIO import StringIO
-try:
-    #This is in Python 2.6+, but we need it on Python 3
-    from io import BytesIO
-except ImportError:
-    BytesIO = StringIO
-from Bio._py3k import _as_bytes, _bytes_to_string
+import warnings
+from io import BytesIO
 
+from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
@@ -33,6 +29,13 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+from Bio import BiopythonParserWarning
+from Bio import MissingPythonDependencyError
+try:
+    from test_bgzf import _have_bug17666
+    do_bgzf = _have_bug17666()
+except MissingPythonDependencyError:
+    do_bgzf = False
 
 def add_prefix(key):
     """Dummy key_function for testing index code."""
@@ -232,7 +235,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(len(keys), len(rec_dict))
         #Make sure boolean evaluation works
         self.assertEqual(bool(keys), bool(rec_dict))
-        for key,id in zip(keys, ids):
+        for key, id in zip(keys, ids):
             self.assertTrue(key in rec_dict)
             self.assertEqual(id, rec_dict[key].id)
             self.assertEqual(id, rec_dict.get(key).id)
@@ -247,21 +250,18 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
         if hasattr(dict, "iteritems"):
             #Python 2.x
-            for key, rec in rec_dict.iteritems():
+            for key, rec in rec_dict.items():
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
-            #Now check non-defined methods...
-            self.assertRaises(NotImplementedError, rec_dict.items)
-            self.assertRaises(NotImplementedError, rec_dict.values)
         else:
             #Python 3
             assert not hasattr(rec_dict, "iteritems")
-            for key, rec in rec_dict.iteritems():
+            for key, rec in rec_dict.items():
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
-            for rec in rec_dict.itervalues():
+            for rec in rec_dict.values():
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
@@ -290,8 +290,16 @@ class IndexDictTests(unittest.TestCase):
             h.close()
             id_list = [rec.id.lower() for rec in
                        SeqIO.parse(filename, format, alphabet)]
-        rec_dict = SeqIO.index(filename, format, alphabet,
-                               key_function = lambda x : x.lower())
+
+        if format in ["sff"]:
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', BiopythonParserWarning)
+                rec_dict = SeqIO.index(filename, format, alphabet,
+                                       key_function = lambda x : x.lower())
+        else:
+            rec_dict = SeqIO.index(filename, format, alphabet,
+                                   key_function = lambda x : x.lower())
+
         self.assertEqual(set(id_list), set(rec_dict.keys()))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
@@ -365,12 +373,14 @@ tests = [
     ("Ace/consed_sample.ace", "ace", None),
     ("Ace/seq.cap.ace", "ace", generic_dna),
     ("Quality/wrapping_original_sanger.fastq", "fastq", None),
-    ("Quality/example.fastq", "fastq", None),
+    ("Quality/example.fastq", "fastq", None), #Unix newlines
     ("Quality/example.fastq", "fastq-sanger", generic_dna),
+    ("Quality/example_dos.fastq", "fastq", None), #DOS/Windows newlines
     ("Quality/tricky.fastq", "fastq", generic_nucleotide),
     ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
     ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
     ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
+    ("Quality/zero_length.fastq", "fastq", generic_dna),
     ("EMBL/epo_prt_selection.embl", "embl", None),
     ("EMBL/U87107.embl", "embl", None),
     ("EMBL/TRBG361.embl", "embl", None),
@@ -415,34 +425,34 @@ tests = [
 for filename, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename, None)]
-    if os.path.isfile(filename + ".bgz"):
-        tasks.append((filename + ".bgz","bgzf"))
+    if do_bgzf and os.path.isfile(filename + ".bgz"):
+        tasks.append((filename + ".bgz", "bgzf"))
     for filename, comp in tasks:
 
-        def funct(fn,fmt,alpha,c):
+        def funct(fn, fmt, alpha, c):
             f = lambda x : x.simple_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
-                    % (format, filename.replace("/","_").replace(".","_")),
+                    % (format, filename.replace("/", "_").replace(".", "_")),
                 funct(filename, format, alphabet, comp))
         del funct
 
-        def funct(fn,fmt,alpha,c):
+        def funct(fn, fmt, alpha, c):
             f = lambda x : x.key_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
-                    % (format, filename.replace("/","_").replace(".","_")),
+                    % (format, filename.replace("/", "_").replace(".", "_")),
                 funct(filename, format, alphabet, comp))
         del funct
 
-        def funct(fn,fmt,alpha,c):
+        def funct(fn, fmt, alpha, c):
             f = lambda x : x.get_raw_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
-                    % (format, filename.replace("/","_").replace(".","_")),
+                    % (format, filename.replace("/", "_").replace(".", "_")),
                 funct(filename, format, alphabet, comp))
         del funct
 

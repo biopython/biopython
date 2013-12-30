@@ -12,7 +12,7 @@ from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from _base import _BaseHmmerTextIndexer
+from ._base import _BaseHmmerTextIndexer
 
 __all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
 
@@ -89,7 +89,7 @@ class Hmmer3TextParser(object):
                 regx = re.search(_RE_OPT, self.line)
                 # if target in regx.group(1), then we store the key as target
                 if 'target' in regx.group(1):
-                    meta['target'] = regx.group(2)
+                    meta['target'] = regx.group(2).strip()
                 else:
                     meta[regx.group(1)] = regx.group(2)
 
@@ -137,7 +137,13 @@ class Hmmer3TextParser(object):
                         self.line = read_forward(self.handle)
 
             # create qresult, set its attributes and yield
-            qresult = QueryResult(qid, hits=hit_list)
+            # not initializing hit_list directly to handle empty hits
+            # (i.e. need to set its query description manually)
+            qresult = QueryResult(id=qid)
+            for hit in hit_list:
+                if not hit:
+                    hit.query_description = qresult.description
+                qresult.append(hit)
             for attr, value in qresult_attrs.items():
                 setattr(qresult, attr, value)
             yield qresult
@@ -176,7 +182,7 @@ class Hmmer3TextParser(object):
                 return hit_list
             # entering hit results row
             # parse the columns into a list
-            row = filter(None, self.line.strip().split(' '))
+            row = [x for x in self.line.strip().split(' ') if x]
             # join the description words if it's >1 word
             if len(row) > 10:
                 row[9] = ' '.join(row[9:])
@@ -242,7 +248,7 @@ class Hmmer3TextParser(object):
                     hit_list.append(hit)
                     break
 
-                parsed = filter(None, self.line.strip().split(' '))
+                parsed = [x for x in self.line.strip().split(' ') if x]
                 assert len(parsed) == 16
                 # parsed column order:
                 # index, is_included, bitscore, bias, evalue_cond, evalue

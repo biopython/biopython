@@ -44,9 +44,9 @@ The SearchIO object model consists of a hierarchy of four nested objects:
 
 """
 
-from query import QueryResult
-from hit import Hit
-from hsp import HSP, HSPFragment
+from .query import QueryResult
+from .hit import Hit
+from .hsp import HSP, HSPFragment
 
 
 __all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']

@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the KEGG Enzyme database.
+"""Code to work with the KEGG Enzyme database.
 
 Functions:
 parse - Returns an iterator giving Record objects.
@@ -14,23 +13,25 @@ Classes:
 Record               -- Holds the information from a KEGG Enzyme record.
 """
 
+from __future__ import print_function
+
 from Bio.KEGG import _write_kegg
 from Bio.KEGG import _wrap_kegg
 
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 rxn_wrap = [0, "",
-            (" + ","",1,1),
-            (" = ","",1,1),
-            (" ","$",1,1),
-            ("-","$",1,1)]
+            (" + ", "", 1, 1),
+            (" = ", "", 1, 1),
+            (" ", "$", 1, 1),
+            ("-", "$", 1, 1)]
 name_wrap = [0, "",
-             (" ","$",1,1),
-             ("-","$",1,1)]
+             (" ", "$", 1, 1),
+             ("-", "$", 1, 1)]
 id_wrap = lambda indent : [indent, "",
-                           (" ","",1,0)]
+                           (" ", "", 1, 0)]
 struct_wrap = lambda indent : [indent, "",
-                               ("  ","",1,1)]
+                               ("  ", "", 1, 1)]
 
 
 class Record(object):
@@ -202,10 +203,10 @@ def parse(handle):
     example, using one of the example KEGG files in the Biopython
     test suite,
 
-    >>> handle = open("KEGG/enzyme.sample")
-    >>> for record in parse(handle):
-    ...     print record.entry, record.name[0]
-    ...
+    >>> with open("KEGG/enzyme.sample") as handle:
+    ...     for record in parse(handle):
+    ...         print("%s %s" % (record.entry, record.name[0]))
+    ... 
     1.1.1.1 Alcohol dehydrogenase
     1.1.1.62 Estradiol 17beta-dehydrogenase
     1.1.1.68 Transferred to EC 1.7.99.5
@@ -214,7 +215,6 @@ def parse(handle):
     2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
     3.1.1.6 Acetylesterase
     2.7.2.1 Acetate kinase
-    >>> handle.close()
 
     """
     record = Record()
@@ -263,7 +263,7 @@ def parse(handle):
             record.effector.append(data.strip(";"))
         elif keyword=="GENES       ":
             if data[3:5]==': ':
-                key, values = data.split(":",1)
+                key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
                 record.genes.append(row)
@@ -281,11 +281,11 @@ def parse(handle):
             record.name.append(data.strip(";"))
         elif keyword=="PATHWAY     ":
             if data[:5]=='PATH:':
-                _, map_num, name = data.split(None,2)
+                _, map_num, name = data.split(None, 2)
                 pathway = ('PATH', map_num, name)
                 record.pathway.append(pathway)
             else:
-                ec_num, name = data.split(None,1)
+                ec_num, name = data.split(None, 1)
                 pathway = 'PATH', ec_num, name
                 record.pathway.append(pathway)
         elif keyword=="PRODUCT     ":
@@ -313,3 +313,4 @@ def parse(handle):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

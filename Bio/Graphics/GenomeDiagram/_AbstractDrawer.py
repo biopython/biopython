@@ -40,6 +40,10 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
+from Bio._py3k import range
+
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.graphics.shapes import *
@@ -190,7 +194,7 @@ def draw_polygon(list_of_points,
     strokecolor, color = _stroke_and_fill_colors(color, border)
 
     xy_list = []
-    for (x,y) in list_of_points:
+    for (x, y) in list_of_points:
         xy_list.append(x)
         xy_list.append(y)
 
@@ -300,7 +304,7 @@ def intermediate_points(start, end, graph_data):
     newdata.append((start, graph_data[0][0]+(graph_data[1][0]-graph_data[0][0])/2.,
                     graph_data[0][1]))
     # add middle set
-    for index in xrange(1, len(graph_data)-1):
+    for index in range(1, len(graph_data)-1):
         lastxval, lastyval = graph_data[index-1]
         xval, yval = graph_data[index]
         nextxval, nextyval = graph_data[index+1]
@@ -432,20 +436,6 @@ class AbstractDrawer(object):
             cross_track_links = []
         else:
             self.cross_track_links = cross_track_links
-
-    @property
-    def xcentre(self):
-        """Backwards compatible alias for xcenter (DEPRECATED)"""
-        warnings.warn("The .xcentre attribute is deprecated, use .xcenter instead",
-                      Bio.BiopythonDeprecationWarning)
-        return self.xcenter
-
-    @property
-    def ycentre(self):
-        """Backwards compatible alias for ycenter (DEPRECATED)"""
-        warnings.warn("The .ycentre attribute is deprecated, use .ycenter instead",
-                      Bio.BiopythonDeprecationWarning)
-        return self.ycenter
 
     def set_page_size(self, pagesize, orientation):
         """ set_page_size(self, pagesize, orientation)

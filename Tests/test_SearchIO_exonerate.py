@@ -1383,7 +1383,7 @@ class ExonerateTextCases(unittest.TestCase):
         """Test parsing exonerate output (exn_22_q_none.exn)"""
         exn_file = get_file('exn_22_q_none.exn')
         qresults = parse(exn_file, 'exonerate-text')
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
 
 
 class ExonerateVulgarCases(unittest.TestCase):

@@ -12,16 +12,20 @@
 """CircularDrawer module for GenomeDiagram."""
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.graphics.shapes import *
 from reportlab.lib import colors
 from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
+from Bio._py3k import range
+
 # GenomeDiagram imports
-from _AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
-from _AbstractDrawer import _stroke_and_fill_colors
-from _FeatureSet import FeatureSet
-from _GraphSet import GraphSet
+from ._AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
+from ._AbstractDrawer import _stroke_and_fill_colors
+from ._FeatureSet import FeatureSet
+from ._GraphSet import GraphSet
 
 from math import ceil, pi, cos, sin, asin
 
@@ -437,7 +441,7 @@ class CircularDrawer(AbstractDrawer):
                 # Default to placing the label the bottom of the feature
                 # as drawn on the page, meaning feature end on left half
                 label_angle = endangle + 0.5 * pi # Make text radial
-                sinval, cosval = endsin,endcos
+                sinval, cosval = endsin, endcos
             else:
                 # Default to placing the label on the bottom of the feature,
                 # which means the feature end when on right hand half
@@ -492,8 +496,8 @@ class CircularDrawer(AbstractDrawer):
         if self.end < endB:
             endB = self.end
 
-        trackobjA = cross_link._trackA(self._parent.tracks.values())
-        trackobjB = cross_link._trackB(self._parent.tracks.values())
+        trackobjA = cross_link._trackA(list(self._parent.tracks.values()))
+        trackobjB = cross_link._trackB(list(self._parent.tracks.values()))
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
@@ -572,7 +576,7 @@ class CircularDrawer(AbstractDrawer):
 
         # Get graph data
         data_quartiles = graph.quartiles()
-        minval, maxval = data_quartiles[0],data_quartiles[4]
+        minval, maxval = data_quartiles[0], data_quartiles[4]
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = 0.5*(top-btm)
         datarange = maxval - minval
@@ -627,7 +631,7 @@ class CircularDrawer(AbstractDrawer):
 
         # Set the number of pixels per unit for the data
         data_quartiles = graph.quartiles()
-        minval, maxval = data_quartiles[0],data_quartiles[4]
+        minval, maxval = data_quartiles[0], data_quartiles[4]
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = 0.5*(top-btm)
         datarange = maxval - minval
@@ -686,7 +690,7 @@ class CircularDrawer(AbstractDrawer):
 
         # Get graph data
         data_quartiles = graph.quartiles()
-        minval, maxval = data_quartiles[0],data_quartiles[4]
+        minval, maxval = data_quartiles[0], data_quartiles[4]
         midval = (maxval + minval)/2. # mid is the value at the X-axis
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = (top-btm)
@@ -820,7 +824,7 @@ class CircularDrawer(AbstractDrawer):
             for set in track.get_sets():
                 if set.__class__ is GraphSet:
                     # Y-axis
-                    for n in xrange(7):
+                    for n in range(7):
                         angle = n * 1.0471975511965976
                         if angle < startangle or endangle < angle:
                             continue
@@ -912,7 +916,7 @@ class CircularDrawer(AbstractDrawer):
             #if 0.5*pi < tickangle < 1.5*pi:
             #    y1 -= label_offset
             labelgroup = Group(label)
-            labelgroup.transform = (1,0,0,1, x1, y1)
+            labelgroup.transform = (1, 0, 0, 1, x1, y1)
         else:
             labelgroup = None
         return tick, labelgroup
@@ -978,7 +982,7 @@ class CircularDrawer(AbstractDrawer):
                 theta, costheta, sintheta = self.canvas_angle(pos)
                 if theta < startangle or endangle < theta:
                     continue
-                x,y = self.xcenter+btm*sintheta, self.ycenter+btm*costheta  # start text halfway up marker
+                x, y = self.xcenter+btm*sintheta, self.ycenter+btm*costheta  # start text halfway up marker
                 labelgroup = Group(label)
                 labelangle = self.sweep*2*pi*(pos-self.start)/self.length - pi/2
                 if theta > pi:
@@ -1061,12 +1065,12 @@ class CircularDrawer(AbstractDrawer):
             # Calculate trig values for angle and coordinates
             startcos, startsin = cos(startangle), sin(startangle)
             endcos, endsin = cos(endangle), sin(endangle)
-            x0,y0 = self.xcenter, self.ycenter # origin of the circle
-            x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
-            x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
-            x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
-            x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-            return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border)
+            x0, y0 = self.xcenter, self.ycenter # origin of the circle
+            x1, y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
+            x2, y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
+            x3, y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
+            x4, y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
+            return draw_polygon([(x1, y1), (x2, y2), (x3, y3), (x4, y4)], color, border)
 
     def _draw_arc_line(self, path, start_radius, end_radius, start_angle, end_angle,
                        move=False):
@@ -1145,11 +1149,11 @@ class CircularDrawer(AbstractDrawer):
             inner_endcos, inner_endsin = cos(inner_endangle), sin(inner_endangle)
             outer_startcos, outer_startsin = cos(outer_startangle), sin(outer_startangle)
             outer_endcos, outer_endsin = cos(outer_endangle), sin(outer_endangle)
-            x1,y1 = (x0+inner_radius*inner_startsin, y0+inner_radius*inner_startcos)
-            x2,y2 = (x0+inner_radius*inner_endsin, y0+inner_radius*inner_endcos)
-            x3,y3 = (x0+outer_radius*outer_endsin, y0+outer_radius*outer_endcos)
-            x4,y4 = (x0+outer_radius*outer_startsin, y0+outer_radius*outer_startcos)
-            return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border,
+            x1, y1 = (x0+inner_radius*inner_startsin, y0+inner_radius*inner_startcos)
+            x2, y2 = (x0+inner_radius*inner_endsin, y0+inner_radius*inner_endcos)
+            x3, y3 = (x0+outer_radius*outer_endsin, y0+outer_radius*outer_endcos)
+            x4, y4 = (x0+outer_radius*outer_startsin, y0+outer_radius*outer_startcos)
+            return draw_polygon([(x1, y1), (x2, y2), (x3, y3), (x4, y4)], color, border,
                                 #default is mitre/miter which can stick out too much:
                                 strokeLineJoin=1,  # 1=round
                                 )
@@ -1181,7 +1185,7 @@ class CircularDrawer(AbstractDrawer):
         shaft_inner_radius = inner_radius + corner_len
         shaft_outer_radius = outer_radius - corner_len
 
-        cornerangle_delta = max(0.0,min(abs(boxheight)*0.5*corner/middle_radius, abs(angle*0.5)))
+        cornerangle_delta = max(0.0, min(abs(boxheight)*0.5*corner/middle_radius, abs(angle*0.5)))
         if angle < 0:
             cornerangle_delta *= -1  # reverse it
 
@@ -1271,7 +1275,7 @@ class CircularDrawer(AbstractDrawer):
         shaft_height = boxheight*shaft_height_ratio
         shaft_inner_radius = middle_radius - 0.5*shaft_height
         shaft_outer_radius = middle_radius + 0.5*shaft_height
-        headangle_delta = max(0.0,min(abs(boxheight)*head_length_ratio/middle_radius, abs(angle)))
+        headangle_delta = max(0.0, min(abs(boxheight)*head_length_ratio/middle_radius, abs(angle)))
         if angle < 0:
             headangle_delta *= -1  # reverse it
         if orientation=="right":
@@ -1290,21 +1294,21 @@ class CircularDrawer(AbstractDrawer):
         startcos, startsin = cos(startangle), sin(startangle)
         headcos, headsin = cos(headangle), sin(headangle)
         endcos, endsin = cos(endangle), sin(endangle)
-        x0,y0 = self.xcenter, self.ycenter      # origin of the circle
+        x0, y0 = self.xcenter, self.ycenter      # origin of the circle
         if 0.5 >= abs(angle) and abs(headangle_delta) >= abs(angle):
             #If the angle is small, and the arrow is all head,
             #cheat and just use a triangle.
             if orientation=="right":
-                x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
-                x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-                x3,y3 = (x0+middle_radius*endsin, y0+middle_radius*endcos)
+                x1, y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
+                x2, y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
+                x3, y3 = (x0+middle_radius*endsin, y0+middle_radius*endcos)
             else:
-                x1,y1 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
-                x2,y2 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
-                x3,y3 = (x0+middle_radius*startsin, y0+middle_radius*startcos)
+                x1, y1 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
+                x2, y2 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
+                x3, y3 = (x0+middle_radius*startsin, y0+middle_radius*startcos)
             #return draw_polygon([(x1,y1),(x2,y2),(x3,y3)], color, border,
             #                    stroke_line_join=1)
-            return Polygon([x1,y1,x2,y2,x3,y3],
+            return Polygon([x1, y1, x2, y2, x3, y3],
                            strokeColor=border or color,
                            fillColor=color,
                            strokeLineJoin=1,  # 1=round, not mitre!
@@ -1408,6 +1412,9 @@ class CircularDrawer(AbstractDrawer):
         if head_length_ratio and tail_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle*0.5), startangle)
             tailangle = min(startangle + min(height*tail_length_ratio/(center*teeth), angle*0.5), endangle)
+            #With very small features, can due to floating point calculations
+            #violate the assertion below that start <= tail <= head <= end
+            tailangle = min(tailangle, headangle)
         elif head_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle), startangle)
             tailangle = startangle
@@ -1422,7 +1429,7 @@ class CircularDrawer(AbstractDrawer):
         startcos, startsin = cos(startangle), sin(startangle)
         headcos, headsin = cos(headangle), sin(headangle)
         endcos, endsin = cos(endangle), sin(endangle)
-        x0,y0 = self.xcenter, self.ycenter      # origin of the circle
+        x0, y0 = self.xcenter, self.ycenter      # origin of the circle
 
         p = ArcPath(strokeColor=strokecolor,
                     fillColor=color,

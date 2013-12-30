@@ -12,6 +12,10 @@ The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
 """
 
 import copy
+from functools import reduce
+
+from Bio._py3k import map
+from Bio._py3k import basestring
 
 
 class CrystalError(Exception):
@@ -78,7 +82,7 @@ class Chain(object):
             residues = residues.replace('*', ' ')
             residues = residues.strip()
             elements = residues.split()
-            self.data = map(Hetero, elements)
+            self.data = [Hetero(x) for x in elements]
         elif isinstance(residues, list):
             for element in residues:
                 if not isinstance(element, Hetero):
@@ -239,18 +243,14 @@ class Crystal(object):
 
     def __repr__(self):
         output = ''
-        keys = self.data.keys()
-        keys.sort()
-        for key in keys:
-            output = output + '%s : %s\n' % (key, self.data[ key ])
+        for key in sorted(self.data):
+            output += '%s : %s\n' % (key, self.data[key])
         return output
 
     def __str__(self):
         output = ''
-        keys = self.data.keys()
-        keys.sort()
-        for key in keys:
-            output = output + '%s : %s\n' % (key, self.data[ key ])
+        for key in sorted(self.data):
+            output += '%s : %s\n' % (key, self.data[key])
         return output
 
     def tostring(self):
@@ -266,7 +266,7 @@ class Crystal(object):
         if isinstance(item, Chain):
             self.data[key] = item
         elif isinstance(item, str):
-            self.data[ key ] = Chain(item)
+            self.data[key] = Chain(item)
         else:
             raise TypeError
 

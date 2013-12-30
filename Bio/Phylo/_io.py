@@ -8,8 +8,8 @@
 This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
 """
 
-# For with on Python/Jython 2.5
-from __future__ import with_statement
+from __future__ import print_function
+
 __docformat__ = "restructuredtext en"
 
 from Bio import File
@@ -31,7 +31,8 @@ supported_formats = {
 try: 
     from Bio.Phylo import CDAOIO
     supported_formats['cdao'] = CDAOIO
-except: pass
+except:
+    pass
 
 
 def parse(file, format, **kwargs):
@@ -45,7 +46,7 @@ def parse(file, format, **kwargs):
 
     >>> trees = parse('../../Tests/PhyloXML/apaf.xml', 'phyloxml')
     >>> for tree in trees:
-    ...     print tree.rooted
+    ...     print(tree.rooted)
     True
     """
     with File.as_handle(file, 'r') as fp:
@@ -61,11 +62,11 @@ def read(file, format, **kwargs):
     """
     try:
         tree_gen = parse(file, format, **kwargs)
-        tree = tree_gen.next()
+        tree = next(tree_gen)
     except StopIteration:
         raise ValueError("There are no trees in this file.")
     try:
-        tree_gen.next()
+        next(tree_gen)
     except StopIteration:
         return tree
     else:
@@ -87,3 +88,4 @@ def convert(in_file, in_format, out_file, out_format, parse_args={}, **kwargs):
     """Convert between two tree file formats."""
     trees = parse(in_file, in_format, **parse_args)
     return write(trees, out_file, out_format, **kwargs)
+

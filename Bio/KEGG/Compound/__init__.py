@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the KEGG Ligand/Compound database.
+"""Code to work with the KEGG Ligand/Compound database.
 
 Functions:
 parse - Returns an iterator giving Record objects.
@@ -15,18 +14,20 @@ Record - A representation of a KEGG Ligand/Compound.
 """
 
 # other Biopython stuff
+from __future__ import print_function
+
 from Bio.KEGG import _write_kegg
 from Bio.KEGG import _wrap_kegg
 
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 name_wrap = [0, "",
-             (" ","$",1,1),
-             ("-","$",1,1)]
+             (" ", "$", 1, 1),
+             ("-", "$", 1, 1)]
 id_wrap = lambda indent : [indent, "",
-                           (" ","",1,0)]
+                           (" ", "", 1, 0)]
 struct_wrap = lambda indent : [indent, "",
-                               ("  ","",1,1)]
+                               ("  ", "", 1, 1)]
 
 
 class Record(object):
@@ -132,10 +133,10 @@ def parse(handle):
     example, using one of the example KEGG files in the Biopython
     test suite,
 
-    >>> handle = open("KEGG/compound.sample")
-    >>> for record in parse(handle):
-    ...     print record.entry, record.name[0]
-    ...
+    >>> with open("KEGG/compound.sample") as handle:
+    ...     for record in parse(handle):
+    ...         print("%s %s" % (record.entry, record.name[0]))
+    ... 
     C00023 Iron
     C00017 Protein
     C00099 beta-Alanine
@@ -144,7 +145,6 @@ def parse(handle):
     C00348 Undecaprenyl phosphate
     C00349 2-Methyl-3-oxopropanoate
     C01386 NH2Mec
-    >>> handle.close()
 
     """
     record = Record()
@@ -174,7 +174,7 @@ def parse(handle):
                 record.enzyme.append(enzyme)
         elif keyword=="PATHWAY     ":
             if data[:5]=='PATH:':
-                path, map, name = data.split(None,2)
+                path, map, name = data.split(None, 2)
                 pathway = (path[:-1], map, name)
                 record.pathway.append(pathway)
             else:
@@ -204,3 +204,4 @@ def parse(handle):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

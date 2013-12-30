@@ -36,7 +36,7 @@ class Hmmer3TabParser(object):
 
     def _parse_row(self):
         """Returns a dictionary of parsed row values."""
-        cols = filter(None, self.line.strip().split(' '))
+        cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
         if len(cols) > 19:
@@ -131,7 +131,7 @@ class Hmmer3TabParser(object):
 
                 # create qresult and yield if we're at a new qresult or at EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    qresult = QueryResult(hit_list, prev_qid)
                     for attr, value in prev['qresult'].items():
                         setattr(qresult, attr, value)
                     yield qresult
@@ -174,11 +174,11 @@ class Hmmer3TabIndexer(SearchIndexer):
             if not line:
                 break
 
-            cols = line.strip().split(split_mark)
+            cols = [x for x in line.strip().split(split_mark) if x]
             if qresult_key is None:
-                qresult_key = list(filter(None, cols))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = list(filter(None, cols))[query_id_idx]
+                curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
@@ -206,7 +206,7 @@ class Hmmer3TabIndexer(SearchIndexer):
             line = handle.readline()
             if not line:
                 break
-            cols = list(filter(None, line.strip().split(split_mark)))
+            cols = [x for x in line.strip().split(split_mark) if x]
             if qresult_key is None:
                 qresult_key = cols[query_id_idx]
             else:
@@ -235,7 +235,7 @@ class Hmmer3TabWriter(object):
         qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
         try:
-            first_qresult = qresults.next()
+            first_qresult = next(qresults)
         except StopIteration:
             handle.write(self._build_header())
         else:
@@ -247,8 +247,8 @@ class Hmmer3TabWriter(object):
                     handle.write(self._build_row(qresult))
                     qresult_counter += 1
                     hit_counter += len(qresult)
-                    hsp_counter += sum([len(hit) for hit in qresult])
-                    frag_counter += sum([len(hit.fragments) for hit in qresult])
+                    hsp_counter += sum(len(hit) for hit in qresult)
+                    frag_counter += sum(len(hit.fragments) for hit in qresult)
 
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 

@@ -19,7 +19,7 @@ class TestNCBIXML(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
 
         alignments = record.alignments
         self.assertEqual(len(alignments), 212)
@@ -1390,7 +1390,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignment.hsps), 1)
         self.assertTrue(alignment.hsps[0].expect > E_VALUE_THRESH)
 
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1404,7 +1404,7 @@ class TestNCBIXML(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
         alignments = record.alignments
 
         self.assertEqual(record.query_id, "gi|1348916|gb|G26684.1|G26684")
@@ -1419,7 +1419,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[1].hsps), 1)
         self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
 
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1434,12 +1434,12 @@ class TestNCBIXML(unittest.TestCase):
 
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 84)
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1454,12 +1454,12 @@ class TestNCBIXML(unittest.TestCase):
 
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|729325|sp|P39483|DHG2_BACME")
         self.assertEqual(len(alignments), 100)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 127)
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1474,12 +1474,12 @@ class TestNCBIXML(unittest.TestCase):
 
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1348853|gb|G26621.1|G26621")
         self.assertEqual(len(alignments), 10)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 102)
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1496,7 +1496,7 @@ class TestNCBIXML(unittest.TestCase):
         handle = open(datafile)
         records = NCBIXML.parse(handle)
 
-        record = records.next()
+        record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "31493")
         self.assertEqual(len(alignments), 10)
@@ -1546,7 +1546,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertTrue(alignments[9].hsps[0].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[9].hsps[1].expect > E_VALUE_THRESH)
 
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1560,14 +1560,14 @@ class TestNCBIXML(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
         alignments = record.alignments
         self.assertEqual(len(record.alignments), 0)
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.query_id, "gi|129628|sp|P07175.1|PARA_AGRTU")
         self.assertEqual(len(record.alignments), 0)
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
     def test_xml_2218L_blastp_001(self):
@@ -1578,11 +1578,11 @@ class TestNCBIXML(unittest.TestCase):
 
         handle = open(datafile)
         records = NCBIXML.parse(handle)
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.query_id, "lcl|1_0")
         alignments = record.alignments
         self.assertEqual(len(alignments), 0)
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
         handle = open(datafile)
@@ -1599,7 +1599,7 @@ class TestNCBIXML(unittest.TestCase):
         handle = open(datafile)
         records = NCBIXML.parse(handle)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1614,7 +1614,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1)
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1632,7 +1632,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments[1].hsps), 2)
         self.assertEqual(len(record.alignments[9].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1646,7 +1646,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1662,7 +1662,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments[0].hsps), 1)
         self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1678,7 +1678,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments[0].hsps), 2)
         self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1694,7 +1694,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments[0].hsps), 1)
         self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1710,7 +1710,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments[0].hsps), 1)
         self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
     def test_xml_2222_blastp_001(self):
@@ -1723,7 +1723,7 @@ class TestNCBIXML(unittest.TestCase):
         handle = open(datafile)
         records = NCBIXML.parse(handle)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -1738,19 +1738,19 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments), 10)
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.query, "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin")
         self.assertEqual(record.query_letters, 304)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.query, "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein")
         self.assertEqual(record.query_letters, 600)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit")
         self.assertEqual(record.query_letters, 473)
 
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
     def test_xml_2218L_rpsblast_001(self):
@@ -1766,7 +1766,7 @@ class TestNCBIXML(unittest.TestCase):
         handle = open(datafile)
         records = NCBIXML.parse(handle)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.18')
         self.assertEqual(record.date, "Mar-02-2008")
@@ -1807,7 +1807,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 76)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.18')
         self.assertEqual(record.date, "Mar-02-2008")
@@ -1834,7 +1834,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 131)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.18')
         self.assertEqual(record.date, "Mar-02-2008")
@@ -1863,7 +1863,7 @@ class TestNCBIXML(unittest.TestCase):
 
         #TODO - Can we detect the convergence status:
         #<Iteration_message>CONVERGED</Iteration_message>
-        self.assertRaises(StopIteration, records.next)
+        self.assertRaises(StopIteration, next, records)
         handle.close()
 
 

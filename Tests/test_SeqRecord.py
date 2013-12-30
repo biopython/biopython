@@ -42,7 +42,7 @@ class SeqRecordCreation(unittest.TestCase):
         try:
             rec.letter_annotations["bad"] = "abc"
             self.assertTrue(False, "Adding a bad letter_annotation should fail!")
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             pass
         #Now try setting it afterwards to a bad value...
         rec = SeqRecord(Seq("ACGT", generic_dna),
@@ -50,7 +50,7 @@ class SeqRecordCreation(unittest.TestCase):
         try:
             rec.letter_annotations={"test" : [1, 2, 3]}
             self.assertTrue(False, "Changing to bad letter_annotations should fail!")
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             pass
         #Now try setting it at creation time to a bad value...
         try:
@@ -58,7 +58,7 @@ class SeqRecordCreation(unittest.TestCase):
                             id="Test", name="Test", description="Test",
                             letter_annotations={"test" : [1, 2, 3]})
             self.assertTrue(False, "Wrong length letter_annotations should fail!")
-        except (TypeError, ValueError), e:
+        except (TypeError, ValueError) as e:
             pass
 
 
@@ -66,22 +66,22 @@ class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
 
     def setUp(self) :
-        f0 = SeqFeature(FeatureLocation(0,26), type="source",
+        f0 = SeqFeature(FeatureLocation(0, 26), type="source",
                         qualifiers={"mol_type":["fake protein"]})
-        f1 = SeqFeature(FeatureLocation(0,ExactPosition(10)))
-        f2 = SeqFeature(FeatureLocation(WithinPosition(12, left=12,right=15),BeforePosition(22)))
+        f1 = SeqFeature(FeatureLocation(0, ExactPosition(10)))
+        f2 = SeqFeature(FeatureLocation(WithinPosition(12, left=12, right=15), BeforePosition(22)))
         f3 = SeqFeature(FeatureLocation(AfterPosition(16),
-                                        OneOfPosition(26, [ExactPosition(25),AfterPosition(26)])))
+                                        OneOfPosition(26, [ExactPosition(25), AfterPosition(26)])))
         self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
                                 id="TestID", name="TestName", description="TestDescr",
                                 dbxrefs=["TestXRef"], annotations={"k":"v"},
                                 letter_annotations = {"fake":"X"*26},
-                                features = [f0,f1,f2,f3])
+                                features = [f0, f1, f2, f3])
 
     def test_slice_variantes(self):
         """Simple slices using different start/end values"""
-        for start in range(-30,30)+[None] :
-            for end in range(-30,30)+[None] :
+        for start in list(range(-30, 30)) + [None] :
+            for end in list(range(-30, 30)) + [None] :
                 if start is None and end is None:
                     continue
                 rec = self.record[start:end]
@@ -163,7 +163,7 @@ class SeqRecordMethods(unittest.TestCase):
         self.assertEqual(rec.description, "<unknown description>")
         self.assertEqual(rec.dbxrefs, ["TestXRef", "dummy"])
         self.assertEqual(len(rec.annotations), 0)
-        self.assertEqual(len(rec.letter_annotations),0)
+        self.assertEqual(len(rec.letter_annotations), 0)
         self.assertEqual(len(rec.features),
                          len(self.record.features) + len(other.features))
         self.assertEqual(rec.features[0].type, "source")

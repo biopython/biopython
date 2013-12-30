@@ -1,0 +1,79 @@
+ID   NRP00000001; PRT; NR2; 1 SQ
+XX
+MF   10830627
+PN   WO9954462
+PR   GB19980008350 22-APR-1998
+ED   28-OCT-1999 WO9954462 A2
+XX
+DR   EPOP:AX013047;
+DE   Sequence 74 from Patent WO9954462. 
+PN   WO9954462-A2/74, 28-OCT-1999
+XX
+FT   source          1..358
+FT                   /organism="Mycobacterium leprae"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:1769"
+XX
+SQ   Sequence 358 AA; 00001508eba3f78863a4f9cb2463810d; MD5;
+//
+ID   NRP00000002; PRT; NR2; 1 SQ
+XX
+MF   22767515
+PN   WO0190366
+PR   US20000206690P 24-MAY-2000
+ED   29-NOV-2001 WO0190366 A2
+XX
+DR   EPOP:AX312021;
+DE   Sequence 5006 from Patent WO0190366. 
+PN   WO0190366-A2/5006, 29-NOV-2001
+XX
+FT   source          1..65
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:9606"
+XX
+SQ   Sequence 65 AA; 0000eece8396364fe22b1bdd6821bd63; MD5;
+//
+ID   NRP00210944; PRT; NR2; 2 SQ
+XX
+MF   9921525
+PN   WO03020945
+PR   GB20010021439 05-SEP-2001
+ED   13-MAR-2003 WO03020945 A2
+XX
+DR   EPOP:AX716885;
+DE   Sequence 1 from Patent WO03020945. 
+PN   WO03020945-A2/1, 13-MAR-2003
+XX
+DR   USPOP:ABY00072;
+DE   Sequence 1 from patent US 7294486. 
+PN   US7294486-A/1, 13-NOV-2007
+PN   US2005130274 A1 16-JUN-2005
+CC   First level of publication supplied by the EPO
+XX
+FT   source          1..25
+FT                   /organism="Streptomyces cattleya"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:29303"
+XX
+SQ   Sequence 25 AA; 000114cdf14c72e3b188040f9f35f5af; MD5;
+//
+ID   NRP00210945; PRT; NR2; 1 SQ
+XX
+MF   9954057
+PN   WO2004078914
+PR   GB20030004882 04-MAR-2003
+ED   16-SEP-2004 WO2004078914 A2
+XX
+DR   EPOP:CQ871087;
+DE   Sequence 7 from Patent WO2004078914. 
+PN   WO2004078914-A2/7, 16-SEP-2004
+XX
+FT   source          1..25
+FT                   /organism="unidentified"
+FT                   /mol_type="protein"
+FT                   /note="Sequence of unknown origin"
+FT                   /db_xref="taxon:32644"
+XX
+SQ   Sequence 25 AA; 000114cdf14c72e3b188040f9f35f5af; MD5;
+//

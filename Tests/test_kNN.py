@@ -61,18 +61,18 @@ class TestKNN(unittest.TestCase):
     def test_calculate_model(self):
         k = 3
         model = kNN.train(xs, ys, k)
-        self.assertEqual(model.classes, set([0,1]))
+        self.assertEqual(model.classes, set([0, 1]))
         n = len(xs)
         for i in range(n):
-            self.assertAlmostEqual(model.xs[i,0], xs[i][0], places=4)
-            self.assertAlmostEqual(model.xs[i,1], xs[i][1], places=4)
+            self.assertAlmostEqual(model.xs[i, 0], xs[i][0], places=4)
+            self.assertAlmostEqual(model.xs[i, 1], xs[i][1], places=4)
             self.assertEqual(model.ys[i], ys[i])
         self.assertEqual(model.k, k)
 
     def test_classify(self):
         k = 3
         model = kNN.train(xs, ys, k)
-        result = kNN.classify(model, [6,-173.143442352])
+        result = kNN.classify(model, [6, -173.143442352])
         self.assertEqual(result, 1)
         result = kNN.classify(model, [309, -271.005880394])
         self.assertEqual(result, 0)
@@ -80,7 +80,7 @@ class TestKNN(unittest.TestCase):
     def test_calculate_probability(self):
         k = 3
         model = kNN.train(xs, ys, k)
-        weights = kNN.calculate(model, [6,-173.143442352])
+        weights = kNN.calculate(model, [6, -173.143442352])
         self.assertAlmostEqual(weights[0], 0.0, places=6)
         self.assertAlmostEqual(weights[1], 3.0, places=6)
         weights = kNN.calculate(model, [309, -271.005880394])

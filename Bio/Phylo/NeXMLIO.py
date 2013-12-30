@@ -12,12 +12,12 @@ See: http://www.nexml.org
 """
 __docformat__ = "restructuredtext en"
 
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import NeXML
 from xml.dom import minidom
 import sys
-from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
+from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
 
 #For speed try to use cElementTree rather than ElementTree
@@ -54,7 +54,7 @@ except AttributeError:
     def register_namespace(prefix, uri):
         ElementTree._namespace_map[uri] = prefix
 
-for prefix, uri in NAMESPACES.iteritems():
+for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
 
@@ -68,8 +68,10 @@ def cdao_to_obo(s):
     
 def matches(s):
     '''Check for matches in both CDAO and OBO namespaces.'''
-    if s.startswith('cdao:'): return (s, cdao_to_obo(s))
-    else: return (s,)
+    if s.startswith('cdao:'):
+        return (s, cdao_to_obo(s))
+    else:
+        return (s,)
 
 class NeXMLError(Exception):
     """Exception raised when NeXML object construction cannot continue."""
@@ -113,8 +115,10 @@ class Parser(object):
         return cls(handle)
 
     def add_annotation(self, node_dict, meta_node):
-        if 'property' in meta_node.attrib: prop = meta_node.attrib['property']
-        else: prop = 'meta'
+        if 'property' in meta_node.attrib:
+            prop = meta_node.attrib['property']
+        else:
+            prop = 'meta'
         
         if prop in matches('cdao:has_Support_Value'):
             node_dict['confidence'] = float(meta_node.text)
@@ -136,14 +140,18 @@ class Parser(object):
                 nodes = []
                 edges = []
                 for child in child_tags:
-                    if child.tag == qUri('nex:node'): nodes.append(child)
-                    if child.tag == qUri('nex:edge'): edges.append(child)
+                    if child.tag == qUri('nex:node'):
+                        nodes.append(child)
+                    if child.tag == qUri('nex:edge'):
+                        edges.append(child)
                     
                 for node in nodes:
                     node_id = node.attrib['id']
                     this_node = node_dict[node_id] = {}
-                    if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
-                    if 'root' in node.attrib and node.attrib['root'] == 'true': root = node_id
+                    if 'otu' in node.attrib and node.attrib['otu']:
+                        this_node['name'] = node.attrib['otu']
+                    if 'root' in node.attrib and node.attrib['root'] == 'true':
+                        root = node_id
                     
                     for child in node.getchildren():
                         if child.tag == qUri('nex:meta'):
@@ -155,10 +163,12 @@ class Parser(object):
                     src, tar = edge.attrib['source'], edge.attrib['target']
                     srcs.add(src)
                     tars.add(tar)
-                    if not src in node_children: node_children[src] = set()
+                    if not src in node_children:
+                        node_children[src] = set()
                     
                     node_children[src].add(tar)
-                    if 'length' in edge.attrib: node_dict[tar]['branch_length'] = float(edge.attrib['length'])
+                    if 'length' in edge.attrib:
+                        node_dict[tar]['branch_length'] = float(edge.attrib['length'])
                     if 'property' in edge.attrib and edge.attrib['property'] in matches('cdao:has_Support_Value'):
                         node_dict[tar]['confidence'] = float(edge.attrib['content'])
                         
@@ -170,14 +180,16 @@ class Parser(object):
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
                     rooted = False
-                    possible_roots = (node.attrib['id'] for node in nodes if node.attrib['id'] in srcs and not node.attrib['id'] in tars)
-                    root = possible_roots.next()
+                    possible_roots = (node.attrib['id'] for node in nodes
+                                      if node.attrib['id'] in srcs
+                                      and not node.attrib['id'] in tars)
+                    root = next(possible_roots)
                 else:
                     rooted = True
                     
                 yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
-                
-            
+
+
     @classmethod
     def _make_tree(cls, node, node_dict, children):
         '''Return a NeXML.Clade, and calls itself recursively for each child, 
@@ -270,7 +282,8 @@ class Writer(object):
         clade.node_id = node_id
         attrib={'id':node_id, 'label':node_id}
         root = rooted and parent is None
-        if root: attrib['root'] = 'true'
+        if root:
+            attrib['root'] = 'true'
         if clade.name:
             tus.add(clade.name)
             attrib['otu'] = clade.name
@@ -279,15 +292,15 @@ class Writer(object):
         if not parent is None:
             edge_id = self.new_label('edge')
             attrib={
-                    'id':edge_id, 'source':parent.node_id, 'target':node_id,
-                    'length':str(clade.branch_length),
-                    'typeof':convert_uri('cdao:Edge'),
+                    'id': edge_id, 'source': parent.node_id, 'target': node_id,
+                    'length': str(clade.branch_length),
+                    'typeof': convert_uri('cdao:Edge'),
                     }
             if hasattr(clade, 'confidence') and not clade.confidence is None:
                 attrib.update({
-                               'property':convert_uri('cdao:has_Support_Value'),
-                               'datatype':'xsd:float',
-                               'content':'%1.2f' % clade.confidence,
+                               'property': convert_uri('cdao:has_Support_Value'),
+                               'datatype': 'xsd:float',
+                               'content': '%1.2f' % clade.confidence,
                                })
             node = ElementTree.SubElement(tree, 'edge', **attrib)
     

@@ -12,7 +12,7 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 __docformat__ = "restructuredtext en"
 
 import re
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import Newick
 
@@ -20,20 +20,20 @@ from Bio.Phylo import Newick
 class NewickError(Exception):
     """Exception raised when Newick object construction cannot continue."""
     pass
-    
-    
+
+
 tokens = [
     (r"\(",                         'open parens'),
     (r"\)",                         'close parens'),
     (r"[^\s\(\)\[\]\'\:\;\,]+",     'unquoted node label'),
-    (r"\:[0-9]*\.?[0-9]+",          'edge length'),
+    (r"\:[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
     (r"\,",                         'comma'),
     (r"\[(\\.|[^\]])*\]",           'comment'),
     (r"\'(\\.|[^\'])*\'",           'quoted node label'),
     (r"\;",                         'semicolon'),
     (r"\n",                         'newline'),
 ]
-tokenizer = re.compile('(%s)' % '|'.join([token[0] for token in tokens]))
+tokenizer = re.compile('(%s)' % '|'.join(token[0] for token in tokens))
 token_dict = dict((name, re.compile(token)) for (token, name) in tokens)
 
 
@@ -70,15 +70,16 @@ def _parse_confidence(text):
         # assert 0 <= current_clade.confidence <= 1
     except ValueError:
         return None
-        
-        
+
+
 def _format_comment(text):
     return '[%s]' % (text.replace('[', '\\[').replace(']', '\\]'))
-    
+
 def _get_comment(clade):
     if hasattr(clade, 'comment') and clade.comment:
         return _format_comment(str(clade.comment))
-    else: return ''
+    else:
+        return ''
 
 
 class Parser(object):
@@ -185,7 +186,7 @@ class Parser(object):
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
-            next_token = tokens.next()
+            next_token = next(tokens)
             raise NewickError('Text after semicolon in Newick tree: %s'
                               % next_token.group())
         except StopIteration:
@@ -206,12 +207,13 @@ class Parser(object):
     def process_clade(self, clade):
         """Final processing of a parsed clade. Removes the node's parent and
         returns it."""
-        if (clade.name and not (self.values_are_confidence or self.comments_are_confidence)
+        if (clade.name and not (self.values_are_confidence or
+                                self.comments_are_confidence)
             and clade.confidence is None):
             clade.confidence = _parse_confidence(clade.name)
             if not clade.confidence is None:
                 clade.name = None
-            
+
         if hasattr(clade, 'parent'):
             parent = clade.parent
             parent.clades.append(clade)

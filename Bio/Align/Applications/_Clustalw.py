@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program Clustal W.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 import os
@@ -21,7 +23,7 @@ class ClustalwCommandline(AbstractCommandline):
     >>> from Bio.Align.Applications import ClustalwCommandline
     >>> in_file = "unaligned.fasta"
     >>> clustalw_cline = ClustalwCommandline("clustalw2", infile=in_file)
-    >>> print clustalw_cline
+    >>> print(clustalw_cline)
     clustalw2 -infile=unaligned.fasta
 
     You would typically run the command line with clustalw_cline() or via
@@ -142,7 +144,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(["-score", "-SCORE", "SCORE", "score"],
                     "Either: PERCENT or ABSOLUTE",
                     checker_function=lambda x: x in ["percent", "PERCENT",
-                                                     "absolute","ABSOLUTE"]),
+                                                     "absolute", "ABSOLUTE"]),
             # ***Slow Pairwise Alignments:***
             _Option(["-pwmatrix", "-PWMATRIX", "PWMATRIX", "pwmatrix"],
                     "Protein weight matrix=BLOSUM, PAM, GONNET, ID or filename",
@@ -328,10 +330,10 @@ class ClustalwCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running ClustalW doctests..."
+    print("Running ClustalW doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

@@ -1,9 +1,16 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Generic functions which are useful for working with HMMs.
 
 This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
+
+from __future__ import print_function
 
 def pretty_print_prediction(emissions, real_state, predicted_state,
                             emission_title = "Emissions",
@@ -33,19 +40,19 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
 
     cur_position = 0
     # while we still have more than seq_length characters to print
-    while 1:
+    while True:
         if (cur_position + seq_length) < len(emissions):
             extension = seq_length
         else:
             extension = len(emissions) - cur_position
 
-        print "%s%s" % (emission_title,
-                        emissions[cur_position:cur_position + seq_length])
-        print "%s%s" % (real_title,
-                        real_state[cur_position:cur_position + seq_length])
-        print "%s%s\n" % (predicted_title,
+        print("%s%s" % (emission_title,
+                        emissions[cur_position:cur_position + seq_length]))
+        print("%s%s" % (real_title,
+                        real_state[cur_position:cur_position + seq_length]))
+        print("%s%s\n" % (predicted_title,
                           predicted_state[cur_position:
-                                          cur_position + seq_length])
+                                          cur_position + seq_length]))
 
         if (len(emissions) < (cur_position + seq_length)):
             break

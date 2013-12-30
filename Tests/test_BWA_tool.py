@@ -5,8 +5,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from __future__ import with_statement
-
 from Bio import MissingExternalDependencyError
 import sys
 import os
@@ -45,8 +43,8 @@ if sys.platform == "win32":
             if bwa_exe:
                 break
 else:
-    import commands
-    output = commands.getoutput("bwa")
+    from Bio._py3k import getoutput
+    output = getoutput("bwa")
 
     #Since "not found" may be in another language, try and be sure this is
     #really the bwa tool's output
@@ -63,21 +61,21 @@ if not bwa_exe:
 class BwaTestCase(unittest.TestCase):
     """Class for implementing BWA test cases"""
     def setUp(self):
-        self.reference_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "human_g1k_v37_truncated.fasta")
-        self.infile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "HNSCC1_1_truncated.fastq")
-        self.infile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "HNSCC1_2_truncated.fastq")
-        self.saifile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA" ,"1.sai")
-        self.saifile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "2.sai")
-        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA" ,"1.sam")
-        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "2.sam")
-        self.samfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),"BWA", "out.sam")
+        self.reference_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "human_g1k_v37_truncated.fasta")
+        self.infile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "HNSCC1_1_truncated.fastq")
+        self.infile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "HNSCC1_2_truncated.fastq")
+        self.saifile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "1.sai")
+        self.saifile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "2.sai")
+        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "1.sam")
+        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "2.sam")
+        self.samfile = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "out.sam")
 
     def test_index(self):
         """Test for creating index files for the reference genome fasta file"""
         cmdline = BwaIndexCommandline()
         cmdline.set_parameter("infile", self.reference_file)
-        cmdline.set_parameter("algorithm","bwtsw")
-        stdout,stderr = cmdline()
+        cmdline.set_parameter("algorithm", "bwtsw")
+        stdout, stderr = cmdline()
         output = stdout.startswith("[bwt_gen]")
         self.assertTrue(stdout.startswith("[bwt_gen]"),
                         "FASTA indexing failed:\n%s\nStdout:%s" \

@@ -18,8 +18,10 @@ def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False
         return resolve_uri('obo:%s' % cdao_elements[s[5:]], namespaces, cdao_to_obo)
 
     for prefix in namespaces:
-        if xml_style: s = s.replace(prefix+':', '{%s}' % namespaces[prefix])
-        else: s = s.replace(prefix+':', namespaces[prefix])
+        if xml_style:
+            s = s.replace(prefix+':', '{%s}' % namespaces[prefix])
+        else:
+            s = s.replace(prefix+':', namespaces[prefix])
 
     return s
 

@@ -11,6 +11,10 @@
 """Command line wrapper for the multiple alignment program Clustal Omega.
 """
 
+from __future__ import print_function
+
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 
@@ -25,7 +29,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     >>> in_file = "unaligned.fasta"
     >>> out_file = "aligned.fasta"
     >>> clustalomega_cline = ClustalOmegaCommandline(infile=in_file, outfile=out_file, verbose=True, auto=True)
-    >>> print clustalomega_cline
+    >>> print(clustalomega_cline)
     clustalo -i unaligned.fasta -o aligned.fasta --auto -v
 
 
@@ -40,7 +44,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     sequence alignments using Clustal Omega.
     Molecular Systems Biology 7:539 doi:10.1038/msb.2011.75
 
-    Last checked against versions: 1.1.0
+    Last checked against versions: 1.2.0
     """
     def __init__(self, cmd="clustalo", **kwargs):
         # order parameters in the same order as clustalo --help
@@ -71,6 +75,8 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     checker_function=lambda x: x in ["protein", "rna", "dna",
                                                      "Protein", "RNA", "DNA",
                                                      "PROTEIN"]),
+            _Switch(["--is-profile", "isprofile"],
+                    "disable check if profile, force profile (default no)"),
             _Option(["--infmt", "infmt"],
                     """Forced sequence input file format (default: auto)
 
@@ -103,9 +109,19 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     filename=True,
                     equate=False),
             _Switch(["--full", "distmat_full"],
-                    "Use full distance matrix for guide-tree calculation (might be slow; mBed is default)"),
+                    "Use full distance matrix for guide-tree calculation (slow; mBed is default)"),
             _Switch(["--full-iter", "distmat_full_iter"],
-                    "Use full distance matrix for guide-tree calculation during iteration (might be slowish; mBed is default)"),
+                    "Use full distance matrix for guide-tree calculation during iteration (mBed is default)"),
+            _Option(["--cluster-size", "clustersize"],
+                    "soft maximum of sequences in sub-clusters",
+                    checker_function=lambda x: isinstance(x, int)),
+            _Option(["--clustering-out", "clusteringout"],
+                    "Clustering output file",
+                    filename=True),
+            _Switch(["--use-kimura", "usekimura"],
+                    "use Kimura distance correction for aligned sequences (default no)"),
+            _Switch(["--percent-id", "percentid"],
+                    "convert distances into percent identities (default no)"),
 
             # Alignment Output
             _Option(["-o", "--out", "--outfile", "outfile"],
@@ -124,6 +140,15 @@ class ClustalOmegaCommandline(AbstractCommandline):
                                                      "selex",
                                                      "st", "stockholm",
                                                      "vie", "vienna"]),
+            _Switch(["--residuenumber", "--resno", "residuenumber"],
+                    "in Clustal format print residue numbers (default no)"),
+            _Option(["--wrap", "wrap"],
+                    "number of residues before line-wrap in output",
+                    checker_function=lambda x: isinstance(x, int)),
+            _Option(["--output-order", "outputorder"],
+                    "MSA output order like in input/guide-tree",
+                    checker_function=lambda x: x in ["input-order", "tree-order"]),
+
            # Iteration
             _Option(["--iterations", "--iter", "iterations"],
                     "Number of (combined guide-tree/HMM) iterations",
@@ -149,7 +174,6 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int)),
 
             # Miscellaneous:
-
             _Switch(["--auto", "auto"],
                     "Set options automatically (might overwrite some of your options)"),
             _Option(["--threads", "threads"],
@@ -161,7 +185,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     filename=True,
                     equate=False),
             _Switch(["-h", "--help", "help"],
-                    "Outline the command line params."),
+                    "Print help and exit."),
             _Switch(["-v", "--verbose", "verbose"],
                     "Verbose output"),
             _Switch(["--version", "version"],
@@ -177,10 +201,10 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running ClustalOmega doctests..."
+    print("Running ClustalOmega doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

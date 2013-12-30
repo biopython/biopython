@@ -17,6 +17,8 @@ __docformat__ = "restructuredtext en"
 import re
 import warnings
 
+from Bio._py3k import basestring
+
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -223,7 +225,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             return False
         seqs = self._filter_search(is_aligned_seq, 'preorder', True)
         try:
-            first_seq = seqs.next()
+            first_seq = next(seqs)
         except StopIteration:
             # No aligned sequences were found --> empty MSA
             return MultipleSeqAlignment([])
@@ -761,15 +763,16 @@ class Events(PhyloElement):
         self.confidence = confidence
 
     def items(self):
-        return [(k, v) for k, v in self.__dict__.iteritems() if v is not None]
+        return [(k, v) for k, v in self.__dict__.items() if v is not None]
 
     def keys(self):
-        return [k for k, v in self.__dict__.iteritems() if v is not None]
+        return [k for k, v in self.__dict__.items() if v is not None]
 
     def values(self):
-        return [v for v in self.__dict__.itervalues() if v is not None]
+        return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
+        #TODO - Better way to do this?
         return len(self.values())
 
     def __getitem__(self, key):
@@ -1118,7 +1121,7 @@ class Sequence(PhyloElement):
         """
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
-            return dict((key, val) for key, val in dct.iteritems()
+            return dict((key, val) for key, val in dct.items()
                         if val is not None)
 
         seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),

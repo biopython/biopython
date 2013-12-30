@@ -1,29 +1,34 @@
-# xpktools.py: A python module containing function definitions and classes
-#          useful for manipulating data from nmrview .xpk peaklist files.
-#
-# ********** INDEX of functions and classes **********
-#
-#    XpkEntry class: A class suited for handling single lines of
-#        non-header data from an nmrview .xpk file.  This class
-#        provides methods for extracting data by the field name
-#        which is listed in the last line of the peaklist header.
+# Copyright 2004 by Bob Bussell.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package. 
+"""For manipulating data from nmrview .xpk peaklist files.
+
+XpkEntry class: A class suited for handling single lines of
+non-header data from an nmrview .xpk file.  This class
+provides methods for extracting data by the field name
+which is listed in the last line of the peaklist header.
+"""
+
+from __future__ import print_function
 
 import sys
 
-# * * * * * INITIALIZATIONS * * * * *
 HEADERLEN = 6
-# * * * * * _______________ * * * * *
 
 
 class XpkEntry(object):
-    # Usage: XpkEntry(xpkentry,xpkheadline) where xpkentry is the line
-    #        from an nmrview .xpk file and xpkheadline is the line from
-    #        the header file that gives the names of the entries
-    #        which is typcially the sixth line of the header (counting fm 1)
-    # Variables are accessed by either their name in the header line as in
-    #   self.field["H1.P"] will return the H1.P entry for example.
-    #   self.field["entrynum"] returns the line number (1st field of line)
+    """Entry from a .xpk file.
 
+    Usage: XpkEntry(xpkentry,xpkheadline) where xpkentry is the line
+    from an nmrview .xpk file and xpkheadline is the line from
+    the header file that gives the names of the entries
+    which is typcially the sixth line of the header (counting fm 1)
+
+    Variables are accessed by either their name in the header line as in
+    self.field["H1.P"] will return the H1.P entry for example.
+    self.field["entrynum"] returns the line number (1st field of line)
+    """
     def __init__(self, entry, headline):
         self.fields = {}  # Holds all fields from input line in a dictionary
                           # keys are data labels from the .xpk header
@@ -37,39 +42,38 @@ class XpkEntry(object):
 
         try:
             self.fields["entrynum"] = datlist[0]
-        except IndexError, e:
+        except IndexError as e:
             pass
 
 
 class Peaklist(object):
-    # This class reads in an entire xpk file and returns
-    # Header file lines are available as attributes
-    # The data lines are available as a list
+    """For loading an entire .xpk file.
+
+    This class reads in an entire xpk file and returns
+    Header file lines are available as attributes
+    The data lines are available as a list
+    """
     def __init__(self, infn):
 
-        self.data = []    # init the data line list
+        with open(infn, 'r') as infile:
 
-        infile = open(infn, 'r')
+            # Read in the header lines
+            self.firstline = infile.readline().split("\012")[0]
+            self.axislabels = infile.readline().split("\012")[0]
+            self.dataset = infile.readline().split("\012")[0]
+            self.sw = infile.readline().split("\012")[0]
+            self.sf = infile.readline().split("\012")[0]
+            self.datalabels = infile.readline().split("\012")[0]
 
-        # Read in the header lines
-        self.firstline = infile.readline().split("\012")[0]
-        self.axislabels = infile.readline().split("\012")[0]
-        self.dataset = infile.readline().split("\012")[0]
-        self.sw = infile.readline().split("\012")[0]
-        self.sf = infile.readline().split("\012")[0]
-        self.datalabels = infile.readline().split("\012")[0]
-
-        # Read in the data lines to a list
-        line = infile.readline()
-        while line:
-            self.data.append(line.split("\012")[0])
-        line = infile.readline()
+            # Read in the data lines to a list
+            self.data = [line.split("\012")[0] for line in infile]
 
     def residue_dict(self, index):
-        # Generate a dictionary idexed by residue number or a nucleus
-        # The nucleus should be given as the input argument in the
-        # same form as it appears in the xpk label line (H1, 15N for example)
+        """Generate a dictionary idexed by residue number or a nucleus.
 
+        The nucleus should be given as the input argument in the
+        same form as it appears in the xpk label line (H1, 15N for example)
+        """
         maxres = -1
         minres = -1
 
@@ -106,48 +110,29 @@ class Peaklist(object):
         return self.dict
 
     def write_header(self, outfn):
-        outfile = _try_open_write(outfn)
-        outfile.write(self.firstline)
-        outfile.write("\012")
-        outfile.write(self.axislabels)
-        outfile.write("\012")
-        outfile.write(self.dataset)
-        outfile.write("\012")
-        outfile.write(self.sw)
-        outfile.write("\012")
-        outfile.write(self.sf)
-        outfile.write("\012")
-        outfile.write(self.datalabels)
-        outfile.write("\012")
-        outfile.close()
-
-
-def _try_open_read(fn):
-    # Try to open a file for reading.  Exit on IOError
-    try:
-        infile = open(fn, 'r')
-    except IOError, e:
-        print "file", fn, "could not be opened for reading - quitting."
-        sys.exit(0)
-    return infile
-
-
-def _try_open_write(fn):
-    # Try to open a file for writing.  Exit on IOError
-    try:
-        infile = open(fn, 'w')
-    except IOError, e:
-        print "file", fn, "could not be opened for writing - quitting."
-        sys.exit(0)
-    return infile
+        with open(outfn, 'wb') as outfile:
+            outfile.write(self.firstline)
+            outfile.write("\012")
+            outfile.write(self.axislabels)
+            outfile.write("\012")
+            outfile.write(self.dataset)
+            outfile.write("\012")
+            outfile.write(self.sw)
+            outfile.write("\012")
+            outfile.write(self.sf)
+            outfile.write("\012")
+            outfile.write(self.datalabels)
+            outfile.write("\012")
 
 
 def replace_entry(line, fieldn, newentry):
-    # Replace an entry in a string by the field number
-    # No padding is implemented currently.  Spacing will change if
-    #  the original field entry and the new field entry are of
-    #  different lengths.
-    # This method depends on xpktools._find_start_entry
+    """Helper function replace an entry in a string by the field number.
+
+    No padding is implemented currently.  Spacing will change if
+    the original field entry and the new field entry are of
+    different lengths.
+    """
+    #This method depends on xpktools._find_start_entry
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
@@ -194,11 +179,13 @@ def _find_start_entry(line, n):
 
 
 def data_table(fn_list, datalabel, keyatom):
-    # Generate and generate a data table from a list of
-    # input xpk files <fn_list>.  The data element reported is
-    # <datalabel> and the index for the data table is by the
-    # nucleus indicated by <keyatom>.
+    """Generate a data table from a list of input xpk files.
 
+    Give the .xpk files as argument <fn_list>.
+    The data element reported in <datalabel> and the index for
+    the data table is by the nucleus indicated by <keyatom>.
+    """
+    #TODO - Clarify this docstring, add an example?
     outlist = []
 
     [dict_list, label_line_list] = _read_dicts(fn_list, keyatom)
@@ -229,12 +216,6 @@ def data_table(fn_list, datalabel, keyatom):
         res = res + 1
 
     return outlist
-
-
-def _sort_keys(dictionary):
-    keys = dictionary.keys()
-    sorted_keys = keys.sort()
-    return sorted_keys
 
 
 def _read_dicts(fn_list, keyatom):

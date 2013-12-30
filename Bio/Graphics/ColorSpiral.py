@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Generate RGB colours suitable for distinguishing categorical data.
 
 This module provides a class that implements a spiral 'path' through HSV
@@ -189,5 +194,5 @@ def get_color_dict(l, **kwargs):
     colors = cs.get_colors(len(l))
     dict = {}
     for item in l:
-        dict[item] = colors.next()
+        dict[item] = next(colors)
     return dict

@@ -1,5 +1,6 @@
-# Copyright 2009 by Eric Talevich.  All rights reserved.
-# Revisions copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Eric Talevich.  All rights reserved.
+# Revisions copyright 2009-2013 by Peter Cock.  All rights reserved.
+# Revisions copyright 2013 Lenna X. Peterson. All rights reserved.
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
@@ -9,16 +10,19 @@
 # as part of this package.
 
 """Unit tests for the Bio.PDB module."""
+from __future__ import print_function
+
 import os
 import tempfile
 import unittest
 import warnings
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 try:
     import numpy
-    from numpy import dot  # Missing on PyPy's micronumpy
+    from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
+    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -31,6 +35,8 @@ from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
+from Bio.PDB import make_dssp_dict
+from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -100,6 +106,20 @@ class A_ExceptionTest(unittest.TestCase):
         self.assertRaises(PDBConstructionException,
                 parser.get_structure, "example", StringIO(data))
 
+    def test_4_occupancy(self):
+        """Parse file with missing occupancy"""
+        permissive = PDBParser(PERMISSIVE=True)
+        structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+        atoms = structure[0]['A'][(' ', 152, ' ')]
+        # Blank occupancy behavior set in Bio/PDB/PDBParser
+        self.assertEqual(atoms['N'].get_occupancy(), None)
+        self.assertEqual(atoms['CA'].get_occupancy(), 1.0)
+        self.assertEqual(atoms['C'].get_occupancy(), 0.0)
+
+        strict = PDBParser(PERMISSIVE=False)
+        self.assertRaises(PDBConstructionException,
+                          strict.get_structure, "test", "PDB/occupancy.pdb")
+
 
 class HeaderTests(unittest.TestCase):
     """Tests for parse_pdb_header."""
@@ -121,7 +141,7 @@ class HeaderTests(unittest.TestCase):
                 'release_date': '1998-10-14',
                 'structure_method': 'x-ray diffraction',
                 }
-        for key, expect in known_strings.iteritems():
+        for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
     def test_fibril(self):
@@ -139,7 +159,7 @@ class HeaderTests(unittest.TestCase):
                 'release_date': '2005-11-22',
                 'structure_method': 'solution nmr',
                 }
-        for key, expect in known_strings.iteritems():
+        for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
 
@@ -678,6 +698,7 @@ class ParseReal(unittest.TestCase):
         finally:
             os.remove(filename)
 
+
 class WriteTest(unittest.TestCase):
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
@@ -767,6 +788,27 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(nresidues, 70)
         finally:
             os.remove(filename)
+
+    def test_pdbio_missing_occupancy(self):
+        """Write PDB file with missing occupancy"""
+
+        from Bio import BiopythonWarning
+        warnings.simplefilter('ignore', BiopythonWarning)
+
+        io = PDBIO()
+        structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
+        io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("test", filename)
+            atoms = struct2[0]['A'][(' ', 152, ' ')]
+            self.assertEqual(atoms['N'].get_occupancy(), None)
+        finally:
+            os.remove(filename)
+            warnings.filters.pop()
+
 
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
@@ -876,6 +918,33 @@ class Atom_Element(unittest.TestCase):
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
 
+    def test_hydrogens(self):
+
+        def quick_assign(fullname):
+            return Atom.Atom(fullname.strip(), None, None, None, None,
+                             fullname, None).element
+
+        pdb_elements = dict(
+            H=(
+                ' H  ', ' HA ', ' HB ', ' HD1', ' HD2', ' HE ', ' HE1', ' HE2',
+                ' HE3', ' HG ', ' HG1', ' HH ', ' HH2', ' HZ ', ' HZ2', ' HZ3',
+                '1H  ', '1HA ', '1HB ', '1HD ', '1HD1', '1HD2', '1HE ', '1HE2',
+                '1HG ', '1HG1', '1HG2', '1HH1', '1HH2', '1HZ ', '2H  ', '2HA ',
+                '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
+                '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
+                '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21',
+            ),
+            O=(' OH ',),
+            C=(' CH2',),
+            N=(' NH1', ' NH2'),
+        )
+
+        for element, atom_names in pdb_elements.items():
+            for fullname in atom_names:
+                e = quick_assign(fullname)
+                #warnings.warn("%s %s" % (fullname, e))
+                self.assertEqual(e, element)
+
 
 class IterationTests(unittest.TestCase):
 
@@ -885,7 +954,7 @@ class IterationTests(unittest.TestCase):
     def test_get_chains(self):
         """Yields chains from different models separately."""
         chains = [chain.id for chain in self.struc.get_chains()]
-        self.assertEqual(chains, ['A','A', 'B', ' '])
+        self.assertEqual(chains, ['A', 'A', 'B', ' '])
 
     def test_get_residues(self):
         """Yields all residues from all models."""
@@ -911,9 +980,10 @@ class IterationTests(unittest.TestCase):
 #        """Residues in a structure are renumbered."""
 #        self.structure.renumber_residues()
 #        nums = [resi.id[1] for resi in self.structure[0]['A'].child_list]
-#        print nums
+#        print(nums)
 #
 # -------------------------------------------------------------
+
 
 class TransformTests(unittest.TestCase):
 
@@ -932,7 +1002,7 @@ class TransformTests(unittest.TestCase):
         """
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
-        total_pos = numpy.array((0.0,0.0,0.0))
+        total_pos = numpy.array((0.0, 0.0, 0.0))
         total_count = 0
         for p in o.get_list():
             pos, count = self.get_total_pos(p)
@@ -950,8 +1020,8 @@ class TransformTests(unittest.TestCase):
     def test_transform(self):
         """Transform entities (rotation and translation)."""
         for o in (self.s, self.m, self.c, self.r, self.a):
-            rotation = rotmat(Vector(1,3,5), Vector(1,0,0))
-            translation=numpy.array((2.4,0,1), 'f')
+            rotation = rotmat(Vector(1, 3, 5), Vector(1, 0, 0))
+            translation=numpy.array((2.4, 0, 1), 'f')
             oldpos = self.get_pos(o)
             o.transform(rotation, translation)
             newpos = self.get_pos(o)
@@ -982,6 +1052,39 @@ class CopyTests(unittest.TestCase):
             self.assertFalse(e is ee)
             self.assertFalse(e.get_list()[0] is ee.get_list()[0])
 
+
+class DsspTests(unittest.TestCase):
+    """Tests for DSSP parsing etc which don't need the binary tool.
+
+    See also test_DSSP_tool.py for run time testing with the tool.
+    """
+    def test_DSSP_file(self):
+        """Test parsing of pregenerated DSSP"""
+        dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
+        self.assertEqual(len(dssp), 130)
+
+    def test_DSSP_noheader_file(self):
+        """Test parsing of pregenerated DSSP missing header information"""
+        # New DSSP prints a line containing only whitespace and "."
+        dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
+        self.assertEqual(len(dssp), 130)
+
+class NACCESSTests(unittest.TestCase):
+    """Tests for NACCESS parsing etc which don't need the binary tool.
+
+    See also test_NACCESS_tool.py for run time testing with the tool.
+    """
+    def test_NACCESS_rsa_file(self):
+        """Test parsing of pregenerated rsa NACCESS file"""
+        with open("PDB/1A8O.rsa") as rsa:
+            naccess = process_rsa_data(rsa)
+        self.assertEqual(len(naccess), 66)
+
+    def test_NACCESS_asa_file(self):
+        """Test parsing of pregenerated asa NACCESS file"""
+        with open("PDB/1A8O.asa") as asa:
+            naccess = process_asa_data(asa)
+        self.assertEqual(len(naccess), 524)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

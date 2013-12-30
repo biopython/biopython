@@ -1,5 +1,12 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Tests the basic functionality of the GEO parsers.
 """
+
+from __future__ import print_function
 
 import os
 import sys
@@ -24,10 +31,9 @@ for file in testfiles:
         fh = open(os.path.join("Geo", file), encoding="latin")
     else:
         fh = open(os.path.join("Geo", file))
-    print "Testing Bio.Geo on " + file + "\n\n"
+    print("Testing Bio.Geo on " + file + "\n\n")
     records = Bio.Geo.parse(fh)
     for record in records:
-        print record
-    print "\n"
+        print(record)
+    print("\n")
     fh.close()
-

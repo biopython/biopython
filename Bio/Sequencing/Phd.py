@@ -113,7 +113,7 @@ def read(handle):
     else:
         raise ValueError("Failed to find END_SEQUENCE line")
 
-    record.seq = Seq.Seq(''.join([n[0] for n in record.sites]), generic_dna)
+    record.seq = Seq.Seq(''.join(n[0] for n in record.sites), generic_dna)
     if record.comments['trim'] is not None:
         first, last = record.comments['trim'][:2]
         record.seq_trimmed = record.seq[first:last]

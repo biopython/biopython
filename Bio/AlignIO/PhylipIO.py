@@ -1,10 +1,9 @@
-# Copyright 2006-2011 by Peter Cock.  All rights reserved.
+# Copyright 2006-2013 by Peter Cock.  All rights reserved.
 # Revisions copyright 2011 Brandon Invergo. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-AlignIO support for the "phylip" format used in Joe Felsenstein's PHYLIP tools.
+"""AlignIO support for "phylip" format from Joe Felsenstein's PHYLIP tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -32,12 +31,16 @@ http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
+from __future__ import print_function
+
 import string
+
+from Bio._py3k import range
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 _PHYLIP_ID_WIDTH = 10
 
@@ -161,7 +164,7 @@ class PhylipIterator(AlignmentIterator):
 
     def _is_header(self, line):
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             return False  # First line should have two integers
         try:
@@ -185,7 +188,7 @@ class PhylipIterator(AlignmentIterator):
         seq = line[self.id_width:].strip().replace(' ', '')
         return seq_id, seq
 
-    def next(self):
+    def __next__(self):
         handle = self.handle
 
         try:
@@ -199,7 +202,7 @@ class PhylipIterator(AlignmentIterator):
         if not line:
             raise StopIteration
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
@@ -220,7 +223,7 @@ class PhylipIterator(AlignmentIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-        for i in xrange(number_of_seqs):
+        for i in range(number_of_seqs):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
@@ -245,7 +248,7 @@ class PhylipIterator(AlignmentIterator):
                 break
 
             #print "New block..."
-            for i in xrange(number_of_seqs):
+            for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -370,7 +373,7 @@ class SequentialPhylipIterator(PhylipIterator):
     the next. According to the PHYLIP documentation for input file formatting,
     newlines and spaces may optionally be entered at any point in the sequences.
     """
-    def next(self):
+    def __next__(self):
         handle = self.handle
 
         try:
@@ -384,7 +387,7 @@ class SequentialPhylipIterator(PhylipIterator):
         if not line:
             raise StopIteration
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
@@ -405,7 +408,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-        for i in xrange(number_of_seqs):
+        for i in range(number_of_seqs):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
@@ -439,7 +442,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
 
 if __name__ == "__main__":
-    print "Running short mini-test"
+    print("Running short mini-test")
 
     phylip_text = """     8    286
 V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG
@@ -497,13 +500,13 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
            LREALNKAFA EMRADGTYEK LAKKYFDFDV YGG---
 """
 
-    from cStringIO import StringIO
+    from Bio._py3k import StringIO
     handle = StringIO(phylip_text)
     count = 0
     for alignment in PhylipIterator(handle):
         for record in alignment:
             count = count+1
-            print record.id
+            print(record.id)
             #print str(record.seq)
     assert count == 8
 
@@ -600,9 +603,9 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
         list5 = list(PhylipIterator(handle))
         assert len(list5) == 1
         assert len(list5[0]) == 5
-        print "That should have failed..."
+        print("That should have failed...")
     except ValueError:
-        print "Evil multiline non-interlaced example failed as expected"
+        print("Evil multiline non-interlaced example failed as expected")
     handle.close()
 
     handle = StringIO(phylip_text5a)
@@ -611,16 +614,16 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     assert len(list5) == 1
     assert len(list4[0]) == 5
 
-    print "Concatenation"
+    print("Concatenation")
     handle = StringIO(phylip_text4 + "\n" + phylip_text4)
     assert len(list(PhylipIterator(handle))) == 2
 
     handle = StringIO(phylip_text3 + "\n" + phylip_text4 + "\n\n\n" + phylip_text)
     assert len(list(PhylipIterator(handle))) == 3
 
-    print "OK"
+    print("OK")
 
-    print "Checking write/read"
+    print("Checking write/read")
     handle = StringIO()
     PhylipWriter(handle).write_file(list5)
     handle.seek(0)
@@ -631,4 +634,4 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
         for r1, r2 in zip(a1, a2):
             assert r1.id == r2.id
             assert str(r1.seq) == str(r2.seq)
-    print "Done"
+    print("Done")

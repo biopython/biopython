@@ -5,8 +5,12 @@
 
 # NACCESS interface adapted from Bio/PDB/DSSP.py
 
+from __future__ import print_function
+
 import os
 import tempfile
+import shutil
+import subprocess
 from Bio.PDB.PDBIO import PDBIO
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
@@ -22,52 +26,51 @@ use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
 
-def run_naccess(model, pdb_file, probe_size = None, z_slice = None,
-                naccess = 'naccess', temp_path = '/tmp/'):
+def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
+                naccess='naccess', temp_path='/tmp/'):
 
-    # make temp directory; chdir to temp directory,
-    # as NACCESS writes to current working directory
-    tmp_path = tempfile.mktemp(dir = temp_path)
-    os.mkdir(tmp_path)
-    old_dir = os.getcwd()
-    os.chdir(tmp_path)
+    # make temp directory;
+    tmp_path = tempfile.mkdtemp(dir=temp_path)
 
     # file name must end with '.pdb' to work with NACCESS
     # -> create temp file of existing pdb
     #    or write model to temp file
-    tmp_pdb_file = tempfile.mktemp('.pdb', dir = tmp_path)
+    handle, tmp_pdb_file = tempfile.mkstemp('.pdb', dir=tmp_path)
+    os.close(handle)
     if pdb_file:
-        os.system('cp %s %s' % (pdb_file, tmp_pdb_file))
+        pdb_file = os.path.abspath(pdb_file)
+        shutil.copy(pdb_file, tmp_pdb_file)
     else:
         writer = PDBIO()
         writer.set_structure(model.get_parent())
         writer.save(tmp_pdb_file)
 
+    # chdir to temp directory, as NACCESS writes to current working directory
+    old_dir = os.getcwd()
+    os.chdir(tmp_path)
+
     # create the command line and run
     # catch standard out & err
-    command = '%s %s ' % (naccess, tmp_pdb_file)
+    command = [naccess, tmp_pdb_file]
     if probe_size:
-        command += '-p %s ' % probe_size
+        command.extend(['-p', probe_size])
     if z_slice:
-        command += '-z %s ' % z_slice
-    in_, out, err = os.popen3(command)
-    in_.close()
-    stdout = out.readlines()
-    out.close()
-    stderr = err.readlines()
-    err.close()
+        command.extend(['-z', z_slice])
+
+    p = subprocess.Popen(command, universal_newlines=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    os.chdir(old_dir)
 
     # get the output, then delete the temp directory
     rsa_file = tmp_pdb_file[:-4] + '.rsa'
-    rf = open(rsa_file)
-    rsa_data = rf.readlines()
-    rf.close()
+    with open(rsa_file) as rf:
+        rsa_data = rf.readlines()
     asa_file = tmp_pdb_file[:-4] + '.asa'
-    af = open(asa_file)
-    asa_data = af.readlines()
-    af.close()
-    os.chdir(old_dir)
-    os.system('rm -rf %s >& /dev/null' % tmp_path)
+    with open(asa_file) as af:
+        asa_data = af.readlines()
+
+    shutil.rmtree(tmp_path, ignore_errors=True)
     return rsa_data, asa_data
 
 
@@ -92,7 +95,7 @@ def process_rsa_data(rsa_data):
                 'non_polar_abs': float(line[55:61]),
                 'non_polar_rel': float(line[62:67]),
                 'all_polar_abs': float(line[68:74]),
-                'all_polar_rel': float(line[75:80]) }
+                'all_polar_rel': float(line[75:80])}
     return naccess_rel_dict
 
 
@@ -118,20 +121,21 @@ def process_asa_data(rsa_data):
 
 class NACCESS(AbstractResiduePropertyMap):
 
-    def __init__(self, model, pdb_file = None,
-                 naccess_binary = 'naccess', tmp_directory = '/tmp'):
-        res_data, atm_data = run_naccess(model, pdb_file, naccess = naccess_binary,
-                                         temp_path = tmp_directory)
+    def __init__(self, model, pdb_file=None,
+                 naccess_binary='naccess', tmp_directory='/tmp'):
+        res_data, atm_data = run_naccess(model, pdb_file,
+                                         naccess=naccess_binary,
+                                         temp_path=tmp_directory)
         naccess_dict = process_rsa_data(res_data)
         res_list = []
-        property_dict={}
-        property_keys=[]
-        property_list=[]
+        property_dict = {}
+        property_keys = []
+        property_list = []
         # Now create a dictionary that maps Residue objects to accessibility
         for chain in model:
-            chain_id=chain.get_id()
+            chain_id = chain.get_id()
             for res in chain:
-                res_id=res.get_id()
+                res_id = res.get_id()
                 if (chain_id, res_id) in naccess_dict:
                     item = naccess_dict[(chain_id, res_id)]
                     res_name = item['res_name']
@@ -139,24 +143,24 @@ class NACCESS(AbstractResiduePropertyMap):
                     property_dict[(chain_id, res_id)] = item
                     property_keys.append((chain_id, res_id))
                     property_list.append((res, item))
-                    res.xtra["EXP_NACCESS"]=item
+                    res.xtra["EXP_NACCESS"] = item
                 else:
                     pass
         AbstractResiduePropertyMap.__init__(self, property_dict, property_keys,
-                property_list)
+                                            property_list)
 
 
 class NACCESS_atomic(AbstractAtomPropertyMap):
 
-    def __init__(self, model, pdb_file = None,
-                 naccess_binary = 'naccess', tmp_directory = '/tmp'):
-        res_data, atm_data = run_naccess(model, pdb_file, naccess = naccess_binary,
-                                         temp_path = tmp_directory)
+    def __init__(self, model, pdb_file=None,
+                 naccess_binary='naccess', tmp_directory='/tmp'):
+        res_data, atm_data = run_naccess(model, pdb_file,
+                                         naccess=naccess_binary,
+                                         temp_path=tmp_directory)
         self.naccess_atom_dict = process_asa_data(atm_data)
-        atom_list = []
-        property_dict={}
-        property_keys=[]
-        property_list=[]
+        property_dict = {}
+        property_keys = []
+        property_list = []
         # Now create a dictionary that maps Atom objects to accessibility
         for chain in model:
             chain_id = chain.get_id()
@@ -164,25 +168,25 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
                 res_id = residue.get_id()
                 for atom in residue:
                     atom_id = atom.get_id()
-                    full_id=(chain_id, res_id, atom_id)
+                    full_id = (chain_id, res_id, atom_id)
                     if full_id in self.naccess_atom_dict:
                         asa = self.naccess_atom_dict[full_id]
-                        property_dict[full_id]=asa
+                        property_dict[full_id] = asa
                         property_keys.append((full_id))
                         property_list.append((atom, asa))
-                        atom.xtra['EXP_NACCESS']=asa
-        AbstractAtomPropertyMap.__init__(self, property_dict, property_keys,
-                property_list)
+                        atom.xtra['EXP_NACCESS'] = asa
+        AbstractAtomPropertyMap.__init__(self, property_dict,
+                                         property_keys, property_list)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     import sys
     from Bio.PDB import PDBParser
 
-    p=PDBParser()
-    s=p.get_structure('X', sys.argv[1])
-    model=s[0]
+    p = PDBParser()
+    s = p.get_structure('X', sys.argv[1])
+    model = s[0]
 
     n = NACCESS(model, sys.argv[1])
-    for e in n.get_iterator():
-        print e
+    for e in n:
+        print(e)

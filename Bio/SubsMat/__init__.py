@@ -109,6 +109,8 @@ Methods for subtraction, addition and multiplication of matrices:
 """
 
 
+from __future__ import print_function
+
 import re
 import sys
 import copy
@@ -197,8 +199,7 @@ class SeqMat(dict):
         self.relative_entropy = 0
 
     def _correct_matrix(self):
-        keylist = self.keys()
-        for key in keylist:
+        for key in self:
             if key[0] > key[1]:
                 self[(key[1], key[0])] = self[key]
                 del self[key]
@@ -237,7 +238,7 @@ class SeqMat(dict):
         result = {}
         for letter in self.alphabet.letters:
             result[letter] = 0.0
-        for pair, value in self.iteritems():
+        for pair, value in self.items():
             i1, i2 = pair
             if i1 == i2:
                 result[i1] += value
@@ -376,7 +377,7 @@ class SubstitutionMatrix(SeqMat):
         """Calculate and return the relative entropy with respect to an
         observed frequency matrix"""
         relative_entropy = 0.
-        for key, value in self.iteritems():
+        for key, value in self.items():
             if value > EPSILON:
                 relative_entropy += obs_freq_mat[key] * log(value)
         relative_entropy /= log(2)
@@ -390,7 +391,7 @@ class LogOddsMatrix(SeqMat):
         """Calculate and return the relative entropy with respect to an
         observed frequency matrix"""
         relative_entropy = 0.
-        for key, value in self.iteritems():
+        for key, value in self.items():
             relative_entropy += obs_freq_mat[key] * value / log(2)
         return relative_entropy
 
@@ -464,7 +465,7 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
     minimum log-odds value of the matrix in entries containing -999
     """
     lo_mat = LogOddsMatrix(subs_mat)
-    for key, value in subs_mat.iteritems():
+    for key, value in subs_mat.items():
         if value < EPSILON:
             lo_mat[key] = -999
         else:
@@ -519,7 +520,7 @@ def read_text_matrix(data_file):
     alphabet = table[0]
     j = 0
     for rec in table[1:]:
-        # print j
+        # print(j)
         row = alphabet[j]
         # row = rec[0]
         if re.compile('[A-z\*]').match(rec[0]):
@@ -533,7 +534,7 @@ def read_text_matrix(data_file):
             i += 1
         j += 1
     # delete entries with an asterisk
-    for i in matrix.keys():
+    for i in matrix:
         if '*' in i:
             del(matrix[i])
     ret_mat = SeqMat(matrix)
@@ -611,7 +612,7 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     sum_mat.make_entropy()
     mat_1.make_entropy()
     mat_2.make_entropy()
-    # print mat_1.entropy, mat_2.entropy
+    # print(mat_1.entropy, mat_2.entropy)
     dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
 
@@ -652,10 +653,10 @@ def two_mat_print(mat_1, mat_2, f=None, alphabet=None, factor_1=1, factor_2=1,
                     key = (i, j)
                 mat_2_key = [alphabet[len_alphabet-alphabet.index(key[0])-1],
                     alphabet[len_alphabet-alphabet.index(key[1])-1]]
-                # print mat_2_key
+                # print(mat_2_key)
                 mat_2_key.sort()
                 mat_2_key = tuple(mat_2_key)
-                # print key, "||",  mat_2_key
+                # print("%s||%s" % (key, mat_2_key)
                 print_mat[key] = mat_2[mat_2_key]
                 print_mat[(key[1], key[0])] = mat_1[key]
     for i in alphabet:

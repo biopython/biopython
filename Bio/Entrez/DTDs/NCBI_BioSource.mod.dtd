@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 12/01/2010 23:04:55
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 09/28/2012 23:04:43
      ============================================ -->
 
 <!-- ============================================ -->
@@ -188,6 +188,7 @@
         haplogroup |
         whole-replicon |
         phenotype |
+        altitude |
         other
         ) #IMPLIED >
 

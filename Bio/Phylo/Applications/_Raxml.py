@@ -7,6 +7,9 @@
 Derived from the help page for RAxML version 7.3 by Alexandros Stamatakis, but
 should work for any version 7.X (and probably earlier for most options).
 """
+from __future__ import print_function
+from Bio._py3k import basestring
+
 __docformat__ = "restructuredtext en"
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -24,7 +27,7 @@ class RaxmlCommandline(AbstractCommandline):
     >>> from Bio.Phylo.Applications import RaxmlCommandline
     >>> raxml_cline = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
     ...                                model="PROTCATWAG", name="interlaced2")
-    >>> print raxml_cline
+    >>> print(raxml_cline)
     raxmlHPC -m PROTCATWAG -n interlaced2 -p 10000 -s Tests/Phylip/interlaced2.phy
 
     You would typically run the command line with raxml_cline() or via
@@ -368,3 +371,4 @@ class RaxmlCommandline(AbstractCommandline):
         # ENH: enforce -s, -n and -m
         if not self.parsimony_seed:
             self.parsimony_seed = 10000
+

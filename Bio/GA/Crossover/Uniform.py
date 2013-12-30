@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Perform uniform crossovers between the genomes of two organisms.
 
 
@@ -40,7 +45,7 @@ class UniformCrossover(object):
         # determine if we have a crossover
         crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
-            minlen = min(len(new_org_1.genome),len(new_org_2.genome))
+            minlen = min(len(new_org_1.genome), len(new_org_2.genome))
             for i in range( minlen ):
                 uniform_chance = random.random()
                 if uniform_chance <= self._uniform_prob:

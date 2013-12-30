@@ -1,5 +1,12 @@
+# Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2007 by Michiel de Hoon. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Tests the basic functionality of the KEGG parsers.
 """
+
+from __future__ import print_function
 
 import os
 
@@ -17,11 +24,11 @@ def t_KEGG_Enzyme(testfiles):
     """Tests Bio.KEGG.Enzyme functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Enzyme on " + file + "\n\n"
+        print("Testing Bio.KEGG.Enzyme on " + file + "\n\n")
         records = Enzyme.parse(fh)
         for record in records:
-            print record
-        print "\n"
+            print(record)
+        print("\n")
         fh.close()
 
 
@@ -29,11 +36,11 @@ def t_KEGG_Compound(testfiles):
     """Tests Bio.KEGG.Compound functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Compound on " + file + "\n\n"
+        print("Testing Bio.KEGG.Compound on " + file + "\n\n")
         records = Compound.parse(fh)
         for record in records:
-            print record
-        print "\n"
+            print(record)
+        print("\n")
         fh.close()
 
 
@@ -41,7 +48,7 @@ def t_KEGG_Map(testfiles):
     """Tests Bio.KEGG.Map functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Map on " + file + "\n\n"
+        print("Testing Bio.KEGG.Map on " + file + "\n\n")
         reactions = Map.parse(fh)
         system = System()
         for reaction in reactions:
@@ -56,7 +63,7 @@ def t_KEGG_Map(testfiles):
         #  solution below proves resilient
         rxs.sort(key=lambda x:str(x))
         for x in rxs:
-            print str(x)
+            print(str(x))
         fh.close()
 
 

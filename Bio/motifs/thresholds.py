@@ -15,7 +15,7 @@ class ScoreDistribution(object):
     thresholds for motif occurences.
     """
     def __init__(self, motif=None, precision=10**3, pssm=None, background=None):
-        if pssm==None:
+        if pssm is None:
             self.min_score = min(0.0, motif.min_score())
             self.interval = max(0.0, motif.max_score())-self.min_score
             self.n_points = precision * motif.length
@@ -30,42 +30,42 @@ class ScoreDistribution(object):
         self.mo_density[-self._index_diff(self.min_score)] = 1.0
         self.bg_density = [0.0]*self.n_points
         self.bg_density[-self._index_diff(self.min_score)] = 1.0
-        if pssm==None:
-            for lo,mo in zip(motif.log_odds(),motif.pwm()):
-                self.modify(lo,mo,motif.background)
+        if pssm is None:
+            for lo, mo in zip(motif.log_odds(), motif.pwm()):
+                self.modify(lo, mo, motif.background)
         else:
             for position in range(pssm.length):
                 mo_new=[0.0]*self.n_points
                 bg_new=[0.0]*self.n_points
-                lo = pssm[:,position]
-                for letter, score in lo.iteritems():
+                lo = pssm[:, position]
+                for letter, score in lo.items():
                     bg = background[letter]
-                    mo = pow(2,pssm[letter,position]) * bg
+                    mo = pow(2, pssm[letter, position]) * bg
                     d=self._index_diff(score)
                     for i in range(self.n_points):
-                        mo_new[self._add(i,d)]+=self.mo_density[i]*mo
-                        bg_new[self._add(i,d)]+=self.bg_density[i]*bg
+                        mo_new[self._add(i, d)]+=self.mo_density[i]*mo
+                        bg_new[self._add(i, d)]+=self.bg_density[i]*bg
                 self.mo_density=mo_new
                 self.bg_density=bg_new
 
     def _index_diff(self,x,y=0.0):
         return int((x-y+0.5*self.step)//self.step)
 
-    def _add(self,i,j):
-        return max(0,min(self.n_points-1,i+j))
+    def _add(self, i, j):
+        return max(0, min(self.n_points-1, i+j))
 
-    def modify(self,scores,mo_probs,bg_probs):
+    def modify(self, scores, mo_probs, bg_probs):
         mo_new=[0.0]*self.n_points
         bg_new=[0.0]*self.n_points
-        for k, v in scores.iteritems():
+        for k, v in scores.items():
             d=self._index_diff(v)
             for i in range(self.n_points):
-                mo_new[self._add(i,d)]+=self.mo_density[i]*mo_probs[k]
-                bg_new[self._add(i,d)]+=self.bg_density[i]*bg_probs[k]
+                mo_new[self._add(i, d)]+=self.mo_density[i]*mo_probs[k]
+                bg_new[self._add(i, d)]+=self.bg_density[i]*bg_probs[k]
         self.mo_density=mo_new
         self.bg_density=bg_new
 
-    def threshold_fpr(self,fpr):
+    def threshold_fpr(self, fpr):
         """
         Approximate the log-odds threshold which makes the type I error (false positive rate).
         """
@@ -76,7 +76,7 @@ class ScoreDistribution(object):
             prob+=self.bg_density[i]
         return self.min_score+i*self.step
 
-    def threshold_fnr(self,fnr):
+    def threshold_fnr(self, fnr):
         """
         Approximate the log-odds threshold which makes the type II error (false negative rate).
         """
@@ -99,7 +99,7 @@ class ScoreDistribution(object):
             fpr+=self.bg_density[i]
             fnr-=self.mo_density[i]
         if return_rate:
-            return self.min_score+i*self.step,fpr
+            return self.min_score+i*self.step, fpr
         else:
             return self.min_score+i*self.step
 

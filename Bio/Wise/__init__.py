@@ -11,7 +11,7 @@
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
-__version__ = "$Revision: 1.17 $"
+from __future__ import print_function
 
 import os
 import sys
@@ -68,18 +68,19 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     """
     Returns a filehandle
     """
-    assert len(pair) == 2
+    if not pair or len(pair) != 2:
+        raise ValueError("Expected pair of filename, not %s" % repr(pair))
 
     output_file = tempfile.NamedTemporaryFile(mode='r')
     input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
 
     if dry_run:
-        print _build_align_cmdline(cmdline,
+        print(_build_align_cmdline(cmdline,
                                    pair,
                                    output_file.name,
                                    kbyte,
                                    force_type,
-                                   quiet)
+                                   quiet))
         return
 
     for filename, input_file in zip(pair, input_files):
@@ -100,13 +101,13 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
                                        quiet)
 
     if debug:
-        print >>sys.stderr, cmdline_str
+        sys.stderr.write("%s\n" % cmdline_str)
 
     status = os.system(cmdline_str) >> 8
 
     if status > 1:
         if kbyte != 0: # possible memory problem; could be None
-            print >>sys.stderr, "INFO trying again with the linear model"
+            sys.stderr.write("INFO trying again with the linear model\n")
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
             raise OSError("%s returned %s" % (" ".join(cmdline), status))
@@ -126,7 +127,7 @@ def all_pairs(singles):
     singles = list(singles)
     while singles:
         suitor = singles.pop(0) # if sorted, stay sorted
-        pairs.extend([(suitor, single) for single in singles])
+        pairs.extend((suitor, single) for single in singles)
 
     return pairs
 

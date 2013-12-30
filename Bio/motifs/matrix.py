@@ -7,8 +7,34 @@ and position-specific scoring matrices.
 """
 
 import math
+
+from Bio._py3k import range
+
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+
+#Hack for Python 2.5, isnan and isinf were new in Python 2.6
+try:
+    from math import isnan as _isnan
+except ImportError:
+    def _isnan(value):
+        #This is tricky due to cross platform float differences
+        if str(value).lower() == "nan":
+            return True
+        return value != value
+try:
+    from math import isinf as _isinf
+except ImportError:
+    def _isinf(value):
+        #This is tricky due to cross platform float differences
+        if str(value).lower().endswith("inf"):
+            return True
+        return False
+#Hack for Python 2.5 on Windows:
+try:
+    _nan = float("nan")
+except ValueError:
+    _nan = 1e1000 / 1e1000
 
 
 class GenericPositionMatrix(dict):
@@ -200,6 +226,21 @@ class GenericPositionMatrix(dict):
             sequence += nucleotide
         return Seq(sequence, alphabet = IUPAC.ambiguous_dna)
 
+    @property
+    def gc_content(self):
+        """
+Compute the fraction GC content.
+"""
+        alphabet = self.alphabet
+        gc_total = 0.0
+        total = 0.0
+        for i in range(self.length):
+            for letter in alphabet.letters:
+                if letter in 'CG':
+                    gc_total += self[letter][i]
+                total += self[letter][i]
+        return gc_total / total
+
     def reverse_complement(self):
         values = {}
         values["A"] = self["T"][::-1]
@@ -234,7 +275,7 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
         else:
             for letter in self.alphabet.letters:
                 counts[letter] = [float(pseudocounts)] * self.length
-        for i in xrange(self.length):
+        for i in range(self.length):
             for letter in self.alphabet.letters:
                 counts[letter][i] += self[letter][i]
         # Actual normalization is done in the PositionWeightMatrix initializer
@@ -245,8 +286,8 @@ class PositionWeightMatrix(GenericPositionMatrix):
 
     def __init__(self, alphabet, counts):
         GenericPositionMatrix.__init__(self, alphabet, counts)
-        for i in xrange(self.length):
-            total = sum([float(self[letter][i]) for letter in alphabet.letters])
+        for i in range(self.length):
+            total = sum(float(self[letter][i]) for letter in alphabet.letters)
             for letter in alphabet.letters:
                 self[letter][i] /= total
         for letter in alphabet.letters:
@@ -291,7 +332,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = float("inf")
                     else:
-                        logodds = float("nan")
+                        logodds = _nan
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
         return pssm
@@ -309,11 +350,16 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
           number is returned
         - otherwise, the result is a one-dimensional list or numpy array
         """
-        if self.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA motifs")
-        if sequence.alphabet!=IUPAC.unambiguous_dna:
-            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+        #TODO - Code itself tolerates ambiguous bases (as NaN).
+        if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs" \
+                                 % self.alphabet)
+        if not isinstance(sequence.alphabet, IUPAC.IUPACUnambiguousDNA):
+            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences" \
+                                 % sequence.alphabet)
 
+        #TODO - Force uppercase here and optimise switch statement in C
+        #by assuming upper case?
         sequence = str(sequence)
         m = self.length
         n = len(sequence)
@@ -324,11 +370,17 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             import _pwm
         except ImportError:
             # use the slower Python code otherwise
-            for i in xrange(n-m+1):
+            #The C code handles mixed case so Python version must too:
+            sequence = sequence.upper()
+            for i in range(n-m+1):
                 score = 0.0
-                for position in xrange(m):
+                for position in range(m):
                     letter = sequence[i+position]
-                    score += self[letter][position]
+                    try:
+                        score += self[letter][position]
+                    except KeyError:
+                        score = _nan
+                        break
                 scores.append(score)
         else:
             # get the log-odds matrix into a proper shape
@@ -349,7 +401,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         m = self.length
         if both:
             rc = self.reverse_complement()
-        for position in xrange(0,n-m+1):
+        for position in range(0, n-m+1):
             s = sequence[position:position+m]
             score = self.calculate(s)
             if score > threshold:
@@ -367,8 +419,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self._letters
-        for position in xrange(0,self.length):
-            score += max([self[letter][position] for letter in letters])
+        for position in range(0, self.length):
+            score += max(self[letter][position] for letter in letters)
         return score
 
     @property
@@ -379,9 +431,13 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self._letters
-        for position in xrange(0,self.length):
-            score += min([self[letter][position] for letter in letters])
+        for position in range(0, self.length):
+            score += min(self[letter][position] for letter in letters)
         return score
+
+    @property
+    def gc_content(self):
+        raise Exception("Cannot compute the %GC composition of a PSSM")
 
     def mean(self, background=None):
         """Expected value of the score of a motif."""
@@ -395,9 +451,13 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         sx = 0.0
         for i in range(self.length):
             for letter in self._letters:
-                logodds = self[letter,i]
+                logodds = self[letter, i]
+                if _isnan(logodds):
+                    continue
+                if _isinf(logodds) and logodds < 0:
+                    continue
                 b = background[letter]
-                p = b * math.pow(2,logodds)
+                p = b * math.pow(2, logodds)
                 sx += p * logodds
         return sx
 
@@ -415,9 +475,13 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sx = 0.0
             sxx = 0.0
             for letter in self._letters:
-                logodds = self[letter,i]
+                logodds = self[letter, i]
+                if _isnan(logodds):
+                    continue
+                if _isinf(logodds) and logodds < 0:
+                    continue
                 b = background[letter]
-                p = b * math.pow(2,logodds)
+                p = b * math.pow(2, logodds)
                 sx += p*logodds
                 sxx += p*logodds*logodds
             sxx -= sx*sx
@@ -443,7 +507,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             if max_p<p:
                 max_p=p
                 max_o=-offset
-        return 1-max_p,max_o
+        return 1-max_p, max_o
 
     def dist_pearson_at(self, other, offset):
         letters = self._letters
@@ -452,15 +516,15 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         sxx = 0.0  # \sum x^2
         sxy = 0.0  # \sum x \cdot y
         syy = 0.0  # \sum y^2
-        norm=max(self.length,offset+other.length)*len(letters)
+        norm=max(self.length, offset+other.length)*len(letters)
         for pos in range(min(self.length-offset, other.length)):
-            xi = [self[letter,pos+offset] for letter in letters]
-            yi = [other[letter,pos] for letter in letters]
+            xi = [self[letter, pos+offset] for letter in letters]
+            yi = [other[letter, pos] for letter in letters]
             sx += sum(xi)
             sy += sum(yi)
-            sxx += sum([x*x for x in xi])
-            sxy += sum([x*y for x,y in zip(xi,yi)])
-            syy += sum([y*y for y in yi])
+            sxx += sum(x*x for x in xi)
+            sxy += sum(x*y for x, y in zip(xi, yi))
+            syy += sum(y*y for y in yi)
         sx /= norm
         sy /= norm
         sxx /= norm
@@ -472,7 +536,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def distribution(self, background=None, precision=10**3):
         """calculate the distribution of the scores at the given precision."""
-        from thresholds import ScoreDistribution
+        from .thresholds import ScoreDistribution
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:

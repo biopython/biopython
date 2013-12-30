@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 from Bio.Alphabet import IUPAC
 from Bio import Seq
 import re
@@ -18,12 +20,12 @@ def read(handle):
     
     Example:
     
-    >>> f = open("meme.output.txt")
     >>> from Bio.Motif.Parsers import MEME
-    >>> record = MEME.read(f)
+    >>> with open("meme.output.txt") as f:
+    ...     record = MEME.read(f)
     >>> for motif in record.motifs:
     ...     for instance in motif.instances:
-    ...         print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
+    ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
     
     """
     record = MEMERecord()
@@ -45,7 +47,7 @@ def read(handle):
         __read_motif_sequences(motif, handle, 'revcomp' in record.command)
         __skip_unused_lines(handle)
         try:
-            line = handle.next()
+            line = next(handle)
         except StopIteration:
             raise ValueError('Unexpected end of stream: Expected to find new motif, or the summary of motifs')
         if line.startswith("SUMMARY OF MOTIFS"):
@@ -72,20 +74,20 @@ class MEMEMotif (Motif):
         self.evalue = 0.0
     
     def _numoccurrences (self, number):
-        if type(number) == int:
+        if isinstance(number, int):
             self.num_occurrences = number
         else:
             number = int(number)
             self.num_occurrences = number
 
-    def get_instance_by_name (self,name):
+    def get_instance_by_name (self, name):
         for i in self.instances:
             if i.sequence_name == name:
                 return i
         return None
 
     def add_instance_from_values (self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
-        inst = MEMEInstance(sequence,self.alphabet)
+        inst = MEMEInstance(sequence, self.alphabet)
         inst._pvalue(pvalue)
         inst._seqname(name)
         inst._start(start)
@@ -99,7 +101,7 @@ class MEMEMotif (Motif):
         self.add_instance(inst)
     
     def _evalue (self, evalue):
-        if type(evalue) == float:
+        if isinstance(evalue, float):
             self.evalue = evalue
         else:
             evalue = float(evalue)
@@ -125,11 +127,11 @@ class MEMEInstance(Seq.Seq):
     def _motifname (self, name):
         self.motif_name = name
     
-    def _start (self,start):
+    def _start (self, start):
         start = int(start)
         self.start = start
     
-    def _pvalue (self,pval):
+    def _pvalue (self, pval):
         pval = float(pval)
         self.pvalue = pval
     
@@ -187,31 +189,31 @@ def __read_datafile(record, handle):
     else:
         raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
     if not line.startswith('DATAFILE'):
         raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
     line = line.strip()
-    line = line.replace('DATAFILE= ','')
+    line = line.replace('DATAFILE= ', '')
     record.datafile = line
 
 
 def __read_alphabet(record, handle):
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'ALPHABET'")
     if not line.startswith('ALPHABET'):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
     line = line.strip()
-    line = line.replace('ALPHABET= ','')
+    line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
         al = IUPAC.unambiguous_dna
     else:
@@ -221,13 +223,13 @@ def __read_alphabet(record, handle):
 
 def __read_sequence_names(record, handle):
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'Sequence name'")
     if not line.startswith('Sequence name'):
         raise ValueError("Line does not start with 'Sequence name':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '----'")
     if not line.startswith('----'):
@@ -251,7 +253,7 @@ def __read_command(record, handle):
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'command'")
     line = line.strip()
-    line = line.replace('command: ','')
+    line = line.replace('command: ', '')
     record.command = line
 
 
@@ -279,19 +281,19 @@ def __read_motif_name(motif, handle):
 
 def __read_motif_sequences(motif, handle, rv):
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError('Unexpected end of stream: Failed to find motif sequences')
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'Sequence name'")
     if not line.startswith('Sequence name'):
         raise ValueError("Line does not start with 'Sequence name':\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError('Unexpected end of stream: Failed to find motif sequences')
     if not line.startswith('---'):
@@ -338,13 +340,13 @@ def __skip_unused_lines(handle):
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'Time'")
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError('Unexpected end of stream: Expected to find blank line')
     if line.strip():
         raise ValueError("Expected blank line, but got:\n%s" % line)
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
     if not line.startswith('***'):

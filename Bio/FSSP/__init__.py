@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Parser for FSSP files, used in a database of protein fold classifications.
 
 This is a module to handle FSSP files. For now it parses only the header,
@@ -10,8 +15,10 @@ functions: read_fssp(file_handle): reads an fssp file into the records. Returns 
 tuple of two instances.
 mult_align: returns a Biopython alignment object
 """
+from __future__ import print_function
+
 import re
-import fssp_rec
+from . import fssp_rec
 from Bio.Align import Generic
 from Bio import Alphabet
 fff_rec = fssp_rec.fff_rec
@@ -91,7 +98,7 @@ class FSSPSumRec(object):
     def __init__(self, in_str):
         self.raw = in_str
         in_rec = in_str.strip().split()
-        # print in_rec
+        # print(in_rec)
         self.nr = int(in_rec[0][:-1])
         self.pdb1 = in_rec[1][:4]
         if len(in_rec[1]) == 4:
@@ -128,7 +135,7 @@ class FSSPSumRec(object):
 
 class FSSPAlignRec(object):
     def __init__(self, in_fff_rec):
-        # print in_fff_rec
+        # print(in_fff_rec)
         self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
         self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
         self.chain_id = in_fff_rec[fssp_rec.align.chain_id]
@@ -182,9 +189,7 @@ class FSSPAlignDict(dict):
     # Returns a sequence string
     def sequence(self, num):
         s = ''
-        sorted_pos_nums = self.abs_res_dict.keys()
-        sorted_pos_nums.sort()
-        for i in sorted_pos_nums:
+        for i in sorted(self.abs_res_dict):
             s += self.abs(i).pos_align_dict[num].aa
         return s
 
@@ -192,13 +197,11 @@ class FSSPAlignDict(dict):
         mult_align_dict = {}
         for j in self.abs(1).pos_align_dict:
             mult_align_dict[j] = ''
-        for fssp_rec in self.itervalues():
+        for fssp_rec in self.values():
             for j in fssp_rec.pos_align_dict:
                 mult_align_dict[j] += fssp_rec.pos_align_dict[j].aa
-        seq_order = mult_align_dict.keys()
-        seq_order.sort()
         out_str = ''
-        for i in seq_order:
+        for i in sorted(mult_align_dict):
             out_str += '> %d\n' % i
             k = 0
             for j in mult_align_dict[i]:
@@ -222,7 +225,6 @@ def read_fssp(fssp_handle):
     header = FSSPHeader()
     sum_dict = FSSPSumDict()
     align_dict = FSSPAlignDict()
-    # fssp_handle=open(fssp_handlename)
     curline = fssp_handle.readline()
     while not summary_title.match(curline):
         # Still in title
@@ -246,7 +248,7 @@ def read_fssp(fssp_handle):
             curline = fssp_handle.readline()
         if not alignments_title.match(curline):
             if equiv_title.match(curline):
-                # print "Reached equiv_title"
+                # print("Reached equiv_title")
                 break
             else:
                 raise ValueError('Bad FSSP file: no alignments title record found')
@@ -266,9 +268,9 @@ def read_fssp(fssp_handle):
             align_dict[key].add_align_list(align_list)
             curline = fssp_handle.readline()
             if not curline:
-                print 'EOFEOFEOF'
+                print('EOFEOFEOF')
                 raise EOFError
-    for i in align_dict.itervalues():
+    for i in align_dict.values():
         i.pos_align_list2dict()
         del i.PosAlignList
     align_dict.build_resnum_list()

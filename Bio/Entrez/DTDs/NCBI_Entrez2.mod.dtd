@@ -1,0 +1,747 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "entrez2.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Entrez2"
+================================================= -->
+
+<!--
+$Revision: 1.12 $********************************************
+
+  entrez2.asn
+   Version 1
+
+   API to Entrez Engine (1999)
+   Retrieval of sequence done through ID1 module
+     Also, SeqId queries
+   Retrieval of PubMed records through PubMed module
+   Retrieval of Structures through PubStruct module
+   Retrieval of Genomes through Genomes module
+
+***************************************************************
+-->
+
+<!--
+**************************************
+  Entrez2 common elements
+**************************************
+ a date/time stamp
+-->
+<!ELEMENT Entrez2-dt (%INTEGER;)>
+
+<!-- database name -->
+<!ELEMENT Entrez2-db-id (#PCDATA)>
+
+<!-- field name -->
+<!ELEMENT Entrez2-field-id (#PCDATA)>
+
+<!-- link name -->
+<!ELEMENT Entrez2-link-id (#PCDATA)>
+
+<!-- list of record UIDs -->
+<!ELEMENT Entrez2-id-list (
+        Entrez2-id-list_db, 
+        Entrez2-id-list_num, 
+        Entrez2-id-list_uids?)>
+
+<!-- the database -->
+<!ELEMENT Entrez2-id-list_db (Entrez2-db-id)>
+
+<!-- number of uids -->
+<!ELEMENT Entrez2-id-list_num (%INTEGER;)>
+
+<!-- coded uids -->
+<!ELEMENT Entrez2-id-list_uids (%OCTETS;)>
+
+<!--
+****************************************
+ The structured form of the boolean is the same in a request or
+    return so that it easy to modify a query. This means some
+    fields are only considered in a return value, like counts
+    by term. They are ignored in a request.
+ The structured boolean supports specific boolean components,
+    an unparsed string in query syntax, and UID lists as
+    elements of a boolean. This makes it possible to submit
+    a single string, a fully structured query, or a mixture.
+    The UID list feature means one can also perform refinements
+    on UID lists from links, neighbors, or other operations.
+    UID list query now returns a history key for subsequent use.
+*****************************************
+-->
+<!ELEMENT Entrez2-boolean-exp (
+        Entrez2-boolean-exp_db, 
+        Entrez2-boolean-exp_exp, 
+        Entrez2-boolean-exp_limits?)>
+
+<!-- database for this query -->
+<!ELEMENT Entrez2-boolean-exp_db (Entrez2-db-id)>
+
+<!-- the Boolean -->
+<!ELEMENT Entrez2-boolean-exp_exp (Entrez2-boolean-element*)>
+
+<!-- date bounds -->
+<!ELEMENT Entrez2-boolean-exp_limits (Entrez2-limits)>
+
+
+<!ELEMENT Entrez2-boolean-element (
+        Entrez2-boolean-element_str | 
+        Entrez2-boolean-element_op | 
+        Entrez2-boolean-element_term | 
+        Entrez2-boolean-element_ids | 
+        Entrez2-boolean-element_key)>
+
+<!-- unparsed query string -->
+<!ELEMENT Entrez2-boolean-element_str (#PCDATA)>
+
+<!-- logical operator -->
+<!ELEMENT Entrez2-boolean-element_op (Entrez2-operator)>
+
+<!-- fielded term -->
+<!ELEMENT Entrez2-boolean-element_term (Entrez2-boolean-term)>
+
+<!-- list of UIDs - returns history key in reply -->
+<!ELEMENT Entrez2-boolean-element_ids (Entrez2-id-list)>
+
+<!-- history key for uploaded UID list or other query -->
+<!ELEMENT Entrez2-boolean-element_key (#PCDATA)>
+
+<!--
+*****************************************
+ the term is both sent and received as parts of
+   queries and replies. The attributes can be filled in
+   by either, but may be ignored by one or the other. Flags are
+   shown if a real value is only of use in the query (Q), only
+   in the reply (R), or used in both (B)
+ do-not-explode and do-not-translate are only active set by
+   by the query. However, they retain those settings in the
+   return value so they can be resent with a new query
+******************************************
+-->
+<!ELEMENT Entrez2-boolean-term (
+        Entrez2-boolean-term_field, 
+        Entrez2-boolean-term_term, 
+        Entrez2-boolean-term_term-count?, 
+        Entrez2-boolean-term_do-not-explode?, 
+        Entrez2-boolean-term_do-not-translate?)>
+
+<!-- B -->
+<!ELEMENT Entrez2-boolean-term_field (Entrez2-field-id)>
+
+<!-- B -->
+<!ELEMENT Entrez2-boolean-term_term (#PCDATA)>
+
+<!-- R count of records with term -->
+<!ELEMENT Entrez2-boolean-term_term-count (%INTEGER;)>
+
+<!-- Q do not explode term -->
+<!ELEMENT Entrez2-boolean-term_do-not-explode EMPTY>
+<!ATTLIST Entrez2-boolean-term_do-not-explode value ( true | false ) "false" >
+
+
+<!-- Q do not use synonyms -->
+<!ELEMENT Entrez2-boolean-term_do-not-translate EMPTY>
+<!ATTLIST Entrez2-boolean-term_do-not-translate value ( true | false ) "false" >
+
+
+
+<!ELEMENT Entrez2-operator (%INTEGER;)>
+<!ATTLIST Entrez2-operator value (
+        and |
+        or |
+        butnot |
+        range |
+        left-paren |
+        right-paren
+        ) #IMPLIED >
+
+
+<!--
+***************************************
+  Entrez2 Request types
+***************************************
+****************************************
+ The basic request wrapper leaves space for a version which
+   allow the server to support older clients
+ The tool parameter allows us to log the client types for
+   debugging and tuning
+ The cookie is a session ID returned by the first Entrez2-reply
+****************************************
+ a standard request
+-->
+<!ELEMENT Entrez2-request (
+        Entrez2-request_request, 
+        Entrez2-request_version, 
+        Entrez2-request_tool?, 
+        Entrez2-request_cookie?, 
+        Entrez2-request_use-history?)>
+
+<!-- the actual request -->
+<!ELEMENT Entrez2-request_request (E2Request)>
+
+<!-- ASN1 spec version -->
+<!ELEMENT Entrez2-request_version (%INTEGER;)>
+
+<!-- tool making request -->
+<!ELEMENT Entrez2-request_tool (#PCDATA)>
+
+<!-- history session cookie -->
+<!ELEMENT Entrez2-request_cookie (#PCDATA)>
+
+<!-- request should use history -->
+<!ELEMENT Entrez2-request_use-history EMPTY>
+<!ATTLIST Entrez2-request_use-history value ( true | false ) "false" >
+
+
+<!-- request types -->
+<!ELEMENT E2Request (
+        E2Request_get-info | 
+        E2Request_eval-boolean | 
+        E2Request_get-docsum | 
+        E2Request_get-term-pos | 
+        E2Request_get-term-list | 
+        E2Request_get-term-hierarchy | 
+        E2Request_get-links | 
+        E2Request_get-linked | 
+        E2Request_get-link-counts)>
+
+<!-- ask for info block -->
+<!ELEMENT E2Request_get-info EMPTY>
+
+<!-- Boolean lookup -->
+<!ELEMENT E2Request_eval-boolean (Entrez2-eval-boolean)>
+
+<!-- get the DocSums -->
+<!ELEMENT E2Request_get-docsum (Entrez2-id-list)>
+
+<!-- get position in term list -->
+<!ELEMENT E2Request_get-term-pos (Entrez2-term-query)>
+
+<!-- get Term list by position -->
+<!ELEMENT E2Request_get-term-list (Entrez2-term-pos)>
+
+<!-- get a hierarchy from a term -->
+<!ELEMENT E2Request_get-term-hierarchy (Entrez2-hier-query)>
+
+<!-- get specific links from a UID list -->
+<!ELEMENT E2Request_get-links (Entrez2-get-links)>
+
+<!-- get subset of UID list which has links -->
+<!ELEMENT E2Request_get-linked (Entrez2-get-links)>
+
+<!-- get all links from one UID -->
+<!ELEMENT E2Request_get-link-counts (Entrez2-id)>
+
+<!--
+****************************************
+ When evaluating a boolean query the counts of hits is always
+    returned.
+ In addition, you can request the UIDs of the hits or the
+    the parsed query in structured form (with counts by term),
+    or both.
+****************************************
+ evaluate Boolean query
+-->
+<!ELEMENT Entrez2-eval-boolean (
+        Entrez2-eval-boolean_return-UIDs?, 
+        Entrez2-eval-boolean_return-parse?, 
+        Entrez2-eval-boolean_query)>
+
+<!-- return UID list? -->
+<!ELEMENT Entrez2-eval-boolean_return-UIDs EMPTY>
+<!ATTLIST Entrez2-eval-boolean_return-UIDs value ( true | false ) "false" >
+
+
+<!-- return parsed query? -->
+<!ELEMENT Entrez2-eval-boolean_return-parse EMPTY>
+<!ATTLIST Entrez2-eval-boolean_return-parse value ( true | false ) "false" >
+
+
+<!-- the actual query -->
+<!ELEMENT Entrez2-eval-boolean_query (Entrez2-boolean-exp)>
+
+
+<!ELEMENT Entrez2-dt-filter (
+        Entrez2-dt-filter_begin-date, 
+        Entrez2-dt-filter_end-date, 
+        Entrez2-dt-filter_type-date)>
+<!--
+**************************************
+  Entrez2 common elements
+**************************************
+ a date/time stamp
+-->
+<!ELEMENT Entrez2-dt-filter_begin-date (Entrez2-dt)>
+<!--
+**************************************
+  Entrez2 common elements
+**************************************
+ a date/time stamp
+-->
+<!ELEMENT Entrez2-dt-filter_end-date (Entrez2-dt)>
+<!-- field name -->
+<!ELEMENT Entrez2-dt-filter_type-date (Entrez2-field-id)>
+
+<!-- date limits -->
+<!ELEMENT Entrez2-limits (
+        Entrez2-limits_filter-date?, 
+        Entrez2-limits_max-UIDs?, 
+        Entrez2-limits_offset-UIDs?)>
+
+<!ELEMENT Entrez2-limits_filter-date (Entrez2-dt-filter)>
+
+<!-- max UIDs to return in list -->
+<!ELEMENT Entrez2-limits_max-UIDs (%INTEGER;)>
+
+<!-- start partway into UID list -->
+<!ELEMENT Entrez2-limits_offset-UIDs (%INTEGER;)>
+
+<!-- a single UID -->
+<!ELEMENT Entrez2-id (
+        Entrez2-id_db, 
+        Entrez2-id_uid)>
+<!-- database name -->
+<!ELEMENT Entrez2-id_db (Entrez2-db-id)>
+
+<!ELEMENT Entrez2-id_uid (%INTEGER;)>
+
+
+<!ELEMENT Entrez2-term-query (
+        Entrez2-term-query_db, 
+        Entrez2-term-query_field, 
+        Entrez2-term-query_term)>
+<!-- database name -->
+<!ELEMENT Entrez2-term-query_db (Entrez2-db-id)>
+<!-- field name -->
+<!ELEMENT Entrez2-term-query_field (Entrez2-field-id)>
+
+<!ELEMENT Entrez2-term-query_term (#PCDATA)>
+
+
+<!ELEMENT Entrez2-hier-query (
+        Entrez2-hier-query_db, 
+        Entrez2-hier-query_field, 
+        Entrez2-hier-query_term?, 
+        Entrez2-hier-query_txid?)>
+<!-- database name -->
+<!ELEMENT Entrez2-hier-query_db (Entrez2-db-id)>
+<!-- field name -->
+<!ELEMENT Entrez2-hier-query_field (Entrez2-field-id)>
+
+<!-- query with either term -->
+<!ELEMENT Entrez2-hier-query_term (#PCDATA)>
+
+<!-- or Taxonomy ID -->
+<!ELEMENT Entrez2-hier-query_txid (%INTEGER;)>
+
+<!-- request portions of term list -->
+<!ELEMENT Entrez2-term-pos (
+        Entrez2-term-pos_db, 
+        Entrez2-term-pos_field, 
+        Entrez2-term-pos_first-term-pos, 
+        Entrez2-term-pos_number-of-terms?)>
+<!-- database name -->
+<!ELEMENT Entrez2-term-pos_db (Entrez2-db-id)>
+<!-- field name -->
+<!ELEMENT Entrez2-term-pos_field (Entrez2-field-id)>
+
+<!ELEMENT Entrez2-term-pos_first-term-pos (%INTEGER;)>
+
+<!-- optional for hierarchy only -->
+<!ELEMENT Entrez2-term-pos_number-of-terms (%INTEGER;)>
+
+<!-- request links of one type -->
+<!ELEMENT Entrez2-get-links (
+        Entrez2-get-links_uids, 
+        Entrez2-get-links_linktype, 
+        Entrez2-get-links_max-UIDS?, 
+        Entrez2-get-links_count-only?, 
+        Entrez2-get-links_parents-persist?)>
+
+<!-- docs to link from -->
+<!ELEMENT Entrez2-get-links_uids (Entrez2-id-list)>
+
+<!-- type of link -->
+<!ELEMENT Entrez2-get-links_linktype (Entrez2-link-id)>
+
+<!-- maximum number of links to return -->
+<!ELEMENT Entrez2-get-links_max-UIDS (%INTEGER;)>
+
+<!-- return only the counts -->
+<!ELEMENT Entrez2-get-links_count-only EMPTY>
+<!ATTLIST Entrez2-get-links_count-only value ( true | false ) #REQUIRED >
+
+
+<!-- allow original uids in list -->
+<!ELEMENT Entrez2-get-links_parents-persist EMPTY>
+<!ATTLIST Entrez2-get-links_parents-persist value ( true | false ) #REQUIRED >
+
+
+<!--
+**********************************************************
+ Replies from the Entrez server
+  all replies contain the date/time stamp when they were executed
+  to do reqular date bounded searches use this value+1 to search
+  again later instead of recording the date/time on the client machine
+  the cookie allows a simple key string to represent UID lists in the history
+**********************************************************
+-->
+<!ELEMENT Entrez2-reply (
+        Entrez2-reply_reply, 
+        Entrez2-reply_dt, 
+        Entrez2-reply_server, 
+        Entrez2-reply_msg?, 
+        Entrez2-reply_key?, 
+        Entrez2-reply_cookie?)>
+
+<!-- the actual reply -->
+<!ELEMENT Entrez2-reply_reply (E2Reply)>
+
+<!-- date/time stamp from server -->
+<!ELEMENT Entrez2-reply_dt (Entrez2-dt)>
+
+<!-- server version info -->
+<!ELEMENT Entrez2-reply_server (#PCDATA)>
+
+<!-- possibly a message to the user -->
+<!ELEMENT Entrez2-reply_msg (#PCDATA)>
+
+<!-- history key for query -->
+<!ELEMENT Entrez2-reply_key (#PCDATA)>
+
+<!-- history session cookie -->
+<!ELEMENT Entrez2-reply_cookie (#PCDATA)>
+
+
+<!ELEMENT E2Reply (
+        E2Reply_error | 
+        E2Reply_get-info | 
+        E2Reply_eval-boolean | 
+        E2Reply_get-docsum | 
+        E2Reply_get-term-pos | 
+        E2Reply_get-term-list | 
+        E2Reply_get-term-hierarchy | 
+        E2Reply_get-links | 
+        E2Reply_get-linked | 
+        E2Reply_get-link-counts)>
+
+<!-- if nothing can be returned -->
+<!ELEMENT E2Reply_error (#PCDATA)>
+
+<!-- the database info -->
+<!ELEMENT E2Reply_get-info (Entrez2-info)>
+
+<!-- result of boolean query -->
+<!ELEMENT E2Reply_eval-boolean (Entrez2-boolean-reply)>
+
+<!ELEMENT E2Reply_get-docsum (Entrez2-docsum-list)>
+
+<!-- position of the term -->
+<!ELEMENT E2Reply_get-term-pos (%INTEGER;)>
+
+<!ELEMENT E2Reply_get-term-list (Entrez2-term-list)>
+<!-- for hierarchical index -->
+<!ELEMENT E2Reply_get-term-hierarchy (Entrez2-hier-node)>
+<!--
+*******************************************
+ Links are returned in sets also using OCTET STRINGS
+*******************************************
+ set of links
+-->
+<!ELEMENT E2Reply_get-links (Entrez2-link-set)>
+<!-- list of record UIDs -->
+<!ELEMENT E2Reply_get-linked (Entrez2-id-list)>
+<!-- all links from 1 uid -->
+<!ELEMENT E2Reply_get-link-counts (Entrez2-link-count-list)>
+
+<!-- describes all the databases -->
+<!ELEMENT Entrez2-info (
+        Entrez2-info_db-count, 
+        Entrez2-info_build-date, 
+        Entrez2-info_db-info)>
+
+<!-- number of databases -->
+<!ELEMENT Entrez2-info_db-count (%INTEGER;)>
+
+<!-- build date of databases -->
+<!ELEMENT Entrez2-info_build-date (Entrez2-dt)>
+
+<!-- info by database -->
+<!ELEMENT Entrez2-info_db-info (Entrez2-db-info*)>
+
+<!-- info for one database -->
+<!ELEMENT Entrez2-db-info (
+        Entrez2-db-info_db-name, 
+        Entrez2-db-info_db-menu, 
+        Entrez2-db-info_db-descr, 
+        Entrez2-db-info_doc-count, 
+        Entrez2-db-info_field-count, 
+        Entrez2-db-info_fields, 
+        Entrez2-db-info_link-count, 
+        Entrez2-db-info_links, 
+        Entrez2-db-info_docsum-field-count, 
+        Entrez2-db-info_docsum-fields)>
+
+<!-- internal name -->
+<!ELEMENT Entrez2-db-info_db-name (Entrez2-db-id)>
+
+<!-- short name for menu -->
+<!ELEMENT Entrez2-db-info_db-menu (#PCDATA)>
+
+<!-- longer explanatory name -->
+<!ELEMENT Entrez2-db-info_db-descr (#PCDATA)>
+
+<!-- total number of records -->
+<!ELEMENT Entrez2-db-info_doc-count (%INTEGER;)>
+
+<!-- number of field types -->
+<!ELEMENT Entrez2-db-info_field-count (%INTEGER;)>
+
+<!ELEMENT Entrez2-db-info_fields (Entrez2-field-info*)>
+
+<!-- number of link types -->
+<!ELEMENT Entrez2-db-info_link-count (%INTEGER;)>
+
+<!ELEMENT Entrez2-db-info_links (Entrez2-link-info*)>
+
+<!ELEMENT Entrez2-db-info_docsum-field-count (%INTEGER;)>
+
+<!ELEMENT Entrez2-db-info_docsum-fields (Entrez2-docsum-field-info*)>
+
+<!-- info about one field -->
+<!ELEMENT Entrez2-field-info (
+        Entrez2-field-info_field-name, 
+        Entrez2-field-info_field-menu, 
+        Entrez2-field-info_field-descr, 
+        Entrez2-field-info_term-count, 
+        Entrez2-field-info_is-date?, 
+        Entrez2-field-info_is-numerical?, 
+        Entrez2-field-info_single-token?, 
+        Entrez2-field-info_hierarchy-avail?, 
+        Entrez2-field-info_is-rangable?, 
+        Entrez2-field-info_is-truncatable?)>
+
+<!-- the internal name -->
+<!ELEMENT Entrez2-field-info_field-name (Entrez2-field-id)>
+
+<!-- short string suitable for menu -->
+<!ELEMENT Entrez2-field-info_field-menu (#PCDATA)>
+
+<!-- longer, explanatory name -->
+<!ELEMENT Entrez2-field-info_field-descr (#PCDATA)>
+
+<!-- number of terms in field -->
+<!ELEMENT Entrez2-field-info_term-count (%INTEGER;)>
+
+<!ELEMENT Entrez2-field-info_is-date EMPTY>
+<!ATTLIST Entrez2-field-info_is-date value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Entrez2-field-info_is-numerical EMPTY>
+<!ATTLIST Entrez2-field-info_is-numerical value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Entrez2-field-info_single-token EMPTY>
+<!ATTLIST Entrez2-field-info_single-token value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Entrez2-field-info_hierarchy-avail EMPTY>
+<!ATTLIST Entrez2-field-info_hierarchy-avail value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Entrez2-field-info_is-rangable EMPTY>
+<!ATTLIST Entrez2-field-info_is-rangable value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Entrez2-field-info_is-truncatable EMPTY>
+<!ATTLIST Entrez2-field-info_is-truncatable value ( true | false ) #REQUIRED >
+
+
+<!-- info about one link -->
+<!ELEMENT Entrez2-link-info (
+        Entrez2-link-info_link-name, 
+        Entrez2-link-info_link-menu, 
+        Entrez2-link-info_link-descr, 
+        Entrez2-link-info_db-to, 
+        Entrez2-link-info_data-size?)>
+<!-- link name -->
+<!ELEMENT Entrez2-link-info_link-name (Entrez2-link-id)>
+
+<!ELEMENT Entrez2-link-info_link-menu (#PCDATA)>
+
+<!ELEMENT Entrez2-link-info_link-descr (#PCDATA)>
+
+<!-- database it links to -->
+<!ELEMENT Entrez2-link-info_db-to (Entrez2-db-id)>
+
+<!-- size of link data element     -->
+<!ELEMENT Entrez2-link-info_data-size (%INTEGER;)>
+
+
+<!ELEMENT Entrez2-docsum-field-type (%INTEGER;)>
+<!ATTLIST Entrez2-docsum-field-type value (
+        string |
+        int |
+        float |
+        date-pubmed
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Entrez2-docsum-field-info (
+        Entrez2-docsum-field-info_field-name, 
+        Entrez2-docsum-field-info_field-description, 
+        Entrez2-docsum-field-info_field-type)>
+
+<!ELEMENT Entrez2-docsum-field-info_field-name (#PCDATA)>
+
+<!ELEMENT Entrez2-docsum-field-info_field-description (#PCDATA)>
+
+<!ELEMENT Entrez2-docsum-field-info_field-type (Entrez2-docsum-field-type)>
+
+
+<!ELEMENT Entrez2-boolean-reply (
+        Entrez2-boolean-reply_count, 
+        Entrez2-boolean-reply_uids?, 
+        Entrez2-boolean-reply_query?)>
+
+<!-- records hit -->
+<!ELEMENT Entrez2-boolean-reply_count (%INTEGER;)>
+
+<!-- if uids requested -->
+<!ELEMENT Entrez2-boolean-reply_uids (Entrez2-id-list)>
+
+<!-- if parsed query requested -->
+<!ELEMENT Entrez2-boolean-reply_query (Entrez2-boolean-exp)>
+
+
+<!ELEMENT Entrez2-docsum-list (
+        Entrez2-docsum-list_count, 
+        Entrez2-docsum-list_list)>
+
+<!-- number of docsums -->
+<!ELEMENT Entrez2-docsum-list_count (%INTEGER;)>
+
+<!ELEMENT Entrez2-docsum-list_list (Entrez2-docsum*)>
+
+
+<!ELEMENT Entrez2-docsum (
+        Entrez2-docsum_uid, 
+        Entrez2-docsum_docsum-data)>
+
+<!-- primary uid (gi, pubmedid) -->
+<!ELEMENT Entrez2-docsum_uid (%INTEGER;)>
+
+<!ELEMENT Entrez2-docsum_docsum-data (Entrez2-docsum-data*)>
+
+
+<!ELEMENT Entrez2-docsum-data (
+        Entrez2-docsum-data_field-name, 
+        Entrez2-docsum-data_field-value)>
+
+<!ELEMENT Entrez2-docsum-data_field-name (#PCDATA)>
+
+<!ELEMENT Entrez2-docsum-data_field-value (#PCDATA)>
+
+
+<!ELEMENT Entrez2-term-list (
+        Entrez2-term-list_pos, 
+        Entrez2-term-list_num, 
+        Entrez2-term-list_list)>
+
+<!-- position of first term in list -->
+<!ELEMENT Entrez2-term-list_pos (%INTEGER;)>
+
+<!-- number of terms in list -->
+<!ELEMENT Entrez2-term-list_num (%INTEGER;)>
+
+<!ELEMENT Entrez2-term-list_list (Entrez2-term*)>
+
+
+<!ELEMENT Entrez2-term (
+        Entrez2-term_term, 
+        Entrez2-term_txid?, 
+        Entrez2-term_count, 
+        Entrez2-term_is-leaf-node?)>
+
+<!ELEMENT Entrez2-term_term (#PCDATA)>
+
+<!ELEMENT Entrez2-term_txid (%INTEGER;)>
+
+<!-- count of records with this term -->
+<!ELEMENT Entrez2-term_count (%INTEGER;)>
+
+<!-- used for hierarchy only -->
+<!ELEMENT Entrez2-term_is-leaf-node EMPTY>
+<!ATTLIST Entrez2-term_is-leaf-node value ( true | false ) #REQUIRED >
+
+
+<!-- for hierarchical index -->
+<!ELEMENT Entrez2-hier-node (
+        Entrez2-hier-node_cannonical-form, 
+        Entrez2-hier-node_lineage-count, 
+        Entrez2-hier-node_lineage?, 
+        Entrez2-hier-node_child-count, 
+        Entrez2-hier-node_children, 
+        Entrez2-hier-node_is-ambiguous?)>
+
+<!-- the official name -->
+<!ELEMENT Entrez2-hier-node_cannonical-form (#PCDATA)>
+
+<!-- number of strings in lineage -->
+<!ELEMENT Entrez2-hier-node_lineage-count (%INTEGER;)>
+
+<!-- strings up the lineage -->
+<!ELEMENT Entrez2-hier-node_lineage (Entrez2-term*)>
+
+<!-- number of children of this node -->
+<!ELEMENT Entrez2-hier-node_child-count (%INTEGER;)>
+
+<!-- the children -->
+<!ELEMENT Entrez2-hier-node_children (Entrez2-term*)>
+
+<!-- used for hierarchy only -->
+<!ELEMENT Entrez2-hier-node_is-ambiguous EMPTY>
+<!ATTLIST Entrez2-hier-node_is-ambiguous value ( true | false ) #REQUIRED >
+
+
+<!--
+*******************************************
+ Links are returned in sets also using OCTET STRINGS
+*******************************************
+ set of links
+-->
+<!ELEMENT Entrez2-link-set (
+        Entrez2-link-set_ids, 
+        Entrez2-link-set_data-size?, 
+        Entrez2-link-set_data?)>
+<!-- list of record UIDs -->
+<!ELEMENT Entrez2-link-set_ids (Entrez2-id-list)>
+
+<!-- size of data elements -->
+<!ELEMENT Entrez2-link-set_data-size (%INTEGER;)>
+
+<!-- coded scores -->
+<!ELEMENT Entrez2-link-set_data (%OCTETS;)>
+
+<!-- all links from 1 uid -->
+<!ELEMENT Entrez2-link-count-list (
+        Entrez2-link-count-list_link-type-count, 
+        Entrez2-link-count-list_links)>
+
+<!-- number of types of links -->
+<!ELEMENT Entrez2-link-count-list_link-type-count (%INTEGER;)>
+
+<!ELEMENT Entrez2-link-count-list_links (Entrez2-link-count*)>
+
+<!-- link count of one type -->
+<!ELEMENT Entrez2-link-count (
+        Entrez2-link-count_link-type, 
+        Entrez2-link-count_link-count)>
+<!-- link name -->
+<!ELEMENT Entrez2-link-count_link-type (Entrez2-link-id)>
+
+<!ELEMENT Entrez2-link-count_link-count (%INTEGER;)>
+

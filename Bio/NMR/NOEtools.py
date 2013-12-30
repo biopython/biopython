@@ -1,27 +1,33 @@
-# NOEtools.py: A python module for predicting NOE coordinates from
-#                assignment data.
-#
-#    The input and output are modelled on nmrview peaklists.
-#    This modules is suitable for directly generating an nmrview
-#    peaklist with predicted crosspeaks directly from the
-#    input assignment peaklist.
+# Copyright 2004 by Bob Bussell.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""NOEtools: For predicting NOE coordinates from assignment data.
 
-import xpktools
+The input and output are modelled on nmrview peaklists.
+This modules is suitable for directly generating an nmrview
+peaklist with predicted crosspeaks directly from the
+input assignment peaklist.
+"""
+
+from . import xpktools
 
 
 def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
-# Predict the i->j NOE position based on self peak (diagonal) assignments
-#
-# example predictNOE(peaklist,"N15","H1",10,12)
-#    where peaklist is of the type xpktools.peaklist
-#    would generate a .xpk file entry for a crosspeak
-#    that originated on N15 of residue 10 and ended up
-#    as magnetization detected on the H1 nucleus of
-#    residue 12.
-# CAVEAT: The initial peaklist is assumed to be diagonal (self peaks only)
-#       and currently there is not checking done to insure that this
-#       assumption holds true.  Check your peaklist for errors and
-#       off diagonal peaks before attempting to use predictNOE.
+    """Predict the i->j NOE position based on self peak (diagonal) assignments
+
+    Example: predictNOE(peaklist,"N15","H1",10,12)
+    where peaklist is of the type xpktools.peaklist
+    would generate a .xpk file entry for a crosspeak
+    that originated on N15 of residue 10 and ended up
+    as magnetization detected on the H1 nucleus of
+    residue 12.
+    
+    CAVEAT: The initial peaklist is assumed to be diagonal (self peaks only)
+    and currently there is not checking done to insure that this
+    assumption holds true.  Check your peaklist for errors and
+    off diagonal peaks before attempting to use predictNOE.
+    """
 
     returnLine = ""  # The modified line to be returned to the caller
 
@@ -66,7 +72,7 @@ def _data_map(labelline):
 
 def _col_ave(list, col):
     # Compute average values from a particular column in a string list
-    total = 0
+    total = 0.0
     n = 0
     for element in list:
         total += float(element.split()[col])

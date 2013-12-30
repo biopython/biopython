@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 22 March 2013 (Biopython 1.61+)}
+\date{Last Update -- 1 December 2013 (Biopython 1.63+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -181,7 +181,6 @@ For Windows we provide pre-compiled click-and-run installers, while for Unix and
 operating systems you must install from source as described in the included README file.
 This is usually as simple as the standard commands:
 
-
 \begin{verbatim}
 python setup.py build
 python setup.py test
@@ -219,11 +218,46 @@ and HTML formats
   The correct capitalization is ``Biopython'', not ``BioPython'' (even though
   that would have matched BioPerl, BioJava and BioRuby).
 
+  \item \emph{What is going wrong with my print commands?} \\
+  This tutorial now uses the Python 3 style print \emph{function}.
+  As of Biopython 1.62, we support both Python 2 and Python 3.
+  The most obvious language difference is the print \emph{statement}
+  in Python 2 became a print \emph{function} in Python 3.
+
+  For example, this will only work under Python 2:
+
+\begin{verbatim}
+>>> print "Hello World!"
+Hello World!
+\end{verbatim}
+
+  If you try that on Python 3 you'll get a \verb|SyntaxError|.
+  Under Python 3 you must write:
+
+%doctest
+\begin{verbatim}
+>>> print("Hello World!")
+Hello World!
+\end{verbatim}
+
+  Surprisingly that will also work on Python 2 -- but only for simple
+  examples printing one thing. In general you need to add this magic
+  line to the start of your Python scripts to use the print function
+  under Python 2.6 and 2.7:
+
+\begin{verbatim}
+from __future__ import print_function
+\end{verbatim}
+
+  If you forget to add this magic import, under Python 2 you'll see
+  extra brackets produced by trying to use the print function when
+  Python 2 is interpretting it as a print statement and a tuple.
+
   \item \emph{How do I find out what version of Biopython I have installed?} \\
   Use this:
   \begin{verbatim}
   >>> import Bio
-  >>> print Bio.__version__
+  >>> print(Bio.__version__)
   ...
   \end{verbatim}
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
@@ -246,15 +280,6 @@ and HTML formats
   \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.pdf}
   \end{itemize}
   
-  \item \emph{Which ``Numerical Python'' do I need?} \\
-  For Biopython 1.48 or earlier, you needed the old Numeric module.
-  For Biopython 1.49 onwards, you need the newer NumPy instead.
-  Both Numeric and NumPy can be installed on the same machine fine.
-  See also: \url{http://numpy.scipy.org/}
-
-  \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
-  You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
-
   \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
   You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
   If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
@@ -262,21 +287,9 @@ and HTML formats
   \item \emph{Why doesn't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
   You need Biopython 1.51 or later.
 
-  \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
-  You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been removed - and this is why the import ``works''.
-
-  \item \emph{Why doesn't} \verb|Bio.SeqIO.read()| \emph{work? The module imports fine but there is no read function!} \\
-  You need Biopython 1.45 or later.  Or, use \texttt{Bio.SeqIO.parse(...).next()} instead.
-
-  \item \emph{Why isn't} \verb|Bio.AlignIO| \emph{present? The module import fails!} \\
-  You need Biopython 1.46 or later.
-
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
   Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
   
-  \item \emph{Why don't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{input functions let me provide a sequence alphabet?} \\
-  You need Biopython 1.49 or later.
-
   \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
   You need Biopython 1.54 or later, or just use handles explicitly (see Section~\ref{sec:appendix-handles}).
   It is especially important to remember to close output handles explicitly after writing your data.
@@ -292,12 +305,8 @@ and HTML formats
   If you aren't using the latest version of Biopython, you could try upgrading.
   However, we (and the NCBI) recommend you use the XML output instead, which is designed to be read by a computer program.
 
-  \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
-  You need Biopython 1.46 or later.
-
   \item \emph{Why doesn't} \verb|Bio.Entrez.parse()| \emph{work? The module imports fine but there is no parse function!} \\
   You need Biopython 1.52 or later.
-
 
   \item \emph{Why has my script using} \verb|Bio.Entrez.efetch()| \emph{stopped working?} \\
   This could be due to NCBI changes in February 2012 introducing EFetch 2.0.
@@ -311,7 +320,7 @@ and HTML formats
   and they do not match the QBLAST defaults anymore. Check things like the gap penalties and expectation threshold.
 
   \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
-  You need Biopython 1.50 or later.  Or, use \texttt{Bio.Blast.NCBIXML.parse(...).next()} instead.
+  You need Biopython 1.50 or later.  Or, use \texttt{next(Bio.Blast.NCBIXML.parse(...))} instead.
   
   \item \emph{Why doesn't my} \verb|SeqRecord| \emph{object have a} \verb|letter_annotations| \emph{attribute?} \\
   Per-letter-annotation support was added in Biopython 1.50.
@@ -375,7 +384,7 @@ Most of the time when we think about sequences we have in my mind a string of le
 >>> my_seq = Seq("AGTACACTGGT")
 >>> my_seq
 Seq('AGTACACTGGT', Alphabet())
->>> print my_seq
+>>> print(my_seq)
 AGTACACTGGT
 >>> my_seq.alphabet
 Alphabet()
@@ -448,9 +457,9 @@ It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than
 \begin{verbatim}
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
-    print seq_record.id
-    print repr(seq_record.seq)
-    print len(seq_record)
+    print(seq_record.id)
+    print(repr(seq_record.seq))
+    print(len(seq_record))
 \end{verbatim}
 
 \noindent You should get something like this on your screen:
@@ -474,9 +483,9 @@ Now let's load the GenBank file \href{http://biopython.org/DIST/docs/tutorial/ex
 \begin{verbatim}
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    print seq_record.id
-    print repr(seq_record.seq)
-    print len(seq_record)
+    print(seq_record.id)
+    print(repr(seq_record.seq))
+    print(len(seq_record))
 \end{verbatim}
 
 \noindent This should give:
@@ -595,13 +604,13 @@ In many ways, we can deal with Seq objects as if they were normal Python strings
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GATCG", IUPAC.unambiguous_dna)
 >>> for index, letter in enumerate(my_seq):
-...     print index, letter
+...     print("%i %s" % (index, letter))
 0 G
 1 A
 2 T
 3 C
 4 G
->>> print len(my_seq)
+>>> print(len(my_seq))
 5
 \end{verbatim}
 
@@ -609,11 +618,11 @@ You can access elements of the sequence in the same way as for strings (but reme
 
 %cont-doctest
 \begin{verbatim}
->>> print my_seq[0] #first letter
+>>> print(my_seq[0]) #first letter
 G
->>> print my_seq[2] #third letter
+>>> print(my_seq[2]) #third letter
 T
->>> print my_seq[-1] #last letter
+>>> print(my_seq[-1]) #last letter
 G
 \end{verbatim}
 
@@ -712,10 +721,11 @@ If you really do just need a plain string, for example to write to a file, or in
 
 Since calling \verb|str()| on a \verb|Seq| object returns the full sequence as a string,
 you often don't actually have to do this conversion explicitly.
-Python does this automatically with a print statement:
+Python does this automatically in the print function
+(and the print statement under Python 2):
 %cont-doctest
 \begin{verbatim}
->>> print my_seq
+>>> print(my_seq)
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
@@ -723,7 +733,7 @@ You can also use the \verb|Seq| object directly with a \verb|%s| placeholder whe
 %cont-doctest
 \begin{verbatim}
 >>> fasta_format_string = ">Name\n%s\n" % my_seq
->>> print fasta_format_string
+>>> print(fasta_format_string)
 >Name
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 <BLANKLINE>
@@ -1095,7 +1105,7 @@ Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
 You can compare the actual tables visually by printing them:
 %TODO - handle <BLANKLINE> automatically in doctest?
 \begin{verbatim}
->>> print standard_table
+>>> print(standard_table)
 Table 1 Standard, SGC0
 
   |  T      |  C      |  A      |  G      |
@@ -1123,7 +1133,7 @@ G | GTG V   | GCG A   | GAG E   | GGG G   | G
 \end{verbatim}
 \noindent and:
 \begin{verbatim}
->>> print mito_table
+>>> print(mito_table)
 Table 2 Vertebrate Mitochondrial, SGC1
 
   |  T      |  C      |  A      |  G      |
@@ -1317,7 +1327,7 @@ just store a single letter ``N'' and the desired length as an integer.
 >>> unk = UnknownSeq(20)
 >>> unk
 UnknownSeq(20, alphabet = Alphabet(), character = '?')
->>> print unk
+>>> print(unk)
 ????????????????????
 >>> len(unk)
 20
@@ -1333,7 +1343,7 @@ the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
 >>> unk_dna = UnknownSeq(20, alphabet=IUPAC.ambiguous_dna)
 >>> unk_dna
 UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
->>> print unk_dna
+>>> print(unk_dna)
 NNNNNNNNNNNNNNNNNNNN
 \end{verbatim}
 
@@ -1353,7 +1363,7 @@ UnknownSeq(20, alphabet = IUPACAmbiguousRNA(), character = 'N')
 >>> unk_protein = unk_dna.translate()
 >>> unk_protein
 UnknownSeq(6, alphabet = ProteinAlphabet(), character = 'X')
->>> print unk_protein
+>>> print(unk_protein)
 XXXXXX
 >>> len(unk_protein)
 6
@@ -1370,7 +1380,7 @@ used in sequencing work hold quality scores but they \emph{never} contain a
 sequence -- instead there is a partner FASTA file which \emph{does} have the
 sequence.
 
-\section{Working with directly strings}
+\section{Working with strings directly}
 \label{sec:seq-module-functions}
 To close this chapter, for those you who \emph{really} don't want to use the sequence
 objects (or who prefer a functional programming style to an object orientated one),
@@ -1463,7 +1473,7 @@ Additionally, you can also pass the id, name and description to the initializati
 '<unknown id>'
 >>> simple_seq_r.id = "AC12345"
 >>> simple_seq_r.description = "Made up sequence I wish I could write a paper about"
->>> print simple_seq_r.description
+>>> print(simple_seq_r.description)
 Made up sequence I wish I could write a paper about
 >>> simple_seq_r.seq
 Seq('GATC', Alphabet())
@@ -1486,9 +1496,9 @@ Adding annotations is easy, and just involves dealing directly with the annotati
 %cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
->>> print simple_seq_r.annotations
+>>> print(simple_seq_r.annotations)
 {'evidence': 'None. I just made it up.'}
->>> print simple_seq_r.annotations["evidence"]
+>>> print(simple_seq_r.annotations["evidence"])
 None. I just made it up.
 \end{verbatim}
 
@@ -1498,10 +1508,10 @@ a string, list or tuple) which has the same length as the sequence:
 
 %cont-doctest
 \begin{verbatim}
->>> simple_seq_r.letter_annotations["phred_quality"] = [40,40,38,30]
->>> print simple_seq_r.letter_annotations
+>>> simple_seq_r.letter_annotations["phred_quality"] = [40, 40, 38, 30]
+>>> print(simple_seq_r.letter_annotations)
 {'phred_quality': [40, 40, 38, 30]}
->>> print simple_seq_r.letter_annotations["phred_quality"]
+>>> print(simple_seq_r.letter_annotations["phred_quality"])
 [40, 40, 38, 30]
 \end{verbatim}
 
@@ -1826,7 +1836,7 @@ If you print out a \verb|FeatureLocation| object, you can get a nice representat
 
 %cont-doctest
 \begin{verbatim}
->>> print my_location
+>>> print(my_location)
 [>5:(8^9)]
 \end{verbatim}
 
@@ -1836,11 +1846,11 @@ We can access the fuzzy start and end positions using the start and end attribut
 \begin{verbatim}
 >>> my_location.start
 AfterPosition(5)
->>> print my_location.start
+>>> print(my_location.start)
 >5
 >>> my_location.end
 BetweenPosition(9, left=8, right=9)
->>> print my_location.end
+>>> print(my_location.end)
 (8^9)
 \end{verbatim}
 
@@ -1874,7 +1884,7 @@ Similarly, to make it easy to create a position without worrying about fuzzy pos
 %cont-doctest
 \begin{verbatim}
 >>> exact_location = SeqFeature.FeatureLocation(5, 9)
->>> print exact_location
+>>> print(exact_location)
 [5:9]
 >>> exact_location.start
 ExactPosition(5)
@@ -1906,8 +1916,8 @@ check all the features one by one in a loop:
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> for feature in record.features:
 ...     if my_snp in feature:
-...         print feature.type, feature.qualifiers.get('db_xref')
-...
+...         print("%s %s" % (feature.type, feature.qualifiers.get('db_xref')))
+... 
 source ['taxon:229193']
 gene ['GeneID:2767712']
 CDS ['GI:45478716', 'GeneID:2767712']
@@ -1936,7 +1946,7 @@ If you are using Biopython 1.59 or later, the feature location's start and end a
 %cont-doctest
 \begin{verbatim}
 >>> feature_seq = example_parent[example_feature.location.start:example_feature.location.end].reverse_complement()
->>> print feature_seq
+>>> print(feature_seq)
 AGCCTTTGCCGTC
 \end{verbatim}
 
@@ -1945,7 +1955,7 @@ This is a simple example so this isn't too bad -- however once you have to deal 
 %cont-doctest
 \begin{verbatim}
 >>> feature_seq = example_feature.extract(example_parent)
->>> print feature_seq
+>>> print(feature_seq)
 AGCCTTTGCCGTC
 \end{verbatim}
 
@@ -1954,13 +1964,13 @@ that of the region of sequence it describes.
 
 %cont-doctest
 \begin{verbatim}
->>> print example_feature.extract(example_parent)
+>>> print(example_feature.extract(example_parent))
 AGCCTTTGCCGTC
->>> print len(example_feature.extract(example_parent))
+>>> print(len(example_feature.extract(example_parent)))
 13
->>> print len(example_feature)
+>>> print(len(example_feature))
 13
->>> print len(example_feature.location)
+>>> print(len(example_feature.location))
 13
 \end{verbatim}
 
@@ -1999,7 +2009,7 @@ record = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQA
                    id="gi|14150838|gb|AAK54648.1|AF376133_1",
                    description="chalcone synthase [Cucumis sativus]")
                    
-print record.format("fasta")
+print(record.format("fasta"))
 \end{verbatim}
 \noindent which should give:
 \begin{verbatim}
@@ -2057,7 +2067,7 @@ entries $11$ and $12$ in the \texttt{features} list:
 
 %cont-doctest
 \begin{verbatim}
->>> print record.features[20]
+>>> print(record.features[20])
 type: gene
 location: [4342:4780](+)
 qualifiers: 
@@ -2068,7 +2078,7 @@ qualifiers:
 \end{verbatim}
 %This one is truncated so can't use for doctest
 \begin{verbatim}
->>> print record.features[21]
+>>> print(record.features[21])
 type: CDS
 location: [4342:4780](+)
 qualifiers: 
@@ -2110,7 +2120,7 @@ Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP
 
 %cont-doctest
 \begin{verbatim}
->>> print sub_record.features[0]
+>>> print(sub_record.features[0])
 type: gene
 location: [42:480](+)
 qualifiers: 
@@ -2120,7 +2130,7 @@ qualifiers:
 <BLANKLINE>
 \end{verbatim}
 \begin{verbatim}
->>> print sub_record.features[20]
+>>> print(sub_record.features[20])
 type: CDS
 location: [42:480](+)
 qualifiers: 
@@ -2171,7 +2181,7 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 
 \begin{verbatim}
 >>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial."
->>> print sub_record.format("genbank")
+>>> print(sub_record.format("genbank"))
 ...
 \end{verbatim}
 
@@ -2194,15 +2204,15 @@ FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functi
 %doctest ../Tests/Quality
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> record = SeqIO.parse("example.fastq", "fastq").next()
+>>> record = next(SeqIO.parse("example.fastq", "fastq"))
 >>> len(record)
 25
->>> print record.seq
+>>> print(record.seq)
 CCCTTCTTGTCTTCAGCGTTTCTCC
 \end{verbatim}
 %TODO - doctest wrapping
 \begin{verbatim}
->>> print record.letter_annotations["phred_quality"]
+>>> print(record.letter_annotations["phred_quality"])
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
 26, 26, 26, 23, 23]
 \end{verbatim}
@@ -2215,14 +2225,14 @@ third \texttt{T}:
 %cont-doctest
 \begin{verbatim}
 >>> left = record[:20]
->>> print left.seq
+>>> print(left.seq)
 CCCTTCTTGTCTTCAGCGTT
->>> print left.letter_annotations["phred_quality"]
+>>> print(left.letter_annotations["phred_quality"])
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26]
 >>> right = record[21:]
->>> print right.seq
+>>> print(right.seq)
 CTCC
->>> print right.letter_annotations["phred_quality"]
+>>> print(right.letter_annotations["phred_quality"])
 [26, 26, 23, 23]
 \end{verbatim}
 
@@ -2233,11 +2243,11 @@ CTCC
 >>> edited = left + right
 >>> len(edited)
 24
->>> print edited.seq
+>>> print(edited.seq)
 CCCTTCTTGTCTTCAGCGTTCTCC
 \end{verbatim}
 \begin{verbatim}
->>> print edited.letter_annotations["phred_quality"]
+>>> print(edited.letter_annotations["phred_quality"])
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
 26, 26, 23, 23]
 \end{verbatim}
@@ -2364,7 +2374,7 @@ Consider this example record:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
->>> print record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)
+>>> print("%s %i %i %i %i" % (record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)))
 NC_005816.1 9609 41 1 11
 \end{verbatim}
 
@@ -2374,7 +2384,7 @@ how most of the annotation is dropped (but not the features):
 %cont-doctest
 \begin{verbatim}
 >>> rc = record.reverse_complement(id="TESTING")
->>> print rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)
+>>> print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)))
 TESTING 9609 41 0 0
 \end{verbatim}
 
@@ -2415,9 +2425,9 @@ In general \verb|Bio.SeqIO.parse()| is used to read in sequence files as \verb|S
 \begin{verbatim}
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
-    print seq_record.id
-    print repr(seq_record.seq)
-    print len(seq_record)
+    print(seq_record.id)
+    print(repr(seq_record.seq))
+    print(len(seq_record))
 \end{verbatim}
 
 The above example is repeated from the introduction in Section~\ref{sec:sequence-parsing}, and will load the orchid DNA sequences in the FASTA format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{ls\_orchid.fasta}.  If instead you wanted to load a GenBank format file like \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} then all you need to do is change the filename and the format string:
@@ -2425,9 +2435,9 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 \begin{verbatim}
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    print seq_record.id
-    print seq_record.seq
-    print len(seq_record)
+    print(seq_record.id)
+    print(seq_record.seq)
+    print(len(seq_record))
 \end{verbatim}
 
 Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}).
@@ -2453,31 +2463,31 @@ In the above examples, we have usually used a for loop to iterate over all the r
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns \verb|SeqRecord| objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
-Instead of using a for loop, can also use the \verb|.next()| method of an iterator to step through the entries, like this:
+Instead of using a for loop, can also use the \verb|next()| function on an iterator to step through the entries, like this:
 
 \begin{verbatim}
 from Bio import SeqIO
 record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 
-first_record = record_iterator.next()
-print first_record.id
-print first_record.description
+first_record = next(record_iterator)
+print(first_record.id)
+print(first_record.description)
 
-second_record = record_iterator.next()
-print second_record.id
-print second_record.description
+second_record = next(record_iterator)
+print(second_record.id)
+print(second_record.description)
 \end{verbatim}
 
-Note that if you try and use \verb|.next()| and there are no more results, you'll get the special \verb|StopIteration| exception.
+Note that if you try to use \verb|next()| and there are no more results, you'll get the special \verb|StopIteration| exception.
 
 One special case to consider is when your sequence files have multiple records, but you only want the first one.  In this situation the following code is very concise:
 
 \begin{verbatim}
 from Bio import SeqIO
-first_record  = SeqIO.parse("ls_orchid.gbk", "genbank").next()
+first_record = next(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{verbatim}
 
-A word of warning here -- using the \verb|.next()| method like this will silently ignore any additional records in the file.
+A word of warning here -- using the \verb|next()| function like this will silently ignore any additional records in the file.
 If your files have {\it one and only one} record, like some of the online examples later in this chapter, or a GenBank file for a single chromosome, then use the new \verb|Bio.SeqIO.read()| function instead.
 This will check there are no extra unexpected records present.
 
@@ -2489,19 +2499,19 @@ In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| g
 from Bio import SeqIO
 records = list(SeqIO.parse("ls_orchid.gbk", "genbank"))
 
-print "Found %i records" % len(records)
+print("Found %i records" % len(records))
 
-print "The last record"
+print("The last record")
 last_record = records[-1] #using Python's list tricks
-print last_record.id
-print repr(last_record.seq)
-print len(last_record)
+print(last_record.id)
+print(repr(last_record.seq))
+print(len(last_record))
 
-print "The first record"
+print("The first record")
 first_record = records[0] #remember, Python counts from zero
-print first_record.id
-print repr(first_record.seq)
-print len(first_record)
+print(first_record.id)
+print(repr(first_record.seq))
+print(len(first_record))
 \end{verbatim}
 
 \noindent Giving:
@@ -2528,8 +2538,8 @@ Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, w
 \begin{verbatim}
 from Bio import SeqIO
 record_iterator = SeqIO.parse("ls_orchid.gbk", "genbank")
-first_record = record_iterator.next()
-print first_record
+first_record = next(record_iterator)
+print(first_record)
 \end{verbatim}
 
 \noindent That should give something like this:
@@ -2557,15 +2567,15 @@ For this example we're going to use the \verb|.annotations| attribute which is j
 The contents of this annotations dictionary were shown when we printed the record above.
 You can also print them out directly:
 \begin{verbatim}
-print first_record.annotations
+print(first_record.annotations)
 \end{verbatim}
 \noindent Like any Python dictionary, you can easily get a list of the keys:
 \begin{verbatim}
-print first_record.annotations.keys()
+print(first_record.annotations.keys())
 \end{verbatim}
 \noindent or values:
 \begin{verbatim}
-print first_record.annotations.values()
+print(first_record.annotations.values())
 \end{verbatim}
 
 In general, the annotation values are strings, or lists of strings.  One special case is any references in the file get stored as reference objects.  
@@ -2573,14 +2583,14 @@ In general, the annotation values are strings, or lists of strings.  One special
 Suppose you wanted to extract a list of the species from the \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
 
 \begin{verbatim}
->>> print first_record.annotations["source"]
+>>> print(first_record.annotations["source"])
 Cypripedium irapeanum
 \end{verbatim}
 
 \noindent or:
 
 \begin{verbatim}
->>> print first_record.annotations["organism"]
+>>> print(first_record.annotations["organism"])
 Cypripedium irapeanum
 \end{verbatim}
 
@@ -2595,7 +2605,7 @@ from Bio import SeqIO
 all_species = []
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     all_species.append(seq_record.annotations["organism"])
-print all_species
+print(all_species)
 \end{verbatim}
 
 Another way of writing this code is to use a list comprehension:
@@ -2604,7 +2614,7 @@ Another way of writing this code is to use a list comprehension:
 from Bio import SeqIO
 all_species = [seq_record.annotations["organism"] for seq_record in \
                SeqIO.parse("ls_orchid.gbk", "genbank")]
-print all_species
+print(all_species)
 \end{verbatim}
 
 \noindent In either case, the result is:
@@ -2632,7 +2642,7 @@ from Bio import SeqIO
 all_species = []
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     all_species.append(seq_record.description.split()[1])
-print all_species
+print(all_species)
 \end{verbatim}
 
 \noindent This gives:
@@ -2647,7 +2657,7 @@ The concise alternative using list comprehensions would be:
 from Bio import SeqIO
 all_species == [seq_record.description.split()[1] for seq_record in \
                 SeqIO.parse("ls_orchid.fasta", "fasta")]
-print all_species
+print(all_species)
 \end{verbatim}
 
 In general, extracting information from the FASTA description line is not very nice.
@@ -2669,20 +2679,19 @@ record GenBank file using a generator expression:
 %doctest examples
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> print sum(len(r) for r in SeqIO.parse("ls_orchid.gbk", "gb"))
+>>> print(sum(len(r) for r in SeqIO.parse("ls_orchid.gbk", "gb")))
 67518
 \end{verbatim}
 
 \noindent
 Here we use a file handle instead, using the \verb|with| statement
-(Python 2.5 or later) to close the handle automatically:
+to close the handle automatically:
 
-%This doctest won't work on Python 2.5, even with the __future__ import. Odd.
+%doctest examples
 \begin{verbatim}
->>> from __future__ import with_statement #Needed on Python 2.5
 >>> from Bio import SeqIO
 >>> with open("ls_orchid.gbk") as handle:
-...     print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 67518
 \end{verbatim}
 
@@ -2693,7 +2702,7 @@ Or, the old fashioned way where you manually close the handle:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> handle = open("ls_orchid.gbk")
->>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+>>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 67518
 >>> handle.close()
 \end{verbatim}
@@ -2707,7 +2716,7 @@ the compressed file for reading - which gives us a handle object:
 >>> import gzip
 >>> from Bio import SeqIO
 >>> handle = gzip.open("ls_orchid.gbk.gz", "r")
->>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+>>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 67518
 >>> handle.close()
 \end{verbatim}
@@ -2720,7 +2729,7 @@ quite as consistent):
 >>> import bz2
 >>> from Bio import SeqIO
 >>> handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")
->>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+>>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 67518
 >>> handle.close()
 \end{verbatim}
@@ -2766,7 +2775,7 @@ Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
-print "%s with %i features" % (seq_record.id, len(seq_record.features))
+print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{verbatim}
 
 \noindent Expected output:
@@ -2791,7 +2800,7 @@ Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291")
 seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 handle.close()
-print "%s with %i features" % (seq_record.id, len(seq_record.features))
+print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{verbatim}
 
 \noindent The expected output of this example is:
@@ -2845,12 +2854,12 @@ from Bio import SeqIO
 handle = ExPASy.get_sprot_raw("O23729")
 seq_record = SeqIO.read(handle, "swiss")
 handle.close()
-print seq_record.id
-print seq_record.name
-print seq_record.description
-print repr(seq_record.seq)
-print "Length %i" % len(seq_record)
-print seq_record.annotations["keywords"]
+print(seq_record.id)
+print(seq_record.name)
+print(seq_record.description)
+print(repr(seq_record.seq))
+print("Length %i" % len(seq_record))
+print(seq_record.annotations["keywords"])
 \end{verbatim}
 
 \noindent Assuming your network connection is OK, you should get back:
@@ -2920,7 +2929,7 @@ Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can 
 \end{verbatim}
 %Can't use following for doctest due to abbreviation
 \begin{verbatim}
->>> print orchid_dict.keys()
+>>> orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
 
@@ -2935,9 +2944,9 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 %cont-doctest
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
->>> print seq_record.description
+>>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
->>> print repr(seq_record.seq)
+>>> print(repr(seq_record.seq))
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
 
@@ -2953,7 +2962,7 @@ Using the same code as above, but for the FASTA file instead:
 \begin{verbatim}
 from Bio import SeqIO
 orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.fasta", "fasta"))
-print orchid_dict.keys()
+print(orchid_dict.keys())
 \end{verbatim}
 
 \noindent This time the keys are:
@@ -2983,13 +2992,13 @@ def get_accession(record):
 \begin{verbatim}
 from Bio import SeqIO
 orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.fasta", "fasta"), key_function=get_accession)
-print orchid_dict.keys()
+print(orchid_dict.keys())
 \end{verbatim}
 
 \noindent Finally, as desired, the new dictionary keys:
 
 \begin{verbatim}
->>> print orchid_dict.keys()
+>>> print(orchid_dict.keys())
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
 
@@ -3005,7 +3014,7 @@ Once again, working with the orchids GenBank file:
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
 for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    print record.id, seguid(record.seq)
+    print(record.id, seguid(record.seq))
 \end{verbatim}
 
 \noindent This should give:
@@ -3026,9 +3035,9 @@ Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argume
 >>> seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
 ...                             lambda rec : seguid(rec.seq))
 >>> record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
->>> print record.id
+>>> print(record.id)
 Z78532.1
->>> print record.description
+>>> print(record.description)
 C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 \end{verbatim}
 
@@ -3067,7 +3076,7 @@ As an example, let's use the same GenBank file as before:
 %cont-doctest
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
->>> print seq_record.description
+>>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
@@ -3120,7 +3129,7 @@ function to use in building the dictionary:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta", key_function=get_acc)
->>> print orchid_dict.keys()
+>>> print(orchid_dict.keys())
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
 
@@ -3190,7 +3199,7 @@ one million records. You can index them like this:
 >>> from Bio import SeqIO
 >>> files = ["gbvrl%i.seq" % (i+1) for i in range(16)]
 >>> gb_vrl = SeqIO.index_db("gbvrl.idx", files, "genbank")
->>> print "%i sequences indexed" % len(gb_vrl)
+>>> print("%i sequences indexed" % len(gb_vrl))
 958086 sequences indexed
 \end{verbatim}
 
@@ -3200,7 +3209,7 @@ use the index as a read only Python dictionary - without having to worry
 about which file the sequence comes from, e.g.
 
 \begin{verbatim}
->>> print gb_vrl["GQ333173.1"].description
+>>> print(gb_vrl["GQ333173.1"].description)
 HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial cds.
 \end{verbatim}
 
@@ -3211,7 +3220,7 @@ Section~\ref{sec:seqio-index-getraw}, the dictionary like object also lets you
 get at the raw text of each record:
 
 \begin{verbatim}
->>> print gb_vrl.get_raw("GQ333173.1")
+>>> print(gb_vrl.get_raw("GQ333173.1"))
 LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009
 DEFINITION  HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial
             cds.
@@ -3443,7 +3452,7 @@ For this example we'll read in the GenBank format file \href{http://biopython.or
 from Bio import SeqIO
 records = SeqIO.parse("ls_orchid.gbk", "genbank")
 count = SeqIO.write(records, "my_example.fasta", "fasta")
-print "Converted %i records" % count
+print("Converted %i records" % count)
 \end{verbatim}
 
 Still, that is a little bit complicated. So, because file conversion is such a
@@ -3452,7 +3461,7 @@ common task, there is a helper function letting you replace that with just:
 \begin{verbatim}
 from Bio import SeqIO
 count = SeqIO.convert("ls_orchid.gbk", "genbank", "my_example.fasta", "fasta")
-print "Converted %i records" % count
+print("Converted %i records" % count)
 \end{verbatim}
 
 The \verb|Bio.SeqIO.convert()| function will take handles \emph{or} filenames.
@@ -3490,8 +3499,8 @@ the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Sectio
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-...     print record.id
-...     print record.seq.reverse_complement()
+...     print(record.id)
+...     print(record.seq.reverse_complement())
 \end{verbatim}
 
 Now, if we want to save these reverse complements to a file, we'll need to make \verb|SeqRecord| objects.
@@ -3552,7 +3561,7 @@ records = SeqIO.parse("ls_orchid.gbk", "genbank")
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
 fasta_data = out_handle.getvalue()
-print fasta_data
+print(fasta_data)
 \end{verbatim}
 
 This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, use the the \verb|SeqRecord| class' \verb|format()| method (see Section~\ref{sec:SeqRecord-format}).
@@ -3658,7 +3667,7 @@ This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downlo
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment
+>>> print(alignment)
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
@@ -3675,10 +3684,10 @@ You'll notice in the above output the sequences have been truncated.  We could i
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> print "Alignment length %i" % alignment.get_alignment_length()
+>>> print("Alignment length %i" % alignment.get_alignment_length())
 Alignment length 52
 >>> for record in alignment:
-...     print "%s - %s" % (record.seq, record.id)
+...     print("%s - %s" % (record.seq, record.id))
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
@@ -3696,7 +3705,7 @@ Did you notice in the raw file above that several of the sequences include datab
 \begin{verbatim}
 >>> for record in alignment:
 ...     if record.dbxrefs:
-...         print record.id, record.dbxrefs
+...         print("%s %s" % (record.id, record.dbxrefs))
 COATB_BPIKE/30-81 ['PDB; 1ifl ; 1-52;']
 COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
 Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
@@ -3707,7 +3716,7 @@ COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 
 \begin{verbatim}
 >>> for record in alignment:
-...     print record
+...     print(record)
 \end{verbatim}
 
 Sanger provide a nice web interface at \url{http://pfam.sanger.ac.uk/family?acc=PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
@@ -3734,7 +3743,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 \begin{verbatim}
 from Bio import AlignIO
 alignment = AlignIO.read("PF05371_seed.faa", "fasta")
-print alignment
+print(alignment)
 \end{verbatim}
 
 All that has changed in this code is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.
@@ -3797,12 +3806,13 @@ Epsilon   CAAACC
 
 If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 
+%TODO - Replace the print blank line with print()?
 \begin{verbatim}
 from Bio import AlignIO
 alignments = AlignIO.parse("resampled.phy", "phylip")
 for alignment in alignments:
-    print alignment
-    print
+    print(alignment)
+    print("")
 \end{verbatim}
 
 \noindent This would give the following output, again abbreviated for display:
@@ -3914,12 +3924,13 @@ One example of this is a collection of pairwise alignments, which can be produce
 To interpret these FASTA examples as several separate alignments, we can use \verb|Bio.AlignIO.parse()| with the optional \verb|seq_count| argument which specifies how many sequences are expected in each alignment (in these examples, 3, 2 and 2 respectively).
 For example, using the third example as the input data:
 
+%TODO - Replace the print blank line with print()?
 \begin{verbatim}
 for alignment in AlignIO.parse(handle, "fasta", seq_count=2):
-    print "Alignment length %i" % alignment.get_alignment_length()
+    print("Alignment length %i" % alignment.get_alignment_length())
     for record in alignment:
-        print "%s - %s" % (record.seq, record.id)
-    print
+        print("%s - %s" % (record.seq, record.id))
+    print("")
 \end{verbatim}
 
 \noindent giving:
@@ -4023,7 +4034,7 @@ For this example, we'll load the PFAM/Stockholm format file used earlier and sav
 \begin{verbatim}
 from Bio import AlignIO
 count = AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.aln", "clustal")
-print "Converted %i alignments" % count
+print("Converted %i alignments" % count)
 \end{verbatim}
 
 Or, using \verb|Bio.AlignIO.parse()| and \verb|Bio.AlignIO.write()|:
@@ -4032,7 +4043,7 @@ Or, using \verb|Bio.AlignIO.parse()| and \verb|Bio.AlignIO.write()|:
 from Bio import AlignIO
 alignments = AlignIO.parse("PF05371_seed.sth", "stockholm")
 count = AlignIO.write(alignments, "PF05371_seed.aln", "clustal")
-print "Converted %i alignments" % count
+print("Converted %i alignments" % count)
 \end{verbatim}
 
 The \verb|Bio.AlignIO.write()| function expects to be given multiple alignment objects.  In the example above we gave it the alignment iterator returned by \verb|Bio.AlignIO.parse()|.
@@ -4105,7 +4116,7 @@ name_mapping = {}
 for i, record in enumerate(alignment):
     name_mapping[i] = record.id
     record.id = "seq%i" % i
-print name_mapping
+print(name_mapping)
 
 AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
 \end{verbatim}
@@ -4146,7 +4157,7 @@ This takes a single mandatory argument, a lower case string which is supported b
 \begin{verbatim}
 from Bio import AlignIO
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
-print alignment.format("clustal")
+print(alignment.format("clustal"))
 \end{verbatim}
 
 As described in Section~\ref{sec:SeqRecord-format}), the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
@@ -4165,7 +4176,7 @@ out_handle = StringIO()
 AlignIO.write(alignments, out_handle, "clustal")
 clustal_data = out_handle.getvalue()
 
-print clustal_data
+print(clustal_data)
 \end{verbatim}
 
 \section{Manipulating Alignments}
@@ -4184,10 +4195,10 @@ make sense:
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> print "Number of rows: %i" % len(alignment)
+>>> print("Number of rows: %i" % len(alignment))
 Number of rows: 7
 >>> for record in alignment:
-...     print "%s - %s" % (record.seq, record.id)
+...     print("%s - %s" % (record.seq, record.id))
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
@@ -4204,7 +4215,7 @@ it selects some of the rows giving back another alignment object:
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment
+>>> print(alignment)
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
@@ -4213,7 +4224,7 @@ AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
->>> print alignment[3:7]
+>>> print(alignment[3:7])
 SingleLetterAlphabet() alignment with 4 rows and 52 columns
 AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
@@ -4226,7 +4237,7 @@ matrix or array objects won't be surprised at this - you use a double index.
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[2,6]
+>>> print(alignment[2, 6])
 T
 \end{verbatim}
 
@@ -4234,7 +4245,7 @@ T
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[2].seq[6]
+>>> print(alignment[2].seq[6])
 T
 \end{verbatim}
 
@@ -4242,7 +4253,7 @@ You can pull out a single column as a string like this:
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[:,6]
+>>> print(alignment[:, 6])
 TTT---T
 \end{verbatim}
 
@@ -4251,7 +4262,7 @@ three rows we extracted earlier, but take just their first six columns:
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[3:6,:6]
+>>> print(alignment[3:6, :6])
 SingleLetterAlphabet() alignment with 3 rows and 6 columns
 AEGDDP COATB_BPM13/24-72
 AEGDDP COATB_BPZJ2/1-49
@@ -4262,7 +4273,7 @@ Leaving the first index as \verb|:| means take all the rows:
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[:,:6]
+>>> print(alignment[:, :6])
 SingleLetterAlphabet() alignment with 7 rows and 6 columns
 AEPNAA COATB_BPIKE/30-81
 AEPNAA Q9T0Q8_BPIKE/1-52
@@ -4278,7 +4289,7 @@ This brings us to a neat way to remove a section. Notice columns
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[:,6:9]
+>>> print(alignment[:, 6:9])
 SingleLetterAlphabet() alignment with 7 rows and 3 columns
 TNY COATB_BPIKE/30-81
 TNY Q9T0Q8_BPIKE/1-52
@@ -4293,7 +4304,7 @@ TSQ COATB_BPIF1/22-73
 
 %cont-doctest
 \begin{verbatim}
->>> print alignment[:,9:]
+>>> print(alignment[:, 9:])
 SingleLetterAlphabet() alignment with 7 rows and 43 columns
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
@@ -4309,8 +4320,8 @@ by column. This lets you do this as a way to remove a block of columns:
 
 %cont-doctest
 \begin{verbatim}
->>> edited = alignment[:,:6] + alignment[:,9:]
->>> print edited
+>>> edited = alignment[:, :6] + alignment[:, 9:]
+>>> print(edited)
 SingleLetterAlphabet() alignment with 7 rows and 49 columns
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
@@ -4330,7 +4341,7 @@ alignment rows alphabetically by id:
 %cont-doctest
 \begin{verbatim}
 >>> edited.sort()
->>> print edited
+>>> print(edited)
 SingleLetterAlphabet() alignment with 7 rows and 49 columns
 DGTSTAATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
 FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
@@ -4348,6 +4359,7 @@ have the same number of rows.
 Depending on what you are doing, it can be more useful to turn the alignment
 object into an array of letters -- and you can do this with NumPy:
 
+%This example fails under PyPy 2.0, https://bugs.pypy.org/issue1546
 %doctest examples lib:numpy
 \begin{verbatim}
 >>> import numpy as np
@@ -4443,7 +4455,7 @@ based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \begin{verbatim}
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
->>> print cline
+>>> print(cline)
 clustalw2 -infile=opuntia.fasta
 \end{verbatim}
 
@@ -4513,7 +4525,7 @@ You should be able to work out how to read in the alignment using
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("opuntia.aln", "clustal")
->>> print align
+>>> print(align)
 SingleLetterAlphabet() alignment with 7 rows and 906 columns
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
@@ -4574,7 +4586,7 @@ alignment to an output file:
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
->>> print cline
+>>> print(cline)
 muscle -in opuntia.fasta -out opuntia.txt
 \end{verbatim}
 
@@ -4591,7 +4603,7 @@ You can also ask for ClustalW-like output:
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
->>> print cline
+>>> print(cline)
 muscle -in opuntia.fasta -out opuntia.aln -clw
 \end{verbatim}
 
@@ -4602,7 +4614,7 @@ used for maximum compatibility:
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
->>> print cline
+>>> print(cline)
 muscle -in opuntia.fasta -out opuntia.aln -clwstrict
 \end{verbatim}
 
@@ -4632,7 +4644,7 @@ advantage of this to avoid having a temporary output file! For example:
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
->>> print muscle_cline
+>>> print(muscle_cline)
 muscle -in opuntia.fasta
 \end{verbatim}
 
@@ -4647,7 +4659,7 @@ Remember that MUSCLE defaults to using FASTA as the output format:
 >>> from StringIO import StringIO
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(StringIO(stdout), "fasta")
->>> print align
+>>> print(align)
 SingleLetterAlphabet() alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
@@ -4673,7 +4685,7 @@ with handles instead:
 ...                          shell=(sys.platform!="win32"))
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(child.stdout, "fasta")
->>> print align
+>>> print(align)
 SingleLetterAlphabet() alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
@@ -4709,7 +4721,7 @@ as for the output.
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(clwstrict=True)
->>> print muscle_cline
+>>> print(muscle_cline)
 muscle -clwstrict
 \end{verbatim}
 
@@ -4742,7 +4754,7 @@ start to run, and we can ask for the output:
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(child.stdout, "clustal")
->>> print align
+>>> print(align)
 SingleLetterAlphabet() alignment with 6 rows and 900 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
@@ -4787,7 +4799,7 @@ a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
 >>> stdout, stderr = muscle_cline(stdin=data)
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(StringIO(stdout), "clustal")
->>> print align
+>>> print(align)
 SingleLetterAlphabet() alignment with 6 rows and 900 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
@@ -4833,7 +4845,7 @@ Let's start by creating a complete \texttt{needle} command line object in one go
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
 ...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
->>> print needle_cline
+>>> print(needle_cline)
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 \end{verbatim}
 
@@ -4879,9 +4891,9 @@ Note that you can also specify (or change or look at) the settings like this:
 >>> needle_cline.gapopen=10
 >>> needle_cline.gapextend=0.5
 >>> needle_cline.outfile="needle.txt"
->>> print needle_cline
+>>> print(needle_cline)
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
->>> print needle_cline.outfile
+>>> print(needle_cline.outfile)
 needle.txt
 \end{verbatim}
 
@@ -4891,7 +4903,7 @@ module, but for simple usage the wrapper object usually suffices:
 
 \begin{verbatim}
 >>> stdout, stderr = needle_cline()
->>> print stdout + stderr
+>>> print(stdout + stderr)
 Needleman-Wunsch global alignment of two sequences
 \end{verbatim}
 
@@ -4901,7 +4913,7 @@ discussed earlier in this chapter, as the \texttt{emboss} format:
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("needle.txt", "emboss")
->>> print align
+>>> print(align)
 SingleLetterAlphabet() alignment with 2 rows and 149 columns
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
@@ -5101,39 +5113,15 @@ it setup right takes some effort:
 \end{itemize}
 
 \noindent
-To further confuse matters there are at least four different standalone BLAST packages,
+To further confuse matters there are several different BLAST packages available,
 and there are also other tools which can produce imitation BLAST output files, such as BLAT.
-
-\subsection{Standalone NCBI ``legacy'' BLAST}
-
-\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
-{NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
-\verb|rpsblast|. This was the most widely used standalone BLAST tool up until its replacement
-BLAST+ was released by the NCBI.
-
-The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
-like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
-functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
-be deprecated and eventually removed from Biopython as people move over to the replacement
-BLAST+ suite.
-
-To try and avoid confusion, we will not cover calling these old tools from Biopython
-in this tutorial. Have a look at the older edition of this tutorial included with
-Biopython 1.52 if you are curious (look at the Tutorial PDF or HTML file in the Doc
-directory within \texttt{biopython-1.52.tar.gz} or \texttt{biopython-1.52.zip}).
 
 \subsection{Standalone NCBI BLAST+}
 
+The ``new''
 \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
-{NCBI ``new'' BLAST+} was released in 2009. This replaces the old NCBI ``legacy'' BLAST
-package. The \verb|Bio.Blast.Applications| module has wrappers for these ``new'' tools
-like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
-(which all used to be handled by \verb|blastall|), \verb|psiblast|
-(replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
-(which replace the old \verb|rpsblast|).
-We don't include a wrapper for the \verb|makeblastdb| used in BLAST+ to build a
-local BLAST database from FASTA file, nor the equivalent tool \verb|formatdb| in
-``legacy'' BLAST.
+{NCBI BLAST+} suite was released in 2009. This replaces the old NCBI ``legacy'' BLAST
+package (see below).
 
 This section will show briefly how to use these tools from within Python. If you have
 already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
@@ -5168,7 +5156,7 @@ and run it:
 >>> blastx_cline
 NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
 db='nr', evalue=0.001)
->>> print blastx_cline
+>>> print(blastx_cline)
 blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
 >>> stdout, stderr = blastx_cline()
 \end{verbatim}
@@ -5182,13 +5170,24 @@ contains seven sequences, so the BLAST XML output should contain multiple result
 Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
 Section~\ref{sec:parsing-blast}.
 
-\subsection{WU-BLAST and AB-BLAST}
+\subsection{Other versions of BLAST}
+
+NCBI BLAST+ (written in C++) was first released in 2009 as a replacement for
+the original NCBI ``legacy'' BLAST (written in C) which is no longer being updated.
+There were a lot of changes -- the old version had a single core command line
+tool \verb|blastall| which covered multiple different BLAST search types (which
+are now separate commands in BLAST+), and all the command line options
+were renamed.
+Biopython's wrappers for the NCBI ``legacy'' BLAST tools have been deprecated
+and will be removed in a future release.
+To try to avoid confusion, we do not cover calling these old tools from Biopython
+in this tutorial.
 
 You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
 (WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
 BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
-the command line tools \verb|wu-blastall| and \verb|ab-blastall|.
-
+the command line tools \verb|wu-blastall| and \verb|ab-blastall|, which mimicked
+\verb|blastall| from the NCBI ``legacy'' BLAST stuie.
 Biopython does not currently provide wrappers for calling these tools, but should be able
 to parse any NCBI compatible output from them.
 
@@ -5284,13 +5283,13 @@ search result:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
->>> blast_record = blast_records.next()
+>>> blast_record = next(blast_records)
 # ... do something with blast_record
->>> blast_record = blast_records.next()
+>>> blast_record = next(blast_records)
 # ... do something with blast_record
->>> blast_record = blast_records.next()
+>>> blast_record = next(blast_records)
 # ... do something with blast_record
->>> blast_record = blast_records.next()
+>>> blast_record = next(blast_records)
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 StopIteration
@@ -5319,7 +5318,7 @@ to do is to pick up the first (and only) BLAST record in \verb|blast_records|:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
->>> blast_record = blast_records.next()
+>>> blast_record = next(blast_records)
 \end{verbatim}
 \noindent or more elegantly:
 \begin{verbatim}
@@ -5349,13 +5348,13 @@ threshold. The following code does this:
 >>> for alignment in blast_record.alignments:
 ...     for hsp in alignment.hsps:
 ...         if hsp.expect < E_VALUE_THRESH:
-...             print '****Alignment****'
-...             print 'sequence:', alignment.title
-...             print 'length:', alignment.length
-...             print 'e value:', hsp.expect
-...             print hsp.query[0:75] + '...'
-...             print hsp.match[0:75] + '...'
-...             print hsp.sbjct[0:75] + '...'
+...             print('****Alignment****')
+...             print('sequence:', alignment.title)
+...             print('length:', alignment.length)
+...             print('e value:', hsp.expect)
+...             print(hsp.query[0:75] + '...')
+...             print(hsp.match[0:75] + '...')
+...             print(hsp.sbjct[0:75] + '...')
 \end{verbatim}
 
 This will print out summary reports like the following:
@@ -5448,13 +5447,13 @@ This will parse the BLAST report into a Blast Record class (either a Blast or a 
 >>> for alignment in blast_record.alignments:
 ...     for hsp in alignment.hsps:
 ...         if hsp.expect < E_VALUE_THRESH:
-...             print '****Alignment****'
-...             print 'sequence:', alignment.title
-...             print 'length:', alignment.length
-...             print 'e value:', hsp.expect
-...             print hsp.query[0:75] + '...'
-...             print hsp.match[0:75] + '...'
-...             print hsp.sbjct[0:75] + '...'
+...             print('****Alignment****')
+...             print('sequence:', alignment.title)
+...             print('length:', alignment.length)
+...             print('e value:', hsp.expect)
+...             print(hsp.query[0:75] + '...')
+...             print(hsp.match[0:75] + '...')
+...             print(hsp.sbjct[0:75] + '...')
 \end{verbatim}
 
 If you also read the section~\ref{sec:parsing-blast} on parsing BLAST XML output, you'll notice that the above code is identical to what is found in that section. Once you parse something into a record class you can deal with it independent of the format of the original BLAST info you were parsing. Pretty snazzy!
@@ -5483,7 +5482,7 @@ The second option, the parser, is optional. If we don't supply a parser, then th
 Now that we've got an iterator, we start retrieving blast records (generated by our parser) using \verb|next()|:
 
 \begin{verbatim}
->>> blast_record = blast_iterator.next()
+>>> blast_record = next(blast_iterator)
 \end{verbatim}
 
 Each call to next will return a new record that we can deal with. Now we can iterate through this records and generate our old favorite, a nice little blast report:
@@ -5494,20 +5493,20 @@ Each call to next will return a new record that we can deal with. Now we can ite
 ...     for alignment in blast_record.alignments:
 ...         for hsp in alignment.hsps:
 ...             if hsp.expect < E_VALUE_THRESH:
-...                 print '****Alignment****'
-...                 print 'sequence:', alignment.title
-...                 print 'length:', alignment.length
-...                 print 'e value:', hsp.expect
+...                 print('****Alignment****')
+...                 print('sequence:', alignment.title)
+...                 print('length:', alignment.length)
+...                 print('e value:', hsp.expect)
 ...                 if len(hsp.query) > 75:
 ...                     dots = '...'
 ...                 else:
 ...                     dots = ''
-...                 print hsp.query[0:75] + dots
-...                 print hsp.match[0:75] + dots
-...                 print hsp.sbjct[0:75] + dots
+...                 print(hsp.query[0:75] + dots)
+...                 print(hsp.match[0:75] + dots)
+...                 print(hsp.sbjct[0:75] + dots)
 \end{verbatim}
 
-%Notice that \verb|b_iterator.next()| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existence of a record.
+%Notice that \verb|next(b_iterator)| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existence of a record.
 
 The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
 
@@ -5547,12 +5546,12 @@ We can read these records one a time, but now we can catch and deal with errors 
 
 \begin{verbatim}
 >>> try:
-...     next_record = iterator.next()
-... except NCBIStandalone.LowQualityBlastError, info:
-...     print "LowQualityBlastError detected in id %s" % info[1]
+...     next_record = next(iterator)
+... except NCBIStandalone.LowQualityBlastError as info:
+...     print("LowQualityBlastError detected in id %s" % info[1])
 \end{verbatim}
 
-The \verb|.next()| method is normally called indirectly via a \verb|for|-loop.
+The \verb|next()| functionality is normally called indirectly via a \verb|for|-loop.
 Right now the \verb|BlastErrorParser| can generate the following errors:
 
 \begin{itemize}
@@ -5726,7 +5725,7 @@ more Hit objects. Let's see what it looks like using the BLAST file we have:
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
->>> print blast_qresult
+>>> print(blast_qresult)
 Program: blastn (2.2.27+)
   Query: 42291 (61)
          mystery_seq
@@ -5791,7 +5790,7 @@ Now let's check our BLAT results using the same procedure as above:
 %cont-doctest
 \begin{verbatim}
 >>> blat_qresult = SearchIO.read('my_blat.psl', 'blat-psl')
->>> print blat_qresult
+>>> print(blat_qresult)
 Program: blat (<unknown version>)
   Query: mystery_seq (61)
          <unknown description>
@@ -5832,9 +5831,9 @@ using the same method.
 
 %cont-doctest
 \begin{verbatim}
->>> print "%s %s" % (blast_qresult.program, blast_qresult.version)
+>>> print("%s %s" % (blast_qresult.program, blast_qresult.version))
 blastn 2.2.27+
->>> print "%s %s" % (blat_qresult.program, blat_qresult.version)
+>>> print("%s %s" % (blat_qresult.program, blat_qresult.version))
 blat <unknown version>
 >>> blast_qresult.param_evalue_threshold    # blast-xml specific
 10.0
@@ -5895,7 +5894,7 @@ slice notation as well. In this case, the slice will return a new
 %cont-doctest
 \begin{verbatim}
 >>> blast_slice = blast_qresult[:3]     # slices the first three hits
->>> print blast_slice
+>>> print(blast_slice)
 Program: blastn (2.2.27+)
   Query: 42291 (61)
          mystery_seq
@@ -5969,8 +5968,8 @@ the \verb|reverse| flag to \verb|True| so that we sort in descending order.
 %cont-doctest
 \begin{verbatim}
 >>> for hit in blast_qresult[:5]:   # id and sequence length of the first five hits
-...     print hit.id, hit.seq_len
-...
+...     print("%s %i" % (hit.id, hit.seq_len))
+... 
 gi|262205317|ref|NR_030195.1| 61
 gi|301171311|ref|NR_035856.1| 60
 gi|270133242|ref|NR_032573.1| 85
@@ -5980,8 +5979,8 @@ gi|301171267|ref|NR_035851.1| 80
 >>> sort_key = lambda hit: hit.seq_len
 >>> sorted_qresult = blast_qresult.sort(key=sort_key, reverse=True, in_place=False)
 >>> for hit in sorted_qresult[:5]:
-...     print hit.id, hit.seq_len
-...
+...     print("%s %i" % (hit.id, hit.seq_len))
+... 
 gi|397513516|ref|XM_003827011.1| 6002
 gi|390332045|ref|XM_776818.2| 4082
 gi|390332043|ref|XM_003723358.1| 4079
@@ -6033,7 +6032,7 @@ that only have one HSP:
 >>> len(filtered_qresult)   # no. of hits after filtering
 37
 >>> for hit in filtered_qresult[:5]:    # quick check for the hit lengths
-...     print hit.id, len(hit.hsps)
+...     print("%s %i" % (hit.id, len(hit.hsps)))
 gi|301171322|ref|NR_035857.1| 2
 gi|262205330|ref|NR_030198.1| 2
 gi|301171447|ref|NR_035871.1| 2
@@ -6060,7 +6059,7 @@ Let's see an example where we're using \verb|hit_map| to rename the hit IDs:
 ...
 >>> mapped_qresult = blast_qresult.hit_map(map_func)
 >>> for hit in mapped_qresult[:5]:
-...     print hit.id
+...     print(hit.id)
 NR_030195.1
 NR_035856.1
 NR_032573.1
@@ -6086,10 +6085,7 @@ Let's see what they look like, beginning with our BLAST search:
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
 >>> blast_hit = blast_qresult[3]    # fourth hit from the query result
-\end{verbatim}
-%HACK: because Py2.5 in windows output floating points slightly different
-\begin{verbatim}
->>> print blast_hit
+>>> print(blast_hit)
 Query: 42291
        mystery_seq
   Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -6124,7 +6120,7 @@ had one hit with 17 HSPs.
 \begin{verbatim}
 >>> blat_qresult = SearchIO.read('my_blat.psl', 'blat-psl')
 >>> blat_hit = blat_qresult[0]      # the only hit
->>> print blat_hit
+>>> print(blat_hit)
 Query: mystery_seq
        <unknown description>
   Hit: chr19 (59128983)
@@ -6202,7 +6198,7 @@ HSP(hit_id='chr19', query_id='mystery_seq', 1 fragments)
 >>> sliced_hit = blat_hit[4:9]  # retrieve multiple items
 >>> len(sliced_hit)
 5
->>> print sliced_hit
+>>> print(sliced_hit)
 Query: mystery_seq
        <unknown description>
   Hit: chr19 (59128983)
@@ -6246,10 +6242,7 @@ BLAST HSP first:
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
 >>> blast_hsp = blast_qresult[0][0]    # first hit, first hsp
-\end{verbatim}
-%HACK: because Py2.5 in windows output floating points slightly different
-\begin{verbatim}
->>> print blast_hsp
+>>> print(blast_hsp)
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
 Query range: [0:61] (1)
@@ -6353,7 +6346,7 @@ It should not surprise you now that the \verb|HSP| object has an
 
 %cont-doctest
 \begin{verbatim}
->>> print blast_hsp.aln
+>>> print(blast_hsp.aln)
 DNAAlphabet() alignment with 2 rows and 61 columns
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 42291
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
@@ -6367,7 +6360,7 @@ results for a different kind of HSP. As usual, we'll begin by invoking
 \begin{verbatim}
 >>> blat_qresult = SearchIO.read('my_blat.psl', 'blat-psl')
 >>> blat_hsp = blat_qresult[0][0]       # first hit, first hsp
->>> print blat_hsp
+>>> print(blat_hsp)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
 Query range: [0:61] (1)
@@ -6430,7 +6423,7 @@ Let's take a look at a BLAT HSP that contains multiple blocks to see how
 %cont-doctest
 \begin{verbatim}
 >>> blat_hsp2 = blat_qresult[0][1]      # first hit, second hsp
->>> print blat_hsp2
+>>> print(blat_hsp2)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
 Query range: [0:61] (1)
@@ -6535,7 +6528,7 @@ These attributes are readily shown when you invoke \verb|print| on an
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
 >>> blast_frag = blast_qresult[0][0][0]    # first hit, first hsp, first fragment
->>> print blast_frag
+>>> print(blast_frag)
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
 Query range: [0:61] (1)
@@ -6553,7 +6546,7 @@ for the query and hit sequences which are not present:
 \begin{verbatim}
 >>> blat_qresult = SearchIO.read('my_blat.psl', 'blat-psl')
 >>> blat_frag = blat_qresult[0][0][0]    # first hit, first hsp, first fragment
->>> print blat_frag
+>>> print(blat_frag)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
 Query range: [0:61] (1)
@@ -6670,12 +6663,12 @@ yields a \verb|QueryResult| object in each iteration. Like
 >>> from Bio import SearchIO
 >>> qresults = SearchIO.parse('tab_2226_tblastn_001.txt', 'blast-tab')
 >>> for qresult in qresults:
-...     print qresult.id
+...     print(qresult.id)
 gi|16080617|ref|NP_391444.1|
 gi|11464971:4-101
 >>> qresults2 = SearchIO.parse('tab_2226_tblastn_005.txt', 'blast-tab', comments=True)
 >>> for qresult in qresults2:
-...     print qresult.id
+...     print(qresult.id)
 random_s00
 gi|16080617|ref|NP_391444.1|
 gi|11464971:4-101
@@ -6846,7 +6839,7 @@ EInfo provides field index term counts, last update, and available links for eac
 \end{verbatim}
 The variable \verb+result+ now contains a list of databases in XML format:
 \begin{verbatim}
->>> print result
+>>> print(result)
 <?xml version="1.0"?>
 <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN"
  "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
@@ -6931,7 +6924,7 @@ One of the most useful is a list of possible search fields for use with ESearch:
 
 \begin{verbatim}
 >>> for field in record["DbInfo"]["FieldList"]:
-...     print "%(Name)s, %(FullName)s, %(Description)s" % field
+...     print("%(Name)s, %(FullName)s, %(Description)s" % field)
 ALL, All Fields, All terms from all searchable fields
 UID, UID, Unique number assigned to publication
 FILT, Filter, Limits the records
@@ -6970,7 +6963,7 @@ search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
 find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nucleotide",term="Cypripedioideae[Orgn] AND matK[Gene]")
+>>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 '25'
@@ -7020,7 +7013,7 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
->>> print Entrez.epost("pubmed", id=",".join(id_list)).read()
+>>> print(Entrez.epost("pubmed", id=",".join(id_list)).read())
 <?xml version="1.0"?>
 <!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
  "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
@@ -7070,7 +7063,7 @@ One common usage is downloading sequences in the FASTA or GenBank/GenPept plain 
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
->>> print handle.read()
+>>> print(handle.read())
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 05-MAY-2008
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
             chloroplast.
@@ -7157,10 +7150,10 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb", retmode="text")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
->>> print record
+>>> print(record)
 ID: EU490707.1
 Name: EU490707
 Description: Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast.
@@ -7184,11 +7177,11 @@ if not os.path.isfile(filename):
     out_handle.write(net_handle.read())
     out_handle.close()
     net_handle.close()
-    print "Saved"
+    print("Saved")
 
-print "Parsing..."
+print("Parsing...")
 record = SeqIO.read(filename, "genbank")
-print record
+print(record)
 \end{verbatim}
 
 To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
@@ -7238,7 +7231,7 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 >>> len(record[0]["LinkSetDb"])
 5
 >>> for linksetdb in record[0]["LinkSetDb"]:
-...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
+...     print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
 ... 
 pubmed pubmed_pubmed 110
 pubmed pubmed_pubmed_combined 6
@@ -7266,7 +7259,8 @@ Let's now at the first search result:
 
 We can use a loop to print out all PubMed IDs:
 \begin{verbatim}
->>> for link in record[0]["LinkSetDb"][0]["Link"] : print link["Id"]
+>>> for link in record[0]["LinkSetDb"][0]["Link"]:
+...     print(link["Id"])
 19304878
 14630660
 18689808
@@ -7292,8 +7286,9 @@ In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``B
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.egquery(term="biopython")
 >>> record = Entrez.read(handle)
->>> for row in record["eGQueryResult"]: print row["DbName"], row["Count"]
-...
+>>> for row in record["eGQueryResult"]:
+...     print(row["DbName"], row["Count"])
+... 
 pubmed 6
 pmc 62
 journals 0
@@ -7342,7 +7337,7 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 ...         continue
 ...     geneid = record['Entrezgene_track-info']['Gene-track']['Gene-track_geneid']
 ...     genename = record['Entrezgene_gene']['Gene-ref']['Gene-ref_locus']
-...     print geneid, genename
+...     print(geneid, genename)
 \end{verbatim}
 
 This will print:
@@ -7472,7 +7467,7 @@ Optionally, you can instruct the parser to skip such tags instead of raising a V
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
->>> record = Entrez.read(handle,validate=False)
+>>> record = Entrez.read(handle, validate=False)
 >>>
 \end{verbatim}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
@@ -7546,7 +7541,7 @@ To parse a file containing multiple Medline records, you can use the \verb+parse
 >>> input = open("pubmed_result2.txt")
 >>> records = Medline.parse(input)
 >>> for record in records:
-...     print record["TI"]
+...     print(record["TI"])
 A high level interface to SCOP and ASTRAL implemented in python.
 GenomeDiagram: a python package for the visualization of large-scale genomic data.
 Open source clustering software.
@@ -7557,7 +7552,7 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed",term="biopython")
+>>> handle = Entrez.esearch(db="pubmed", term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
 ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
@@ -7565,14 +7560,14 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
 \begin{verbatim}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db="pubmed",id=idlist,rettype="medline",retmode="text")
+>>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
 \end{verbatim}
 Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline records in plain-text Medline format. Now we use \verb+Bio.Medline+ to parse these records:
 \begin{verbatim}
 >>> from Bio import Medline
 >>> records = Medline.parse(handle)
 >>> for record in records:
-...     print record["AU"]
+...     print(record["AU"])
 ['Cock PJ', 'Antao T', 'Chang JT', 'Chapman BA', 'Cox CJ', 'Dalke A', ..., 'de Hoon MJ']
 ['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
 ['Casbon JA', 'Crooks GE', 'Saqi MA']
@@ -7585,10 +7580,10 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 For comparison, here we show an example using the XML format:
 \begin{verbatim}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db="pubmed",id=idlist,rettype="medline",retmode="xml")
+>>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
 >>> records = Entrez.read(handle)
 >>> for record in records:
-...     print record["MedlineCitation"]["Article"]["ArticleTitle"]
+...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
 Biopython: freely available Python tools for computational molecular biology and
  bioinformatics.
 Enzymes/non-enzymes classification model complexity based on composition, sequence,
@@ -7620,7 +7615,7 @@ The following code fragment shows how to parse the example GEO file
 >>> handle = open("GSE16.txt")
 >>> records = Geo.parse(handle)
 >>> for record in records:
-...     print record
+...     print(record)
 \end{verbatim}
 
 You can search the ``gds'' database (GEO datasets) with ESearch:
@@ -7628,7 +7623,7 @@ You can search the ``gds'' database (GEO datasets) with ESearch:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="gds",term="GSE16")
+>>> handle = Entrez.esearch(db="gds", term="GSE16")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 2
@@ -7724,7 +7719,7 @@ To parse a file containing more than one UniGene record, use the \verb+parse+ fu
 >>> input = open("unigenerecords.data")
 >>> records = UniGene.parse(input)
 >>> for record in records:
-...     print record.ID
+...     print(record.ID)
 \end{verbatim}
 
 \section{Using a proxy}
@@ -7765,7 +7760,7 @@ In this example, we will query PubMed for all articles having to do with orchids
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"]=="pubmed":
-...         print row["Count"]
+...         print(row["Count"])
 463
 \end{verbatim}
 
@@ -7774,7 +7769,7 @@ Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of t
 >>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
 >>> record = Entrez.read(handle)
 >>> idlist = record["IdList"]
->>> print idlist
+>>> print(idlist)
 \end{verbatim}
 
 
@@ -7801,12 +7796,13 @@ Keep in mind that \verb+records+ is an iterator, so you can iterate through the 
 \end{verbatim}
 
 Let's now iterate over the records to print out some information about each record:
+%TODO - Replace the print blank line with print()?
 \begin{verbatim}
 >>> for record in records:
-...     print "title:", record.get("TI", "?")
-...     print "authors:", record.get("AU", "?")
-...     print "source:", record.get("SO", "?")
-...     print
+...     print("title:", record.get("TI", "?"))
+...     print("authors:", record.get("AU", "?"))
+...     print("source:", record.get("SO", "?"))
+...     print("")
 \end{verbatim}
 
 The output for this looks like:
@@ -7827,7 +7823,7 @@ Especially interesting to note is the list of authors, which is returned as a st
 ...     if not "AU" in record:
 ...         continue
 ...     if search_author in record["AU"]:
-...         print "Author %s found: %s" % (search_author, record["SO"])
+...         print("Author %s found: %s" % (search_author, record["SO"]))
 \end{verbatim}
 
 Hopefully this section gave you an idea of the power and flexibility of the Entrez and Medline interfaces and how they can be used together.
@@ -7845,7 +7841,7 @@ First, we use EGQuery to find out the number of results we will get before actua
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"]=="nuccore":
-...         print row["Count"]
+...         print(row["Count"])
 814
 \end{verbatim}
 
@@ -7858,22 +7854,22 @@ So, we expect to find 814 Entrez Nucleotide records (this is the number I obtain
 
 Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
 \begin{verbatim}
->>> print record.keys()
+>>> print(record.keys())
 [u'Count', u'RetMax', u'IdList', u'TranslationSet', u'RetStart', u'QueryTranslation']
 \end{verbatim}
 First, let's check how many results were found:
 \begin{verbatim}
->>> print record["Count"]
+>>> print(record["Count"])
 '814'
 \end{verbatim}
 which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
 \begin{verbatim}
->>> print len(record["IdList"])
+>>> len(record["IdList"])
 814
 \end{verbatim}
 Let's look at the first five results:
 \begin{verbatim}
->>> print record["IdList"][:5]
+>>> record["IdList"][:5]
 ['187237168', '187372713', '187372690', '187372688', '187372686']
 \end{verbatim}
 
@@ -7884,16 +7880,16 @@ However, in this situation you should ideally be using the history feature descr
 
 \begin{verbatim}
 >>> idlist = ",".join(record["IdList"][:5])
->>> print idlist
+>>> print(idlist)
 187237168,187372713,187372690,187372688,187372686
 >>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml")
 >>> records = Entrez.read(handle)
->>> print len(records)
+>>> len(records)
 5
 \end{verbatim}
 Each of these records corresponds to one GenBank record.
 \begin{verbatim}
->>> print records[0].keys()
+>>> print(records[0].keys())
 [u'GBSeq_moltype', u'GBSeq_source', u'GBSeq_sequence',
  u'GBSeq_primary-accession', u'GBSeq_definition', u'GBSeq_accession-version',
  u'GBSeq_topology', u'GBSeq_length', u'GBSeq_feature-table',
@@ -7901,17 +7897,17 @@ Each of these records corresponds to one GenBank record.
  u'GBSeq_taxonomy', u'GBSeq_references', u'GBSeq_update-date',
  u'GBSeq_organism', u'GBSeq_locus', u'GBSeq_strandedness']
 
->>> print records[0]["GBSeq_primary-accession"]
+>>> print(records[0]["GBSeq_primary-accession"])
 DQ110336
 
->>> print records[0]["GBSeq_other-seqids"]
+>>> print(records[0]["GBSeq_other-seqids"])
 ['gb|DQ110336.1|', 'gi|187237168']
 
->>> print records[0]["GBSeq_definition"]
+>>> print(records[0]["GBSeq_definition"])
 Cypripedium calceolus voucher Davis 03-03 A maturase (matR) gene, partial cds;
 mitochondrial
 
->>> print records[0]["GBSeq_organism"]
+>>> print(records[0]["GBSeq_organism"])
 Cypripedium calceolus
 \end{verbatim}
 
@@ -7934,7 +7930,7 @@ First, we want to make a query and find out the ids of the records to retrieve. 
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"]=="nuccore":
-...         print row["Count"]
+...         print(row["Count"])
 ...
 9
 \end{verbatim}
@@ -7959,7 +7955,7 @@ If you want to look at the raw GenBank files, you can read from this handle and 
 
 \begin{verbatim}
 >>> text = handle.read()
->>> print text
+>>> print(text)
 LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
 DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
 ACCESSION   AY851612
@@ -7986,8 +7982,8 @@ In this case, we are just getting the raw records. To get the records in a more 
 \noindent We can now step through the records and look at the information we are interested in:
 \begin{verbatim}
 >>> for record in records: 
->>> ...    print "%s, length %i, with %i features" \
->>> ...           % (record.name, len(record), len(record.features))
+>>> ...    print("%s, length %i, with %i features" \
+>>> ...           % (record.name, len(record), len(record.features)))
 AY851612, length 892, with 3 features
 AY851611, length 881, with 3 features
 AF191661, length 895, with 3 features
@@ -8100,7 +8096,7 @@ batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
-    print "Going to download record %i to %i" % (start+1, end)
+    print("Going to download record %i to %i" % (start+1, end))
     fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text",
                                  retstart=start, retmax=batch_size,
                                  webenv=webenv, query_key=query_key)
@@ -8123,13 +8119,13 @@ search_results = Entrez.read(Entrez.esearch(db="pubmed",
                                             reldate=365, datetype="pdat",
                                             usehistory="y"))
 count = int(search_results["Count"])
-print "Found %i results" % count
+print("Found %i results" % count)
 
 batch_size = 10
 out_handle = open("recent_orchid_papers.txt", "w")
 for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
-    print "Going to download record %i to %i" % (start+1, end)
+    print("Going to download record %i to %i" % (start+1, end))
     fetch_handle = Entrez.efetch(db="pubmed",
                                  rettype="medline", retmode="text",
                                  retstart=start, retmax=batch_size,
@@ -8235,17 +8231,18 @@ To read one Swiss-Prot record from the handle, we use the function \verb|read()|
 This function should be used if the handle points to exactly one Swiss-Prot record. It raises a \verb|ValueError| if no Swiss-Prot record was found, and also if more than one record was found.
 
 We can now print out some information about this record:
+%TODO - Check the single quotes when printing record.description here:
 \begin{verbatim}
->>> print record.description
+>>> print(record.description)
 'RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;'
 >>> for ref in record.references:
-...     print "authors:", ref.authors
-...     print "title:", ref.title
-...
+...     print("authors:", ref.authors)
+...     print("title:", ref.title)
+... 
 authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
->>> print record.organism_classification
+>>> print(record.organism_classification)
 ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', ..., 'Bromheadia']
 \end{verbatim}
 
@@ -8345,8 +8342,8 @@ The entries in this file can be parsed by the \verb+parse+ function in the \verb
 >>> handle = open("keywlist.txt")
 >>> records = KeyWList.parse(handle)
 >>> for record in records:
-...     print record['ID']
-...     print record['DE']
+...     print(record['ID'])
+...     print(record['DE'])
 \end{verbatim}
 
 This prints
@@ -8375,21 +8372,21 @@ We can now take the records one at a time and print out some information. For ex
 >>> from Bio.ExPASy import Prosite
 >>> handle = open("prosite.dat")
 >>> records = Prosite.parse(handle)
->>> record = records.next()
+>>> record = next(records)
 >>> record.accession
 'PS00001'
 >>> record.name
 'ASN_GLYCOSYLATION'
 >>> record.pdoc
 'PDOC00001'
->>> record = records.next()
+>>> record = next(records)
 >>> record.accession
 'PS00004'
 >>> record.name
 'CAMP_PHOSPHO_SITE'
 >>> record.pdoc
 'PDOC00004'
->>> record = records.next()
+>>> record = next(records)
 >>> record.accession
 'PS00005'
 >>> record.name
@@ -8405,7 +8402,7 @@ and so on. If you're interested in how many Prosite records there are, you could
 >>> n = 0
 >>> for record in records: n+=1
 ...
->>> print n
+>>> n
 2073
 \end{verbatim}
 
@@ -8543,7 +8540,7 @@ If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exi
 ...     try:
 ...         record = SwissProt.read(handle)
 ...     except ValueException:
-...         print "WARNING: Accession %s not found" % accession
+...         print("WARNING: Accession %s not found" % accession)
 ...     records.append(record)
 \end{verbatim}
 
@@ -8588,7 +8585,7 @@ To retrieve a Prosite or Prosite documentation record in raw format, use \verb|g
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_prosite_raw('PS00001')
 >>> text = handle.read()
->>> print text
+>>> print(text)
 \end{verbatim}
 
 To retrieve a Prosite record and parse it into a \verb|Bio.Prosite.Record| object, use
@@ -8747,7 +8744,7 @@ The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
 \begin{verbatim}
->>> file = open(filename,'r')
+>>> file = open(filename, 'r')
 >>> header_dict = parse_pdb_header(file)
 >>> file.close()
 \end{verbatim}
@@ -8826,7 +8823,7 @@ out glycine residues:
 ...             return True
 ...         else:
 ...             return False
-...
+... 
 >>> io = PDBIO()
 >>> io.set_structure(s)
 >>> io.save('gly_only.pdb', GlySelect())
@@ -8918,7 +8915,7 @@ like:
 
 \begin{verbatim}
 >>> full_id = residue.get_full_id()
->>> print full_id
+>>> print(full_id)
 ("1abc", 0, "A", ("", 10, "A"))
 \end{verbatim}
 
@@ -9200,10 +9197,10 @@ the \texttt{Atom} object associated with a specific altloc identifier:
 
 \begin{verbatim}
 >>> atom.disordered_select('A') # select altloc A atom
->>> print atom.get_altloc()
+>>> print(atom.get_altloc())
 "A"
 >>> atom.disordered_select('B') # select altloc B atom
->>> print atom.get_altloc()
+>>> print(atom.get_altloc())
 "B"
 \end{verbatim}
 
@@ -9301,7 +9298,7 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 ...     for chain in model:
 ...         for residue in chain:
 ...             for atom in residue:
-...                 print atom
+...                 print(atom)
 ...
 \end{verbatim}
 
@@ -9309,7 +9306,7 @@ There is a shortcut if you want to iterate over all atoms in a structure:
 \begin{verbatim}
 >>> atoms = structure.get_atoms()
 >>> for atom in atoms:
-...     print atom
+...     print(atom)
 ...
 \end{verbatim}
 
@@ -9317,7 +9314,7 @@ Similarly, to iterate over all atoms in a chain, use
 \begin{verbatim}
 >>> atoms = chain.get_atoms()
 >>> for atom in atoms:
-...     print atom
+...     print(atom)
 ...
 \end{verbatim}
 
@@ -9327,7 +9324,7 @@ or if you want to iterate over all residues in a model:
 \begin{verbatim}
 >>> residues = model.get_residues()
 >>> for residue in residues:
-...     print residue
+...     print(residue)
 ...
 \end{verbatim}
 
@@ -9364,7 +9361,7 @@ For more info, see the API documentation.
 ...    residue_id = residue.get_id()
 ...    hetfield = residue_id[0]
 ...    if hetfield[0]=="H":
-...        print residue_id
+...        print(residue_id)
 ...
 \end{verbatim}
 
@@ -9377,7 +9374,7 @@ For more info, see the API documentation.
 ...             if residue.has_id("CA"):
 ...                 ca = residue["CA"]
 ...                 if ca.get_bfactor() > 50.0:
-...                     print ca.get_coord()
+...                     print(ca.get_coord())
 ...
 \end{verbatim}
 
@@ -9392,8 +9389,8 @@ For more info, see the API documentation.
 ...                 resname = residue.get_resname()
 ...                 model_id = model.get_id()
 ...                 chain_id = chain.get_id()
-...                 print model_id, chain_id, resname, resseq
-...
+...                 print(model_id, chain_id, resname, resseq)
+... 
 \end{verbatim}
 
 \subsubsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
@@ -9420,7 +9417,7 @@ To extract polypeptides from a structure, construct a list of \texttt{Polypeptid
 >>> model_nr = 1
 >>> polypeptide_list = build_peptides(structure, model_nr)
 >>> for polypeptide in polypeptide_list:
-...     print polypeptide
+...     print(polypeptide)
 ...
 \end{verbatim}
 
@@ -9433,12 +9430,12 @@ Example:
 # Using C-N 
 >>> ppb=PPBuilder()
 >>> for pp in ppb.build_peptides(structure): 
-...     print pp.get_sequence()
+...     print(pp.get_sequence())
 ...
 # Using CA-CA
 >>> ppb=CaPPBuilder()
 >>> for pp in ppb.build_peptides(structure): 
-...     print pp.get_sequence()
+...     print(pp.get_sequence())
 ...
 \end{verbatim}
 Note that in the above case only model 0 of the structure is considered
@@ -9458,7 +9455,7 @@ Example:
 
 \begin{verbatim}
 >>> seq = polypeptide.get_sequence()
->>> print seq
+>>> print(seq)
 Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
 \end{verbatim}
 
@@ -9524,8 +9521,8 @@ Example:
 # The moving atoms will be put on the fixed atoms
 >>> sup.set_atoms(fixed, moving)
 # Print rotation/translation/rmsd
->>> print sup.rotran
->>> print sup.rms 
+>>> print(sup.rotran)
+>>> print(sup.rms) 
 # Apply rotation/translation to the moving atoms
 >>> sup.apply(moving)
 \end{verbatim}
@@ -9567,7 +9564,7 @@ Example:
 # Calculate classical coordination number
 >>> exp_fs = hse.calc_fs_exposure(model)
 # Print HSEalpha for a residue
->>> print exp_ca[some_residue]
+>>> print(exp_ca[some_residue])
 \end{verbatim}
 
 \subsection{Determining the secondary structure}
@@ -10517,7 +10514,7 @@ Now, within Python, read the tree file, giving the file name and the name of the
 Printing the tree object as a string gives us a look at the entire object hierarchy.
 
 \begin{verbatim}
->>> print tree
+>>> print(tree)
 
 Tree(weight=1.0, rooted=False, name="")
     Clade(branch_length=1.0)
@@ -10654,7 +10651,7 @@ entries, we can jump directly to that position in the tree by indexing it.  Here
 \verb|[0,1]| refers to the second child of the first child of the root.
 
 \begin{verbatim}
->>> tree.clade[0,1].color = "blue"
+>>> tree.clade[0, 1].color = "blue"
 \end{verbatim}
 
 Finally, show our work (see Fig. \ref{fig:phylo-color-draw}):
@@ -10718,7 +10715,8 @@ examples of using Bio.Phylo, see the cookbook page on Biopython.org:
 
 Like SeqIO and AlignIO, Phylo handles file input and output through four functions:
 \verb|parse|, \verb|read|, \verb|write| and \verb|convert|,
-all of which support the tree file formats Newick, NEXUS, phyloXML and NeXML.
+all of which support the tree file formats Newick, NEXUS, phyloXML and NeXML, as
+well as the Comparative Data Analysis Ontology (CDAO).
 
 The \verb|read| function parses a single tree in the given file and returns it. Careful; it
 will raise an error if the file contains more than one tree, or no trees.
@@ -10726,7 +10724,7 @@ will raise an error if the file contains more than one tree, or no trees.
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
->>> print tree
+>>> print(tree)
 \end{verbatim}
 
 (Example files are available in the \texttt{Tests/Nexus/} and \texttt{Tests/PhyloXML/}
@@ -10738,7 +10736,7 @@ through each of the trees in the given file:
 \begin{verbatim}
 >>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
-...     print tree
+...     print(tree)
 \end{verbatim}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
@@ -10778,9 +10776,10 @@ with SeqIO and AlignIO:
 
 The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
 
+%TODO - make this into a doctest?
 \begin{verbatim}
 >>> tree = Phylo.read("Tests/PhyloXML/example.xml", "phyloxml")
->>> print tree
+>>> print(tree)
 Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
 attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
     Clade()
@@ -11239,7 +11238,7 @@ descriptions and examples of using the additional annotation features provided b
 % The object hierarchy still looks and behaves similarly:
 
 % \begin{verbatim}
-% >>> print tree
+% >>> print(tree)
 
 % Phylogeny(rooted=True, name="")
 %     Clade(branch_length=1.0)
@@ -11286,7 +11285,8 @@ This generates a tree file and a stats file with the names
 \end{verbatim}
 
 A similar wrapper for RAxML (\url{http://sco.h-its.org/exelixis/software.html})
-was added in Biopython 1.60.
+was added in Biopython 1.60, and FastTree
+(\url{http://www.microbesonline.org/fasttree/}) in Biopython 1.62.
 
 Note that some popular Phylip programs, including \texttt{dnaml} and \texttt{protml},
 are already available through the EMBOSS wrappers in \texttt{Bio.Emboss.Applications} if
@@ -11333,13 +11333,13 @@ Here is an example of typical usage of codeml:
 >>> ns_sites = results.get("NSsites")
 >>> m0 = ns_sites.get(0)
 >>> m0_params = m0.get("parameters")
->>> print m0_params.get("omega")
+>>> print(m0_params.get("omega"))
 \end{verbatim}
 
 Existing output files may be parsed as well using a module's \texttt{read()} function:
 \begin{verbatim}
 >>> results = codeml.read("Tests/PAML/Results/codeml/codeml_NSsites_all.out")
->>> print results.get("lnL max")
+>>> print(results.get("lnL max"))
 \end{verbatim}
 
 Detailed documentation for this new module currently lives on the Biopython wiki:
@@ -11373,6 +11373,14 @@ releases:
 
 We're open to any suggestions for improving the functionality and usability of this module;
 just let us know on the mailing list or our bug database.
+
+Finally, if you need additional functionality not yet included in the Phylo
+module, check if it's available in another of the high-quality Python libraries
+for phylogenetics such as DendroPy (\url{http://pythonhosted.org/DendroPy/}) or
+PyCogent (\url{http://pycogent.org/}). Since these libraries also support
+standard file formats for phylogenetic trees, you can easily transfer data
+between libraries by writing to a temporary file or StringIO object.
+
 
 \chapter{Sequence motif analysis using Bio.motifs}
 
@@ -11434,7 +11442,7 @@ The instances are saved in an attribute \verb+m.instances+, which is essentially
 Printing out the Motif object shows the instances from which it was constructed:
 %cont-doctest
 \begin{verbatim}
->>> print m
+>>> print(m)
 TACAA
 TACGC
 TACAC
@@ -11454,7 +11462,7 @@ The Motif object has an attribute \verb+.counts+ containing the counts of each
 nucleotide at each position. Printing this counts matrix shows it in an easily readable format:
 %cont-doctest
 \begin{verbatim}
->>> print m.counts
+>>> print(m.counts)
         0      1      2      3      4
 A:   3.00   7.00   0.00   2.00   1.00
 C:   0.00   0.00   5.00   2.00   6.00
@@ -11473,17 +11481,17 @@ but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
 %cont-doctest
 \begin{verbatim}
->>> m.counts['T',0]
+>>> m.counts['T', 0]
 4
->>> m.counts['T',2]
+>>> m.counts['T', 2]
 2
->>> m.counts['T',3]
+>>> m.counts['T', 3]
 0
 \end{verbatim}
 You can also directly access columns of the counts matrix
 %Don't doctest this as dictionary order is platform dependent:
 \begin{verbatim}
->>> m.counts[:,3]
+>>> m.counts[:, 3]
 {'A': 2, 'C': 2, 'T': 0, 'G': 3}
 \end{verbatim}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
@@ -11536,7 +11544,7 @@ We can also get the reverse complement of a motif:
 Seq('GCGTA', IUPACUnambiguousDNA())
 >>> r.degenerate_consensus
 Seq('GBGTW', IUPACAmbiguousDNA())
->>> print r
+>>> print(r)
 TTGTA
 GCGTA
 GTGTA
@@ -11550,39 +11558,62 @@ GCATT
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 
-\subsection{Reading motifs}
+\subsection{Creating a sequence logo}
+If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+\begin{verbatim}
+>>> m.weblogo("mymotif.png")
+\end{verbatim}
+We should get our logo saved as a PNG in the specified file.
+
+\section{Reading motifs}
 \label{sec:io}
 
 Creating motifs from instances by hand is a bit boring, so it's
 useful to have some I/O functions for reading and writing
-motifs. There are no really well established standards for storing
-motifs, but there's a couple of formats which are more used than
-others. The most important distinction is whether the motif
-representation is based on instances or on some version of PWM matrix.
+motifs. There are not any really well established standards for storing
+motifs, but there are a couple of formats that are more used than
+others.
 
-\subsubsection*{JASPAR}
-One of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
-stores motifs either as a list of instances, or as a frequency matrix.
-As an example, these are the beginning and ending lines of the JASPAR
-\verb+Arnt.sites+ file showing known binding sites of the mouse
-helix-loop-helix transcription factor Arnt:
+\subsection{JASPAR}
+One of the most popular motif databases is \href{http://jaspar.genereg.net}{JASPAR}. In addition to the motif sequence information, the JASPAR database stores a lot of meta-information for each motif. The module \verb+Bio.motifs+ contains a specialized class \verb+jaspar.Motif+ in which this meta-information is represented as attributes:
+\begin{itemize}
+    \item \verb+matrix_id+ - the unique JASPAR motif ID, e.g. 'MA0004.1'
+    \item \verb+name+ - the name of the TF, e.g. 'Arnt'
+    \item \verb+collection+ - the JASPAR collection to which the motif belongs, e.g. 'CORE'
+    \item \verb+tf_class+ - the structual class of this TF, e.g. 'Zipper-Type'
+    \item \verb+tf_family+ - the family to which this TF belongs, e.g. 'Helix-Loop-Helix'
+    \item \verb+species+ - the species to which this TF belongs, may have multiple values, these are specified as taxonomy IDs, e.g. 10090
+    \item \verb+tax_group+ - the taxonomic supergroup to which this motif belongs, e.g. 'vertebrates'
+    \item \verb+acc+ - the accesion number of the TF protein, e.g. 'P53762'
+    \item \verb+data_type+ - the type of data used to construct this motif, e.g. 'SELEX'
+    \item \verb+medline+ - the Pubmed ID of literature supporting this motif, may be multiple values, e.g. 7592839 
+    \item \verb+pazar_id+ - external reference to the TF in the \href{http://pazar.info}{PAZAR} database, e.g. 'TF0000003'
+    \item \verb+comment+ - free form text containing notes about the construction of the motif
+\end{itemize}
+
+The \verb+jaspar.Motif+ class inherits from the generic \verb+Motif+ class and therefore provides all the facilities of any of the motif formats --- reading motifs, writing motifs, scanning sequences for motif instances etc.
+
+JASPAR stores motifs in several different ways including three different flat file formats and as an SQL database. All of these formats facilitate the construction of a counts matrix. However, the amount of meta information described above that is available varies with the format.
+
+\subsubsection*{The JASPAR \texttt{sites} format}
+
+The first of the three flat file formats contains a list of instances. As an example, these are the beginning and ending lines of the JASPAR \verb+Arnt.sites+ file showing known binding sites of the mouse helix-loop-helix transcription factor Arnt.
 \begin{verbatim}
->MA0004 ARNT    1
+>MA0004 ARNT 1
 CACGTGatgtcctc
->MA0004 ARNT    2
+>MA0004 ARNT 2
 CACGTGggaggtac
->MA0004 ARNT    3
+>MA0004 ARNT 3
 CACGTGccgcgcgc
 ...
->MA0004 ARNT    18
+>MA0004 ARNT 18
 AACGTGacagccctcc
->MA0004 ARNT    19
+>MA0004 ARNT 19
 AACGTGcacatcgtcc
->MA0004 ARNT    20
+>MA0004 ARNT 20
 aggaatCGCGTGc
 \end{verbatim}
-The parts of the sequence in capital letters are the motif instances
-that were found to align to each other.
+The parts of the sequence in capital letters are the motif instances that were found to align to each other.
 
 We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
@@ -11590,15 +11621,14 @@ We can create a \verb+Motif+ object from these instances as follows:
 >>> from Bio import motifs
 >>> arnt = motifs.read(open("Arnt.sites"), "sites")
 \end{verbatim}
-The instances from which this motif was created is stored in the
-\verb+.instances+ property:
+The instances from which this motif was created is stored in the \verb+.instances+ property:
 %cont-doctest
 \begin{verbatim}
->>> print arnt.instances[:3]
+>>> print(arnt.instances[:3])
 [Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
 >>> for instance in arnt.instances:
-...     print instance
-... 
+...     print(instance)
+...
 CACGTG
 CACGTG
 CACGTG
@@ -11623,7 +11653,7 @@ CGCGTG
 The counts matrix of this motif is automatically calculated from the instances:
 %cont-doctest
 \begin{verbatim}
->>> print arnt.counts
+>>> print(arnt.counts)
         0      1      2      3      4      5
 A:   4.00  19.00   0.00   0.00   0.00   0.00
 C:  16.00   0.00  20.00   0.00   0.00   0.00
@@ -11631,22 +11661,25 @@ G:   0.00   1.00   0.00  20.00   0.00  20.00
 T:   0.00   0.00   0.00   0.00  20.00   0.00
 <BLANKLINE>
 \end{verbatim}
+This format does not store any meta information.
 
-The JASPAR database also makes motifs available directly as a count matrix,
-without the instances from which it was created.
-For example, this is the JASPAR file \verb+SRF.pfm+ containing the count
-matrix for the human SRF transcription factor:
+\subsubsection*{The JASPAR \texttt{pfm} format}
+
+JASPAR also makes motifs available directly as a count matrix,
+without the instances from which it was created. This \verb+pfm+ format only
+stores the counts matrix for a single motif.
+For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix for the human SRF transcription factor:
 \begin{verbatim}
- 2  9  0  1 32  3 46  1 43 15  2  2
- 1 33 45 45  1  1  0  0  0  1  0  1
-39  2  1  0  0  0  0  0  0  0 44 43
- 4  2  0  0 13 42  0 45  3 30  0  0
+ 2 9 0 1 32 3 46 1 43 15 2 2
+ 1 33 45 45 1 1 0 0 0 1 0 1
+39 2 1 0 0 0 0 0 0 0 44 43
+ 4 2 0 0 13 42 0 45 3 30 0 0
 \end{verbatim}
 We can create a motif for this count matrix as follows:
 %cont-doctest
 \begin{verbatim}
->>> srf = motifs.read(open("SRF.pfm"),"pfm")
->>> print srf.counts
+>>> srf = motifs.read(open("SRF.pfm"), "pfm")
+>>> print(srf.counts)
         0      1      2      3      4      5      6      7      8      9     10     11
 A:   2.00   9.00   0.00   1.00  32.00   3.00  46.00   1.00  43.00  15.00   2.00   2.00
 C:   1.00  33.00  45.00  45.00   1.00   1.00   0.00   0.00   0.00   1.00   0.00   1.00
@@ -11657,19 +11690,214 @@ T:   4.00   2.00   0.00   0.00  13.00  42.00   0.00  45.00   3.00  30.00   0.00 
 As this motif was created from the counts matrix directly, it has no instances associated with it:
 %cont-doctest
 \begin{verbatim}
->>> print srf.instances
+>>> print(srf.instances)
 None
 \end{verbatim}
 We can now ask for the consensus sequence of these two motifs:
 %cont-doctest
 \begin{verbatim}
->>> print arnt.counts.consensus
+>>> print(arnt.counts.consensus)
 CACGTG
->>> print srf.counts.consensus
+>>> print(srf.counts.consensus)
 GCCCATATATGG
 \end{verbatim}
 
-\subsubsection*{MEME}
+As with the instances file, not meta information is stored in this format.
+
+\subsubsection*{The JASPAR format \texttt{jaspar}}
+
+The \verb+jaspar+ file format allows multiple motifs to be specified in a single file. In this format each of the motif records consist of a header line followed by four lines defining the counts matrix. The header line begins with a \verb+>+ character (similar to the Fasta file format) and is followed by the unique JASPAR matrix ID and the TF name. The following example shows a \verb+jaspar+ formatted file containing the three motifs Arnt, RUNX1 and MEF2A:
+\begin{verbatim}
+>MA0004.1 Arnt
+A  [ 4 19  0  0  0  0 ]
+C  [16  0 20  0  0  0 ]
+G  [ 0  1  0 20  0 20 ]
+T  [ 0  0  0  0 20  0 ]
+>MA0002.1 RUNX1
+A  [10 12  4  1  2  2  0  0  0  8 13 ]
+C  [ 2  2  7  1  0  8  0  0  1  2  2 ]
+G  [ 3  1  1  0 23  0 26 26  0  0  4 ]
+T  [11 11 14 24  1 16  0  0 25 16  7 ]
+>MA0052.1 MEF2A
+A  [ 1  0 57  2  9  6 37  2 56  6 ]
+C  [50  0  1  1  0  0  0  0  0  0 ]
+G  [ 0  0  0  0  0  0  0  0  2 50 ]
+T  [ 7 58  0 55 49 52 21 56  0  2 ]
+\end{verbatim}
+The motifs are read as follows:
+\begin{verbatim}
+>>> fh = open("jaspar_motifs.txt")
+>>> for m in motifs.parse(fh, "jaspar"))
+...     print(m)
+TF name	 Arnt
+Matrix ID	MA0004.1
+Matrix:
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+
+TF name	 RUNX1
+Matrix ID	MA0002.1
+Matrix:
+        0      1      2      3      4      5      6      7      8      9     10
+A:  10.00  12.00   4.00   1.00   2.00   2.00   0.00   0.00   0.00   8.00  13.00
+C:   2.00   2.00   7.00   1.00   0.00   8.00   0.00   0.00   1.00   2.00   2.00
+G:   3.00   1.00   1.00   0.00  23.00   0.00  26.00  26.00   0.00   0.00   4.00
+T:  11.00  11.00  14.00  24.00   1.00  16.00   0.00   0.00  25.00  16.00   7.00
+
+
+
+TF name	 MEF2A
+Matrix ID	MA0052.1
+Matrix:
+        0      1      2      3      4      5      6      7      8      9
+A:   1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00
+C:  50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00
+G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00
+T:   7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00
+\end{verbatim}
+
+Note that printing a JASPAR motif yields both the counts data and the available meta-information.
+
+\subsubsection*{Accessing the JASPAR database}
+
+In addition to parsing these flat file formats, we can also retrieve motifs from a JASPAR SQL database. Unlike the flat file formats, a JASPAR database allows storing of all possible meta information defined in the JASPAR \verb+Motif+ class. It is beyond the scope of this document to describe how to set up a JASPAR database (please see the main \href{http://jaspar.genereg.net}{JASPAR} website). Motifs are read from a JASPAR database using the \verb+Bio.motifs.jaspar.db+ module.  First connect to the JASPAR database using the JASPAR5 class which models the the latest JASPAR schema:
+\begin{verbatim}
+>>> from Bio.motifs.jaspar.db import JASPAR5
+>>> 
+>>> JASPAR_DB_HOST = <hostname>
+>>> JASPAR_DB_NAME = <db_name>
+>>> JASPAR_DB_USER = <user>
+>>> JASPAR_DB_PASS = <passord>
+>>> 
+>>> jdb = JASPAR5(
+...     host=JASPAR_DB_HOST,
+...     name=JASPAR_DB_NAME,
+...     user=JASPAR_DB_USER,
+...     password=JASPAR_DB_PASS
+... )
+\end{verbatim}
+
+Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number seperated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
+\begin{verbatim}
+>>> arnt = jdb.fetch_motif_by_id("MA0004")
+\end{verbatim}
+Printing the motif reveals that the JASPAR SQL database stores much more meeta-information than the flat files:
+\begin{verbatim}
+>>> print(arnt)
+TF name	Arnt
+Matrix ID	MA0004.1
+Collection	CORE
+TF class	Zipper-Type
+TF family	Helix-Loop-Helix
+Species	10090
+Taxonomic group	vertebrates
+Accession	['P53762']
+Data type used	SELEX
+Medline	7592839
+PAZAR ID	TF0000003
+Comments	-
+Matrix:
+	0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+\end{verbatim}
+
+We can also fetch motifs by name. The name must be an exact match (partial matches or database wildcards are not currently supported). Note that as the name is not guaranteed to be unique, the \verb+fetch_motifs_by_name+ method actually returns a list.
+\begin{verbatim}
+>>> motifs = jdb.fetch_motifs_by_name("Arnt")
+>>> print(motifs[0])
+TF name	Arnt
+Matrix ID	MA0004.1
+Collection	CORE
+TF class	Zipper-Type
+TF family	Helix-Loop-Helix
+Species	10090
+Taxonomic group	vertebrates
+Accession	['P53762']
+Data type used	SELEX
+Medline	7592839
+PAZAR ID	TF0000003
+Comments	-
+Matrix:
+	0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+\end{verbatim}
+
+The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
+\begin{verbatim}
+>>> motifs = jdb.fetch_motifs(
+...     collection = 'CORE',
+...     tax_group = ['vertebrates', 'insects'],
+...     tf_class = 'Winged Helix-Turn-Helix',
+...     tf_family = ['Forkhead', 'Ets'],
+...     min_ic = 12
+... )
+>>> for motif in motifs:
+...     pass # do something with the motif
+\end{verbatim}
+
+\subsubsection*{Compatibility with Perl TFBS modules}
+
+An important thing to note is that the JASPAR \verb+Motif+ class was designed to be compatible with the popular \href{http://tfbs.genereg.net/}{Perl TFBS modules}. Therefore some specifics about the choice of defaults for background and pseudocounts as well as how information content is computed and sequences searched for instances is based on this compatibility criteria. These choices are noted in the specific subsections below.
+
+\begin{itemize}
+\item{\bf Choice of background:} \\
+The Perl \verb+TFBS+ modules appear to allow a choice of custom background probabilities (although the documentation states that uniform background is assumed). However the default is to use a uniform background. Therefore it is recommended that you use a uniform background for computing the position-specific scoring matrix (PSSM). This is the default when using the Biopython \verb+motifs+ module.
+\item{\bf Choice of pseudocounts:} \\
+By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * \textrm{bg}[\textrm{nucleotide}]$, where $N$ represents the total number of sequences used to construct the matrix. To apply this same pseudocount formula, set the motif \verb+pseudocounts+ attribute using the \verb+jaspar.calculate\_pseudcounts()+ funtion:
+\begin{verbatim}
+>>> motif.pseudocounts = motifs.jaspar.calculate_pseudocounts(motif)
+\end{verbatim}
+Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the pssm computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
+\item{\bf Computation of matrix information content:} \\
+The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behaviour is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
+\item{\bf Searching for instances:} \\
+Searching for instances with the Perl \verb+TFBS+ motifs was usually performed using a relative score threshold, i.e. a score in the range 0 to 1. In order to compute the absolute PSSM score corresponding to a relative score one can use the equation:
+\begin{verbatim}
+>>> abs_score =  (pssm.max - pssm.min) * rel_score + pssm.min
+\end{verbatim}
+To convert the absolute score of an instance back to a relative score, one can use the equation:
+\begin{verbatim}
+>>> rel_score = (abs_score - pssm.min) / (pssm.max - pssm.min)
+\end{verbatim}
+For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
+%TODO - Check missing ... lines, make into a doctest?
+\begin{verbatim}
+>>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA", unambiguous_dna)
+>>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt) 
+>>> pssm = arnt.pssm()
+>>> max_score = pssm.max()
+>>> min_score = pssm.min()
+>>> abs_score_threshold = (max_score - min_score) * 0.8 + min_score
+>>> for position, score in pssm.search(test_seq,
+                                       threshold=abs_score_threshold):
+...     rel_score = (score - min_score) / (max_score - min_score)
+...     print("Position %d: score = %5.3f, rel. score = %5.3f" % (
+            position, score, rel_score))
+... 
+Position 2: score = 5.362, rel. score = 0.801
+Position 8: score = 6.112, rel. score = 0.831
+Position -20: score = 7.103, rel. score = 0.870
+Position 17: score = 10.351, rel. score = 1.000
+Position -11: score = 10.351, rel. score = 1.000
+\end{verbatim}
+\end{itemize}
+
+\subsection{MEME}
 
 MEME \cite{bailey1994} is a tool for discovering motifs in a group of related
 DNA or protein sequences. It takes as input a group of DNA or protein sequences 
@@ -11754,9 +11982,9 @@ The class inherits from list, and you can think of \verb+record+ as a list of Mo
 >>> len(record)
 2
 >>> motif = record[0]
->>> print motif.consensus
+>>> print(motif.consensus)
 TTCACATGCCGC
->>> print motif.degenerate_consensus
+>>> print(motif.degenerate_consensus)
 TTCACATGSCNC
 \end{verbatim}
 In addition to these generic motif attributes, each motif also stores its
@@ -11768,7 +11996,7 @@ specific information as calculated by MEME. For example,
 >>> motif.length
 12
 >>> evalue = motif.evalue
->>> print "%3.1g" % evalue
+>>> print("%3.1g" % evalue)
 0.2
 >>> motif.name
 'Motif 1'
@@ -11798,16 +12026,13 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 >>> motif.instances[0].length
 12
 >>> pvalue = motif.instances[0].pvalue
-\end{verbatim}
-%Sadly Python 2.5 on Windows gives 1.85e-008 breaking doctest:
-\begin{verbatim}
->>> print "%5.3g" % pvalue
+>>> print("%5.3g" % pvalue)
 1.85e-08
 \end{verbatim}
 
 \subsubsection*{MAST}
 
-\subsubsection*{TRANSFAC}
+\subsection{TRANSFAC}
 
 TRANSFAC is a manually curated database of transcription factors, together
 with their genomic binding sites and DNA binding profiles \cite{matys2003}.
@@ -11935,7 +12160,7 @@ references associated with the motif, using these two-letter keys:
 Printing the motifs writes them out in their native TRANSFAC format:
 %cont-doctest
 \begin{verbatim}
->>> print record
+>>> print(record)
 VV  EXAMPLE January 15, 2013
 XX
 //
@@ -11982,23 +12207,32 @@ in a string and saving it in a file:
 >>> handle.close()
 \end{verbatim}
 
-\subsection{Writing motifs}
+\section{Writing motifs}
+
 Speaking of exporting, let's look at export functions in general.
-To export a motif in the JASPAR \verb+.pfm+ format, use
+We can use the \verb+format+ method to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
 \begin{verbatim}
->>> print m.format("pfm")
-3       7       0       2       1
-0       0       5       2       6
-0       0       0       3       0
-4       0       2       0       0
-<BLANKLINE>
+>>> print(arnt.format("pfm"))
+  4.00  19.00   0.00   0.00   0.00   0.00
+ 16.00   0.00  20.00   0.00   0.00   0.00
+  0.00   1.00   0.00  20.00   0.00  20.00
+  0.00   0.00   0.00   0.00  20.00   0.00
+\end{verbatim}
+Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
+\begin{verbatim}
+>>> print(arnt.format("jaspar"))
+>MA0004.1  Arnt
+A [  4.00  19.00   0.00   0.00   0.00   0.00]
+C [ 16.00   0.00  20.00   0.00   0.00   0.00]
+G [  0.00   1.00   0.00  20.00   0.00  20.00]
+T [  0.00   0.00   0.00   0.00  20.00   0.00]
 \end{verbatim}
 
 To write the motif in a TRANSFAC-like matrix format, use
 %cont-doctest
 \begin{verbatim}
->>> print m.format("transfac")
+>>> print(m.format("transfac"))
 P0      A      C      G      T
 01      3      0      0      4      W
 02      7      0      0      0      A
@@ -12015,7 +12249,7 @@ This function can be used regardless of whether the motifs originated from a TRA
 %cont-doctest
 \begin{verbatim}
 >>> two_motifs = [arnt, srf]
->>> print motifs.write(two_motifs, 'transfac')
+>>> print(motifs.write(two_motifs, 'transfac'))
 P0      A      C      G      T
 01      4     16      0      0      C
 02     19      0      1      0      A
@@ -12043,12 +12277,21 @@ XX
 <BLANKLINE>
 \end{verbatim}
 
-\subsection{Creating a sequence logo}
-If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+Or, to write multiple motifs in the \verb+jaspar+ format:
 \begin{verbatim}
->>> arnt.weblogo("Arnt.png")
+>>> two_motifs = [arnt, mef2a]
+>>> print(motifs.write(two_motifs, "jaspar"))
+>MA0004.1  Arnt
+A [  4.00  19.00   0.00   0.00   0.00   0.00]
+C [ 16.00   0.00  20.00   0.00   0.00   0.00]
+G [  0.00   1.00   0.00  20.00   0.00  20.00]
+T [  0.00   0.00   0.00   0.00  20.00   0.00]
+>MA0052.1  MEF2A
+A [  1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00]
+C [ 50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00]
+G [  0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00]
+T [  7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00]
 \end{verbatim}
-We should get our logo saved as a PNG in the specified file.
 
 \section{Position-Weight Matrices}
 
@@ -12070,7 +12313,7 @@ nucleotides at all positions, specify a number for the
 %cont-doctest
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts=0.5)
->>> print pwm
+>>> print(pwm)
         0      1      2      3      4
 A:   0.39   0.83   0.06   0.28   0.17
 C:   0.06   0.06   0.61   0.28   0.72
@@ -12085,7 +12328,7 @@ pseudocounts accordingly:
 %cont-doctest
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
->>> print pwm
+>>> print(pwm)
         0      1      2      3      4
 A:   0.40   0.84   0.07   0.29   0.18
 C:   0.04   0.04   0.60   0.27   0.71
@@ -12117,7 +12360,7 @@ The reverse complement of the position-weight matrix can be calculated directly 
 %cont-doctest
 \begin{verbatim}
 >>> rpwm = pwm.reverse_complement()
->>> print rpwm
+>>> print(rpwm)
         0      1      2      3      4
 A:   0.07   0.07   0.29   0.07   0.51
 C:   0.04   0.38   0.04   0.04   0.04
@@ -12136,7 +12379,7 @@ matrix:
 %cont-doctest
 \begin{verbatim}
 >>> pssm = pwm.log_odds()
->>> print pssm
+>>> print(pssm)
         0      1      2      3      4
 A:   0.68   1.76  -1.91   0.21  -0.49
 C:  -2.49  -2.49   1.26   0.09   1.51
@@ -12157,7 +12400,7 @@ For example, against a background with a 40\% GC content, use
 \begin{verbatim}
 >>> background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
 >>> pssm = pwm.log_odds(background)
->>> print pssm
+>>> print(pssm)
         0      1      2      3      4
 A:   0.42   1.49  -2.17  -0.05  -0.75
 C:  -2.17  -2.17   1.58   0.42   1.83
@@ -12170,9 +12413,9 @@ The maximum and minimum score obtainable from the PSSM are stored in the
 \verb+.max+ and \verb+.min+ properties:
 %cont-doctest
 \begin{verbatim}
->>> print "%4.2f" % pssm.max
+>>> print("%4.2f" % pssm.max)
 6.59
->>> print "%4.2f" % pssm.min
+>>> print("%4.2f" % pssm.min)
 -10.85
 \end{verbatim}
 
@@ -12182,7 +12425,7 @@ background are calculated by the \verb+.mean+ and \verb+.std+ methods.
 \begin{verbatim}
 >>> mean = pssm.mean(background)
 >>> std = pssm.std(background)
->>> print "mean = %0.2f, standard deviation = %0.2f" % (mean, std)
+>>> print("mean = %0.2f, standard deviation = %0.2f" % (mean, std))
 mean = 3.21, standard deviation = 2.59
 \end{verbatim}
 A uniform background is used if \verb+background+ is not specified.
@@ -12203,7 +12446,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 
 %cont-doctest
 \begin{verbatim}
->>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA",m.alphabet)
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
 >>> len(test_seq)
 26
 \end{verbatim}
@@ -12214,8 +12457,8 @@ The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 %cont-doctest
 \begin{verbatim}
->>> for pos,seq in m.instances.search(test_seq):
-...     print pos, seq
+>>> for pos, seq in m.instances.search(test_seq):
+...     print("%i %s" % (pos, seq))
 ... 
 0 TACAC
 10 TACAA
@@ -12224,8 +12467,8 @@ the true instances of the motif:
 We can do the same with the reverse complement (to find instances on the complementary strand):
 %cont-doctest
 \begin{verbatim}
->>> for pos,seq in r.instances.search(test_seq):
-...     print pos, seq
+>>> for pos, seq in r.instances.search(test_seq):
+...     print("%i %s" % (pos, seq))
 ... 
 6 GCATT
 20 GCATT
@@ -12237,7 +12480,7 @@ It's just as easy to look for positions, giving rise to high log-odds scores aga
 %cont-doctest
 \begin{verbatim}
 >>> for position, score in pssm.search(test_seq, threshold=3.0):
-...     print "Position %d: score = %5.3f" % (position, score)
+...     print("Position %d: score = %5.3f" % (position, score))
 ... 
 Position 0: score = 5.622
 Position -20: score = 4.601
@@ -12298,21 +12541,21 @@ We can specify the requested false-positive rate (probability of ``finding'' a m
 %cont-doctest
 \begin{verbatim}
 >>> threshold = distribution.threshold_fpr(0.01)
->>> print "%5.3f" % threshold
+>>> print("%5.3f" % threshold)
 4.009
 \end{verbatim}
 or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
 %cont-doctest
 \begin{verbatim}
 >>> threshold = distribution.threshold_fnr(0.1)
->>> print "%5.3f" % threshold
+>>> print("%5.3f" % threshold)
 -0.510
 \end{verbatim}
 or a threshold (approximately) satisfying some relation between the false-positive rate and the false-negative rate ($\frac{\textrm{fnr}}{\textrm{fpr}}\simeq t$):
 %cont-doctest
 \begin{verbatim}
 >>> threshold = distribution.threshold_balanced(1000)
->>> print "%5.3f" % threshold
+>>> print("%5.3f" % threshold)
 6.241
 \end{verbatim}
 or a threshold satisfying (roughly) the equality between the
@@ -12321,7 +12564,7 @@ in patser software by Hertz and Stormo):
 %cont-doctest
 \begin{verbatim}
 >>> threshold = distribution.threshold_patser()
->>> print "%5.3f" % threshold
+>>> print("%5.3f" % threshold)
 0.346
 \end{verbatim}
 
@@ -12331,10 +12574,10 @@ instances with balanced threshold with rate of $1000$.
 %cont-doctest
 \begin{verbatim}
 >>> threshold = distribution.threshold_fpr(0.01)
->>> print "%5.3f" % threshold
+>>> print("%5.3f" % threshold)
 4.009
->>> for position, score in pssm.search(test_seq,threshold=threshold):
-...     print "Position %d: score = %5.3f" % (position, score)
+>>> for position, score in pssm.search(test_seq, threshold=threshold):
+...     print("Position %d: score = %5.3f" % (position, score))
 ... 
 Position 0: score = 5.622
 Position -20: score = 4.601
@@ -12351,14 +12594,14 @@ To facilitate searching for potential TFBSs using PSSMs, both the position-weigh
 >>> from Bio import motifs
 >>> handle = open("Arnt.sites")
 >>> motif = motifs.read(handle, 'sites')
->>> print motif.counts
+>>> print(motif.counts)
         0      1      2      3      4      5
 A:   4.00  19.00   0.00   0.00   0.00   0.00
 C:  16.00   0.00  20.00   0.00   0.00   0.00
 G:   0.00   1.00   0.00  20.00   0.00  20.00
 T:   0.00   0.00   0.00   0.00  20.00   0.00
 <BLANKLINE>
->>> print motif.pwm
+>>> print(motif.pwm)
         0      1      2      3      4      5
 A:   0.20   0.95   0.00   0.00   0.00   0.00
 C:   0.80   0.00   1.00   0.00   0.00   0.00
@@ -12368,7 +12611,7 @@ T:   0.00   0.00   0.00   0.00   1.00   0.00
 \end{verbatim}
 %Can't use next bit in doctest, Windows Python 2.5 and 2.6 put -1.$ not -inf
 \begin{verbatim}
->>> print motif.pssm
+>>> print(motif.pssm)
         0      1      2      3      4      5
 A:  -0.32   1.93   -inf   -inf   -inf   -inf
 C:   1.68   -inf   2.00   -inf   -inf   -inf
@@ -12380,8 +12623,8 @@ The negative infinities appear here because the corresponding entry in the frequ
 %cont-doctest
 \begin{verbatim}
 >>> for letter in "ACGT":
-...     print "%s: %4.2f" % (letter, motif.pseudocounts[letter])
-...
+...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
+... 
 A: 0.00
 C: 0.00
 G: 0.00
@@ -12392,8 +12635,8 @@ If you change the \verb+.pseudocounts+ attribute, the position-frequency matrix 
 \begin{verbatim}
 >>> motif.pseudocounts = 3.0
 >>> for letter in "ACGT":
-...     print "%s: %4.2f" % (letter, motif.pseudocounts[letter])
-...
+...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
+... 
 A: 3.00
 C: 3.00
 G: 3.00
@@ -12402,7 +12645,7 @@ T: 3.00
 %Can't use this in doctest, Windows Python 2.5 and 2.6 give G/1 as 0.13 not 0.12
 %TODO - Check why...
 \begin{verbatim}
->>> print motif.pwm
+>>> print(motif.pwm)
         0      1      2      3      4      5
 A:   0.22   0.69   0.09   0.09   0.09   0.09
 C:   0.59   0.09   0.72   0.09   0.09   0.09
@@ -12412,7 +12655,7 @@ T:   0.09   0.09   0.09   0.09   0.72   0.09
 \end{verbatim}
 %cont-doctest
 \begin{verbatim}
->>> print motif.pssm
+>>> print(motif.pssm)
         0      1      2      3      4      5
 A:  -0.19   1.46  -1.42  -1.42  -1.42  -1.42
 C:   1.25  -1.42   1.52  -1.42  -1.42  -1.42
@@ -12426,8 +12669,8 @@ The position-specific scoring matrix depends on the background distribution, whi
 %cont-doctest
 \begin{verbatim}
 >>> for letter in "ACGT":
-...     print "%s: %4.2f" % (letter, motif.background[letter])
-...
+...     print("%s: %4.2f" % (letter, motif.background[letter]))
+... 
 A: 0.25
 C: 0.25
 G: 0.25
@@ -12437,7 +12680,7 @@ Again, if you modify the background distribution, the position-specific scoring 
 %cont-doctest
 \begin{verbatim}
 >>> motif.background = {'A': 0.2, 'C': 0.3, 'G': 0.3, 'T': 0.2}
->>> print motif.pssm
+>>> print(motif.pssm)
         0      1      2      3      4      5
 A:   0.13   1.78  -1.09  -1.09  -1.09  -1.09
 C:   0.98  -1.68   1.26  -1.68  -1.68  -1.68
@@ -12450,8 +12693,8 @@ Setting \verb+motif.background+ to \verb+None+ resets it to a uniform distributi
 \begin{verbatim}
 >>> motif.background = None
 >>> for letter in "ACGT":
-...     print "%s: %4.2f" % (letter, motif.background[letter])
-...
+...     print("%s: %4.2f" % (letter, motif.background[letter]))
+... 
 A: 0.25
 C: 0.25
 G: 0.25
@@ -12462,8 +12705,8 @@ If you set \verb+motif.background+ equal to a single value, it will be interpret
 \begin{verbatim}
 >>> motif.background = 0.8
 >>> for letter in "ACGT":
-...     print "%s: %4.2f" % (letter, motif.background[letter])
-...
+...     print("%s: %4.2f" % (letter, motif.background[letter]))
+... 
 A: 0.10
 C: 0.40
 G: 0.40
@@ -12472,13 +12715,13 @@ T: 0.10
 Note that you can now calculate the mean of the PSSM scores over the background against which it was computed:
 %cont-doctest
 \begin{verbatim}
->>> print "%f" % motif.pssm.mean(motif.background)
+>>> print("%f" % motif.pssm.mean(motif.background))
 4.703928
 \end{verbatim}
 as well as its standard deviation:
 %cont-doctest
 \begin{verbatim}
->>> print "%f" % motif.pssm.std(motif.background)
+>>> print("%f" % motif.pssm.std(motif.background))
 3.290900
 \end{verbatim}
 and its distribution:
@@ -12486,7 +12729,7 @@ and its distribution:
 \begin{verbatim}
 >>> distribution = motif.pssm.distribution(background=motif.background)
 >>> threshold = distribution.threshold_fpr(0.01)
->>> print "%f" % threshold
+>>> print("%f" % threshold)
 3.854375
 \end{verbatim}
 
@@ -12522,7 +12765,7 @@ which is similar to our test motif \verb|m|:
 >>> m_reb1 = motifs.read(open("REB1.pfm"), "pfm")
 >>> m_reb1.consensus
 Seq('GTTACCCGG', IUPACUnambiguousDNA())
->>> print m_reb1.counts
+>>> print(m_reb1.counts)
         0      1      2      3      4      5      6      7      8
 A:  30.00   0.00   0.00 100.00   0.00   0.00   0.00   0.00  15.00
 C:  10.00   0.00   0.00   0.00 100.00 100.00 100.00   0.00  15.00
@@ -12537,7 +12780,7 @@ To make the motifs comparable, we choose the same values for the pseudocounts an
 >>> m_reb1.pseudocounts = {'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6}
 >>> m_reb1.background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
 >>> pssm_reb1 = m_reb1.pssm
->>> print pssm_reb1
+>>> print(pssm_reb1)
         0      1      2      3      4      5      6      7      8
 A:   0.00  -5.67  -5.67   1.72  -5.67  -5.67  -5.67  -5.67  -0.97
 C:  -0.97  -5.67  -5.67  -5.67   2.30   2.30   2.30  -5.67  -0.41
@@ -12551,9 +12794,9 @@ $1-r$, where $r$ is the Pearson correlation coefficient (PCC):
 %cont-doctest
 \begin{verbatim}
 >>> distance, offset = pssm.dist_pearson(pssm_reb1)
->>> print "distance = %5.3g" % distance
+>>> print("distance = %5.3g" % distance)
 distance = 0.239
->>> print offset
+>>> print(offset)
 -2
 \end{verbatim}
 This means that the best PCC between motif \verb|m| and  \verb|m_reb1| is obtained with the following alignment:
@@ -12630,7 +12873,7 @@ with the following code:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> motifsA = motifs.parse(open("alignace.out"),"alignace")
+>>> motifsA = motifs.parse(open("alignace.out"), "alignace")
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -12657,14 +12900,14 @@ shown below (other parameters can be specified as keyword parameters):
 >>> command="/opt/bin/AlignACE"
 >>> input_file="test.fa"
 >>> from Bio.motifs.applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command,input=input_file,gcback=0.6,numcols=10)
->>> stdout,stderr= cmd()
+>>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
+>>> stdout, stderr= cmd()
 \end{verbatim}
 
 Since AlignAce prints all of its output to standard output, you can get
 to your motifs by parsing the first part of the result:
 \begin{verbatim}
->>> motifs = motifs.parse(stdout,"alignace")
+>>> motifs = motifs.parse(stdout, "alignace")
 \end{verbatim}
 
 
@@ -12711,10 +12954,10 @@ This is for now just an empty container, so let's add some sequences to our newl
 %cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
->>> m.add_instance(Seq("TATAA",m.alphabet))
->>> m.add_instance(Seq("TATTA",m.alphabet))
->>> m.add_instance(Seq("TATAA",m.alphabet))
->>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+>>> m.add_instance(Seq("TATTA", m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
 \end{verbatim}
 Now we have a full \verb|Motif| instance, so we can try to get some
 basic information about it. Let's start with length and consensus
@@ -12734,7 +12977,7 @@ In case of DNA motifs, we can also get a reverse complement of a motif:
 >>> m.reverse_complement().consensus()
 Seq('TTATA', IUPACUnambiguousDNA())
 >>> for i in m.reverse_complement().instances:
-...     print i
+...     print(i)
 TTATA
 TAATA
 TTATA
@@ -12744,7 +12987,7 @@ TTATA
 We can also calculate the information content of a motif with a simple call:
 %cont-doctest
 \begin{verbatim}
->>> print "%0.2f" % m.ic()
+>>> print("%0.2f" % m.ic())
 5.27
 \end{verbatim}
 This gives us a number of bits of information provided by the motif,
@@ -12833,12 +13076,12 @@ let's look at how we can import JASPAR motifs from instances:
 %doctest ../Tests/Motif
 \begin{verbatim}
 >>> from Bio import Motif
->>> arnt = Motif.read(open("Arnt.sites"),"jaspar-sites")
+>>> arnt = Motif.read(open("Arnt.sites"), "jaspar-sites")
 \end{verbatim}
 and from a count matrix:
 %cont-doctest
 \begin{verbatim}
->>> srf = Motif.read(open("SRF.pfm"),"jaspar-pfm")
+>>> srf = Motif.read(open("SRF.pfm"), "jaspar-pfm")
 \end{verbatim}
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
@@ -12888,7 +13131,7 @@ be careful with exporting instances from count-based motifs.
 
 Speaking of exporting, let's look at export functions. We can export to fasta:
 \begin{verbatim}
->>> print m.format("fasta")
+>>> print(m.format("fasta"))
 >instance0
 TATAA
 >instance1
@@ -12900,7 +13143,7 @@ TATAA
 \end{verbatim}
 or to TRANSFAC-like matrix format (used by some motif processing software)
 \begin{verbatim}
->>> print m.format("transfac")
+>>> print(m.format("transfac"))
 XX
 TY Motif
 ID 
@@ -12932,8 +13175,8 @@ test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 \begin{verbatim}
->>> for pos,seq in m.search_instances(test_seq):
-...     print pos,seq.tostring()
+>>> for pos, seq in m.search_instances(test_seq):
+...     print(pos, seq.tostring())
 ... 
 10 TATAA
 15 TATAA
@@ -12941,8 +13184,8 @@ the true instances of the motif:
 \end{verbatim}
 We can do the same with the reverse complement (to find instances on the complementary strand):
 \begin{verbatim}
->>> for pos,seq in m.reverse_complement().search_instances(test_seq):
-...     print pos,seq.tostring()
+>>> for pos, seq in m.reverse_complement().search_instances(test_seq):
+...     print(pos, seq.tostring())
 ... 
 12 TAATA
 20 TTATA
@@ -12950,8 +13193,8 @@ We can do the same with the reverse complement (to find instances on the complem
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=5.0):
-...     print pos,score
+>>> for pos, score in m.search_pwm(test_seq, threshold=5.0):
+...     print(pos, score)
 ... 
 10 8.44065060871
 -12 7.06213898545
@@ -12971,7 +13214,7 @@ distribution of scores for a given motif. Since the space for a score
 distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
 \begin{verbatim}
->>> sd = Motif.score_distribution(m,precision=10**4)
+>>> sd = Motif.score_distribution(m, precision=10**4)
 \end{verbatim}
 The sd object can be used to determine a number of different thresholds.
 
@@ -13002,8 +13245,8 @@ For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=sd.threshold_balanced(1000)):
-...     print pos,score
+>>> for pos, score in m.search_pwm(test_seq, threshold=sd.threshold_balanced(1000)):
+...     print(pos, score)
 ... 
 10 8.44065060871
 15 8.44065060871
@@ -13038,7 +13281,7 @@ motifs.
 To show how these functions work, let us first load another motif,
 which is similar to our test motif \verb|m|:
 \begin{verbatim}
->>> ubx=Motif.read(open("Ubx.pfm"),"jaspar-pfm")
+>>> ubx=Motif.read(open("Ubx.pfm"), "jaspar-pfm")
 <Bio.Motif.Motif.Motif object at 0xc29b90>
 >>> ubx.consensus()
 Seq('TAAT', IUPACUnambiguousDNA())
@@ -13100,7 +13343,7 @@ favorite parameters and saved the output in the file
 running the following piece of code:
 
 \begin{verbatim}
->>> motifsM = list(Motif.parse(open("meme.out"),"MEME"))
+>>> motifsM = list(Motif.parse(open("meme.out"), "MEME"))
 >>> motifsM
 [<Bio.Motif.MEMEMotif.MEMEMotif object at 0xc356b0>]
 \end{verbatim}
@@ -13140,7 +13383,7 @@ your output in the file \verb|alignace.out|. You can parse your output
 with the following code:
 
 \begin{verbatim}
->>> motifsA=list(Motif.parse(open("alignace.out"),"AlignAce"))
+>>> motifsA=list(Motif.parse(open("alignace.out"), "AlignAce"))
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -13165,8 +13408,8 @@ shown below (other parameters can be specified as keyword parameters):
 >>> command="/opt/bin/AlignACE"
 >>> input_file="test.fa"
 >>> from Bio.Motif.Applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command,input=input_file,gcback=0.6,numcols=10)
->>> stdout,stderr= cmd()
+>>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
+>>> stdout, stderr= cmd()
 \end{verbatim}
 
 Since AlignAce prints all its output to standard output, you can get
@@ -13596,16 +13839,16 @@ To create a new \verb|Node| object, we need to specify \verb|left| and \verb|rig
 
 \begin{verbatim}
 >>> from Bio.Cluster import Node
->>> Node(2,3)
+>>> Node(2, 3)
 (2, 3): 0
->>> Node(2,3,0.91)
+>>> Node(2, 3, 0.91)
 (2, 3): 0.91
 \end{verbatim}
 
 The attributes \verb|left|, \verb|right|, and \verb|distance| of an existing \verb|Node| object can be modified directly:
 
 \begin{verbatim}
->>> node = Node(4,5)
+>>> node = Node(4, 5)
 >>> node.left = 6
 >>> node.right = 2
 >>> node.distance = 0.73
@@ -13618,9 +13861,9 @@ The Python class \verb|Tree| represents a full hierarchical clustering solution.
 
 \begin{verbatim}
 >>> from Bio.Cluster import Node, Tree
->>> nodes = [Node(1,2,0.2), Node(0,3,0.5), Node(-2,4,0.6), Node(-1,-3,0.9)]
+>>> nodes = [Node(1, 2, 0.2), Node(0, 3, 0.5), Node(-2, 4, 0.6), Node(-1, -3, 0.9)]
 >>> tree = Tree(nodes)
->>> print tree
+>>> print(tree)
 (1, 2): 0.2
 (0, 3): 0.5
 (-2, 4): 0.6
@@ -13630,7 +13873,7 @@ The Python class \verb|Tree| represents a full hierarchical clustering solution.
 The \verb|Tree| initializer checks if the list of nodes is a valid hierarchical clustering result:
 
 \begin{verbatim}
->>> nodes = [Node(1,2,0.2), Node(0,2,0.5)]
+>>> nodes = [Node(1, 2, 0.2), Node(0, 2, 0.5)]
 >>> Tree(nodes)
 Traceback (most recent call last):
   File "<stdin>", line 1, in ?
@@ -13640,7 +13883,7 @@ ValueError: Inconsistent tree
 Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 
 \begin{verbatim}
->>> nodes = [Node(1,2,0.2), Node(0,-1,0.5)]
+>>> nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5)]
 >>> tree = Tree(nodes)
 >>> tree[0]
 (1, 2): 0.2
@@ -13653,16 +13896,16 @@ Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 As a \verb|Tree| object is read-only, we cannot change individual nodes in a \verb|Tree| object. However, we can convert the tree to a list of nodes, modify this list, and create a new tree from this list:
 
 \begin{verbatim}
->>> tree = Tree([Node(1,2,0.1), Node(0,-1,0.5), Node(-2,3,0.9)])
->>> print tree
+>>> tree = Tree([Node(1, 2, 0.1), Node(0, -1, 0.5), Node(-2, 3, 0.9)])
+>>> print(tree)
 (1, 2): 0.1
 (0, -1): 0.5
 (-2, 3): 0.9
 >>> nodes = tree[:]
->>> nodes[0] = Node(0,1,0.2)
+>>> nodes[0] = Node(0, 1, 0.2)
 >>> nodes[1].left = 2
 >>> tree = Tree(nodes)
->>> print tree
+>>> print(tree)
 (0, 1): 0.2
 (2, -1): 0.5
 (-2, 3): 0.9
@@ -14243,7 +14486,7 @@ The function \verb+train+ has two optional arguments: \verb+update_fn+ and \verb
 
 \begin{verbatim}
 >>> def show_progress(iteration, loglikelihood):
-        print "Iteration:", iteration, "Log-likelihood function:", loglikelihood
+        print("Iteration:", iteration, "Log-likelihood function:", loglikelihood)
 >>>
 >>> model = LogisticRegression.train(xs, ys, update_fn=show_progress)
 Iteration: 0 Log-likelihood function: -11.7835020695
@@ -14314,30 +14557,30 @@ Gene pair & Intergene distance $x_1$ & Gene expression score $x_2$ \\
 
 The logistic regression model classifies {\it yxcE}, {\it yxcD} as belonging to the same operon (class OP), while {\it yxiB}, {\it yxiA} are predicted to belong to different operons:
 \begin{verbatim}
->>> print "yxcE, yxcD:", LogisticRegression.classify(model, [6,-173.143442352])
+>>> print("yxcE, yxcD:", LogisticRegression.classify(model, [6, -173.143442352]))
 yxcE, yxcD: 1
->>> print "yxiB, yxiA:", LogisticRegression.classify(model, [309, -271.005880394])
+>>> print("yxiB, yxiA:", LogisticRegression.classify(model, [309, -271.005880394]))
 yxiB, yxiA: 0
 \end{verbatim}
 (which, by the way, agrees with the biological literature).
 
 To find out how confident we can be in these predictions, we can call the \verb+calculate+ function to obtain the probabilities (equations (\ref{eq:OP}) and \ref{eq:NOP}) for class OP and NOP. For {\it yxcE}, {\it yxcD} we find
 \begin{verbatim}
->>> q, p = LogisticRegression.calculate(model, [6,-173.143442352])
->>> print "class OP: probability =", p, "class NOP: probability =", q
+>>> q, p = LogisticRegression.calculate(model, [6, -173.143442352])
+>>> print("class OP: probability =", p, "class NOP: probability =", q)
 class OP: probability = 0.993242163503 class NOP: probability = 0.00675783649744
 \end{verbatim}
 and for {\it yxiB}, {\it yxiA}
 \begin{verbatim}
 >>> q, p = LogisticRegression.calculate(model, [309, -271.005880394])
->>> print "class OP: probability =", p, "class NOP: probability =", q
+>>> print("class OP: probability =", p, "class NOP: probability =", q)
 class OP: probability = 0.000321211251817 class NOP: probability = 0.999678788748
 \end{verbatim}
 
 To get some idea of the prediction accuracy of the logistic regression model, we can apply it to the training data:
 \begin{verbatim}
 >>> for i in range(len(ys)):
-        print "True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i])
+        print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -14360,7 +14603,7 @@ showing that the prediction is correct for all but one of the gene pairs. A more
 \begin{verbatim}
 >>> for i in range(len(ys)):
         model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
-        print "True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i])
+        print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -14416,10 +14659,10 @@ To classify new data using the $k$-nearest neighbors model, we use the \verb+cla
 For the example of the gene pairs {\it yxcE}, {\it yxcD} and {\it yxiB}, {\it yxiA}, we find:
 \begin{verbatim}
 >>> x = [6, -173.143442352]
->>> print "yxcE, yxcD:", kNN.classify(model, x)
+>>> print("yxcE, yxcD:", kNN.classify(model, x))
 yxcE, yxcD: 1
 >>> x = [309, -271.005880394]
->>> print "yxiB, yxiA:", kNN.classify(model, x)
+>>> print("yxiB, yxiA:", kNN.classify(model, x))
 yxiB, yxiA: 0
 \end{verbatim}
 In agreement with the logistic regression model, {\it yxcE}, {\it yxcD} are classified as belonging to the same operon (class OP), while {\it yxiB}, {\it yxiA} are predicted to belong to different operons.
@@ -14432,9 +14675,9 @@ The \verb+classify+ function lets us specify both a distance function and a weig
 ...    assert len(x2)==2
 ...    distance = abs(x1[0]-x2[0]) + abs(x1[1]-x2[1])
 ...    return distance
-...
+... 
 >>> x = [6, -173.143442352]
->>> print "yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock)
+>>> print("yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock))
 yxcE, yxcD: 1
 \end{verbatim}
 
@@ -14445,9 +14688,9 @@ The weight function can be used for weighted voting. For example, we may want to
 ...    assert len(x1)==2
 ...    assert len(x2)==2
 ...    return exp(-abs(x1[0]-x2[0]) - abs(x1[1]-x2[1]))
-...
+... 
 >>> x = [6, -173.143442352]
->>> print "yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight)
+>>> print("yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight))
 yxcE, yxcD: 1
 \end{verbatim}
 By default, all neighbors are given an equal weight.
@@ -14456,7 +14699,7 @@ To find out how confident we can be in these predictions, we can call the \verb+
 \begin{verbatim}
 >>> x = [6, -173.143442352]
 >>> weight = kNN.calculate(model, x)
->>> print "class OP: weight =", weight[0], "class NOP: weight =", weight[1]
+>>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
 class OP: weight = 0.0 class NOP: weight = 3.0
 \end{verbatim}
 which means that all three neighbors of \verb+x1+, \verb+x2+ are in the NOP class. As another example, for {\it yesK}, {\it yesL} we find
@@ -14464,7 +14707,7 @@ which means that all three neighbors of \verb+x1+, \verb+x2+ are in the NOP clas
 \begin{verbatim}
 >>> x = [117, -267.14]
 >>> weight = kNN.calculate(model, x)
->>> print "class OP: weight =", weight[0], "class NOP: weight =", weight[1]
+>>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
 class OP: weight = 2.0 class NOP: weight = 1.0
 \end{verbatim}
 which means that two neighbors are operon pairs and one neighbor is a non-operon pair.
@@ -14472,7 +14715,7 @@ which means that two neighbors are operon pairs and one neighbor is a non-operon
 To get some idea of the prediction accuracy of the $k$-nearest neighbors approach, we can apply it to the training data:
 \begin{verbatim}
 >>> for i in range(len(ys)):
-        print "True:", ys[i], "Predicted:", kNN.classify(model, xs[i])
+        print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -14495,7 +14738,7 @@ showing that the prediction is correct for all but two of the gene pairs. A more
 \begin{verbatim}
 >>> for i in range(len(ys)):
         model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
-        print "True:", ys[i], "Predicted:", kNN.classify(model, xs[i])
+        print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -15408,9 +15651,8 @@ you want to switch it over to using the new version included with Biopython then
 you will have to make a few changes - most importantly to your import statements.
 
 Also, the older version of GenomeDiagram used only the UK spellings of color and
-center (colour and centre).  As part of the integration into Biopython, both
-forms can now be used for argument names. However, at some point in the future the
-UK spellings may be deprecated.
+center (colour and centre).  You will need to change to the American spellings,
+although for several years the Biopython version of GenomeDiagram supported both.
 
 For example, if you used to have:
 \begin{verbatim}
@@ -15485,7 +15727,7 @@ entries = [("Chr I", "CHR_I/NC_003070.fna"),
            ("Chr V", "CHR_V/NC_003076.fna")]
 for (name, filename) in entries:
    record = SeqIO.read(filename,"fasta")
-   print name, len(record)
+   print(name, len(record))
 \end{verbatim}
 
 \noindent This gave the lengths of the five chromosomes, which we'll now use in
@@ -15666,12 +15908,12 @@ input_file = "big_file.sff"
 id_file = "short_list.txt"
 output_file = "short_list.sff"
 wanted = set(line.rstrip("\n").split(None,1)[0] for line in open(id_file))
-print "Found %i unique identifiers in %s" % (len(wanted), id_file)
+print("Found %i unique identifiers in %s" % (len(wanted), id_file))
 records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
 count = SeqIO.write(records, output_file, "sff")
-print "Saved %i records from %s to %s" % (count, input_file, output_file)
+print("Saved %i records from %s to %s" % (count, input_file, output_file))
 if count < len(wanted):
-    print "Warning %i IDs not found in %s" % (len(wanted)-count, input_file)
+    print("Warning %i IDs not found in %s" % (len(wanted)-count, input_file))
 \end{verbatim}
 
 Note that we use a Python \verb|set| rather than a \verb|list|, this makes
@@ -15697,7 +15939,7 @@ This file contains one and only one record, so we can read it in as a
 %doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> original_rec = SeqIO.read("NC_005816.gb","genbank")
+>>> original_rec = SeqIO.read("NC_005816.gb", "genbank")
 \end{verbatim}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
@@ -15832,7 +16074,7 @@ of the \verb|SeqRecord| object (added in Biopython 1.55):
 from Bio import SeqIO
 records = (rec.upper() for rec in SeqIO.parse("mixed.fas", "fasta"))
 count = SeqIO.write(records, "upper.fas", "fasta")
-print "Converted %i records to upper case" % count
+print("Converted %i records to upper case" % count)
 \end{verbatim}
 
 How does this work? The first line is just importing the \verb|Bio.SeqIO|
@@ -15957,7 +16199,7 @@ from Bio import SeqIO
 count = 0
 for rec in SeqIO.parse("SRR020192.fastq", "fastq"):
     count += 1
-print "%i reads" % count
+print("%i reads" % count)
 \end{verbatim}
 
 \noindent Now let's do a simple filtering for a minimum PHRED quality of 20:
@@ -15968,7 +16210,7 @@ good_reads = (rec for rec in \
               SeqIO.parse("SRR020192.fastq", "fastq") \
               if min(rec.letter_annotations["phred_quality"]) >= 20)
 count = SeqIO.write(good_reads, "good_quality.fastq", "fastq")
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 \noindent This pulled out only $14580$ reads out of the $41892$ present.
@@ -15999,7 +16241,7 @@ primer_reads = (rec for rec in \
                 SeqIO.parse("SRR020192.fastq", "fastq") \
                 if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(primer_reads, "with_primer.fastq", "fastq")
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 \noindent That should find $13819$ reads from \texttt{SRR014849.fastq} and save them to
@@ -16016,7 +16258,7 @@ trimmed_primer_reads = (rec[11:] for rec in \
                         SeqIO.parse("SRR020192.fastq", "fastq") \
                         if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(trimmed_primer_reads, "with_primer_trimmed.fastq", "fastq")
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 \noindent Again, that should pull out the $13819$ reads from \texttt{SRR020192.fastq},
@@ -16039,7 +16281,7 @@ def trim_primer(record, primer):
 trimmed_reads = (trim_primer(record, "GATGACGGTGT") for record in \
                  SeqIO.parse("SRR020192.fastq", "fastq"))
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 This takes longer, as this time the output file contains all $41892$ reads.
@@ -16065,7 +16307,7 @@ def trim_primers(records, primer):
 original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_primers(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 This form is more flexible if you want to do something more complicated
@@ -16104,7 +16346,7 @@ def trim_adaptors(records, adaptor):
 original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 Because we are using a FASTQ input file in this example, the \verb|SeqRecord|
@@ -16144,7 +16386,7 @@ def trim_adaptors(records, adaptor, min_len):
 original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT", 100)
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
-print "Saved %i reads" % count
+print("Saved %i reads" % count)
 \end{verbatim}
 
 By changing the format names, you could apply this to FASTA files instead.
@@ -16280,7 +16522,7 @@ a \verb|SeqRecord| iterator:
 \begin{verbatim}
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
 for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")):
-   print record
+   print(record)
 \end{verbatim}
 
 This function will check that the FASTA and QUAL files are consistent (e.g.
@@ -16295,7 +16537,7 @@ handle = open("temp.fastq", "w") #w=write
 records = PairedFastaQualIterator(open("example.fasta"), open("example.qual"))
 count = SeqIO.write(records, handle, "fastq")
 handle.close()
-print "Converted %i records" % count
+print("Converted %i records" % count)
 \end{verbatim}
 
 \subsection{Indexing a FASTQ file}
@@ -16415,7 +16657,7 @@ NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 %doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO 
->>> record = SeqIO.read("NC_005816.fna","fasta")
+>>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> table = 11
 >>> min_pro_len = 100
 \end{verbatim}
@@ -16430,8 +16672,8 @@ get a list of all the possible ORF translations in the six reading frames:
 ...         length = 3 * ((len(record)-frame) // 3) #Multiple of three
 ...         for pro in nuc[frame:frame+length].translate(table).split("*"):
 ...             if len(pro) >= min_pro_len:
-...                 print "%s...%s - length %i, strand %i, frame %i" \
-...                       % (pro[:30], pro[-3:], len(pro), strand, frame)
+...                 print("%s...%s - length %i, strand %i, frame %i" \
+...                       % (pro[:30], pro[-3:], len(pro), strand, frame))
 GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
 KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
 GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
@@ -16495,8 +16737,8 @@ def find_orfs_with_trans(seq, trans_table, min_protein_length):
 
 orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
 for start, end, strand, pro in orf_list:
-    print "%s...%s - length %i, strand %i, %i:%i" \
-          % (pro[:30], pro[-3:], len(pro), strand, start, end)
+    print("%s...%s - length %i, strand %i, %i:%i" \
+          % (pro[:30], pro[-3:], len(pro), strand, start, end))
 \end{verbatim}
 
 \noindent And the output:
@@ -16697,8 +16939,8 @@ the first two from our orchid FASTA file \href{http://biopython.org/DIST/docs/tu
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
 record_iterator = SeqIO.parse(handle, "fasta")
-rec_one = record_iterator.next()
-rec_two = record_iterator.next()
+rec_one = next(record_iterator)
+rec_two = next(record_iterator)
 handle.close()
 \end{verbatim}
 
@@ -16780,7 +17022,7 @@ for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
 #Now find any sub-sequences found in both sequences
 #(Python 2.3 would require slightly different code here)
 matches = set(dict_one).intersection(dict_two)
-print "%i unique matches" % len(matches)
+print("%i unique matches" % len(matches))
 \end{verbatim}
 \noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
 \begin{verbatim}
@@ -16859,7 +17101,7 @@ for subfigure in [1,2]:
     pylab.ylabel("PHRED quality score")
     pylab.xlabel("Position")
 pylab.savefig("SRR001666.png")
-print "Done"
+print("Done")
 \end{verbatim}
 
 You should note that we are using the \verb|Bio.SeqIO| format name \texttt{fastq}
@@ -16989,7 +17231,9 @@ my_pssm = summary_align.pos_specific_score_matrix(second_seq
 
 \end{enumerate}
 
-The command above returns a \verb|PSSM| object. To print out the PSSM as we showed above, we simply need to do a \verb|print my_pssm|, which gives:
+The command above returns a \verb|PSSM| object.
+To print out the PSSM as shown above,
+we simply need to do a \verb|print(my_pssm)|, which gives:
 
 \begin{verbatim}
     A   C   G   T
@@ -17007,7 +17251,7 @@ T  1.0 0.0 0.0 6.0
 You can access any element of the PSSM by subscripting like \verb|your_pssm[sequence_number][residue_count_name]|. For instance, to get the counts for the 'A' residue in the second element of the above PSSM you would do:
 
 \begin{verbatim}
->>> print my_pssm[1]["A"]
+>>> print(my_pssm[1]["A"])
 7.0
 \end{verbatim}
 
@@ -17434,12 +17678,13 @@ As an example, the \verb|test_Biospam.py| test script to test the
 module  could look as follows:
 
 \begin{verbatim}
+from __future__ import print_function
 from Bio import Biospam
 
-print "2 + 3 =", Biospam.addition(2, 3)
-print "9 - 1 =", Biospam.addition(9, -1)
-print "2 * 3 =", Biospam.multiplication(2, 3)
-print "9 * (- 1) =", Biospam.multiplication(9, -1)
+print("2 + 3 =", Biospam.addition(2, 3))
+print("9 - 1 =", Biospam.addition(9, -1))
+print("2 * 3 =", Biospam.multiplication(2, 3))
+print("9 * (- 1) =", Biospam.multiplication(9, -1))
 \end{verbatim}
 
 We generate the corresponding output with \verb|python run_tests.py -g test_Biospam.py|, and check the output file \verb|output/test_Biospam|:
@@ -17840,7 +18085,7 @@ The expected frequency table can (and generally should) be generated from the ob
 
 \begin{verbatim}
 >>> exp_freq_table = SubsMat._exp_freq_table_from_obs_freq(OFM)
->>> EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
+>>> EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
 \end{verbatim}
 
 But you can supply your own \verb|exp_freq_table|, if you wish
@@ -17960,8 +18205,8 @@ Any one of the following may be done to geerate the frequency table (ftab):
 
 \begin{verbatim}
 >>> from SubsMat import *
->>> ftab = FreqTable.FreqTable(my_frequency_dictionary,FreqTable.FREQ)
->>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
+>>> ftab = FreqTable.FreqTable(my_frequency_dictionary, FreqTable.FREQ)
+>>> ftab = FreqTable.FreqTable(my_count_dictionary, FreqTable.COUNT)
 >>> ftab = FreqTable.read_count(open('myCountFile'))
 >>> ftab = FreqTable.read_frequency(open('myFrequencyFile'))
 \end{verbatim}
@@ -17983,8 +18228,10 @@ The main forums for discussing feature requests and potential bugs are the
   \item \mailto{biopython-dev@biopython.org} -- A more development oriented list that is mainly used by developers (but anyone is free to contribute!).
 \end{itemize}
 
-Additionally, if you think you've found a bug, you can submit it to our
-bug-tracking page at \url{http://redmine.open-bio.org/projects/biopython}.
+Additionally, if you think you've found a new bug, you can submit it to
+our issue tracker at \url{https://github.com/biopython/biopython/issues}
+(this has replaced the older tracker hosted at
+\url{http://redmine.open-bio.org/projects/biopython}).
 This way, it won't get buried in anyone's Inbox and forgotten about.
 
 \section{Mailing lists and helping newcomers}
@@ -18140,7 +18387,7 @@ handle:
 \begin{verbatim}
 from Bio import SeqIO
 for record in SeqIO.parse("m_cold.fasta", "fasta"):
-    print record.id, len(record)
+    print(record.id, len(record))
 \end{verbatim}
 
 On older versions of Biopython you had to use a handle, e.g.
@@ -18149,7 +18396,7 @@ On older versions of Biopython you had to use a handle, e.g.
 from Bio import SeqIO
 handle = open("m_cold.fasta", "r")
 for record in SeqIO.parse(handle, "fasta"):
-    print record.id, len(record)
+    print(record.id, len(record))
 handle.close()
 \end{verbatim}
 
@@ -18161,7 +18408,7 @@ import gzip
 from Bio import SeqIO
 handle = gzip.open("m_cold.fasta.gz")
 for record in SeqIO.parse(handle, "fasta"):
-    print record.id, len(record)
+    print(record.id, len(record))
 handle.close()
 \end{verbatim}
 
@@ -18177,17 +18424,17 @@ string into a handle. The following example shows how to do this using
 %doctest
 \begin{verbatim}
 >>> my_info = 'A string\n with multiple lines.'
->>> print my_info
+>>> print(my_info)
 A string
  with multiple lines.
 >>> from StringIO import StringIO
 >>> my_info_handle = StringIO(my_info)
 >>> first_line = my_info_handle.readline()
->>> print first_line
+>>> print(first_line)
 A string
 <BLANKLINE>
 >>> second_line = my_info_handle.readline()
->>> print second_line
+>>> print(second_line)
  with multiple lines.
 \end{verbatim}
 
@@ -18272,3 +18519,4 @@ Alok Saldanha: ``Java Treeview---extensible visualization of microarray data''. 
 \href{http://dx.doi.org/10.1093/bioinformatics/bth349}{http://dx.doi.org/10.1093/bioinformatics/bth349}
 \end{thebibliography}
 \end{document}
+

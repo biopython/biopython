@@ -1,10 +1,10 @@
 #include "Python.h"
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include "numpy/arrayobject.h"
 #include <stdio.h>
 #include <string.h>
 #include <float.h>
 #include "cluster.h"
-
 
 /* Must define Py_TYPE for Python 2.5 or older */
 #ifndef Py_TYPE
@@ -15,6 +15,12 @@
 #ifndef PyVarObject_HEAD_INIT
 #define PyVarObject_HEAD_INIT(type, size)       \
         PyObject_HEAD_INIT(type) size,
+#endif
+
+/* NumPy version 1.7 and later uses NPY_ARRAY_C_CONTIGUOUS; earlier versions
+ * use NPY_C_CONTIGUOUS. */
+#ifndef NPY_ARRAY_C_CONTIGUOUS
+#  define NPY_ARRAY_C_CONTIGUOUS NPY_C_CONTIGUOUS
 #endif
 
 /* ========================================================================== */
@@ -1085,12 +1091,12 @@ static PyTypeObject PyNodeType = {
     0,                         /* tp_as_buffer */
     Py_TPFLAGS_DEFAULT,        /* tp_flags */
     PyNode_doc,                /* tp_doc */
-    0,		               /* tp_traverse */
-    0,		               /* tp_clear */
-    0,		               /* tp_richcompare */
-    0,		               /* tp_weaklistoffset */
-    0,		               /* tp_iter */
-    0,		               /* tp_iternext */
+    0,                         /* tp_traverse */
+    0,                         /* tp_clear */
+    0,                         /* tp_richcompare */
+    0,                         /* tp_weaklistoffset */
+    0,                         /* tp_iter */
+    0,                         /* tp_iternext */
     0,                         /* tp_methods */
     0,                         /* tp_members */
     PyNode_getset,             /* tp_getset */
@@ -1406,12 +1412,12 @@ static PyTypeObject PyTreeType = {
     0,                           /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT,          /*tp_flags*/
     PyTree_doc,                  /* tp_doc */
-    0,		                 /* tp_traverse */
-    0,		                 /* tp_clear */
-    0,		                 /* tp_richcompare */
-    0,		                 /* tp_weaklistoffset */
-    0,		                 /* tp_iter */
-    0,		                 /* tp_iternext */
+    0,                           /* tp_traverse */
+    0,                           /* tp_clear */
+    0,                           /* tp_richcompare */
+    0,                           /* tp_weaklistoffset */
+    0,                           /* tp_iter */
+    0,                           /* tp_iternext */
     PyTree_methods,              /* tp_methods */
     NULL,                        /* tp_members */
     0,                           /* tp_getset */
@@ -2161,7 +2167,7 @@ py_median(PyObject* unused, PyObject* args)
     return DATA;
   }
   if(!PyArray_Check(DATA))
-  { aDATA = (PyArrayObject *) PyArray_ContiguousFromObject(DATA, PyArray_NOTYPE, 0, 0);
+  { aDATA = (PyArrayObject*) PyArray_FromAny(DATA, NULL, 0, 0, NPY_ARRAY_C_CONTIGUOUS, NULL);
     if (!aDATA)
     { PyErr_SetString(PyExc_TypeError,
                      "Argument cannot be converted to needed array.");
@@ -2227,7 +2233,7 @@ py_mean(PyObject* unused, PyObject* args)
     return DATA;
   }
   if(!PyArray_Check(DATA))
-  { aDATA = (PyArrayObject *) PyArray_ContiguousFromObject(DATA, PyArray_NOTYPE, 0, 0);
+  { aDATA = (PyArrayObject *)PyArray_FromAny(DATA, NULL, 0, 0, NPY_ARRAY_C_CONTIGUOUS, NULL);
     if (!aDATA)
     { PyErr_SetString(PyExc_TypeError,
                       "Argument cannot be converted to needed array.");

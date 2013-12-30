@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from __future__ import with_statement
-
 import os
 import unittest
 
@@ -31,7 +29,7 @@ def simple_LCC(s):
 
 
 def windowed_LCC(s):
-    return ", ".join(["%0.2f" % v for v in lcc_mult(s, 20)])
+    return ", ".join("%0.2f" % v for v in lcc_mult(s, 20))
 
 
 class SeqUtilsTests(unittest.TestCase):

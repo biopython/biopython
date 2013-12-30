@@ -4,11 +4,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#TODO: factor out this module with SeqIO's _index to stay DRY
-
 """Custom indexing for Bio.SearchIO objects."""
 
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio._py3k import _bytes_to_string
 from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
@@ -26,7 +24,7 @@ class SearchIndexer(_IndexedSeqFileProxy):
         self._kwargs = kwargs
 
     def _parse(self, handle):
-        return iter(self._parser(handle, **self._kwargs)).next()
+        return next(iter(self._parser(handle, **self._kwargs)))
 
     def get(self, offset):
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))

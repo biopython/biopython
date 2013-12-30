@@ -6,6 +6,8 @@
 
 """Common utility functions for various Bio submodules."""
 
+from __future__ import print_function
+
 import os
 
 
@@ -22,8 +24,6 @@ def iterlen(items):
     5
     >>> iterlen(iter("abcde"))
     5
-    >>> iterlen(xrange(5))
-    5
 
     """
     try:
@@ -39,12 +39,9 @@ def read_forward(handle):
     """Reads through whitespaces, returns the first non-whitespace line."""
     while True:
         line = handle.readline()
-        # if line has characters and stripping does not remove them,
-        # return the line
-        if line and line.strip():
-            return line
-        # if line ends, return None
-        elif not line:
+        # if line is empty or line has characters and stripping does not remove
+        # them, return the line
+        if (not line) or (line and line.strip()):
             return line
 
 
@@ -109,14 +106,14 @@ def run_doctest(target_dir=None, *args, **kwargs):
 
     cur_dir = os.path.abspath(os.curdir)
 
-    print "Runing doctests..."
+    print("Runing doctests...")
     try:
         os.chdir(find_test_dir(target_dir))
         doctest.testmod(*args, **kwargs)
     finally:
         # and revert back to initial directory
         os.chdir(cur_dir)
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     run_doctest()

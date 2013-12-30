@@ -1,0 +1,2267 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             ../nrpspks.fa
+# target HMM database:             /data/uni/antismash2/antismash/specific_modules/nrpspks/nrpspksdomains.hmm
+# model-specific thresholding:     TC cutoffs
+# number of worker threads:        2
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       bpsA  [L=3165]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model                Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------             -----------
+          0 1080.2   1.3     4e-111  362.7   0.0    3.3  3  AMP-binding          AMP-binding enzyme
+   6.6e-248  811.3  29.9   1.3e-133  436.1   3.5    3.3  3  Cglyc                
+   2.5e-218  714.1   0.0   2.7e-107  349.6   0.0    3.3  3  Condensation_DCL     
+   2.8e-168  552.4 119.2   1.7e-143  470.4  30.9    4.4  3  Epimerization        
+     2e-135  441.8   0.0    3.7e-59  191.5   0.0    3.5  3  Condensation_LCL     
+   1.7e-110  360.3   2.5    7.7e-49  157.9   0.2    3.2  3  Condensation_Starter 
+      2e-92  300.9   0.0    5.4e-47  151.8   0.0    3.2  2  Condensation_Dual    
+    1.3e-81  265.3  81.7    8.1e-23   70.6   9.9    8.9  6  CAL_domain           
+    9.6e-65  206.1   3.3    2.8e-22   70.0   0.1    3.7  3  PCP                  
+    4.5e-62  201.4   0.0    3.1e-26   83.7   0.1    3.5  3  Heterocyclization    
+    6.2e-38  121.7  38.4    4.5e-21   66.4   5.5    3.9  2  CXglyc               
+    8.5e-27   84.6   5.1    2.2e-10   32.0   0.1    3.9  3  ACP                  
+    2.4e-12   37.2   0.1    4.1e-08   23.6   0.0    2.4  1  NRPS-COM_Nterm       
+    4.4e-11   33.6  10.2    1.7e-06   19.1   1.2    2.9  0  NRPS-COM_Cterm       
+
+
+Domain annotation for each model (and alignments):
+>> AMP-binding  AMP-binding enzyme
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  360.7   0.1  6.3e-111  1.7e-110       1     418 []      36     428 ..      36     428 .. 0.96
+   2 !  362.7   0.0  1.5e-111    4e-111       1     418 []    1059    1449 ..    1059    1449 .. 0.96
+   3 !  354.4   0.0  5.1e-109  1.4e-108       1     418 []    2564    2970 ..    2564    2970 .. 0.96
+
+  Alignments for each domain:
+  == domain 1    score: 360.7 bits;  conditional E-value: 6.3e-111
+                  EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHHEC CS
+  AMP-binding   1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelakeal 98 
+                  TYr+lder+ rla  L ++G+++gdrVa+++++s+++v+a+la++kaGa+yvpv++ +pa r+a++++ds ak++++++++  ++++  +++ +    
+         bpsA  36 TYRQLDERAGRLAGRLASRGIRRGDRVAVVMDRSADLVVALLAVWKAGAAYVPVDAGYPAPRVAFMVADSAAKLVVCSAASRGAVPAGVESLEP---- 129
+                  9*************************************************************************************99888764.... PP
+
+                  CETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHHCCCH CS
+  AMP-binding  99 iivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsvleil 196
+                                     +  +++++++ p++ ++p d+ay++yTSG+TG+PKgV ++++ ++ l++ +++ ++ ++  +vl+ +p+afd+s++e++
+         bpsA 130 -------------------AAAAEEGASDAPAATVRPGDPAYVMYTSGSTGTPKGVTISQGCVAELTMDAGWAMEPGE--AVLMHSPHAFDASLFELW 206
+                  ...................67888888888999999***********************************9999944..6***************** PP
+
+                  HHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE--GGGSSE CS
+  AMP-binding 197 gplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGltEttvi 294
+                  +pl++G+++vl++p +  d+++l +  ++ +vt ++l+   l++++++++   +++   r +l+gg+ +++++++r+r a +++++ n+YG+tE+t++
+         bpsA 207 MPLASGVRVVLAEPGSV-DARRL-REAAAAGVTRVYLTAGSLRAVAEEAP---ESFAEFREVLTGGDVVPAHAVERVRTAAPRARFRNMYGPTEATMC 299
+                  ****************6.66665.666689*******************8...9******************************************** PP
+
+                  SEEEECGHHH..-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE-TT--EEEEEG CS
+  AMP-binding 295 vtvslpgdee..tkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgridedGyleiiGR 386
+                  +t++l+ + +    +++iGrpl+g +++++d   ++v+pg+vG l+++g+ +a+GY+++ +ltae+fv+d+ +    +y TGDl+ +++dG+l + GR
+         bpsA 300 ATWHLLQPGDvvGPVVPIGRPLTGRRVQVLDASLRPVGPGVVGDLYLSGA-LAEGYFNRAALTAERFVADPSApgqrMYWTGDLAQWTADGELVFAGR 396
+                  *********999*************************************5.9********************************************** PP
+
+                  GGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding 387 kkdqvkirGeriepgeiEsvllehpgvaeaaV 418
+                  ++dqvkirG+riepgeiE++l++ p+v++a+V
+         bpsA 397 ADDQVKIRGFRIEPGEIEAALIAQPDVHDAVV 428
+                  ******************************98 PP
+
+  == domain 2    score: 362.7 bits;  conditional E-value: 1.5e-111
+                   EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHH CS
+  AMP-binding    1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelake 96  
+                   +Y++l+er+ ++aa+Lr++Gv+ +drV++++ +s++w + +l++l aG+++vpv+p +paer ++i++ +++ ++++  +   +++++ +++l++ 
+         bpsA 1059 SYADLWERSLKFAAVLRAHGVRSEDRVGLVVGRSAWWTVGMLGVLLAGGTFVPVDPAYPAERKEWIFRSANPMLVVCAGATRGAVPAEFADRLVV- 1153
+                   7**************************************************************************************99999865. PP
+
+                   ECCETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHH CS
+  AMP-binding   97 aliivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsv 192 
+                                        +e +++a ++   + ++p++ ay+iyTSG+TG+PKgV++th++l +l+ ++++r+g++p++rvl++++l fd  v
+         bpsA 1154 --------------------IDEVDPAAGSAGDLPRVDPRSAAYVIYTSGSTGTPKGVVVTHAGLGNLALAHIDRFGVSPSSRVLQFAALGFDTIV 1229
+                   ....................355555555555555557********************************************************** PP
+
+                   CCCHHHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE-- CS
+  AMP-binding  193 leilgplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGl 288 
+                    e++++ll+Gatlv+++++dl+  a + d++e+  +t++ ++p++l +    p       s++ +++ +ge ++p l++rl +     +++n+YG+
+         bpsA 1230 SEVMMALLSGATLVVPPERDLPPRASFTDALERWDITHVKAPPSVLGTADVLP-------STVETVVAAGELCPPGLVDRLSAD---RRMINAYGP 1315
+                   ***********************************************999888.......8*********************95...57******* PP
+
+                   GGGSSESEEEECGHHH-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE-TT-- CS
+  AMP-binding  289 tEttvivtvslpgdeetkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgridedGy 380 
+                   tEtt+++t+s p  + ++p++ G+p+pgv+ +++d   +++ppg++GEl+++g +va+GYl++ +ltae+fv+d++     +yrTGDl++++e+G+
+         bpsA 1316 TETTICATMSMPLSPGQHPIPFGKPVPGVRGYLLDSFLRPLPPGVTGELYLAGIGVARGYLGRSALTAERFVADPFVpgerMYRTGDLAYWTEQGE 1411
+                   ************************************************************************************************ PP
+
+                   EEEEEGGGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding  381 leiiGRkkdqvkirGeriepgeiEsvllehpgvaeaaV 418 
+                   l   GR++dqvkirG+r+ep eiE +l++ p v +aaV
+         bpsA 1412 LVSAGRADDQVKIRGFRVEPREIEFALSGYPRVTQAAV 1449
+                   *************************************9 PP
+
+  == domain 3    score: 354.4 bits;  conditional E-value: 5.1e-109
+                   EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHH CS
+  AMP-binding    1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelake 96  
+                   TY+eld+r+n+la++L ++G++p+  Va+llp+s+e+v+a+la+ k+G++++p++p +pa+r+a++l+d++++++it++ l ++   +  +  + +
+         bpsA 2564 TYAELDARANQLARWLIDQGAGPEGLVAVLLPRSLELVVALLAVTKTGGAWLPIDPGYPADRIAFMLDDAGPALVITTAVLSASPIGDVLAARSRT 2659
+                   9*********************************************************************************99999888888776 PP
+
+                   ECCETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHH CS
+  AMP-binding   97 aliivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsv 192 
+                   ++ +        ++  + +l   + ++ ++ ++++ l+p+++ay+iyTSG+TG+PK+V++thrnl++++ +++++++   + r+++ +++afd+ v
+         bpsA 2660 VVLD--------EPAAAGQLAGRDRAPVTDTDRARALDPRHPAYLIYTSGSTGRPKAVVVTHRNLTNYLLHCGRMYPGLRG-RSVLHSSIAFDLTV 2746
+                   6555........5667788999999999999999999*****************************************999.************** PP
+
+                   CCCHHHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE-- CS
+  AMP-binding  193 leilgplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGl 288 
+                   +++++pl++G+ +++   ed      l   +e+    +l ++p++l +l  a             +l+gge+l+++++ ++r++ ++i++vn YG+
+         bpsA 2747 TATFTPLIVGGEIHVGALED------LIGVVEAAPSIFLKATPSHLLTLDTASR----GSAGSGDLLLGGEQLPADTVVQWRRKYPNIVVVNEYGP 2832
+                   ***************99555......8999999999999999999999999995....55666779****************************** PP
+
+                   GGGSSESEEEECGHHH....-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE- CS
+  AMP-binding  289 tEttvivtvslpgdee....tkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgrid 376 
+                   tE+tv+++ +++++ +      +++iG+pl+++++ ++d + ++vppg+vGEl+++g+++a+GYl++  lta +fv+d+++    +yrTGDl+ ++
+         bpsA 2833 TEATVGCVEYRLEPGQecppGGVVPIGTPLANMRAFVLDSWLRLVPPGAVGELYVAGAGLARGYLGRAGLTATRFVADPFGsgerMYRTGDLVQWN 2928
+                   ************99999******************************************************************************* PP
+
+                   TT--EEEEEGGGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding  377 edGyleiiGRkkdqvkirGeriepgeiEsvllehpgvaeaaV 418 
+                   +dG+l + GR++dqvk+rG+riepgeiE++l + + v +a+V
+         bpsA 2929 PDGQLVFAGRVDDQVKVRGFRIEPGEIEAALVAQESVGQAVV 2970
+                   ****************************************98 PP
+
+>> Cglyc  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  436.1   3.5  4.7e-134  1.3e-133       2     299 .]     601     893 ..     600     893 .. 0.98
+   2 !   35.4   5.4   5.3e-12   1.4e-11      39     297 ..    1638    1904 ..    1626    1906 .. 0.80
+   3 !  351.5   1.2  2.8e-108  7.5e-108       1     298 [.    2087    2381 ..    2087    2382 .. 0.98
+
+  Alignments for each domain:
+  == domain 1    score: 436.1 bits;  conditional E-value: 4.7e-134
+  Cglyc   2 edvWPLsPlqeGllfhaaldeegpdvYqvqrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaeverlaa 105
+            e++WPL+PlqeGllf+++ld++g+d+Yqvq ilel+gp+da rlraaW+a+++rh++Lr sf+rl+sg+tvq+v+++v+ pWr+vDl+++   +++a+v++l+a
+   bpsA 601 EEIWPLAPLQEGLLFESILDDQGSDIYQVQVILELNGPVDAPRLRAAWDAVVRRHPELRLSFHRLASGKTVQAVHGDVTPPWRVVDLTGA--GDVDAAVAALVA 702
+            89***************************************************************************************9..99********** PP
+
+  Cglyc 106 eeraerfdlakaPllrllLvrlgedrhrlvvtshhilvDGWslpiileelaalYaaggdaselpaaasyrdylaWlsrqdkeaaraaWraelagldeptlvapa 209
+            ee+++rf+la+aPl+rl+Lvr+++dr+rl++++hhilvDGWs+++il++++++Y+ag+ ++e++  a++rdylaWl+rqd++aaraaWraelagldep+l+a++
+   bpsA 703 EEQQQRFELATAPLVRLVLVRIAADRYRLLFVIHHILVDGWSVAVILNDVSEAYEAGEPVPEQRGGATFRDYLAWLDRQDDDAARAAWRAELAGLDEPALIATS 806
+            ******************************************************************************************************76 PP
+
+  Cglyc 210 daarapaepeevvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrvrLd 299
+                +++e+++++++l+++l++rl+ +arehglt +tvv++aWa+vLarL++rtdvvfG++va+rP+el+g+esm+Gll+++vPvrv Ld
+   bpsA 807 G---VETEYDYRATHLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDVVFGTMVATRPPELAGIESMPGLLMTAVPVRVPLD 893
+            6...5667999*****************************************************************************97 PP
+
+  == domain 2    score: 35.4 bits;  conditional E-value: 5.3e-12
+  Cglyc   39 pldaarlraaWeallarhaaLrasfrrlksgetvqvva.revelpWrevDlselpedeaeaeverlaaeeraerfdlakaPllrllLvrlgedrh.rlvvts 138 
+              l ++ l a + a+++ h++Lra     ++g+ + v + ++v++   ++ +      +  +e+ + aa+   +r+d ++  + + + v  g+d+  rlvv+ 
+   bpsA 1638 DLTEKALAAGFAAVVDTHDMLRARVVADEGGRRLVVGErGSVDVAGAVTRIRAD--GRSLDEAVADAARAAVTRLDPSAGVMAQAVWVDAGPDQVgRLVVVA 1737
+             466788999********************9998766541568888777777544..55555555567788899******************988559***** PP
+
+  Cglyc  139 hhilvDGWslpiileelaalYaa...ggdaselpaaasyrdy...l.aWlsrqdkeaaraaWraelagldeptlvapadaarapaepeevvlelseeltrrl 233 
+             hh+ vDG s  i+l++l+a+ +a   g +    p  as++ +   l  W    ++    aaW+a l   d+p+  ++++ + a+ +  ++   +++  t +l
+   bpsA 1738 HHLSVDGVSWRILLSDLQAACEAavaGREPVLEPVGASFKRWaglLaEWAVSAERAGELAAWKAILGPGDRPAGAQATS-RAAEGAVRSRSWVVPKVETAAL 1838
+             ******************9988722133344456789***98333224777888888899************9887544.4455555667777777788888 PP
+
+  Cglyc  234 velar.ehgltlntvvqgaWalvLarLagrtdvvfGatvagr.PaelpgvesmvGlllntvPvrvr 297 
+             +  a       +n v+ +  a  +ar  g + v+      gr P + +++ + vG + ++ Pvr  
+   bpsA 1839 AGRAPvAFHCGVNEVLLAGLAGAVARWRGGDAVLVDVESHGRhPVDGTDLSRTVGWFTSAHPVRLD 1904
+             87775255788999999999****************999999799*******************75 PP
+
+  == domain 3    score: 351.5 bits;  conditional E-value: 2.8e-108
+  Cglyc    1 ledvWPLsPlqeGllfhaaldeegpdvYqvqrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaever 102 
+             l++v PLsPlq+Gl fha +  +g+dvY++q +lel gpld+  lr++ +all+rha+Lra+fr+ ++g++ qvv + v++p + vD++e   ++++ae+++
+   bpsA 2087 LAEVLPLSPLQHGLAFHAGYAGDGVDVYTAQAVLELAGPLDVPLLRKSVRALLDRHANLRAGFRHGADGTAYQVVPGAVAVPVTLVDVTES--ADPAAEAAA 2186
+             579**************************************************************************************99..88999999* PP
+
+  Cglyc  103 laaeeraerfdlakaPllrllLvrlgedrhrlvvtshhilvDGWslpiileelaalYaaggdaselpaaasyrdylaWlsrqdkeaaraaWraelagldept 204 
+             +aa era+ f+la++Pllr+++v lg+drhrlv+t hhil+DGWs+p++l+el++lY +g + ++l++++ yrdylaW+   d+eaa +aWr+ lagl ept
+   bpsA 2187 VAAAERARPFELARPPLLRVMVVVLGPDRHRLVLTNHHILLDGWSTPLLLDELLTLYRNGAAPAALAPVTPYRDYLAWVRETDREAATEAWRDALAGLPEPT 2288
+             ****************************************************************************************************** PP
+
+  Cglyc  205 lvapadaarapaepeevvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrvrL 298 
+             lva+  +    + pe+  ++l+e+++++l + are g+t++tv+q++W +vLa L+gr+dvvfG++v+grPaelpg+e+mvGl++ntvPvrvr+
+   bpsA 2289 LVAADRPV-PVEVPEQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAALTGRDDVVFGSVVSGRPAELPGIETMVGLFINTVPVRVRM 2381
+             ***65555.55789******************************************************************************97 PP
+
+>> Condensation_DCL  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  306.5   0.0   1.3e-94   3.5e-94       1     299 [.     601     892 ..     601     893 .. 0.95
+   2 !   54.2   0.0   9.1e-18   2.4e-17      28     299 ..    1629    1905 ..    1618    1906 .. 0.86
+   3 !  349.6   0.0    1e-107  2.7e-107       2     299 ..    2089    2381 ..    2088    2382 .. 0.98
+
+  Alignments for each domain:
+  == domain 1    score: 306.5 bits;  conditional E-value: 1.3e-94
+  Condensation_DCL   1 edvypLsplQeGllfhallde.eadvYvvqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaee 92 
+                       e+++pL+plQeGllf ++ld+ ++d Y vq++lel+g++d+ rlraa++a+v+rh+ Lr +F++ +++++vq v+ +v+ ++r++dl++  + 
+              bpsA 601 EEIWPLAPLQEGLLFESILDDqGSDIYQVQVILELNGPVDAPRLRAAWDAVVRRHPELRLSFHRLASGKTVQAVHGDVTPPWRVVDLTGAGDV 693
+                       68*****************9989******************************************************************8886 PP
+
+  Condensation_DCL  93 eqeeelealaaedrergFdlarapllrltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaalpaa.rpYrdYiawlarq 184
+                       +  +++ al ae+++++F+la+apl+rl+l+r a++ryrl++  Hhil+DGWs++++l+++ e Y   ++gep+  ++  +++rdY+awl+rq
+              bpsA 694 D--AAVAALVAEEQQQRFELATAPLVRLVLVRIAADRYRLLFVIHHILVDGWSVAVILNDVSEAY---EAGEPVPEQRGgATFRDYLAWLDRQ 781
+                       6..**************************************************************...556655554545************* PP
+
+  Condensation_DCL 185 dkeaaeaaWreeLagleeptllaeakkeeeeeaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvsgRpa 277
+                       d++aa+aaWr+eLagl+ep l+a +  e+e    +    ++l+ + +++L  +ar++g+T +t+v+aawa++L+rlt+r+dvvFG+ v+ Rp+
+              bpsA 782 DDDAARAAWRAELAGLDEPALIATSGVETE----YDYRATHLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDVVFGTMVATRPP 870
+                       **********************99998774....666778899************************************************** PP
+
+  Condensation_DCL 278 elpgvesmvGlfiNtvPvrvrl 299
+                       el+g+esm Gl++  vPvrv l
+              bpsA 871 ELAGIESMPGLLMTAVPVRVPL 892
+                       *******************976 PP
+
+  == domain 2    score: 54.2 bits;  conditional E-value: 9.1e-18
+  Condensation_DCL   28 vqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaeeeqeeelealaaedrergFdlarapll 118 
+                        + +v+   + l  ++l+a ++a+vd h++Lr+  v +e +  + vv ++ ++++    ++ +a+ ++ +e+ a aa+   ++ d+++ ++ 
+              bpsA 1629 QWMVVGTPSDLTEKALAAGFAAVVDTHDMLRARVVADEGG-RRLVVGERGSVDVAGAVTRIRADGRSLDEAVADAARAAVTRLDPSAGVMA 1718
+                        5566777788999*********************996655.56699999999998877777767666666666667777889********* PP
+
+  Condensation_DCL  119 rltlirlaeery.rlvltnHhillDGWslplllkellelYqalaegepaalpaa.rpYrdYiawlarq....dkeaaeaaWreeLagleep 203 
+                        + + +  + +++ rlv+ +Hh+ +DG s  +ll++l +  +a+ +g+++ l+++ ++++ + + la+     +++   aaW++ L   ++p
+              bpsA 1719 QAVWVDAGPDQVgRLVVVAHHLSVDGVSWRILLSDLQAACEAAVAGREPVLEPVgASFKRWAGLLAEWavsaERAGELAAWKAILGPGDRP 1809
+                        *******9987659*************************************9999******988877622226666778************ PP
+
+  Condensation_DCL  204 tllaeakkeeeeeaepeeleveldeeateaLeelar.sqgvTlntlvqaawallLsrltgrddvvFGatvsgR.paelpgvesmvGlfiNt 292 
+                           + +++++  e ++++ +  +++ +t+aL+  a  + +  +n ++ a  a  ++r  g d v+  +   gR p++ ++  ++vG f   
+              bpsA 1810 AGAQATSRAA--EGAVRSRSWVVPKVETAALAGRAPvAFHCGVNEVLLAGLAGAVARWRGGDAVLVDVESHGRhPVDGTDLSRTVGWFTSA 1898
+                        9988777776..68899999999********988862679*************************99999999567888899********* PP
+
+  Condensation_DCL  293 vPvrvrl 299 
+                         Pvr+++
+              bpsA 1899 HPVRLDV 1905
+                        ****876 PP
+
+  == domain 3    score: 349.6 bits;  conditional E-value: 1e-107
+  Condensation_DCL    2 dvypLsplQeGllfhallde.eadvYvvqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselae 91  
+                        +v+pLsplQ+Gl fha ++  + dvY+ q+vlel+g+ldv +lr++++al+drh++Lr++F + ++++  qvv+  v+++++ +d++e a+
+              bpsA 2089 EVLPLSPLQHGLAFHAGYAGdGVDVYTAQAVLELAGPLDVPLLRKSVRALLDRHANLRAGFRHGADGTAYQVVPGAVAVPVTLVDVTESAD 2179
+                        79****************9989******************************************************************877 PP
+
+  Condensation_DCL   92 eeqeeelealaaedrergFdlarapllrltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaalpaarpYrdYiawla 182 
+                         +  +e+ a+aa++r+r F+lar+pllr++++ l+ +r+rlvltnHhillDGWs+plll+ell+lY  +++  paal +++pYrdY+aw++
+              bpsA 2180 PA--AEAAAVAAAERARPFELARPPLLRVMVVVLGPDRHRLVLTNHHILLDGWSTPLLLDELLTLY--RNGAAPAALAPVTPYRDYLAWVR 2266
+                        76..9999**********************************************************..99999****************** PP
+
+  Condensation_DCL  183 rqdkeaaeaaWreeLagleeptllaeakkeeeeeaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvs 273 
+                        + d+eaa++aWr++Lagl eptl+a +++     + pe++ ++lde+  +aL + ar++gvT++t++qa+w+++L++ltgrddvvFG++vs
+              bpsA 2267 ETDREAATEAWRDALAGLPEPTLVAADRPVP--VEVPEQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAALTGRDDVVFGSVVS 2355
+                        **************************99988..59******************************************************** PP
+
+  Condensation_DCL  274 gRpaelpgvesmvGlfiNtvPvrvrl 299 
+                        gRpaelpg+e+mvGlfiNtvPvrvr+
+              bpsA 2356 GRPAELPGIETMVGLFINTVPVRVRM 2381
+                        ************************98 PP
+
+>> Epimerization  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   57.4  16.7   4.3e-19   1.1e-18      28     178 ..     631     773 ..     631     802 .. 0.80
+   2 !  470.4  30.9  6.4e-144  1.7e-143       1     317 []    1606    1906 ..    1606    1906 .. 0.99
+   3 !   41.6  18.3   2.7e-14     7e-14      29     214 ..    2119    2294 ..    2118    2316 .. 0.87
+
+  Alignments for each domain:
+  == domain 1    score: 57.4 bits;  conditional E-value: 4.3e-19
+  Epimerization  28 vlLevpagldedaLraALqaLldhHDALRlRf.reedggwrqrnvperGavdeaaflLevvdlsggdd.ldaaieaaaneaQasLDlaaGpLlrAv 121
+                    v Le+  ++d+ +LraA  a++++H+ LRl f r + g+ +q +   +G v    ++ +vvdl+g+ d ++a+++  a e Q+++ la+ pL+r+v
+           bpsA 631 VILELNGPVDAPRLRAAWDAVVRRHPELRLSFhRLASGKTVQAV---HGDVT---PPWRVVDLTGAGDvDAAVAALVAEEQQQRFELATAPLVRLV 720
+                    67999999**********************************88...55555...*************6666666678899*************** PP
+
+  Epimerization 122 lfd.agdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrr 178
+                    l++ a+d    rLl+viHH  VDG S  ++L D   AYe+   G+++     +  fr+
+           bpsA 721 LVRiAADRY--RLLFVIHHILVDGWSVAVILNDVSEAYEA---GEPVPEQRGGATFRD 773
+                    ***655555..*************8888888888888885...666555555555555 PP
+
+  == domain 2    score: 470.4 bits;  conditional E-value: 6.4e-144
+  Epimerization    1 tGevpLTPIQrWFfeqdggerhHfNQsvlLevpagldedaLraALqaLldhHDALRlRfreedggwrqrnvperGavdeaaflLevvdlsggdd 94  
+                     +G+v++TP++  ++  dg + + f+Q++++ +p++l+e+aL+a+++a++d+HD+LR+R++ ++gg r+++ +erG+vd +a+++++++++g + 
+           bpsA 1606 VGDVAWTPVMWMLG--DGVAGPAFAQWMVVGTPSDLTEKALAAGFAAVVDTHDMLRARVVADEGGRRLVV-GERGSVD-VAGAVTRIRADGRS- 1694
+                     7*************..6************************************************9****.*******.**************. PP
+
+  Epimerization   95 ldaaieaaaneaQasLDlaaGpLlrAvlfdagdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrrWAerLaeyAq 188 
+                     ld+a+++aa++a+++LD++aG++ +Av++dag++++grL++v+HHL VDGVSWRILL DL+aA+e+a+aG++++L+p++ Sf+rWA +Lae+A 
+           bpsA 1695 LDEAVADAARAAVTRLDPSAGVMAQAVWVDAGPDQVGRLVVVAHHLSVDGVSWRILLSDLQAACEAAVAGREPVLEPVGASFKRWAGLLAEWAV 1788
+                     ********************************************************************************************** PP
+
+  Epimerization  189 seallaEldYWrevlagpdppLPadrpdgdkaddtagtartvsvtLsaeeTraLLtevpaAYhTgvNDvLLtALalAlarWtGgrGggdaavlv 282 
+                     s ++++El+ W+++l+++d+p +a +  +      +g++r++s+++++ eT+aL +++p A+h+gvN+vLL++La+A+arW+Gg+     avlv
+           bpsA 1789 SAERAGELAAWKAILGPGDRPAGAQATSR----AAEGAVRSRSWVVPKVETAALAGRAPVAFHCGVNEVLLAGLAGAVARWRGGD-----AVLV 1873
+                     ************************99999....****************************************************.....**** PP
+
+  Epimerization  283 dLEGHGReEelfdglDlSRTVGWFTSiYPVrLdla 317 
+                     d+E+HGR  +++dg DlSRTVGWFTS +PVrLd+a
+           bpsA 1874 DVESHGR--HPVDGTDLSRTVGWFTSAHPVRLDVA 1906
+                     *******..************************96 PP
+
+  == domain 3    score: 41.6 bits;  conditional E-value: 2.7e-14
+  Epimerization   29 lLevpagldedaLraALqaLldhHDALRlRfreedgg.wrqrnvperGavdeaaflLevvdlsggddldaaieaaaneaQas.LDlaaGpLlrA 120 
+                     +Le+  +ld+  Lr+  +aLld+H  LR+ fr+ ++g   q++   +Gav+   ++++ vd+++ +d++a ++a a++ +a+ + la+ pLlr+
+           bpsA 2119 VLELAGPLDVPLLRKSVRALLDRHANLRAGFRHGADGtAYQVV---PGAVA---VPVTLVDVTESADPAAEAAAVAAAERARpFELARPPLLRV 2206
+                     89*****************************9999999*****...*****...***********99666666666666666799********* PP
+
+  Epimerization  121 vlfdagdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrrWAerLaeyAqseallaEldYWrevlagpdpp..LPa 212 
+                       + +g+++ +rL+L+ HH   DG S   LL+ L ++Y+   +G a+a  ++ t++r++ +   e     +++a  + Wr +lag  +p  + a
+           bpsA 2207 MVVVLGPDR-HRLVLTNHHILLDGWSTPLLLDELLTLYR---NGAAPAALAPVTPYRDYLAWVRET----DREAATEAWRDALAGLPEPtlVAA 2292
+                     *********.*****************************...9***99999999999975555555....677777889999998777644455 PP
+
+  Epimerization  213 dr 214 
+                     dr
+           bpsA 2293 DR 2294
+                     55 PP
+
+>> Condensation_LCL  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  178.3   0.0   1.4e-55   3.6e-55       3     295 ..     603     892 ..     601     893 .. 0.90
+   2 !   68.0   0.0   5.8e-22   1.5e-21      33     295 ..    1634    1905 ..    1615    1906 .. 0.81
+   3 !  191.5   0.0   1.4e-59   3.7e-59       2     295 ..    2089    2381 ..    2088    2382 .. 0.92
+
+  Alignments for each domain:
+  == domain 1    score: 178.3 bits;  conditional E-value: 1.4e-55
+  Condensation_LCL   3 rlplSfaQqrlwflnqle.pesaayniplalrltgeldvealeaAladlvaRheiLRtvf.peedgepvqvvlpaaelelevedls.....ea 88 
+                        +pl++ Q+ l f + l+ + s+ y+++++l+l+g++d+ +l+aA++++v+Rh  LR +f +   g++vq v+ +++++++v+dl+     +a
+              bpsA 603 IWPLAPLQEGLLFESILDdQGSDIYQVQVILELNGPVDAPRLRAAWDAVVRRHPELRLSFhRLASGKTVQAVHGDVTPPWRVVDLTgagdvDA 695
+                       58999***********98366888************************************66789999************************* PP
+
+  Condensation_LCL  89 eleelveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelleee 181
+                       ++++lv+ee +++F+L+++pl+r+ l+r+a++++ Ll+v+HHi +DgwS++v+l++++++Y+a   g+  + +    +++DY +w  +    +
+              bpsA 696 AVAALVAEEQQQRFELATAPLVRLVLVRIAADRYRLLFVIHHILVDGWSVAVILNDVSEAYEA---GEPVPEQRGGATFRDYLAWLDR----Q 781
+                       *************************************************************54...7777778888********9875....4 PP
+
+  Condensation_LCL 182 elarqlaYWreqLaglpelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvGtpvagRt 274
+                       + ++ +a Wr++Lagl e   L +    + + +yr+     +l ++l+++l  +arehg t+ +v++aa+a++L+rl++++D+v Gt va R 
+              bpsA 782 DDDAARAAWRAELAGLDEPA-LIATSGVETEYDYRA----THLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDVVFGTMVATRP 869
+                       45666677********8875.666666677777775....78899***********************************************6 PP
+
+  Condensation_LCL 275 ..raeledliGfFvNtlvlrtel 295
+                          a +e++ G+ +  +++r+ l
+              bpsA 870 peLAGIESMPGLLMTAVPVRVPL 892
+                       22578999999999999999865 PP
+
+  == domain 2    score: 68.0 bits;  conditional E-value: 5.8e-22
+  Condensation_LCL   33 rltgeldvealeaAladlvaRheiLRtvfpeedgepvqvvlpa..aelelevedls......eaeleelveeeaarpFdLekepllrvrll 115 
+                            +l ++al+a +a++v+ h++LR + + ++g  + vv ++  ++++ +v++++      ++++++++ ++a ++ d +++++ ++  +
+              bpsA 1634 GTPSDLTEKALAAGFAAVVDTHDMLRARVVADEGGRRLVVGERgsVDVAGAVTRIRadgrslDEAVADAA-RAAVTRLDPSAGVMAQAVWV 1723
+                        55678999**********************************9665555555555588887555555554.888999************** PP
+
+  Condensation_LCL  116 rlaee.ehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelleeeelarqlaYWreqLaglpelleLpt 205 
+                           ++    L++v+HH  +Dg+S+++ll++l+a+ +a++ag++p l+p+  +++ +a    e++ + e a +la W++ L           
+              bpsA 1724 DAGPDqVGRLVVVAHHLSVDGVSWRILLSDLQAACEAAVAGREPVLEPVGASFKRWAGLLAEWAVSAERAGELAAWKAILGPG-------- 1806
+                        998761578***********************************************************************854........ PP
+
+  Condensation_LCL  206 drprpavqsyrGarvefeldaelsaklkela......rehgvtlFmvllaalavlLsrlsgqeDivvGtpvagRtr...aeledliGfFvN 287 
+                        drp  a+++ r+a+ +++  + +  k+++ a       + ++ +  vlla la  ++r  g + ++v +   gR+    ++l++++G F  
+              bpsA 1807 DRPAGAQATSRAAEGAVRSRSWVVPKVETAAlagrapVAFHCGVNEVLLAGLAGAVARWRGGDAVLVDVESHGRHPvdgTDLSRTVGWFTS 1897
+                        5666666666555555555555555554433000001344566778****************************85222789999*****9 PP
+
+  Condensation_LCL  288 tlvlrtel 295 
+                          ++r+++
+              bpsA 1898 AHPVRLDV 1905
+                        99999987 PP
+
+  == domain 3    score: 191.5 bits;  conditional E-value: 1.4e-59
+  Condensation_LCL    2 erlplSfaQqrlwflnqlepes.aayniplalrltgeldvealeaAladlvaRheiLRtvf.peedgepvqvvlpaaelelevedls.... 86  
+                        e lplS+ Q+ l f + ++++  ++y  +++l+l g+ldv  l++++++l++Rh  LR  f +  dg+++qvv  a++++++ +d++    
+              bpsA 2089 EVLPLSPLQHGLAFHAGYAGDGvDVYTAQAVLELAGPLDVPLLRKSVRALLDRHANLRAGFrHGADGTAYQVVPGAVAVPVTLVDVTesad 2179
+                        568**************998762679***********************************77899999******************9999 PP
+
+  Condensation_LCL   87 .eaeleelveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqre 176 
+                         +ae+++++++e arpF+L++ pllrv ++ l +++h L+l+ HHi  DgwS+ +ll+el +lY   ++g+ap+  +    Y+DY +w re
+              bpsA 2180 pAAEAAAVAAAERARPFELARPPLLRVMVVVLGPDRHRLVLTNHHILLDGWSTPLLLDELLTLY---RNGAAPAALAPVTPYRDYLAWVRE 2267
+                        9999999*********************************************************...44555555545559********96 PP
+
+  Condensation_LCL  177 lleeeelarqlaYWreqLaglpelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvG 267 
+                        +    + ++  + Wr++Laglpe + + +drp p +     +++  +ld++++++l + are gvt+ +vl+a++ ++L+ l+g++D+v G
+              bpsA 2268 T----DREAATEAWRDALAGLPEPTLVAADRPVPVEVP---EQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAALTGRDDVVFG 2351
+                        4....55666677*******************998876...679*********************************************** PP
+
+  Condensation_LCL  268 tpvagRtr..aeledliGfFvNtlvlrtel 295 
+                        + v+gR    + +e ++G+F+Nt+++r+++
+              bpsA 2352 SVVSGRPAelPGIETMVGLFINTVPVRVRM 2381
+                        ******863369***************986 PP
+
+>> Condensation_Starter  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  157.9   0.2   2.9e-49   7.7e-49       4     299 ..     604     892 ..     601     893 .. 0.91
+   2 !   47.2   0.1   1.5e-15     4e-15      37     299 ..    1638    1905 ..    1629    1906 .. 0.87
+   3 !  153.7   0.0   5.3e-48   1.4e-47       3     299 ..    2090    2381 ..    2088    2382 .. 0.92
+
+  Alignments for each domain:
+  == domain 1    score: 157.9 bits;  conditional E-value: 2.9e-49
+  Condensation_Starter   4 lpLtaaQrgiWlaqqldpd.spvynigeyveikgeldlelLeeAirqvvaeadalrvrl.veeegepvqavaeelpveleviDlsaeed 90 
+                            pL + Q+g+ +   ld++ s +y++  ++e++g++d+++L++A   vv+++  lr+++   + g+ vqav  +++ +++v+Dl+++ d
+                  bpsA 604 WPLAPLQEGLLFESILDDQgSDIYQVQVILELNGPVDAPRLRAAWDAVVRRHPELRLSFhRLASGKTVQAVHGDVTPPWRVVDLTGAGD 692
+                           59999**********9875378*************************************888999************************ PP
+
+  Condensation_Starter  91 peaaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeapfgslsdllaeeq 179
+                            +aa+ a++ ++ ++ ++l++ pL+r +l+r++ +ry +++ +HHi++DG+++a++++ ++e+Y+a +   ++pe++ g       +  
+                  bpsA 693 VDAAVAALVAEEQQQRFELATAPLVRLVLVRIAADRYRLLFVIHHILVDGWSVAVILNDVSEAYEAGE---PVPEQRGGA---TFRDYL 775
+                           ****************************************************************9855...766666553...334455 PP
+
+  Condensation_Starter 180 aYraSerfakDrayWleklaalpepvslseraapakeasasalrrsaelpaallerlkelaeasgisvaelliAalaaylsrltgeddv 268
+                           a+ + ++   +ra W+++la+l ep++++  ++     +++   r ++l++al+ rl  +a+++g++ ++++ Aa a+ l+rlt + dv
+                  bpsA 776 AWLDRQDDDAARAAWRAELAGLDEPALIA--TSG---VETEYDYRATHLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDV 859
+                           56666777889999**************5..444...6788999999****************************************** PP
+
+  Condensation_Starter 269 vlglpvmnRlgsaa..krtpGmvanvlPLrlsv 299
+                           v+g++v+ R  + a   ++pG ++  +P+r+ +
+                  bpsA 860 VFGTMVATRPPELAgiESMPGLLMTAVPVRVPL 892
+                           *********876543389************976 PP
+
+  == domain 2    score: 47.2 bits;  conditional E-value: 1.5e-15
+  Condensation_Starter   37 eldlelLeeAirqvvaeadalrvrlveeegepvqavaeelpvelev..iDlsaeedpeaaaeawmradlarpldldgdpLfrfallr 121 
+                            +l +++L++ ++ vv+++d lr+r+v +eg+ +  v e   v+++   + ++a+    ++a a   +++ + ld  ++ + + + + 
+                  bpsA 1638 DLTEKALAAGFAAVVDTHDMLRARVVADEGGRRLVVGERGSVDVAGavTRIRADGRSLDEAVADAARAAVTRLDPSAGVMAQAVWVD 1724
+                            567899999*****************************9998887622556666666678888888888888999999********* PP
+
+  Condensation_Starter  122 lgeery.ywyqrvHHiilDGfgfalltrriaeiYtalaagea.apeapfgslsdllaeeqaYraSerfakDrayWleklaalpepvs 206 
+                             g++++  +++ +HH+ +DG++  +l+  ++++ +a +ag++ + e   +s+++ +   ++++ S++ a   a W++ l     p+ 
+                  bpsA 1725 AGPDQVgRLVVVAHHLSVDGVSWRILLSDLQAACEAAVAGREpVLEPVGASFKRWAGLLAEWAVSAERAGELAAWKAILGPGDRPAG 1811
+                            **8887358899****************************98466777889***************************999999888 PP
+
+  Condensation_Starter  207 lseraapakeasasalrrsaelpaallerlk.elaeasgisvaelliAalaaylsrltgeddvvlglpvmnRl...gsaakrtpGmv 289 
+                             ++ +++   a+ +  +rs+ +p+ ++++l  ++  a  ++v+e+l+A la  ++r+ g d v++++  ++R+   g+   rt+G +
+                  bpsA 1812 AQATSRA---AEGAVRSRSWVVPKVETAALAgRAPVAFHCGVNEVLLAGLAGAVARWRGGDAVLVDVESHGRHpvdGTDLSRTVGWF 1895
+                            7655555...7778888888888877777751566799**********************************966678899****** PP
+
+  Condensation_Starter  290 anvlPLrlsv 299 
+                            ++  P+rl+v
+                  bpsA 1896 TSAHPVRLDV 1905
+                            *******998 PP
+
+  == domain 3    score: 153.7 bits;  conditional E-value: 5.3e-48
+  Condensation_Starter    3 rlpLtaaQrgiWl.aqqldpdspvynigeyveikgeldlelLeeAirqvvaeadalrvrl.veeegepvqavaeelpveleviDlsa 87  
+                             lpL++ Q+g+ + a    +   vy+  +++e+ g+ld++lL++++r +++++  lr+ +  +++g+++q v  ++ v+++++D+++
+                  bpsA 2090 VLPLSPLQHGLAFhAGYAGDGVDVYTAQAVLELAGPLDVPLLRKSVRALLDRHANLRAGFrHGADGTAYQVVPGAVAVPVTLVDVTE 2176
+                            79********96615557777899*************************************************************** PP
+
+  Condensation_Starter   88 eedpeaaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeapfgslsdl 174 
+                            ++dp+a+a a+  a+ arp++l++ pL r+ ++ lg++r+ ++ + HHi+lDG+++ ll+ ++ ++Y++ a  ++a+ ap +++ d+
+                  bpsA 2177 SADPAAEAAAVAAAERARPFELARPPLLRVMVVVLGPDRHRLVLTNHHILLDGWSTPLLLDELLTLYRNGA--APAALAPVTPYRDY 2261
+                            *********************************************************************99..66678888888888 PP
+
+  Condensation_Starter  175 laeeqaYraSerfakDrayWleklaalpepvslseraapakeasasalrrsaelpaallerlkelaeasgisvaelliAalaaylsr 261 
+                            la  ++ ++    + + + W++ la+lpep++++++++    + + + +++++l+++ +++l + a+++g++v+++l A+  + l+ 
+                  bpsA 2262 LAWVRETDR----EAATEAWRDALAGLPEPTLVAADRPV---PVEVPEQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAA 2341
+                            887765544....344445**************886666...899999*************************************** PP
+
+  Condensation_Starter  262 ltgeddvvlglpvmnRlgsa..akrtpGmvanvlPLrlsv 299 
+                            ltg+ddvv+g  v++R  +     +++G ++n++P+r+++
+                  bpsA 2342 LTGRDDVVFGSVVSGRPAELpgIETMVGLFINTVPVRVRM 2381
+                            ****************987522789************997 PP
+
+>> Condensation_Dual  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  133.9   0.0   5.8e-42   1.5e-41       2     296 .]     602     893 ..     601     893 .. 0.89
+   2 !  151.8   0.0   2.1e-47   5.4e-47       2     295 ..    2089    2381 ..    2088    2382 .. 0.91
+
+  Alignments for each domain:
+  == domain 1    score: 133.9 bits;  conditional E-value: 5.8e-42
+  Condensation_Dual   2 diYpLapLqeGilfHhllaeeg.DpYllqallafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleldsadge 92 
+                        +i+pLapLqeG+lf  +l ++g D Y +q+ l+++      +  aa ++v+ Rh  Lr +++     + vq v+  ++ + + ++l+ a + 
+               bpsA 602 EIWPLAPLQEGLLFESILDDQGsDIYQVQVILELNGPVDAPRLRAAWDAVVRRHPELRLSFHRLASGKTVQAVHGDVTPPWRVVDLTGAGD- 692
+                        8***************9988754***********************************************************999998866. PP
+
+  Condensation_Dual  93 vaeqlea.rfdprrarldlsqapllrlvvaedaaegrllllllfHHlilDhttlevlseEvqallq.gqe.ealpapvpyRnfvaqarlgvs 181
+                        v + ++a   + +++r++l+ apl+rlv+++  a +r+ ll  +HH+++D  +++v+ ++v+   + g+   +    + +R+++a   + ++
+               bpsA 693 VDAAVAAlVAEEQQQRFELATAPLVRLVLVRI-AADRYRLLFVIHHILVDGWSVAVILNDVSEAYEaGEPvPEQRGGATFRDYLAWLDR-QD 782
+                        777666615678899*************9998.8899999*******************99765541443134455789******9955.56 PP
+
+  Condensation_Dual 182 eaeheafFrekLadvdeptlpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFGtvllGRlq 273
+                        +++++a +r++La +dep l      ++g ++e +  +++l+++L++rl   ar+ g+ +++++H awa+vlar++ r+dvvFGt++  R  
+               bpsA 783 DDAARAAWRAELAGLDEPAL----IATSGVETEYDYRATHLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDVVFGTMVATRPP 870
+                        66777788**********75....677888888999999***************************************************** PP
+
+  Condensation_Dual 274 ggegadralGlfintLPlrldld 296
+                          +g +++ Gl++  +P+r+ ld
+               bpsA 871 ELAGIESMPGLLMTAVPVRVPLD 893
+                        *******************9875 PP
+
+  == domain 2    score: 151.8 bits;  conditional E-value: 2.1e-47
+  Condensation_Dual    2 diYpLapLqeGilfHhllaeeg.DpYllqallafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleldsad 90  
+                         ++ pL+pLq+G+ fH  +a++g D Y  qa+l++a    +    +++++++dRh  Lr+++      ++ qvv   + ++v+ ++++++ 
+               bpsA 2089 EVLPLSPLQHGLAFHAGYAGDGvDVYTAQAVLELAGPLDVPLLRKSVRALLDRHANLRAGFRHGADGTAYQVVPGAVAVPVTLVDVTESA 2178
+                         678*************9999877****************************************9999*********************** PP
+
+  Condensation_Dual   91 gevaeqlearfdprrarldlsqapllrlvvaedaaegrllllllfHHlilDhttlevlseEvqallqgqe..ealpapvpyRnfvaqarl 178 
+                         ++ ae  + +   r++ ++l++ pllr++v+     +r  l+l+ HH++lD  +  +l +E+ +l ++ +  +al++ +pyR+++a +r 
+               bpsA 2179 DPAAEAAAVAAAERARPFELARPPLLRVMVVVL-GPDRHRLVLTNHHILLDGWSTPLLLDELLTLYRNGAapAALAPVTPYRDYLAWVRE 2267
+                         **9999999999***************999887.6778888899*****************98877664412689999**********77 PP
+
+  Condensation_Dual  179 gvseaeheafFrekLadvdeptlpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFGtvl 268 
+                         +  ea+ ++ +r+ La + eptl    + v    +  e++ ++l+++ +q+l ++ar+ gv ++++l   w++vla ++gr+dvvFG+v+
+               bpsA 2268 TDREAA-TEAWRDALAGLPEPTLVAADRPVPV--EVPEQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAALTGRDDVVFGSVV 2354
+                         665555.5557************876665555..5556999************************************************* PP
+
+  Condensation_Dual  269 lGRlqggegadralGlfintLPlrldl 295 
+                         +GR +   g ++++Glfint+P+r+++
+               bpsA 2355 SGRPAELPGIETMVGLFINTVPVRVRM 2381
+                         ************************987 PP
+
+>> CAL_domain  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   70.6   9.9   3.1e-23   8.1e-23       1     157 [.      36     171 ..      36     172 .. 0.88
+   2 !   39.0   6.1   1.1e-13   2.8e-13     243     465 .]     246     428 ..     246     428 .. 0.88
+   3 !   35.0   0.1   1.7e-12   4.4e-12     104     180 ..    1141    1218 ..    1125    1223 .. 0.82
+   4 !   40.6   1.4   3.6e-14   9.5e-14     291     465 .]    1309    1449 ..    1283    1449 .. 0.93
+   5 !   58.9   5.9     1e-19   2.8e-19       1     160 [.    2564    2716 ..    2564    2734 .. 0.89
+   6 !   43.0   0.8   6.6e-15   1.7e-14     368     457 ..    2876    2964 ..    2875    2970 .. 0.89
+
+  Alignments for each domain:
+  == domain 1    score: 70.6 bits;  conditional E-value: 3.1e-23
+  CAL_domain   1 syaeLerrarrlAGhLqdlGlkpGdrVvillgnrvefVeayLAclrAgaVAVPlnpdsadaelahllrdsGiravltdaAhaavLdkvrrtapalalvd 99 
+                 +y++L++ra+rlAG L+ +G+++GdrV++ +      V+a+LA+  Aga  VP++ +   + +a + +ds + +v+                +a+ +  
+        bpsA  36 TYRQLDERAGRLAGRLASRGIRRGDRVAVVMDRSADLVVALLAVWKAGAAYVPVDAGYPAPRVAFMVADSAAKLVVC---------------SAASRG- 118
+                 8**************************************************************************44...............444455. PP
+
+  CAL_domain 100 ahaagrelagfasyeelatpe...salpArDDPvlglDelAwmlYTSGsTGrPKGVlsthr 157
+                      +++ag+ s+e++a  e   s +pA++     + ++A+ +YTSGsTG+PKGV  +++
+        bpsA 119 -----AVPAGVESLEPAAAAEegaSDAPAATV---RPGDPAYVMYTSGSTGTPKGVTISQG 171
+                 .....669999999988865322255555554...8********************99997 PP
+
+  == domain 2    score: 39.0 bits;  conditional E-value: 1.1e-13
+  CAL_domain 243 ldavkeeerpdfdlssLrvalvGGepvrAsLlreFeerFavfglkrsplldtYGltETsgsitvnkkgeqfrpleldrdaLnlgkrapaGarveglell 341
+                 l+av ee  ++ +  + r  l GG +v+A  ++++ ++ a+    r  + + YG tE++  +t                             ++g +++
+        bpsA 246 LRAVAEE--APESFAEFREVLTGGDVVPAHAVERVRTA-AP----RARFRNMYGPTEATMCATWH---------------------L----LQPG-DVV 311
+                 5788888..88888888999999999999999998654.78....88899999999999999999.....................3....4788.888 PP
+
+  CAL_domain 342 sCAsFvEvGlpvpgltLRiVDPetgadvppGeeGEiWvkGPnvmrGYLhnqPeataqaLrsilhtddDG......WyRTGDLGrr.aeaGnltvTGRiK 433
+                 +    v +G p  g  + + D ++ + v pG +G ++ +G +++ GY +n+ + ta+  ++      D+       y TGDL+   a+ G+l+  GR +
+        bpsA 312 GP--VVPIGRPLTGRRVQVLD-ASLRPVGPGVVGDLYLSG-ALAEGY-FNRAALTAERFVA------DPsapgqrMYWTGDLAQWtAD-GELVFAGRAD 398
+                 88..8999*************.******************.9*****.********99998......55334444799*****86266.********** PP
+
+  CAL_domain 434 elIirgGeNiHPheiEasiVaravpgvadaaV 465
+                 + + ++G  i P+eiEa  +++a p+v da+V
+        bpsA 399 DQVKIRGFRIEPGEIEA--ALIAQPDVHDAVV 428
+                 *****************..***********98 PP
+
+  == domain 3    score: 35.0 bits;  conditional E-value: 1.7e-12
+  CAL_domain  104 grelagfas.yeelatpesalpArDD.PvlglDelAwmlYTSGsTGrPKGVlsthrNcLwsnaaCivpalgldedDrvL 180 
+                  g+++a fa+ + + + +++a++ + D P  ++  +A+  YTSGsTG+PKGV++th   L   a + +   g+++ +rvL
+        bpsA 1141 GAVPAEFADrLVVIDEVDPAAGSAGDlPRVDPRSAAYVIYTSGSTGTPKGVVVTHAG-LGNLALAHIDRFGVSPSSRVL 1218
+                  5566666654566777888888766646778999*********************98.999999999999999999998 PP
+
+  == domain 4    score: 40.6 bits;  conditional E-value: 3.6e-14
+  CAL_domain  291 lldtYGltETsgsitvnkkgeqfrpleldrdaLnlgkrapaGarveglellsCAsFvEvGlpvpgltLRiVDPetgadvppGeeGEiWvkGPnvmrG 387 
+                  ++++YG tET+  +t++                      p  +++     +        G+pvpg+   + D    + +ppG  GE++  G +v+rG
+        bpsA 1309 MINAYGPTETTICATMS---------------------MPLSPGQHP---IPF------GKPVPGVRGYLLD-SFLRPLPPGVTGELYLAGIGVARG 1374
+                  59***************.....................*******99...555......*************.99999******************* PP
+
+  CAL_domain  388 YLhnqPeataqaLrsilhtddDGW......yRTGDLGrraeaGnltvTGRiKelIirgGeNiHPheiEasiVaravpgvadaaV 465 
+                  Y  ++ + ta+  ++      D++      yRTGDL+   e G+l+  GR ++ + ++G  + P+eiE   ++   p v  aaV
+        bpsA 1375 Y-LGRSALTAERFVA------DPFvpgermYRTGDLAYWTEQGELVSAGRADDQVKIRGFRVEPREIEF--ALSGYPRVTQAAV 1449
+                  *.9*******99998......9997777778**************************************..******9999998 PP
+
+  == domain 5    score: 58.9 bits;  conditional E-value: 1e-19
+  CAL_domain    1 syaeLerrarrlAGhLqdlGlkpGdrVvillgnrvefVeayLAclrAgaVAVPlnpdsadaelahllrdsGiravlt.daAhaavLdkvrrtapala 96  
+                  +yaeL++ra +lA  L d G  p   V++ll+   e V+a+LA+   g    P++p+   +  a +l+d+G  +v+t  + +a    +v ++++   
+        bpsA 2564 TYAELDARANQLARWLIDQGAGPEGLVAVLLPRSLELVVALLAVTKTGGAWLPIDPGYPADRIAFMLDDAGPALVITtAVLSASPIGDVLAARSRTV 2660
+                  8**********************************************************************77776515689999999999998655 PP
+
+  CAL_domain   97 lvdahaagrelag.fasyeelatpesalpArDDPvlglDelAwmlYTSGsTGrPKGVlsthrNcL 160 
+                  ++    +++  ag +a  +++++++  ++   +  l++  +A++ YTSGsTGrPK V++thrN L
+        bpsA 2661 VL----DEPAAAGqLAGRDRAPVTDTDRA--RA--LDPRHPAYLIYTSGSTGRPKAVVVTHRN-L 2716
+                  55....67777764666789999999999..45..****************************.8 PP
+
+  == domain 6    score: 43.0 bits;  conditional E-value: 6.6e-15
+  CAL_domain  368 dvppGeeGEiWvkGPnvmrGYLhnqPeataqaLrsilhtddDGW......yRTGDLGrraeaGnltvTGRiKelIirgGeNiHPheiEasiVarav 457 
+                  +vppG++GE++v G +++rGY  ++   ta   ++      D++      yRTGDL      G l+  GR+++ + ++G  i P+eiEa++Va+++
+        bpsA 2876 LVPPGAVGELYVAGAGLARGY-LGRAGLTATRFVA------DPFgsgermYRTGDLVQWNPDGQLVFAGRVDDQVKVRGFRIEPGEIEAALVAQES 2964
+                  79*******************.9*******99998......665555555*******99877***************************8888875 PP
+
+>> PCP  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   66.0   0.0   1.9e-21   5.1e-21       1      66 [.     505     569 ..     505     571 .. 0.97
+   2 !   68.6   0.1   2.9e-22   7.7e-22       1      69 [.    1525    1592 ..    1525    1593 .. 0.96
+   3 !   70.0   0.1   1.1e-22   2.8e-22       1      68 [.    3053    3119 ..    3053    3121 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 66.0 bits;  conditional E-value: 1.9e-21
+   PCP   1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaall 66 
+           E+ L+ ++aevLgv r g+dD FFelGG+S+ a+rl+ar  + +g+ ++++++f++pt a laa++
+  bpsA 505 ERVLCGLFAEVLGVARAGVDDGFFELGGDSIGAMRLAARAAK-AGLLVTPAQIFEEPTPARLAAVA 569
+           889**************************************9.********************986 PP
+
+  == domain 2    score: 68.6 bits;  conditional E-value: 2.9e-22
+   PCP    1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaallsed 69  
+            E+ L+e++a vLg+ rVg+dD+FFelGG+S+l+++l+ar r+  g++ + +d+f+ +t + +a+l++e+
+  bpsA 1525 ERVLCELFAGVLGLARVGVDDSFFELGGDSILSMQLAARARR-SGLTFTAADVFDGKTPERIAQLAAES 1592
+            899***************************************.********************998875 PP
+
+  == domain 3    score: 70.0 bits;  conditional E-value: 1.1e-22
+   PCP    1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaallse 68  
+            E+ L++++aevLg+er g+dD+FFelGG+S+l++rl+ar ++  g++   +++f+++t a +aa++++
+  bpsA 3053 ERLLCALFAEVLGLERAGADDSFFELGGDSILSMRLAARAHR-EGMSFGAREVFEQRTPAGIAAIVER 3119
+            889***************************************.9********************9986 PP
+
+>> Heterocyclization  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   83.7   0.1   1.2e-26   3.1e-26      40     278 ..     639     871 ..     629     880 .. 0.88
+   2 !   37.0   0.0   1.9e-12   5.1e-12      38     294 ..    1637    1900 ..    1618    1906 .. 0.73
+   3 !   76.1   0.0   2.4e-24   6.3e-24      39     298 ..    2125    2380 ..    2089    2382 .. 0.86
+
+  Alignments for each domain:
+  == domain 1    score: 83.7 bits;  conditional E-value: 1.2e-26
+  Heterocyclization  40 ldlarleaaiealiarHpMLrvvvledGeQrilpavp...kkkievhDlrevkadevearlaalRerlshqvldvergelfeleltllpegk 128
+                        +d+ rl+aa+ a+++rHp Lr++++  +  ++++av+   +   +v Dl    a  v+a++aal ++ ++q+ +++  +l+ l l++++ ++
+               bpsA 639 VDAPRLRAAWDAVVRRHPELRLSFHRLASGKTVQAVHgdvTPPWRVVDLTG--AGDVDAAVAALVAEEQQQRFELATAPLVRLVLVRIAADR 728
+                        7999*********************9998888888876556778999*988..5567899******************************** PP
+
+  Heterocyclization 129 trlhlslDllvaDaaSfrlLlaeLaalye.geeleaaplevsFrdyllaeraqreaarerdrayWqarlpeLpaaPeLPlakepekleeprf 219
+                         rl + +  +++D +S+ ++l++ +++ye ge ++++   ++Frdyl+  ++q++ a+   ra W a l+ L ++P+L  +   e+    + 
+               bpsA 729 YRLLFVIHHILVDGWSVAVILNDVSEAYEaGEPVPEQRGGATFRDYLAWLDRQDDDAA---RAAWRAELAGL-DEPALIATSGVET----EY 812
+                        ***************************97356788999999*******9998887665...899********.5788877666555....77 PP
+
+  Heterocyclization 220 trrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnltlfnrqpl 278
+                          r+++l+p+   +l  +a+e+g+tps+v+ aa+a vlar ++++ +++   +  r+p 
+               bpsA 813 DYRATHLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDVVFGTMVATRPPE 871
+                        8888999***********************************99999887777766665 PP
+
+  == domain 2    score: 37.0 bits;  conditional E-value: 1.9e-12
+  Heterocyclization   38 edldlarleaaiealiarHpMLrvvvled..GeQrilpavpkkki..evhDlrevkadevearlaalRerlshqvldvergelf.elelt 122 
+                         +dl+ ++l a   a++  H+MLr++v +d  G+  ++ +   + +  +v+ +r+   +  ea  +a R++ +  +ld+  g +  ++ + 
+               bpsA 1637 SDLTEKALAAGFAAVVDTHDMLRARVVADegGRRLVVGERGSVDVagAVTRIRADGRSLDEAVADAARAAVT--RLDPSAGVMAqAVWVD 1724
+                         689999******************998774344445555554444114666676666655555555555544..4555555444156677 PP
+
+  Heterocyclization  123 llpegktrlhlslDllvaDaaSfrlLlaeLaalyege....eleaaplevsFrdy..llaeraqreaarerdrayWqarlpeLpaaPeLP 206 
+                           p++  rl +    l +D  S r+Ll++L+a+ e +    e  ++p+ +sF +   llae a +++++  + a W a    + ++ + P
+               bpsA 1725 AGPDQVGRLVVVAHHLSVDGVSWRILLSDLQAACEAAvagrEPVLEPVGASFKRWagLLAEWAVSAERA-GELAAWKA----ILGPGDRP 1809
+                         79****************************98765443333888999999**98633555555555555.44455655....55666778 PP
+
+  Heterocyclization  207 lakepekleeprftrrrhs.ldpeewqalkaraa.eagvtpsmvllaafaevlarwsessrflLnltlfnrqplh.pdvdklvgDFtsll 293 
+                           +++++ +++  +r r + +++ e +al+ ra  + +  +  vlla  a  +arw + +++l+ +    r+p++ +d+ ++vg Fts  
+               bpsA 1810 AGAQATSRAAEGAVRSRSWvVPKVETAALAGRAPvAFHCGVNEVLLAGLAGAVARWRGGDAVLVDVESHGRHPVDgTDLSRTVGWFTSAH 1899
+                         87666666666666666661566789999999853789***********************************98579*********976 PP
+
+  Heterocyclization  294 l 294 
+                          
+               bpsA 1900 P 1900
+                         5 PP
+
+  == domain 3    score: 76.1 bits;  conditional E-value: 2.4e-24
+  Heterocyclization   39 dldlarleaaiealiarHpMLrvvvl..edGe.QrilpavpkkkievhDlrevkadevearlaalRerlshqvldvergelfeleltllp 125 
+                          ld+  l++ ++al+ rH  Lr+ ++  +dG+  +++p +  + ++  D+ e+++ ++  + aa+ ++   +  +++r +l+ + +++l 
+               bpsA 2125 PLDVPLLRKSVRALLDRHANLRAGFRhgADGTaYQVVPGAVAVPVTLVDVTESADPAA--EAAAVAAAERARPFELARPPLLRVMVVVLG 2212
+                         589999******************9833477635888999999*******99666654..56777788888999999************* PP
+
+  Heterocyclization  126 egktrlhlslDllvaDaaSfrlLlaeLaalyegeeleaaplev.sFrdyllaeraqreaarerdrayWqarlpeLpaaPeLPlakepekl 214 
+                          +++rl l    +++D +S  lLl+eL +ly++ +++aa   v  +rdyl+  r+++++a   + + W + l+ Lp+ P+L  a  p  +
+               bpsA 2213 PDRHRLVLTNHHILLDGWSTPLLLDELLTLYRNGAAPAALAPVtPYRDYLAWVRETDREA---ATEAWRDALAGLPE-PTLVAADRPVPV 2298
+                         **********************************99998888879*****9988776655...5777********95.999999999886 PP
+
+  Heterocyclization  215 eeprftrrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnltlfnrqplhpdvdklvgDFtsllllevd 298 
+                         e p  ++ +++ld++  qal ara+e gvt+s+vl a++  vla+ ++++ +++   +  r++  p ++ +vg F + + + v+
+               bpsA 2299 EVP--EQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAALTGRDDVVFGSVVSGRPAELPGIETMVGLFINTVPVRVR 2380
+                         655..679*****************************************************************99988766665 PP
+
+>> CXglyc  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   66.4   5.5   1.7e-21   4.5e-21      27     300 ..     627     890 ..     606     893 .. 0.84
+   2 !   64.4   4.5   6.7e-21   1.8e-20      18     300 ..    2104    2379 ..    2088    2382 .. 0.84
+
+  Alignments for each domain:
+  == domain 1    score: 66.4 bits;  conditional E-value: 1.7e-21
+  CXglyc  27 lhvsvalrlrGrldvpaleaalgdvaarheilrttfp....G.daqsvhqhv.hdaaaveltpveateedlpgllaerresvfdltrevpwrcdlfalsdkeh 123
+               v v l l+G +d p l aa   v  rh  lr +f     G + q+vh  v +    v+lt     +  + +l+ae +++ f+l+     r  l +++ + +
+    bpsA 627 YQVQVILELNGPVDAPRLRAAWDAVVRRHPELRLSFHrlasGkTVQAVHGDVtPPWRVVDLTGAGDVDAAVAALVAEEQQQRFELATAPLVRLVLVRIAADRY 729
+             457899*****************************96332232457888888445566899999999999****************99999************ PP
+
+  CXglyc 124 vlalkvhriladddsldvflrdlaaayGarraGrvperaplalqfadyalwerrllegerekdslindqiafwrdnlagideetvlpfdrersavpsrraGtv 226
+              l + +h il d  s+ v+l d++ ay a     vpe+   a  f dy  w  r      + d+      a wr +lag+de   + +    +    r     
+    bpsA 730 RLLFVIHHILVDGWSVAVILNDVSEAYEAGE--PVPEQRGGA-TFRDYLAWLDRQ-----DDDA----ARAAWRAELAGLDEPALIATSGVETEYDYR----- 815
+             ***************************9964..699988755.7*******7663.....3332....2357**********9998877665555444..... PP
+
+  CXglyc 227 alrldaepharlteavepaGadalqlvhaalalllarlGagedvviGttl.prdedlidlepliGpfarplalrt 300
+             a +l  + h+rl+  +   G    ++vhaa a++larl   +dvv Gt++  r  +l  +e++ G +  ++++r 
+    bpsA 816 ATHLTPALHTRLLGFAREHGLTPSTVVHAAWAMVLARLTRRTDVVFGTMVaTRPPELAGIESMPGLLMTAVPVRV 890
+             56788999****************************************87358999**********999999996 PP
+
+  == domain 2    score: 64.4 bits;  conditional E-value: 6.7e-21
+  CXglyc   18 arpgeetaglhvsva.lrlrGrldvpaleaalgdvaarheilrttfp.Gdaqsvhqhvhdaaaveltpveateedlpg.....llaerresvfdltrevpw 111 
+              a   +++ +++++ a l l G ldvp l  +++ + +rh  lr+ f  G   + +q v+ a av +t+v++te   p+     + a  r++ f+l+r    
+    bpsA 2104 AGYAGDGVDVYTAQAvLELAGPLDVPLLRKSVRALLDRHANLRAGFRhGADGTAYQVVPGAVAVPVTLVDVTESADPAaeaaaVAAAERARPFELARPPLL 2204
+              555677777777755389****************************736667899******************9888622221445678899********* PP
+
+  CXglyc  112 rcdlfalsdkehvlalkvhriladddsldvflrdlaaayGarraGrvper.aplalqfadyalwerrllegerekdslindqiafwrdnlagideetvlpf 211 
+              r  +  l  + h l l+ h il d  s+ ++l +l + y   r+G +p   ap+   + dy  w r+    +re+        + wrd+lag++e t +  
+    bpsA 2205 RVMVVVLGPDRHRLVLTNHHILLDGWSTPLLLDELLTLY---RNGAAPAAlAPV-TPYRDYLAWVRE---TDREAA------TEAWRDALAGLPEPTLVAA 2292
+              ***********************************9999...99***9862555.589******764...444443......356**************** PP
+
+  CXglyc  212 drersavpsrraGtvalrldaepharlteavepaGadalqlvhaalalllarlGagedvviGttlp.rdedlidlepliGpfarplalrt 300 
+              dr+ ++        +   ld      l + +   G  + ++++a   ++la l   +dvv G+++  r  +l  +e+++G f  ++++r 
+    bpsA 2293 DRPVPV---EVPEQIWTTLDETFAQALGARARECGVTVSTVLQAVWGMVLAALTGRDDVVFGSVVSgRPAELPGIETMVGLFINTVPVRV 2379
+              **9766...44455667789888788999999******************************98854999999***********999996 PP
+
+>> ACP  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   29.4   0.1   5.4e-10   1.4e-09       3      67 ..     507     567 ..     505     569 .. 0.89
+   2 !   32.0   0.1   8.4e-11   2.2e-10       2      67 ..    1526    1587 ..    1525    1592 .. 0.94
+   3 !   23.2   0.1   4.7e-08   1.2e-07       2      69 ..    3054    3117 ..    3053    3120 .. 0.93
+
+  Alignments for each domain:
+  == domain 1    score: 29.4 bits;  conditional E-value: 5.4e-10
+   ACP   3 lvreevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLae 67 
+           +++   a+vlg+ +     +d+ F++lG DS+ a++L  r ++a Gl ++++++f+ ptp++La+
+  bpsA 507 VLCGLFAEVLGV-ARAG--VDDGFFELGGDSIGAMRLAARAAKA-GLLVTPAQIFEEPTPARLAA 567
+           6778889*****.5555..599******************8877.******************97 PP
+
+  == domain 2    score: 32.0 bits;  conditional E-value: 8.4e-11
+   ACP    2 alvreevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLae 67  
+            ++++e  a vlgl     v +d++F++lG DS+ +++L  r ++  Gl+++a+ vfd +tp+++a+
+  bpsA 1526 RVLCELFAGVLGL---ARVGVDDSFFELGGDSILSMQLAARARRS-GLTFTAADVFDGKTPERIAQ 1587
+            689999*******...99***********************8776.*****************997 PP
+
+  == domain 3    score: 23.2 bits;  conditional E-value: 4.7e-08
+   ACP    2 alvreevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLaehL 69  
+            +l+++  a+vlgl   +   +d++F++lG DS+ +++L  r +++ G+++ a  vf+  tp+ +a+ +
+  bpsA 3054 RLLCALFAEVLGL---ERAGADDSFFELGGDSILSMRLAARAHRE-GMSFGAREVFEQRTPAGIAAIV 3117
+            6899999******...88889********************9999.****************999876 PP
+
+>> NRPS-COM_Nterm  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   23.6   0.0   1.6e-08   4.1e-08      11      31 ..     601     621 ..     600     623 .. 0.92
+
+  Alignments for each domain:
+  == domain 1    score: 23.6 bits;  conditional E-value: 1.6e-08
+  NRPS-COM_Nterm  11 edIYpLSPMQeGMLFHsLldp 31 
+                     e I+pL+P+QeG+LF s+ld 
+            bpsA 601 EEIWPLAPLQEGLLFESILDD 621
+                     78****************986 PP
+
+>> NRPS-COM_Cterm  
+   [No individual domains that satisfy reporting thresholds (although complete target did)]
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (3165 residues)
+Target model(s):                          37  (9277 nodes)
+Passed MSV filter:                        17  (0.459459); expected 0.7 (0.02)
+Passed bias filter:                       16  (0.432432); expected 0.7 (0.02)
+Passed Vit filter:                        15  (0.405405); expected 0.0 (0.001)
+Passed Fwd filter:                        14  (0.378378); expected 0.0 (1e-05)
+Initial search space (Z):                 37  [actual number of targets]
+Domain search space  (domZ):              14  [number of targets reported over threshold]
+# CPU time: 0.17u 0.00s 00:00:00.17 Elapsed: 00:00:00.17
+# Mc/sec: 172.72
+//
+Query:       bpsB  [L=4077]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model                Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------             -----------
+          0 1441.4  36.7   2.4e-149  487.7   0.7    5.7  5  Cglyc                
+          0 1154.9   0.0   1.8e-113  369.9   0.0    5.3  5  Condensation_DCL     
+          0 1082.9   9.3   5.8e-116  378.6   0.1    3.3  3  AMP-binding          AMP-binding enzyme
+   3.3e-282  929.2 176.5   1.4e-131  430.9  26.9    5.8  5  Epimerization        
+   7.2e-210  686.2   0.0    3.3e-61  198.2   0.0    5.3  5  Condensation_LCL     
+   4.6e-152  496.7   0.0    8.3e-48  154.5   0.0    5.5  4  Condensation_Dual    
+   1.1e-149  488.9   0.1    4.5e-44  142.2   0.0    5.7  5  Condensation_Starter 
+    2.7e-89  290.8   0.0    4.3e-27   86.5   0.0    5.6  4  Heterocyclization    
+      2e-82  268.0  78.7    3.3e-25   78.5   8.8    7.7  6  CAL_domain           
+    8.3e-66  209.5   1.5    1.2e-22   71.2   0.0    4.1  3  PCP                  
+    1.1e-50  163.6  52.7    7.6e-20   62.3   3.0    5.8  3  CXglyc               
+    7.3e-33  104.0   2.7    4.4e-13   40.7   0.0    4.1  3  ACP                  
+    2.8e-28   88.2   0.0      7e-11   32.5   0.0    3.4  3  NRPS-COM_Nterm       
+    4.2e-11   33.7   0.4    6.6e-06   17.3   0.0    3.2  0  NRPS-COM_Cterm       
+
+
+Domain annotation for each model (and alignments):
+>> Cglyc  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  487.7   0.7  9.1e-150  2.4e-149       1     298 [.       6     301 ..       6     302 .. 0.99
+   2 !   20.9   0.4   1.3e-07   3.5e-07     106     298 ..    1132    1332 ..    1051    1333 .. 0.62
+   3 !  465.2   1.9  6.4e-143  1.7e-142       1     299 []    1507    1801 ..    1507    1801 .. 0.99
+   4 !   23.3   1.3   2.5e-08   6.5e-08      40     207 ..    2575    2748 ..    2559    2840 .. 0.71
+   5 !  466.4   0.5  2.9e-143  7.8e-143       2     298 ..    3020    3315 ..    3019    3316 .. 0.99
+
+  Alignments for each domain:
+  == domain 1    score: 487.7 bits;  conditional E-value: 9.1e-150
+  Cglyc   1 ledvWPLsPlqeGllfhaaldeegpdvYqvqrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaeverla 104
+            +e++WPLsPlq Gllfha++d egpdvY +++il+l gp+daa lraaWe+llarha Lra+fr++ksgetvq++ar+velpWrevDls+l  d++e++v++la
+   bpsB   6 IEEIWPLSPLQAGLLFHAVYDGEGPDVYIGHWILDLAGPVDAAGLRAAWETLLARHAPLRACFRQRKSGETVQIIARQVELPWREVDLSHL--DDPEEAVRELA 107
+            68*****************************************************************************************..99********* PP
+
+  Cglyc 105 aeeraerfdlakaPllrllLvrlgedrhrlvvtshhilvDGWslpiileelaalYaaggdaselpaaasyrdylaWlsrqdkeaaraaWraelagldeptlvap 208
+            +++r++rfdla+aPllrl+L+rlg+d hrlvvt+hh ++DGWslpi+++el+ lY aggdas+lp+++syr+ylaWlsrqdke+a +aW ael+g++eptlv+p
+   bpsB 108 EQDRTTRFDLAQAPLLRLTLIRLGADAHRLVVTCHHTIMDGWSLPIVIDELSVLYPAGGDASALPDVPSYREYLAWLSRQDKERALSAWTAELSGAEEPTLVVP 211
+            ******************************************************************************************************** PP
+
+  Cglyc 209 adaarapaepeevvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrvrL 298
+            ad++rapaepe+v ++l+e+ltr+l+elar+hgltlntvvqgaWalvLa+Lagr dvvfGa+v++rP++lpgve mvGl+lntvPvrvrL
+   bpsB 212 ADPGRAPAEPESVEAHLPEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDVVFGAAVSARPPDLPGVEGMVGLFLNTVPVRVRL 301
+            *****************************************************************************************9 PP
+
+  == domain 2    score: 20.9 bits;  conditional E-value: 1.3e-07
+  Cglyc  106 eeraerfdlakaPllrllLvrlgedr.hrlvvtshhilvDGWslpiileelaalYa...aggdaselpaaasyrdylaWls.rqdkeaar...aaWraelag 199 
+             +  +  +d ++  + r++ +  g+++  rl ++ hh+ vD  s  i+l +l a+Y+   +gg+ +  p+++syr++   l  r   e++    + W+a ++g
+   bpsB 1132 RTATGTLDPSAGIMARVVWIDAGDAEpGRLAFVAHHLSVDAVSWGILLPDLRAAYDeviSGGTPALEPPVTSYRQWARRLTaRALSESTVaelEKWAAVVEG 1233
+             34455688888889999999998865379**************************84446899999999*****9887775144444443001344444444 PP
+
+  Cglyc  200 ldeptlvapadaarapaepeevvlelseeltrrlvelar.ehgltlntvvqgaWalvLarLagrtdvv.fGatvagr.PaelpgvesmvGlllntvPvrvrL 298 
+             +       p+d+++ + + ++  ++ls +  r+lv++        ++ v+ +  a  +ar+ g    +       gr  a+  ++ + vG + ++ Pvr +L
+   bpsB 1234 A---EPALPQDTGQHTGQSHSWSTSLSGTEVRDLVTVLPgAFHCGIQDVLLAGLAGAVARVRGSGAALlVDVEGHGReAADGEDLLRTVGWFTSVHPVRLEL 1332
+             4...34456677777777777777777777777766533033444444444444445555544433220222333441234555556677777777777665 PP
+
+  == domain 3    score: 465.2 bits;  conditional E-value: 6.4e-143
+  Cglyc    1 ledvWPLsPlqeGllfhaaldeegpdvYqvqrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaever 102 
+             l+d+WPLsPlqeG+lf++a+de+g+dvYq+qril+ldgpld+ rlraaW+++larha+Lr++f++l sg+tvqvv+re+++pWr++Dls+l+++ea+aever
+   bpsB 1507 LTDIWPLSPLQEGMLFERAFDEDGVDVYQTQRILDLDGPLDEPRLRAAWNQVLARHASLRTGFHQLGSGATVQVVVREADIPWRVADLSHLDAAEAAAEVER 1608
+             68**************************************************************************************************** PP
+
+  Cglyc  103 laaeeraerfdlakaPllrllLvrlgedrhrlvvtshhilvDGWslpiileelaalYaaggdaselpaaasyrdylaWlsrqdkeaaraaWraelagldept 204 
+             l+ae++ +rfd++++PllrllL+rlg+d+hrlvvtshh+l+DGWs+p+++ e+++ Ya+g   +++++++sy+dylaWlsrqd ea+r+aWraelag+dept
+   bpsB 1609 LLAEDQGRRFDVTRPPLLRLLLIRLGADEHRLVVTSHHVLLDGWSTPLVVGEMSDGYAGG---RSSSKPPSYQDYLAWLSRQDAEATRSAWRAELAGADEPT 1707
+             **********************************************************99...778899********************************* PP
+
+  Cglyc  205 lvapadaarapaepeevvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrvrLd 299 
+             lv+ ada+++ ++p+e++ +l+e +tr+l+ +ar+hglt++t+v gaWalvLarLagrtdvvfG++v+grPa++p+ve+mvG+++ntvP rvrLd
+   bpsB 1708 LVD-ADAGKTLVMPDEHAEWLPEPATRALAGFARGHGLTVSTIVLGAWALVLARLAGRTDVVFGSVVSGRPADVPDVERMVGMFINTVPARVRLD 1801
+             **9.999**************************************************************************************98 PP
+
+  == domain 4    score: 23.3 bits;  conditional E-value: 2.5e-08
+  Cglyc   40 ldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrev.DlselpedeaeaeverlaaeeraerfdlakaPllrllLvrlgedrh.rlvvtsh 139 
+             l ++ l a   a+++ h++Lr    + ++ e   vva++ +++     +  e+  d   ae++   a+++a r+d  +  l+r + v  g+ r  rlvv+ h
+   bpsB 2575 LSVTALVAGLGAVIDTHDMLRSRIVESEGVEPRLVVAGRGTVDAAALvERVEA-GDGDLAEIADRCAHDTAARLDPVAGVLVRAVWVDAGPGRAgRLVVAAH 2675
+             556778889999****************9999999999888876543033333.455678888888999*********************977449****** PP
+
+  Cglyc  140 hilvDGWslpiileelaalYa...aggdaselpaaasyrdylaWlsrqdkeaa..raaWraelagldeptlva 207 
+             h++vD  s   +l +l+a+ +   agg+ +  p+ +s+r +   l+ +   ++   a+W + l+g+++     
+   bpsB 2676 HLVVDVVSWRTLLPDLQAACEavvAGGQPALDPPDVSFRRWSRTLDGEAAIRTgeLAVWTEILDGAQSRLGEL 2748
+             *************9999876522269999999999****9888887766544422578999999987654333 PP
+
+  == domain 5    score: 466.4 bits;  conditional E-value: 2.9e-143
+  Cglyc    2 edvWPLsPlqeGllfhaaldeegpdvYqvqrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaeverl 103 
+              d+WPLsPlqeGllfhaa d++gpdvY+++r+l++dgpld+ar+ra+W+ ll+rh+aLrasf++l+sge+vqv+ar+v  +Wre+Dls+lpe+ea ae++rl
+   bpsB 3020 LDIWPLSPLQEGLLFHAA-DDRGPDVYASMRTLAIDGPLDVARFRASWTVLLDRHPALRASFHQLESGEAVQVIARDVPPDWRETDLSGLPESEALAEFDRL 3120
+             69***************9.*********************************************************************************** PP
+
+  Cglyc  104 aaeeraerfdlakaPllrllLvrlgedrhrlvvtshhilvDGWslpiileelaalYaaggdaselpaaasyrdylaWlsrqdkeaaraaWraelagldeptl 205 
+             aa+ +aerfdl+kaP lrl+Lvrlg++r+rl++tshhi++DGWslp+il +++++Y+aggd ++lpaa+syrd+laW++rqdk aa +aWr+elaglde+t+
+   bpsB 3121 AARMHAERFDLTKAPQLRLHLVRLGDRRYRLIFTSHHIVADGWSLPLILVDVLTAYEAGGDGRTLPAATSYRDFLAWVDRQDKGAAGQAWRTELAGLDEATH 3222
+             ****************************************************************************************************** PP
+
+  Cglyc  206 vapadaarapaepeevvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrvrL 298 
+             v+p  +  +p epe+v++el++e+++rlve++r+hg+t nt++qg+Wal+LarLagr+dvvfGa+vagrP+e+pgves+vGl++n++Pvr+rL
+   bpsB 3223 VVPPGSIITPLEPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLARLAGRNDVVFGAAVAGRPPEIPGVESAVGLFMNMLPVRARL 3315
+             ********************************************************************************************9 PP
+
+>> Condensation_DCL  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  369.9   0.0  6.7e-114  1.8e-113       1     299 [.       7     301 ..       7     302 .. 0.99
+   2 !   36.5   0.0   2.3e-12   6.2e-12      36     236 ..    1068    1266 ..    1046    1333 .. 0.72
+   3 !  352.0   0.0  1.9e-108  4.9e-108       2     300 .]    1509    1801 ..    1508    1801 .. 0.97
+   4 !   49.0   0.0   3.6e-16   9.5e-16      31     297 ..    2568    2838 ..    2544    2841 .. 0.80
+   5 !  340.8   0.0  4.8e-105  1.3e-104       2     299 ..    3021    3315 ..    3020    3316 .. 0.99
+
+  Alignments for each domain:
+  == domain 1    score: 369.9 bits;  conditional E-value: 6.7e-114
+  Condensation_DCL   1 edvypLsplQeGllfhallde.eadvYvvqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaee 92 
+                       e+++pLsplQ Gllfha++d  + dvY+   +l+l+g++d++ lraa+++l++rh+ Lr++F +++++e+vq+++++vel++re+dls+l++ 
+              bpsB   7 EEIWPLSPLQAGLLFHAVYDGeGPDVYIGHWILDLAGPVDAAGLRAAWETLLARHAPLRACFRQRKSGETVQIIARQVELPWREVDLSHLDDP 99 
+                       68******************999*******************************************************************998 PP
+
+  Condensation_DCL  93 eqeeelealaaedrergFdlarapllrltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaalpaarpYrdYiawlarqd 185
+                       e  e++++la++dr+++Fdla+apllrltlirl+++ +rlv+t Hh ++DGWslp++++el  lY   a+g+++alp +++Yr+Y+awl+rqd
+              bpsB 100 E--EAVRELAEQDRTTRFDLAQAPLLRLTLIRLGADAHRLVVTCHHTIMDGWSLPIVIDELSVLY--PAGGDASALPDVPSYREYLAWLSRQD 188
+                       7..9*************************************************************..99************************ PP
+
+  Condensation_DCL 186 keaaeaaWreeLagleeptllaeakkeeeeeaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvsgRpae 278
+                       ke+a +aW++eL+g+eeptl+ +a++ ++ +aepe++e++l+e+ t++L+elar++g+Tlnt+vq+awal+L++l+gr dvvFGa+vs Rp++
+              bpsB 189 KERALSAWTAELSGAEEPTLVVPADPGRA-PAEPESVEAHLPEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDVVFGAAVSARPPD 280
+                       **************************998.*************************************************************** PP
+
+  Condensation_DCL 279 lpgvesmvGlfiNtvPvrvrl 299
+                       lpgve mvGlf+NtvPvrvrl
+              bpsB 281 LPGVEGMVGLFLNTVPVRVRL 301
+                       *******************98 PP
+
+  == domain 2    score: 36.5 bits;  conditional E-value: 2.3e-12
+  Condensation_DCL   36 geldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaeeeqeeelealaaedrergFdlarapllrltlirla 126 
+                          +++++l  a+qa++d h+ Lr+        + + +v+++ +++   l ++  a +   +e+ + + +  + + d+++ ++ r++ i  +
+              bpsB 1068 AGVNPDALVSALQAVLDAHDLLRARVE----PDGRLIVPERGAVAAAGLLTRVAAGTGGLDEIAEREVRTATGTLDPSAGIMARVVWIDAG 1154
+                        3499********************994....4677899**99999999988888887766777777777777889**************99 PP
+
+  Condensation_DCL  127 eer.yrlvltnHhillDGWslplllkellelYqalaegepaalpaa.rpYrdYiawlarqdkeaae....aaWreeLagleeptllaeakk 211 
+                        +++  rl + +Hh+ +D+ s  +ll +l + Y+++ +g ++al+++ ++Yr++ + l+++  ++++    + W++  +g+e   +l++++ 
+              bpsB 1155 DAEpGRLAFVAHHLSVDAVSWGILLPDLRAAYDEVISGGTPALEPPvTSYRQWARRLTARALSESTvaelEKWAAVVEGAEP--ALPQDTG 1243
+                        876279**************************999999999986555************98877761111556666666652..2333333 PP
+
+  Condensation_DCL  212 eeeeeaepeeleveldeeateaLee 236 
+                        ++  + ++++++++l+ +++++L +
+              bpsB 1244 QH--TGQSHSWSTSLSGTEVRDLVT 1266
+                        33..567777777777777776654 PP
+
+  == domain 3    score: 352.0 bits;  conditional E-value: 1.9e-108
+  Condensation_DCL    2 dvypLsplQeGllfhallde.eadvYvvqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselae 91  
+                        d++pLsplQeG+lf   +de + dvY +q +l+l+g+ld  rlraa++++++rh+ Lrt+F++  ++ +vqvv++e+++++r+ dls+l++
+              bpsB 1509 DIWPLSPLQEGMLFERAFDEdGVDVYQTQRILDLDGPLDEPRLRAAWNQVLARHASLRTGFHQLGSGATVQVVVREADIPWRVADLSHLDA 1599
+                        9*****************9999********************************************************************* PP
+
+  Condensation_DCL   92 eeqeeelealaaedrergFdlarapllrltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaalpaarpYrdYiawla 182 
+                        +e+++e+e+l+aed+ r+Fd++r+pllrl lirl+++++rlv+t+Hh+llDGWs+pl++ e+ + Y   a+g+ ++  ++++Y+dY+awl+
+              bpsB 1600 AEAAAEVERLLAEDQGRRFDVTRPPLLRLLLIRLGADEHRLVVTSHHVLLDGWSTPLVVGEMSDGY---AGGRSSS--KPPSYQDYLAWLS 1685
+                        ******************************************************************...6666654..6789********* PP
+
+  Condensation_DCL  183 rqdkeaaeaaWreeLagleeptllaeakkeeeeeaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvs 273 
+                        rqd+ea+++aWr+eLag++eptl+  ++ ++    +p e+   l+e at+aL+ +ar +g+T++t+v +awal+L+rl+gr+dvvFG++vs
+              bpsB 1686 RQDAEATRSAWRAELAGADEPTLVDADAGKT--LVMPDEHAEWLPEPATRALAGFARGHGLTVSTIVLGAWALVLARLAGRTDVVFGSVVS 1774
+                        ************************9888777..599******************************************************* PP
+
+  Condensation_DCL  274 gRpaelpgvesmvGlfiNtvPvrvrld 300 
+                        gRpa++p+ve+mvG+fiNtvP rvrld
+              bpsB 1775 GRPADVPDVERMVGMFINTVPARVRLD 1801
+                        ************************986 PP
+
+  == domain 4    score: 49.0 bits;  conditional E-value: 3.6e-16
+  Condensation_DCL   31 vlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaeeeqeeelealaaedrergFdlarapllrlt 121 
+                        +++  + l v++l a + a++d h++Lr+ +ve+e  ep+ vv+ + +++   l  + +a + + +e+ + +a+d +++ d+ + +l+r +
+              bpsB 2568 SVAAPRDLSVTALVAGLGAVIDTHDMLRSRIVESEGVEPRLVVAGRGTVDAAALVERVEAGDGDLAEIADRCAHDTAARLDPVAGVLVRAV 2658
+                        56666789999***************************************999988888888889************************** PP
+
+  Condensation_DCL  122 lirlaeery.rlvltnHhillDGWslplllkellelYqalaegepaalpaa.rpYrdYiawlarqdk..eaaeaaWreeLagleeptllae 208 
+                         +  +  r  rlv+ +Hh+++D  s   ll +l +  +a+ +g ++al+++  ++r + ++l+ + +  +   a+W+e L+g++++  l e
+              bpsB 2659 WVDAGPGRAgRLVVAAHHLVVDVVSWRTLLPDLQAACEAVVAGGQPALDPPdVSFRRWSRTLDGEAAirTGELAVWTEILDGAQSR--LGE 2747
+                        ****9876549**************************999999999996666**********9887511556789*******9854..444 PP
+
+  Condensation_DCL  209 akkeeeeeaepeeleveldeeate.aLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvsgRpa.elpgvesmvGlfiNtvPvrv 297 
+                         ++++++ ++ ++ + ++++e+    +e+++ + +  +  ++ a  a  ++   g + vv  +   gR++    +  +++G f    P+r+
+              bpsB 2748 LDPRRDTVSTAGRRSWTVPREHAGvLVEQVTSAFHCGVHEVLLATLAGAVAGWRGGTAVVVDVEGHGRQPlGELDLSRTLGWFTDVHPLRL 2838
+                        4444444455555555665555440456777788888888888888888888888888887777777765222245566677766666665 PP
+
+  == domain 5    score: 340.8 bits;  conditional E-value: 4.8e-105
+  Condensation_DCL    2 dvypLsplQeGllfhalldeeadvYvvqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaee 92  
+                        d++pLsplQeGllfha  d++ dvY+   +l+++g+ldv+r+ra+++ l+drh++Lr++F++ e++e vqv++++v  ++re+dls+l+e+
+              bpsB 3021 DIWPLSPLQEGLLFHAADDRGPDVYASMRTLAIDGPLDVARFRASWTVLLDRHPALRASFHQLESGEAVQVIARDVPPDWRETDLSGLPES 3111
+                        8****************************************************************************************** PP
+
+  Condensation_DCL   93 eqeeelealaaedrergFdlarapllrltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaalpaarpYrdYiawlar 183 
+                        e+ +e+++laa+ ++++Fdl++ap lrl+l+rl+++ryrl++t+Hhi+ DGWslpl+l ++l+ Y   a+g+  +lpaa++Yrd++aw++r
+              bpsB 3112 EALAEFDRLAARMHAERFDLTKAPQLRLHLVRLGDRRYRLIFTSHHIVADGWSLPLILVDVLTAY--EAGGDGRTLPAATSYRDFLAWVDR 3200
+                        *****************************************************************..77788888**************** PP
+
+  Condensation_DCL  184 qdkeaaeaaWreeLagleeptllaeakkeeeeeaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvsg 274 
+                        qdk aa +aWr+eLagl+e+t++ +  +  + + epe++ +eld e++++L e++r++gvT ntl+q++wal L+rl+gr+dvvFGa+v+g
+              bpsB 3201 QDKGAAGQAWRTELAGLDEATHVVPPGSIIT-PLEPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLARLAGRNDVVFGAAVAG 3290
+                        *************************999998.*********************************************************** PP
+
+  Condensation_DCL  275 RpaelpgvesmvGlfiNtvPvrvrl 299 
+                        Rp+e+pgves vGlf+N +Pvr+rl
+              bpsB 3291 RPPEIPGVESAVGLFMNMLPVRARL 3315
+                        **********************997 PP
+
+>> AMP-binding  AMP-binding enzyme
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  378.6   0.1  2.2e-116  5.8e-116       1     418 []     482     879 ..     482     879 .. 0.96
+   2 !  349.7   0.5  1.3e-107  3.5e-107       1     418 []    1981    2375 ..    1981    2375 .. 0.98
+   3 !  359.2   0.1  1.7e-110  4.5e-110       1     418 []    3498    3887 ..    3498    3887 .. 0.98
+
+  Alignments for each domain:
+  == domain 1    score: 378.6 bits;  conditional E-value: 2.2e-116
+                  EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHHEC CS
+  AMP-binding   1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelakeal 98 
+                  +Y+el+er++rla +L  +Gv++gdrVa++l++sp++++++la++kaGa+yvpv+p +p er +++l+ds+++++++ ++  +++++   + ++    
+         bpsB 482 SYGELAERAERLAGYLNGRGVRRGDRVAVVLDRSPDLIATLLAVWKAGAAYVPVDPAYPVERRKFMLADSGPAAVVCAEAYRAAVPDTCPEPIVL--- 576
+                  7*****************************************************************************************99975... PP
+
+                  CETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHHCCCH CS
+  AMP-binding  99 iivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsvleil 196
+                                  ++  +  + a++++ ++ +++ddlay++yTSG+TG+PKgV ++h+n++al+   ++rvg   +d+vl+ +++afd s++e++
+         bpsB 577 ----------------DDPRTRQAVAESPRLSAGTSADDLAYVMYTSGSTGTPKGVAVSHGNVAALAGEPGWRVGP--GDAVLLHASHAFDISLFEMW 656
+                  ................5667778888888888888*********************************99999998..669***************** PP
+
+                  HHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE--GGGSSE CS
+  AMP-binding 197 gplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGltEttvi 294
+                  +pll+Ga++vl+ p    d a+l  +  + +vt  +l+  ++++l+++ +   +    lr +l+gg++++ ++++r+r +++++++ ++YG+tE+t++
+         bpsB 657 VPLLSGARVVLAGPGAV-DGAAL-AAYVAGGVTAAHLTAGAFRVLADESP---EAVAGLREVLTGGDAVPLAAVERVRGRVRNVRVRHLYGPTEATLC 749
+                  ****************6.55555.555589*******************8...9******************************************** PP
+
+                  SEEEECGHHH..-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE-TT--EEEEEG CS
+  AMP-binding 295 vtvslpgdee..tkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgridedGyleiiGR 386
+                  +t+ l+++ +   ++ +iGrpl+g +++++d   ++vppg+ GEl+++g++va+GY  +p+ltae+fv+d+ +    +yrTGDl++++e+G l + GR
+         bpsB 750 ATWWLLEPGDetGSVLPIGRPLAGRRVHVLDAFLRPVPPGVAGELYVAGAGVAQGYSSRPALTAERFVADPSGsgarMYRTGDLAYWTEQGALAFAGR 847
+                  ****999998889************************************************************************************* PP
+
+                  GGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding 387 kkdqvkirGeriepgeiEsvllehpgvaeaaV 418
+                  ++dqvkirG+r+epgeiE vl+++pgv +a+V
+         bpsB 848 ADDQVKIRGYRVEPGEIEVVLAGLPGVGQAVV 879
+                  ******************************98 PP
+
+  == domain 2    score: 349.7 bits;  conditional E-value: 1.3e-107
+                   EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHH CS
+  AMP-binding    1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelake 96  
+                   +Y++ld++++rla +L   Gv++gdrV++++++++++++a+l+++kaGa+ vpv+ ++paer++++l+d++a+v+++ ++  +++++  +  ++  
+         bpsB 1981 SYADLDRESDRLAGHLAGIGVGRGDRVGVVMTRGADLFVALLGVWKAGAAQVPVNVDYPAERIERMLADVGASVAVCVEATRKAVPDGVEPVVV-- 2074
+                   7*************************************************************************************99988875.. PP
+
+                   ECCETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHH CS
+  AMP-binding   97 aliivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsv 192 
+                                       +l  +++  +e p+v + ++d+ay++yTSG+TG PK+V + h++++al++  ++  g   +d vl+ +++afd+s+
+         bpsB 2075 --------------------DLPVIGGVRPEAPPVTVGAHDVAYVMYTSGSTGVPKAVAVPHGSVAALASDPGWSQGP--GDCVLLHASHAFDASL 2148
+                   ....................6899********************************************9999888887..668************* PP
+
+                   CCCHHHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE-- CS
+  AMP-binding  193 leilgplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGl 288 
+                   +ei++pl++Ga++ +++p +  d+++l +++++ +vt+++l+  ++++++++ +    ++  lr il+gg++++ + + r+r+a++++++ ++YG+
+         bpsB 2149 VEIWVPLVSGARVLVAEPGT-VDAERLREAVSR-GVTTVHLTAGAFRAVAEESP---DSFIGLREILTGGDAVPLASVVRMRQACPDVRVRQLYGP 2239
+                   ********************.699999999976.*******************8...8************************************** PP
+
+                   GGGSSESEEEECGHHH..-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE-TT CS
+  AMP-binding  289 tEttvivtvslpgdee..tkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgrided 378 
+                   tE t+++t+  +++ +    + +iGrpl+g +++++d   ++v+p+++GEl+++g+++a GYl++ ++t e+fv++++     +yrTGDl+r++++
+         bpsB 2240 TEITLCATWLVLEPGAatGDVLPIGRPLAGRQAYVLDAFLQPVAPNVTGELYLAGAGLAHGYLGNTAATSERFVANPFSgggrMYRTGDLARWTDQ 2335
+                   **********999999999***************************************************************************** PP
+
+                   --EEEEEGGGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding  379 GyleiiGRkkdqvkirGeriepgeiEsvllehpgvaeaaV 418 
+                   G+l + GR++ qvkirG+r+epge+E +l e+p va+a+V
+         bpsB 2336 GELVFAGRADSQVKIRGYRVEPGEVEVALTEVPHVAQAVV 2375
+                   **************************************98 PP
+
+  == domain 3    score: 359.2 bits;  conditional E-value: 1.7e-110
+                   EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHH CS
+  AMP-binding    1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelake 96  
+                   T++ l  +v+ la+ L   Gv+++ rV++l+++s+e+ ++++a+  aG+v+vpv+p++p+er++++l++s + v+++++   ++++++ + ++   
+         bpsB 3498 TFGGLLGEVEALARLLVGAGVRREHRVGVLVERSAELAVTMMAVSFAGGVFVPVDPDYPRERVEFMLANSAPGVMVCTKTTRAAVPAEFAGTVL-- 3591
+                   66778889*******************************************************************************9999985.. PP
+
+                   ECCETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHH CS
+  AMP-binding   97 aliivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsv 192 
+                                        l++l++a+++ + +p+ p+d ay+iyTSG+TG PKgV++th +l++l  ++++r+ ++ ++rvl+l++  fd+ v
+         bpsB 3592 --------------------VLDELPAADPDVELPPVAPEDAAYVIYTSGSTGVPKGVLVTHSGLANLGYAHIERMAVTSSSRVLQLSATGFDAIV 3667
+                   ....................5899************************************************************************ PP
+
+                   CCCHHHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE-- CS
+  AMP-binding  193 leilgplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGl 288 
+                    e++++ll+Gatlvl++  + +   +l ++i++ ++t+l++ p++l    + p        +lr++l+gge+l+p+l++r+     g +++++YG+
+         bpsB 3668 SELYMALLAGATLVLPDAASMPPRVTLGEAIRRAGITHLTVSPSVLASEDDLP-------DTLRTVLTGGEALPPALVDRWSP---GRRVIQAYGP 3753
+                   ********************99999999*************************.......59********************6...679******* PP
+
+                   GGGSSESEEEECGHHH-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE-TT-- CS
+  AMP-binding  289 tEttvivtvslpgdeetkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgridedGy 380 
+                   tEtt+++t+s p  +    ++ G p+++v+ +++d   ++vppg+vGEl+i+g ++a+GYl++p ltae+fv+ +++    +yr+GDl r++ +G+
+         bpsB 3754 TETTICSTMSAPLSPGHDQVPLGGPIHNVRHYVLDAFLQPVPPGVVGELYITGVGLARGYLGRPGLTAERFVASPFApgerMYRSGDLFRWTREGQ 3849
+                   ************************************************************************************************ PP
+
+                   EEEEEGGGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding  381 leiiGRkkdqvkirGeriepgeiEsvllehpgvaeaaV 418 
+                   l + GR++ qvk+rG+r+ep+eiE+vl+ehp v ++aV
+         bpsB 3850 LLFAGRVDAQVKVRGYRVEPAEIEAVLAEHPWVGQVAV 3887
+                   ************************************98 PP
+
+>> Epimerization  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   44.0  16.3   4.8e-15   1.3e-14      31     242 ..      40     236 ..      38     238 .. 0.90
+   2 !  430.9  26.9  5.4e-132  1.4e-131       1     316 [.    1037    1332 ..    1037    1333 .. 0.99
+   3 !   30.8  13.9   4.8e-11   1.3e-10      30     140 ..    1540    1647 ..    1538    1651 .. 0.82
+   4 !  420.9  33.7  5.8e-129  1.5e-128       1     316 [.    2538    2840 ..    2538    2841 .. 0.97
+   5 !   26.8   9.3   7.6e-10     2e-09      30     178 ..    3051    3193 ..    3049    3194 .. 0.86
+
+  Alignments for each domain:
+  == domain 1    score: 44.0 bits;  conditional E-value: 4.8e-15
+  Epimerization  31 evpagldedaLraALqaLldhHDALRlRf.reedggwrqrnvperGavdeaaflLevvdlsggddldaaieaaan.eaQasLDlaaGpLlrAvlfd 124
+                     +  ++d++ LraA + Ll++H  LR++f +++ g+ +q++   +  v+    + ++vdls +dd+++a++++a  +  +++Dla+ pLlr+ l +
+           bpsB  40 DLAGPVDAAGLRAAWETLLARHAPLRACFrQRKSGETVQII---ARQVE---LPWREVDLSHLDDPEEAVRELAEqDRTTRFDLAQAPLLRLTLIR 129
+                    567789***********************************...55555...799999*******888888888615678**************** PP
+
+  Epimerization 125 agdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrrWAerLaeyAqseallaEldYWrevlagpdppLPadrpdgdka 220
+                    +g++  +rL+++ HH + DG S  I ++ L  +Y +   G +++  p   S+r++ + L+++  +++    l  W++ l+g+++p  + ++d+   
+           bpsB 130 LGADA-HRLVVTCHHTIMDGWSLPIVIDELSVLYPA---GGDASALPDVPSYREYLAWLSRQ--DKE--RALSAWTAELSGAEEPTLVVPADP--- 214
+                    *****.*****************************6...55555555556************..544..79**************99999999... PP
+
+  Epimerization 221 ddtagtartvsvtLsaeeTraL 242
+                    ++  +  ++v+  L++  Tr L
+           bpsB 215 GRAPAEPESVEAHLPEHLTRSL 236
+                    9******************977 PP
+
+  == domain 2    score: 430.9 bits;  conditional E-value: 5.4e-132
+  Epimerization    1 tGevpLTPIQrWFfeqdggerhHfNQsvlLevpagldedaLraALqaLldhHDALRlRfreedggwrqrnvperGavdeaaflLevvdlsggdd 94  
+                     +Ge+p+TP++r+++  d++ r++f+Q +++ +pag+++daL+ ALqa+ld HD LR+R+  e++g r+++ perGav+ aa+lL++v +++g  
+           bpsB 1037 VGEIPWTPVMRALG--DDAMRPGFAQVRVVVTPAGVNPDALVSALQAVLDAHDLLRARV--EPDG-RLIV-PERGAVA-AAGLLTRVAAGTGG- 1122
+                     7*************..6******************************************..9999.4555.*******.**************. PP
+
+  Epimerization   95 ldaaieaaaneaQasLDlaaGpLlrAvlfdagdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrrWAerLaeyAq 188 
+                     ld+++e++++ a + LD++aG + r+v+ dagd+ pgrL +v+HHL VD+VSW ILL+DL+aAY  + +G ++aL+p+ tS+r+WA+rL+++A 
+           bpsB 1123 LDEIAEREVRTATGTLDPSAGIMARVVWIDAGDAEPGRLAFVAHHLSVDAVSWGILLPDLRAAYDEVISGGTPALEPPVTSYRQWARRLTARAL 1216
+                     ********************************************************************************************** PP
+
+  Epimerization  189 seallaEldYWrevlagpdppLPadrpdgdkaddtagtartvsvtLsaeeTraLLtevpaAYhTgvNDvLLtALalAlarWtGgrGggdaavlv 282 
+                     se+ +aEl+ W++v++g++p+LP+d  ++       g+++++s++Ls +e r L+t  p A+h+g++DvLL++La+A+ar +G +    aa+lv
+           bpsB 1217 SESTVAELEKWAAVVEGAEPALPQDTGQH------TGQSHSWSTSLSGTEVRDLVTVLPGAFHCGIQDVLLAGLAGAVARVRGSG----AALLV 1300
+                     *****************************......**************************************************....***** PP
+
+  Epimerization  283 dLEGHGReEelfdglDlSRTVGWFTSiYPVrLdl 316 
+                     d+EGHGR  e++dg Dl RTVGWFTS++PVrL+l
+           bpsB 1301 DVEGHGR--EAADGEDLLRTVGWFTSVHPVRLEL 1332
+                     *******..***********************98 PP
+
+  == domain 3    score: 30.8 bits;  conditional E-value: 4.8e-11
+  Epimerization   30 LevpagldedaLraALqaLldhHDALRlRf.reedggwrqrnvperGavdeaaflLevvdlsggdd..ldaaieaaaneaQ.asLDlaaGpLlr 119 
+                     L +  +lde +LraA +++l++H  LR  f +   g  +q++v+e+ ++       +v+dls +d+   +a +e++++e Q +++D  + pLlr
+           bpsB 1540 LDLDGPLDEPRLRAAWNQVLARHASLRTGFhQLGSGATVQVVVREADIPW------RVADLSHLDAaeAAAEVERLLAEDQgRRFDVTRPPLLR 1627
+                     566779************************99999999998856666666......5555555555556677777666666378********** PP
+
+  Epimerization  120 AvlfdagdgdpgrLlLviHHL 140 
+                     + l ++g++  +rL+++ HH 
+           bpsB 1628 LLLIRLGADE-HRLVVTSHHV 1647
+                     **********.*********6 PP
+
+  == domain 4    score: 420.9 bits;  conditional E-value: 5.8e-129
+  Epimerization    1 tGevpLTPIQrWFfeq..dggerhHfNQsvlLevpagldedaLraALqaLldhHDALRlRfreedgg.wrqrnvperGavdeaaflLevvdlsg 91  
+                     +Gevp+TP++r+++e+   g +r+  +Q+v +++p +l+++aL+a+L+a++d+HD+LR+R +e +g  +r+++ ++rG+vd aa+l+e+v++++
+           bpsB 2538 VGEVPWTPVVRALLERdpAGLTRGAMAQWVSVAAPRDLSVTALVAGLGAVIDTHDMLRSRIVESEGVePRLVV-AGRGTVD-AAALVERVEAGD 2629
+                     7***************555******************************************777776799999.*******.************ PP
+
+  Epimerization   92 gddldaaieaaaneaQasLDlaaGpLlrAvlfdagdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrrWAerLae 185 
+                     gd l+++++++a + +a+LD+ aG+L+rAv++dag+g++grL++++HHLVVD VSWR LL+DL+aA+e+++aG ++aL+p+  SfrrW+++L  
+           bpsB 2630 GD-LAEIADRCAHDTAARLDPVAGVLVRAVWVDAGPGRAGRLVVAAHHLVVDVVSWRTLLPDLQAACEAVVAGGQPALDPPDVSFRRWSRTLDG 2722
+                     **.******************************************************************************************9 PP
+
+  Epimerization  186 yAqseallaEldYWrevlagpdppLPadrpdgdkaddtagtartvsvtLsaeeTraLLtevpaAYhTgvNDvLLtALalAlarWtGgrGggdaa 279 
+                     +A+   + +El+ W+e+l+g+  +L+  +p +    dt++ta+++s+t+++e + +L+ +v +A+h+gv++vLL++La+A+a W+Gg+     a
+           bpsB 2723 EAAI--RTGELAVWTEILDGAQSRLGELDPRR----DTVSTAGRRSWTVPREHAGVLVEQVTSAFHCGVHEVLLATLAGAVAGWRGGT-----A 2805
+                     9885..**************************....****************************************************.....* PP
+
+  Epimerization  280 vlvdLEGHGReEelfdglDlSRTVGWFTSiYPVrLdl 316 
+                     v+vd+EGHGR ++l + lDlSRT GWFT ++P+rLd+
+           bpsB 2806 VVVDVEGHGR-QPLGE-LDLSRTLGWFTDVHPLRLDV 2840
+                     **********.66666.*******************8 PP
+
+  == domain 5    score: 26.8 bits;  conditional E-value: 7.6e-10
+  Epimerization   30 LevpagldedaLraALqaLldhHDALRlRf.reedggwrqrnvperGavdeaaflLevvdlsggddldaaieaaaneaQa.....sLDlaaGpL 117 
+                     L+   +ld+++ ra    Lld+H+ALR+ f + e g+ +q++     a d + ++ ++ dlsg+  ++  + a++++++a     ++Dl + p 
+           bpsB 3051 LAIDGPLDVARFRASWTVLLDRHPALRASFhQLESGEAVQVI-----ARD-VPPDWRETDLSGL--PESEALAEFDRLAArmhaeRFDLTKAPQ 3136
+                     677789************************************.....777.77899999*****..666666666666662222457******* PP
+
+  Epimerization  118 lrAvlfdagdgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrr 178 
+                     lr+ l+++gd +  rL ++ HH V DG S   +L D  +AYe+   G + +  p  tS+r+
+           bpsB 3137 LRLHLVRLGDRR-YRLIFTSHHIVADGWSLPLILVDVLTAYEA---GGDGRTLPAATSYRD 3193
+                     ************.**************9999999999999996...777777888888886 PP
+
+>> Condensation_LCL  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  198.2   0.0   1.2e-61   3.3e-61       3     295 ..       9     301 ..       7     302 .. 0.93
+   2 !   53.2   0.0   1.8e-17   4.8e-17      38     295 ..    1070    1332 ..    1061    1333 .. 0.79
+   3 !  187.3   0.0   2.6e-58   6.9e-58       4     296 .]    1511    1801 ..    1508    1801 .. 0.92
+   4 !   61.3   0.0     6e-20   1.6e-19      37     295 ..    2574    2840 ..    2565    2841 .. 0.85
+   5 !  179.3   0.0   6.9e-56   1.8e-55       4     295 ..    3023    3315 ..    3021    3316 .. 0.92
+
+  Alignments for each domain:
+  == domain 1    score: 198.2 bits;  conditional E-value: 1.2e-61
+  Condensation_LCL   3 rlplSfaQqrlwflnqlepesaa.yniplalrltgeldvealeaAladlvaRheiLRtvf.peedgepvqvvlpaaelelevedls.....ea 88 
+                        +plS+ Q  l f + +++e +  y    +l l g++d++ l+aA+++l+aRh  LR +f +++ ge+vq ++ ++el+++++dls     e+
+              bpsB   9 IWPLSPLQAGLLFHAVYDGEGPDvYIGHWILDLAGPVDAAGLRAAWETLLARHAPLRACFrQRKSGETVQIIARQVELPWREVDLShlddpEE 101
+                       58****************998762677889******************************77788999************************* PP
+
+  Condensation_LCL  89 eleelveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelleee 181
+                       +++el+e++ +++FdL+++pllr++l+rl ++ h L++++HH i+DgwSl + ++el+ lY   + g+a++l+++p +Y++Y +w +    ++
+              bpsB 102 AVRELAEQDRTTRFDLAQAPLLRLTLIRLGADAHRLVVTCHHTIMDGWSLPIVIDELSVLY--PAGGDASALPDVP-SYREYLAWLS----RQ 187
+                       *************************************************************..6699********9.9******877....56 PP
+
+  Condensation_LCL 182 elarqlaYWreqLagl.pelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvGtpvagR 273
+                       + +r l+ W+++L+g+ +++l +p+d  r + +    ++ve +l+++l+++l+elar+hg tl +v++ a+a++L++l+g+ D+v G+ v+ R
+              bpsB 188 DKERALSAWTAELSGAeEPTLVVPADPGRAPAE---PESVEAHLPEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDVVFGAAVSAR 277
+                       77899999******9956778899998887765...478****************************************************** PP
+
+  Condensation_LCL 274 t..raeledliGfFvNtlvlrtel 295
+                           + +e+++G+F+Nt+++r++l
+              bpsB 278 PpdLPGVEGMVGLFLNTVPVRVRL 301
+                       622589***************987 PP
+
+  == domain 2    score: 53.2 bits;  conditional E-value: 1.8e-17
+  Condensation_LCL   38 ldvealeaAladlvaRheiLRtvfpeedgepvqvvlpa.aele.levedls....eaeleelveeeaarpFdLekepllrvrllrlae.ee 121 
+                        ++ +al +Al+++++ h+ LR +  e dg+ +   + a a++  l+ ++ +     +e++e+  + a+ + d +++++ rv  +   + e 
+              bpsB 1070 VNPDALVSALQAVLDAHDLLRARV-EPDGRLIVPERGAvAAAGlLTRVA-AgtggLDEIAEREVRTATGTLDPSAGIMARVVWIDAGDaEP 1158
+                        67899******************9.666665332222222222133333.24466556666666777789**************9988346 PP
+
+  Condensation_LCL  122 hvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelleeeelarqlaYWreqLaglpelleLptdrprpav 212 
+                          L++v+HH  +D +S+g+ll +l a+Y++  +g +p+l+p   +Y+++a    + + +e++ ++l+ W +  +g+++  +Lp d  ++  
+              bpsB 1159 GRLAFVAHHLSVDAVSWGILLPDLRAAYDEVISGGTPALEPPVTSYRQWARRLTARALSESTVAELEKWAAVVEGAEP--ALPQDTGQHTG 1247
+                        89*************************************************99999999999999***********98..58***999999 PP
+
+  Condensation_LCL  213 qsyrGarvefeld.aelsaklkelarehgvtlFmvllaalavlLsrlsgq.eDivvGtpvagRtraeledl...iGfFvNtlvlrtel 295 
+                        qs++    + +l+  e+++ ++ l  + ++    vlla la  ++r+ g+ + ++v +   gR+ a+ edl   +G F    ++r+el
+              bpsB 1248 QSHS---WSTSLSgTEVRDLVTVLPGAFHCGIQDVLLAGLAGAVARVRGSgAALLVDVEGHGREAADGEDLlrtVGWFTSVHPVRLEL 1332
+                        9885...555555145555666667788999999999999999999987636788999999999887776534478888888888776 PP
+
+  == domain 3    score: 187.3 bits;  conditional E-value: 2.6e-58
+  Condensation_LCL    4 lplSfaQqrlwflnqlepes.aayniplalrltgeldvealeaAladlvaRheiLRtvf.peedgepvqvvlpaaelelevedls...... 86  
+                        +plS+ Q+ + f   ++++  ++y+ + +l l+g+ld+ +l+aA+++++aRh +LRt f +   g +vqvv  +a+++++v dls      
+              bpsB 1511 WPLSPLQEGMLFERAFDEDGvDVYQTQRILDLDGPLDEPRLRAAWNQVLARHASLRTGFhQLGSGATVQVVVREADIPWRVADLShldaae 1601
+                        89**************98762679***********************************55577888***********************9 PP
+
+  Condensation_LCL   87 .eaeleelveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqre 176 
+                         +ae+e+l++e+  r+Fd+++ pllr+ l+rl ++eh L+++ HH+  DgwS+ + + e+++ Y    ag +++ +  p +Y+DY +w + 
+              bpsB 1602 aAAEVERLLAEDQGRRFDVTRPPLLRLLLIRLGADEHRLVVTSHHVLLDGWSTPLVVGEMSDGY----AGGRSSSK--PPSYQDYLAWLS- 1685
+                        999*************************************************************....33333333..458*****9876. PP
+
+  Condensation_LCL  177 lleeeelarqlaYWreqLaglpelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvG 267 
+                           ++++++ ++ Wr++Lag+ e + + +d  +  v     ++++  l++  +++l+ +ar hg t+ +++l a+a++L+rl+g++D+v G
+              bpsB 1686 ---RQDAEATRSAWRAELAGADEPTLVDADAGKTLVMP---DEHAEWLPEPATRALAGFARGHGLTVSTIVLGAWALVLARLAGRTDVVFG 1770
+                        ...6788999999**********999999998888776...678999******************************************** PP
+
+  Condensation_LCL  268 tpvagRtr..aeledliGfFvNtlvlrteld 296 
+                        + v+gR    +++e+++G+F+Nt++ r++ld
+              bpsB 1771 SVVSGRPAdvPDVERMVGMFINTVPARVRLD 1801
+                        ******763379***************9975 PP
+
+  == domain 4    score: 61.3 bits;  conditional E-value: 6e-20
+  Condensation_LCL   37 eldvealeaAladlvaRheiLRtvfpeedgep.vqvvlpa..aelelevedls.....eaeleelveeeaarpFdLekepllrvrllrlae 119 
+                        +l v+al a l ++++ h++LR++++e++g   + vv+ +  ++++  ve+++      ae+++++++++a++ d  +++l+r+  +   +
+              bpsB 2574 DLSVTALVAGLGAVIDTHDMLRSRIVESEGVEpRLVVAGRgtVDAAALVERVEagdgdLAEIADRCAHDTAARLDPVAGVLVRAVWVDAGP 2664
+                        68899********************8888865277777777766666666666778888999999999*******************9988 PP
+
+  Condensation_LCL  120 .eehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelle.eeelarqlaYWreqLaglpelleLptdrp 208 
+                         +   L++ +HH ++D +S++ ll +l+a+ +a +ag +p+l p +v+++ +   +r+l + +   + +la W+e L+g++++  L    p
+              bpsB 2665 gRAGRLVVAAHHLVVDVVSWRTLLPDLQAACEAVVAGGQPALDPPDVSFRRW---SRTLDGeAAIRTGELAVWTEILDGAQSR--LGELDP 2750
+                        46789*****************************************998765...555555244566799**********876..556678 PP
+
+  Condensation_LCL  209 rpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvGtpvagRt...raeledliGfFvNtlvlrtel 295 
+                        r+ + s++G+r      ++    ++++  + ++ ++ vlla la  ++   g + +vv +   gR+   + +l++++G F    +lr+++
+              bpsB 2751 RRDTVSTAGRRSWTVPREHAGVLVEQVTSAFHCGVHEVLLATLAGAVAGWRGGTAVVVDVEGHGRQplgELDLSRTLGWFTDVHPLRLDV 2840
+                        9999999997765555555566778999999**********************************64447899**************987 PP
+
+  == domain 5    score: 179.3 bits;  conditional E-value: 6.9e-56
+  Condensation_LCL    4 lplSfaQqrlwflnqlepesaayniplalrltgeldvealeaAladlvaRheiLRtvf.peedgepvqvvlpaaelelevedls....... 86  
+                        +plS+ Q+ l f +  ++  ++y    +l ++g+ldv++++a+++ l++Rh +LR +f + e ge+vqv++ +++++++++dls       
+              bpsB 3023 WPLSPLQEGLLFHAADDRGPDVYASMRTLAIDGPLDVARFRASWTVLLDRHPALRASFhQLESGEAVQVIARDVPPDWRETDLSglpesea 3113
+                        79********************************************************66789999*********************9998 PP
+
+  Condensation_LCL   87 eaeleelveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrel 177 
+                         ae+++l+++  a++FdL+k+p lr++l+rl ++++ L+++ HHi+aDgwSl ++l ++ ++Y+a   g++ +l+  + +Y+D+ +w  ++
+              bpsB 3114 LAEFDRLAARMHAERFDLTKAPQLRLHLVRLGDRRYRLIFTSHHIVADGWSLPLILVDVLTAYEA--GGDGRTLP-AATSYRDFLAWVDRQ 3201
+                        8899999*9******************************************************66..56666666.667********9864 PP
+
+  Condensation_LCL  178 leeeelarqlaYWreqLaglpelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvGt 268 
+                         +     +  + Wr++Lagl e +++    p    +  + +rv+feld+e+s++l e+ r+hgvt  ++++ ++a+ L+rl+g++D+v G+
+              bpsB 3202 DK----GAAGQAWRTELAGLDEATHVV--PPGSIITPLEPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLARLAGRNDVVFGA 3286
+                        33....344445********9988664..577788889999************************************************** PP
+
+  Condensation_LCL  269 pvagRtr..aeledliGfFvNtlvlrtel 295 
+                         vagR    + +e+ +G+F+N l++r++l
+              bpsB 3287 AVAGRPPeiPGVESAVGLFMNMLPVRARL 3315
+                        *****752279***************986 PP
+
+>> Condensation_Dual  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  154.1   0.0     4e-48   1.1e-47       2     295 ..       8     301 ..       7     302 .. 0.91
+   2 !  154.5   0.0   3.1e-48   8.3e-48       2     296 .]    1509    1801 ..    1508    1801 .. 0.88
+   3 !   22.3   0.0   5.8e-08   1.5e-07      40     171 ..    2577    2715 ..    2564    2841 .. 0.83
+   4 !  148.2   0.0   2.5e-46   6.7e-46       2     295 ..    3021    3315 ..    3020    3316 .. 0.89
+
+  Alignments for each domain:
+  == domain 1    score: 154.1 bits;  conditional E-value: 4e-48
+  Condensation_Dual   2 diYpLapLqeGilfHhllaeeg.DpYllqallafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleldsadge 92 
+                        +i+pL+pLq G+lfH ++ +eg D Y+ +  l +a         aa +++++Rh  Lr+ +   +  e vq++ rq+el+ +e++l++ d++
+               bpsB   8 EIWPLSPLQAGLLFHAVYDGEGpDVYIGHWILDLAGPVDAAGLRAAWETLLARHAPLRACFRQRKSGETVQIIARQVELPWREVDLSHLDDP 99 
+                        8*****************99987********************************************************************9 PP
+
+  Condensation_Dual  93 vaeqlearfdprrarldlsqapllrlvvaedaaegrllllllfHHlilDhttlevlseEvqall..qgqeealpapvpyRnfvaqarlgvse 182
+                         ++  e + + r++r+dl+qapllrl++ +    +   l+++ HH i+D  +l ++++E++ l    g+++alp   +yR+++a   ++ +e
+               bpsB 100 EEAVRELAEQDRTTRFDLAQAPLLRLTLIRLG-ADAHRLVVTCHHTIMDGWSLPIVIDELSVLYpaGGDASALPDVPSYREYLAWLSRQDKE 190
+                        7777777778899**************99984.5556677899*****************98852268999*************99666555 PP
+
+  Condensation_Dual 183 aeheafFrekLadvdeptlpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFGtvllGRlqg 274
+                        ++  + ++++L+  +eptl        +   e e+++ +l+++L+++l e arr g+ + +++  awa vla+++gr dvvFG+ ++ R   
+               bpsB 191 RAL-SAWTAELSGAEEPTLVVPADP-GRAPAEPESVEAHLPEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDVVFGAAVSARPPD 280
+                        555.556999*********987655.555566699999****************************************************** PP
+
+  Condensation_Dual 275 gegadralGlfintLPlrldl 295
+                          g++ ++Glf+nt+P+r++l
+               bpsB 281 LPGVEGMVGLFLNTVPVRVRL 301
+                        *******************97 PP
+
+  == domain 2    score: 154.5 bits;  conditional E-value: 3.1e-48
+  Condensation_Dual    2 diYpLapLqeGilfHhllaeeg.DpYllqallafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleldsad 90  
+                         di+pL+pLqeG+lf + + e+g D Y +q  l ++      +  aa +qv++Rh  Lrt+++  g  + vqvv r+a+++ +  +l++ d
+               bpsB 1509 DIWPLSPLQEGMLFERAFDEDGvDVYQTQRILDLDGPLDEPRLRAAWNQVLARHASLRTGFHQLGSGATVQVVVREADIPWRVADLSHLD 1598
+                         9****************999877*************999999************************************987766665544 PP
+
+  Condensation_Dual   91 ..gevaeqlearfdprrarldlsqapllrlvvaedaaegrllllllfHHlilDhttlevlseEvqallqgqeealpapvpyRnfvaqarl 178 
+                           ++ ae  +   + + +r+d+++ pllrl + +    ++  l+++ HH++lD  +  +++ E++   +g +++ ++p +y +++a    
+               bpsB 1599 aaEAAAEVERLLAEDQGRRFDVTRPPLLRLLLIRL-GADEHRLVVTSHHVLLDGWSTPLVVGEMSDGYAGGRSS-SKPPSYQDYLAWLS- 1685
+                         104444444555678889************99998.55666778899*******************99998776.77889******995. PP
+
+  Condensation_Dual  179 gvseaeheafFrekLadvdeptlpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFGtvl 268 
+                         ++++++ ++ +r++La  deptl    a++ +     +e+++ l++  +++l   ar  g+ +++++  awa vlar++gr+dvvFG+v+
+               bpsB 1686 RQDAEATRSAWRAELAGADEPTLVD--ADAGKTLVMPDEHAEWLPEPATRALAGFARGHGLTVSTIVLGAWALVLARLAGRTDVVFGSVV 1773
+                         55666677778***********853..3444444555789999*********************************************** PP
+
+  Condensation_Dual  269 lGRlqggegadralGlfintLPlrldld 296 
+                         +GR +   +++r++G+fint+P r++ld
+               bpsB 1774 SGRPADVPDVERMVGMFINTVPARVRLD 1801
+                         *************************986 PP
+
+  == domain 3    score: 22.3 bits;  conditional E-value: 5.8e-08
+  Condensation_Dual   40 ldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveel..eldsadgevaeqlearfdprrarldlsqapllrlvvaedaaeg 127 
+                         ++a +a l +vid hd+Lr+ ++  +  ep  vv  + +++  +l  ++++ dg++ae  ++  +  +arld     l+r+v++      
+               bpsB 2577 VTALVAGLGAVIDTHDMLRSRIVESEGVEPRLVVAGRGTVDAAALveRVEAGDGDLAEIADRCAHDTAARLDPVAGVLVRAVWVDAGPGR 2666
+                         6788999****************999999******99999988763356788899999999999999*************9999887777 PP
+
+  Condensation_Dual  128 rllllllfHHlilDhttlevlseEvqa....llqgqeealpap.vpyRn 171 
+                            l++  HHl++D ++ ++l  ++qa    +++g + al +p v++R 
+               bpsB 2667 AGRLVVAAHHLVVDVVSWRTLLPDLQAaceaVVAGGQPALDPPdVSFRR 2715
+                         7789999**********99988777761111455556666443267775 PP
+
+  == domain 4    score: 148.2 bits;  conditional E-value: 2.5e-46
+  Condensation_Dual    2 diYpLapLqeGilfHhllaeegDpYllqallafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleld..sa 89  
+                         di+pL+pLqeG+lfH    +  D Y    +la++    + +f a+   ++dRh  Lr++++  +  e+vqv+ r ++ + +e++l+  ++
+               bpsB 3021 DIWPLSPLQEGLLFHAADDRGPDVYASMRTLAIDGPLDVARFRASWTVLLDRHPALRASFHQLESGEAVQVIARDVPPDWRETDLSglPE 3110
+                         9****************************************************************************9999888763345 PP
+
+  Condensation_Dual   90 dgevae..qlearfdprrarldlsqapllrlvvaedaaegrllllllfHHlilDhttlevlseEvq.allq.gqeealpapvpyRnfvaq 175 
+                         ++++ae  +l+ar++  ++r+dl++ap lrl++++   + r+ l+ + HH++ D  +l ++  +v  a+ + g+ ++lpa+++yR+f+a 
+               bpsB 3111 SEALAEfdRLAARMH--AERFDLTKAPQLRLHLVRL-GDRRYRLIFTSHHIVADGWSLPLILVDVLtAYEAgGDGRTLPAATSYRDFLAW 3197
+                         555554115555555..689************9998.889999***************9998887515544367899************* PP
+
+  Condensation_Dual  176 arlgvseaeheafFrekLadvdeptlpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFG 265 
+                         + ++ + a+ +a +r +La +de t+     ++ +   e e ++ +l+ e s+rl e +rr gv a +l+   wa  lar++gr+dvvFG
+               bpsB 3198 VDRQDKGAAGQA-WRTELAGLDEATHVVPPGSIITPL-EPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLARLAGRNDVVFG 3285
+                         *77776666666.6899********988877776654.4588999********************************************* PP
+
+  Condensation_Dual  266 tvllGRlqggegadralGlfintLPlrldl 295 
+                         + + GR   + g+++a+Glf+n LP+r +l
+               bpsB 3286 AAVAGRPPEIPGVESAVGLFMNMLPVRARL 3315
+                         ***************************876 PP
+
+>> Condensation_Starter  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  141.3   0.0   3.2e-44   8.5e-44       4     299 ..      10     301 ..       7     302 .. 0.91
+   2 !   33.1   0.0   2.9e-11   7.8e-11      38     299 ..    1070    1332 ..    1061    1333 .. 0.75
+   3 !  142.2   0.0   1.7e-44   4.5e-44       4     299 ..    1511    1800 ..    1508    1801 .. 0.89
+   4 !   34.9   0.0   8.1e-12   2.1e-11      38     299 ..    2575    2840 ..    2563    2841 .. 0.81
+   5 !  129.9   0.0   9.4e-41   2.5e-40       5     299 ..    3024    3315 ..    3021    3316 .. 0.92
+
+  Alignments for each domain:
+  == domain 1    score: 141.3 bits;  conditional E-value: 3.2e-44
+  Condensation_Starter   4 lpLtaaQrgiWlaqqldpdspvynige.yveikgeldlelLeeAirqvvaeadalrvrl.veeegepvqavaeelpveleviDlsaeed 90 
+                            pL++ Q+g+ +    d + p   ig+ ++++ g++d++ L++A + ++a++  lr+ +   + ge vq +a++++ +++ +Dls+ +d
+                  bpsB  10 WPLSPLQAGLLFHAVYDGEGPDVYIGHwILDLAGPVDAAGLRAAWETLLARHAPLRACFrQRKSGETVQIIARQVELPWREVDLSHLDD 98 
+                           69*****************999999984689****************************9999************************** PP
+
+  Condensation_Starter  91 peaaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeapfgslsdllaeeq 179
+                           pe+a++++ ++d  + +dl++ pL r  l+rlg + + +++++HH i+DG+++ +++ +++ +Y a  + +a      +s+ ++la   
+                  bpsB  99 PEEAVRELAEQDRTTRFDLAQAPLLRLTLIRLGADAHRLVVTCHHTIMDGWSLPIVIDELSVLYPAGGDASA--LPDVPSYREYLAWL- 184
+                           *****************************************************************9986665..44567888777654. PP
+
+  Condensation_Starter 180 aYraSerfakDrayWleklaalpepvslseraapakeasasalrrsaelpaallerlkelaeasgisvaelliAalaaylsrltgeddv 268
+                                ++ +++   W+++l++++ep+++  + +   +a a++ +++a+lp+ l+++l ela+++g+++++++  a a+ l++l+g+ dv
+                  bpsB 185 ---SRQDKERALSAWTAELSGAEEPTLVVPADPG--RAPAEPESVEAHLPEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDV 268
+                           ...44555777777*************9875554..4899999********************************************** PP
+
+  Condensation_Starter 269 vlglpvmnRlgs..aakrtpGmvanvlPLrlsv 299
+                           v+g  v++R         ++G ++n++P+r+++
+                  bpsB 269 VFGAAVSARPPDlpGVEGMVGLFLNTVPVRVRL 301
+                           *********976225789************986 PP
+
+  == domain 2    score: 33.1 bits;  conditional E-value: 2.9e-11
+  Condensation_Starter   38 ldlelLeeAirqvvaeadalrvrlveeegepvq.avaeelpveleviDlsaeedpeaaaeawmradlarpldldgdpLfrfallrlg 123 
+                            ++ ++L +A++ v++ +d lr+r+  ++   v  + a ++   l  + + a +   +++ +   +++  +ld  ++ + r++ +  g
+                  bpsB 1070 VNPDALVSALQAVLDAHDLLRARVEPDGRLIVPeRGAVAAAGLL--TRVAAGTGGLDEIAEREVRTATGTLDPSAGIMARVVWIDAG 1154
+                            66666666666666667766666643333322201111111111..22222223333333333444555677777788888888888 PP
+
+  Condensation_Starter  124 eery.ywyqrvHHiilDGfgfalltrriaeiYtalaagea.apeapfgslsdllaeeqaYraSerfakDrayWleklaalpepvsls 208 
+                            +++   + + +HH+ +D+++  +l+  + ++Y +  +g + a e p +s+ + +   +a + Se      + W++ ++++++++ + 
+                  bpsB 1155 DAEPgRLAFVAHHLSVDAVSWGILLPDLRAAYDEVISGGTpALEPPVTSYRQWARRLTARALSESTVAELEKWAAVVEGAEPALPQ- 1240
+                            7664258899************************9987653889999******************************999986555. PP
+
+  Condensation_Starter  209 eraapakeasasalrrsaelpaallerlkela.easgisvaelliAalaaylsrltged.dvvlglpvmnRl...gsaakrtpGmva 290 
+                             ++++    + +++++s++l+ ++++ l ++   a  ++++++l+A la  ++r+ g+   +++++  ++R    g+  +rt+G ++
+                  bpsB 1241 -DTGQ---HTGQSHSWSTSLSGTEVRDLVTVLpGAFHCGIQDVLLAGLAGAVARVRGSGaALLVDVEGHGREaadGEDLLRTVGWFT 1323
+                            .6777...78999************99998762689**********************978999*******822245789******* PP
+
+  Condensation_Starter  291 nvlPLrlsv 299 
+                            +v P+rl++
+                  bpsB 1324 SVHPVRLEL 1332
+                            ******975 PP
+
+  == domain 3    score: 142.2 bits;  conditional E-value: 1.7e-44
+  Condensation_Starter    4 lpLtaaQrgiWlaqqldpds.pvynigeyveikgeldlelLeeAirqvvaeadalrvrl.veeegepvqavaeelpveleviDlsae 88  
+                             pL++ Q+g+ +  ++d+d   vy++  +++++g+ld+++L++A +qv+a++ +lr+ +     g  vq v++e++++++v Dls+ 
+                  bpsB 1511 WPLSPLQEGMLFERAFDEDGvDVYQTQRILDLDGPLDEPRLRAAWNQVLARHASLRTGFhQLGSGATVQVVVREADIPWRVADLSHL 1597
+                            59**************998538*************************************656677889*****************86 PP
+
+  Condensation_Starter   89 e..dpeaaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeapfgslsd 173 
+                            +  +++a++e+++ +d  r +d+++ pL r  l+rlg +++ ++++ HH++lDG+++ l++ + ++ Y   ++ ++ p+    s++d
+                  bpsB 1598 DaaEAAAEVERLLAEDQGRRFDVTRPPLLRLLLIRLGADEHRLVVTSHHVLLDGWSTPLVVGEMSDGYAGGRSSSK-PP----SYQD 1679
+                            6226668889**********************************************************98885444.44....4555 PP
+
+  Condensation_Starter  174 llaeeqaYraSerfakDrayWleklaalpepvslseraapakeasasalrrsaelpaallerlkelaeasgisvaelliAalaayls 260 
+                            +la        ++ +  r  W+++la++ ep+++ ++a++   +   + ++  +lp+  +++l  +a+ +g++v+++++ a a+ l+
+                  bpsB 1680 YLAWL----SRQDAEATRSAWRAELAGADEPTLVDADAGK---TLVMPDEHAEWLPEPATRALAGFARGHGLTVSTIVLGAWALVLA 1759
+                            54433....22334455666**************999888...999999999*********************************** PP
+
+  Condensation_Starter  261 rltgeddvvlglpvmnRlgs..aakrtpGmvanvlPLrlsv 299 
+                            rl+g+ dvv+g  v++R        r++Gm++n++P r+++
+                  bpsB 1760 RLAGRTDVVFGSVVSGRPADvpDVERMVGMFINTVPARVRL 1800
+                            *****************98622689************9987 PP
+
+  == domain 4    score: 34.9 bits;  conditional E-value: 8.1e-12
+  Condensation_Starter   38 ldlelLeeAirqvvaeadalrvrlveeeg.epvqavaeelpvelev.iDlsaeedpe.aaaeawmradlarpldldgdpLfrfallr 121 
+                            l +++L + +  v++++d lr r+ve eg ep+  va   +v+ +  ++  ++ d + a++      d+a+ ld  ++ L+r + + 
+                  bpsB 2575 LSVTALVAGLGAVIDTHDMLRSRIVESEGvEPRLVVAGRGTVDAAAlVERVEAGDGDlAEIADRCAHDTAARLDPVAGVLVRAVWVD 2661
+                            667888999999************665553899999999999987745555555443488999999999999999999********* PP
+
+  Condensation_Starter  122 lgeery.ywyqrvHHiilDGfgfalltrriaeiYtalaagea....apeapfgslsdllaeeqaYraSerfakDrayWleklaalpe 203 
+                             g+ r   +++ +HH+++D ++  +l+  ++++ +a +ag +    +p+  f + s+ l+ e+a r         a W+e l++++ 
+                  bpsB 2662 AGPGRAgRLVVAAHHLVVDVVSWRTLLPDLQAACEAVVAGGQpaldPPDVSFRRWSRTLDGEAAIRT-----GELAVWTEILDGAQS 2743
+                            **999735899***************************99873222344445555666666666654.....56799*****99997 PP
+
+  Condensation_Starter  204 pvslseraapakeasasalrrsaelpaallerl.kelaeasgisvaelliAalaaylsrltgeddvvlglpvmnRl...gsaakrtp 286 
+                             +       p++++  +a rrs+++p++ +  l +++ +a  ++v+e+l+A la  ++ + g   vv+++  ++R+   +    rt+
+                  bpsB 2744 RLGE---LDPRRDTVSTAGRRSWTVPREHAGVLvEQVTSAFHCGVHEVLLATLAGAVAGWRGGTAVVVDVEGHGRQplgELDLSRTL 2827
+                            5544...444344899999*********99988367899************************************8332345569** PP
+
+  Condensation_Starter  287 GmvanvlPLrlsv 299 
+                            G ++ v PLrl+v
+                  bpsB 2828 GWFTDVHPLRLDV 2840
+                            **********998 PP
+
+  == domain 5    score: 129.9 bits;  conditional E-value: 9.4e-41
+  Condensation_Starter    5 pLtaaQrgiWlaqqldpdspvynigeyveikgeldlelLeeAirqvvaeadalrvrl.veeegepvqavaeelpveleviDlsaeed 90  
+                            pL++ Q+g+ +  + d    vy     ++i+g+ld+++++++ + +++++ alr+++   e ge+vq +a+++p +++ +Dls+ ++
+                  bpsB 3024 PLSPLQEGLLFHAADDRGPDVYASMRTLAIDGPLDVARFRASWTVLLDRHPALRASFhQLESGEAVQVIARDVPPDWRETDLSGLPE 3110
+                            9********************************************************88899*********************9887 PP
+
+  Condensation_Starter   91 pe..aaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeapfgslsdll 175 
+                             e  a+  ++  +  a+ +dl++ p  r  l+rlg++ry ++++ HHi++DG+++ l++  + ++Y+a  +g++ p+  ++s+ d+l
+                  bpsB 3111 SEalAEFDRLAARMHAERFDLTKAPQLRLHLVRLGDRRYRLIFTSHHIVADGWSLPLILVDVLTAYEAGGDGRTLPA--ATSYRDFL 3195
+                            7733666799**************************************************************99655..58999999 PP
+
+  Condensation_Starter  176 aeeqaYraSerfakDrayWleklaalpepvslseraapake.asasalrrsaelpaallerlkelaeasgisvaelliAalaaylsr 261 
+                            a   + ++ +    + + W+ +la+l e++ +    +p++  +  ++ r+  el++++ +rl e+ +++g+++++l+  + a++l+r
+                  bpsB 3196 AWVDRQDKGA----AGQAWRTELAGLDEATHV---VPPGSIiTPLEPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLAR 3275
+                            8776655554....5666**********8877...5666777********************************************* PP
+
+  Condensation_Starter  262 ltgeddvvlglpvmnRlgs..aakrtpGmvanvlPLrlsv 299 
+                            l+g++dvv+g  v++R  +     +++G ++n+lP+r ++
+                  bpsB 3276 LAGRNDVVFGAAVAGRPPEipGVESAVGLFMNMLPVRARL 3315
+                            ****************876226899************875 PP
+
+>> Heterocyclization  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   77.7   0.0     8e-25   2.1e-24      39     295 ..      44     297 ..      10     302 .. 0.87
+   2 !   86.5   0.0   1.6e-27   4.3e-27       6     292 ..    1512    1793 ..    1508    1800 .. 0.86
+   3 !   27.7   0.0   1.4e-09   3.6e-09      38     299 ..    2573    2840 ..    2558    2841 .. 0.80
+   4 !   72.5   0.0     3e-23   7.9e-23      40     295 ..    3057    3311 ..    3050    3316 .. 0.90
+
+  Alignments for each domain:
+  == domain 1    score: 77.7 bits;  conditional E-value: 8e-25
+  Heterocyclization  39 dldlarleaaiealiarHpMLrvvvle..dG.eQrilpavpkkkievhDlrevkadevearlaalRerlshqvldvergelfeleltllpeg 127
+                         +d+a l+aa+e+l+arH  Lr+ +++   G + +i++++ +   +  Dl++ ++   e+++++l e+    + d+++ +l+ l+l++l  +
+               bpsB  44 PVDAAGLRAAWETLLARHAPLRACFRQrkSGeTVQIIARQVELPWREVDLSHLDDP--EEAVRELAEQDRTTRFDLAQAPLLRLTLIRLGAD 133
+                        58999********************7522341345666666777888999997766..57999***************************** PP
+
+  Heterocyclization 128 ktrlhlslDllvaDaaSfrlLlaeLaalyege.eleaaplevsFrdyllaeraqreaarerdrayWqarlpeLpaaPeLPlakepekleepr 218
+                         +rl +    +++D +S+ + ++eL+ ly    ++ a p   s+r+yl+  ++q+++++    + W+a l+  +++P+L + ++p + + ++
+               bpsB 134 AHRLVVTCHHTIMDGWSLPIVIDELSVLYPAGgDASALPDVPSYREYLAWLSRQDKERA---LSAWTAELSG-AEEPTLVVPADPGR-APAE 220
+                        *****************************7662555555555*******9999887766...5669**9998.799****9999999.7777 PP
+
+  Heterocyclization 219 ftrrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnltlfnrqplhpdvdklvgDFtsllll 295
+                         +  +++l+++  + l++ a+++g+t+ +v+  a+a vla+ ++++ +++   +  r+p  p v+ +vg F + + +
+               bpsB 221 PESVEAHLPEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDVVFGAAVSARPPDLPGVEGMVGLFLNTVPV 297
+                        8889999**************************************************************99887655 PP
+
+  == domain 2    score: 86.5 bits;  conditional E-value: 1.6e-27
+  Heterocyclization    6 pLtdvQaAylvGReaeqelGgvachlYvEf..dgedldlarleaaiealiarHpMLrvvvledGeQ...rilpavpkkkievhDlrevka 90  
+                         pL+++Q+ +l  R   +  +gv  +  + +      ld  rl+aa+++++arH  Lr+ +++ G     +++ + ++   +v+Dl++ +a
+               bpsB 1512 PLSPLQEGMLFERA--FDEDGVDVYQTQRIldLDGPLDEPRLRAAWNQVLARHASLRTGFHQLGSGatvQVVVREADIPWRVADLSHLDA 1599
+                         67777777777653..4556666666666532234599**********************998765111455555688899********* PP
+
+  Heterocyclization   91 devearlaalRerlshqvldvergelfeleltllpegktrlhlslDllvaDaaSfrlLlaeLaalyegeeleaaplevsFrdyllaeraq 180 
+                         +e++a++++l ++ + ++ dv+r +l+ l l++l  +++rl +    +++D +S  l + e+++ y+g +   +p +  + dyl+  ++q
+               bpsB 1600 AEAAAEVERLLAEDQGRRFDVTRPPLLRLLLIRLGADEHRLVVTSHHVLLDGWSTPLVVGEMSDGYAGGRSSSKPPS--YQDYLAWLSRQ 1687
+                         *********************************************************************99999987..78888888887 PP
+
+  Heterocyclization  181 reaarerdrayWqarlpeLpaaPeLPlakepekleeprftrrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnl 270 
+                         +++a    r+ W a l+  +++P+L  a + ++l  p     + +l++ + +al+ +a+ +g+t+s+++l a+a vlar ++++ +++  
+               bpsB 1688 DAEAT---RSAWRAELAG-ADEPTLVDADAGKTLVMP--DEHAEWLPEPATRALAGFARGHGLTVSTIVLGAWALVLARLAGRTDVVFGS 1771
+                         77666...777**99998.789999777777775555..67899********************************************** PP
+
+  Heterocyclization  271 tlfnrqplhpdvdklvgDFtsl 292 
+                          +  r++  pdv+++vg F + 
+               bpsB 1772 VVSGRPADVPDVERMVGMFINT 1793
+                         *****************99775 PP
+
+  == domain 3    score: 27.7 bits;  conditional E-value: 1.4e-09
+  Heterocyclization   38 edldlarleaaiealiarHpMLrvvv.ledGeQrilpavpkkkievhDlrevkadevearlaalRerlshqv...ldvergelf.elelt 122 
+                         +dl++++l a + a+i  H+MLr ++ +++G    l  +   +++ + l e + ++ + +la++ +r +h +   ld+  g l+ ++ + 
+               bpsB 2573 RDLSVTALVAGLGAVIDTHDMLRSRIvESEGVEPRLVVAGRGTVDAAALVE-RVEAGDGDLAEIADRCAHDTaarLDPVAGVLVrAVWVD 2661
+                         5788999999999**********9752679999999999999999999988.66778999****99999976111344444444134455 PP
+
+  Heterocyclization  123 llpegktrlhlslDllvaDaaSfrlLlaeLaalyege....eleaaplevsFrdyllaeraqreaarerdrayWqarlpeLpaaPeLPla 208 
+                           p+   rl +    lv+D+ S r+Ll +L+a+ e      +  + p +vsFr+   + +  ++a r+ + a W++ l+    + +L   
+               bpsB 2662 AGPGRAGRLVVAAHHLVVDVVSWRTLLPDLQAACEAVvaggQPALDPPDVSFRRWSRTLDG-EAAIRTGELAVWTEILDGA--QSRLGEL 2748
+                         5889999***********************98766544444999999******87555444.4455578899****99974..5566544 PP
+
+  Heterocyclization  209 kepekleeprftrrrhsldpeewqal.karaaeagvtpsmvllaafaevlarwsessrflLnltlfnrqpl.hpdvdklvgDFtslllle 296 
+                          +p + +  +  rr+ ++++e+   l ++ +++ +  +  vlla  a  +a w + +++++ +    rqpl + d+ +++g Ft +  l 
+               bpsB 2749 -DPRRDTVSTAGRRSWTVPREHAGVLvEQVTSAFHCGVHEVLLATLAGAVAGWRGGTAVVVDVEGHGRQPLgELDLSRTLGWFTDVHPLR 2837
+                         .556667777888888888888887725667899************************************9567***********98887 PP
+
+  Heterocyclization  297 vdl 299 
+                         +d+
+               bpsB 2838 LDV 2840
+                         775 PP
+
+  == domain 4    score: 72.5 bits;  conditional E-value: 3e-23
+  Heterocyclization   40 ldlarleaaiealiarHpMLrvvvle....dGeQrilpavpkkkievhDlrevkadevearlaalRerlshqvldvergelfeleltllp 125 
+                         ld+ar++a ++ l+ rHp Lr+++++    ++ Q i  +vp+   + +Dl+   ++e+ a++++l +r++ ++ d+++ + + l+l++l 
+               bpsB 3057 LDVARFRASWTVLLDRHPALRASFHQlesgEAVQVIARDVPP-DWRETDLSGLPESEALAEFDRLAARMHAERFDLTKAPQLRLHLVRLG 3145
+                         89**********************854443566777777765.67899****************************************** PP
+
+  Heterocyclization  126 egktrlhlslDllvaDaaSfrlLlaeLaalye.geeleaaplevsFrdyllaeraqreaarerdrayWqarlpeLpaaPeLPlakepekl 214 
+                         + + rl +    +vaD +S+ l+l +  ++ye g + ++ p + s+rd+l+  ++q++ a+    + W   l+ L +a +  +  + + +
+               bpsB 3146 DRRYRLIFTSHHIVADGWSLPLILVDVLTAYEaGGDGRTLPAATSYRDFLAWVDRQDKGAA---GQAWRTELAGLDEATH--VVPPGSII 3230
+                         ********************998888776665166999999999*******9999988777...5569*******99976..56777788 PP
+
+  Heterocyclization  215 eeprftrrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnltlfnrqplhpdvdklvgDFtsllll 295 
+                         +  + +r +++ld e++++l ++++++gvt  +++  ++a  lar ++++ +++   +  r+p  p v++ vg F ++l +
+               bpsB 3231 TPLEPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLARLAGRNDVVFGAAVAGRPPEIPGVESAVGLFMNMLPV 3311
+                         99999**********************************************************************998765 PP
+
+>> CAL_domain  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   78.5   8.8   1.2e-25   3.3e-25       1     211 [.     482     671 ..     482     681 .. 0.86
+   2 !   46.1   3.0   7.9e-16   2.1e-15     369     465 .]     786     879 ..     767     879 .. 0.92
+   3 !   60.8   5.7   2.8e-20   7.3e-20       1     158 [.    1981    2118 ..    1981    2129 .. 0.91
+   4 !   41.5   1.6   1.8e-14   4.9e-14     370     465 .]    2283    2375 ..    2281    2375 .. 0.93
+   5 !   38.1   0.1   1.9e-13   5.1e-13     116     180 ..    3598    3656 ..    3575    3657 .. 0.84
+   6 !   32.2   4.3   1.2e-11   3.3e-11     258     460 ..    3722    3882 ..    3714    3887 .. 0.87
+
+  Alignments for each domain:
+  == domain 1    score: 78.5 bits;  conditional E-value: 1.2e-25
+  CAL_domain   1 syaeLerrarrlAGhLqdlGlkpGdrVvillgnrvefVeayLAclrAgaVAVPlnpdsadaelahllrdsGiravltdaAhaavLdkvrrtapalalvd 99 
+                 sy+eL++ra rlAG+L ++G+++GdrV++ l   +  ++ +LA+  Aga  VP++p       + +l+dsG  av+                +++ +  
+        bpsB 482 SYGELAERAERLAGYLNGRGVRRGDRVAVVLDRSPDLIATLLAVWKAGAAYVPVDPAYPVERRKFMLADSGPAAVV---------------CAEAYRA- 564
+                 8*******************************************************9999999999*********4...............4444454. PP
+
+  CAL_domain 100 ahaagrelagfasyee...latpesalpArDDPvlglDelAwmlYTSGsTGrPKGVlsthrNcLwsnaaCivpalgldedDrvLwwlPLfHslGLiacl 195
+                 a+ +++ ++ ++ +++    a+ es++        ++D+lA+ +YTSGsTG+PKGV ++h+N    +a ++ p +++ + D vL  ++ + + +L +  
+        bpsB 565 AV-PDTCPEPIVLDDPrtrQAVAESPRL---SAGTSADDLAYVMYTSGSTGTPKGVAVSHGN---VAALAGEPGWRVGPGDAVLLHASHAFDISL-FEM 655
+                 33.5666666666665111455555554...43469**************************...9999***************99999999999.778 PP
+
+  CAL_domain 196 LaptavGAtvrlmpge 211
+                  +p+++GA v+l+++ 
+        bpsB 656 WVPLLSGARVVLAGPG 671
+                 9999999999998885 PP
+
+  == domain 2    score: 46.1 bits;  conditional E-value: 7.9e-16
+  CAL_domain 369 vppGeeGEiWvkGPnvmrGYLhnqPeataqaLrsilhtddDG....WyRTGDLGrraeaGnltvTGRiKelIirgGeNiHPheiEasiVaravpgvada 463
+                 vppG  GE++v G +v++GY   +P+ ta+  ++    d +G     yRTGDL+   e G l+  GR ++ + ++G  + P+eiE   V+  +pgv  a
+        bpsB 786 VPPGVAGELYVAGAGVAQGY-SSRPALTAERFVA----DPSGsgarMYRTGDLAYWTEQGALAFAGRADDQVKIRGYRVEPGEIEV--VLAGLPGVGQA 877
+                 9*******************.9999999999996....333333458***************************************..********999 PP
+
+  CAL_domain 464 aV 465
+                 +V
+        bpsB 878 VV 879
+                 98 PP
+
+  == domain 3    score: 60.8 bits;  conditional E-value: 2.8e-20
+  CAL_domain    1 syaeLerrarrlAGhLqdlGlkpGdrVvillgnrvefVeayLAclrAgaVAVPlnpdsadaelahllrdsGiravltdaAhaavLdkvrrtapalal 97  
+                  sya+L+r+  rlAGhL+++G+ +GdrV + +  +    +a+L++  Aga  VP+n d      + +l+d G+ + +  +A        r++ p    
+        bpsB 1981 SYADLDRESDRLAGHLAGIGVGRGDRVGVVMTRGADLFVALLGVWKAGAAQVPVNVDYPAERIERMLADVGASVAVCVEAT-------RKAVP---- 2066
+                  8*************************************************************************9655555.......44444.... PP
+
+  CAL_domain   98 vdahaagrelagfasyeelatpesalpArDDPvlglDelAwmlYTSGsTGrPKGVlsthrN 158 
+                        + +++ ++++ + +++ + +p+ +    g+ ++A+ +YTSGsTG PK V + h++
+        bpsB 2067 ------DGVEPVVVDLPVIGGVRPEAPPVTV---GAHDVAYVMYTSGSTGVPKAVAVPHGS 2118
+                  ......55566689*************6665...*******************99999998 PP
+
+  == domain 4    score: 41.5 bits;  conditional E-value: 1.8e-14
+  CAL_domain  370 ppGeeGEiWvkGPnvmrGYLhnqPeataqaLrsilhtddDGWyRTGDLGrraeaGnltvTGRiKelIirgGeNiHPheiEasiVaravpgvadaaV 465 
+                  +p   GE++  G +++ GY  ++++at +  ++    + +  yRTGDL+r  + G+l+  GR +  + ++G  + P+e+E   ++++vp va a+V
+        bpsB 2283 APNVTGELYLAGAGLAHGY-LGNTAATSERFVANPFSGGGRMYRTGDLARWTDQGELVFAGRADSQVKIRGYRVEPGEVEV--ALTEVPHVAQAVV 2375
+                  56667**************.99***99999998777888889***************************************..***********98 PP
+
+  == domain 5    score: 38.1 bits;  conditional E-value: 1.9e-13
+  CAL_domain  116 latpesalpArDDPvlglDelAwmlYTSGsTGrPKGVlsthrNcLwsnaaCivpalgldedDrvL 180 
+                  +a+p+  lp    Pv+ + ++A+  YTSGsTG PKGVl+th   L    ++ +  +++++ +rvL
+        bpsB 3598 AADPDVELP----PVA-PEDAAYVIYTSGSTGVPKGVLVTHSG-LANLGYAHIERMAVTSSSRVL 3656
+                  345555566....665.99*********************976.********************8 PP
+
+  == domain 6    score: 32.2 bits;  conditional E-value: 1.2e-11
+  CAL_domain  258 sLrvalvGGepvrAsLlreFeerFavfglkrsplldtYGltETsgsitvnkkgeqfrpleldrdaLnlgkrapaGarveglellsCAsFvEvGlpvp 354 
+                  +Lr  l GGe +++ L+++      v        + +YG tET+  +t++                     ap  ++ ++   +        G p+ 
+        bpsB 3722 TLRTVLTGGEALPPALVDRWSPGRRV--------IQAYGPTETTICSTMS---------------------APLSPGHDQ---V------PLGGPIH 3780
+                  57888888888888888877765555........99**************.....................*********...4......45***** PP
+
+  CAL_domain  355 gltLRiVDPetgadvppGeeGEiWvkGPnvmrGYLhnqPeataqaLrsilhtddDGW......yRTGDLGrraeaGnltvTGRiKelIirgGeNiHP 445 
+                   +   + D +    vppG +GE+++ G +++rGY  ++P  ta+  ++      +++      yR GDL r    G l   GR++  + ++G  + P
+        bpsB 3781 NVRHYVLD-AFLQPVPPGVVGELYITGVGLARGY-LGRPGLTAERFVA------SPFapgermYRSGDLFRWTREGQLLFAGRVDAQVKVRGYRVEP 3869
+                  **999***.99999********************.9*******97777......554444444******997555********************** PP
+
+  CAL_domain  446 heiEasiVaravpgv 460 
+                  +eiEa  V+ ++p v
+        bpsB 3870 AEIEA--VLAEHPWV 3882
+                  *****..*****966 PP
+
+>> PCP  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   71.2   0.0   4.5e-23   1.2e-22       1      69 [.     958    1025 ..     958    1026 .. 0.97
+   2 !   67.4   0.0   6.8e-22   1.8e-21       1      69 [.    2459    2526 ..    2459    2527 .. 0.96
+   3 !   67.5   0.0   6.7e-22   1.8e-21       1      68 [.    3975    4041 ..    3975    4043 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 71.2 bits;  conditional E-value: 4.5e-23
+   PCP    1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaallsed 69  
+            E+ L+ ++a+vLg+++Vg+dD+FFelGG+S+ +++++ar r+  g +l+++ +f+++t + laal++e+
+  bpsB  958 ERVLCGVFADVLGLDHVGVDDSFFELGGDSISSMQVAARARR-EGISLTPRLVFEHRTPERLAALAQEA 1025
+            889***************************************.9********************99875 PP
+
+  == domain 2    score: 67.4 bits;  conditional E-value: 6.8e-22
+   PCP    1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaallsed 69  
+            E+ L+ ++ae+Lg+erVg+dD FFelGG+S+l++rl+ar r+  +     k++f+++t a +aa+++++
+  bpsB 2459 ERVLCGLFAEILGLERVGADDGFFELGGDSILSMRLAARARR-ENFVFGAKQVFEQKTPAGIAAVAERG 2526
+            889***************************************.9999*****************99875 PP
+
+  == domain 3    score: 67.5 bits;  conditional E-value: 6.7e-22
+   PCP    1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaallse 68  
+            E++L++++a+vLg+++Vg dD+FFelGG+S+ +++l+ar r   g+el++ ++f+++t + la +++e
+  bpsB 3975 EARLCALFADVLGLDQVGPDDSFFELGGDSITSMQLSARARP-TGLELTPWQVFDEKTPERLAVIVQE 4041
+            789***************************************.********************99986 PP
+
+>> CXglyc  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   47.1   2.4   1.2e-15   3.3e-15      32     300 ..      38     299 ..      11     302 .. 0.83
+   2 !   58.4   3.4   4.5e-19   1.2e-18      21     300 ..    1527    1798 ..    1512    1801 .. 0.83
+   3 !   62.3   3.0   2.9e-20   7.6e-20      19     302 ..    3036    3315 ..    3024    3316 .. 0.86
+
+  Alignments for each domain:
+  == domain 1    score: 47.1 bits;  conditional E-value: 1.2e-15
+  CXglyc  32 alrlrGrldvpaleaalgdvaarheilrttfp....Gda.qsvhqhv.hdaaaveltpveateedlpgllaerresvfdltrevpwrcdlfalsdkehvlalk 128
+              l l G +d + l aa   + arh  lr+ f     G++ q + ++v     +v+l+ ++  ee +  l  + r++ fdl++    r +l++l  + h l ++
+    bpsB  38 ILDLAGPVDAAGLRAAWETLLARHAPLRACFRqrksGETvQIIARQVeLPWREVDLSHLDDPEEAVRELAEQDRTTRFDLAQAPLLRLTLIRLGADAHRLVVT 140
+             58899**************************722113221333445523456899****************************99****************** PP
+
+  CXglyc 129 vhriladddsldvflrdlaaayGarraGrvperaplalqfadyalwerrllegerekdslindqiafwrdnlagideet.vlpfdrersavpsrraGtvalrl 230
+              h  + d  sl +++ +l+  y a  +  +    p    + +y  w  r   +++e+       ++ w  +l+g++e t v+p d  r+        +v  +l
+    bpsB 141 CHHTIMDGWSLPIVIDELSVLYPAGGDASA---LPDVPSYREYLAWLSR---QDKER------ALSAWTAELSGAEEPTlVVPADPGRAPA---EPESVEAHL 228
+             **********************99766555...455557999*99*766...33332......4678********9965389***998643...456899999 PP
+
+  CXglyc 231 daepharlteavepaGadalqlvhaalalllarlGagedvviGttl.prdedlidlepliGpfarplalrt 300
+               +    l+e +   G    ++v+ a al+la+l    dvv G+++  r  dl  +e+++G f  ++++r 
+    bpsB 229 PEHLTRSLAELARRHGLTLNTVVQGAWALVLAQLAGRPDVVFGAAVsARPPDLPGVEGMVGLFLNTVPVRV 299
+             9999999************************************98736999***************99997 PP
+
+  == domain 2    score: 58.4 bits;  conditional E-value: 4.5e-19
+  CXglyc   21 geetaglhv.svalrlrGrldvpaleaalgdvaarheilrttfp..Gdaqsvhqhvhdaa....aveltpveatee..dlpgllaerresvfdltrevpwr 112 
+              +e++ ++++    l l G ld p l aa ++v arh  lrt f   G++ +v   v++a       +l+ ++a+e   ++  llae + + fd+tr    r
+    bpsB 1527 DEDGVDVYQtQRILDLDGPLDEPRLRAAWNQVLARHASLRTGFHqlGSGATVQVVVREADipwrVADLSHLDAAEAaaEVERLLAEDQGRRFDVTRPPLLR 1627
+              5555555441456899***************************655999999999999962222468999999985337899******************* PP
+
+  CXglyc  113 cdlfalsdkehvlalkvhriladddsldvflrdlaaayGarraGrvperaplalqfadyalwerrllegerekdslindqiafwrdnlagideetvlpfdr 213 
+                l++l  +eh l ++ h +l d  s+ +++ +++  y   r      + p    + dy  w  r     +++++      + wr +lag+de t +  d 
+    bpsB 1628 LLLIRLGADEHRLVVTSHHVLLDGWSTPLVVGEMSDGYAGGR---SSSKPP---SYQDYLAWLSR-----QDAEA----TRSAWRAELAGADEPTLVDADA 1713
+              **************************************8644...444445...588*****876.....33332....3457*****************9 PP
+
+  CXglyc  214 ersav.psrraGtvalrldaepharlteavepaGadalqlvhaalalllarlGagedvviGttlp.rdedlidlepliGpfarplalrt 300 
+               ++ v p   a      l   +   l+  +   G  + ++v  a al+larl   +dvv G+++  r  d+ d+e ++G f  +++ r 
+    bpsB 1714 GKTLVmPDEHAEW----LPEPATRALAGFARGHGLTVSTIVLGAWALVLARLAGRTDVVFGSVVSgRPADVPDVERMVGMFINTVPARV 1798
+              9886516666654....44455556888999******************************98754999************99998876 PP
+
+  == domain 3    score: 62.3 bits;  conditional E-value: 2.9e-20
+  CXglyc   19 rpgeetaglhvsv.alrlrGrldvpaleaalgdvaarheilrttf....pGdaqsv.hqhv.hdaaaveltpveatee..dlpgllaerresvfdltrevp 110 
+                ++ + +++ s+ +l + G ldv+ + a+   + +rh  lr++f     G+a  v  + v +d  + +l+ ++ +e   ++  l a+ +++ fdlt+   
+    bpsB 3036 AADDRGPDVYASMrTLAIDGPLDVARFRASWTVLLDRHPALRASFhqleSGEAVQViARDVpPDWRETDLSGLPESEAlaEFDRLAARMHAERFDLTKAPQ 3136
+              45556666777764799****************************444447775551556778999999*9999888433777888889999********* PP
+
+  CXglyc  111 wrcdlfalsdkehvlalkvhriladddsldvflrdlaaayGarraGrvperaplalqfadyalwerrllegerekdslindqiafwrdnlagideetvlpf 211 
+               r +l +l d+ + l ++ h i+ad  sl ++l d+ +ay a  +Gr+    p a  + d+  w  r      +k++      + wr +lag+de t +  
+    bpsB 3137 LRLHLVRLGDRRYRLIFTSHHIVADGWSLPLILVDVLTAYEAGGDGRT---LPAATSYRDFLAWVDRQ-----DKGAA----GQAWRTELAGLDEATHVV- 3224
+              **********************************************97...69999********8764.....44332....246**********98643. PP
+
+  CXglyc  212 drersavpsrraGtvalrldaepharlteavepaGadalqlvhaalalllarlGagedvviGttlp.rdedlidlepliGpfarplalrtdl 302 
+                + s+++      va+ ld e+  rl+e +   G  a +l +   al larl   +dvv G+++  r  ++  +e+ +G f   l++r+ l
+    bpsB 3225 -PPGSIITPLEPERVAFELDDETSKRLVEFTRRHGVTANTLFQGVWALHLARLAGRNDVVFGAAVAgRPPEIPGVESAVGLFMNMLPVRARL 3315
+              .3778888889999************************************************987538888889**************9865 PP
+
+>> ACP  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   40.4   0.1   2.1e-13   5.5e-13       3      67 ..     960    1020 ..     958    1025 .. 0.93
+   2 !   20.5   0.0   3.2e-07   8.5e-07       3      67 ..    2461    2521 ..    2459    2524 .. 0.92
+   3 !   40.7   0.0   1.7e-13   4.4e-13       3      70 ..    3977    4040 ..    3975    4043 .. 0.91
+
+  Alignments for each domain:
+  == domain 1    score: 40.4 bits;  conditional E-value: 2.1e-13
+   ACP    3 lvreevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLae 67  
+            +++   a+vlgl   + v +d++F++lG DS+ ++++  r +++ G++L++ lvf+h tp++La+
+  bpsB  960 VLCGVFADVLGL---DHVGVDDSFFELGGDSISSMQVAARARRE-GISLTPRLVFEHRTPERLAA 1020
+            6677789*****...*************************9999.******************97 PP
+
+  == domain 2    score: 20.5 bits;  conditional E-value: 3.2e-07
+   ACP    3 lvreevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLae 67  
+            +++   a+ lgl   + v +d+ F++lG DS+ +++L  r +++ ++ + a +vf+ +tp+ +a+
+  bpsB 2461 VLCGLFAEILGL---ERVGADDGFFELGGDSILSMRLAARARRE-NFVFGAKQVFEQKTPAGIAA 2521
+            67778899****...*************************9999.***************98775 PP
+
+  == domain 3    score: 40.7 bits;  conditional E-value: 1.7e-13
+   ACP    3 lvreevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLaehLl 70  
+             +++  a+vlgl   ++v pd++F++lG DS+t+++L+ r  + tGl+L++ +vfd +tp++La  ++
+  bpsB 3977 RLCALFADVLGL---DQVGPDDSFFELGGDSITSMQLSARA-RPTGLELTPWQVFDEKTPERLAVIVQ 4040
+            678899******...*************************5.567******************97766 PP
+
+>> NRPS-COM_Nterm  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   32.5   0.0   2.7e-11     7e-11       6      32 ..       2      28 ..       1      29 [. 0.91
+   2 !   25.0   0.0   5.8e-09   1.5e-08      11      26 ..    1508    1523 ..    1503    1529 .. 0.89
+   3 !   26.5   0.0     2e-09   5.2e-09      12      27 ..    3021    3036 ..    3019    3041 .. 0.92
+
+  Alignments for each domain:
+  == domain 1    score: 32.5 bits;  conditional E-value: 2.7e-11
+  NRPS-COM_Nterm  6 kkknIedIYpLSPMQeGMLFHsLldpe 32
+                    +++ Ie I+pLSP+Q G+LFH+ +d e
+            bpsB  2 SQSRIEEIWPLSPLQAGLLFHAVYDGE 28
+                    7899********************965 PP
+
+  == domain 2    score: 25.0 bits;  conditional E-value: 5.8e-09
+  NRPS-COM_Nterm   11 edIYpLSPMQeGMLFH 26  
+                       dI+pLSP+QeGMLF 
+            bpsB 1508 TDIWPLSPLQEGMLFE 1523
+                      69*************6 PP
+
+  == domain 3    score: 26.5 bits;  conditional E-value: 2e-09
+  NRPS-COM_Nterm   12 dIYpLSPMQeGMLFHs 27  
+                      dI+pLSP+QeG+LFH+
+            bpsB 3021 DIWPLSPLQEGLLFHA 3036
+                      9**************8 PP
+
+>> NRPS-COM_Cterm  
+   [No individual domains that satisfy reporting thresholds (although complete target did)]
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (4077 residues)
+Target model(s):                          37  (9277 nodes)
+Passed MSV filter:                        18  (0.486486); expected 0.7 (0.02)
+Passed bias filter:                       15  (0.405405); expected 0.7 (0.02)
+Passed Vit filter:                        14  (0.378378); expected 0.0 (0.001)
+Passed Fwd filter:                        14  (0.378378); expected 0.0 (1e-05)
+Initial search space (Z):                 37  [actual number of targets]
+Domain search space  (domZ):              14  [number of targets reported over threshold]
+# CPU time: 0.19u 0.00s 00:00:00.19 Elapsed: 00:00:00.20
+# Mc/sec: 189.11
+//
+Query:       bpsC  [L=1858]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model                Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------             -----------
+   4.2e-188  614.8  29.7     1e-178  584.0   8.0    3.1  2  CXglyc               
+   6.9e-170  555.2   8.3   1.6e-147  481.7   1.7    2.5  2  Cglyc                
+   3.1e-147  480.7   0.0   2.5e-110  359.5   0.0    2.2  2  Condensation_DCL     
+   5.8e-133  433.7   0.0    5.9e-76  246.6   0.0    2.6  2  Condensation_LCL     
+   1.2e-113  371.0   0.4   5.2e-109  355.7   0.2    2.4  1  AMP-binding          AMP-binding enzyme
+    1.1e-73  239.4   0.0    3.9e-44  142.4   0.0    2.4  2  Condensation_Starter 
+    2.2e-62  202.3   0.0    1.3e-48  157.1   0.0    2.4  2  Condensation_Dual    
+    2.5e-44  143.1   0.1    1.8e-25   81.2   0.0    2.2  2  Heterocyclization    
+    6.7e-40  129.2   0.1    2.1e-39  127.5   0.1    2.0  1  Thioesterase         Thioesterase domain
+    3.8e-24   76.0   0.2    1.8e-23   73.8   0.0    2.3  1  PCP                  
+    2.3e-23   72.4  26.1    1.6e-20   63.0   3.4    3.7  1  CAL_domain           
+      1e-21   67.5  38.8    1.3e-18   57.2  17.0    2.9  1  Epimerization        
+      1e-14   45.9   0.1    4.1e-14   44.0   0.0    2.2  1  ACP                  
+      6e-13   39.1   0.0    9.9e-13   38.4   0.0    1.3  1  NRPS-COM_Nterm       
+
+
+Domain annotation for each model (and alignments):
+>> CXglyc  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   38.8   4.3   4.1e-13   1.1e-12      31     301 ..      45     309 ..      18     311 .. 0.79
+   2 !  584.0   8.0  3.8e-179    1e-178       1     303 []    1048    1350 ..    1048    1350 .. 1.00
+
+  Alignments for each domain:
+  == domain 1    score: 38.8 bits;  conditional E-value: 4.1e-13
+  CXglyc  31 valrlrGrldvpaleaalgdvaarheilrttfp..Gdaqsvhqhvhdaa....avelt..pveateedlpgllaerresvfdltrevpwrcdlfalsdkehvl 125
+                 + G ld   l a+ + + +rh  lr+ f     aq v    ++a     + +l+  p +++e ++  l a+  ++ + +      + +l++l  + h l
+    bpsC  45 TVYGIDGPLDPGLLRASWQALVDRHAALRACFRyvSGAQMVQVIAREAEvpwrETDLSglPDDIAEGEVDRLAADEVAERLRIEAAPLMKLHLIRLGPDRHRL 147
+             3456899************************972244555544445554211134554224568899999999999999999988888999************ PP
+
+  CXglyc 126 alkvhriladddsldvflrdlaaayGarraGrvperaplalqfadyalwerrllegerekdslindqiafwrdnlagideetvlpfdrersavpsrraGtval 228
+               ++h +l d  s+ ++ r+laa y a          p ++ + dy  w  r     ++k+       a wr +lag+d  t +    +   vp     t  +
+    bpsC 148 VHTLHHVLVDGWSMPILHRELAAIYAAG---GDASGLPPTVSYRDYLAWLGR-----QDKEVA----RAAWRAELAGLDTPTTVAAPDPAR-VPDIH--TAVV 235
+             *************************984...445567889*********654.....444432....357*********998877654433.56554..5567 PP
+
+  CXglyc 229 rldaepharlteavepaGadalqlvhaalalllarlGagedvviG.ttlprdedlidlepliGpfarplalrtd 301
+              l ae    l++ +        ++v+ a a++la+l   +dvv G t+  r  dl  +e+++G +  +l++r  
+    bpsC 236 ELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGRDDVVFGaTASGRPADLPGVEAMVGQLLNTLPVRVR 309
+             889999999******999**************************9445679*******************9975 PP
+
+  == domain 2    score: 584.0 bits;  conditional E-value: 3.8e-179
+  CXglyc    1 rpdrvpltarqlrawllarpgeetaglhvsvalrlrGrldvpaleaalgdvaarheilrttfpGdaqsvhqhvhdaaaveltpveateedlpgllaerres 101 
+              rpdrvp+tarqlrawlla+pg+etaglh+svalrl+Gr+dvpal+aalgdvaarheilrttfpGdaqsvhqhvhda+aveltpv +teedlpgllaerr+ 
+    bpsC 1048 RPDRVPVTARQLRAWLLADPGGETAGLHTSVALRLHGRVDVPALAAALGDVAARHEILRTTFPGDAQSVHQHVHDALAVELTPVGVTEEDLPGLLAERRDL 1148
+              9**************************************************************************************************** PP
+
+  CXglyc  102 vfdltrevpwrcdlfalsdkehvlalkvhriladddsldvflrdlaaayGarraGrvperaplalqfadyalwerrllegerekdslindqiafwrdnlag 202 
+              +fdltr+vpwrcdlfalsd+ehvl+l+vhriladddsldvf+rdlaaayGarr+Grvperaplalqfadyalwe+rll++e+e +slin+q+afwrdnlag
+    bpsC 1149 LFDLTRDVPWRCDLFALSDNEHVLHLQVHRILADDDSLDVFFRDLAAAYGARREGRVPERAPLALQFADYALWEQRLLTDENEPGSLINEQVAFWRDNLAG 1249
+              ***************************************************************************************************** PP
+
+  CXglyc  203 ideetvlpfdrersavpsrraGtvalrldaepharlteavepaGadalqlvhaalalllarlGagedvviGttlprdedlidlepliGpfarplalrtdls 303 
+              +d+etvlpfdr+r+avpsrraGtvalrl+a+pharltea+ep Gad+l++vhaala+lla+lGag+dvviGt+lprde+l+dlep+iGpf+r+lalrtd+s
+    bpsC 1250 LDGETVLPFDRPRPAVPSRRAGTVALRLEAGPHARLTEAAEPPGADTLEMVHAALAMLLAKLGAGHDVVIGTALPRDEELFDLEPMIGPFTRALALRTDVS 1350
+              ***************************************************************************************************97 PP
+
+>> Cglyc  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  481.7   1.7  6.2e-148  1.6e-147       1     299 []      14     311 ..      14     311 .. 0.99
+   2 !   76.3   0.2   1.8e-24   4.7e-24      31     296 ..    1077    1347 ..    1069    1350 .. 0.81
+
+  Alignments for each domain:
+  == domain 1    score: 481.7 bits;  conditional E-value: 6.2e-148
+  Cglyc   1 ledvWPLsPlqeGllfhaaldeegpdvYqvqrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaeverla 104
+            +edvWPLsPlqeG+l+h+ald++gpd+Y+vq+++ +dgpld   lra+W+al++rhaaLra+fr+++++++vqv+are+e+pWre+Dls+lp+d ae ev+rla
+   bpsC  14 VEDVWPLSPLQEGMLYHTALDDDGPDTYTVQTVYGIDGPLDPGLLRASWQALVDRHAALRACFRYVSGAQMVQVIAREAEVPWRETDLSGLPDDIAEGEVDRLA 117
+            69****************************************************************************************************** PP
+
+  Cglyc 105 aeeraerfdlakaPllrllLvrlgedrhrlvvtshhilvDGWslpiileelaalYaaggdaselpaaasyrdylaWlsrqdkeaaraaWraelagldeptlvap 208
+            a+e aer+++++aPl++l+L+rlg+drhrlv+t hh+lvDGWs+pi+++elaa+Yaaggdas+lp+++syrdylaWl+rqdke araaWraelagld+pt+va+
+   bpsC 118 ADEVAERLRIEAAPLMKLHLIRLGPDRHRLVHTLHHVLVDGWSMPILHRELAAIYAAGGDASGLPPTVSYRDYLAWLGRQDKEVARAAWRAELAGLDTPTTVAA 221
+            ******************************************************************************************************** PP
+
+  Cglyc 209 adaarapaepeevvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrvrLd 299
+             d+ar+p++ +++v+el++elt+ l+++ar+h+ltlntvvqgaWa+vLa+Lagr+dvvfGat++grPa+lpgve+mvG llnt+PvrvrLd
+   bpsC 222 PDPARVPDI-HTAVVELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGRDDVVFGATASGRPADLPGVEAMVGQLLNTLPVRVRLD 311
+            *******99.8999****************************************************************************8 PP
+
+  == domain 2    score: 76.3 bits;  conditional E-value: 1.8e-24
+  Cglyc   31 qrileldgpldaarlraaWeallarhaaLrasfrrlksgetvqvvarevelpWrevDlselpedeaeaeverlaaeeraerfdlakaPllrllLvrlgedrh 132 
+                l+l+g++d+  l aa   + arh+ Lr++f   ++ ++ q v++  +     v+l+ +    +e+++  l+ae r+  fdl++    r  L  l++++h
+   bpsC 1077 SVALRLHGRVDVPALAAALGDVAARHEILRTTFPGDAQ-SVHQHVHDALA-----VELTPV--GVTEEDLPGLLAERRDLLFDLTRDVPWRCDLFALSDNEH 1170
+             56789****************************75432.23355555554.....455555..667779999****************************** PP
+
+  Cglyc  133 rlvvtshhilvDGWslpiileelaalYaa..ggda.selpaaasyrdylaWlsr..qdke.......aaraaWraelagldeptlvapad..aarapaepee 220 
+              l + +h il+D  sl + +++laa+Y a  +g++ ++ p a  + dy  W +r   d++          a Wr++lagld  t++      +a  +  + +
+   bpsC 1171 VLHLQVHRILADDDSLDVFFRDLAAAYGArrEGRVpERAPLALQFADYALWEQRllTDENepgslinEQVAFWRDNLAGLDGETVLPFDRprPAVPSRRAGT 1272
+             ***************************98332334144566789*******999443443122222134578***********9876554114444556778 PP
+
+  Cglyc  221 vvlelseeltrrlvelarehgltlntvvqgaWalvLarLagrtdvvfGatvagrPaelpgvesmvGlllntvPvrv 296 
+             v+l+l++  + rl+e a   g     +v++a a++La+L   +dvv G++   r  el ++e m+G +  ++  r 
+   bpsC 1273 VALRLEAGPHARLTEAAEPPGADTLEMVHAALAMLLAKLGAGHDVVIGTAL-PRDEELFDLEPMIGPFTRALALRT 1347
+             89999999**************9999**********************987.69**************99998886 PP
+
+>> Condensation_DCL  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  359.5   0.0  9.5e-111  2.5e-110       1     300 []      15     311 ..      15     311 .. 0.98
+   2 !  119.1   0.0   1.6e-37   4.3e-37      29     299 ..    1077    1349 ..    1064    1350 .. 0.90
+
+  Alignments for each domain:
+  == domain 1    score: 359.5 bits;  conditional E-value: 9.5e-111
+  Condensation_DCL   1 edvypLsplQeGllfhallde.eadvYvvqlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaee 92 
+                       edv+pLsplQeG+l+h+ ld+ + d+Y+vq+v+ ++g+ld+ +lra++qalvdrh++Lr++F   +  ++vqv+++e+e+++re+dls+l+++
+              bpsC  15 EDVWPLSPLQEGMLYHTALDDdGPDTYTVQTVYGIDGPLDPGLLRASWQALVDRHAALRACFRYVSGAQMVQVIAREAEVPWRETDLSGLPDD 107
+                       79*****************9999********************************************************************** PP
+
+  Condensation_DCL  93 eqeeelealaaedrergFdlarapllrltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaalpaarpYrdYiawlarqd 185
+                        +e e+++laa++ +++  +++apl++l+lirl+ +r+rlv t Hh+l+DGWs+p+l +el ++Y  +a+g+++ lp++ +YrdY+awl rqd
+              bpsC 108 IAEGEVDRLAADEVAERLRIEAAPLMKLHLIRLGPDRHRLVHTLHHVLVDGWSMPILHRELAAIY--AAGGDASGLPPTVSYRDYLAWLGRQD 198
+                       *****************************************************************..99************************ PP
+
+  Condensation_DCL 186 keaaeaaWreeLagleeptllaeakkeeeeeaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvsgRpae 278
+                       ke a+aaWr+eLagl++pt++a  ++++    + ++  vel++e t+ L+++ar + +Tlnt+vq+awa++L++l+grddvvFGat sgRpa+
+              bpsC 199 KEVARAAWRAELAGLDTPTTVAAPDPAR--VPDIHTAVVELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGRDDVVFGATASGRPAD 289
+                       *********************9988877..57889999******************************************************* PP
+
+  Condensation_DCL 279 lpgvesmvGlfiNtvPvrvrld 300
+                       lpgve+mvG ++Nt+Pvrvrld
+              bpsC 290 LPGVEAMVGQLLNTLPVRVRLD 311
+                       *******************986 PP
+
+  == domain 2    score: 119.1 bits;  conditional E-value: 1.6e-37
+  Condensation_DCL   29 qlvlelegeldverlraaaqalvdrheiLrtaFveeeleepvqvvlkevelelreldlselaeeeqeeelealaaedrergFdlarapllr 119 
+                         ++l+l+g++dv +l+aa+  + +rheiLrt+F   + +++ q v++  ++el+ + ++e       e l  l+ae r+  Fdl+r+++ r
+              bpsC 1077 SVALRLHGRVDVPALAAALGDVAARHEILRTTFPG-DAQSVHQHVHDALAVELTPVGVTE-------EDLPGLLAERRDLLFDLTRDVPWR 1159
+                        57899****************************55.9999***********999999988.......67999******************* PP
+
+  Condensation_DCL  120 ltlirlaeeryrlvltnHhillDGWslplllkellelYqalaegepaal.paarpYrdYiawlarq..dk.......eaaeaaWreeLagl 200 
+                        + l+ l+++++ l l  H il D  sl +++++l + Y a++eg+ ++  p a ++ dY  w +r   d+       +++ a+Wr++Lagl
+              bpsC 1160 CDLFALSDNEHVLHLQVHRILADDDSLDVFFRDLAAAYGARREGRVPERaPLALQFADYALWEQRLltDEnepgsliNEQVAFWRDNLAGL 1250
+                        ********************************************9998615569********88863333112222235679********* PP
+
+  Condensation_DCL  201 eeptllaeakkeeee.eaepeeleveldeeateaLeelarsqgvTlntlvqaawallLsrltgrddvvFGatvsgRpaelpgvesmvGlfi 290 
+                        +++t+l+ ++++ +  +++ +++ ++l++  +++L+e+a+  g     +v+aa a+lL++l   +dvv G++   R+ el + e m+G f 
+              bpsC 1251 DGETVLPFDRPRPAVpSRRAGTVALRLEAGPHARLTEAAEPPGADTLEMVHAALAMLLAKLGAGHDVVIGTAL-PRDEELFDLEPMIGPFT 1340
+                        ********999998889999**************************************************887.6**************** PP
+
+  Condensation_DCL  291 NtvPvrvrl 299 
+                          +++r+++
+              bpsC 1341 RALALRTDV 1349
+                        *99999875 PP
+
+>> Condensation_LCL  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  184.6   0.0   1.7e-57   4.5e-57       3     296 .]      17     311 ..      15     311 .. 0.90
+   2 !  246.6   0.0   2.3e-76   5.9e-76       2     296 .]    1050    1350 ..    1049    1350 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 184.6 bits;  conditional E-value: 1.7e-57
+  Condensation_LCL   3 rlplSfaQqrlwflnqlepesa.ayniplalrltgeldvealeaAladlvaRheiLRtvfpeedgep.vqvvlpaaelelevedls....... 86 
+                        +plS+ Q+ + +   l+++ + +y +++++ ++g+ld   l+a++++lv+Rh +LR +f+ + g + vqv++ +ae++++++dls       
+              bpsC  17 VWPLSPLQEGMLYHTALDDDGPdTYTVQTVYGIDGPLDPGLLRASWQALVDRHAALRACFRYVSGAQmVQVIAREAEVPWRETDLSglpddia 109
+                       68***************9776527************************************776665549999999****************** PP
+
+  Condensation_LCL  87 eaeleelveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelle 179
+                       e e+++l+++e+a++  +e++pl++++l+rl +++h L+ ++HH+ +DgwS+ +l relaa+Yaa   g+a+ l+  +v+Y+DY +w      
+              bpsC 110 EGEVDRLAADEVAERLRIEAAPLMKLHLIRLGPDRHRLVHTLHHVLVDGWSMPILHRELAAIYAA--GGDASGLP-PTVSYRDYLAWLG---- 195
+                       ***************************************************************44..77777777.679******9875.... PP
+
+  Condensation_LCL 180 eeelarqlaYWreqLaglpelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvGtpvag 272
+                       +++ +  +a Wr++Lagl + +++ +  p +       ++  +el+ael++ l+++ar h+ tl +v++ a+av+L++l+g++D+v G+  +g
+              bpsC 196 RQDKEVARAAWRAELAGLDTPTTVAAPDPARVPDI---HTAVVELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGRDDVVFGATASG 285
+                       5556666778********99888766555444333...456799************************************************* PP
+
+  Condensation_LCL 273 Rtr..aeledliGfFvNtlvlrteld 296
+                       R    + +e ++G  +Ntl++r++ld
+              bpsC 286 RPAdlPGVEAMVGQLLNTLPVRVRLD 311
+                       *863379***************9975 PP
+
+  == domain 2    score: 246.6 bits;  conditional E-value: 2.3e-76
+  Condensation_LCL    2 erlplSfaQqrlwflnqlepesaayniplalrltgeldvealeaAladlvaRheiLRtvfpeedgepvqvvlpaaelelevedlseaelee 92  
+                        +r+p+   Q r w+l+   +e+a  + ++alrl+g++dv al+aAl d++aRheiLRt+fp + ++++q+v++a+++el+ + ++e++l  
+              bpsC 1050 DRVPVTARQLRAWLLADPGGETAGLHTSVALRLHGRVDVPALAAALGDVAARHEILRTTFPGDAQSVHQHVHDALAVELTPVGVTEEDLPG 1140
+                        789**************************************************************************************** PP
+
+  Condensation_LCL   93 lveeeaarpFdLekepllrvrllrlaeeehvLllvvHHiiaDgwSlgvllrelaalYaarlagqapelaplpvqYaDYalwqrelle.... 179 
+                        l++e     FdL++++++r+ l+ l+++ehvL l+vH i aD+ Sl+v++r+laa+Y ar++g+ pe apl++q+aDYalw+++ll+    
+              bpsC 1141 LLAERRDLLFDLTRDVPWRCDLFALSDNEHVLHLQVHRILADDDSLDVFFRDLAAAYGARREGRVPERAPLALQFADYALWEQRLLTdene 1231
+                        ***************************************************************************************9999 PP
+
+  Condensation_LCL  180 .eeelarqlaYWreqLaglpelleLptdrprpavqsyrGarvefeldaelsaklkelarehgvtlFmvllaalavlLsrlsgqeDivvGtp 269 
+                         ++ +++q+a+Wr++Lagl  ++ Lp drprpav s r+ +v+++l+a  +a+l+e a+  g+ +  +++aala+lL++l++ +D+v+Gt 
+              bpsC 1232 pGSLINEQVAFWRDNLAGLDGETVLPFDRPRPAVPSRRAGTVALRLEAGPHARLTEAAEPPGADTLEMVHAALAMLLAKLGAGHDVVIGTA 1322
+                        9999**************************************************************************************9 PP
+
+  Condensation_LCL  270 vagRtr.aeledliGfFvNtlvlrteld 296 
+                        +   ++  +le +iG F   l+lrt+++
+              bpsC 1323 LPRDEElFDLEPMIGPFTRALALRTDVS 1350
+                        864433269****************985 PP
+
+>> AMP-binding  AMP-binding enzyme
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  355.7   0.2    2e-109  5.2e-109       1     418 []     493     887 ..     493     887 .. 0.95
+
+  Alignments for each domain:
+  == domain 1    score: 355.7 bits;  conditional E-value: 2e-109
+                  EHHHHHHHHHHHHHHHHH----TT-EEEEE-SSSHHHHHHHHHHHHTT-EEEE--TTS-HHHHHHHHHHCTESEEEEESBCHCCHHHHHHHHHCHHEC CS
+  AMP-binding   1 TYreldervnrlaagLrklGvkpgdrVaillpnspewviaflaclkaGavyvpvyptlpaerlayilndseakvlitddelltklkeaaskelakeal 98 
+                  TY+e+d+ +nrla +L  +Gv++gdrV++ +++sp+++iafla++kaGa+yvpv+  +paer++++++ds++++++++ +  + ++  a  + a+   
+         bpsC 493 TYAEVDQASNRLAGYLAVRGVGRGDRVGVAMERSPDLLIAFLAIWKAGAAYVPVDVEYPAERISFVFDDSGVSTVLCTLATSAVAPGNAIVLDAP--- 587
+                  9*******************************************************************************999999988888765... PP
+
+                  CETTCCEESECCCCCCEHCHHHHGTSTSS-CCCSBTTTSEEEEEEE-------EEEEEEHHHHHHHHHHHHHHHTTTTT.EEEEES-TTSTHHHCCCH CS
+  AMP-binding  99 iivrsepaesvgeeellleleslkkasteppkvplkpddlayiiyTSGtTGkPKgVmlthrnllalvagiakrvglkpddrvlsllplafdgsvleil 196
+                                     ++  + ++ + p+  + +ddlay++yTSG+TG PKgV + h++++ l+  +++++g   +d vl+ + + fd s+++++
+         bpsC 588 -------------------ETRVAVRDCAAPEIRPHADDLAYVMYTSGSTGLPKGVAIPHGAVAGLAGDAGWQIGP--GDGVLMHATHVFDPSLYAMW 664
+                  ...................3334444444444444889******************************99999999..556***************** PP
+
+                  HHHTTT-EEEEESSCCTCSHHHHHHHHHHTT-SEEEE-HHHHHHHHHHHHCCCTTTTT--EEEE-----THHHHHHHHHHCTTSEEEEEE--GGGSSE CS
+  AMP-binding 197 gplllGatlvlvspedlkdpalllddiekykvtvlalvptllelllkapekkkldlsslrlilsggeplspellrrlreafggipivngYGltEttvi 294
+                  +pl++Ga++ l++p  l d+a + +++ + ++t+++l+   +++l+++++   + +  l  i +gg+ ++ + +++lr+a +g ++ n+YG+tEtt++
+         bpsC 665 VPLVSGARVLLTEPGVL-DAAGVRQAV-HRGATFVHLTAGTFRALAETAP---ECFEGLVEIGTGGDVVPLQSVENLRRAQPGLRVRNTYGPTETTLC 757
+                  ****************6.777776666.669******************8...9******************************************** PP
+
+                  SEEEECGHHH..-SSC---EBSTTTEEEEEBSTT-BEE-S----EEEESTTS--B-TT-HHHHHHHEEESTT-....EEE---EEEE-TT--EEEEEG CS
+  AMP-binding 295 vtvslpgdee..tkpgsiGrplpgveikivdeegkevppgevGEllirgpsvakGYlkdpeltaeafvedgwk....lyrTGDlgridedGyleiiGR 386
+                  +t+ ++++ e   +  +iG+p+++ +i+++d   ++vppg+ GEl+i+g ++a GYlk p lta +fv+ +++    +yrTGD +r++ dG++ ++GR
+         bpsC 758 ATWLPIEPGEvlGRELPIGHPMTNRRIYLLDAFLRPVPPGVAGELYIAGTGLAHGYLKSPGLTAGRFVACPFAagerMYRTGDRARWTRDGEVVFLGR 855
+                  ************************************************************************************************** PP
+
+                  GGCEEEB---EEEHHHHHHHHHTSTTEEEEEE CS
+  AMP-binding 387 kkdqvkirGeriepgeiEsvllehpgvaeaaV 418
+                  ++dqvkirG+r+e+ge+E++l++ pgv ea+V
+         bpsC 856 ADDQVKIRGYRVELGEVEAALAAQPGVVEAVV 887
+                  ******************************98 PP
+
+>> Condensation_Starter  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  142.4   0.0   1.5e-44   3.9e-44       3     299 ..      17     310 ..      15     311 .. 0.93
+   2 !   94.8   0.0   4.7e-30   1.3e-29       3     298 ..    1051    1348 ..    1049    1350 .. 0.87
+
+  Alignments for each domain:
+  == domain 1    score: 142.4 bits;  conditional E-value: 1.5e-44
+  Condensation_Starter   3 rlpLtaaQrgiWlaqqldpdsp.vynigeyveikgeldlelLeeAirqvvaeadalrvrl.veeegepvqavaeelpveleviDlsaee 89 
+                             pL++ Q+g+ +  +ld+d p +y++ ++  i+g+ld  lL+++ + +v+++ alr+ +    + + vq +a+e++v+++ +Dls+ +
+                  bpsC  17 VWPLSPLQEGMLYHTALDDDGPdTYTVQTVYGIDGPLDPGLLRASWQALVDRHAALRACFrYVSGAQMVQVIAREAEVPWRETDLSGLP 105
+                           57**************99987659************************************99999999********************9 PP
+
+  Condensation_Starter  90 d..peaaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeapfgslsdlla 176
+                           d  +e ++ ++  +++a+ l++++ pL++  l+rlg++r+ ++++ HH+++DG+++ +l r++a+iY a    +a    p+ s+ d+la
+                  bpsC 106 DdiAEGEVDRLAADEVAERLRIEAAPLMKLHLIRLGPDRHRLVHTLHHVLVDGWSMPILHRELAAIYAAGG--DASGLPPTVSYRDYLA 192
+                           9445789************************************************************9987..5555777899999886 PP
+
+  Condensation_Starter 177 eeqaYraSerfakDrayWleklaalpepvslseraapakeasasalrrsaelpaallerlkelaeasgisvaelliAalaaylsrltge 265
+                               +   ++ + +ra W+++la+l  p+++++  ++   +  + +++++elpa+l++ l ++a+ +++++++++  a a+ l++l+g+
+                  bpsC 193 ----WLGRQDKEVARAAWRAELAGLDTPTTVAAPDPA---RVPDIHTAVVELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGR 274
+                           ....5566677899999**************877777...99*********************************************** PP
+
+  Condensation_Starter 266 ddvvlglpvmnRlgs..aakrtpGmvanvlPLrlsv 299
+                           ddvv+g   ++R         ++G ++n+lP+r+++
+                  bpsC 275 DDVVFGATASGRPADlpGVEAMVGQLLNTLPVRVRL 310
+                           ************986225799************987 PP
+
+  == domain 2    score: 94.8 bits;  conditional E-value: 4.7e-30
+  Condensation_Starter    3 rlpLtaaQrgiWlaqqldpdspvynigeyveikgeldlelLeeAirqvvaeadalrvrlveeegepvqavaeelpveleviDlsaee 89  
+                            r+p+ta Q + Wl      +++   ++  ++++g++d+++L++A+  v+a+++ lr+++ ++ ++++q+v ++l vel+ + +++e+
+                  bpsC 1051 RVPVTARQLRAWLLADPGGETAGLHTSVALRLHGRVDVPALAAALGDVAARHEILRTTFPGDAQSVHQHVHDALAVELTPVGVTEED 1137
+                            78**********************************************************************************999 PP
+
+  Condensation_Starter   90 dpeaaaeawmradlarpldldgdpLfrfallrlgeeryywyqrvHHiilDGfgfalltrriaeiYtalaageaapeap.fgslsdll 175 
+                             p      ++ +  +  +dl++d  +r  l+ l+++++ +  +vH i++D  ++ +++r +a++Y a+++g+ ++ ap + +++d++
+                  bpsC 1138 LPG-----LLAERRDLLFDLTRDVPWRCDLFALSDNEHVLHLQVHRILADDDSLDVFFRDLAAAYGARREGRVPERAPlALQFADYA 1219
+                            877.....88899999*******************************************************9866665266899988 PP
+
+  Condensation_Starter  176 aeeqaYraSer.....fakDrayWleklaalpepvslse.raapake.asasalrrsaelpaallerlkelaeasgisvaelliAal 255 
+                              eq+    e+      ++  a+W+++la+l   + l   r++p  + +s++a ++ ++l+a  ++rl+e+ae  g+   e++ Aal
+                  bpsC 1220 LWEQRLLTDENepgslINEQVAFWRDNLAGLDGETVLPFdRPRP--AvPSRRAGTVALRLEAGPHARLTEAAEPPGADTLEMVHAAL 1304
+                            777765443322222289999**********9888876535555..55*************************************** PP
+
+  Condensation_Starter  256 aaylsrltgeddvvlglpvmnRlgs.aakrtpGmvanvlPLrls 298 
+                            a++l++l    dvv+g+ + +  +      ++G ++  l+Lr++
+                  bpsC 1305 AMLLAKLGAGHDVVIGTALPRDEELfDLEPMIGPFTRALALRTD 1348
+                            ****************9876544431233466666666666665 PP
+
+>> Condensation_Dual  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  157.1   0.0   4.8e-49   1.3e-48       1     296 []      15     311 ..      15     311 .. 0.91
+   2 !   42.8   0.0   3.3e-14   8.7e-14      31     295 ..    1079    1349 ..    1070    1350 .. 0.78
+
+  Alignments for each domain:
+  == domain 1    score: 157.1 bits;  conditional E-value: 4.8e-49
+  Condensation_Dual   1 qdiYpLapLqeGilfHhllaeeg.DpYllqallafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleldsadg 91 
+                        +d++pL+pLqeG+l+H  l ++g D+Y +q+++ ++         a+ q+++dRh  Lr+ + +    + vqv+ r+ae++ +e++l+   +
+               bpsC  15 EDVWPLSPLQEGMLYHTALDDDGpDTYTVQTVYGIDGPLDPGLLRASWQALVDRHAALRACFRYVSGAQMVQVIAREAEVPWRETDLSGLPD 106
+                        59***************9999877************99999999999*****************************************9999 PP
+
+  Condensation_Dual  92 evaeqlear..fdprrarldlsqapllrlvvaedaaegrllllllfHHlilDhttlevlseEvqallq..gqeealpapvpyRnfvaqarlg 179
+                        ++ae   +r   d  ++rl ++ apl++l++ +    +r  l+ ++HH+++D  ++ +l++E+ a+ +  g+++ lp++v+yR+++a    +
+               bpsC 107 DIAEGEVDRlaADEVAERLRIEAAPLMKLHLIRL-GPDRHRLVHTLHHVLVDGWSMPILHRELAAIYAagGDASGLPPTVSYRDYLAWL-GR 196
+                        99986655411577889*************9987.67788888999******************98753378889************98.55 PP
+
+  Condensation_Dual 180 vseaeheafFrekLadvdeptlpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFGtvllGR 271
+                        ++++ ++a +r++La +d+pt+        +   +i+ a  +l+aeL++ l + ar  ++ + +++  awa vla+++gr+dvvFG+  +GR
+               bpsC 197 QDKEVARAAWRAELAGLDTPTTVAAPDP--ARVPDIHTAVVELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGRDDVVFGATASGR 286
+                        6777788889***********9866554..44567889999*************************************************** PP
+
+  Condensation_Dual 272 lqggegadralGlfintLPlrldld 296
+                         +   g++ ++G ++ntLP+r++ld
+               bpsC 287 PADLPGVEAMVGQLLNTLPVRVRLD 311
+                        **********************986 PP
+
+  == domain 2    score: 42.8 bits;  conditional E-value: 3.3e-14
+  Condensation_Dual   31 llafasrerldaflaalqqvidRhdiLrtavlWegleepvqvvwrqaeleveeleldsadgevaeqlearfdprrarldlsqapllrlvv 120 
+                          l+++ r  + a +aal  v +Rh+iLrt++  +  ++  q v+    +e++   +  +++++   l++r d     +dl++    r+ +
+               bpsC 1079 ALRLHGRVDVPALAAALGDVAARHEILRTTFPGDA-QSVHQHVHDALAVELT--PVGVTEEDLPGLLAERRD---LLFDLTRDVPWRCDL 1162
+                         56677777888999***************997654.4555666665555555..555555566788887766...789****99999999 PP
+
+  Condensation_Dual  121 aedaaegrllllllfHHlilDhttlevlseEvqall.qgqe....ealpapvpyRnfva.qarlgvse.......aeheafFrekLadvd 197 
+                          +  ++++ +l l++H ++ D+ +l+v+ +++ a   + +e    e+ p ++++ ++   + rl ++e       +e+ af+r++La +d
+               bpsC 1163 FAL-SDNEHVLHLQVHRILADDDSLDVFFRDLAAAYgARREgrvpERAPLALQFADYALwEQRLLTDEnepgsliNEQVAFWRDNLAGLD 1251
+                         987.77889999****************9999876514444111234566788999965244555544122222246889********** PP
+
+  Condensation_Dual  198 ept.lpfglaevqgdgseieearraleaeLsqrlreqarrlgvsaasllHlawaqvlartsgredvvFGtvllGRlqggegadralGlfi 286 
+                           t lpf+       +++   ++ +lea  ++rl e a   g  +  ++H a a++la++   +dvv Gt l  R +   + + ++G f 
+               bpsC 1252 GETvLPFDRPRPAVPSRRAGTVALRLEAGPHARLTEAAEPPGADTLEMVHAALAMLLAKLGAGHDVVIGTAL-PRDEELFDLEPMIGPFT 1340
+                         66538*****************************************************************98.47777778888888888 PP
+
+  Condensation_Dual  287 ntLPlrldl 295 
+                           L lr d+
+               bpsC 1341 RALALRTDV 1349
+                         888888765 PP
+
+>> Heterocyclization  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   81.2   0.0     7e-26   1.8e-25      40     296 ..      53     307 ..      19     311 .. 0.90
+   2 !   59.7   0.0   2.3e-19   6.2e-19      39     299 ..    1085    1349 ..    1073    1350 .. 0.84
+
+  Alignments for each domain:
+  == domain 1    score: 81.2 bits;  conditional E-value: 7e-26
+  Heterocyclization  40 ldlarleaaiealiarHpMLrvvvle.dGeQ..rilpavpkkkievhDlrevkadevearlaalRerlshqvldvergelfeleltllpegk 128
+                        ld+  l+a ++al+ rH  Lr+ ++   G Q  +++++ +++  + +Dl+   +d +e ++++l +    ++l++e  +l++l+l++l  ++
+               bpsC  53 LDPGLLRASWQALVDRHAALRACFRYvSGAQmvQVIAREAEVPWRETDLSGLPDDIAEGEVDRLAADEVAERLRIEAAPLMKLHLIRLGPDR 144
+                        89999*******************85389993334556667778899********************************************* PP
+
+  Heterocyclization 129 trlhlslDllvaDaaSfrlLlaeLaalyege.eleaaplevsFrdyllaeraqreaarerdrayWqarlpeLpaaPeLPlakepekleeprf 219
+                        +rl   l  +++D +S+ +L +eLaa+y+   ++   p +vs+rdyl+   +q++++   +ra W a l+ L  +P+   a +p++   p +
+               bpsC 145 HRLVHTLHHVLVDGWSMPILHRELAAIYAAGgDASGLPPTVSYRDYLAWLGRQDKEV---ARAAWRAELAGLD-TPTTVAAPDPAR--VPDI 230
+                        ****************************855499999**********9998887765...5999********6.455555555555..8999 PP
+
+  Heterocyclization 220 trrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnltlfnrqplhpdvdklvgDFtslllle 296
+                        +   ++l++e  + l+++a+ +++t+ +v+  a+a vla+ ++++ +++  t   r++  p v+++vg   + l + 
+               bpsC 231 HTAVVELPAELTDGLAQFARGHDLTLNTVVQGAWAVVLAQLAGRDDVVFGATASGRPADLPGVEAMVGQLLNTLPVR 307
+                        999*****************************************************************887766555 PP
+
+  == domain 2    score: 59.7 bits;  conditional E-value: 2.3e-19
+  Heterocyclization   39 dldlarleaaiealiarHpMLrvvvledGeQrilpavpkkkievhDlrevkadevearlaalRerlshqvldvergelfeleltllpegk 128 
+                         ++d+ +l aa+ +++arH++Lr+++  d+ Q + ++  + +++v+ l  v    +e++l  l +++   + d++r       l  l++++
+               bpsC 1085 RVDVPALAAALGDVAARHEILRTTFPGDA-QSVHQH-VHDALAVE-LTPVGV--TEEDLPGLLAERRDLLFDLTRDVPWRCDLFALSDNE 1169
+                         78999********************6554.444444.44455554.333333..34568888888888888999999999********** PP
+
+  Heterocyclization  129 trlhlslDllvaDaaSfrlLlaeLaalyege....eleaaplevsFrdyllaera......qreaarerdrayWqarlpeLpaaPeLPla 208 
+                         ++lhl++  ++aD  S+ +++++Laa+y  +      e apl+++F+dy l e++      ++ +  +++ a+W + l+ L ++  LP++
+               bpsC 1170 HVLHLQVHRILADDDSLDVFFRDLAAAYGARregrVPERAPLALQFADYALWEQRlltdenEPGSLINEQVAFWRDNLAGLDGETVLPFD 1259
+                         ***************************97664342567789999****97766651111003344558999******************* PP
+
+  Heterocyclization  209 kepekleeprftrrrhsldpeewqalkaraaeagvtpsmvllaafaevlarwsessrflLnltlfnrqplhpdvdklvgDFtsllllevd 298 
+                         ++   + ++r    + +l++   ++l+++a+  g     ++ aa a +la+  + + +++  t + r +   d++ ++g Ft  l l +d
+               bpsC 1260 RPRPAVPSRRAGTVALRLEAGPHARLTEAAEPPGADTLEMVHAALAMLLAKLGAGHDVVIG-TALPRDEELFDLEPMIGPFTRALALRTD 1348
+                         999999*****************************999999*************9999987.8899*******************99988 PP
+
+  Heterocyclization  299 l 299 
+                         +
+               bpsC 1349 V 1349
+                         6 PP
+
+>> Thioesterase  Thioesterase domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  127.5   0.1     8e-40   2.1e-39       1     222 [.    1622    1836 ..    1622    1847 .. 0.87
+
+  Alignments for each domain:
+  == domain 1    score: 127.5 bits;  conditional E-value: 8e-40
+                    EEEEES---TT-HGGGHHHHHHHTSCEEEEEEECSTTC----TTTTHHHHHHHHHHHHHHHH--S-SEEEE------HHHHHHHHHHHHHS--CE CS
+  Thioesterase    1 rpLfcfppagGsasvyrklarklpdplveflaiqlpgrerdepllesieelaeeyaealrqiqpegPyaLfGySlGGllAfevArqLerqgeeva 95  
+                    +pLfc++ +gG ++ y +l r lp++  +++++q++g  r+epl+ s+ee+a++y+e++r+ qp gPy+L+G+SlGG +A ++Ar Le+ ge++ 
+          bpsC 1622 PPLFCVHASGGLSWNYEPLLRYLPPN-QPVYGVQARGLARTEPLPGSVEEMAADYLEQIRAVQPAGPYHLLGWSLGGRIAQAMARLLEADGERLG 1715
+                    59***********************8.******************************************************************** PP
+
+                    EEEEESSSESSS-CCCHCCHHHHHCHHHHHSCCCHHCCCCTHHHHCCHHHHHHHHHHHHHHTTT--CTSECCHHCEEEEEEGCS-CCCCCCCCCC CS
+  Thioesterase   96 sLiliDapapsekakeashllgdeelvaelrdiggtpealledeellsellpalradkralenysirpiaaqkvdatlfygsddplneldtllaa 190 
+                     L l Da++ + ++k++  + ++++l +  +++   + +l +  +++s+l+ ++r   +  ++ +  p+a +    +lf+   d+ ++l+ + a+
+          bpsC 1716 LLALLDAYPVYMGRKTTGAASEEAALEQRNQQDLDLAGQLVKGVAARSRLEAVMRNLWKVGPRHTRSPFAGD---VLLFVATVDRPAHLPVPVAK 1807
+                    ********9999999999999999888888888877777777775555555555555555555555566666...999*999999999*999999 PP
+
+                    SSCSCTCSSSEEEEEE---TTHCHCCCHHHHH CS
+  Thioesterase  191 arwreytpgafsvhvlpgdhftlledaaeell 222 
+                    a+w+e t+ga++ h +p++h ++++    + l
+          bpsC 1808 ASWKEFTSGAVEAHEIPSNHYDMVQ---SAAL 1836
+                    99**********************9...3333 PP
+
+>> PCP  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   73.8   0.0   6.8e-24   1.8e-23       1      68 [.     970    1037 ..     970    1039 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 73.8 bits;  conditional E-value: 6.8e-24
+   PCP    1 EteLaeiwaevLgverVgidDdFFelGGhSLlatrliarirqelgvelsvkdLfaaptvaalaallse 68  
+            E+ L++++ae+L +++Vg+dD F +lGG S la+rl+arir+elg +l +++Lf++pt a la++l++
+  bpsC  970 EKVLCALFAEILSIDQVGVDDTFHDLGGSSALAMRLVARIREELGADLPIRQLFSSPTPAGLARALAA 1037
+            789*************************************************************9986 PP
+
+>> CAL_domain  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   63.0   3.4   6.1e-21   1.6e-20       1     156 [.     493     628 ..     493     630 .. 0.89
+
+  Alignments for each domain:
+  == domain 1    score: 63.0 bits;  conditional E-value: 6.1e-21
+  CAL_domain   1 syaeLerrarrlAGhLqdlGlkpGdrVvillgnrvefVeayLAclrAgaVAVPlnpdsadaelahllrdsGiravl.tdaAhaavLdkvrrtapalalv 98 
+                 +yae ++   rlAG+L+ +G+ +GdrV +++   +    a+LA+  Aga  VP++        + + +dsG+  vl t+a++        ++ap  a+v
+        bpsC 493 TYAEVDQASNRLAGYLAVRGVGRGDRVGVAMERSPDLLIAFLAIWKAGAAYVPVDVEYPAERISFVFDDSGVSTVLcTLATS--------AVAPGNAIV 583
+                 8*********************************************************999999*******97776367777........9******** PP
+
+  CAL_domain  99 dahaagrelagfasyeelatpesalpArDDPvlglDelAwmlYTSGsTGrPKGVlsth 156
+                  ++a++++    ++  + +  ++         + +D+lA+ +YTSGsTG PKGV   h
+        bpsC 584 -LDAPETR----VA--VRDCAAPEIR------PHADDLAYVMYTSGSTGLPKGVAIPH 628
+                 .8877665....44..5555566777......899*******************7666 PP
+
+>> Epimerization  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   57.2  17.0   5.1e-19   1.3e-18      35     240 ..      52     243 ..      49     247 .. 0.93
+
+  Alignments for each domain:
+  == domain 1    score: 57.2 bits;  conditional E-value: 5.1e-19
+  Epimerization  35 gldedaLraALqaLldhHDALRlRfreedgg.wrqrnvperGavdeaaflLevvdlsggdd..ldaaiea.aaneaQasLDlaaGpLlrAvlfdag 126
+                    +ld+  Lra  qaL+d+H ALR++fr + g   +q++     a + a+++ ++ dlsg++d   +  +++ aa+e++ +L+++a pL+++ l ++g
+           bpsC  52 PLDPGLLRASWQALVDRHAALRACFRYVSGAqMVQVI-----ARE-AEVPWRETDLSGLPDdiAEGEVDRlAADEVAERLRIEAAPLMKLHLIRLG 141
+                    69***********************777777699999.....777.99***************66666662678999******************* PP
+
+  Epimerization 127 dgdpgrLlLviHHLVVDGVSWRILLEDLaaAYeQaaaGqaiaLppKTtSfrrWAerLaeyAqseallaEldYWrevlagpdppLPadrpdgdkadd 222
+                    +++ +rL+ + HH  VDG S  IL   Laa Y++   G +++  p+T S+r++ + L ++  +++    ++ Wr+ lag d+p  + +pd+     
+           bpsC 142 PDR-HRLVHTLHHVLVDGWSMPILHRELAAIYAA---GGDASGLPPTVSYRDYLAWLGRQ--DKE--VARAAWRAELAGLDTPTTVAAPDP----A 225
+                    ***.*****************************6...***********************..444..6789********************....* PP
+
+  Epimerization 223 tagtartvsvtLsaeeTr 240
+                    ++ + +t+ v+L+ae T+
+           bpsC 226 RVPDIHTAVVELPAELTD 243
+                    *****************7 PP
+
+>> ACP  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   44.0   0.0   1.5e-14   4.1e-14       5      71 ..     974    1037 ..     970    1039 .. 0.90
+
+  Alignments for each domain:
+  == domain 1    score: 44.0 bits;  conditional E-value: 1.5e-14
+   ACP    5 reevaavlglasasdvdpdraFkdlGvDSltaveLrnrLeaatGlrLpatlvfdhptpraLaehLle 71  
+            ++  a+ l +   ++v +d++F dlG +S  a++L+ r+++++G +Lp  ++f  ptp+ La++L +
+  bpsC  974 CALFAEILSI---DQVGVDDTFHDLGGSSALAMRLVARIREELGADLPIRQLFSSPTPAGLARALAA 1037
+            5556666666...9**************************************************986 PP
+
+>> NRPS-COM_Nterm  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   38.4   0.0   3.8e-13   9.9e-13       5      31 ..       9      35 ..       6      37 .. 0.89
+
+  Alignments for each domain:
+  == domain 1    score: 38.4 bits;  conditional E-value: 3.8e-13
+  NRPS-COM_Nterm  5 tkkknIedIYpLSPMQeGMLFHsLldp 31
+                    + ++++ed++pLSP+QeGML+H+ ld 
+            bpsC  9 KRRSSVEDVWPLSPLQEGMLYHTALDD 35
+                    67899******************9986 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (1858 residues)
+Target model(s):                          37  (9277 nodes)
+Passed MSV filter:                        19  (0.513514); expected 0.7 (0.02)
+Passed bias filter:                       17  (0.459459); expected 0.7 (0.02)
+Passed Vit filter:                        15  (0.405405); expected 0.0 (0.001)
+Passed Fwd filter:                        14  (0.378378); expected 0.0 (1e-05)
+Initial search space (Z):                 37  [actual number of targets]
+Domain search space  (domZ):              14  [number of targets reported over threshold]
+# CPU time: 0.06u 0.02s 00:00:00.08 Elapsed: 00:00:00.08
+# Mc/sec: 215.46
+//

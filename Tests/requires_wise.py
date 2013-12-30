@@ -13,9 +13,9 @@ if sys.platform=="win32":
     raise MissingExternalDependencyError(
         "Don't know how to find the Wise2 tool dnal on Windows.")
 
-import commands
+from Bio._py3k import getoutput
 not_found_types = ["command not found", "dnal: not found", "not recognized"]
-dnal_output = commands.getoutput("dnal")
+dnal_output = getoutput("dnal")
 
 for not_found in not_found_types:
     if not_found in dnal_output:

@@ -27,12 +27,15 @@
 
 """
 
-# ReportLab imports
+from __future__ import print_function
+
 from reportlab.lib import colors
 
+from Bio._py3k import range
+
 # GenomeDiagram imports
-from _FeatureSet import FeatureSet
-from _GraphSet import GraphSet
+from ._FeatureSet import FeatureSet
+from ._GraphSet import GraphSet
 
 
 class Track(object):
@@ -88,7 +91,7 @@ class Track(object):
                                 labels on the grey track
 
         o greytrack_font_rotation   Int describing the angle through which to
-                                    rotate the grey track labels
+                                    rotate the grey track labels (Linear only)
 
         o greytrack_font_color     colors.Color describing the color to draw
                                     the grey track labels
@@ -166,7 +169,7 @@ class Track(object):
                                     labels on the grey track
 
             o greytrack_font_rotation   Int describing the angle through which to
-                                        rotate the grey track labels
+                                        rotate the grey track labels (Linear only)
 
             o greytrack_font_color     colors.Color describing the color to draw
                                        the grey track labels (overridden by
@@ -301,14 +304,14 @@ class Track(object):
 
             Return the sets contained in this track
         """
-        return self._sets.values()
+        return list(self._sets.values())
 
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return the ids of all sets contained in this track
         """
-        return self._sets.keys()
+        return list(self._sets.keys())
 
     def range(self):
         """ range(self) -> (int, int)
@@ -378,8 +381,8 @@ if __name__ == '__main__':
 
     # test code
     from Bio import SeqIO
-    from _FeatureSet import FeatureSet
-    from _GraphSet import GraphSet
+    from ._FeatureSet import FeatureSet
+    from ._GraphSet import GraphSet
     from random import normalvariate
 
     genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
@@ -397,15 +400,15 @@ if __name__ == '__main__':
     gdt.add_set(gdfs2)
 
     graphdata = []
-    for pos in xrange(1, len(genbank_entry.seq), 1000):
+    for pos in range(1, len(genbank_entry.seq), 1000):
         graphdata.append((pos, normalvariate(0.5, 0.1)))
     gdgs = GraphSet(2, 'test data')
     gdgs.add_graph(graphdata, 'Test Data')
     gdt.add_set(gdgs)
 
-    print gdt.get_ids()
+    print(gdt.get_ids())
     sets = gdt.get_sets()
     for set in sets:
-        print set
+        print(set)
 
-    print gdt.get_element_limits()
+    print(gdt.get_element_limits())

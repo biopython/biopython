@@ -41,17 +41,16 @@ def psea(pname):
     fname=run_psea(pname)
     start=0
     ss=""
-    fp=open(fname, 'r')
-    for l in fp.readlines():
-        if l[0:6]==">p-sea":
-            start=1
-            continue
-        if not start:
-            continue
-        if l[0]=="\n":
-            break
-        ss=ss+l[0:-1]
-    fp.close()
+    with open(fname, 'r') as fp:
+        for l in fp.readlines():
+            if l[0:6]==">p-sea":
+                start=1
+                continue
+            if not start:
+                continue
+            if l[0]=="\n":
+                break
+            ss=ss+l[0:-1]
     return ss
 
 

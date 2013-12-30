@@ -14,7 +14,7 @@
         - "ProviderId" has been removed from PubmedData
         - "URL" has been removed from PubmdeData
 		
-		$Id: pubmed_080101.dtd,v 1.1 2008-05-17 02:42:42 mdehoon Exp $
+		$Id: pubmed_080101.dtd 143882 2008-10-23 15:38:53Z korobtch $
         
        -->
 <!-- ================================================================= -->
@@ -32,12 +32,12 @@
                                    PL|PT|PS|RO|RU|SL|SK|SQ|SR|SV|SW|TH|TR|UK|
                                    VI|ZH)">
 <!ENTITY % pub.status.int "pmc | pmcr | pubmed | pubmedr | 
-                             premedline | medline | medliner">
+                             premedline | medline | medliner | entrez">
 <!ENTITY % pub.status "(received | accepted | epublish | 
                               ppublish | revised | aheadofprint | 
                               retracted | %pub.status.int;)">
 <!ENTITY % art.id.type.int "pubmed | medline | pmcid">
-<!ENTITY % art.id.type "(doi | pii | pmcpid | pmpid | 
+<!ENTITY % art.id.type "(doi | pii | pmcpid | pmpid | pmc | mid |
                               sici | %art.id.type.int;)">
 <!-- ================================================================= -->
 <!ELEMENT PubmedArticleSet (PubmedArticle)+>

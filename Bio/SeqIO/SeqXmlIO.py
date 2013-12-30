@@ -12,16 +12,21 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), http://dx.doi.org/10.1093/bib/bbr025
 """
 
+from __future__ import print_function
+
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.dom import pulldom
 from xml.sax import SAXParseException
 
+from Bio._py3k import range
+from Bio._py3k import basestring
+
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Interfaces import SequentialSequenceWriter
+from .Interfaces import SequentialSequenceWriter
 
 
 class XMLRecordIterator:
@@ -73,7 +78,7 @@ class XMLRecordIterator:
                 elif event == "END_ELEMENT" and node.namespaceURI == self._namespace and node.localName == self._recordTag:
                     yield record
 
-        except SAXParseException, e:
+        except SAXParseException as e:
 
             if e.getLineNumber() == 1 and e.getColumnNumber() == 0:
                 #empty file
@@ -90,7 +95,8 @@ class XMLRecordIterator:
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary."""
 
-        return dict((node.attributes.item(i).name, node.attributes.item(i).value) for i in xrange(node.attributes.length))
+        return dict((node.attributes.item(i).name, node.attributes.item(i).value)
+                    for i in range(node.attributes.length))
 
 
 class SeqXmlIterator(XMLRecordIterator):
@@ -400,23 +406,23 @@ class SeqXmlWriter(SequentialSequenceWriter):
                     self.xml_generator.endElement("property")
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
 
     from Bio import SeqIO
     import sys
 
-    fileHandle = open("Tests/SeqXML/protein_example.xml", "r")
-    records = list(SeqIO.parse(fileHandle, "seqxml"))
+    with open("Tests/SeqXML/protein_example.xml", "r") as fileHandle:
+        records = list(SeqIO.parse(fileHandle, "seqxml"))
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
     stringHandle = StringIO()
 
     SeqIO.write(records, stringHandle, "seqxml")
     SeqIO.write(records, sys.stdout, "seqxml")
-    print
+    print("")
 
     stringHandle.seek(0)
     records = list(SeqIO.parse(stringHandle, "seqxml"))
 
     SeqIO.write(records, sys.stdout, "seqxml")
-    print
+    print("")

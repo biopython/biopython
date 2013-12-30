@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Find and deal with motifs in biological sequence data.
 
 Representing DNA (or RNA or proteins) in a neural network can be difficult
@@ -12,7 +17,7 @@ from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
 
 # local modules
-from Pattern import PatternRepository
+from .Pattern import PatternRepository
 
 
 class MotifFinder(object):
@@ -201,7 +206,7 @@ class MotifCoder(object):
         # as long as we have some motifs present, normalize them
         # otherwise we'll just return 0 for everything
         if max_count > 0:
-            for motif in seq_motifs.keys():
+            for motif in seq_motifs:
                 seq_motifs[motif] = (float(seq_motifs[motif] - min_count)
                                      / float(max_count))
 

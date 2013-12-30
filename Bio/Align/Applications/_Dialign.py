@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program DIALIGN2-2.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
@@ -23,7 +25,7 @@ class DialignCommandline(AbstractCommandline):
     >>> from Bio.Align.Applications import DialignCommandline
     >>> dialign_cline = DialignCommandline(input="unaligned.fasta",
     ...                                    fn="aligned", fa=True)
-    >>> print dialign_cline
+    >>> print(dialign_cline)
     dialign2-2 -fa -fn aligned unaligned.fasta
 
     You would typically run the command line with dialign_cline() or via
@@ -157,7 +159,7 @@ class DialignCommandline(AbstractCommandline):
                     "Maximum number of `*' characters indicating degree "
                     "of local similarity among sequences. By default, no "
                     "stars are used but numbers between 0 and 9, instead.",
-                    checker_function = lambda x: x in range(0,10),
+                    checker_function = lambda x: x in range(0, 10),
                     equate=False),
             _Switch(["-stdo", "stdo"],
                     "Results written to standard output."),
@@ -182,10 +184,10 @@ class DialignCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running modules doctests..."
+    print("Running modules doctests...")
     import doctest
     doctest.testmod()
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     _test()

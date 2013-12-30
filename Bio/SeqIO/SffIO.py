@@ -16,7 +16,7 @@ For example, to iterate over the records in an SFF file,
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
-    ...     print record.id, len(record), record.seq[:20]+"..."
+    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JWQ7T 265 tcagGGTCTACATGTTGGTT...
     E3MFGYR02JA6IL 271 tcagTTTTTTTTGGAAAGGA...
     E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
@@ -31,26 +31,26 @@ For example, to iterate over the records in an SFF file,
 Each SeqRecord object will contain all the annotation from the SFF file,
 including the PHRED quality scores.
 
-    >>> print record.id, len(record)
+    >>> print("%s %i" % (record.id, len(record)))
     E3MFGYR02F7Z7G 219
-    >>> print record.seq[:10], "..."
-    tcagAATCAT ...
-    >>> print record.letter_annotations["phred_quality"][:10], "..."
-    [22, 21, 23, 28, 26, 15, 12, 21, 28, 21] ...
+    >>> print("%s..." % record.seq[:10])
+    tcagAATCAT...
+    >>> print("%r..." % (record.letter_annotations["phred_quality"][:10]))
+    [22, 21, 23, 28, 26, 15, 12, 21, 28, 21]...
 
 Notice that the sequence is given in mixed case, the central upper case region
 corresponds to the trimmed sequence. This matches the output of the Roche
 tools (and the 3rd party tool sff_extract) for SFF to FASTA.
 
-    >>> print record.annotations["clip_qual_left"]
+    >>> print(record.annotations["clip_qual_left"])
     4
-    >>> print record.annotations["clip_qual_right"]
+    >>> print(record.annotations["clip_qual_right"])
     134
-    >>> print record.seq[:4]
+    >>> print(record.seq[:4])
     tcag
-    >>> print record.seq[4:20], "...", record.seq[120:134]
-    AATCATCCACTTTTTA ... CAAAACACAAACAG
-    >>> print record.seq[134:]
+    >>> print("%s...%s" % (record.seq[4:20], record.seq[120:134]))
+    AATCATCCACTTTTTA...CAAAACACAAACAG
+    >>> print(record.seq[134:])
     atcttatcaacaaaactcaaagttcctaactgagacacgcaacaggggataagacaaggcacacaggggataggnnnnnnnnnnn
 
 The annotations dictionary also contains any adapter clip positions
@@ -58,23 +58,23 @@ The annotations dictionary also contains any adapter clip positions
 
     >>> len(record.annotations)
     11
-    >>> print record.annotations["flow_key"]
+    >>> print(record.annotations["flow_key"])
     TCAG
-    >>> print record.annotations["flow_values"][:10], "..."
-    (83, 1, 128, 7, 4, 84, 6, 106, 3, 172) ...
-    >>> print len(record.annotations["flow_values"])
+    >>> print(record.annotations["flow_values"][:10])
+    (83, 1, 128, 7, 4, 84, 6, 106, 3, 172)
+    >>> print(len(record.annotations["flow_values"]))
     400
-    >>> print record.annotations["flow_index"][:10], "..."
-    (1, 2, 3, 2, 2, 0, 3, 2, 3, 3) ...
-    >>> print len(record.annotations["flow_index"])
+    >>> print(record.annotations["flow_index"][:10])
+    (1, 2, 3, 2, 2, 0, 3, 2, 3, 3)
+    >>> print(len(record.annotations["flow_index"]))
     219
 
 Note that to convert from a raw reading in flow_values to the corresponding
 homopolymer stretch estimate, the value should be rounded to the nearest 100:
 
-    >>> print [int(round(value, -2)) // 100
-    ...        for value in record.annotations["flow_values"][:10]], '...'
-    [1, 0, 1, 0, 0, 1, 0, 1, 0, 2] ...
+    >>> print("%r..." % [int(round(value, -2)) // 100
+    ...                  for value in record.annotations["flow_values"][:10]])
+    [1, 0, 1, 0, 0, 1, 0, 1, 0, 2]...
 
 If a read name is exactly 14 alphanumeric characters, the annotations
 dictionary will also contain meta-data about the read extracted by
@@ -83,11 +83,11 @@ Number. Note that if a read name happens to be exactly 14 alphanumeric
 characters but was not generated automatically, these annotation records
 will contain nonsense information.
 
-    >>> print record.annotations["region"]
+    >>> print(record.annotations["region"])
     2
-    >>> print record.annotations["time"]
+    >>> print(record.annotations["time"])
     [2008, 1, 9, 16, 16, 0]
-    >>> print record.annotations["coords"]
+    >>> print(record.annotations["coords"])
     (2434, 1658)
 
 As a convenience method, you can read the file with SeqIO format name "sff-trim"
@@ -96,7 +96,7 @@ except for the PHRED quality scores and anything encoded in the read names):
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
-    ...     print record.id, len(record), record.seq[:20]+"..."
+    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JWQ7T 260 GGTCTACATGTTGGTTAACC...
     E3MFGYR02JA6IL 265 TTTTTTTTGGAAAGGAAAAC...
     E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
@@ -111,35 +111,39 @@ except for the PHRED quality scores and anything encoded in the read names):
 Looking at the final record in more detail, note how this differs to the
 example above:
 
-    >>> print record.id, len(record)
+    >>> print("%s %i" % (record.id, len(record)))
     E3MFGYR02F7Z7G 130
-    >>> print record.seq[:10], "..."
-    AATCATCCAC ...
-    >>> print record.letter_annotations["phred_quality"][:10], "..."
-    [26, 15, 12, 21, 28, 21, 36, 28, 27, 27] ...
+    >>> print("%s..." % record.seq[:10])
+    AATCATCCAC...
+    >>> print("%r..." % record.letter_annotations["phred_quality"][:10])
+    [26, 15, 12, 21, 28, 21, 36, 28, 27, 27]...
     >>> len(record.annotations)
     3
-    >>> print record.annotations["region"]
+    >>> print(record.annotations["region"])
     2
-    >>> print record.annotations["coords"]
+    >>> print(record.annotations["coords"])
     (2434, 1658)
-    >>> print record.annotations["time"]
+    >>> print(record.annotations["time"])
     [2008, 1, 9, 16, 16, 0]
 
 You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
 
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
+    >>> try:
+    ...     from StringIO import StringIO # Python 2
+    ... except ImportError:
+    ...     from io import StringIO # Python 3
+    ...
     >>> out_handle = StringIO()
     >>> count = SeqIO.convert("Roche/E3MFGYR02_random_10_reads.sff", "sff",
     ...                       out_handle, "fastq")
-    >>> print "Converted %i records" % count
+    >>> print("Converted %i records" % count)
     Converted 10 records
 
 The output FASTQ file would start like this:
 
-    >>> print "%s..." % out_handle.getvalue()[:50]
+    >>> print("%s..." % out_handle.getvalue()[:50])
     @E3MFGYR02JWQ7T
     tcagGGTCTACATGTTGGTTAACCCGTACTGATT...
 
@@ -152,7 +156,7 @@ which is a little slower. For example,
     >>> from Bio import SeqIO
     >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff")
     >>> record = reads["E3MFGYR02JHD4H"]
-    >>> print record.id, len(record), record.seq[:20]+"..."
+    >>> print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
 
 Or, using the trimmed reads:
@@ -160,7 +164,7 @@ Or, using the trimmed reads:
     >>> from Bio import SeqIO
     >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim")
     >>> record = reads["E3MFGYR02JHD4H"]
-    >>> print record.id, len(record), record.seq[:20]+"..."
+    >>> print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
     >>> reads.close()
 
@@ -177,10 +181,10 @@ degenerate bit of this pretend primer):
 
     >>> from Bio import SeqIO
     >>> records = (record for record in
-    ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff","sff")
+    ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
     ...            if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
     >>> count = SeqIO.write(records, "temp_filtered.sff", "sff")
-    >>> print "Selected %i records" % count
+    >>> print("Selected %i records" % count)
     Selected 2 records
 
 Of course, for an assembly you would probably want to remove these primers.
@@ -195,20 +199,20 @@ is just to adjust the left clip position!
     ...             record.annotations["clip_qual_left"] += len(primer)
     ...             yield record
     >>> records = SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
-    >>> count = SeqIO.write(filter_and_trim(records,"AAAGA"),
+    >>> count = SeqIO.write(filter_and_trim(records, "AAAGA"),
     ...                     "temp_filtered.sff", "sff")
-    >>> print "Selected %i records" % count
+    >>> print("Selected %i records" % count)
     Selected 2 records
 
 We can check the results, note the lower case clipped region now includes the "AAAGA"
 sequence:
 
     >>> for record in SeqIO.parse("temp_filtered.sff", "sff"):
-    ...     print record.id, len(record), record.seq[:20]+"..."
+    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JHD4H 310 tcagaaagaCAAGTGGTATC...
     E3MFGYR02GAZMS 278 tcagaaagaAGTAAGGTAAA...
     >>> for record in SeqIO.parse("temp_filtered.sff", "sff-trim"):
-    ...     print record.id, len(record), record.seq[:20]+"..."
+    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JHD4H 287 CAAGTGGTATCAACGCAGAG...
     E3MFGYR02GAZMS 266 AGTAAGGTAAATAACAAACG...
     >>> import os
@@ -218,6 +222,9 @@ For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
+
+from __future__ import print_function
+
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
 from Bio.Seq import Seq
@@ -227,12 +234,12 @@ import sys
 import re
 
 from Bio._py3k import _bytes_to_string, _as_bytes
-_null = _as_bytes("\0")
-_sff = _as_bytes(".sff")
-_hsh = _as_bytes(".hsh")
-_srt = _as_bytes(".srt")
-_mft = _as_bytes(".mft")
-_flag = _as_bytes("\xff")
+_null = b"\0"
+_sff = b".sff"
+_hsh = b".hsh"
+_srt = b".srt"
+_mft = b".mft"
+_flag = b"\xff"
 
 
 def _sff_file_header(handle):
@@ -243,18 +250,17 @@ def _sff_file_header(handle):
     Returns a tuple of values from the header (header_length, index_offset,
     index_length, number_of_reads, flows_per_read, flow_chars, key_sequence)
 
-    >>> handle = open("Roche/greek.sff", "rb")
-    >>> values = _sff_file_header(handle)
-    >>> handle.close()
-    >>> print values[0]
+    >>> with open("Roche/greek.sff", "rb") as handle:
+    ...     values = _sff_file_header(handle)
+    >>> print(values[0])
     840
-    >>> print values[1]
+    >>> print(values[1])
     65040
-    >>> print values[2]
+    >>> print(values[2])
     256
-    >>> print values[3]
+    >>> print(values[3])
     24
-    >>> print values[4]
+    >>> print(values[4])
     800
     >>> values[-1]
     'TCAG'
@@ -314,8 +320,11 @@ def _sff_file_header(handle):
     padding = header_length - number_of_flows_per_read - key_length - 31
     assert 0 <= padding < 8, padding
     if handle.read(padding).count(_null) != padding:
-        raise ValueError("Post header %i byte padding region contained data"
-                         % padding)
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post header %i byte "
+                      "null padding region contained data." % padding,
+                      BiopythonParserWarning)
     return header_length, index_offset, index_length, \
         number_of_reads, number_of_flows_per_read, \
         flow_chars, key_sequence
@@ -366,8 +375,11 @@ def _sff_do_slow_index(handle):
         name = _bytes_to_string(handle.read(name_length))
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
-            raise ValueError("Post name %i byte padding region contained data"
-                             % padding)
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Your SFF file is invalid, post name %i byte "
+                          "padding region contained data" % padding,
+                          BiopythonParserWarning)
         assert record_offset + read_header_length == handle.tell()
         #now the flowgram values, flowgram index, bases and qualities
         size = read_flow_size + 3 * seq_len
@@ -377,9 +389,12 @@ def _sff_do_slow_index(handle):
         if padding:
             padding = 8 - padding
             if handle.read(padding).count(_null) != padding:
-                raise ValueError("Post quality %i byte padding region contained data"
-                                 % padding)
-        #print read, name, record_offset
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Your SFF file is invalid, post quality %i "
+                              "byte padding region contained data" % padding,
+                              BiopythonParserWarning)
+        #print("%s %s %i" % (read, name, record_offset))
         yield name, record_offset
     if handle.tell() % 8 != 0:
         raise ValueError(
@@ -569,8 +584,11 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     name = _bytes_to_string(handle.read(name_length))
     padding = read_header_length - read_header_size - name_length
     if handle.read(padding).count(_null) != padding:
-        raise ValueError("Post name %i byte padding region contained data"
-                         % padding)
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post name %i "
+                      "byte padding region contained data" % padding,
+                      BiopythonParserWarning)
     #now the flowgram values, flowgram index, bases and qualities
     #NOTE - assuming flowgram_format==1, which means struct type H
     flow_values = handle.read(read_flow_size)  # unpack later if needed
@@ -583,8 +601,11 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     if padding:
         padding = 8 - padding
         if handle.read(padding).count(_null) != padding:
-            raise ValueError("Post quality %i byte padding region contained data"
-                             % padding)
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Your SFF file is invalid, post quality %i "
+                          "byte padding region contained data" % padding,
+                          BiopythonParserWarning)
     #Follow Roche and apply most aggressive of qual and adapter clipping.
     #Note Roche seems to ignore adapter clip fields when writing SFF,
     #and uses just the quality clipping values for any clipping.
@@ -706,8 +727,11 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     padding = read_header_length - read_header_size - 8 - name_length
     pad = handle.read(padding)
     if pad.count(_null) != padding:
-        raise ValueError("Post name %i byte padding region contained data"
-                         % padding)
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post name %i "
+                      "byte padding region contained data" % padding,
+                      BiopythonParserWarning)
     raw += pad
     #now the flowgram values, flowgram index, bases and qualities
     raw += handle.read(read_flow_size + seq_len * 3)
@@ -717,8 +741,11 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
         padding = 8 - padding
         pad = handle.read(padding)
         if pad.count(_null) != padding:
-            raise ValueError("Post quality %i byte padding region contained data"
-                             % padding)
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Your SFF file is invalid, post quality %i "
+                          "byte padding region contained data" % padding,
+                          BiopythonParserWarning)
         raw += pad
     #Return the raw bytes
     return raw
@@ -770,7 +797,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
-    ...     print record.id, len(record)
+    ...     print("%s %i" % (record.id, len(record)))
     E3MFGYR02JWQ7T 265
     E3MFGYR02JA6IL 271
     E3MFGYR02JHD4H 310
@@ -784,9 +811,9 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
 
     You can also call it directly:
 
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SffIterator(handle):
-    ...     print record.id, len(record)
+    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+    ...     for record in SffIterator(handle):
+    ...         print("%s %i" % (record.id, len(record)))
     E3MFGYR02JWQ7T 265
     E3MFGYR02JA6IL 271
     E3MFGYR02JHD4H 310
@@ -797,13 +824,12 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     E3MFGYR02HHZ8O 221
     E3MFGYR02GPGB1 269
     E3MFGYR02F7Z7G 219
-    >>> handle.close()
 
     Or, with the trim option:
 
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SffIterator(handle, trim=True):
-    ...     print record.id, len(record)
+    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+    ...     for record in SffIterator(handle, trim=True):
+    ...         print("%s %i" % (record.id, len(record)))
     E3MFGYR02JWQ7T 260
     E3MFGYR02JA6IL 265
     E3MFGYR02JHD4H 292
@@ -814,10 +840,8 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     E3MFGYR02HHZ8O 150
     E3MFGYR02GPGB1 221
     E3MFGYR02F7Z7G 130
-    >>> handle.close()
 
     """
-    #TODO - Once drop Python 2.5, update doctest to use 'with' to close handle
     if isinstance(Alphabet._get_base_alphabet(alphabet),
                   Alphabet.ProteinAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold proteins.")
@@ -869,17 +893,64 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
                                    key_sequence,
                                    alphabet,
                                    trim)
-    #The following is not essential, but avoids confusing error messages
-    #for the user if they try and re-parse the same handle.
-    if index_offset and handle.tell() == index_offset:
+    _check_eof(handle, index_offset, index_length)
+
+
+def _check_eof(handle, index_offset, index_length):
+    """Check final padding is OK (8 byte alignment) and file ends (PRIVATE).
+
+    Will attempt to spot apparent SFF file concatenation and give an error.
+
+    Will not attempt to seek, only moves the handle forward.
+    """
+    offset = handle.tell()
+    extra = b""
+    padding = 0
+
+    if index_offset and offset <= index_offset:
+        # Index block then end of file...
+        if offset < index_offset:
+            raise ValueError("Gap of %i bytes after final record end %i, "
+                             "before %i where index starts?"
+                             % (index_offset - offset, offset, index_offset))
+        # Doing read to jump the index rather than a seek
+        # in case this is a network handle or similar 
+        handle.read(index_offset + index_length - offset)
         offset = index_offset + index_length
-        if offset % 8:
-            offset += 8 - (offset % 8)
-        assert offset % 8 == 0
-        handle.seek(offset)
-    #Should now be at the end of the file...
-    if handle.read(1):
-        raise ValueError("Additional data at end of SFF file")
+        assert offset == handle.tell(), \
+            "Wanted %i, got %i, index is %i to %i" \
+            % (offset, handle.tell(), index_offset, index_offset + index_length)
+
+    if offset % 8:
+        padding = 8 - (offset % 8)
+        extra = handle.read(padding)
+
+    if padding >= 4 and extra[-4:] == _sff:
+        #Seen this in one user supplied file, should have been
+        #four bytes of null padding but was actually .sff and
+        #the start of a new concatenated SFF file!
+        raise ValueError("Your SFF file is invalid, post index %i byte "
+                         "null padding region ended '.sff' which could "
+                         "be the start of a concatenated SFF file? "
+                         "See offset %i" % (padding, offset))
+    if extra.count(_null) != padding:
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is invalid, post index %i byte "
+                      "null padding region contained data." % padding,
+                      BiopythonParserWarning)
+
+    offset = handle.tell()
+    assert offset % 8 == 0
+    # Should now be at the end of the file...
+    extra = handle.read(4)
+    if extra == _sff:
+        raise ValueError("Additional data at end of SFF file, "
+                         "perhaps multiple SFF files concatenated? "
+                         "See offset %i" % offset)
+    elif extra:
+        raise ValueError("Additional data at end of SFF file, "
+                         "see offset %i" % offset)
 
 
 #This is a generator function!
@@ -936,7 +1007,7 @@ class SffWriter(SequenceWriter):
         #Get the first record in order to find the flow information
         #we will need for the header.
         try:
-            record = records.next()
+            record = next(records)
         except StopIteration:
             record = None
         if record is None:
@@ -1174,19 +1245,15 @@ class SffWriter(SequenceWriter):
 
 
 if __name__ == "__main__":
-    print "Running quick self test"
+    print("Running quick self test")
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
     metadata = ReadRocheXmlManifest(open(filename, "rb"))
     index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
     index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
     assert index1 == index2
     assert len(index1) == len(list(SffIterator(open(filename, "rb"))))
-    from StringIO import StringIO
-    try:
-        #This is in Python 2.6+, and is essential on Python 3
-        from io import BytesIO
-    except ImportError:
-        BytesIO = StringIO
+    from Bio._py3k import StringIO
+    from io import BytesIO
     assert len(index1) == len(
         list(SffIterator(BytesIO(open(filename, "rb").read()))))
 
@@ -1241,7 +1308,7 @@ if __name__ == "__main__":
 
     sff_trim = list(SffIterator(open(filename, "rb"), trim=True))
 
-    print ReadRocheXmlManifest(open(filename, "rb"))
+    print(ReadRocheXmlManifest(open(filename, "rb")))
 
     from Bio import SeqIO
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
@@ -1256,10 +1323,10 @@ if __name__ == "__main__":
 
     for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
                                    qual_no_trim, fasta_trim, qual_trim):
-        #print
-        print s.id
-        #print s.seq
-        #print s.letter_annotations["phred_quality"]
+        #print("")
+        print(s.id)
+        #print(s.seq)
+        #print(s.letter_annotations["phred_quality"])
 
         assert s.id == f.id == q.id
         assert str(s.seq) == str(f.seq)
@@ -1271,47 +1338,46 @@ if __name__ == "__main__":
         assert sT.letter_annotations[
             "phred_quality"] == qT.letter_annotations["phred_quality"]
 
-    print "Writing with a list of SeqRecords..."
+    print("Writing with a list of SeqRecords...")
     handle = StringIO()
     w = SffWriter(handle, xml=metadata)
     w.write_file(sff)  # list
     data = handle.getvalue()
-    print "And again with an iterator..."
+    print("And again with an iterator...")
     handle = StringIO()
     w = SffWriter(handle, xml=metadata)
     w.write_file(iter(sff))
     assert data == handle.getvalue()
     #Check 100% identical to the original:
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    original = open(filename, "rb").read()
-    assert len(data) == len(original)
-    assert data == original
-    del data
-    handle.close()
+    with open(filename, "rb").read() as original:
+        assert len(data) == len(original)
+        assert data == original
+        del data
 
-    print "-" * 50
+    print("-" * 50)
     filename = "../../Tests/Roche/greek.sff"
     for record in SffIterator(open(filename, "rb")):
-        print record.id
+        print(record.id)
     index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
     index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
     assert index1 == index2
     try:
-        print ReadRocheXmlManifest(open(filename, "rb"))
+        print(ReadRocheXmlManifest(open(filename, "rb")))
         assert False, "Should fail!"
     except ValueError:
         pass
 
-    handle = open(filename, "rb")
-    for record in SffIterator(handle):
-        pass
-    try:
+    with open(filename, "rb") as handle:
         for record in SffIterator(handle):
-            print record.id
-        assert False, "Should have failed"
-    except ValueError, err:
-        print "Checking what happens on re-reading a handle:"
-        print err
+            pass
+        try:
+            for record in SffIterator(handle):
+                print(record.id)
+            assert False, "Should have failed"
+        except ValueError as err:
+            print("Checking what happens on re-reading a handle:")
+            print(err)
 
     """
     #Ugly code to make test files...
@@ -1395,31 +1461,30 @@ if __name__ == "__main__":
     #Ugly bit of code to make a fake index at end
     records = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
-    out_handle = open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "w")
-    w = SffWriter(out_handle, index=False, xml=None)
-    #Fake the header...
-    w._number_of_reads = len(records)
-    w._index_start = 0
-    w._index_length = 0
-    w._key_sequence = records[0].annotations["flow_key"]
-    w._flow_chars = records[0].annotations["flow_chars"]
-    w._number_of_flows_per_read = len(w._flow_chars)
-    w.write_header()
-    for record in records:
-        w.write_record(record)
-    w._index_start = out_handle.tell()
-    w._index_length = len(index)
-    out_handle.write(index)
-    out_handle.seek(0)
-    w.write_header() #this time with index info
-    out_handle.close()
+    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "w") as out_handle:
+        w = SffWriter(out_handle, index=False, xml=None)
+        #Fake the header...
+        w._number_of_reads = len(records)
+        w._index_start = 0
+        w._index_length = 0
+        w._key_sequence = records[0].annotations["flow_key"]
+        w._flow_chars = records[0].annotations["flow_chars"]
+        w._number_of_flows_per_read = len(w._flow_chars)
+        w.write_header()
+        for record in records:
+            w.write_record(record)
+        w._index_start = out_handle.tell()
+        w._index_length = len(index)
+        out_handle.write(index)
+        out_handle.seek(0)
+        w.write_header() #this time with index info
     records2 = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     for old, new in zip(records, records2):
         assert str(old.seq)==str(new.seq)
     try:
-        print ReadRocheXmlManifest(
-            open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb"))
+        print(ReadRocheXmlManifest(
+            open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
         assert False, "Should fail!"
     except ValueError:
         pass
@@ -1427,4 +1492,6 @@ if __name__ == "__main__":
         open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     """
 
-    print "Done"
+    print("Done")
+
+

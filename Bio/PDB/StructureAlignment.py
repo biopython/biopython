@@ -7,7 +7,9 @@
 file.
 """
 
-from Bio.SCOP.Raf import to_one_letter_code
+from __future__ import print_function
+
+from Bio.Data import SCOPData
 
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
@@ -43,7 +45,7 @@ class StructureAlignment(object):
             aa2=column[sj]
             if aa1!="-":
                 # Position in seq1 is not -
-                while 1:
+                while True:
                     # Loop until an aa is found
                     r1=rl1[p1]
                     p1=p1+1
@@ -54,7 +56,7 @@ class StructureAlignment(object):
                 r1=None
             if aa2!="-":
                 # Position in seq2 is not -
-                while 1:
+                while True:
                     # Loop until an aa is found
                     r2=rl2[p2]
                     p2=p2+1
@@ -78,7 +80,7 @@ class StructureAlignment(object):
     def _test_equivalence(self, r1, aa1):
         "Test if aa in sequence fits aa in structure."
         resname=r1.get_resname()
-        resname=to_one_letter_code[resname]
+        resname=SCOPData.protein_letters_3to1[resname]
         assert(aa1==resname)
 
     def get_maps(self):
@@ -103,10 +105,10 @@ if __name__=="__main__":
     from Bio.PDB import PDBParser
 
     if len(sys.argv) != 4:
-        print "Expects three arguments,"
-        print " - FASTA alignment filename (expect two sequences)"
-        print " - PDB file one"
-        print " - PDB file two"
+        print("Expects three arguments,")
+        print(" - FASTA alignment filename (expect two sequences)")
+        print(" - PDB file one")
+        print(" - PDB file two")
         sys.exit()
 
     # The alignment
@@ -128,5 +130,5 @@ if __name__=="__main__":
     al=StructureAlignment(fa, m1, m2)
 
     # Print aligned pairs (r is None if gap)
-    for (r1,r2) in al.get_iterator():
-        print r1, r2
+    for (r1, r2) in al.get_iterator():
+        print("%s %s" % (r1, r2))

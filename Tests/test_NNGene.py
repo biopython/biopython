@@ -10,6 +10,8 @@ This exercises the Motif, Schema and Signature methods of representing
 genes, as well as generic Pattern methods.
 """
 # standard library
+from __future__ import print_function
+
 import os
 import unittest
 
@@ -58,9 +60,9 @@ class PatternIOTest(unittest.TestCase):
         input_handle = open(self.test_file, "r")
         read_motifs = self.pattern_io.read(input_handle)
         input_handle.close()
-        assert read_motifs == motifs, \
-               "Failed to get back expected motifs %s, got %s" \
-               % (motifs, read_motifs)
+        self.assertEqual(read_motifs, motifs,
+                         "Failed to get back expected motifs %s, got %s"
+                         % (motifs, read_motifs))
 
         # write seqs
         seq_motifs = []
@@ -74,9 +76,9 @@ class PatternIOTest(unittest.TestCase):
         input_handle = open(self.test_file, "r")
         read_motifs = self.pattern_io.read(input_handle)
         input_handle.close()
-        assert read_motifs == motifs, \
-               "Failed to get back expected motifs %s from seqs, got %s" \
-               % (motifs, read_motifs)
+        self.assertEqual(read_motifs, motifs,
+                         "Failed to get back expected motifs %s from seqs, got %s"
+                         % (motifs, read_motifs))
 
     def test_schema(self):
         """Reading and writing schemas to a file.
@@ -91,9 +93,9 @@ class PatternIOTest(unittest.TestCase):
         input_handle = open(self.test_file, "r")
         read_schemas = self.pattern_io.read(input_handle)
         input_handle.close()
-        assert schemas == read_schemas, \
-               "Read incorrect schemas %s, expected %s." \
-               % (read_schemas, schemas)
+        self.assertEqual(schemas, read_schemas,
+                         "Read incorrect schemas %s, expected %s."
+                         % (read_schemas, schemas))
 
         # --- make sure inappropriate alphabets are reported
         schemas = ["GTR", "G*C"] # '*' not in the unambigous alphabet
@@ -123,9 +125,9 @@ class PatternIOTest(unittest.TestCase):
         input_handle = open(self.test_file, "r")
         read_sigs = self.pattern_io.read(input_handle)
         input_handle.close()
-        assert read_sigs == signatures, \
-               "Got back unexpected signatures %s, wanted %s" \
-               % (read_sigs, signatures)
+        self.assertEqual(read_sigs, signatures,
+                         "Got back unexpected signatures %s, wanted %s"
+                         % (read_sigs, signatures))
 
 
 class PatternRepositoryTest(unittest.TestCase):
@@ -145,78 +147,83 @@ class PatternRepositoryTest(unittest.TestCase):
         """
         all_motifs = self.repository.get_all()
 
-        assert all_motifs == ["GATC", "GGGG", "GTAG", "AAAA", "ATAT"], \
-               "Unexpected motifs returned %s" % all_motifs
+        self.assertEqual(all_motifs,
+                         ["GATC", "GGGG", "GTAG", "AAAA", "ATAT"],
+                         "Unexpected motifs returned %s" % all_motifs)
 
     def test_get_random(self):
         """Retrieve random patterns from the repository.
         """
         for num_patterns in range(5):
             patterns = self.repository.get_random(num_patterns)
-            assert len(patterns) == num_patterns, \
-                   "Got unexpected number of patterns %s, expected %s" \
-                   % (len(patterns), num_patterns)
+            self.assertEqual(len(patterns), num_patterns,
+                             "Got unexpected number of patterns %s, expected %s"
+                             % (len(patterns), num_patterns))
 
             for pattern in patterns:
-                assert pattern in self.motifs.keys(), \
-                       "Got unexpected pattern %s" % pattern
+                self.assertTrue(pattern in list(self.motifs.keys()),
+                                "Got unexpected pattern %s" % pattern)
 
     def test_get_top_percentage(self):
         """Retrieve the top percentge of patterns from the repository.
         """
         for num_patterns, percentage in ((1, 0.2), (2, .4), (5, 1.0)):
             patterns = self.repository.get_top_percentage(percentage)
-            assert len(patterns) == num_patterns, \
-                   "Got unexpected number of patterns %s, expected %s" \
-                   % (len(patterns), num_patterns)
+            self.assertEqual(len(patterns), num_patterns,
+                             "Got unexpected number of patterns %s, expected %s"
+                             % (len(patterns), num_patterns))
 
             for pattern in patterns:
-                assert pattern in self.motifs.keys(), \
-                       "Got unexpected pattern %s" % pattern
+                self.assertTrue(pattern in list(self.motifs.keys()),
+                                "Got unexpected pattern %s" % pattern)
 
     def test_get_top(self):
         """Retrieve a certain number of the top patterns.
         """
         for num_patterns in range(5):
             patterns = self.repository.get_top(num_patterns)
-            assert len(patterns) == num_patterns, \
-                   "Got unexpected number of patterns %s, expected %s" \
-                   % (len(patterns), num_patterns)
+            self.assertEqual(len(patterns), num_patterns,
+                             "Got unexpected number of patterns %s, expected %s"
+                             % (len(patterns), num_patterns))
 
             for pattern in patterns:
-                assert pattern in self.motifs.keys(), \
-                       "Got unexpected pattern %s" % pattern
+                self.assertTrue(pattern in list(self.motifs.keys()),
+                                "Got unexpected pattern %s" % pattern)
 
     def test_get_differing(self):
         """Retrieve patterns from both sides of the list (top and bottom).
         """
         patterns = self.repository.get_differing(2, 2)
-        assert patterns == ["GATC", "GGGG", "AAAA", "ATAT"], \
-               "Got unexpected patterns %s" % patterns
+        self.assertEqual(patterns,
+                         ["GATC", "GGGG", "AAAA", "ATAT"],
+                         "Got unexpected patterns %s" % patterns)
 
     def test_remove_polyA(self):
         """Test the ability to remove A rich patterns from the repository.
         """
         patterns = self.repository.get_all()
-        assert len(patterns) == 5, "Unexpected starting: %s" % patterns
+        self.assertEqual(len(patterns), 5,
+                         "Unexpected starting: %s" % patterns)
 
         self.repository.remove_polyA()
 
         patterns = self.repository.get_all()
-        assert len(patterns) == 3, "Unexpected ending: %s" % patterns
-        assert patterns == ["GATC", "GGGG", "GTAG"], \
-               "Unexpected patterns: %s" % patterns
+        self.assertEqual(len(patterns), 3,
+                         "Unexpected ending: %s" % patterns)
+        self.assertEqual(patterns,
+                         ["GATC", "GGGG", "GTAG"],
+                         "Unexpected patterns: %s" % patterns)
 
     def test_count(self):
         """Retrieve counts for particular patterns in the repository.
         """
         num_times = self.repository.count("GGGG")
-        assert num_times == 10, \
-               "Did not count item in the respository: %s" % num_times
+        self.assertEqual(num_times, 10,
+                         "Did not count item in the respository: %s" % num_times)
 
         num_times = self.repository.count("NOT_IN_THERE")
-        assert num_times == 0, \
-               "Counted items not in repository: %s" % num_times
+        self.assertEqual(num_times, 0,
+                         "Counted items not in repository: %s" % num_times)
 
 
 # --- Tests for motifs
@@ -239,9 +246,9 @@ class MotifFinderTest(unittest.TestCase):
 
             iterator = SeqIO.parse(handle, "fasta",
                                    alphabet=IUPAC.unambiguous_dna)
-            while 1:
+            while True:
                 try:
-                    seq_record = iterator.next()
+                    seq_record = next(iterator)
                 except StopIteration:
                     break
                 if seq_record is None:
@@ -259,8 +266,8 @@ class MotifFinderTest(unittest.TestCase):
         motif_repository = self.motif_finder.find(self.test_records, 8)
         top_motif = motif_repository.get_top(1)
 
-        assert top_motif[0] == 'TTGGAAAG', \
-               "Got unexpected motif %s" % top_motif[0]
+        self.assertEqual(top_motif[0], 'TTGGAAAG',
+                         "Got unexpected motif %s" % top_motif[0])
 
     def test_find_differences(self):
         """Find the difference in motif counts between two sets of sequences.
@@ -271,8 +278,10 @@ class MotifFinderTest(unittest.TestCase):
 
         top, bottom = motif_repository.get_differing(1, 1)
 
-        assert top == "TTGGAAAG", "Got unexpected top motif %s" % top
-        assert bottom == "AATGGCAT", "Got unexpected bottom motif %s" % bottom
+        self.assertEqual(top, "TTGGAAAG",
+                         "Got unexpected top motif %s" % top)
+        self.assertEqual(bottom, "AATGGCAT",
+                         "Got unexpected bottom motif %s" % bottom)
 
 
 class MotifCoderTest(unittest.TestCase):
@@ -293,9 +302,9 @@ class MotifCoderTest(unittest.TestCase):
             seq_to_code = Seq(match_string, IUPAC.unambiguous_dna)
             matches = self.coder.representation(seq_to_code)
 
-            assert matches == expected, \
-                   "Did not match representation, expected %s, got %s" \
-                   % (expected, matches)
+            self.assertEqual(matches, expected,
+                             "Did not match representation, expected %s, got %s"
+                             % (expected, matches))
 
 
 # --- Tests for schemas
@@ -326,8 +335,9 @@ class SchemaTest(unittest.TestCase):
         for motif, expected in self.match_info:
             found_matches = self.motif_coder.find_matches(motif,
                                                           self.match_string)
-            assert found_matches == expected, "Expected %s, got %s" \
-                   % (expected, found_matches)
+            self.assertEqual(found_matches, expected,
+                             "Expected %s, got %s"
+                             % (expected, found_matches))
 
     def test_num_matches(self):
         """Find how many matches are present in a sequence.
@@ -335,8 +345,9 @@ class SchemaTest(unittest.TestCase):
         for motif, expected in self.match_info:
             num_matches = self.motif_coder.num_matches(motif,
                                                        self.match_string)
-            assert num_matches == len(expected), \
-                   "Expected %s, got %s" % (num_matches, len(expected))
+            self.assertEqual(num_matches, len(expected),
+                             "Expected %s, got %s"
+                             % (num_matches, len(expected)))
 
     def test_find_ambiguous(self):
         """Find the positions of ambiguous items in a sequence.
@@ -348,9 +359,9 @@ class SchemaTest(unittest.TestCase):
 
         for motif, expected in ambig_info:
             found_positions = self.motif_coder.find_ambiguous(motif)
-            assert found_positions == expected, \
-                   "Expected %s, got %s for %s" % (expected, found_positions,
-                                                   motif)
+            self.assertEqual(found_positions, expected,
+                             "Expected %s, got %s for %s"
+                             % (expected, found_positions, motif))
 
     def test_num_ambiguous(self):
         """Find the number of ambiguous items in a sequence.
@@ -362,8 +373,9 @@ class SchemaTest(unittest.TestCase):
 
         for motif, expected in ambig_info:
             found_num = self.motif_coder.num_ambiguous(motif)
-            assert found_num == expected, \
-                   "Expected %s, got %s for %s" % (expected, found_num, motif)
+            self.assertEqual(found_num, expected,
+                             "Expected %s, got %s for %s"
+                             % (expected, found_num, motif))
 
     def test_motif_cache(self):
         """Make sure motif compiled regular expressions are cached properly.
@@ -373,7 +385,7 @@ class SchemaTest(unittest.TestCase):
         self.motif_coder.find_matches(test_motif, "GATCGATC")
 
         self.assertTrue(test_motif in self.motif_coder._motif_cache,
-                     "Did not find motif cached properly.")
+                        "Did not find motif cached properly.")
 
         # make sure we don't bomb out if we use the same motif twice
         self.motif_coder.find_matches(test_motif, "GATCGATC")
@@ -384,8 +396,8 @@ class SchemaTest(unittest.TestCase):
         found_unambig = self.motif_coder.all_unambiguous()
 
         expected = ["A", "C", "G", "T"]
-        assert found_unambig == expected, \
-               "Got %s, expected %s" % (found_unambig, expected)
+        self.assertEqual(found_unambig, expected,
+                         "Got %s, expected %s" % (found_unambig, expected))
 
 
 class SchemaFinderTest(unittest.TestCase):
@@ -421,7 +433,8 @@ class SchemaFinderTest(unittest.TestCase):
             repository = self.finder.find(self.test_records + self.diff_records)
             schemas = repository.get_all()
 
-            assert len(schemas) >= self.num_schemas, "Got too few schemas."
+            self.assertTrue(len(schemas) >= self.num_schemas,
+                            "Got too few schemas.")
 
     def test_find_differences(self):
         """Find schemas that differentiate between two sets of sequences.
@@ -432,7 +445,8 @@ class SchemaFinderTest(unittest.TestCase):
                                                       self.diff_records)
             schemas = repository.get_all()
 
-            assert len(schemas) >= self.num_schemas, "Got too few schemas."
+            self.assertTrue(len(schemas) >= self.num_schemas,
+                            "Got too few schemas.")
 
 
 class SchemaCoderTest(unittest.TestCase):
@@ -462,8 +476,8 @@ class SchemaCoderTest(unittest.TestCase):
         for match_string, expected in self.match_strings:
             match_seq = Seq(match_string, IUPAC.unambiguous_dna)
             found_rep = self.motif_coder.representation(match_seq)
-            assert found_rep == expected, "Got %s, expected %s" % \
-                   (found_rep, expected)
+            self.assertEqual(found_rep, expected,
+                             "Got %s, expected %s" % (found_rep, expected))
 
 
 class SchemaMatchingTest(unittest.TestCase):
@@ -474,19 +488,24 @@ class SchemaMatchingTest(unittest.TestCase):
 
     def runTest(self):
         match = Schema.matches_schema("GATC", "AAAAA")
-        assert match == 0, "Expected no match because of length differences"
+        self.assertEqual(match, 0,
+                         "Expected no match because of length differences")
 
         match = Schema.matches_schema("GATC", "GAT*")
-        assert match == 1, "Expected match"
+        self.assertEqual(match, 1,
+                         "Expected match")
 
         match = Schema.matches_schema("GATC", "GATC")
-        assert match == 1, "Expected match"
+        self.assertEqual(match, 1,
+                         "Expected match")
 
         match = Schema.matches_schema("GATC", "C*TC")
-        assert match == 0, "Expected no match because of char mismatch."
+        self.assertEqual(match, 0,
+                         "Expected no match because of char mismatch.")
 
         match = Schema.matches_schema("G*TC", "*TTC")
-        assert match == 1, "Expected match because of ambiguity."
+        self.assertEqual(match, 1,
+                         "Expected match because of ambiguity.")
 
 
 class SchemaFactoryTest(unittest.TestCase):
@@ -524,9 +543,9 @@ class SchemaFactoryTest(unittest.TestCase):
 
         schema_bank = self.factory.from_motifs(motif_bank, .5, 2)
         if VERBOSE:
-            print "\nSchemas:"
+            print("\nSchemas:")
             for schema in schema_bank.get_all():
-                print "%s: %s" % (schema, schema_bank.count(schema))
+                print("%s: %s" % (schema, schema_bank.count(schema)))
 
     def test_hard_from_motifs(self):
         """Generating schema from a real life set of motifs.
@@ -534,9 +553,9 @@ class SchemaFactoryTest(unittest.TestCase):
         schema_bank = self._load_schema_repository()
 
         if VERBOSE:
-            print "\nSchemas:"
+            print("\nSchemas:")
             for schema in schema_bank.get_top(5):
-                print "%s: %s" % (schema, schema_bank.count(schema))
+                print("%s: %s" % (schema, schema_bank.count(schema)))
 
     def _load_schema_repository(self):
         """Helper function to load a schema repository from a file.
@@ -583,7 +602,7 @@ class SchemaFactoryTest(unittest.TestCase):
                                       alphabet=IUPAC.unambiguous_dna):
             schema_values = schema_coder.representation(seq_record.seq)
             if VERBOSE:
-                print "Schema values:", schema_values
+                print("Schema values: %s" % schema_values)
         fasta_handle.close()
 
 
@@ -610,8 +629,7 @@ class SignatureFinderTest(unittest.TestCase):
         repository = self.sig_finder.find(self.test_records, 6, 9)
         top_sig = repository.get_top(1)
 
-        assert top_sig[0] == ('TTGGAA', 'TGGAAA'), \
-               "Unexpected signature %s" % top_sig[0]
+        self.assertEqual(top_sig[0], ('TTGGAA', 'TGGAAA'))
 
 
 class SignatureCoderTest(unittest.TestCase):
@@ -636,9 +654,9 @@ class SignatureCoderTest(unittest.TestCase):
             test_seq = Seq(seq_string, IUPAC.unambiguous_dna)
             predicted = self.coder.representation(test_seq)
 
-            assert predicted == expected, \
-                   "Non-expected representation %s for %s, wanted %s" \
-                   % (predicted, seq_string, expected)
+            self.assertEqual(predicted, expected,
+                             "Non-expected representation %s for %s, wanted %s"
+                             % (predicted, seq_string, expected))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

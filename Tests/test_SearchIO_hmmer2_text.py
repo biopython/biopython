@@ -17,7 +17,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_21(self):
         """Test parsing hmmpfam 2.1 file (text_21_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_21_hmmpfam_001.out"), self.fmt)
-        res = results.next()
+        res = next(results)
         self.assertEqual('roa1_drome', res.id)
         self.assertEqual('<unknown description>', res.description)
         self.assertEqual('hmmpfam', res.program)
@@ -70,7 +70,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_22(self):
         """Test parsing hmmpfam 2.2 file (text_22_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_22_hmmpfam_001.out"), self.fmt)
-        res = results.next()
+        res = next(results)
         self.assertEqual('gi|1522636|gb|AAC37060.1|', res.id)
         self.assertEqual('M. jannaschii predicted coding region MJECS02 [Methanococcus jannaschii]', res.description)
         self.assertEqual('[none]', res.accession)
@@ -108,7 +108,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_23(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_001.out"), self.fmt)
-        res = results.next()
+        res = next(results)
         self.assertEqual('gi|90819130|dbj|BAE92499.1|', res.id)
         self.assertEqual('glutamate synthase [Porphyra yezoensis]', res.description)
         self.assertEqual('[none]', res.accession)
@@ -156,15 +156,55 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_23_no_match(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_002.out)"""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_002.out"), self.fmt)
-        res = results.next()
+        res = next(results)
 
         self.assertEqual('SEQ0001', res.id)
         self.assertEqual(0, len(res.hits))
 
-        res = results.next()
+        res = next(results)
 
         self.assertEqual('SEQ0002', res.id)
         self.assertEqual(0, len(res.hits))
+
+    def test_hmmpfam_23_missing_consensus(self):
+        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_003.out)"""
+        results = parse(path.join("Hmmer", "text_23_hmmpfam_003.out"), self.fmt)
+        res = next(results)
+
+        self.assertEqual('small_input', res.id)
+        self.assertEqual('[none]', res.description)
+        self.assertEqual('[none]', res.accession)
+        self.assertEqual('hmmpfam', res.program)
+        self.assertEqual('2.3.2', res.version)
+        self.assertEqual('antismash/specific_modules/lantipeptides/ClassIVLanti.hmm', res.target)
+        self.assertEqual(1, len(res))
+
+        hit = res[0]
+        self.assertEqual('ClassIVLanti', hit.id)
+        self.assertEqual('Class-IV', hit.description)
+        self.assertAlmostEqual(-79.3, hit.bitscore)
+        self.assertAlmostEqual(1, hit.evalue)
+        self.assertEqual(1, hit.domain_obs_num)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(1, hsp.domain_index)
+        self.assertEqual(0, hsp.hit_start)
+        self.assertEqual(66, hsp.hit_end)
+        self.assertEqual('[]', hsp.hit_endtype)
+        self.assertEqual(5, hsp.query_start)
+        self.assertEqual(20, hsp.query_end)
+        self.assertEqual('..', hsp.query_endtype)
+        self.assertAlmostEqual(-79.3, hsp.bitscore)
+        self.assertAlmostEqual(1, hsp.evalue)
+        self.assertEqual(len(hsp.query.seq), len(hsp.hit.seq))
+        self.assertEqual(len(hsp.query.seq), len(hsp.aln_annotation['homology']))
+        self.assertEqual('msEEqLKAFiAKvqaDtsLqEqLKaEGADvvaiAKAaGFtitteDLnahiqakeLsdeeLEgvaGg',
+                         str(hsp.hit.seq))
+        self.assertEqual('        F+                           G  +t   Ln                   ',
+                         str(hsp.aln_annotation['homology']))
+        self.assertEqual('-------CFL---------------------------GCLVTNWVLNRS-----------------',
+                         str(hsp.query.seq))
 
     def test_hmmpfam_24(self):
         """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)"""
@@ -378,7 +418,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(337, hsp.query_end)
         self.assertEqual('[]', hsp.query_endtype)
         self.assertEqual('lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr', str(hsp.query.seq)[:40])
-        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi',str(hsp.query.seq)[-40:])
+        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+P+++DWRe kg  VtpVK+QG qCGSCWAFSa g lEg+',
                 str(hsp.aln_annotation['homology'])[:40])
@@ -388,7 +428,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(332, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
         self.assertEqual('IPKTVDWRE-KG-CVTPVKNQG-QCGSCWAFSASGCLEGQ', str(hsp.hit.seq)[:40])
-        self.assertEqual('LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI',str(hsp.hit.seq)[-40:])
+        self.assertEqual('LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI', str(hsp.hit.seq)[-40:])
         self.assertEqual(337, len(hsp.hit.seq))
 
         # last hit
@@ -413,7 +453,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(337, hsp.query_end)
         self.assertEqual('[]', hsp.query_endtype)
         self.assertEqual('lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr', str(hsp.query.seq)[:40])
-        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi',str(hsp.query.seq)[-40:])
+        self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+Pe +DWR+ kg aVtpVK+QG +CGSCWAFSav ++Eg+',
                 str(hsp.aln_annotation['homology'])[:40])
@@ -423,7 +463,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(343, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
         self.assertEqual('IPEYVDWRQ-KG-AVTPVKNQG-SCGSCWAFSAVVTIEGI', str(hsp.hit.seq)[:40])
-        self.assertEqual('LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV',str(hsp.hit.seq)[-40:])
+        self.assertEqual('LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV', str(hsp.hit.seq)[-40:])
         self.assertEqual(337, len(hsp.hit.seq))
 
 

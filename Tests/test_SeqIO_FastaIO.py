@@ -4,10 +4,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from __future__ import with_statement
+from __future__ import print_function
 
 import unittest
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
@@ -46,9 +46,9 @@ def read_single_with_titles(filename, alphabet):
     global title_to_ids
     handle = open(filename)
     iterator = FastaIterator(handle, alphabet, title_to_ids)
-    record = iterator.next()
+    record = next(iterator)
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     handle.close()
@@ -91,7 +91,7 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.seq.alphabet, alphabet)
         #Uncomment this for testing the methods are calling the right files:
-        #print "{%s done}" % filename,
+        #print("{%s done}" % filename)
 
     def multi_check(self, filename, alphabet):
         """Basic test for parsing multi-record FASTA files."""
@@ -107,7 +107,7 @@ class TitleFunctions(unittest.TestCase):
             self.assertEqual(str(new.seq), str(old.seq))
             self.assertEqual(new.seq.alphabet, old.seq.alphabet)
         #Uncomment this for testing the methods are calling the right files:
-        #print "{%s done}" % filename,
+        #print("{%s done}" % filename)
 
     def test_no_name(self):
         """Test FASTA record with no identifier."""

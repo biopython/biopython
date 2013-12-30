@@ -29,11 +29,17 @@
     db_index.Get_OS_OC_GN('EFTU_ECOLI')
 """
 
+from __future__ import print_function
+
 import os
 import re
 import string
 import sys
-import gdbm
+
+try:
+    import gdbm # Python 2
+except ImportError:
+    from dbm import gnu as gdbm # Python 3
 
 
 class DB_Index:
@@ -47,7 +53,7 @@ class DB_Index:
 
         db['datafile'] = os.path.abspath(infile)
 
-        while 1:
+        while True:
             line = fid.readline()
             if not line or not len(line):
                 break
@@ -69,8 +75,8 @@ class DB_Index:
                     db[acc] = value
                     id, acc, start, stop = None, None, None, None
                 except:
-                    print 'AARRGGGG', start, stop, type(start), type(stop)
-                    print id, acc
+                    print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
+                    print("%s %s" % (id, acc))
 
         db.close()
         fid.close()
@@ -91,7 +97,7 @@ class DB_Index:
             values = self.db[id]
         except:
             return None
-        start, stop = map(int, string.split(values))
+        start, stop = [int(x) for x in values.split()]
         self.fid.seek(start)
         txt = self.fid.read(stop - start)
         return txt
@@ -132,7 +138,7 @@ class DB_Index:
 
     def Get_Kingdom(self, id):
         res = self.Get_Taxonomy(id)
-        #print id, res
+        #print("%s %s" % (id, res))
         if not res:
             return "U"
         kd = string.strip(string.split(res, ";")[0])
@@ -145,7 +151,7 @@ class DB_Index:
         elif kd == "Viridae" or kd == "Viruses":
             return "V"
         else:
-            print kd, "UNKNOWN"
+            print("%s UNKNOWN" % kd)
             return "U"
 
     def Get_Gene(self, id):
@@ -261,8 +267,8 @@ class DB_Index:
 
 def help(exit=0):
     name = os.path.basename(sys.argv[0])
-    print 'Usage: %s <db> <gene ID>' % name
-    print '  or   %s --index <db.dat>' % name
+    print('Usage: %s <db> <gene ID>' % name)
+    print('  or   %s --index <db.dat>' % name)
     if exit:
         sys.exit(0)
 
@@ -302,5 +308,5 @@ if __name__ == '__main__':
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)
     for id in ids:
-        #print db_index.Get(id)
-        print func(id)
+        #print(db_index.Get(id))
+        print(func(id))

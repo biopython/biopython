@@ -14,11 +14,39 @@ Release 1.55, with advance notice in the release notes for Release 1.54.
 
 Python 2.5
 ==========
-Still supported, but has triggered a warning since Release 1.61.
+No longer supported as of Release 1.63, having triggered a warning with
+Release 1.62, with advance notice in the release notes for Release 1.61.
+
+Python 3.0, 3.1, 3.2
+====================
+Never officially supported, these trigger a warning in Release 1.62
+recommending Python 3.3 or later if you wish to use Python 3.
+
+Iterator .next() methods
+========================
+The .next() method defined for any Biopython iterator is deprecated as of
+Biopython 1.63 under Python 2 (and not present on Python 3). Please replace
+my_iterator.next() with next(my_iterator) using the new built-in function
+next() instead.
+
+Bio.SVDSuperimposer
+===================
+As of Release 1.63, the main class (confusingly also called) SVDSuperimposer
+is best imported as follows:
+
+>>> from Bio.SVDSuperimposer import SVDSuperimposer
+>>> super_imposer = SVDSuperimposer()
+
+This short form also works on older releases. The longer even more
+confusing historical alternatives dependent on the double module name
+no longer work, e.g. you can no longer do this:
+
+>>> from Bio.SVDSuperimposer.SVDSuperimposer import SVDSuperimposer
+>>> super_imposer = SVDSuperimposer()
 
 Bio.PDB.mmCIF
 =============
-This was Removed in Release 1.62, when MMCIF2Dict was updated to use shlex
+This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex
 from the standard library instead. This had required manual intervention to
 include when installing Biopython from source due to a dependency on flex.
 
@@ -26,6 +54,16 @@ Bio.SeqFeature
 ==============
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated.
+
+Bio.Motif
+=========
+Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
+deprecated in Release 1.62. Please use the newer Bio.motifs module instead.
+
+AlignAceCommandline and CompareAceCommandline
+=============================================
+Deprecated in release 1.62. An up to date version of the software cannot
+be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================
@@ -93,8 +131,11 @@ blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
 Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
-which was declared obsolete in Release 1.54. For some time now, both the NCBI
-and Biopython have encouraged people to parse the XML output instead.
+which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
+
+For some time now, both the NCBI and Biopython have encouraged people to
+parse the XML output instead, however Bio.SearchIO will initially attempt
+to support plain text BLAST output.
 
 Bio.Blast.Applications
 ======================
@@ -166,9 +207,9 @@ GenomeDiagram originally used colour and centre (UK spelling of color and
 center) for argument names.  As part of its integration into Biopython 1.50,
 this will support both colour and color, and both centre and center, to help
 people port existing scripts written for the standalone version of
-GenomeDiagram.  However, these were deprecated in Release 1.55 final, and we
-intend to eventually remove support for colour and centre in later releases
-of Biopython.
+GenomeDiagram.  However, these were deprecated in Release 1.55 final.
+Support for centre was removed in Release 1.62, and we intend to eventually
+remove support for colour in later releases of Biopython.
 
 Bio.AlignAce and Bio.MEME
 =========================
@@ -535,7 +576,8 @@ method get_seq_by_num were deprecated in Release 1.57.
 
 Bio.ParserSupport
 =================
-Bio.ParserSupport was declared obsolete in Release 1.59.
+Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
+Release 1.63.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.

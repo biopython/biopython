@@ -1,8 +1,13 @@
+# Copyright 2001 by Iddo Friedberg.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from Bio import FSSP
 from Bio.FSSP import FSSPTools
 import sys
 import os
-import cPickle
+#import pickle
 
 test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
@@ -13,7 +18,7 @@ handle.close()
 f.write("...1cnv.fssp read\n")
 for i in ["author", "compnd", "database", "header", "nalign",
           "pdbid", "seqlength", "source"]:
-    f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec,i))))
+    f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec, i))))
 f.write("\nlen(sum_rec) = %d; head_rec.nalign = %d\n" %
         (len(sum_rec), head_rec.nalign))
 f.write("The above two numbers should be the same\n")
@@ -26,27 +31,21 @@ f.write("...Done\n")
 # sum_ge_15, align_ge_15 = FSSPTools.filter(sum_rec, align_rec, 'pID', 15,100)
 
 # f.write("\nnumber of records filtered in: %d\n" % len(sum_ge_15))
-# k = sum_ge_15.keys()
-# k.sort()
+# k = sorted(sum_ge_15)
 # f.write("\nRecords filtered in %s\n" % k)
 # Pickling takes too long.. remove from test.
 # f.write("\nLet's Pickle this\n")
 # dump_file = os.path.join('FSSP', 'mydump.pik')
-# cPickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
+# pickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
 
 f.write("\nFilter by name\n")
 name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
 f.write("\nname list %s\n" % str(name_list))
 sum_newnames, align_newnames = FSSPTools.name_filter(sum_rec, align_rec,
                                                      name_list)
-
-ks = sum_newnames.keys()
-ks.sort()
-for key in ks:
+for key in sorted(sum_newnames):
     f.write("%s : %s\n" % (key, sum_newnames[key]))
 
-dict = align_newnames['0P168'].pos_align_dict
-ks = dict.keys()
-ks.sort()
-for key in ks:
-    f.write("%s : %s\n" % (key, dict[key]))
+new_dict = align_newnames['0P168'].pos_align_dict
+for key in sorted(new_dict):
+    f.write("%s : %s\n" % (key, new_dict[key]))

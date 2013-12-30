@@ -1,0 +1,34 @@
+hmmpfam - search one or more sequences against HMM database
+HMMER 2.3.2 (Oct 2003)
+Copyright (C) 1992-2003 HHMI/Washington University School of Medicine
+Freely distributed under the GNU General Public License (GPL)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+HMM file:                 antismash/specific_modules/lantipeptides/ClassIVLanti.hmm
+Sequence file:            -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query sequence: small_input
+Accession:      [none]
+Description:    [none]
+
+Scores for sequence family classification (score includes all domains):
+Model        Description                                Score    E-value  N
+--------     -----------                                -----    ------- ---
+ClassIVLanti Class-IV                                   -79.3          1   1
+
+Parsed for domains:
+Model        Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------     ------- ----- -----    ----- -----      -----  -------
+ClassIVLanti   1/1       6    20 ..     1    66 []   -79.3        1
+
+Alignments of top-scoring domains:
+ClassIVLanti: domain 1 of 1, from 6 to 20: score -79.3, E = 1
+                   *->msEEqLKAFiAKvqaDtsLqEqLKaEGADvvaiAKAaGFtitteDLn
+                              F+                           G  +t   Ln
+  small_inpu     6    -------CFL---------------------------GCLVTNWVLN 18
+
+                   ahiqakeLsdeeLEgvaGg<-*
+
+  small_inpu    19 RS-----------------    20
+
+//

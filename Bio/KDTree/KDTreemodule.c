@@ -1,4 +1,5 @@
 #include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
 #include "KDTree.h"
 
@@ -553,7 +554,7 @@ static PyObject *PyTree_get_indices(PyTree *self)
 		return Py_None;
 	}
 
-	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, PyArray_LONG);
+	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, NPY_LONG);
 	if (!array)
 	{
 		PyErr_SetString(PyExc_MemoryError,
@@ -583,7 +584,7 @@ static PyObject *PyTree_get_radii(PyTree *self)
 		return Py_None;
 	}
 
-	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, PyArray_FLOAT);
+	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, NPY_FLOAT32);
 	if (!array)
 	{
 		PyErr_SetString(PyExc_MemoryError,

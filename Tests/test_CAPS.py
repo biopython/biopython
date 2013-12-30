@@ -1,3 +1,8 @@
+# Copyright 2001 by Iddo Friedberg.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import unittest
 
 from Bio import CAPS
@@ -10,8 +15,8 @@ from Bio.Align import MultipleSeqAlignment
 
 def createAlignment(sequences, alphabet):
     """Create an Alignment object from a list of sequences"""
-    return MultipleSeqAlignment((SeqRecord(Seq(s,alphabet), id="sequence%i"%(i+1))
-                                 for (i,s) in enumerate(sequences)),
+    return MultipleSeqAlignment((SeqRecord(Seq(s, alphabet), id="sequence%i"%(i+1))
+                                 for (i, s) in enumerate(sequences)),
                                 alphabet)
 
 
@@ -63,10 +68,10 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
         self.assertEqual(map.dcuts[0].enzyme, EcoRI)
         self.assertEqual(map.dcuts[0].start, 5)
         self.assertEqual(map.dcuts[0].cuts_in, [0])
-        self.assertEqual(map.dcuts[0].blocked_in, [1,2])
+        self.assertEqual(map.dcuts[0].blocked_in, [1, 2])
         self.assertEqual(map.dcuts[1].enzyme, AluI)
         self.assertEqual(map.dcuts[1].start, 144)
-        self.assertEqual(map.dcuts[1].cuts_in, [1,2])
+        self.assertEqual(map.dcuts[1].cuts_in, [1, 2])
         self.assertEqual(map.dcuts[1].blocked_in, [0])
 
     def testNoCAPS(self):

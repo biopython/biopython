@@ -9,10 +9,106 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 ===================================================================
- 
-(In progress, not released yet) Biopython 1.62
 
-Please note that this could be our last release to support Python 2.5.
+(In progress, not yet released) Biopython 1.64
+
+Bio.Entrez will now automatically download and cache new NCBI DTD files for
+XML parsing under the user's home directory (using ``~/.biopython`` on
+Unix like systems, and ``$APPDATA/biopython`` on Windows).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Leighton Pritchard
+Michiel de Hoon
+Peter Cock
+Vincent Davis (first contribution)
+Wibowo 'Bow' Arindrarto
+
+===================================================================
+
+4 December 2013: Biopython 1.63 released.
+
+This release supports Python 3.3 onwards without conversion via the 2to3
+library. See the Biopython 1.63 beta release notes below for details. Since
+the beta release we have made some minor bug fixes and test improvements.
+
+The restriction enzyme list in Bio.Restriction has been updated to the
+December 2013 release of REBASE.
+
+Additional contributors since the beta:
+
+Gokcen Eraslan (first contribution)
+
+===================================================================
+
+12 November 2013: Biopython 1.63 beta released.
+
+This is a beta release for testing purposes, the main reason for a
+beta version is the large amount of changes imposed by the removal of
+the 2to3 library previously required for the support of Python 3.X.
+This was made possible by dropping Python 2.5 (and Jython 2.5).
+
+This release of Biopython supports Python 2.6 and 2.7, and also Python
+3.3.
+
+The Biopython Tutorial & Cookbook, and the docstring examples in the source
+code, now use the Python 3 style print function in place of the Python 2
+style print statement. This language feature is available under Python 2.6
+and 2.7 via:
+
+    from __future__ import print_function
+
+Similarly we now use the Python 3 style built-in next function in place of
+the Python 2 style iterators' .next() method. This language feature is also
+available under Python 2.6 and 2.7.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Chris Mitchell (first contribution)
+Christian Brueffer
+Eric Talevich
+Josha Inglis (first contribution)
+Konstantin Tretyakov (first contribution)
+Lenna Peterson
+Martin Mokrejs
+Nigel Delaney (first contribution)
+Peter Cock
+Sergei Lebedev (first contribution)
+Tiago Antao
+Wayne Decatur (first contribution)
+Wibowo 'Bow' Arindrarto
+
+===================================================================
+
+28 August 2013: Biopython 1.62 released.
+
+This is our first release to officially support Python 3, however it is
+also our final release supporting Python 2.5. Specifically this release
+is supported and tested on standard Python 2.5, 2.6, 2.7 and 3.3.
+It was also tested under Jython 2.5, 2.7 and PyPy 1.9, 2.0.
+
+See the Biopython 1.62 beta release notes below for most changes. Since the
+beta release we have added several minor bug fixes and test improvements.
+Additional contributors since the beta:
+
+Bertrand Néron (first contribution)
+Lenna Peterson
+Martin Mokrejs
+Matsuyuki Shirota (first contribution)
+
+===================================================================
+ 
+15 July 2013: Biopython 1.62 beta released.
+
+This is a beta release for testing purposes, both for new features added,
+and changes to location parsing, but more importantly Biopython 1.62 will
+be our first release to officially support Python 3.
+
+Specifically we intend Biopython 1.62 to support standard Python 2.5, 2.6, 2.7
+and 3.3, but the release will also be tested under Jython 2.5, 2.7 and PyPy
+1.9, 2.0 as well. It will be our final release supporting Python 2.5.
 
 The translation functions will give a warning on any partial codons (and this
 will probably become an error in a future release). If you know you are dealing
@@ -32,6 +128,9 @@ now optionally extract bootstrap values from the Newick comment field (like
 Molphy and Archaeopteryx do). Nate Sutton added a wrapper for FastTree to
 Bio.Phylo.Applications.
 
+New module Bio.UniProt adds parsers for the GAF, GPA and GPI formats from
+UniProt-GOA.
+
 The BioSQL module is now supported in Jython. MySQL and PostgreSQL databases
 can be used. The relevant JDBC driver should be available in the CLASSPATH.
 
@@ -45,21 +144,35 @@ Python standard library's shlex module instead of C code using flex.
 
 The Bio.Sequencing.Applications module now includes a BWA command line wrapper.
 
+Bio.motifs supports JASPAR format files with multiple position-frequence
+matrices.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Alexander Campbell (first contribution)
 Andrea Rizzi (first contribution)
+Anthony Mathelier (first contribution)
 Ben Morris (first contribution)
+Brad Chapman
 Christian Brueffer
+David Arenillas (first contribution)
 David Martin (first contribution)
+Eric Talevich
+Iddo Friedberg
+Jian-Long Huang (first contribution)
+Joao Rodrigues
+Kai Blin
 Michiel de Hoon
 Nate Sutton (first contribution)
 Peter Cock
 Petra Kubincová (first contribution)
+Phillip Garland
 Saket Choudhary (first contribution)
 Tiago Antao
+Wibowo 'Bow' Arindrarto
 Xabier Bello (first contribution)
 
 ===================================================================

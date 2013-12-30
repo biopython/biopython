@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Represent Neural Networks.
 
 This module contains classes to represent Generic Neural Networks that
@@ -59,7 +64,7 @@ class BasicNetwork(object):
         of the prevoious weight change to use.
         """
         num_iterations = 0
-        while 1:
+        while True:
             num_iterations += 1
             training_error = 0.0
             for example in training_examples:
@@ -103,10 +108,7 @@ class BasicNetwork(object):
         # update the predicted values for these inputs
         self._input.update(inputs)
 
-        output_keys = self._output.values.keys()
-        output_keys.sort()
-
         outputs = []
-        for output_key in output_keys:
+        for output_key in sorted(self._output.values):
             outputs.append(self._output.values[output_key])
         return outputs

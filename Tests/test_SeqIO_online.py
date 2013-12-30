@@ -24,7 +24,7 @@ from Bio import ExPASy
 
 #In order to check any sequences returned
 from Bio import SeqIO
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio.SeqUtils.CheckSum import seguid
 
 from Bio.File import UndoHandle
@@ -54,6 +54,8 @@ class EntrezTests(unittest.TestCase):
     def simple(self, database, formats, entry, length, checksum):
         for f in formats:
             handle = Entrez.efetch(db=database, id=entry, rettype=f, retmode="text")
+            if f == "gbwithparts":
+                f = "gb"
             record = SeqIO.read(handle, f)
             handle.close()
             self.assertTrue((entry in record.name) or
@@ -69,13 +71,13 @@ for database, formats, entry, length, checksum in [
          "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
         ("nucleotide", ["fasta", "gb"], "6273291", 902,
          "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
-        ("protein", ["fasta", "gb"], "16130152", 367,
+        ("protein", ["fasta", "gbwithparts"], "16130152", 367,
          "fCjcjMFeGIrilHAn6h+yju267lg"),
         ]:
 
     def funct(d, f, e, l, c):
         method = lambda x : x.simple(d, f, e, l, c)
-        method.__doc__ = "Bio.Entrez.efetch(%s, %s, ...)" % (d, e)
+        method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
         return method
 
     setattr(EntrezTests, "test_%s_%s" % (database, entry),

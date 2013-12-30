@@ -6,7 +6,7 @@
 """Use the DSSP program to calculate secondary structure and accessibility.
 
 You need to have a working version of DSSP (and a license, free for academic
-use) in order to use this. For DSSP, see U{http://www.cmbi.kun.nl/gv/dssp/}.
+use) in order to use this. For DSSP, see U{http://swift.cmbi.ru.nl/gv/dssp/}.
 
 The DSSP codes for secondary structure used here are:
 
@@ -20,11 +20,15 @@ The DSSP codes for secondary structure used here are:
     - -        None
 """
 
-import os
-import re
-import tempfile
+from __future__ import print_function
 
-from Bio.SCOP.Raf import to_one_letter_code
+__docformat__ = "epytext en"
+
+import re
+from Bio._py3k import StringIO
+import subprocess
+
+from Bio.Data import SCOPData
 
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
@@ -95,11 +99,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         accessibility.
     @rtype: {}
     """
-    out_file = tempfile.NamedTemporaryFile(suffix='.dssp')
-    out_file.flush()    # needed?
-    os.system("%s %s > %s" % (DSSP, in_file, out_file.name))
-    out_dict, keys = make_dssp_dict(out_file.name)
-    out_file.close()
+    #Using universal newlines is important on Python 3, this
+    #gives unicode handles rather than bytes handles.
+    p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    out_dict, keys = _make_dssp_dict(StringIO(out))
     return out_dict, keys
 
 
@@ -111,51 +116,60 @@ def make_dssp_dict(filename):
     @param filename: the DSSP output file
     @type filename: string
     """
+    with open(filename, "r") as handle:
+        return _make_dssp_dict(handle)
+
+def _make_dssp_dict(handle):
+    """
+    Return a DSSP dictionary that maps (chainid, resid) to
+    aa, ss and accessibility, from an open DSSP file object.
+
+    @param handle: the open DSSP output file handle
+    @type handle: file
+    """
     dssp = {}
-    handle = open(filename, "r")
-    try:
-        start = 0
-        keys = []
-        for l in handle.readlines():
-            sl = l.split()
-            if sl[1] == "RESIDUE":
-                # Start parsing from here
-                start = 1
-                continue
-            if not start:
-                continue
-            if l[9] == " ":
-                # Skip -- missing residue
-                continue
-            resseq = int(l[5:10])
-            icode = l[10]
-            chainid = l[11]
-            aa = l[13]
-            ss = l[16]
-            if ss == " ":
-                ss = "-"
-            try:
-                acc = int(l[34:38])
-                phi = float(l[103:109])
-                psi = float(l[109:115])
-            except ValueError, exc:
-                # DSSP output breaks its own format when there are >9999
-                # residues, since only 4 digits are allocated to the seq num
-                # field.  See 3kic chain T res 321, 1vsy chain T res 6077.
-                # Here, look for whitespace to figure out the number of extra
-                # digits, and shift parsing the rest of the line by that amount.
-                if l[34] != ' ':
-                    shift = l[34:].find(' ')
-                    acc = int((l[34+shift:38+shift]))
-                    phi = float(l[103+shift:109+shift])
-                    psi = float(l[109+shift:115+shift])
-                else:
-                    raise ValueError(exc)
-            res_id = (" ", resseq, icode)
-            dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi)
-            keys.append((chainid, res_id))
-    finally:
-        handle.close()
+    start = 0
+    keys = []
+    for l in handle.readlines():
+        sl = l.split()
+        if len(sl) < 2:
+            continue
+        if sl[1] == "RESIDUE":
+            # Start parsing from here
+            start = 1
+            continue
+        if not start:
+            continue
+        if l[9] == " ":
+            # Skip -- missing residue
+            continue
+        resseq = int(l[5:10])
+        icode = l[10]
+        chainid = l[11]
+        aa = l[13]
+        ss = l[16]
+        if ss == " ":
+            ss = "-"
+        try:
+            acc = int(l[34:38])
+            phi = float(l[103:109])
+            psi = float(l[109:115])
+        except ValueError as exc:
+            # DSSP output breaks its own format when there are >9999
+            # residues, since only 4 digits are allocated to the seq num
+            # field.  See 3kic chain T res 321, 1vsy chain T res 6077.
+            # Here, look for whitespace to figure out the number of extra
+            # digits, and shift parsing the rest of the line by that amount.
+            if l[34] != ' ':
+                shift = l[34:].find(' ')
+                acc = int((l[34+shift:38+shift]))
+                phi = float(l[103+shift:109+shift])
+                psi = float(l[109+shift:115+shift])
+            else:
+                raise ValueError(exc)
+        res_id = (" ", resseq, icode)
+        dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi)
+        keys.append((chainid, res_id))
     return dssp, keys
 
 
@@ -173,7 +187,7 @@ class DSSP(AbstractResiduePropertyMap):
         >>> model = structure[0]
         >>> dssp = DSSP(model, "1MOT.pdb")
         >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-        >>> a_key = dssp.keys()[2]
+        >>> a_key = list(dssp.keys())[2]
         >>> # residue object, secondary structure, solvent accessibility,
         >>> # relative accessiblity, phi, psi
         >>> dssp[a_key]
@@ -290,7 +304,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            resname = to_one_letter_code.get(resname, 'X')
+            resname = SCOPData.protein_letters_3to1.get(resname, 'X')
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'
@@ -315,11 +329,11 @@ if __name__ == "__main__":
     d = DSSP(model, sys.argv[1])
 
     for r in d:
-        print r
-    print "Handled", len(d), "residues"
-    print d.keys()
+        print(r)
+    print("Handled %i residues" % len(d))
+    print(d.keys())
     if ('A', 1) in d:
-        print d[('A', 1)]
-        print s[0]['A'][1].xtra
+        print(d[('A', 1)])
+        print(s[0]['A'][1].xtra)
     # Secondary structure
-    print ''.join(d[key][1] for key in d.keys())
+    print(''.join(item[1] for item in d))

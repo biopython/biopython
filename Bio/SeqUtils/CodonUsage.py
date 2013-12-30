@@ -1,5 +1,12 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
+from __future__ import print_function
+
 import math
-from CodonUsageIndices import SharpEcoliIndex
+from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO # To parse a FASTA file
 
 
@@ -128,28 +135,27 @@ class CodonAdaptationIndex(object):
         return math.exp(cai_value / (cai_length - 1.0))
 
     def _count_codons(self, fasta_file):
-        handle = open(fasta_file, 'r')
+        with open(fasta_file, 'r') as handle:
 
-        # make the codon dictionary local
-        self.codon_count = CodonsDict.copy()
+            # make the codon dictionary local
+            self.codon_count = CodonsDict.copy()
 
-        # iterate over sequence and count all the codons in the FastaFile.
-        for cur_record in SeqIO.parse(handle, "fasta"):
-            # make sure the sequence is lower case
-            if str(cur_record.seq).islower():
-                dna_sequence = str(cur_record.seq).upper()
-            else:
-                dna_sequence = str(cur_record.seq)
-            for i in range(0, len(dna_sequence), 3):
-                codon = dna_sequence[i:i+3]
-                if codon in self.codon_count:
-                    self.codon_count[codon] += 1
+            # iterate over sequence and count all the codons in the FastaFile.
+            for cur_record in SeqIO.parse(handle, "fasta"):
+                # make sure the sequence is lower case
+                if str(cur_record.seq).islower():
+                    dna_sequence = str(cur_record.seq).upper()
                 else:
-                    raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.id))
-        handle.close()
+                    dna_sequence = str(cur_record.seq)
+                for i in range(0, len(dna_sequence), 3):
+                    codon = dna_sequence[i:i+3]
+                    if codon in self.codon_count:
+                        self.codon_count[codon] += 1
+                    else:
+                        raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.id))
 
     # this just gives the index when the objects is printed.
     def print_index(self):
         """Prints out the index used."""
         for i in sorted(self.index):
-            print "%s\t%.3f" % (i, self.index[i])
+            print("%s\t%.3f" % (i, self.index[i]))
