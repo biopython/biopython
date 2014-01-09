@@ -657,10 +657,10 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
-        #Also check the write_to_string method matches,
+        #Also check the write_to_string (bytes string) method matches,
         #(Note the possible confusion over new lines on Windows)
-        assert open(output_filename).read().replace("\r\n", "\n") \
-               == gdd.write_to_string('PDF').replace("\r\n", "\n")
+        assert open(output_filename, "rb").read().replace(b"\r\n", b"\n") \
+               == gdd.write_to_string('PDF').replace(b"\r\n", b"\n")
 
         output_filename = os.path.join('Graphics', 'GD_region_linear.svg')
         gdd.write(output_filename, 'SVG')

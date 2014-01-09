@@ -301,7 +301,7 @@ class Diagram(object):
         return _write(self.drawing, filename, output, dpi=dpi)
 
     def write_to_string(self, output='PS', dpi=72):
-        """ write(self, output='PS')
+        """Returns a byte string containing the diagram in the requested format.
 
             o output        String indicating output format, one of PS, PDF,
                             SVG, JPG, BMP, GIF, PNG, TIFF or TIFF (as
@@ -309,14 +309,17 @@ class Diagram(object):
 
             o dpi           Resolution (dots per inch) for bitmap formats.
 
-            Return the completed drawing as a string in a prescribed format
+            Return the completed drawing as a bytes string in a prescribed format
         """
         #The ReportLab drawToString method, which this function used to call,
-        #just uses a cStringIO or StringIO handle with the drawToFile method.
+        #just used a cStringIO or StringIO handle with the drawToFile method.
         #In order to put all our complicated file format specific code in one
-        #place we'll just use a StringIO handle here:
-        from Bio._py3k import StringIO
-        handle = StringIO()
+        #place we just used a StringIO handle here, later a BytesIO handle
+        #for Python 3 compatibility.
+        #
+        #TODO - Rename this method to include keyword bytes?
+        from io import BytesIO
+        handle = BytesIO()
         self.write(handle, output, dpi)
         return handle.getvalue()
 
