@@ -86,7 +86,7 @@ class AppTest(unittest.TestCase):
         fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname)
-        self.assertTrue(abs(fst - 0.1) < 0.025,
+        self.assertTrue(abs(fst - 0.1) < 0.03,
                         "Stochastic result, expected %f close to 0.1" % fst)
 
     def test_fdist_force_fst(self):
