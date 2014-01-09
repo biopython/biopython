@@ -101,9 +101,11 @@ class DictTest(unittest.TestCase):
         classes = ['A', 'B', 'C', 'D']
         colors = get_color_dict(classes, jitter=0)
         cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b)
-                    for c, (r, g, b) in colors.items()]
-        expected = ['A: (0.52, 0.76, 0.69)', 'C: (0.59, 0.13, 0.47)',
-                    'B: (0.40, 0.31, 0.68)', 'D: (0.50, 0.00, 0.00)']
+                    for c, (r, g, b) in sorted(colors.items())]
+        expected = ['A: (0.52, 0.76, 0.69)',
+                    'B: (0.40, 0.31, 0.68)',
+                    'C: (0.59, 0.13, 0.47)',
+                    'D: (0.50, 0.00, 0.00)']
         self.assertEqual(cstr, expected)
 
 if __name__ == "__main__":
