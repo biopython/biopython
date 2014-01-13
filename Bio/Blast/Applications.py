@@ -1458,7 +1458,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
         _NcbibaseblastCommandline._validate(self)
 
 
-class NcbideltablastCommandline(_NcbiblastMain2SeqCommandline):
+class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
     """Create a commandline for the NCBI BLAST+ program deltablast (for proteins).
 
     This is a wrapper for the deltablast command line command included in
@@ -1478,10 +1478,6 @@ class NcbideltablastCommandline(_NcbiblastMain2SeqCommandline):
     def __init__(self, cmd="deltablast", **kwargs):
         self.parameters = [
                            #General search options:
-                           _Option(["-task", "task"],
-                                   "Task to execute (string,  or deltablast).",
-                                   checker_function=lambda value : value in ["deltablast"],
-                                   equate=False),
                            _Option(["-matrix", "matrix"],
                                    "Scoring matrix name (default BLOSUM62)."),
                            _Option(["-threshold", "threshold"],
@@ -1505,14 +1501,11 @@ class NcbideltablastCommandline(_NcbiblastMain2SeqCommandline):
                                    Format: "yes", "window locut hicut", or "no" to disable.
                                    Default is "12 2.2 2.5""",
                                    equate=False),
-                           #Extension options:
-                           _Switch(["-ungapped", "ungapped"],
-                                   "Perform ungapped alignment only?"),
-                           #Miscellaneous options: FIXME: these are probably not valid args
+                           #Miscellaneous options:
                            _Switch(["-use_sw_tback", "use_sw_tback"],
                                    "Compute locally optimal Smith-Waterman alignments?"),
                            ]
-        _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
+        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
 def _test():
