@@ -21,7 +21,8 @@ from Bio.Blast import Applications
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
           "rpsblast+", #For Debian
-          "rpsblast", "rpstblastn", "psiblast", "blast_formatter"]
+          "rpsblast", "rpstblastn", "psiblast", "blast_formatter",
+          "deltablast"]
 exe_names = {}
 
 if sys.platform=="win32":
@@ -71,7 +72,9 @@ if "rpsblast+" in exe_names:
     del exe_names["rpsblast+"]
 
 #We can cope with blast_formatter being missing, only added in BLAST 2.2.24+
-if len(set(exe_names).difference(["blast_formatter"])) < len(wanted)-1 :
+#We can cope with deltablast being missing, only added in BLAST 2.2.26+
+optional = ["blast_formatter", "deltablast"]
+if len(set(exe_names).difference(optional)) < len(set(wanted).difference(optional)):
     raise MissingExternalDependencyError("Install the NCBI BLAST+ command line "
                                          "tools if you want to use the "
                                          "Bio.Blast.Applications wrapper.")
@@ -310,6 +313,11 @@ class CheckCompleteArgList(unittest.TestCase):
         def test_blast_formatter(self):
             """Check all blast_formatter arguments are supported"""
             self.check("blast_formatter", Applications.NcbiblastformatterCommandline)
+
+    if "deltablast" in exe_names:
+        def test_deltablast(self):
+            """Check all deltablast arguments are supported"""
+            self.check("deltablast", Applications.NcbideltablastCommandline)
 
 
 if __name__ == "__main__":
