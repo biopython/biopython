@@ -11,8 +11,6 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
-from Bio import SeqIO
-from Bio import AlignIO
 from Bio.Sequencing.Applications import SamtoolsViewCommandline,SamtoolsCalmdCommandline
 from Bio.Sequencing.Applications import SamtoolsCatCommandline, SamtoolsFaidxCommandline
 from Bio.Sequencing.Applications import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
@@ -20,7 +18,6 @@ from Bio.Sequencing.Applications import SamtoolsIndexCommandline, SamtoolsMergeC
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
 from Bio.Sequencing.Applications import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
 from Bio.Sequencing.Applications import SamtoolsSortCommandline, SamtoolsTargetcutCommandline
-from Bio.Application import ApplicationError
 
 #################################################################
 
@@ -87,8 +84,6 @@ class SamtoolsTestCase(unittest.TestCase):
     def add_files_to_clean(self,filename):
         self.files_to_clean.add(filename)
 
-
-
     def test_view(self):
         """Test for samtools view"""
 
@@ -104,18 +99,17 @@ class SamtoolsTestCase(unittest.TestCase):
                         "SAM file  viewing failed:\n%s\nStderr:%s" \
                         % (cmdline, stderr_sam))
 
-
     def test_faidx(self):
         cmdline = SamtoolsFaidxCommandline()
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
         self.assertFalse(stderr, "Samtools faidx failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
-
         self.assertTrue(os.path.isfile(self.referenceindexfile))
 
     def test_calmd(self):
         """Test for samtools calmd"""
+
         cmdline = SamtoolsCalmdCommandline()
         cmdline.set_parameter("reference", self.reference)
         cmdline.set_parameter("input_bam", self.bamfile1)
@@ -128,7 +122,6 @@ class SamtoolsTestCase(unittest.TestCase):
         else:
             print "doesnt exist"
             stderr_calmd_expected = "[fai_load] build FASTA index.\n"
-
         stdout, stderr = cmdline()
         if stderr == stderr_calmd_expected:
             print "SAME"
@@ -149,12 +142,9 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
 
-
-
     def test_fixmate(self):
         ##TODO : Needs a name-sorted alignment file
         pass
-
 
     def test_sort(self):
         cmdline = SamtoolsSortCommandline()
@@ -163,7 +153,6 @@ class SamtoolsTestCase(unittest.TestCase):
         stdout, stderr = cmdline()
         self.assertFalse(stderr, "Samtools sort failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
-
 
     def test_index(self):
         cmdline = SamtoolsIndexCommandline()
@@ -182,29 +171,28 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertFalse(stderr, "Samtools idxstats failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr))
 
-
-
     def test_merge(self):
         cmdline = SamtoolsMergeCommandline()
         cmdline.set_parameter("input_bam",[self.bamfile1, self.bamfile2])
         cmdline.set_parameter("out_bam", self.outbamfile)
         cmdline.set_parameter("f", True) ## Overwrite out.bam if it exists
         stdout, stderr = cmdline()
-
         self.assertFalse(stderr, "Samtools merge failed:\n%s\nStderr:%s"\
                         % (cmdline, stderr)    )
-
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
 
-
     def test_mpileup(self):
         cmdline = SamtoolsMpileupCommandline()
-        cmdline.set_parameter("input_file", self.bamfile1)
+        cmdline.set_parameter("input_file", [self.bamfile1])
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
 
-
+    def test_mpileup_list(self):
+        cmdline = SamtoolsMpileupCommandline()
+        cmdline.set_parameter("input_file", [self.bamfile1, self.bamfile2])
+        stdout, stderr = cmdline()
+        self.assertFalse("[bam_pileup_core]" in stdout)
 
     def test_phase(self):
         pass

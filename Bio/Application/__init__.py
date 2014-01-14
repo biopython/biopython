@@ -660,13 +660,16 @@ class _ArgumentList(_Argument):
         assert isinstance(self.value, list), \
                 "Arguments should be a list"
         assert self.value, "Requires atleast one filename"
+        """
+            A trailing space is required so that parameters following the last filename in 'v'
+            do not appear merged.
+            E.g:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
+                  samtools cat in1.bam in2.bam -o out.sam  [with trailing space][Correct]
+        """
         if self.is_filename:
             return " ".join(_escape_filename(v) for v in self.value) + " "
-            ## Add a space after the last filename otherwise the rest of arguments are concatenated
-            ## without a space . For eg. samtools cat in1.bam in2.bam-o out. sam (there should be a space)
-            ## between -o and in2.bam
         else:
-            return " ".join(self.value)
+            return " ".join(self.value) + " "
 
 
 class _StaticArgument(_AbstractParameter):

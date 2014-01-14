@@ -196,7 +196,7 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
                             It is recommended to collect indel candidates from sequencing technologies
                             that have low indel error rate such as ILLUMINA""",
                             equate=False, checker_function = lambda x : isinstance(x,basestring)),
-                    _Argument(["input_file"],
+                    _ArgumentList(["input_file"],
                               "Input File for generating mpileup", filename=True, is_required=True),
 
                 ]
