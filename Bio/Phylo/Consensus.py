@@ -569,8 +569,11 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
     tree = consensus(list(trees))
     return tree
 
-
+import logging
+logging.basicConfig(filename='/home/yeyanbo/consensus.log',level=logging.DEBUG)
 def _bitstrs(tree):
+    '''return a dict of all bitstrs to the corresponding branch
+     lenghts(rounded to 5 decimal places)'''
     bitstrs = {}
     term_names = [term.name for term in tree.get_terminals()]
     term_names.sort()
@@ -578,10 +581,14 @@ def _bitstrs(tree):
         clade_term_names = [term.name for term in clade.get_terminals()]
         boolvals = [name in clade_term_names for name in term_names]  
         bitstr = _BitString(''.join(map(str, map(int, boolvals))))
-        bitstrs[bitstr] = clade.branch_length or 0.0
+        bitstrs[bitstr] = round(clade.branch_length, 5) or 0.0
     return bitstrs
     
-def compare(tree1, tree2):
+def _equal_topology(tree1, tree2):
+    '''check whether two trees are equal in terms of topology and
+     branch lengths''' 
     term_names1 =  [term.name for term in tree1.get_terminals()]
     term_names2 =  [term.name for term in tree2.get_terminals()]
+    logging.info(repr(_bitstrs(tree1)))
+    logging.info(repr(_bitstrs(tree2)))
     return (set(term_names1) == set(term_names2)) and (_bitstrs(tree1) == _bitstrs(tree2))
