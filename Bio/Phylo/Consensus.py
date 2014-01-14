@@ -581,12 +581,12 @@ def _bitstrs(tree):
         clade_term_names = [term.name for term in clade.get_terminals()]
         boolvals = [name in clade_term_names for name in term_names]  
         bitstr = _BitString(''.join(map(str, map(int, boolvals))))
-        bitstrs[bitstr] = round(clade.branch_length, 5) or 0.0
+        bitstrs[bitstr] = round(clade.branch_length or 0.0, 5)
     return bitstrs
     
 def _equal_topology(tree1, tree2):
     '''check whether two trees are equal in terms of topology and
-     branch lengths''' 
+     branch lengths(5 decimal places)''' 
     term_names1 =  [term.name for term in tree1.get_terminals()]
     term_names2 =  [term.name for term in tree2.get_terminals()]
     logging.info(repr(_bitstrs(tree1)))

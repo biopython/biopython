@@ -64,17 +64,17 @@ class ConsensusTest(unittest.TestCase):
         consensus_tree = Consensus.strict_consensus(self.trees)
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_trees[0]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
         # tree 1 and tree 2
         consensus_tree = Consensus.strict_consensus(self.trees[:2])
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_trees[1]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[1]))
         # tree 1 and tree 3
         consensus_tree = Consensus.strict_consensus(self.trees[::2])
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_trees[2]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
         #ref_trees.close()
         #tree_file.close()
 
@@ -85,11 +85,11 @@ class ConsensusTest(unittest.TestCase):
         consensus_tree = Consensus.majority_consensus(self.trees)
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_tree[0]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_tree[0]))
         consensus_tree = Consensus.majority_consensus(self.trees, 1)
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_tree[1]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_tree[1]))
 
     def test_adam_consensus(self):
         #ref_trees = open('./TreeConstruction/adam_refs.tre')
@@ -99,17 +99,17 @@ class ConsensusTest(unittest.TestCase):
         #tree_file = '/home/yeyanbo/adam.tres'
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_trees[0]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
         # tree 1 and tree 2
         consensus_tree = Consensus.adam_consensus(self.trees[:2])
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_trees[1]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[1]))
         # tree 1 and tree 3
         consensus_tree = Consensus.adam_consensus(self.trees[::2])
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
-        self.assertTrue(Consensus.compare(consensus_tree, ref_trees[2]))
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
         #ref_trees.close()
         #tree_file.close()
 
@@ -127,7 +127,7 @@ class BootstrapTest(unittest.TestCase):
     """Test for bootstrap methods"""
 
     def setUp(self):
-        self.msa = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        self.msa = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
 
     def test_bootstrap(self):
         msa_list = list(Consensus.bootstrap(self.msa, 100))
