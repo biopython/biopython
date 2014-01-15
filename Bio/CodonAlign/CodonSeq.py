@@ -705,7 +705,7 @@ def _yn00(seq1, seq2, k, codon_table):
         tot = sum(fcodon[i].values())
         fcodon[i] = dict((j, k/tot) for j, k in fcodon[i].items())
     pi = Counter()
-    for i in codon_table.forward_table.keys() + codon_table.stop_codons:
+    for i in list(codon_table.forward_table.keys()) + codon_table.stop_codons:
         if 'U' not in i:
             pi[i] = 0
     for i in seq1 + seq2:
