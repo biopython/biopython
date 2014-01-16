@@ -572,6 +572,11 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-max_hsps_per_subject", "max_hsps_per_subject"],
                     "Override maximum number of HSPs per subject to save for ungapped searches (integer)",
                     equate=False),
+            _Option(["-max_hsps", "max_hsps"],
+                    "Set maximum number of HSPs per subject sequence to save (default 0 means no limit).",
+                    equate=False),
+            _Switch(["-sum_statistics", "sum_statistics"],
+                    "Use sum statistics."),
             #Extension options
             _Option(["-xdrop_ungap", "xdrop_ungap"],
                     "X-dropoff value (in bits) for ungapped extensions. Float.",

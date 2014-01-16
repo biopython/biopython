@@ -250,6 +250,13 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "rpsblast":
             #New in BLAST 2.2.28+ so will look like extra args on old BLAST:
             extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
+        if exe_name in ["blastn", "blastp", "blastx", "tblastn", "tblastx",
+                        "psiblast", "rpstblastn", "rpsblast"]:
+            #New in BLAST 2.2.29+ so will look like extra args on old BLAST:
+            extra = extra.difference(["-max_hsps", "-sum_statistics"])
+        if exe_name in ["rpstblastn", "rpsblast"]:
+            #Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
+            extra = extra.difference(["-gilist", "-negative_gilist"])
 
         if extra or missing:
             import warnings
