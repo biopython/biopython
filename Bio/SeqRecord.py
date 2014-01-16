@@ -856,7 +856,18 @@ class SeqRecord(object):
         slxa_0001_1_0001_01 ACTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print(list(new.letter_annotations.keys()))
         []
+
+        Also, as a special case, zero plus a SeqRecord returns the record unchanged.
+        This is a trick in order to allow you to take the sum of a list of records:
+
+        >>> record[20:25] + record[10:15] + record[0:5]
+        SeqRecord(seq=Seq('ACGTAGTACGACGTA', SingleLetterAlphabet()), id='slxa_0001_1_0001_01', name='slxa_0001_1_0001_01', description='slxa_0001_1_0001_01', dbxrefs=[])
+        >>> sum([record[20:25], record[10:15], record[0:5]])
+        SeqRecord(seq=Seq('ACGTAGTACGACGTA', SingleLetterAlphabet()), id='slxa_0001_1_0001_01', name='slxa_0001_1_0001_01', description='slxa_0001_1_0001_01', dbxrefs=[])
+
         """
+        if other == 0:
+            return self
         if isinstance(other, SeqRecord):
             raise RuntimeError("This should have happened via the __add__ of "
                                "the other SeqRecord being added!")

@@ -275,7 +275,18 @@ class Seq(object):
         Seq('LVMELKI', ProteinAlphabet())
 
         Adding two Seq (like) objects is handled via the __add__ method.
+
+        Note that as a special case, zero plus a sequence returns the sequence.
+        This is a trick to allow you to sum a list of sequences:
+
+        >>> from Bio.Alphabet import generic_dna
+        >>> sequences = [Seq("ACGT", generic_dna), Seq("TTTACG", generic_dna)]
+        >>> sum(sequences)
+        Seq('ACGTTTTACG', DNAAlphabet())
+
         """
+        if other == 0:
+            return self
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -1182,6 +1193,8 @@ class UnknownSeq(Seq):
     def __radd__(self, other):
         #If other is an UnknownSeq, then __add__ would be called.
         #Offload to the base class...
+        if other == 0:
+            return self
         return other + Seq(str(self), self.alphabet)
 
     def __getitem__(self, index):
@@ -1642,6 +1655,8 @@ class MutableSeq(object):
             raise TypeError
 
     def __radd__(self, other):
+        #if other == 0:
+        #    return self #Or a new instance?
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
