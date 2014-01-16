@@ -1466,11 +1466,11 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
 
     >>> from Bio.Blast.Applications import NcbideltablastCommandline
     >>> cline = NcbideltablastCommandline(query="rosemary.pro", db="nr",
-    ...                               evalue=0.001, remote=True, ungapped=True)
+    ...                               evalue=0.001, remote=True)
     >>> cline
-    NcbideltablastCommandline(cmd='deltablast', query='rosemary.pro', db='nr', evalue=0.001, remote=True, ungapped=True)
+    NcbideltablastCommandline(cmd='deltablast', query='rosemary.pro', db='nr', evalue=0.001, remote=True)
     >>> print(cline)
-    deltablast -query rosemary.pro -db nr -evalue 0.001 -remote -ungapped
+    deltablast -query rosemary.pro -db nr -evalue 0.001 -remote
 
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
