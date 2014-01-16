@@ -395,6 +395,33 @@ class MultipleSeqAlignment(_Alignment):
                 annotations[k] = v
         return MultipleSeqAlignment(merged, alpha, annotations)
 
+    def __radd__(self, other):
+        """Internal method of alignment addition support.
+
+        Note that as a special case, zero plus an alignment returns the alignment unchanged.
+        This is a trick in order to allow you to take the sum of a list of alignments:
+
+        >>> from Bio import AlignIO
+        >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
+        >>> print(align)
+        SingleLetterAlphabet() alignment with 7 rows and 156 columns
+        TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
+        TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
+        TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
+        TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191
+        TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191
+        TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191
+        TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191
+        >>> print(align[:,10:15] + align[:,55:65] + align[:,70:75])
+
+        >>> print(sum([align[:,10:15], align[:,55:65], align[:,70:75]]))
+
+        """
+        if other == 0:
+            return self
+        else:
+            raise NotImplementedError
+
     def __getitem__(self, index):
         """Access part of the alignment.
 
