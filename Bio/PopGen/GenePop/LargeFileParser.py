@@ -92,7 +92,6 @@ class Record(object):
         self.comment_line = ""
         self.loci_list = []
         self.populations = []
-        self.data_generator = None
         self.stack = []
 
     def data_generator(self):
