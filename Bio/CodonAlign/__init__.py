@@ -6,9 +6,15 @@
 
 """Code for dealing with Codon Alignment.
 """
+from __future__ import print_function
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
-from itertools import izip
+
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
+#from itertools import izip
 
 from Bio.SeqRecord import SeqRecord
 
@@ -49,24 +55,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
-    >>> print codon_aln
-    CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)
-    TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
-    TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
-
-    >>> from Bio.Alphabet import IUPAC
-    >>> from Bio.Seq import Seq
-    >>> from Bio.SeqRecord import SeqRecord
-    >>> from Bio.Align import MultipleSeqAlignment
-    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG',
-    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
-    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-    >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
-    >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
-    >>> aln = MultipleSeqAlignment([pro1, pro2])
-    >>> codon_aln = build(aln, [seq1, seq2])
-    >>> print codon_aln
+    >>> print(codon_aln)
     CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)
     TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
     TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
@@ -163,7 +152,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             try:
                 nucl_id = corr_dict[pro_rec.id]
             except KeyError:
-                print "Protein record (%s) is not in corr_dict!" % pro_rec.id
+                print("Protein record (%s) is not in corr_dict!" % pro_rec.id)
                 exit(1)
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
@@ -756,15 +745,15 @@ def _align_shift_recs(recs):
     return recs
 
 
-def toCodonAlignment(align, alphabet=default_codon_alphabet):
-    """Function to convert a MultipleSeqAlignment to CodonAlignment.
-    It is the user's responsibility to ensure all the requirement
-    needed by CodonAlignment is met.
-
-    """
-    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
-            for i in align._records]
-    return CodonAlignment(rec, alphabet=align._alphabet)
+#def toCodonAlignment(align, alphabet=default_codon_alphabet):
+#    """Function to convert a MultipleSeqAlignment to CodonAlignment.
+#    It is the user's responsibility to ensure all the requirement
+#    needed by CodonAlignment is met.
+#
+#    """
+#    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+#            for i in align._records]
+#    return CodonAlignment(rec, alphabet=align._alphabet)
 
 
 if __name__ == "__main__":
