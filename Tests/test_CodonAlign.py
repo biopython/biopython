@@ -141,24 +141,24 @@ class Test_dn_ds(unittest.TestCase):
         codon_seq1 = self.aln[0]
         codon_seq2 = self.aln[1]
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='NG86')
-        self.assertEqual(round(dN, 5), 0.02091)
-        self.assertEqual(round(dS, 5), 0.01784)
+        self.assertEqual(round(dN, 4), 0.0209)
+        self.assertEqual(round(dS, 4), 0.0178)
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='LWL85')
-        self.assertEqual(round(dN, 5), 0.02031)
-        self.assertEqual(round(dS, 5), 0.01639)
+        self.assertEqual(round(dN, 4), 0.0203)
+        self.assertEqual(round(dS, 4), 0.0164)
         try:
             from scipy.linalg import expm
             dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
-            self.assertEqual(round(dN, 5), 0.01982)
-            self.assertEqual(round(dS, 5), 0.02216)
+            self.assertEqual(round(dN, 4), 0.0198)
+            self.assertEqual(round(dS, 4), 0.0222)
         except ImportError:
             warnings.warn('Importing scipy.linalg.expm failed. Skip testing ML method for dN/dS estimation')
             pass
         try:
             from scipy.optimize import minimize
             dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
-            self.assertEqual(round(dN, 5), 0.01939)
-            self.assertEqual(round(dS, 5), 0.02172)
+            self.assertEqual(round(dN, 4), 0.0194)
+            self.assertEqual(round(dS, 4), 0.0217)
         except ImportError:
             warnings.warn('Importing scipy.optimize.minimize failed. Skip testing ML method for dN/dS estimation')
             pass
@@ -174,7 +174,7 @@ class Test_MK(unittest.TestCase):
             p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
             pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
             codon_aln = CodonAlign.build(pro_aln, p)
-            self.assertEqual(round(mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 5), 0.00206)
+            self.assertEqual(round(mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021)
 
 
 if __name__ == "__main__":
