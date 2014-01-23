@@ -12,6 +12,7 @@ alphabet for CodonSeq class.
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 
+import copy
 try:
     from itertools import izip
 except ImportError:
@@ -23,7 +24,7 @@ from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
 from Bio.Data.CodonTable import generic_by_id
 
 
-default_codon_table = generic_by_id[1]
+default_codon_table = copy.deepcopy(generic_by_id[1])
 
 def get_codon_alphabet(alphabet, gap="-", stop="*"):
     """function to get alignment alphabet for codon alignment. Only

@@ -173,6 +173,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
 
     Return the p-value of test result
     """
+    import copy
     if not all([isinstance(i, CodonAlignment) for i in codon_alns]):
         raise TypeError("mktest accept CodonAlignment list.")
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
@@ -181,7 +182,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
                            " equal length.")
     codon_num = codon_aln_len[0]//3
     # prepare codon_dict (taking stop codon as an extra amino acid)
-    codon_dict = codon_table.forward_table
+    codon_dict = copy.deepcopy(codon_table.forward_table)
     for stop in codon_table.stop_codons:
         codon_dict[stop] = 'stop'
     # prepare codon_lst
