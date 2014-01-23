@@ -19,11 +19,10 @@ except ImportError:
 from Bio.SeqRecord import SeqRecord
 
 from Bio.CodonAlign.CodonSeq import CodonSeq
-from Bio.CodonAlign.CodonAlignment import CodonAlignment
+from Bio.CodonAlign.CodonAlignment import CodonAlignment, mktest
 from Bio.CodonAlign.CodonAlphabet import CodonAlphabet
 from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alphabet
 from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
-
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
           codon_table=default_codon_table, alphabet=None,
