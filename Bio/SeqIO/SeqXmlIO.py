@@ -246,7 +246,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if self.source is not None:
             attrs["source"] = self.source
         if self.source_version is not None:
-            attrs["sourceVersion"] = self.source_ersion
+            attrs["sourceVersion"] = self.source_version
         if self.species is not None:
             if not isinstance(species, basestring):
                 raise TypeError("species should be of type string")
