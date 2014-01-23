@@ -8,6 +8,7 @@
 import sys
 import warnings
 import tempfile
+import platform
 import unittest
 
 from Bio import CodonAlign, SeqIO, AlignIO
@@ -170,11 +171,14 @@ class Test_MK(unittest.TestCase):
             warnings.warn('Python 2.6 detected. Skip testing MK method')
             pass
         else:
-            from Bio.CodonAlign.CodonAlignment import mktest
-            p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
-            pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
-            codon_aln = CodonAlign.build(pro_aln, p)
-            self.assertEqual(round(mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021)
+            from run_tests import is_numpy
+            if is_numpy():
+                p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
+                pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
+                codon_aln = CodonAlign.build(pro_aln, p)
+                self.assertEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021)
+            else:
+                warnings.warn('Numpy not installed. Skip MK test.')
 
 
 if __name__ == "__main__":
