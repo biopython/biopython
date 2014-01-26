@@ -143,6 +143,26 @@ class TestReadAndWrite(unittest.TestCase):
         for record1, record2 in zip(read1_records, read2_records):
             assert_equal_records(self, record1, record2)
 
+    def test_write_species(self):
+        """Test writing species from annotation tags."""
+        record = SeqIO.read("SwissProt/sp016", "swiss")
+        self.assertEqual(record.annotations["organism"], "Homo sapiens (Human)")
+        self.assertEqual(record.annotations["ncbi_taxid"], ["9606"])
+        handle = StringIO()
+        SeqIO.write(record, handle, "seqxml")
+        handle.seek(0)
+        output = handle.getvalue()
+        self.assertTrue("Homo sapiens (Human)" in output)
+        self.assertTrue("9606" in output)
+        if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"/>' in output:
+            # Good
+            pass
+        elif '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>' in output:
+            # Not as concise, but fine
+            pass
+        else:
+            raise ValueError("Mising expceted <species> tag")
+
 
 class TestReadCorruptFiles(unittest.TestCase):
 
