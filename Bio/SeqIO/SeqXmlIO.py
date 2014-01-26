@@ -152,6 +152,7 @@ class SeqXmlIterator(XMLRecordIterator):
 
         #the keywords for the species annotation are taken from SwissIO
         record.annotations["organism"] = attr_dict["name"]
+        #TODO - Should have been a list to match SwissProt parser:
         record.annotations["ncbi_taxid"] = attr_dict["ncbiTaxID"]
 
     def _attr_entry(self, attr_dict, record):
@@ -294,18 +295,28 @@ class SeqXmlWriter(SequentialSequenceWriter):
         """Write the species if given."""
 
         if "organism" in record.annotations and "ncbi_taxid" in record.annotations:
+            local_org = record.annotations["organism"]
+            local_ncbi_taxid = record.annotations["ncbi_taxid"]
+            if isinstance(local_ncbi_taxid, list):
+                #SwissProt parser uses a list (can cope with chimeras)
+                if len(local_ncbi_taxid) == 1:
+                    local_ncbi_taxid = local_ncbi_taxid[0]
+                else:
+                    raise ValueError('Multiple entries for record.annotations["ncbi_taxid"], %r'
+                                     % local_ncbi_taxid)
+                                           
 
-            if not isinstance(record.annotations["organism"], basestring):
+            if not isinstance(local_org, basestring):
                 raise TypeError("organism should be of type string")
 
-            if not isinstance(record.annotations["ncbi_taxid"], (basestring, int)):
+            if not isinstance(local_ncbi_taxid, (basestring, int)):
                 raise TypeError("ncbiTaxID should be of type string or int")
 
             #The local species definition is only written if it differs from the global species definition
-            if record.annotations["organism"] != self.species or record.annotations["ncbi_taxid"] != self.ncbiTaxId:
+            if local_org != self.species or local_ncbi_taxid != self.ncbiTaxId:
 
-                attr = {"name": record.annotations["organism"],
-                        "ncbiTaxID": record.annotations["ncbi_taxid"]}
+                attr = {"name": local_org,
+                        "ncbiTaxID": local_ncbi_taxid}
                 self.xml_generator.startElement(
                     "species", AttributesImpl(attr))
                 self.xml_generator.endElement("species")
