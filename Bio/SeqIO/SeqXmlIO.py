@@ -249,7 +249,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if self.source_version is not None:
             attrs["sourceVersion"] = self.source_version
         if self.species is not None:
-            if not isinstance(species, basestring):
+            if not isinstance(self.species, basestring):
                 raise TypeError("species should be of type string")
             attrs["speciesName"] = self.species
         if self.ncbiTaxId is not None:
