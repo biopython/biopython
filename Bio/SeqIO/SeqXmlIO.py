@@ -294,17 +294,20 @@ class SeqXmlWriter(SequentialSequenceWriter):
     def _write_species(self, record):
         """Write the species if given."""
 
-        if "organism" in record.annotations and "ncbi_taxid" in record.annotations:
-            local_org = record.annotations["organism"]
+        local_ncbi_taxid = None
+        if "ncbi_taxid" in record.annotations:
             local_ncbi_taxid = record.annotations["ncbi_taxid"]
             if isinstance(local_ncbi_taxid, list):
-                #SwissProt parser uses a list (can cope with chimeras)
+                #SwissProt parser uses a list (which could cope with chimeras)
                 if len(local_ncbi_taxid) == 1:
                     local_ncbi_taxid = local_ncbi_taxid[0]
+                elif len(local_ncbi_taxid) == 0:
+                    local_ncbi_taxid = None
                 else:
-                    raise ValueError('Multiple entries for record.annotations["ncbi_taxid"], %r'
+                    ValueError('Multiple entries for record.annotations["ncbi_taxid"], %r'
                                      % local_ncbi_taxid)
-                                           
+        if "organism" in record.annotations and local_ncbi_taxid:
+            local_org = record.annotations["organism"]
 
             if not isinstance(local_org, basestring):
                 raise TypeError("organism should be of type string")
