@@ -1100,7 +1100,6 @@ Testing reading swiss format file SwissProt/sp001
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1128,7 +1127,6 @@ Testing reading swiss format file SwissProt/sp002
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1156,7 +1154,6 @@ Testing reading swiss format file SwissProt/sp003
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1184,7 +1181,6 @@ Testing reading swiss format file SwissProt/sp004
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1212,7 +1208,6 @@ Testing reading swiss format file SwissProt/sp005
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1240,7 +1235,6 @@ Testing reading swiss format file SwissProt/sp006
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1268,7 +1262,6 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1296,7 +1289,6 @@ Testing reading swiss format file SwissProt/sp008
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1324,7 +1316,6 @@ Testing reading swiss format file SwissProt/sp009
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1352,7 +1343,6 @@ Testing reading swiss format file SwissProt/sp010
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1380,7 +1370,6 @@ Testing reading swiss format file SwissProt/sp011
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1436,7 +1425,6 @@ Testing reading swiss format file SwissProt/sp013
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1492,7 +1480,6 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1520,7 +1507,6 @@ Testing reading swiss format file SwissProt/sp016
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1548,7 +1534,6 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -1667,7 +1652,6 @@ Testing reading swiss format file SwissProt/Q13639.txt
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'seqxml' format
- Failed: ncbiTaxID should be of type string or int
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
