@@ -426,7 +426,7 @@ def _open(cgi, params={}, post=False):
     else:
         _open.previous = current
     # Remove None values from the parameters
-    for key, value in params.items():
+    for key, value in list(params.items()):
         if value is None:
             del params[key]
     # Tell Entrez that we are using Biopython (or whatever the user has
