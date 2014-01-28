@@ -281,10 +281,11 @@ def majority_consensus(trees, cutoff=0):
     """
     terms = trees[0].get_terminals()
     bitstr_counts = _count_clades(trees)
-    # Sort bitstrs from higher #occurrences to lower, then by #tips
+    # Sort bitstrs by descending #occurrences, then #tips, then tip order
     bitstrs = sorted(bitstr_counts.keys(),
                      key=lambda bitstr: (bitstr_counts[bitstr][0],
-                                         bitstr.count('1')),
+                                         bitstr.count('1'),
+                                         str(bitstr)),
                      reverse=True)
     root = BaseTree.Clade()
     if bitstrs[0].count('1') == len(terms):
