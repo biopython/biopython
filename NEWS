@@ -22,6 +22,7 @@ Unix like systems, and ``$APPDATA/biopython`` on Windows).
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Edward Liaw (first contribution)
 Eric Talevich
 Leighton Pritchard
 Michiel de Hoon
