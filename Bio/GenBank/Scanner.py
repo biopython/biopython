@@ -118,7 +118,7 @@ class InsdcScanner(object):
             line = line.rstrip()
             if line in self.FEATURE_START_MARKERS:
                 if self.debug:
-                    print("Found header table")
+                    print("Found feature table")
                 break
             #if line[:self.HEADER_WIDTH]==self.FEATURE_START_MARKER[:self.HEADER_WIDTH]:
             #    if self.debug : print("Found header table (?)")
