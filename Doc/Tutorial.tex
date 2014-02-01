@@ -4107,7 +4107,42 @@ COATB_BPIF FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
            RA
 \end{verbatim}
 
-One of the big handicaps of the PHYLIP alignment file format is that the sequence identifiers are strictly truncated at ten characters.  In this example, as you can see the resulting names are still unique - but they are not very readable.  In this particular case, there is no clear way to compress the identifiers, but for the sake of argument you may want to assign your own names or numbering system.  This following bit of code manipulates the record identifiers before saving the output:
+One of the big handicaps of the original PHYLIP alignment file format is
+that the sequence identifiers are strictly truncated at ten characters.
+In this example, as you can see the resulting names are still unique -
+but they are not very readable. As a result, a more relaxed variant of
+the original PHYLIP format is now quite widely used:
+
+\begin{verbatim}
+from Bio import AlignIO
+AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip-relaxed")
+\end{verbatim}
+
+This time the output looks like this, using a longer indentation to
+allow all the identifers to be given in full::
+
+\begin{verbatim}
+ 7 52
+COATB_BPIKE/30-81  AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
+Q9T0Q8_BPIKE/1-52  AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIKLFKKFVS
+COATB_BPI22/32-83  DGTSTATSYA TEAMNSLKTQ ATDLIDQTWP VVTSVAVAGL AIRLFKKFSS
+COATB_BPM13/24-72  AEGDDP---A KAAFNSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFTS
+COATB_BPZJ2/1-49   AEGDDP---A KAAFDSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFAS
+Q9T0Q9_BPFD/1-49   AEGDDP---A KAAFDSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFTS
+COATB_BPIF1/22-73  FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
+
+                   KA
+                   RA
+                   KA
+                   KA
+                   KA
+                   KA
+                   RA
+\end{verbatim}
+
+If you have to work with the original strict PHYLIP format, then you may need to
+compress the identifers somehow -- or assign your own names or numbering system.
+This following bit of code manipulates the record identifiers before saving the output:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -4126,7 +4161,7 @@ AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
 {0: 'COATB_BPIKE/30-81', 1: 'Q9T0Q8_BPIKE/1-52', 2: 'COATB_BPI22/32-83', ...}
 \end{verbatim}
 
-\noindent Here is the new PHYLIP format output:
+\noindent Here is the new (strict) PHYLIP format output:
 \begin{verbatim}
  7 52
 seq0       AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
