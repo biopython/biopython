@@ -4181,7 +4181,9 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
            RA
 \end{verbatim}
 
-\noindent In general, because of the identifier limitation, working with PHYLIP file formats shouldn't be your first choice.  Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
+\noindent In general, because of the identifier limitation, working with
+\textit{strict} PHYLIP file formats shouldn't be your first choice. 
+Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
 
 \subsection{Getting your alignment objects as formatted strings}
 \label{sec:alignment-format-method}
@@ -4195,7 +4197,7 @@ alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 print(alignment.format("clustal"))
 \end{verbatim}
 
-As described in Section~\ref{sec:SeqRecord-format}), the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
+As described in Section~\ref{sec:SeqRecord-format}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
 
 Internally the \verb|format()| method is using the \verb|StringIO| string based handle and calling
 \verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an
