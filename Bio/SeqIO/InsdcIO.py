@@ -31,13 +31,16 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
 
+from __future__ import print_function
+
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
-from Interfaces import SequentialSequenceWriter
+from .Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
 from Bio._py3k import _is_int_or_long
+from Bio._py3k import basestring
 
 # NOTE
 # ====
@@ -124,8 +127,8 @@ def _insdc_feature_position_string(pos, offset=0):
         return ">%i" % (pos.position + offset)
     elif isinstance(pos, SeqFeature.OneOfPosition):
         return "one-of(%s)" \
-               % ",".join([_insdc_feature_position_string(p, offset)
-                           for p in pos.position_choices])
+               % ",".join(_insdc_feature_position_string(p, offset)
+                          for p in pos.position_choices)
     elif isinstance(pos, SeqFeature.AbstractPosition):
         raise NotImplementedError("Please report this as a bug in Biopython.")
     else:
@@ -263,9 +266,9 @@ def _insdc_feature_location_string(feature, rec_length):
     #        assert f.strand == +1
     #This covers typical forward strand features, and also an evil mixed strand:
     assert feature.location_operator != ""
-    return  "%s(%s)" % (feature.location_operator,
-                        ",".join([_insdc_feature_location_string(f, rec_length)
-                                  for f in feature._sub_features]))
+    return "%s(%s)" % (feature.location_operator,
+                       ",".join(_insdc_feature_location_string(f, rec_length)
+                                for f in feature._sub_features))
 
 
 class _InsdcWriter(SequentialSequenceWriter):
@@ -334,12 +337,12 @@ class _InsdcWriter(SequentialSequenceWriter):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
         location = _insdc_location_string(feature.location, record_length)
-        f_type = feature.type.replace(" ","_")
+        f_type = feature.type.replace(" ", "_")
         line = (self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT] \
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
-        for key, values in feature.qualifiers.iteritems():
+        for key, values in feature.qualifiers.items():
             if isinstance(values, list) or isinstance(values, tuple):
                 for value in values:
                     self._write_feature_qualifier(key, value)
@@ -1116,7 +1119,7 @@ class ImgtWriter(EmblWriter):
 if __name__ == "__main__":
     print("Quick self test")
     import os
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     def compare_record(old, new):
         if old.id != new.id and old.name != new.name:
@@ -1224,9 +1227,8 @@ if __name__ == "__main__":
             continue
         print(filename)
 
-        handle = open("../../Tests/GenBank/%s" % filename)
-        records = list(GenBankIterator(handle))
-        handle.close()
+        with open("../../Tests/GenBank/%s" % filename) as handle:
+            records = list(GenBankIterator(handle))
 
         check_genbank_writer(records)
         check_embl_writer(records)
@@ -1236,9 +1238,8 @@ if __name__ == "__main__":
             continue
         print(filename)
 
-        handle = open("../../Tests/EMBL/%s" % filename)
-        records = list(EmblIterator(handle))
-        handle.close()
+        with open("../../Tests/EMBL/%s" % filename) as handle:
+            records = list(EmblIterator(handle))
 
         check_genbank_writer(records)
         check_embl_writer(records)
@@ -1249,8 +1250,7 @@ if __name__ == "__main__":
             continue
         print(filename)
 
-        handle = open("../../Tests/SwissProt/%s" % filename)
-        records = list(SeqIO.parse(handle, "swiss"))
-        handle.close()
+        with open("../../Tests/SwissProt/%s" % filename) as handle:
+            records = list(SeqIO.parse(handle, "swiss"))
 
         check_genbank_writer(records)

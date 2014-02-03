@@ -6,8 +6,9 @@ available Python tools for computational molecular biology.
 
 Our user-centric documentation is hosted on http://biopython.org including
 the main Biopython Tutorial and Cookbook:
- * HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
- * PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+
+* HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
+* PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 This README file is intended primarily for people interested in working
 with the Biopython source code, either one of the releases from the
@@ -30,7 +31,7 @@ For the impatient
 =================
 
 To build and install Biopython, download and unzip the source code, go to this
-directory at the command line, and type:
+directory at the command line, and type::
 
     python setup.py build
     python setup.py test
@@ -49,17 +50,11 @@ Biopython under Python 3.3 as well.
 
 Biopython is currently supported and tested on the following Python verions:
 
-- Python 2.6, 2.7 -- see http://www.python.org
+- Python 2.6, 2.7, 3.3 -- see http://www.python.org
 
   This is the currently the primary development platform for Biopython.
 
-- Python 3.3 -- see http://www.python.org
-
-  Under Python 3 our setup.py script calls the 2to3 library automatically
-  to convert our Python 2 code into Python 3 code. Most of the Biopython
-  modules are available under Python 3 (but not yet all).
-
-- PyPy 1.9, 2.0, 2.1 -- see http://www.pypy.org
+- PyPy 1.9, 2.0, 2.1, 2.2 -- see http://www.pypy.org
 
   Aside from modules with C code or dependent of NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
@@ -80,7 +75,7 @@ Depending on which parts of Biopython you plan to use, there are a
 number of other optional Python dependencies - which can in general
 be installed after Biopython.
 
-- NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
+- NumPy, see http://www.numpy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
   think you might need these modules, then please install NumPy first BEFORE
@@ -93,9 +88,8 @@ be installed after Biopython.
   it later if needed.
 
 - matplotlib, see http://matplotlib.org/ (optional)
-  The Bio.Phylo uses this package to plot phylogenetic trees. As with
-  ReportLab, you can install this at any time to enable the plotting
-  functionality.
+  Bio.Phylo uses this package to plot phylogenetic trees. As with ReportLab,
+  you can install this at any time to enable the plotting functionality.
 
 - networkx, see http://networkx.lanl.gov/ (optional) and
   pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
@@ -103,6 +97,10 @@ be installed after Biopython.
   These packages are used for certain niche functions in Bio.Phylo.
   Again, they are only needed to enable these functions and can be installed
   later if needed.
+
+- rdflib, see https://github.com/RDFLib/rdflib (optional)
+  This package is used in the CDAO parser under Bio.Phylo, and can be installed
+  as needed.
 
 - psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
@@ -127,7 +125,7 @@ Windows users should use the appropriate provided installation package
 from our website (each is specific to a different Python version).
 
 Installation from source should be as simple as going to the Biopython
-source code directory, and typing:
+source code directory, and typing::
 
     python setup.py build
     python setup.py test
@@ -138,8 +136,9 @@ Substitute `python` with your specific version, for example `python3`,
 
 If you need to do additional configuration, e.g. changing the base
 directory, please type `python setup.py`, or see the documentation here:
- * HTML - http://biopython.org/DIST/docs/install/Installation.html
- * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
+
+* HTML - http://biopython.org/DIST/docs/install/Installation.html
+* PDF - http://biopython.org/DIST/docs/install/Installation.pdf
 
 
 Testing
@@ -147,11 +146,11 @@ Testing
 
 Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
-directory and type:
+directory and type::
 
     python setup.py test
 
-Do not panic if you see messages warning of skipped tests:
+Do not panic if you see messages warning of skipped tests::
 
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
 
@@ -188,8 +187,8 @@ bug database and our mailing lists to see if it has already been reported
 (and hopefully fixed), and if not please do report the bug. We can't fix
 problems we don't know about ;)
 
- * Old issue tracker: https://redmine.open-bio.org/projects/biopython
- * Current issue tracker: https://github.com/biopython/biopython/issues
+* Old issue tracker: https://redmine.open-bio.org/projects/biopython
+* Current issue tracker: https://github.com/biopython/biopython/issues
 
 If you suspect the problem lies within a parser, it is likely that the data
 format has changed and broken the parsing code.  (The text BLAST and GenBank
@@ -203,15 +202,15 @@ as released code, and may contain new dependencies.
 Finally, you can send a bug report to the bug database or the mailing list at
 biopython@biopython.org.  In the bug report, please let us know:
 
- 1. Which operating system and hardware (32 bit or 64 bit) you are using
- 2. Python version
- 3. Biopython version (or git version/date)
- 4. Traceback that occurs (the full error message)
+1. Which operating system and hardware (32 bit or 64 bit) you are using
+2. Python version
+3. Biopython version (or git commit/date)
+4. Traceback that occurs (the full error message)
 
-    And also ideally:
+And also ideally:
 
- 5. Example code that breaks
- 6. A data file that causes the problem
+5. Example code that breaks
+6. A data file that causes the problem
 
 
 Contributing, Bug Reports
@@ -230,17 +229,17 @@ Distribution Structure
 ======================
 
 - README      -- This file.
-- NEWS        -- Release notes and news
+- NEWS        -- Release notes and news.
 - LICENSE     -- What you can do with the code.
 - CONTRIB     -- An (incomplete) list of people who helped Biopython in
-                 one way or another.
+  one way or another.
 - DEPRECATED  -- Contains information about modules in Biopython that are
-                 removed or no longer recommended for use, and how to update
-                 code that uses those modules.
-- MANIFEST.in -- Tells distutils what files to distribute
+  removed or no longer recommended for use, and how to update
+  code that uses those modules.
+- MANIFEST.in -- Tells distutils what files to distribute.
 - setup.py    -- Installation file.
 - Bio/        -- The main code base code.
 - BioSQL/     -- Code for using Biopython with BioSQL databases.
 - Doc/        -- Documentation.
-- Scripts/    -- Miscellaneous, possibly useful, standalone scripts
-- Tests/      -- Regression testing code
+- Scripts/    -- Miscellaneous, possibly useful, standalone scripts.
+- Tests/      -- Regression testing code including sample data files.

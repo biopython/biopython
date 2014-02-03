@@ -20,6 +20,9 @@ __docformat__ = "restructuredtext en"
 
 import sys
 
+from Bio._py3k import basestring
+from Bio._py3k import unicode
+
 from Bio.Phylo import PhyloXML as PX
 
 #For speed try to use cElementTree rather than ElementTree
@@ -50,7 +53,7 @@ except AttributeError:
     def register_namespace(prefix, uri):
         ElementTree._namespace_map[uri] = prefix
 
-for prefix, uri in NAMESPACES.iteritems():
+for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
 
@@ -215,9 +218,9 @@ def _indent(elem, level=0):
 
 
 def _str2bool(text):
-    if text == 'true':
+    if text == 'true' or text=='1':
         return True
-    if text == 'false':
+    if text == 'false' or text=='0':
         return False
     raise ValueError('String could not be converted to boolean: ' + text)
 
@@ -284,7 +287,7 @@ class Parser(object):
     def __init__(self, file):
         # Get an iterable context for XML parsing events
         context = iter(ElementTree.iterparse(file, events=('start', 'end')))
-        event, root = context.next()
+        event, root = next(context)
         self.root = root
         self.context = context
 
@@ -374,8 +377,8 @@ class Parser(object):
             'reference':    'references',
             'property':     'properties',
             }
-    _clade_tracked_tags = set(_clade_complex_types + _clade_list_types.keys()
-                              + ['branch_length', 'name', 'node_id', 'width'])
+    _clade_tracked_tags = set(_clade_complex_types).union(_clade_list_types.keys()).union(
+                                             ['branch_length', 'name', 'node_id', 'width'])
 
     def _parse_clade(self, parent):
         """Parse a Clade node and its children, recursively."""

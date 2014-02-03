@@ -7,6 +7,8 @@
 
 
 
+from __future__ import print_function
+
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
         self.property_dict=property_dict
@@ -99,7 +101,7 @@ class AbstractPropertyMap(object):
 
         Example:
             >>> for (res, property) in iter(map):
-            ...     print res, property
+            ...     print(res, property)
 
         @return: iterator
         """
@@ -133,3 +135,4 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
         if isinstance(res_id, int):
             ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
         return ent_id
+

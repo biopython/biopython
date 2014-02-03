@@ -75,7 +75,7 @@ def PdbSeqresIterator(handle):
                                     'db_acc': db_acc, 'db_id_code': db_id_code})
         # ENH: 'SEQADV' 'MODRES'
 
-    for chn_id, residues in sorted(chains.iteritems()):
+    for chn_id, residues in sorted(chains.items()):
         record = SeqRecord(Seq(''.join(residues), generic_protein))
         record.annotations = {"chain": chn_id}
         if chn_id in metadata:
@@ -143,7 +143,7 @@ def PdbAtomIterator(handle):
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
     model = struct[0]
-    for chn_id, chain in sorted(model.child_dict.iteritems()):
+    for chn_id, chain in sorted(model.child_dict.items()):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [res for res in chain.get_unpacked_list()
                     if seq1(res.get_resname().upper(),
@@ -164,7 +164,7 @@ def PdbAtomIterator(handle):
             for i, pregap, postgap in gaps:
                 if postgap > pregap:
                     gapsize = postgap - pregap - 1
-                    res_out.extend(map(restype, residues[prev_idx:i]))
+                    res_out.extend(restype(x) for x in  residues[prev_idx:i])
                     prev_idx = i
                     res_out.append('X'*gapsize)
                 else:
@@ -172,14 +172,14 @@ def PdbAtomIterator(handle):
                                   UserWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
-                    res_out.extend(map(restype, residues[prev_idx:i]))
+                    res_out.extend(restype(x) for x in residues[prev_idx:i])
                     break
             else:
                 # Last segment
-                res_out.extend(map(restype, residues[prev_idx:]))
+                res_out.extend(restype(x) for x in residues[prev_idx:])
         else:
             # No gaps
-            res_out = map(restype, residues)
+            res_out = [restype(x) for x in residues]
         record_id = "%s:%s" % (pdb_id, chn_id)
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)

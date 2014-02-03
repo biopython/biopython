@@ -3,10 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import os.path
 import unittest
 import shutil
-from StringIO import StringIO
+from Bio._py3k import StringIO
 import tempfile
 
 from Bio import File

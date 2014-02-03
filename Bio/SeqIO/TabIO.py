@@ -31,6 +31,8 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 example above.
 """
 
+from __future__ import print_function
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -94,7 +96,7 @@ class TabWriter(SequentialSequenceWriter):
 
 if __name__ == "__main__":
     print("Running quick self test")
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     #This example has a trailing blank line which should be ignored
     handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")

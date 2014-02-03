@@ -7,7 +7,7 @@
 import sys
 import os
 import unittest
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
 from Bio.Align.Applications import ProbconsCommandline
 
@@ -18,8 +18,8 @@ probcons_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("PROBCONS not available on Windows")
 else:
-    import commands
-    output = commands.getoutput("probcons")
+    from Bio._py3k import getoutput
+    output = getoutput("probcons")
     if "not found" not in output and "probcons" in output.lower():
         probcons_exe = "probcons"
 
@@ -47,11 +47,11 @@ class ProbconsApplication(unittest.TestCase):
         stdout, stderr = cmdline()
         self.assertTrue(stderr.startswith("\nPROBCONS"))
         align = AlignIO.read(StringIO(stdout), "fasta")
-        records = list(SeqIO.parse(self.infile1,"fasta"))
-        self.assertEqual(len(records),len(align))
+        records = list(SeqIO.parse(self.infile1, "fasta"))
+        self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_Probcons_alignment_clustalw(self):
         """Round-trip through app and read clustalw alignment from stdout
@@ -64,11 +64,11 @@ class ProbconsApplication(unittest.TestCase):
         stdout, stderr = cmdline()
         self.assertTrue(stderr.strip().startswith("PROBCONS"))
         align = AlignIO.read(StringIO(stdout), "clustal")
-        records = list(SeqIO.parse(self.infile1,"fasta"))
-        self.assertEqual(len(records),len(align))
+        records = list(SeqIO.parse(self.infile1, "fasta"))
+        self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_Probcons_complex_commandline(self):
         """Round-trip through app with complex command line and output file

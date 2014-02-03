@@ -57,6 +57,23 @@ class EntrezOnlineCase(unittest.TestCase):
         # arbitrary number, just to make sure the parser works
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
 
+    def test_webenv_search(self):
+        """Test Entrez.search from link webenv history"""
+        elink = Entrez.elink(db='nucleotide', dbfrom='protein',
+                id='22347800,48526535', webenv=None, query_key=None,
+                cmd='neighbor_history')
+        recs = Entrez.read(elink)
+        elink.close()
+        record = recs.pop()
+
+        webenv = record['WebEnv']
+        query_key = record['LinkSetDbHistory'][0]['QueryKey']
+        esearch = Entrez.esearch(db='nucleotide', term=None, retstart=0,
+            retmax=10, webenv=webenv, query_key=query_key, usehistory='y')
+        search_record = Entrez.read(esearch)
+        esearch.close()
+        self.assertEqual(2, len(search_record['IdList']))
+
     def test_seqio_from_url(self):
         """Test Entrez into SeqIO.read from URL"""
         efetch = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',

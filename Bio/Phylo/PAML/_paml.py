@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import os
 import subprocess
 
@@ -89,7 +91,7 @@ class Paml(object):
 
     def get_all_options(self):
         """Return the values of all the options."""
-        return self._options.items()
+        return list(self._options.items())
 
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.

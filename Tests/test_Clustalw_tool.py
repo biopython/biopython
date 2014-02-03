@@ -7,6 +7,8 @@
 
 #TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
 #and *.aln where we have not requested an explicit name?
+from __future__ import print_function
+
 from Bio import MissingExternalDependencyError
 
 import sys
@@ -58,18 +60,18 @@ if sys.platform == "win32":
             if clustalw_exe:
                 break
 else:
-    import commands
+    from Bio._py3k import getoutput
     #Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
     #command, but this does cause them to quit cleanly.  Otherwise they prompt
     #the user for input (causing a lock up).
-    output = commands.getoutput("clustalw2 --version")
+    output = getoutput("clustalw2 --version")
     #Since "not found" may be in another language, try and be sure this is
     #really the clustalw tool's output
     if "not found" not in output and "CLUSTAL" in output \
     and "Multiple Sequence Alignments" in output:
         clustalw_exe = "clustalw2"
     if not clustalw_exe:
-        output = commands.getoutput("clustalw --version")
+        output = getoutput("clustalw --version")
         if "not found" not in output and "CLUSTAL" in output \
         and "Multiple Sequence Alignments" in output:
             clustalw_exe = "clustalw"
@@ -115,7 +117,7 @@ class ClustalWTestCase(unittest.TestCase):
         align = AlignIO.read(cline.outfile, "clustal")
         #The length of the alignment will depend on the version of clustalw
         #(clustalw 2.1 and clustalw 1.83 are certainly different).
-        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile,"clustal"))
+        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
             self.assertTrue(str(record.seq) == str(output_records[record.id].seq))

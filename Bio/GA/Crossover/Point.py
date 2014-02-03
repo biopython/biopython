@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Perform two-point crossovers between the genomes of two organisms.
 
 This module performs single-point crossover between two genomes.
@@ -11,7 +16,7 @@ new genome 2 --   a b c D E F
 
 """
 # standard modules
-from GeneralPoint import TwoCrossover
+from .GeneralPoint import TwoCrossover
 
 
 class SinglePointCrossover(TwoCrossover):

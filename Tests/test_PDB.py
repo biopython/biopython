@@ -10,11 +10,13 @@
 # as part of this package.
 
 """Unit tests for the Bio.PDB module."""
+from __future__ import print_function
+
 import os
 import tempfile
 import unittest
 import warnings
-from StringIO import StringIO
+from Bio._py3k import StringIO
 
 try:
     import numpy
@@ -34,6 +36,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
+from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -138,7 +141,7 @@ class HeaderTests(unittest.TestCase):
                 'release_date': '1998-10-14',
                 'structure_method': 'x-ray diffraction',
                 }
-        for key, expect in known_strings.iteritems():
+        for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
     def test_fibril(self):
@@ -156,7 +159,7 @@ class HeaderTests(unittest.TestCase):
                 'release_date': '2005-11-22',
                 'structure_method': 'solution nmr',
                 }
-        for key, expect in known_strings.iteritems():
+        for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
 
@@ -936,7 +939,7 @@ class Atom_Element(unittest.TestCase):
             N=(' NH1', ' NH2'),
         )
 
-        for element, atom_names in pdb_elements.iteritems():
+        for element, atom_names in pdb_elements.items():
             for fullname in atom_names:
                 e = quick_assign(fullname)
                 #warnings.warn("%s %s" % (fullname, e))
@@ -951,7 +954,7 @@ class IterationTests(unittest.TestCase):
     def test_get_chains(self):
         """Yields chains from different models separately."""
         chains = [chain.id for chain in self.struc.get_chains()]
-        self.assertEqual(chains, ['A','A', 'B', ' '])
+        self.assertEqual(chains, ['A', 'A', 'B', ' '])
 
     def test_get_residues(self):
         """Yields all residues from all models."""
@@ -977,7 +980,7 @@ class IterationTests(unittest.TestCase):
 #        """Residues in a structure are renumbered."""
 #        self.structure.renumber_residues()
 #        nums = [resi.id[1] for resi in self.structure[0]['A'].child_list]
-#        print nums
+#        print(nums)
 #
 # -------------------------------------------------------------
 
@@ -999,7 +1002,7 @@ class TransformTests(unittest.TestCase):
         """
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
-        total_pos = numpy.array((0.0,0.0,0.0))
+        total_pos = numpy.array((0.0, 0.0, 0.0))
         total_count = 0
         for p in o.get_list():
             pos, count = self.get_total_pos(p)
@@ -1017,8 +1020,8 @@ class TransformTests(unittest.TestCase):
     def test_transform(self):
         """Transform entities (rotation and translation)."""
         for o in (self.s, self.m, self.c, self.r, self.a):
-            rotation = rotmat(Vector(1,3,5), Vector(1,0,0))
-            translation=numpy.array((2.4,0,1), 'f')
+            rotation = rotmat(Vector(1, 3, 5), Vector(1, 0, 0))
+            translation=numpy.array((2.4, 0, 1), 'f')
             oldpos = self.get_pos(o)
             o.transform(rotation, translation)
             newpos = self.get_pos(o)
@@ -1066,6 +1069,22 @@ class DsspTests(unittest.TestCase):
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
 
+class NACCESSTests(unittest.TestCase):
+    """Tests for NACCESS parsing etc which don't need the binary tool.
+
+    See also test_NACCESS_tool.py for run time testing with the tool.
+    """
+    def test_NACCESS_rsa_file(self):
+        """Test parsing of pregenerated rsa NACCESS file"""
+        with open("PDB/1A8O.rsa") as rsa:
+            naccess = process_rsa_data(rsa)
+        self.assertEqual(len(naccess), 66)
+
+    def test_NACCESS_asa_file(self):
+        """Test parsing of pregenerated asa NACCESS file"""
+        with open("PDB/1A8O.asa") as asa:
+            naccess = process_asa_data(asa)
+        self.assertEqual(len(naccess), 524)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

@@ -30,6 +30,8 @@ The library files can be found in directory 'fragment_data'.
     >>> fragment = fm[residue]
 """
 
+from __future__ import print_function
+
 import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
@@ -62,27 +64,26 @@ def _read_fragments(size, length, dir="."):
     @type dir: string
     """
     filename=(dir+"/"+_FRAGMENT_FILE) % (size, length)
-    fp=open(filename, "r")
-    flist=[]
-    # ID of fragment=rank in spec file
-    fid=0
-    for l in fp.readlines():
-                # skip comment and blank lines
-        if l[0]=="*" or l[0]=="\n":
-            continue
-        sl=l.split()
-        if sl[1]=="------":
-            # Start of fragment definition
-            f=Fragment(length, fid)
-            flist.append(f)
-            # increase fragment id (rank)
-            fid+=1
-            continue
-        # Add CA coord to Fragment
-        coord=numpy.array(map(float, sl[0:3]))
-        # XXX= dummy residue name
-        f.add_residue("XXX", coord)
-    fp.close()
+    with open(filename, "r") as fp:
+        flist=[]
+        # ID of fragment=rank in spec file
+        fid=0
+        for l in fp.readlines():
+                    # skip comment and blank lines
+            if l[0]=="*" or l[0]=="\n":
+                continue
+            sl=l.split()
+            if sl[1]=="------":
+                # Start of fragment definition
+                f=Fragment(length, fid)
+                flist.append(f)
+                # increase fragment id (rank)
+                fid+=1
+                continue
+            # Add CA coord to Fragment
+            coord = numpy.array([float(x) for x in sl[0:3]])
+            # XXX= dummy residue name
+            f.add_residue("XXX", coord)
     return flist
 
 
@@ -323,16 +324,12 @@ if __name__=="__main__":
 
     import sys
 
-    p=PDBParser()
-    s=p.get_structure("X", sys.argv[1])
-
-    m=s[0]
-    fm=FragmentMapper(m, 10, 5, "levitt_data")
+    p = PDBParser()
+    s = p.get_structure("X", sys.argv[1])
+    m = s[0]
+    fm = FragmentMapper(m, 10, 5, "levitt_data")
 
     for r in Selection.unfold_entities(m, "R"):
-
-        print r,
+        print("%s:" % r)
         if r in fm:
             print(fm[r])
-        else:
-            print

@@ -37,7 +37,7 @@ def _wrap_kegg(line, max_width = KEGG_DATA_LENGTH, wrap_rule = _default_wrap):
     indent = " " * wrap_rule[0]
     connect = wrap_rule[1]
     rules = wrap_rule[2:]
-    while 1:
+    while True:
         if len(line) <= max_width:
             wrapped_line = wrapped_line + line
             s = s + wrapped_line

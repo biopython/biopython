@@ -10,6 +10,8 @@
 # crc32, crc64, gcg, and seguid
 # crc64 is adapted from BioPerl
 
+from __future__ import print_function
+
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 
@@ -36,10 +38,10 @@ def _init_table_h():
             rflag = l & 1
             l >>= 1
             if part_h & 1:
-                l |= (1L << 31)
-            part_h >>= 1L
+                l |= (1 << 31)
+            part_h >>= 1
             if rflag:
-                part_h ^= 0xd8000000L
+                part_h ^= 0xd8000000
         _table_h.append(part_h)
     return _table_h
 

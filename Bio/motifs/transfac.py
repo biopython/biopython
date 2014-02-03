@@ -93,7 +93,7 @@ def read(handle):
             record.version = value
         elif key in ('P0', 'PO'): # Old TRANSFAC files use PO instead of P0 
             counts = {}
-            assert value.split()[:4]==['A','C','G','T']
+            assert value.split()[:4]==['A', 'C', 'G', 'T']
             length = 0
             for c in "ACGT":
                 counts[c] = []

@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Bio.AlignIO support for the "nexus" file format.
+"""Bio.AlignIO support for the "nexus" file format.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -14,10 +13,12 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
+from __future__ import print_function
+
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentWriter
+from .Interfaces import AlignmentWriter
 from Bio import Alphabet
 
 #You can get a couple of example files here:
@@ -75,7 +76,7 @@ class NexusWriter(AlignmentWriter):
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
-            first_alignment = align_iter.next()
+            first_alignment = next(align_iter)
         except StopIteration:
             first_alignment = None
         if first_alignment is None:
@@ -84,7 +85,7 @@ class NexusWriter(AlignmentWriter):
 
         #Check there is only one alignment...
         try:
-            second_alignment = align_iter.next()
+            second_alignment = next(align_iter)
         except StopIteration:
             second_alignment = None
         if second_alignment is not None:
@@ -136,9 +137,9 @@ class NexusWriter(AlignmentWriter):
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
 if __name__ == "__main__":
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
     print("Quick self test")
-    print
+    print("")
     print("Repeated names without a TAXA block")
     handle = StringIO("""#NEXUS
     [TITLE: NoName]
@@ -158,10 +159,10 @@ if __name__ == "__main__":
     for a in NexusIterator(handle):
         print(a)
         for r in a:
-            print repr(r.seq), r.name, r.id
+            print("%r %s %s" % (r.seq, r.name, r.id))
     print("Done")
 
-    print
+    print("")
     print("Repeated names with a TAXA block")
     handle = StringIO("""#NEXUS
     [TITLE: NoName]
@@ -188,13 +189,13 @@ if __name__ == "__main__":
     for a in NexusIterator(handle):
         print(a)
         for r in a:
-            print repr(r.seq), r.name, r.id
+            print("%r %s %s" % (r.seq, r.name, r.id))
     print("Done")
-    print
+    print("")
     print("Reading an empty file")
     assert 0 == len(list(NexusIterator(StringIO())))
     print("Done")
-    print
+    print("")
     print("Writing...")
 
     handle = StringIO()

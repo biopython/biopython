@@ -1,5 +1,12 @@
+# Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2007 by Michiel de Hoon. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Tests the basic functionality of the KEGG parsers.
 """
+
+from __future__ import print_function
 
 import os
 

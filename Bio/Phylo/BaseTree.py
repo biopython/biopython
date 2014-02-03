@@ -10,6 +10,11 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "restructuredtext en"
 
+from Bio._py3k import zip
+from Bio._py3k import filter
+from Bio._py3k import basestring
+from Bio._py3k import unicode
+
 import collections
 import copy
 import itertools
@@ -57,7 +62,7 @@ def _sorted_attrs(elem):
     singles = []
     lists = []
     # Sort attributes for consistent results
-    for attrname, child in sorted(elem.__dict__.iteritems(),
+    for attrname, child in sorted(elem.__dict__.items(),
                                   key=lambda kv: kv[0]):
         if child is None:
             continue
@@ -115,7 +120,7 @@ def _attribute_matcher(kwargs):
                 return False
         else:
             kwa_copy = kwargs
-        for key, pattern in kwa_copy.iteritems():
+        for key, pattern in kwa_copy.items():
             # Nodes must match all other specified attributes
             if not hasattr(node, key):
                 return False
@@ -230,7 +235,7 @@ class TreeElement(object):
             return "%s=%s" % (key, val)
         return u'%s(%s)' % (self.__class__.__name__,
                             ', '.join(pair_as_kwarg_string(key, val)
-                                  for key, val in self.__dict__.iteritems()
+                                  for key, val in self.__dict__.items()
                                   if val is not None and
                                   type(val) in (str, int, float, bool, unicode)
                                   ))
@@ -260,14 +265,14 @@ class TreeMixin(object):
             order_func = order_opts[order]
         except KeyError:
             raise ValueError("Invalid order '%s'; must be one of: %s"
-                             % (order, tuple(order_opts.keys())))
+                             % (order, tuple(order_opts)))
         if follow_attrs:
             get_children = _sorted_attrs
             root = self
         else:
             get_children = lambda elem: elem.clades
             root = self.root
-        return itertools.ifilter(filter_func, order_func(root, get_children))
+        return filter(filter_func, order_func(root, get_children))
 
     def find_any(self, *args, **kwargs):
         """Return the first element found by find_elements(), or None.
@@ -277,7 +282,7 @@ class TreeMixin(object):
         """
         hits = self.find_elements(*args, **kwargs)
         try:
-            return hits.next()
+            return next(hits)
         except StopIteration:
             return None
 
@@ -320,7 +325,7 @@ class TreeMixin(object):
         >>> from Bio.Phylo.IO import PhyloXMIO
         >>> phx = PhyloXMLIO.read('phyloxml_examples.xml')
         >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
-        >>> matches.next()
+        >>> next(matches)
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """
@@ -413,7 +418,7 @@ class TreeMixin(object):
             if p is None:
                 raise ValueError("target %s is not in this tree" % repr(t))
         mrca = self.root
-        for level in itertools.izip(*paths):
+        for level in zip(*paths):
             ref = level[0]
             for other in level[1:]:
                 if ref is not other:
@@ -871,7 +876,7 @@ class Tree(TreeElement, TreeMixin):
         tips = self.get_terminals()
         for tip in tips:
             self.root_with_outgroup(tip)
-            new_max = max(self.depths().iteritems(), key=lambda nd: nd[1])
+            new_max = max(self.depths().items(), key=lambda nd: nd[1])
             if new_max[1] > max_distance:
                 tip1 = tip
                 tip2 = new_max[0]
@@ -912,7 +917,7 @@ class Tree(TreeElement, TreeMixin):
             as an output file format.
         """
         if format_spec:
-            from StringIO import StringIO
+            from Bio._py3k import StringIO
             from Bio.Phylo import _io
             handle = StringIO()
             _io.write([self], handle, format_spec)
@@ -1013,14 +1018,17 @@ class Clade(TreeElement, TreeMixin):
         """Number of clades directy under the root."""
         return len(self.clades)
 
-    def __nonzero__(self):
-        """Boolean value of an instance of this class.
+    #Python 3:
+    def __bool__(self):
+        """Boolean value of an instance of this class (True).
 
         NB: If this method is not defined, but ``__len__``  is, then the object
         is considered true if the result of ``__len__()`` is nonzero. We want
         Clade instances to always be considered True.
         """
         return True
+    #Python 2:
+    __nonzero__ = __bool__
 
     def __str__(self):
         if self.name:
@@ -1122,11 +1130,8 @@ class BranchColor(object):
                 len(hexstr) == 7
                 ), "need a 24-bit hexadecimal string, e.g. #000000"
 
-        def unpack(cc):
-            return int('0x'+cc, base=16)
-
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
-        return cls(*map(unpack, RGB))
+        return cls(*[int('0x'+cc, base=16) for cc in RGB])
 
     @classmethod
     def from_name(cls, colorname):

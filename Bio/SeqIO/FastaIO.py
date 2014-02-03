@@ -11,6 +11,8 @@
 
 You are expected to use this module via the Bio.SeqIO functions."""
 
+from __future__ import print_function
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -26,7 +28,7 @@ def SimpleFastaParser(handle):
     identifier (the first word) and comment or description.
 
     >>> for values in SimpleFastaParser(open("Fasta/dups.fasta")):
-    ...     print values
+    ...     print(values)
     ('alpha', 'ACGTA')
     ('beta', 'CGTC')
     ('gamma', 'CCGCC')
@@ -84,7 +86,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     with no custom handling of the title lines:
 
     >>> for record in FastaIterator(open("Fasta/dups.fasta")):
-    ...     print record.id
+    ...     print(record.id)
     alpha
     beta
     gamma
@@ -94,9 +96,9 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     However, you can supply a title2ids function to alter this:
 
     >>> def take_upper(title):
-    ...     return title.split(None,1)[0].upper(), "", title
+    ...     return title.split(None, 1)[0].upper(), "", title
     >>> for record in FastaIterator(open("Fasta/dups.fasta"), title2ids=take_upper):
-    ...     print record.id
+    ...     print(record.id)
     ALPHA
     BETA
     GAMMA
@@ -133,7 +135,7 @@ class FastaWriter(SequentialSequenceWriter):
                  Use zero (or None) for no wrapping, giving a single
                  long line for the sequence.
         record2title - Optional function to return the text to be
-                 used for the title line of each record.  By default the
+                 used for the title line of each record.  By default
                  a combination of the record.id and record.description
                  is used.  If the record.description starts with the
                  record.id, then just the record.description is used.
@@ -251,7 +253,7 @@ if __name__ == "__main__":
         assert count > 0
         print(str(record.__class__))
 
-    from cStringIO import StringIO
+    from Bio._py3k import StringIO
     print("--------")
     print("FastaIterator (empty input file)")
     #Just to make sure no errors happen
@@ -262,3 +264,4 @@ if __name__ == "__main__":
     assert count == 0
 
     print("Done")
+

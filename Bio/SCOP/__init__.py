@@ -48,13 +48,15 @@ _open         -- Internally used function.
 
 """
 
+from __future__ import print_function
+
 import os
 import re
 
-import Des
-import Cla
-import Hie
-import Residues
+from . import Des
+from . import Cla
+from . import Hie
+from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
@@ -68,7 +70,7 @@ _nodetype_to_code= { 'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
 
 nodeCodeOrder = [ 'ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px' ]
 
-astralBibIds = [10,20,25,30,35,40,50,70,90,95,100]
+astralBibIds = [10, 20, 25, 30, 35, 40, 50, 70, 90, 95, 100]
 
 astralEvs = [10, 5, 1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 1e-4, 1e-5, 1e-10, 1e-15,
              1e-20, 1e-25, 1e-50]
@@ -87,7 +89,7 @@ try:
     #See if the cmp function exists (will on Python 2)
     _cmp = cmp
 except NameError:
-    def _cmp(a,b):
+    def _cmp(a, b):
         """Implementation of cmp(x,y) for Python 3 (PRIVATE).
 
         Based on Python 3 docs which say if you really need the cmp()
@@ -114,10 +116,10 @@ def cmp_sccs(sccs1, sccs2):
     if s1[0] != s2[0]:
         return _cmp(s1[0], s2[0])
 
-    s1 = list(map(int, s1[1:]))
-    s2 = list(map(int, s2[1:]))
+    s1 = [int(x) for x in s1[1:]]
+    s2 = [int(x) for x in  s2[1:]]
 
-    return _cmp(s1,s2)
+    return _cmp(s1, s2)
 
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
@@ -153,7 +155,7 @@ def parse_domain(str):
 
 
 def _open_scop_file(scop_dir_path, version, filetype):
-    filename = "dir.%s.scop.txt_%s" % (filetype,version)
+    filename = "dir.%s.scop.txt_%s" % (filetype, version)
     handle = open(os.path.join( scop_dir_path, filename))
     return handle
 
@@ -310,27 +312,21 @@ class Scop(object):
 
     def write_hie(self, handle):
         """Build an HIE SCOP parsable file from this object"""
-        nodes = self._sunidDict.values()
         # We order nodes to ease comparison with original file
-        nodes.sort(key = lambda n: n.sunid)
-        for n in nodes:
+        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
             handle.write(str(n.toHieRecord()))
 
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object"""
-        nodes = self._sunidDict.values()
         # Origional SCOP file is not ordered?
-        nodes.sort(key = lambda n: n.sunid)
-        for n in nodes:
+        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
     def write_cla(self, handle):
         """Build a CLA SCOP parsable file from this object"""
-        nodes = self._sidDict.values()
         # We order nodes to ease comparison with original file
-        nodes.sort(key = lambda n: n.sunid)
-        for n in nodes:
+        for n in sorted(self._sidDict.values(), key=lambda n: n.sunid):
             handle.write(str(n.toClaRecord()))
 
     def getDomainFromSQL(self, sunid=None, sid=None):
@@ -367,12 +363,12 @@ class Scop(object):
                 cur.execute("select sid, residues, pdbid from cla where sunid=%s",
                                sunid)
 
-                [n.sid,n.residues,pdbid] = cur.fetchone()
+                [n.sid, n.residues, pdbid] = cur.fetchone()
                 n.residues = Residues.Residues(n.residues)
                 n.residues.pdbid=pdbid
                 self._sidDict[n.sid] = n
 
-            [n.sunid,n.type,n.sccs,n.description] = data
+            [n.sunid, n.type, n.sccs, n.description] = data
 
             if data[1] != 'ro':
                 cur.execute("SELECT parent FROM hie WHERE child=%s", sunid)
@@ -408,7 +404,7 @@ class Scop(object):
         # SQL cla table knows nothing about 'ro'
         if node.type == 'ro':
             for c in node.getChildren():
-                for d in self.getDescendentsFromSQL(c,type):
+                for d in self.getDescendentsFromSQL(c, type):
                     des_list.append(d)
             return des_list
 
@@ -421,7 +417,7 @@ class Scop(object):
             for d in data:
                 if int(d[0]) not in self._sunidDict:
                     n = Node(scop=self)
-                    [n.sunid,n.type,n.sccs,n.description] = d
+                    [n.sunid, n.type, n.sccs, n.description] = d
                     n.sunid=int(n.sunid)
                     self._sunidDict[n.sunid] = n
 
@@ -447,7 +443,7 @@ class Scop(object):
                     n = Domain(scop=self)
                     #[n.sunid, n.sid, n.pdbid, n.residues, n.sccs, n.type,
                     #n.description,n.parent] = data
-                    [n.sunid,n.sid, pdbid,n.residues,n.sccs,n.type,n.description,
+                    [n.sunid, n.sid, pdbid, n.residues, n.sccs, n.type, n.description,
                      n.parent] = d[0:8]
                     n.residues = Residues.Residues(n.residues)
                     n.residues.pdbid = pdbid
@@ -467,7 +463,7 @@ class Scop(object):
         cur.execute("CREATE TABLE hie (parent INT, child INT, PRIMARY KEY (child),\
         INDEX (parent) )")
 
-        for p in self._sunidDict.itervalues():
+        for p in self._sunidDict.values():
             for c in p.children:
                 cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
 
@@ -480,7 +476,7 @@ class Scop(object):
         residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT,\
         dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )")
 
-        for n in self._sidDict.itervalues():
+        for n in self._sidDict.values():
             c = n.toClaRecord()
             cur.execute( "INSERT INTO cla VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                          (n.sunid, n.sid, c.residues.pdbid, c.residues, n.sccs,
@@ -498,7 +494,7 @@ class Scop(object):
         description VARCHAR(255),\
         PRIMARY KEY (sunid) )")
 
-        for n in self._sunidDict.itervalues():
+        for n in self._sunidDict.values():
             cur.execute( "INSERT INTO des VALUES (%s,%s,%s,%s)",
                          ( n.sunid, n.type, n.sccs, n.description ) )
 
@@ -567,7 +563,7 @@ class Node(object):
         if self.scop is None:
             return self.children
         else:
-            return map( self.scop.getNodeBySunid, self.children )
+            return [self.scop.getNodeBySunid(x) for x in self.children]
 
     def getParent(self):
         """Return the parent of this Node"""
@@ -585,7 +581,7 @@ class Node(object):
 
         nodes = [self]
         if self.scop:
-            return self.scop.getDescendentsFromSQL(self,node_type)
+            return self.scop.getDescendentsFromSQL(self, node_type)
         while nodes[0].type != node_type:
             if nodes[0].type == 'px':
                 return [] # Fell of the bottom of the hierarchy
@@ -604,7 +600,7 @@ class Node(object):
             node_type = _nodetype_to_code[node_type]
 
         if self.scop:
-            return self.scop.getAscendentFromSQL(self,node_type)
+            return self.scop.getAscendentFromSQL(self, node_type)
         else:
             n = self
             if n.type == node_type:
@@ -627,7 +623,7 @@ class Domain(Node):
                   of PDB atoms that make up this domain.
     """
     def __init__(self,scop=None):
-        Node.__init__(self,scop=scop)
+        Node.__init__(self, scop=scop)
         self.sid = ''
         self.residues = None
 
@@ -728,7 +724,7 @@ class Astral(object):
         self.IdDatasets = {}
         self.IdDatahash = {}
 
-    def domainsClusteredByEv(self,id):
+    def domainsClusteredByEv(self, id):
         """get domains clustered by evalue"""
         if id not in self.EvDatasets:
             if self.db_handle:
@@ -739,13 +735,13 @@ class Astral(object):
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id] ,
+                filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id],
                                                   self.version)
-                filename = os.path.join(self.path,filename)
+                filename = os.path.join(self.path, filename)
                 self.EvDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.EvDatasets[id]
 
-    def domainsClusteredById(self,id):
+    def domainsClusteredById(self, id):
         """get domains clustered by percent id"""
         if id not in self.IdDatasets:
             if self.db_handle:
@@ -756,7 +752,7 @@ class Astral(object):
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
                 filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
-                filename = os.path.join(self.path,filename)
+                filename = os.path.join(self.path, filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
 
@@ -767,7 +763,7 @@ class Astral(object):
         if not file_handle:
             file_handle = open(filename)
         doms = []
-        while 1:
+        while True:
             line = file_handle.readline()
             if not line:
                 break
@@ -776,8 +772,8 @@ class Astral(object):
         if filename:
             file_handle.close()
 
-        doms = filter( lambda a: a[0]=='d', doms )
-        doms = map( self.scop.getDomainBySid, doms )
+        doms = [a for a in doms if a[0]=='d']
+        doms = [self.scop.getDomainBySid(x) for x in doms]
         return doms
 
     def getAstralDomainsFromSQL(self, column):
@@ -786,11 +782,11 @@ class Astral(object):
         cur = self.db_handle.cursor()
         cur.execute("SELECT sid FROM astral WHERE "+column+"=1")
         data = cur.fetchall()
-        data = map( lambda x: self.scop.getDomainBySid(x[0]), data)
+        data = [self.scop.getDomainBySid(x[0]) for x in data]
 
         return data
 
-    def getSeqBySid(self,domain):
+    def getSeqBySid(self, domain):
         """get the seq record of a given domain from its sid"""
         if self.db_handle is None:
             return self.fasta_dict[domain].seq
@@ -799,11 +795,11 @@ class Astral(object):
             cur.execute("SELECT seq FROM astral WHERE sid=%s", domain)
             return Seq(cur.fetchone()[0])
 
-    def getSeq(self,domain):
+    def getSeq(self, domain):
         """Return seq associated with domain"""
         return self.getSeqBySid(domain.sid)
 
-    def hashedDomainsById(self,id):
+    def hashedDomainsById(self, id):
         """Get domains clustered by sequence identity in a dict"""
         if id not in self.IdDatahash:
             self.IdDatahash[id] = {}
@@ -811,7 +807,7 @@ class Astral(object):
                 self.IdDatahash[id][d] = 1
         return self.IdDatahash[id]
 
-    def hashedDomainsByEv(self,id):
+    def hashedDomainsByEv(self, id):
         """Get domains clustered by evalue in a dict"""
         if id not in self.EvDatahash:
             self.EvDatahash[id] = {}
@@ -819,11 +815,11 @@ class Astral(object):
                 self.EvDatahash[id][d] = 1
         return self.EvDatahash[id]
 
-    def isDomainInId(self,dom,id):
+    def isDomainInId(self, dom, id):
         """Returns true if the domain is in the astral clusters for percent ID"""
         return dom in self.hashedDomainsById(id)
 
-    def isDomainInEv(self,dom,id):
+    def isDomainInEv(self, dom, id):
         """Returns true if the domain is in the ASTRAL clusters for evalues"""
         return dom in self.hashedDomainsByEv(id)
 
@@ -868,7 +864,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     params = {'pdb' : pdb, 'key' : key, 'sid' : sid, 'disp' : disp,
               'dir' : dir, 'loc' : loc}
     variables = {}
-    for k, v in params.iteritems():
+    for k, v in params.items():
         if v is not None:
             variables[k] = v
     variables.update(keywds)
@@ -884,17 +880,14 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
-    import urllib
-    import urllib2
+    from Bio._py3k import urlopen, urlencode
+
     # Open a handle to SCOP.
-    options = urllib.urlencode(params)
-    try:
-        if get:  # do a GET
-            if options:
-                cgi += "?" + options
-            handle = urllib2.urlopen(cgi)
-        else:    # do a POST
-            handle = urllib2.urlopen(cgi, data=options)
-    except urllib2.HTTPError as exception:
-        raise exception
+    options = urlencode(params)
+    if get:  # do a GET
+        if options:
+            cgi += "?" + options
+        handle = urlopen(cgi)
+    else:    # do a POST
+        handle = urlopen(cgi, data=options)
     return handle

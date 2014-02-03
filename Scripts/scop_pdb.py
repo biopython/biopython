@@ -6,9 +6,12 @@
 # as part of this package.
 
 
+from __future__ import print_function
+
 import getopt
 import sys
-import urllib
+
+from Bio._py3k import urlretrieve as _urlretrieve
 
 from Bio.SCOP import *
 
@@ -63,7 +66,7 @@ def open_pdb(pdbid, pdb_url=None):
     if pdb_url is None:
         pdb_url = default_pdb_url
     url = pdb_url % pdbid
-    fn, header = urllib.urlretrieve(url)
+    fn, header = _urlretrieve(url)
     return open(fn)
 
 
@@ -72,7 +75,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
              ["help", "usage", "pdb=", "output=", "input="])
     except getopt.GetoptError:
-        # print help information and exit:
+        # show help information and exit:
         usage()
         sys.exit(2)
 
@@ -95,26 +98,25 @@ def main():
             pdb_url = a
 
     if len(args) < 2:
-        print >> sys.stderr, \
-             "Not enough arguments. Try --help for more details."
+        sys.stderr.write("Not enough arguments. Try --help for more details.\n")
         sys.exit(2)
 
     raf_url = args[0]
     cla_url = args[1]
 
-    (raf_filename, headers) = urllib.urlretrieve(raf_url)
+    (raf_filename, headers) = _urlretrieve(raf_url)
     seqMapIndex = Raf.SeqMapIndex(raf_filename)
 
-    (cla_filename, headers) = urllib.urlretrieve(cla_url)
+    (cla_filename, headers) = _urlretrieve(cla_url)
     claIndex = Cla.Index(cla_filename)
 
     if input is None:
         sids = args[2:]
     elif input == '-':
-        sids = sys.stdin.xreadlines()
+        sids = sys.stdin
     else:
         in_handle = open(input)
-        sids = in_handle.xreadlines()
+        sids = in_handle
 
     try:
         for sid in sids:
@@ -124,7 +126,7 @@ def main():
             pdbid = id[1:5]
             s = pdbid[0:1]
             if s == '0' or s == 's':
-                print >> sys.stderr, "No coordinates for domain " + id
+                sys.stderr.write("No coordinates for domain %s\n" % id)
                 continue
 
             if output is None:
@@ -148,7 +150,7 @@ def main():
                     finally:
                         f.close()
                 except (IOError, KeyError, RuntimeError) as e:
-                    print >> sys.stderr, "I cannot do SCOP domain ", id, ":", e
+                    sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
             finally:
                 out_handle.close()
     finally:

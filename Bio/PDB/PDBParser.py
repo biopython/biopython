@@ -5,6 +5,8 @@
 
 """Parser for PDB files."""
 
+from __future__ import print_function
+
 import warnings
 
 try:
@@ -228,8 +230,8 @@ class PDBParser(object):
                 except PDBConstructionException as message:
                     self._handle_PDB_exception(message, global_line_counter)
             elif record_type == "ANISOU":
-                anisou = map(float, (line[28:35], line[35:42], line[43:49],
-                                     line[49:56], line[56:63], line[63:70]))
+                anisou = [float(x) for x in (line[28:35], line[35:42], line[43:49],
+                                             line[49:56], line[56:63], line[63:70])]
                 # U's are scaled by 10^4
                 anisou_array = (numpy.array(anisou, "f") / 10000.0).astype("f")
                 structure_builder.set_anisou(anisou_array)
@@ -255,15 +257,15 @@ class PDBParser(object):
                 current_residue_id = None
             elif record_type == "SIGUIJ":
                 # standard deviation of anisotropic B factor
-                siguij = map(float, (line[28:35], line[35:42], line[42:49],
-                                     line[49:56], line[56:63], line[63:70]))
+                siguij = [float(x) for x in (line[28:35], line[35:42], line[42:49],
+                                             line[49:56], line[56:63], line[63:70])]
                 # U sigma's are scaled by 10^4
                 siguij_array = (numpy.array(siguij, "f") / 10000.0).astype("f")
                 structure_builder.set_siguij(siguij_array)
             elif record_type == "SIGATM":
                 # standard deviation of atomic positions
-                sigatm = map(float, (line[30:38], line[38:45], line[46:54],
-                                     line[54:60], line[60:66]))
+                sigatm = [float(x) for x in (line[30:38], line[38:45], line[46:54],
+                                             line[54:60], line[60:66])]
                 sigatm_array = numpy.array(sigatm, "f")
                 structure_builder.set_sigatm(sigatm_array)
             local_line_counter += 1
@@ -311,4 +313,4 @@ if __name__ == "__main__":
                 for a in r:
                     p = a.get_parent()
                     if not p is r:
-                        print p, r
+                        print("%s %s" % (p, r))

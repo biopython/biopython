@@ -23,8 +23,8 @@ mafft_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
 else:
-    import commands
-    output = commands.getoutput("mafft -help")
+    from Bio._py3k import getoutput
+    output = getoutput("mafft -help")
     if "not found" not in output and "MAFFT" in output:
         mafft_exe = "mafft"
 if not mafft_exe:
@@ -53,8 +53,8 @@ def check_mafft_version(mafft_exe):
         index = output.find(marker)
         if index == -1:
             continue
-        version = output[index+len(marker):].strip().split(None,1)[0]
-        major = int(version.split(".",1)[0])
+        version = output[index+len(marker):].strip().split(None, 1)[0]
+        major = int(version.split(".", 1)[0])
         if major < 6:
             raise MissingExternalDependencyError("Test requires MAFFT v6 or "
                                                  "later (found %s)." % version)

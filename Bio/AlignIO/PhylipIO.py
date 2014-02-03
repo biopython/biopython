@@ -1,10 +1,9 @@
-# Copyright 2006-2011 by Peter Cock.  All rights reserved.
+# Copyright 2006-2013 by Peter Cock.  All rights reserved.
 # Revisions copyright 2011 Brandon Invergo. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-AlignIO support for the "phylip" format used in Joe Felsenstein's PHYLIP tools.
+"""AlignIO support for "phylip" format from Joe Felsenstein's PHYLIP tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -32,12 +31,16 @@ http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
+from __future__ import print_function
+
 import string
+
+from Bio._py3k import range
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 _PHYLIP_ID_WIDTH = 10
 
@@ -161,7 +164,7 @@ class PhylipIterator(AlignmentIterator):
 
     def _is_header(self, line):
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             return False  # First line should have two integers
         try:
@@ -185,7 +188,7 @@ class PhylipIterator(AlignmentIterator):
         seq = line[self.id_width:].strip().replace(' ', '')
         return seq_id, seq
 
-    def next(self):
+    def __next__(self):
         handle = self.handle
 
         try:
@@ -199,7 +202,7 @@ class PhylipIterator(AlignmentIterator):
         if not line:
             raise StopIteration
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
@@ -220,7 +223,7 @@ class PhylipIterator(AlignmentIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-        for i in xrange(number_of_seqs):
+        for i in range(number_of_seqs):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
@@ -245,7 +248,7 @@ class PhylipIterator(AlignmentIterator):
                 break
 
             #print "New block..."
-            for i in xrange(number_of_seqs):
+            for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -370,7 +373,7 @@ class SequentialPhylipIterator(PhylipIterator):
     the next. According to the PHYLIP documentation for input file formatting,
     newlines and spaces may optionally be entered at any point in the sequences.
     """
-    def next(self):
+    def __next__(self):
         handle = self.handle
 
         try:
@@ -384,7 +387,7 @@ class SequentialPhylipIterator(PhylipIterator):
         if not line:
             raise StopIteration
         line = line.strip()
-        parts = filter(None, line.split())
+        parts = [x for x in line.split() if x]
         if len(parts) != 2:
             raise ValueError("First line should have two integers")
         try:
@@ -405,7 +408,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-        for i in xrange(number_of_seqs):
+        for i in range(number_of_seqs):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
@@ -497,7 +500,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
            LREALNKAFA EMRADGTYEK LAKKYFDFDV YGG---
 """
 
-    from cStringIO import StringIO
+    from Bio._py3k import StringIO
     handle = StringIO(phylip_text)
     count = 0
     for alignment in PhylipIterator(handle):

@@ -1,5 +1,10 @@
-
 #!/usr/bin/env python
+# Copyright 2000-2001 by Brad Chapman.  All rights reserved.
+# Revisions copyright 2007-2003 by Peter Cock. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """test_align.py
 
 A script to test alignment stuff.
@@ -10,6 +15,8 @@ o Reading and Writing fasta format
 o Converting between formats"""
 
 # standard library
+from __future__ import print_function
+
 import os
 
 # biopython
@@ -43,7 +50,7 @@ assert alignment[0].id == "mixed"
 assert alignment[1].id == "lower"
 assert alignment[2].id == "upper"
 for (col, letter) in enumerate(letters):
-    assert alignment[:,col] == letter + letter.lower() + letter.upper()
+    assert alignment[:, col] == letter + letter.lower() + letter.upper()
 #Check row extractions:
 assert alignment[0].id == "mixed"
 assert alignment[-1].id == "upper"
@@ -76,20 +83,19 @@ alignment = AlignIO.read(os.path.join(test_dir, test_names[0]), "clustal",
 # test the base alignment stuff
 print('all_seqs...')
 for seq_record in alignment:
-    print 'description:', seq_record.description
-    print 'seq:', repr(seq_record.seq)
-print 'length:', alignment.get_alignment_length()
+    print('description: %s' % seq_record.description)
+    print('seq: %r' % seq_record.seq)
+print('length: %i' % alignment.get_alignment_length())
 
 print('Calculating summary information...')
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus()
 assert isinstance(consensus, Seq)
-print 'consensus:', repr(consensus)
+print('consensus: %r' % consensus)
 
 
 print('Replacement dictionary')
-ks = align_info.replacement_dictionary(['N']).keys()
-ks.sort()
+ks = sorted(align_info.replacement_dictionary(['N']))
 for key in ks:
     print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
 
@@ -123,9 +129,9 @@ print('relative information: %0.2f' \
       % align_info.information_content(e_freq_table = e_freq_table,
                                        chars_to_ignore = ['N']))
 
-print 'Column 1:', align_info.get_column(1)
+print('Column 1: %s' % align_info.get_column(1))
 print('IC for column 1: %0.2f' % align_info.ic_vector[1])
-print 'Column 7:', align_info.get_column(7)
+print('Column 7: %s' % align_info.get_column(7))
 print('IC for column 7: %0.2f' % align_info.ic_vector[7])
 print('test print_info_content')
 AlignInfo.print_info_content(align_info)
@@ -139,14 +145,14 @@ alignment = AlignIO.read(to_parse, "fasta",
 # test the base alignment stuff
 print('all_seqs...')
 for seq_record in alignment:
-    print 'description:', seq_record.description
-    print 'seq:', repr(seq_record.seq)
+    print('description: %s' % seq_record.description)
+    print('seq: %r' % seq_record.seq)
 
-print 'length:', alignment.get_alignment_length()
+print('length: %i' % alignment.get_alignment_length())
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
 assert isinstance(consensus, Seq)
-print 'consensus:', repr(consensus)
+print('consensus: %r' % consensus)
 
 print(alignment)
 
@@ -165,7 +171,7 @@ print(alignment.format("clustal"))
 """
 # test to find a position in an original sequence given a
 # column position in an alignment
-print "Testing finding column positions..."
+print("Testing finding column positions...")
 alignment_info = ["GATC--CGATC--G",
                   "GA--CCCG-TC--G",
                   "GAT--CC--TC--G"]

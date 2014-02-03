@@ -11,10 +11,12 @@ This tests the Graphics.BasicChromosome classes and the
 Graphics.DisplayRepresentation classes.
 """
 # standard library
+from __future__ import print_function
+
 import os
 import sys
 import random
-import cStringIO
+from Bio._py3k import StringIO
 import unittest
 
 from Bio import MissingPythonDependencyError
@@ -234,7 +236,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         # trick to write the properties to a string
         save_stdout = sys.stdout
-        new_stdout = cStringIO.StringIO()
+        new_stdout = StringIO()
         sys.stdout = new_stdout
 
         test_widget.dumpProperties()
@@ -291,11 +293,11 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 #Output was copy and pasted to the script, see above.
                 #Continue test using SeqFeature objects!
                 #To test colours from the qualifiers,
-                for i,f in enumerate(features):
+                for i, f in enumerate(features):
                     f.qualifiers['color'] = [str(i % 16)]
             else:
-                features = [(start,end,strand,label,color)
-                            for (start,end,strand,label) in features]
+                features = [(start, end, strand, label, color)
+                            for (start, end, strand, label) in features]
             #I haven't found a nice source of data for real Arabidopsis
             #cytobands, so these three are made up at random!
             cytobands = []

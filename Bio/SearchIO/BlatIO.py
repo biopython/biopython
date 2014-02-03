@@ -177,11 +177,12 @@ Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
 """
-
 import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import zip
+
 from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -204,11 +205,10 @@ def _list_from_csv(csv_string, caster=None):
     caster -- Cast function to use on each list item.
 
     """
-    filtered = (x for x in filter(None, csv_string.split(',')))
     if caster is None:
-        return list(filtered)
+        return [x for x in csv_string.split(',') if x]
     else:
-        return [caster(x) for x in filtered]
+        return [caster(x) for x in csv_string.split(',') if x]
 
 
 def _reorient_starts(starts, blksizes, seqlen, strand):
@@ -308,10 +308,10 @@ def _create_hsp(hid, qid, psl):
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-    query_range_all = zip(qstarts, [x + y for x, y in
-            zip(qstarts, psl['blocksizes'])])
-    hit_range_all = zip(hstarts, [x + y for x, y in
-            zip(hstarts, psl['blocksizes'])])
+    query_range_all = list(zip(qstarts, [x + y for x, y in
+                                         zip(qstarts, psl['blocksizes'])]))
+    hit_range_all = list(zip(hstarts, [x + y for x, y in
+                                       zip(hstarts, psl['blocksizes'])]))
     # check length of sequences and coordinates, all must match
     if 'tseqs' in psl and 'qseqs' in psl:
         assert len(psl['tseqs']) == len(psl['qseqs']) == \
@@ -399,7 +399,7 @@ class BlatPslParser(object):
     def _parse_row(self):
         """Returns a dictionary of parsed column values."""
         assert self.line
-        cols = filter(None, self.line.strip().split('\t'))
+        cols = [x for x in self.line.strip().split('\t') if x]
         self._validate_cols(cols)
 
         psl = {}
@@ -539,11 +539,11 @@ class BlatPslIndexer(SearchIndexer):
         while True:
             end_offset = handle.tell()
 
-            cols = line.strip().split(tab_char)
+            cols = [x for x in line.strip().split(tab_char) if x]
             if qresult_key is None:
-                qresult_key = list(filter(None, cols))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = list(filter(None, cols))[query_id_idx]
+                curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
                     yield _bytes_to_string(qresult_key), start_offset, \
@@ -570,11 +570,11 @@ class BlatPslIndexer(SearchIndexer):
             line = handle.readline()
             if not line:
                 break
-            cols = line.strip().split(tab_char)
+            cols = [x for x in line.strip().split(tab_char) if x]
             if qresult_key is None:
-                qresult_key = list(filter(None, cols))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = list(filter(None, cols))[query_id_idx]
+                curr_key = cols[query_id_idx]
                 if curr_key != qresult_key:
                     break
             qresult_raw += line
@@ -604,8 +604,8 @@ class BlatPslWriter(object):
                 handle.write(self._build_row(qresult))
                 qresult_counter += 1
                 hit_counter += len(qresult)
-                hsp_counter += sum([len(hit) for hit in qresult])
-                frag_counter += sum([len(hit.fragments) for hit in qresult])
+                hsp_counter += sum(len(hit) for hit in qresult)
+                frag_counter += sum(len(hit.fragments) for hit in qresult)
 
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 

@@ -3,24 +3,29 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+from Bio._py3k import basestring
+
 import os
+import warnings
+
+try:
+    from StringIO import StringIO # Python 2
+    # Can't use cStringIO, quoting the documentation,
+    #   "Unlike the StringIO module, this module is not able to accept
+    #    Unicode strings that cannot be encoded as plain ASCII strings."
+    # Therefore can't use from Bio._py3k import StringIO
+except ImportError:
+    from io import StringIO # Python 3
+from io import BytesIO
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
-from StringIO import StringIO
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
-
-try:
-    #This is in Python 2.6+, but we need it on Python 3
-    from io import BytesIO
-except ImportError:
-    BytesIO = StringIO
-
-import warnings
 
 # TODO - Convert this to using unittest, and check desired warnings
 # are issued. Used to do that by capturing warnings to stdout and
@@ -33,16 +38,16 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = ["fasta","clustal","phylip","phylip-relaxed",
-                    "phylip-sequential","tab","ig",
-                    "stockholm","emboss", "fastq","fastq-solexa",
-                    "fastq-illumina","qual"]
+no_alpha_formats = ["fasta", "clustal", "phylip", "phylip-relaxed",
+                    "phylip-sequential", "tab", "ig",
+                    "stockholm", "emboss", "fastq", "fastq-solexa",
+                    "fastq-illumina", "qual"]
 possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
 #test output, with any new formats added since appended to the end.
-test_write_read_alignment_formats = ["fasta","clustal","phylip","stockholm",
+test_write_read_alignment_formats = ["fasta", "clustal", "phylip", "stockholm",
                                      "phylip-relaxed"]
 for format in sorted(SeqIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
@@ -62,10 +67,10 @@ test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 test_files = [
     ("sff",    False, 'Roche/E3MFGYR02_random_10_reads.sff', 10),
 #Following examples are also used in test_Clustalw.py
-    ("clustal",True,  'Clustalw/cw02.aln', 2),
-    ("clustal",True,  'Clustalw/opuntia.aln', 7),
-    ("clustal",True,  'Clustalw/hedgehog.aln', 5),
-    ("clustal",True,  'Clustalw/odd_consensus.aln', 2),
+    ("clustal", True,  'Clustalw/cw02.aln', 2),
+    ("clustal", True,  'Clustalw/opuntia.aln', 7),
+    ("clustal", True,  'Clustalw/hedgehog.aln', 5),
+    ("clustal", True,  'Clustalw/odd_consensus.aln', 2),
 #Following nucleic examples are also used in test_SeqIO_FastaIO.py
     ("fasta",  False, 'Fasta/lupine.nu', 1),
     ("fasta",  False, 'Fasta/elderberry.nu', 1),
@@ -123,32 +128,35 @@ test_files = [
     ("uniprot-xml",  False, 'SwissProt/Q13639.xml', 1),
     ("swiss",    False, 'SwissProt/Q13639.txt', 1),
 #Following examples are also used in test_GenBank.py
-    ("genbank",False, 'GenBank/noref.gb', 1),
-    ("genbank",False, 'GenBank/cor6_6.gb', 6),
-    ("genbank",False, 'GenBank/iro.gb', 1),
-    ("genbank",False, 'GenBank/pri1.gb', 1),
-    ("genbank",False, 'GenBank/arab1.gb', 1),
-    ("genbank",False, 'GenBank/protein_refseq.gb', 1),  # Old version
-    ("genbank",False, 'GenBank/protein_refseq2.gb', 1),  # Revised version
-    ("genbank",False, 'GenBank/extra_keywords.gb', 1),
-    ("genbank",False, 'GenBank/one_of.gb', 1),
-    ("genbank",False, 'GenBank/NT_019265.gb', 1),  # contig, no sequence
-    ("genbank",False, 'GenBank/origin_line.gb', 1),
-    ("genbank",False, 'GenBank/blank_seq.gb', 1),
-    ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
-    ("genbank",False, 'GenBank/NC_005816.gb', 1),  # See also AE017046.embl
-    ("genbank",False, 'GenBank/NC_000932.gb', 1),
-    ("genbank",False, 'GenBank/pBAD30.gb', 1),  # Odd LOCUS line from Vector NTI
+    ("genbank", False, 'GenBank/noref.gb', 1),
+    ("genbank", False, 'GenBank/cor6_6.gb', 6),
+    ("genbank", False, 'GenBank/iro.gb', 1),
+    ("genbank", False, 'GenBank/pri1.gb', 1),
+    ("genbank", False, 'GenBank/arab1.gb', 1),
+    ("genbank", False, 'GenBank/protein_refseq.gb', 1),  # Old version
+    ("genbank", False, 'GenBank/protein_refseq2.gb', 1),  # Revised version
+    ("genbank", False, 'GenBank/extra_keywords.gb', 1),
+    ("genbank", False, 'GenBank/one_of.gb', 1),
+    ("genbank", False, 'GenBank/NT_019265.gb', 1),  # contig, no sequence
+    ("genbank", False, 'GenBank/origin_line.gb', 1),
+    ("genbank", False, 'GenBank/blank_seq.gb', 1),
+    ("genbank", False, 'GenBank/dbsource_wrap.gb', 1),
+    ("genbank", False, 'GenBank/NC_005816.gb', 1),  # See also AE017046.embl
+    ("genbank", False, 'GenBank/NC_000932.gb', 1),
+    ("genbank", False, 'GenBank/pBAD30.gb', 1),  # Odd LOCUS line from Vector NTI
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
-    ("genbank",False, 'GenBank/gbvrl1_start.seq', 3),
+    ("genbank", False, 'GenBank/gbvrl1_start.seq', 3),
 #Following files are also used in test_GFF.py
-    ("genbank",False, 'GFF/NC_001422.gbk', 1),
+    ("genbank", False, 'GFF/NC_001422.gbk', 1),
 #Generated with Entrez.efetch("protein", id="16130152", rettype="gbwithparts")
-    ("genbank",False, 'GenBank/NP_416719.gbwithparts', 1),
+    ("genbank", False, 'GenBank/NP_416719.gbwithparts', 1),
+#GenPept file with nasty bond locations,
+    ("genbank", False, 'GenBank/1MRR_A.gp', 1),
 #Following files are currently only used here or in test_SeqIO_index.py:
     ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
+    ("embl",   False, 'EMBL/patents.embl', 4), # more proteins, but no seq
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited2.embl', 1), #Partial ID line
@@ -199,12 +207,13 @@ test_files = [
     ("pir", True,  'NBRF/clustalw.pir', 2),
 #Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
-    ("qual",  False,'Quality/example.qual',  3),
-    ("fastq", True, 'Quality/example.fastq', 3),
+    ("qual",  False, 'Quality/example.qual',  3),
+    ("fastq", True, 'Quality/example.fastq', 3), #Unix new lines
+    ("fastq", True, 'Quality/example_dos.fastq', 3), #DOS/Windows new lines
     ("fastq", True, 'Quality/tricky.fastq', 4),
-    ("fastq", False,'Quality/sanger_faked.fastq', 1),
-    ("fastq", False,'Quality/sanger_93.fastq', 1),
-    ("fastq-illumina", False,'Quality/illumina_faked.fastq', 1),
+    ("fastq", False, 'Quality/sanger_faked.fastq', 1),
+    ("fastq", False, 'Quality/sanger_93.fastq', 1),
+    ("fastq-illumina", False, 'Quality/illumina_faked.fastq', 1),
     ("fastq-solexa", False, 'Quality/solexa_faked.fastq', 1),
     ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
 #Following examples are also used in test_SeqXML.py
@@ -299,7 +308,7 @@ def alignment_summary(alignment, index=" "):
     answer = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
-    for i in range(min(5,alignment_len)):
+    for i in range(min(5, alignment_len)):
         answer.append(index + col_summary(alignment.get_column(i))
                             + " alignment column %i" % i)
     if alignment_len > 5:
@@ -312,7 +321,7 @@ def alignment_summary(alignment, index=" "):
 
 
 def check_simple_write_read(records, indent=" "):
-    #print indent+"Checking we can write and then read back these records"
+    #print(indent+"Checking we can write and then read back these records")
     for format in test_write_read_alignment_formats:
         if format not in possible_unknown_seq_formats \
         and isinstance(records[0].seq, UnknownSeq) \
@@ -390,16 +399,16 @@ def check_simple_write_read(records, indent=" "):
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
             if format in ["phylip", "phylip-sequential"]:
-                assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
+                assert r1.id.replace("[", "").replace("]", "")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="phylip-relaxed":
                 assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
                         "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="clustal":
-                assert r1.id.replace(" ","_")[:30] == r2.id, \
+                assert r1.id.replace(" ", "_")[:30] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="stockholm":
-                assert r1.id.replace(" ","_") == r2.id, \
+                assert r1.id.replace(" ", "_") == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="fasta":
                 assert r1.id.split()[0] == r2.id
@@ -437,7 +446,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    h = open(t_filename,mode)
+    h = open(t_filename, mode)
     records = list(SeqIO.parse(handle=h, format=t_format))
     h.close()
     assert len(records) == t_count, \
@@ -451,11 +460,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     #Try using the iterator with the next() method
     records3 = []
-    h = open(t_filename,mode)
+    h = open(t_filename, mode)
     seq_iterator = SeqIO.parse(handle=h, format=t_format)
     while True:
         try:
-            record = seq_iterator.next()
+            record = next(seq_iterator)
         except StopIteration:
             break
         assert record is not None, "Should raise StopIteration not return None"
@@ -463,10 +472,10 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     h.close()
 
     #Try a mixture of next() and list (a torture test!)
-    h = open(t_filename,mode)
+    h = open(t_filename, mode)
     seq_iterator = SeqIO.parse(handle=h, format=t_format)
     try:
-        record = seq_iterator.next()
+        record = next(seq_iterator)
     except StopIteration:
         record = None
     if record is not None:
@@ -486,7 +495,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         h = ForwardOnlyHandle(open(t_filename, mode))
     seq_iterator = SeqIO.parse(h, format=t_format)
     try:
-        record = seq_iterator.next()
+        record = next(seq_iterator)
     except StopIteration:
         record = None
     if record is not None:
@@ -585,21 +594,21 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     for given_alpha in good:
         #These should all work...
         given_base = Alphabet._get_base_alphabet(given_alpha)
-        for record in SeqIO.parse(t_filename,t_format,given_alpha):
+        for record in SeqIO.parse(t_filename, t_format, given_alpha):
             base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
             assert isinstance(base_alpha, given_base.__class__)
             assert base_alpha == given_base
         if t_count == 1:
-            h = open(t_filename,mode)
-            record = SeqIO.read(h,t_format,given_alpha)
+            h = open(t_filename, mode)
+            record = SeqIO.read(h, t_format, given_alpha)
             h.close()
             assert isinstance(base_alpha, given_base.__class__)
             assert base_alpha == given_base
     for given_alpha in bad:
         #These should all fail...
-        h = open(t_filename,mode)
+        h = open(t_filename, mode)
         try:
-            print(SeqIO.parse(h,t_format,given_alpha).next())
+            print(next(SeqIO.parse(h, t_format, given_alpha)))
             h.close()
             assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
                    % (repr(given_alpha), t_filename)

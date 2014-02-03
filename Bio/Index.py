@@ -16,9 +16,12 @@ _InMemoryIndex  An in-memory Index class.
 """
 import os
 import array
-import cPickle
 import shelve
 
+try:
+    import cPickle as pickle # Only available under Python 2
+except ImportError:
+    import pickle # Python 3
 
 class _ShelveIndex(dict):
     """An index file wrapped around shelve.
@@ -89,16 +92,16 @@ class _InMemoryIndex(dict):
 
         # Load the database if it exists
         if os.path.exists(indexname):
-            handle = open(indexname)
-            version = self._toobj(handle.readline().rstrip())
-            if version != self.__version:
-                raise IOError("Version %s doesn't match my version %s"
-                              % (version, self.__version))
-            for line in handle:
-                key, value = line.split()
-                key, value = self._toobj(key), self._toobj(value)
-                self[key] = value
-            self.__changed = 0
+            with open(indexname) as handle:
+                version = self._toobj(handle.readline().rstrip())
+                if version != self.__version:
+                    raise IOError("Version %s doesn't match my version %s"
+                                  % (version, self.__version))
+                for line in handle:
+                    key, value = line.split()
+                    key, value = self._toobj(key), self._toobj(value)
+                    self[key] = value
+                self.__changed = 0
 
     def update(self, dict):
         self.__changed = 1
@@ -118,12 +121,11 @@ class _InMemoryIndex(dict):
 
     def __del__(self):
         if self.__changed:
-            handle = open(self._indexname, 'w')
-            handle.write("%s\n" % self._tostr(self.__version))
-            for key, value in self.items():
-                handle.write("%s %s\n" %
-                             (self._tostr(key), self._tostr(value)))
-            handle.close()
+            with open(self._indexname, 'w') as handle:
+                handle.write("%s\n" % self._tostr(self.__version))
+                for key, value in self.items():
+                    handle.write("%s %s\n" %
+                                 (self._tostr(key), self._tostr(value)))
 
     def _tostr(self, obj):
         # I need a representation of the object that's saveable to
@@ -133,15 +135,13 @@ class _InMemoryIndex(dict):
         # the integers into strings and join them together with commas.
         # It's not the most efficient way of storing things, but it's
         # relatively fast.
-        s = cPickle.dumps(obj)
+        s = pickle.dumps(obj)
         intlist = array.array('b', s)
-        strlist = map(str, intlist)
-        return ','.join(strlist)
+        return ','.join(str(i) for i in intlist)
 
     def _toobj(self, str):
-        intlist = map(int, str.split(','))
+        intlist = [int(i) for i in str.split(',')]
         intlist = array.array('b', intlist)
-        strlist = map(chr, intlist)
-        return cPickle.loads(''.join(strlist))
+        return pickle.loads(''.join(chr(i) for i in intlist))
 
 Index = _InMemoryIndex

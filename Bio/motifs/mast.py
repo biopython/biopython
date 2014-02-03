@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 from Bio.Alphabet import IUPAC
 from Bio.motifs import meme
 
@@ -18,14 +20,14 @@ class Record(list):
     motifs in the record by their index. Alternatively, you can find a motif
     by its name:
 
-    >>> f = open("mast.output.txt")
     >>> from Bio import motifs
-    >>> record = motifs.parse(f, 'MAST')
+    >>> with open("mast.output.txt") as f:
+    ...     record = motifs.parse(f, 'MAST')
     >>> motif = record[0]
-    >>> print motif.name
+    >>> print(motif.name)
     1
     >>> motif = record['1']
-    >>> print motif.name
+    >>> print(motif.name)
     1
     """
 
@@ -72,10 +74,10 @@ def __read_database_and_motifs(record, handle):
     for line in handle:
         if line.startswith('DATABASE AND MOTIFS'):
             break
-    line = handle.next()
+    line = next(handle)
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
-    line = handle.next()
+    line = next(handle)
     if not 'DATABASE' in line:
         raise ValueError("Line does not contain 'DATABASE':\n%s" % line)
     words = line.strip().split()
@@ -87,7 +89,7 @@ def __read_database_and_motifs(record, handle):
     for line in handle:
         if 'MOTIF WIDTH' in line:
             break
-    line = handle.next()
+    line = next(handle)
     if not '----' in line:
         raise ValueError("Line does not contain '----':\n%s" % line)
     for line in handle:
@@ -108,7 +110,7 @@ def __read_section_i(record, handle):
     for line in handle:
         if line.startswith('SEQUENCE NAME'):
             break
-    line = handle.next()
+    line = next(handle)
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
     for line in handle:
@@ -117,7 +119,7 @@ def __read_section_i(record, handle):
         else:
             sequence, description_evalue_length = line.split(None, 1)
             record.sequences.append(sequence)
-    line = handle.next()
+    line = next(handle)
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
 
@@ -129,7 +131,7 @@ def __read_section_ii(record, handle):
     for line in handle:
         if line.startswith('SEQUENCE NAME'):
             break
-    line = handle.next()
+    line = next(handle)
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
     for line in handle:
@@ -141,7 +143,7 @@ def __read_section_ii(record, handle):
         else:
             sequence, pvalue, diagram = line.split()
             record.diagrams[sequence] = diagram
-    line = handle.next()
+    line = next(handle)
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
 
@@ -159,3 +161,4 @@ def __read_section_iii(record, handle):
     for line in handle:
         if line.strip():
             break
+

@@ -6,6 +6,8 @@
 
 """Common utility functions for various Bio submodules."""
 
+from __future__ import print_function
+
 import os
 
 
@@ -22,8 +24,6 @@ def iterlen(items):
     5
     >>> iterlen(iter("abcde"))
     5
-    >>> iterlen(xrange(5))
-    5
 
     """
     try:
@@ -39,12 +39,9 @@ def read_forward(handle):
     """Reads through whitespaces, returns the first non-whitespace line."""
     while True:
         line = handle.readline()
-        # if line has characters and stripping does not remove them,
-        # return the line
-        if line and line.strip():
-            return line
-        # if line ends, return None
-        elif not line:
+        # if line is empty or line has characters and stripping does not remove
+        # them, return the line
+        if (not line) or (line and line.strip()):
             return line
 
 

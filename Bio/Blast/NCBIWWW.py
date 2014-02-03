@@ -6,7 +6,8 @@
 # Patched by Brad Chapman.
 # Chris Wroe added modifications for work in myGrid
 
-"""
+"""Code to invoke the NCBI BLAST server over the internet.
+
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI.
 http://blast.ncbi.nlm.nih.gov/
@@ -15,28 +16,29 @@ Functions:
 qblast        Do a BLAST search using the QBLAST API.
 """
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from __future__ import print_function
 
+from Bio._py3k import StringIO
 from Bio._py3k import _as_string, _as_bytes
-import os
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import urlencode as _urlencode
+from Bio._py3k import Request as _Request
+
 
 def qblast(program, database, sequence,
-           auto_format=None,composition_based_statistics=None,
-           db_genetic_code=None,endpoints=None,entrez_query='(none)',
-           expect=10.0,filter=None,gapcosts=None,genetic_code=None,
-           hitlist_size=50,i_thresh=None,layout=None,lcase_mask=None,
-           matrix_name=None,nucl_penalty=None,nucl_reward=None,
-           other_advanced=None,perc_ident=None,phi_pattern=None,
-           query_file=None,query_believe_defline=None,query_from=None,
-           query_to=None,searchsp_eff=None,service=None,threshold=None,
-           ungapped_alignment=None,word_size=None,
-           alignments=500,alignment_view=None,descriptions=500,
-           entrez_links_new_window=None,expect_low=None,expect_high=None,
-           format_entrez_query=None,format_object=None,format_type='XML',
-           ncbi_gi=None,results_file=None,show_overview=None, megablast=None,
+           auto_format=None, composition_based_statistics=None,
+           db_genetic_code=None, endpoints=None, entrez_query='(none)',
+           expect=10.0, filter=None, gapcosts=None, genetic_code=None,
+           hitlist_size=50, i_thresh=None, layout=None, lcase_mask=None,
+           matrix_name=None, nucl_penalty=None, nucl_reward=None,
+           other_advanced=None, perc_ident=None, phi_pattern=None,
+           query_file=None, query_believe_defline=None, query_from=None,
+           query_to=None, searchsp_eff=None, service=None, threshold=None,
+           ungapped_alignment=None, word_size=None,
+           alignments=500, alignment_view=None, descriptions=500,
+           entrez_links_new_window=None, expect_low=None, expect_high=None,
+           format_entrez_query=None, format_object=None, format_type='XML',
+           ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
            ):
     """Do a BLAST search using the QBLAST server at NCBI.
 
@@ -62,8 +64,6 @@ def qblast(program, database, sequence,
     http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
 
     """
-    import urllib
-    import urllib2
     import time
 
     assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
@@ -74,79 +74,79 @@ def qblast(program, database, sequence,
     # To perform a PSI-BLAST or PHI-BLAST search the service ("Put" and "Get" commands) must be specified
     # (e.g. psi_blast = NCBIWWW.qblast("blastp", "refseq_protein", input_sequence, service="psi"))
     parameters = [
-        ('AUTO_FORMAT',auto_format),
-        ('COMPOSITION_BASED_STATISTICS',composition_based_statistics),
-        ('DATABASE',database),
-        ('DB_GENETIC_CODE',db_genetic_code),
-        ('ENDPOINTS',endpoints),
-        ('ENTREZ_QUERY',entrez_query),
-        ('EXPECT',expect),
-        ('FILTER',filter),
-        ('GAPCOSTS',gapcosts),
-        ('GENETIC_CODE',genetic_code),
-        ('HITLIST_SIZE',hitlist_size),
-        ('I_THRESH',i_thresh),
-        ('LAYOUT',layout),
-        ('LCASE_MASK',lcase_mask),
-        ('MEGABLAST',megablast),
-        ('MATRIX_NAME',matrix_name),
-        ('NUCL_PENALTY',nucl_penalty),
-        ('NUCL_REWARD',nucl_reward),
-        ('OTHER_ADVANCED',other_advanced),
-        ('PERC_IDENT',perc_ident),
-        ('PHI_PATTERN',phi_pattern),
-        ('PROGRAM',program),
+        ('AUTO_FORMAT', auto_format),
+        ('COMPOSITION_BASED_STATISTICS', composition_based_statistics),
+        ('DATABASE', database),
+        ('DB_GENETIC_CODE', db_genetic_code),
+        ('ENDPOINTS', endpoints),
+        ('ENTREZ_QUERY', entrez_query),
+        ('EXPECT', expect),
+        ('FILTER', filter),
+        ('GAPCOSTS', gapcosts),
+        ('GENETIC_CODE', genetic_code),
+        ('HITLIST_SIZE', hitlist_size),
+        ('I_THRESH', i_thresh),
+        ('LAYOUT', layout),
+        ('LCASE_MASK', lcase_mask),
+        ('MEGABLAST', megablast),
+        ('MATRIX_NAME', matrix_name),
+        ('NUCL_PENALTY', nucl_penalty),
+        ('NUCL_REWARD', nucl_reward),
+        ('OTHER_ADVANCED', other_advanced),
+        ('PERC_IDENT', perc_ident),
+        ('PHI_PATTERN', phi_pattern),
+        ('PROGRAM', program),
         #('PSSM',pssm), - It is possible to use PSI-BLAST via this API?
-        ('QUERY',sequence),
-        ('QUERY_FILE',query_file),
-        ('QUERY_BELIEVE_DEFLINE',query_believe_defline),
-        ('QUERY_FROM',query_from),
-        ('QUERY_TO',query_to),
+        ('QUERY', sequence),
+        ('QUERY_FILE', query_file),
+        ('QUERY_BELIEVE_DEFLINE', query_believe_defline),
+        ('QUERY_FROM', query_from),
+        ('QUERY_TO', query_to),
         #('RESULTS_FILE',...), - Can we use this parameter?
-        ('SEARCHSP_EFF',searchsp_eff),
-        ('SERVICE',service),
-        ('THRESHOLD',threshold),
-        ('UNGAPPED_ALIGNMENT',ungapped_alignment),
-        ('WORD_SIZE',word_size),
+        ('SEARCHSP_EFF', searchsp_eff),
+        ('SERVICE', service),
+        ('THRESHOLD', threshold),
+        ('UNGAPPED_ALIGNMENT', ungapped_alignment),
+        ('WORD_SIZE', word_size),
         ('CMD', 'Put'),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(urllib.urlencode(query))
+    message = _as_bytes(_urlencode(query))
 
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
-                              message,
-                              {"User-Agent":"BiopythonClient"})
-    handle = urllib2.urlopen(request)
+    request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+                       message,
+                       {"User-Agent":"BiopythonClient"})
+    handle = _urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
-        ('ALIGNMENTS',alignments),
-        ('ALIGNMENT_VIEW',alignment_view),
-        ('DESCRIPTIONS',descriptions),
-        ('ENTREZ_LINKS_NEW_WINDOW',entrez_links_new_window),
-        ('EXPECT_LOW',expect_low),
-        ('EXPECT_HIGH',expect_high),
-        ('FORMAT_ENTREZ_QUERY',format_entrez_query),
-        ('FORMAT_OBJECT',format_object),
-        ('FORMAT_TYPE',format_type),
-        ('NCBI_GI',ncbi_gi),
-        ('RID',rid),
-        ('RESULTS_FILE',results_file),
-        ('SERVICE',service),
-        ('SHOW_OVERVIEW',show_overview),
+        ('ALIGNMENTS', alignments),
+        ('ALIGNMENT_VIEW', alignment_view),
+        ('DESCRIPTIONS', descriptions),
+        ('ENTREZ_LINKS_NEW_WINDOW', entrez_links_new_window),
+        ('EXPECT_LOW', expect_low),
+        ('EXPECT_HIGH', expect_high),
+        ('FORMAT_ENTREZ_QUERY', format_entrez_query),
+        ('FORMAT_OBJECT', format_object),
+        ('FORMAT_TYPE', format_type),
+        ('NCBI_GI', ncbi_gi),
+        ('RID', rid),
+        ('RESULTS_FILE', results_file),
+        ('SERVICE', service),
+        ('SHOW_OVERVIEW', show_overview),
         ('CMD', 'Get'),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(urllib.urlencode(query))
+    message = _as_bytes(_urlencode(query))
 
-    # Poll NCBI until the results are ready.  Use a 3 second wait
-    delay = 3.0
+    # Poll NCBI until the results are ready.  Use a backoff delay from 2 - 120 second wait
+    delay = 2.0
     previous = time.time()
     while True:
         current = time.time()
@@ -156,16 +156,17 @@ def qblast(program, database, sequence,
             previous = current + wait
         else:
             previous = current
-        #proxy = urllib2.ProxyHandler({'http': os.environ['http_proxy']})
-        #auth = urllib2.HTTPBasicAuthHandler()
-        #opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
-        #urllib2.install_opener(opener)
-        print "D"
-        request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
-                                  message,
-                                  {"User-Agent":"BiopythonClient"})
-        handle = urllib2.urlopen(request)
+        if delay + .5*delay <= 120:
+            delay += .5*delay
+        else:
+            delay = 120
+
+        request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+                           message,
+                           {"User-Agent":"BiopythonClient"})
+        handle = _urlopen(request)
         results = _as_string(handle.read())
+
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
         if results=="\n\n":
@@ -214,21 +215,21 @@ def _parse_qblast_ref_page(handle):
         i = s.find('<div class="error msInf">')
         if i != -1:
             msg = s[i+len('<div class="error msInf">'):].strip()
-            msg = msg.split("</div>",1)[0].split("\n",1)[0].strip()
+            msg = msg.split("</div>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
         #In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
             msg = s[i+len('<p class="error">'):].strip()
-            msg = msg.split("</p>",1)[0].split("\n",1)[0].strip()
+            msg = msg.split("</p>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
         #Generic search based on the way the error messages start:
         i = s.find('Message ID#')
         if i != -1:
             #Break the message at the first HTML tag
-            msg = s[i:].split("<",1)[0].split("\n",1)[0].strip()
+            msg = s[i:].split("<", 1)[0].split("\n", 1)[0].strip()
             raise ValueError("Error message from NCBI: %s" % msg)
         #We didn't recognise the error layout :(
         #print s

@@ -23,7 +23,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.FAout = "Motif/fa.out"
         self.PFMout = "Motif/fa.out"
         self.m=Motif.Motif()
-        self.m.add_instance(Seq("ATATA",self.m.alphabet))
+        self.m.add_instance(Seq("ATATA", self.m.alphabet))
         
     def tearDown(self):
         self.PFMin.close()
@@ -75,7 +75,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[0].instances[8].tostring(), "TCTACGATTGAG")
         self.assertEqual(record.motifs[0].instances[9].tostring(), "TCAAAGATAGAG")
         self.assertEqual(record.motifs[0].instances[10].tostring(), "TCTACGATTGAG")
-        self.assertEqual(record.motifs[0].mask, [1,1,0,1,1,1,1,1,0,1,1,1])
+        self.assertEqual(record.motifs[0].mask, [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1])
         self.assertAlmostEqual(record.motifs[0].score, 57.9079)
         self.assertEqual(record.motifs[1].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[1].instances), 22)
@@ -101,7 +101,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[1].instances[19].tostring(), "GGCGGGCCATCCCTGTATGAA")
         self.assertEqual(record.motifs[1].instances[20].tostring(), "CTCCAGGTCGCATGGAGAGAG")
         self.assertEqual(record.motifs[1].instances[21].tostring(), "CCTCGGATCGCTTGGGAAGAG")
-        self.assertEqual(record.motifs[1].mask, [1,0,1,1,0,1,0,0,1,1,1,0,0,0,1,0,0,0,1,0,1])
+        self.assertEqual(record.motifs[1].mask, [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1])
         self.assertAlmostEqual(record.motifs[1].score, 19.6235)
 
         self.assertEqual(record.motifs[2].alphabet, IUPAC.unambiguous_dna)
@@ -124,7 +124,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[2].instances[15].tostring(), "GACCTGGAGGCTTAGACTTGG")
         self.assertEqual(record.motifs[2].instances[16].tostring(), "GCGCTCTTCCCAAGCGATCCG")
         self.assertEqual(record.motifs[2].instances[17].tostring(), "GGGCCGTCAGCTCTCAAGTCT")
-        self.assertEqual(record.motifs[2].mask, [1,0,1,1,0,1,0,0,0,1,1,0,0,0,1,0,1,0,0,1,1])
+        self.assertEqual(record.motifs[2].mask, [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[2].score, 19.1804)
 
         self.assertEqual(record.motifs[3].alphabet, IUPAC.unambiguous_dna)
@@ -145,7 +145,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[3].instances[13].tostring(), "GCGATCAGCTTGTGGGCGTGC")
         self.assertEqual(record.motifs[3].instances[14].tostring(), "GACAAATCGGATACTGGGGCA")
         self.assertEqual(record.motifs[3].instances[15].tostring(), "GCACTTAGCAGCGTATCGTTA")
-        self.assertEqual(record.motifs[3].mask, [1,1,1,0,0,0,0,1,1,0,0,0,0,1,0,0,1,1,1,0,1])
+        self.assertEqual(record.motifs[3].mask, [1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1])
         self.assertAlmostEqual(record.motifs[3].score, 18.0097)
         self.assertEqual(record.motifs[4].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[4].instances), 15)
@@ -164,7 +164,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[4].instances[12].tostring(), "ATGCTTAGAGGTT")
         self.assertEqual(record.motifs[4].instances[13].tostring(), "AGACTTGGGCGAT")
         self.assertEqual(record.motifs[4].instances[14].tostring(), "CGACCTGGAGGCT")
-        self.assertEqual(record.motifs[4].mask, [1,1,0,1,0,1,1,1,1,1,1,0,1])
+        self.assertEqual(record.motifs[4].mask, [1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1])
         self.assertAlmostEqual(record.motifs[4].score, 16.8287)
         self.assertEqual(record.motifs[5].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[5].instances), 18)
@@ -186,7 +186,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[5].instances[15].tostring(), "CTCTGCGTCGCATGGCGGCGTGG")
         self.assertEqual(record.motifs[5].instances[16].tostring(), "GGAGGCTTAGACTTGGGCGATAC")
         self.assertEqual(record.motifs[5].instances[17].tostring(), "GCATGGAGAGAGATCCGGAGGAG")
-        self.assertEqual(record.motifs[5].mask, [1,0,1,0,1,1,0,0,0,1,0,0,0,0,1,0,1,1,0,0,1,0,1])
+        self.assertEqual(record.motifs[5].mask, [1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1])
         self.assertAlmostEqual(record.motifs[5].score, 15.0441)
         self.assertEqual(record.motifs[6].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[6].instances), 20)
@@ -210,7 +210,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[6].instances[17].tostring(), "GCTCGTCTATGGTCA")
         self.assertEqual(record.motifs[6].instances[18].tostring(), "GCGCATGCTGGATCC")
         self.assertEqual(record.motifs[6].instances[19].tostring(), "GGCCGTCAGCTCTCA")
-        self.assertEqual(record.motifs[6].mask, [1,1,0,1,1,1,1,0,1,0,1,0,0,1,1])
+        self.assertEqual(record.motifs[6].mask, [1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[6].score, 13.3145)
         self.assertEqual(record.motifs[7].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[7].instances), 20)
@@ -234,7 +234,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[7].instances[17].tostring(), "AGTCAATGACACGCGCCTGGG")
         self.assertEqual(record.motifs[7].instances[18].tostring(), "GGTCATGGAATCTTATGTAGC")
         self.assertEqual(record.motifs[7].instances[19].tostring(), "GTAGATAACAGAGGTCGGGGG")
-        self.assertEqual(record.motifs[7].mask, [1,0,0,1,0,0,0,1,1,0,0,1,1,0,0,0,1,1,0,1,1])
+        self.assertEqual(record.motifs[7].mask, [1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[7].score, 11.6098)
         self.assertEqual(record.motifs[8].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[8].instances), 14)
@@ -252,7 +252,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[8].instances[11].tostring(), "GAGATCCGGAGGAGG")
         self.assertEqual(record.motifs[8].instances[12].tostring(), "GCGATCCGAGGGCCG")
         self.assertEqual(record.motifs[8].instances[13].tostring(), "GAGTTCACATGGCTG")
-        self.assertEqual(record.motifs[8].mask, [1,0,1,0,0,1,1,0,1,1,1,1,1,0,1])
+        self.assertEqual(record.motifs[8].mask, [1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1])
         self.assertAlmostEqual(record.motifs[8].score, 11.2943)
         self.assertEqual(record.motifs[9].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[9].instances), 18)
@@ -274,7 +274,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[9].instances[15].tostring(), "TCTAGGCGGGC")
         self.assertEqual(record.motifs[9].instances[16].tostring(), "AGTATGCTTAG")
         self.assertEqual(record.motifs[9].instances[17].tostring(), "TGGAGGCTTAG")
-        self.assertEqual(record.motifs[9].mask, [1,1,1,1,0,1,1,1,1,1,1])
+        self.assertEqual(record.motifs[9].mask, [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1])
         self.assertAlmostEqual(record.motifs[9].score, 9.7924)
         self.assertEqual(record.motifs[10].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[10].instances), 13)
@@ -291,7 +291,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[10].instances[10].tostring(), "ATCCTCTGCGTCGCATGGCGG")
         self.assertEqual(record.motifs[10].instances[11].tostring(), "GACCATAGACGAGCATCAAAG")
         self.assertEqual(record.motifs[10].instances[12].tostring(), "GGCCCTCGGATCGCTTGGGAA")
-        self.assertEqual(record.motifs[10].mask, [1,0,1,1,0,0,0,1,0,0,0,1,1,1,1,0,0,0,0,1,1])
+        self.assertEqual(record.motifs[10].mask, [1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[10].score, 9.01393)
         self.assertEqual(record.motifs[11].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[11].instances), 16)
@@ -311,7 +311,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[11].instances[13].tostring(), "GCGATCCGAG")
         self.assertEqual(record.motifs[11].instances[14].tostring(), "AGTGCGCGTC")
         self.assertEqual(record.motifs[11].instances[15].tostring(), "AGTGCCCGAG")
-        self.assertEqual(record.motifs[11].mask, [1,1,1,1,1,1,1,1,1,1])
+        self.assertEqual(record.motifs[11].mask, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
         self.assertAlmostEqual(record.motifs[11].score, 7.51121)
         self.assertEqual(record.motifs[12].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[12].instances), 16)
@@ -331,7 +331,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[12].instances[13].tostring(), "GCACGTAGCTGGTAAATAGG")
         self.assertEqual(record.motifs[12].instances[14].tostring(), "GCGGCGTGGATTTCATACAG")
         self.assertEqual(record.motifs[12].instances[15].tostring(), "CCTGGAGGCTTAGACTTGGG")
-        self.assertEqual(record.motifs[12].mask, [1,1,0,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,1,1])
+        self.assertEqual(record.motifs[12].mask, [1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[12].score, 5.63667)
         self.assertEqual(record.motifs[13].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[13].instances), 15)
@@ -350,7 +350,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[13].instances[12].tostring(), "ACGCACGGGACTTCAACCAG")
         self.assertEqual(record.motifs[13].instances[13].tostring(), "GCACGTAGCTGGTAAATAGG")
         self.assertEqual(record.motifs[13].instances[14].tostring(), "ATCCTCTGCGTCGCATGGCG")
-        self.assertEqual(record.motifs[13].mask, [1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,0,0,1,1])
+        self.assertEqual(record.motifs[13].mask, [1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[13].score, 3.89842)
         self.assertEqual(record.motifs[14].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[14].instances), 14)
@@ -368,7 +368,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[14].instances[11].tostring(), "TACTCCGGGTAC")
         self.assertEqual(record.motifs[14].instances[12].tostring(), "GACGCAGAGGAT")
         self.assertEqual(record.motifs[14].instances[13].tostring(), "TAGGCGGGCCAT")
-        self.assertEqual(record.motifs[14].mask, [1,1,1,1,1,0,1,1,1,0,1,1])
+        self.assertEqual(record.motifs[14].mask, [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[14].score, 3.33444)
         self.assertEqual(record.motifs[15].alphabet, IUPAC.unambiguous_dna)
         self.assertEqual(len(record.motifs[15].instances), 21)
@@ -393,20 +393,20 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record.motifs[15].instances[18].tostring(), "AGGCTCGCACGTAGCTGG")
         self.assertEqual(record.motifs[15].instances[19].tostring(), "CCACGCCGCCATGCGACG")
         self.assertEqual(record.motifs[15].instances[20].tostring(), "AGCCTCCAGGTCGCATGG")
-        self.assertEqual(record.motifs[15].mask, [1,1,0,1,0,1,0,0,1,1,0,1,1,0,0,0,1,1])
+        self.assertEqual(record.motifs[15].mask, [1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[15].score, 1.0395)
  
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
-        motif= Motif.read(self.PFMin,"jaspar-pfm")
-        assert motif.length==12
+        motif= Motif.read(self.PFMin, "jaspar-pfm")
+        self.assertEqual(motif.length, 12)
 
     def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
-        motif= Motif.read(self.SITESin,"jaspar-sites")
-        assert motif.length==6
+        motif= Motif.read(self.SITESin, "jaspar-sites")
+        self.assertEqual(motif.length, 6)
 
     def test_FAoutput(self):
         """Ensure that we can write proper FASTA output files.

@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program PRANK.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -27,7 +29,7 @@ class PrankCommandline(AbstractCommandline):
     ...                                o="aligned", #prefix only!
     ...                                f=8, #FASTA output
     ...                                notree=True, noxml=True)
-    >>> print prank_cline
+    >>> print(prank_cline)
     prank -d=unaligned.fasta -o=aligned -f=8 -noxml -notree
 
     You would typically run the command line with prank_cline() or via

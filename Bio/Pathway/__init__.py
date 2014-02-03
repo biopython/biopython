@@ -30,6 +30,8 @@ Note: This module should be regarded as a prototype only. API changes are likely
       Comments and feature requests are most welcome.
 """
 
+from functools import reduce
+
 from Bio.Pathway.Rep.MultiGraph import *
 
 
@@ -72,7 +74,7 @@ class Reaction(object):
         # enforce invariants on reactants:
         self.reactants = reactants.copy()
         # loop over original, edit the copy
-        for r, value in reactants.iteritems():
+        for r, value in reactants.items():
             if value == 0:
                 del self.reactants[r]
         self.catalysts = sorted(set(catalysts))
@@ -99,7 +101,7 @@ class Reaction(object):
     def __repr__(self):
         """Returns a debugging string representation of self."""
         return "Reaction(" + \
-               ",".join(map(repr,[self.reactants,
+               ",".join(map(repr, [self.reactants,
                                   self.catalysts,
                                   self.data,
                                   self.reversible])) + ")"
@@ -142,7 +144,7 @@ class Reaction(object):
 
     def species(self):
         """Returns a list of all Species involved in self."""
-        return self.reactants.keys()
+        return list(self.reactants.keys())
 
 
 class System(object):
@@ -162,7 +164,7 @@ class System(object):
 
     def __repr__(self):
         """Returns a debugging string representation of self."""
-        return "System(" + ",".join(map(repr,self.__reactions)) + ")"
+        return "System(" + ",".join(map(repr, self.__reactions)) + ")"
 
     def __str__(self):
         """Returns a string representation of self."""
@@ -188,7 +190,7 @@ class System(object):
 
     def species(self):
         """Returns a list of the species in this system."""
-        return sorted(set(reduce(lambda s,x: s + x,
+        return sorted(set(reduce(lambda s, x: s + x,
                           [x.species() for x in self.reactions()], [])))
 
     def stochiometry(self):

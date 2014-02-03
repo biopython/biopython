@@ -11,6 +11,8 @@
 """Command line wrapper for the multiple alignment program Clustal Omega.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -27,7 +29,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     >>> in_file = "unaligned.fasta"
     >>> out_file = "aligned.fasta"
     >>> clustalomega_cline = ClustalOmegaCommandline(infile=in_file, outfile=out_file, verbose=True, auto=True)
-    >>> print clustalomega_cline
+    >>> print(clustalomega_cline)
     clustalo -i unaligned.fasta -o aligned.fasta --auto -v
 
 

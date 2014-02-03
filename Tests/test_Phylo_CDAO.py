@@ -56,18 +56,18 @@ def _test_write_factory(source):
     def test_write(self):
         """Parse, rewrite and retest an example file."""
         infile = open(filename, 'rb')
-        t1 = CDAOIO.Parser(infile).parse().next()
+        t1 = next(CDAOIO.Parser(infile).parse())
         infile.close()
         outfile = open(DUMMY, 'w+b')
         CDAOIO.write([t1], outfile)
         outfile.close()
         
-        t2 = CDAOIO.Parser(open(DUMMY, 'rb')).parse().next()
+        t2 = next(CDAOIO.Parser(open(DUMMY, 'rb')).parse())
         
         def assert_property(prop_name):
             p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals()])
             p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals()])
-            self.assertEqual(p1,p2)
+            self.assertEqual(p1, p2)
         
         for prop_name in ('name', 'branch_length', 'confidence'):
             assert_property(prop_name)

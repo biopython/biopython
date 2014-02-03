@@ -23,6 +23,8 @@ Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology
 1998 Oct;16(10):939-45.
 
 """
+from __future__ import print_function
+
 from Bio.Application import AbstractCommandline, _Option, _Argument
 
 import warnings
@@ -37,7 +39,7 @@ class AlignAceCommandline(AbstractCommandline):
     >>> from Bio.motifs.applications import AlignAceCommandline
     >>> in_file = "sequences.fasta"
     >>> alignace_cline = AlignAceCommandline(infile=in_file, gcback=0.55)
-    >>> print alignace_cline
+    >>> print(alignace_cline)
     AlignACE -i sequences.fasta -gcback 0.55
 
     You would typically run the command line with alignace_cline() or via
@@ -105,7 +107,7 @@ class CompareAceCommandline(AbstractCommandline):
     >>> m1_file = "sequences1.fasta"
     >>> m2_file = "sequences2.fasta"
     >>> compareace_cline = CompareAceCommandline(motif1=m1_file, motif2=m2_file)
-    >>> print compareace_cline
+    >>> print(compareace_cline)
     CompareACE sequences1.fasta sequences2.fasta
 
     You would typically run the command line with compareace_cline() or via

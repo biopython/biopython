@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Model a single layer in a nueral network.
 
 These classes deal with a layers in the neural network (ie. the input layer,
@@ -6,6 +11,8 @@ hidden layers and the output layer).
 # standard library
 import math
 import random
+
+from Bio._py3k import range
 
 
 def logistic_function(value):
@@ -37,7 +44,7 @@ class AbstractLayer(object):
         else:
             lower_range = 1
 
-        self.nodes = range(lower_range, num_nodes + 1)
+        self.nodes = list(range(lower_range, num_nodes + 1))
 
         self.weights = {}
 
@@ -104,7 +111,7 @@ class InputLayer(AbstractLayer):
         o inputs -- A list of inputs into the network -- this must be
         equal to the number of nodes in the layer.
         """
-        if len(inputs) != len(self.values.keys()) - 1:
+        if len(inputs) != len(self.values) - 1:
             raise ValueError("Inputs do not match input layer nodes.")
 
         # set the node values from the inputs

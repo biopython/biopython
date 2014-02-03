@@ -5,7 +5,12 @@
 
 import os
 import unittest
-from Bio.Blast import NCBIStandalone
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.Blast import NCBIStandalone
 
 
 class TestBlastRecord(unittest.TestCase):
@@ -124,7 +129,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 7927717)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 284596)
@@ -189,7 +194,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 289135)
         self.assertEqual(record.num_sequences, 6999)
         self.assertEqual(record.num_extends, 10742)
@@ -349,7 +354,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 8801581)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 320828)
@@ -432,7 +437,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 8801581)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 320828)
@@ -542,7 +547,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 14679054)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 599117)
@@ -682,7 +687,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 11332752)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 435116)
@@ -1880,7 +1885,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0413)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 51436041)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 1847150)
@@ -2915,7 +2920,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0524)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 23641501)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 1047546)
@@ -3052,7 +3057,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 3835)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 3835)
@@ -3168,7 +3173,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 8762)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 8762)
@@ -3362,7 +3367,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 6844)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 6844)
@@ -3439,7 +3444,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 1902)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 1902)
@@ -3587,7 +3592,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 23174157)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 387821)
@@ -3603,7 +3608,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 25621919)
         self.assertEqual(record.effective_search_space, 3458959065)
         self.assertEqual(record.effective_search_space_used, 3458959065)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 12)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -3653,7 +3658,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 14686001)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 235383)
@@ -3669,7 +3674,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 25704177)
         self.assertEqual(record.effective_search_space, 1979221629)
         self.assertEqual(record.effective_search_space_used, 1979221629)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 12)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -3855,7 +3860,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 6165875)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 55665)
@@ -3871,7 +3876,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 6276684)
         self.assertEqual(record.effective_search_space, 1324380324)
         self.assertEqual(record.effective_search_space_used, 1324380324)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 13)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -3921,7 +3926,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 13588598)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 162273)
@@ -3937,7 +3942,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 6452268)
         self.assertEqual(record.effective_search_space, 2451861840)
         self.assertEqual(record.effective_search_space_used, 2451861840)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 13)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -4525,7 +4530,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 6627852)
         self.assertEqual(record.effective_search_space, 1047200616)
         self.assertEqual(record.effective_search_space_used, 1047200616)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 13)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -4862,7 +4867,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 12068104)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 396723)
@@ -4927,7 +4932,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 8952568)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 387403)
@@ -5028,7 +5033,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 6932673)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 246623)
@@ -5093,7 +5098,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 270485)
         self.assertEqual(record.num_sequences, 6999)
         self.assertEqual(record.num_extends, 9861)
@@ -5253,7 +5258,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 8801581)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 320828)
@@ -5336,7 +5341,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 8801581)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 320828)
@@ -5446,7 +5451,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 14679054)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 599117)
@@ -5658,7 +5663,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0471)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 23669955)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 918938)
@@ -6731,7 +6736,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0524)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 26734132)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 1229035)
@@ -7210,7 +7215,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 3835)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 3835)
@@ -7326,7 +7331,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 8762)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 8762)
@@ -8060,7 +8065,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 6844)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 6844)
@@ -8137,7 +8142,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 1902)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 1902)
@@ -8285,7 +8290,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 23174157)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 387821)
@@ -8301,7 +8306,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 25621919)
         self.assertEqual(record.effective_search_space, 3458959065)
         self.assertEqual(record.effective_search_space_used, 3458959065)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 12)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -8351,7 +8356,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 14686001)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 235383)
@@ -8367,7 +8372,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 25704177)
         self.assertEqual(record.effective_search_space, 1979221629)
         self.assertEqual(record.effective_search_space_used, 1979221629)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 12)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -8553,7 +8558,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 6165875)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 55665)
@@ -8569,7 +8574,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 6276684)
         self.assertEqual(record.effective_search_space, 1324380324)
         self.assertEqual(record.effective_search_space_used, 1324380324)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 13)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -8619,7 +8624,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 13588598)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 162273)
@@ -8635,7 +8640,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_database_length, 6452268)
         self.assertEqual(record.effective_search_space, 2451861840)
         self.assertEqual(record.effective_search_space_used, 2451861840)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 13)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -9560,7 +9565,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 12068104)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 396723)
@@ -9625,7 +9630,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 8952568)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 387403)
@@ -10011,7 +10016,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0470)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 11011949)
         self.assertEqual(record.num_sequences, 82258)
         self.assertEqual(record.num_extends, 406641)
@@ -12276,7 +12281,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0458)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 221707272)
         self.assertEqual(record.num_sequences, 88201)
         self.assertEqual(record.num_extends, 8189338)
@@ -12755,7 +12760,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.31)
         self.assertEqual(record.matrix, 'blastn matrix:1 -3')
-        self.assertEqual(record.gap_penalties, [5,2])
+        self.assertEqual(record.gap_penalties, [5, 2])
         self.assertEqual(record.num_hits, 3835)
         self.assertEqual(record.num_sequences, 87792)
         self.assertEqual(record.num_extends, 3835)
@@ -13061,7 +13066,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0464)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.230)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 7377465)
         self.assertEqual(record.num_sequences, 87404)
         self.assertEqual(record.num_extends, 229017)
@@ -13164,7 +13169,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0410)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.140)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 3730)
         self.assertEqual(record.num_sequences, 19)
         self.assertEqual(record.num_extends, 61)
@@ -13177,7 +13182,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.effective_hsp_length, 47)
         self.assertEqual(record.effective_database_length, 6419)
         self.assertEqual(record.effective_search_space_used, 1270962)
-        self.assertEqual(record.frameshift, ('50,','0.1'))
+        self.assertEqual(record.frameshift, ('50,', '0.1'))
         self.assertEqual(record.threshold, 12)
         self.assertEqual(record.window_size, 40)
         self.assertEqual(len(record.dropoff_1st_pass), 2)
@@ -13446,7 +13451,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -13773,7 +13778,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0410)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.140)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 4155855)
         self.assertEqual(record.num_sequences, 4105)
         self.assertEqual(record.num_extends, 166484)
@@ -13807,7 +13812,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 59)
         self.assertAlmostEqual(record.blast_cutoff[1], 27.3)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -13995,7 +14000,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[2], 0.140)
 
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 2679991)
         self.assertEqual(record.num_sequences, 4105)
         self.assertEqual(record.num_extends, 104631)
@@ -14029,7 +14034,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 58)
         self.assertAlmostEqual(record.blast_cutoff[1], 26.9)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record, None)
         handle.close()
 
@@ -14040,7 +14045,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -14064,7 +14069,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2202L_blastn_002(self):
@@ -14074,7 +14079,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, '2.2.2')
         self.assertEqual(record.date, "Jan-08-2002")
@@ -14098,7 +14103,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2208L_psiblast_001(self):
@@ -14147,7 +14152,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.0431)
         self.assertAlmostEqual(record.ka_params_gap[2], 0.140)
         self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.gap_penalties, [11, 1])
         self.assertEqual(record.num_hits, 2949500)
         self.assertEqual(record.num_sequences, 4311)
         self.assertEqual(record.num_extends, 123966)
@@ -14188,7 +14193,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.15')
         self.assertEqual(record.date, "Oct-15-2006")
@@ -14199,7 +14204,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 1573298872)
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2220L_blastx_001(self):
@@ -14209,7 +14214,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14228,16 +14233,16 @@ class TestNCBITextParser(unittest.TestCase):
         ("gb|AAW12704.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
         ("gb|AAW12703.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
         ]
-        for (a,b) in zip(record.descriptions, descrs):
-            self.assertEqual((a.title, a.score, a.e),b)
-        for (a,b) in zip(record.alignments, descrs):
+        for (a, b) in zip(record.descriptions, descrs):
+            self.assertEqual((a.title, a.score, a.e), b)
+        for (a, b) in zip(record.alignments, descrs):
             self.assertEqual(a.title[0], ">")
             if b[0].endswith("..."):
                 self.assertTrue(a.title.startswith(">"+b[0][:-3]))
             else:
                 self.assertEqual(a.title, ">" + b[0])
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2220L_blastx_002(self):
@@ -14247,7 +14252,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14259,7 +14264,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14271,7 +14276,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14283,7 +14288,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14303,19 +14308,19 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments[0].hsps), 2)
         self.assertEqual(record.alignments[0].hsps[0].expect, 8e-07)
         self.assertEqual(record.alignments[0].hsps[0].align_length, 40)
-        self.assertEqual(record.alignments[0].hsps[0].identities, (25,40))
+        self.assertEqual(record.alignments[0].hsps[0].identities, (25, 40))
         self.assertEqual(record.alignments[0].hsps[1].expect, 8e-07)
         self.assertEqual(record.alignments[0].hsps[1].align_length, 23)
-        self.assertEqual(record.alignments[0].hsps[1].identities, (12,23))
+        self.assertEqual(record.alignments[0].hsps[1].identities, (12, 23))
         self.assertEqual(len(record.alignments[1].hsps), 2)
         self.assertEqual(record.alignments[1].hsps[0].expect, 8e-07)
         self.assertEqual(record.alignments[1].hsps[0].align_length, 40)
-        self.assertEqual(record.alignments[1].hsps[0].identities, (25,40))
+        self.assertEqual(record.alignments[1].hsps[0].identities, (25, 40))
         self.assertEqual(record.alignments[1].hsps[1].expect, 8e-07)
         self.assertEqual(record.alignments[1].hsps[1].align_length, 23)
-        self.assertEqual(record.alignments[1].hsps[1].identities, (12,23))
+        self.assertEqual(record.alignments[1].hsps[1].identities, (12, 23))
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14327,7 +14332,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14339,7 +14344,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.20')
         self.assertEqual(record.date, "Feb-08-2009")
@@ -14351,7 +14356,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2221L_blastp_001(self):
@@ -14361,7 +14366,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.21')
         self.assertEqual(record.date, "Jun-14-2009")
@@ -14374,7 +14379,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.21')
         self.assertEqual(record.date, "Jun-14-2009")
@@ -14387,7 +14392,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, '2.2.21')
         self.assertEqual(record.date, "Jun-14-2009")
@@ -14400,7 +14405,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2222L_blastx_001(self):
@@ -14410,7 +14415,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14423,7 +14428,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14436,7 +14441,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14448,7 +14453,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14461,7 +14466,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14474,7 +14479,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14487,7 +14492,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
         self.assertEqual(record.date, "Sep-27-2009")
@@ -14500,7 +14505,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2222_blastx_001(self):
@@ -14510,7 +14515,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14523,7 +14528,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14537,7 +14542,7 @@ class TestNCBITextParser(unittest.TestCase):
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14549,7 +14554,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14562,7 +14567,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14576,7 +14581,7 @@ class TestNCBITextParser(unittest.TestCase):
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14589,7 +14594,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
         self.assertEqual(record.date, "")
@@ -14602,7 +14607,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastn_001(self):
@@ -14612,7 +14617,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14623,7 +14628,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastn_002(self):
@@ -14633,7 +14638,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
@@ -14646,7 +14651,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastn_003(self):
@@ -14656,7 +14661,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
@@ -14672,7 +14677,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastp_001(self):
@@ -14682,7 +14687,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTP')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14693,7 +14698,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastp_002(self):
@@ -14703,7 +14708,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTP')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus\nsubtilis subsp. subtilis str. 168]')
@@ -14716,7 +14721,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastp_003(self):
@@ -14726,7 +14731,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTP')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "gi|11464971:4-101 pleckstrin [Mus musculus]")
@@ -14742,7 +14747,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 2)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastx_001(self):
@@ -14752,7 +14757,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14771,7 +14776,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
@@ -14784,7 +14789,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_blastx_003(self):
@@ -14794,7 +14799,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'BLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
@@ -14810,7 +14815,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 2)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastn_001(self):
@@ -14820,7 +14825,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14831,7 +14836,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastn_002(self):
@@ -14841,7 +14846,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus\nsubtilis subsp. subtilis str. 168]')
@@ -14854,7 +14859,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastn_003(self):
@@ -14864,7 +14869,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTN')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "gi|11464971:4-101 pleckstrin [Mus musculus]")
@@ -14880,7 +14885,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 2)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastx_001(self):
@@ -14890,7 +14895,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'random_s00')
@@ -14901,7 +14906,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastx_002(self):
@@ -14911,7 +14916,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
@@ -14924,7 +14929,7 @@ class TestNCBITextParser(unittest.TestCase):
         for ali in record.alignments:
             self.assertEqual(len(ali.hsps), 1)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
     def test_text_2226_tblastx_003(self):
@@ -14934,7 +14939,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
-        record = records.next()
+        record = next(records)
         self.assertEqual(record.application, 'TBLASTX')
         self.assertEqual(record.version, '2.2.26+')
         self.assertEqual(record.query, "hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
@@ -14950,7 +14955,7 @@ class TestNCBITextParser(unittest.TestCase):
             else:
                 self.assertEqual(len(ali.hsps), 3)
 
-        self.assertEqual(None, records.next())
+        self.assertEqual(None, next(records))
         handle.close()
 
 

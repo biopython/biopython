@@ -5,15 +5,20 @@
 
 """Bio.SearchIO object to model search results from a single query."""
 
+from __future__ import print_function
+from Bio._py3k import basestring
+
 from copy import deepcopy
 from itertools import chain
 
 from Bio._py3k import OrderedDict
+from Bio._py3k import filter
+
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 
-from _base import _BaseSearchObject
-from hit import Hit
+from ._base import _BaseSearchObject
+from .hit import Hit
 
 
 class QueryResult(_BaseSearchObject):
@@ -30,8 +35,8 @@ class QueryResult(_BaseSearchObject):
     invoking `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-    >>> print qresult
+    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+    >>> print(qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -77,7 +82,7 @@ class QueryResult(_BaseSearchObject):
     100
     >>> len(sliced_qresult)
     3
-    >>> print sliced_qresult
+    >>> print(sliced_qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -134,7 +139,7 @@ class QueryResult(_BaseSearchObject):
     ...     hit.id = hit.id.split('|')[3]
     ...     return hit
     >>> mapped_qresult = qresult.hit_map(renamer)
-    >>> print mapped_qresult
+    >>> print(mapped_qresult)
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -228,17 +233,17 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
-            for hit in self._items.itervalues():
+            for hit in self._items.values():
                 yield hit
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.iterkeys():
+            for hit_id in self._items.keys():
                 yield hit_id
 
         def iteritems(self):
             """Returns an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():
+            for item in self._items.items():
                 yield item
 
     else:
@@ -268,7 +273,7 @@ class QueryResult(_BaseSearchObject):
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.keys():
+            for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
@@ -284,8 +289,12 @@ class QueryResult(_BaseSearchObject):
     def __len__(self):
         return len(self._items)
 
-    def __nonzero__(self):
+    #Python 3:
+    def __bool__(self):
         return bool(self._items)
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __repr__(self):
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
@@ -467,7 +476,7 @@ class QueryResult(_BaseSearchObject):
         description begins with the string 'Homo sapiens', case sensitive:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> def desc_filter(hit):
         ...     return hit.description.startswith('Homo sapiens')
         ...
@@ -476,7 +485,7 @@ class QueryResult(_BaseSearchObject):
         >>> filtered = qresult.hit_filter(desc_filter)
         >>> len(filtered)
         39
-        >>> print filtered[:4]
+        >>> print(filtered[:4])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -498,7 +507,7 @@ class QueryResult(_BaseSearchObject):
             True
 
         """
-        hits = filter(func, self.hits)
+        hits = list(filter(func, self.hits))
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -515,8 +524,8 @@ class QueryResult(_BaseSearchObject):
         HSPs in a Hit except for the first one:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-        >>> print qresult[:8]
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+        >>> print(qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -535,7 +544,7 @@ class QueryResult(_BaseSearchObject):
 
         >>> top_hsp = lambda hit: hit[:1]
         >>> mapped_qresult = qresult.hit_map(top_hsp)
-        >>> print mapped_qresult[:8]
+        >>> print(mapped_qresult[:8])
         Program: blastn (2.2.27+)
           Query: 33211 (61)
                  mir_1
@@ -555,7 +564,7 @@ class QueryResult(_BaseSearchObject):
         """
         hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
-            hits = map(func, hits)
+            hits = [func(x) for x in hits]
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -565,12 +574,12 @@ class QueryResult(_BaseSearchObject):
         function.
 
         `hsp_filter` is the same as `hit_filter`, except that it filters
-        directly on each HSP object in every Hit. If a the filtering removes
-        all HSP object in a given Hit, the entire Hit will be discarded. This
+        directly on each HSP object in every Hit. If the filtering removes
+        all HSP objects in a given Hit, the entire Hit will be discarded. This
         will result in the QueryResult having less Hit after filtering.
 
         """
-        hits = filter(None, (hit.filter(func) for hit in self.hits))
+        hits = [x for x in (hit.filter(func) for hit in self.hits) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -583,7 +592,7 @@ class QueryResult(_BaseSearchObject):
         function to all HSP objects in every Hit, instead of the Hit objects.
 
         """
-        hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
+        hits = [x for x in (hit.map(func) for hit in list(self.hits)[:]) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -607,12 +616,12 @@ class QueryResult(_BaseSearchObject):
         integer index or hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> len(qresult)
         100
         >>> for hit in qresult[:5]:
-        ...     print hit.id
-        ...
+        ...     print(hit.id)
+        ... 
         gi|262205317|ref|NR_030195.1|
         gi|301171311|ref|NR_035856.1|
         gi|270133242|ref|NR_032573.1|
@@ -659,7 +668,7 @@ class QueryResult(_BaseSearchObject):
         correlated with search rank) of a given hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> qresult.index('gi|301171259|ref|NR_035850.1|')
         7
 

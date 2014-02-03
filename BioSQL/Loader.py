@@ -16,6 +16,8 @@ classes in this module directly. Rather, call the load() method on
 a database object.
 """
 # standard modules
+from __future__ import print_function
+
 from time import gmtime, strftime
 
 # biopython
@@ -25,6 +27,8 @@ from Bio import Entrez
 from Bio.Seq import UnknownSeq
 
 from Bio._py3k import _is_int_or_long
+from Bio._py3k import range
+from Bio._py3k import basestring
 
 
 class DatabaseLoader:
@@ -56,7 +60,7 @@ class DatabaseLoader:
         self._load_comment(record, bioentry_id)
         self._load_dbxrefs(record, bioentry_id)
         references = record.annotations.get('references', ())
-        for reference, rank in zip(references, range(len(references))):
+        for reference, rank in zip(references, list(range(len(references)))):
             self._load_reference(reference, rank, bioentry_id)
         self._load_annotations(record, bioentry_id)
         for seq_feature_num in range(len(record.features)):
@@ -320,7 +324,7 @@ class DatabaseLoader:
                 return " " + letter.lower()
             else:
                 return letter
-        answer = "".join([add_space(letter) for letter in entrez_name]).strip()
+        answer = "".join(add_space(letter) for letter in entrez_name).strip()
         assert answer == answer.lower()
         return answer
 
@@ -389,7 +393,7 @@ class DatabaseLoader:
                 species_names = [("scientific name",
                                   taxonomic_record[0]["ScientificName"])]
                 try:
-                    for name_class, names in taxonomic_record[0]["OtherNames"].iteritems():
+                    for name_class, names in taxonomic_record[0]["OtherNames"].items():
                         name_class = self._fix_name_class(name_class)
                         if not isinstance(names, list):
                             #The Entrez parser seems to return single entry
@@ -479,7 +483,7 @@ class DatabaseLoader:
                 "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
                 " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
         taxon_id = self.adaptor.last_id("taxon")
-        assert isinstance(taxon_id, int) or isinstance(taxon_id, long), repr(taxon_id)
+        assert isinstance(taxon_id, (int, long)), repr(taxon_id)
         # ... and its name in taxon_name
         scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
         if scientific_name:
@@ -653,7 +657,7 @@ class DatabaseLoader:
                    "(bioentry_id, term_id, value, rank)" \
                    " VALUES (%s, %s, %s, %s)"
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
-        for key, value in record.annotations.iteritems():
+        for key, value in record.annotations.items():
             if key in ["references", "comment", "ncbi_taxid", "date"]:
                 #Handled separately
                 continue

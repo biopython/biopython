@@ -5,9 +5,13 @@
 
 """mmCIF parser"""
 
+from __future__ import print_function
+
 from string import ascii_letters
 
 import numpy
+
+from Bio._py3k import range
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -31,9 +35,9 @@ class MMCIFParser(object):
             element_list = None
         seq_id_list=mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list=mmcif_dict["_atom_site.label_asym_id"]
-        x_list=map(float, mmcif_dict["_atom_site.Cartn_x"])
-        y_list=map(float, mmcif_dict["_atom_site.Cartn_y"])
-        z_list=map(float, mmcif_dict["_atom_site.Cartn_z"])
+        x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
+        y_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_y"]]
+        z_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_z"]]
         alt_list=mmcif_dict["_atom_site.label_alt_id"]
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
@@ -73,7 +77,7 @@ class MMCIFParser(object):
         # so serial_id means the Model ID specified in the file
         current_model_id = 0
         current_serial_id = 0
-        for i in xrange(0, len(atom_id_list)):
+        for i in range(0, len(atom_id_list)):
             x=x_list[i]
             y=y_list[i]
             z=z_list[i]
@@ -128,7 +132,7 @@ class MMCIFParser(object):
             if aniso_flag==1:
                 u=(aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou=map(float, u)
+                mapped_anisou = [float(x) for x in u]
                 anisou_array=numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell

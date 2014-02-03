@@ -41,7 +41,7 @@ except ImportError:
 
 # OK, we can go ahead
 import unittest
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio import Phylo
 

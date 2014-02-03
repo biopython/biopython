@@ -86,6 +86,8 @@ N1 - Other functional RNA
 XX - Unknown
 """
 
+from __future__ import print_function
+
 from Bio.Alphabet import single_letter_alphabet, generic_protein, \
     generic_dna, generic_rna
 from Bio.Seq import Seq

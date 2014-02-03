@@ -3,16 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code to support writing parsers (OBSOLETE).
-
-
+"""Code to support writing parsers (DEPRECATED).
 
 Classes:
 AbstractParser         Base class for parsers.
 AbstractConsumer       Base class of all Consumers.
 TaggingConsumer        Consumer that tags output with its event.  For debugging
 EventGenerator         Generate Biopython Events from Martel XML output
-                       (note that Martel is now DEPRECATED)
+                       (note that Martel has been removed)
 
 Functions:
 safe_readline          Read a line from a handle, with check for EOF.
@@ -25,10 +23,10 @@ is_blank_line          Test whether a line is blank.
 
 """
 
-
+from Bio import BiopythonDeprecationWarning
 import warnings
-warnings.warn("The module Bio.ParserSupport is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
-
+warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
+              "future release of Biopython.", BiopythonDeprecationWarning)
 
 import sys
 try:
@@ -37,7 +35,8 @@ except ImportError:
     #Python 3, see http://bugs.python.org/issue8206
     InstanceType = object
 from types import MethodType
-import StringIO
+
+from Bio._py3k import StringIO
 
 from Bio import File
 
@@ -59,14 +58,11 @@ class AbstractParser(object):
         raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
-        return self.parse(StringIO.StringIO(string))
+        return self.parse(StringIO(string))
 
     def parse_file(self, filename):
-        h = open(filename)
-        try:
+        with open(filename) as h:
             retval = self.parse(h)
-        finally:
-            h.close()
         return retval
 
 
@@ -298,7 +294,7 @@ def read_and_call_while(uhandle, method, **keywds):
 
     """
     nlines = 0
-    while 1:
+    while True:
         line = safe_readline(uhandle)
         # If I've failed the condition, then stop reading the line.
         if _fails_conditions(*(line,), **keywds):
@@ -320,7 +316,7 @@ def read_and_call_until(uhandle, method, **keywds):
 
     """
     nlines = 0
-    while 1:
+    while True:
         line = safe_readline(uhandle)
         # If I've met the condition, then stop reading the line.
         if not _fails_conditions(*(line,), **keywds):

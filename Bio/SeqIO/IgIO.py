@@ -9,7 +9,10 @@
 
 """Bio.SeqIO support for the "ig" (IntelliGenetics or MASE) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You are expected to use this module via the Bio.SeqIO functions.
+"""
+
+from __future__ import print_function
 
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
@@ -90,13 +93,12 @@ if __name__ == "__main__":
     if os.path.isdir(path):
         for filename in os.listdir(path):
             if os.path.splitext(filename)[-1] == ".txt":
-                print
+                print("")
                 print(filename)
                 print("-" * len(filename))
-                handle = open(os.path.join(path, filename))
-                for record in IgIterator(handle):
-                    print record.id, len(record)
-                handle.close()
+                with open(os.path.join(path, filename)) as handle:
+                    for record in IgIterator(handle):
+                        print("%s %i" % (record.id, len(record)))
         print("Done")
     else:
         print("Could not find input files")

@@ -1,6 +1,8 @@
 #/usr/bin/env python
 """Small script to test timing of loading records into a BioSQL database.
 """
+from __future__ import print_function
+
 import time
 # set up the connection
 from Bio import GenBank

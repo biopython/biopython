@@ -8,7 +8,7 @@ in case the calculation was done.
 
 import os
 import tarfile
-from Controller import SimCoalController
+from .Controller import SimCoalController
 
 
 class SimCoalCache(object):

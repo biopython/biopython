@@ -4,6 +4,8 @@
 This is a very basic test of Neural Network functionality.
 """
 # Neural Network code we'll be using
+from __future__ import print_function
+
 from Bio.NeuralNetwork.Training import TrainingExample
 from Bio.NeuralNetwork.BackPropagation import Layer
 from Bio.NeuralNetwork.BackPropagation.Network import BasicNetwork
@@ -52,10 +54,9 @@ def stopping_criteria(num_iterations, validation_error, training_error):
     """
     if num_iterations % 100 == 0:
         if VERBOSE:
-            print "error:", validation_error
+            print("error: %s" % validation_error)
     if num_iterations >= 2000:
-        return 1
-
-    return 0
+        return True
+    return False
 
 main()

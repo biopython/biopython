@@ -19,7 +19,7 @@ from Bio.Emboss.Applications import FTreeDistCommandline, FDNAParsCommandline
 #Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
-exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist','fprotpars','fconsense',
+exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist', 'fprotpars', 'fconsense',
                'fseqboot', 'ftreedist', 'fdnapars']
 exes = dict()  # Dictionary mapping from names to exe locations
 
@@ -33,10 +33,10 @@ if "EMBOSS_ROOT" in os.environ:
                 exes[name] = os.path.join(path, name+".exe")
     del path, name
 if sys.platform!="win32":
-    import commands
+    from Bio._py3k import getoutput
     for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
-        output = commands.getoutput("%s -help" % name)
+        output = getoutput("%s -help" % name)
         if "not found" not in output and "not recognized" not in output:
             exes[name] = name
         del output
@@ -65,7 +65,7 @@ def write_AlignIO_protein():
 
 def clean_up():
     """Delete tests files (to be used as tearDown() function in test fixtures)"""
-    for filename in ["test_file", "Phylip/opuntia.phy","Phylip/hedgehog.phy"]:
+    for filename in ["test_file", "Phylip/opuntia.phy", "Phylip/hedgehog.phy"]:
         if os.path.isfile(filename):
             os.remove(filename)
 
@@ -178,7 +178,7 @@ class ParsimonyTests(unittest.TestCase):
                                          auto= True, stdout=True)
         stdout, stderr = cline()
         a_taxa = [s.name.replace(" ", "_") for s in
-                  AlignIO.parse(open(filename, "r"), format).next()]
+                  next(AlignIO.parse(open(filename, "r"), format))]
         for tree in parse_trees("test_file"):
             t_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
             self.assertEqual(sorted(a_taxa), sorted(t_taxa))
@@ -275,11 +275,11 @@ class TreeComparisonTests(unittest.TestCase):
                                      auto = True, filter = True)
         stdout, stderr = cline()
         #Split the next and get_taxa into two steps to help 2to3 work
-        tree1 = parse_trees("test_file").next()
+        tree1 = next(parse_trees("test_file"))
         taxa1 = tree1.get_taxa()
         for tree in parse_trees("Phylip/horses.tree"):
             taxa2 = tree.get_taxa()
-            self.assertEqual(sorted(taxa1),sorted(taxa2))
+            self.assertEqual(sorted(taxa1), sorted(taxa2))
 
     def test_ftreedist(self):
         """Calculate the distance between trees with ftreedist"""

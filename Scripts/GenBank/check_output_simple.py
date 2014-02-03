@@ -10,6 +10,8 @@ Usage:
 
 """
 # standard library
+from __future__ import print_function
+
 import sys
 
 # GenBank stuff to test
@@ -25,19 +27,19 @@ handle = open(sys.argv[1], 'r')
 
 iterator = GenBank.Iterator(handle, parser)
 
-while 1:
-    cur_record = iterator.next()
+while True:
+    cur_record = next(iterator)
 
     if not(cur_record):
         break
 
     print("***Record")
-    print "Seq:", cur_record.seq
-    print "Id:", cur_record.id
-    print "Name:", cur_record.name
-    print "Description", cur_record.description
+    print("Seq: %s" % cur_record.seq)
+    print("Id: %s" % cur_record.id)
+    print("Name: %s" % cur_record.name)
+    print("Description: %s" % cur_record.description)
     print("Annotations****")
-    for annotation_key in cur_record.annotations.keys():
+    for annotation_key in cur_record.annotations:
         if annotation_key != 'references':
             print("Key: %s" % annotation_key)
             print("Value: %s" % cur_record.annotations[annotation_key])

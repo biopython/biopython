@@ -17,9 +17,9 @@ import os
 
 from Bio import BiopythonDeprecationWarning
 
-import BioSeq
-import Loader
-import DBUtils
+from . import BioSeq
+from . import Loader
+from . import DBUtils
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
@@ -102,7 +102,7 @@ def open_database(driver="MySQLdb", **kwargs):
             elif "db" in kw:
                 kw["dbname"] = kw["db"]
                 del kw["db"]
-            dsn = ' '.join(['='.join(i) for i in kw.items()])
+            dsn = ' '.join('='.join(i) for i in kw.items())
             conn = connect(dsn)
 
     if os.name == "java":
@@ -175,11 +175,11 @@ class DBServer:
 
         def values(self):
             """List of BioSeqDatabase objects in the database."""
-            return [self[key] for key in self.keys()]
+            return [self[key] for key in self]
 
         def items(self):
             """List of (namespace, BioSeqDatabase) for entries in the database."""
-            return [(key, self[key]) for key in self.keys()]
+            return [(key, self[key]) for key in self]
 
         def iterkeys(self):
             """Iterate over namespaces (sub-databases) in the database."""
@@ -547,7 +547,7 @@ class BioSeqDatabase:
         warnings.warn("Use bio_seq_database.keys() instead of "
                       "bio_seq_database.get_all_primary_ids()",
                       BiopythonDeprecationWarning)
-        return self.keys()
+        return list(self.keys())
 
     def __getitem__(self, key):
         return BioSeq.DBSeqRecord(self.adaptor, key)
@@ -593,11 +593,11 @@ class BioSeqDatabase:
 
         def values(self):
             """List of DBSeqRecord objects in the namespace (sub database)."""
-            return [self[key] for key in self.keys()]
+            return [self[key] for key in self]
 
         def items(self):
             """List of (id, DBSeqRecord) for the namespace (sub database)."""
-            return [(key, self[key]) for key in self.keys()]
+            return [(key, self[key]) for key in self]
 
         def iterkeys(self):
             """Iterate over ids (which may not be meaningful outside this database)."""
@@ -631,10 +631,10 @@ class BioSeqDatabase:
     def lookup(self, **kwargs):
         if len(kwargs) != 1:
             raise TypeError("single key/value parameter expected")
-        k, v = kwargs.items()[0]
+        k, v = list(kwargs.items())[0]
         if k not in _allowed_lookups:
-            raise TypeError("lookup() expects one of %s, not %r" %
-                            (repr(_allowed_lookups.keys())[1:-1], repr(k)))
+            raise TypeError("lookup() expects one of %r, not %r" %
+                            (list(_allowed_lookups.keys()), k))
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
         seqid = lookup_func(self.dbid, v)

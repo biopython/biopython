@@ -40,8 +40,8 @@ that yields one QueryResult object per iteration.
 
     >>> from Bio import SearchIO
     >>> for qresult in SearchIO.parse('Blast/mirna.xml', 'blast-xml'):
-    ...     print qresult.id, qresult.description
-    ...
+    ...     print("%s %s" % (qresult.id, qresult.description))
+    ... 
     33211 mir_1
     33212 mir_2
     33213 mir_3
@@ -52,8 +52,8 @@ QueryResult object and will raise an exception if the source file contains more
 than one queries:
 
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
-    >>> print qresult.id, qresult.description
-    ...
+    >>> print("%s %s" % (qresult.id, qresult.description))
+    ... 
     gi|11464971:4-101 pleckstrin [Mus musculus]
 
     >>> SearchIO.read('Blast/mirna.xml', 'blast-xml')
@@ -177,7 +177,7 @@ Support for parsing and indexing:
 
  - exonerate-text   - Exonerate plain text output.
  - exonerate-vulgar - Exonerate vulgar line.
- - exonerate-text   - Exonerate cigar line.
+ - exonerate-cigar  - Exonerate cigar line.
  - fasta-m10        - Bill Pearson's FASTA -m 10 output.
  - hmmer3-text      - HMMER3 regular text output format. Supported HMMER3
                       subprograms are hmmscan, hmmsearch, and phmmer.
@@ -193,6 +193,9 @@ the main SearchIO functions. More details and examples are available in each
 of the format's documentation.
 
 """
+
+from __future__ import print_function
+from Bio._py3k import basestring
 
 __docformat__ = 'epytext en'
 
@@ -278,8 +281,8 @@ def parse(handle, format=None, **kwargs):
     >>> qresults
     <generator object ...>
     >>> for qresult in qresults:
-    ...     print "Search %s has %i hits" % (qresult.id, len(qresult))
-    ...
+    ...     print("Search %s has %i hits" % (qresult.id, len(qresult)))
+    ... 
     Search 33211 has 100 hits
     Search 33212 has 44 hits
     Search 33213 has 95 hits
@@ -291,8 +294,8 @@ def parse(handle, format=None, **kwargs):
 
     >>> from Bio import SearchIO
     >>> for qresult in SearchIO.parse('Blast/mirna.tab', 'blast-tab', comments=True):
-    ...     print "Search %s has %i hits" % (qresult.id, len(qresult))
-    ...
+    ...     print("Search %s has %i hits" % (qresult.id, len(qresult)))
+    ... 
     Search 33211 has 100 hits
     Search 33212 has 44 hits
     Search 33213 has 95 hits
@@ -325,8 +328,8 @@ def read(handle, format=None, **kwargs):
 
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
-    >>> print qresult.id, qresult.description
-    ...
+    >>> print("%s %s" % (qresult.id, qresult.description))
+    ... 
     gi|11464971:4-101 pleckstrin [Mus musculus]
 
     If the given handle has no results, an exception will be raised:
@@ -353,12 +356,12 @@ def read(handle, format=None, **kwargs):
     generator = parse(handle, format, **kwargs)
 
     try:
-        first = generator.next()
+        first = next(generator)
     except StopIteration:
         raise ValueError("No query results found in handle")
     else:
         try:
-            second = generator.next()
+            second = next(generator)
         except StopIteration:
             second = None
 
@@ -382,7 +385,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> from Bio import SearchIO
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> search_dict = SearchIO.to_dict(qresults)
-    >>> sorted(search_dict.keys())
+    >>> sorted(search_dict)
     ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']
     >>> search_dict['gi|156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
@@ -396,7 +399,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> key_func = lambda qresult: qresult.id.split('|')[1]
     >>> search_dict = SearchIO.to_dict(qresults, key_func)
-    >>> sorted(search_dict.keys())
+    >>> sorted(search_dict)
     ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
     >>> search_dict['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
@@ -441,7 +444,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml')
     >>> search_idx
     SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=None)
-    >>> sorted(search_idx.keys())
+    >>> sorted(search_idx)
     ['gi|156630997:105-1160', 'gi|195230749:301-1383', ..., 'gi|53729353:216-1313']
     >>> search_idx['gi|195230749:301-1383']
     QueryResult(id='gi|195230749:301-1383', 5 hits)
@@ -467,7 +470,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml', key_func)
     >>> search_idx
     SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=<function <lambda> at ...>)
-    >>> sorted(search_idx.keys())
+    >>> sorted(search_idx)
     ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
     >>> search_idx['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
@@ -512,7 +515,7 @@ def index_db(index_filename, filenames=None, format=None,
 
     >>> from Bio import SearchIO
     >>> db_idx = SearchIO.index_db(':memory:', 'Blast/mirna.xml', 'blast-xml')
-    >>> sorted(db_idx.keys())
+    >>> sorted(db_idx)
     ['33211', '33212', '33213']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
@@ -524,7 +527,7 @@ def index_db(index_filename, filenames=None, format=None,
     >>> from Bio import SearchIO
     >>> files = ['Blast/mirna.xml', 'Blast/wnts.xml']
     >>> db_idx = SearchIO.index_db(':memory:', files, 'blast-xml')
-    >>> sorted(db_idx.keys())
+    >>> sorted(db_idx)
     ['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
@@ -541,6 +544,9 @@ def index_db(index_filename, filenames=None, format=None,
 
     BGZF compressed files are supported, and detected automatically. Ordinary
     GZIP compressed files are not supported.
+
+    See also Bio.SearchIO.index(), Bio.SearchIO.to_dict(), and the Python module
+    glob which is useful for building lists of files.  
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)
@@ -671,3 +677,4 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

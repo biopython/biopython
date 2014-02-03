@@ -8,8 +8,9 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import zip
 
-from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
+from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
 
 __all__ = ['ExonerateVulgarParser', 'ExonerateVulgarIndexer']
@@ -102,8 +103,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
                 hstarts, hends = hends, hstarts
 
     # set start and end ranges
-    hsp['query_ranges'] = zip(qstarts, qends)
-    hsp['hit_ranges'] = zip(hstarts, hends)
+    hsp['query_ranges'] = list(zip(qstarts, qends))
+    hsp['hit_ranges'] = list(zip(hstarts, hends))
     return hsp
 
 
@@ -153,7 +154,8 @@ class ExonerateVulgarParser(_BaseExonerateParser):
         # cast score into int
         hsp['score'] = int(hsp['score'])
         # store vulgar line and parse it
-        hsp['vulgar_comp'] = vulgars.group(10)
+        # rstrip to remove line endings (otherwise gives errors in Windows)
+        hsp['vulgar_comp'] = vulgars.group(10).rstrip()
         hsp = parse_vulgar_comp(hsp, hsp['vulgar_comp'])
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}

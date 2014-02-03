@@ -4,11 +4,18 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_translations.py
 
+from __future__ import print_function
+
 import sys
 import time
 
 sys.path.insert(0, '.')
-from Tkinter import *
+
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
 
 from Bio.Seq import reverse_complement, translate
 from Bio.SeqUtils import GC
@@ -67,7 +74,7 @@ class xbb_translations:
             subseq = seq[i:i+60]
             p = i/3
             res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  '.join(map(None, protein[p:p+20])) + '\n'
+            res += '  '.join(protein[p:p+20]) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
 
@@ -95,16 +102,16 @@ class xbb_translations:
             p = i/3
             # + frames
             res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
-            res += ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
-            res += '  '.join(map(None, frames[1][p:p+20])) + '\n'
+            res += '  ' + '  '.join(frames[3][p:p+20]) + '\n'
+            res += ' ' + '  '.join(frames[2][p:p+20]) + '\n'
+            res += '  '.join(frames[1][p:p+20]) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
             res += csubseq.lower() + '\n'
             # - frames
-            res += '  '.join(map(None, frames[-2][p:p+20])) + ' \n'
-            res += ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
-            res += '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
+            res += '  '.join(frames[-2][p:p+20]) + ' \n'
+            res += ' ' + '  '.join(frames[-1][p:p+20]) + '\n'
+            res += '  ' + '  '.join(frames[-3][p:p+20]) + '\n\n'
 
         return res
 
@@ -113,12 +120,12 @@ if __name__ == '__main__':
     s = 'ATTCCGGTTGATCCTGCCGGACCCGACCGCTATCGGGGTAGGGATAAGCCATGGGAGTCTTACACTCCCGGGTAAGGGAGTGTGGCGGACGGCTGAGTAACACGTGGCTAACCTACCCTCGGGACGGGGATAACCCCGGGAAACTGGGGATAATCCCCGATAGGGAAGGAGTCCTGGAATGGTTCCTTCCCTAAAGGGCTATAGGCTATTTCCCGTTTGTAGCCGCCCGAGGATGGGGCTACGGCCCATCAGGCTGTCGGTGGGGTAAAGGCCCACCGAACCTATAACGGGTAGGGGCCGTGGAAGCGGGAGCCTCCAGTTGGGCACTGAGACAAGGGCCCAGGCCCTACGGGGCGCACCAGGCGCGAAACGTCCCCAATGCGCGAAAGCGTGAGGGCGCTACCCCGAGTGCCTCCGCAAGGAGGCTTTTCCCCGCTCTAAAAAGGCGGGGGAATAAGCGGGGGGCAAGTCTGGTGTCAGCCGCCGCGGTAATACCAGCTCCGCGAGTGGTCGGGGTGATTACTGGGCCTAAAGCGCCTGTAGCCGGCCCACCAAGTCGCCCCTTAAAGTCCCCGGCTCAACCGGGGAACTGGGGGCGATACTGGTGGGCTAGGGGGCGGGAGAGGCGGGGGGTACTCCCGGAGTAGGGGCGAAATCCTTAGATACCGGGAGGACCACCAGTGGCGGAAGCGCCCCGCTA'
 
     test = xbb_translations()
-#     for i in range(0, 4):
-#         print test.frame1(s[i:])
-    #print s
-    #print test.complement(s)
+#    for i in range(0, 4):
+#        print(test.frame1(s[i:]))
+    #print(s)
+    #print(test.complement(s))
     print('============================================================')
     print(test.gcframe(s))
 
-#     for i in Translate.unambiguous_dna_by_id.keys():
-#         print Translate.unambiguous_dna_by_id[i].table.names[0]
+#    for i in Translate.unambiguous_dna_by_id:
+#        print(Translate.unambiguous_dna_by_id[i].table.names[0])

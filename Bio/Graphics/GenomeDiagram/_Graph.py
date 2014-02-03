@@ -28,6 +28,8 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+
 from reportlab.lib import colors
 
 from math import sqrt
@@ -146,7 +148,7 @@ class GraphData(object):
             Return data as a list of sorted (position, value) tuples
         """
         data = []
-        for xval in self.data.keys():
+        for xval in self.data:
             yval = self.data[xval]
             data.append((xval, yval))
         data.sort()
@@ -168,8 +170,7 @@ class GraphData(object):
             Returns the (minimum, lowerQ, medianQ, upperQ, maximum) values as
             a tuple
         """
-        data = self.data.values()
-        data.sort()
+        data = sorted(self.data.values())
         datalen = len(data)
         return(data[0], data[datalen//4], data[datalen//2],
                data[3*datalen//4], data[-1])
@@ -180,8 +181,7 @@ class GraphData(object):
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
         """
-        positions = self.data.keys()
-        positions.sort()
+        positions = sorted(self.data) # i.e. dict keys
         # Return first and last positions in graph
         #print len(self.data)
         return (positions[0], positions[-1])
@@ -191,7 +191,7 @@ class GraphData(object):
 
             Returns the mean value for the data points
         """
-        data = self.data.values()
+        data = list(self.data.values())
         sum = 0.
         for item in data:
             sum += float(item)
@@ -202,7 +202,7 @@ class GraphData(object):
 
             Returns the sample standard deviation for the data
         """
-        data = self.data.values()
+        data = list(self.data.values())
         m = self.mean()
         runtotal = 0.
         for entry in data:
@@ -238,10 +238,8 @@ class GraphData(object):
             high = index.stop
             if index.step is not None and index.step != 1:
                 raise ValueError
-            positions = self.data.keys()
-            positions.sort()
             outlist = []
-            for pos in positions:
+            for pos in sorted(self.data):
                 if pos >= low and pos <=high:
                     outlist.append((pos, self.data[pos]))
             return outlist

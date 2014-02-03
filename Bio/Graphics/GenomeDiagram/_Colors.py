@@ -21,6 +21,9 @@
 """
 
 # ReportLab imports
+from __future__ import print_function
+from Bio._py3k import basestring
+
 from reportlab.lib import colors
 
 
@@ -107,20 +110,20 @@ class ColorTranslator(object):
             Reads information from a file containing color information and
             stores it internally
         """
-        lines = open(filename, 'r').readlines()
-        for line in lines:
-            data = line.strip().split('\t')
-            try:
-                label = int(data[0])
-                red, green, blue = int(data[1]), int(data[2]), int(data[3])
-                if len(data) > 4:
-                    comment = data[4]
-                else:
-                    comment = ""
-                self._colorscheme[label] = (self.int255_color((red, green, blue)),
-                                             comment)
-            except:
-                raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
+        with open(filename, 'r').readlines() as lines:
+            for line in lines:
+                data = line.strip().split('\t')
+                try:
+                    label = int(data[0])
+                    red, green, blue = int(data[1]), int(data[2]), int(data[3])
+                    if len(data) > 4:
+                        comment = data[4]
+                    else:
+                        comment = ""
+                    self._colorscheme[label] = (self.int255_color((red, green, blue)),
+                                                 comment)
+                except:
+                    raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
 
     def get_artemis_colorscheme(self):
         """ get_artemis_colorscheme(self)
@@ -145,7 +148,7 @@ class ColorTranslator(object):
             value = int(value)
         except ValueError:
             if value.count('.'):                           # dot-delimited
-                value = int(artemis_color.split('.',1)[0]) # Use only first integer
+                value = int(artemis_color.split('.', 1)[0]) # Use only first integer
             else:
                 raise
         if value in self._artemis_colorscheme:

@@ -9,12 +9,21 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import re
 import sys
 import time
 
-from Tkinter import *
-from tkFileDialog import askopenfilename, asksaveasfilename
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
+try:
+    import tkFileDialog as filedialog # Python 2
+except ImportError:
+    from tkinter import filedialog # Python 3
 
 sys.path.insert(0, '.')
 from xbb_utils import *
@@ -23,8 +32,7 @@ from xbb_blast import BlastIt
 from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
 from Bio.Data import CodonTable
-from Bio.SeqUtils import quick_FASTA_reader
-
+from Bio.SeqIO.FastaIO import SimpleFastaParser
 
 class xbb_widget:
     def __init__(self, parent=None):
@@ -61,7 +69,7 @@ class xbb_widget:
     def init_variables(self):
         self.seqwidth = 60
         self.translation_tables = {}
-        for i, table in CodonTable.unambiguous_dna_by_id.iteritems():
+        for i, table in CodonTable.unambiguous_dna_by_id.items():
             self.translation_tables[table.names[0]] = i
         self.translator = xbb_translations()
 
@@ -282,7 +290,7 @@ class xbb_widget:
 
     def get_selection(self):
         w = self.sequence_id
-        #print w.selection_own()
+        #print(w.selection_own())
         #w.selection_own()
         try:
             return w.selection_get()
@@ -329,13 +337,14 @@ class xbb_widget:
 
     def open(self, file=None):
         if not file:
-            file = askopenfilename()
+            file = filedialog.askopenfilename()
         if not file:
             return
-        genes = quick_FASTA_reader(file)
-        self.insert_sequence(genes[0])
+        with open(file) as handle:
+            self.insert_sequence(next(SimpleFastaParser(handle)))
 
-    def insert_sequence(self, (name, sequence)):
+    def insert_sequence(self, name_sequence):
+        (name, sequence) = name_sequence
         self.sequence_id.delete(0.0, END)
         self.sequence_id.insert(END, sequence.upper())
         self.fix_sequence()
@@ -355,7 +364,7 @@ class xbb_widget:
 
     def export(self):
         seq = self.get_self_selection()
-        print seq, len(seq)
+        print("%s %i" % (seq, len(seq)))
 
     def gcframe(self):
         seq = self.get_selection_or_sequence()
@@ -423,7 +432,7 @@ GC=%f
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
-        seq = map(None, re.sub('[^A-Z]', '', seq))
+        seq = list(re.sub('[^A-Z]', '', seq))
         seq.reverse()
         seq = ''.join(seq)
 
@@ -444,7 +453,7 @@ GC=%f
         seq = w.get(start, stop)
         seq = re.sub('[^A-Z]', '', seq)
 
-        #print 'seq >%s<' % seq
+        #print('seq >%s<' % seq)
         complementary = self.translator.complement(seq)
         w.delete(start, stop)
         w.insert(start, complementary)

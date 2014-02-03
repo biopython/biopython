@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Implement Roulette Wheel selection on a population.
 
 This implements Roulette Wheel selection in which individuals are
@@ -9,7 +14,7 @@ import random
 import copy
 
 # local modules
-from Abstract import AbstractSelection
+from .Abstract import AbstractSelection
 
 
 class RouletteWheelSelection(AbstractSelection):
@@ -49,8 +54,7 @@ class RouletteWheelSelection(AbstractSelection):
         # set up the current probabilities for selecting organisms
         # from the population
         prob_wheel = self._set_up_wheel(population)
-        probs = prob_wheel.keys()
-        probs.sort()
+        probs = sorted(prob_wheel)
 
         # now create the new population with the same size as the original
         new_population = []

@@ -5,6 +5,8 @@
 
 """Half-sphere exposure and coordination number calculation."""
 
+from __future__ import print_function
+
 import warnings
 from math import pi
 
@@ -207,20 +209,19 @@ class HSExposureCA(_AbstractHSExposure):
         if len(self.ca_cb_list)==0:
             warnings.warn("Nothing to draw.", RuntimeWarning)
             return
-        fp=open(filename, "w")
-        fp.write("from pymol.cgo import *\n")
-        fp.write("from pymol import cmd\n")
-        fp.write("obj=[\n")
-        fp.write("BEGIN, LINES,\n")
-        fp.write("COLOR, %.2f, %.2f, %.2f,\n" % (1.0, 1.0, 1.0))
-        for (ca, cb) in self.ca_cb_list:
-            x,y,z=ca.get_array()
-            fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x,y,z))
-            x,y,z=cb.get_array()
-            fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x,y,z))
-        fp.write("END]\n")
-        fp.write("cmd.load_cgo(obj, 'HS')\n")
-        fp.close()
+        with open(filename, "w") as fp:
+            fp.write("from pymol.cgo import *\n")
+            fp.write("from pymol import cmd\n")
+            fp.write("obj=[\n")
+            fp.write("BEGIN, LINES,\n")
+            fp.write("COLOR, %.2f, %.2f, %.2f,\n" % (1.0, 1.0, 1.0))
+            for (ca, cb) in self.ca_cb_list:
+                x, y, z=ca.get_array()
+                fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x, y, z))
+                x, y, z=cb.get_array()
+                fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x, y, z))
+            fp.write("END]\n")
+            fp.write("cmd.load_cgo(obj, 'HS')\n")
 
 
 class HSExposureCB(_AbstractHSExposure):
@@ -325,17 +326,17 @@ if __name__=="__main__":
     hse=HSExposureCA(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
-    print
+    print("")
 
     hse=HSExposureCB(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
-    print
+    print("")
 
     hse=ExposureCN(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
-    print
+    print("")
 
     for c in model:
         for r in c:

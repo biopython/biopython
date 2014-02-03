@@ -34,11 +34,13 @@
 # IMPORTS
 
 # ReportLab
+from __future__ import print_function
+
 from reportlab.pdfbase import _fontdata
 from reportlab.lib import colors
 
 # GenomeDiagram
-from _Feature import Feature
+from ._Feature import Feature
 
 # Builtins
 import re
@@ -181,7 +183,7 @@ class FeatureSet(object):
         """
         # If no attribute or value specified, return all features
         if attribute is None or value is None:
-            return self.features.values()
+            return list(self.features.values())
         # If no comparator is specified, return all features where the attribute
         # value matches that passed
         if comparator is None:
@@ -210,7 +212,7 @@ class FeatureSet(object):
 
             Return a list of all ids for the feature set
         """
-        return self.features.keys()
+        return list(self.features.keys())
 
     def range(self):
         """ range(self)

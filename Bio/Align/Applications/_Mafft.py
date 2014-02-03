@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment programme MAFFT.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 import os
@@ -22,7 +24,7 @@ class MafftCommandline(AbstractCommandline):
     >>> mafft_exe = "/opt/local/mafft"
     >>> in_file = "../Doc/examples/opuntia.fasta"
     >>> mafft_cline = MafftCommandline(mafft_exe, input=in_file)
-    >>> print mafft_cline
+    >>> print(mafft_cline)
     /opt/local/mafft ../Doc/examples/opuntia.fasta
 
     If the mafft binary is on the path (typically the case on a Unix style
@@ -31,7 +33,7 @@ class MafftCommandline(AbstractCommandline):
     >>> from Bio.Align.Applications import MafftCommandline
     >>> in_file = "../Doc/examples/opuntia.fasta"
     >>> mafft_cline = MafftCommandline(input=in_file)
-    >>> print mafft_cline
+    >>> print(mafft_cline)
     mafft ../Doc/examples/opuntia.fasta
 
     You would typically run the command line with mafft_cline() or via
@@ -40,9 +42,8 @@ class MafftCommandline(AbstractCommandline):
     want to save to a file and then parse, e.g.::
 
         stdout, stderr = mafft_cline()
-        handle = open("aligned.fasta", "w")
-        handle.write(stdout)
-        handle.close()
+        with open("aligned.fasta", "w") as handle:
+            handle.write(stdout)
         from Bio import AlignIO
         align = AlignIO.read("aligned.fasta", "fasta")
 
@@ -78,7 +79,7 @@ class MafftCommandline(AbstractCommandline):
     Last checked against version: MAFFT v6.717b (2009/12/03)
     """
     def __init__(self, cmd="mafft", **kwargs):
-        BLOSUM_MATRICES = ["30","45","62","80"]
+        BLOSUM_MATRICES = ["30", "45", "62", "80"]
         self.parameters = \
             [
             #**** Algorithm ****
@@ -367,3 +368,4 @@ class MafftCommandline(AbstractCommandline):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

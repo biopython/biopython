@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """
 Given a trie, find all occurrences of a word in the trie in a string.
 
@@ -27,7 +32,7 @@ def match(string, trie):
         substr = string[:i+1]
         if not trie.has_prefix(substr):
             break
-        if trie.has_key(substr):
+        if substr in trie:
             longest = substr
     return longest
 
@@ -44,7 +49,7 @@ def match_all(string, trie):
         substr = string[:i+1]
         if not trie.has_prefix(substr):
             break
-        if trie.has_key(substr):
+        if substr in trie:
             matches.append(substr)
     return matches
 

@@ -4,13 +4,15 @@
 # as part of this package.
 
 """Unit tests for Bio.SeqIO.convert(...) function."""
+from __future__ import print_function
+
 import unittest
 import warnings
 from Bio.Seq import UnknownSeq
 from Bio import SeqIO
 from Bio.SeqIO import QualityIO
 from Bio.SeqIO._convert import _converter as converter_dict
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 
@@ -26,7 +28,7 @@ def truncation_expected(format):
 
 #Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
-    records = list(SeqIO.parse(in_filename,in_format, alphabet))
+    records = list(SeqIO.parse(in_filename, in_format, alphabet))
     #Write it out...
     handle = StringIO()
     qual_truncate = truncation_expected(out_format)
@@ -55,7 +57,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     #We want the SAME error message from parse/write as convert!
     err1 = None
     try:
-        records = list(SeqIO.parse(in_filename,in_format, alphabet))
+        records = list(SeqIO.parse(in_filename, in_format, alphabet))
         handle = StringIO()
         if qual_truncate:
             warnings.simplefilter('ignore', UserWarning)
@@ -79,7 +81,6 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         assert str(err1) == str(err2), \
                "Different failures, parse/write:\n%s\nconvert:\n%s" \
                % (err1, err2)
-    #print err
 
 
 #TODO - move this to a shared test module...
@@ -108,16 +109,16 @@ def compare_record(old, new, truncate=None):
     if "phred_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations \
     and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"]:
-        if truncate and [min(q,truncate) for q in old.letter_annotations["phred_quality"]] == \
-                        [min(q,truncate) for q in new.letter_annotations["phred_quality"]]:
+        if truncate and [min(q, truncate) for q in old.letter_annotations["phred_quality"]] == \
+                        [min(q, truncate) for q in new.letter_annotations["phred_quality"]]:
             pass
         else:
             raise ValuerError("Mismatch in phred_quality")
     if "solexa_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations \
     and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"]:
-        if truncate and [min(q,truncate) for q in old.letter_annotations["solexa_quality"]] == \
-                        [min(q,truncate) for q in new.letter_annotations["solexa_quality"]]:
+        if truncate and [min(q, truncate) for q in old.letter_annotations["solexa_quality"]] == \
+                        [min(q, truncate) for q in new.letter_annotations["solexa_quality"]]:
             pass
         else:
             raise ValueError("Mismatch in phred_quality")
@@ -128,9 +129,9 @@ def compare_record(old, new, truncate=None):
         converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
-            converted = [min(q,truncate) for q in converted]
+            converted = [min(q, truncate) for q in converted]
         if converted != new.letter_annotations["solexa_quality"]:
-            print
+            print("")
             print(old.letter_annotations["phred_quality"])
             print(converted)
             print(new.letter_annotations["solexa_quality"])
@@ -142,7 +143,7 @@ def compare_record(old, new, truncate=None):
         converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
-            converted = [min(q,truncate) for q in converted]
+            converted = [min(q, truncate) for q in converted]
         if converted != new.letter_annotations["phred_quality"]:
             print(old.letter_annotations["solexa_quality"])
             print(converted)
@@ -156,7 +157,7 @@ def compare_records(old_list, new_list, truncate_qual=None):
     if len(old_list) != len(new_list):
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list):
-        if not compare_record(old,new,truncate_qual):
+        if not compare_record(old, new, truncate_qual):
             return False
     return True
 
@@ -187,13 +188,13 @@ for filename, format, alphabet in tests:
         if in_format != format:
             continue
 
-        def funct(fn,fmt1, fmt2, alpha):
+        def funct(fn, fmt1, fmt2, alpha):
             f = lambda x : x.simple_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
 
         setattr(ConvertTests, "test_%s_%s_to_%s"
-                % (filename.replace("/","_").replace(".","_"), in_format, out_format),
+                % (filename.replace("/", "_").replace(".", "_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
         del funct
 
@@ -232,13 +233,13 @@ for filename, format, alphabet in tests:
             #and in order to pass this strict test they should.
             continue
 
-        def funct(fn,fmt1, fmt2, alpha):
+        def funct(fn, fmt1, fmt2, alpha):
             f = lambda x : x.failure_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
 
         setattr(ConvertTests, "test_%s_%s_to_%s"
-                % (filename.replace("/","_").replace(".","_"), in_format, out_format),
+                % (filename.replace("/", "_").replace(".", "_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
     del funct
 

@@ -19,9 +19,9 @@ class Record(list):
 def read(handle):
     """read(handle)"""
     record = Record()
-    line = handle.next()
+    line = next(handle)
     record.version = line.strip()
-    line = handle.next()
+    line = next(handle)
     record.command = line.strip()
     for line in handle:
         line = line.strip()
@@ -53,7 +53,7 @@ def read(handle):
             motif.mask = mask
             record.append(motif)
         elif len(line.split("\t"))==4:
-            seq = Seq(line.split("\t")[0],IUPAC.unambiguous_dna)
+            seq = Seq(line.split("\t")[0], IUPAC.unambiguous_dna)
             instances.append(seq)
         elif "*" in line:
             mask = line.strip("\r\n")

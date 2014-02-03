@@ -22,6 +22,28 @@ Python 3.0, 3.1, 3.2
 Never officially supported, these trigger a warning in Release 1.62
 recommending Python 3.3 or later if you wish to use Python 3.
 
+Iterator .next() methods
+========================
+The .next() method defined for any Biopython iterator is deprecated as of
+Biopython 1.63 under Python 2 (and not present on Python 3). Please replace
+my_iterator.next() with next(my_iterator) using the new built-in function
+next() instead.
+
+Bio.SVDSuperimposer
+===================
+As of Release 1.63, the main class (confusingly also called) SVDSuperimposer
+is best imported as follows:
+
+>>> from Bio.SVDSuperimposer import SVDSuperimposer
+>>> super_imposer = SVDSuperimposer()
+
+This short form also works on older releases. The longer even more
+confusing historical alternatives dependent on the double module name
+no longer work, e.g. you can no longer do this:
+
+>>> from Bio.SVDSuperimposer.SVDSuperimposer import SVDSuperimposer
+>>> super_imposer = SVDSuperimposer()
+
 Bio.PDB.mmCIF
 =============
 This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex
@@ -109,8 +131,11 @@ blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
 Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
-which was declared obsolete in Release 1.54. For some time now, both the NCBI
-and Biopython have encouraged people to parse the XML output instead.
+which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
+
+For some time now, both the NCBI and Biopython have encouraged people to
+parse the XML output instead, however Bio.SearchIO will initially attempt
+to support plain text BLAST output.
 
 Bio.Blast.Applications
 ======================
@@ -551,7 +576,8 @@ method get_seq_by_num were deprecated in Release 1.57.
 
 Bio.ParserSupport
 =================
-Bio.ParserSupport was declared obsolete in Release 1.59.
+Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
+Release 1.63.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.

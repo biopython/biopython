@@ -3,10 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import string
-from StringIO import StringIO
+from Bio._py3k import StringIO
 from Bio import File
-from Bio import ParserSupport
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio import ParserSupport
 
 # pyUnit
 

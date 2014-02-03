@@ -30,10 +30,15 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
-import urllib
-import urllib2
+from __future__ import print_function
+
 import time
 from Bio._py3k import _binary_to_string_handle, _as_bytes
+
+#Importing these functions with leading underscore as not intended for reuse
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import urlencode as _urlencode
+from Bio._py3k import quote as _quote
 
 #Constant
 _BASE_URL = "http://togows.dbcls.jp"
@@ -109,6 +114,11 @@ def entry(db, id, format=None, field=None):
         except KeyError:
             fields = _get_entry_fields(db)
             _entry_db_fields[db] = fields
+        if db == "pubmed" and field == "ti" and "title" in fields:
+            #Backwards compatibility fix for TogoWS change Nov/Dec 2013
+            field = "title"
+            import warnings
+            warnings.warn("TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead.")
         if field not in fields:
             raise ValueError("TogoWS entry fetch does not explicitly support "
                              "field '%s' for database '%s'. Only: %s"
@@ -126,7 +136,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, urllib.quote(id))
+    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
     if field:
         url += "/" + field
     if format:
@@ -154,7 +164,7 @@ def search_count(db, query):
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
     handle = _open(_BASE_URL + "/search/%s/%s/count"
-                   % (db, urllib.quote(query)))
+                   % (db, _quote(query)))
     count = int(handle.read().strip())
     handle.close()
     return count
@@ -172,7 +182,7 @@ def search_iter(db, query, limit=None, batch=100):
     You would use this function within a for loop, e.g.
 
     >>> for id in search_iter("pubmed", "lung+cancer+drug", limit=10):
-    ...     print id #maybe fetch data with entry?
+    ...     print(id) #maybe fetch data with entry?
 
     Internally this first calls the Bio.TogoWS.search_count() and then
     uses Bio.TogoWS.search() to get the results in batches.
@@ -189,10 +199,10 @@ def search_iter(db, query, limit=None, batch=100):
     prev_ids = []  # Just cache the last batch for error checking
     while remain:
         batch = min(batch, remain)
-        #print "%r left, asking for %r" % (remain, batch)
+        #print("%r left, asking for %r" % (remain, batch))
         ids = search(db, query, offset, batch).read().strip().split()
         assert len(ids) == batch, "Got %i, expected %i" % (len(ids), batch)
-        #print "offset %i, %s ... %s" % (offset, ids[0], ids[-1])
+        #print("offset %i, %s ... %s" % (offset, ids[0], ids[-1]))
         if ids == prev_ids:
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
@@ -245,7 +255,7 @@ def search(db, query, offset=None, limit=None, format=None):
         import warnings
         warnings.warn("TogoWS search does not explicitly support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
-    url = _BASE_URL + "/search/%s/%s" % (db, urllib.quote(query))
+    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -264,7 +274,7 @@ def search(db, query, offset=None, limit=None, format=None):
         raise ValueError("Expect BOTH offset AND limit to be provided (or neither)")
     if format:
         url += "." + format
-    #print url
+    #print(url)
     return _open(url)
 
 
@@ -314,14 +324,11 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    #print url
-    try:
-        if post:
-            handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))
-        else:
-            handle = urllib2.urlopen(url)
-    except urllib2.HTTPError as exception:
-        raise exception
+    #print(url)
+    if post:
+        handle = _urlopen(url, _as_bytes(_urlencode(post)))
+    else:
+        handle = _urlopen(url)
 
     #We now trust TogoWS to have set an HTTP error code, that
     #suffices for my current unit tests. Previously we would

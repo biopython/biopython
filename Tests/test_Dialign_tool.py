@@ -18,8 +18,8 @@ dialign_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
 else:
-    import commands
-    output = commands.getoutput("dialign2-2")
+    from Bio._py3k import getoutput
+    output = getoutput("dialign2-2")
     if "not found" not in output and "dialign2-2" in output.lower():
         dialign_exe = "dialign2-2"
         if "DIALIGN2_DIR" not in os.environ:

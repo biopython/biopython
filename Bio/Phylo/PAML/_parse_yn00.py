@@ -19,7 +19,7 @@ def parse_ng86(lines, results):
         # Find all floating point numbers in this line
         line_floats_res = re.findall("-*\d+\.\d+", line)
         line_floats = [float(val) for val in line_floats_res]
-        matrix_row_res = re.match("(.+)\s{5,15}",line)
+        matrix_row_res = re.match("(.+)\s{5,15}", line)
         if matrix_row_res is not None:
             seq_name = matrix_row_res.group(1).strip()
             sequences.append(seq_name)

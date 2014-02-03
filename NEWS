@@ -10,20 +10,81 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.63
+(In progress, not yet released) Biopython 1.64
 
-Note this release does *not* support Python 2.5 (or Jython 2.5), which has
-allowed some code clean-up, and wider use of context managers (with
-statements).
+Bio.Phylo now has tree construction and consensus modules, from on the
+Google Summer of Code (GSoC) work by Yanbo Ye.
+
+Bio.Entrez will now automatically download and cache new NCBI DTD files for
+XML parsing under the user's home directory (using ``~/.biopython`` on
+Unix like systems, and ``$APPDATA/biopython`` on Windows).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Edward Liaw (first contribution)
+Eric Talevich
+Leighton Pritchard
+Michiel de Hoon
+Peter Cock
+Vincent Davis (first contribution)
+Wibowo 'Bow' Arindrarto
+Yanbo Ye (first contribution)
+
+===================================================================
+
+4 December 2013: Biopython 1.63 released.
+
+This release supports Python 3.3 onwards without conversion via the 2to3
+library. See the Biopython 1.63 beta release notes below for details. Since
+the beta release we have made some minor bug fixes and test improvements.
+
+The restriction enzyme list in Bio.Restriction has been updated to the
+December 2013 release of REBASE.
+
+Additional contributors since the beta:
+
+Gokcen Eraslan (first contribution)
+
+===================================================================
+
+12 November 2013: Biopython 1.63 beta released.
+
+This is a beta release for testing purposes, the main reason for a
+beta version is the large amount of changes imposed by the removal of
+the 2to3 library previously required for the support of Python 3.X.
+This was made possible by dropping Python 2.5 (and Jython 2.5).
+
+This release of Biopython supports Python 2.6 and 2.7, and also Python
+3.3.
+
+The Biopython Tutorial & Cookbook, and the docstring examples in the source
+code, now use the Python 3 style print function in place of the Python 2
+style print statement. This language feature is available under Python 2.6
+and 2.7 via:
+
+    from __future__ import print_function
+
+Similarly we now use the Python 3 style built-in next function in place of
+the Python 2 style iterators' .next() method. This language feature is also
+available under Python 2.6 and 2.7.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Chris Mitchell (first contribution)
+Christian Brueffer
+Eric Talevich
+Josha Inglis (first contribution)
+Konstantin Tretyakov (first contribution)
 Lenna Peterson
+Martin Mokrejs
+Nigel Delaney (first contribution)
 Peter Cock
 Sergei Lebedev (first contribution)
+Tiago Antao
 Wayne Decatur (first contribution)
+Wibowo 'Bow' Arindrarto
 
 ===================================================================
 

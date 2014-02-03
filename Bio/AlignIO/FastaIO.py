@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Bio.AlignIO support for "fasta-m10" output from Bill Pearson's FASTA tools.
+"""Bio.AlignIO support for "fasta-m10" output from Bill Pearson's FASTA tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -19,6 +18,8 @@ developed as an input format to the FASTA tools.  The Bio.AlignIO and
 Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
+
+from __future__ import print_function
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -77,9 +78,9 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         handle = ...
         for a in AlignIO.parse(handle, "fasta-m10"):
             assert len(a) == 2, "Should be pairwise!"
-            print "Alignment length %i" % a.get_alignment_length()
+            print("Alignment length %i" % a.get_alignment_length())
             for record in a:
-                print record.seq, record.name, record.id
+                print("%s %s %s" % (record.seq, record.name, record.id))
 
     Note that this is not a full blown parser for all the information
     in the FASTA output - for example, most of the header and all of the
@@ -126,10 +127,10 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             print(tool)
             print(query_seq)
             print(query_tags)
-            print q, len(q)
+            print("%s %i" % (q, len(q)))
             print(match_seq)
             print(match_tags)
-            print m, len(m)
+            print("%s %i" % (m, len(m)))
             print(handle.name)
             raise err
 
@@ -141,9 +142,9 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         alignment._annotations = {}
 
         #Want to record both the query header tags, and the alignment tags.
-        for key, value in header_tags.iteritems():
+        for key, value in header_tags.items():
             alignment._annotations[key] = value
-        for key, value in align_tags.iteritems():
+        for key, value in align_tags.items():
             alignment._annotations[key] = value
 
         #Query
@@ -592,7 +593,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
 
 """
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     alignments = list(FastaM10Iterator(StringIO(simple_example)))
     assert len(alignments) == 4, len(alignments)
@@ -602,16 +603,15 @@ Function used was FASTA [version 34.26 January 12, 2007]
               % (len(a), a.get_alignment_length()))
         for r in a:
             print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
-        #print a.annotations
+        #print(a.annotations)
     print("Done")
 
     import os
     path = "../../Tests/Fasta/"
-    files = [f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10"]
-    files.sort()
+    files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
     for filename in files:
         if os.path.splitext(filename)[-1] == ".m10":
-            print
+            print("")
             print(filename)
             print("=" * len(filename))
             for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):

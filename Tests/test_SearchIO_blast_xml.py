@@ -5,16 +5,21 @@
 
 """Tests for SearchIO BlastIO parsers."""
 
-
 import os
 import unittest
+import warnings
 
+from Bio import BiopythonParserWarning
 from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
 FMT = 'blast-xml'
 
+REFERENCE = (u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, '
+             u'Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), '
+             u'"Gapped BLAST and PSI-BLAST: a new generation of protein database '
+             u'search programs", Nucleic Acids Res. 25:3389-3402.')
 
 def get_file(filename):
     """Returns the path of a test file."""
@@ -29,11 +34,11 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual(1, qresult.param_score_match)
         self.assertEqual(-3, qresult.param_score_mismatch)
@@ -107,7 +112,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_001(self):
@@ -116,7 +121,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -147,7 +152,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.description)
@@ -189,7 +194,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.description)
@@ -273,7 +278,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_xml_2226_blastn_002(self):
@@ -282,7 +287,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -311,7 +316,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual([], list(qresult.hits))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_003(self):
@@ -320,7 +325,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -379,7 +384,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_004(self):
@@ -387,7 +392,7 @@ class BlastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
@@ -473,7 +478,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastn_005(self):
@@ -482,7 +487,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -513,7 +518,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription '
@@ -557,7 +562,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
@@ -622,7 +627,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('||| |||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
 
@@ -633,11 +638,11 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -712,7 +717,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2218_blastp_001(self):
@@ -720,11 +725,11 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.18+', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual(11, qresult.param_gap_open)
@@ -795,7 +800,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('T +A C  + +V I+++   +W+++     H+  V  + WAP', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2218_blastp_002(self):
@@ -803,13 +808,12 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
         self.assertEqual('2.2.18+', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(0.01, qresult.param_evalue_threshold)
         self.assertEqual(11, qresult.param_gap_open)
@@ -831,7 +835,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('gi|129628|sp|P07175.1|PARA_AGRTU', qresult.id)
@@ -846,7 +850,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_xml_2218L_blastp_001(self):
@@ -855,7 +859,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -883,7 +887,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2222_blastp_001(self):
@@ -891,7 +895,7 @@ class BlastpXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.22+', qresult.version)
@@ -976,7 +980,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1008,7 +1012,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
@@ -1051,7 +1055,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -1131,7 +1135,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_xml_2226_blastp_002(self):
@@ -1140,7 +1144,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1172,7 +1176,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastp_003(self):
@@ -1181,7 +1185,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1238,7 +1242,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastp_004(self):
@@ -1247,7 +1251,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1343,7 +1347,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastp_005(self):
@@ -1352,7 +1356,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1384,7 +1388,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.description)
@@ -1424,7 +1428,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -1504,7 +1508,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
 
@@ -1515,11 +1519,11 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -1588,7 +1592,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('+ +NS  +  A+  N+   SSSG K++ +K     +KS +  + H++  IN+   +K  KEH VV +', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2222_blastx_001(self):
@@ -1596,7 +1600,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.22+', qresult.version)
@@ -1651,7 +1655,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1683,7 +1687,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
@@ -1764,7 +1768,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_xml_2226_blastx_002(self):
@@ -1772,7 +1776,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1802,7 +1806,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastx_003(self):
@@ -1810,7 +1814,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -1906,7 +1910,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_blastx_004(self):
@@ -1915,7 +1919,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -1947,7 +1951,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
@@ -2029,7 +2033,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('V  AGVQW +L   QPPP  FK FS LS  SSWD R  PPCL+ FVFL+ETGF HVGQAGL+   SG+  A ASQS GI GVSH   P C+', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
 
@@ -2040,11 +2044,11 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(0.001, qresult.param_evalue_threshold)
         self.assertEqual(11, qresult.param_gap_open)
@@ -2116,7 +2120,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('L  KV +VTG  +G+G A+AV  GQ  +KVVVNY ++ E A +V  EI+     AI ++ DV   + V  L++ AV+ FG LD++ +NAG+           +  VPS +E  +E      +++V   N  G F  +REA ++  E    G +I  SS    +   P    Y+ SKG +      LA++   K I VN + PGAI T +          N E F D +', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_001(self):
@@ -2125,7 +2129,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2156,7 +2160,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
@@ -2196,7 +2200,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -2276,7 +2280,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
     def test_xml_2226_tblastn_002(self):
@@ -2284,7 +2288,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2312,7 +2316,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(-1, qresult.stat_entropy)
         self.assertEqual(0, len(qresult))
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_003(self):
@@ -2320,7 +2324,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2374,7 +2378,7 @@ class TblastnXmlCases(unittest.TestCase):
 
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_004(self):
@@ -2382,7 +2386,7 @@ class TblastnXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2476,7 +2480,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS', str(hsp.hit.seq))
         self.assertEqual('GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS', hsp.aln_annotation['homology'])
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastn_005(self):
@@ -2485,7 +2489,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2516,7 +2520,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.description)
@@ -2555,7 +2559,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.description)
@@ -2635,7 +2639,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
 
 
@@ -2647,12 +2651,12 @@ class TblastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test the first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
         self.assertEqual('2.2.12', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(REFERENCE, qresult.reference)
         self.assertEqual('BLOSUM80', qresult.param_matrix)
         self.assertEqual(1, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2723,7 +2727,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('PL K H +FQ S+ FY+ C+  + +QLL', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastx_001(self):
@@ -2732,7 +2736,7 @@ class TblastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -2763,7 +2767,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.description)
@@ -2843,7 +2847,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
     def test_xml_2226_tblastx_002(self):
@@ -2851,7 +2855,7 @@ class TblastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2879,7 +2883,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(-1, qresult.stat_entropy)
         self.assertEqual(0, len(qresult))
 
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastx_003(self):
@@ -2887,7 +2891,7 @@ class TblastxXmlCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('2.2.26+', qresult.version)
@@ -2982,7 +2986,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_xml_2226_tblastx_004(self):
@@ -2991,7 +2995,7 @@ class TblastxXmlCases(unittest.TestCase):
         counter = 0
 
         # test each qresult's attributes
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         # test meta variables, only for the first one
@@ -3022,7 +3026,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test parsed values of the second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.description)
@@ -3106,7 +3110,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.aln_annotation['homology'])
 
         # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
 
@@ -3117,8 +3121,10 @@ class BlastXmlSpecialCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        # test each qresult's attributes
-        qresult = qresults.next()
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', BiopythonParserWarning)
+            qresult = next(qresults)
+            assert len(w) == 1
         counter += 1
 
         # test the Hit IDs only, since this is a special case

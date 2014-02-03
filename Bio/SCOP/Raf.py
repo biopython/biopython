@@ -26,6 +26,9 @@ protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
                         include chemically modified residues.
 """
 
+from __future__ import print_function
+from Bio._py3k import basestring
+
 from copy import copy
 
 from Bio.Data.SCOPData import protein_letters_3to1
@@ -64,8 +67,7 @@ class SeqMapIndex(dict):
         dict.__init__(self)
         self.filename = filename
 
-        f = open(self.filename, "rU")
-        try:
+        with open(self.filename, "rU") as f:
             position = 0
             while True:
                 line = f.readline()
@@ -75,20 +77,15 @@ class SeqMapIndex(dict):
                 if key is not None:
                     self[key]=position
                 position = f.tell()
-        finally:
-            f.close()
 
     def __getitem__(self, key):
         """ Return an item from the indexed file. """
-        position = dict.__getitem__(self,key)
+        position = dict.__getitem__(self, key)
 
-        f = open(self.filename, "rU")
-        try:
+        with open(self.filename, "rU") as f:
             f.seek(position)
             line = f.readline()
             record = SeqMap(line)
-        finally:
-            f.close()
         return record
 
     def getSeqMap(self, residues):
@@ -103,7 +100,7 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags =(('_','',''),) # All residues of unnamed chain
+            frags =(('_', '', ''),) # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
@@ -264,10 +261,10 @@ class SeqMap(object):
             if chainid == '_':
                 chainid = ' '
             resid = r.resid
-            resSet[(chainid,resid)] = r
+            resSet[(chainid, resid)] = r
 
         resFound = {}
-        for line in pdb_handle.xreadlines():
+        for line in pdb_handle:
             if line.startswith("ATOM  ") or line.startswith("HETATM"):
                 chainid = line[21:22]
                 resid = line[22:27].strip()
@@ -282,9 +279,9 @@ class SeqMap(object):
                             resFound[key] = res
 
         if len(resSet) != len(resFound):
-            #for k in resFound.keys():
+            #for k in resFound:
             #    del resSet[k]
-            #print resSet
+            #print(resSet)
 
             raise RuntimeError('I could not find at least one ATOM or HETATM'
                    +' record for each and every residue in this sequence map.')

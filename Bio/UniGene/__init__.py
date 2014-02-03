@@ -120,7 +120,7 @@ class SequenceLine(object):
             self.text=text
             self._init_from_text(text)
 
-    def _init_from_text(self,text):
+    def _init_from_text(self, text):
         parts = text.split('; ')
         for part in parts:
             key, val = part.split("=")
@@ -128,7 +128,7 @@ class SequenceLine(object):
                 if val[:5]=='IMAGE':
                     self.is_image=True
                     self.image = val[6:]
-            setattr(self,key.lower(),val)
+            setattr(self, key.lower(), val)
 
     def __repr__(self):
         return self.text
@@ -157,12 +157,12 @@ class ProtsimLine(object):
             self.text=text
             self._init_from_text(text)
 
-    def _init_from_text(self,text):
+    def _init_from_text(self, text):
         parts = text.split('; ')
 
         for part in parts:
             key, val = part.split("=")
-            setattr(self,key.lower(),val)
+            setattr(self, key.lower(), val)
 
     def __repr__(self):
         return self.text
@@ -186,12 +186,12 @@ class STSLine(object):
             self.text=text
             self._init_from_text(text)
 
-    def _init_from_text(self,text):
+    def _init_from_text(self, text):
         parts = text.split(' ')
 
         for part in parts:
             key, val = part.split("=")
-            setattr(self,key.lower(),val)
+            setattr(self, key.lower(), val)
 
     def __repr__(self):
         return self.text

@@ -4,6 +4,8 @@
 # as part of this package.
 
 
+from __future__ import print_function
+
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 
@@ -106,7 +108,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
                 for al in lParser[1][loci_pos]:
                     if al is not None:
                         loci[loci_pos].add(al)
-                        curr_pop[loci_pos][al]= curr_pop[loci_pos].get(al,0)+1
+                        curr_pop[loci_pos][al]= curr_pop[loci_pos].get(al, 0)+1
         else:
             pops.append(curr_pop)
             num_pops += 1
@@ -118,8 +120,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
     pops.append(curr_pop)
     fd_rec.num_pops = num_pops
     for loci_pos in range(num_loci):
-        alleles = list(loci[loci_pos])
-        alleles.sort()
+        alleles = sorted(loci[loci_pos])
         loci_rec = [len(alleles), []]
         for pop in pops:
             pop_rec = []

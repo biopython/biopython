@@ -31,7 +31,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -42,7 +42,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -91,7 +91,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test third result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -172,7 +172,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test fourth result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -310,7 +310,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test fifth result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -523,7 +523,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(5, counter)
 
     def test_30_hmmscan_002(self):
@@ -534,7 +534,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -545,7 +545,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_003(self):
@@ -556,7 +556,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -605,7 +605,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
@@ -616,7 +616,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -697,7 +697,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_005(self):
@@ -708,7 +708,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -846,7 +846,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_006(self):
@@ -857,7 +857,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -1070,7 +1070,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_007(self):
@@ -1081,7 +1081,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -1256,7 +1256,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.77, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_008(self):
@@ -1267,7 +1267,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first result
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmscan', qresult.program)
@@ -1405,7 +1405,7 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
 
@@ -1416,7 +1416,7 @@ class HmmerscanCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
         self.assertEqual('SCO3574', qresult.id)
         self.assertEqual(5, len(qresult.hits))
@@ -1451,7 +1451,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1462,7 +1462,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
     def test_30_hmmsearch_002(self):
@@ -1472,7 +1472,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1611,7 +1611,7 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, qresults.next, )
+        #self.assertRaises(StopIteration, next, qresults)
         #self.assertEqual(1, counter)
 
     def test_30_hmmsearch_003(self):
@@ -1621,7 +1621,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1728,7 +1728,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, qresults.next, )
+        #self.assertRaises(StopIteration, next, qresults)
         #self.assertEqual(1, counter)
 
     def test_30_hmmsearch_004(self):
@@ -1738,7 +1738,7 @@ class HmmersearchCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
         counter = 0
 
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1877,7 +1877,7 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, qresults.next, )
+        #self.assertRaises(StopIteration, next, qresults)
         #self.assertEqual(1, counter)
 
     def test_30_hmmsearch_005(self):
@@ -1888,7 +1888,7 @@ class HmmersearchCases(unittest.TestCase):
         counter = 0
 
         # test first qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -1899,7 +1899,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        qresult = qresults.next()
+        qresult = next(qresults)
         counter += 1
 
         self.assertEqual('hmmsearch', qresult.program)
@@ -2038,7 +2038,7 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        self.assertRaises(StopIteration, qresults.next, )
+        self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(2, counter)
 
 

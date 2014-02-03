@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Methods for performing repairs that will Stabilize genomes.
 
 These methods perform repair to keep chromosomes from drifting too far in
@@ -42,7 +47,7 @@ class AmbiguousRepair(object):
         new_org = organism.copy()
 
         # start getting rid of ambiguous items
-        while 1:
+        while True:
             # first find all of the ambigous items
             seq_genome = new_org.genome.toseq()
             all_ambiguous = self._ambig_finder.find_ambiguous(str(seq_genome))

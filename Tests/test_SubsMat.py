@@ -10,7 +10,11 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.SubsMat.")
 
-import cPickle
+try:
+    import cPickle as pickle # Only available on Python 3
+except ImportError:
+    import pickle
+
 import sys
 import os
 from Bio import SubsMat
@@ -31,41 +35,37 @@ for i in ftab_prot.alphabet.letters:
 pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
 #Don't want to use text mode on Python 3,
 with open(pickle_file, 'rb') as handle:
-    acc_rep_mat = cPickle.load(handle)
+    acc_rep_mat = pickle.load(handle)
 acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
 obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
 ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
-obs_freq_mat.print_mat(f=f,format=" %4.3f")
+obs_freq_mat.print_mat(f=f, format=" %4.3f")
 
 
 f.write("Diff between supplied and matrix-derived frequencies, should be small\n")
-ks = ftab_prot.keys()
-ks.sort()
-for i in ks:
-    f.write("%s %.2f\n" % (i,abs(ftab_prot[i] - ftab_prot2[i])))
+for i in sorted(ftab_prot):
+    f.write("%s %.2f\n" % (i, abs(ftab_prot[i] - ftab_prot2[i])))
 
 s = 0.
 f.write("Calculating sum of letters for an observed frequency matrix\n")
 counts = obs_freq_mat.sum()
-keys = counts.keys()
-keys.sort()
-for key in keys:
+for key in sorted(counts):
     f.write("%s\t%.2f\n" % (key, counts[key]))
     s += counts[key]
 f.write("Total sum %.2f should be 1.0\n" % (s))
 lo_mat_prot = \
-SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1)  # ,ftab_prot
+SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat, round_digit=1)  # ,ftab_prot
 f.write("\nLog odds matrix\n")
 f.write("\nLog odds half matrix\n")
 # Was %.1f. Let us see if this is OK
-lo_mat_prot.print_mat(f=f,format=" %d",alphabet='AVILMCFWYHSTNQKRDEGP')
+lo_mat_prot.print_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
 f.write("\nLog odds full matrix\n")
 # Was %.1f. Let us see if this is OK
-lo_mat_prot.print_full_mat(f=f,format=" %d",alphabet='AVILMCFWYHSTNQKRDEGP')
+lo_mat_prot.print_full_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
 
 f.write("\nTesting MatrixInfo\n")
 for i in MatrixInfo.available_matrices:
-    mat = SubsMat.SeqMat(getattr(MatrixInfo,i))
+    mat = SubsMat.SeqMat(getattr(MatrixInfo, i))
     f.write("\n%s\n------------\n" % i)
     mat.print_mat(f=f)
 f.write("\nTesting Entropy\n")

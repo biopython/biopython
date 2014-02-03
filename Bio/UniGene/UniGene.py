@@ -1,21 +1,9 @@
+# Copyright 2001 by Katharine Lindner. All Rights Reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-# Permission to use, copy, modify, and distribute this software and
-# its documentation with or without modifications and for any purpose
-# and without fee is hereby granted, provided that any copyright
-# notices appear in all copies and that both those copyright notices
-# and this permission notice appear in supporting documentation, and
-# that the names of the contributors or copyright holders not be used
-# in advertising or publicity pertaining to distribution of the software
-# without specific prior permission.
-#
-# THE CONTRIBUTORS AND COPYRIGHT HOLDERS OF THIS SOFTWARE DISCLAIM ALL
-# WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL THE
-# CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT
-# OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-# NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
-# WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+from __future__ import print_function
 
 import warnings
 from Bio import BiopythonDeprecationWarning
@@ -63,7 +51,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
         else:
             uhandle = Bio.File.UndoHandle(handle)
         text = ''
-        while 1:
+        while True:
             line = uhandle.readline()
             line = string.strip( line )
             if( line == '' ):
@@ -168,7 +156,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
                         contents.append( text )
                     else:
                         self.queue[ self.master_key ][ self.key_waiting ] = \
-                            [ contents , text ]
+                            [ contents, text ]
                 except:
                     self.queue[ self.master_key ][ self.key_waiting ] = text
 
@@ -210,8 +198,8 @@ class UniGeneParser( sgmllib.SGMLParser ):
 
 
 if( __name__ == '__main__' ):
-    handle = open( 'Hs13225.htm')
-    undo_handle = Bio.File.UndoHandle( handle )
-    unigene_parser = UniGeneParser()
-    unigene_parser.parse( handle )
-    unigene_parser.print_tags()
+    with open( 'Hs13225.htm') as handle:
+        undo_handle = Bio.File.UndoHandle( handle )
+        unigene_parser = UniGeneParser()
+        unigene_parser.parse( handle )
+        unigene_parser.print_tags()

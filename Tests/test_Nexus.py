@@ -1,8 +1,17 @@
+# Copyright 2005 by Iddo Friedberg.  All rights reserved.
+# Revisions copyright 2006-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2008 by Frank Kauff. All rights reserved.
+# Revisions copyright 2009 by Michiel de Hoon. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import os.path
 import unittest
 import tempfile
-import cStringIO
 import sys
+from Bio._py3k import StringIO
+from Bio._py3k import range
 
 from Bio.Nexus import Nexus, Trees
 
@@ -113,7 +122,7 @@ class NexusTest1(unittest.TestCase):
              "three": [16, 17, 18, 19, 20, 21, 22, 23],
              "two":   [8, 9, 10, 11, 12, 13, 14, 15],
             })
-        self.assertEqual(n.taxpartitions.keys(), ['taxpart'])
+        self.assertEqual(list(n.taxpartitions.keys()), ['taxpart'])
         self.assertEqual(n.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
@@ -125,7 +134,7 @@ class NexusTest1(unittest.TestCase):
         # and exporting adjusted sets
         f1=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f1,
-                           delete=['t1','t7'],
+                           delete=['t1', 't7'],
                            exclude=n.invert(n.charsets['big']))
         f1.seek(0)
         nf1=Nexus.Nexus(f1)
@@ -187,7 +196,7 @@ class NexusTest1(unittest.TestCase):
                                                         'c': [1]})
         self.assertEqual(nf1.charpartitions['part'], {'one': [0, 1, 2, 3]})
 
-        self.assertEqual(nf1.taxpartitions.keys(), ['taxpart'])
+        self.assertEqual(list(nf1.taxpartitions.keys()), ['taxpart'])
         self.assertEqual(nf1.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
@@ -198,7 +207,7 @@ class NexusTest1(unittest.TestCase):
         f2=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f2,
                            delete=['t2_the_name'],
-                           exclude=range(3,40,4))
+                           exclude=list(range(3, 40, 4)))
         f2.seek(0)
         nf2=Nexus.Nexus(f2)
         self.assertEqual(os.path.normpath(nf2.filename),
@@ -283,7 +292,7 @@ class NexusTest1(unittest.TestCase):
              "three": [12, 13, 14, 15, 16, 17],
              "two":   [6, 7, 8, 9, 10, 11],
             })
-        self.assertEqual(nf2.taxpartitions.keys(), ['taxpart'])
+        self.assertEqual(list(nf2.taxpartitions.keys()), ['taxpart'])
         self.assertEqual(nf2.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
@@ -308,20 +317,16 @@ usertype matrix_test stepmatrix=5
         n=Nexus.Nexus(self.handle)
         t3=n.trees[2]
         t2=n.trees[2]
-        t3.root_with_outgroup(['t1','t5'])
+        t3.root_with_outgroup(['t1', 't5'])
         self.assertEqual(str(t3), "tree tree1 = (((((('one should be punished, for (that)!','isn''that [a] strange name?'),'t2 the name'),t8,t9),t6),t7),(t5,t1));")
-        self.assertEqual(t3.is_monophyletic(['t8','t9','t6','t7']), -1)
-        self.assertEqual(t3.is_monophyletic(['t1','t5']), 13)
+        self.assertEqual(t3.is_monophyletic(['t8', 't9', 't6', 't7']), -1)
+        self.assertEqual(t3.is_monophyletic(['t1', 't5']), 13)
         t3.split(parent_id=t3.search_taxon('t9'))
         stdout = sys.stdout
         try:
-            sys.stdout = cStringIO.StringIO()
+            sys.stdout = StringIO()
             t3.display()
-            if sys.version_info[0] == 3:
-                output = sys.stdout.getvalue()
-            else:
-                sys.stdout.reset()
-                output = sys.stdout.read()
+            output = sys.stdout.getvalue()
         finally:
             sys.stdout = stdout
         expected = """\
@@ -351,7 +356,7 @@ Root:  16
         for l1, l2 in zip(output.split("\n"), expected.split("\n")):
             self.assertEqual(l1, l2)
         self.assertEqual(output, expected)
-        self.assertEqual(t3.is_compatible(t2,threshold=0.3), [])
+        self.assertEqual(t3.is_compatible(t2, threshold=0.3), [])
 
     def test_internal_node_labels(self):
         """Handle text labels on internal nodes.
@@ -359,16 +364,20 @@ Root:  16
         ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
                "TT1:25.000000)Taxaceae:90.000000;"
         tree = Trees.Tree(ts1b)
-        assert self._get_flat_nodes(tree) == [('Taxaceae', 90.0, None, None),
-                ('Cephalotaxus', 125.0, None, None), ('TT1', 25.0, None, None),
-                ('Taxus', 100.0, None, None), ('Torreya', 100.0, None, None)]
+        self.assertEqual(self._get_flat_nodes(tree), [('Taxaceae', 90.0, None, None),
+                                                      ('Cephalotaxus', 125.0, None, None),
+                                                      ('TT1', 25.0, None, None),
+                                                      ('Taxus', 100.0, None, None),
+                                                      ('Torreya', 100.0, None, None)])
 
         ts1c = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
                 "25.000000)90.000000;"
         tree = Trees.Tree(ts1c)
-        assert self._get_flat_nodes(tree) == [(None, 90.0, None, None),
-                ('Cephalotaxus', 125.0, None, None), (None, 25.0, None, None),
-                ('Taxus', 100.0, None, None), ('Torreya', 100.0, None, None)]
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 90.0, None, None),
+                                                      ('Cephalotaxus', 125.0, None, None),
+                                                      (None, 25.0, None, None),
+                                                      ('Taxus', 100.0, None, None),
+                                                      ('Torreya', 100.0, None, None)])
 
         ts2 = "(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"\
           "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"\

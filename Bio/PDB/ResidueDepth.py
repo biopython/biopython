@@ -15,7 +15,7 @@ the solvent accessible surface.
 Residue Depth:
 
     >>> rd = ResidueDepth(model, pdb_file)
-    >>> print rd[(chain_id, res_id)]
+    >>> print(rd[(chain_id, res_id)])
 
 Direct MSMS interface:
 
@@ -39,6 +39,8 @@ Direct MSMS interface:
         >>> rd = residue_depth(residue, surface)
 """
 
+from __future__ import print_function
+
 import os
 import tempfile
 
@@ -53,16 +55,15 @@ def _read_vertex_array(filename):
     """
     Read the vertex list into a Numeric array.
     """
-    fp=open(filename, "r")
-    vertex_list=[]
-    for l in fp.readlines():
-        sl=l.split()
-        if not len(sl)==9:
-            # skip header
-            continue
-        vl=map(float, sl[0:3])
-        vertex_list.append(vl)
-    fp.close()
+    with open(filename, "r") as fp:
+        vertex_list=[]
+        for l in fp.readlines():
+            sl=l.split()
+            if not len(sl)==9:
+                # skip header
+                continue
+            vl = [float(x) for x in sl[0:3]]
+            vertex_list.append(vl)
     return numpy.array(vertex_list)
 
 

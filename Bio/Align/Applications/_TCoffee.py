@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program TCOFFEE.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -28,7 +30,7 @@ class TCoffeeCommandline(AbstractCommandline):
     >>> tcoffee_cline = TCoffeeCommandline(infile="unaligned.fasta",
     ...                                    output="clustalw",
     ...                                    outfile="aligned.aln")
-    >>> print tcoffee_cline
+    >>> print(tcoffee_cline)
     t_coffee -output clustalw -infile unaligned.fasta -outfile aligned.aln
 
     You would typically run the command line with tcoffee_cline() or via
@@ -41,7 +43,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
     Last checked against: Version_6.92
     """
-    SEQ_TYPES = ["dna","protein","dna_protein"]
+    SEQ_TYPES = ["dna", "protein", "dna_protein"]
 
     def __init__(self, cmd="t_coffee", **kwargs):
         self.parameters = [

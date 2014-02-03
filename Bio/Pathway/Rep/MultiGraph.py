@@ -5,6 +5,8 @@
 
 # get set abstraction for graph representation
 
+from functools import reduce
+
 
 #TODO - Subclass graph?
 class MultiGraph(object):
@@ -28,19 +30,18 @@ class MultiGraph(object):
         return not self.__eq__(g)
 
     def __repr__(self):
-        """Returns an unique string representation of this graph."""
+        """Returns a unique string representation of this graph."""
         s = "<MultiGraph: "
-        keys = sorted(self._adjacency_list.keys())
-        for key in keys:
+        for key in sorted(self._adjacency_list):
             values = sorted(self._adjacency_list[key])
-            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
+            s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x,y: x+y,
-                         map(len, self._adjacency_list.values()))
+        edgenum = reduce(lambda x, y: x+y,
+                         [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<MultiGraph: " + \
                str(nodenum) + " node(s), " + \
@@ -62,7 +63,7 @@ class MultiGraph(object):
         self._adjacency_list[source].add(edge)
         if label not in self._label_map:
             self._label_map[label] = set()
-        self._label_map[label].add((source,to))
+        self._label_map[label].add((source, to))
 
     def child_edges(self, parent):
         """Returns a list of (child, label) pairs for parent."""
@@ -72,7 +73,7 @@ class MultiGraph(object):
 
     def children(self, parent):
         """Returns a list of unique children for parent."""
-        return sorted(set([x[0] for x in self.child_edges(parent)]))
+        return sorted(set(x[0] for x in self.child_edges(parent)))
 
     def edges(self, label):
         """Returns a list of all the edges with this label."""
@@ -82,18 +83,18 @@ class MultiGraph(object):
 
     def labels(self):
         """Returns a list of all the edge labels in this graph."""
-        return self._label_map.keys()
+        return list(self._label_map.keys())
 
     def nodes(self):
         """Returns a list of the nodes in this graph."""
-        return self._adjacency_list.keys()
+        return list(self._adjacency_list.keys())
 
     def parent_edges(self, child):
         """Returns a list of (parent, label) pairs for child."""
         if child not in self._adjacency_list:
             raise ValueError("Unknown <child> node: " + str(child))
         parents = []
-        for parent, children in self._adjacency_list.iteritems():
+        for parent, children in self._adjacency_list.items():
             for x in children:
                 if x[0] is child:
                     parents.append((parent, x[1]))
@@ -101,7 +102,7 @@ class MultiGraph(object):
 
     def parents(self, child):
         """Returns a list of unique parents for child."""
-        return sorted(set([x[0] for x in self.parent_edges(child)]))
+        return sorted(set(x[0] for x in self.parent_edges(child)))
 
     def remove_node(self, node):
         """Removes node and all edges connected to it."""
@@ -114,7 +115,7 @@ class MultiGraph(object):
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x[0] is not node)
         # remove all refering pairs in label map
-        for label in self._label_map.keys():
+        for label in list(self._label_map.keys()): # we're editing this!
             lm = set(x for x in self._label_map[label]
                      if (x[0] is not node) and (x[1] is not node))
             # remove the entry completely if the label is now unused

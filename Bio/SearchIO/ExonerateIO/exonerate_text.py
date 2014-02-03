@@ -9,11 +9,14 @@ import re
 from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import zip
+
+
 from Bio.Alphabet import generic_protein
 
-from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
+from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
-from exonerate_vulgar import parse_vulgar_comp, _RE_VULGAR
+from .exonerate_vulgar import parse_vulgar_comp, _RE_VULGAR
 
 
 __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
@@ -81,10 +84,10 @@ def _get_inter_coords(coords, strand=1):
     if strand == -1:
         sorted_coords = [(max(a, b), min(a, b)) for a, b in coords]
         inter_coords = list(chain(*sorted_coords))[1:-1]
-        return zip(inter_coords[1::2], inter_coords[::2])
+        return list(zip(inter_coords[1::2], inter_coords[::2]))
     else:
         inter_coords = list(chain(*coords))[1:-1]
-        return zip(inter_coords[::2], inter_coords[1::2])
+        return list(zip(inter_coords[::2], inter_coords[1::2]))
 
 
 def _stitch_rows(raw_rows):
@@ -93,7 +96,7 @@ def _stitch_rows(raw_rows):
     # (i.e. alignments with codons using cdna2genome model)
     # by creating additional rows to contain the codons
     try:
-        max_len = max([len(x) for x in raw_rows])
+        max_len = max(len(x) for x in raw_rows)
         for row in raw_rows:
             assert len(row) == max_len
     except AssertionError:
@@ -253,7 +256,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
     fstart = hsp['%s_start' % seq_type]
     # fend is fstart + number of residues in the sequence, minus gaps
     fend = fstart + len(
-            hsp[seq_type][0].replace('-','').replace('>',
+            hsp[seq_type][0].replace('-', '').replace('>',
             '').replace('<', '')) * seq_step
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
@@ -311,7 +314,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         hit = header['hit']
         hsp = header['hsp']
         # check for values that must have been set by previous methods
-        for val_name in ('query_start', 'query_end' ,'hit_start', 'hit_end',
+        for val_name in ('query_start', 'query_end', 'hit_start', 'hit_end',
                 'query_strand', 'hit_strand'):
             assert val_name in hsp, hsp
 

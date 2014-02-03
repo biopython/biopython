@@ -8,6 +8,8 @@ Usage:
 find_parser_problems.py <GenBank file to parse>
 """
 # standard library
+from __future__ import print_function
+
 import sys
 
 # GenBank
@@ -25,29 +27,29 @@ parser = GenBank.ErrorParser(feature_parser)
 handle = open(sys.argv[1], 'r')
 iterator = GenBank.Iterator(handle, parser, has_header=1)
 
-while 1:
+while True:
     have_record = 0
 
     while have_record == 0:
         try:
-            cur_record = iterator.next()
+            cur_record = next(iterator)
             have_record = 1
         except GenBank.ParserFailureError as msg:
-            print "Parsing Problem:", msg
+            print("Parsing Problem: %s" % msg)
             sys.exit()
 
     if cur_record is None:
         break
 
-    print "Successfully parsed record", cur_record.id
+    print("Successfully parsed record %s" % cur_record.id)
 
     if verbose:
         print("***Record")
-        print "Seq:", cur_record.seq
-        print "Id:", cur_record.id
-        print "Name:", cur_record.name
-        print "Description", cur_record.description
-        print "Annotations", cur_record.annotations
+        print("Seq: %s" % cur_record.seq)
+        print("Id: %s" % cur_record.id)
+        print("Name: %s" % cur_record.name)
+        print("Description: %s" % cur_record.description)
+        print("Annotations: %s" % cur_record.annotations)
         print("Feaures")
         for feature in cur_record.features:
             print(feature)

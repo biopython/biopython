@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Parser for ACE files output by PHRAP.
+"""Parser for ACE files output by PHRAP.
 
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)
@@ -42,7 +41,7 @@ see _RecordConsumer for details.
         from Bio.Sequencing import Ace
         contigs=Ace.parse(open('my_ace_file.ace'))
         for contig in contigs:
-            print contig.name
+            print(contig.name)
             ...
 
 Please note that for memory efficiency, when using the iterator approach, only one
@@ -54,6 +53,8 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
 
+from __future__ import print_function
+from Bio._py3k import zip
 
 class rd(object):
     """RD (reads), store a read with its name, sequence etc.
@@ -76,11 +77,11 @@ class qa(object):
         self.align_clipping_start = None
         self.align_clipping_end = None
         if line:
-            header = map(eval, line.split()[1:])
-            self.qual_clipping_start = header[0]
-            self.qual_clipping_end = header[1]
-            self.align_clipping_start = header[2]
-            self.align_clipping_end = header[3]
+            header = line.split()
+            self.qual_clipping_start = int(header[1])
+            self.qual_clipping_end = int(header[2])
+            self.align_clipping_start = int(header[3])
+            self.align_clipping_end = int(header[4])
 
 
 class ds(object):
@@ -95,12 +96,11 @@ class ds(object):
         self.direction = ''
         if line:
             tags = ['CHROMAT_FILE', 'PHD_FILE', 'TIME', 'CHEM', 'DYE', 'TEMPLATE', 'DIRECTION']
-            poss = map(line.find, tags)
+            poss = [line.find(x) for x in tags]
             tagpos = dict(zip(poss, tags))
             if -1 in tagpos:
                 del tagpos[-1]
-            ps = tagpos.keys()
-            ps.sort()
+            ps = sorted(tagpos) # the keys
             for (p1, p2) in zip(ps, ps[1:]+[len(line)+1]):
                 setattr(self, tagpos[p1].lower(), line[p1+len(tagpos[p1])+1:p2].strip())
 
@@ -274,7 +274,7 @@ def parse(handle):
             while True:
                 if line.startswith('CO'):
                     break
-                line = handle.next()
+                line = next(handle)
         except StopIteration:
             return
 
@@ -295,7 +295,7 @@ def parse(handle):
         for line in handle:
             if not line.strip():
                 break
-            record.quality.extend(map(int, line.split()))
+            record.quality.extend(int(x) for x in line.split())
 
         for line in handle:
             if line.strip():
@@ -306,7 +306,7 @@ def parse(handle):
                 break
             record.af.append(af(line))
             try:
-                line = handle.next()
+                line = next(handle)
             except StopIteration:
                 raise ValueError("Unexpected end of AF block")
 
@@ -314,7 +314,7 @@ def parse(handle):
             if line.strip():
                 break
             try:
-                line = handle.next()
+                line = next(handle)
             except StopIteration:
                 raise ValueError("Unexpected end of file")
 
@@ -323,7 +323,7 @@ def parse(handle):
                 break
             record.bs.append(bs(line))
             try:
-                line = handle.next()
+                line = next(handle)
             except StopIteration:
                 raise ValueError("Failed to find end of BS block")
 
@@ -341,7 +341,7 @@ def parse(handle):
                     # If I've met the condition, then stop reading the line.
                     if line.startswith("RD "):
                         break
-                    line = handle.next()
+                    line = next(handle)
             except StopIteration:
                 raise ValueError("Failed to find RD line")
 
@@ -378,7 +378,7 @@ def parse(handle):
                     while True:
                         if line.strip():
                             break
-                        line = handle.next()
+                        line = next(handle)
                 except StopIteration:
                     # file ends here
                     break
@@ -418,7 +418,7 @@ def parse(handle):
                     if record.wa is None:
                         record.wa = []
                     try:
-                        line = handle.next()
+                        line = next(handle)
                     except StopIteration:
                         raise ValueError("Failed to read WA block")
                     record.wa.append(wa(line))
@@ -432,7 +432,7 @@ def parse(handle):
                     if record.ct is None:
                         record.ct = []
                     try:
-                        line = handle.next()
+                        line = next(handle)
                     except StopIteration:
                         raise ValueError("Failed to read CT block")
                     record.ct.append(ct(line))
@@ -530,7 +530,7 @@ def read(handle):
     record = ACEFileRecord()
 
     try:
-        line = handle.next()
+        line = next(handle)
     except StopIteration:
         raise ValueError("Premature end of file")
 
@@ -539,7 +539,8 @@ def read(handle):
         raise ValueError("File does not start with 'AS'.")
 
     words = line.split()
-    record.ncontigs, record.nreads = map(int, words[1:3])
+    record.ncontigs = int(words[1])
+    record.nreads = int(words[2])
 
     # now read all the records
     record.contigs = list(parse(handle))

@@ -69,7 +69,7 @@ class StructureBuilder(object):
         o id - int
         o serial_num - int
         """
-        self.model=Model(model_id,serial_num)
+        self.model=Model(model_id, serial_num)
         self.structure.add(self.model)
 
     def init_chain(self, chain_id):

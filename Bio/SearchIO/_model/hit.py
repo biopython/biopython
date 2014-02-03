@@ -5,13 +5,17 @@
 
 """Bio.SearchIO object to model a single database hit."""
 
+from __future__ import print_function
+
 from itertools import chain
+
+from Bio._py3k import filter
 
 from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import allitems, optionalcascade
 
-from _base import _BaseSearchObject
-from hsp import HSP
+from ._base import _BaseSearchObject
+from .hsp import HSP
 
 
 class Hit(_BaseSearchObject):
@@ -26,9 +30,9 @@ class Hit(_BaseSearchObject):
     To have a quick look at a Hit and its contents, invoke `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
     >>> hit = qresult[3]
-    >>> print hit
+    >>> print(hit)
     Query: 33211
            mir_1
       Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -57,7 +61,7 @@ class Hit(_BaseSearchObject):
     Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
     >>> hit[:1]
     Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 hsps)
-    >>> print hit[1:]
+    >>> print(hit[1:])
     Query: 33211
            mir_1
       Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -80,7 +84,7 @@ class Hit(_BaseSearchObject):
     2
     >>> len(filtered_hit)
     1
-    >>> print filtered_hit
+    >>> print(filtered_hit)
     Query: 33211
            mir_1
       Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -124,7 +128,7 @@ class Hit(_BaseSearchObject):
             # This makes it easier to work with file formats with unpredictable
             # hit-hsp ordering. The empty hit object itself is nonfunctional,
             # however, since all its cascading properties are empty.
-            if len(set([getattr(hsp, attr) for hsp in hsps])) > 1:
+            if len(set(getattr(hsp, attr) for hsp in hsps)) > 1:
                 raise ValueError("Hit object can not contain HSPs with "
                         "more than one %s." % attr)
 
@@ -145,8 +149,12 @@ class Hit(_BaseSearchObject):
     def __len__(self):
         return len(self.hsps)
 
-    def __nonzero__(self):
+    #Python 3:
+    def __bool__(self):
         return bool(self.hsps)
+
+    #Python 2:
+    __nonzero__= __bool__
 
     def __contains__(self, hsp):
         return hsp in self._items
@@ -313,7 +321,7 @@ class Hit(_BaseSearchObject):
         than 60:
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
         >>> hit = qresult[3]
         >>> evalue_filter = lambda hsp: hsp.bitscore > 60
         >>> filtered_hit = hit.filter(evalue_filter)
@@ -321,7 +329,7 @@ class Hit(_BaseSearchObject):
         2
         >>> len(filtered_hit)
         1
-        >>> print filtered_hit
+        >>> print(filtered_hit)
         Query: 33211
                mir_1
           Hit: gi|301171322|ref|NR_035857.1| (86)
@@ -332,7 +340,7 @@ class Hit(_BaseSearchObject):
                   0   8.9e-20     100.47      60           [1:61]                [13:73]
 
         """
-        hsps = filter(func, self.hsps)
+        hsps = list(filter(func, self.hsps))
         if hsps:
             obj = self.__class__(hsps)
             self._transfer_attrs(obj)
@@ -359,7 +367,7 @@ class Hit(_BaseSearchObject):
 
         """
         if func is not None:
-            hsps = map(func, self.hsps[:])  # this creates a shallow copy
+            hsps = [func(x) for x in self.hsps[:]] # this creates a shallow copy
         else:
             hsps = self.hsps[:]
         if hsps:

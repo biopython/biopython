@@ -1,14 +1,53 @@
-# Copyright 2010 by Peter Cock.  All rights reserved.
+# Copyright 2010-2013 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Python 3 compatibility tools (PRIVATE)."""
+"""Python 3 compatibility tools (PRIVATE).
 
+We currently have lines like this under Python 2 in order
+to use iterator based zip, map and filter:
+
+    from future_builtins import zip
+
+There is no similar option for range yet, other than:
+
+    range = xrange
+    input = raw_input
+
+or:
+
+    from __builtin__ import xrange as range
+    from __builtin__ import raw_input as input
+
+Under Python 3 this imports need to be removed. Also, deliberate
+importing of built in functions like open changes from Python 2:
+
+    from __builtin__ import open
+
+to this under Python 3:
+
+    from builtins import open
+
+Instead, we can do this under either Python 2 or 3:
+
+    from Bio._py3k import open
+    from Bio._py3k import zip
+
+Once we drop support for Python 2, the whole of Bio._py3k will
+go away.
+"""
 import sys
 
 if sys.version_info[0] >= 3:
-    #Python 3 code (which will be converted using 2to3 script)
+    #Code for Python 3
+    from builtins import open, zip, map, filter, range, input
+
     import codecs
+
+    #Lots of our Python 2 code uses isinstance(x, basestring)
+    #which after 2to3 becomes isinstance(x, str)
+    basestring = str
+    unicode = str
 
     _bytes_to_string = lambda b: b.decode() # bytes to unicode string
     _string_to_bytes = lambda s: s.encode() # unicode string to bytes
@@ -79,8 +118,22 @@ if sys.version_info[0] >= 3:
     #On Python 3, can depend on OrderedDict being present:
     from collections import OrderedDict
 
+    #On Python 3, this will be a unicode StringIO
+    from io import StringIO
+
+    #On Python 3 urllib, urllib2, and urlparse were merged:
+    from urllib.request import urlopen, Request, urlretrieve, urlparse
+    from urllib.parse import urlencode, quote
+    from urllib.error import HTTPError
+
 else:
     #Python 2 code
+    from __builtin__ import open, basestring, unicode
+
+    #Import Python3 like iterator functions:
+    from future_builtins import zip, map, filter
+    from __builtin__ import xrange as range
+    from __builtin__ import raw_input as input
 
     _bytes_to_string = lambda b: b # bytes to string, i.e. do nothing
     _string_to_bytes = lambda s: str(s) # str (or unicode) to bytes string
@@ -100,10 +153,7 @@ else:
 
     def _is_int_or_long(i):
         """Check if the value is an integer or long."""
-        #If the 2to3 long fixer is enabled (which it is by default), this
-        #will be changed to "isinstance(i, int) or isinstance(i, int)"
-        #but that doesn't matter.
-        return isinstance(i, int) or isinstance(i, long)
+        return isinstance(i, (int, long))
 
     def _binary_to_string_handle(handle):
         """Treat a binary handle like a text handle."""
@@ -118,4 +168,47 @@ else:
             from ordereddict import OrderedDict
         except ImportError:
             #Use our bundled copy instead
-            from _ordereddict import OrderedDict
+            from ._ordereddict import OrderedDict
+
+    # On Python 2 this will be a (bytes) string based handle.
+    # Note this doesn't work as it is unicode based:
+    # from io import StringIO
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from StringIO import StringIO
+
+    #Under urllib.request on Python 3:
+    from urllib2 import urlopen, Request
+    from urllib import urlretrieve
+    from urlparse import urlparse
+
+    #Under urllib.parse on Python 3:
+    from urllib import urlencode, quote
+
+    #Under urllib.error on Python 3:
+    from urllib2 import HTTPError
+
+
+if sys.platform == "win32":
+    # Can't use commands.getoutput on Python 2, Unix only/broken:
+    # http://bugs.python.org/issue15073
+    # Can't use subprocess.getoutput on Python 3, Unix only/broken:
+    # http://bugs.python.org/issue10197
+    def getoutput(cmd):
+        import subprocess
+        child = subprocess.Popen(cmd,
+                                 stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT,
+                                 universal_newlines=True,
+                                 shell=False)
+        stdout, stderr = child.communicate()
+        # Remove trailing \n to match the Unix function,
+        return stdout.rstrip("\n")
+elif sys.version_info[0] >= 3:
+    # Use subprocess.getoutput on Python 3,
+    from subprocess import getoutput
+else:
+    # Use commands.getoutput on Python 2,
+    from commands import getoutput

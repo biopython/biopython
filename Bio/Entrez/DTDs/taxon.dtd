@@ -1,7 +1,7 @@
 <!-- ?xml version="1.0"? -->
 <!-- DOCTYPE TaxaSet PUBLIC "-//NLM//DTD TaxaSet, 20 February 2004//EN" "taxon.dtd" -->
 
-<!-- $Id: taxon.dtd,v 1.1 2008-05-17 06:10:25 mdehoon Exp $ -->
+<!-- $Id: taxon.dtd 348960 2012-01-05 21:51:40Z yasmax $ -->
 
 <!-- ELEMENTS -->
 <!ELEMENT TaxId       (#PCDATA)>
@@ -53,7 +53,7 @@
 <!ELEMENT PropValueString (#PCDATA)>
 
 <!-- Taxon structural entities -->
-<!ELEMENT TaxaSet ( Taxon+ )>
+<!ELEMENT TaxaSet ( Taxon* )>
 
 <!ELEMENT Taxon (
                  TaxId,
@@ -80,17 +80,17 @@
                           GenbankAcronym?,
                           BlastName?,
                           ( EquivalentName |
-	                    Synonym        |
-	                    Acronym        |
+                            Synonym        |
+                            Acronym        |
                             Misspelling    |
-	                    Anamorph       |
-	                    Includes       |
-	                    CommonName     |
-	                    Inpart         |
-	                    Misnomer       |
-	                    Teleomorph     |
-	                    GenbankSynonym |
-	                    GenbankAnamorph
+                            Anamorph       |
+                            Includes       |
+                            CommonName     |
+                            Inpart         |
+                            Misnomer       |
+                            Teleomorph     |
+                            GenbankSynonym |
+                            GenbankAnamorph
                           )*,
                           Name*
                         )>

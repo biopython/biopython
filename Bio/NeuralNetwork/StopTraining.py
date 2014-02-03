@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Classes to help deal with stopping training a neural network.
 
 One of the key issues with training a neural network is knowning when to
@@ -12,6 +17,8 @@ in this module should be instaniated, and then the stop_training function
 of the classes passed to the network.
 """
 
+
+from __future__ import print_function
 
 class ValidationIncreaseStop(object):
     """Class to stop training on a network when the validation error increases.

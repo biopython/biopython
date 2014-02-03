@@ -2,8 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Common SearchIO utility functions."""
+
+from Bio._py3k import basestring
 
 
 def get_processor(format, mapping):
@@ -28,7 +29,7 @@ def get_processor(format, mapping):
                     format)
         else:
             raise ValueError("Unknown format %r. Supported formats are "
-                    "%r" % (format, "', '".join(mapping.keys())))
+                    "%r" % (format, "', '".join(mapping)))
 
     mod_name, obj_name = obj_info
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])

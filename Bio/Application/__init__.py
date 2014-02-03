@@ -19,9 +19,12 @@ construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
 """
+from __future__ import print_function
+from Bio._py3k import basestring
+
 import os
+import platform
 import sys
-import StringIO
 import subprocess
 import re
 
@@ -31,11 +34,13 @@ from Bio import File
 
 #Use this regular expression to test the property names are going to
 #be valid as Python properties or arguments
-_re_prop_name = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*")
+_re_prop_name = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 assert _re_prop_name.match("t")
 assert _re_prop_name.match("test")
 assert _re_prop_name.match("_test") is None # we don't want private names
 assert _re_prop_name.match("-test") is None
+assert _re_prop_name.match("any-hyphen") is None
+assert _re_prop_name.match("underscore_ok")
 assert _re_prop_name.match("test_name")
 assert _re_prop_name.match("test2")
 #These are reserved names in Python itself,
@@ -60,7 +65,7 @@ class ApplicationError(_ProcessCalledError):
     >>> err = ApplicationError(-11, "helloworld", "", "Some error text")
     >>> err.returncode, err.cmd, err.stdout, err.stderr
     (-11, 'helloworld', '', 'Some error text')
-    >>> print err
+    >>> print(err)
     Command 'helloworld' returned non-zero exit status -11, 'Some error text'
 
     """
@@ -135,7 +140,7 @@ class AbstractCommandline(object):
     >>> water_cmd.asequence = "asis:ACCCGGGCGCGGT"
     >>> water_cmd.bsequence = "asis:ACCCGAGCGCGGT"
     >>> water_cmd.outfile = "temp_water.txt"
-    >>> print water_cmd
+    >>> print(water_cmd)
     water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
     >>> water_cmd
     WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
@@ -157,7 +162,7 @@ class AbstractCommandline(object):
     ...                              asequence="asis:ACCCGGGCGCGGT",
     ...                              bsequence="asis:ACCCGAGCGCGGT",
     ...                              outfile="temp_water.txt")
-    >>> print water_cmd
+    >>> print(water_cmd)
     "C:\Program Files\EMBOSS\water.exe" -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
 
     Notice that since the path name includes a space it has automatically
@@ -238,7 +243,7 @@ class AbstractCommandline(object):
                        "argument value required." % p.names[0]
             prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop)  # magic!
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             self.set_parameter(key, value)
 
     def _validate(self):
@@ -265,7 +270,7 @@ class AbstractCommandline(object):
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
-        >>> print cline
+        >>> print(cline)
         water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> str(cline)
         'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5'
@@ -287,7 +292,7 @@ class AbstractCommandline(object):
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
-        >>> print cline
+        >>> print(cline)
         water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
@@ -387,7 +392,7 @@ class AbstractCommandline(object):
         Traceback (most recent call last):
         ...
         ValueError: Option name csequence was not found.
-        >>> print cline
+        >>> print(cline)
         water -stdout -asequence=a.fasta -bsequence=b.fasta -gapopen=10 -gapextend=0.5
 
         This workaround uses a whitelist of object attributes, and sets the
@@ -468,11 +473,23 @@ class AbstractCommandline(object):
         #
         #Using universal newlines is important on Python 3, this
         #gives unicode handles rather than bytes handles.
+
+	#Windows 7 and 8 want shell = True
+	#platform is easier to understand that sys to determine
+	#windows version
+        if sys.platform != "win32":
+            use_shell = True
+        else:
+            win_ver = platform.win32_ver()[0]
+            if win_ver in ["7", "8"]:
+                use_shell = True
+            else:
+                use_shell = False
         child_process = subprocess.Popen(str(self), stdin=subprocess.PIPE,
                                          stdout=stdout_arg, stderr=stderr_arg,
                                          universal_newlines=True,
                                          cwd=cwd, env=env,
-                                         shell=(sys.platform!="win32"))
+                                         shell=use_shell)
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
         if not stdout:
@@ -693,9 +710,9 @@ def _escape_filename(filename):
 
     Note this will not add quotes if they are already included:
 
-    >>> print _escape_filename('example with spaces')
+    >>> print((_escape_filename('example with spaces')))
     "example with spaces"
-    >>> print _escape_filename('"example with spaces"')
+    >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
     """
     #Is adding the following helpful
@@ -729,3 +746,4 @@ def _test():
 if __name__ == "__main__":
     #Run the doctests
     _test()
+

@@ -13,6 +13,10 @@ and MAST programs, as well as files in the TRANSFAC format.
 Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
+from __future__ import print_function
+
+from Bio._py3k import range
+
 import math
 
 
@@ -39,8 +43,8 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import motifs
-    >>> for m in motifs.parse(open("Motif/alignace.out"),"AlignAce"):
-    ...     print m.consensus
+    >>> for m in motifs.parse(open("Motif/alignace.out"), "AlignAce"):
+    ...     print(m.consensus)
     TCTACGATTGAG
     CTGCAGCTAGCTACGAGTGAG
     GTGCTCTAAGCATAGTAGGCG
@@ -98,7 +102,7 @@ def read(handle, format):
     Or a single-motif MEME file,
 
     >>> from Bio import motifs
-    >>> m = motifs.read(open("motifs/meme.out"),"meme")
+    >>> m = motifs.read(open("motifs/meme.out"), "meme")
     >>> m.consensus
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -106,7 +110,7 @@ def read(handle, format):
     an exception is raised:
 
     >>> from Bio import motifs
-    >>> motif = motifs.read(open("motifs/alignace.out"),"AlignAce")
+    >>> motif = motifs.read(open("motifs/alignace.out"), "AlignAce")
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -116,7 +120,7 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import motifs
-    >>> record = motifs.parse(open("motifs/alignace.out"),"alignace")
+    >>> record = motifs.parse(open("motifs/alignace.out"), "alignace")
     >>> motif = record[0]
     >>> motif.consensus
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
@@ -187,10 +191,10 @@ class Instances(list):
         """
         a generator function, returning found positions of motif instances in a given sequence
         """
-        for pos in xrange(0,len(sequence)-self.length+1):
+        for pos in range(0, len(sequence)-self.length+1):
             for instance in self:
                 if str(instance) == str(sequence[pos:pos+self.length]):
-                    yield(pos,instance)
+                    yield(pos, instance)
                     break # no other instance will fit (we don't want to return multiple hits)
     def reverse_complement(self):
         instances = Instances(alphabet=self.alphabet)
@@ -206,7 +210,7 @@ class Motif(object):
     A class representing sequence motifs.
     """
     def __init__(self, alphabet=None, instances=None, counts=None):
-        import matrix
+        from . import matrix
         from Bio.Alphabet import IUPAC
         self.name=""
         if counts is not None and instances is not None:
@@ -317,7 +321,7 @@ class Motif(object):
             text += str(self.instances)
 
         if masked:
-            for i in xrange(self.length):
+            for i in range(self.length):
                 if self.__mask[i]:
                     text += "*"
                 else:
@@ -423,34 +427,34 @@ The same rules are used by TRANSFAC."""
             'color4': '',
 
         """
-        import urllib
-        import urllib2
+        from Bio._py3k import urlopen, urlencode, Request
+
         frequencies = self.format('transfac')
         url = 'http://weblogo.threeplusone.com/create.cgi'
-        values = {'sequences' : frequencies,
-                  'format' : format.lower(),
-                  'stack_width' : 'medium',
-                  'stack_per_line' : '40',
-                  'alphabet' : 'alphabet_dna',
-                  'ignore_lower_case' : True,
-                  'unit_name' : "bits",
-                  'first_index' : '1',
-                  'logo_start' : '1',
+        values = {'sequences': frequencies,
+                  'format': format.lower(),
+                  'stack_width': 'medium',
+                  'stack_per_line': '40',
+                  'alphabet': 'alphabet_dna',
+                  'ignore_lower_case': True,
+                  'unit_name': "bits",
+                  'first_index': '1',
+                  'logo_start': '1',
                   'logo_end': str(self.length),
-                  'composition' : "comp_auto",
-                  'percentCG' : '',
-                  'scale_width' : True,
-                  'show_errorbars' : True,
-                  'logo_title' : '',
-                  'logo_label' : '',
+                  'composition': "comp_auto",
+                  'percentCG': '',
+                  'scale_width': True,
+                  'show_errorbars': True,
+                  'logo_title': '',
+                  'logo_label': '',
                   'show_xaxis': True,
                   'xaxis_label': '',
                   'show_yaxis': True,
                   'yaxis_label': '',
                   'yaxis_scale': 'auto',
-                  'yaxis_tic_interval' : '1.0',
-                  'show_ends' : True,
-                  'show_fineprint' : True,
+                  'yaxis_tic_interval': '1.0',
+                  'show_ends': True,
+                  'show_fineprint': True,
                   'color_scheme': 'color_auto',
                   'symbols0': '',
                   'symbols1': '',
@@ -463,20 +467,18 @@ The same rules are used by TRANSFAC."""
                   'color3': '',
                   'color4': '',
                   }
-        for k,v in kwds.iteritems():
-            if type(values[k])==bool:
+        for k, v in kwds.items():
+            if isinstance(values[k], bool):
                 if not v:
                     v = ""
             values[k]=str(v)
 
-        data = urllib.urlencode(values)
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        f = open(fname,"w")
-        im = response.read()
-
-        f.write(im)
-        f.close()
+        data = urlencode(values)
+        req = Request(url, data)
+        response = urlopen(req)
+        with open(fname,"w") as f:
+            im = response.read()
+            f.write(im)
 
     def format(self, format):
         """Returns a string representation of the Motif in a given format
@@ -517,3 +519,5 @@ def write(motifs, format):
         return transfac.write(motifs)
     else:
         raise ValueError("Unknown format type %s" % format)
+
+

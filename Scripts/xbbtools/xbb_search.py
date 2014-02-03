@@ -4,16 +4,22 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_search.py
 
-import commands
 import os
 import re
 import sys
 sys.path.insert(0, '.')
-from Tkinter import *
-from tkColorChooser import askcolor
-from Bio.Data.IUPACData import ambiguous_dna_values
-import re
 
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
+try:
+    import tkColorChooser as colorchooser # Python 2
+except ImportError:
+    from tkinter import colorchooser # Python 3
+
+from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
 
 
@@ -24,9 +30,9 @@ class DNAsearch:
 
     def init_alphabet(self):
         self.alphabet = ambiguous_dna_values
-        other = ''.join(self.alphabet.keys())
+        other = ''.join(self.alphabet)
         self.alphabet['N'] = self.alphabet['N'] + other
-        for key in self.alphabet.keys():
+        for key in self.alphabet:
             if key == 'N':
                 continue
             if key in self.alphabet[key]:
@@ -65,7 +71,7 @@ class DNAsearch:
     def SearchAll(self):
         pos = -1
         positions = []
-        while 1:
+        while True:
             m = self._Search(pos + 1)
             if not m:
                 break
@@ -116,7 +122,7 @@ class XDNAsearch(Toplevel, DNAsearch):
             return
         if not color:
             try:
-                color = askcolor()[1]
+                color = colorchooser.askcolor()[1]
             except:
                 color = 'cyan'
         self.current_color = color

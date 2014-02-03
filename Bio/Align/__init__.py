@@ -9,6 +9,8 @@ One of the most important things in this module is the MultipleSeqAlignment
 class, used in the Bio.AlignIO module.
 
 """
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Seq import Seq
@@ -32,7 +34,7 @@ class MultipleSeqAlignment(_Alignment):
 
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
-    >>> print align
+    >>> print(align)
     SingleLetterAlphabet() alignment with 7 rows and 156 columns
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
@@ -49,7 +51,7 @@ class MultipleSeqAlignment(_Alignment):
     >>> len(align)
     7
     >>> for record in align:
-    ...     print record.id, len(record)
+    ...     print("%s %i" % (record.id, len(record)))
     gi|6273285|gb|AF191659.1|AF191 156
     gi|6273284|gb|AF191658.1|AF191 156
     gi|6273287|gb|AF191661.1|AF191 156
@@ -60,19 +62,19 @@ class MultipleSeqAlignment(_Alignment):
 
     You can also access individual rows as SeqRecord objects via their index:
 
-    >>> print align[0].id
+    >>> print(align[0].id)
     gi|6273285|gb|AF191659.1|AF191
-    >>> print align[-1].id
+    >>> print(align[-1].id)
     gi|6273291|gb|AF191665.1|AF191
 
     And extract columns as strings:
 
-    >>> print align[:,1]
+    >>> print(align[:, 1])
     AAAAAAA
 
     Or, take just the first ten columns as a sub-alignment:
 
-    >>> print align[:,:10]
+    >>> print(align[:, :10])
     SingleLetterAlphabet() alignment with 7 rows and 10 columns
     TATACATTAA gi|6273285|gb|AF191659.1|AF191
     TATACATTAA gi|6273284|gb|AF191658.1|AF191
@@ -86,7 +88,7 @@ class MultipleSeqAlignment(_Alignment):
     remove a section of the alignment. For example, taking just the first
     and last ten columns:
 
-    >>> print align[:,:10] + align[:,-10:]
+    >>> print(align[:, :10] + align[:, -10:])
     SingleLetterAlphabet() alignment with 7 rows and 20 columns
     TATACATTAAGTGTACCAGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAGTGTACCAGA gi|6273284|gb|AF191658.1|AF191
@@ -130,7 +132,7 @@ class MultipleSeqAlignment(_Alignment):
         >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
         >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
         >>> align = MultipleSeqAlignment([a, b, c], annotations={"tool": "demo"})
-        >>> print align
+        >>> print(align)
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
@@ -204,7 +206,7 @@ class MultipleSeqAlignment(_Alignment):
         First we create a small alignment (three rows):
 
         >>> align = MultipleSeqAlignment([a, b, c])
-        >>> print align
+        >>> print(align)
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
@@ -213,7 +215,7 @@ class MultipleSeqAlignment(_Alignment):
         Now we can extend this alignment with another two rows:
 
         >>> align.extend([d, e])
-        >>> print align
+        >>> print(align)
         DNAAlphabet() alignment with 5 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
@@ -232,7 +234,7 @@ class MultipleSeqAlignment(_Alignment):
             #Take the first record's length
             records = iter(records)  # records arg could be list or iterator
             try:
-                rec = records.next()
+                rec = next(records)
             except StopIteration:
                 #Special case, no records
                 return
@@ -252,7 +254,7 @@ class MultipleSeqAlignment(_Alignment):
 
         >>> from Bio import AlignIO
         >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
-        >>> print align
+        >>> print(align)
         SingleLetterAlphabet() alignment with 7 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
@@ -273,7 +275,7 @@ class MultipleSeqAlignment(_Alignment):
         Now append this to the alignment,
 
         >>> align.append(dummy)
-        >>> print align
+        >>> print(align)
         SingleLetterAlphabet() alignment with 8 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
@@ -336,12 +338,12 @@ class MultipleSeqAlignment(_Alignment):
 
         Now, let's look at these two alignments:
 
-        >>> print left
+        >>> print(left)
         DNAAlphabet() alignment with 3 rows and 5 columns
         AAAAC Alpha
         AAA-C Beta
         AAAAG Gamma
-        >>> print right
+        >>> print(right)
         DNAAlphabet() alignment with 3 rows and 2 columns
         GT Alpha
         GT Beta
@@ -350,7 +352,7 @@ class MultipleSeqAlignment(_Alignment):
         And add them:
 
         >>> combined = left + right
-        >>> print combined
+        >>> print(combined)
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
@@ -385,10 +387,10 @@ class MultipleSeqAlignment(_Alignment):
             raise ValueError("When adding two alignments they must have the same length"
                              " (i.e. same number or rows)")
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
-        merged = (left+right for left,right in zip(self, other))
+        merged = (left+right for left, right in zip(self, other))
         # Take any common annotation:
         annotations = dict()
-        for k, v in self.annotations.iteritems():
+        for k, v in self.annotations.items():
             if k in other.annotations and other.annotations[k] == v:
                 annotations[k] = v
         return MultipleSeqAlignment(merged, alpha, annotations)
@@ -430,17 +432,17 @@ class MultipleSeqAlignment(_Alignment):
         index (think of the alignment as a list of SeqRecord objects here):
 
         >>> first_record = align[0]
-        >>> print first_record.id, first_record.seq
+        >>> print("%s %s" % (first_record.id, first_record.seq))
         Alpha AAAACGT
         >>> last_record = align[-1]
-        >>> print last_record.id, last_record.seq
+        >>> print("%s %s" % (last_record.id, last_record.seq))
         Epsilon AAA-GGT
 
         You can also access use python's slice notation to create a sub-alignment
         containing only some of the SeqRecord objects:
 
         >>> sub_alignment = align[2:5]
-        >>> print sub_alignment
+        >>> print(sub_alignment)
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAAGGT Gamma
         AAAACGT Delta
@@ -450,7 +452,7 @@ class MultipleSeqAlignment(_Alignment):
         can be used to select every second sequence:
 
         >>> sub_alignment = align[::2]
-        >>> print sub_alignment
+        >>> print(sub_alignment)
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAAAGGT Gamma
@@ -459,7 +461,7 @@ class MultipleSeqAlignment(_Alignment):
         Or to get a copy of the alignment with the rows in reverse order:
 
         >>> rev_alignment = align[::-1]
-        >>> print rev_alignment
+        >>> print(rev_alignment)
         DNAAlphabet() alignment with 5 rows and 7 columns
         AAA-GGT Epsilon
         AAAACGT Delta
@@ -470,7 +472,7 @@ class MultipleSeqAlignment(_Alignment):
         You can also use two indices to specify both rows and columns. Using simple
         integers gives you the entry as a single character string. e.g.
 
-        >>> align[3,4]
+        >>> align[3, 4]
         'C'
 
         This is equivalent to:
@@ -485,17 +487,17 @@ class MultipleSeqAlignment(_Alignment):
 
         To get a single column (as a string) use this syntax:
 
-        >>> align[:,4]
+        >>> align[:, 4]
         'CCGCG'
 
         Or, to get part of a column,
 
-        >>> align[1:3,4]
+        >>> align[1:3, 4]
         'CG'
 
         However, in general you get a sub-alignment,
 
-        >>> print align[1:5,3:6]
+        >>> print(align[1:5, 3:6])
         DNAAlphabet() alignment with 4 rows and 3 columns
         -CG Beta
         AGG Gamma
@@ -555,7 +557,7 @@ class MultipleSeqAlignment(_Alignment):
 
         If you simple try and add these without sorting, you get this:
 
-        >>> print align1 + align2
+        >>> print(align1 + align2)
         DNAAlphabet() alignment with 3 rows and 8 columns
         ACGTCGGT <unknown id>
         ACGGCGTT <unknown id>
@@ -568,7 +570,7 @@ class MultipleSeqAlignment(_Alignment):
 
         >>> align1.sort()
         >>> align2.sort()
-        >>> print align1 + align2
+        >>> print(align1 + align2)
         DNAAlphabet() alignment with 3 rows and 8 columns
         ACGCCGCT Chicken
         ACGTCGTT Human
@@ -578,13 +580,13 @@ class MultipleSeqAlignment(_Alignment):
         GC content of each sequence.
 
         >>> from Bio.SeqUtils import GC
-        >>> print align1
+        >>> print(align1)
         DNAAlphabet() alignment with 3 rows and 4 columns
         ACGC Chicken
         ACGT Human
         ACGG Mouse
         >>> align1.sort(key = lambda record: GC(record.seq))
-        >>> print align1
+        >>> print(align1)
         DNAAlphabet() alignment with 3 rows and 4 columns
         ACGT Human
         ACGC Chicken
@@ -594,7 +596,7 @@ class MultipleSeqAlignment(_Alignment):
         but backwards:
 
         >>> align1.sort(reverse=True)
-        >>> print align1
+        >>> print(align1)
         DNAAlphabet() alignment with 3 rows and 4 columns
         ACGG Mouse
         ACGT Human
@@ -646,3 +648,5 @@ class MultipleSeqAlignment(_Alignment):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+
+

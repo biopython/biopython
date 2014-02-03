@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """
 This is an implementation of a state-emitting MarkovModel.  I am using
 terminology similar to Manning and Schutze.
@@ -61,8 +66,8 @@ class MarkovModel(object):
         self.p_emission = p_emission
 
     def __str__(self):
-        import StringIO
-        handle = StringIO.StringIO()
+        from Bio._py3k import StringIO
+        handle = StringIO()
         save(self, handle)
         handle.seek(0)
         return handle.read()
@@ -100,14 +105,14 @@ def load(handle):
     line = _readline_and_check_start(handle, "TRANSITION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
-        mm.p_transition[i,:] = map(float, line.split()[1:])
+        mm.p_transition[i,:] = [float(v) for v in line.split()[1:]]
 
     # Load the emission.
     mm.p_emission = numpy.zeros((N, M))
     line = _readline_and_check_start(handle, "EMISSION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
-        mm.p_emission[i,:] = map(float, line.split()[1:])
+        mm.p_emission[i,:] = [float(v) for v in line.split()[1:]]
 
     return mm
 
@@ -123,12 +128,10 @@ def save(mm, handle):
         w("  %s: %g\n" % (mm.states[i], mm.p_initial[i]))
     w("TRANSITION:\n")
     for i in range(len(mm.p_transition)):
-        x = map(str, mm.p_transition[i])
-        w("  %s: %s\n" % (mm.states[i], ' '.join(x)))
+        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_transition[i])))
     w("EMISSION:\n")
     for i in range(len(mm.p_emission)):
-        x = map(str, mm.p_emission[i])
-        w("  %s: %s\n" % (mm.states[i], ' '.join(x)))
+        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_emission[i])))
 
 
 # XXX allow them to specify starting points
@@ -164,12 +167,12 @@ def train_bw(states, alphabet, training_data,
             raise ValueError("pseudo_initial not shape len(states)")
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
-        if pseudo_transition.shape != (N,N):
+        if pseudo_transition.shape != (N, N):
             raise ValueError("pseudo_transition not shape " +
                              "len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
-        if pseudo_emission.shape != (N,M):
+        if pseudo_emission.shape != (N, M):
             raise ValueError("pseudo_emission not shape " +
                              "len(states) X len(alphabet)")
 
@@ -182,7 +185,7 @@ def train_bw(states, alphabet, training_data,
         training_outputs.append([indexes[x] for x in outputs])
 
     # Do some sanity checking on the outputs.
-    lengths = map(len, training_outputs)
+    lengths = [len(x) for x in training_outputs]
     if min(lengths) == 0:
         raise ValueError("I got training data with outputs of length 0")
 
@@ -209,17 +212,18 @@ def _baum_welch(N, M, training_outputs,
         p_initial = _copy_and_check(p_initial, (N,))
 
     if p_transition is None:
-        p_transition = _random_norm((N,N))
+        p_transition = _random_norm((N, N))
     else:
-        p_transition = _copy_and_check(p_transition, (N,N))
+        p_transition = _copy_and_check(p_transition, (N, N))
     if p_emission is None:
-        p_emission = _random_norm((N,M))
+        p_emission = _random_norm((N, M))
     else:
-        p_emission = _copy_and_check(p_emission, (N,M))
+        p_emission = _copy_and_check(p_emission, (N, M))
 
     # Do all the calculations in log space to avoid underflows.
-    lp_initial, lp_transition, lp_emission = map(
-        numpy.log, (p_initial, p_transition, p_emission))
+    lp_initial = numpy.log(p_initial)
+    lp_transition = numpy.log(p_transition)
+    lp_emission = numpy.log(p_emission)
     if pseudo_initial is not None:
         lpseudo_initial = numpy.log(pseudo_initial)
     else:
@@ -255,7 +259,7 @@ def _baum_welch(N, M, training_outputs,
                            % MAX_ITERATIONS)
 
     # Return everything back in normal space.
-    return map(numpy.exp, (lp_initial, lp_transition, lp_emission))
+    return [numpy.exp(x) for x in (lp_initial, lp_transition, lp_emission)]
 
 
 def _baum_welch_one(N, M, outputs,
@@ -286,13 +290,13 @@ def _baum_welch_one(N, M, outputs,
                      bmat[j][t+1]
                 lp_traverse[i][j] = lp
         # Normalize the probability for this time step.
-        lp_arc[:,:,t] = lp_traverse - _logsum(lp_traverse)
+        lp_arc[:,:, t] = lp_traverse - _logsum(lp_traverse)
 
     # Sum of all the transitions out of state i at time t.
     lp_arcout_t = numpy.zeros((N, T))
     for t in range(T):
         for i in range(N):
-            lp_arcout_t[i][t] = _logsum(lp_arc[i,:,t])
+            lp_arcout_t[i][t] = _logsum(lp_arc[i,:, t])
 
     # Sum of all the transitions out of state i.
     lp_arcout = numpy.zeros(N)
@@ -300,7 +304,7 @@ def _baum_welch_one(N, M, outputs,
         lp_arcout[i] = _logsum(lp_arcout_t[i,:])
 
     # UPDATE P_INITIAL.
-    lp_initial = lp_arcout_t[:,0]
+    lp_initial = lp_arcout_t[:, 0]
     if lpseudo_initial is not None:
         lp_initial = _logvecadd(lp_initial, lpseudo_initial)
         lp_initial = lp_initial - _logsum(lp_initial)
@@ -310,7 +314,7 @@ def _baum_welch_one(N, M, outputs,
     # transitions out of i.
     for i in range(N):
         for j in range(N):
-            lp_transition[i][j] = _logsum(lp_arc[i,j,:]) - lp_arcout[i]
+            lp_transition[i][j] = _logsum(lp_arc[i, j,:]) - lp_arcout[i]
         if lpseudo_transition is not None:
             lp_transition[i] = _logvecadd(lp_transition[i], lpseudo_transition)
             lp_transition[i] = lp_transition[i] - _logsum(lp_transition[i])
@@ -323,7 +327,7 @@ def _baum_welch_one(N, M, outputs,
         for t in range(T):
             k = outputs[t]
             for j in range(N):
-                ksum[k] = logaddexp(ksum[k], lp_arc[i,j,t])
+                ksum[k] = logaddexp(ksum[k], lp_arc[i, j, t])
         ksum = ksum - _logsum(ksum)      # Normalize
         if lpseudo_emission is not None:
             ksum = _logvecadd(ksum, lpseudo_emission[i])
@@ -337,7 +341,7 @@ def _baum_welch_one(N, M, outputs,
     # the _forward algorithm and calculate from the clean one, but
     # that may be more expensive than overshooting the training by one
     # step.
-    return _logsum(fmat[:,T])
+    return _logsum(fmat[:, T])
 
 
 def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
@@ -348,7 +352,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
     matrix = numpy.zeros((N, T+1))
 
     # Initialize the first column to be the initial values.
-    matrix[:,0] = lp_initial
+    matrix[:, 0] = lp_initial
     for t in range(1, T+1):
         k = outputs[t-1]
         for j in range(N):
@@ -408,12 +412,12 @@ def train_visible(states, alphabet, training_data,
             raise ValueError("pseudo_initial not shape len(states)")
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
-        if pseudo_transition.shape != (N,N):
+        if pseudo_transition.shape != (N, N):
             raise ValueError("pseudo_transition not shape " +
                              "len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
-        if pseudo_emission.shape != (N,M):
+        if pseudo_emission.shape != (N, M):
             raise ValueError("pseudo_emission not shape " +
                              "len(states) X len(alphabet)")
 
@@ -449,7 +453,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
 
     # p_transition is the probability that a state leads to the next
     # one.  C(i,j)/C(i) where i and j are states.
-    p_transition = numpy.zeros((N,N))
+    p_transition = numpy.zeros((N, N))
     if pseudo_transition:
         p_transition = p_transition + pseudo_transition
     for states in training_states:
@@ -461,10 +465,10 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
 
     # p_emission is the probability of an output given a state.
     # C(s,o)|C(s) where o is an output and s is a state.
-    p_emission = numpy.zeros((N,M))
+    p_emission = numpy.zeros((N, M))
     if pseudo_emission:
         p_emission = p_emission + pseudo_emission
-    p_emission = numpy.ones((N,M))
+    p_emission = numpy.ones((N, M))
     for outputs, states in zip(training_outputs, training_states):
         for o, s in zip(outputs, states):
             p_emission[s, o] += 1
@@ -485,10 +489,9 @@ def find_states(markov_model, output):
 
     # _viterbi does calculations in log space.  Add a tiny bit to the
     # matrices so that the logs will not break.
-    x = mm.p_initial + VERY_SMALL_NUMBER
-    y = mm.p_transition + VERY_SMALL_NUMBER
-    z = mm.p_emission + VERY_SMALL_NUMBER
-    lp_initial, lp_transition, lp_emission = map(numpy.log, (x, y, z))
+    lp_initial = numpy.log(mm.p_initial + VERY_SMALL_NUMBER)
+    lp_transition = numpy.log(mm.p_transition + VERY_SMALL_NUMBER)
+    lp_emission = numpy.log(mm.p_emission + VERY_SMALL_NUMBER)
     # Change output into a list of indexes into the alphabet.
     indexes = itemindex(mm.alphabet)
     output = [indexes[x] for x in output]
@@ -514,16 +517,16 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
 
     # Store the best scores.
     scores = numpy.zeros((N, T))
-    scores[:,0] = lp_initial + lp_emission[:,output[0]]
+    scores[:, 0] = lp_initial + lp_emission[:, output[0]]
     for t in range(1, T):
         k = output[t]
         for j in range(N):
             # Find the most likely place it came from.
-            i_scores = scores[:,t-1] + \
-                       lp_transition[:,j] + \
-                       lp_emission[j,k]
+            i_scores = scores[:, t-1] + \
+                       lp_transition[:, j] + \
+                       lp_emission[j, k]
             indexes = _argmaxes(i_scores)
-            scores[j,t] = i_scores[indexes[0]]
+            scores[j, t] = i_scores[indexes[0]]
             backtrace[j][t] = indexes
 
     # Do the backtrace.  First, find a good place to start.  Then,
@@ -533,7 +536,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
     # it by keeping our own stack.
     in_process = []    # list of (t, states, score)
     results = []       # return values.  list of (states, score)
-    indexes = _argmaxes(scores[:,T-1])      # pick the first place
+    indexes = _argmaxes(scores[:, T-1])      # pick the first place
     for i in indexes:
         in_process.append((T-1, [i], scores[i][T-1]))
     while in_process:

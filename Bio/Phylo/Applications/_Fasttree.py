@@ -3,6 +3,8 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Command-line wrapper for tree inference program Fasttree."""
+from __future__ import print_function
+
 __docformat__ = "restructuredtext en"
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
@@ -38,10 +40,10 @@ class FastTreeCommandline(AbstractCommandline):
     >>> import _Fasttree
     >>> fasttree_exe = r"C:\FasttreeWin32\fasttree.exe"
     >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input=r'C:\Input\ExampleAlignment.fsa', out='C:\Output\ExampleTree.tree')
-    >>> print cmd
+    >>> print(cmd)
     >>> out, err = cmd()
-    >>> print out
-    >>> print err
+    >>> print(out)
+    >>> print(err)
 
     Usage advice:
     the only parameters needed are (fasttree_exe, input='<InputFile>' out='<OutputFile>')
@@ -500,3 +502,4 @@ class FastTreeCommandline(AbstractCommandline):
                 ]
 
         AbstractCommandline.__init__(self, cmd, **kwargs)
+

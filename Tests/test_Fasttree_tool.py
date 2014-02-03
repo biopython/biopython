@@ -1,15 +1,20 @@
-# Copyright 2013 by Nate Sutton.  Based on test_Clustalw_tool.py by
-# Peter Cock.  Example code used from Biopython's Phylo cookbook by
-# Eric Talevich.  All rights reserved.  This code is part of the
-# Biopython distribution and governed by its license.  Please see
-# the LICENSE file that should have been included as part of this package.
+# Copyright 2013 by Nate Sutton.  All rights reserved.
+# Based on test_Clustalw_tool.py by Peter Cock.
+# Example code used from Biopython's Phylo cookbook by Eric Talevich.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
 
 import sys
 import os
 import itertools
-from StringIO import StringIO
+from Bio._py3k import StringIO
+from Bio._py3k import zip
 
 from Bio import SeqIO
 from Bio import Phylo
@@ -45,9 +50,9 @@ if sys.platform == "win32":
             if fasttree_exe:
                 break
 else:
-    import commands
+    from Bio._py3k import getoutput
     # Checking the -help argument
-    output = commands.getoutput("fasttree -help")
+    output = getoutput("fasttree -help")
     # Since "is not recognized" may be in another language, try and be sure this
     # is really the fasttree tool's output
     fasttree_found = False
@@ -80,11 +85,11 @@ except ApplicationError as err:
            "Cannot open input file" in str(err) or \
            "non-zero exit status" in str(err), str(err)
 
-print
+print("")
 print("Single sequence")
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
-assert len(list(SeqIO.parse(input_file,"fasta")))==1
+assert len(list(SeqIO.parse(input_file, "fasta")))==1
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
@@ -96,7 +101,7 @@ except ApplicationError as err:
     print("Failed (good)")
     #assert str(err) == "No records found in handle", str(err)
 
-print
+print("")
 print("Invalid sequence")
 input_file = "Medline/pubmed_result1.txt"
 assert os.path.isfile(input_file)
@@ -118,19 +123,19 @@ except ApplicationError as err:
            or "non-zero exit status " in str(err), str(err)
 
 #################################################################
-print
+print("")
 print("Checking normal situations")
 print("==========================")
 
 #Create a temp fasta file with a space in the name
 temp_filename_with_spaces = "Clustalw/temp horses.fasta"
 handle = open(temp_filename_with_spaces, "w")
-SeqIO.write(SeqIO.parse("Phylip/hennigian.phy","phylip"), handle, "fasta")
+SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
 handle.close()
 
 for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
-    input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"))
-    print
+    input_records = SeqIO.to_dict(SeqIO.parse(input_file, "fasta"))
+    print("")
     print("Calling fasttree on %s (with %i records)" \
           % (repr(input_file), len(input_records)))
 
@@ -142,7 +147,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     out, err = cline()
     assert err.strip().startswith("FastTree")
 
-    print
+    print("")
     print("Checking generation of tree terminals")
     tree = Phylo.read(StringIO(out), 'newick')
 
@@ -160,14 +165,14 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     assert len(names) > 0.0
     print("Success")
 
-    print
+    print("")
     print("Checking distances between tree terminals")
     def terminal_neighbor_dists(self):
         """Return a list of distances between adjacent terminals."""
         def generate_pairs(self):
             pairs = itertools.tee(self)
-            pairs[1].next()
-            return itertools.izip(pairs[0], pairs[1])
+            next(pairs[1]) # Advance second iterator one step
+            return zip(pairs[0], pairs[1])
         return [self.distance(*i) for i in
                 generate_pairs(self.find_clades(terminal=True))]
 
@@ -176,5 +181,5 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
 
     print("Success")
 
-print
+print("")
 print("Done")

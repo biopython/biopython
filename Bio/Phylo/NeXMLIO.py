@@ -12,12 +12,12 @@ See: http://www.nexml.org
 """
 __docformat__ = "restructuredtext en"
 
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import NeXML
 from xml.dom import minidom
 import sys
-from _cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
+from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
 
 #For speed try to use cElementTree rather than ElementTree
@@ -54,7 +54,7 @@ except AttributeError:
     def register_namespace(prefix, uri):
         ElementTree._namespace_map[uri] = prefix
 
-for prefix, uri in NAMESPACES.iteritems():
+for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
 
@@ -180,14 +180,16 @@ class Parser(object):
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
                     rooted = False
-                    possible_roots = (node.attrib['id'] for node in nodes if node.attrib['id'] in srcs and not node.attrib['id'] in tars)
-                    root = possible_roots.next()
+                    possible_roots = (node.attrib['id'] for node in nodes
+                                      if node.attrib['id'] in srcs
+                                      and not node.attrib['id'] in tars)
+                    root = next(possible_roots)
                 else:
                     rooted = True
                     
                 yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
-                
-            
+
+
     @classmethod
     def _make_tree(cls, node, node_dict, children):
         '''Return a NeXML.Clade, and calls itself recursively for each child, 
@@ -290,15 +292,15 @@ class Writer(object):
         if not parent is None:
             edge_id = self.new_label('edge')
             attrib={
-                    'id':edge_id, 'source':parent.node_id, 'target':node_id,
-                    'length':str(clade.branch_length),
-                    'typeof':convert_uri('cdao:Edge'),
+                    'id': edge_id, 'source': parent.node_id, 'target': node_id,
+                    'length': str(clade.branch_length),
+                    'typeof': convert_uri('cdao:Edge'),
                     }
             if hasattr(clade, 'confidence') and not clade.confidence is None:
                 attrib.update({
-                               'property':convert_uri('cdao:has_Support_Value'),
-                               'datatype':'xsd:float',
-                               'content':'%1.2f' % clade.confidence,
+                               'property': convert_uri('cdao:has_Support_Value'),
+                               'datatype': 'xsd:float',
+                               'content': '%1.2f' % clade.confidence,
                                })
             node = ElementTree.SubElement(tree, 'edge', **attrib)
     

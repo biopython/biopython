@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Generic functionality useful for all gene representations.
 
 This module contains classes which can be used for all the different
@@ -76,7 +81,7 @@ class PatternIO(object):
         """
         all_patterns = []
 
-        while 1:
+        while True:
             cur_line = input_handle.readline()
 
             if not(cur_line):
@@ -90,7 +95,7 @@ class PatternIO(object):
             if self._alphabet is not None:
                 # make single patterns (not signatures) into lists, so we
                 # can check signatures and single patterns the same
-                if type(cur_pattern) != type(tuple([])):
+                if not isinstance(cur_pattern, tuple):
                     test_pattern = [cur_pattern]
                 else:
                     test_pattern = cur_pattern

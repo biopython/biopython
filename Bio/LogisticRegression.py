@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module provides code for doing logistic regressions.
+"""Code for doing logistic regressions.
 
 
 Classes:
@@ -15,6 +14,8 @@ train        Train a new classifier.
 calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
 """
+
+from __future__ import print_function
 
 import numpy
 import numpy.linalg
@@ -99,8 +100,8 @@ def train(xs, ys, update_fn=None, typecode=None):
         Xtyp = numpy.dot(Xt, y-p)         # Calculate the first derivative.
         XtWX = numpy.dot(numpy.dot(Xt, W), X)   # Calculate the second derivative.
         #u, s, vt = singular_value_decomposition(XtWX)
-        #print "U", u
-        #print "S", s
+        #print("U %s" % u)
+        #print("S %s" % s)
         delta = numpy.linalg.solve(XtWX, Xtyp)
         if numpy.fabs(stepsize-1.0) > 0.001:
             delta = delta * stepsize
@@ -109,7 +110,7 @@ def train(xs, ys, update_fn=None, typecode=None):
         raise RuntimeError("Didn't converge.")
 
     lr = LogisticRegression()
-    lr.beta = map(float, beta)   # Convert back to regular array.
+    lr.beta = [float(x) for x in beta]   # Convert back to regular array.
     return lr
 
 

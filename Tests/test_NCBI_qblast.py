@@ -12,10 +12,13 @@ Goals:
     Make sure that all retrieval is working as expected.
     Make sure we can parse the latest XML format being used by the NCBI.
 """
+from __future__ import print_function
+
+from Bio._py3k import HTTPError
+
 import requires_internet
 requires_internet.check()
 from Bio import MissingExternalDependencyError
-from urllib2 import HTTPError
 
 #We want to test these:
 from Bio.Blast import NCBIWWW
@@ -35,10 +38,10 @@ tests = [
     #Simple protein blast filtered for rat only, using protein GI:160837788
     #the actin related protein 2/3 complex, subunit 1B [Mus musculus]
     ("blastp", "nr", "160837788", 0.001,
-     "rat [ORGN]", ['9506405','13592137','37589612','149064087','56912225']),
+     "rat [ORGN]", ['9506405', '13592137', '37589612', '149064087', '56912225']),
     #This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
     ("blastn", "nr", "GTACCTTGATTTCGTATTC"+("N"*30)+"GACTCTACTACCTTTACCC",
-     10, "pan [ORGN]", ["37953274","51104367","51104367","51104367"]),
+     10, "pan [ORGN]", ["37953274", "51104367", "51104367", "51104367"]),
     #Try an orchid EST (nucleotide) sequence against NR using BLASTX
     ("blastx", "nr", """>gi|116660609|gb|EG558220.1|EG558220 CR02019H04 Leaf CR02 cDNA library Catharanthus roseus cDNA clone CR02019H04 5', mRNA sequence
 CTCCATTCCCTCTCTATTTTCAGTCTAATCAAATTAGAGCTTAAAAGAATGAGATTTTTAACAAATAAAA
@@ -50,11 +53,11 @@ CCACTACGTCCTTACTATTTTTGGCCGAGGAAAGATGCTTGGGAAGAACTTAAAACAGTTTTAGAAAGCA
 AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
 GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
 ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-     0.0000001, None, ["21554275","18409071","296087288"]),
+     0.0000001, None, ["21554275", "18409071", "296087288"]),
 ]
 
 print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
-for program,database,query,e_value,entrez_filter,expected_hits in tests:
+for program, database, query, e_value, entrez_filter, expected_hits in tests:
     print("qblast('%s', '%s', %s, ...)" % (program, database, repr(query)))
     try:
         if program=="blastn":
@@ -80,7 +83,7 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests:
         assert len(query) == record.query_letters
     elif query.startswith(">"):
         #We used a FASTA record as the query
-        assert query[1:].split("\n",1)[0] == (record.query)
+        assert query[1:].split("\n", 1)[0] == (record.query)
     else:
         #We used an identifier as the query
         assert query in record.query_id.split("|")
@@ -118,7 +121,7 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests:
         for expected_hit in expected_hits:
             for descr in record.descriptions:
                 if expected_hit == descr.accession \
-                or expected_hit in descr.title.split(None,1)[0].split("|"):
+                or expected_hit in descr.title.split(None, 1)[0].split("|"):
                     found_result = True
                     break
         assert found_result, "Missing all of %s in descriptions" % expected_hit

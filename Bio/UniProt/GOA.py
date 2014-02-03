@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import copy
-import sys
-
+# Copyright 2013 by Iddo Friedberg idoerg@gmail.com
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Parsers for the GAF, GPA and GPI formats from UniProt-GOA.
 
 Uniprot-GOA README + GAF format description:
@@ -14,51 +16,50 @@ ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_association_readme
 
 gp_information (GPI format) README:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
-
-(c) 2013 Iddo Friedberg idoerg@gmail.com
-http://iddo-friedberg.net
-Distributed under Biopython license.
-
 """
 
+import copy
+import sys
+
+from Bio._py3k import zip
 
 # GAF: GO Annotation Format
 #
 # GAF version 2.0
 
-GAF20FIELDS = ['DB' , 
-        'DB_Object_ID' , 
-        'DB_Object_Symbol' , 
-        'Qualifier' , 
-        'GO_ID' , 
-        'DB:Reference' , 
-        'Evidence' , 
-        'With' , 
+GAF20FIELDS = ['DB', 
+        'DB_Object_ID', 
+        'DB_Object_Symbol', 
+        'Qualifier', 
+        'GO_ID', 
+        'DB:Reference', 
+        'Evidence', 
+        'With', 
         'Aspect',
-        'DB_Object_Name' , 
-        'Synonym' , 
-        'DB_Object_Type' , 
-        'Taxon_ID' , 
-        'Date' , 
-        'Assigned_By' , 
-        'Annotation_Extension' , 
+        'DB_Object_Name', 
+        'Synonym', 
+        'DB_Object_Type', 
+        'Taxon_ID', 
+        'Date', 
+        'Assigned_By', 
+        'Annotation_Extension', 
         'Gene_Product_Form_ID']
 
 # GAF version 1.0
-GAF10FIELDS = ['DB' , 
-        'DB_Object_ID' , 
-        'DB_Object_Symbol' , 
-        'Qualifier' , 
-        'GO_ID' , 
-        'DB:Reference' , 
-        'Evidence' , 
-        'With' , 
+GAF10FIELDS = ['DB', 
+        'DB_Object_ID', 
+        'DB_Object_Symbol', 
+        'Qualifier', 
+        'GO_ID', 
+        'DB:Reference', 
+        'Evidence', 
+        'With', 
         'Aspect',
-        'DB_Object_Name' , 
-        'Synonym' , 
-        'DB_Object_Type' , 
-        'Taxon_ID' , 
-        'Date' , 
+        'DB_Object_Name', 
+        'Synonym', 
+        'DB_Object_Type', 
+        'Taxon_ID', 
+        'Date', 
         'Assigned_By'] 
 
 
@@ -397,7 +398,7 @@ if __name__ == '__main__':
     Write only S. cerevisiae records, but remove all
     records with IEA evidence
     """
-    banned = {'Evidence': set(['IEA','EXP'])}
+    banned = {'Evidence': set(['IEA', 'EXP'])}
     allowed = {'Taxon_ID': set(['taxon:4932'])}
     for inrec in gafiterator(open(sys.argv[1])):
         if record_has(inrec, allowed) and \

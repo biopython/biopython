@@ -4,6 +4,8 @@
 # and then turns it into an in-memory python dictionary.
 # This is *not* suitable for FASTA files with millions of entries.
 
+from __future__ import print_function
+
 from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 
@@ -18,9 +20,9 @@ rec_iterator = SeqIO.parse("ls_orchid.fasta", "fasta", generic_dna)
 orchid_dict = SeqIO.to_dict(rec_iterator, get_accession_num)
 
 for id_num in orchid_dict:
-    print 'id number:', id_num
-    print 'description:', orchid_dict[id_num].description
-    print 'sequence:', orchid_dict[id_num].seq
+    print('id number: %s' % id_num)
+    print('description: %s' % orchid_dict[id_num].description)
+    print('sequence: %s' % orchid_dict[id_num].seq)
 
 
 # Indexed
@@ -42,6 +44,6 @@ def get_accession_num(record_id):
 orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta", generic_dna)
 
 for id_num in orchid_dict:
-    print 'id number:', id_num
-    print 'description:', orchid_dict[id_num].description
-    print 'sequence:', orchid_dict[id_num].seq
+    print('id number: %s' % id_num)
+    print('description: %s' % orchid_dict[id_num].description)
+    print('sequence: %s' % orchid_dict[id_num].seq)

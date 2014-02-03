@@ -50,7 +50,7 @@ class ClaTests(unittest.TestCase):
                                         in actual_hierarchy)
                 self.assertEqual(len(actual_hierarchy),
                                   len(expected_hierarchy))
-                for key, actual_value in actual_hierarchy.iteritems():
+                for key, actual_value in actual_hierarchy.items():
                     self.assertEqual(actual_value, expected_hierarchy[key])
         finally:
             f.close()
@@ -67,7 +67,7 @@ class ClaTests(unittest.TestCase):
         record = Cla.Record(recLine)
         self.assertEqual(record.sid, 'd1dan.1')
         self.assertEqual(record.residues.pdbid, '1dan')
-        self.assertEqual(record.residues.fragments, (('T','',''),('U','91','106')))
+        self.assertEqual(record.residues.fragments, (('T', '', ''), ('U', '91', '106')))
         self.assertEqual(record.sccs, 'b.1.2.1')
         self.assertEqual(record.sunid, 21953)
         self.assertEqual(record.hierarchy, {'cl' : 48724,

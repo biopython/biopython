@@ -8,6 +8,8 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import basestring
+
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -123,8 +125,8 @@ _COLUMN_FRAG = {
     'qseq': ('query', str),
     'sseq': ('hit', str),
 }
-_SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() +
-        _COLUMN_HSP.keys() + _COLUMN_FRAG.keys())
+_SUPPORTED_FIELDS = set(list(_COLUMN_QRESULT) + list(_COLUMN_HIT) +
+                        list(_COLUMN_HSP) + list(_COLUMN_FRAG))
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
@@ -672,8 +674,8 @@ class BlastTabWriter(object):
                 if not self.has_comments:
                     qresult_counter += 1
                 hit_counter += len(qresult)
-                hsp_counter += sum([len(hit) for hit in qresult])
-                frag_counter += sum([len(hit.fragments) for hit in qresult])
+                hsp_counter += sum(len(hit) for hit in qresult)
+                frag_counter += sum(len(hit.fragments) for hit in qresult)
             # if it's commented and there are no hits in the qresult, we still
             # increment the counter
             if self.has_comments:
@@ -815,8 +817,7 @@ class BlastTabWriter(object):
         comments = []
         # inverse mapping of the long-short name map, required
         # for writing comments
-        inv_field_map = dict((value, key) for key, value in
-                _LONG_SHORT_MAP.items())
+        inv_field_map = dict((v, k) for k, v in _LONG_SHORT_MAP.items())
 
         # try to anticipate qress without version
         if not hasattr(qres, 'version'):
@@ -838,7 +839,7 @@ class BlastTabWriter(object):
         # qresults without hits don't show the Fields comment
         if qres:
             comments.append('# Fields: %s' %
-                    ', '.join([inv_field_map[field] for field in self.fields]))
+                            ', '.join(inv_field_map[field] for field in self.fields))
         comments.append('# %i hits found' % len(qres))
 
         return '\n'.join(comments) + '\n'

@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Extract information from alignment objects.
 
 In order to try and avoid huge alignment objects with tons of functions,
@@ -9,11 +14,11 @@ o SummaryInfo
 o PSSM
 """
 
-# standard library
+from __future__ import print_function
+
 import math
 import sys
 
-# biopython modules
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
@@ -255,8 +260,8 @@ class SummaryInfo(object):
                 rep_dict = self._pair_replacement(
                     self.alignment._records[rec_num1].seq,
                     self.alignment._records[rec_num2].seq,
-                    self.alignment._records[rec_num1].annotations.get('weight',1.0),
-                    self.alignment._records[rec_num2].annotations.get('weight',1.0),
+                    self.alignment._records[rec_num1].annotations.get('weight', 1.0),
+                    self.alignment._records[rec_num2].annotations.get('weight', 1.0),
                     rep_dict, skip_items)
 
         return rep_dict
@@ -316,8 +321,7 @@ class SummaryInfo(object):
                 #Note the built in set does not have a union_update
                 #which was provided by the sets module's Set
                 set_letters = set_letters.union(record.seq)
-            list_letters = list(set_letters)
-            list_letters.sort()
+            list_letters = sorted(set_letters)
             all_letters = "".join(list_letters)
         return all_letters
 
@@ -342,7 +346,7 @@ class SummaryInfo(object):
         # and drop it out
         if isinstance(self.alignment._alphabet, Alphabet.Gapped):
             skip_items.append(self.alignment._alphabet.gap_char)
-            all_letters = all_letters.replace(self.alignment._alphabet.gap_char,'')
+            all_letters = all_letters.replace(self.alignment._alphabet.gap_char, '')
 
         # now create the dictionary
         for first_letter in all_letters:
@@ -499,7 +503,7 @@ class SummaryInfo(object):
 
             info_content[residue_num] = column_score
         # sum up the score
-        total_info = sum(info_content.itervalues())
+        total_info = sum(info_content.values())
         # fill in the ic_vector member: holds IC for each column
         for i in info_content:
             self.ic_vector[i] = info_content[i]
@@ -528,7 +532,7 @@ class SummaryInfo(object):
         for record in all_records:
             try:
                 if record.seq[residue_num] not in to_ignore:
-                    weight = record.annotations.get('weight',1.0)
+                    weight = record.annotations.get('weight', 1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
             # getting a key error means we've got a problem with the alphabet
@@ -575,8 +579,8 @@ class SummaryInfo(object):
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
                                      "do not match observed %s"
-                                     % (e_freq_table.keys(),
-                                        obs_freq.keys() - [gap_char]))
+                                     % (list(e_freq_table.keys()),
+                                        list(obs_freq.keys()) - [gap_char]))
 
         total_info = 0.0
 
@@ -598,7 +602,7 @@ class SummaryInfo(object):
                 total_info += letter_info
         return total_info
 
-    def get_column(self,col):
+    def get_column(self, col):
         return self.alignment.get_column(col)
 
 
@@ -647,8 +651,7 @@ class PSSM(object):
 
     def __str__(self):
         out = " "
-        all_residues = self.pssm[0][1].keys()
-        all_residues.sort()
+        all_residues = sorted(self.pssm[0][1])
 
         # first print out the top header
         for res in all_residues:
@@ -677,9 +680,7 @@ def print_info_content(summary_info,fout=None,rep_record=0):
     if not summary_info.ic_vector:
         summary_info.information_content()
     rep_sequence = summary_info.alignment._records[rep_record].seq
-    positions = summary_info.ic_vector.keys()
-    positions.sort()
-    for pos in positions:
+    for pos in sorted(summary_info.ic_vector):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
                    summary_info.ic_vector[pos]))
 
@@ -704,15 +705,15 @@ if __name__ == "__main__":
     print(consensus)
     consensus = summary.gap_consensus(ambiguous="N")
     print(consensus)
-    print
+    print("")
     print(summary.pos_specific_score_matrix(chars_to_ignore=['-'],
                                             axis_seq=consensus))
-    print
+    print("")
     #Have a generic alphabet, without a declared gap char, so must tell
     #provide the frequencies and chars to ignore explicitly.
     print(summary.information_content(e_freq_table=expected,
                                       chars_to_ignore=['-']))
-    print
+    print("")
     print("Trying a protein sequence with gaps and stops")
 
     alpha = Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein, "-"), "*")
@@ -728,7 +729,7 @@ if __name__ == "__main__":
     print(c)
     c = s.gap_consensus(ambiguous="X")
     print(c)
-    print
+    print("")
     print(s.pos_specific_score_matrix(chars_to_ignore=['-', '*'], axis_seq=c))
 
     print(s.information_content(chars_to_ignore=['-', '*']))

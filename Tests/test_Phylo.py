@@ -7,7 +7,8 @@
 
 import sys
 import unittest
-from cStringIO import StringIO
+from Bio._py3k import StringIO
+from io import BytesIO
 
 from Bio import Phylo
 from Bio.Phylo import PhyloXML, NewickIO
@@ -87,12 +88,8 @@ class IOTests(unittest.TestCase):
     def test_convert(self):
         """Convert a tree between all supported formats."""
         mem_file_1 = StringIO()
+        mem_file_2 = BytesIO()
         mem_file_3 = StringIO()
-        if sys.version_info[0] == 3:
-            from io import BytesIO
-            mem_file_2 = BytesIO()
-        else:
-            mem_file_2 = StringIO()
         Phylo.convert(EX_NEWICK, 'newick', mem_file_1, 'nexus')
         mem_file_1.seek(0)
         Phylo.convert(mem_file_1, 'nexus', mem_file_2, 'phyloxml')
@@ -165,8 +162,8 @@ class TreeTests(unittest.TestCase):
             # Root is bifurcating
             self.assertEqual(len(tree.root.clades), 2)
             # Deepest tips under each child of the root are equally deep
-            deep_dist_0 = max(tree.clade[0].depths().itervalues())
-            deep_dist_1 = max(tree.clade[1].depths().itervalues())
+            deep_dist_0 = max(tree.clade[0].depths().values())
+            deep_dist_1 = max(tree.clade[1].depths().values())
             self.assertAlmostEqual(deep_dist_0, deep_dist_1)
 
     # Magic method
@@ -236,7 +233,7 @@ class MixinTests(unittest.TestCase):
         self.assertTrue(isinstance(octo[0], PhyloXML.Clade))
         self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
         # string filter
-        dee = self.phylogenies[10].find_clades('D').next()
+        dee = next(self.phylogenies[10].find_clades('D'))
         self.assertEqual(dee.name, 'D')
 
     def test_find_terminal(self):

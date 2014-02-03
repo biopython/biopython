@@ -12,7 +12,7 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 __docformat__ = "restructuredtext en"
 
 import re
-from cStringIO import StringIO
+from Bio._py3k import StringIO
 
 from Bio.Phylo import Newick
 
@@ -33,7 +33,7 @@ tokens = [
     (r"\;",                         'semicolon'),
     (r"\n",                         'newline'),
 ]
-tokenizer = re.compile('(%s)' % '|'.join([token[0] for token in tokens]))
+tokenizer = re.compile('(%s)' % '|'.join(token[0] for token in tokens))
 token_dict = dict((name, re.compile(token)) for (token, name) in tokens)
 
 
@@ -186,7 +186,7 @@ class Parser(object):
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
-            next_token = tokens.next()
+            next_token = next(tokens)
             raise NewickError('Text after semicolon in Newick tree: %s'
                               % next_token.group())
         except StopIteration:

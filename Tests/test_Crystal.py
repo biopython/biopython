@@ -452,16 +452,20 @@ class CrystalTestCase(unittest.TestCase):
         self.assertEqual(len(target.data), 0)
 
     def testKeys(self):
-        self.assertEqual(self.crystal.keys(), self.crystal.data.keys())
+        self.assertEqual(list(self.crystal.keys()),
+                         list(self.crystal.data.keys()))
 
     def testValues(self):
-        self.assertEqual(self.crystal.values(), self.crystal.data.values())
+        self.assertEqual(list(self.crystal.values()),
+                         list(self.crystal.data.values()))
 
     def testItems(self):
-        self.assertEqual(self.crystal.items(), self.crystal.data.items())
+        self.assertEqual(list(self.crystal.items()),
+                         list(self.crystal.data.items()))
 
     def testKeys(self):
-        self.assertEqual(self.crystal.keys(), self.crystal.data.keys())
+        self.assertEqual(list(self.crystal.keys()),
+                         list(self.crystal.data.keys()))
 
     def testHasKey(self):
         self.assertTrue('b' in self.crystal)

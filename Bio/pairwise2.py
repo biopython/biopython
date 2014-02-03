@@ -55,7 +55,7 @@ Some examples:
     # for mismatches or gaps.
     >>> from Bio.pairwise2 import format_alignment
     >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -69,7 +69,7 @@ Some examples:
 
     # Same thing as before, but with a local alignment.
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     ||||
     AC-G-
@@ -84,7 +84,7 @@ Some examples:
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
     >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -99,7 +99,7 @@ Some examples:
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
     >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     ACCGT
     |||||
     AC-G-
@@ -117,7 +117,7 @@ Biopython ( Bio.SubsMat -> MatrixInfo ).
     >>> from Bio.SubsMat import MatrixInfo as matlist
     >>> matrix = matlist.blosum62
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
-    ...     print format_alignment(*a)
+    ...     print(format_alignment(*a))
     KEVLA
     |||||
     -EVL-
@@ -150,6 +150,8 @@ type help(pairwise2.align.localds) at the Python prompt.
 #   value of the function is the score.
 # - one_alignment_only: boolean
 #   Only recover one alignment.
+
+from __future__ import print_function
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
@@ -337,8 +339,8 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             score_only)
     score_matrix, trace_matrix = x
 
-    #print "SCORE"; print_matrix(score_matrix)
-    #print "TRACEBACK"; print_matrix(trace_matrix)
+    #print("SCORE %s" % print_matrix(score_matrix))
+    #print("TRACEBACK %s" % print_matrix(trace_matrix))
 
     # Look for the proper starting point.  Get a list of all possible
     # starting points.
@@ -852,7 +854,7 @@ def print_matrix(matrix):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             matrixT[j].append(len(str(matrix[i][j])))
-    ndigits = map(max, matrixT)
+    ndigits = [max(x) for x in matrixT]
     for i in range(len(matrix)):
         #Using string formatting trick to add leading spaces,
         print(" ".join("%*s " % (ndigits[j], matrix[i][j])

@@ -2,16 +2,19 @@
 """Example of generating a substitution matrix from an alignment.
 """
 # standard library
+from __future__ import print_function
+
 import sys
 
 # Biopython
 from Bio import SubsMat
-from Bio import Clustalw
-from Bio.Alphabet import IUPAC
+from Bio import AlignIO
+from Bio.Alphabet import IUPAC, Gapped
 from Bio.Align import AlignInfo
 
 # get an alignment object from a Clustalw alignment output
-c_align = Clustalw.parse_file('protein.aln', IUPAC.protein)
+c_align = AlignIO.read('protein.aln', 'clustal',
+                       alphabet=Gapped(IUPAC.protein))
 summary_align = AlignInfo.SummaryInfo(c_align)
 
 # get a replacement dictionary and accepted replacement matrix
@@ -26,6 +29,6 @@ print(replace_info)
 
 my_lom = SubsMat.make_log_odds_matrix(my_arm)
 
-print 'log_odds_mat:', my_lom
+print('log_odds_mat: %s' % my_lom)
 
 my_lom.print_mat()

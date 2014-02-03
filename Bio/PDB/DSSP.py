@@ -6,7 +6,7 @@
 """Use the DSSP program to calculate secondary structure and accessibility.
 
 You need to have a working version of DSSP (and a license, free for academic
-use) in order to use this. For DSSP, see U{http://www.cmbi.kun.nl/gv/dssp/}.
+use) in order to use this. For DSSP, see U{http://swift.cmbi.ru.nl/gv/dssp/}.
 
 The DSSP codes for secondary structure used here are:
 
@@ -20,8 +20,12 @@ The DSSP codes for secondary structure used here are:
     - -        None
 """
 
+from __future__ import print_function
+
+__docformat__ = "epytext en"
+
 import re
-from StringIO import StringIO
+from Bio._py3k import StringIO
 import subprocess
 
 from Bio.Data import SCOPData
@@ -112,7 +116,6 @@ def make_dssp_dict(filename):
     @param filename: the DSSP output file
     @type filename: string
     """
-    handle = open(filename, "r")
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
 
@@ -121,8 +124,8 @@ def _make_dssp_dict(handle):
     Return a DSSP dictionary that maps (chainid, resid) to
     aa, ss and accessibility, from an open DSSP file object.
 
-    @param filename: the open DSSP output file
-    @type filename: file
+    @param handle: the open DSSP output file handle
+    @type handle: file
     """
     dssp = {}
     start = 0
@@ -184,7 +187,7 @@ class DSSP(AbstractResiduePropertyMap):
         >>> model = structure[0]
         >>> dssp = DSSP(model, "1MOT.pdb")
         >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-        >>> a_key = dssp.keys()[2]
+        >>> a_key = list(dssp.keys())[2]
         >>> # residue object, secondary structure, solvent accessibility,
         >>> # relative accessiblity, phi, psi
         >>> dssp[a_key]
@@ -327,10 +330,10 @@ if __name__ == "__main__":
 
     for r in d:
         print(r)
-    print "Handled", len(d), "residues"
+    print("Handled %i residues" % len(d))
     print(d.keys())
     if ('A', 1) in d:
         print(d[('A', 1)])
         print(s[0]['A'][1].xtra)
     # Secondary structure
-    print(''.join(d[key][1] for key in d.keys()))
+    print(''.join(item[1] for item in d))

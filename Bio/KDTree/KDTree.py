@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-KD tree data structure for searching N-dimensional vectors.
+"""KD tree data structure for searching N-dimensional vectors.
 
 The KD tree data structure can be used for all kinds of searches that
 involve N-dimensional vectors, e.g.  neighbor searches (find all points
@@ -13,6 +12,8 @@ that are within a certain radius of each other. See "Computational Geometry:
 Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
+
+from __future__ import print_function
 
 from numpy import sum, sqrt, array
 from numpy.random import random

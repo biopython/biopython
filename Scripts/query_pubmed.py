@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from __future__ import print_function
+
 import sys
 import getopt
 
@@ -67,7 +69,7 @@ if __name__ == '__main__':
     batch_size = 3
     for start in range(0, count, batch_size):
         end = min(count, start + batch_size)
-        #print "Going to download record %i to %i" % (start+1, end)
+        #print("Going to download record %i to %i" % (start+1, end))
         fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",
                                      retmode="text",
                                      retstart=start, retmax=batch_size,

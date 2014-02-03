@@ -23,9 +23,10 @@ sequencing. If this is an issue later on, storing the keys and offsets in a
 temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
 """
 
-import re
-from StringIO import StringIO
+from __future__ import print_function
 
+import re
+from Bio._py3k import StringIO
 from Bio._py3k import _bytes_to_string, _as_bytes
 
 from Bio import SeqIO
@@ -47,16 +48,15 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         if alphabet is None:
             def _parse(handle):
                 """Dynamically generated parser function (PRIVATE)."""
-                return i(handle).next()
+                return next(i(handle))
         else:
             #TODO - Detect alphabet support ONCE at __init__
             def _parse(handle):
                 """Dynamically generated parser function (PRIVATE)."""
                 try:
-                    return i(handle, alphabet=alphabet).next()
+                    return next(i(handle, alphabet=alphabet))
                 except TypeError:
-                    return SeqIO._force_alphabet(i(handle),
-                                                 alphabet).next()
+                    return next(SeqIO._force_alphabet(i(handle), alphabet))
         self._parse = _parse
 
     def get(self, offset):
@@ -93,19 +93,34 @@ class SffRandomAccess(SeqFileRandomAccess):
         if index_offset and index_length:
             #There is an index provided, try this the fast way:
             count = 0
+            max_offset = 0
             try:
                 for name, offset in SeqIO.SffIO._sff_read_roche_index(handle):
+                    max_offset = max(max_offset, offset)
                     yield name, offset, 0
                     count += 1
                 assert count == number_of_reads, \
                     "Indexed %i records, expected %i" \
                     % (count, number_of_reads)
-                return
+                # If that worked, call _check_eof ...
             except ValueError as err:
                 import warnings
-                warnings.warn("Could not parse the SFF index: %s" % err)
+                from Bio import BiopythonParserWarning
+                warnings.warn("Could not parse the SFF index: %s" % err,
+                              BiopythonParserWarning)
                 assert count == 0, "Partially populated index"
                 handle.seek(0)
+                # Drop out to the slow way...
+            else:
+                # Fast way worked, check EOF
+                if index_offset + index_length <= max_offset:
+                    # Can have an index at start (or mid-file)
+                    handle.seek(max_offset)
+                    # Parse the final read,
+                    SeqIO.SffIO._sff_read_raw_record(handle, self._flows_per_read)
+                    # Should now be at the end of the file!
+                SeqIO.SffIO._check_eof(handle, index_offset, index_length)
+                return
         #We used to give a warning in this case, but Ion Torrent's
         #SFF files don't have an index so that would be annoying.
         #Fall back on the slow way!
@@ -115,6 +130,8 @@ class SffRandomAccess(SeqFileRandomAccess):
             count += 1
         assert count == number_of_reads, \
             "Indexed %i records, expected %i" % (count, number_of_reads)
+        SeqIO.SffIO._check_eof(handle, index_offset, index_length)
+
 
     def get(self, offset):
         handle = self._handle
@@ -421,7 +438,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         </uniprot>
         """ % _bytes_to_string(self.get_raw(offset))
         #TODO - For consistency, this function should not accept a string:
-        return SeqIO.UniprotIO.UniprotIterator(data).next()
+        return next(SeqIO.UniprotIO.UniprotIterator(data))
 
 
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
@@ -521,7 +538,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         at_char = _as_bytes("@")
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
-            raise ValueError("Problem with FASTQ @ line:\n%s" % repr(line))
+            raise ValueError("Problem with FASTQ @ line:\n%r" % line)
         while line:
             #assert line[0]=="@"
             #This record seems OK (so far)
@@ -542,11 +559,16 @@ class FastqRandomAccess(SeqFileRandomAccess):
             qual_len = 0
             while line:
                 if seq_len == qual_len:
+                    if seq_len == 0:
+                        #Special case, quality line should be just "\n"
+                        line = handle.readline()
+                        if line.strip():
+                            raise ValueError("Expected blank quality line, not %r" % line)
                     #Should be end of record...
                     end_offset = handle.tell()
                     line = handle.readline()
                     if line and line[0:1] != at_char:
-                        ValueError("Problem with line %s" % repr(line))
+                        raise ValueError("Problem with line %r" % line)
                     break
                 else:
                     line = handle.readline()
@@ -556,7 +578,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 raise ValueError("Problem with quality section")
             yield _bytes_to_string(id), start_offset, length
             start_offset = end_offset
-        #print "EOF"
+        #print("EOF")
 
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
@@ -568,7 +590,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         at_char = _as_bytes("@")
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
-            raise ValueError("Problem with FASTQ @ line:\n%s" % repr(line))
+            raise ValueError("Problem with FASTQ @ line:\n%r" % line)
         #Find the seq line(s)
         seq_len = 0
         while line:
@@ -584,10 +606,16 @@ class FastqRandomAccess(SeqFileRandomAccess):
         qual_len = 0
         while line:
             if seq_len == qual_len:
+                if seq_len == 0:
+                    #Special case, quality line should be just "\n"                                                                                                                      
+                    line = handle.readline()
+                    if line.strip():
+                        raise ValueError("Expected blank quality line, not %r" % line)
+                    data += line
                 #Should be end of record...
                 line = handle.readline()
                 if line and line[0:1] != at_char:
-                    ValueError("Problem with line %s" % repr(line))
+                    raise ValueError("Problem with line %r" % line)
                 break
             else:
                 line = handle.readline()

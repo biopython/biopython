@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2010-2011 by Peter Cock.
+# Copyright 2010-2013 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -93,24 +93,28 @@ standard Python library gzip) because they contain a function called open
 i.e. Suppose you do this:
 
 >>> from Bio.bgzf import *
->>> print open.__module__
+>>> print(open.__module__)
 Bio.bgzf
 
 Or,
 
 >>> from gzip import *
->>> print open.__module__
+>>> print(open.__module__)
 gzip
 
 Notice that the open function has been replaced. You can "fix" this if you
 need to by importing the built-in open function:
 
->>> from __builtin__ import open
+>>> try:
+...     from __builtin__ import open # Python 2
+... except ImportError:
+...     from builtins import open # Python 3
+...
 
 However, what we recommend instead is to use the explicit namespace, e.g.
 
 >>> from Bio import bgzf
->>> print bgzf.open.__module__
+>>> print(bgzf.open.__module__)
 Bio.bgzf
 
 
@@ -136,20 +140,20 @@ attention to the file offsets which will be explained below:
 
 >>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "r")
 >>> assert 0 == handle.tell()
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
 LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009
 >>> assert 80 == handle.tell()
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
 DEFINITION  Arabidopsis thaliana chloroplast, complete genome.
 >>> assert 143 == handle.tell()
 >>> data = handle.read(70000)
 >>> assert 987828735 == handle.tell()
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
 f="GeneID:844718"
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
      CDS             complement(join(84337..84771,85454..85843))
 >>> offset = handle.seek(make_virtual_offset(55074, 126))
->>> print handle.readline().rstrip()
+>>> print(handle.readline().rstrip())
     68521 tatgtcattc gaaattgtat aaagacaact cctatttaat agagctattt gtgcaagtat
 >>> handle.close()
 
@@ -158,7 +162,7 @@ brings us to the key point about BGZF, which is the block structure:
 
 >>> handle = open("GenBank/NC_000932.gb.bgz", "rb")
 >>> for values in BgzfBlocks(handle):
-...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
 Raw start 0, raw length 15073; data start 0, data length 65536
 Raw start 15073, raw length 17857; data start 65536, data length 65536
 Raw start 32930, raw length 22144; data start 131072, data length 65536
@@ -175,7 +179,7 @@ it is possible your BGZF file is incomplete.
 
 By reading ahead 70,000 bytes we moved into the second BGZF block,
 and at that point the BGZF virtual offsets start to look different
-a simple offset into the decompressed data as exposed by the gzip
+to a simple offset into the decompressed data as exposed by the gzip
 library.
 
 As an example, consider seeking to the decompressed position 196734.
@@ -187,9 +191,9 @@ does not always hold) and starting at byte 126 of the fourth block
 offset of 55074 and the offset within the block of 126 to get the
 BGZF virtual offset.
 
->>> print 55074 << 16 | 126
+>>> print(55074 << 16 | 126)
 3609329790
->>> print bgzf.make_virtual_offset(55074, 126)
+>>> print(bgzf.make_virtual_offset(55074, 126))
 3609329790
 
 Thus for this BGZF file, decompressed position 196734 corresponds
@@ -216,16 +220,19 @@ you want to index BGZF compressed sequence files:
 >>> handle = BgzfReader("GenBank/NC_000932.gb.bgz")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
->>> print record.id
+>>> print(record.id)
 NC_000932.1
 
 """
 
+from __future__ import print_function
+
+import sys # to detect when under Python 2
 import zlib
 import struct
-import __builtin__  # to access the usual open function
 
 from Bio._py3k import _as_bytes, _as_string
+from Bio._py3k import open as _open
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 #but need to use bytes on Python 3
@@ -258,9 +265,9 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     within_block_offset within the (decompressed) block (unsigned
     16 bit integer).
 
-    >>> make_virtual_offset(0,0)
+    >>> make_virtual_offset(0, 0)
     0
-    >>> make_virtual_offset(0,1)
+    >>> make_virtual_offset(0, 1)
     1
     >>> make_virtual_offset(0, 2**16 - 1)
     65535
@@ -269,21 +276,21 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     ...
     ValueError: Require 0 <= within_block_offset < 2**16, got 65536
 
-    >>> 65536 == make_virtual_offset(1,0)
+    >>> 65536 == make_virtual_offset(1, 0)
     True
-    >>> 65537 == make_virtual_offset(1,1)
+    >>> 65537 == make_virtual_offset(1, 1)
     True
     >>> 131071 == make_virtual_offset(1, 2**16 - 1)
     True
 
-    >>> 6553600000 == make_virtual_offset(100000,0)
+    >>> 6553600000 == make_virtual_offset(100000, 0)
     True
-    >>> 6553600001 == make_virtual_offset(100000,1)
+    >>> 6553600001 == make_virtual_offset(100000, 1)
     True
-    >>> 6553600010 == make_virtual_offset(100000,10)
+    >>> 6553600010 == make_virtual_offset(100000, 10)
     True
 
-    >>> make_virtual_offset(2**48,0)
+    >>> make_virtual_offset(2**48, 0)
     Traceback (most recent call last):
     ...
     ValueError: Require 0 <= block_start_offset < 2**48, got 281474976710656
@@ -317,10 +324,14 @@ def BgzfBlocks(handle):
     decompressed length of the blocks contents (limited to 65536 in
     BGZF).
 
-    >>> from __builtin__ import open
+    >>> try:
+    ...     from __builtin__ import open # Python 2
+    ... except ImportError:
+    ...     from builtins import open # Python 3
+    ...
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 18239; data start 0, data length 65536
     Raw start 18239, raw length 18223; data start 65536, data length 65536
     Raw start 36462, raw length 18017; data start 131072, data length 65536
@@ -342,7 +353,7 @@ def BgzfBlocks(handle):
 
     >>> handle = open("SamBam/ex1_refresh.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 53; data start 0, data length 38
     Raw start 53, raw length 18195; data start 38, data length 65434
     Raw start 18248, raw length 18190; data start 65472, data length 65409
@@ -361,7 +372,7 @@ def BgzfBlocks(handle):
 
     >>> handle = open("SamBam/ex1_header.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 104; data start 0, data length 103
     Raw start 104, raw length 18195; data start 103, data length 65434
     Raw start 18299, raw length 18190; data start 65537, data length 65409
@@ -438,10 +449,14 @@ class BgzfReader(object):
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
     in an example BAM file,
 
-    >>> from __builtin__ import open
+    >>> try:
+    ...     from __builtin__ import open # Python 2
+    ... except ImportError:
+    ...     from builtins import open # Python 3
+    ...
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
     Raw start 0, raw length 18239; data start 0, data length 65536
     Raw start 18239, raw length 18223; data start 65536, data length 65536
     Raw start 36462, raw length 18017; data start 131072, data length 65536
@@ -513,7 +528,7 @@ class BgzfReader(object):
             if "w" in mode.lower() \
             or "a" in mode.lower():
                 raise ValueError("Must use read mode (default), not write or append mode")
-            handle = __builtin__.open(filename, "rb")
+            handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
         if self._text:
             self._newline = "\n"
@@ -657,11 +672,16 @@ class BgzfReader(object):
             #assert data.endswith(self._newline)
             return data
 
-    def next(self):
+    def __next__(self):
         line = self.readline()
         if not line:
             raise StopIteration
         return line
+
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Python 2 style alias for Python 3 style __next__ method."""
+            return self.__next__()
 
     def __iter__(self):
         return self
@@ -693,16 +713,16 @@ class BgzfWriter(object):
             and "a" not in mode.lower():
                 raise ValueError("Must use write or append mode, not %r" % mode)
             if "a" in mode.lower():
-                handle = __builtin__.open(filename, "ab")
+                handle = _open(filename, "ab")
             else:
-                handle = __builtin__.open(filename, "wb")
+                handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
         self._handle = handle
         self._buffer = b""
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
-        #print "Saving %i bytes" % len(block)
+        #print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
         #Giving a negative window bits means no gzip/zlib headers, -15 used in samtools
@@ -721,7 +741,7 @@ class BgzfWriter(object):
         else:
             crc = struct.pack("<I", crc)
         bsize = struct.pack("<H", len(compressed)+25)  # includes -1
-        crc = struct.pack("<I", zlib.crc32(block) & 0xffffffffL)
+        crc = struct.pack("<I", zlib.crc32(block) & 0xffffffff)
         uncompressed_length = struct.pack("<I", len(block))
         #Fixed 16 bytes,
         # gzip magic bytes (4) mod time (4),
@@ -740,11 +760,11 @@ class BgzfWriter(object):
         #block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
-            #print "Cached %r" % data
+            #print("Cached %r" % data)
             self._buffer += data
             return
         else:
-            #print "Got %r, writing out some data..." % data
+            #print("Got %r, writing out some data..." % data)
             self._buffer += data
             while len(self._buffer) >= 65536:
                 self._write_block(self._buffer[:65536])
@@ -789,16 +809,16 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         print("Call this with no arguments and pipe uncompressed data in on stdin")
         print("and it will produce BGZF compressed data on stdout. e.g.")
-        print
+        print("")
         print("./bgzf.py < example.fastq > example.fastq.bgz")
-        print
+        print("")
         print("The extension convention of *.bgz is to distinugish these from *.gz")
         print("used for standard gzipped files without the block structure of BGZF.")
         print("You can use the standard gunzip command to decompress BGZF files,")
         print("if it complains about the extension try something like this:")
-        print
+        print("")
         print("cat example.fastq.bgz | gunzip > example.fastq")
-        print
+        print("")
         print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 
@@ -812,3 +832,4 @@ if __name__ == "__main__":
     #Doing close with write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")
+

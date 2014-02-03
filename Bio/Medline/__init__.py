@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with Medline.
+"""Code to work with Medline from the NCBI.
 
 Classes:
 Record           A dictionary holding Medline data.
@@ -14,6 +13,8 @@ read             Reads one Medline record
 parse            Allows you to iterate over a bunch of Medline records
 """
 
+
+from __future__ import print_function
 
 class Record(dict):
     """A dictionary holding information from a Medline record.
@@ -105,12 +106,13 @@ def parse(handle):
     Typical usage:
 
         from Bio import Medline
-        handle = open("mymedlinefile")
-        records = Medline.parse(handle)
-        for record in record:
-            print record['TI']
+        with open("mymedlinefile") as handle:
+            records = Medline.parse(handle)
+            for record in record:
+                print(record['TI'])
 
     """
+    #TODO - Turn that into a working doctest
     # These keys point to string values
     textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
                 "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
@@ -135,7 +137,7 @@ def parse(handle):
                 record[key] = []
             record[key].append(line[6:])
         try:
-            line = handle.next()
+            line = next(handle)
         except StopIteration:
             finished = True
         else:
@@ -160,10 +162,11 @@ def read(handle):
     Typical usage:
 
         from Bio import Medline
-        handle = open("mymedlinefile")
-        record = Medline.read(handle)
-        print record['TI']
+        with open("mymedlinefile") as handle:
+            record = Medline.read(handle)
+            print(record['TI'])
 
     """
+    #TODO - Turn that into a working doctest
     records = parse(handle)
-    return records.next()
+    return next(records)

@@ -9,10 +9,16 @@ Usage:
 python check_output.py <name of file to parse>
 """
 # standard modules
+from __future__ import print_function
+
 import sys
 import os
-import cStringIO
 import gzip
+
+try:
+    from StringIO import StringIO # Python 2
+except ImportError:
+    from io import StringIO # Python 3
 
 # biopython
 from Bio import GenBank
@@ -24,10 +30,10 @@ def do_comparison(good_record, test_record):
     Ths compares the two GenBank record, and will raise an AssertionError
     if two lines do not match, showing the non-matching lines.
     """
-    good_handle = cStringIO.StringIO(good_record)
-    test_handle = cStringIO.StringIO(test_record)
+    good_handle = StringIO(good_record)
+    test_handle = StringIO(test_record)
 
-    while 1:
+    while True:
         good_line = good_handle.readline()
         test_line = test_handle.readline()
 
@@ -62,14 +68,14 @@ def write_format(file):
     iterator = GenBank.Iterator(cur_handle, record_parser)
     compare_iterator = GenBank.Iterator(compare_handle)
 
-    while 1:
-        cur_record = iterator.next()
-        compare_record = compare_iterator.next()
+    while True:
+        cur_record = next(iterator)
+        compare_record = next(compare_iterator)
 
         if cur_record is None or compare_record is None:
             break
 
-        # print "\tTesting for %s" % cur_record.version
+        # print("\tTesting for %s" % cur_record.version)
 
         output_record = str(cur_record) + "\n"
         try:

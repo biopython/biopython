@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program MUSCLE.
 """
 
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -22,7 +24,7 @@ class MuscleCommandline(AbstractCommandline):
     >>> in_file = r"C:\My Documents\unaligned.fasta"
     >>> out_file = r"C:\My Documents\aligned.fasta"
     >>> muscle_cline = MuscleCommandline(muscle_exe, input=in_file, out=out_file)
-    >>> print muscle_cline
+    >>> print(muscle_cline)
     "C:\Program Files\Aligments\muscle3.8.31_i86win32.exe" -in "C:\My Documents\unaligned.fasta" -out "C:\My Documents\aligned.fasta"
 
     You would typically run the command line with muscle_cline() or via
@@ -354,10 +356,10 @@ class MuscleCommandline(AbstractCommandline):
                     "Write PHYLIP interleaved output to specified filename",
                     filename=True,
                     equate=False),
-            _Option(["-physout", "physout"],"Write PHYLIP sequential format to specified filename",
+            _Option(["-physout", "physout"], "Write PHYLIP sequential format to specified filename",
                     filename=True,
                     equate=False),
-            _Option(["-htmlout", "htmlout"],"Write HTML output to specified filename",
+            _Option(["-htmlout", "htmlout"], "Write HTML output to specified filename",
                     filename=True,
                     equate=False),
             _Option(["-clwout", "clwout"],

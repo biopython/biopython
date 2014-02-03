@@ -19,6 +19,8 @@ parse             Parses the keywlist.txt file and returns an iterator to
 """
 
 
+from __future__ import print_function
+
 class Record(dict):
     """
     This record stores the information of one keyword or category in the

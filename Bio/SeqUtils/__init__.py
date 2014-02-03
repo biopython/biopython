@@ -9,6 +9,8 @@
 
 """Miscellaneous functions for dealing with sequences."""
 
+from __future__ import print_function
+
 import re
 from math import pi, sin, cos
 
@@ -37,7 +39,7 @@ def GC(seq):
     Note that this will return zero for an empty sequence.
     """
     try:
-        gc = sum(map(seq.count, ['G', 'C', 'g', 'c', 'S', 's']))
+        gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
         return gc*100.0/len(seq)
     except ZeroDivisionError:
         return 0.0
@@ -107,20 +109,23 @@ def GC_skew(seq, window=100):
 def xGC_skew(seq, window=1000, zoom=100,
                          r=300, px=100, py=100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
-    from Tkinter import Scrollbar, Canvas, BOTTOM, BOTH, ALL, \
-                        VERTICAL, HORIZONTAL, RIGHT, LEFT, X, Y
-    yscroll = Scrollbar(orient=VERTICAL)
-    xscroll = Scrollbar(orient=HORIZONTAL)
-    canvas = Canvas(yscrollcommand=yscroll.set,
-                    xscrollcommand=xscroll.set, background='white')
+    try:
+        import Tkinter as tkinter # Python 2
+    except ImportError:
+        import tkinter # Python 3
+
+    yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
+    xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
+    canvas = tkinter.Canvas(yscrollcommand=yscroll.set,
+                            xscrollcommand=xscroll.set, background='white')
     win = canvas.winfo_toplevel()
     win.geometry('700x700')
 
     yscroll.config(command=canvas.yview)
     xscroll.config(command=canvas.xview)
-    yscroll.pack(side=RIGHT, fill=Y)
-    xscroll.pack(side=BOTTOM, fill=X)
-    canvas.pack(fill=BOTH, side=LEFT, expand=1)
+    yscroll.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+    xscroll.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+    canvas.pack(fill=tkinter.BOTH, side=tkinter.LEFT, expand=1)
     canvas.update()
 
     X0, Y0 = r + px, r + py
@@ -162,7 +167,7 @@ def xGC_skew(seq, window=1000, zoom=100,
         canvas.update()
         start += window
 
-    canvas.configure(scrollregion=canvas.bbox(ALL))
+    canvas.configure(scrollregion=canvas.bbox(tkinter.ALL))
 
 
 def molecular_weight(seq):
@@ -247,11 +252,11 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
-    threecode = dict(IUPACData.protein_letters_1to3_extended.items() +
-            custom_map.items())
+    threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
+                     list(custom_map.items()))
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
-    return ''.join([threecode.get(aa, undef_code) for aa in seq])
+    return ''.join(threecode.get(aa, undef_code) for aa in seq)
 
 
 def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
@@ -300,11 +305,11 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
     onecode = dict((k.upper(), v) for k, v in
-            IUPACData.protein_letters_3to1_extended.items())
+                   IUPACData.protein_letters_3to1_extended.items())
     # add the given termination codon code and custom maps
-    onecode.update((k.upper(), v) for (k, v) in custom_map.iteritems())
+    onecode.update((k.upper(), v) for (k, v) in custom_map.items())
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
-    return ''.join([onecode.get(aa.upper(), undef_code) for aa in seqlist])
+    return ''.join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 
 
 # }}}
@@ -322,7 +327,7 @@ def six_frame_translations(seq, genetic_code=1):
     similar to DNA Striders six-frame translation
 
     >>> from Bio.SeqUtils import six_frame_translations
-    >>> print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
+    >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
     GC_Frame: a:5 t:0 g:8 c:5 
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
@@ -367,16 +372,16 @@ def six_frame_translations(seq, genetic_code=1):
         csubseq = comp[i:i+60]
         p = i//3
         res += '%d/%d\n' % (i+1, i/3+1)
-        res += '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
-        res += ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
-        res += '  '.join(map(None, frames[1][p:p+20])) + '\n'
+        res += '  ' + '  '.join(frames[3][p:p+20]) + '\n'
+        res += ' ' + '  '.join(frames[2][p:p+20]) + '\n'
+        res += '  '.join(frames[1][p:p+20]) + '\n'
         # seq
         res += subseq.lower() + '%5d %%\n' % int(GC(subseq))
         res += csubseq.lower() + '\n'
         # - frames
-        res += '  '.join(map(None, frames[-2][p:p+20])) +' \n'
-        res += ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
-        res += '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
+        res += '  '.join(frames[-2][p:p+20]) +' \n'
+        res += ' ' + '  '.join(frames[-1][p:p+20]) + '\n'
+        res += '  ' + '  '.join(frames[-3][p:p+20]) + '\n\n'
     return res
 
 # }}}
@@ -397,7 +402,7 @@ def quick_FASTA_reader(file):
 
     >>> seqs = quick_FASTA_reader("Fasta/dups.fasta")
     >>> for title, sequence in seqs:
-    ...     print title, sequence
+    ...     print("%s %s" % (title, sequence))
     alpha ACGTA
     beta CGTC
     gamma CCGCC
@@ -417,12 +422,9 @@ def quick_FASTA_reader(file):
     If you want to use simple strings, use the function SimpleFastaParser
     added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
     """
-    handle = open(file)
-    entries = []
     from Bio.SeqIO.FastaIO import SimpleFastaParser
-    for title, sequence in SimpleFastaParser(handle):
-        entries.append((title, sequence))
-    handle.close()
+    with open(file) as handle:
+        entries = list(SimpleFastaParser(handle))
     return entries
 
 

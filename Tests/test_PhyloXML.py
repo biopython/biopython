@@ -236,9 +236,9 @@ class TreeTests(unittest.TestCase):
         #Because we short circult interation, must close handle explicitly
         #to avoid a ResourceWarning
         handle = open(EX_DOLLO)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
-        bchars = tree.clade[0,0].binary_characters
+        bchars = tree.clade[0, 0].binary_characters
         self.assertTrue(isinstance(bchars, PX.BinaryCharacters))
         self.assertEqual(bchars.type, 'parsimony inferred')
         for name, count, value in (
@@ -265,7 +265,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Confidence objects."""
         #Because we short circult interation, must close handle explicitly
         handle = open(EX_MADE)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
         self.assertEqual(tree.name, 'testing confidence')
         for conf, type, val in zip(tree.confidences,
@@ -285,8 +285,8 @@ class TreeTests(unittest.TestCase):
     def test_Date(self):
         """Instantiation of Date objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[11]
-        silurian = tree.clade[0,0].date
-        devonian = tree.clade[0,1].date
+        silurian = tree.clade[0, 0].date
+        devonian = tree.clade[0, 1].date
         ediacaran = tree.clade[1].date
         for date, desc, val in zip(
                 (silurian, devonian, ediacaran),
@@ -305,9 +305,9 @@ class TreeTests(unittest.TestCase):
         Also checks Point type and safe Unicode handling (?).
         """
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[10]
-        hirschweg = tree.clade[0,0].distributions[0]
-        nagoya = tree.clade[0,1].distributions[0]
-        eth_zurich = tree.clade[0,2].distributions[0]
+        hirschweg = tree.clade[0, 0].distributions[0]
+        nagoya = tree.clade[0, 1].distributions[0]
+        eth_zurich = tree.clade[0, 2].distributions[0]
         san_diego = tree.clade[1].distributions[0]
         for dist, desc, lati, longi, alti in zip(
                 (hirschweg, nagoya, eth_zurich, san_diego),
@@ -334,9 +334,9 @@ class TreeTests(unittest.TestCase):
         """
         #Because we short circult interation, must close handle explicitly
         handle = open(EX_APAF)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
-        clade = tree.clade[0,0,0,0,0,0,0,0,0,0]
+        clade = tree.clade[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         darch = clade.sequences[0].domain_architecture
         self.assertTrue(isinstance(darch, PX.DomainArchitecture))
         self.assertEqual(darch.length, 1249)
@@ -406,9 +406,9 @@ class TreeTests(unittest.TestCase):
         #Because we short circult interation, must close handle explicitly
         #to avoid a ResourceWarning
         handle = open(EX_DOLLO)
-        tree = PhyloXMLIO.parse(handle).next()
+        tree = next(PhyloXMLIO.parse(handle))
         handle.close()
-        reference = tree.clade[0,0,0,0,0,0].references[0]
+        reference = tree.clade[0, 0, 0, 0, 0, 0].references[0]
         self.assertTrue(isinstance(reference, PX.Reference))
         self.assertEqual(reference.doi, '10.1038/nature06614')
         self.assertEqual(reference.desc, None)
@@ -429,8 +429,8 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(seq0.name, 'alcohol dehydrogenase')
         self.assertEqual(seq0.annotations[0].ref, 'InterPro:IPR002085')
         # More complete elements
-        seq1 = trees[5].clade[0,0].sequences[0]
-        seq2 = trees[5].clade[0,1].sequences[0]
+        seq1 = trees[5].clade[0, 0].sequences[0]
+        seq2 = trees[5].clade[0, 1].sequences[0]
         seq3 = trees[5].clade[1].sequences[0]
         for seq, sym, acc, name, mol_seq, ann_refs in zip(
                 (seq1, seq2, seq3),
@@ -475,7 +475,7 @@ class TreeTests(unittest.TestCase):
         """
         trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Octopus
-        tax5 = trees[5].clade[0,0].taxonomies[0]
+        tax5 = trees[5].clade[0, 0].taxonomies[0]
         self.assertTrue(isinstance(tax5, PX.Taxonomy))
         self.assertEqual(tax5.id.value, '6645')
         self.assertEqual(tax5.id.provider, 'NCBI')
@@ -673,8 +673,8 @@ class MethodTests(unittest.TestCase):
     def test_clade_getitem(self):
         """Clade.__getitem__: get sub-clades by extended indexing."""
         tree = self.phyloxml.phylogenies[3]
-        self.assertEqual(tree.clade[0,0], tree.clade.clades[0].clades[0])
-        self.assertEqual(tree.clade[0,1], tree.clade.clades[0].clades[1])
+        self.assertEqual(tree.clade[0, 0], tree.clade.clades[0].clades[0])
+        self.assertEqual(tree.clade[0, 1], tree.clade.clades[0].clades[1])
         self.assertEqual(tree.clade[1], tree.clade.clades[1])
         self.assertEqual(len(tree.clade[:]), len(tree.clade.clades))
         self.assertEqual(len(tree.clade[0,:]),

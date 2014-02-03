@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Copyright 2009 by Michiel de Hoon.  All rights reserved.
+# Revisions copyright 2010 by Peter Cock. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Test for the SwissProt parser on SwissProt files.
 """
 import os

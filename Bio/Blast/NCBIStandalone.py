@@ -5,7 +5,7 @@
 # Patches by Mike Poidinger to support multiple databases.
 # Updated by Peter Cock in 2007 to do a better job on BLAST 2.2.15
 
-"""Code for calling standalone BLAST and parsing plain text output (OBSOLETE).
+"""Code for calling standalone BLAST and parsing plain text output (DEPRECATED).
 
 Rather than parsing the human readable plain text BLAST output (which seems to
 change with every update to BLAST), we and the NBCI recommend you parse the
@@ -39,9 +39,9 @@ _DatabaseReportConsumer  Consumes database report information.
 _ParametersConsumer      Consumes parameters information.
 
 Functions:
-blastall        Execute blastall (OBSOLETE).
-blastpgp        Execute blastpgp (OBSOLETE).
-rpsblast        Execute rpsblast (OBSOLETE).
+blastall        Execute blastall.
+blastpgp        Execute blastpgp.
+rpsblast        Execute rpsblast.
 
 For calling the BLAST command line tools, we encourage you to use the
 command line wrappers in Bio.Blast.Applications - the three functions
@@ -49,14 +49,16 @@ blastall, blastpgp and rpsblast are considered to be obsolete now, and
 are likely to be deprecated and then removed in future releases.
 """
 
-import warnings
-warnings.warn("The plain text parser in this module still works at the time of writing, but is considered obsolete and updating it to cope with the latest versions of BLAST is not a priority for us.", PendingDeprecationWarning)
+from __future__ import print_function
 
 from Bio import BiopythonDeprecationWarning
+import warnings
+warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
+              "parsing BLAST output instead.", BiopythonDeprecationWarning)
 
 import os
 import re
-import StringIO
+from Bio._py3k import StringIO
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -177,7 +179,7 @@ class _Scanner(object):
                                 consumer.reference, start='Reference'):
             # References are normally multiline terminated by a blank line
             # (or, based on the old code, the RID line)
-            while 1:
+            while True:
                 line = uhandle.readline()
                 if is_blank_line(line):
                     consumer.noevent(line)
@@ -435,7 +437,7 @@ class _Scanner(object):
         self._scan_alignment_header(uhandle, consumer)
 
         # Scan a bunch of score/alignment pairs.
-        while 1:
+        while True:
             if self._eof(uhandle):
                 #Shouldn't have issued that _scan_alignment_header event...
                 break
@@ -457,7 +459,7 @@ class _Scanner(object):
         #  ...
         # Length=428
         read_and_call(uhandle, consumer.title, start='>')
-        while 1:
+        while True:
             line = safe_readline(uhandle)
             if line.lstrip().startswith('Length =') \
             or line.lstrip().startswith('Length='):
@@ -505,7 +507,7 @@ class _Scanner(object):
         # Sbjct: 70 PNIIQLKD 77
         #
 
-        while 1:
+        while True:
             # Blastn adds an extra line filled with spaces before Query
             attempt_read_and_call(uhandle, consumer.noevent, start='     ')
             read_and_call(uhandle, consumer.query, start='Query')
@@ -527,7 +529,7 @@ class _Scanner(object):
 
     def _scan_masterslave_alignment(self, uhandle, consumer):
         consumer.start_alignment()
-        while 1:
+        while True:
             line = safe_readline(uhandle)
             # Check to see whether I'm finished reading the alignment.
             # This is indicated by 1) database section, 2) next psi-blast
@@ -1003,7 +1005,7 @@ class _AlignmentConsumer(object):
 
     def length(self, line):
         #e.g. "Length = 81" or more recently, "Length=428"
-        parts = line.replace(" ","").split("=")
+        parts = line.replace(" ", "").split("=")
         assert len(parts)==2, "Unrecognised format length line"
         self._alignment.length = parts[1]
         self._alignment.length = _safe_int(self._alignment.length)
@@ -1310,15 +1312,13 @@ class _DatabaseReportConsumer(object):
         self._dr.num_sequences_in_database.append(_safe_int(sequences))
 
     def ka_params(self, line):
-        x = line.split()
-        self._dr.ka_params = map(_safe_float, x)
+        self._dr.ka_params = [_safe_float(x) for x in line.split()]
 
     def gapped(self, line):
         self._dr.gapped = 1
 
     def ka_params_gap(self, line):
-        x = line.split()
-        self._dr.ka_params_gap = map(_safe_float, x)
+        self._dr.ka_params_gap = [_safe_float(x) for x in line.split()]
 
     def end_database_report(self):
         pass
@@ -1332,9 +1332,8 @@ class _ParametersConsumer(object):
         self._params.matrix = line[8:].rstrip()
 
     def gap_penalties(self, line):
-        x = _get_cols(
-            line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})
-        self._params.gap_penalties = map(_safe_float, x)
+        self._params.gap_penalties = [_safe_float(x) for x in _get_cols(
+            line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})]
 
     def num_hits(self, line):
         if '1st pass' in line:
@@ -1637,7 +1636,7 @@ class Iterator(object):
         self._parser = parser
         self._header = []
 
-    def next(self):
+    def __next__(self):
         """next(self) -> object
 
         Return the next Blast record from the file.  If no more records,
@@ -1646,7 +1645,7 @@ class Iterator(object):
         """
         lines = []
         query = False
-        while 1:
+        while True:
             line = self._uhandle.readline()
             if not line:
                 break
@@ -1682,11 +1681,16 @@ class Iterator(object):
 
         data = ''.join(lines)
         if self._parser is not None:
-            return self._parser.parse(StringIO.StringIO(data))
+            return self._parser.parse(StringIO(data))
         return data
 
+    if sys.version_info[0] < 3:
+        def next(self):
+            """Python 2 style alias for Python 3 style __next__ method."""
+            return self.__next__()
+
     def __iter__(self):
-        return iter(self.next, None)
+        return iter(self.__next__, None)
 
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
@@ -1753,50 +1757,49 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     _security_check_parameters(keywds)
 
     att2param = {
-        'matrix' : '-M',
-        'gap_open' : '-G',
-        'gap_extend' : '-E',
-        'nuc_match' : '-r',
-        'nuc_mismatch' : '-q',
-        'query_genetic_code' : '-Q',
-        'db_genetic_code' : '-D',
+        'matrix': '-M',
+        'gap_open': '-G',
+        'gap_extend': '-E',
+        'nuc_match': '-r',
+        'nuc_mismatch': '-q',
+        'query_genetic_code': '-Q',
+        'db_genetic_code': '-D',
 
-        'gapped' : '-g',
-        'expectation' : '-e',
-        'wordsize' : '-W',
-        'strands' : '-S',
-        'keep_hits' : '-K',
-        'xdrop' : '-X',
-        'hit_extend' : '-f',
-        'region_length' : '-L',
-        'db_length' : '-z',
-        'search_length' : '-Y',
+        'gapped': '-g',
+        'expectation': '-e',
+        'wordsize': '-W',
+        'strands': '-S',
+        'keep_hits': '-K',
+        'xdrop': '-X',
+        'hit_extend': '-f',
+        'region_length': '-L',
+        'db_length': '-z',
+        'search_length': '-Y',
 
-        'program' : '-p',
-        'database' : '-d',
-        'infile' : '-i',
-        'filter' : '-F',
-        'believe_query' : '-J',
-        'restrict_gi' : '-l',
-        'nprocessors' : '-a',
-        'oldengine' : '-V',
+        'program': '-p',
+        'database': '-d',
+        'infile': '-i',
+        'filter': '-F',
+        'believe_query': '-J',
+        'restrict_gi': '-l',
+        'nprocessors': '-a',
+        'oldengine': '-V',
 
-        'html' : '-T',
-        'descriptions' : '-v',
-        'alignments' : '-b',
-        'align_view' : '-m',
-        'show_gi' : '-I',
-        'seqalign_file' : '-O',
-        'outfile' : '-o',
+        'html': '-T',
+        'descriptions': '-v',
+        'alignments': '-b',
+        'align_view': '-m',
+        'show_gi': '-I',
+        'seqalign_file': '-O',
+        'outfile': '-o',
         }
-    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", BiopythonDeprecationWarning)
-    from Applications import BlastallCommandline
+    from .Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
     cline.set_parameter(att2param['program'], program)
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems():
+    for key, value in keywds.items():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -1872,61 +1875,59 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
     align_infile        Input alignment file for PSI-BLAST restart.
     """
-
-    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
-        'matrix' : '-M',
-        'gap_open' : '-G',
-        'gap_extend' : '-E',
-        'window_size' : '-A',
-        'npasses' : '-j',
-        'passes' : '-P',
+        'matrix': '-M',
+        'gap_open': '-G',
+        'gap_extend': '-E',
+        'window_size': '-A',
+        'npasses': '-j',
+        'passes': '-P',
 
-        'gapped' : '-g',
-        'expectation' : '-e',
-        'wordsize' : '-W',
-        'keep_hits' : '-K',
-        'xdrop' : '-X',
-        'hit_extend' : '-f',
-        'region_length' : '-L',
-        'db_length' : '-Z',
-        'search_length' : '-Y',
-        'nbits_gapping' : '-N',
-        'pseudocounts' : '-c',
-        'xdrop_final' : '-Z',
-        'xdrop_extension' : '-y',
-        'model_threshold' : '-h',
-        'required_start' : '-S',
-        'required_end' : '-H',
+        'gapped': '-g',
+        'expectation': '-e',
+        'wordsize': '-W',
+        'keep_hits': '-K',
+        'xdrop': '-X',
+        'hit_extend': '-f',
+        'region_length': '-L',
+        'db_length': '-Z',
+        'search_length': '-Y',
+        'nbits_gapping': '-N',
+        'pseudocounts': '-c',
+        'xdrop_final': '-Z',
+        'xdrop_extension': '-y',
+        'model_threshold': '-h',
+        'required_start': '-S',
+        'required_end': '-H',
 
-        'program' : '-p',
-        'database' : '-d',
-        'infile' : '-i',
-        'filter' : '-F',
-        'believe_query' : '-J',
-        'nprocessors' : '-a',
+        'program': '-p',
+        'database': '-d',
+        'infile': '-i',
+        'filter': '-F',
+        'believe_query': '-J',
+        'nprocessors': '-a',
 
-        'html' : '-T',
-        'descriptions' : '-v',
-        'alignments' : '-b',
-        'align_view' : '-m',
-        'show_gi' : '-I',
-        'seqalign_file' : '-O',
-        'align_outfile' : '-o',
-        'checkpoint_outfile' : '-C',
-        'restart_infile' : '-R',
-        'hit_infile' : '-k',
-        'matrix_outfile' : '-Q',
-        'align_infile' : '-B',
+        'html': '-T',
+        'descriptions': '-v',
+        'alignments': '-b',
+        'align_view': '-m',
+        'show_gi': '-I',
+        'seqalign_file': '-O',
+        'align_outfile': '-o',
+        'checkpoint_outfile': '-C',
+        'restart_infile': '-R',
+        'hit_infile': '-k',
+        'matrix_outfile': '-Q',
+        'align_infile': '-B',
         }
-    from Applications import BlastpgpCommandline
+    from .Applications import BlastpgpCommandline
     cline = BlastpgpCommandline(blastcmd)
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems():
+    for key, value in keywds.items():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -1992,46 +1993,44 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
                         omitted standard output is used (which you can access
                         from the returned handles).
     """
-
-    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
-        'multihit' : '-P',
-        'gapped' : '-g',
-        'expectation' : '-e',
-        'range_restriction' : '-L',
-        'xdrop' : '-X',
-        'xdrop_final' : '-Z',
-        'xdrop_extension' : '-y',
-        'search_length' : '-Y',
-        'nbits_gapping' : '-N',
-        'protein' : '-p',
-        'db_length' : '-z',
+        'multihit': '-P',
+        'gapped': '-g',
+        'expectation': '-e',
+        'range_restriction': '-L',
+        'xdrop': '-X',
+        'xdrop_final': '-Z',
+        'xdrop_extension': '-y',
+        'search_length': '-Y',
+        'nbits_gapping': '-N',
+        'protein': '-p',
+        'db_length': '-z',
 
-        'database' : '-d',
-        'infile' : '-i',
-        'filter' : '-F',
-        'case_filter' : '-U',
-        'believe_query' : '-J',
-        'nprocessors' : '-a',
-        'logfile' : '-l',
+        'database': '-d',
+        'infile': '-i',
+        'filter': '-F',
+        'case_filter': '-U',
+        'believe_query': '-J',
+        'nprocessors': '-a',
+        'logfile': '-l',
 
-        'html' : '-T',
-        'descriptions' : '-v',
-        'alignments' : '-b',
-        'align_view' : '-m',
-        'show_gi' : '-I',
-        'seqalign_file' : '-O',
-        'align_outfile' : '-o',
+        'html': '-T',
+        'descriptions': '-v',
+        'alignments': '-b',
+        'align_view': '-m',
+        'show_gi': '-I',
+        'seqalign_file': '-O',
+        'align_outfile': '-o',
         }
 
-    from Applications import RpsBlastCommandline
+    from .Applications import RpsBlastCommandline
     cline = RpsBlastCommandline(blastcmd)
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems():
+    for key, value in keywds.items():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -2135,7 +2134,7 @@ def _security_check_parameters(param_dict):
     for appending a command line), or ">", "<" or "|" (redirection)
     and if any are found raises an exception.
     """
-    for key, value in param_dict.iteritems():
+    for key, value in param_dict.items():
         str_value = str(value) # Could easily be an int or a float
         for bad_str in [";", "&&", ">", "<", "|"]:
             if bad_str in str_value:
@@ -2192,7 +2191,7 @@ class BlastErrorParser(AbstractParser):
         results = handle.read()
 
         try:
-            self._scanner.feed(StringIO.StringIO(results), self._consumer)
+            self._scanner.feed(StringIO(results), self._consumer)
         except ValueError:
             # if we have a bad_report_file, save the info to it first
             if self._bad_report_handle:
@@ -2201,7 +2200,7 @@ class BlastErrorParser(AbstractParser):
 
             # now we want to try and diagnose the error
             self._diagnose_error(
-                StringIO.StringIO(results), self._consumer.data)
+                StringIO(results), self._consumer.data)
 
             # if we got here we can't figure out the problem
             # so we should pass along the syntax error we got

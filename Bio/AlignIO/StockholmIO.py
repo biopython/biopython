@@ -1,9 +1,9 @@
-# Copyright 2006-2010 by Peter Cock.  All rights reserved.
+# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Bio.AlignIO support for the "stockholm" format (used in the PFAM database).
+"""Bio.AlignIO support for "stockholm" format (used in the PFAM database).
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -29,12 +29,12 @@ using the Bio.AlignIO.read() function:
 
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm")
-    >>> print align
+    >>> print(align)
     SingleLetterAlphabet() alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
     >>> for record in align:
-    ...     print record.id, len(record)
+    ...     print("%s %i" % (record.id, len(record)))
     AP001509.1 104
     AE007476.1 104
 
@@ -47,7 +47,7 @@ optional argument to the Bio.AlignIO.read() function:
     >>> from Bio.Alphabet import generic_rna
     >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
     ...                      alphabet=generic_rna)
-    >>> print align
+    >>> print(align)
     RNAAlphabet() alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
@@ -57,9 +57,9 @@ some GR lines for the secondary structure of the sequences.  These are
 strings, with one character for each letter in the associated sequence:
 
     >>> for record in align:
-    ...     print record.id
-    ...     print record.seq
-    ...     print record.letter_annotations['secondary_structure']
+    ...     print(record.id)
+    ...     print(record.seq)
+    ...     print(record.letter_annotations['secondary_structure'])
     AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
     -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
@@ -71,7 +71,7 @@ Any general annotation for each row is recorded in the SeqRecord's annotations
 dictionary.  You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
-    >>> print align.format("fasta")
+    >>> print(align.format("fasta"))
     >AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
     GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -83,7 +83,7 @@ using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 Most output formats won't be able to hold the annotation possible in a
 Stockholm file:
 
-    >>> print align.format("stockholm")
+    >>> print(align.format("stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -110,9 +110,9 @@ with Alignnment objects. Again, if you want to you can specify this is RNA:
     >>> from Bio.Alphabet import generic_rna
     >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm",
     ...                           alphabet=generic_rna):
-    ...     print record.id
-    ...     print record.seq
-    ...     print record.letter_annotations['secondary_structure']
+    ...     print(record.id)
+    ...     print(record.seq)
+    ...     print(record.letter_annotations['secondary_structure'])
     AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
     -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
@@ -124,16 +124,18 @@ Remember that if you slice a SeqRecord, the per-letter-annotions like the
 secondary structure string here, are also sliced:
 
     >>> sub_record = record[10:20]
-    >>> print sub_record.seq
+    >>> print(sub_record.seq)
     AUCGUUUUAC
-    >>> print sub_record.letter_annotations['secondary_structure']
+    >>> print(sub_record.letter_annotations['secondary_structure'])
     -------<<<
 """
+from __future__ import print_function
+
 __docformat__ = "epytext en"  # not just plaintext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class StockholmWriter(SequentialAlignmentWriter):
@@ -238,7 +240,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 % (seq_name, self.clean(xref)))
 
         #GS = other per sequence annotation
-        for key, value in record.annotations.iteritems():
+        for key, value in record.annotations.items():
             if key in self.pfam_gs_mapping:
                 data = self.clean(str(value))
                 if data:
@@ -252,7 +254,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 pass
 
         #GR = per row per column sequence annotation
-        for key, value in record.letter_annotations.iteritems():
+        for key, value in record.letter_annotations.items():
             if key in self.pfam_gr_mapping and len(str(value)) == len(record.seq):
                 data = self.clean(str(value))
                 if data:
@@ -310,7 +312,7 @@ class StockholmIterator(AlignmentIterator):
                        "OC": "organism_classification",
                        "LO": "look"}
 
-    def next(self):
+    def __next__(self):
         try:
             line = self._header
             del self._header
@@ -321,8 +323,6 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
         if not line.strip() == '# STOCKHOLM 1.0':
             raise ValueError("Did not find STOCKHOLM header")
-            #import sys
-            #print >> sys.stderr, 'Warning file does not start with STOCKHOLM 1.0'
 
         # Note: If this file follows the PFAM conventions, there should be
         # a line containing the number of sequences, e.g. "#=GF SQ 67"
@@ -335,7 +335,7 @@ class StockholmIterator(AlignmentIterator):
         gr = {}
         gf = {}
         passed_end_alignment = False
-        while 1:
+        while True:
             line = self.handle.readline()
             if not line:
                 break  # end of file
@@ -424,7 +424,7 @@ class StockholmIterator(AlignmentIterator):
                 raise ValueError("Found %i records in this alignment, told to expect %i"
                                  % (len(ids), self.records_per_alignment))
 
-            alignment_length = len(seqs.values()[0])
+            alignment_length = len(list(seqs.values())[0])
             records = []  # Alignment obj will put them all in a list anyway
             for id in ids:
                 seq = seqs[id]
@@ -456,17 +456,17 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
 
     def _identifier_split(self, identifier):
-        """Returns (name,start,end) string tuple from an identier."""
+        """Returns (name, start, end) string tuple from an identier."""
         if '/' in identifier:
             name, start_end = identifier.rsplit("/", 1)
             if start_end.count("-") == 1:
                 try:
-                    start, end = map(int, start_end.split("-"))
-                    return (name, start, end)
+                    start, end = start_end.split("-")
+                    return name, int(start), int(end)
                 except ValueError:
                     # Non-integers after final '/' - fall through
                     pass
-        return (identifier, None, None)
+        return identifier, None, None
 
     def _get_meta_data(self, identifier, meta_dict):
         """Takes an itentifier and returns dict of all meta-data matching it.
@@ -537,3 +537,4 @@ class StockholmIterator(AlignmentIterator):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+

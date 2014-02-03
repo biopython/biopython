@@ -12,16 +12,21 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), http://dx.doi.org/10.1093/bib/bbr025
 """
 
+from __future__ import print_function
+
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.dom import pulldom
 from xml.sax import SAXParseException
 
+from Bio._py3k import range
+from Bio._py3k import basestring
+
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Interfaces import SequentialSequenceWriter
+from .Interfaces import SequentialSequenceWriter
 
 
 class XMLRecordIterator:
@@ -90,7 +95,8 @@ class XMLRecordIterator:
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary."""
 
-        return dict((node.attributes.item(i).name, node.attributes.item(i).value) for i in xrange(node.attributes.length))
+        return dict((node.attributes.item(i).name, node.attributes.item(i).value)
+                    for i in range(node.attributes.length))
 
 
 class SeqXmlIterator(XMLRecordIterator):
@@ -146,6 +152,7 @@ class SeqXmlIterator(XMLRecordIterator):
 
         #the keywords for the species annotation are taken from SwissIO
         record.annotations["organism"] = attr_dict["name"]
+        #TODO - Should have been a list to match SwissProt parser:
         record.annotations["ncbi_taxid"] = attr_dict["ncbiTaxID"]
 
     def _attr_entry(self, attr_dict, record):
@@ -240,9 +247,9 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if self.source is not None:
             attrs["source"] = self.source
         if self.source_version is not None:
-            attrs["sourceVersion"] = self.source_ersion
+            attrs["sourceVersion"] = self.source_version
         if self.species is not None:
-            if not isinstance(species, basestring):
+            if not isinstance(self.species, basestring):
                 raise TypeError("species should be of type string")
             attrs["speciesName"] = self.species
         if self.ncbiTaxId is not None:
@@ -287,19 +294,32 @@ class SeqXmlWriter(SequentialSequenceWriter):
     def _write_species(self, record):
         """Write the species if given."""
 
-        if "organism" in record.annotations and "ncbi_taxid" in record.annotations:
+        local_ncbi_taxid = None
+        if "ncbi_taxid" in record.annotations:
+            local_ncbi_taxid = record.annotations["ncbi_taxid"]
+            if isinstance(local_ncbi_taxid, list):
+                #SwissProt parser uses a list (which could cope with chimeras)
+                if len(local_ncbi_taxid) == 1:
+                    local_ncbi_taxid = local_ncbi_taxid[0]
+                elif len(local_ncbi_taxid) == 0:
+                    local_ncbi_taxid = None
+                else:
+                    ValueError('Multiple entries for record.annotations["ncbi_taxid"], %r'
+                                     % local_ncbi_taxid)
+        if "organism" in record.annotations and local_ncbi_taxid:
+            local_org = record.annotations["organism"]
 
-            if not isinstance(record.annotations["organism"], basestring):
+            if not isinstance(local_org, basestring):
                 raise TypeError("organism should be of type string")
 
-            if not isinstance(record.annotations["ncbi_taxid"], (basestring, int)):
+            if not isinstance(local_ncbi_taxid, (basestring, int)):
                 raise TypeError("ncbiTaxID should be of type string or int")
 
             #The local species definition is only written if it differs from the global species definition
-            if record.annotations["organism"] != self.species or record.annotations["ncbi_taxid"] != self.ncbiTaxId:
+            if local_org != self.species or local_ncbi_taxid != self.ncbiTaxId:
 
-                attr = {"name": record.annotations["organism"],
-                        "ncbiTaxID": record.annotations["ncbi_taxid"]}
+                attr = {"name": local_org,
+                        "ncbiTaxID": local_ncbi_taxid}
                 self.xml_generator.startElement(
                     "species", AttributesImpl(attr))
                 self.xml_generator.endElement("species")
@@ -405,18 +425,18 @@ if __name__ == "__main__":
     from Bio import SeqIO
     import sys
 
-    fileHandle = open("Tests/SeqXML/protein_example.xml", "r")
-    records = list(SeqIO.parse(fileHandle, "seqxml"))
+    with open("Tests/SeqXML/protein_example.xml", "r") as fileHandle:
+        records = list(SeqIO.parse(fileHandle, "seqxml"))
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
     stringHandle = StringIO()
 
     SeqIO.write(records, stringHandle, "seqxml")
     SeqIO.write(records, sys.stdout, "seqxml")
-    print
+    print("")
 
     stringHandle.seek(0)
     records = list(SeqIO.parse(stringHandle, "seqxml"))
 
     SeqIO.write(records, sys.stdout, "seqxml")
-    print
+    print("")

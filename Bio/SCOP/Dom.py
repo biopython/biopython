@@ -15,7 +15,7 @@ The DOM files for older releases can be found
 "elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
 """
 
-from Residues import Residues
+from .Residues import Residues
 
 
 class Record(object):
@@ -58,7 +58,7 @@ class Record(object):
     def __str__(self):
         s = []
         s.append(self.sid)
-        s.append(str(self.residues).replace(" ","\t") )
+        s.append(str(self.residues).replace(" ", "\t") )
         s.append(self.hierarchy)
         return "\t".join(s) + "\n"
 

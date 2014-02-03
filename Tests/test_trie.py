@@ -17,6 +17,7 @@ except ImportError:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingPythonDependencyError(message)
 
+from Bio._py3k import StringIO
 
 class TestTrie(unittest.TestCase):
 
@@ -43,21 +44,19 @@ class TestTrie(unittest.TestCase):
         trieobj["he"] = 7
         trieobj["hej"] = 9
         trieobj["foo"] = "bar"
-        k = trieobj.keys()
-        k.sort()
+        k = sorted(trieobj.keys())
         self.assertEqual(k, ["foo", "he", "hej", "hello"])
         self.assertEqual(trieobj["hello"], 5)
         self.assertEqual(trieobj.get("bye"), None)
-        self.assertEqual(trieobj.has_key("hello"), True)
-        self.assertEqual(trieobj.has_key("he"), True)
-        self.assertEqual(trieobj.has_key("bye"), False)
-        self.assertEqual(trieobj.has_prefix("h"), True)
-        self.assertEqual(trieobj.has_prefix("hel"), True)
-        self.assertEqual(trieobj.has_prefix("foa"), False)
-        self.assertEqual(trieobj.has_prefix("hello world"), False)
+        self.assertTrue("hello" in trieobj)
+        self.assertTrue("he" in trieobj)
+        self.assertFalse("bye" in trieobj)
+        self.assertTrue(trieobj.has_prefix("h"))
+        self.assertTrue(trieobj.has_prefix("hel"))
+        self.assertFalse(trieobj.has_prefix("foa"))
+        self.assertFalse(trieobj.has_prefix("hello world"))
         self.assertEqual(len(trieobj), 4)
-        k = trieobj.with_prefix("he")
-        k.sort()
+        k = sorted(trieobj.with_prefix("he"))
         self.assertEqual(k, ["he", "hej", "hello"])
         k = trieobj.with_prefix("l")
         self.assertEqual(k, [])
@@ -67,12 +66,11 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(k, [])
 
     def test_save(self):
-        import StringIO
         trieobj = trie.trie()
         trieobj["foo"] = 1
-        k = trieobj.keys()
+        k = list(trieobj.keys())
         self.assertEqual(k, ["foo"])
-        v = trieobj.values()
+        v = list(trieobj.values())
         self.assertEqual(v, [1])
         self.assertEqual(trieobj.get("bar", 99), 99)
         trieobj["hello"] = '55a'
@@ -80,8 +78,7 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(trieobj.get_approximate("foo", 1), [("foo", 1, 0)])
         self.assertEqual(trieobj.get_approximate("foa", 0), [])
         self.assertEqual(trieobj.get_approximate("foa", 1), [("foo", 1, 1)])
-        x = trieobj.get_approximate("foa", 2)
-        x.sort()
+        x = sorted(trieobj.get_approximate("foa", 2))
         self.assertEqual(x, [("foo", 1, 1), ("foo", 1, 2), ("foo", 1, 2)])
         # foo  foo-  foo-
         # foa  f-oa  fo-a
@@ -92,14 +89,13 @@ class TestTrie(unittest.TestCase):
         y = {}
         for z in x:
             y[z] = y.get(z, 0) + 1
-        x = y.items()
-        x.sort()
-        self.assertEqual(x,[(('foo', 1, 0), 1), (('hello', '55a', 4), 6)])
-        h = StringIO.StringIO()
+        x = sorted(y.items())
+        self.assertEqual(x, [(('foo', 1, 0), 1), (('hello', '55a', 4), 6)])
+        h = StringIO()
         trie.save(h, trieobj)
         h.seek(0)
         trieobj = trie.load(h)
-        k = trieobj.keys()
+        k = list(trieobj.keys())
         self.assertTrue("foo" in k)
         self.assertTrue("hello" in k)
         self.assertEqual(repr(trieobj["foo"]), '1')
@@ -145,21 +141,16 @@ class TestTrieFind(unittest.TestCase):
         trieobj["foo"] = "bar"
         trieobj["wor"] = "ld"
         self.assertEqual(triefind.match("hello world!", trieobj), "hello")
-        k = triefind.match_all("hello world!", trieobj)
-        k.sort()
+        k = sorted(triefind.match_all("hello world!", trieobj))
         self.assertEqual(k, ["he", "hello"])
-        k = triefind.find("hello world!", trieobj)
-        k.sort()
+        k = sorted(triefind.find("hello world!", trieobj))
         self.assertEqual(k, [("he", 0, 2), ("hello", 0, 5), ("wor", 6, 9)])
-        k = triefind.find_words("hello world!", trieobj)
-        k.sort()
+        k = sorted(triefind.find_words("hello world!", trieobj))
         self.assertEqual(k, [("hello", 0, 5)])
         trieobj["world"] = "full"
-        k = triefind.find("hello world!", trieobj)
-        k.sort()
+        k = sorted(triefind.find("hello world!", trieobj))
         self.assertEqual(k, [("he", 0, 2), ("hello", 0, 5), ("wor", 6, 9), ("world", 6, 11)])
-        k = triefind.find_words("hello world!", trieobj)
-        k.sort()
+        k = sorted(triefind.find_words("hello world!", trieobj))
         self.assertEqual(k, [("hello", 0, 5), ("world", 6, 11)])
 
 

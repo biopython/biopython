@@ -1,3 +1,8 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+
 """Provide trainers which estimate parameters based on training sequences.
 
 These should be used to 'train' a Markov Model prior to actually using
@@ -16,7 +21,7 @@ in the training data.
 import math
 
 # local stuff
-from DynamicProgramming import ScaledDPAlgorithms
+from .DynamicProgramming import ScaledDPAlgorithms
 
 
 class TrainingSequence(object):
@@ -104,8 +109,7 @@ class AbstractTrainer(object):
         calculation.
         """
         # get an ordered list of all items
-        all_ordered = counts.keys()
-        all_ordered.sort()
+        all_ordered = sorted(counts)
 
         ml_estimation = {}
 
@@ -191,7 +195,7 @@ class BaumWelchTrainer(AbstractTrainer):
         prev_log_likelihood = None
         num_iterations = 1
 
-        while 1:
+        while True:
             transition_count = self._markov_model.get_blank_transitions()
             emission_count = self._markov_model.get_blank_emissions()
 

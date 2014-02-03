@@ -4,12 +4,18 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blast.py
 
+from __future__ import print_function
+
 import glob
 import os
 import sys
 from threading import *
-import commands
-from Tkinter import *
+
+try:
+    from Tkinter import * # Python 2
+except ImportError:
+    from tkinter import * # Python 3
+
 import Pmw
 sys.path.insert(0, '.')
 
@@ -40,8 +46,8 @@ class BlastIt:
             pass
         nin.extend(glob.glob('*.nin'))
 
-        self.pin = map(lambda x: os.path.splitext(x)[0], pin)
-        self.nin = map(lambda x: os.path.splitext(x)[0], nin)
+        self.pin = [os.path.splitext(x)[0] for x in pin]
+        self.nin = [os.path.splitext(x)[0] for x in nin]
 
     def Choices(self):
         self.GetBlasts()
@@ -99,7 +105,6 @@ class BlastIt:
 
     def Update(self):
         self.notepad.update()
-        #print '.',
         self.notepad.after(1, self.Update)
 
     def oldRun(self):
@@ -111,7 +116,7 @@ class BlastIt:
 
         print(self.command)
         self.pipe = posix.popen(self.command)
-        while 1:
+        while True:
             try:
                 char = self.pipe.read(1)
                 self.notepad.insert(END, char)

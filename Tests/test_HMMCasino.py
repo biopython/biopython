@@ -12,6 +12,8 @@ loaded dice is .05 and the probability of switching from loaded to fair is
 .1.
 """
 
+from __future__ import print_function
+
 import os
 if os.name == 'java':
     from Bio import MissingExternalDependencyError
@@ -150,7 +152,7 @@ standard_mm = mm_builder.get_markov_model()
 rolls, states = generate_rolls(3000)
 
 # predicted_states, prob = my_mm.viterbi(rolls, DiceTypeAlphabet())
-# print "prob:", prob
+# print("prob: %f" % prob)
 # Utilities.pretty_print_prediction(rolls, states, predicted_states)
 
 
@@ -159,7 +161,7 @@ def stop_training(log_likelihood_change, num_iterations):
     """Tell the training model when to stop.
     """
     if VERBOSE:
-        print "ll change:", log_likelihood_change
+        print("ll change: %f" % log_likelihood_change)
     if log_likelihood_change < 0.01:
         return 1
     elif num_iterations >= 10:
@@ -182,7 +184,7 @@ test_rolls, test_states = generate_rolls(300)
 
 predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
 if VERBOSE:
-    print "Prediction probability:", prob
+    print("Prediction probability: %f" % prob)
     Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
 
 # -- Baum-Welch training without known state sequences
@@ -200,5 +202,5 @@ test_rolls, test_states = generate_rolls(300)
 
 predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
 if VERBOSE:
-    print "Prediction probability:", prob
+    print("Prediction probability: %f" % prob)
     Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)

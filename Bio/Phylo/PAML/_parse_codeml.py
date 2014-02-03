@@ -187,7 +187,7 @@ def parse_model(lines, results):
         # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
         if "lnL(ntime:" in line and len(line_floats) > 0:
             results["lnL"] = line_floats[0]
-            np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)",line)
+            np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)", line)
             if np_res is not None:
                 num_params = int(np_res.group(1))
         # Get parameter list. This can be useful for specifying starting
@@ -337,7 +337,7 @@ def parse_model(lines, results):
             float_model_params = []
             for param in model_params:
                 float_model_params.append((param[0], _nan_float(param[1])))
-            parameters = dict(parameters.items() + float_model_params)
+            parameters.update(dict(float_model_params))
     if len(parameters) > 0:
         results["parameters"] = parameters
     return results

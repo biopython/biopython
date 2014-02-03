@@ -1,19 +1,20 @@
-# Copyright 2006-2010 by Peter Cock.  All rights reserved.
+# Copyright 2006-2013 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Bio.AlignIO support for the "clustal" output from CLUSTAL W and other tools.
+"""Bio.AlignIO support for "clustal" output from CLUSTAL W and other tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
 
+from __future__ import print_function
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class ClustalWriter(SequentialAlignmentWriter):
@@ -83,7 +84,7 @@ class ClustalWriter(SequentialAlignmentWriter):
 class ClustalIterator(AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    def next(self):
+    def __next__(self):
         handle = self.handle
         try:
             #Header we saved from when we were parsing
@@ -343,7 +344,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 
 """
 
-    from StringIO import StringIO
+    from Bio._py3k import StringIO
 
     alignments = list(ClustalIterator(StringIO(aln_example1)))
     assert 1 == len(alignments)

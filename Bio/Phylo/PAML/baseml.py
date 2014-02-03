@@ -5,8 +5,8 @@
 
 import os
 import os.path
-from _paml import Paml, _relpath
-import _parse_baseml
+from ._paml import Paml, _relpath
+from . import _parse_baseml
 
 
 class BasemlError(EnvironmentError):
@@ -101,7 +101,7 @@ class Baseml(Paml):
             with open(ctl_file) as ctl_handle:
                 for line in ctl_handle:
                     line = line.strip()
-                    uncommented = line.split("*",1)[0]
+                    uncommented = line.split("*", 1)[0]
                     if uncommented != "":
                         if "=" not in uncommented:
                             raise AttributeError(
@@ -138,8 +138,8 @@ class Baseml(Paml):
                                 except:
                                     converted_value = value
                             temp_options[option] = converted_value
-        for option in self._options.keys():
-            if option in temp_options.keys():
+        for option in self._options:
+            if option in temp_options:
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
@@ -182,9 +182,8 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
-    handle = open(results_file)
-    lines = handle.readlines()
-    handle.close()
+    with open(results_file) as handle:
+        lines = handle.readlines()
     (results, num_params) = _parse_baseml.parse_basics(lines, results)
     results = _parse_baseml.parse_parameters(lines, results, num_params)
     if results.get("version") is None:

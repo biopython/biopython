@@ -7,6 +7,8 @@
 # database, and if it finds them then do some standalone blast searches
 # using Bio.Blast.NCBIStandalone to call the command line tool.
 
+from __future__ import print_function
+
 import os
 import sys
 import subprocess
@@ -19,7 +21,8 @@ from Bio.Blast import Applications
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
           "rpsblast+", #For Debian
-          "rpsblast", "rpstblastn", "psiblast", "blast_formatter"]
+          "rpsblast", "rpstblastn", "psiblast", "blast_formatter",
+          "deltablast"]
 exe_names = {}
 
 if sys.platform=="win32":
@@ -36,7 +39,7 @@ else :
 for folder in likely_dirs:
     if not os.path.isdir(folder):
         continue
-    for name in wanted :
+    for name in wanted:
         if sys.platform=="win32":
             exe_name = os.path.join(folder, name+".exe")
         else:
@@ -58,8 +61,8 @@ for folder in likely_dirs:
             if name == "blast_formatter" and " -archive " not in output:
                 continue
             exe_names[name] = exe_name
-        #else :
-        #    print "Rejecting", exe_name
+        #else:
+        #    print("Rejecting %r" % exe_name)
         del exe_name, name
 
 #To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias
@@ -69,7 +72,9 @@ if "rpsblast+" in exe_names:
     del exe_names["rpsblast+"]
 
 #We can cope with blast_formatter being missing, only added in BLAST 2.2.24+
-if len(set(exe_names).difference(["blast_formatter"])) < len(wanted)-1 :
+#We can cope with deltablast being missing, only added in BLAST 2.2.26+
+optional = ["blast_formatter", "deltablast"]
+if len(set(exe_names).difference(optional)) < len(set(wanted).difference(optional)):
     raise MissingExternalDependencyError("Install the NCBI BLAST+ command line "
                                          "tools if you want to use the "
                                          "Bio.Blast.Applications wrapper.")
@@ -180,7 +185,7 @@ class CheckCompleteArgList(unittest.TestCase):
             assert index != -1
             name = stdoutdata[:index]
             if " " in name:
-                name = name.split(None,1)[0]
+                name = name.split(None, 1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index+1:]
 
@@ -207,8 +212,8 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "tblastx":
             #These appear to have been removed in BLAST 2.2.23+
             #(which seems a bit odd - TODO - check with NCBI?)
-            extra = extra.difference(["-gapextend","-gapopen",
-                                      "-xdrop_gap","-xdrop_gap_final"])
+            extra = extra.difference(["-gapextend", "-gapopen",
+                                      "-xdrop_gap", "-xdrop_gap_final"])
         if exe_name in ["rpsblast", "rpstblastn"]:
             #These appear to have been removed in BLAST 2.2.24+
             #(which seems a bit odd - TODO - check with NCBI?)
@@ -248,6 +253,13 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "rpsblast":
             #New in BLAST 2.2.28+ so will look like extra args on old BLAST:
             extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
+        if exe_name in ["blastn", "blastp", "blastx", "tblastn", "tblastx",
+                        "psiblast", "rpstblastn", "rpsblast"]:
+            #New in BLAST 2.2.29+ so will look like extra args on old BLAST:
+            extra = extra.difference(["-max_hsps", "-sum_statistics"])
+        if exe_name in ["rpstblastn", "rpsblast"]:
+            #Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
+            extra = extra.difference(["-gilist", "-negative_gilist"])
 
         if extra or missing:
             import warnings
@@ -301,6 +313,11 @@ class CheckCompleteArgList(unittest.TestCase):
         def test_blast_formatter(self):
             """Check all blast_formatter arguments are supported"""
             self.check("blast_formatter", Applications.NcbiblastformatterCommandline)
+
+    if "deltablast" in exe_names:
+        def test_deltablast(self):
+            """Check all deltablast arguments are supported"""
+            self.check("deltablast", Applications.NcbideltablastCommandline)
 
 
 if __name__ == "__main__":

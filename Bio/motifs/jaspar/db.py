@@ -2,10 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This modules requires MySQLdb to be installed.
+"""Provides read access to a JASPAR5 formatted database.
 
-Provides read access to a JASPAR5 formatted database.
+This modules requires MySQLdb to be installed.
 
 Example, substitute the your database credentials as
 appropriate:
@@ -27,7 +26,7 @@ appropriate:
     >>> 
     >>> 
     >>> ets1 = jdb.fetch_motif_by_id('MA0098')
-    >>> print ets1
+    >>> print(ets1)
     TF name ETS1
     Matrix ID   MA0098.1
     Collection  CORE
@@ -61,6 +60,8 @@ appropriate:
     ...     pass # do something with the motif
 
 """
+
+from __future__ import print_function
 
 from Bio import MissingPythonDependencyError
 
@@ -419,7 +420,7 @@ class JASPAR5(object):
             for row in rows:
                 base_counts.append(row[0])
 
-            counts[base] = map(float, base_counts)
+            counts[base] = [float(x) for x in base_counts]
 
         return matrix.GenericPositionMatrix(dna, counts)
 
@@ -730,3 +731,4 @@ class JASPAR5(object):
             return True
 
         return False
+

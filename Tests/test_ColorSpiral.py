@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Copyright 2013 by Leighton Pritchard.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """ Tests for general functionality of the ColorSpiral utility
 """
 
@@ -7,15 +12,7 @@ import colorsys
 from math import pi
 import os
 import unittest
-
-try:
-    from cmath import rect
-except ImportError:
-    #This was added in Python 2.6, fallback for Python 2.5:
-    from math import sin, cos
-
-    def rect(r, phi):
-        return r * (cos(phi) + sin(phi)*1j)
+from cmath import rect
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
@@ -35,7 +32,7 @@ class SpiralTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed on HSV spiral."""
     def setUp(self):
         """Set up canvas for drawing"""
-        output_filename = os.path.join("Graphics","spiral_test.pdf")
+        output_filename = os.path.join("Graphics", "spiral_test.pdf")
         self.c = Canvas(output_filename, pagesize=A4)
         # co-ordinates of the centre of the canvas
         self.x_0, self.y_0 = 0.5 * A4[0], 0.5 * A4[1]
@@ -75,7 +72,7 @@ class SquareTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed in a square, with jitter."""
     def setUp(self):
         """Set up canvas for drawing"""
-        output_filename = os.path.join("Graphics","square_test.pdf")
+        output_filename = os.path.join("Graphics", "square_test.pdf")
         self.c = Canvas(output_filename, pagesize=(500, 500))
 
     def test_colorspiral(self):
@@ -104,9 +101,11 @@ class DictTest(unittest.TestCase):
         classes = ['A', 'B', 'C', 'D']
         colors = get_color_dict(classes, jitter=0)
         cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b)
-                    for c, (r, g, b) in colors.items()]
-        expected = ['A: (0.52, 0.76, 0.69)', 'C: (0.59, 0.13, 0.47)',
-                    'B: (0.40, 0.31, 0.68)', 'D: (0.50, 0.00, 0.00)']
+                    for c, (r, g, b) in sorted(colors.items())]
+        expected = ['A: (0.52, 0.76, 0.69)',
+                    'B: (0.40, 0.31, 0.68)',
+                    'C: (0.59, 0.13, 0.47)',
+                    'D: (0.50, 0.00, 0.00)']
         self.assertEqual(cstr, expected)
 
 if __name__ == "__main__":

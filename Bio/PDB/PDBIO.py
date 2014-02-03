@@ -5,6 +5,8 @@
 
 """Output of PDB files."""
 
+from Bio._py3k import basestring
+
 from Bio.PDB.StructureBuilder import StructureBuilder # To allow saving of chains, residues, etc..
 from Bio.Data.IUPACData import atom_weights # Allowed Elements
 
@@ -229,12 +231,11 @@ if __name__=="__main__":
     io.set_structure(s)
     io.save("out1.pdb")
 
-    fp=open("out2.pdb", "w")
-    s1=p.get_structure("test1", sys.argv[1])
-    s2=p.get_structure("test2", sys.argv[2])
-    io=PDBIO(1)
-    io.set_structure(s1)
-    io.save(fp)
-    io.set_structure(s2)
-    io.save(fp, write_end=1)
-    fp.close()
+    with open("out2.pdb", "w") as fp:
+        s1=p.get_structure("test1", sys.argv[1])
+        s2=p.get_structure("test2", sys.argv[2])
+        io=PDBIO(1)
+        io.set_structure(s1)
+        io.save(fp)
+        io.set_structure(s2)
+        io.save(fp, write_end=1)

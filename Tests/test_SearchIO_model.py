@@ -1126,7 +1126,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         self.assertRaises(TypeError, len, self)
         # len is a shorthand for .aln_span, and it can be set manually
         self.fragment.aln_span = 5
-        self.assertEqual(5,len(self.fragment))
+        self.assertEqual(5, len(self.fragment))
 
     def test_repr(self):
         """Test HSPFragment.__repr__, no alignments"""

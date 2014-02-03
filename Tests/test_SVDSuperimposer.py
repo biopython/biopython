@@ -3,6 +3,8 @@
 # as part of this package.
 
 #TODO - Don't use "from XXX import *"
+from __future__ import print_function
+
 try:
     from numpy import *
     from numpy import dot  # missing in old PyPy's micronumpy
@@ -12,7 +14,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.SVDSuperimposer.")
 
-from Bio.SVDSuperimposer import *
+from Bio.SVDSuperimposer import SVDSuperimposer
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 
@@ -60,19 +62,13 @@ def simple_matrix_print(matrix):
     versions of the underlying libraries or the compilation options
     they used).
     """
+    return "[%s]" % "\n ".join("[%s]" % " ".join("% 1.4f" % v for v in row)
+                               for row in matrix)
 
-    #This uses a fancy double nested list expression.
-    #If and when Biopython requires Python 2.4 or later,
-    #it would be slightly nicer to use generator expressions.
-    return "[" \
-    + "\n ".join(["["
-                 + " ".join(["% 1.4f" % val for val in row])
-                 + "]" for row in matrix]) \
-    + "]"
 
 # output results
 print(simple_matrix_print(y_on_x1))
-print
+print("")
 print(simple_matrix_print(y_on_x2))
-print
+print("")
 print("%.2f" % rms)

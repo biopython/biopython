@@ -13,6 +13,8 @@ well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs.
 """
 
+from __future__ import print_function
+
 import warnings
 from Bio import BiopythonDeprecationWarning
 warnings.warn("The module Bio.Motif has been deprecated and will be "
@@ -29,8 +31,8 @@ from Bio.Motif.Parsers.AlignAce import read as _AlignAce_read
 from Bio.Motif.Parsers.MEME import read as _MEME_read
 from Bio.Motif.Thresholds import ScoreDistribution
 
-_parsers={"AlignAce" : _AlignAce_read,
-          "MEME" : _MEME_read,
+_parsers={"AlignAce": _AlignAce_read,
+          "MEME": _MEME_read,
           }
 
 def _from_pfm(handle):
@@ -45,7 +47,7 @@ _readers={"jaspar-pfm": _from_pfm,
 
 
           
-def parse(handle,format):
+def parse(handle, format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats:
@@ -60,8 +62,8 @@ def parse(handle,format):
     For example:
 
     >>> from Bio import Motif
-    >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
-    ...     print motif.consensus()
+    >>> for motif in Motif.parse(open("Motif/alignace.out"), "AlignAce"):
+    ...     print(motif.consensus())
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
     GTGCCCTAAGCATACTAGGCG
@@ -93,7 +95,7 @@ def parse(handle,format):
         for m in parser(handle).motifs:
             yield m
 
-def read(handle,format):
+def read(handle, format):
     """Reads a motif from a handle using a specified file-format.
 
     This supports the same formats as Bio.Motif.parse(), but
@@ -101,14 +103,14 @@ def read(handle,format):
     reading a pfm file:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
+    >>> motif = Motif.read(open("Motif/SRF.pfm"), "jaspar-pfm")
     >>> motif.consensus()
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import Motif
-    >>> motif =  Motif.read(open("Motif/meme.out"),"MEME")
+    >>> motif =  Motif.read(open("Motif/meme.out"), "MEME")
     >>> motif.consensus()
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -116,7 +118,7 @@ def read(handle,format):
     an exception is raised:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/alignace.out"),"AlignAce")
+    >>> motif = Motif.read(open("Motif/alignace.out"), "AlignAce")
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -126,7 +128,7 @@ def read(handle,format):
     shown in the example above).  Instead use:
 
     >>> from Bio import Motif
-    >>> motif = Motif.parse(open("Motif/alignace.out"),"AlignAce").next()
+    >>> motif = next(Motif.parse(open("Motif/alignace.out"), "AlignAce"))
     >>> motif.consensus()
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
@@ -135,13 +137,13 @@ def read(handle,format):
     """
     iterator = parse(handle, format)
     try:
-        first = iterator.next()
+        first = next(iterator)
     except StopIteration:
         first = None
     if first is None:
         raise ValueError("No motifs found in handle")
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     if second is not None:
@@ -157,10 +159,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print("Runing doctests...")
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
