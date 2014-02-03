@@ -1,6 +1,6 @@
 """Command line wrapper for samtools"""
-
 from __future__ import print_function
+__docformat__ = "epytext en"
 from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument
