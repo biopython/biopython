@@ -1,7 +1,6 @@
 """Command line wrapper for samtools"""
 
-__docformat__ = "epytext en"
-
+from __future__ import print_function
 from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument
@@ -115,8 +114,8 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
     Example:
 
         >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-        >>> input_file = "/path/to/sam_or_bam_file"
-        >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input_file)
+        >>> input = ["/path/to/sam_or_bam_file"]
+        >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
         >>> print(samtools_mpileup_cmd)
         samtools mpileup /path/to/sam_or_bam_file
 
