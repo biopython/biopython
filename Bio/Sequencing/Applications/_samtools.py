@@ -1,4 +1,6 @@
 """Command line wrapper for samtools"""
+# Last Checked with samtools [0.1.18 (r982:295)]
+
 from __future__ import print_function
 __docformat__ = "epytext en"
 from Bio.Application import _Option, _Argument, _Switch
