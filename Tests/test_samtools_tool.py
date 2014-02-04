@@ -5,19 +5,25 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from __future__ import with_statement
 
 from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
-from Bio.Sequencing.Applications import SamtoolsViewCommandline,SamtoolsCalmdCommandline
-from Bio.Sequencing.Applications import SamtoolsCatCommandline, SamtoolsFaidxCommandline
-from Bio.Sequencing.Applications import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
-from Bio.Sequencing.Applications import SamtoolsIndexCommandline, SamtoolsMergeCommandline
-from Bio.Sequencing.Applications import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
-from Bio.Sequencing.Applications import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
-from Bio.Sequencing.Applications import SamtoolsSortCommandline, SamtoolsTargetcutCommandline
+from Bio.Sequencing.Applications import SamtoolsViewCommandline
+from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
+from Bio.Sequencing.Applications import SamtoolsCatCommandline
+from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
+from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
+from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
+from Bio.Sequencing.Applications import SamtoolsIndexCommandline
+from Bio.Sequencing.Applications import SamtoolsMergeCommandline
+from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
+from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
+from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
+from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
+from Bio.Sequencing.Applications import SamtoolsSortCommandline
+#from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
 
 #################################################################
 
@@ -46,19 +52,21 @@ if sys.platform == "win32":
             if samtools_exe:
                 break
 else:
-    import commands
-    output = commands.getoutput("samtools")
+    from Bio._py3k import getoutput
+    output = getoutput("samtools")
 
     #Since "not found" may be in another language, try and be sure this is
     #really the samtools tool's output
     samtools_found = False
-    if "not found" not in output and "samtools" in output \
-    and "samtools (Tools for alignments in the SAM format)" in output:
+    if ("not found" not in output and
+       "samtools" in output and
+       "samtools (Tools for alignments in the SAM format)" in output):
         samtools_exe = "bwa"
 
 if not samtools_exe:
-    raise MissingExternalDependencyError(\
-        "Install samtools and correctly set the file path to the program if you want to use it from Biopython")
+    raise MissingExternalDependencyError(
+        """Install samtools and correctly set the file path to the program
+        if you want to use it from Biopython""")
 
 
 class SamtoolsTestCase(unittest.TestCase):
@@ -68,7 +76,8 @@ class SamtoolsTestCase(unittest.TestCase):
         self.files_to_clean = set()
         self.samfile1 = os.path.join("SamBam", "sam1.sam")
         self.reference = os.path.join("BWA", "human_g1k_v37_truncated.fasta")
-        self.referenceindexfile = os.path.join("BWA", "human_g1k_v37_truncated.fasta.fai")
+        self.referenceindexfile = os.path.join("BWA",
+                                               "human_g1k_v37_truncated.fasta.fai")
         self.samfile2 = os.path.join("SamBam", "sam2.sam")
         self.bamfile1 = os.path.join("SamBam", "bam1.bam")
         self.bamfile2 = os.path.join("SamBam", "bam2.bam")
@@ -81,7 +90,7 @@ class SamtoolsTestCase(unittest.TestCase):
             if os.path.isfile(filename):
                 os.remove(filename)
 
-    def add_files_to_clean(self,filename):
+    def add_files_to_clean(self, filename):
         self.files_to_clean.add(filename)
 
     def test_view(self):
@@ -89,22 +98,25 @@ class SamtoolsTestCase(unittest.TestCase):
 
         cmdline = SamtoolsViewCommandline()
         cmdline.set_parameter("input_file", self.bamfile1)
-        stdout_bam,stderr_bam = cmdline()
-        self.assertTrue(stderr_bam.startswith(""),"SAM file viewing failed: \n%s\nStdout:%s" \
+        stdout_bam, stderr_bam = cmdline()
+        self.assertTrue(stderr_bam.startswith(""),
+                        "SAM file viewing failed: \n%s\nStdout:%s"
                         % (cmdline, stdout_bam))
         cmdline.set_parameter("input_file", self.samfile1)
         cmdline.set_parameter("S", True)
         stdout_sam, stderr_sam = cmdline()
-        self.assertTrue(stderr_sam.startswith("[samopen] SAM header is present:"),
-                        "SAM file  viewing failed:\n%s\nStderr:%s" \
-                        % (cmdline, stderr_sam))
+        self.assertTrue(
+            stderr_sam.startswith("[samopen] SAM header is present:"),
+            "SAM file  viewing failed:\n%s\nStderr:%s"
+            % (cmdline, stderr_sam))
 
     def test_faidx(self):
         cmdline = SamtoolsFaidxCommandline()
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
-        self.assertFalse(stderr, "Samtools faidx failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr))
+        self.assertFalse(stderr,
+                         "Samtools faidx failed:\n%s\nStderr:%s"
+                         % (cmdline, stderr))
         self.assertTrue(os.path.isfile(self.referenceindexfile))
 
     def test_calmd(self):
@@ -117,27 +129,29 @@ class SamtoolsTestCase(unittest.TestCase):
         ## samtools calmd creates one at the time of calling
 
         if os.path.exists(self.referenceindexfile):
-            print "exists"
+            print("exists")
             stderr_calmd_expected = ""
         else:
-            print "doesnt exist"
+            print("doesnt exist")
             stderr_calmd_expected = "[fai_load] build FASTA index.\n"
         stdout, stderr = cmdline()
         if stderr == stderr_calmd_expected:
-            print "SAME"
+            print("SAME")
         else:
-            print "NOT SAME"
-            print stderr
-            print stderr_calmd_expected
-        self.assertTrue(stderr==stderr_calmd_expected, "Samtools calmd failed:\n%s\nStderr:%s" \
+            print("NOT SAME")
+            print(stderr)
+            print(stderr_calmd_expected)
+        self.assertTrue(stderr == stderr_calmd_expected,
+                        "Samtools calmd failed:\n%s\nStderr:%s"
                         % (cmdline, stderr))
 
     def test_cat(self):
         cmdline = SamtoolsCatCommandline()
         cmdline.set_parameter("o", self.outbamfile)
-        cmdline.set_parameter("input_bam", [self.bamfile1,self.bamfile2])
+        cmdline.set_parameter("input_bam", [self.bamfile1, self.bamfile2])
         stdout, stderr = cmdline()
-        self.assertTrue(stderr=="", "Samtools cat failed:\n%s\nStderr:%s"\
+        self.assertTrue(stderr == "",
+                        "Samtools cat failed:\n%s\nStderr:%s"
                         % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
@@ -151,16 +165,17 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         cmdline.set_parameter("out_prefix", "bam1")
         stdout, stderr = cmdline()
-        self.assertFalse(stderr, "Samtools sort failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr))
+        self.assertFalse(stderr,
+                         "Samtools sort failed:\n%s\nStderr:%s"
+                         % (cmdline, stderr))
 
     def test_index(self):
         cmdline = SamtoolsIndexCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertFalse(stderr, "Samtools index failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr))
-
+        self.assertFalse(stderr,
+                         "Samtools index failed:\n%s\nStderr:%s"
+                         % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.bamindexfile1))
 
     def test_idxstats(self):
@@ -168,17 +183,19 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsIdxstatsCommandline()
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertFalse(stderr, "Samtools idxstats failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr))
+        self.assertFalse(stderr,
+                         "Samtools idxstats failed:\n%s\nStderr:%s"
+                         % (cmdline, stderr))
 
     def test_merge(self):
         cmdline = SamtoolsMergeCommandline()
-        cmdline.set_parameter("input_bam",[self.bamfile1, self.bamfile2])
+        cmdline.set_parameter("input_bam", [self.bamfile1, self.bamfile2])
         cmdline.set_parameter("out_bam", self.outbamfile)
-        cmdline.set_parameter("f", True) ## Overwrite out.bam if it exists
+        cmdline.set_parameter("f", True)  # Overwrite out.bam if it exists
         stdout, stderr = cmdline()
-        self.assertFalse(stderr, "Samtools merge failed:\n%s\nStderr:%s"\
-                        % (cmdline, stderr)    )
+        self.assertFalse(stderr,
+                         "Samtools merge failed:\n%s\nStderr:%s"
+                         % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
 
@@ -205,8 +222,6 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_targetcut(self):
         pass
-
-
 
 
 if __name__ == "__main__":
