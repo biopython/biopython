@@ -42,7 +42,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
             _Switch(["-u", "u"],
                     """Output uncompressed BAM.
 
-                    This option saves time spent on compression/decomprssion
+                    This option saves time spent on compression/decompression
                     and is thus preferred when the output is piped to
                     another samtools command"""),
             _Switch(["-H", "H"], "Output the header only"),
@@ -435,7 +435,7 @@ class SamtoolsIndexCommandline(AbstractCommandline):
 class SamtoolsIdxstatsCommandline(AbstractCommandline):
     """Command line wrapper for samtools idxstats.
 
-    Retrieve and print stats in the index file,equivalent to:
+    Retrieve and print stats in the index file, equivalent to:
 
     $ samtools idxstats <aln.bam>
 
@@ -553,7 +553,7 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
         self.parameters = [
             _StaticArgument("rmdup"),
             _Switch(["-s", "s"],
-                    """Remove duplicate for single-end reads.
+                    """Remove duplicates for single-end reads.
 
                     By default, the command works for paired-end
                     reads only"""),
@@ -655,7 +655,7 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("targetcut"),
-            _Option(["-Q", "Q"], "Minimum Base Qulaity ",
+            _Option(["-Q", "Q"], "Minimum Base Quality ",
                     equate=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Option(["-i", "i"], "Insertion Penalty",
