@@ -672,16 +672,17 @@ class _Argument(_AbstractParameter):
             return "%s " % self.value
 
 class _ArgumentList(_Argument):
+    """Represent a variable list of arguments on a command line, e.g. multiple filenames."""
+    #TODO - Option to require at least one value? e.g. min/max count?
+
     def __str__(self):
         assert isinstance(self.value, list), \
                 "Arguments should be a list"
-        assert self.value, "Requires atleast one filename"
-        """
-            A trailing space is required so that parameters following the last filename in 'v'
-            do not appear merged.
-            E.g:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
-                  samtools cat in1.bam in2.bam -o out.sam  [with trailing space][Correct]
-        """
+        assert self.value, "Requires at least one filename"
+        # A trailing space is required so that parameters following the last filename
+        # do not appear merged.
+        # e.g.:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
+        #        samtools cat in1.bam in2.bam -o out.sam  [with trailing space][Correct]
         if self.is_filename:
             return " ".join(_escape_filename(v) for v in self.value) + " "
         else:
