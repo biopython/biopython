@@ -19,6 +19,9 @@ Bio.Entrez will now automatically download and cache new NCBI DTD files for
 XML parsing under the user's home directory (using ``~/.biopython`` on
 Unix like systems, and ``$APPDATA/biopython`` on Windows).
 
+Bio.Sequencing.Applications now includes a wrapper for the samtools command
+line tool.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -27,6 +30,7 @@ Eric Talevich
 Leighton Pritchard
 Michiel de Hoon
 Peter Cock
+Saket Choudhary
 Vincent Davis (first contribution)
 Wibowo 'Bow' Arindrarto
 Yanbo Ye (first contribution)
