@@ -613,7 +613,7 @@ class _Switch(_AbstractParameter):
     "human readable" name describing the option in one word. This
     must be a valid Python identifer as it is used as the property
     name and as a keyword argument, and should therefore follow PEP8
-    naming. 
+    naming.
 
     o description -- a description of the option. This is used as
     the property docstring.
@@ -683,6 +683,23 @@ class _ArgumentList(_Argument):
         # do not appear merged.
         # e.g.:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
         #        samtools cat in1.bam in2.bam -o out.sam  [with trailing space][Correct]
+        if self.is_filename:
+            return " ".join(_escape_filename(v) for v in self.value) + " "
+        else:
+            return " ".join(self.value) + " "
+
+
+class _ArgumentList(_Argument):
+    def __str__(self):
+        assert isinstance(self.value, list), \
+                "Arguments should be a list"
+        assert self.value, "Requires atleast one filename"
+        """
+            A trailing space is required so that parameters following the last filename in 'v'
+            do not appear merged.
+            E.g:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
+                  samtools cat in1.bam in2.bam -o out.sam  [with trailing space][Correct]
+        """
         if self.is_filename:
             return " ".join(_escape_filename(v) for v in self.value) + " "
         else:
