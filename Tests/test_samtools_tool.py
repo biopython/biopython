@@ -41,11 +41,10 @@ if sys.platform == "win32":
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
-    #A default path of C:\Program Files\samtools.exe was chosen
-    #but this path can be edited depending on where samtools is located
-
-    likely_dirs = ["samtools", "Samtools", "SAMtools"]
-    likely_exes = ["samtools.exe", "Samtools.exe", "SAMtools.exe"]
+    # By default tries C:\Program Files\samtools\samtools.exe
+    # or  C:\Program Files\samtools.exe was chosen
+    likely_dirs = ["samtools", ""]
+    likely_exes = ["samtools.exe"]
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
@@ -60,11 +59,9 @@ else:
 
     #Since "not found" may be in another language, try and be sure this is
     #really the samtools tool's output
-    samtools_found = False
     if ("not found" not in output and
-       "samtools" in output and
        "samtools (Tools for alignments in the SAM format)" in output):
-        samtools_exe = "bwa"
+        samtools_exe = "samtools"
 
 if not samtools_exe:
     raise MissingExternalDependencyError(
@@ -99,7 +96,7 @@ class SamtoolsTestCase(unittest.TestCase):
     def test_view(self):
         """Test for samtools view"""
 
-        cmdline = SamtoolsViewCommandline()
+        cmdline = SamtoolsViewCommandline(samtools_exe)
         cmdline.set_parameter("input_file", self.bamfile1)
         stdout_bam, stderr_bam = cmdline()
         self.assertTrue(stderr_bam.startswith(""),
@@ -114,7 +111,7 @@ class SamtoolsTestCase(unittest.TestCase):
             % (cmdline, stderr_sam))
 
     def test_faidx(self):
-        cmdline = SamtoolsFaidxCommandline()
+        cmdline = SamtoolsFaidxCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
         self.assertFalse(stderr,
@@ -125,7 +122,7 @@ class SamtoolsTestCase(unittest.TestCase):
     def test_calmd(self):
         """Test for samtools calmd"""
 
-        cmdline = SamtoolsCalmdCommandline()
+        cmdline = SamtoolsCalmdCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         cmdline.set_parameter("input_bam", self.bamfile1)
         ## If there is no index file for the reference
@@ -149,7 +146,7 @@ class SamtoolsTestCase(unittest.TestCase):
                         % (cmdline, stderr))
 
     def test_cat(self):
-        cmdline = SamtoolsCatCommandline()
+        cmdline = SamtoolsCatCommandline(samtools_exe)
         cmdline.set_parameter("o", self.outbamfile)
         cmdline.set_parameter("input_bam", [self.bamfile1, self.bamfile2])
         stdout, stderr = cmdline()
@@ -164,7 +161,7 @@ class SamtoolsTestCase(unittest.TestCase):
         pass
 
     def test_sort(self):
-        cmdline = SamtoolsSortCommandline()
+        cmdline = SamtoolsSortCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", self.bamfile1)
         cmdline.set_parameter("out_prefix", "bam1")
         stdout, stderr = cmdline()
@@ -173,7 +170,7 @@ class SamtoolsTestCase(unittest.TestCase):
                          % (cmdline, stderr))
 
     def test_index(self):
-        cmdline = SamtoolsIndexCommandline()
+        cmdline = SamtoolsIndexCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
         self.assertFalse(stderr,
@@ -183,7 +180,7 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_idxstats(self):
         self.test_index()
-        cmdline = SamtoolsIdxstatsCommandline()
+        cmdline = SamtoolsIdxstatsCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
         self.assertFalse(stderr,
@@ -191,7 +188,7 @@ class SamtoolsTestCase(unittest.TestCase):
                          % (cmdline, stderr))
 
     def test_merge(self):
-        cmdline = SamtoolsMergeCommandline()
+        cmdline = SamtoolsMergeCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", [self.bamfile1, self.bamfile2])
         cmdline.set_parameter("out_bam", self.outbamfile)
         cmdline.set_parameter("f", True)  # Overwrite out.bam if it exists
@@ -203,13 +200,13 @@ class SamtoolsTestCase(unittest.TestCase):
         self.add_files_to_clean(self.outbamfile)
 
     def test_mpileup(self):
-        cmdline = SamtoolsMpileupCommandline()
+        cmdline = SamtoolsMpileupCommandline(samtools_exe)
         cmdline.set_parameter("input_file", [self.bamfile1])
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
 
     def test_mpileup_list(self):
-        cmdline = SamtoolsMpileupCommandline()
+        cmdline = SamtoolsMpileupCommandline(samtools_exe)
         cmdline.set_parameter("input_file", [self.bamfile1, self.bamfile2])
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
