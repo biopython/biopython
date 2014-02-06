@@ -17,7 +17,7 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PY3=yes; fi"
   - "sudo apt-get install clustalw clustalo"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss"
-  - "sudo apt-get install samtools"
+  - "sudo apt-get install samtools bwa"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
