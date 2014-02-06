@@ -129,30 +129,20 @@ class SamtoolsTestCase(unittest.TestCase):
         ## samtools calmd creates one at the time of calling
 
         if os.path.exists(self.referenceindexfile):
-            print("exists")
+            #print("exists")
             stderr_calmd_expected = ""
         else:
-            print("doesnt exist")
+            #print("doesnt exist")
             stderr_calmd_expected = "[fai_load] build FASTA index.\n"
         stdout, stderr = cmdline()
-        if stderr == stderr_calmd_expected:
-            print("SAME")
-        else:
-            print("NOT SAME")
-            print(stderr)
-            print(stderr_calmd_expected)
-        self.assertTrue(stderr == stderr_calmd_expected,
-                        "Samtools calmd failed:\n%s\nStderr:%s"
-                        % (cmdline, stderr))
+        self.assertEqual(stderr, stderr_calmd_expected)
 
     def test_cat(self):
         cmdline = SamtoolsCatCommandline(samtools_exe)
         cmdline.set_parameter("o", self.outbamfile)
         cmdline.set_parameter("input_bam", [self.bamfile1, self.bamfile2])
         stdout, stderr = cmdline()
-        self.assertTrue(stderr == "",
-                        "Samtools cat failed:\n%s\nStderr:%s"
-                        % (cmdline, stderr))
+        self.assertEqual(stderr, "")
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
 
