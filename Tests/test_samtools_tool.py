@@ -146,9 +146,7 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.outbamfile))
         self.add_files_to_clean(self.outbamfile)
 
-    def test_fixmate(self):
-        ##TODO : Needs a name-sorted alignment file
-        pass
+    #TODO: def test_fixmate(self):
 
     def test_sort(self):
         cmdline = SamtoolsSortCommandline(samtools_exe)
@@ -201,17 +199,11 @@ class SamtoolsTestCase(unittest.TestCase):
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
 
-    def test_phase(self):
-        pass
+    #TODO: def test_phase(self):
+    #TODO: def test_reheader(self):
+    #TODO: def test_rmdup(self):
+    #TODO: def test_targetcut(self):
 
-    def test_reheader(self):
-        pass
-
-    def test_rmdup(self):
-        pass
-
-    def test_targetcut(self):
-        pass
 
 
 if __name__ == "__main__":
