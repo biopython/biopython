@@ -29,11 +29,8 @@ if sys.platform == "win32":
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
-    #A default path of C:\Program Files\bwa.exe was chosen
-    #but this path can be edited depending on where bwa is located
-
-    likely_dirs = ["bwa", "BWA", "Bwa", "bwa-0.6.2"]
-    likely_exes = ["bwa.exe", "BWA.exe", "Bwa.exe"]
+    likely_dirs = ["bwa", "bwa-0.6.2", ""]
+    likely_exes = ["bwa"]
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
@@ -72,7 +69,7 @@ class BwaTestCase(unittest.TestCase):
 
     def test_index(self):
         """Test for creating index files for the reference genome fasta file"""
-        cmdline = BwaIndexCommandline()
+        cmdline = BwaIndexCommandline(bwa_exe)
         cmdline.set_parameter("infile", self.reference_file)
         cmdline.set_parameter("algorithm", "bwtsw")
         stdout, stderr = cmdline()
@@ -83,7 +80,7 @@ class BwaTestCase(unittest.TestCase):
 
     def do_aln(self, in_file, out_file):
         """Test for generating sai files given the reference and read file"""
-        cmdline = BwaAlignCommandline()
+        cmdline = BwaAlignCommandline(bwa_exe)
         cmdline.set_parameter("reference", self.reference_file)
         cmdline.read_file = in_file
         self.assertTrue(os.path.isfile(in_file))
@@ -95,7 +92,7 @@ class BwaTestCase(unittest.TestCase):
 
     def test_samse(self):
         """Test for single end sequencing """
-        cmdline = BwaSamseCommandline()
+        cmdline = BwaSamseCommandline(bwa_exe)
         cmdline.set_parameter("reference", self.reference_file)
         cmdline.set_parameter("read_file", self.infile1)
         cmdline.set_parameter("sai_file", self.saifile1)
@@ -113,7 +110,7 @@ class BwaTestCase(unittest.TestCase):
         self.do_aln(self.infile1, self.saifile1)
         self.do_aln(self.infile2, self.saifile2)
 
-        cmdline = BwaSampeCommandline()
+        cmdline = BwaSampeCommandline(bwa_exe)
         cmdline.set_parameter("reference", self.reference_file)
         cmdline.set_parameter("sai_file1", self.saifile1)
         cmdline.set_parameter("sai_file2", self.saifile2)
