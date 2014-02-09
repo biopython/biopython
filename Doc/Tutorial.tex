@@ -798,6 +798,34 @@ Seq('ACGT', IUPACUnambiguousDNA())
 Seq('GATCGATGCACGT', NucleotideAlphabet())
 \end{verbatim}
 
+You may often have many sequences to add together, which can be done with a for loop like this:
+
+%doctest
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
+>>> list_of_seqs = [Seq("ACGT", generic_dna), Seq("AACC", generic_dna), Seq("GGTT", generic_dna)]
+>>> concatenated = Seq("", generic_dna)
+>>> for s in list_of_seqs:
+...      concatenated += s
+...
+>>> concatenated
+Seq('ACGTAACCGGTT', DNAAlphabet())
+\end{verbatim}
+
+Or, a more elegant approach is to the use built in \verb|sum| function with its optional start value argument (which otherwise defaults to zero):
+
+%doctest
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
+>>> list_of_seqs = [Seq("ACGT", generic_dna), Seq("AACC", generic_dna), Seq("GGTT", generic_dna)]
+>>> sum(list_of_seqs, Seq("", generic_dna))
+Seq('ACGTAACCGGTT', DNAAlphabet())
+\end{verbatim}
+
+Unlike the Python string, the Biopython \verb|Seq| does not (currently) have a \verb|.join| method.
+
 \section{Changing case}
 
 Python strings have very useful \verb|upper| and \verb|lower| methods for changing the case.
