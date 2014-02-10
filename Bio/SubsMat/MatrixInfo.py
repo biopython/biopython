@@ -25,6 +25,20 @@ available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'slim161', 'structure'
                      ]
 
+
+#Build a dictionary with both key orders.
+def mirror_matrix(matrix):  #e.g., MatrixInfo.mirror_matrix(MatrixInfo.blosum62)
+    converted_matrix = {}
+    for key in matrix:
+        converted_matrix[key] = matrix[key]        
+        try:
+            #By doing a try-catch for the mirroring, the function will handle non-symmetric matrices like SLIM
+            converted_matrix[(key[1],key[0])] = matrix[(key[1],key[0])]
+        except KeyError:
+            converted_matrix[(key[1],key[0])] = matrix[key]
+    return converted_matrix
+
+
 #NOTE - The only reason we define temp functions rather than assigning
 #the dictionaries directly to variables is to work around a JVM
 #limitation on code size if running under Jython. The temp functions
