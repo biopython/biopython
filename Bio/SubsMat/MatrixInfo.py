@@ -21,22 +21,9 @@ available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'ident', 'johnson', 'levin', 'mclach',
                       'miyata', 'nwsgappep', 'pam120', 'pam180',
                       'pam250', 'pam30', 'pam300', 'pam60',
-                      'pam90', 'rao', 'risler', 'structure', 
-                      'slim161', 'phat75_73'
+                      'pam90', 'phat75_73', 'rao', 'risler', 
+                      'slim161', 'structure'
                      ]
-
-
-#Build a dictionary with both key orders. This should be moved into the SubsMat class
-def full_matrix(matrix):  #e.g., MatrixInfo.mirror_matrix(MatrixInfo.blosum62)
-    converted_matrix = {}
-    for key in matrix:
-        converted_matrix[key] = matrix[key]        
-        try:
-            #By doing a try-catch for the mirroring, the function will handle non-symmetric matrices like SLIM
-            converted_matrix[(key[1],key[0])] = matrix[(key[1],key[0])]
-        except KeyError:
-            converted_matrix[(key[1],key[0])] = matrix[key]
-    return converted_matrix
 
 
 #NOTE - The only reason we define temp functions rather than assigning
