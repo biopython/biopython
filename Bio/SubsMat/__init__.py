@@ -51,10 +51,9 @@ Full matrix size:N*N
 Half matrix size: N(N+1)/2
 
 If you provide a full matrix, the constructor will create a half-matrix
-automatically.
-If you provide a half-matrix, make sure of a (low, high) sorted order in
-the keys: there should only be
-a ('A','C') not a ('C','A').
+automatically, unless the non_synon parameter is set to True.
+If you provide a half-matrix, the keys will be sorted into a (low, high)
+order; i.e., ('A','C'), not ('C','A').
 
 Internal functions:
 
@@ -134,10 +133,10 @@ EPSILON = 0.00000000000001
 
 
 class SeqMat(dict):
-    """A Generic sequence matrix class
-    The key is a 2-tuple containing the letter indices of the matrix. Those
-    should be sorted in the tuple (low, high). Because each matrix is dealt
-    with as a half-matrix."""
+    """A Generic sequence matrix class.
+    The key is a 2-tuple containing the letter indices of the matrix. 
+    These will be sorted in the tuple (low, high), if dealing
+    with a half-matrix."""
 
     def _alphabet_from_matrix(self):
         ab_dict = {}
@@ -149,7 +148,7 @@ class SeqMat(dict):
             s += i
         self.alphabet.letters = s
 
-    def __init__(self, data=None, alphabet=None, mat_name='', build_later=0):
+    def __init__(self, data=None, alphabet=None, mat_name='', build_later=0, non_synon=0):
         # User may supply:
         # data: matrix itself
         # mat_name: its name. See below.
@@ -158,6 +157,8 @@ class SeqMat(dict):
         # build_later: skip the matrix size assertion. User will build the
         # matrix after creating the instance. Constructor builds a half matrix
         # filled with zeroes.
+        # non_synon: if the substitution scores for AA pairs are not the same
+        # as their reverse, a full 20x20 matrix is necessary
 
         assert isinstance(mat_name, str)
 
@@ -189,12 +190,23 @@ class SeqMat(dict):
         self.ab_list.sort()
         # Names: a string like "BLOSUM62" or "PAM250"
         self.mat_name = mat_name
-        if build_later:
+        
+        if build_later and not non_synon:
+            self.non_synon = False
+            self._init_zero()    
+        elif build_later and non_synon:
+            self.non_synon = True
             self._init_zero()
-        else:
+            self.make_full_mat()
+        elif not build_later and non_synon:
+            self.non_synon = True
+            self.make_full_mat()
+        else: #not build_later and not non_synon. i.e., default
             # Convert full to half
+            self.non_synon = False
             self._full_to_half()
             self._correct_matrix()
+            
         self.sum_letters = {}
         self.relative_entropy = 0
 
@@ -224,7 +236,8 @@ class SeqMat(dict):
 
     def _init_zero(self):
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i)+1]:
+            j_range = self.ab_list if (self.non_synon == True) else self.ab_list[:self.ab_list.index(i)+1]
+            for j in j_range:
                 self[j, i] = 0.
 
     def make_entropy(self):
@@ -247,6 +260,18 @@ class SeqMat(dict):
                 result[i2] += value / 2
         return result
 
+    #Fill in both key pair orders
+    def make_full_mat(self):
+        self.non_synon = True
+        temp_copy = copy.copy(self)
+        for key in temp_copy:
+            try:
+                #don't over-write the reverse keys if they are already initialized
+                test_key = self[(key[1],key[0])]
+            except KeyError:
+                self[(key[1],key[0])] = self[key]
+        
+
     def print_full_mat(self, f=None, format="%4d", topformat="%4s",
                 alphabet=None, factor=1, non_sym=None):
         f = f or sys.stdout
@@ -255,9 +280,10 @@ class SeqMat(dict):
         assert non_sym is None or isinstance(non_sym, float) or \
         isinstance(non_sym, int)
         full_mat = copy.copy(self)
-        for i in self:
-            if i[0] != i[1]:
-                full_mat[(i[1], i[0])] = full_mat[i]
+        if self.non_synon == False:
+            for i in self:
+                full_mat[(i[1],i[0])] = full_mat[i]
+                
         if not alphabet:
             alphabet = self.ab_list
         topline = ''
@@ -288,41 +314,48 @@ class SeqMat(dict):
         User may pass own alphabet, which should contain all letters in the
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes"""
-
-        f = f or sys.stdout
-        if not alphabet:
-            alphabet = self.ab_list
-        bottomline = ''
-        for i in alphabet:
-            bottomline = bottomline + bottomformat % i
-        bottomline = bottomline + '\n'
-        for i in alphabet:
-            outline = i
-            for j in alphabet[:alphabet.index(i)+1]:
-                try:
-                    val = self[j, i]
-                except KeyError:
-                    val = self[i, j]
-                val *= factor
-                if val == -999:
-                    cur_str = '  ND'
-                else:
-                    cur_str = format % val
-
-                outline = outline + cur_str
-            outline = outline + '\n'
-            f.write(outline)
-        f.write(bottomline)
+        if self.non_synon == False:           
+            f = f or sys.stdout
+            if not alphabet:
+                alphabet = self.ab_list
+            bottomline = ''
+            for i in alphabet:
+                bottomline = bottomline + bottomformat % i
+            bottomline = bottomline + '\n'
+            for i in alphabet:
+                outline = i
+                for j in alphabet[:alphabet.index(i)+1]:
+                    try:
+                        val = self[j, i]
+                    except KeyError:
+                        val = self[i, j]
+                    val *= factor
+                    if val == -999:
+                        cur_str = '  ND'
+                    else:
+                        cur_str = format % val
+    
+                    outline = outline + cur_str
+                outline = outline + '\n'
+                f.write(outline)
+            f.write(bottomline)
+        else:
+            self.print_full_mat()
 
     def __str__(self):
         """Print a nice half-matrix."""
         output = ""
         alphabet = self.ab_list
         n = len(alphabet)
+        
+        if self.non_synon == True:
+            output += '%4s' * n % tuple(alphabet) + "\n"
+      
         for i in range(n):
             c1 = alphabet[i]
             output += c1
-            for j in range(i+1):
+            j_range = n if (self.non_synon == True) else (i+1)
+            for j in range(j_range):
                 c2 = alphabet[j]
                 try:
                     val = self[c2, c1]
@@ -333,7 +366,9 @@ class SeqMat(dict):
                 else:
                     output += "%4d" % val
             output += '\n'
-        output += '%4s' * n % tuple(alphabet) + "\n"
+        
+        if self.non_synon == False:
+            output += '%4s' * n % tuple(alphabet) + "\n"
         return output
 
     def __sub__(self, other):
