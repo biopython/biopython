@@ -37,7 +37,6 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 #Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import quote as _quote
 
 #Constant
@@ -301,10 +300,10 @@ def convert(data, in_format, out_format):
     #TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
         #Handle
-        return _open(url, post={"data": data.read()})
+        return _open(url, post=data.read())
     else:
         #String
-        return _open(url, post={"data": data})
+        return _open(url, post=data)
 
 
 def _open(url, post=None):
@@ -326,7 +325,7 @@ def _open(url, post=None):
 
     #print(url)
     if post:
-        handle = _urlopen(url, _as_bytes(_urlencode(post)))
+        handle = _urlopen(url, _as_bytes(post))
     else:
         handle = _urlopen(url)
 
