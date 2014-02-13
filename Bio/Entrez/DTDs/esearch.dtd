@@ -1,0 +1,103 @@
+<!--
+                This is the Current DTD for Entrez eSearch
+$Id: eSearch_020511.dtd 85163 2006-06-28 17:35:21Z olegh $
+-->
+<!-- ================================================================= -->
+
+<!--~~ !dtd
+~~json 
+    <json type='esearch' version='0.3'>
+      <config lcnames='true'/>
+    </json>
+~~-->
+
+<!ELEMENT       eSearchResult  (
+                                 (
+                                   (
+                                     Count,
+                                     ( RetMax,
+                                       RetStart,
+                                       QueryKey?,
+                                       WebEnv?,
+                                       IdList,
+                                       TranslationSet,
+                                       TranslationStack?,
+                                       QueryTranslation
+                                      )?
+                                   ) | ERROR
+                                 ),
+                                 ErrorList?,
+                                 WarningList?
+                               )>
+
+
+<!ELEMENT       Count             (#PCDATA)>  <!-- \d+ -->
+<!ELEMENT       RetMax            (#PCDATA)>  <!-- \d+ -->
+<!ELEMENT       RetStart          (#PCDATA)>  <!-- \d+ -->
+<!ELEMENT       Id                (#PCDATA)>  <!-- \d+ -->
+
+<!ELEMENT       From              (#PCDATA)>  <!-- .+ -->
+<!ELEMENT       To                (#PCDATA)>  <!-- .+ -->
+<!ELEMENT       Term              (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT       Field             (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT       QueryKey          (#PCDATA)>  <!-- \d+ -->
+<!ELEMENT       WebEnv            (#PCDATA)>  <!-- \S+ -->
+
+<!ELEMENT       Explode           (#PCDATA)>  <!-- (Y|N) -->
+<!ELEMENT       OP                (#PCDATA)>  <!-- (AND|OR|NOT|RANGE|GROUP) -->
+<!ELEMENT       IdList            (Id*)>
+
+<!ELEMENT       Translation       (From, To)>
+<!ELEMENT       TranslationSet    (Translation*)>
+
+<!ELEMENT       TermSet           (Term, Field, Count, Explode)>
+
+<!--~~ <TranslationStack>
+~~ json <array/>
+~~-->
+<!ELEMENT       TranslationStack  ((TermSet|OP)*)>
+
+<!-- Error message tags  -->
+<!--~~ <ERROR>
+~~ json <json key="ERROR"/>
+~~-->
+<!ELEMENT        ERROR                  (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT        OutputMessage          (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT        QuotedPhraseNotFound   (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT        PhraseIgnored          (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT        FieldNotFound          (#PCDATA)>  <!-- .+ -->
+
+<!ELEMENT        PhraseNotFound         (#PCDATA)>  <!-- .+ -->
+
+
+<!ELEMENT        QueryTranslation       (#PCDATA)>  <!-- .+ -->
+
+<!--~~ <ErrorList>
+~~ json
+  <object>
+    <array key="phrasesnotfound" select='PhraseNotFound'/>
+    <array key="fieldsnotfound" select='FieldsNotFound'/>
+  </object>
+~~-->
+<!ELEMENT        ErrorList      (PhraseNotFound*,FieldNotFound*)>
+
+<!--~~ <WarningList>
+~~ json
+  <object>
+    <array key="phrasesignored" select='PhraseIgnored'/>
+    <array key="quotedphrasesnotfound" select='QuotedPhraseNotFound'/>
+    <array key="outputmessages" select='OutputMessage'/>
+  </object>
+~~-->
+<!ELEMENT        WarningList    ( PhraseIgnored*,
+                                  QuotedPhraseNotFound*,
+                                  OutputMessage* )>
+
+
+
