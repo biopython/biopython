@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 1 December 2013 (Biopython 1.63+)}
+\date{Last Update -- 16 February 2014 (Biopython 1.63+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4799,6 +4799,7 @@ Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
 ...                          stdin=subprocess.PIPE,
 ...                          stdout=subprocess.PIPE,
 ...                          stderr=subprocess.PIPE,
+...                          universal_newlines=True,
 ...                          shell=(sys.platform!="win32"))                     
 \end{verbatim}
 
@@ -4835,7 +4836,8 @@ caution: Dealing with errors with this style of calling external programs is muc
 complicated.
 It also becomes far harder to diagnose problems, because you can't try running MUSCLE
 manually outside of Biopython (because you don't have the input file to supply).
-There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
+There can also be subtle cross platform issues (e.g. Windows versus Linux,
+Python 2 versus Python 3), and how
 you run your script can have an impact (e.g. at the command line, from IDLE or an
 IDE, or as a GUI script). These are all generic Python issues though, and not
 specific to Biopython.
