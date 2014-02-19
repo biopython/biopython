@@ -6,25 +6,27 @@
 import os
 import unittest
 from Bio.PopGen import SimCoal
-from Bio.PopGen.SimCoal.Controller import SimCoalController
+from Bio.PopGen.SimCoal.Controller import SimCoalController, FastSimCoalController
 from Bio import MissingExternalDependencyError
 
-#Tests simcoal related code. Note: this case requires simcoal
-#test_PopGen_SimCoal_nodepend tests code that does not require simcoal
+#Tests simcoal related code. Note: this case requires simcoal and fastsimcoal
+#test_PopGen_SimCoal_nodepend tests code that does not require simcoal or fastsimcoal
 
-found = False
-for path in os.environ['PATH'].split(os.pathsep):
-    try:
-        for filename in os.listdir(path):
-            if filename == "simcoal2" \
-            or (filename.lower() == "simcoal2.exe"):
-                found = True
-                simcoal_dir = path
-    except os.error:
-        pass  # Path doesn't exist - correct to pass
-if not found:
-    raise MissingExternalDependencyError(
-        "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
+def CheckForExecutable(exe):
+    found = False
+    for path in os.environ['PATH'].split(os.pathsep):
+        try:
+            for filename in os.listdir(path):
+                if filename == exe \
+                or (filename.lower() == exe+".exe"):
+                    found = True
+                    exe_dir = path
+        except os.error:
+            pass  # Path doesn't exist - correct to pass
+    if not found:
+        raise MissingExternalDependencyError(
+            "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
+    return exe_dir
 
 
 class AppTest(unittest.TestCase):
@@ -48,11 +50,25 @@ class AppTest(unittest.TestCase):
     def test_simcoal(self):
         """Test simcoal execution.
         """
+        simcoal_dir = CheckForExecutable("simcoal2")
         ctrl = SimCoalController(simcoal_dir)
         ctrl.run_simcoal('simple.par', 50, par_dir = 'PopGen')
         assert os.path.isdir(os.path.join('PopGen', 'simple')), \
                "Output directory not created!"
         assert( len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
+        self.tidy()
+
+    def test_fastsimcoal(self):
+        """Test simcoal execution.
+        """
+        fastsimcoal_dir = CheckForExecutable("fastsimcoal21")
+        print fastsimcoal_dir
+        ctrl = FastSimCoalController(fastsimcoal_dir=fastsimcoal_dir)
+        ctrl.run_fastsimcoal('simple.par', 50, par_dir = 'PopGen')
+        assert os.path.isdir(os.path.join('PopGen', 'simple')), \
+               "Output directory not created!"
+        assert( len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
+        self.tidy()
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
