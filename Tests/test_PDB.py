@@ -157,7 +157,7 @@ class HeaderTests(unittest.TestCase):
         """Parse the header of another PDB file (2BEG)."""
         parser = PDBParser()
         struct = parser.get_structure('2BEG', 'PDB/2BEG.pdb')
-        self.assertAlmostEqual(struct.header['resolution'], None)
+        self.assertEqual(struct.header['resolution'], None)
         self.assertAlmostEqual(struct.header['cell'][0], 1.0)
         self.assertAlmostEqual(struct.header['cell'][1], 1.0)
         self.assertAlmostEqual(struct.header['cell'][2], 1.0)
