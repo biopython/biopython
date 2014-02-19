@@ -451,8 +451,6 @@ class DistanceCalculator(object):
         :Parameters:
             msa : MultipleSeqAlignment
                 DNA or Protein multiple sequence alignment.
-            output : output name of phylip distance matrix
-                File name of distance matrix
         """
 
         if not isinstance(msa, MultipleSeqAlignment):
