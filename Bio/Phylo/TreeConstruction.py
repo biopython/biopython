@@ -6,6 +6,7 @@
 """Classes and methods for tree construction"""
 __docformat__ = "restructuredtext en"
 
+from __future__ import print_function
 import itertools
 import copy
 from Bio.Phylo import BaseTree
@@ -393,7 +394,12 @@ class DistanceCalculator(object):
     models = ['identity'] + dna_models + protein_models
 
     def __init__(self, model='identity', verbose=False):
-        """Initialize with a distance model"""
+        """Initialize with a distance model
+
+        Params:
+            model - scoring matrix to use
+            verbose - print out status of distancematrix construction
+        """
 
         if model == 'identity':
             self.scoring_matrix = None
@@ -461,7 +467,7 @@ class DistanceCalculator(object):
         dm = _DistanceMatrix(names)
         for seq1, seq2 in itertools.combinations(msa, 2):
             if self.verbose and (seq1.id != verbose_name):
-                print "Getting Distance From {0}".format(seq1.id)
+                print("Getting Distance From {0}".format(seq1.id))
                 verbose_name = seq1.id
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
