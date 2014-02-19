@@ -25,7 +25,7 @@ def CheckForExecutable(exe):
             pass  # Path doesn't exist - correct to pass
     if not found:
         raise MissingExternalDependencyError(
-            "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
+            "Install %s if you want to use Bio.PopGen.SimCoal."%exe)
     return exe_dir
 
 
