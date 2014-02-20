@@ -178,6 +178,9 @@ class FastSimCoalController(object):
 
         The initializer checks for existence and executability of binaries
         and sets up the command line controller.
+
+        Fastsimcoal2 is available here: http://cmpg.unibe.ch/software/fastsimcoal2/.
+        This wrapper was written and tested for fastsimcoal version 2.01.
         """
         self.bin_name = bin_name
         self.fastsimcoal_dir = fastsimcoal_dir
