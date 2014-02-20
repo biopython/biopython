@@ -23,7 +23,8 @@ for path in os.environ['PATH'].split(os.pathsep):
         pass  # Path doesn't exist - correct to pass
 if not found:
     raise MissingExternalDependencyError(
-        "Install FASTSIMCOAL if you want to use Bio.PopGen.SimCoal.")
+        """"Install fastsimcoal if you want to use
+        Bio.PopGen.SimCoal.Controller.FastSimCoalController.""")
 
 class AppTest(unittest.TestCase):
     """Tests fastsimcoal execution via biopython.
