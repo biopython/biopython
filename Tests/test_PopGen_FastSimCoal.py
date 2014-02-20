@@ -9,7 +9,7 @@ import os
 import shutil
 import unittest
 
-#Tests simcoal related code. Note: this case requires fastsimcoal21
+#Tests fastsimcoal related code. Note: this case requires fastsimcoal21
 
 def CheckForExecutable(exe):
     found = False
