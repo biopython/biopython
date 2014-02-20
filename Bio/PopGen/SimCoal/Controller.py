@@ -81,12 +81,12 @@ class _FastSimCoalCommandLine(AbstractCommandline):
                     filename=True, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, str)),
             _Option(["-F", "--dFile", "dFile"],
-                    """ Same as -f but only uses simple parameters defined
+                    """Same as -f but only uses simple parameters defined
                     in the template file. Complex params are recomputed""",
                     filename=True, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, str)),
             _Option(["-e", "--efile", "efile"],
-                    """ Parameter prior definition file.
+                    """Parameter prior definition file.
                     Parameters drawn from specified distributions are
                     substituted into template file.""",
                     filename=True, equate=False, is_required=False,
@@ -96,8 +96,8 @@ class _FastSimCoalCommandLine(AbstractCommandline):
                     Listed parameter values are substituted in template file.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
-            _Switch(["-g", "--genotypic", "genotypic"], "Generates arelequin projects with genotypic data"),
-            _Switch(["-p", "--phased", "phased"], "Specifies that phase is known in arlequin output"),
+            _Switch(["-g", "--genotypic", "genotypic"], "Generates Arlequin projects with genotypic data"),
+            _Switch(["-p", "--phased", "phased"], "Specifies that phase is known in Arlequin output"),
             _Option(["-s", "--dnatosnp", "dnatosnp"],
                     """"Output DNA as SNP data (0: ancestral, 1: derived
                     and specify maximum no. SNPs to output.""",
@@ -106,7 +106,7 @@ class _FastSimCoalCommandLine(AbstractCommandline):
             _Switch(["-S", "--allsites", "allsites"],
                     """Output the whole DNA sequence, including monomorphic sites"""),
             _Switch(["-I", "--inf", "inf"],
-                    """ Generates DNA mutations according to an
+                    """Generates DNA mutations according to an
                     infinite sites (IS) mutation model."""),
             _Switch(["-d", "--dsfs", "dsfs"], "Computes derived site frequency spectrum"),
             _Switch(["-m", "--msfs", "msfs"], "Computes minor site frequency spectrum"),
@@ -117,52 +117,52 @@ class _FastSimCoalCommandLine(AbstractCommandline):
             _Switch(["-q", "--quiet", "quiet"], "Minimal messages output to console"),
             _Switch(["-T", "--tree", "tree"], "Output coalescent tree in nexus format."),
             _Option(["-k", "--keep", "keep"],
-                    """ Number of simulated polymorphic sites kept in memory.
+                    """Number of simulated polymorphic sites kept in memory.
                     If the simulated no. is larger, then temporary files are created.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
-            _Option(["--seed", "seed"], "Seed for the random number generator (positive int <=1E6",
+            _Option(["--seed", "seed"], "Seed for the random number generator (positive int <=1E6)",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Switch(["-x", "--noarloutput", "noarloutput"], "Does not generate Arlequin output"),
             _Switch(["-D", "--dadioutput", "dadioutput"], "Output SFS in dadi format"),
             _Option(["-M", "--maxlhood", "maxlhood"],
-                    """ Perform parameter estimation by max lhood from SFS, and
+                    """Perform parameter estimation by max lhood from SFS, and
                     define stop criterion as min., rel., diff. in parameter
                     values between iterations""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, float)),
             _Option(["-N", "--maxnumsims", "maxnumsims"],
-                     """ Maximum number of simulations to perform during
+                     """Maximum number of simulations to perform during
                      likelihood maximization.""",
                      filename=False, equate=False, is_required=False,
                      checker_function=lambda x: isinstance(x, int)),
             _Option(["-l", "--minnumloops", "minnumloops"],
-                    """ Minimum number of iteration loops to perform during
+                    """Minimum number of iteration loops to perform during
                     likelihood maximization.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Option(["-L", "--maxnumloops", "maxnumloops"],
-                    """ Maximum number of iterations to perform during
+                    """Maximum number of iterations to perform during
                     likelihood maximization""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Option(["-C", "--minSFSCount", "minSFSCount"],
-                    """ Minimum observed SFS entry count taken into account
+                    """Minimum observed SFS entry count taken into account
                     in likelihood computation""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Switch(["-0", "--removeZeroSFS", "removeZeroSFS"],
-                    """ Do not take into account monomorphic sites for
-                    SFS likelihood computation"""),
+                    """Do not take into account monomorphic sites for
+                    SFS likelihood computation."""),
             _Option(["-a", "--ascDeme", "ascDeme"],
-                    """ This is the deme id where ascertainment is performed
+                    """This is the deme id where ascertainment is performed
                     when simulating SNPs.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Option(["-A", "--ascSize", "ascSize"],
-                    """ Number of ascertained chromosomzes used to define SNPs in 
-                    a given deme. """,
+                    """Number of ascertained chromosomes used to define SNPs in 
+                    a given deme.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Switch(["-u", "--multiSFS", "multiSFS"], "Generate or use multidimensional SFS")
