@@ -11,21 +11,19 @@ import unittest
 
 #Tests fastsimcoal related code. Note: this case requires fastsimcoal21
 
-def CheckForExecutable(exe):
-    found = False
-    for path in os.environ['PATH'].split(os.pathsep):
-        try:
-            for filename in os.listdir(path):
-                if filename == exe \
-                or (filename.lower() == exe+".exe"):
-                    found = True
-                    exe_dir = path
-        except os.error:
-            pass  # Path doesn't exist - correct to pass
-    if not found:
-        raise MissingExternalDependencyError(
-            "Install %s if you want to use Bio.PopGen.SimCoal."%exe)
-    return exe_dir
+found = False
+for path in os.environ['PATH'].split(os.pathsep):
+    try:
+        for filename in os.listdir(path):
+            if filename == "fastsimcoal21" \
+            or (filename.lower() == "fastsimcoal21.exe"):
+                found = True
+                fastsimcoal_dir = path
+    except os.error:
+        pass  # Path doesn't exist - correct to pass
+if not found:
+    raise MissingExternalDependencyError(
+        "Install FASTSIMCOAL if you want to use Bio.PopGen.SimCoal.")
 
 class AppTest(unittest.TestCase):
     """Tests fastsimcoal execution via biopython.
@@ -46,7 +44,6 @@ class AppTest(unittest.TestCase):
     def test_fastsimcoal(self):
         """Test fastsimcoal execution.
         """
-        fastsimcoal_dir = CheckForExecutable("fastsimcoal21")
         ctrl = FastSimCoalController(fastsimcoal_dir=fastsimcoal_dir)
         ctrl.run_fastsimcoal('simple.par', 50, par_dir = 'PopGen')
         assert os.path.isdir(os.path.join('PopGen', 'simple')), \
