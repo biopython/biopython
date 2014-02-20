@@ -175,6 +175,7 @@ class FastSimCoalController(object):
 
         fastsimcoal_dir is the directory where fastsimcoal is.
         By default the binary should be called fastsimcoal21.
+        bin_name specifies a different name for the binary.
 
         The initializer checks for existence and executability of binaries
         and sets up the command line controller.
@@ -199,6 +200,11 @@ class FastSimCoalController(object):
 
     def run_fastsimcoal(self, par_file, num_sims, par_dir = '.', opts = {}):
         """Executes Fastsimcoal.
+
+        par_file is the input parameter file (--ifile) for fastsimcoal.
+        num_sims is the number of simulations to perform.
+        par_dir is the directory where par_file is and where output will be written.
+        opts is a dictionary of additional options to fastsimcoal.
         """
         if par_dir is None:
             par_dir = os.sep.join([".","Fastsimcoal","runs"])
