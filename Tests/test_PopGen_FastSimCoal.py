@@ -3,10 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import os
-import unittest
 from Bio.PopGen.SimCoal.Controller import FastSimCoalController
 from Bio import MissingExternalDependencyError
+import os
+import shutil
+import unittest
 
 #Tests simcoal related code. Note: this case requires fastsimcoal21
 
@@ -37,24 +38,20 @@ class AppTest(unittest.TestCase):
 
     def tidy(self):
         if not os.path.isdir(os.path.join('PopGen', 'simple')):
-            #Unit test must have failed to invoke simcaol,
+            #Unit test must have failed to invoke fastsimcaol21,
             #and thus it never created the directory.
             return
-        for file in os.listdir(os.path.join('PopGen', 'simple')):
-            os.remove(os.sep.join(['PopGen', 'simple', file]))
-        os.rmdir(os.path.join('PopGen', 'simple'))
+        shutil.rmtree(os.path.join('PopGen', 'simple'))
 
     def test_fastsimcoal(self):
         """Test fastsimcoal execution.
         """
         fastsimcoal_dir = CheckForExecutable("fastsimcoal21")
-        print fastsimcoal_dir
         ctrl = FastSimCoalController(fastsimcoal_dir=fastsimcoal_dir)
         ctrl.run_fastsimcoal('simple.par', 50, par_dir = 'PopGen')
         assert os.path.isdir(os.path.join('PopGen', 'simple')), \
                "Output directory not created!"
         assert(len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
-
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
