@@ -518,7 +518,7 @@ class DataHandler(object):
             try:
                 handle = _urlopen(url)
             except IOError:
-                raise RuntimeException("Failed to access %s at %s" % (filename, url))
+                raise RuntimeError("Failed to access %s at %s" % (filename, url))
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
