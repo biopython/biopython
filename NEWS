@@ -22,12 +22,15 @@ Unix like systems, and ``$APPDATA/biopython`` on Windows).
 Bio.Sequencing.Applications now includes a wrapper for the samtools command
 line tool.
 
+Bio.PopGen.SimCoal now also supports fastsimcoal.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Edward Liaw (first contribution)
 Eric Talevich
 Leighton Pritchard
+Melissa Gymrek (first contribution)
 Michiel de Hoon
 Peter Cock
 Saket Choudhary
