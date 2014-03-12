@@ -30,9 +30,7 @@ class SimCoalController(object):
         self.bin_name = "simcoal2"
         if self.bin_name not in dir_contents:
             #Try case insensitive,
-            dir_contents_lower = [x.lower() for x in dir_contents]
-            if self.bin_name in dir_contents_lower:
-                self.bin_name = dir_contents[dir_contents_lower.index(self.bin_name)]
+            dir_contents = [x.lower() for x in dir_contents]
         if self.bin_name not in dir_contents:
             #Try with .exe
             self.bin_name += '.exe'
