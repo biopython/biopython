@@ -878,7 +878,7 @@ def format_alignment(align1, align2, score, begin, end):
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
 try:
-    from cpairwise2 import rint, _make_score_matrix_fast
+    from .cpairwise2 import rint, _make_score_matrix_fast
 except ImportError:
     pass
 
