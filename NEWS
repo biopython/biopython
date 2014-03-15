@@ -27,6 +27,7 @@ Bio.PopGen.SimCoal now also supports fastsimcoal.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Chunlei Wu (first contribution)
 Edward Liaw (first contribution)
 Eric Talevich
 Leighton Pritchard
