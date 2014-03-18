@@ -16,12 +16,17 @@ from Bio.Application import AbstractCommandline, _Argument, _Option, _Switch
 
 class SimCoalController(object):
     def __init__(self, simcoal_dir):
-        """Initializes the controller.
+        """Initializes the controller. (DEPRECATED)
 
         simcoal_dir is the directory where simcoal is.
 
         The initializer checks for existance and executability of binaries.
         """
+        import warnings
+        warnings.warn("SimCoalController has been deprecated, and we intend"
+                      " to remove it in a future release of Biopython."
+                      " Please use FastSimCoalController instead.",
+                      DeprecationWarning)
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name  # remove this?
         dir_contents = os.listdir(self.simcoal_dir)
@@ -159,7 +164,7 @@ class _FastSimCoalCommandLine(AbstractCommandline):
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
             _Option(["-A", "--ascSize", "ascSize"],
-                    """Number of ascertained chromosomes used to define SNPs in 
+                    """Number of ascertained chromosomes used to define SNPs in
                     a given deme.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
@@ -217,4 +222,4 @@ class FastSimCoalController(object):
                                                  parfile=par_file, numsims=num_sims, **opts)
         controller()
         os.chdir(curr_dir)
-        
+
