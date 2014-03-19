@@ -55,7 +55,6 @@ else:
     output = getoutput("fasttree -help")
     # Since "is not recognized" may be in another language, try and be sure this
     # is really the fasttree tool's output
-    fasttree_found = False
     if "is not recognized" not in output and "protein_alignment" in output \
     and "nucleotide_alignment" in output:
         fasttree_exe = "fasttree"
