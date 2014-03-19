@@ -39,8 +39,8 @@ if sys.platform == "win32":
     # was chosen here but users can alter the path according to where
     # fasttree is located on their systems
 
-    likely_dirs = ["Fasttree", "fasttree", "FastTree"]
-    likely_exes = ["Fasttree.exe", "fasttree.exe", "FastTree.exe"]
+    likely_dirs = ["", "FastTree"]
+    likely_exes = ["FastTree.exe"]
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
