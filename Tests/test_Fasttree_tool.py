@@ -51,17 +51,21 @@ if sys.platform == "win32":
                 break
 else:
     from Bio._py3k import getoutput
-    # Checking the -help argument
-    output = getoutput("fasttree -help")
-    # Since "is not recognized" may be in another language, try and be sure this
-    # is really the fasttree tool's output
-    if "is not recognized" not in output and "protein_alignment" in output \
-    and "nucleotide_alignment" in output:
-        fasttree_exe = "fasttree"
+    # Website uses 'FastTree', Nate's system had 'fasttree'
+    likely_exes = ["FastTree", "fasttree"]
+    for filename in likely_exes:
+        # Checking the -help argument
+        output = getoutput("%s -help" % filename)
+        # Since "is not recognized" may be in another language, try and be sure this
+        # is really the fasttree tool's output
+        if "is not recognized" not in output and "protein_alignment" in output \
+        and "nucleotide_alignment" in output:
+            fasttree_exe = filename
+            break
 
 if not fasttree_exe:
     raise MissingExternalDependencyError(
-        "Install fasttree and correctly set the file path to the program "
+        "Install FastTree and correctly set the file path to the program "
         "if you want to use it from Biopython.")
 
 #################################################################
