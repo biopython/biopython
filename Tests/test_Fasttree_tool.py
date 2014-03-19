@@ -144,7 +144,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
 
     #Any filesnames with spaces should get escaped with quotes automatically.
     #Using keyword arguments here.
-    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file)
+    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file, nt=True)
     assert str(eval(repr(cline)))==str(cline)
 
     out, err = cline()
