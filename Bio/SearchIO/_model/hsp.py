@@ -762,7 +762,8 @@ class HSPFragment(_BaseHSP):
 
             # homology line
             homol = ''
-            if 'homology' in self.aln_annotation:
+            if 'homology' in self.aln_annotation and \
+                    isinstance(self.aln_annotation.get('homology'), basestring):
                 homol = self.aln_annotation['homology']
 
             if self.aln_span <= 67:
