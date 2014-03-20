@@ -38,7 +38,7 @@ def _adjust_aa_seq(fraglist):
     hsp_hstart = fraglist[0].hit_start
     hsp_qstart = fraglist[0].query_start
     for frag in fraglist:
-        assert frag.query_strand == 0
+        assert frag.query_strand == 0 or frag.hit_strand == 0
         # fragment should have a length that is a multiple of 3
         assert len(frag) % 3 == 0
         # hit step may be -1 as we're aligning to DNA
@@ -61,10 +61,11 @@ def _adjust_aa_seq(fraglist):
         frag.hit = hseq1
         frag.query = qseq1
 
-        # set coordinates
-        # no need to set the hit coordinates since the hit sequence
-        # is not a protein sequence
-        frag.query_start, frag.query_end = qstart, qend
+        # set coordinates for the protein sequence
+        if frag.query_strand == 0:
+            frag.query_start, frag.query_end = qstart, qend
+        elif frag.hit_strand == 0:
+            frag.hit_start, frag.hit_end = hstart, hend
 
         # update alignment annotation
         # by turning them into list of triplets
@@ -296,6 +297,8 @@ class _BaseExonerateParser(object):
         if hit['description'].endswith(':[revcomp]'):
             hsp['hit_strand'] = '-'
             hit['description'] = hit['description'].replace(':[revcomp]', '')
+        elif '2protein' in qresult['model']:
+            hsp['hit_strand'] = '.'
         else:
             hsp['hit_strand'] = '+'
 

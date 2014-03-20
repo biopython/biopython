@@ -479,6 +479,44 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('!!!.||+...|||:!:||+   |||+||  !!::!!.:!:', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CAATGCAGAAGACGTTCAATTAGCTTTGAATAAGCATATG', str(hsp.hit_all[0].seq)[-40:])
 
+    def test_exn_22_m_dna2protein(self):
+        """Test parsing exonerate output (exn_22_m_dna2protein.exn)"""
+
+        exn_file = get_file('exn_22_m_dna2protein.exn')
+        qresult = read(exn_file, self.fmt)
+
+        # check common attributes
+        for hit in qresult:
+            self.assertEqual(qresult.id, hit.query_id)
+            for hsp in hit:
+                self.assertEqual(hit.id, hsp.hit_id)
+                self.assertEqual(qresult.id, hsp.query_id)
+
+        self.assertEqual('dna', qresult.id)
+        self.assertEqual('', qresult.description)
+        self.assertEqual('exonerate', qresult.program)
+        self.assertEqual('ungapped:dna2protein', qresult.model)
+        self.assertEqual(1, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('protein', hit.id)
+        self.assertEqual('', hit.description)
+        self.assertEqual(1, len(hit.hsps))
+
+        hsp = hit[0]
+        self.assertEqual(105, hsp.score)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(0, hsp[0].hit_strand)
+        self.assertEqual(0, hsp[0].query_start)
+        self.assertEqual(93, hsp[0].query_end)
+        self.assertEqual(313, hsp[0].hit_start)
+        self.assertEqual(344, hsp[0].hit_end)
+        self.assertEqual(1, len(hsp.query_all))
+        self.assertEqual(1, len(hsp.hit_all))
+        self.assertEqual('NSPFXKGPLASVQNPVYHKQPLNPAPNAETH', str(hsp[0].query.seq)[:40])
+        self.assertEqual(['|||', '...', ' !!', ' !!', '! !'], hsp[0].aln_annotation['homology'][:5])
+        self.assertEqual('NQSVPKRPAGSVQNPVYHNQPLNPAPSRDPH', str(hsp[0].hit.seq)[:40])
+
     def test_exn_22_m_est2genome(self):
         """Test parsing exonerate output (exn_22_m_est2genome.exn)"""
 
