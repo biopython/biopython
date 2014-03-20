@@ -20,7 +20,7 @@ from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
 
 def SimpleFastaParser(handle):
-    """Generator function to iterator over Fasta records (as string tuples).
+    """Generator function to iterate over Fasta records (as string tuples).
 
     For each record a tuple of two strings is returned, the FASTA title
     line (without the leading '>' character), and the sequence (with any

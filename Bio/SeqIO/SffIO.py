@@ -941,7 +941,8 @@ def _check_eof(handle, index_offset, index_length):
                       BiopythonParserWarning)
 
     offset = handle.tell()
-    assert offset % 8 == 0
+    assert offset % 8 == 0, \
+        "Wanted offset %i %% 8 = %i to be zero" % (offset, offset % 8)
     # Should now be at the end of the file...
     extra = handle.read(4)
     if extra == _sff:
