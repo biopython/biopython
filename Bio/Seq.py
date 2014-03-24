@@ -379,7 +379,7 @@ class Seq(object):
         >>> print(Seq("AAAA").count("AA"))
         2
 
-        A non-overlapping search would give the answer as three!
+        An overlapping search would give the answer as three!
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
@@ -1718,7 +1718,7 @@ class MutableSeq(object):
         >>> print(MutableSeq("AAAA").count("AA"))
         2
 
-        A non-overlapping search would give the answer as three!
+        An overlapping search would give the answer as three!
         """
         try:
             #TODO - Should we check the alphabet?
