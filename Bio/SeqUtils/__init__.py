@@ -383,9 +383,9 @@ def molecular_weight(seq, seq_type='Seq', double_stranded=False, circular=False,
         raise ValueError('allowed seq_types are DNA, RNA or protein')
 
     if monoisotopic:
-        water = 18.01
+        water = 18.010565
     else:
-        water = 18.02
+        water = 18.0153
 
     try:
         weight = sum(weight_table[x] for x in seq) - (len(seq)-1) * water
