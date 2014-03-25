@@ -336,6 +336,7 @@ NUMPY_PACKAGES = [
     'Bio.Affy',
     'Bio.Cluster',
     'Bio.KDTree',
+    'Bio.Phenomics'
 ]
 
 if os.name == 'java':
