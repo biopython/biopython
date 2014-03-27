@@ -38,7 +38,7 @@ directory at the command line, and type::
     sudo python setup.py install
 
 Windows users are instead recommended to use the installation packages provided
-on our website, http://biopython.org
+on our website, http://biopython.org -- further instructions are given below.
 
 
 Python Requirements
@@ -50,7 +50,7 @@ Biopython under Python 3.3 as well.
 
 Biopython is currently supported and tested on the following Python versions:
 
-- Python 2.6, 2.7, 3.3 -- see http://www.python.org
+- Python 2.6, 2.7, 3.3, 3.4 -- see http://www.python.org
 
   This is the currently the primary development platform for Biopython.
 
