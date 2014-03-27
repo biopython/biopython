@@ -14,7 +14,7 @@ from __future__ import print_function
 import re
 from math import pi, sin, cos
 
-from Bio.Seq import Seq
+from Bio.Seq import Seq, MutableSeq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
@@ -313,29 +313,72 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 # {{{
 
 
-def molecular_weight(seq, seq_type='Seq', double_stranded=False, circular=False,
+def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
                      monoisotopic=False):
     """Calculates the molecular weight of a DNA, RNA or protein sequence.
 
-    Only unambiguous letters are allowed. Nucleotid sequences are assumed to
+    Only unambiguous letters are allowed. Nucleotide sequences are assumed to
     have a 5' phosphate.
 
-    seq: String or Biopyhton sequence object
-    seq_type: DNA, RNA, protein or Seq (=default). 'Seq': derive sequence type
-              from the sequence object's alphabet.  
+    seq: String or Biopython sequence object.
+    seq_type: The default (None) is to take the alphabet from the seq argument,
+              or assume DNA if the seq argument is a string. Override this with
+              a string 'DNA', 'RNA', or 'protein'.
     double_stranded: Calculate the mass for the double stranded molecule?
     circular: Is the molecule circular (has no ends)?
     monoisotopic: Use the monoisotopic mass tables?
 
-    If seq_type ='Seq' and seq is a string or a sequence object with no special
-    alphabet (generic alphabet) then it is suggested that the sequence is DNA
-    (for backward compatibility).
+    Note that for backwards compatibility, if the seq argument is a string,
+    and no seq_type is specified (i.e. left as None), then DNA is assumed.
+
+    >>> print("%0.2f" % molecular_weight("AGC"))
+    949.61
+
+    However, it is better to be explicit - for example with strings:
+
+    >>> print("%0.2f" % molecular_weight("AGC", "DNA"))
+    949.61
+    >>> print("%0.2f" % molecular_weight("AGC", "RNA"))
+    997.61
+    >>> print("%0.2f" % molecular_weight("AGC", "protein"))
+    249.29
+
+    Or, with the sequence alphabet:
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import generic_dna, generic_rna, generic_protein
+    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_dna)))
+    949.61
+    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_rna)))
+    997.61
+    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_protein)))
+    249.29
+
+    Note that using a generic alphabet without giving a seq_type will give
+    an exception:
+
+    >>> from Bio.Seq import Seq
+    >>> print("%0.2f" % molecular_weight(Seq("AGC")))
+    Traceback (most recent call last):
+      ...
+    ValueError: Sequence type not specified. Use a Seq object with an appropriate alpabet, or set seq_type
+
+    Also note that contradictory sequence alphabets and seq_type will also
+    give an exception:
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import generic_dna
+    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_dna), "RNA"))
+    Traceback (most recent call last):
+      ...
+    ValueError: seq_type='RNA' contradicts DNA from seq alphabet
+
     """
     # Rewritten by Markus Piotrowski, 2014
     
     # Find the alphabet type
     tmp_type = ''
-    if isinstance(seq, Seq):
+    if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
         base_alphabet = Alphabet._get_base_alphabet(seq.alphabet)
         if isinstance(base_alphabet, Alphabet.DNAAlphabet):
             tmp_type = 'DNA'
@@ -347,23 +390,23 @@ def molecular_weight(seq, seq_type='Seq', double_stranded=False, circular=False,
             tmp_type = 'protein'
             # Convert to one-letter sequence. Have to use a string for seq1  
             seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
-        elif isinstance(base_alphabet, Alphabet.Alphabet):
-            pass
-        else:
-            raise ValueError('%s is not a valid alphabet for mass'
-                             %base_alphabet + 'calculations.')
-
-    if seq_type != 'Seq':
-        if tmp_type and tmp_type !=seq_type:
-            raise ValueError('seq_type=%s contradicts %s alphabet'
-                                 %(seq_type, tmp_type))
+        elif not isinstance(base_alphabet, Alphabet.Alphabet):
+            raise TypeError("%s is not a valid alphabet for mass calculations"
+                             % base_alphabet)
+        if seq_type and tmp_type and tmp_type != seq_type:
+            raise ValueError("seq_type=%r contradicts %s from seq alphabet"
+                             % (seq_type, tmp_type))
+        seq_type = tmp_type
+    elif isinstance(seq, str):
+        if seq_type is None:
+            seq_type = "DNA" # backward compatibity
     else:
-        if not tmp_type:
-            seq_type = 'DNA'
-        else:
-            seq_type = tmp_type
-        if isinstance(seq, str):
-           seq_type = 'DNA'
+        raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
+
+    if not seq_type:
+        raise ValueError("Sequence type not specified. Use a Seq "
+                         "object with an appropriate alpabet, or "
+                         "set seq_type")
             
     seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
 
@@ -383,7 +426,8 @@ def molecular_weight(seq, seq_type='Seq', double_stranded=False, circular=False,
         else:
             weight_table = IUPACData.protein_weights
     else:
-        raise ValueError('allowed seq_types are DNA, RNA or protein')
+        raise ValueError("Allowed seq_types are DNA, RNA or protein, not %r"
+                         % seq_type)
 
     if monoisotopic:
         water = 18.010565
