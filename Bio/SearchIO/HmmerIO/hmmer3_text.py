@@ -361,7 +361,7 @@ class Hmmer3TextParser(object):
                     break
                 # otherwise check if it's an annotation line and parse it
                 # len(hmmseq) is only != len(aliseq) when the cursor is parsing
-                # the homology character. Since we're not parsing that, we
+                # the similarity character. Since we're not parsing that, we
                 # check for when the condition is False (i.e. when it's ==)
                 elif len(hmmseq) == len(aliseq):
                     regx = re.search(_HRE_ANNOT_LINE, self.line)

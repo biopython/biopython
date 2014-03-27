@@ -176,7 +176,7 @@ def _get_blocks(rows, coords, idx):
         # get seqs according to index
         block['query'] = rows[idx['query']][start:end]
         block['hit'] = rows[idx['hit']][start:end]
-        block['homology'] = rows[idx['midline']][start:end]
+        block['similarity'] = rows[idx['midline']][start:end]
         if idx['qannot'] is not None:
             block['query_annotation'] = rows[idx['qannot']][start:end]
         if idx['hannot'] is not None:
@@ -365,7 +365,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 or '2protein' in qresult['model']:
             hsp['alphabet'] = generic_protein
         # get the annotations if they exist
-        for annot_type in ('homology', 'query_annotation', 'hit_annotation'):
+        for annot_type in ('similarity', 'query_annotation', 'hit_annotation'):
             try:
                 hsp['aln_annotation'][annot_type] = \
                         [x[annot_type] for x in seq_blocks]

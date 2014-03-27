@@ -7,7 +7,7 @@
 
 This module adds support for parsing HMMER outputs. HMMER is a
 suite of programs implementing the profile hidden Markov models to find
-homology across protein sequences.
+similarity across protein sequences.
 
 Bio.SearchIO.HmmerIO was tested on the following HMMER versions and flavors:
 
@@ -132,7 +132,7 @@ denotes attributes not available in the hmmer2-text format:
 |                 +-------------------------+----------------------------------+
 |                 | query_endtype           | query sequence end types         |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | aln_annotation          | alignment homology string and    |
+| HSPFragment     | aln_annotation          | alignment similarity string and  |
 | (also via HSP)  |                         | other annotations (e.g. PP, CS)  |
 |                 +-------------------------+----------------------------------+
 |                 | aln_span                | length of alignment fragment     |

@@ -572,7 +572,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(414, hsp.hit_end)
         self.assertEqual('AGAGAAAATAAAACAAGTAATAAAATATTAATGGAAAAAATAAATTCTTGTTTATTTAGACCTGATTCTAATCACTTTTCTTGCCCGGAGTCATTTTTGACA', str(hsp.hit.seq))
         self.assertEqual(1, hsp.query_strand)
-        self.assertEqual({'homology': ': : :: :::::: :  : : : :  :  :::  :::: : : ::     ::::::::      :: ::: : :  ::: : :::::     ::::::  ::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ': : :: :::::: :  : : : :  :  :::  :::: : : ::     ::::::::      :: ::: : :  ::: : :::::     ::::::  ::'}, hsp.aln_annotation)
 
         # test third qresult
         qresult = qresults[2]
@@ -699,7 +699,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(490, hsp.hit_end)
         self.assertEqual('GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACAACGATTAATGAGGAGATTTATGAAGAGGGTTCTTCGATTTTAGGCCAATCGGAAGGAATTATGTAGCAAGTCCATCAGAAAATGGAAGTAGTCAT', str(hsp.hit.seq))
         self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual({'homology': ':::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: ::::::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ':::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: ::::::'}, hsp.aln_annotation)
 
 
 class Fasta36Cases(unittest.TestCase):
@@ -752,7 +752,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(195, hsp.hit_end)
         self.assertEqual('AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFGRS------EVDTEHLLLALADSDVVKTILGQFKIKVDDLKRQIESEAKR-GDKPF-EGEIGVSPRVKDALSR', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '.::..-:::. .   :.. . .---::  :.::: :..------ .   . . .:.:. :.: ..-----..  :....  ..::-::. .-:  :...   .  :::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '.::..-:::. .   :.. . .---::  :.::: :..------ .   . . .:.:. :.: ..-----..  :....  ..::-::. .-:  :...   .  :::'}, hsp.aln_annotation)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973588|ref|YP_001338639.1|', hit.id)
@@ -778,7 +778,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(248, hsp.hit_end)
         self.assertEqual('ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIMWNALSKNRLFDG----NKELKEFIMTLT', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': ':.. : ::.:--.  ..  :...   .::.:..-.  .::.:. ..::----..:  : ....:'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ':.. : ::.:--.  ..  :...   .::.:..-.  .::.:. ..::----..:  : ....:'}, hsp.aln_annotation)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|152973480|ref|YP_001338531.1|', hit.id)
@@ -804,7 +804,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(87, hsp.hit_end)
         self.assertEqual('ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTDDQLIDFMLQ', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': ':. :  :. : .: ..::  .-----:: . ...:::...  ...'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ':. :  :. : .: ..::  .-----:: . ...:::...  ...'}, hsp.aln_annotation)
 
         # test second qresult
         qresult = qresults[1]
@@ -840,7 +840,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(81, hsp.hit_end)
         self.assertEqual('IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '.:::   ..  .::..:::..      :  .:..: ..'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '.:::   ..  .::..:::..      :  .:..: ..'}, hsp.aln_annotation)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973509|ref|YP_001338560.1|', hit.id)
@@ -866,7 +866,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(418, hsp.hit_end)
         self.assertEqual('FFDLVIENPGK', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '::::.: : ::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '::::.: : ::'}, hsp.aln_annotation)
         # second qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|152973581|ref|YP_001338632.1|', hit.id)
@@ -892,7 +892,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(84, hsp.hit_end)
         self.assertEqual('ESVVFILMAGFAMSVCYLFFSVLEKVINARKSKDESIYHD', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '....::..:   .:   -::: .:. .. .::: .-.. :'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '....::..:   .:   -::: .:. .. .::: .-.. :'}, hsp.aln_annotation)
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|152973536|ref|YP_001338587.1|', hit.id)
@@ -918,7 +918,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(36, hsp.hit_end)
         self.assertEqual('ASFSKEEQDKVAVDKVAADVAWQERMNKPV', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '::: :.. ::. :. ..  ...  . . :.'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '::: :.. ::. :. ..  ...  . . :.'}, hsp.aln_annotation)
 
         # test third qresult
         qresult = qresults[2]
@@ -954,7 +954,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(94, hsp.hit_end)
         self.assertEqual('SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': ':...: . . :  ::.: : .:: -. . . .:. . ... ::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ':...: . . :  ::.: : .:: -. . . .:. . ... ::'}, hsp.aln_annotation)
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973505|ref|YP_001338556.1|', hit.id)
@@ -980,7 +980,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(281, hsp.hit_end)
         self.assertEqual('IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW---ISAAVPESIAYLLKDTSQFEISVPAYPD', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': ':.:.  ..:-:   :  . . .... .:.. ..---:.  . :.  :--.::..:: ..: . :'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ':.:.  ..:-:   :  . . .... .:.. ..---:.  . :.  :--.::..:: ..: . :'}, hsp.aln_annotation)
 
     def test_output008(self):
         """Test parsing tfastx36 output (output008.m10)"""
@@ -1040,7 +1040,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(317, hsp.hit_end)
         self.assertEqual('IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHGLWRLHHHPVYLYAWILRLRGHGMQSGGLL', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '. :. ::  ...  :.  . .: .  :    :  :---. :::   :    ..   :. :.  .:'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '. :. ::  ...  :.  . .: .  :    :  :---. :::   :    ..   :. :.  .:'}, hsp.aln_annotation)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|57163782|ref|NM_001009242.1|', hit.id)
@@ -1066,7 +1066,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(595, hsp.hit_end)
         self.assertEqual('GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAGRLHVPAHRAWLPHQLPHALRHGPAQEAAHASQLHPAQPGRG*PLHGLRWLHHHPLH/PLCMDTLSLGPQDAIWRASLPHWAVKLPCGLWWSWPLSGTWWCVSP*ATSA------LGRTMP*WASLSPGSWHWPALHPPSLVGPGTSLKACSVHAGSTTTHSSQKS', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': ':::.:---: :-:   :: .   ::    ..  .  .::-------: :. ::  ..   :.  . .: .  :  .    :-----:::  :- : .:.     : :  . .. .   -:  ...   : .. .  . :   .:------:.. .:   . ::     :    :.::.  .:: :-.: .   ...:...:'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': ':::.:---: :-:   :: .   ::    ..  .  .::-------: :. ::  ..   :.  . .: .  :  .    :-----:::  :- : .:.     : :  . .. .   -:  ...   : .. .  . :   .:------:.. .:   . ::     :    :.::.  .:: :-.: .   ...:...:'}, hsp.aln_annotation)
 
         # test third qresult
         qresult = qresults[2]
@@ -1112,7 +1112,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1044, hsp.hit_end)
         self.assertEqual('MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTLPAFFAKSSSIYNPVIYIMMNKQFRNCMLTTLCCGKNPLGDDEASTTGSKTETSQVAPA', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '::::::::::::::: :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::.::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::..:::::::::::::::::::::.:::::::::::::.: :::::::::::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '::::::::::::::: :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::.::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::..:::::::::::::::::::::.:::::::::::::.: :::::::::::'}, hsp.aln_annotation)
         # fourth qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|18148870|dbj|AB062417.1|', hit.id)
@@ -1144,7 +1144,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds', hit.description)
         self.assertEqual(983, hit.seq_len)
         self.assertEqual(2, len(hit))
-        self.assertEqual({'homology': '::::::::::::::: ::::::::: ::::::::::::::::::::::.::::::::::::::::::::::::::::::::::::::.::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::.:::::::::: . :.:::::::::::::: ::.:.:::::::::::::::::::::::::::::::::::::::::::::::.:::.:::::::::::.::::::::::::::..:.:::::::::::::::::.::.:::::::::::::.:::::::::::::'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '::::::::::::::: ::::::::: ::::::::::::::::::::::.::::::::::::::::::::::::::::::::::::::.::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::.:::::::::: . :.:::::::::::::: ::.:.:::::::::::::::::::::::::::::::::::::::::::::::.:::.:::::::::::.::::::::::::::..:.:::::::::::::::::.::.:::::::::::::.:::::::::::::'}, hsp.aln_annotation)
         # fourth qresult, third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual(2138, hsp.initn_score)
@@ -1164,7 +1164,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(978, hsp.hit_end)
         self.assertEqual('VPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVANLFMVFGGFTTTLYTSMHGYFVFGATGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLAFTWVMALACAAPPLAGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVVAFLICWLPYASVAFYIFTHQGSNFGPVFMTIPAFFAKSSSIYNPVIYIMMNKQFRNCMLTTLCCGKNPLGDDEASTT', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        self.assertEqual({'homology': '::::: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::.::::.:::::.::::::: :::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::.::::::::::::::::::::::::::::::::::.::::::::::::::::::::::::::::::::::::::::.::::::.:::::::::::::::::::.:::::::::::..:::::::::::::::::::::.:::::::::::::.:'}, hsp.aln_annotation)
+        self.assertEqual({'similarity': '::::: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::.::::.:::::.::::::: :::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::.::::::::::::::::::::::::::::::::::.::::::::::::::::::::::::::::::::::::::::.::::::.:::::::::::::::::::.:::::::::::..:::::::::::::::::::::.:::::::::::::.:'}, hsp.aln_annotation)
         # fourth qresult, third hit, second hsp
         hsp = qresult[2].hsps[1]
         self.assertEqual(74, hsp.initn_score)

@@ -46,7 +46,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('lfVgNLppdvteedLkdlFskfGpivsikivrDiiekpketgkskGfaFVeFeseedAekAlealnG.kelggrklrv',
                          str(hsp.hit.seq))
         self.assertEqual('lf+g+L + +t+e Lk++F+k G iv++ +++D     + t++s+Gf+F+++  ++  + A +    +++++gr+++ ',
-                         str(hsp.aln_annotation['homology']))
+                         str(hsp.aln_annotation['similarity']))
         self.assertEqual('LFIGGLDYRTTDENLKAHFEKWGNIVDVVVMKD-----PRTKRSRGFGFITYSHSSMIDEAQK--SRpHKIDGRVVEP',
                          str(hsp.query.seq))
 
@@ -63,7 +63,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('lfVgNLppdvteedLkdlFskfGpivsikivrDiiekpketgkskGfaFVeFeseedAekAlealnGkelggrklrv',
                          str(hsp.hit.seq))
         self.assertEqual('lfVg L  d +e+ ++d+F++fG iv+i+iv+D     ketgk +GfaFVeF++++ ++k +     ++l+g+ + v',
-                         str(hsp.aln_annotation['homology']))
+                         str(hsp.aln_annotation['similarity']))
         self.assertEqual('LFVGALKDDHDEQSIRDYFQHFGNIVDINIVID-----KETGKKRGFAFVEFDDYDPVDKVVL-QKQHQLNGKMVDV',
                          str(hsp.query.seq))
 
@@ -100,7 +100,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('lrnELentLWavADkLRGsmDaseYKdyVLGLlFlKYiSdkFlerrieieerktdtesepsldyakledqyeqlededlekedfyqkkGvFilPsqlFwdfikeaeknkldedigtdldkifseledqialgypaSeedfkGlfpdldfnsnkLgskaqarnetLtelidlfselelgtPmHNG.dfeelgikDlfGDaYEYLLgkFAeneGKsGGeFYTPqeVSkLiaeiLtigqpsegdfsIYDPAcGSGSLllqaskflgehdgkrnaisyYGQEsn',
                          str(hsp.hit.seq))
         self.assertEqual(' ++EL+++  av+   R              L+F K++ dk      +i+         p +   + +++y   ++   ++ ++y ++      + lF++++   e ++  ++++ + +    ++      + +       Glf ++++  ++ +s+   +ne ++e+i+ +++ +++     G++ +el   D++G +YE L+   Ae   K+ G +YTP e++  ia+ + i+  ++                  +++ ++    k+n+i +    s+',
-                         str(hsp.aln_annotation['homology']))
+                         str(hsp.aln_annotation['similarity']))
         self.assertEqual('NTSELDKKKFAVLLMNR--------------LIFIKFLEDK------GIV---------PRDLLRRTYEDY---KKSNVLI-NYYDAY-L----KPLFYEVLNTPEDER--KENIRT-NPYYKDIPYL---N-G-------GLFRSNNV--PNELSFTIKDNEIIGEVINFLERYKFTLSTSEGsEEVELNP-DILGYVYEKLINILAEKGQKGLGAYYTPDEITSYIAKNT-IEPIVVE----------------RFKEIIK--NWKINDINF----ST',
                          str(hsp.query.seq))
 
@@ -138,7 +138,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('lPwelgLaevhqtLvengLRdrVsLia',
                          str(hsp.hit.seq))
         self.assertEqual('+P  l++ +vh  L++ gLR + s+ +',
-                         str(hsp.aln_annotation['homology']))
+                         str(hsp.aln_annotation['similarity']))
         self.assertEqual('IPPLLAVGAVHHHLINKGLRQEASILV',
                          str(hsp.query.seq))
 
@@ -198,11 +198,11 @@ class HmmpfamTests(unittest.TestCase):
         self.assertAlmostEqual(-79.3, hsp.bitscore)
         self.assertAlmostEqual(1, hsp.evalue)
         self.assertEqual(len(hsp.query.seq), len(hsp.hit.seq))
-        self.assertEqual(len(hsp.query.seq), len(hsp.aln_annotation['homology']))
+        self.assertEqual(len(hsp.query.seq), len(hsp.aln_annotation['similarity']))
         self.assertEqual('msEEqLKAFiAKvqaDtsLqEqLKaEGADvvaiAKAaGFtitteDLnahiqakeLsdeeLEgvaGg',
                          str(hsp.hit.seq))
         self.assertEqual('        F+                           G  +t   Ln                   ',
-                         str(hsp.aln_annotation['homology']))
+                         str(hsp.aln_annotation['similarity']))
         self.assertEqual('-------CFL---------------------------GCLVTNWVLNRS-----------------',
                          str(hsp.query.seq))
 
@@ -251,7 +251,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('ENHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQG--',
                 str(hsp.query.seq)[:40])
         self.assertEqual('+++++  L+++++e++k+ewP++Wp+ + +l  l++++  ',
-                str(hsp.aln_annotation['homology'])[:40])
+                str(hsp.aln_annotation['similarity'])[:40])
         self.assertEqual('WVSMSHITA-ENCkLLEILCLLL----NEQELQLGAAECL',
                 str(hsp.query.seq)[-40:])
         self.assertEqual(0, hsp.hit_start)
@@ -260,7 +260,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('pkflrnKLalalaelakqewPsnWpsffpdlvsllsssss',
                 str(hsp.hit.seq)[:40])
         self.assertEqual('W+++++i + ++++ll++l+ lL    +  +l++ A+eCL',
-                str(hsp.aln_annotation['homology'])[-40:])
+                str(hsp.aln_annotation['similarity'])[-40:])
         self.assertEqual('Wipiglianvnpi.llnllfslLsgpesdpdlreaAveCL',
                 str(hsp.hit.seq)[-40:])
 
@@ -421,9 +421,9 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+P+++DWRe kg  VtpVK+QG qCGSCWAFSa g lEg+',
-                str(hsp.aln_annotation['homology'])[:40])
+                str(hsp.aln_annotation['similarity'])[:40])
         self.assertEqual('+VKNSWG++WG++GY++ia+++n    n+CG+a+ asypi',
-                str(hsp.aln_annotation['homology'])[-40:])
+                str(hsp.aln_annotation['similarity'])[-40:])
         self.assertEqual(113, hsp.hit_start)
         self.assertEqual(332, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
@@ -456,9 +456,9 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+Pe +DWR+ kg aVtpVK+QG +CGSCWAFSav ++Eg+',
-                str(hsp.aln_annotation['homology'])[:40])
+                str(hsp.aln_annotation['similarity'])[:40])
         self.assertEqual('++KNSWGt WGEnGY+ri+Rg+++s ++ CG+ ++  yp+',
-                str(hsp.aln_annotation['homology'])[-40:])
+                str(hsp.aln_annotation['similarity'])[-40:])
         self.assertEqual(133, hsp.hit_start)
         self.assertEqual(343, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
