@@ -3119,13 +3119,12 @@ class BlastXmlSpecialCases(unittest.TestCase):
     def test_xml_2226_blastn_006(self):
         xml_file = get_file('xml_2226_blastn_006.xml')
         qresults = parse(xml_file, FMT)
-        counter = 0
 
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
-            assert len(w) == 1
-        counter += 1
+            self.assertEqual(len(w), 1,
+                             "Expected one BiopythonParserWarning, got %r" % w)
 
         # test the Hit IDs only, since this is a special case
         hit1 = qresult[0]
