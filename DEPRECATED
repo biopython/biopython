@@ -76,8 +76,9 @@ Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
 
 Bio.HotRand
 ===========
-Obsolete file Bio/HotRand.py was deprecated in Release 1.61, consider using
-an alternative RNG, or the Python module "randomdotorg".
+Obsolete file Bio/HotRand.py was deprecated in Release 1.61, and removed in
+Release 1.64. Consider using an alternative RNG, or the Python module
+"randomdotorg".
 
 Bio.Search
 ==========
