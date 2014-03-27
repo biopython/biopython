@@ -138,21 +138,40 @@ def _make_ranges(mydict):
         d[key] = (value, value)
     return d
 
-# From bioperl's SeqStats.pm
+# Mass data taken from PubChem
+
+# Average masses of monophosphate deoxy nucleotides
 unambiguous_dna_weights = {
-    "A": 347.,
-    "C": 323.,
-    "G": 363.,
-    "T": 322.,
+    "A": 331.2218,
+    "C": 307.1971,
+    "G": 347.2212,
+    "T": 322.2085
     }
+
+# Monoisotopic masses of monophospate deoxy nucleotides
+monoisotopic_unambiguous_dna_weights = {
+    "A": 331.06817,
+    "C": 307.056936,
+    "G": 347.063084,
+    "T": 322.056602
+    }
+
 unambiguous_dna_weight_ranges = _make_ranges(unambiguous_dna_weights)
 
 unambiguous_rna_weights = {
-    "A": unambiguous_dna_weights["A"] + 16.,  # 16 for the oxygen
-    "C": unambiguous_dna_weights["C"] + 16.,
-    "G": unambiguous_dna_weights["G"] + 16.,
-    "U": 340.,
+    "A": 347.2212,
+    "C": 323.1965,
+    "G": 363.2206,
+    "U": 324.1813
 }
+
+monoisotopic_unambiguous_rna_weights = {
+    "A": 347.063084,
+    "C": 323.051851,
+    "G": 363.057999,
+    "U": 324.035867
+}
+
 unambiguous_rna_weight_ranges = _make_ranges(unambiguous_rna_weights)
 
 
@@ -181,51 +200,53 @@ ambiguous_rna_weight_ranges, avg_ambiguous_rna_weights = \
                                       unambiguous_rna_weights)
 
 protein_weights = {
-    "A": 89.09,
-    "C": 121.16,
-    "D": 133.10,
-    "E": 147.13,
-    "F": 165.19,
-    "G": 75.07,
-    "H": 155.16,
-    "I": 131.18,
-    "K": 146.19,
-    "L": 131.18,
-    "M": 149.21,
-    "N": 132.12,
-    #"O": 0.0, # Needs to be recorded!
-    "P": 115.13,
-    "Q": 146.15,
-    "R": 174.20,
-    "S": 105.09,
-    "T": 119.12,
-    #"U": 168.05, # To be confirmed
-    "V": 117.15,
-    "W": 204.23,
-    "Y": 181.19
+    "A": 89.0932,
+    "C": 121.1582,
+    "D": 133.1027,
+    "E": 147.1293,
+    "F": 165.1891,
+    "G": 75.0666,
+    "H": 155.1546,
+    "I": 131.1729,
+    "K": 146.1876,
+    "L": 131.1729,
+    "M": 149.2113,
+    "N": 132.1179,
+    "O": 255.3134, 
+    "P": 115.1305,
+    "Q": 146.1445,
+    "R": 174.201,
+    "S": 105.0926,
+    "T": 119.1192,
+    "U": 168.0532,
+    "V": 117.1463,
+    "W": 204.2252,
+    "Y": 181.1885
     }
 
 monoisotopic_protein_weights = {
-    "A": 89.05,
-    "C": 121.02,
-    "D": 133.04,
-    "E": 147.05,
-    "F": 165.08,
-    "G": 75.03,
-    "H": 155.07,
-    "I": 131.09,
-    "K": 146.11,
-    "L": 131.09,
-    "M": 149.05,
-    "N": 132.05,
-    "P": 115.06,
-    "Q": 146.07,
-    "R": 174.11,
-    "S": 105.04,
-    "T": 119.06,
-    "V": 117.08,
-    "W": 204.09,
-    "Y": 181.07,
+    "A": 89.047678,
+    "C": 121.019749,
+    "D": 133.037508,
+    "E": 147.053158,
+    "F": 165.078979,
+    "G": 75.032028,
+    "H": 155.069477,
+    "I": 131.094629,
+    "K": 146.105528,
+    "L": 131.094629,
+    "M": 149.051049,
+    "N": 132.053492,
+    "O": 255.158292,
+    "P": 115.063329,
+    "Q": 146.069142,
+    "R": 174.111676,
+    "S": 105.042593,
+    "T": 119.058243,
+    "U": 168.964203,
+    "V": 117.078979,
+    "W": 204.089878,
+    "Y": 181.073893,
     }
 
 extended_protein_values = {
@@ -255,6 +276,7 @@ extended_protein_values = {
     "X": "ACDEFGHIKLMNPQRSTVWY",
     #TODO - Include U and O in the possible values of X?
     #This could alter the extended_protein_weight_ranges ...
+    #by MP: Won't do this, because they are so rare.
     "Y": "Y",
     "Z": "QE",
 }
