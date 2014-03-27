@@ -135,8 +135,8 @@ Bio.Blast.NCBIStandalone
 ========================
 The three functions for calling the "legacy" NCBI BLAST command line tools
 blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
-1.53, and deprecated in Release 1.61. Please use the BLAST+ wrappers in
-Bio.Blast.Applications instead.
+1.53, deprecated in Release 1.61, and removed in Release 1.64. Please use
+the BLAST+ wrappers in Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
 which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
