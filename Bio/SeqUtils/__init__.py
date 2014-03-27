@@ -393,7 +393,7 @@ def six_frame_translations(seq, genetic_code=1):
 
 
 def quick_FASTA_reader(file):
-    """Simple FASTA reader, returning a list of string tuples (OBSOLETE).
+    """Simple FASTA reader, returning a list of string tuples (DEPRECATED).
 
     The single argument 'file' should be the filename of a FASTA format file.
     This function will open and read in the entire file, constructing a list
@@ -422,6 +422,12 @@ def quick_FASTA_reader(file):
     If you want to use simple strings, use the function SimpleFastaParser
     added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
     """
+    import warnings
+    from Bio import BiopythonDeprecationWarning
+    warnings.warn("The quick_FASTA_reader has been deprecated and will be "
+                  "removed in a future release of Biopython. Please try "
+                  "function SimpleFastaParser from Bio.SeqIO.FastaIO "
+                  "instead.", BiopythonDeprecationWarning)
     from Bio.SeqIO.FastaIO import SimpleFastaParser
     with open(file) as handle:
         entries = list(SimpleFastaParser(handle))
