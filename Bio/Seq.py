@@ -296,10 +296,10 @@ class Seq(object):
 
         You are now encouraged to use str(my_seq) instead of
         my_seq.tostring()."""
-        import warnings
+        from Bio import BiopythonDeprecationWarning
         warnings.warn("This method is obsolete; please use str(my_seq) "
                       "instead of my_seq.tostring().",
-                      PendingDeprecationWarning)
+                      BiopythonDeprecationWarning)
         return str(self)
 
     def tomutable(self):   # Needed?  Or use a function?
@@ -1554,7 +1554,6 @@ class MutableSeq(object):
         """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
-            import warnings
             warnings.warn("In future comparing incompatible alphabets will "
                           "only trigger a warning (not an exception). In "
                           "the interim please use id(seq1)==id(seq2) or "
@@ -1813,10 +1812,10 @@ class MutableSeq(object):
 
         print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
         """
-        import warnings
+        from Bio import BiopythonDeprecationWarning
         warnings.warn("This method is obsolete; please use str(my_seq) "
                       "instead of my_seq.tostring().",
-                      PendingDeprecationWarning)
+                      BiopythonDeprecationWarning)
         return "".join(self.data)
 
     def toseq(self):
@@ -1970,7 +1969,6 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         n -= 6
         amino_acids = ["M"]
     elif n % 3 != 0:
-        import warnings
         from Bio import BiopythonWarning
         warnings.warn("Partial codon, len(sequence) not a multiple of three. "
                       "Explicitly trim the sequence or add trailing N before "
