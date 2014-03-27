@@ -568,8 +568,9 @@ UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
 and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
-The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59,
-and deprecated in Release 1.61.
+
+Submodule Bio.UniGene.UniGene which was an HTML parser was declared obsolete
+in Release 1.59, deprecated in Release 1.61, and removed in Release 1.64.
 
 Bio.SubsMat
 ===========
