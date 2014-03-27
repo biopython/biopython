@@ -24,6 +24,9 @@ line tool.
 
 Bio.PopGen.SimCoal now also supports fastsimcoal.
 
+The `homology` key in the `aln_annotation` attribute of an HSP object in
+Bio.SearchIO has been renamed to `similarity`.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
