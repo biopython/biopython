@@ -2,6 +2,8 @@
 # Created: Wed May 29 08:07:18 2002
 # thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
+# Revisions copyright 2014 by Markus Piotrowski.
+# Revisions copyright 2014 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -329,9 +331,12 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
     monoisotopic: Use the monoisotopic mass tables?
 
     Note that for backwards compatibility, if the seq argument is a string,
-    and no seq_type is specified (i.e. left as None), then DNA is assumed.
+    or Seq object with a generic alphabet, and no seq_type is specified
+    (i.e. left as None), then DNA is assumed.
 
     >>> print("%0.2f" % molecular_weight("AGC"))
+    949.61
+    >>> print("%0.2f" % molecular_weight(Seq("AGC")))
     949.61
 
     However, it is better to be explicit - for example with strings:
@@ -353,15 +358,6 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
     997.61
     >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_protein)))
     249.29
-
-    Note that using a generic alphabet without giving a seq_type will give
-    an exception:
-
-    >>> from Bio.Seq import Seq
-    >>> print("%0.2f" % molecular_weight(Seq("AGC")))
-    Traceback (most recent call last):
-      ...
-    ValueError: Sequence type not specified. Use a Seq object with an appropriate alpabet, or set seq_type
 
     Also note that contradictory sequence alphabets and seq_type will also
     give an exception:
@@ -393,6 +389,8 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
         elif not isinstance(base_alphabet, Alphabet.Alphabet):
             raise TypeError("%s is not a valid alphabet for mass calculations"
                              % base_alphabet)
+        else:
+            tmp_type = "DNA" # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
             raise ValueError("seq_type=%r contradicts %s from seq alphabet"
                              % (seq_type, tmp_type))
@@ -403,11 +401,6 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
     else:
         raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
 
-    if not seq_type:
-        raise ValueError("Sequence type not specified. Use a Seq "
-                         "object with an appropriate alpabet, or "
-                         "set seq_type")
-            
     seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
 
     if seq_type == 'DNA':
