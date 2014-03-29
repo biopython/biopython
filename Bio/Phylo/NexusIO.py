@@ -25,7 +25,7 @@ End;
 """
 
 # 'index' starts from 1; 'tree' is the Newick tree string
-TREE_TEMPLATE = "Tree tree%(index)d=[&U]%(tree)s;"
+TREE_TEMPLATE = "Tree tree%(index)d=[&U]%(tree)s"
 
 
 def parse(handle):
