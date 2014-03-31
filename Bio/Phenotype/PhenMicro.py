@@ -24,6 +24,8 @@ import json
 import csv
 import numpy as np
 
+from Bio._py3k import basestring
+
 # Private csv headers - hardcoded because this are supposedly never changed
 _datafile = 'Data File'
 _plate = 'Plate Type'
@@ -61,6 +63,20 @@ class PlateRecord(object):
     A02
     ...
     
+    The plate rows and columns can be queried with an indexing system similar 
+    to NumPy and other matrices:
+    
+    >>> print(plate[1])
+    PlateRecord('WellRecord['B01'], WellRecord['B02'], WellRecord['B03'], WellRecord['B04']...WellRecord['B12']')
+    
+    >>> print(plate[:,1])
+    PlateRecord('WellRecord['A02'], WellRecord['B02'], WellRecord['C02'], WellRecord['D02']...WellRecord['H02']')
+    
+    Single WellRecord objects can be accessed using this indexing system:
+    
+    >>> print(plate[1,2])
+    WellRecord('(0.0, 11.0), (0.25, 11.0), (0.5, 11.0), (0.75, 11.0), (1.0, 11.0)...(95.75, 11.0)')
+    
     The presence of a particular well can be inspected with the "in" keyword:
     >>> 'A01' in plate
     True
@@ -75,7 +91,7 @@ class PlateRecord(object):
     H03
     ...
     
-    All the wells belonging to a "row" (identified by the number of the well)
+    All the wells belonging to a "column" (identified by the number of the well)
     in the plate can be obtained:
     
     >>> for well in plate.getColumn(12):
@@ -122,6 +138,13 @@ class PlateRecord(object):
         except TypeError:
             raise TypeError('You must provide an iterator-like object '+
                   'containing the single wells')
+        
+        self._update()
+                  
+    def _update(self):
+        """Update the rows and columns string identifiers."""
+        self._rows = sorted(set([x[0] for x in self._wells]))
+        self._columns = sorted(set([x[1:] for x in self._wells]))
     
     def _isWell(self, obj):
         """Check if the given object is a WellRecord object
@@ -133,18 +156,161 @@ class PlateRecord(object):
             raise ValueError('A WellRecord type object is needed as value'+
                             ' (got %s)'%type(obj))
     
-    def __getitem__(self, key):
-        try:
-            return self._wells[key]
-        except KeyError:
-            raise KeyError('Well %s not found!'%key)
+    def __getitem__(self, index):
+        """Access part of the plate.
+        
+        Depending on the indices, you can get a WellRecord object
+        (representing a single well of the plate),
+        or another plate
+        (representing some part or all of the original plate).
+
+        plate[wid] gives a WellRecord (if wid is a WellRecord id)
+        plate[r,c] gives a WellRecord
+        plate[r] gives a row as a PlateRecord
+        plate[r,:] gives a row as a PlateRecord
+        plate[:,c] gives a column as a PlateRecord
+
+        plate[:] and plate[:,:] give a copy of the plate
+
+        Anything else gives a subset of the original plate, e.g.
+        plate[0:2] or plate[0:2,:] uses only row 0 and 1
+        plate[:,1:3] uses only columns 1 and 2
+        plate[0:2,1:3] uses only rows 0 & 1 and only cols 1 & 2
+
+        >>> from Bio import Phenotype
+        >>> plate = Phenotype.read("plate.csv", "pm-csv")
+
+        You can access a well of the plate, using its id.
+        
+        >>> w = plate['A01']
+
+        You can access a row of the plate as a PlateRecord using an integer
+        index:
+
+        >>> first_row = plate[0]
+        >>> print(first_row)
+        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], WellRecord['A04']...WellRecord['A12']')
+        >>> last_row = plate[-1]
+        >>> print(last_row)
+        PlateRecord('WellRecord['H01'], WellRecord['H02'], WellRecord['H03'], WellRecord['H04']...WellRecord['H12']')
+
+        You can also access use python's slice notation to sub-plates
+        containing only some of the plate rows:
+
+        >>> sub_plate = plate[2:5]
+        >>> print(sub_plate)
+        PlateRecord('WellRecord['C01'], WellRecord['C02'], WellRecord['C03'], WellRecord['C04']...WellRecord['E12']')
+        
+        This includes support for a step, i.e. plate[start:end:step], which
+        can be used to select every second row:
+
+        >>> sub_plate = plate[::2]
+
+        You can also use two indices to specify both rows and columns.
+        Using simple integers gives you the single wells. e.g.
+
+        >>> w = plate[3, 4]
+        >>> print(w.id)
+        'D05'
+
+        To get a single column use this syntax:
+
+        >>> sub_plate = plate[:, 4]
+        >>> print(sub_plate)
+        PlateRecord('WellRecord['A05'], WellRecord['B05'], WellRecord['C05'], WellRecord['D05']...WellRecord['H05']')
+
+        Or, to get part of a column,
+
+        >>> sub_plate = plate[1:3, 4]
+        >>> print(sub_plate)
+        PlateRecord(WellRecord['B05'], WellRecord['C05'])
+
+        However, in general you get a sub-plate,
+
+        >>> print(align[1:5, 3:6])
+        PlateRecord('WellRecord['B04'], WellRecord['B05'], WellRecord['B06'], WellRecord['C04']...WellRecord['E06']')
+        
+        This should all seem familiar to anyone who has used the NumPy
+        array or matrix objects.
+        """
+    
+        # Well identifier access
+        if isinstance(index, basestring):
+            try:
+                return self._wells[index]
+            except KeyError:
+                raise KeyError('Well %s not found!'%index)
+        
+        # Integer index
+        elif isinstance(index, int):
+            try:
+                row = self._rows[index]
+            except IndexError:
+                raise IndexError('Row %d not found!'%index)
+            return PlateRecord(self.id,
+                        filter(lambda x: x.id.startswith(row),
+                               self._wells.values()))
+                               
+        # Slice
+        elif isinstance(index, slice):
+            rows = self._rows[index]
+            return PlateRecord(self.id,
+                        filter(lambda x: x.id[0] in rows,
+                               self._wells.values()))
+        
+        # Other access
+        elif len(index) != 2:
+            raise TypeError('Invalid index type.')
             
+        row_index, col_index = index
+        if isinstance(row_index, int) and isinstance(col_index, int):
+            # Return a single WellRecord
+            try:
+                row = self._rows[row_index]
+            except IndexError:
+                raise IndexError('Row %d not found!'%row_index)
+            try:
+                col = self._columns[col_index]
+            except IndexError:
+                raise IndexError('Column %d not found!'%col_index)
+            
+            return self._wells[row + col]
+       
+        elif isinstance(row_index, int):
+            try:
+                row = self._rows[row_index]
+            except IndexError:
+                raise IndexError('Row %d not found!'%row_index)
+            cols = self._columns[col_index]
+            
+            return  PlateRecord(self.id,
+                        filter(lambda x: x.id.startswith(row) and
+                                         x.id[1:] in cols,
+                               self._wells.values()))
+        
+        elif isinstance(col_index, int):
+            try:
+                col = self._columns[col_index]
+            except IndexError:
+                raise IndexError('Columns %d not found!'%col_index)
+            rows = self._rows[row_index]
+            
+            return  PlateRecord(self.id,
+                        filter(lambda x: x.id.endswith(col) and
+                                         x.id[0] in rows,
+                               self._wells.values()))
+            
+        else:
+            rows = self._rows[row_index]
+            cols = self._columns[col_index]
+            
+            return  PlateRecord(self.id,
+                        filter(lambda x: x.id[0] in rows and
+                                         x.id[1:] in cols,
+                               self._wells.values()))
+                               
     def __setitem__(self, key, value):
-        # Key is casted to str implicitly
-        try:
-            key = str(key)
-        except Exception:
-            # Is it even possible to get an exception here?
+        if not isinstance(key, basestring):
             raise ValueError('Well identifier should be string-like')
         self._isWell(value)
         # Provided key and well ID should be the same
@@ -153,14 +319,14 @@ class PlateRecord(object):
                             ' (got "%s" and "%s")'%(type(value.id), type(key)))
         self._wells[key] = value
         
+        self._update()
+        
     def __delitem__(self, key):
-        # Key is casted to str implicitly
-        try:
-            key = str(key)
-        except Exception:
-            # Is it even possible to get an exception here?
+        if not isinstance(key, basestring):
             raise ValueError('Well identifier should be string-like')
         del self._wells[key]
+        
+        self._update()
         
     def __iter__(self):
         for well in sorted(self._wells):
@@ -256,7 +422,7 @@ class PlateRecord(object):
         try:
             column = int(column)
         except Exception:
-            raise ValueError('Column identifier should be number')
+            raise ValueError('Column identifier should be a number')
 
         # A 96-well plate has well numbers in two digits
         for w in sorted(filter(lambda x: x.endswith('%02d'%column),
