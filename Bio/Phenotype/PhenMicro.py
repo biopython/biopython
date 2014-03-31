@@ -50,8 +50,8 @@ class PlateRecord(object):
     Microarray plate, along with metadata (if any). The single wells can be
     accessed calling their id as an index or iterating on the PlateRecord:
     
-    >>> from Bio import Phenomics
-    >>> plate = Phenomics.read("plate.csv", "pm-csv")
+    >>> from Bio import Phenotype
+    >>> plate = Phenotype.read("plate.csv", "pm-csv")
     >>> well = plate['A05']
     >>> for well in plate:
     ...    print("%s"%well.id)
@@ -86,7 +86,7 @@ class PlateRecord(object):
     Two PlateRecord objects can be compared: if all their wells are equal the 
     two plates are considered equal:
     
-    >>> plate2 = Phenomics.read("plate.json", "pm-json")
+    >>> plate2 = Phenotype.read("plate.json", "pm-json")
     >>> plate == plate2
     True
     
@@ -317,8 +317,8 @@ class PlateRecord(object):
         The python built in function str works by calling the object's ___str__
         method.  e.g.
 
-        >>> from Bio import Phenomics
-        >>> record = Phenomics.read("plates.csv", "pm-csv")
+        >>> from Bio import Phenotype
+        >>> record = Phenotype.read("plates.csv", "pm-csv")
         >>> print(record)
         Plate ID: PM09
         Well: 96
@@ -346,8 +346,8 @@ class WellRecord(object):
     Microarray well. The single time points and signals can be
     accessed iterating on the WellRecord or using lists indeces or slices:
     
-    >>> from Bio import Phenomics
-    >>> plate = Phenomics.read("plate.csv", "pm-csv")
+    >>> from Bio import Phenotype
+    >>> plate = Phenotype.read("plate.csv", "pm-csv")
     >>> well = plate['A05']
     >>> for time, signal in well:
     ...    print("Time: %f, Signal: %f" % (time, signal))
@@ -511,8 +511,8 @@ class WellRecord(object):
         The python built in function str works by calling the object's ___str__
         method.  e.g.
 
-        >>> from Bio import Phenomics
-        >>> plate = Phenomics.read("plates.csv", "pm-csv")
+        >>> from Bio import Phenotype
+        >>> plate = Phenotype.read("plates.csv", "pm-csv")
         >>> record = plate['A05']
         >>> print(record)
         Plate ID: PM09
