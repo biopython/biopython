@@ -97,6 +97,13 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(ValueError, p._isWell, 'a')
         self.assertEqual(p['A01'].id, 'A01')
         self.assertRaises(KeyError, p.__getitem__, 'test')
+        self.assertEqual(len(p[1]), 12)
+        self.assertEqual(len(p[1:4:2]), 24)
+        self.assertEqual(p[1,2], p['B03'])
+        self.assertEqual(len(p[:,1]), 8)
+        self.assertEqual(len(p[:,1:4:2]), 16)
+        self.assertRaises(TypeError, p.__getitem__, 1, 2, 3)
+        self.assertRaises(IndexError, p.__getitem__, 13)        
         self.assertRaises(ValueError, p.__setitem__, 'A02', p['A01'])
         self.assertRaises(ValueError, p.__setitem__, 'A02', 'a')
         p['A02'] = p['A02']
