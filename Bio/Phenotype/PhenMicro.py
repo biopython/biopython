@@ -46,7 +46,9 @@ _measurements = 'measurements'
 #
 
 class PlateRecord(object):
-    '''PlateRecord object stores all the wells of a particular Phenotype
+    """PlateRecord object for storing Phenotype Microarray plates data.
+    
+    A PlateRecord stores all the wells of a particular Phenotype
     Microarray plate, along with metadata (if any). The single wells can be
     accessed calling their id as an index or iterating on the PlateRecord:
     
@@ -102,7 +104,7 @@ class PlateRecord(object):
     be subtracted to all wells:
     
     >>> subplate = plate.subtractControl()
-    '''
+    """
     
     def __init__(self, plateid, wells=[]):
         self.id = plateid
@@ -122,11 +124,10 @@ class PlateRecord(object):
                   'containing the single wells')
     
     def _isWell(self, obj):
-        '''
-        Check if the given object is a WellRecord object
+        """Check if the given object is a WellRecord object
         
         Used both for the class constructor and the __setitem__ method
-        '''
+        """
         # Value should be of WellRecord type
         if not isinstance(obj, WellRecord):
             raise ValueError('A WellRecord type object is needed as value'+
@@ -171,7 +172,7 @@ class PlateRecord(object):
         return False
         
     def __len__(self):
-        '''Returns the number of wells in this plate'''
+        """Returns the number of wells in this plate"""
         return len(self._wells)
     
     def __eq__(self, other):
@@ -184,11 +185,13 @@ class PlateRecord(object):
         return not self.__eq__(other)
         
     def __add__(self, plate):
-        '''Add another PlateRecord object
+        """Add another PlateRecord object
+        
         The wells in both plates must be the same
         
         A new PlateRecord object is returned, having the same id as the 
-        left operand'''
+        left operand
+        """
         if not isinstance( plate, PlateRecord ) :
             raise TypeError('Expecting a PlateRecord object')
         
@@ -205,11 +208,13 @@ class PlateRecord(object):
         return newp
             
     def __sub__(self, plate):
-        '''Subtract another PlateRecord object
+        """Subtract another PlateRecord object
+        
         The wells in both plates must be the same
         
         A new PlateRecord object is returned, having the same id as the 
-        left operand'''
+        left operand
+        """
         if not isinstance( plate, PlateRecord ) :
             raise TypeError('Expecting a PlateRecord object')
         
@@ -226,10 +231,10 @@ class PlateRecord(object):
         return newp
         
     def getRow(self, row):
-        '''
-        Get all the wells of a given row
+        """Get all the wells of a given row
+        
         A row is identified with a letter (e.g. 'A')
-        '''
+        """
         # Key is casted to str implicitly
         try:
             row = str(row)
@@ -243,10 +248,10 @@ class PlateRecord(object):
             yield self._wells[w]
         
     def getColumn(self, column):
-        '''
-        Get all the wells of a given column
+        """Get all the wells of a given column
+        
         A column is identified with a number (e.g. '6')
-        '''
+        """
         # Column is casted to int implicitly
         try:
             column = int(column)
@@ -259,13 +264,14 @@ class PlateRecord(object):
             yield self._wells[w]
 
     def subtractControl(self, control='A01', wells=None):
-        '''Subtract a 'control' well from the other plate's wells
+        """Subtract a 'control' well from the other plates wells
+        
         By default the control is subtracted to all wells, unless
         a list of well ID is provided
         
         The control well should belong to the plate
         A new PlateRecord object is returned
-        '''
+        """
         if control not in self:
             raise ValueError('Control well not present in plate')
         wcontrol = self[control]
@@ -342,8 +348,10 @@ class PlateRecord(object):
         return "\n".join(lines)
 
 class WellRecord(object):
-    '''WellRecord object stores all the time course signals of a Phenotype
-    Microarray well. The single time points and signals can be
+    """WellRecord object stores all the time course signals of a Phenotype
+    Microarray well.
+    
+    The single time points and signals can be
     accessed iterating on the WellRecord or using lists indeces or slices:
     
     >>> from Bio import Phenotype
@@ -385,7 +393,7 @@ class WellRecord(object):
     >>> well2 = well + well1
     >>> print(well2.id)
     A05
-    '''
+    """
     
     def __init__(self, wellid, plate=PlateRecord(None), signals={}):
         self.plate = plate
@@ -396,9 +404,9 @@ class WellRecord(object):
         self._signals = signals
     
     def _interpolate(self, time):
-        '''Private method to get a linear interpolation of the signals
+        """Private method to get a linear interpolation of the signals
         at certain time points.
-        '''
+        """
         times = sorted(self._signals.keys())
         
         return np.interp(time,
@@ -407,8 +415,8 @@ class WellRecord(object):
                         left=np.nan, right=np.nan)
     
     def __setitem__(self, time, signal):
-        '''Assign a signal at a certain time point.
-        '''
+        """Assign a signal at a certain time point.
+        """
         try:
             time = float(time)
         except ValueError:
@@ -421,8 +429,8 @@ class WellRecord(object):
         self._signals[time] = signal
     
     def __getitem__(self, time):
-        '''Returns a subset of signals or a single signal.
-        '''
+        """Returns a subset of signals or a single signal.
+        """
         if isinstance( time, slice ) :
             time = np.arange(time.start, time.stop, time.step)
             return list(self._interpolate(time))
@@ -454,10 +462,11 @@ class WellRecord(object):
         return not self.__eq__(other)
            
     def __add__(self, well):
-        '''Add another WellRecord object
+        """Add another WellRecord object
         
         A new WellRecord object is returned, having the same id as the 
-        left operand'''
+        left operand
+        """
         if not isinstance( well, WellRecord ) :
             raise TypeError('Expecting a WellRecord object')
                             
@@ -472,10 +481,11 @@ class WellRecord(object):
         return neww
             
     def __sub__(self, well):
-        '''Subtract another WellRecord object
+        """Subtract another WellRecord object
         
         A new WellRecord object is returned, having the same id as the 
-        left operand'''
+        left operand
+        """
         if not isinstance( well, WellRecord ) :
             raise TypeError('Expecting a WellRecord object')
                             
@@ -490,7 +500,7 @@ class WellRecord(object):
         return neww
             
     def __len__(self):
-        '''Returns the number of time points sampled'''
+        """Returns the number of time points sampled"""
         return len(self._signals)
             
     def __repr__(self):
@@ -538,15 +548,15 @@ class WellRecord(object):
         return "\n".join(lines)
         
     def getRaw(self):
-        '''Get a list of time/signal pairs'''
+        """Get a list of time/signal pairs"""
         return [(t,self._signals[t]) for t in sorted(self._signals.keys())]
         
     def getTimes(self):
-        '''Get a list of the recorded time points'''
+        """Get a list of the recorded time points"""
         return sorted(self._signals.keys())
         
     def getSignals(self):
-        '''Get a list of the recorded signals (ordered by collection time)'''
+        """Get a list of the recorded signals (ordered by collection time)"""
         return [self._signals[t] for t in sorted(self._signals.keys())]
 
 def JsonIterator(handle):
@@ -771,8 +781,8 @@ def CsvIterator(handle):
         yield plate
 
 def _toOPM(plate):
-    '''Helper function to transform a PlateRecord object into a dictionary
-    '''
+    """Helper function to transform a PlateRecord object into a dictionary
+    """
     d={}
     
     for k, v in plate.qualifiers.items():
