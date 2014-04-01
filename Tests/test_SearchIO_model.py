@@ -61,6 +61,15 @@ class QueryResultCases(unittest.TestCase):
         self.qresult.seq_len = 1102
         self.qresult.target = 'refseq_rna'
 
+    def test_order(self):
+        # added hits should be ordered
+        self.assertEqual(self.qresult[0], hit11)
+        self.assertEqual(self.qresult[2], hit31)
+        # removal of second item should bump item #2 to #1
+        del self.qresult['hit2']
+        self.assertEqual(self.qresult[0], hit11)
+        self.assertEqual(self.qresult[1], hit31)
+
     def test_init_none(self):
         """Test QueryResult.__init__, no arguments"""
         qresult = QueryResult()
