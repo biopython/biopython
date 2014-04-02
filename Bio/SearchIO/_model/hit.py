@@ -123,8 +123,10 @@ class Hit(_BaseSearchObject):
         """
         # default attribute values
         self._id = id
+        self._alt_ids = []
         self._query_id = query_id
         self._description = None
+        self._alt_descriptions = []
         self._query_description = None
 
         for attr in ('query_id', 'query_description', 'hit_id',
@@ -291,6 +293,16 @@ class Hit(_BaseSearchObject):
             """ID string of the query that produced the hit""")
     # returns all hsps
     hsps = allitems(doc="""HSP objects contained in the Hit""")
+
+    @property
+    def alt_ids(self):
+        """Alternative IDs of the Hit"""
+        return self._alt_ids
+
+    @property
+    def alt_descriptions(self):
+        """Alternative descriptions of the Hit"""
+        return self._alt_descriptions
 
     @property
     def fragments(self):
