@@ -667,10 +667,32 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0.267, qresult.stat_lambda)
         self.assertEqual(0.14, qresult.stat_entropy)
         self.assertEqual(212, len(qresult))
+        # check for alternative ID results
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|26250604|ref|NP_756644.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|30064867|ref|NP_839038.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|24115132|ref|NP_709642.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|24054404|gb|AAN45349.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|2367310|gb|AAC76839.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|30043127|gb|AAP18849.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|26111035|gb|AAN83218.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|3193217|gb|AAC19240.1|'])
+        self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
+                qresult['gi|7444818|pir||E65188'])
 
         hit = qresult[0]
         self.assertEqual('gi|49176427|ref|NP_418280.3|', hit.id)
-        self.assertEqual('component of Sec-independent translocase [Escherichia coli K12] >gi|26250604|ref|NP_756644.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|30064867|ref|NP_839038.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|24115132|ref|NP_709642.1| hypothetical protein SF3914 [Shigella flexneri 2a str. 301] >gi|24054404|gb|AAN45349.1| orf, conserved hypothetical protein [Shigella flexneri 2a str. 301] >gi|2367310|gb|AAC76839.1| component of Sec-independent translocase [Escherichia coli K12] >gi|30043127|gb|AAP18849.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|26111035|gb|AAN83218.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|3193217|gb|AAC19240.1| MttA1 [Escherichia coli] >gi|7444818|pir||E65188 hypothetical 11.3 kD protein in udp-rfaH intergenic region - Escherichia coli (strain K-12)', hit.description)
+        self.assertEqual('component of Sec-independent translocase '
+                '[Escherichia coli K12]', hit.description)
+        self.assertEqual(9, len(hit.alt_ids))
+        self.assertEqual(9, len(hit.alt_descriptions))
         self.assertEqual(103, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -1405,10 +1427,24 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(0.267, qresult.stat_lambda)
         self.assertEqual(0.14, qresult.stat_entropy)
         self.assertEqual(5, len(qresult))
+        # check for alternative ID results
+        self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
+                qresult['gi|221311516|ref|ZP_03593363.1|'])
+        self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
+                qresult['gi|221315843|ref|ZP_03597648.1|'])
+        self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
+                qresult['gi|221320757|ref|ZP_03602051.1|'])
+        self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
+                qresult['gi|221325043|ref|ZP_03606337.1|'])
+        self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
+                qresult['gi|321313111|ref|YP_004205398.1|'])
 
         hit = qresult[0]
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.id)
-        self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] >gi|221311516|ref|ZP_03593363.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] >gi|221315843|ref|ZP_03597648.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. NCIB 3610] >gi|221320757|ref|ZP_03602051.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. JH642] >gi|221325043|ref|ZP_03606337.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. SMY] >gi|321313111|ref|YP_004205398.1| unnamed protein product [Bacillus subtilis BSn5]', hit.description)
+        self.assertEqual('membrane bound lipoprotein [Bacillus '
+                'subtilis subsp. subtilis str. 168]', hit.description)
+        self.assertEqual(5, len(hit.alt_ids))
+        self.assertEqual(5, len(hit.alt_descriptions))
         self.assertEqual(102, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -3043,13 +3079,17 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(0, qresult.stat_lambda)
         self.assertEqual(0, qresult.stat_entropy)
         self.assertEqual(5, len(qresult))
+        # check for alternative ID results
+        self.assertEqual(qresult['gi|296147483|ref|NM_001183135.1|'],
+                qresult['gi|116616412|gb|EF059095.1|'])
 
         hit = qresult[0]
         self.assertEqual('gi|296147483|ref|NM_001183135.1|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, '
-                'complete cds >gi|116616412|gb|EF059095.1| Synthetic '
-                'construct Saccharomyces cerevisiae clone FLH203015.01X '
-                'MON2, complete sequence', hit.description)
+        self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) '
+                'mRNA, complete cds', hit.description)
+        self.assertEqual('gi|116616412|gb|EF059095.1|', hit.alt_ids[0])
+        self.assertEqual('Synthetic construct Saccharomyces cerevisiae '
+                'clone FLH203015.01X MON2, complete sequence', hit.alt_descriptions[0])
         self.assertEqual(4911, hit.seq_len)
         self.assertEqual(7, len(hit))
 
