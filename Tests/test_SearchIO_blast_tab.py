@@ -39,6 +39,9 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, len(qresults))
         self.assertEqual(192, len(qresults[0].hits))
         self.assertEqual(243, sum([len(x) for x in qresults[0]]))
+        # there is one hit with an alternative ID
+        self.assertEqual(qresults[0]['gi|31126987|gb|AY255526.2|'],
+                qresults[0]['gi|31342050|ref|NM_181083.2|'])
 
         # only checking the new fields in 2.2.28+
         hit = qresults[0][0]
@@ -692,6 +695,7 @@ class BlastnTabCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
         self.assertEqual(['gi|145479850|ref|XM_001425911.1|'], hit.id_all)
+        self.assertEqual([], hit.alt_ids)
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.accession)
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.accession_version)
         self.assertEqual('0', hit.gi)
@@ -770,6 +774,7 @@ class BlastnTabCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
         self.assertEqual(['gi|350596019|ref|XM_003360601.2|'], hit.id_all)
+        self.assertEqual([], hit.alt_ids)
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.accession)
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.accession_version)
         self.assertEqual('0', hit.gi)
