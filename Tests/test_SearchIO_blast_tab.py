@@ -26,7 +26,24 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class BlastnTabCases(unittest.TestCase):
+class BlastTabCases(unittest.TestCase):
+
+    def test_tab_2228_tblastn_001(self):
+        "Test parsing TBLASTN 2.2.28+ tabular output (tab_2228_tblastn_001)"
+        tab_file = get_file('tab_2228_tblastn_001.txt')
+        qresults = list(parse(tab_file, FMT,
+                              fields=list(all_fields.values()),
+                              comments=True))
+
+        self.assertEqual(1, len(qresults))
+        self.assertEqual(10, len(qresults[0].hits))
+        # there is one hit with an alternative ID
+        self.assertEqual(qresults[0]['gi|148227873|ref|NM_001095167.1|'],
+                qresults[0]['gi|55250552|gb|BC086280.1|'])
+
+        # check some of the HSPs
+        self.assertEqual(0.0, qresults[0][0][0].evalue)
+        self.assertEqual(8e-173, qresults[0][-1][0].evalue)
 
     def test_tab_2228_tblastx_001(self):
         "Test parsing TBLASTX 2.2.28+ tabular output (tab_2228_tblastx_001)"

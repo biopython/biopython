@@ -137,7 +137,7 @@ _DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch',
 # one field from each of the following sets must exist in order for the
 # parser to work
 _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
-_MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
+_MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver', 'sallseqid'])
 
 # simple function to create BLAST HSP attributes that may be computed if
 # other certain attributes are present
@@ -348,10 +348,12 @@ class BlastTabParser(object):
 
     def _get_id(self, parsed):
         """Returns the value used for a QueryResult or Hit ID from a parsed row."""
-        # use 'id', with 'accession' and 'accession_version' fallbacks
-        # one of these must have a value since we've checked whether
+        # use 'id', with 'id_all', 'accession' and 'accession_version'
+        # fallbacks one of these must have a value since we've checked whether
         # they exist or not when parsing the comments
         id_cache = parsed.get('id')
+        if id_cache is None and 'id_all' in parsed:
+            id_cache = parsed.get('id_all')[0]
         if id_cache is None:
             id_cache = parsed.get('accession')
         if id_cache is None:

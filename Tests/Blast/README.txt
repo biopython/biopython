@@ -8,6 +8,8 @@ release version, from the most recent first.
 
 BLAST 2.2.28+
 -------------
+tab_2228_tblastn_001         single query, custom columns: evalue sallseqid qseqid, commented
+
 tab_2228_tblastx_001         single query with all columns (including new ones added in this version), commented
 
 
