@@ -451,7 +451,7 @@ class BlastTabParser(object):
                     for attr, value in prev['hit'].items():
                         setattr(hit, attr, value)
                         if attr == 'id_all':
-                            hit._alt_ids = [x for x in value if x != hit.id]
+                            hit._id_alt = [x for x in value if x != hit.id]
                     hit_list.append(hit)
                     hsp_list = []
                 # create qresult and yield if we're at a new qresult or EOF

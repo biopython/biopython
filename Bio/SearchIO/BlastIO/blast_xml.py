@@ -401,8 +401,8 @@ class BlastXmlParser(object):
 
             hit = Hit(hsps)
             hit.description = hit_desc
-            hit._alt_ids = [x[0] for x in id_descs[1:]]
-            hit._alt_descriptions = [x[1] for x in id_descs[1:]]
+            hit._id_alt = [x[0] for x in id_descs[1:]]
+            hit._description_alt = [x[1] for x in id_descs[1:]]
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id
 

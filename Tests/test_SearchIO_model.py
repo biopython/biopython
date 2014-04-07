@@ -150,10 +150,10 @@ class QueryResultCases(unittest.TestCase):
     def test_contains_alt(self):
         """Test QueryResult.__contains__, with alternative IDs"""
         # contains should work with alternative hit IDs
-        hit11._alt_ids = ['alt1']
+        hit11._id_alt = ['alt1']
         query = QueryResult([hit11])
         self.assertTrue('alt1' in query)
-        hit11._alt_ids = []
+        hit11._id_alt = []
 
     def test_len(self):
         """Test QueryResult.__len__"""
@@ -179,7 +179,7 @@ class QueryResultCases(unittest.TestCase):
     def test_setitem_ok_alt(self):
         """Test QueryResult.__setitem__, checking alt hit IDs"""
         # hit objects assignment should make alt IDs visible
-        hit11._alt_ids = ['alt1', 'alt11']
+        hit11._id_alt = ['alt1', 'alt11']
         query = QueryResult()
         query['hit1'] = hit11
         self.assertEqual(hit11, query['hit1'])
@@ -187,13 +187,13 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(hit11, query['alt11'])
         self.assertTrue(hit11.id != 'alt1')
         self.assertTrue(hit11.id != 'alt11')
-        hit11._alt_ids = []
+        hit11._id_alt = []
 
     def test_setitem_ok_alt_existing(self):
         """Test QueryResult.__setitem__, existing key"""
         # hit objects assignment on existing hits should also update alt IDs
-        hit11._alt_ids = ['alt1']
-        hit21._alt_ids = ['alt2']
+        hit11._id_alt = ['alt1']
+        hit21._id_alt = ['alt2']
         query = QueryResult()
         query['hit'] = hit11
         self.assertEqual(hit11, query['hit'])
@@ -202,16 +202,16 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(hit21, query['hit'])
         self.assertEqual(hit21, query['alt2'])
         self.assertRaises(KeyError, query.__getitem__, 'alt1')
-        hit11._alt_ids = []
-        hit21._alt_ids = []
+        hit11._id_alt = []
+        hit21._id_alt = []
 
     def test_setitem_ok_alt_ok_promote(self):
         """Test QueryResult.__setitem__, previously alt ID"""
         # hit objects assignment with ID previously existing as alternative
         # should make the ID primary
-        hit11._alt_ids = ['alt1']
-        hit41._alt_ids = ['alt4']
-        hit31._alt_ids = ['alt3']
+        hit11._id_alt = ['alt1']
+        hit41._id_alt = ['alt4']
+        hit31._id_alt = ['alt3']
         query = QueryResult([hit11, hit41])
         self.assertEqual(hit11, query['alt1'])
         self.assertEqual(hit41, query['alt4'])
@@ -222,9 +222,9 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(hit41, query['alt4'])
         self.assertTrue('alt1' in query._items)
         self.assertTrue('alt1' not in query._QueryResult__alt_hit_ids)
-        hit11._alt_ids = []
-        hit41._alt_ids = []
-        hit31._alt_ids = []
+        hit11._id_alt = []
+        hit41._id_alt = []
+        hit31._id_alt = []
 
     def test_setitem_wrong_key_type(self):
         """Test QueryResult.__setitem__, wrong key type"""
@@ -286,8 +286,8 @@ class QueryResultCases(unittest.TestCase):
     def test_getitm_slice_alt_ok(self):
         """Test QueryResult.__getitem__, with slice and alt IDs"""
         # slicing should be reflected in the alt IDs as well
-        hit31._alt_ids = ['alt3']
-        hit11._alt_ids = ['alt1']
+        hit31._id_alt = ['alt3']
+        hit11._id_alt = ['alt1']
         query = QueryResult([hit31, hit11])
         self.assertEqual(hit11, query['hit1'])
         self.assertEqual(hit11, query['alt1'])
@@ -298,17 +298,17 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(hit31, query['alt3'])
         self.assertRaises(KeyError, query.__getitem__, 'hit1')
         self.assertRaises(KeyError, query.__getitem__, 'alt1')
-        hit31._alt_ids = []
-        hit11._alt_ids = []
+        hit31._id_alt = []
+        hit11._id_alt = []
 
     def test_getitem_alt_ok(self):
         """Test QueryResult.__getitem__, single item with alternative ID"""
-        hit11._alt_ids = ['alt1']
+        hit11._id_alt = ['alt1']
         query = QueryResult([hit11])
         self.assertEqual(hit11, query['hit1'])
         self.assertEqual(hit11, query['alt1'])
         self.assertTrue(hit11.id != 'alt1')
-        hit11._alt_ids = []
+        hit11._id_alt = []
 
     def test_delitem_string_ok(self):
         """Test QueryResult.__getitem__, with string"""
@@ -337,14 +337,14 @@ class QueryResultCases(unittest.TestCase):
     def test_delitem_alt_ok(self):
         """Test QueryResult.__delitem__, with alt ID"""
         # delitem should work with alt IDs
-        hit31._alt_ids = ['alt3']
+        hit31._id_alt = ['alt3']
         qresult = QueryResult([hit31, hit41])
         self.assertEqual(2, len(qresult))
         del qresult['alt3']
         self.assertEqual(1, len(qresult))
         self.assertEqual(hit41, qresult['hit4'])
         self.assertRaises(KeyError, qresult.__getitem__, 'alt3')
-        hit31._alt_ids = []
+        hit31._id_alt = []
 
     def test_description_set(self):
         """Test QueryResult.description setter"""
@@ -459,20 +459,20 @@ class QueryResultCases(unittest.TestCase):
     def test_append_alt_id_exists(self):
         """Test QueryResult.append, when alt ID exists"""
         # append should raise an error if hit_key already exists as alt ID
-        hit11._alt_ids = ['alt']
-        hit21._alt_ids = ['alt']
+        hit11._id_alt = ['alt']
+        hit21._id_alt = ['alt']
         qresult = QueryResult([hit11])
         self.assertRaises(ValueError, qresult.append, hit21)
-        hit11._alt_ids = []
-        hit21._alt_ids = []
+        hit11._id_alt = []
+        hit21._id_alt = []
 
     def test_append_alt_id_exists_alt(self):
         """Test QueryResult.append, when alt ID exists as primary"""
         # append should raise an error if alt ID already exists as primary ID
-        hit21._alt_ids = ['hit1']
+        hit21._id_alt = ['hit1']
         qresult = QueryResult([hit11])
         self.assertRaises(ValueError, qresult.append, hit21)
-        hit21._alt_ids = []
+        hit21._id_alt = []
 
     def test_hit_filter(self):
         """Test QueryResult.hit_filter"""
@@ -663,15 +663,15 @@ class QueryResultCases(unittest.TestCase):
     def test_pop_string_alt_ok(self):
         """Test QueryResult.pop, with alternative ID"""
         # pop should work with alternative index
-        hit11._alt_ids = ['alt1']
-        hit21._alt_ids = ['alt2']
+        hit11._id_alt = ['alt1']
+        hit21._id_alt = ['alt2']
         qresult = QueryResult([hit11, hit21])
         hit = qresult.pop('alt1')
         self.assertEqual(hit, hit11)
         self.assertEqual([hit21], list(qresult))
         self.assertTrue('hit1' not in qresult)
-        hit11._alt_ids = []
-        hit21._alt_ids = []
+        hit11._id_alt = []
+        hit21._id_alt = []
 
     def test_index(self):
         """Test QueryResult.index"""
@@ -682,10 +682,10 @@ class QueryResultCases(unittest.TestCase):
     def test_index_alt(self):
         """Test QueryResult.index, with alt ID"""
         # index should work with alt IDs
-        hit11._alt_ids = ['alt1']
+        hit11._id_alt = ['alt1']
         qresult = QueryResult([hit21, hit11])
         self.assertEqual(1, qresult.index('alt1'))
-        hit11._alt_ids = []
+        hit11._id_alt = []
 
     def test_index_not_present(self):
         """Test QueryResult.index, when index is not present"""
