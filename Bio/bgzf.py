@@ -701,6 +701,12 @@ class BgzfReader(object):
     def fileno(self):
         return self._handle.fileno()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
+
 
 class BgzfWriter(object):
 
@@ -802,6 +808,12 @@ class BgzfWriter(object):
 
     def fileno(self):
         return self._handle.fileno()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
 
 
 if __name__ == "__main__":
