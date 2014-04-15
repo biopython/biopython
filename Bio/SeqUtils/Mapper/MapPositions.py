@@ -23,6 +23,7 @@ class CDSPositionError(InvalidPositionError):
 class ProteinPositionError(InvalidPositionError):
     "Exception for bad protein coordinates"
 
+sentinel = object()
 
 class MapPosition(object):
     """Generic position for coordinate mapping."""
@@ -209,7 +210,7 @@ class CDSPosition(MapPosition):
         -------
         CDSPosition
         """
-        if not anchor:
+        if anchor is None:
             pos = cls("%+d" % offset)
         elif anchor < 0:
             raise CDSPositionError("Anchor cannot be negative.")
@@ -238,7 +239,7 @@ class CDSPosition(MapPosition):
         self.validate(anchor=val)
         self.pos = val
 
-    def validate(self, anchor="sentinel", offset="sentinel"):
+    def validate(self, anchor=sentinel, offset=sentinel):
         """Check whether anchor and offset yield a valid position.
 
         Parameters
@@ -253,9 +254,9 @@ class CDSPosition(MapPosition):
         bool
         """
 
-        if anchor == "sentinel":
+        if anchor is sentinel:
             anchor = self.anchor
-        if offset == "sentinel":
+        if offset is sentinel:
             offset = self.offset
         if offset == 0:
             raise CDSPositionError(
@@ -278,7 +279,8 @@ class CDSPosition(MapPosition):
         # outside CDS
         elif self.offset > 0:
             return "post-CDS"
-        return "pre-CDS"
+        else:
+            return "pre-CDS"
         assert False  # all integers should return
 
     @property
@@ -291,10 +293,10 @@ class CDSPosition(MapPosition):
             return {'offset': self.offset}
 
     fmt_dict = {
-        'exon': "%d",
-        'intron': "%d%+d",
-        'post-CDS': "%+d",
-        'pre-CDS': "%+d",
+        'exon': "{pos:d}",
+        'intron': "{pos:d}{offset:+d}",
+        'post-CDS': "{offset:+d}",
+        'pre-CDS': "{offset:+d}",
     }
 
     @staticmethod
@@ -333,7 +335,7 @@ class CDSPosition(MapPosition):
         # set default dicts if parameter dicts are false
         fmt_dict = fmt_dict or self.fmt_dict
         val_dict = val_dict or self.sub_dict
-        return fmt_dict[self.pos_type] % tuple(val_dict.values())
+        return fmt_dict[self.pos_type].format(**val_dict)
 
     @staticmethod
     def parse_int(cpos):
@@ -395,7 +397,7 @@ class CDSPosition(MapPosition):
     def to_hgvs(self):
         """Convert CDS position to HGVS"""
         fmt_dict = copy(self.fmt_dict)
-        fmt_dict['post-CDS'] = "*%d"
+        fmt_dict['post-CDS'] = "*{offset:d}"
         sub_dict = self._shift_index(self.sub_dict, 1)
         return self._make_str(sub_dict, fmt_dict)
 

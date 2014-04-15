@@ -140,17 +140,17 @@ class CoordinateMapper(object):
         fmts = CDSPosition.fmt_dict
 
         def _simple_g2c(g):
-            return CDSPosition(self.exon_list.index(g))
+            return self.exon_list.index(g)
 
         # within exon
         if gpos in self.exons:
-            return _simple_g2c(gpos)
+            return CDSPosition(_simple_g2c(gpos))
         # before CDS
         if gpos < self.exons.start:
-            return CDSPosition(fmts['post-CDS'] % (gpos - self.exons.start))
+            return CDSPosition(fmts['post-CDS'].format(offset=gpos - self.exons.start))
         # after CDS
         if gpos >= self.exons.end:
-            return CDSPosition(fmts['pre-CDS'] % (gpos - self.exons.end + 1))
+            return CDSPosition(fmts['pre-CDS'].format(offset=gpos - self.exons.end + 1))
         # intron
         # set start of first intron
         prev_end = self.exons.parts[0].end
@@ -172,7 +172,8 @@ class CoordinateMapper(object):
                 offset = gpos - prev_end + 1
                 assert offset > 0
             assert self.check_intron(anchor, offset)
-            return CDSPosition(fmts['intron'] % (anchor, offset))
+            return CDSPosition(fmts['intron'].format(pos=anchor,
+                                                     offset=offset))
 
         assert False  # function should return for every integer
 
