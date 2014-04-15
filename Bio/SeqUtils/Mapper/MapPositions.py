@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+from __future__ import print_function
 from copy import copy
 import re
 
@@ -426,10 +427,10 @@ class CDSPosition(MapPosition):
 if __name__ == "__main__":
 
     def print_pos(pos_obj):
-        print "object:", pos_obj
-        print "repr:", repr(pos_obj)
-        print "HGVS:", pos_obj.to_hgvs()
-        print
+        print("object: %s" % pos_obj)
+        print("repr: %s" % repr(pos_obj))
+        print("HGVS: %s" % pos_obj.to_hgvs())
+        print()
 
     g = GenomePosition.from_hgvs(6)
     print_pos(g)
@@ -441,5 +442,5 @@ if __name__ == "__main__":
     #test_c = CDSPosition(6)
     #test_c = CDSPosition(-1)
     print_pos(test_g)
-    print test_c.pos_type
+    print(test_c.pos_type)
     print_pos(test_c)

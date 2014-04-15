@@ -13,6 +13,6 @@ Includes methods for converting locations to and from HGVS conventions.
 Genbank locations can be parsed with SeqIO.
 """
 
-from MapPositions import MapPosition, \
+from .MapPositions import MapPosition, \
         GenomePosition, CDSPosition, ProteinPosition
-from CoordinateMapper import CoordinateMapper
+from .CoordinateMapper import CoordinateMapper

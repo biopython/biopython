@@ -7,6 +7,7 @@
 from functools import wraps
 import unittest
 
+from Bio._py3k import range
 from Bio.SeqFeature import FeatureLocation, SeqFeature
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils.Mapper import CoordinateMapper, CDSPosition
@@ -18,9 +19,9 @@ from Bio.SeqUtils.Mapper.MapPositions import CDSPositionError, \
 
 exons = [(5808, 5860), (6757, 6874), (7767, 7912), (13709, 13785)]
 cmap = CoordinateMapper(exons)
-g_exons = xrange(7868, 7875)  # len 7
-c_exons = xrange(270, 279)  # len 9
-p_exons = xrange(90, 93)   # len 3
+g_exons = range(7868, 7875)  # len 7
+c_exons = range(270, 279)  # len 9
+p_exons = range(90, 93)   # len 3
 p_exons_trip = [p for p in p_exons for n in range(3)]  # len 9
 c_exon_prs = ((270, 272), (273, 275), (276, 278))  # len 3
 g_exon_prs = ((7868, 7870), (7871, 7873), (7874, 7876))  # len 3
@@ -336,7 +337,7 @@ class TestStrand(unittest.TestCase):
         assert list(self.cm.exons) == self.g_exons
         c_len = 11
         assert c_len == len(list(self.cm.exons))
-        self.c_exons = xrange(c_len)
+        self.c_exons = range(c_len)
 
     def testg2c(self):
         "c2g and g2c should work for mixed-strand exons"

@@ -31,10 +31,12 @@ p                     A  B  C  D  E  F  G  H  I  J  K
 
 """
 
+from __future__ import print_function
 from functools import wraps
 from math import floor
 import warnings
 
+from Bio._py3k import range
 from Bio import BiopythonParserWarning
 from Bio.SeqFeature import FeatureLocation
 from Bio.SeqUtils.Mapper import GenomePosition, CDSPosition, ProteinPosition
@@ -72,7 +74,7 @@ class CoordinateMapper(object):
         # Try as SeqRecord
         if hasattr(seq, 'features'):
             # generator
-            cdsf = (f for f in seq.features if f.type == 'CDS').next()
+            cdsf = next(f for f in seq.features if f.type == 'CDS')
             return cdsf.location
         # Try as SeqFeature
         elif hasattr(seq, 'location'):
@@ -337,41 +339,41 @@ if __name__ == '__main__':
     def test_list(g_range):
         cm = CoordinateMapper(exons)
         for g1 in g_range:
-            print g1,
+            print(g1, end=" ")
             c1 = cm.g2c(g1)
-            print c1,
+            print(c1, end=" ")
             p1 = cm.c2p(c1)
-            print p1,
+            print(p1, end=" ")
             if p1:
                 c2 = cm.p2c(p1)[0]
             else:
                 c2 = c1
-            print ' | ', c2,
+            print(' | ', c2, end=" ")
             g2 = cm.c2g(c2)
-            print g2
+            print(g2)
 
-        print cm.g2p(7872)
-        print cm.p2g(92)
+        print(cm.g2p(7872))
+        print(cm.p2g(92))
 
     def test_simple():
-        from SeqFeature import SeqFeature
+        from Bio.SeqFeature import SeqFeature
         location = sum([FeatureLocation(2, 4, +1),
                         FeatureLocation(8, 11, +1),
                         FeatureLocation(16, 18, +1)])
         simple_exons = SeqFeature(location, type="CDS")
         cm = CoordinateMapper(simple_exons)
-        print cm.exons
-        print list(cm.exons)
-        print range(len(cm.exons))
+        print(cm.exons)
+        print(list(cm.exons))
+        print(range(len(cm.exons)))
         for i in range(len(cm.exons)):
-            print "%3s" % cm.c2g(i),
-        print
-        for i in xrange(20):
-            print "%3d" % i,
-        print
-        for i in xrange(20):
-            print "%3s" % cm.g2c(i),
-        print
+            print("%3s" % cm.c2g(i), end=" ")
+        print()
+        for i in range(20):
+            print("%3d" % i, end=" ")
+        print()
+        for i in range(20):
+            print("%3s" % cm.g2c(i), end=" ")
+        print()
 
     r1 = (7870, 7871, 7872, 7873, 7874)
     r2 = (5807, 5808, 5809,
@@ -380,5 +382,5 @@ if __name__ == '__main__':
           13784, 13785, 13786)
     test_list(r1)
     #test_list(r2)
-    print
+    print()
     test_simple()
