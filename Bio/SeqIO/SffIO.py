@@ -934,11 +934,12 @@ def _check_eof(handle, index_offset, index_length):
                          "be the start of a concatenated SFF file? "
                          "See offset %i" % (padding, offset))
     if padding and not extra:
+        #TODO - Is this error harmless enough to just ignore?
         import warnings
         from Bio import BiopythonParserWarning
-        warnings.warn("Your SFF file is invalid, post index %i byte "
-                      "null padding region at end of file is missing"
-                      % padding, BiopythonParserWarning)
+        warnings.warn("Your SFF file is technically invalid as it is missing "
+                      "a terminal %i byte null padding region." % padding,
+                      BiopythonParserWarning)
         return
     if extra.count(_null) != padding:
         import warnings
