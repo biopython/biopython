@@ -63,16 +63,23 @@ class Alignment(object):
         # hold everything at a list of SeqRecord objects
         self._records = []
 
-    def _str_line(self, record):
+    def _str_line(self, record, length=50):
         """Returns a truncated string representation of a SeqRecord (PRIVATE).
 
         This is a PRIVATE function used by the __str__ method.
         """
-        if len(record.seq) <= 50:
-            return "%s %s" % (record.seq, record.id)
+        if record.seq.__class__.__name__ == "CodonSeq":
+            if len(record.seq) <= length:
+                return "%s %s" % (record.seq, record.id)
+            else:
+                return "%s...%s %s" \
+                       % (record.seq[:length-3], record.seq[-3:], record.id)
         else:
-            return "%s...%s %s" \
-                   % (record.seq[:44], record.seq[-3:], record.id)
+            if len(record.seq) <= length:
+                return "%s %s" % (record.seq, record.id)
+            else:
+                return "%s...%s %s" \
+                       % (record.seq[:length-6], record.seq[-3:], record.id)
 
     def __str__(self):
         """Returns a multi-line string summary of the alignment.

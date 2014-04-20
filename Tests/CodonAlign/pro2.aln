@@ -1,0 +1,101 @@
+CLUSTAL W (1.81) multiple sequence alignment
+
+isotig35100                          ERQGRWCVPGEAVEARVSRSCVREMAEPGRRRGPRSRGGGAGRGARRARVARGRRPRAPQ
+isotig35101                          ERQGRWCVPGEAVEARVSRSCVREMAEPGRRRGPRSRGGGAGRGARRARVARGRRPRAPQ
+ENSG00000176953:ENST00000320805      ------------------------MAEPVGKRGRWSGGSGAGRGGRGGWGGRGRRPRAQR
+                                                             ****  .** .* *.*****.* .. .******* .
+
+isotig35100                          SLSRLIPDTVLVDLVSDSDEEILEV-----VADPVEAPAARAPAPAAHGQDSDSDSAGAD
+isotig35101                          SLSRLIPDTVLVDLVSDSDEEILEV-----VADPVEAPAARAPAPAAHGQDSDSDSAGAD
+ENSG00000176953:ENST00000320805      SPSRGTLDVVSVDLVTDSDEEILEVATARGAADEVEVEPPEPPGPVASRDNSNSDSEGED
+                                     * **   *.* ****:*********     .** **. .. .*.*.*  ::*:*** * *
+
+isotig35100                          EGPAGAPQTLVRRRRRRLLDPGEAPVVPVYSGKVQSSLNLIPDNSSLLKLCPSEPEDEAD
+isotig35101                          EGPAGAPQTLVRRRRRRLLDPGEAPVVPVYSGKVQSSLNLIPDNSSLLKLCPSEPEDEAD
+ENSG00000176953:ENST00000320805      RRPAGPPREPVRRRRRLVLDPGEAPLVPVYSGKVKSSLRLIPDDLSLLKLYPPGDEEEAE
+                                       ***.*.  ****** :*******:********:***.****: ***** *.  *:**:
+
+isotig35100                          VTDCGSPPPEDALIPGSPWKKKLRNKHEKEEMKMEEFPDQDISPLPRPSSRNKSRKHTEA
+isotig35101                          VTDCGSPPPEDALIPGSPWKKKLRNKHEKEEMKMEEFPDQDISPLPRPSSRNKSRKHTEA
+ENSG00000176953:ENST00000320805      LADSSGLYHEGSPSPGSPWKTKLRTK-DKEEKKKTEFLDLDNSPLSPPSPRTKSRTHTRA
+                                     ::*...   *.:  ******.***.* :*** *  ** * * ***. **.*.***.** *
+
+isotig35100                          LQKLREVNKRLQDLRSCLSPKQHQSPALQNPDDEVVLVDGPVLSQSPRLFTLKIRCRADL
+isotig35101                          LQKLREVNKRLQDLRSCLSPKQHQSPALQNPDDEVVLVDGPVLSQSPRLFTLKIRCRADL
+ENSG00000176953:ENST00000320805      LKKLSEVNKRLQDLRSCLSPKPPQGQEQQGQEDEVVLVEGPTLPETPRLFPLKIRCRADL
+                                     *:** ****************  *.   *. :******:**.*.::****.*********
+
+isotig35100                          VRLPVMTSEPLQNVVDYMANHLGVSPSRILLLFGETELSPTATPRTLKLGVADIIDCVVL
+isotig35101                          VRLPVMTSEPLQNVVDYMANHLGVSPSRILLLFGETELSPTATPRTLKLGVADIIDCVVL
+ENSG00000176953:ENST00000320805      VRLPLRMSEPLQSVVDHMATHLGVSPSRILLLFGETELSPTATPRTLKLGVADIIDCVVL
+                                     ****:  *****.***:**.****************************************
+
+isotig35100                          TSSSEATETTQQLCLRVQGKEKHQMLEISLSPDSPLEVLMAHYEEAMGLSGHKLSFFFDG
+isotig35101                          TSSSEATETTQQLCLRVQGKEKHQMLEISLSPDSPLEVLMAHYEEAMGLSGHKLSFFFDG
+ENSG00000176953:ENST00000320805      TSSPEATETSQQLQLRVQGKEKHQTLEVSLSRDSPLKTLMSHYEEAMGLSGRKLSFFFDG
+                                     ***.*****:*** ********** **:*** ****:.**:**********.********
+
+isotig35100                          TKLSGKELPADLGMESGDLIEVWGSFLLLFGCRAKTWGQQLPLLLLFFAPGLTETELELV
+isotig35101                          TKLSGKELPADLGMESGDLIEVWGSFLLLFGCRAKTWGQQLPLLLLFFAPGLTETELELV
+ENSG00000176953:ENST00000320805      TKLSGRELPADLGMESGDLIEVWG------------------------------------
+                                     *****.******************                                    
+
+isotig35100                          YLFPALGIEPRAVHMLRMCEVEVKPRHDLCPVSLT-------------VVSSGLIGNCVT
+isotig35101                          YLFPALGIEPWAVHMLRMCEVEVKPRHDLCPVSLTDWLCDCGCPGWPVAVCVGAVDSSSW
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          VAALGGLWLCVLVLCTAAPGAWRRGIGFPTISFSSAQMSLAFGCPGLFMPHWGPTGI---
+isotig35101                          GMEKGYWLPYHFVQCTNEPCIWVPRLVIYATLGTNRDFNSHLGAEMQVPSLVGIVGCREI
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          ------------LILIWGLRCRYLPWWGSVAGKTSNDIYAEAEDVDSGFLKANRSGVFSP
+isotig35101                          NKQHLCSGLGRQWVIFKGQEWCLQPWASTLPGLGQHLVHTSWHAHLATSEHMQLLSLMFT
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          GHPLSQD--SASIWYIL-----PGMHIPHLSTCSCVCLLFRPPALSCQHPLGIFVSECLY
+isotig35101                          LVPSSRPLLSAPTWYICIMSLDDFLNVCDFSVCTWYCAIDILSSLSVSDRLAMLAPS---
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          KMIFMCVILVYVHGTVQTFCLHSVVTGPCHLLDLLLFRSAVAAPWHMILLTHCLNWRDTV
+isotig35101                          ----------------RSVVVPICCGCPIVALDDITHTLPLEGYLSRQLLGTKFQTTANI
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          ASSEPNSRPQQTSFCVFPSGPGVIVWHTCPGWDCGLRRFISLVFLGFSSECGLLFLELLF
+isotig35101                          FLCVPFWARVGNCLAYLPRMGLWVTQVHFSGFSRVFFRMWT-AFLGASLSFSPVFSVVVL
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          PSLDQYLVLLYFLICQSTVYKALHILISFIPPFLINVHLLVFLCLLVFLGFLLCVFSVRS
+isotig35101                          SDLPVY--------CVSTAYLNILYLTTISYQCPPSGFSLLAACFLVRLPFV--CFFCEE
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          CLCSRQLQITFRIALCVPRGIFTKQTFLTLMQTAGFCKGFFVLCFFFFCFCFCFLRENEK
+isotig35101                          LLVFAIANNLQNSTLCTQGDFHQTDILNFNADSWLLLERVFCFVFFFFLLLFLLFKGKER
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          ELPEWQGFRGVSGLLLLDLTSETFIVFCLASFLFFCFYLSYDHMRIEFLICCGVDTDCSE
+isotig35101                          T-------SRMAGVLAGSLRIATFGSLNLRN--FHCLLLACFFVLLFLSLILRPLNENRV
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          LSTLLLTGYSTVLVPDYCMLRLNHLKCTFVWESKFYCVLIIMSQFSKLCLLKNYVVLSQE
+isotig35101                          LTDLLWCGYLFTFHSASHWLQLDCTGSLLYVTSKPSEMHLCVGEQILLCFNYNEPVFALS
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          VCQLLKNFFCENMLY---LILIFKNSMTYSFQVSQLLYDNITHYYYVFNLSQREMPL---
+isotig35101                          TKKLICSLTFTRSMSTSKFFLEYVIPLNFNIKFHDIVLPGFSALVQLMNLNTLLLCIQSQ
+ENSG00000176953:ENST00000320805      ------------------------------------------------------------
+                                                                                                 
+
+isotig35100                          --------
+isotig35101                          PIKGDAFN
+ENSG00000176953:ENST00000320805      --------
+                                             

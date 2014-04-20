@@ -263,6 +263,7 @@ PACKAGES = [
     'Bio.Application',
     'Bio.Blast',
     'Bio.CAPS',
+    'Bio.CodonAlign',
     'Bio.Compass',
     'Bio.Crystal',
     'Bio.Data',
