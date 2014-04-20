@@ -109,7 +109,7 @@ class CodonAlignment(MultipleSeqAlignment):
     def get_dn_ds_matrix(self, method="NG86"):
         """Available methods include NG86, LWL85, YN00 and ML.
         """
-        from Bio.Phylo.TreeConstruction import DistanceMatrix
+        from Bio.Phylo.TreeConstruction import _DistanceMatrix as DM
         names = [i.id for i in self._records]
         size = len(self._records)
         dn_matrix = []
@@ -126,8 +126,8 @@ class CodonAlignment(MultipleSeqAlignment):
                 else:
                     dn_matrix[i].append(0.0)
                     ds_matrix[i].append(0.0)
-        dn_dm = DistanceMatrix(names, matrix=dn_matrix)
-        ds_dm = DistanceMatrix(names, matrix=ds_matrix)
+        dn_dm = DM(names, matrix=dn_matrix)
+        ds_dm = DM(names, matrix=ds_matrix)
         return dn_dm, ds_dm
 
     def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
