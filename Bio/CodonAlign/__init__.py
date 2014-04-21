@@ -9,6 +9,12 @@
 from __future__ import print_function
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+warnings.warn('Bio.CodonAlign is an experimental module which may undergo '
+              'significant changes prior to its future official release.',
+              BiopythonExperimentalWarning)
 
 try:
     from itertools import izip
@@ -354,7 +360,6 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         pro_re[0] = qcodon
                         break
                 if qcodon == -1:
-                    import warnings
                     warnings.warn("first frameshift detection failed for "
                                   "{0}".format(nucl.id))
             # check anchors in the middle
@@ -374,7 +379,6 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                     pro_re[anchor_pos[i][2]:anchor_pos[i+1][2]] = [qcodon]
                     qcodon = None
                 elif qcodon == -1:
-                    import warnings
                     warnings.warn("middle frameshift detection failed for "
                                   "{0}".format(nucl.id))
             # check the last anchor
@@ -406,7 +410,6 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         pro_re[-1] = qcodon
                         break
                 if qcodon == -1:
-                    import warnings
                     warnings.warn("last frameshift detection failed for "
                                   "{0}".format(nucl.id))
             # try global match
@@ -540,7 +543,6 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
 
     """
     import re
-    import warnings
     from Bio.Seq import Seq
 
     nucl_seq = nucl.seq.ungap(gap_char)
