@@ -30,11 +30,13 @@ EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 class IOTests(unittest.TestCase):
     """Tests for parsing and writing the supported formats."""
 
-    def test_newick_read_single(self):
-        """Read a Newick file with one tree."""
+    def test_newick_read_single1(self):
+        """Read first Newick file with one tree."""
         tree = Phylo.read(EX_NEWICK, 'newick')
         self.assertEqual(len(tree.get_terminals()), 28)
-        
+
+    def test_newick_read_single2(self):
+        """Read second Newick file with one tree."""
         tree = Phylo.read(EX_NEWICK2, 'newick')
         self.assertEqual(len(tree.get_terminals()), 33)
         self.assertEqual(tree.find_any('Homo sapiens').comment, 'modern human')
@@ -43,6 +45,8 @@ class IOTests(unittest.TestCase):
         tree = Phylo.read(EX_NEWICK2, 'newick', comments_are_confidence=True)
         self.assertEqual(tree.root.confidence, 100)
 
+    def test_newick_read_single3(self):
+        """Read Nexus file with one tree."""
         tree = Phylo.read(EX_NEXUS2, 'nexus')
         self.assertEqual(len(tree.get_terminals()), 658)
 
