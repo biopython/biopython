@@ -11,7 +11,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.SubsMat.")
 
 try:
-    import cPickle as pickle # Only available on Python 3
+    import cPickle as pickle # Only available on Python 2
 except ImportError:
     import pickle
 
