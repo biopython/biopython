@@ -12,6 +12,10 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.64
 
+The module Bio.CodonAlign is now in the master branch. It facilitates building
+codon alignment and further analysis upon it. This work is from the Google
+Summer of Code (GSoC) 2013.
+
 Bio.Phylo now has tree construction and consensus modules, from on the
 Google Summer of Code (GSoC) work by Yanbo Ye.
 
@@ -46,6 +50,7 @@ Tiago Antao
 Vincent Davis (first contribution)
 Wibowo 'Bow' Arindrarto
 Yanbo Ye (first contribution)
+Zheng Ruan (first contribution)
 
 ===================================================================
 
