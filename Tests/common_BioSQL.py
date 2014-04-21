@@ -225,11 +225,11 @@ class ReadTest(unittest.TestCase):
         """Check list, keys, length etc"""
         db = self.db
         items = list(db.values())
-        keys = list(db.keys())
+        keys = list(db)
         l = len(items)
         self.assertEqual(l, len(db))
         self.assertEqual(l, len(list(db.items())))
-        self.assertEqual(l, len(list(db.keys())))
+        self.assertEqual(l, len(list(db)))
         self.assertEqual(l, len(list(db.values())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
@@ -737,7 +737,7 @@ class InDepthLoadTest(unittest.TestCase):
         test_feature = features[0]
         self.assertEqual(test_feature.type, "source")
         self.assertEqual(str(test_feature.location), "[0:206](+)")
-        self.assertEqual(len(list(test_feature.qualifiers.keys())), 3)
+        self.assertEqual(len(test_feature.qualifiers), 3)
         self.assertEqual(test_feature.qualifiers["country"], ["Russia:Bashkortostan"])
         self.assertEqual(test_feature.qualifiers["organism"], ["Armoracia rusticana"])
         self.assertEqual(test_feature.qualifiers["db_xref"], ["taxon:3704"])
@@ -753,7 +753,7 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(str(test_feature._sub_features[1].location), "[142:206](+)")
         self.assertEqual(test_feature._sub_features[1].type, "CDS")
         #self.assertEqual(test_feature._sub_features[1].location_operator, "join")
-        self.assertEqual(len(list(test_feature.qualifiers.keys())), 6)
+        self.assertEqual(len(test_feature.qualifiers), 6)
         self.assertEqual(test_feature.qualifiers["gene"], ["csp14"])
         self.assertEqual(test_feature.qualifiers["codon_start"], ["2"])
         self.assertEqual(test_feature.qualifiers["product"],

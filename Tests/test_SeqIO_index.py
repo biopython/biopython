@@ -230,7 +230,7 @@ class IndexDictTests(unittest.TestCase):
         #Done
 
     def check_dict_methods(self, rec_dict, keys, ids):
-        self.assertEqual(set(keys), set(rec_dict.keys()))
+        self.assertEqual(set(keys), set(rec_dict))
         #This is redundant, I just want to make sure len works:
         self.assertEqual(len(keys), len(rec_dict))
         #Make sure boolean evaluation works
@@ -300,7 +300,7 @@ class IndexDictTests(unittest.TestCase):
             rec_dict = SeqIO.index(filename, format, alphabet,
                                    key_function = lambda x : x.lower())
 
-        self.assertEqual(set(id_list), set(rec_dict.keys()))
+        self.assertEqual(set(id_list), set(rec_dict))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
             self.assertTrue(key in rec_dict)

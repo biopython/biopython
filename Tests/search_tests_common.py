@@ -99,8 +99,8 @@ class CheckIndex(unittest.TestCase):
 
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""
-    attrs_a = set(obj_a.__dict__.keys())
-    attrs_b = set(obj_b.__dict__.keys())
+    attrs_a = set(obj_a.__dict__)
+    attrs_b = set(obj_b.__dict__)
     diff = attrs_a.symmetric_difference(attrs_b)
     privates = len([x for x in diff if x.startswith('_')])
     return len(diff) - privates
@@ -114,7 +114,7 @@ def compare_search_obj(obj_a, obj_b):
 
     # compare qresult attributes
     # if the above assertion pass, doesn't matter if we use a or be here
-    compare_attrs(obj_a, obj_b, obj_a.__dict__.keys())
+    compare_attrs(obj_a, obj_b, list(obj_a.__dict__))
 
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
@@ -153,9 +153,9 @@ def compare_attrs(obj_a, obj_b, attrs):
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
-            keys_a = sorted(val_a.keys())
+            keys_a = sorted(val_a)
             values_a = sorted(val_a.values())
-            keys_b = sorted(val_b.keys())
+            keys_b = sorted(val_b)
             values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,

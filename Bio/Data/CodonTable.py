@@ -202,7 +202,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
                                        + "for both proteins and stop codons")
             # This is a true stop codon - tell the caller about it
             raise KeyError(codon)
-        return list(possible.keys())
+        return list(possible)
 
 
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
@@ -294,7 +294,7 @@ class AmbiguousForwardTable(object):
                 x[name] = 1
                 inverted[c] = x
         for name, val in inverted.items():
-            inverted[name] = list(val.keys())
+            inverted[name] = list(val)
         self._inverted = inverted
 
         self._cache = {}
