@@ -51,12 +51,15 @@ class IOTests(unittest.TestCase):
         self.assertEqual(len(tree.get_terminals()), 658)
 
     def test_unicode_exception(self):
+        """ Checks that a unicode file with BOM is not 
+        parsed but produces a sensible error message.
+        This test is differnet in Python 3 because the unicode
+        behavior differs on apple and windows machines """
         if sys.version_info[0]<3:
             self.assertRaises(NewickIO.NewickError, Phylo.read,EX_NEWICK_BOM,"newick")
         else:
-            tree = Phylo.read(EX_NEWICK_BOM, 'newick')
+            tree = Phylo.read(open(EX_NEWICK_BOM,encoding="utf-8"), 'newick')
             self.assertEqual(len(tree.get_terminals()), 3)
-
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
         trees = list(Phylo.parse(EX_NEXUS, 'nexus'))
