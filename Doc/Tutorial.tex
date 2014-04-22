@@ -4427,8 +4427,8 @@ object into an array of letters -- and you can do this with NumPy:
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
->>> align_array.shape
-(7, 52)
+>>> print("Array shape %i by %i" % align_array.shape)
+Array shape 7 by 52
 \end{verbatim}
 
 If you will be working heavily with the columns, you can tell NumPy to store
