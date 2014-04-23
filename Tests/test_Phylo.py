@@ -51,10 +51,13 @@ class IOTests(unittest.TestCase):
         self.assertEqual(len(tree.get_terminals()), 658)
 
     def test_unicode_exception(self):
-        if sys.version_info[0]<3:
-            self.assertRaises(NewickIO.NewickError, Phylo.read,EX_NEWICK_BOM,"newick")
+        """Read a Newick file with a unicode byte order mark (BOM)."""
+        if sys.version_info[0] < 3:
+            self.assertRaises(NewickIO.NewickError, Phylo.read, EX_NEWICK_BOM, "newick")
         else:
-            tree = Phylo.read(EX_NEWICK_BOM, 'newick')
+            # Must specify the encoding on Windows
+            with open(EX_NEWICK_BOM, encoding="utf-8") as handle:
+                tree = Phylo.read(handle, 'newick')
             self.assertEqual(len(tree.get_terminals()), 3)
 
     def test_newick_read_multiple(self):
