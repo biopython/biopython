@@ -6,6 +6,7 @@
 """Tests for SearchIO BlastIO parsers."""
 
 import os
+import sys
 import unittest
 import warnings
 
@@ -3120,10 +3121,17 @@ class BlastXmlSpecialCases(unittest.TestCase):
         xml_file = get_file('xml_2226_blastn_006.xml')
         qresults = parse(xml_file, FMT)
 
+        exp_warning = 1
+        # Python >= 3.4 somehow captures the 'U' file mode
+        # deprecation warning in our filter, so we expect
+        # 2 warnings instead of just one
+        if sys.version_info[:2] >= (3, 4):
+            exp_warning += 1
+
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
-            self.assertEqual(len(w), 1,
+            self.assertEqual(exp_warning, len(w),
                              "Expected one BiopythonParserWarning, got %r" % w)
 
         # test the Hit IDs only, since this is a special case
