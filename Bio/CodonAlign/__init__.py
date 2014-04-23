@@ -119,7 +119,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                 from Bio import SeqIO
                 nucl_seqs = SeqIO.to_dict(nucl_seqs)
             elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
-                nucl_seeq = dict((i.id, i) for i in nucl_seqs)
+                nucl_seqs = dict((i.id, i) for i in nucl_seqs)
                 #nucl_seqs = {i.id: i for i in nucl_seqs}
             elif nucl_seqs.__class__.__name__ in \
                     ("_IndexedSeqFileDict", "dict"):
@@ -151,6 +151,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             pro_nucl_pair = []
             for pro_rec in pro_align:
                 pro_nucl_pair.append((pro_rec, nucl_seqs[pro_rec.id]))
+    # corr_method = 2, dict pairing
     elif corr_method == 2:
         pro_nucl_pair = []
         for pro_rec in pro_align:
