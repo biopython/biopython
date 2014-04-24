@@ -3131,8 +3131,8 @@ class BlastXmlSpecialCases(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
-            self.assertEqual(exp_warning, len(w),
-                             "Expected one BiopythonParserWarning, got %r" % w)
+            self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
+                    " {1}".format(exp_warning, len(w)))
 
         # test the Hit IDs only, since this is a special case
         hit1 = qresult[0]
