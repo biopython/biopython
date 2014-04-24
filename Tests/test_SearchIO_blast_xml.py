@@ -3122,12 +3122,6 @@ class BlastXmlSpecialCases(unittest.TestCase):
         qresults = parse(xml_file, FMT)
 
         exp_warning = 1
-        # Python >= 3.4 somehow captures the 'U' file mode
-        # deprecation warning in our filter, so we expect
-        # 2 warnings instead of just one
-        if sys.version_info[:2] >= (3, 4):
-            exp_warning += 1
-
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
