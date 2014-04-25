@@ -12,6 +12,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 
 from Bio.Application import AbstractCommandline, _Argument
 
@@ -220,25 +221,6 @@ class GenePopController(object):
         """
         self.controller = _GenePopCommandline(genepop_dir)
 
-    def _remove_garbage(self, fname_out):
-        try:
-            if fname_out is not None:
-                os.remove(fname_out)
-        except OSError:
-            pass  # safe
-        try:
-            os.remove("genepop.txt")
-        except OSError:
-            pass  # safe
-        try:
-            os.remove("fichier.in")
-        except OSError:
-            pass  # safe
-        try:
-            os.remove("cmdline.txt")
-        except OSError:
-            pass  # safe
-
     def _get_opts(self, dememorization, batches, iterations, enum_test=None):
         opts = {}
         opts["Dememorization"] = dememorization
@@ -252,14 +234,19 @@ class GenePopController(object):
         return opts
 
     def _run_genepop(self, extensions, option, fname, opts={}):
-        for extension in extensions:
-            self._remove_garbage(fname + extension)
+        cwd = os.getcwd()
+        temp_dir = tempfile.mkdtemp()
+        os.chdir(temp_dir)
         self.controller.set_menu(option)
-        self.controller.set_input(fname)
+        if os.path.isabs(fname):
+            self.controller.set_input(fname)
+        else:
+            self.controller.set_input(cwd + os.sep + fname)
         for opt in opts:
             self.controller.set_parameter(opt, opt + "=" + str(opts[opt]))
         self.controller()  # checks error level is zero
-        self._remove_garbage(None)
+        os.chdir(cwd)
+        shutil.rmtree(temp_dir)
         return
 
     def _test_pop_hz_both(self, fname, type, ext, enum_test=True,
