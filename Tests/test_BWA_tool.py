@@ -52,8 +52,8 @@ else:
 
 if not bwa_exe:
     raise MissingExternalDependencyError("Install bwa and correctly set"
-                                         "the file path to the program if"
-                                         "you want to use it from Biopython")
+                                         " the file path to the program if"
+                                         " you want to use it from Biopython")
 
 
 class BwaTestCase(unittest.TestCase):
