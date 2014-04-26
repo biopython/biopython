@@ -7,8 +7,6 @@
 
 # Last Checked with samtools [0.1.18 (r982:295)]
 
-
-
 from Bio import MissingExternalDependencyError
 import sys
 import os
@@ -17,17 +15,16 @@ from Bio.Sequencing.Applications import SamtoolsViewCommandline
 from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
 from Bio.Sequencing.Applications import SamtoolsCatCommandline
 from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
-from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
 from Bio.Sequencing.Applications import SamtoolsIndexCommandline
 from Bio.Sequencing.Applications import SamtoolsMergeCommandline
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
-from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
-from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
 from Bio.Sequencing.Applications import SamtoolsSortCommandline
-#from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
-
+#TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
+#TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
+#TODO from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
+#TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
+#TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 #################################################################
 
 #Try to avoid problems when the OS is in another language
@@ -74,24 +71,39 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.files_to_clean = set()
-        self.samfile1 = os.path.join("SamBam", "sam1.sam")
-        self.reference = os.path.join("BWA", "human_g1k_v37_truncated.fasta")
-        self.referenceindexfile = os.path.join("BWA",
+        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "SamBam",
+                                     "sam1.sam")
+        self.reference = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "BWA",
+                                      "human_g1k_v37_truncated.fasta")
+        self.referenceindexfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                               "BWA",
                                                "human_g1k_v37_truncated.fasta.fai")
-        self.samfile2 = os.path.join("SamBam", "sam2.sam")
-        self.bamfile1 = os.path.join("SamBam", "bam1.bam")
-        self.bamfile2 = os.path.join("SamBam", "bam2.bam")
-        self.outsamfile = os.path.join("SamBam", "out.sam")
-        self.outbamfile = os.path.join("SamBam", "out.bam")
-        self.bamindexfile1 = os.path.join("SamBam", "bam1.bam.bai")
+        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "SamBam",
+                                     "sam2.sam")
+        self.bamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "SamBam",
+                                     "bam1.bam")
+        self.bamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "SamBam",
+                                     "bam2.bam")
+        self.outsamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "SamBam",
+                                       "out.sam")
+        self.outbamfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "SamBam",
+                                       "out.bam")
+        self.bamindexfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                          "SamBam",
+                                          "bam1.bam.bai")
+        self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
     def tearDown(self):
         for filename in self.files_to_clean:
             if os.path.isfile(filename):
                 os.remove(filename)
-
-    def add_files_to_clean(self, filename):
-        self.files_to_clean.add(filename)
 
     def test_view(self):
         """Test for samtools view"""
@@ -110,6 +122,18 @@ class SamtoolsTestCase(unittest.TestCase):
             "SAM file  viewing failed:\n%s\nStderr:%s"
             % (cmdline, stderr_sam))
 
+    def create_fasta_index(self):
+        """Creates index for reference fasta sequence."""
+        cmdline = SamtoolsFaidxCommandline(samtools_exe)
+        cmdline.set_parameter("reference", self.reference)
+        stdout, stderr = cmdline()
+
+    def create_bam_index(self, input_bam):
+        """Creates index of an input bam file"""
+        cmdline = SamtoolsIndexCommandline(samtools_exe)
+        cmdline.set_parameter("input_bam", input_bam)
+        stdout, stderr = cmdline()
+
     def test_faidx(self):
         cmdline = SamtoolsFaidxCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
@@ -121,7 +145,7 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_calmd(self):
         """Test for samtools calmd"""
-
+        self.create_fasta_index()
         cmdline = SamtoolsCalmdCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         cmdline.set_parameter("input_bam", self.bamfile1)
@@ -143,15 +167,13 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", [self.bamfile1, self.bamfile2])
         stdout, stderr = cmdline()
         self.assertEqual(stderr, "")
-        self.assertTrue(os.path.exists(self.outbamfile))
-        self.add_files_to_clean(self.outbamfile)
 
     #TODO: def test_fixmate(self):
 
     def test_sort(self):
         cmdline = SamtoolsSortCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", self.bamfile1)
-        cmdline.set_parameter("out_prefix", "bam1")
+        cmdline.set_parameter("out_prefix", "SamBam/out")
         stdout, stderr = cmdline()
         self.assertFalse(stderr,
                          "Samtools sort failed:\n%s\nStderr:%s"
@@ -167,7 +189,7 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.bamindexfile1))
 
     def test_idxstats(self):
-        self.test_index()
+        self.create_bam_index(self.bamfile1)
         cmdline = SamtoolsIdxstatsCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
@@ -185,7 +207,6 @@ class SamtoolsTestCase(unittest.TestCase):
                          "Samtools merge failed:\n%s\nStderr:%s"
                          % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
-        self.add_files_to_clean(self.outbamfile)
 
     def test_mpileup(self):
         cmdline = SamtoolsMpileupCommandline(samtools_exe)
@@ -203,7 +224,6 @@ class SamtoolsTestCase(unittest.TestCase):
     #TODO: def test_reheader(self):
     #TODO: def test_rmdup(self):
     #TODO: def test_targetcut(self):
-
 
 
 if __name__ == "__main__":
