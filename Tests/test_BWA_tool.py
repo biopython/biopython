@@ -59,31 +59,15 @@ if not bwa_exe:
 class BwaTestCase(unittest.TestCase):
     """Class for implementing BWA test cases"""
     def setUp(self):
-        self.reference_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                           "BWA",
-                                           "human_g1k_v37_truncated.fasta")
+        self.reference_file = "BWA/human_g1k_v37_truncated.fasta"
         self.reference_extensions = ['amb', 'ann', 'bwt', 'pac', 'sa']
-        self.infile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                    "BWA",
-                                    "HNSCC1_1_truncated.fastq")
-        self.infile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                    "BWA",
-                                    "HNSCC1_2_truncated.fastq")
-        self.saifile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     "BWA",
-                                     "1.sai")
-        self.saifile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     "BWA",
-                                     "2.sai")
-        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     "BWA",
-                                     "1.sam")
-        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     "BWA",
-                                     "2.sam")
-        self.samfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                    "BWA",
-                                    "out.sam")
+        self.infile1 = "BWA/HNSCC1_1_truncated.fastq"
+        self.infile2 = "BWA/HNSCC1_2_truncated.fastq"
+        self.saifile1 = "BWA/1.sai"
+        self.saifile2 = "BWA/2.sai"
+        self.samfile1 = "BWA/1.sam"
+        self.samfile2 = "BWA/2.sam"
+        self.samfile = "BWA/out.sam"
         self.files_to_clean = [self.saifile1, self.saifile2,
                                self.samfile1, self.samfile2,
                                self.samfile]
