@@ -66,7 +66,7 @@ class ApplicationError(_ProcessCalledError):
     >>> err.returncode, err.cmd, err.stdout, err.stderr
     (-11, 'helloworld', '', 'Some error text')
     >>> print(err)
-    Command 'helloworld' returned non-zero exit status -11, 'Some error text'
+    Non-zero return code -11 from 'helloworld', message 'Some error text'
 
     """
     def __init__(self, returncode, cmd, stdout="", stderr=""):
@@ -82,11 +82,11 @@ class ApplicationError(_ProcessCalledError):
         except:
             msg = ""
         if msg:
-            return "Command '%s' returned non-zero exit status %d, %r" \
-                   % (self.cmd, self.returncode, msg)
+            return "Non-zero return code %d from %r, message %r" \
+                   % (self.returncode, self.cmd, msg)
         else:
-            return "Command '%s' returned non-zero exit status %d" \
-                   % (self.cmd, self.returncode)
+            return "Non-zero return code %d from %r" \
+                   % (self.returncode, self.cmd)
 
     def __repr__(self):
         return "ApplicationError(%i, %s, %s, %s)" \
