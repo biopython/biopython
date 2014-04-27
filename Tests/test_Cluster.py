@@ -4,6 +4,17 @@
 
 import unittest
 
+# We require NumPy as a build dependency and runtime dependency,
+# so check this first:
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.Cluster")
+
+# Given NumPy is installed, if we can't import Cluster this is
+# most likely due to Biopython being installed without NumPy
 try:
     from Bio import Cluster
 except ImportError:
@@ -11,13 +22,6 @@ except ImportError:
     raise MissingPythonDependencyError("If you want to use Bio.Cluster, "
                                        "install NumPy first and then "
                                        "reinstall Biopython")
-
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Cluster")
 
 
 class TestCluster(unittest.TestCase):
