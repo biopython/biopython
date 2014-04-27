@@ -96,7 +96,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
-                            "non-zero exit status" in str(err))
+                            "non-zero return code" in str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
