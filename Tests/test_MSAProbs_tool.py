@@ -72,7 +72,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
-                            "non-zero exit status" in str(err))
+                            "Non-zero return code " in str(err), str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
