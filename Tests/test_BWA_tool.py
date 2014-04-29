@@ -49,6 +49,11 @@ else:
     if "not found" not in output and "bwa" in output \
             and "alignment via Burrows-Wheeler transformation" in output:
         bwa_exe = "bwa"
+    skip_aln_tests = False
+    aln_output = getoutput("bwa aln")
+    if "unrecognized" in aln_output:
+        skip_aln_tests = True
+        print("'bwa aln' is unrecognized, skipping aln/samse/sampe tests")
 
 if not bwa_exe:
     raise MissingExternalDependencyError("Install bwa and correctly set"
@@ -109,14 +114,7 @@ class BwaTestCase(unittest.TestCase):
                         % (cmdline, stderr))
 
     def skip_aln_tests(self):
-        """As reported  on http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011342.html
-        'bwa aln' is failing for bwa[0.7.6a-r433]
-        Tests using 'aln' should be skipped in that case"""
-
-        aln_output = getoutput("bwa aln")
-        if "unrecognized" in aln_output:
-            return True
-        return False
+        """Tests using 'aln' should be skipped if aln is unrecognized"""
 
     def create_fasta_index(self):
         """Creates index for fasta file
@@ -124,53 +122,51 @@ class BwaTestCase(unittest.TestCase):
            This should be called to create an index before any alignment
            operation.
 
-        """
+         """
         cmdline = BwaIndexCommandline(bwa_exe)
         cmdline.set_parameter("infile", self.reference_file)
         cmdline.set_parameter("algorithm", "bwtsw")
         stdout, stderr = cmdline()
 
-    def test_samse(self):
-        """Test for single end sequencing """
-        if self.skip_aln_tests():
-            return
-        self.create_fasta_index()
-        self.do_aln(self.infile1, self.saifile1)
-        cmdline = BwaSamseCommandline(bwa_exe)
-        cmdline.set_parameter("reference", self.reference_file)
-        cmdline.set_parameter("read_file", self.infile1)
-        cmdline.set_parameter("sai_file", self.saifile1)
-        stdout, stderr = cmdline(stdout=self.samfile1)
+    if not skip_aln_tests:
 
-        with open(self.samfile1, "r") as handle:
-            headline = handle.readline()
-        self.assertTrue(headline.startswith("@SQ"),
-                        "Error generating sam files:\n%s\nOutput starts:%s"
-                        % (cmdline, headline))
+        def test_samse(self):
+            """Test for single end sequencing """
+            self.create_fasta_index()
+            self.do_aln(self.infile1, self.saifile1)
+            cmdline = BwaSamseCommandline(bwa_exe)
+            cmdline.set_parameter("reference", self.reference_file)
+            cmdline.set_parameter("read_file", self.infile1)
+            cmdline.set_parameter("sai_file", self.saifile1)
+            stdout, stderr = cmdline(stdout=self.samfile1)
 
-    def test_sampe(self):
-        """Test for generating samfile by paired end sequencing"""
-        if self.skip_aln_tests():
-            return
-        self.create_fasta_index()
+            with open(self.samfile1, "r") as handle:
+                headline = handle.readline()
+            self.assertTrue(headline.startswith("@SQ"),
+                            "Error generating sam files:\n%s\nOutput starts:%s"
+                            % (cmdline, headline))
 
-        ##Generate sai files from paired end data
-        self.do_aln(self.infile1, self.saifile1)
-        self.do_aln(self.infile2, self.saifile2)
+        def test_sampe(self):
+            """Test for generating samfile by paired end sequencing"""
+            self.create_fasta_index()
 
-        cmdline = BwaSampeCommandline(bwa_exe)
-        cmdline.set_parameter("reference", self.reference_file)
-        cmdline.set_parameter("sai_file1", self.saifile1)
-        cmdline.set_parameter("sai_file2", self.saifile2)
-        cmdline.set_parameter("read_file1", self.infile1)
-        cmdline.set_parameter("read_file2", self.infile2)
-        stdout, stderr = cmdline(stdout=self.samfile)
+            ##Generate sai files from paired end data
+            self.do_aln(self.infile1, self.saifile1)
+            self.do_aln(self.infile2, self.saifile2)
 
-        with open(self.samfile, "r") as handle:
-            headline = handle.readline()
-        self.assertTrue(headline.startswith("@SQ"),
-                        "Error generating sam files:\n%s\nOutput starts:%s"
-                        % (cmdline, headline))
+            cmdline = BwaSampeCommandline(bwa_exe)
+            cmdline.set_parameter("reference", self.reference_file)
+            cmdline.set_parameter("sai_file1", self.saifile1)
+            cmdline.set_parameter("sai_file2", self.saifile2)
+            cmdline.set_parameter("read_file1", self.infile1)
+            cmdline.set_parameter("read_file2", self.infile2)
+            stdout, stderr = cmdline(stdout=self.samfile)
+
+            with open(self.samfile, "r") as handle:
+                headline = handle.readline()
+            self.assertTrue(headline.startswith("@SQ"),
+                            "Error generating sam files:\n%s\nOutput starts:%s"
+                            % (cmdline, headline))
 
 
 if __name__ == "__main__":
