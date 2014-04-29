@@ -108,6 +108,16 @@ class BwaTestCase(unittest.TestCase):
                         "Error aligning sequence to reference:\n%s\nStderr:%s"
                         % (cmdline, stderr))
 
+    def skip_aln_tests(self):
+        """As reported  on http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011342.html
+        'bwa aln' is failing for bwa[0.7.6a-r433]
+        Tests using 'aln' should be skipped in that case"""
+
+        aln_output = getoutput("bwa aln")
+        if "unrecognized" in aln_output:
+            return True
+        return False
+
     def create_fasta_index(self):
         """Creates index for fasta file
            BWA requires an indexed fasta for each alignment operation.
@@ -122,6 +132,8 @@ class BwaTestCase(unittest.TestCase):
 
     def test_samse(self):
         """Test for single end sequencing """
+        if self.skip_aln_tests():
+            return
         self.create_fasta_index()
         self.do_aln(self.infile1, self.saifile1)
         cmdline = BwaSamseCommandline(bwa_exe)
@@ -138,6 +150,8 @@ class BwaTestCase(unittest.TestCase):
 
     def test_sampe(self):
         """Test for generating samfile by paired end sequencing"""
+        if self.skip_aln_tests():
+            return
         self.create_fasta_index()
 
         ##Generate sai files from paired end data
