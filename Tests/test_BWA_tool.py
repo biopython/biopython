@@ -113,9 +113,6 @@ class BwaTestCase(unittest.TestCase):
                         "Error aligning sequence to reference:\n%s\nStderr:%s"
                         % (cmdline, stderr))
 
-    def skip_aln_tests(self):
-        """Tests using 'aln' should be skipped if aln is unrecognized"""
-
     def create_fasta_index(self):
         """Creates index for fasta file
            BWA requires an indexed fasta for each alignment operation.
