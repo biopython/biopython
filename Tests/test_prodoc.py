@@ -1094,6 +1094,8 @@ action."
 J. Pept. Sci. 11:688-696(2005).
 PubMed=16059970; DOI=10.1002/psc.699""")
 
+        handle.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
