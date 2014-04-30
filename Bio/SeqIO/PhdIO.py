@@ -16,7 +16,7 @@ For example, using Bio.SeqIO we can read in one of the example PHRED files
 from the Biopython unit tests:
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse(open("Phd/phd1"), "phd"):
+    >>> for record in SeqIO.parse("Phd/phd1", "phd"):
     ...     print(record.id)
     ...     print("%s..." % record.seq[:10])
     ...     print("%s..." % record.letter_annotations["phred_quality"][:10])
