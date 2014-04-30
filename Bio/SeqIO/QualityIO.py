@@ -239,8 +239,8 @@ Alternatively, if you have enough RAM to hold all the records in memory at once,
 then a simple dictionary approach would work:
 
     >>> from Bio import SeqIO
-    >>> reads = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fasta"), "fasta"))
-    >>> for rec in SeqIO.parse(open("Quality/example.qual"), "qual"):
+    >>> reads = SeqIO.to_dict(SeqIO.parse("Quality/example.fasta", "fasta"))
+    >>> for rec in SeqIO.parse("Quality/example.qual", "qual"):
     ...     reads[rec.id].letter_annotations["phred_quality"]=rec.letter_annotations["phred_quality"]
 
 You can then access any record by its key, and get both the sequence and the
@@ -1218,7 +1218,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
     encoding PHRED integer qualities using ASCII values with an offset of 64.
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/illumina_faked.fastq"), "fastq-illumina")
+    >>> record = SeqIO.read("Quality/illumina_faked.fastq", "fastq-illumina")
     >>> print("%s %s" % (record.id, record.seq))
     Test ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     >>> max(record.letter_annotations["phred_quality"])
@@ -1231,7 +1231,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
     quality reads. If you have an old Solexa/Illumina file with negative
     Solexa scores, and try and read this as an Illumina 1.3+ file it will fail:
 
-    >>> record2 = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-illumina")
+    >>> record2 = SeqIO.read("Quality/solexa_faked.fastq", "fastq-illumina")
     Traceback (most recent call last):
        ...
     ValueError: Invalid character in quality string
@@ -1386,7 +1386,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     Sanger style FASTQ file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
+    >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
     >>> with open("Quality/temp.fastq", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "fastq")
     3
@@ -1402,7 +1402,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     PHRED qualities:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
+    >>> record_iterator = SeqIO.parse("Quality/solexa_example.fastq", "fastq-solexa")
     >>> with open("Quality/temp.fastq", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "fastq")
     5
@@ -1459,7 +1459,7 @@ class QualPhredWriter(SequentialSequenceWriter):
     reads in a FASTQ file and saves the quality scores into a QUAL file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
+    >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
     >>> with open("Quality/temp.qual", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "qual")
     3
@@ -1578,7 +1578,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     reads in a FASTQ file and re-saves it as another FASTQ file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
+    >>> record_iterator = SeqIO.parse("Quality/solexa_example.fastq", "fastq-solexa")
     >>> with open("Quality/temp.fastq", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "fastq-solexa")
     5
@@ -1592,7 +1592,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     This code is also called if you use the .format("fastq-solexa") method of
     a SeqRecord. For example,
 
-    >>> record = SeqIO.read(open("Quality/sanger_faked.fastq"), "fastq-sanger")
+    >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
     >>> print(record.format("fastq-solexa"))
     @Test PHRED qualities from 40 to 0 inclusive
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
@@ -1653,7 +1653,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     method of a SeqRecord. For example,
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/sanger_faked.fastq"), "fastq-sanger")
+    >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
     >>> print(record.format("fastq-illumina"))
     @Test PHRED qualities from 40 to 0 inclusive
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
@@ -1726,10 +1726,11 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     can't be used to read the two files together - but this function can!
     For example,
 
-    >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
-    ...                                    open("Quality/example.qual", "rU"))
-    >>> for record in rec_iter:
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.fasta", "rU") as f:
+    ...     with open("Quality/example.qual", "rU") as q:
+    ...         for record in PairedFastaQualIterator(f, q):
+    ...             print("%s %s" % (record.id, record.seq))
+    ...
     EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
     EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
@@ -1746,10 +1747,10 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     this function to convert paired FASTA and QUAL files into FASTQ files:
 
     >>> from Bio import SeqIO
-    >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
-    ...                                    open("Quality/example.qual", "rU"))
-    >>> with open("Quality/temp.fastq", "w") as out_handle:
-    ...     SeqIO.write(rec_iter, out_handle, "fastq")
+    >>> with open("Quality/example.fasta", "rU") as f:
+    ...     with open("Quality/example.qual", "rU") as q:
+    ...         SeqIO.write(PairedFastaQualIterator(f, q), "Quality/temp.fastq", "fastq")
+    ...
     3
 
     And don't forget to clean up the temp file if you don't need it anymore:
