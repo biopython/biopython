@@ -85,11 +85,13 @@ class TestBuildAndIO(unittest.TestCase):
             elif i[1] == 'id':
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
-                id = dict((i.split()[0], i.split()[1]) for i in open(i[0][2]).readlines())
+                with open(i[0][2]) as handle:
+                    id = dict((i.split()[0], i.split()[1]) for i in handle)
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
                     caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
             alns.append(caln)
+            nucl.close() # Close the indexed FASTA file
         self.alns = alns
 
     def test_IO(self):
@@ -133,7 +135,8 @@ class Test_dn_ds(unittest.TestCase):
     def setUp(self):
         nucl = SeqIO.parse(TEST_ALIGN_FILE6[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
         prot = AlignIO.read(TEST_ALIGN_FILE6[0][1], 'clustal', alphabet=IUPAC.protein)
-        id_corr = dict((i.split()[0], i.split()[1]) for i in open(TEST_ALIGN_FILE6[0][2]).readlines())
+        with open(TEST_ALIGN_FILE6[0][2]) as handle:
+            id_corr = dict((i.split()[0], i.split()[1]) for i in handle)
         aln = CodonAlign.build(prot, nucl, corr_dict=id_corr, alphabet=CodonAlign.default_codon_alphabet)
         self.aln = aln
 
@@ -182,6 +185,7 @@ class Test_MK(unittest.TestCase):
                 p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
                 codon_aln = CodonAlign.build(pro_aln, p)
+                p.close() # Close indexed FASTA file
                 self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
             else:
                 warnings.warn('Numpy not installed. Skip MK test.')
