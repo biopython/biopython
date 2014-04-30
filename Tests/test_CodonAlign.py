@@ -142,11 +142,11 @@ class Test_dn_ds(unittest.TestCase):
         codon_seq1 = self.aln[0]
         codon_seq2 = self.aln[1]
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='NG86')
-        self.assertAlmostEquals(round(dN, 4), 0.0209, places=4)
-        self.assertAlmostEquals(round(dS, 4), 0.0178, places=4)
+        self.assertAlmostEqual(round(dN, 4), 0.0209, places=4)
+        self.assertAlmostEqual(round(dS, 4), 0.0178, places=4)
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='LWL85')
-        self.assertAlmostEquals(round(dN, 4), 0.0203, places=4)
-        self.assertAlmostEquals(round(dS, 4), 0.0164, places=4)
+        self.assertAlmostEqual(round(dN, 4), 0.0203, places=4)
+        self.assertAlmostEqual(round(dS, 4), 0.0164, places=4)
 
         try:
             import scipy
@@ -157,15 +157,15 @@ class Test_dn_ds(unittest.TestCase):
         # This should be present:
         from scipy.linalg import expm
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
-        self.assertAlmostEquals(round(dN, 4), 0.0198, places=4)
-        self.assertAlmostEquals(round(dS, 4), 0.0222, places=4)
+        self.assertAlmostEqual(round(dN, 4), 0.0198, places=4)
+        self.assertAlmostEqual(round(dS, 4), 0.0222, places=4)
 
         try:
             # New in scipy v0.11
             from scipy.optimize import minimize
             dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
-            self.assertAlmostEquals(round(dN, 4), 0.0194, places=4)
-            self.assertAlmostEquals(round(dS, 4), 0.0217, places=4)
+            self.assertAlmostEqual(round(dN, 4), 0.0194, places=4)
+            self.assertAlmostEqual(round(dS, 4), 0.0217, places=4)
         except ImportError:
             # TODO - Show a warning?
             pass
@@ -182,7 +182,7 @@ class Test_MK(unittest.TestCase):
                 p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
                 codon_aln = CodonAlign.build(pro_aln, p)
-                self.assertAlmostEquals(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
+                self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
             else:
                 warnings.warn('Numpy not installed. Skip MK test.')
 
