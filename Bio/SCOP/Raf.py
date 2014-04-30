@@ -28,6 +28,7 @@ protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
 
 from __future__ import print_function
 from Bio._py3k import basestring
+from Bio._py3k import _universal_read_mode
 
 from copy import copy
 
@@ -67,7 +68,7 @@ class SeqMapIndex(dict):
         dict.__init__(self)
         self.filename = filename
 
-        with open(self.filename, "rU") as f:
+        with open(self.filename, _universal_read_mode) as f:
             position = 0
             while True:
                 line = f.readline()
@@ -82,7 +83,7 @@ class SeqMapIndex(dict):
         """ Return an item from the indexed file. """
         position = dict.__getitem__(self, key)
 
-        with open(self.filename, "rU") as f:
+        with open(self.filename, _universal_read_mode) as f:
             f.seek(position)
             line = f.readline()
             record = SeqMap(line)

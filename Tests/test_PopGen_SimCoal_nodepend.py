@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from Bio._py3k import _universal_read_mode
+
 import os
 import unittest
 from Bio.PopGen import SimCoal
@@ -23,7 +25,7 @@ class TemplateTest(unittest.TestCase):
             'PopGen')
         #Confirm the files match (ignoring any switch of line endings
         #possible if the input file used a different OS convention)
-        handle = open(os.path.join('PopGen', 'simple.par'), "rU")
+        handle = open(os.path.join('PopGen', 'simple.par'), _universal_read_mode)
         old = handle.readlines()
         handle.close()
         handle = open(os.path.join('PopGen', 'simple_100_30.par'))

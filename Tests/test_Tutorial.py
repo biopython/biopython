@@ -5,6 +5,7 @@
 
 # This will apply to all the doctests too:
 from __future__ import print_function
+from Bio._py3k import _universal_read_mode
 
 import unittest
 import doctest
@@ -63,7 +64,7 @@ def extract_doctests(latex_filename):
 
     This is a generator, yielding one tuple per doctest.
     """
-    handle = open(latex_filename, "rU")
+    handle = open(latex_filename, _universal_read_mode)
     line_number = 0
     in_test = False
     lines = []

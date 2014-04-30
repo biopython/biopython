@@ -21,6 +21,7 @@ import warnings
 from io import BytesIO
 
 from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
+from Bio._py3k import _universal_read_mode
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
@@ -363,7 +364,7 @@ class IndexDictTests(unittest.TestCase):
 
     def test_duplicates_to_dict(self):
         """Index file with duplicate identifers with Bio.SeqIO.to_dict()"""
-        handle = open("Fasta/dups.fasta", "rU")
+        handle = open("Fasta/dups.fasta", _universal_read_mode)
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()

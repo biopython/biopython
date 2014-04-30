@@ -4,6 +4,7 @@
 # as part of this package.
 
 from __future__ import print_function
+from Bio._py3k import _universal_read_mode
 
 import os
 import sys
@@ -352,7 +353,7 @@ class SimpleAlignTest(unittest.TestCase):
         child.stdout.close()
         child.stderr.close()
         del child
-        handle = open(output_html, "rU")
+        handle = open(output_html, _universal_read_mode)
         html = handle.read().strip().upper()
         handle.close()
         self.assertTrue(html.startswith("<HTML"))
