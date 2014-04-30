@@ -15,6 +15,7 @@ database, and is compatible with the BioSQL standards.
 """
 import os
 
+from Bio._py3k import _universal_read_mode
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -257,7 +258,7 @@ class DBServer:
 
         # read the file with all comment lines removed
         sql = ""
-        with open(sql_file, "rU") as sql_handle:
+        with open(sql_file, _universal_read_mode) as sql_handle:
             for line in sql_handle:
                 if line.startswith("--"):  # don't include comment lines
                     pass
