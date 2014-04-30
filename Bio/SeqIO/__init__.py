@@ -98,6 +98,7 @@ providing dictionary like access to any record. For example,
     3
     >>> print(len(record_dict["gi|1348917|gb|G26685|G26685"]))
     413
+    >>> record_dict.close()
 
 Many but not all of the supported input file formats can be indexed like
 this. For example "fasta", "fastq", "qual" and even the binary format "sff"
@@ -132,6 +133,7 @@ keep the output 100% identical to the input). For example,
     TAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGGAATTGNTTTG
     CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
     <BLANKLINE>
+    >>> record_dict.close()
 
 Here the original file and what Biopython would output differ in the line
 wrapping. Also note that under Python 3, the get_raw method will return a
@@ -154,6 +156,7 @@ example FASTQ file uses Unix style endings (b"\n" only),
     False
     >>> len(raw)
     78
+    >>> fastq_dict.close()
 
 Here is the same file but using DOS/Windows new lines (b"\r\n" instead),
 
@@ -170,6 +173,7 @@ Here is the same file but using DOS/Windows new lines (b"\r\n" instead),
     True
     >>> len(raw)
     82
+    >>> fastq_dict.close()
 
 Because this uses two bytes for each new line, the file is longer than
 the Unix equivalent with only one byte.
@@ -747,6 +751,7 @@ def index(filename, format, alphabet=None, key_function=None):
     True
     >>> print(records.get("Missing", None))
     None
+    >>> records.close()
 
     If the file is BGZF compressed, this is detected automatically. Ordinary
     GZIP files are not supported:
@@ -757,6 +762,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> print(records["EAS54_6_R1_2_1_540_792"].seq)
     TTGGCAGGCCAAGGCCGATGGATCA
+    >>> records.close()
 
     Note that this pseudo dictionary will not support all the methods of a
     true Python dictionary, for example values() is not defined since this
@@ -776,7 +782,7 @@ def index(filename, format, alphabet=None, key_function=None):
     dictionary, e.g.
 
     >>> from Bio import SeqIO
-    >>> records = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fastq"), "fastq"))
+    >>> records = SeqIO.to_dict(SeqIO.parse("Quality/example.fastq", "fastq"))
     >>> len(records)
     3
     >>> sorted(records)
@@ -810,6 +816,7 @@ def index(filename, format, alphabet=None, key_function=None):
     False
     >>> print(records.get("Missing", None))
     None
+    >>> records.close()
 
     Another common use case would be indexing an NCBI style FASTA file,
     where you might want to extract the GI number from the FASTA identifer
@@ -888,6 +895,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     'gi|7525076|ref|NP_051101.1| Ycf2 [Arabidopsis thaliana]'
     >>> records["45478717"].description
     'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'
+    >>> records.close()
 
     In this example the two files contain 85 and 10 records respectively.
 
@@ -989,6 +997,9 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-if __name__ == "__main__":
-    from Bio._utils import run_doctest
-    run_doctest()
+# This helpful trick for testing no longer works with the
+# local imports :(
+#
+#if __name__ == "__main__":
+#    from Bio._utils import run_doctest
+#    run_doctest()
