@@ -849,7 +849,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
                   Alphabet.RNAAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
     try:
-        assert 0 == handle.tell()
+        assert 0 == handle.tell(), "Not at start of file, offset %i" % handle.tell()
     except AttributeError:
         #Probably a network handle or something like that
         handle = _AddTellHandle(handle)
