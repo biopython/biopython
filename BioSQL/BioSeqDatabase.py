@@ -256,16 +256,15 @@ class DBServer:
         # the default and removing the simple-minded approach.
 
         # read the file with all comment lines removed
-        sql_handle = open(sql_file, "rU")
-        sql = r""
-        for line in sql_handle:
-            if line.startswith("--"):  # don't include comment lines
-                pass
-            elif line.startswith("#"):  # ditto for MySQL comments
-                pass
-            elif line.strip():  # only include non-blank lines
-                sql += line.strip()
-                sql += ' '
+        sql = ""
+        with open(sql_file, "rU") as sql_handle:
+            for line in sql_handle:
+                if line.startswith("--"):  # don't include comment lines
+                    pass
+                elif line.startswith("#"):  # ditto for MySQL comments
+                    pass
+                elif line.strip():  # only include non-blank lines
+                    sql += line.strip() + " "
 
         # two ways to load the SQL
         # 1. PostgreSQL can load it all at once and actually needs to
