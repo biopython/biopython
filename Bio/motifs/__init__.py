@@ -43,8 +43,10 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import motifs
-    >>> for m in motifs.parse(open("Motif/alignace.out"), "AlignAce"):
-    ...     print(m.consensus)
+    >>> with open("Motif/alignace.out") as handle:
+    ...     for m in motifs.parse(handle, "AlignAce"):
+    ...         print(m.consensus)
+    ...
     TCTACGATTGAG
     CTGCAGCTAGCTACGAGTGAG
     GTGCTCTAAGCATAGTAGGCG
@@ -95,14 +97,16 @@ def read(handle, format):
     reading a JASPAR-style pfm file:
 
     >>> from Bio import motifs
-    >>> m = motifs.read(open("motifs/SRF.pfm"), "pfm")
+    >>> with open("motifs/SRF.pfm") as handle:
+    ...     m = motifs.read(handle, "pfm")
     >>> m.consensus
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import motifs
-    >>> m = motifs.read(open("motifs/meme.out"), "meme")
+    >>> with open("motifs/meme.out") as handle:
+    ...     m = motifs.read(handle, "meme")
     >>> m.consensus
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -110,7 +114,8 @@ def read(handle, format):
     an exception is raised:
 
     >>> from Bio import motifs
-    >>> motif = motifs.read(open("motifs/alignace.out"), "AlignAce")
+    >>> with open("motifs/alignace.out") as handle:
+    ...     motif = motifs.read(handle, "AlignAce")
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -120,7 +125,8 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import motifs
-    >>> record = motifs.parse(open("motifs/alignace.out"), "alignace")
+    >>> with open("motifs/alignace.out") as handle:
+    ...     record = motifs.parse(handle, "alignace")
     >>> motif = record[0]
     >>> motif.consensus
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
@@ -521,3 +527,6 @@ def write(motifs, format):
         raise ValueError("Unknown format type %s" % format)
 
 
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
