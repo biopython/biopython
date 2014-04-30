@@ -1359,7 +1359,8 @@ if __name__ == "__main__":
     assert data == handle.getvalue()
     #Check 100% identical to the original:
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    with open(filename, "rb").read() as original:
+    with open(filename, "rb") as handle:
+        original = handle.read()
         assert len(data) == len(original)
         assert data == original
         del data
