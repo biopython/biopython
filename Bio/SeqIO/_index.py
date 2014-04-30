@@ -554,6 +554,8 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 seq_len += len(line.strip())
             if not line:
                 raise ValueError("Premature end of file in seq section")
+            elif seq_len == 0:
+                raise ValueError("Zero-length sequence found in file")
             #assert line[0]=="+"
             #Find the qual line(s)
             qual_len = 0
