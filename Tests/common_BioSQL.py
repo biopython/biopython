@@ -157,7 +157,7 @@ def destroy_database():
             os.remove(TESTDB)
 
 
-def load_database(gb_handle):
+def load_database(gb_filename_or_handle):
     """Load a GenBank file into a new BioSQL database.
 
     This is useful for running tests against a newly created database.
@@ -172,7 +172,7 @@ def load_database(gb_handle):
     db = server.new_database(db_name)
 
     # get the GenBank file we are going to put into it
-    iterator = SeqIO.parse(gb_handle, "gb")
+    iterator = SeqIO.parse(gb_filename_or_handle, "gb")
     # finally put it in the database
     count = db.load(iterator)
     server.commit()
@@ -188,10 +188,7 @@ class ReadTest(unittest.TestCase):
     def setUp(self):
         """Connect to and load up the database.
         """
-        gb_file = "GenBank/cor6_6.gb"
-        gb_handle = open(gb_file, "r")
-        load_database(gb_handle)
-        gb_handle.close()
+        load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER,
@@ -274,10 +271,7 @@ class SeqInterfaceTest(unittest.TestCase):
     def setUp(self):
         """Load a database.
         """
-        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file, "r")
-        load_database(gb_handle)
-        gb_handle.close()
+        load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER, passwd = DBPASSWD,
@@ -414,9 +408,7 @@ class LoaderTest(unittest.TestCase):
         self.db = self.server.new_database(db_name)
 
         # get the GenBank file we are going to put into it
-        input_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        handle = open(input_file, "r")
-        self.iterator = SeqIO.parse(handle, "gb")
+        self.iterator = SeqIO.parse("GenBank/cor6_6.gb", "gb")
 
     def tearDown(self):
         self.server.close()
@@ -580,6 +572,7 @@ class ClosedLoopTest(unittest.TestCase):
                     del old.annotations[key]
             self.assertTrue(compare_record(old, new))
         #Done
+        handle.close()
         server.close()
 
 
@@ -661,9 +654,7 @@ class InDepthLoadTest(unittest.TestCase):
     """
     def setUp(self):
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file, "r")
-        load_database(gb_handle)
-        gb_handle.close()
+        load_database(gb_file)
 
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER, passwd = DBPASSWD,
@@ -807,12 +798,12 @@ class AutoSeqIOTests(unittest.TestCase):
     def check(self, t_format, t_filename, t_count=1):
         db = self.db
 
-        iterator = SeqIO.parse(handle=open(t_filename, "r"), format=t_format)
+        iterator = SeqIO.parse(t_filename, t_format)
         count = db.load(iterator)
         assert count == t_count
         self.server.commit()
 
-        iterator = SeqIO.parse(handle=open(t_filename, "r"), format=t_format)
+        iterator = SeqIO.parse(t_filename, t_format)
         for record in iterator:
             #print(" - %s, %s" % (checksum_summary(record), record.id))
             key = record.name
