@@ -514,23 +514,27 @@ def index_db(index_filename, filenames=None, format=None,
     indexing overhead, provided it has been indexed at least once.
 
     >>> from Bio import SearchIO
-    >>> db_idx = SearchIO.index_db(':memory:', 'Blast/mirna.xml', 'blast-xml')
+    >>> idx_filename = ":memory:" # Use a real filename, this is in RAM only!
+    >>> db_idx = SearchIO.index_db(idx_filename, 'Blast/mirna.xml', 'blast-xml')
     >>> sorted(db_idx)
     ['33211', '33212', '33213']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
+    >>> db_idx.close()
 
     `index_db` can also index multiple files and store them in the same
     database, making it easier to group multiple search files and access them
     from a single interface.
 
     >>> from Bio import SearchIO
+    >>> idx_filename = ":memory:" # Use a real filename, this is in RAM only!
     >>> files = ['Blast/mirna.xml', 'Blast/wnts.xml']
-    >>> db_idx = SearchIO.index_db(':memory:', files, 'blast-xml')
+    >>> db_idx = SearchIO.index_db(idx_filename, files, 'blast-xml')
     >>> sorted(db_idx)
     ['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
+    >>> db_idx.close()
 
     One common example where this is helpful is if you had a large set of
     query sequences (say ten thousand) which you split into ten query files
