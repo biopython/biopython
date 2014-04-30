@@ -1001,6 +1001,9 @@ class AceTestTwo(unittest.TestCase):
     def setUp(self):
         self.handle = open("Ace/seq.cap.ace")
 
+    def tearDown(self):
+        self.handle.close()
+
     def test_check_ACEParser(self):
         """Test to check that ACEParser can parse the whole file into one record."""
         record=Ace.read(self.handle)
@@ -1346,6 +1349,9 @@ class AceTestThree(unittest.TestCase):
     """
     def setUp(self):
         self.handle = open("Ace/consed_sample.ace")
+
+    def tearDown(self):
+        self.handle.close()
 
     def test_check_ACEParser(self):
         """Test to check that ACEParser can parse the whole file into one record."""
