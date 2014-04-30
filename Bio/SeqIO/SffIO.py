@@ -1256,79 +1256,89 @@ class SffWriter(SequenceWriter):
 if __name__ == "__main__":
     print("Running quick self test")
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    metadata = ReadRocheXmlManifest(open(filename, "rb"))
-    index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
-    index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
+    with open(filename, "rb") as handle:
+        metadata = ReadRocheXmlManifest(handle)
+    with open(filename, "rb") as handle:
+        index1 = sorted(_sff_read_roche_index(handle))
+    with open(filename, "rb") as handle:
+        index2 = sorted(_sff_do_slow_index(handle))
     assert index1 == index2
-    assert len(index1) == len(list(SffIterator(open(filename, "rb"))))
+    with open(filename, "rb") as handle:
+        assert len(index1) == len(list(SffIterator(handle)))
     from Bio._py3k import StringIO
     from io import BytesIO
-    assert len(index1) == len(
-        list(SffIterator(BytesIO(open(filename, "rb").read()))))
+    with open(filename, "rb") as handle:
+        assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
 
-    if sys.platform != "win32":
-        assert len(index1) == len(list(SffIterator(open(filename, "r"))))
-        index2 = sorted(_sff_read_roche_index(open(filename)))
+    if sys.platform != "win32" and sys.version_info[0] < 3:
+        #Can be lazy and treat as binary...
+        with open(filename, "r") as handle:
+            assert len(index1) == len(list(SffIterator(handle)))
+        with open(filename) as handle:
+            index2 = sorted(_sff_read_roche_index(handle))
         assert index1 == index2
-        index2 = sorted(_sff_do_slow_index(open(filename)))
+        with open(filename, "r") as handle:
+            index2 = sorted(_sff_do_slow_index(handle))
         assert index1 == index2
-        assert len(index1) == len(list(SffIterator(open(filename))))
-        assert len(index1) == len(
-            list(SffIterator(BytesIO(open(filename, "r").read()))))
-        assert len(
-            index1) == len(list(SffIterator(BytesIO(open(filename).read()))))
+        with open(filename, "r") as handle:
+            assert len(index1) == len(list(SffIterator(handle)))
+        with open(filename, "r") as handle:
+            assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
 
-    sff = list(SffIterator(open(filename, "rb")))
+    with open(filename, "rb") as handle:
+        sff = list(SffIterator(handle))
 
-    sff2 = list(SffIterator(
-        open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
+    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
+        sff2 = list(SffIterator(handle))
     assert len(sff) == len(sff2)
     for old, new in zip(sff, sff2):
         assert old.id == new.id
         assert str(old.seq) == str(new.seq)
 
-    sff2 = list(SffIterator(
-        open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
+    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
+        sff2 = list(SffIterator(handle))
     assert len(sff) == len(sff2)
     for old, new in zip(sff, sff2):
         assert old.id == new.id
         assert str(old.seq) == str(new.seq)
 
-    sff2 = list(SffIterator(
-        open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
+    with open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
+        sff2 = list(SffIterator(handle))
     assert len(sff) == len(sff2)
     for old, new in zip(sff, sff2):
         assert old.id == new.id
         assert str(old.seq) == str(new.seq)
 
-    sff2 = list(SffIterator(
-        open("../../Tests/Roche/E3MFGYR02_index_at_start.sff", "rb")))
+    with open("../../Tests/Roche/E3MFGYR02_index_at_start.sff", "rb") as handle:
+        sff2 = list(SffIterator(handle))
     assert len(sff) == len(sff2)
     for old, new in zip(sff, sff2):
         assert old.id == new.id
         assert str(old.seq) == str(new.seq)
 
-    sff2 = list(SffIterator(
-        open("../../Tests/Roche/E3MFGYR02_index_in_middle.sff", "rb")))
+    with open("../../Tests/Roche/E3MFGYR02_index_in_middle.sff", "rb") as handle:
+        sff2 = list(SffIterator(handle))
     assert len(sff) == len(sff2)
     for old, new in zip(sff, sff2):
         assert old.id == new.id
         assert str(old.seq) == str(new.seq)
 
-    sff_trim = list(SffIterator(open(filename, "rb"), trim=True))
+    with open(filename, "rb") as handle:
+        sff_trim = list(SffIterator(handle, trim=True))
 
-    print(ReadRocheXmlManifest(open(filename, "rb")))
+    with open(filename, "rb") as handle:
+        print(ReadRocheXmlManifest(handle))
 
     from Bio import SeqIO
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
-    fasta_no_trim = list(SeqIO.parse(open(filename, "rU"), "fasta"))
+    fasta_no_trim = list(SeqIO.parse(filename, "fasta"))
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.qual"
-    qual_no_trim = list(SeqIO.parse(open(filename, "rU"), "qual"))
+    qual_no_trim = list(SeqIO.parse(filename, "qual"))
 
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.fasta"
-    fasta_trim = list(SeqIO.parse(open(filename, "rU"), "fasta"))
+    fasta_trim = list(SeqIO.parse(filename, "fasta"))
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.qual"
-    qual_trim = list(SeqIO.parse(open(filename, "rU"), "qual"))
+    qual_trim = list(SeqIO.parse(filename, "qual"))
 
     for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
                                    qual_no_trim, fasta_trim, qual_trim):
@@ -1348,12 +1358,12 @@ if __name__ == "__main__":
             "phred_quality"] == qT.letter_annotations["phred_quality"]
 
     print("Writing with a list of SeqRecords...")
-    handle = StringIO()
+    handle = BytesIO()
     w = SffWriter(handle, xml=metadata)
     w.write_file(sff)  # list
     data = handle.getvalue()
     print("And again with an iterator...")
-    handle = StringIO()
+    handle = BytesIO()
     w = SffWriter(handle, xml=metadata)
     w.write_file(iter(sff))
     assert data == handle.getvalue()
@@ -1367,13 +1377,17 @@ if __name__ == "__main__":
 
     print("-" * 50)
     filename = "../../Tests/Roche/greek.sff"
-    for record in SffIterator(open(filename, "rb")):
-        print(record.id)
-    index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
-    index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
+    with open(filename, "rb") as handle:
+        for record in SffIterator(handle):
+            print(record.id)
+    with open(filename, "rb") as handle:
+        index1 = sorted(_sff_read_roche_index(handle))
+    with open(filename, "rb") as handle:
+        index2 = sorted(_sff_do_slow_index(handle))
     assert index1 == index2
     try:
-        print(ReadRocheXmlManifest(open(filename, "rb")))
+        with open(filename, "rb") as handle:
+            print(ReadRocheXmlManifest(handle))
         assert False, "Should fail!"
     except ValueError:
         pass
