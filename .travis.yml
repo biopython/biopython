@@ -9,12 +9,14 @@ python:
   - "2.6"
   - "2.7"
   - "3.3"
+  - "3.4"
   - "pypy"
 
 before_install:
-  - "export PY3=no"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PY3=yes; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PY3=yes; fi"
+  - "export PY3=yes"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
   - "sudo apt-get install clustalw clustalo"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss"
   - "sudo apt-get install samtools bwa"
