@@ -3104,6 +3104,7 @@ As an example, let's use the same GenBank file as before:
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+>>> orchid_dict.close()
 \end{verbatim}
 
 \noindent Note that \verb|Bio.SeqIO.index()| won't take a handle,
@@ -3280,6 +3281,7 @@ uncompressed GenBank file:
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
 >>> len(orchid_dict)
 94
+>>> orchid_dict.close()
 \end{verbatim}
 
 You could compress this (while keeping the original file) at the command
@@ -3298,6 +3300,7 @@ You can use the compressed file in exactly the same way:
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk.bgz", "genbank")
 >>> len(orchid_dict)
 94
+>>> orchid_dict.close()
 \end{verbatim}
 
 \noindent
@@ -3309,6 +3312,7 @@ or:
 >>> orchid_dict = SeqIO.index_db("ls_orchid.gbk.bgz.idx", "ls_orchid.gbk.bgz", "genbank")
 >>> len(orchid_dict)
 94
+>>> orchid_dict.close()
 \end{verbatim}
 
 The \verb|SeqIO| indexing automatically detects the BGZF compression. Note
@@ -6763,6 +6767,7 @@ format name:
 ['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|']
 >>> idx['gi|16080617|ref|NP_391444.1|']
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
+>>> idx.close()
 \end{verbatim}
 
 Or also with the format-specific keyword argument:
@@ -6774,6 +6779,7 @@ Or also with the format-specific keyword argument:
 ['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|', 'random_s00']
 >>> idx['gi|16080617|ref|NP_391444.1|']
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
+>>> idx.close()
 \end{verbatim}
 
 Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
@@ -6786,6 +6792,7 @@ Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
 ['GI|11464971:4-101', 'GI|16080617|REF|NP_391444.1|']
 >>> idx['GI|16080617|REF|NP_391444.1|']
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
+>>> idx.close()
 \end{verbatim}
 
 \verb|Bio.SearchIO.index_db| works like as \verb|index|, only it writes the
@@ -7571,8 +7578,9 @@ We first open the file and then parse it:
 %doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
->>> input = open("pubmed_result1.txt")
->>> record = Medline.read(input)
+>>> with open("pubmed_result1.txt") as handle:
+...    record = Medline.read(handle)
+...
 \end{verbatim}
 The \verb+record+ now contains the Medline record as a Python dictionary:
 %cont-doctest
@@ -7601,10 +7609,10 @@ To parse a file containing multiple Medline records, you can use the \verb+parse
 %doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
->>> input = open("pubmed_result2.txt")
->>> records = Medline.parse(input)
->>> for record in records:
-...     print(record["TI"])
+>>> with open("pubmed_result2.txt") as handle:
+...     for record in Medline.parse(handle):
+...         print(record["TI"])
+...
 A high level interface to SCOP and ASTRAL implemented in python.
 GenomeDiagram: a python package for the visualization of large-scale genomic data.
 Open source clustering software.
@@ -8521,8 +8529,9 @@ In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Rec
 %doctest ../Tests/Enzymes
 \begin{verbatim}
 >>> from Bio.ExPASy import Enzyme
->>> handle = open("lipoprotein.txt")
->>> record = Enzyme.read(handle)
+>>> with open("lipoprotein.txt") as handle:
+...     record = Enzyme.read(handle)
+...
 >>> record["ID"]
 '3.1.1.34'
 >>> record["DE"]
@@ -11686,7 +11695,9 @@ We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> arnt = motifs.read(open("Arnt.sites"), "sites")
+>>> with open("Arnt.sites") as handle:
+...     arnt = motifs.read(handle, "sites")
+...
 \end{verbatim}
 The instances from which this motif was created is stored in the \verb+.instances+ property:
 %cont-doctest
@@ -11745,7 +11756,9 @@ For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix
 We can create a motif for this count matrix as follows:
 %cont-doctest
 \begin{verbatim}
->>> srf = motifs.read(open("SRF.pfm"), "pfm")
+>>> with open("SRF.pfm") as handle:
+...     srf = motifs.read(handle, "pfm")
+...
 >>> print(srf.counts)
         0      1      2      3      4      5      6      7      8      9     10     11
 A:   2.00   9.00   0.00   1.00  32.00   3.00  46.00   1.00  43.00  15.00   2.00   2.00
@@ -12659,8 +12672,9 @@ To facilitate searching for potential TFBSs using PSSMs, both the position-weigh
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> handle = open("Arnt.sites")
->>> motif = motifs.read(handle, 'sites')
+>>> with open("Arnt.sites") as handle:
+...     motif = motifs.read(handle, 'sites')
+...
 >>> print(motif.counts)
         0      1      2      3      4      5
 A:   4.00  19.00   0.00   0.00   0.00   0.00
@@ -12829,7 +12843,9 @@ which is similar to our test motif \verb|m|:
 %TODO - Start a new doctest here?
 %cont-doctest
 \begin{verbatim}
->>> m_reb1 = motifs.read(open("REB1.pfm"), "pfm")
+>>> with open("REB1.pfm") as handle:
+...    m_reb1 = motifs.read(handle, "pfm")
+...
 >>> m_reb1.consensus
 Seq('GTTACCCGG', IUPACUnambiguousDNA())
 >>> print(m_reb1.counts)
@@ -12893,7 +12909,9 @@ running the following piece of code:
 %doctest ../Tests/Motif
 \begin{verbatim}
 >>> from Bio import motifs
->>> motifsM = motifs.parse(open("meme.out"), "meme")
+>>> with open("meme.out") as handle:
+...     motifsM = motifs.parse(handle, "meme")
+...
 \end{verbatim}
 \begin{verbatim}
 >>> motifsM
@@ -12940,7 +12958,9 @@ with the following code:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> motifsA = motifs.parse(open("alignace.out"), "alignace")
+>>> with open("alignace.out") as handle:
+...     motifsA = motifs.parse(handle, "alignace")
+...
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -13143,12 +13163,16 @@ let's look at how we can import JASPAR motifs from instances:
 %doctest ../Tests/Motif
 \begin{verbatim}
 >>> from Bio import Motif
->>> arnt = Motif.read(open("Arnt.sites"), "jaspar-sites")
+>>> with open("Arnt.sites") as handle:
+...     arnt = Motif.read(handle, "jaspar-sites")
+...
 \end{verbatim}
 and from a count matrix:
 %cont-doctest
 \begin{verbatim}
->>> srf = Motif.read(open("SRF.pfm"), "jaspar-pfm")
+>>> with open("SRF.pfm") as handle:
+...     srf = Motif.read(handle, "jaspar-pfm")
+...
 \end{verbatim}
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
