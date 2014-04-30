@@ -235,9 +235,10 @@ for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
     assert 0 == AlignIO.write([], handle, t_format), \
            "Writing no alignments to %s format should work!" \
            % t_format
+    handle.close()
 
 #Check writers reject non-alignments
-list_of_records = list(AlignIO.read(open("Clustalw/opuntia.aln"), "clustal"))
+list_of_records = list(AlignIO.read("Clustalw/opuntia.aln", "clustal"))
 for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
@@ -246,6 +247,7 @@ for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
             % t_format
     except (TypeError, AttributeError, ValueError):
         pass
+    handle.close()
     del handle
 del list_of_records, t_format
 
@@ -256,7 +258,8 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    alignments = list(AlignIO.parse(handle=open(t_filename, "r"), format=t_format))
+    with open(t_filename, "r") as handle:
+        alignments = list(AlignIO.parse(handle, format=t_format))
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
@@ -272,7 +275,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
 
     #Try using the iterator with the next() method
     alignments3 = []
-    seq_iterator = AlignIO.parse(handle=open(t_filename, "r"), format=t_format)
+    seq_iterator = AlignIO.parse(t_filename, format=t_format)
     while True:
         try:
             record = next(seq_iterator)
@@ -282,7 +285,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         alignments3.append(record)
 
     #Try a mixture of next() and list (a torture test!)
-    seq_iterator = AlignIO.parse(handle=open(t_filename, "r"), format=t_format)
+    seq_iterator = AlignIO.parse(t_filename, format=t_format)
     try:
         record = next(seq_iterator)
     except StopIteration:
@@ -295,7 +298,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert len(alignments4) == t_count
 
     #Try a mixture of next() and for loop (a torture test!)
-    seq_iterator = AlignIO.parse(handle=open(t_filename, "r"), format=t_format)
+    seq_iterator = AlignIO.parse(t_filename, format=t_format)
     try:
         record = next(seq_iterator)
     except StopIteration:
@@ -310,11 +313,13 @@ for (t_format, t_per, t_count, t_filename) in test_files:
 
     # Check Bio.AlignIO.read(...)
     if t_count == 1:
-        alignment = AlignIO.read(handle=open(t_filename), format=t_format)
+        with open(t_filename) as handle:
+            alignment = AlignIO.read(handle, format=t_format)
         assert isinstance(alignment, Alignment)
     else:
         try:
-            alignment = AlignIO.read(open(t_filename), t_format)
+            with open(t_filename) as handle:
+                alignment = AlignIO.read(handle, t_format)
             assert False, "Bio.AlignIO.read(...) should have failed"
         except ValueError:
             # Expected to fail
@@ -348,11 +353,13 @@ for (t_format, t_per, t_count, t_filename) in test_files:
 
     if t_count==1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
         #print(" Trying to read a triple concatenation of the input file")
-        data = open(t_filename, "r").read()
+        with open(t_filename, "r") as handle:
+            data = handle.read()
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)
         handle.seek(0)
         assert 3 == len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per)))
+        handle.close()
 
     #Some alignment file formats have magic characters which mean
     #use the letter in this position in the first sequence.
