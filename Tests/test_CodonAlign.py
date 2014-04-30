@@ -147,21 +147,27 @@ class Test_dn_ds(unittest.TestCase):
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='LWL85')
         self.assertAlmostEquals(round(dN, 4), 0.0203, places=4)
         self.assertAlmostEquals(round(dS, 4), 0.0164, places=4)
+
         try:
-            from scipy.linalg import expm
-            dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
-            self.assertAlmostEquals(round(dN, 4), 0.0198, places=4)
-            self.assertAlmostEquals(round(dS, 4), 0.0222, places=4)
+            import scipy
         except ImportError:
-            warnings.warn('Importing scipy.linalg.expm failed. Skip testing ML method for dN/dS estimation')
-            pass
+            # Silently skip the rest of the test
+            return
+
+        # This should be present:
+        from scipy.linalg import expm
+        dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
+        self.assertAlmostEquals(round(dN, 4), 0.0198, places=4)
+        self.assertAlmostEquals(round(dS, 4), 0.0222, places=4)
+
         try:
+            # New in scipy v0.11
             from scipy.optimize import minimize
             dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
             self.assertAlmostEquals(round(dN, 4), 0.0194, places=4)
             self.assertAlmostEquals(round(dS, 4), 0.0217, places=4)
         except ImportError:
-            warnings.warn('Importing scipy.optimize.minimize failed. Skip testing ML method for dN/dS estimation')
+            # TODO - Show a warning?
             pass
 
 class Test_MK(unittest.TestCase):
