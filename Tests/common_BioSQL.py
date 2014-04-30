@@ -550,7 +550,7 @@ class ClosedLoopTest(unittest.TestCase):
         self.loop("GenBank/arab1.gb", "gb")
 
     def loop(self, filename, format):
-        original_records = list(SeqIO.parse(open(filename, "rU"), format))
+        original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
@@ -624,7 +624,7 @@ class TransferTest(unittest.TestCase):
         self.trans("GenBank/arab1.gb", "gb")
 
     def trans(self, filename, format):
-        original_records = list(SeqIO.parse(open(filename, "rU"), format))
+        original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
