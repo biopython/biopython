@@ -35,7 +35,11 @@ except:
         "bitmaps with Bio.Graphics.")
 try:
     # Skip the test if PIL is not installed
-    import Image as i
+    # The preferred PIL import has changed over time:
+    try:
+        from PIL import Image as i
+    except ImportError:
+        import Image as i
     del i
 except:
     raise MissingPythonDependencyError(
