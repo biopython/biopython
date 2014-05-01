@@ -57,18 +57,20 @@ def open_database(driver="MySQLdb", **kwargs):
             url_pref = "jdbc:postgresql://" + kwargs["host"] + "/"
 
     else:
-        module = __import__(driver)
-    connect = getattr(module, "connect")
+        module = __import__(driver, fromlist=["connect"])
+    connect = module.connect
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver == "MySQLdb" and os.name != "java":
+    if driver in ["MySQLdb", "mysql.connector"] and os.name != "java":
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
         if "password" in kw:
             kw["passwd"] = kw["password"]
             del kw["password"]
+        #kw["charset"] = "utf8"
+        #kw["use_unicode"] = True
     else:
         # DB-API recommendations
         if "db" in kw:
@@ -275,7 +277,7 @@ class DBServer:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
-        elif self.module_name in ["MySQLdb", "sqlite3"]:
+        elif self.module_name in ["mysql.connector", "MySQLdb", "sqlite3"]:
             sql_parts = sql.split(";")  # one line per sql command
             for sql_line in sql_parts[:-1]:  # don't use the last item, it's blank
                 self.adaptor.cursor.execute(sql_line)

@@ -48,7 +48,7 @@
 
 CREATE TABLE biodatabase (
   	biodatabase_id 	INT(10) UNSIGNED NOT NULL auto_increment,
-  	name           	VARCHAR(128) BINARY NOT NULL,
+  	name           	VARCHAR(128) NOT NULL,
 	authority	VARCHAR(128),
 	description	TEXT,
 	PRIMARY KEY (biodatabase_id),
@@ -86,8 +86,8 @@ CREATE INDEX taxparent ON taxon(parent_taxon_id);
 -- corresponds to the names table of the NCBI taxonomy databaase
 CREATE TABLE taxon_name (
        taxon_id		INT(10) UNSIGNED NOT NULL,
-       name		VARCHAR(255) BINARY NOT NULL,
-       name_class	VARCHAR(32) BINARY NOT NULL,
+       name		VARCHAR(255) NOT NULL,
+       name_class	VARCHAR(32) NOT NULL,
        UNIQUE (taxon_id,name,name_class)
 ) ENGINE=INNODB;
 
@@ -98,7 +98,7 @@ CREATE INDEX taxnamename    ON taxon_name(name);
 -- we chose to have a separate table for this instead of reusing biodatabase
 CREATE TABLE ontology (
        	ontology_id        INT(10) UNSIGNED NOT NULL auto_increment,
-       	name	   	   VARCHAR(32) BINARY NOT NULL,
+       	name	   	   VARCHAR(32) NOT NULL,
        	definition	   TEXT,
 	PRIMARY KEY (ontology_id),
 	UNIQUE (name)
@@ -108,9 +108,9 @@ CREATE TABLE ontology (
 -- terms eg GO IDs to the various keys allowed as qualifiers
 CREATE TABLE term (
        	term_id   INT(10) UNSIGNED NOT NULL auto_increment,
-       	name	   	   VARCHAR(255) BINARY NOT NULL,
+       	name	   	   VARCHAR(255) NOT NULL,
        	definition	   TEXT,
-	identifier	   VARCHAR(40) BINARY,
+	identifier	   VARCHAR(40) ,
 	is_obsolete	   CHAR(1),
 	ontology_id	   INT(10) UNSIGNED NOT NULL,
 	PRIMARY KEY (term_id),
@@ -133,7 +133,7 @@ CREATE INDEX term_ont ON term(ontology_id);
 -- Synonym is a reserved word in many RDBMSs, so the column synonym
 -- may eventually be renamed to name.
 CREATE TABLE term_synonym (
-       synonym		  VARCHAR(255) BINARY NOT NULL,
+       synonym		  VARCHAR(255) NOT NULL,
        term_id		  INT(10) UNSIGNED NOT NULL,
        PRIMARY KEY (term_id,synonym)
 ) ENGINE=INNODB;
@@ -247,8 +247,8 @@ CREATE TABLE bioentry (
   	biodatabase_id  INT(10) UNSIGNED NOT NULL,
   	taxon_id     	INT(10) UNSIGNED,
   	name		VARCHAR(40) NOT NULL,
-  	accession    	VARCHAR(128) BINARY NOT NULL,
-  	identifier   	VARCHAR(40) BINARY,
+  	accession    	VARCHAR(128) NOT NULL,
+  	identifier   	VARCHAR(40) ,
 	division	VARCHAR(6),
   	description  	TEXT,
   	version 	SMALLINT UNSIGNED NOT NULL, 
@@ -329,8 +329,8 @@ CREATE TABLE biosequence (
 --
 CREATE TABLE dbxref (
         dbxref_id	INT(10) UNSIGNED NOT NULL auto_increment,
-        dbname          VARCHAR(40) BINARY NOT NULL,
-        accession       VARCHAR(128) BINARY NOT NULL,
+        dbname          VARCHAR(40)  NOT NULL,
+        accession       VARCHAR(128) NOT NULL,
 	version		SMALLINT UNSIGNED NOT NULL,
 	PRIMARY KEY (dbxref_id),
         UNIQUE(accession, dbname, version)
