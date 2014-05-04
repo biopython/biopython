@@ -25,11 +25,11 @@ DBTYPE = 'sqlite'
 #TESTDB = ':memory:'
 # Instead, we use (if we can) /dev/shm
 try:
-    test_db_fname = tempfile.mkstemp(dir='/dev/shm')[1]
+    h, test_db_fname = tempfile.mkstemp("_BioSQL.db", dir='/dev/shm')
 except OSError:
     # We can't use /dev/shm
     h, test_db_fname = tempfile.mkstemp("_BioSQL.db")
-    os.close(h)
+os.close(h)
 
 TESTDB = test_db_fname
 
