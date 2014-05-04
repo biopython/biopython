@@ -8,6 +8,7 @@ from __future__ import print_function
 import os
 import platform
 import unittest
+import tempfile
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
@@ -39,6 +40,19 @@ global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
 global SYSTEM
 
 SYSTEM = platform.system()
+
+def temp_db_filename():
+    # In memory SQLite does not work with current test structure since the tests
+    # expect databases to be retained between individual tests.
+    # TESTDB = ':memory:'
+    # Instead, we use (if we can) /dev/shm
+    try:
+        h, test_db_fname = tempfile.mkstemp("_BioSQL.db", dir='/dev/shm')
+    except OSError:
+        # We can't use /dev/shm
+        h, test_db_fname = tempfile.mkstemp("_BioSQL.db")
+    os.close(h)
+    return test_db_fname
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
@@ -136,8 +150,12 @@ def _do_db_create():
 def create_database():
     """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
     if DBDRIVER in ["sqlite3"]:
+        global TESTDB
         if os.path.exists(TESTDB):
             os.remove(TESTDB)
+        # Now pick a new filename - just in case there is a stale handle
+        # (which might be happening under Windows...)
+        TESTDB = temp_db_filename()
     else:
         _do_db_create()
 
