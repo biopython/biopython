@@ -634,15 +634,30 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         clip_right = seq_len
     #Now build a SeqRecord
     if trim:
-        seq = seq[clip_left:clip_right].upper()
-        quals = quals[clip_left:clip_right]
+        if clip_left > clip_right:
+            # Raise an error?
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Overlapping clip values in SFF record, trimmed to nothing",
+                          BiopythonParserWarning)
+            seq = ""
+            quals = []
+        else:
+            seq = seq[clip_left:clip_right].upper()
+            quals = quals[clip_left:clip_right]
         #Don't record the clipping values, flow etc, they make no sense now:
         annotations = {}
     else:
-        #This use of mixed case mimics the Roche SFF tool's FASTA output
-        seq = seq[:clip_left].lower() + \
-            seq[clip_left:clip_right].upper() + \
-            seq[clip_right:].lower()
+        if clip_left > clip_right:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Overlapping clip values in SFF record", BiopythonParserWarning)
+            seq = seq.lower()
+        else:
+            #This use of mixed case mimics the Roche SFF tool's FASTA output
+            seq = seq[:clip_left].lower() + \
+                seq[clip_left:clip_right].upper() + \
+                seq[clip_right:].lower()
         annotations = {"flow_values": struct.unpack(read_flow_fmt, flow_values),
                        "flow_index": struct.unpack(temp_fmt, flow_index),
                        "flow_chars": flow_chars,

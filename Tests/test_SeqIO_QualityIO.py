@@ -723,6 +723,38 @@ class MappingTests(unittest.TestCase):
                          expected_phred)
 
 
+class TestSFF(unittest.TestCase):
+    """Test SFF specific details."""
+    def test_overlapping_clip(self):
+        with open("Roche/greek.sff", "rb") as handle:
+            record = next(SeqIO.parse(handle, "sff"))
+        self.assertEqual(len(record), 395)
+        s = str(record.seq.lower())
+        # Apply overlapping clipping
+        record.annotations['clip_qual_left']=51
+        record.annotations['clip_qual_right']=44
+        record.annotations['clip_adapter_left']=50
+        record.annotations['clip_adapter_right']=75
+        self.assertEqual(len(record), 395)
+        self.assertEqual(len(record.seq), 395)
+        # Save the clipped record...
+        h = BytesIO()
+        count = SeqIO.write(record, h, "sff")
+        # Now reload it...
+        h.seek(0)
+        record = SeqIO.read(h, "sff")
+        record.annotations['clip_qual_left']=51
+        record.annotations['clip_qual_right']=44
+        record.annotations['clip_adapter_left']=50
+        record.annotations['clip_adapter_right']=75
+        self.assertEqual(len(record), 395)
+        self.assertEqual(s, str(record.seq.lower()))
+        # And check with trimming applied...
+        h.seek(0)
+        record = SeqIO.read(h, "sff-trim")
+        self.assertEqual(len(record), 0)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
