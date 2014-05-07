@@ -667,14 +667,14 @@ def _yn00(seq1, seq2, k, codon_table):
     """Main function for yn00 method (PRIVATE).
     """
     # nomenclature is according to PMID: 10666704
-    from collections import Counter
+    from collections import defaultdict
     from scipy.linalg import expm
     fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
               {'A': 0, 'G': 0, 'C': 0, 'T': 0},
               {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
     codon_fold_dict = _get_codon_fold(codon_table)
-    fold0_cnt = Counter()
-    fold4_cnt = Counter()
+    fold0_cnt = defaultdict(int)
+    fold4_cnt = defaultdict(int)
     for codon in seq1 + seq2:
         # count sites at different codon position
         if codon != '---':
@@ -704,7 +704,7 @@ def _yn00(seq1, seq2, k, codon_table):
     for i in range(3):
         tot = sum(fcodon[i].values())
         fcodon[i] = dict((j, k/tot) for j, k in fcodon[i].items())
-    pi = Counter()
+    pi = defaultdict(int)
     for i in list(codon_table.forward_table.keys()) + codon_table.stop_codons:
         if 'U' not in i:
             pi[i] = 0
