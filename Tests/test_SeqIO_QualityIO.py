@@ -731,10 +731,10 @@ class TestSFF(unittest.TestCase):
         self.assertEqual(len(record), 395)
         s = str(record.seq.lower())
         # Apply overlapping clipping
-        record.annotations['clip_qual_left']=51
-        record.annotations['clip_qual_right']=44
-        record.annotations['clip_adapter_left']=50
-        record.annotations['clip_adapter_right']=75
+        record.annotations['clip_qual_left'] = 51
+        record.annotations['clip_qual_right'] = 44
+        record.annotations['clip_adapter_left'] = 50
+        record.annotations['clip_adapter_right'] = 75
         self.assertEqual(len(record), 395)
         self.assertEqual(len(record.seq), 395)
         # Save the clipped record...
@@ -743,10 +743,10 @@ class TestSFF(unittest.TestCase):
         # Now reload it...
         h.seek(0)
         record = SeqIO.read(h, "sff")
-        record.annotations['clip_qual_left']=51
-        record.annotations['clip_qual_right']=44
-        record.annotations['clip_adapter_left']=50
-        record.annotations['clip_adapter_right']=75
+        self.assertEqual(record.annotations['clip_qual_left'], 51)
+        self.assertEqual(record.annotations['clip_qual_right'], 44)
+        self.assertEqual(record.annotations['clip_adapter_left'], 50)
+        self.assertEqual(record.annotations['clip_adapter_right'], 75)
         self.assertEqual(len(record), 395)
         self.assertEqual(s, str(record.seq.lower()))
         # And check with trimming applied...
