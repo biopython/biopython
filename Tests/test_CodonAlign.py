@@ -173,22 +173,20 @@ class Test_dn_ds(unittest.TestCase):
             # TODO - Show a warning?
             pass
 
-class Test_MK(unittest.TestCase):
-    def test_mk(self):
-        ver = sys.version_info
-        if ver[0] == 2 and ver[1] == 6:
-            warnings.warn('Python 2.6 detected. Skip testing MK method')
-            pass
-        else:
-            from run_tests import is_numpy
-            if is_numpy():
-                p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
-                pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
-                codon_aln = CodonAlign.build(pro_aln, p)
-                p.close() # Close indexed FASTA file
-                self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
-            else:
-                warnings.warn('Numpy not installed. Skip MK test.')
+
+from run_tests import is_numpy
+try:
+    from math import lgamma # New in Python 2.7
+except ImportError:
+    lgamma = None
+if is_numpy() and lgamma:
+    class Test_MK(unittest.TestCase):
+        def test_mk(self):
+            p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
+            pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
+            codon_aln = CodonAlign.build(pro_aln, p)
+            p.close() # Close indexed FASTA file
+            self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
 
 
 if __name__ == "__main__":
