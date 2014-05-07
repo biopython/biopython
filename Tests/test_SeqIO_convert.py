@@ -32,22 +32,20 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     #Write it out...
     handle = StringIO()
     qual_truncate = truncation_expected(out_format)
-    if qual_truncate:
-        warnings.simplefilter('ignore', UserWarning)
-    SeqIO.write(records, handle, out_format)
-    if qual_truncate:
-        warnings.filters.pop()
+    with warnings.catch_warnings():
+        if qual_truncate:
+            warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(records, handle, out_format)
     handle.seek(0)
     #Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle, out_format, alphabet))
     compare_records(records, records2, qual_truncate)
     #Finally, use the convert function, and check that agrees:
     handle2 = StringIO()
-    if qual_truncate:
-        warnings.simplefilter('ignore', UserWarning)
-    SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
-    if qual_truncate:
-        warnings.filters.pop()
+    with warnings.catch_warnings():
+        if qual_truncate:
+            warnings.simplefilter('ignore', UserWarning)
+        SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
     #We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
 
@@ -59,11 +57,10 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     try:
         records = list(SeqIO.parse(in_filename, in_format, alphabet))
         handle = StringIO()
-        if qual_truncate:
-            warnings.simplefilter('ignore', UserWarning)
-        SeqIO.write(records, handle, out_format)
-        if qual_truncate:
-            warnings.filters.pop()
+        with warnings.catch_warnings():
+            if qual_truncate:
+                warnings.simplefilter('ignore', UserWarning)
+            SeqIO.write(records, handle, out_format)
         handle.seek(0)
         assert False, "Parse or write should have failed!"
     except ValueError as err:
@@ -71,11 +68,10 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     #Now do the conversion...
     try:
         handle2 = StringIO()
-        if qual_truncate:
-            warnings.simplefilter('ignore', UserWarning)
-        SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
-        if qual_truncate:
-            warnings.filters.pop()
+        with warnings.catch_warnings():
+            if qual_truncate:
+                warnings.simplefilter('ignore', UserWarning)
+            SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
         assert False, "Convert should have failed!"
     except ValueError as err2:
         assert str(err1) == str(err2), \
