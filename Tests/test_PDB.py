@@ -28,6 +28,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
+from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
@@ -51,6 +52,8 @@ class A_ExceptionTest(unittest.TestCase):
 
         NB: The try/finally block is adapted from the warnings.catch_warnings
         context manager in the Python 2.6 standard library.
+
+        TODO: Now we require Python 2.6, switch to using warnings.catch_warnings
         """
         warnings.simplefilter('always', PDBConstructionWarning)
         try:
@@ -89,13 +92,12 @@ class A_ExceptionTest(unittest.TestCase):
 
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        try:
-            parser = PDBParser(PERMISSIVE=False)
+        parser = PDBParser(PERMISSIVE=False)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", PDBConstructionWarning)
             self.assertRaises(PDBConstructionException,
-                   parser.get_structure, "example", "PDB/a_structure.pdb")
-        finally:
-            warnings.filters.pop()
+                              parser.get_structure, "example", "PDB/a_structure.pdb")
+            self.assertEqual(len(w), 4, w)
 
     def test_3_bad_xyz(self):
         """Check error: Parse an entry with bad x,y,z value."""
@@ -109,7 +111,10 @@ class A_ExceptionTest(unittest.TestCase):
     def test_4_occupancy(self):
         """Parse file with missing occupancy"""
         permissive = PDBParser(PERMISSIVE=True)
-        structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", PDBConstructionWarning)
+            structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+            self.assertEqual(len(w), 3, w)
         atoms = structure[0]['A'][(' ', 152, ' ')]
         # Blank occupancy behavior set in Bio/PDB/PDBParser
         self.assertEqual(atoms['N'].get_occupancy(), None)
@@ -165,10 +170,10 @@ class HeaderTests(unittest.TestCase):
 
 class ParseTest(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        p = PDBParser(PERMISSIVE=1)
-        self.structure = p.get_structure("example", "PDB/a_structure.pdb")
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            p = PDBParser(PERMISSIVE=1)
+            self.structure = p.get_structure("example", "PDB/a_structure.pdb")
 
     def test_c_n(self):
         """Extract polypeptides using C-N."""
@@ -701,10 +706,10 @@ class ParseReal(unittest.TestCase):
 
 class WriteTest(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        self.parser = PDBParser(PERMISSIVE=1)
-        self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.parser = PDBParser(PERMISSIVE=1)
+            self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
 
     def test_pdbio_write_structure(self):
         """Write a full structure using PDBIO"""
@@ -791,32 +796,34 @@ class WriteTest(unittest.TestCase):
 
     def test_pdbio_missing_occupancy(self):
         """Write PDB file with missing occupancy"""
-
-        from Bio import BiopythonWarning
-        warnings.simplefilter('ignore', BiopythonWarning)
-
         io = PDBIO()
-        structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
         io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
-            io.save(filename)
-            struct2 = self.parser.get_structure("test", filename)
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter("always", BiopythonWarning)
+                io.save(filename)
+                self.assertEqual(len(w), 1, w)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("test", filename)
             atoms = struct2[0]['A'][(' ', 152, ' ')]
             self.assertEqual(atoms['N'].get_occupancy(), None)
         finally:
             os.remove(filename)
-            warnings.filters.pop()
 
 
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
-        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         self.model=structure[1]
         #Look at first chain only
         a_residues=list(self.model["A"].child_list)
@@ -897,10 +904,10 @@ class Atom_Element(unittest.TestCase):
     """induces Atom Element from Atom Name"""
 
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
-        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
 
     def test_AtomElement(self):
@@ -941,7 +948,9 @@ class Atom_Element(unittest.TestCase):
 
         for element, atom_names in pdb_elements.items():
             for fullname in atom_names:
-                e = quick_assign(fullname)
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", PDBConstructionWarning)
+                    e = quick_assign(fullname)
                 #warnings.warn("%s %s" % (fullname, e))
                 self.assertEqual(e, element)
 
@@ -971,10 +980,8 @@ class IterationTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
 #
 #    def setUp(self):
-#        warnings.simplefilter('ignore', PDBConstructionWarning)
 #        pdb_filename = "PDB/1A8O.pdb"
 #        self.structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-#        warnings.filters.pop()
 #
 #    def test_renumber_residues(self):
 #        """Residues in a structure are renumbered."""
