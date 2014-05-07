@@ -96,7 +96,7 @@ class MultiGraph(object):
         parents = []
         for parent, children in self._adjacency_list.items():
             for x in children:
-                if x[0] is child:
+                if x[0] == child:
                     parents.append((parent, x[1]))
         return sorted(parents)
 
@@ -113,11 +113,11 @@ class MultiGraph(object):
         # remove all in-edges from adjacency list
         for n in self._adjacency_list:
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
-                                          if x[0] is not node)
+                                          if x[0] != node)
         # remove all refering pairs in label map
         for label in list(self._label_map.keys()): # we're editing this!
             lm = set(x for x in self._label_map[label]
-                     if (x[0] is not node) and (x[1] is not node))
+                     if (x[0] != node) and (x[1] != node))
             # remove the entry completely if the label is now unused
             if lm:
                 self._label_map[label] = lm
