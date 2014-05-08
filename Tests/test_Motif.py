@@ -9,10 +9,11 @@ import unittest
 import warnings
 
 from Bio import BiopythonDeprecationWarning
-warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio import Motif
 
 from Bio.Alphabet import IUPAC
-from Bio import Motif
 from Bio.Seq import Seq
 
 class MotifTestsBasic(unittest.TestCase):
