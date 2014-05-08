@@ -8,8 +8,13 @@
 import os
 import unittest
 
-from Bio.SearchIO import parse
-from Bio.SearchIO.BlastIO.blast_tab import _LONG_SHORT_MAP as all_fields
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+   from Bio.SearchIO import parse
+   from Bio.SearchIO.BlastIO.blast_tab import _LONG_SHORT_MAP as all_fields
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'

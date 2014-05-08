@@ -11,7 +11,11 @@ import unittest
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.SearchIO import parse
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+   from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
