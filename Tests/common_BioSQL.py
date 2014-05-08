@@ -18,7 +18,6 @@ from Bio._py3k import basestring
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
 import warnings
 from Bio import BiopythonWarning
-warnings.simplefilter('ignore', BiopythonWarning)
 
 # local stuff
 from Bio import MissingExternalDependencyError
@@ -418,7 +417,8 @@ class LoaderTest(unittest.TestCase):
 
         # remove the database if it already exists
         try:
-            del self.server[db_name]
+            self.server[db_name]
+            self.server.remove_database(db_name)
         except KeyError:
             pass
 
@@ -892,13 +892,19 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('genbank', 'GenBank/iro.gb')
         self.check('genbank', 'GenBank/pri1.gb')
         self.check('genbank', 'GenBank/arab1.gb')
-        self.check('genbank', 'GenBank/protein_refseq2.gb')
+        with warnings.catch_warnings():
+            #BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.check('genbank', 'GenBank/protein_refseq2.gb')
         self.check('genbank', 'GenBank/extra_keywords.gb')
         self.check('genbank', 'GenBank/one_of.gb')
         self.check('genbank', 'GenBank/NT_019265.gb')
         self.check('genbank', 'GenBank/origin_line.gb')
         self.check('genbank', 'GenBank/blank_seq.gb')
-        self.check('genbank', 'GenBank/dbsource_wrap.gb')
+        with warnings.catch_warnings():
+            #BiopythonWarning: bond location operators are not fully supported
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.check('genbank', 'GenBank/dbsource_wrap.gb')
         self.check('genbank', 'GenBank/NC_005816.gb')
         self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
         self.check('genbank', 'GFF/NC_001422.gbk')
