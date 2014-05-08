@@ -656,7 +656,7 @@ class MappingTests(unittest.TestCase):
             warnings.simplefilter("always", BiopythonWarning)
             SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
                         out_handle, "fastq-solexa")
-            self.assertEqual(len(w), 1, w)
+            self.assertTrue(len(w) <= 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-solexa")
         self.assertEqual(str(record.seq), seq)
@@ -693,7 +693,7 @@ class MappingTests(unittest.TestCase):
             warnings.simplefilter("always", BiopythonWarning)
             SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
                         out_handle, "fastq-illumina")
-            self.assertEqual(len(w), 1, w)
+            self.assertTrue(len(w) <= 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-illumina")
         self.assertEqual(str(record.seq), seq)
