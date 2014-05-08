@@ -11,7 +11,13 @@ import tempfile
 import platform
 import unittest
 
-from Bio import CodonAlign, SeqIO, AlignIO
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+   from Bio import CodonAlign, SeqIO, AlignIO
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
