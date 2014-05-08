@@ -418,8 +418,7 @@ class LoaderTest(unittest.TestCase):
 
         # remove the database if it already exists
         try:
-            self.server[db_name]
-            self.server.remove_database(db_name)
+            del self.server[db_name]
         except KeyError:
             pass
 
