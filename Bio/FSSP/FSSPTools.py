@@ -5,11 +5,13 @@
 
 from Bio import FSSP
 import copy
-from Bio.Align import Generic
+from Bio.Align import MultipleSeqAlignment
 from Bio import Alphabet
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
-class FSSPAlign(Generic.Alignment):
+class FSSPAlign(MultipleSeqAlignment):
     def _add_numbering_table(self, new_record):
         new_record.annotations['abs2pdb'] = {}
         new_record.annotations['pdb2abs'] = {}
@@ -23,7 +25,7 @@ class FSSPMultAlign(dict):
 
 
 def mult_align(sum_dict, align_dict):
-    """Returns a biopython multiple alignment instance (Bio.Align.Generic)"""
+    """Returns a biopython multiple alignment instance (MultipleSeqAlignment)"""
     mult_align_dict = {}
     for j in align_dict.abs(1).pos_align_dict:
         mult_align_dict[j] = ''
@@ -33,12 +35,11 @@ def mult_align(sum_dict, align_dict):
         for j in align_dict.abs(i).pos_align_dict:
             # loop within a position
             mult_align_dict[j] += align_dict.abs(i).pos_align_dict[j].aa
-    fssp_align = Generic.Alignment(Alphabet.Gapped(
-                                   Alphabet.IUPAC.extended_protein))
+    alpha = Alphabet.Gapped(Alphabet.IUPAC.extended_protein)
+    fssp_align = MultipleSeqAlignment([], alphabet=alpha)
     for i in sorted(mult_align_dict):
-        fssp_align.add_sequence(sum_dict[i].pdb2+sum_dict[i].chain2,
-                                mult_align_dict[i])
-#        fssp_align._add_numbering_table()
+        fssp_align.append(SeqRecord(Seq(mult_align_dict[i], alpha),
+                                    sum_dict[i].pdb2+sum_dict[i].chain2))
     return fssp_align
 
 
