@@ -215,7 +215,9 @@ class DBServer:
         """Remove a namespace and all its entries."""
         if name not in self:
             raise KeyError(name)
-        self.remove_database(name)
+        db_id = self.adaptor.fetch_dbid_by_dbname(name)
+        remover = Loader.DatabaseRemover(self.adaptor, db_id)
+        remover.remove()
 
     def remove_database(self, db_name):
         """Remove a namespace and all its entries (OBSOLETE).
@@ -232,9 +234,7 @@ class DBServer:
         warnings.warn("This method is deprecated.  In keeping with the "
                       "dictionary interface, you can now use 'del "
                       "server[name]' instead", BiopythonDeprecationWarning)
-        db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
-        remover = Loader.DatabaseRemover(self.adaptor, db_id)
-        remover.remove()
+        self.__delitem__(db_name)
 
     def new_database(self, db_name, authority=None, description=None):
         """Add a new database to the server and return it.
