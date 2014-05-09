@@ -119,8 +119,10 @@ class MafftApplication(unittest.TestCase):
                                        phylipout=True)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
             stdoutdata, stderrdata = cmdline()
-            #e.g. " 3 706\n" but allow some variation in the column count
-            self.assertTrue(stdoutdata.startswith(" 3 70"), stdoutdata)
+            #e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
+            self.assertTrue(stdoutdata.startswith(" 3 68") or
+                            stdoutdata.startswith(" 3 69") or
+                            stdoutdata.startswith(" 3 70"), stdoutdata)
             self.assertTrue("gi|1348912 " in stdoutdata,
                             stdoutdata)
             self.assertTrue("gi|1348912|gb|G26680|G26680" not in stdoutdata,
@@ -133,8 +135,10 @@ class MafftApplication(unittest.TestCase):
                                        phylipout=True, namelength=50)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
             stdoutdata, stderrdata = cmdline()
-            #e.g. " 3 706\n" but allow some variation in the column count
-            self.assertTrue(stdoutdata.startswith(" 3 70"), stdoutdata)
+            #e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
+            self.assertTrue(stdoutdata.startswith(" 3 68") or
+                            stdoutdata.startswith(" 3 69") or
+                            stdoutdata.startswith(" 3 70"), stdoutdata)
             self.assertTrue("gi|1348912|gb|G26680|G26680" in stdoutdata,
                             stdoutdata)
             self.assertTrue("$#=0" not in stderrdata)
