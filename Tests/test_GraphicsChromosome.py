@@ -19,6 +19,9 @@ import random
 from Bio._py3k import StringIO
 import unittest
 
+import warnings
+from Bio import BiopythonWarning
+
 from Bio import MissingPythonDependencyError
 try:
     # reportlab
@@ -346,7 +349,10 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             cur_chromosome.add(spacer)
             #This chromosome is done
             chr_diagram.add(cur_chromosome)
-        chr_diagram.draw("Graphics/tRNA_chrom.pdf", "Arabidopsis thaliana tRNA")
+        with warnings.catch_warnings():
+            # BiopythonWarning: Too many labels to avoid overlap
+            warnings.simplefilter("ignore", BiopythonWarning)
+            chr_diagram.draw("Graphics/tRNA_chrom.pdf", "Arabidopsis thaliana tRNA")
 
 
 class ChromosomeCountTest(unittest.TestCase):
