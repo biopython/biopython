@@ -63,13 +63,16 @@ def _test_write_factory(source):
         with open(DUMMY) as infile:
             t2 = next(CDAOIO.Parser(infile).parse())
         
-        def assert_property(prop_name):
-            p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals()])
-            p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals()])
-            self.assertEqual(p1, p2)
-        
         for prop_name in ('name', 'branch_length', 'confidence'):
-            assert_property(prop_name)
+            p1 = [getattr(n, prop_name) for n in t1.get_terminals()]
+            p2 = [getattr(n, prop_name) for n in t2.get_terminals()]
+            if p1 == p2:
+                pass
+            else:
+                # Can't sort lists with None on Python 3 ...
+                self.assertFalse(None in p1, "Bad input values for %s: %r" % (prop_name, p1))
+                self.assertFalse(None in p2, "Bad output values for %s: %r" % (prop_name, p2))
+                self.assertEqual(sorted(p1), sorted(p2))
 
     test_write.__doc__ = "Write and re-parse the phylogenies in %s." % source
     return test_write
