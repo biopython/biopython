@@ -149,6 +149,11 @@ class Hmmer3TextParser(object):
             yield qresult
             self.line = read_forward(self.handle)
 
+            # HMMER >= 3.1 outputs '[ok]' at the end of all results file,
+            # which means we can break the main loop when we see the line
+            if '[ok]' in self.line:
+                break
+
     def _parse_hit(self, qid):
         """Parses a HMMER3 hit block, beginning with the hit table."""
         # get to the end of the hit table delimiter and read one more line
