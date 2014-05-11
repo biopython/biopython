@@ -22,6 +22,7 @@ before_install:
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss"
   - "sudo apt-get install samtools bwa"
 #Misc python modules we can use as soft dependencies
+  - "pip install reportlab"
   - "pip install rdflib"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
