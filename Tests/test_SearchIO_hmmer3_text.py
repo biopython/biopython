@@ -26,13 +26,13 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class HmmerscanCases(unittest.TestCase):
+class HmmscanCases(unittest.TestCase):
 
     def test_30_hmmscan_001(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_001)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_001)"
 
-        xml_file = get_file('text_30_hmmscan_001.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_001.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
@@ -532,10 +532,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(5, counter)
 
     def test_30_hmmscan_002(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_002)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_002)"
 
-        xml_file = get_file('text_30_hmmscan_002.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_002.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
@@ -554,10 +554,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_003(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_003)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_003)"
 
-        xml_file = get_file('text_30_hmmscan_003.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_003.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
@@ -614,10 +614,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_004)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_004)"
 
-        xml_file = get_file('text_30_hmmscan_004.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_004.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
@@ -706,10 +706,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_005(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_005)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_005)"
 
-        xml_file = get_file('text_30_hmmscan_005.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_005.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first result
@@ -855,10 +855,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_006(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_006)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_006)"
 
-        xml_file = get_file('text_30_hmmscan_006.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_006.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
@@ -1079,10 +1079,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_007(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_007)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_007)"
 
-        xml_file = get_file('text_30_hmmscan_007.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_007.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
@@ -1265,10 +1265,10 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_008(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_008)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_008)"
 
-        xml_file = get_file('text_30_hmmscan_008.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmscan_008.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first result
@@ -1415,7 +1415,7 @@ class HmmerscanCases(unittest.TestCase):
 
 
     def test_30_hmmscan_009(self):
-        "Test parsing hmmerscan 3.0 (text_30_hmmscan_009)"
+        "Test parsing hmmscan 3.0 (text_30_hmmscan_009)"
         hmmer_file = get_file('text_30_hmmscan_009.out')
         qresults = parse(hmmer_file, FMT)
         counter = 0
@@ -1452,8 +1452,8 @@ class HmmersearchCases(unittest.TestCase):
     def test_30_hmmsearch_001(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_001)"
 
-        xml_file = get_file('text_30_hmmsearch_001.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmsearch_001.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         qresult = next(qresults)
@@ -1473,8 +1473,8 @@ class HmmersearchCases(unittest.TestCase):
     def test_30_hmmsearch_002(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_002)"
 
-        xml_file = get_file('text_30_hmmsearch_002.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmsearch_002.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         qresult = next(qresults)
@@ -1622,8 +1622,8 @@ class HmmersearchCases(unittest.TestCase):
     def test_30_hmmsearch_003(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_003)"
 
-        xml_file = get_file('text_30_hmmsearch_003.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmsearch_003.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         qresult = next(qresults)
@@ -1739,8 +1739,8 @@ class HmmersearchCases(unittest.TestCase):
     def test_30_hmmsearch_004(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_004)"
 
-        xml_file = get_file('text_30_hmmsearch_004.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmsearch_004.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         qresult = next(qresults)
@@ -1888,8 +1888,8 @@ class HmmersearchCases(unittest.TestCase):
     def test_30_hmmsearch_005(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_005)"
 
-        xml_file = get_file('text_30_hmmsearch_005.out')
-        qresults = parse(xml_file, FMT)
+        txt_file = get_file('text_30_hmmsearch_005.out')
+        qresults = parse(txt_file, FMT)
         counter = 0
 
         # test first qresult
