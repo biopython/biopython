@@ -17,9 +17,12 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
+#Misc command line tools we can call
   - "sudo apt-get install clustalw clustalo"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss"
   - "sudo apt-get install samtools bwa"
+#Misc python modules we can use as soft dependencies
+  - "pip install rdflib"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
