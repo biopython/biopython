@@ -23,7 +23,7 @@ before_install:
   - "sudo apt-get install samtools bwa"
 #Misc python modules we can use as soft dependencies
   - "pip install reportlab"
-  - "pip install rdflib"
+  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy' ]]; then pip install rdflib; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
