@@ -28,6 +28,111 @@ def get_file(filename):
 
 class HmmscanCases(unittest.TestCase):
 
+    def test_31b1_hmmscan_001(self):
+        "Test parsing hmmscan 3.1b1 (text_31b1_hmmscan_001)"
+
+        txt_file = get_file('text_31b1_hmmscan_001.out')
+        qresults = parse(txt_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = next(qresults)
+        counter += 1
+
+        self.assertEqual('hmmscan', qresult.program)
+        self.assertEqual('/home/bow/db/hmmer/protdb/Pfam-A.hmm', qresult.target)
+        self.assertEqual('3.1b1', qresult.version)
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual(22, qresult.seq_len)
+        self.assertEqual(0, len(qresult))
+
+        # test fifth result
+        for qresult in qresults:
+            counter += 1
+
+        self.assertEqual('hmmscan', qresult.program)
+        self.assertEqual('/home/bow/db/hmmer/protdb/Pfam-A.hmm', qresult.target)
+        self.assertEqual('3.1b1', qresult.version)
+        self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
+        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.description)
+        self.assertEqual(352, qresult.seq_len)
+        self.assertEqual(5, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('Pou', hit.id)
+        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.description)
+        self.assertTrue(hit.is_included)
+        self.assertEqual(7.6e-37, hit.evalue)
+        self.assertEqual(124.8, hit.bitscore)
+        self.assertEqual(0.5, hit.bias)
+        self.assertEqual(1.5, hit.domain_exp_num)
+        self.assertEqual(1, hit.domain_obs_num)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit.hsps[0]
+        self.assertEqual(1, hsp.domain_index)
+        self.assertTrue(hsp.is_included)
+        self.assertEqual(123.9, hsp.bitscore)
+        self.assertEqual(0.5, hsp.bias)
+        self.assertEqual(5e-40, hsp.evalue_cond)
+        self.assertEqual(1.5e-36, hsp.evalue)
+        self.assertEqual(2, hsp.hit_start)
+        self.assertEqual(75, hsp.hit_end)
+        self.assertEqual('.]', hsp.hit_endtype)
+        self.assertEqual(132, hsp.query_start)
+        self.assertEqual(205, hsp.query_end)
+        self.assertEqual('..', hsp.query_endtype)
+        self.assertEqual(130, hsp.env_start)
+        self.assertEqual(205, hsp.env_end)
+        self.assertEqual('..', hsp.env_endtype)
+        self.assertEqual(0.97, hsp.acc_avg)
+        self.assertEqual('eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae',
+                str(hsp.hit.seq))
+        self.assertEqual('KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD',
+                str(hsp.query.seq))
+        self.assertEqual('67899******************************************************************96',
+                hsp.aln_annotation['PP'])
+
+        # last hit
+        hit = qresult[4]
+        self.assertEqual('DUF521', hit.id)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
+        self.assertFalse(hit.is_included)
+        self.assertEqual(0.15, hit.evalue)
+        self.assertEqual(10.5, hit.bitscore)
+        self.assertEqual(0.1, hit.bias)
+        self.assertEqual(1.4, hit.domain_exp_num)
+        self.assertEqual(1, hit.domain_obs_num)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit.hsps[0]
+        self.assertEqual(1, hsp.domain_index)
+        self.assertFalse(hsp.is_included)
+        self.assertEqual(9.6, hsp.bitscore)
+        self.assertEqual(0.1, hsp.bias)
+        self.assertEqual(9.4e-05, hsp.evalue_cond)
+        self.assertEqual(0.28, hsp.evalue)
+        self.assertEqual(272, hsp.hit_start)
+        self.assertEqual(334, hsp.hit_end)
+        self.assertEqual('..', hsp.hit_endtype)
+        self.assertEqual(220, hsp.query_start)
+        self.assertEqual(280, hsp.query_end)
+        self.assertEqual('..', hsp.query_endtype)
+        self.assertEqual(196, hsp.env_start)
+        self.assertEqual(294, hsp.env_end)
+        self.assertEqual('..', hsp.env_endtype)
+        self.assertEqual(0.77, hsp.acc_avg)
+        self.assertEqual('adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk',
+                str(hsp.hit.seq))
+        self.assertEqual('QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR',
+                str(hsp.query.seq))
+        self.assertEqual('345666667778888899************************99..9999999988876554',
+                hsp.aln_annotation['PP'])
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(5, counter)
+
     def test_30_hmmscan_001(self):
         "Test parsing hmmscan 3.0 (text_30_hmmscan_001)"
 
