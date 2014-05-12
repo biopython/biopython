@@ -36,6 +36,10 @@ from distutils.extension import Extension
 
 _CHECKED = None
 
+def osx_clang_fix():
+    # see http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011240.html
+    os.environ['CFLAGS'] = '-Qunused-arguments'
+    os.environ['CPPFLAGS'] = '-Qunused-arguments'
 
 def is_pypy():
     import platform
@@ -130,6 +134,9 @@ def check_dependencies():
     # means overwrite previous installations.  If the user has
     # forced an installation, should we also ignore dependencies?
 
+    # fix compiler options only for OSX
+    if sys.platform == 'darwin':
+        osx_clang_fix()
     # We only check for NumPy, as this is a compile time dependency
     if is_Numpy_installed():
         return True
