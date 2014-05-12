@@ -139,6 +139,7 @@ def _do_db_create():
     except (server.module.IntegrityError,
             server.module.ProgrammingError) as e:  # ditto--perhaps
         if str(e).find('database "%s" does not exist' % TESTDB) == -1:
+            server.close()
             raise
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
@@ -172,9 +173,14 @@ def create_database():
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                           user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST, db = TESTDB)
-    server.load_database_sql(SQL_FILE)
-    server.commit()
-    server.close()
+    try:
+        server.load_database_sql(SQL_FILE)
+        server.commit()
+        server.close()
+    except:
+        # Failed, but must close the handle...
+        server.close()
+        raise
 
 
 def destroy_database():
