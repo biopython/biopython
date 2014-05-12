@@ -9,6 +9,7 @@ import os
 import platform
 import unittest
 import tempfile
+import time
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
@@ -127,7 +128,6 @@ def _do_db_create():
         # with Postgres, can get errors about database still being used and
         # not able to be dropped. Wait briefly to be sure previous tests are
         # done with it.
-        import time
         time.sleep(1)
 
         sql = r"DROP DATABASE " + TESTDB
@@ -151,7 +151,17 @@ def create_database():
     if DBDRIVER in ["sqlite3"]:
         global TESTDB
         if os.path.exists(TESTDB):
-            os.remove(TESTDB)
+            try:
+                os.remove(TESTDB)
+            except:
+                time.sleep(1)
+                try:
+                    os.remove(TESTDB)
+                except:
+                    # Seen this with PyPy 2.1 (and older) on Windows -
+                    # which suggests an open handle still exists?
+                    print("Could not remove %r" % TESTDB)
+                    pass
         # Now pick a new filename - just in case there is a stale handle
         # (which might be happening under Windows...)
         TESTDB = temp_db_filename()
