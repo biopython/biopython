@@ -753,6 +753,17 @@ class TestSFF(unittest.TestCase):
             self.assertEqual(len(w), 1, w)
         self.assertEqual(len(record), 0)
 
+    def test_negative_clip(self):
+        for clip in ["clip_qual_left", "clip_qual_right",
+                     "clip_adapter_left", "clip_adapter_right"]:
+            with open("Roche/greek.sff", "rb") as handle:
+                record = next(SeqIO.parse(handle, "sff"))
+            self.assertEqual(len(record), 395)
+            self.assertTrue(0 <= record.annotations[clip], record.annotations[clip])
+            record.annotations[clip] = -1
+            with BytesIO() as h:
+                self.assertRaises(ValueError, SeqIO.write, record, h, "sff")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

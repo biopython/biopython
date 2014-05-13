@@ -1196,7 +1196,7 @@ class SffWriter(SequenceWriter):
         try:
             quals = record.letter_annotations["phred_quality"]
         except KeyError:
-            raise ValueError("Missing PHRED qualities information")
+            raise ValueError("Missing PHRED qualities information for %s" % record.id)
         #Flow
         try:
             flow_values = record.annotations["flow_values"]
@@ -1205,21 +1205,29 @@ class SffWriter(SequenceWriter):
                     or self._flow_chars != _as_bytes(record.annotations["flow_chars"]):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
-            raise ValueError("Missing SFF flow information")
+            raise ValueError("Missing SFF flow information for %s" % record.id)
         except AttributeError:
             raise ValueError("Header not written yet?")
         #Clipping
         try:
             clip_qual_left = record.annotations["clip_qual_left"]
+            if clip_qual_left < 0:
+                raise ValueError("Negative SFF clip_qual_left value for %s" % record.id)
             if clip_qual_left:
                 clip_qual_left += 1
             clip_qual_right = record.annotations["clip_qual_right"]
+            if clip_qual_right < 0:
+                raise ValueError("Negative SFF clip_qual_right value for %s" % record.id)
             clip_adapter_left = record.annotations["clip_adapter_left"]
+            if clip_adapter_left < 0:
+                raise ValueError("Negative SFF clip_adapter_left value for %s" % record.id)
             if clip_adapter_left:
                 clip_adapter_left += 1
             clip_adapter_right = record.annotations["clip_adapter_right"]
+            if clip_adapter_right < 0:
+                raise ValueError("Negative SFF clip_adapter_right value for %s" % record.id)
         except KeyError:
-            raise ValueError("Missing SFF clipping information")
+            raise ValueError("Missing SFF clipping information for %s" % record.id)
 
         #Capture information for index
         if self._index is not None:
