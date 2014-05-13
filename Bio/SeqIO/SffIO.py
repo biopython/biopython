@@ -634,7 +634,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         clip_right = seq_len
     #Now build a SeqRecord
     if trim:
-        if clip_left > clip_right:
+        if clip_left >= clip_right:
             # Raise an error?
             import warnings
             from Bio import BiopythonParserWarning
@@ -648,7 +648,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         #Don't record the clipping values, flow etc, they make no sense now:
         annotations = {}
     else:
-        if clip_left > clip_right:
+        if clip_left >= clip_right:
             import warnings
             from Bio import BiopythonParserWarning
             warnings.warn("Overlapping clip values in SFF record", BiopythonParserWarning)
