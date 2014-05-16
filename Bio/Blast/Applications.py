@@ -1103,9 +1103,44 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                                    Format: "yes", "window locut hicut", or "no" to disable.
                                    Default is "12 2.2 2.5""",
                                    equate=False),
+                           #Extension options:
+                           _Option(["-gap_trigger", "gap_trigger"],
+                                   "Number of bits to trigger gapping Default = 22",
+                                   equate=False),
                            #Miscellaneous options:
                            _Switch(["-use_sw_tback", "use_sw_tback"],
                                    "Compute locally optimal Smith-Waterman alignments?"),
+                           #PSI-BLAST options
+                           _Option(["-num_iterations", "num_iterations"],
+                                   """Number of iterations to perform. (integer >=1, Default is 1)
+                                   Incompatible with: remote""",
+                           equate=False),
+                           _Option(["-out_pssm", "out_pssm"],
+                                   """File name to store checkpoint file""",
+                           filename=True,
+                           equate=False),
+                           _Option(["-out_ascii_pssm", "out_ascii_pssm"],
+                                   """File name to store ASCII version of PSSM""",
+                           filename=True,
+                           equate=False),
+                           #PSSM engine options
+                           _Option(["-pseudocount", "pseudocount"],
+                                   """Pseudo-count value used when constructing PSSM
+                                   (Integer, Default is zero).""",
+                           equate=False),
+                           _Option(["-domain_inclusion_ethresh", "domain_inclusion_ethresh"],
+                                   """E-value inclusion threshold for alignments with conserved domains.
+                                   (float, Default is 0.05)""",
+                           equate=False),
+                           _Option(["-inclusion_ethresh", "inclusion_ethresh"],
+                                   """E-value inclusion threshold for pairwise alignments. (float, Default is 0.002)""",
+                           equate=False),
+                           #DELTA-BLAST options
+                           _Option(["-rpsdb", "rpsdb"],
+                                   """BLAST domain database name (String, Default = 'cdd_delta')""",
+                           equate=False),
+                           _Switch(["-show_domain_hits", "show_domain_hits"],
+                                   """Show domain hits, Incompatible with:  remote, subject""")
                            ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
