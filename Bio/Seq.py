@@ -11,7 +11,7 @@ See also U{http://biopython.org/wiki/Seq} and the chapter in our tutorial:
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
 """
-__docformat__ ="epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 import string  # for maketrans only
 import array
