@@ -101,12 +101,12 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags =(('_', '', ''),) # All residues of unnamed chain
+            frags = (('_', '', ''),) # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
             chainid = frag[0]
-            if chainid=='' or chainid=='-' or chainid==' ' or chainid=='_':
+            if chainid in ['', '-', ' ', '_']:
                 chainid = '_'
             id = pdbid + chainid
 
@@ -118,7 +118,7 @@ class SeqMapIndex(dict):
             if frag[1]:
                 start = int(sm.index(frag[1], chainid))
             if frag[2]:
-                end = int(sm.index(frag[2], chainid)+1)
+                end = int(sm.index(frag[2], chainid)) + 1
 
             sm = sm[start:end]
 
@@ -164,7 +164,7 @@ class SeqMap(object):
 
         line = line.rstrip()  # no trailing whitespace
 
-        if len(line)<header_len:
+        if len(line) < header_len:
             raise ValueError("Incomplete header: "+line)
 
         self.pdbid = line[0:4]
@@ -173,8 +173,8 @@ class SeqMap(object):
         self.version = line[6:10]
 
         #Raf format versions 0.01 and 0.02 are identical for practical purposes
-        if(self.version != "0.01" and self.version !="0.02"):
-            raise ValueError("Incompatible RAF version: "+self.version)
+        if(self.version != "0.01" and self.version != "0.02"):
+            raise ValueError("Incompatible RAF version: " + self.version)
 
         self.pdb_datestamp = line[14:20]
         self.flags = line[21:27]
@@ -195,7 +195,7 @@ class SeqMap(object):
         for i in range(0, len(self.res)):
             if self.res[i].resid == resid and self.res[i].chainid == chainid:
                 return i
-        raise KeyError("No such residue "+chainid+resid)
+        raise KeyError("No such residue " + chainid + resid)
 
     def __getitem__(self, index):
         if not isinstance(index, slice):
@@ -256,7 +256,7 @@ class SeqMap(object):
         #The set of residues that I have to find records for.
         resSet = {}
         for r in self.res:
-            if r.atom=='X':  # Unknown residue type
+            if r.atom == 'X':  # Unknown residue type
                 continue
             chainid = r.chainid
             if chainid == '_':
