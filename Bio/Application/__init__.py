@@ -542,7 +542,7 @@ class _Option(_AbstractParameter):
     (eg ["-a", "--append", "append"]). The first name in list is used
     when building the command line. The last name in the list is a
     "human readable" name describing the option in one word. This
-    must be a valid Python identifer as it is used as the property
+    must be a valid Python identifier as it is used as the property
     name and as a keyword argument, and should therefore follow PEP8
     naming.
 
