@@ -42,19 +42,19 @@ _ParametersConsumer      Consumes parameters information.
 
 from __future__ import print_function
 
-#from Bio import BiopythonDeprecationWarning
-#import warnings
+from Bio import BiopythonDeprecationWarning
+import warnings
 warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
               "parsing BLAST output instead.", BiopythonDeprecationWarning)
 
-#import os
+import os
 import re
-#from Bio._py3k import StringIO
+from Bio._py3k import StringIO
 
-#from Bio import File
+from Bio import File
 from Bio.ParserSupport import *
 from Bio.Blast import Record
-#from Bio.Application import _escape_filename
+from Bio.Application import _escape_filename
 
 
 class LowQualityBlastError(Exception):
