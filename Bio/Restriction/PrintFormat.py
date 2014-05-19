@@ -201,7 +201,7 @@ class PrintFormat(object):
         s1 is the sentence before the non cutting enzymes."""
         return title + self._make_nocut_only(nc, s1)
 
-    def _make_nocut_only(self, nc, s1, ls =[],title=''):
+    def _make_nocut_only(self, nc, s1, ls=[], title=''):
         """PF._make_nocut_only(nc, s1) -> string.
 
         return a formatted string of the non cutting enzymes.
@@ -223,7 +223,7 @@ class PrintFormat(object):
         stringsite = Join((stringsite, st, '\n'))
         return stringsite
 
-    def _make_list_only(self, ls, title, nc = [], s1 = ''):
+    def _make_list_only(self, ls, title, nc=[], s1=''):
         """PF._make_list_only(ls, title) -> string.
 
         return a string of form:
