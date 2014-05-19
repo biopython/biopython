@@ -675,12 +675,19 @@ class _Argument(_AbstractParameter):
 
 
 class _ArgumentList(_Argument):
-    """Represent a variable list of arguments on a command line, e.g. multiple filenames."""
-    #TODO - Option to require at least one value? e.g. min/max count?
+    """Represent a variable list of arguments on a command line, e.g. multiple filenames.
+    arg_count: Tuple (min, max) argument count. min <= max"""
+    def __init__(self,arg_count=None):
+        self.arg_count = arg_count
 
     def __str__(self):
         assert isinstance(self.value, list), \
                 "Arguments should be a list"
+        assert (isinstance(self.arg_count, tuple) and len(self.arg_count) == 2 and
+                self.arg_count[0] <= self.arg_count[1]) or self.arg_count == None, \
+                "If specified arg_count must be a tuple of (min, max)"
+        assert (self.arg_count[0] <= len(self.value) <= self.arg_count[1]) or self.arg_count == None, \
+            "Then number of arguments must be between arg_count min and max"
         assert self.value, "Requires at least one filename"
         # A trailing space is required so that parameters following the last filename
         # do not appear merged.
