@@ -21,7 +21,7 @@ class Record(object):
     Stores the information in a cel file
 
     >>> with open('Tests/Affy/affy_v3_ex.CEL.bz2', 'rb') as handle:
-    ...     cel_data = StringIO(decompress(handle.read()).decode('ascii'))
+    ...     cel_data = bz2.open('Tests/Affy/affy_v3_ex.CEL.bz2', 'rt', encoding='ascii')
     ...
     >>> c = CelFile.read(cel_data)
     >>> print(c.ncols, c.nrows)
