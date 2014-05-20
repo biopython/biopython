@@ -1,0 +1,74 @@
+[CEL]
+Version=3
+
+[HEADER]
+Cols=5
+Rows=5
+TotalX=5
+TotalY=5
+OffsetX=0
+OffsetY=0
+GridCornerUL=206 129
+GridCornerUR=3570 107
+GridCornerLR=3597 3470
+GridCornerLL=234 3492
+Axis-invertX=0
+AxisInvertY=0
+swapXY=0
+DatHeader=[11..65533]  1g_A9AF:CLS=3684 RWS=3684 XIN=1  YIN=1  VE=30        2.0 08/23/07 11:23:24 50205880  M10      Tgondii_SNP1.1sq          570  25356.509766  3.500000  1.5600  6
+Algorithm=Percentile
+AlgorithmParameters=Percentile:75;CellMargin:2;OutlierHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize:TRUE;FullFeatureWidth:7;FullFeatureHeight:7;IgnoreOutliersInShiftRows:FALSE;FeatureExtraction:TRUE;PoolWidthExtenstion:2;PoolHeightExtension:2;UseSubgrids:FALSE;RandomizePixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000
+
+[INTENSITY]
+NumberCells=25
+CellHeader=X	Y	MEAN	STDV	NPIXELS
+  0	  0	234.0	24.0	 25
+  1	  0	22428.0	2378.1	 25
+  2	  0	249.0	27.7	 25
+  3	  0	22339.0	2264.8	 25
+  4	  0	156.0	27.2	 25
+  1	  0	170.0	34.5	 25
+  2	  0	22177.0	2669.0	 25
+  3	  0	164.0	19.7	 25
+  4	  0	22104.0	3661.2	 25
+  0   1 188.0 29.8   25
+  1	  1	188.0	29.8	 25
+  2	  1	21871.0	2795.9	 25
+  3	  1	168.0	67.9	 25
+  4	  1	21883.0	2792.4	 25
+  0   2 188.0 29.8   25
+  1	  2	193.0	88.7	 25
+  2	  2	21455.0	2976.5	 25
+  3	  2	198.0	62.0	 25
+  4	  2	21300.0	2914.5	 25
+  0   3 188.0 29.8   25
+  1	  3	182.0	76.2	 25
+  2	  3	21438.0	2759.5	 25
+  3	  3	188.0	49.2	 25
+  4	  3	20945.0	2762.0	 25
+  0	  4	193.0	38.8	 25
+  1	  4	20370.0	2611.8	 25
+  2	  4	174.0	26.6	 25
+  3	  4	20605.0	2810.7	 25
+  4	  4	168.0	24.1	 25
+
+[MASKS]
+NumberCells=3
+CellHeader=X  Y
+4 1
+4 2
+3 1
+
+[OUTLIERS]
+NumberCells=3
+CellHeader=X  Y
+1 1
+2 1
+1 3
+
+[MODIFIED]
+NumberCells=3
+CellHeader=X  Y ORIGMEAN
+3 1 189.0
+3 2 21775.0
+4 1 220.0
