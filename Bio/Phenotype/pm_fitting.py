@@ -9,7 +9,9 @@ If not available, a warning is raised.
 Functions:
 logistic           Logistic growth model.
 gompertz           Gompertz growth model.
-richards           Richards growth model."""
+richards           Richards growth model.
+fit                Sigmoid functions fit.
+get_area           Calculate the area under the PM curve."""
 
 import warnings
 import numpy as np
