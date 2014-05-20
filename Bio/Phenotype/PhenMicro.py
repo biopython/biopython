@@ -803,9 +803,9 @@ class WellRecord(object):
         else:
             sigmoid = (function, )
         
-        mod = __import__ ('pm_fitting')
+        mod = __import__ ('Bio.Phenotype.pm_fitting')
         for sigmoid_func in sigmoid:
-            func = getattr(mod, sigmoid_func)
+            func = getattr(mod.Phenotype.pm_fitting, sigmoid_func)
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
