@@ -566,6 +566,21 @@ class WellRecord(object):
         
         self.id = wellid
     
+        # Curve parameters (to be calculated with the "fit" function)
+        # Parameters that don't need scipy
+        self.max = None
+        self.min = None
+        self.average_height = None
+        
+        # Parameters that need scipy
+        self.area = None
+        self.plateau = None
+        self.slope = None
+        self.lag = None
+        self.v = None
+        self.y0 = None
+        self.model = None
+    
         # Original signals (private)
         self._signals = signals
     
@@ -713,17 +728,77 @@ class WellRecord(object):
         lines.append(repr(self))
         return "\n".join(lines)
         
-    def getRaw(self):
+    def get_raw(self):
         """Get a list of time/signal pairs"""
         return [(t,self._signals[t]) for t in sorted(self._signals.keys())]
         
-    def getTimes(self):
+    def get_times(self):
         """Get a list of the recorded time points"""
         return sorted(self._signals.keys())
         
-    def getSignals(self):
+    def get_signals(self):
         """Get a list of the recorded signals (ordered by collection time)"""
         return [self._signals[t] for t in sorted(self._signals.keys())]
+        
+    def fit(self, function=None):
+        """Fit a sigmoid function to this well and extract curve parameters
+        
+        If function is not set, the following order will be applied:
+        * logistic
+        * gompertz
+        * richards
+        
+        The first function that is succesfuly fitted to the signals will
+        be used to extract the curve parameters; if no function can be fitted
+        a warning is raised.
+        
+        Some of the parameters don't need the curve fitting, which depends on
+        the scipy curve_fit function. If scipy is not available, only those
+        paraeters will be calculated, and a warning will be raised."""
+        avail_func = ('logistic', 'gompertz', 'richards', )
+        
+        if function not in avail_func and function is not None:
+            raise ValueError('Sigmoid function %s not recognized'%function)
+            
+        # Parameters not dependent on curve fitting
+        self.max = max(self, key=lambda x: x[1])[1]
+        self.min = min(self, key=lambda x: x[1])[1]
+        
+        self.average_height = np.array( self.get_signals() ).mean()
+        
+        # Parameters that depend on scipy curve_fit
+        try:
+            from pm_fitting import fit, get_area
+        except ImportError:
+            warnings.warn('SciPy not installed, could not calculate area, '+
+                          'plateau, slope, lag, v and y0',
+                           ImportWarning)
+            return
+        
+        self.area = get_area(self.get_signals(), self.get_times())
+        
+        if function is None:
+            sigmoid = avail_func
+        else:
+            sigmoid = (function, )
+        
+        mod = __import__ ('pm_fitting')
+        for sigmoid_func in sigmoid:
+            func = getattr(mod, sigmoid_func)
+            try:
+                (self.plateau, self.slope,
+                 self.lag, self.v, self.y0), pcov = fit(func,
+                                                        self.get_times(),
+                                                        self.get_signals())
+                
+                self.model = sigmoid_func
+                break
+            except RuntimeError:
+                pass
+        
+        if self.model is None:
+            warnings.warn('Could not fit any sigmoid function',
+                           RuntimeWarning)
 
 def JsonIterator(handle):
     """Generator function to iterate over PM json records (as PlateRecord
