@@ -203,6 +203,22 @@ class TestPhenoMicro(unittest.TestCase):
                         "313.00\nWellRecord('(0.0, 37.0), (0.25, 29.0), "+
                         "(0.5, 32.0), (0.75, 30.0), "+
                         "(1.0, 29.0)...(95.75, 217.0)')")
+                        
+        w.fit()
+        try:
+            import scipy
+            self.assertAlmostEqual(w.area, 20879.5)
+            self.assertAlmostEqual(w.model, 'logistic')
+            self.assertAlmostEqual(w.lag, 50.133778161391703)
+            self.assertAlmostEqual(w.plateau, -9.0027754566443665)
+            self.assertAlmostEqual(w.slope, -0.81820575579006449)
+            self.assertAlmostEqual(w.v, 1.0)
+            self.assertAlmostEqual(w.y0, 221.59917327080325)
+        except ImportError:
+            pass
+        self.assertEqual(w.max, 313.0)
+        self.assertEqual(w.min, 29.0)
+        self.assertEqual(w.average_height, 217.82552083333334)
 
         self.assertRaises(TypeError, w.__add__, 'a')
 
