@@ -559,6 +559,27 @@ class WellRecord(object):
     >>> well2 = well + well1
     >>> print(well2.id)
     A05
+    
+    If SciPy is installed, a sigmoid function can be fitted to the PM curve,
+    in order to extract some parameters; three sigmoid functions are available:
+    * logistic
+    * richards
+    * gompertz
+    The functions are described in Zwietering et al., 1990 (PMID: 16348228)
+    
+    >>> well.fit()
+    >>> print(well.slope, well.model)
+    (61.853516785566917, 'logistic')
+    
+    If not sigmoid function is specified, the first one that is succesfully
+    fitted is used. The user can also specify a specific function.
+    
+    >>> well.fit('gompertz')
+    >>> print(well.slope, well.model)
+    (127.94630059171354, 'gompertz')
+    
+    If no function can be fitted, the parameters are left as None, except for
+    the max, min, average_height and area. 
     """
     
     def __init__(self, wellid, plate=PlateRecord(None), signals={}):
