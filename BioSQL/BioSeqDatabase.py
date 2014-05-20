@@ -14,6 +14,7 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 import os
+import sys
 
 from Bio import BiopythonDeprecationWarning
 
@@ -96,6 +97,7 @@ def open_database(driver="MySQLdb", **kwargs):
         try:
             conn = connect(**kw)
         except module.InterfaceError:
+            raise
             # Ok, so let's try building a DSN
             # (older releases of psycopg need this)
             if "database" in kw:
@@ -145,7 +147,11 @@ class DBServer:
         self.module = module
         if module_name is None:
             module_name = module.__name__
-        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name))
+        if module_name == "mysql.connector" and sys.version_info[0] == 3:
+            wrap_cursor = True
+        else:
+            wrap_cursor = False
+        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor)
         self.module_name = module_name
 
     def __repr__(self):
@@ -297,11 +303,44 @@ class DBServer:
         """Close the connection. No further activity possible."""
         return self.adaptor.close()
 
+class _CursorWrapper:
+    """A wraper for mysql.connector resolving bytestring representations."""
+    def __init__(self, real_cursor):
+        self.real_cursor = real_cursor
+
+    def execute(self, operation, params=None, multi=False):
+        self.real_cursor.execute(operation, params, multi)
+
+    def _convert_tuple(self, tuple_):
+        tuple_list = list(tuple_)
+        for i, elem in enumerate(tuple_list):
+            if type(elem) is bytes:
+                tuple_list[i] = elem.decode("utf-8")
+        return tuple(tuple_list)
+
+    def _convert_list(self, lst):
+        ret_lst = []
+        for tuple_ in lst:
+            new_tuple = self._convert_tuple(tuple_)
+            ret_lst.append(new_tuple)
+        return ret_lst
+
+    def fetchall(self):
+        rv = self.real_cursor.fetchall()
+        return self._convert_list(rv)
+
+    def fetchone(self):
+        tuple_ = self.real_cursor.fetchone()
+        return self._convert_tuple(tuple_)
+
 
 class Adaptor:
-    def __init__(self, conn, dbutils):
+    def __init__(self, conn, dbutils, wrap_cursor=False):
         self.conn = conn
-        self.cursor = conn.cursor()
+        if wrap_cursor:
+            self.cursor = _CursorWrapper(conn.cursor())
+        else:
+            self.cursor = conn.cursor()
         self.dbutils = dbutils
 
     def last_id(self, table):
