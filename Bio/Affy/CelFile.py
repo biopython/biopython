@@ -53,12 +53,25 @@ class Record(object):
 
     """
     def __init__(self):
+        self.version = None
+        self.GridCornerUL = None
+        self.GridCornerUR = None
+        self.GridCornerLR = None
+        self.GridCornerLL = None
+        self.DatHeader = None
+        self.Algorithm = None
+        self.AlgorithmParameters = None
+        self.NumberCells = None
         self.intensities = None
         self.stdevs = None
         self.npix = None
         self.nrows = None
         self.ncols = None
-
+        self.nmask = None
+        self.mask = None
+        self.noutliers = None
+        self.outliers = None
+        self.modified = None
 
 def read(handle):
     """
@@ -71,28 +84,100 @@ def read(handle):
     for line in handle:
         if not line.strip():
             continue
-        if line[:8] == "[HEADER]":
+        # Set current section
+        if line[:5] == "[CEL]":
+            section = "CEL"
+        elif line[:8] == "[HEADER]":
             section = "HEADER"
         elif line[:11] == "[INTENSITY]":
             section = "INTENSITY"
             record.intensities = numpy.zeros((record.nrows, record.ncols))
             record.stdevs = numpy.zeros((record.nrows, record.ncols))
             record.npix = numpy.zeros((record.nrows, record.ncols), int)
+        elif line[:7] == "[MASKS]":
+            section = "MASKS"
+            record.mask = numpy.zeros((record.nrows, record.ncols))
+        elif line[:10] == "[OUTLIERS]":
+            section = "OUTLIERS"
+            record.outliers = numpy.zeros((record.nrows, record.ncols))
+        elif line[:10] == "[MODIFIED]":
+            section = "MODIFIED"
+            record.modified = numpy.zeros((record.nrows, record.ncols))
         elif line[0] == "[":
+            # This would be an unknown section
             section = ""
+        elif section == "CEL":
+            keyword, value = line.split("=", 1)
+            if keyword == 'Version':
+                record.version = int(value)
         elif section == "HEADER":
+            # Set record.ncols and record.nrows, remaining data goes into
+            # record.header dict
             keyword, value = line.split("=", 1)
             if keyword == "Cols":
                 record.ncols = int(value)
             elif keyword == "Rows":
                 record.nrows = int(value)
+            elif keyword == 'GridCornerUL':
+                x, y = value.split()
+                record.GridCornerUL = (int(x), int(y))
+            elif keyword == 'GridCornerUR':
+                x, y = value.split()
+                record.GridCornerUR = (int(x), int(y))
+            elif keyword == 'GridCornerLR':
+                x, y = value.split()
+                record.GridCornerLR = (int(x), int(y))
+            elif keyword == 'GridCornerLL':
+                x, y = value.split()
+                record.GridCornerLL = (int(x), int(y))
+            elif keyword == 'DatHeader':
+                record.DatHeader = value.strip('\n\r')
+            elif keyword == 'Algorithm':
+                record.Algorithm = value.strip('\n\r')
+            elif keyword == 'AlgorithmParameters':
+                record.AlgorithmParameters = value.strip('\n\r')
         elif section == "INTENSITY":
-            if "=" in line:
-                continue
-            words = line.split()
-            y = int(words[0])
-            x = int(words[1])
-            record.intensities[x, y] = float(words[2])
-            record.stdevs[x, y] = float(words[3])
-            record.npix[x, y] = int(words[4])
+            if "NumberCells" in line:
+                record.NumberCells = line.split("=", 1)[1].strip('\n\r')
+            elif "CellHeader" in line:
+                pass
+            else:
+                words = line.split()
+                y = int(words[0])
+                x = int(words[1])
+                record.intensities[x, y] = float(words[2])
+                record.stdevs[x, y] = float(words[3])
+                record.npix[x, y] = int(words[4])
+        elif section == "MASKS":
+            if "NumberCells" in line:
+                record.nmask = int(line.split("=", 1)[1])
+            elif "CellHeader" in line:
+                pass
+            else:
+                words = line.split()
+                y = int(words[0])
+                x = int(words[1])
+                record.mask[x, y] = int(1)
+        elif section == "OUTLIERS":
+            if "NumberCells" in line:
+                record.noutliers = int(line.split("=", 1)[1])
+            elif "CellHeader" in line:
+                pass
+            else:
+                words = line.split()
+                y = int(words[0])
+                x = int(words[1])
+                record.outliers[x, y] = int(1)
+        elif section == "MODIFIED":
+            if "NumberCells" in line:
+                record.nmodified= int(line.split("=", 1)[1])
+            elif "CellHeader" in line:
+                pass
+            else:
+                words = line.split()
+                y = int(words[0])
+                x = int(words[1])
+                record.modified[x, y] = float(words[2])
+        else:
+            continue
     return record
