@@ -84,7 +84,7 @@ class PlateRecord(object):
     All the wells belonging to a "row" (identified by the first charachter of
     the well id) in the plate can be obtained:
     
-    >>> for well in plate.getRow('H'):
+    >>> for well in plate.get_row('H'):
     ...     print("%s" % well.id)
     H01
     H02
@@ -94,7 +94,7 @@ class PlateRecord(object):
     All the wells belonging to a "column" (identified by the number of the well)
     in the plate can be obtained:
     
-    >>> for well in plate.getColumn(12):
+    >>> for well in plate.get_column(12):
     ...     print("%s" % well.id)
     A01
     B12
@@ -119,7 +119,7 @@ class PlateRecord(object):
     Many Phenotype Microarray plate have a "negative control" well, which can
     be subtracted to all wells:
     
-    >>> subplate = plate.subtractControl()
+    >>> subplate = plate.subtract_control()
     """
     
     def __init__(self, plateid, wells=[]):
@@ -133,7 +133,7 @@ class PlateRecord(object):
         self._wells = {}
         try:
             for w in wells:
-                self._isWell(w)
+                self._is_well(w)
                 self[w.id] = w
         except TypeError:
             raise TypeError('You must provide an iterator-like object '+
@@ -146,7 +146,7 @@ class PlateRecord(object):
         self._rows = sorted(set([x[0] for x in self._wells]))
         self._columns = sorted(set([x[1:] for x in self._wells]))
     
-    def _isWell(self, obj):
+    def _is_well(self, obj):
         """Check if the given object is a WellRecord object
         
         Used both for the class constructor and the __setitem__ method
@@ -312,7 +312,7 @@ class PlateRecord(object):
     def __setitem__(self, key, value):
         if not isinstance(key, basestring):
             raise ValueError('Well identifier should be string-like')
-        self._isWell(value)
+        self._is_well(value)
         # Provided key and well ID should be the same
         if value.id != key:
             raise ValueError('WellRecord ID and provided key are different'+
@@ -396,7 +396,7 @@ class PlateRecord(object):
         
         return newp
         
-    def getRow(self, row):
+    def get_row(self, row):
         """Get all the wells of a given row
         
         A row is identified with a letter (e.g. 'A')
@@ -413,7 +413,7 @@ class PlateRecord(object):
         for w in sorted(filter(lambda x: x.startswith(row), self._wells)):
             yield self._wells[w]
         
-    def getColumn(self, column):
+    def get_column(self, column):
         """Get all the wells of a given column
         
         A column is identified with a number (e.g. '6')
@@ -429,7 +429,7 @@ class PlateRecord(object):
                         self._wells)):
             yield self._wells[w]
 
-    def subtractControl(self, control='A01', wells=None):
+    def subtract_control(self, control='A01', wells=None):
         """Subtract a 'control' well from the other plates wells
         
         By default the control is subtracted to all wells, unless
@@ -674,11 +674,11 @@ class WellRecord(object):
         if len(self) > 7:
             #Shows the last time point and the first five
             return "%s('%s...%s')" % (self.__class__.__name__,
-                                ', '.join( [str(x) for x in self.getRaw()[:5]]),
-                                str(self.getRaw()[-1]))
+                                ', '.join( [str(x) for x in self.get_raw()[:5]]),
+                                str(self.get_raw()[-1]))
         else:
             return "%s(%s)" % (self.__class__.__name__,
-                              ', '.join( [str(x) for x in self.getRaw()]))
+                              ', '.join( [str(x) for x in self.get_raw()]))
         
             
     def __str__(self):
