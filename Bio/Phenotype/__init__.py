@@ -140,7 +140,7 @@ def write(plates, handle, format):
 
     return count
 
-def parse(handle, format, alphabet=None):
+def parse(handle, format):
     """Turns a phenotype file into an iterator returning PlateRecords.
 
      - handle   - handle to the file, or the filename as a string
