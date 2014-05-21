@@ -182,6 +182,7 @@ class TestPhenoMicro(unittest.TestCase):
                 (16.75, 313.0))
         self.assertEqual(min(w, key=lambda x: x[1]),
                 (0.25, 29.0))
+        self.assertEqual(len(w[:]), 96)
         self.assertEqual(w[1], 29.)
         self.assertEqual(w[12], 272.)
         self.assertEqual(w[1:5], [29.,35.,39.,43.])

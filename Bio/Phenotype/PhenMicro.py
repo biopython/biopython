@@ -633,8 +633,19 @@ class WellRecord(object):
     def __getitem__(self, time):
         """Returns a subset of signals or a single signal.
         """
-        if isinstance( time, slice ) :
-            time = np.arange(time.start, time.stop, time.step)
+        if isinstance( time, slice ):
+            # Fix the missing values in the slice
+            if time.start is None:
+                start = 0
+            else:
+                start = time.start
+                
+            if time.stop is None:
+                stop = max(self.get_times())
+            else:
+                stop = time.stop
+            
+            time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
             
         elif isinstance( time, int ) or isinstance( time, float ): 
