@@ -1,8 +1,13 @@
 
 import unittest
 from Bio.Affy import CelFile
-import numpy
-from numpy.testing import assert_array_equal
+try:
+    import numpy
+    from numpy.testing import assert_array_equal
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.Cluster")
 
 class testCelFile(unittest.TestCase):
     """
