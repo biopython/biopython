@@ -20,10 +20,9 @@ class Record(object):
     """
     Stores the information in a cel file
 
-    >>> with open('Tests/Affy/affy_v3_ex.CEL.bz2', 'rb') as handle:
-    ...     cel_data = bz2.open('Tests/Affy/affy_v3_ex.CEL.bz2', 'rt', encoding='ascii')
+    >>> with open('Tests/Affy/affy_v3_example.CEL', 'rb') as handle:
+    ...     c = CelFile.read(handle)
     ...
-    >>> c = CelFile.read(cel_data)
     >>> print(c.ncols, c.nrows)
     478 478
     >>> print(c.intensities)
