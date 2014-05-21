@@ -133,9 +133,9 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             #Formatting options:
             # - see baseclass
             #Query filtering options
-            _Option(["-soft_masking", "soft_masking"],
-                    "Apply filtering locations as soft masks (Boolean, Default = true)",
-                    equate=False),
+            # TODO -soft_masking <Boolean>, is this a switch or an option?
+            #_Switch(["-soft_masking", "soft_masking"],
+            #        "Apply filtering locations as soft masks?"),
             _Switch(["-lcase_masking", "lcase_masking"],
                     "Use lower case filtering in query and subject sequence(s)?"),
             #Restrict search or results
@@ -465,9 +465,10 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
             _Option(["-reward", "reward"],
                     "Reward for a nucleotide match (integer, at least zero).",
                     equate=False),
-            _Option(["-use_index", "use_index"],
-                    "Use MegaBLAST database index (Boolean, Default = False)",
-                    equate=False),
+            #TODO - Does this need an argument or is it a switch?
+            #_Option(["-use_index", "use_index"],
+            #        "Use MegaBLAST database index (boolean).",
+            #        equate=False),
             _Option(["-index_name", "index_name"],
                     "MegaBLAST database index name.",
                     equate=False),
@@ -1098,7 +1099,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                            #Query filtering options:
                            _Option(["-seg", "seg"],
                                    """Filter query sequence with SEG (string).
-                                       
+
                                    Format: "yes", "window locut hicut", or "no" to disable.
                                    Default is "12 2.2 2.5""",
                                    equate=False),
