@@ -886,6 +886,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('fasta', 'GFF/NC_001802.fna')
         self.check('fasta', 'GFF/multi.fna', 3)
         self.check('fasta', 'Registry/seqs.fasta', 2)
+        self.check('fasta', 'Registry/seqs.fasta', 2)
         self.check('swiss', 'SwissProt/sp001')
         self.check('swiss', 'SwissProt/sp002')
         self.check('swiss', 'SwissProt/sp003')

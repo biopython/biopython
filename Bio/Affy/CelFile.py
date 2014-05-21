@@ -138,7 +138,7 @@ def read(handle):
                 record.AlgorithmParameters = value.strip('\n\r')
         elif section == "INTENSITY":
             if "NumberCells" in line:
-                record.NumberCells = line.split("=", 1)[1].strip('\n\r')
+                record.NumberCells = int(line.split("=", 1)[1])
             elif "CellHeader" in line:
                 pass
             else:
