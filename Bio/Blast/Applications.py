@@ -1099,7 +1099,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                            #Query filtering options:
                            _Option(["-seg", "seg"],
                                    """Filter query sequence with SEG (string).
-
+                                       
                                    Format: "yes", "window locut hicut", or "no" to disable.
                                    Default is "12 2.2 2.5""",
                                    equate=False),
