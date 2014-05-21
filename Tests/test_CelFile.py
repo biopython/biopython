@@ -13,7 +13,6 @@ class testCelFile(unittest.TestCase):
     """
     Test reading of CEL file
     """
-
     def test_read(self):
         version = 3
         GridCornerUL = (206, 129)
