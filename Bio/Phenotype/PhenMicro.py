@@ -562,9 +562,9 @@ class WellRecord(object):
     
     If SciPy is installed, a sigmoid function can be fitted to the PM curve,
     in order to extract some parameters; three sigmoid functions are available:
+    * gompertz
     * logistic
     * richards
-    * gompertz
     The functions are described in Zwietering et al., 1990 (PMID: 16348228)
     
     >>> well.fit()
@@ -776,8 +776,8 @@ class WellRecord(object):
         """Fit a sigmoid function to this well and extract curve parameters
         
         If function is not set, the following order will be applied:
-        * logistic
         * gompertz
+        * logistic
         * richards
         
         The first function that is succesfuly fitted to the signals will
@@ -787,7 +787,7 @@ class WellRecord(object):
         Some of the parameters don't need the curve fitting, which depends on
         the scipy curve_fit function. If scipy is not available, only those
         paraeters will be calculated, and a warning will be raised."""
-        avail_func = ('logistic', 'gompertz', 'richards', )
+        avail_func = ('gompertz', 'logistic', 'richards', )
         
         if function not in avail_func and function is not None:
             raise ValueError('Sigmoid function %s not recognized'%function)

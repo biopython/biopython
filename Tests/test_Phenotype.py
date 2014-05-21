@@ -209,12 +209,12 @@ class TestPhenoMicro(unittest.TestCase):
         try:
             import scipy
             self.assertAlmostEqual(w.area, 20879.5)
-            self.assertAlmostEqual(w.model, 'logistic')
-            self.assertAlmostEqual(w.lag, 50.133778161391703)
-            self.assertAlmostEqual(w.plateau, -9.0027754566443665)
-            self.assertAlmostEqual(w.slope, -0.81820575579006449)
-            self.assertAlmostEqual(w.v, 1.0)
-            self.assertAlmostEqual(w.y0, 221.59917327080325)
+            self.assertAlmostEqual(w.model, 'gompertz')
+            self.assertAlmostEqual(w.lag, 6.0430847693582308)
+            self.assertAlmostEqual(w.plateau, 188.5035927381775)
+            self.assertAlmostEqual(w.slope, 48.20107990377582)
+            self.assertAlmostEqual(w.v, 0.10000000000000001)
+            self.assertAlmostEqual(w.y0, 45.889066612487497)
         except ImportError:
             pass
         self.assertEqual(w.max, 313.0)
