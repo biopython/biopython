@@ -109,7 +109,7 @@ def fit(function, x, y):
     The function parameters and the parameters covariance."""
     # Compute guesses for the parameters
     # This is necessary to get significant fits
-    p0 = [guess_plateau(x, y), 4.0, guess_lag(x, y), 0.1, 0]
+    p0 = [guess_plateau(x, y), 4.0, guess_lag(x, y), 0.1, min(y)]
     
     params, pcov = curve_fit(function, x, y, p0 = p0)
     return params, pcov
