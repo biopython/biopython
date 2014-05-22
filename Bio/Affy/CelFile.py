@@ -13,6 +13,9 @@ Classes:
 Record    Contains the information from a cel file
 """
 
+#We use print in the doctests
+from __future__ import print_function
+
 try:
     import numpy
 except ImportError:
@@ -22,38 +25,34 @@ except ImportError:
 
 
 class Record(object):
-    """
-    Stores the information in a cel file
+    """Stores the information in a cel file
 
-    >>> with open('Tests/Affy/affy_v3_example.CEL', 'rb') as handle:
+    Example usage:
+
+    >>> from Bio.Affy import CelFile
+    >>> with open('Affy/affy_v3_example.CEL') as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
-    478 478
+    5 5
     >>> print(c.intensities)
-    [[   234.  22428.    249. ...,  19179.    229.  19592.]
-     [ 22730.    302.  22274. ...,    266.  18839.    241.]
-     [   284.  22154.    287. ...,  18696.    332.  20289.]
-     ...,
-     [ 20743.    364.  19723. ...,    242.  19834.    220.]
-     [   329.  20431.    368. ...,  19328.    266.  19990.]
-     [ 20522.    325.  20713. ...,    224.  19963.    207.]]
+    [[   234.    170.  22177.    164.  22104.]
+     [   188.    188.  21871.    168.  21883.]
+     [   188.    193.  21455.    198.  21300.]
+     [   188.    182.  21438.    188.  20945.]
+     [   193.  20370.    174.  20605.    168.]]
     >>> print(c.stdevs)
-    [[   24.   2378.1    27.7 ...,  2723.4    62.5  2771.6]
-     [ 2075.3    46.7  2633.9 ...,    48.3  2208.4    49.5]
-     [   73.3  2327.6    35.  ...,  2856.6    64.8  2280.5]
-     ...,
-     [ 3147.3    63.2  2707.7 ...,    52.9  2557.9    89.9]
-     [   49.3  2170.9    73.7 ...,  3128.9    53.   3018.2]
-     [ 2913.3    38.7  2341.4 ...,    50.6  3532.9    45.8]]
+    [[   24.     34.5  2669.     19.7  3661.2]
+     [   29.8    29.8  2795.9    67.9  2792.4]
+     [   29.8    88.7  2976.5    62.   2914.5]
+     [   29.8    76.2  2759.5    49.2  2762. ]
+     [   38.8  2611.8    26.6  2810.7    24.1]]
     >>> print(c.npix)
-    [[25 25 25 ..., 25 25 25]
-     [25 25 25 ..., 25 25 25]
-     [25 25 25 ..., 25 25 25]
-     ...,
-     [25 25 25 ..., 25 25 25]
-     [25 25 25 ..., 25 25 25]
-     [25 25 25 ..., 25 25 25]]
+    [[25 25 25 25 25]
+     [25 25 25 25 25]
+     [25 25 25 25 25]
+     [25 25 25 25 25]
+     [25 25 25 25 25]]
 
     """
     def __init__(self):
@@ -185,3 +184,7 @@ def read(handle):
         else:
             continue
     return record
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
