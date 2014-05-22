@@ -97,7 +97,10 @@ class Hmmer3TabParser(object):
                 prev = cur
                 prev_qid = cur_qid
             # only parse the result row if it's not EOF
-            if self.line:
+            # NOTE: we are not parsing the extra '#' lines appended to the end
+            # of hmmer31b1 tabular results since storing them in qresult
+            # objects means we can not do a single-pass parsing
+            if self.line and not self.line.startswith('#'):
                 cur = self._parse_row()
                 cur_qid = cur['qresult']['id']
             else:

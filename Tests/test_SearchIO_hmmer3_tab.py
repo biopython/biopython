@@ -28,6 +28,65 @@ def get_file(filename):
 
 class HmmscanCases(unittest.TestCase):
 
+    def test_31b1_hmmscan_001(self):
+        """Test parsing hmmer3-tab, hmmscan 3.1b1, multiple queries (tab_31b1_hmmscan_001)"""
+
+        tab_file = get_file('tab_31b1_hmmscan_001.out')
+        qresults = list(parse(tab_file, FMT))
+        self.assertEqual(4, len(qresults))
+
+        # first qresult, first hit, first hsp
+        qresult = qresults[0]
+        self.assertEqual(1, len(qresult))
+        self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
+        self.assertEqual('-', qresult.acc)
+        hit = qresult[0]
+        self.assertEqual(1, len(hit))
+        self.assertEqual('Globin', hit.id)
+        self.assertEqual('PF00042.17', hit.acc)
+        self.assertEqual(1e-22, hit.evalue)
+        self.assertEqual(80.5, hit.bitscore)
+        self.assertEqual(0.3, hit.bias)
+        self.assertEqual(1.3, hit.domain_exp_num)
+        self.assertEqual(1, hit.region_num)
+        self.assertEqual(0, hit.cluster_num)
+        self.assertEqual(0, hit.overlap_num)
+        self.assertEqual(1, hit.env_num)
+        self.assertEqual(1, hit.domain_obs_num)
+        self.assertEqual(1, hit.domain_reported_num)
+        self.assertEqual(1, hit.domain_included_num)
+        self.assertEqual('Globin', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual(1.6e-22, hsp.evalue)
+        self.assertEqual(79.8, hsp.bitscore)
+        self.assertEqual(0.3, hsp.bias)
+
+        # last qresult, last hit, last hsp
+        qresult = qresults[-1]
+        self.assertEqual(5, len(qresult))
+        self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
+        self.assertEqual('-', qresult.acc)
+        hit = qresult[-1]
+        self.assertEqual(1, len(hit))
+        self.assertEqual('DUF521', hit.id)
+        self.assertEqual('PF04412.8', hit.acc)
+        self.assertEqual(0.15, hit.evalue)
+        self.assertEqual(10.5, hit.bitscore)
+        self.assertEqual(0.1, hit.bias)
+        self.assertEqual(1.4, hit.domain_exp_num)
+        self.assertEqual(1, hit.region_num)
+        self.assertEqual(0, hit.cluster_num)
+        self.assertEqual(0, hit.overlap_num)
+        self.assertEqual(1, hit.env_num)
+        self.assertEqual(1, hit.domain_obs_num)
+        self.assertEqual(1, hit.domain_reported_num)
+        self.assertEqual(0, hit.domain_included_num)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual(0.28, hsp.evalue)
+        self.assertEqual(9.6, hsp.bitscore)
+        self.assertEqual(0.1, hsp.bias)
+
     def test_30_hmmscan_001(self):
         "Test parsing hmmer3-tab, hmmscan 3.0, multiple queries (tab_30_hmmscan_001)"
 

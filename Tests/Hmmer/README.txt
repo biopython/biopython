@@ -24,6 +24,7 @@ text_30_hmmsearch_003.out    single query, multiple matches, multiple hsps per m
 text_30_hmmsearch_004.out    single query, multiple matches, multiple hsps per match, no alignment width
 text_30_hmmsearch_005.out    multiple queries
 
+tab_31b1_hmmscan_001.out    multiple queries
 tab_30_hmmscan_001.out      multiple queries
 tab_30_hmmscan_002.out      single query, no match
 tab_30_hmmscan_003.out      single query, one match, one hsp per match
