@@ -26,7 +26,7 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class HmmerscanCases(unittest.TestCase):
+class HmmscanCases(unittest.TestCase):
 
     def test_30_hmmscan_001(self):
         "Test parsing hmmer3-tab, hmmscan 3.0, multiple queries (tab_30_hmmscan_001)"
