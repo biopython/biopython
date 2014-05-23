@@ -18,8 +18,13 @@ get_area           Calculate the area under the PM curve."""
 import warnings
 import numpy as np
 
-from scipy.optimize.minpack import curve_fit
-from scipy.integrate import trapz
+try:
+    from scipy.optimize.minpack import curve_fit
+    from scipy.integrate import trapz
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+             'Install scipy to extract curve parameters.')
 
 def logistic(x, A, u, d, v, y0):
     """Logistic growth model
