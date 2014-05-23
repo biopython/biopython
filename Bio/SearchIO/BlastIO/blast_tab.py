@@ -449,9 +449,12 @@ class BlastTabParser(object):
                 if hit_state == state_HIT_NEW:
                     hit = Hit(hsp_list)
                     for attr, value in prev['hit'].items():
-                        setattr(hit, attr, value)
-                        if attr == 'id_all':
-                            hit._id_alt = [x for x in value if x != hit.id]
+                        if attr != 'id_all':
+                            setattr(hit, attr, value)
+                        else:
+                            # not setting hit ID since it's already set from the
+                            # prev_hid above
+                            setattr(hit, '_id_alt', value[1:])
                     hit_list.append(hit)
                     hsp_list = []
                 # create qresult and yield if we're at a new qresult or EOF
@@ -706,7 +709,10 @@ class BlastTabWriter(object):
                     if field in _COLUMN_QRESULT:
                         value = getattr(qresult, _COLUMN_QRESULT[field][0])
                     elif field in _COLUMN_HIT:
-                        value = getattr(hit, _COLUMN_HIT[field][0])
+                        if field == 'sallseqid':
+                            value = getattr(hit, 'id_all')
+                        else:
+                            value = getattr(hit, _COLUMN_HIT[field][0])
                     # special case, since 'frames' can be determined from
                     # query frame and hit frame
                     elif field == 'frames':

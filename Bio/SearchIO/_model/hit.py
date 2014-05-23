@@ -295,14 +295,14 @@ class Hit(_BaseSearchObject):
     hsps = allitems(doc="""HSP objects contained in the Hit""")
 
     @property
-    def id_alt(self):
+    def id_all(self):
         """Alternative ID(s) of the Hit"""
-        return self._id_alt
+        return [self.id] + self._id_alt
 
     @property
-    def description_alt(self):
+    def description_all(self):
         """Alternative descriptions of the Hit"""
-        return self._description_alt
+        return [self.description] + self._description_alt
 
     @property
     def fragments(self):

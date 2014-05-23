@@ -691,8 +691,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('gi|49176427|ref|NP_418280.3|', hit.id)
         self.assertEqual('component of Sec-independent translocase '
                 '[Escherichia coli K12]', hit.description)
-        self.assertEqual(9, len(hit.id_alt))
-        self.assertEqual(9, len(hit.description_alt))
+        self.assertEqual(10, len(hit.id_all))
+        self.assertEqual(10, len(hit.description_all))
         self.assertEqual(103, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -1443,8 +1443,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus '
                 'subtilis subsp. subtilis str. 168]', hit.description)
-        self.assertEqual(5, len(hit.id_alt))
-        self.assertEqual(5, len(hit.description_alt))
+        self.assertEqual(6, len(hit.id_all))
+        self.assertEqual(6, len(hit.description_all))
         self.assertEqual(102, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -3087,9 +3087,9 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('gi|296147483|ref|NM_001183135.1|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) '
                 'mRNA, complete cds', hit.description)
-        self.assertEqual('gi|116616412|gb|EF059095.1|', hit.id_alt[0])
+        self.assertEqual('gi|116616412|gb|EF059095.1|', hit.id_all[1])
         self.assertEqual('Synthetic construct Saccharomyces cerevisiae '
-                'clone FLH203015.01X MON2, complete sequence', hit.description_alt[0])
+                'clone FLH203015.01X MON2, complete sequence', hit.description_all[1])
         self.assertEqual(4911, hit.seq_len)
         self.assertEqual(7, len(hit))
 

@@ -408,7 +408,7 @@ class QueryResult(_BaseSearchObject):
 
         # remove existing alt_id references, if hit_key already exists
         if hit_key in self._items:
-            for alt_key in self._items[hit_key].id_alt:
+            for alt_key in self._items[hit_key].id_all[1:]:
                 del self.__alt_hit_ids[alt_key]
 
         # if hit_key is already present as an alternative ID
@@ -417,7 +417,7 @@ class QueryResult(_BaseSearchObject):
             del self.__alt_hit_ids[hit_key]
 
         self._items[hit_key] = hit
-        for alt_id in hit.id_alt:
+        for alt_id in hit.id_all[1:]:
             self.__alt_hit_ids[alt_id] = hit_key
 
     def __delitem__(self, hit_key):
@@ -500,7 +500,7 @@ class QueryResult(_BaseSearchObject):
         else:
             hit_key = hit.id
 
-        if hit_key not in self and all([pid not in self for pid in hit.id_alt]):
+        if hit_key not in self and all([pid not in self for pid in hit.id_all[1:]]):
             self[hit_key] = hit
         else:
             raise ValueError("The ID or alternative IDs of Hit %r exists in "
@@ -691,7 +691,7 @@ class QueryResult(_BaseSearchObject):
         try:
             hit = self._items.pop(hit_key)
             # remove all alternative IDs of the popped hit
-            for alt_id in hit.id_alt:
+            for alt_id in hit.id_all[1:]:
                 try:
                     del self.__alt_hit_ids[alt_id]
                 except KeyError:
