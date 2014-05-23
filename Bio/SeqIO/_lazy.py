@@ -45,6 +45,8 @@ if __name__ == "__main__":
     SeqRecord = SeqRecord.SeqRecord
 else:
     from ..SeqRecord import SeqRecord, _RestrictedDict
+    
+from copy import copy
 
 class SeqRecordProxyBase(SeqRecord):
     """A SeqRecord object holds a sequence and information about it.
@@ -84,22 +86,9 @@ class SeqRecordProxyBase(SeqRecord):
 
 
     """
-    
-    def _set_seq(self, value):
-        #TODO - Add a deprecation warning that the seq should be write only?
-        if self._per_letter_annotations:
-            #TODO - Make this a warning? Silently empty the dictionary?
-            raise ValueError("You must empty the letter annotations first!")
-        self._seq = value
-        try:
-            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
-        except AttributeError:
-            #e.g. seq is None
-            self._per_letter_annotations = _RestrictedDict(length=0)
-
-    seq = property(fget=lambda self: self._seq,
-                   fset=_set_seq,
-                   doc="The sequence itself, as a Seq or MutableSeq object.")
+    def __init__(self):
+        raise NotImplementedError( \
+            "__init__ must be implemented in the derived class")
 
     def __getitem__(self, index):
         """Returns a sub-sequence or an individual letter.
@@ -347,7 +336,7 @@ class SeqRecordProxyBase(SeqRecord):
     def lower(self):
         """Returns a copy of the record with a lower case sequence.
 
-        possibly do something clever or get implemnted by the derived class
+        possibly do something clever
         """
         raise NotImplementedError(" this needs to be implemented")
 
@@ -451,53 +440,26 @@ class TestSeqRecordBaseClass(SeqRecordProxyBase):
     letter_annotations = property(
         fget=lambda self: self._per_letter_annotations,
         fset=_set_per_letter_annotations,
-        doc="""Dictionary of per-letter-annotation for the sequence.
-
-        For example, this can hold quality scores used in FASTQ or QUAL files.
-        Consider this example using Bio.SeqIO to read in an example Solexa
-        variant FASTQ file as a SeqRecord:
-
-        >>> from Bio import SeqIO
-        >>> record = SeqIO.read("Quality/solexa_faked.fastq", "fastq-solexa")
-        >>> print("%s %s" % (record.id, record.seq))
-        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-        >>> print(list(record.letter_annotations))
-        ['solexa_quality']
-        >>> print(record.letter_annotations["solexa_quality"])
-        [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
-
-        The letter_annotations get sliced automatically if you slice the
-        parent SeqRecord, for example taking the last ten bases:
-
-        >>> sub_record = record[-10:]
-        >>> print("%s %s" % (sub_record.id, sub_record.seq))
-        slxa_0001_1_0001_01 ACGTNNNNNN
-        >>> print(sub_record.letter_annotations["solexa_quality"])
-        [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
-
-        Any python sequence (i.e. list, tuple or string) can be recorded in
-        the SeqRecord's letter_annotations dictionary as long as the length
-        matches that of the SeqRecord's sequence.  e.g.
-
-        >>> len(sub_record.letter_annotations)
-        1
-        >>> sub_record.letter_annotations["dummy"] = "abcdefghij"
-        >>> len(sub_record.letter_annotations)
-        2
-
-        You can delete entries from the letter_annotations dictionary as usual:
-
-        >>> del sub_record.letter_annotations["solexa_quality"]
-        >>> sub_record.letter_annotations
-        {'dummy': 'abcdefghij'}
-
-        You can completely clear the dictionary easily as follows:
-
-        >>> sub_record.letter_annotations = {}
-        >>> sub_record.letter_annotations
-        {}
-        """)
+        doc="""Dictionary of per-letter-annotation for the sequence.""")
     
+    def _set_seq(self, value):
+        #TODO - Add a deprecation warning that the seq should be write only?
+        if self._per_letter_annotations:
+            #TODO - Make this a warning? Silently empty the dictionary?
+            raise ValueError("You must empty the letter annotations first!")
+        self._seq = value
+        try:
+            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
+        except AttributeError:
+            #e.g. seq is None
+            self._per_letter_annotations = _RestrictedDict(length=0)
+
+    seq = property(fget=lambda self: self._seq,
+                   fset=_set_seq,
+                   doc="The sequence itself, as a Seq or MutableSeq object.")
+
+
+                   
 if __name__ == "__main__":
     import unittest
     #from Bio import SeqRecord
@@ -510,8 +472,9 @@ if __name__ == "__main__":
 
         def test_nothing(self):
             """An addition test"""
-            a = SeqRecordProxyBase("sequencefake", "fakeid")
+            a = TestSeqRecordBaseClass("sequencefake", "fakeid")
             self.assertEqual(5, 5)
+            self.assertRaises(NotImplementedError, SeqRecordProxyBase)
             
     unittest.main( exit=False )
     """if __name__ == "__main__":
