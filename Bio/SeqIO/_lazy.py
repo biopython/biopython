@@ -76,10 +76,19 @@ class SeqRecordProxyBase(SeqRecord):
 
 
     #subclassing to-do list
-    attributes that must be filled 
+    attributes that must be managed or utilized 
      -   self._seq         :::   sequence type, set by _read_seq
+     -   self.name         :::   this should be identical
+     -   self.dbxrefs      :::   [] db cross references
+     -   self.id           :::   id string
+     -   self._features    :::   list of SeqFeatures
+     -   self._annotations :::   dict of annotations
+     -   self._letter_an...:::   per letter information
+
+
      -   self._index_begin :::   defines begin index w/r/t global
      -   self._index_end   :::   defines end index w/r/t global
+
      
 
     methods need implementation by derived class:
@@ -152,6 +161,8 @@ class SeqRecordProxyBase(SeqRecord):
 
     def upper(self):
         """Returns a copy of the record with an upper case sequence.
+
+        
         """
         if not self._seq:
             self._read_seq()
@@ -166,8 +177,32 @@ class SeqRecordProxyBase(SeqRecord):
         if not self._seq:
             self._read_seq()
         newSelf = copy(self)
-        newSelf._seq = self._seq.upper()
+        newSelf._seq = self._seq.lower()
         return newSelf
+
+    def __repr__(self):
+        """this is a shortened repr for the lazy loading parsers
+
+        modification of the repr() magic method is required to prevent
+        simple command line options from unnecessarily invoking full
+        parsing of a file. 
+
+        This strategy of redefining __repr__ contrasts with the __str__
+        method that is left to the base class since invoking the str() is
+        less used and more likely in output focused programs. 
+        """
+        idrepr = "id=%s" % str(self.id)
+        namerepr = "name=%s" % str(self.name)
+        descriptionrepr = "description=%s" % str(self.description)
+        dbxrefsrepr = "dbxrefs=%s" % repr(self.dbxrefs)
+        if self._seq is None:
+            seqrepr = "seq=NOT_READ"
+        else:
+            seqrepr = "seq=%s" % repr(self.seq)                 
+        return self.__class__.__name__ \
+         + "(%s, %s, %s, %s, %s)" \
+         % (seqrepr, idrepr, namerepr, descriptionrepr, dbxrefsrepr)
+
 
     # All methods tagged below are implemented in the base class
     #
@@ -185,87 +220,88 @@ class SeqRecordProxyBase(SeqRecord):
     #def __repr__(self):
     #def __contains__(self, char):
     #def __iter__(self):
-
-class TestSeqRecordBaseClass(SeqRecordProxyBase):
-    """ this class implements the minimum funcationality for a working proxy
-    """
-    def __init__(self, handle, id = "<unknown id>", name = "<unknown name>",
-                 description = "<unknown description>", dbxrefs = None,
-                 features = None, annotations = None,
-                 letter_annotations = None, index_begin=0,
-                 index_end=None):
-        """Create a SeqRecord.
-
-        Arguments:
-         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
-         - id          - Sequence identifier, recommended (string)
-         - name        - Sequence name, optional (string)
-         - description - Sequence description, optional (string)
-         - dbxrefs     - Database cross references, optional (list of strings)
-         - features    - Any (sub)features, optional (list of SeqFeature objects)
-         - annotations - Dictionary of annotations for the whole sequence
-         - letter_annotations - Dictionary of per-letter-annotations, values
-                                should be strings, list or tuples of the same
-                                length as the full sequence.
-
-        """
-        self._index_begin = index_begin
-        self._index_end = len(handle)
-        self._seq = None
-
-        if id is not None and not isinstance(id, basestring):
-            #Lots of existing code uses id=None... this may be a bad idea.
-            raise TypeError("id argument should be a string")
-        if not isinstance(name, basestring):
-            raise TypeError("name argument should be a string")
-        if not isinstance(description, basestring):
-            raise TypeError("description argument should be a string")
-        self._handle = handle
-        self.id = id
-        self.name = name
-        self.description = description
-
-        # database cross references (for the whole sequence)
-        if dbxrefs is None:
-            dbxrefs = []
-        elif not isinstance(dbxrefs, list):
-            raise TypeError("dbxrefs argument should be a list (of strings)")
-        self.dbxrefs = dbxrefs
-
-        # annotations about the whole sequence
-        if annotations is None:
-            annotations = {}
-        elif not isinstance(annotations, dict):
-            raise TypeError("annotations argument should be a dict")
-        self.annotations = annotations
-
-        #TODO handle letter annotations properly
-        self.letter_annotations = letter_annotations
-
-        #TODO handle features annotations about parts of the sequence
-        if features is None:
-            features = []
-        elif not isinstance(features, list):
-            raise TypeError("features argument should be a list (of SeqFeature objects)")
-        self.features = features
-    
-    def _read_seq(self):
-        if self._seq:
-            pass
-        else:
-            i = self._index_begin
-            j = self._index_end 
-            self._seq = self._handle[i:j]
-
-    
-
-
-                   
 if __name__ == "__main__":
     import unittest
     #from Bio import SeqRecord
     #from Bio.SeqIO import _lazy
+    #from Bio.Seq import Seq
+    seqpath = os.path.join(biopath,"Seq.py")
+    Seq = imp.load_source("Seq", seqpath)
+    Seq = Seq.Seq
     
+
+    class TestSeqRecordBaseClass(SeqRecordProxyBase):
+        """ this class implements the minimum funcationality for a working proxy
+        """
+        def __init__(self, handle, id = "<unknown id>", name = "<unknown name>",
+                     description = "<unknown description>", dbxrefs = None,
+                     features = None, annotations = None,
+                     letter_annotations = None, index_begin=0,
+                     index_end=None):
+            """Create a SeqRecord.
+
+            Arguments:
+             - handle      - Sequence string, required (string)
+             - id          - Sequence identifier, recommended (string)
+             - name        - Sequence name, optional (string)
+             - description - Sequence description, optional (string)
+             - dbxrefs     - Database cross references, optional (list of strings)
+             - features    - Any (sub)features, optional (list of SeqFeature objects)
+             - annotations - Dictionary of annotations for the whole sequence
+             - letter_annotations - Dictionary of per-letter-annotations, values
+                                    should be strings, list or tuples of the same
+                                    length as the full sequence.
+
+            """
+            self._index_begin = index_begin
+            self._index_end = len(handle)
+            self._seq = None
+
+            if id is not None and not isinstance(id, basestring):
+                #Lots of existing code uses id=None... this may be a bad idea.
+                raise TypeError("id argument should be a string")
+            if not isinstance(name, basestring):
+                raise TypeError("name argument should be a string")
+            if not isinstance(description, basestring):
+                raise TypeError("description argument should be a string")
+            self._handle = handle
+            self.id = id
+            self.name = name
+            self.description = description
+
+            # database cross references (for the whole sequence)
+            if dbxrefs is None:
+                dbxrefs = []
+            elif not isinstance(dbxrefs, list):
+                raise TypeError("dbxrefs argument should be a list (of strings)")
+            self.dbxrefs = dbxrefs
+
+            # annotations about the whole sequence
+            if annotations is None:
+                annotations = {}
+            elif not isinstance(annotations, dict):
+                raise TypeError("annotations argument should be a dict")
+            self.annotations = annotations
+
+            #TODO handle letter annotations properly
+            self.letter_annotations = letter_annotations
+
+            #TODO handle features annotations about parts of the sequence
+            if features is None:
+                features = []
+            elif not isinstance(features, list):
+                raise TypeError("features argument should be a list (of SeqFeature objects)")
+            self.features = features
+        
+        def _read_seq(self):
+            if self._seq:
+                pass
+            else:
+                i = self._index_begin
+                j = self._index_end 
+                self._seq = Seq(self._handle[i:j])
+    
+
     class SeqRecordProxyBaseClassTests(unittest.TestCase):
 
         def setUp(self):
@@ -289,8 +325,8 @@ if __name__ == "__main__":
             """checks on basic worksing of _read_seq"""
             a = TestSeqRecordBaseClass("sequencefake", "fakeid")
             self.assertEqual(None, a._seq)
-            self.assertEqual("sequencefake", a.seq)
-            self.assertEqual("sequencefake", a._seq)
+            self.assertEqual("sequencefake", str(a.seq))
+            self.assertEqual("sequencefake", str(a._seq))
 
         def test_simple_index_grab(self):
             a = TestSeqRecordBaseClass("sequencefake", "fakeid")
@@ -304,18 +340,47 @@ if __name__ == "__main__":
             self.assertTrue(a._handle is b._handle)
             self.assertTrue(a is not b)
 
-        def test_two_level_index_grab(self):
+        def test_two_level_getter_indexes(self):
             a = TestSeqRecordBaseClass("sequencefake", "fakeid")
             b = a[1:9]
             c = b[1:8]
             self.assertEqual(2, c._index_begin)
             self.assertEqual(9, c._index_end)
 
+        def test_two_level_getter_handle_identity(self):
+            a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+            b = a[1:9]
+            c = b[1:8]
+            self.assertTrue(a._handle is c._handle)
+
         def test_upper(self):
             a = TestSeqRecordBaseClass("seQUencefake", "fakeid")
             b = a.upper()
-            self.assertEqual("SEQUENCEFAKE", b._seq)
+            self.assertEqual("SEQUENCEFAKE", str(b._seq))
 
+        def test_lower(self):
+            a = TestSeqRecordBaseClass("seQUEncefake", "fakeid")
+            b = a.lower()
+            self.assertEqual("sequencefake", str(b._seq))
+
+        def test_repr(self):
+            out = r"""TestSeqRecordBaseClass(seq=NOT_READ, id=fakeid, """ + \
+                  r"""name=<unknown name>, description=<unknown description>, dbxrefs=[])"""
+            out2 = r"""TestSeqRecordBaseClass(seq=Seq('sequencefake', Alphabet()), id=fakeid, """ + \
+                  r"""name=<unknown name>, description=<unknown description>, dbxrefs=[])"""
+            a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+            self.assertEqual(out, repr(a))
+            s = a.seq 
+            self.assertEqual(out2, repr(a))
+
+        def test_len_method(self):
+            a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+            b = a[3:6]
+            self.assertEqual(3, len(b))
+            self.assertEqual(None, b._seq)
+            self.assertEqual(len("sequencefake"), len(a))
+    
+    a = TestSeqRecordBaseClass("seQUencefake", "fakeid")
     unittest.main( exit=False )
     """if __name__ == "__main__":
         runner = unittest.TextTestRunner(verbosity = 2)
