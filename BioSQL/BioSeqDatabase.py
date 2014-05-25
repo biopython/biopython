@@ -95,21 +95,7 @@ def open_database(driver="MySQLdb", **kwargs):
     elif driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
-        try:
-            conn = connect(**kw)
-        except module.InterfaceError:
-            # Ok, so let's try building a DSN
-            # (older releases of psycopg need this)
-            # (how old? We've droped psycopg v1 support)
-            # TODO - can we remove this code yet?
-            if "database" in kw:
-                kw["dbname"] = kw["database"]
-                del kw["database"]
-            elif "db" in kw:
-                kw["dbname"] = kw["db"]
-                del kw["db"]
-            dsn = ' '.join('='.join(i) for i in kw.items())
-            conn = connect(dsn)
+        conn = connect(**kw)
 
     if os.name == "java":
         server = DBServer(conn, module, driver)
