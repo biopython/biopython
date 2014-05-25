@@ -33,6 +33,10 @@ Bio.SearchIO has been renamed to `similarity`.
 
 The Bio.SeqUtils masses and molecular_weight function have been updated.
 
+BioSQL can now use the mysql-connector package (available for Python 2, 3
+and PyPy) as an alternative to MySQLdb (Python 2 only) to connect to a MySQL
+database.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
