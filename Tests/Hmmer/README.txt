@@ -30,6 +30,7 @@ tab_30_hmmscan_002.out      single query, no match
 tab_30_hmmscan_003.out      single query, one match, one hsp per match
 tab_30_hmmscan_004.out      single query, multiple matches, one hsp per match
 
+domtab_31b1_hmmscan_001.out multiple queries
 domtab_30_hmmscan_001.out   multiple queries, hmm as hit
 domtab_30_hmmscan_002.out   single query, no match, hmm as hit
 domtab_30_hmmscan_003.out   single query, one match, one hsp per match, hmm as hit
