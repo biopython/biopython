@@ -25,7 +25,7 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class HmmerscanCases(unittest.TestCase):
+class HmmscanCases(unittest.TestCase):
 
     fmt = 'hmmscan3-domtab'
 
