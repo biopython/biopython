@@ -4587,6 +4587,7 @@ in the file \verb|opuntia.aln|.
 You should be able to work out how to read in the alignment using
 \verb|Bio.AlignIO| by now:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("opuntia.aln", "clustal")
@@ -4605,6 +4606,8 @@ In case you are interested (and this is an aside from the main thrust of this
 chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
 Newick tree file, and \verb|Bio.Phylo| can parse these:
 
+%Possible regression, output not showing branch lengths now?
+%TODO: doctest examples
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("opuntia.dnd", "newick")
