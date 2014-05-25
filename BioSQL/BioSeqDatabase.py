@@ -1,7 +1,7 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2014 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
-# Revisions 2013 copyright by Tiago Antao.  All rights reserved.
+# Revisions 2013-2014 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -98,9 +98,10 @@ def open_database(driver="MySQLdb", **kwargs):
         try:
             conn = connect(**kw)
         except module.InterfaceError:
-            raise
             # Ok, so let's try building a DSN
             # (older releases of psycopg need this)
+            # (how old? We've droped psycopg v1 support)
+            # TODO - can we remove this code yet?
             if "database" in kw:
                 kw["dbname"] = kw["database"]
                 del kw["database"]
