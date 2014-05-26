@@ -434,6 +434,66 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
 
+class HmmsearchCases(unittest.TestCase):
+
+    def test_31b1_hmmsearch_001(self):
+        """Test parsing hmmer3-tab, hmmsearch 3.1b1, multiple queries (tab_31b1_hmmscan_001)"""
+
+        tab_file = get_file('tab_31b1_hmmsearch_001.out')
+        qresults = list(parse(tab_file, FMT))
+        self.assertEqual(1, len(qresults))
+
+        # first qresult
+        qresult = qresults[0]
+        self.assertEqual(4, len(qresult))
+        self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.acc)
+
+        # first hit, first hsp
+        hit = qresult[0]
+        self.assertEqual(1, len(hit))
+        self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
+        self.assertEqual('-', hit.acc)
+        self.assertEqual(8.5e-147, hit.evalue)
+        self.assertEqual(492.3, hit.bitscore)
+        self.assertEqual(0.0, hit.bias)
+        self.assertEqual(2.1, hit.domain_exp_num)
+        self.assertEqual(2, hit.region_num)
+        self.assertEqual(0, hit.cluster_num)
+        self.assertEqual(0, hit.overlap_num)
+        self.assertEqual(2, hit.env_num)
+        self.assertEqual(2, hit.domain_obs_num)
+        self.assertEqual(2, hit.domain_reported_num)
+        self.assertEqual(2, hit.domain_included_num)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual(1.2e-72, hsp.evalue)
+        self.assertEqual(249.3, hsp.bitscore)
+        self.assertEqual(0.0, hsp.bias)
+
+        # last hit, last hsp
+        hit = qresult[-1]
+        self.assertEqual(1, len(hit))
+        self.assertEqual('sp|P18652|KS6AA_CHICK', hit.id)
+        self.assertEqual('-', hit.acc)
+        self.assertEqual(2.6e-145, hit.evalue)
+        self.assertEqual(487.5, hit.bitscore)
+        self.assertEqual(0.0, hit.bias)
+        self.assertEqual(2.1, hit.domain_exp_num)
+        self.assertEqual(2, hit.region_num)
+        self.assertEqual(0, hit.cluster_num)
+        self.assertEqual(0, hit.overlap_num)
+        self.assertEqual(2, hit.env_num)
+        self.assertEqual(2, hit.domain_obs_num)
+        self.assertEqual(2, hit.domain_reported_num)
+        self.assertEqual(2, hit.domain_included_num)
+        self.assertEqual('Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1', hit.description)
+        hsp = hit.hsps[-1]
+        self.assertEqual(7.6e-72, hsp.evalue)
+        self.assertEqual(246.7, hsp.bitscore)
+        self.assertEqual(0.0, hsp.bias)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
