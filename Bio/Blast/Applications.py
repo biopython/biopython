@@ -161,19 +161,17 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     "Restrict search with the given Entrez query (requires remote).",
                     equate=False),
             _Option(["-max_target_seqs", "max_target_seqs"],
-                    """Maximum number of aligned sequences to keep.
-
-                    Integer argument (at least one).""",
+                    "Maximum number of aligned sequences to keep (integer, at least one).",
                     equate=False),
             #Statistical options
             _Option(["-dbsize", "dbsize"],
-                    "Effective length of the database (integer)",
+                    "Effective length of the database (integer).",
                     equate=False),
             _Option(["-searchsp", "searchsp"],
-                    "Effective length of the search space (integer)",
+                    "Effective length of the search space (integer).",
                     equate=False),
             _Option(["-max_hsps_per_subject", "max_hsps_per_subject"],
-                    "Override maximum number of HSPs per subject to save for ungapped searches (integer)",
+                    "Override maximum number of HSPs per subject to save for ungapped searches (integer).",
                     equate=False),
             _Option(["-max_hsps", "max_hsps"],
                     "Set maximum number of HSPs per subject sequence to save (default 0 means no limit).",
@@ -182,16 +180,16 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     "Use sum statistics."),
             #Extension options
             _Option(["-xdrop_ungap", "xdrop_ungap"],
-                    "X-dropoff value (in bits) for ungapped extensions. Float.",
+                    "X-dropoff value (in bits) for ungapped extensions (float).",
                     equate=False),
             _Option(["-xdrop_gap", "xdrop_gap"],
-                    "X-dropoff value (in bits) for preliminary gapped extensions. Float.",
+                    "X-dropoff value (in bits) for preliminary gapped extensions (float).",
                     equate=False),
             _Option(["-xdrop_gap_final", "xdrop_gap_final"],
-                    "X-dropoff value (in bits) for final gapped alignment. Float.",
+                    "X-dropoff value (in bits) for final gapped alignment (float).",
                     equate=False),
             _Option(["-window_size", "window_size"],
-                    "Multiple hits window size, use 0 to specify 1-hit algorithm. Integer.",
+                    "Multiple hits window size, use 0 to specify 1-hit algorithm (integer).",
                     equate=False),
             # Search strategy options
             _Option(["-import_search_strategy", "import_search_strategy"],
@@ -208,9 +206,9 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     equate=False),
             #Miscellaneous options
             _Option(["-num_threads", "num_threads"],
-                    """Number of threads to use in the BLAST search.
+                    """Number of threads to use in the BLAST search (integer, at least one).
 
-                    Integer of at least one. Default is one.
+                    Default is one.
                     Incompatible with: remote""",
                     equate=False),
             _Switch(["-remote", "remote"],
@@ -264,7 +262,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
                     filename=True,
                     equate=False),
             _Option(["-subject_loc", "subject_loc"],
-                    """Location on the subject sequence (Format: start-stop)
+                    """Location on the subject sequence (Format: start-stop).
 
                     Incompatible with: db, gilist, seqidlist, negative_gilist,
                     db_soft_mask, db_hard_mask, remote.
@@ -282,14 +280,14 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
                     """,
                     equate=False),
             _Option(["-best_hit_overhang", "best_hit_overhang"],
-                    """Best Hit algorithm overhang value (recommended value: 0.1)
+                    """Best Hit algorithm overhang value (float, recommended value: 0.1)
 
                     Float between 0.0 and 0.5 inclusive.
 
                     Incompatible with: culling_limit.""",
                     equate=False),
             _Option(["-best_hit_score_edge", "best_hit_score_edge"],
-                    """Best Hit algorithm score edge value (recommended value: 0.1)
+                    """Best Hit algorithm score edge value (float, recommended value: 0.1)
 
                     Float between 0.0 and 0.5 inclusive.
 
@@ -384,8 +382,7 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
             _Option(["-matrix", "matrix"],
                     "Scoring matrix name (default BLOSUM62)."),
             _Option(["-threshold", "threshold"],
-                    "Minimum word score such that the word is added to the "
-                    "BLAST lookup table (float)",
+                    "Minimum score for words to be added to the BLAST lookup table (float).",
                     equate=False),
             _Option(["-comp_based_stats", "comp_based_stats"],
                     """Use composition-based statistics (string, default 2, i.e. True).
@@ -564,9 +561,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     equate=False),
             #Input query options:
             _Option(["-query_gencode", "query_gencode"],
-                    """Genetic code to use to translate query
-
-                    Integer. Default is one.""",
+                    "Genetic code to use to translate query (integer, default 1).",
                     equate=False),
             #General search options:
             _Option(["-frame_shift_penalty", "frame_shift_penalty"],
@@ -585,8 +580,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).",
                     equate=False),
             _Option(["-threshold", "threshold"],
-                    "Minimum word score such that the word is added to the "
-                    "BLAST lookup table (float)",
+                    "Minimum score for words to be added to the BLAST lookup table (float).",
                     equate=False),
             _Option(["-comp_based_stats", "comp_based_stats"],
                     """Use composition-based statistics for blastp, blastx, or tblastn:
@@ -638,9 +632,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
         self.parameters = [
             #General search options:
             _Option(["-db_gencode", "db_gencode"],
-                    """Genetic code to use to translate query
-
-                    Integer. Default is one.""",
+                    "Genetic code to use to translate query (integer, default 1).",
                     equate=False),
             _Option(["-frame_shift_penalty", "frame_shift_penalty"],
                     """Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).
@@ -658,7 +650,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).",
                     equate=False),
             _Option(["-threshold", "threshold"],
-                    "Minimum word score such that the word is added to the BLAST lookup table (float)",
+                    "Minimum score for words to be added to the BLAST lookup table (float).",
                     equate=False),
             _Option(["-comp_based_stats", "comp_based_stats"],
                     """Use composition-based statistics (string, default 2, i.e. True).
@@ -725,15 +717,11 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
                     equate=False),
             #Input query options:
             _Option(["-query_gencode", "query_gencode"],
-                    """Genetic code to use to translate query
-
-                    Integer. Default is one.""",
+                    "Genetic code to use to translate query (integer, default 1).",
                     equate=False),
             #General search options:
             _Option(["-db_gencode", "db_gencode"],
-                    """Genetic code to use to translate query
-
-                    Integer. Default is one.""",
+                    "Genetic code to use to translate query (integer, default 1).",
                     equate=False),
             _Option(["-max_intron_length", "max_intron_length"],
                     """Maximum intron length (integer).
@@ -746,8 +734,7 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).",
                     equate=False),
             _Option(["-threshold", "threshold"],
-                    "Minimum word score such that the word is added to the "
-                    "BLAST lookup table (float)",
+                    "Minimum score for words to be added to the BLAST lookup table (float).",
                     equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],
@@ -784,8 +771,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).",
                     equate=False),
             _Option(["-threshold", "threshold"],
-                    "Minimum word score such that the word is added to the "
-                    "BLAST lookup table (float)",
+                    "Minimum score for words to be added to the BLAST lookup table (float).",
                     equate=False),
             _Option(["-comp_based_stats", "comp_based_stats"],
                     """Use composition-based statistics (string, default 2, i.e. True).
@@ -807,29 +793,28 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     equate=False),
             #Extension options:
             _Option(["-gap_trigger", "gap_trigger"],
-                    "Number of bits to trigger gapping (float, default 22)",
+                    "Number of bits to trigger gapping (float, default 22).",
                     equate=False),
             #Miscellaneous options:
             _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
             #PSI-BLAST options:
             _Option(["-num_iterations", "num_iterations"],
-                    """Number of iterations to perform, integer
+                    """Number of iterations to perform (integer, at least one).
 
-                    Integer of at least one. Default is one.
+                    Default is one.
                     Incompatible with: remote""",
                     equate=False),
             _Option(["-out_pssm", "out_pssm"],
-                    "File name to store checkpoint file",
+                    "File name to store checkpoint file.",
                     filename=True,
                     equate=False),
             _Option(["-out_ascii_pssm", "out_ascii_pssm"],
-                    "File name to store ASCII version of PSSM",
+                    "File name to store ASCII version of PSSM.",
                     filename=True,
                     equate=False),
             _Option(["-in_msa", "in_msa"],
-                    """File name of multiple sequence alignment to restart
-                    PSI-BLAST
+                    """File name of multiple sequence alignment to restart PSI-BLAST.
 
                     Incompatible with: in_pssm, query""",
                     filename=True,
@@ -842,32 +827,29 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     sequence is used.""",
                     equate=False),
             _Option(["-in_pssm", "in_pssm"],
-                    """PSI-BLAST checkpoint file
+                    """PSI-BLAST checkpoint file.
 
                     Incompatible with: in_msa, query, phi_pattern""",
                     filename=True,
                     equate=False),
             #PSSM engine options:
             _Option(["-pseudocount", "pseudocount"],
-                    """Pseudo-count value used when constructing PSSM
+                    """Pseudo-count value used when constructing PSSM.
 
                     Integer. Default is zero.""",
                     equate=False),
             _Option(["-inclusion_ethresh", "inclusion_ethresh"],
-                    """E-value inclusion threshold for pairwise alignments
-
-                    Float. Default is 0.002.""",
+                    "E-value inclusion threshold for pairwise alignments (float, default 0.002).",
                     equate=False),
             _Switch(["-ignore_msa_master", "ignore_msa_master"],
                     """Ignore the master sequence when creating PSSM
 
-                    * Requires:  in_msa
-                    * Incompatible with:  msa_master_idx, in_pssm, query,
-                    query_loc, phi_pattern
+                    Requires: in_msa
+                    Incompatible with: msa_master_idx, in_pssm, query, query_loc, phi_pattern
                     """),
             #PHI-BLAST options:
             _Option(["-phi_pattern", "phi_pattern"],
-                    """File name containing pattern to search
+                    """File name containing pattern to search.
 
                     Incompatible with: in_pssm""",
                     filename=True,
@@ -991,9 +973,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     equate=False),
             #Input query options:
             _Option(["-query_gencode", "query_gencode"],
-                    """Genetic code to use to translate query
-
-                    Integer. Default is one.""",
+                    "Genetic code to use to translate query (integer, default 1).",
                     equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],
@@ -1079,69 +1059,71 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="deltablast", **kwargs):
         self.parameters = [
-                           #General search options:
-                           _Option(["-matrix", "matrix"],
-                                   "Scoring matrix name (default BLOSUM62)."),
-                           _Option(["-threshold", "threshold"],
-                                   "Minimum word score such that the word is added to the "
-                                   "BLAST lookup table (float)",
-                                   equate=False),
-                           _Option(["-comp_based_stats", "comp_based_stats"],
-                                   """Use composition-based statistics (string, default 2, i.e. True).
+            #General search options:
+            _Option(["-matrix", "matrix"],
+                    "Scoring matrix name (default BLOSUM62)."),
+            _Option(["-threshold", "threshold"],
+                    "Minimum score for words to be added to the BLAST lookup table (float).",
+                    equate=False),
+            _Option(["-comp_based_stats", "comp_based_stats"],
+                    """Use composition-based statistics (string, default 2, i.e. True).
 
-                                   0, F or f: no composition-based statistics
-                                   2, T or t, D or d : Composition-based score adjustment as in
-                                   Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                    0, F or f: no composition-based statistics.
+                    2, T or t, D or d : Composition-based score adjustment as in
+                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
 
-                                   Note that tblastn also supports values of 1 and 3.""",
-                                   checker_function=lambda value : value in "0Ft2TtDd",
-                                   equate=False),
-                           #Query filtering options:
-                           _Option(["-seg", "seg"],
-                                   """Filter query sequence with SEG (string).
-                                       
-                                   Format: "yes", "window locut hicut", or "no" to disable.
-                                   Default is "12 2.2 2.5""",
-                                   equate=False),
-                           #Extension options:
-                           _Option(["-gap_trigger", "gap_trigger"],
-                                   "Number of bits to trigger gapping Default = 22",
-                                   equate=False),
-                           #Miscellaneous options:
-                           _Switch(["-use_sw_tback", "use_sw_tback"],
-                                   "Compute locally optimal Smith-Waterman alignments?"),
-                           #PSI-BLAST options
-                           _Option(["-num_iterations", "num_iterations"],
-                                   """Number of iterations to perform. (integer >=1, Default is 1)
-                                   Incompatible with: remote""",
-                           equate=False),
-                           _Option(["-out_pssm", "out_pssm"],
-                                   """File name to store checkpoint file""",
-                           filename=True,
-                           equate=False),
-                           _Option(["-out_ascii_pssm", "out_ascii_pssm"],
-                                   """File name to store ASCII version of PSSM""",
-                           filename=True,
-                           equate=False),
-                           #PSSM engine options
-                           _Option(["-pseudocount", "pseudocount"],
-                                   """Pseudo-count value used when constructing PSSM
-                                   (Integer, Default is zero).""",
-                           equate=False),
-                           _Option(["-domain_inclusion_ethresh", "domain_inclusion_ethresh"],
-                                   """E-value inclusion threshold for alignments with conserved domains.
-                                   (float, Default is 0.05)""",
-                           equate=False),
-                           _Option(["-inclusion_ethresh", "inclusion_ethresh"],
-                                   """E-value inclusion threshold for pairwise alignments. (float, Default is 0.002)""",
-                           equate=False),
-                           #DELTA-BLAST options
-                           _Option(["-rpsdb", "rpsdb"],
-                                   """BLAST domain database name (String, Default = 'cdd_delta')""",
-                           equate=False),
-                           _Switch(["-show_domain_hits", "show_domain_hits"],
-                                   """Show domain hits, Incompatible with:  remote, subject""")
-                           ]
+                    Note that tblastn also supports values of 1 and 3.""",
+                    checker_function=lambda value : value in "0Ft2TtDd",
+                    equate=False),
+            #Query filtering options:
+            _Option(["-seg", "seg"],
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""",
+                    equate=False),
+            #Extension options:
+            _Option(["-gap_trigger", "gap_trigger"],
+                    "Number of bits to trigger gapping Default = 22",
+                    equate=False),
+            #Miscellaneous options:
+            _Switch(["-use_sw_tback", "use_sw_tback"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
+            #PSI-BLAST options
+            _Option(["-num_iterations", "num_iterations"],
+                    """Number of iterations to perform. (integer >=1, Default is 1)
+
+                    Incompatible with: remote""",
+                    equate=False),
+            _Option(["-out_pssm", "out_pssm"],
+                    "File name to store checkpoint file.",
+                    filename=True,
+                    equate=False),
+            _Option(["-out_ascii_pssm", "out_ascii_pssm"],
+                    "File name to store ASCII version of PSSM.",
+                    filename=True,
+                    equate=False),
+            #PSSM engine options
+            _Option(["-pseudocount", "pseudocount"],
+                    "Pseudo-count value used when constructing PSSM (integer, default 0).",
+                    equate=False),
+            _Option(["-domain_inclusion_ethresh", "domain_inclusion_ethresh"],
+                    """E-value inclusion threshold for alignments with conserved domains.
+
+                    (float, Default is 0.05)""",
+                    equate=False),
+            _Option(["-inclusion_ethresh", "inclusion_ethresh"],
+                    "E-value inclusion threshold for pairwise alignments (float, Default is 0.002).",
+                    equate=False),
+            #DELTA-BLAST options
+            _Option(["-rpsdb", "rpsdb"],
+                    "BLAST domain database name (dtring, Default = 'cdd_delta').",
+                    equate=False),
+            _Switch(["-show_domain_hits", "show_domain_hits"],
+                    """Show domain hits?
+
+                    Incompatible with:  remote, subject""")
+            ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
