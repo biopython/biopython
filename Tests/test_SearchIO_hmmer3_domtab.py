@@ -568,6 +568,44 @@ class HmmersearchCases(unittest.TestCase):
 
     fmt = 'hmmsearch3-domtab'
 
+    def test_domtab_31b1_hmmsearch_001(self):
+        "Test parsing hmmsearch-domtab, hmmsearch 3.1b1, single query (domtab_31b1_hmmsearch_001)"
+
+        tab_file = get_file('domtab_31b1_hmmsearch_001.out')
+        qresults = list(parse(tab_file, self.fmt))
+
+        self.assertEqual(1, len(qresults))
+
+        qresult = qresults[0]
+        self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.accession)
+        self.assertEqual(260, qresult.seq_len)
+        hit = qresult[0]
+        self.assertEqual(2, len(hit))
+        self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
+        self.assertEqual('Pkinase', hit.query_id)
+        self.assertEqual('-', hit.accession)
+        self.assertEqual(733, hit.seq_len)
+        self.assertEqual(8.5e-147, hit.evalue)
+        self.assertEqual(492.3, hit.bitscore)
+        self.assertEqual(0.0, hit.bias)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hsp.hit_id)
+        self.assertEqual('Pkinase', hsp.query_id)
+        self.assertEqual(1, hsp.domain_index)
+        self.assertEqual(2.6e-75, hsp.evalue_cond)
+        self.assertEqual(3.6e-70, hsp.evalue)
+        self.assertEqual(241.2, hsp.bitscore)
+        self.assertEqual(0.0, hsp.bias)
+        self.assertEqual(58, hsp.hit_start)
+        self.assertEqual(318, hsp.hit_end)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(260, hsp.query_end)
+        self.assertEqual(58, hsp.env_start)
+        self.assertEqual(318, hsp.env_end)
+        self.assertEqual(0.95, hsp.acc_avg)
+
     def test_domtab_30_hmmsearch_001(self):
         "Test parsing hmmsearch-domtab, hmmsearch 3.0, multiple queries (domtab_30_hmmsearch_001)"
 
