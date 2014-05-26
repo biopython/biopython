@@ -172,6 +172,9 @@ Support for parsing, indexing, and writing:
  - hmmer3-domtab    - HMMER3 domain table output. When using this format, the
                       program name has to be specified. For example, for parsing
                       hmmscan output, the name would be 'hmmscan-domtab'.
+ - hmmer3-pfamtab   - HMMER3 pfam table output. This format also requires the
+                      program name to be specified. So the valid format names
+                      are, for example, 'hmmscan-pfamtab' or 'hmmsearch-pfamtab'.
 
 Support for parsing and indexing:
 
@@ -232,6 +235,9 @@ _ITERATOR_MAP = {
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
+        'hmmscan3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmhitParser'),
+        'hmmsearch3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmqueryParser'),
+        'phmmer3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmqueryParser'),
 }
 
 # dictionary of supported formats for index()
@@ -249,6 +255,9 @@ _INDEXER_MAP = {
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitIndexer'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryIndexer'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryIndexer'),
+        'hmmscan3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmhitIndexer'),
+        'hmmsearch3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmqueryIndexer'),
+        'phmmer3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmqueryIndexer'),
 }
 
 # dictionary of supported formats for write()
@@ -260,6 +269,9 @@ _WRITER_MAP = {
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitWriter'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
+        'hmmscan3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmhitWriter'),
+        'hmmsearch3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmqueryWriter'),
+        'phmmer3-pfamtab': ('HmmerIO', 'Hmmer3PfamtabHmmqueryWriter'),
 }
 
 
