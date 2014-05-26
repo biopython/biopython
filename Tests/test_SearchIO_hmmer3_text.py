@@ -1554,6 +1554,66 @@ class HmmscanCases(unittest.TestCase):
 
 class HmmersearchCases(unittest.TestCase):
 
+    def test_31b1_hmmsearch_001(self):
+        """Test parsing hmmsearch 3.1b1 (text_31b1_hmmsearch_001)"""
+
+        txt_file = get_file('text_31b1_hmmsearch_001.out')
+        qresults = list(parse(txt_file, FMT))
+
+        self.assertEqual(2, len(qresults))
+
+        # first qresult is empty
+        qresult = qresults[0]
+        self.assertEqual('Globins', qresult.id)
+        self.assertEqual(149, qresult.seq_len)
+        self.assertEqual(0, len(qresult))
+
+        # second qresult
+        qresult = qresults[1]
+        self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual(260, qresult.seq_len)
+        self.assertEqual('PF00069.17', qresult.accession)
+        self.assertEqual('Protein kinase domain', qresult.description)
+        self.assertEqual(4, len(qresult))
+
+        # first hit, first hsp
+        hit = qresult[0]
+        self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
+        self.assertTrue(hit.is_included)
+        self.assertEqual(8.5e-147, hit.evalue)
+        self.assertEqual(492.3, hit.bitscore)
+        self.assertEqual(0.0, hit.bias)
+        self.assertEqual(2.1, hit.domain_exp_num)
+        self.assertEqual(2, hit.domain_obs_num)
+        self.assertEqual(2, len(hit))
+
+        hsp = hit.hsps[0]
+        self.assertEqual(1, hsp.domain_index)
+        self.assertTrue(hsp.is_included)
+        self.assertEqual(241.2, hsp.bitscore)
+        self.assertEqual(0.0, hsp.bias)
+        self.assertEqual(2.6e-75, hsp.evalue_cond)
+        self.assertEqual(3.6e-70, hsp.evalue)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(260, hsp.query_end)
+        self.assertEqual('[]', hsp.query_endtype)
+        self.assertEqual(58, hsp.hit_start)
+        self.assertEqual(318, hsp.hit_end)
+        self.assertEqual('..', hsp.hit_endtype)
+        self.assertEqual(58, hsp.env_start)
+        self.assertEqual(318, hsp.env_end)
+        self.assertEqual('..', hsp.env_endtype)
+        self.assertEqual(0.95, hsp.acc_avg)
+        self.assertEqual('EEEEEEEEEETTEEEEEEEE...TTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
+                hsp.aln_annotation['CS'])
+        self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
+                str(hsp.query.seq))
+        self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF',
+                str(hsp.hit.seq))
+        self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997',
+                hsp.aln_annotation['PP'])
+
     def test_30_hmmsearch_001(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_001)"
 
