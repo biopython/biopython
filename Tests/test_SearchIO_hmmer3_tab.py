@@ -39,11 +39,11 @@ class HmmscanCases(unittest.TestCase):
         qresult = qresults[0]
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Globin', hit.id)
-        self.assertEqual('PF00042.17', hit.acc)
+        self.assertEqual('PF00042.17', hit.accession)
         self.assertEqual(1e-22, hit.evalue)
         self.assertEqual(80.5, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
@@ -65,11 +65,11 @@ class HmmscanCases(unittest.TestCase):
         qresult = qresults[-1]
         self.assertEqual(5, len(qresult))
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[-1]
         self.assertEqual(1, len(hit))
         self.assertEqual('DUF521', hit.id)
-        self.assertEqual('PF04412.8', hit.acc)
+        self.assertEqual('PF04412.8', hit.accession)
         self.assertEqual(0.15, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -99,11 +99,11 @@ class HmmscanCases(unittest.TestCase):
         counter += 1
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Globin', hit.id)
-        self.assertEqual('PF00042.17', hit.acc)
+        self.assertEqual('PF00042.17', hit.accession)
         self.assertEqual(6e-21, hit.evalue)
         self.assertEqual(74.6, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
@@ -126,11 +126,11 @@ class HmmscanCases(unittest.TestCase):
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|126362951:116-221', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Ig_3', hit.id)
-        self.assertEqual('PF13927.1', hit.acc)
+        self.assertEqual('PF13927.1', hit.accession)
         self.assertEqual(1.4e-09, hit.evalue)
         self.assertEqual(38.2, hit.bitscore)
         self.assertEqual(0.4, hit.bias)
@@ -150,7 +150,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual(1, len(hit))
         self.assertEqual('Ig_2', hit.id)
-        self.assertEqual('PF13895.1', hit.acc)
+        self.assertEqual('PF13895.1', hit.accession)
         self.assertEqual(3.5e-05, hit.evalue)
         self.assertEqual(23.7, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -173,11 +173,11 @@ class HmmscanCases(unittest.TestCase):
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Xpo1', hit.id)
-        self.assertEqual('PF08389.7', hit.acc)
+        self.assertEqual('PF08389.7', hit.accession)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
         self.assertEqual(7.8, hit.bias)
@@ -197,7 +197,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual(1, len(hit))
         self.assertEqual('IBN_N', hit.id)
-        self.assertEqual('PF03810.14', hit.acc)
+        self.assertEqual('PF03810.14', hit.accession)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -220,12 +220,12 @@ class HmmscanCases(unittest.TestCase):
         counter += 1
         self.assertEqual(5, len(qresult))
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         # first hit
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Pou', hit.id)
-        self.assertEqual('PF00157.12', hit.acc)
+        self.assertEqual('PF00157.12', hit.accession)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
         self.assertEqual(0.5, hit.bias)
@@ -246,7 +246,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual(1, len(hit))
         self.assertEqual('Homeobox', hit.id)
-        self.assertEqual('PF00046.24', hit.acc)
+        self.assertEqual('PF00046.24', hit.accession)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
         self.assertEqual(1.1, hit.bias)
@@ -267,7 +267,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual(1, len(hit))
         self.assertEqual('HTH_31', hit.id)
-        self.assertEqual('PF13560.1', hit.acc)
+        self.assertEqual('PF13560.1', hit.accession)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -288,7 +288,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[3]
         self.assertEqual(1, len(hit))
         self.assertEqual('Homeobox_KN', hit.id)
-        self.assertEqual('PF05920.6', hit.acc)
+        self.assertEqual('PF05920.6', hit.accession)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -309,7 +309,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[4]
         self.assertEqual(1, len(hit))
         self.assertEqual('DUF521', hit.id)
-        self.assertEqual('PF04412.8', hit.acc)
+        self.assertEqual('PF04412.8', hit.accession)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -350,11 +350,11 @@ class HmmscanCases(unittest.TestCase):
         counter += 1
         self.assertEqual(1, len(qresult))
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Globin', hit.id)
-        self.assertEqual('PF00042.17', hit.acc)
+        self.assertEqual('PF00042.17', hit.accession)
         self.assertEqual(6e-21, hit.evalue)
         self.assertEqual(74.6, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
@@ -387,11 +387,11 @@ class HmmscanCases(unittest.TestCase):
         counter += 1
         self.assertEqual(2, len(qresult))
         self.assertEqual('gi|126362951:116-221', qresult.id)
-        self.assertEqual('-', qresult.acc)
+        self.assertEqual('-', qresult.accession)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('Ig_3', hit.id)
-        self.assertEqual('PF13927.1', hit.acc)
+        self.assertEqual('PF13927.1', hit.accession)
         self.assertEqual(1.4e-09, hit.evalue)
         self.assertEqual(38.2, hit.bitscore)
         self.assertEqual(0.4, hit.bias)
@@ -411,7 +411,7 @@ class HmmscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual(1, len(hit))
         self.assertEqual('Ig_2', hit.id)
-        self.assertEqual('PF13895.1', hit.acc)
+        self.assertEqual('PF13895.1', hit.accession)
         self.assertEqual(3.5e-05, hit.evalue)
         self.assertEqual(23.7, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -447,13 +447,13 @@ class HmmsearchCases(unittest.TestCase):
         qresult = qresults[0]
         self.assertEqual(4, len(qresult))
         self.assertEqual('Pkinase', qresult.id)
-        self.assertEqual('PF00069.17', qresult.acc)
+        self.assertEqual('PF00069.17', qresult.accession)
 
         # first hit, first hsp
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('-', hit.acc)
+        self.assertEqual('-', hit.accession)
         self.assertEqual(8.5e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -475,7 +475,7 @@ class HmmsearchCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual(1, len(hit))
         self.assertEqual('sp|P18652|KS6AA_CHICK', hit.id)
-        self.assertEqual('-', hit.acc)
+        self.assertEqual('-', hit.accession)
         self.assertEqual(2.6e-145, hit.evalue)
         self.assertEqual(487.5, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
