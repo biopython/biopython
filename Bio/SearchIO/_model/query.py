@@ -214,7 +214,7 @@ class QueryResult(_BaseSearchObject):
     if hasattr(OrderedDict, 'iteritems'):
 
         def __iter__(self):
-            return iter(self.iterhits())
+            return self.iterhits()
 
         @property
         def hits(self):
@@ -233,17 +233,17 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
-            for hit in self._items.values():
+            for hit in self._items.itervalues():
                 yield hit
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.keys():
+            for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
             """Returns an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.items():
+            for item in self._items.iteritems():
                 yield item
 
     else:
