@@ -357,11 +357,11 @@ class QueryResult(_BaseSearchObject):
         elif isinstance(hit_key, int):
             length = len(self)
             if 0 <= hit_key < length:
-                for idx, item in enumerate(self._items.itervalues()):
+                for idx, item in enumerate(self.iterhits()):
                     if idx == hit_key:
                         return item
             elif -1 * length <= hit_key < 0:
-                for idx, item in enumerate(self._items.itervalues()):
+                for idx, item in enumerate(self.iterhits()):
                     if length + hit_key == idx:
                         return item
             raise IndexError("list index out of range")
