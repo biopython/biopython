@@ -12,7 +12,8 @@ This module allows you to control Simcoal2 and FastSimcoal
 
 import os
 import sys
-from Bio.Application import AbstractCommandline, _Argument, _Option, _Switch
+from Bio.Application import AbstractCommandline, _Option, _Switch
+
 
 class SimCoalController(object):
     def __init__(self, simcoal_dir):
@@ -22,11 +23,6 @@ class SimCoalController(object):
 
         The initializer checks for existance and executability of binaries.
         """
-        import warnings
-        warnings.warn("SimCoalController has been deprecated, and we intend"
-                      " to remove it in a future release of Biopython."
-                      " Please use FastSimCoalController instead.",
-                      DeprecationWarning)
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name  # remove this?
         dir_contents = os.listdir(self.simcoal_dir)
@@ -45,7 +41,7 @@ class SimCoalController(object):
                          os.X_OK):
             raise IOError("SimCoal not executable")
 
-    def run_simcoal(self, par_file, num_sims, ploydi = '1', par_dir = '.'):
+    def run_simcoal(self, par_file, num_sims, ploydi='1', par_dir='.'):
         """Executes SimCoal.
         """
         if par_dir is None:
@@ -58,7 +54,7 @@ class SimCoalController(object):
             exe = '"' + exe + '"'
         cmd = exe + ' ' + par_file + ' ' + str(num_sims) + ' ' + ploydi
         #TODO - Better way to spot if on Jython on Windows?
-        if sys.platform=="win32" or self.bin_name.endswith(".exe"):
+        if sys.platform == "win32" or self.bin_name.endswith(".exe"):
             #There is no /dev/nul on Windows
             cmd += ' > nul 2>nul'
         else:
@@ -66,10 +62,11 @@ class SimCoalController(object):
         os.system(cmd)
         os.chdir(curr_dir)
 
+
 class _FastSimCoalCommandLine(AbstractCommandline):
     """ Command Line Wrapper for Fastsimcoal
     """
-    def __init__(self, fastsimcoal_dir = None, cmd = 'fastsimcoal', **kwargs):
+    def __init__(self, fastsimcoal_dir=None, cmd='fastsimcoal', **kwargs):
         self.parameters = [
             _Option(["-i", "--ifile", "parfile"], "Name of the parameter file",
                     filename=True, equate=False, is_required=False,
@@ -136,10 +133,10 @@ class _FastSimCoalCommandLine(AbstractCommandline):
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, float)),
             _Option(["-N", "--maxnumsims", "maxnumsims"],
-                     """Maximum number of simulations to perform during
-                     likelihood maximization.""",
-                     filename=False, equate=False, is_required=False,
-                     checker_function=lambda x: isinstance(x, int)),
+                    """Maximum number of simulations to perform during
+                    likelihood maximization.""",
+                    filename=False, equate=False, is_required=False,
+                    checker_function=lambda x: isinstance(x, int)),
             _Option(["-l", "--minnumloops", "minnumloops"],
                     """Minimum number of iteration loops to perform during
                     likelihood maximization.""",
@@ -168,12 +165,13 @@ class _FastSimCoalCommandLine(AbstractCommandline):
                     a given deme.""",
                     filename=False, equate=False, is_required=False,
                     checker_function=lambda x: isinstance(x, int)),
-            _Switch(["-u", "--multiSFS", "multiSFS"], "Generate or use multidimensional SFS")
-            ]
+            _Switch(["-u", "--multiSFS", "multiSFS"],
+                    "Generate or use multidimensional SFS")]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 class FastSimCoalController(object):
-    def __init__(self, fastsimcoal_dir = None, bin_name = "fastsimcoal21"):
+    def __init__(self, fastsimcoal_dir=None, bin_name="fastsimcoal21"):
         """Initializes the controller.
 
         fastsimcoal_dir is the directory where fastsimcoal is.
@@ -201,7 +199,7 @@ class FastSimCoalController(object):
         if not os.access(os.path.join(self.fastsimcoal_dir, self.bin_name), os.X_OK):
             raise IOError("Fastsimcoal not executable")
 
-    def run_fastsimcoal(self, par_file, num_sims, par_dir = '.', opts = {}):
+    def run_fastsimcoal(self, par_file, num_sims, par_dir='.', opts={}):
         """Executes Fastsimcoal.
 
         par_file is the input parameter file (--ifile) for fastsimcoal.
@@ -210,11 +208,12 @@ class FastSimCoalController(object):
         opts is a dictionary of additional options to fastsimcoal.
         """
         if par_dir is None:
-            par_dir = os.sep.join([".","Fastsimcoal","runs"])
-            if not os.path.exists(par_dir): os.mkdir(par_dir)
+            par_dir = os.sep.join([".", "Fastsimcoal", "runs"])
+            if not os.path.exists(par_dir):
+                os.mkdir(par_dir)
         curr_dir = os.getcwd()
         os.chdir(par_dir)
-        if par_file is None: # Must use .tpl for -t instead if no par_file
+        if par_file is None:  # Must use .tpl for -t instead if no par_file
             controller = _FastSimCoalCommandLine(cmd=os.path.join(self.fastsimcoal_dir, self.bin_name),
                                                  numsims=num_sims, **opts)
         else:
@@ -222,4 +221,3 @@ class FastSimCoalController(object):
                                                  parfile=par_file, numsims=num_sims, **opts)
         controller()
         os.chdir(curr_dir)
-
