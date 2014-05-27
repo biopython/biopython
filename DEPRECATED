@@ -591,12 +591,3 @@ Release 1.63.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.
-
-Bio.PopGen.SimCoal
-==================
-The modules Bio.PopGen.SimCoal.Async and Bio.PopGen.SimCoal.Cache were
-deprecated since Release 1.64.
-
-The class SimCoalController in Bio.PopGen.SimCoal.Controller was
-also deprecated in favour of FastSimCoalController (i.e. Simcoal2 was
-deprecated for fastsimcoal).
