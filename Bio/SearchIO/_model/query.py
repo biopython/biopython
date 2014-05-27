@@ -355,7 +355,16 @@ class QueryResult(_BaseSearchObject):
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
-            return list(self._items.values())[hit_key]
+            length = len(self)
+            if 0 <= hit_key < length:
+                for idx, item in enumerate(self._items.itervalues()):
+                    if idx == hit_key:
+                        return item
+            elif -1 * length <= hit_key < 0:
+                for idx, item in enumerate(self._items.itervalues()):
+                    if length + hit_key == idx:
+                        return item
+            raise IndexError("list index out of range")
 
         # if key is a string, then do a regular dictionary retrieval
         return self._items[hit_key]
