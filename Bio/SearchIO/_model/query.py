@@ -367,23 +367,26 @@ class QueryResult(_BaseSearchObject):
         # hit must be a Hit object
         if not isinstance(hit, Hit):
             raise TypeError("QueryResult objects can only contain Hit objects.")
+        qid = self.id
+        hqid = hit.query_id
         # and it must have the same query ID as this object's ID
         # unless it's the query ID is None (default for empty objects), in which
         # case we want to use the hit's query ID as the query ID
-        if self.id is not None:
-            if hit.query_id != self.id:
+        if qid is not None:
+            if hqid != qid:
                 raise ValueError("Expected Hit with query ID %r, found %r "
-                        "instead." % (self.id, hit.query_id))
+                        "instead." % (qid, hqid))
         else:
-            self.id = hit.query_id
+            self.id = hqid
         # same thing with descriptions
-        if self.description is not None:
-            if hit.query_description != self.description:
+        qdesc = self.description
+        hqdesc = hit.query_description
+        if qdesc is not None:
+            if hqdesc != qdesc:
                 raise ValueError("Expected Hit with query description %r, "
-                        "found %r instead." % (self.description,
-                        hit.query_description))
+                        "found %r instead." % (qdesc, hqdesc))
         else:
-            self.description = hit.query_description
+            self.description = hqdesc
 
         self._items[hit_key] = hit
 
