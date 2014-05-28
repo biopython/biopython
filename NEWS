@@ -14,10 +14,10 @@ The latest news is at the top of this file.
 
 The new experimental module Bio.CodonAlign facilitates building codon
 alignment and further analysis upon it. This work is from the Google
-Summer of Code (GSoC) 2013.
+Summer of Code (GSoC) project by Zheng Ruan.
 
 Bio.Phylo now has tree construction and consensus modules, from on the
-Google Summer of Code (GSoC) work by Yanbo Ye.
+GSoC work by Yanbo Ye.
 
 Bio.Entrez will now automatically download and cache new NCBI DTD files for
 XML parsing under the user's home directory (using ``~/.biopython`` on
