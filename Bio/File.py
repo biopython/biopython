@@ -109,6 +109,23 @@ def _open_for_random_access(filename):
         handle.seek(0)
     return handle
 
+@contextlib.contextmanager
+def as_handle_binary(filename):
+    """Use context manager to open a file in binary mode. Also checks BGZF fmt
+
+    This funcationality is used by the Bio.SeqIO and Bio.SearchIO index
+    and index_db functions.
+    """
+    handle = open(filename, "rb")
+    from . import bgzf
+    try:
+        yield bgzf.BgzfReader(mode="rb", fileobj=handle)
+    except ValueError as e:
+        assert "BGZF" in str(e)
+        #Not a BGZF file after all, rewind to start:
+        handle.seek(0)
+    yield handle
+
 
 class UndoHandle(object):
     """A Python handle that adds functionality for saving lines.
