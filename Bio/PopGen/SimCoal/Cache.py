@@ -9,11 +9,7 @@ in case the calculation was done.
 
 import os
 import tarfile
-import warnings
 from .Controller import SimCoalController
-warnings.warn("Bio.PopGen.SimCoal.Cache has been deprecated, and we intend to"
-              " remove it in a future release of Biopython.",
-              DeprecationWarning)
 
 
 class SimCoalCache(object):
@@ -32,12 +28,12 @@ class SimCoalCache(object):
         self.cacheDir = os.sep.join([data_dir, 'SimCoal', 'cache'])
         self.simcoalDir = simcoal_dir
 
-    def run_simcoal(self, par_file, num_sims, ploydi = '1', parDir = None):
+    def run_simcoal(self, par_file, num_sims, ploydi='1', parDir=None):
         if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         par_file_root = par_file[:-4]
         tar_name = os.sep.join([self.cacheDir, ploydi, par_file_root +
-            '.tar.bz2'])
+                                '.tar.bz2'])
         if os.access(tar_name, os.R_OK):
             tf = tarfile.open(tar_name)
             tar_num_sims = len(tf.getmembers()) - 3
@@ -58,7 +54,7 @@ class SimCoalCache(object):
         tf.add(os.sep.join([parDir, par_file_root]), par_file_root)
         tf.close()
 
-    def listSimulations(self, ploidy = '1'):
+    def listSimulations(self, ploidy='1'):
         '''
            Lists available simulations.
         '''
@@ -69,7 +65,7 @@ class SimCoalCache(object):
                 sims.append(file[:-8])
         return sims
 
-    def getSimulation(self, sim_name, ploidy = '1', parDir = None):
+    def getSimulation(self, sim_name, ploidy='1', parDir=None):
         '''
            Makes available a cached simulation.
 
@@ -80,7 +76,7 @@ class SimCoalCache(object):
         if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         tar_name = os.sep.join([self.cacheDir, ploidy, sim_name +
-            '.tar.bz2'])
+                                '.tar.bz2'])
         tf = tarfile.open(tar_name)
         tf.extractall(parDir)
         tf.close()

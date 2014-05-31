@@ -1,0 +1,340 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.1b1 (May 2013); http://hmmer.org/
+# Copyright (C) 2013 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             prot_multi.fa
+# target HMM database:             /home/bow/db/hmmer/protdb/Pfam-A.hmm
+# output directed to file:         hmmscan/text_31b1_hmmscan_001.out
+# per-seq hits tabular output:     hmmscan/tab_31b1_hmmscan_001.out
+# per-dom hits tabular output:     hmmscan/domtab_31b1_hmmscan_001.out
+# pfam-style tabular hit output:   hmmscan/pfamtab_31b1_hmmscan_001.out
+# number of worker threads:        2
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       random_s00  [L=22]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+
+   [No hits detected that satisfy reporting thresholds]
+
+
+Domain annotation for each model (and alignments):
+
+   [No targets detected that satisfy reporting thresholds]
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (22 residues searched)
+Target model(s):                       14831  (2610332 nodes)
+Passed MSV filter:                        57  (0.0038433); expected 296.6 (0.02)
+Passed bias filter:                       44  (0.00296676); expected 296.6 (0.02)
+Passed Vit filter:                         1  (6.74263e-05); expected 14.8 (0.001)
+Passed Fwd filter:                         0  (0); expected 0.1 (1e-05)
+Initial search space (Z):              14831  [actual number of targets]
+Domain search space  (domZ):               0  [number of targets reported over threshold]
+# CPU time: 0.30u 0.23s 00:00:00.53 Elapsed: 00:00:03.04
+# Mc/sec: 18.89
+//
+Query:       gi|4885477|ref|NP_005359.1|  [L=154]
+Description: myoglobin [Homo sapiens]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+      1e-22   80.5   0.3    1.6e-22   79.8   0.3    1.3  1  Globin    Globin
+
+
+Domain annotation for each model (and alignments):
+>> Globin  Globin
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   79.8   0.3   1.1e-26   1.6e-22       1     109 [.       7     112 ..       7     113 .. 0.97
+
+  Alignments for each domain:
+  == domain 1  score: 79.8 bits;  conditional E-value: 1.1e-26
+                                  HHHHHHHHHHHHHTHHHHHHHHHHHHHHHHSGGGGGGSTTTTTTT-HHHHCTSHHHHHHHHHHHHHHHHHHHTTTSHHHHHH CS
+                       Globin   1 dkalvkaswekvkanaeelgaeilkrlFkaypdtkklFkkfgdlssaedlksspkfkahakkvlaalgeavknldndealka 82 
+                                  +++lv   w+kv+a+++ +g+e+l rlFk +p+t ++F kf++l+s +++k s+++k+h+++vl+alg ++k+   ++ ++a
+  gi|4885477|ref|NP_005359.1|   7 EWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKSEDEMKASEDLKKHGATVLTALGGILKK---KGHHEA 85 
+                                  5789*********************************************************************...689*** PP
+
+                                  HHHHHHHHHHTSTT--HHHHHHHHHHH CS
+                       Globin  83 alkklaarHaergkvdpanFklfgeal 109
+                                   +k la++Ha+++k++ ++ + ++e++
+  gi|4885477|ref|NP_005359.1|  86 EIKPLAQSHATKHKIPVKYLEFISECI 112
+                                  ************************998 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (154 residues searched)
+Target model(s):                       14831  (2610332 nodes)
+Passed MSV filter:                       494  (0.0333086); expected 296.6 (0.02)
+Passed bias filter:                      402  (0.0271054); expected 296.6 (0.02)
+Passed Vit filter:                        35  (0.00235992); expected 14.8 (0.001)
+Passed Fwd filter:                         1  (6.74263e-05); expected 0.1 (1e-05)
+Initial search space (Z):              14831  [actual number of targets]
+Domain search space  (domZ):               1  [number of targets reported over threshold]
+# CPU time: 0.38u 0.31s 00:00:00.69 Elapsed: 00:00:03.72
+# Mc/sec: 108.06
+//
+Query:       gi|126362951|ref|NP_001075106.1|  [L=106]
+Description: leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+    9.3e-10   38.8   0.4    1.4e-09   38.3   0.4    1.3  1  Ig_3      Immunoglobulin domain
+    1.6e-06   28.1   0.1      2e-06   27.8   0.1    1.1  1  Ig_2      Immunoglobulin domain
+
+
+Domain annotation for each model (and alignments):
+>> Ig_3  Immunoglobulin domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   38.3   0.4   1.8e-13   1.4e-09       1      73 [.       8      83 ..       8      87 .. 0.95
+
+  Alignments for each domain:
+  == domain 1  score: 38.3 bits;  conditional E-value: 1.8e-13
+                              Ig_3  1 kPvisvspsptvtsggnvtLtCsaeggpppptisWy.....ietppelqgsegssssestLtissvtsedsGtYtCva 73
+                                      kP++s++psp+v+sggnv L+C ++     + +s +     +++   +++++ ++ss +++++ +v+++ +  Y+C+a
+  gi|126362951|ref|NP_001075106.1|  8 KPTLSAQPSPVVNSGGNVILQCDSQVA--FDGFSLCkegedEHPQCLNSQPHARGSSRAIFSVGPVSPSRRWWYRCYA 83
+                                      8************************99..78888888****************************************9 PP
+
+>> Ig_2  Immunoglobulin domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   27.8   0.1   2.6e-10     2e-06       1      80 []       8     103 ..       8     103 .. 0.75
+
+  Alignments for each domain:
+  == domain 1  score: 27.8 bits;  conditional E-value: 2.6e-10
+                              Ig_2   1 kpvlsapp.tvvtegenvtLtCqapgnptpkvqwykdg.....eelsqsqna.......lfipnvsaedsGtYtCra 64 
+                                       kp+lsa+p +vv+ g nv L C ++   ++ +++ k+g     + l++++ a       + +  vs++    Y+C+a
+  gi|126362951|ref|NP_001075106.1|   8 KPTLSAQPsPVVNSGGNVILQCDSQVA-FDGFSLCKEGedehpQCLNSQPHArgssraiFSVGPVSPSRRWWYRCYA 83 
+                                       799**9997779*************86.9*******98643333333333335555553444669************ PP
+
+                              Ig_2  65 ....snsegskqsnsvevtv 80 
+                                           s +e+s +s+ +e+ v
+  gi|126362951|ref|NP_001075106.1|  84 ydsnSPYEWSLPSDLLELLV 103
+                                       88554455699999999876 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (106 residues searched)
+Target model(s):                       14831  (2610332 nodes)
+Passed MSV filter:                       171  (0.0115299); expected 296.6 (0.02)
+Passed bias filter:                      140  (0.00943969); expected 296.6 (0.02)
+Passed Vit filter:                        11  (0.00074169); expected 14.8 (0.001)
+Passed Fwd filter:                         2  (0.000134853); expected 0.1 (1e-05)
+Initial search space (Z):              14831  [actual number of targets]
+Domain search space  (domZ):               2  [number of targets reported over threshold]
+# CPU time: 0.31u 0.24s 00:00:00.55 Elapsed: 00:00:01.22
+# Mc/sec: 226.80
+//
+Query:       gi|22748937|ref|NP_065801.1|  [L=1204]
+Description: exportin-5 [Homo sapiens]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+    8.5e-34  116.6   7.8    1.2e-33  116.1   4.9    2.8  2  Xpo1      Exportin 1-like protein
+     0.0044   16.9   0.0      0.036   13.9   0.0    2.7  2  IBN_N     Importin-beta N-terminal domain
+  ------ inclusion threshold ------
+      0.095   11.7   0.3        1.3    8.0   0.3    2.3  2  Rac1      Rac1-binding domain
+
+
+Domain annotation for each model (and alignments):
+>> Xpo1  Exportin 1-like protein
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  116.1   4.9   2.3e-37   1.2e-33       2     148 .]     110     271 ..     109     271 .. 0.98
+   2 ?   -1.8   0.0      0.52   2.6e+03     112     139 ..     499     525 ..     496     529 .. 0.86
+
+  Alignments for each domain:
+  == domain 1  score: 116.1 bits;  conditional E-value: 2.3e-37
+                                   HHHHHHHHHHHHHHHHHHTTTTSTTHHHHHHHHHCT-HHHHHHHHHHHHHHHHHHCTSXTTCSHHHHHHHHHHHHHHHHHH CS
+                          Xpo1   2 kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqk 82 
+                                   +++++ l+++++e++++e+p++Wp+++ +l  l++++++++el++ iL++l+e++++f  ++l  +rr++++++l++++++
+  gi|22748937|ref|NP_065801.1| 110 NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMER 188
+                                   89******************************************************99..79******************* PP
+
+                                   HHHHHHHHHHHHHHCC...............HHHHHHHHHHHHHHHTTTS-HHHHHSSC..HHHHHHHHTTSCCCHHHHHH CS
+                          Xpo1  83 ilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAve 146
+                                   i+++ll+ l+++v+k+               ++++  a+L++l+ +++w+++++i +++  ll++l+ lLn++el+  A+e
+  gi|22748937|ref|NP_065801.1| 189 IFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAE 269
+                                   **************99*****************************************8889******************** PP
+
+                                   HH CS
+                          Xpo1 147 cL 148
+                                   cL
+  gi|22748937|ref|NP_065801.1| 270 CL 271
+                                   *8 PP
+
+  == domain 2  score: -1.8 bits;  conditional E-value: 0.52
+                                   HHTTTS-HHHHHSSCHHHHHHHHTTSCC CS
+                          Xpo1 112 swvswidiglivnspllsllfqlLndpe 139
+                                   s+v+w  ++l+++s +++ +f+ Ln++e
+  gi|22748937|ref|NP_065801.1| 499 SFVQWEAMTLFLES-VITQMFRTLNREE 525
+                                   899*********98.8888899998776 PP
+
+>> IBN_N  Importin-beta N-terminal domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   13.9   0.0   7.3e-06     0.036       4      75 ..      36      98 ..      33     100 .. 0.87
+   2 ?   -3.5   0.0         2     1e+04      57      74 ..     168     185 ..     165     186 .. 0.84
+
+  Alignments for each domain:
+  == domain 1  score: 13.9 bits;  conditional E-value: 7.3e-06
+                                  HHHHHHHSTTHHHHHHHHHHHTTTSTHHHHHHHHHHHHHHHHHSCCHHHHHHHHCSSHHHHHHHHHHHHHHH CS
+                         IBN_N  4 qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll 75
+                                   ++++++  P ++++ l+++ +k+    vR++++++L++ ++ +W+         ++  ek +++n++ +l+
+  gi|22748937|ref|NP_065801.1| 36 FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI 98
+                                  56788886699*********.6555899******************........999999****99999887 PP
+
+  == domain 2  score: -3.5 bits;  conditional E-value: 2
+                                   HCSSHHHHHHHHHHHHHH CS
+                         IBN_N  57 qqlpeeekelIrnnllnl 74 
+                                   q+lp++ + +I ++l + 
+  gi|22748937|ref|NP_065801.1| 168 QTLPPQRRRDIQQTLTQN 185
+                                   6899*******9999876 PP
+
+>> Rac1  Rac1-binding domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    8.0   0.3   0.00026       1.3      94     171 ..      89     169 ..      82     254 .. 0.75
+   2 ?    0.8   0.0     0.041     2e+02     150     181 ..     310     341 ..     296     354 .. 0.82
+
+  Alignments for each domain:
+  == domain 1  score: 8.0 bits;  conditional E-value: 0.00026
+                          Rac1  94 qlrsnimksvvepslkriqkqldqshslvdia..slerar.khletllevlvtlsqqgekvssevydflyrlaevkvslsv 171
+                                   +l++ +m  +++ +l+ ++++     +l+ i    ++r   +h   +l  l tls+qge  +  v  +l rlae  v++  
+  gi|22748937|ref|NP_065801.1|  89 YLKNSVMELIANGTLNILEEENHIKDALSRIVveMIKREWpQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTFQT 169
+                                   788899999******9998766666666666511555543499*9*****************999999******9888642 PP
+
+  == domain 2  score: 0.8 bits;  conditional E-value: 0.041
+                          Rac1 150 kvssevydflyrlaevkvslsvrldtlkqqqe 181
+                                    +  + y fl+rl +v  +l+ +l +l + + 
+  gi|22748937|ref|NP_065801.1| 310 GLVEKHYVFLKRLCQVLCALGNQLCALLGADS 341
+                                   556678******************99977665 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (1204 residues searched)
+Target model(s):                       14831  (2610332 nodes)
+Passed MSV filter:                       567  (0.0382307); expected 296.6 (0.02)
+Passed bias filter:                      414  (0.0279145); expected 296.6 (0.02)
+Passed Vit filter:                        32  (0.00215764); expected 14.8 (0.001)
+Passed Fwd filter:                         3  (0.000202279); expected 0.1 (1e-05)
+Initial search space (Z):              14831  [actual number of targets]
+Domain search space  (domZ):               3  [number of targets reported over threshold]
+# CPU time: 0.78u 0.28s 00:00:01.06 Elapsed: 00:00:03.60
+# Mc/sec: 873.01
+//
+Query:       gi|125490392|ref|NP_038661.2|  [L=352]
+Description: POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model       Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------    -----------
+    7.6e-37  124.8   0.5    1.5e-36  123.9   0.5    1.5  1  Pou          Pou domain - N-terminal to homeobox domain
+    1.8e-18   65.8   1.1    3.4e-18   64.9   1.1    1.5  1  Homeobox     Homeobox domain
+  ------ inclusion threshold ------
+      0.013   15.6   0.0       0.18   12.0   0.0    2.2  2  HTH_31       Helix-turn-helix domain
+      0.043   13.5   0.0        0.1   12.2   0.0    1.6  1  Homeobox_KN  Homeobox KN domain
+       0.15   10.5   0.1       0.28    9.6   0.1    1.4  1  DUF521       Protein of unknown function (DUF521)
+
+
+Domain annotation for each model (and alignments):
+>> Pou  Pou domain - N-terminal to homeobox domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  123.9   0.5     5e-40   1.5e-36       3      75 .]     133     205 ..     131     205 .. 0.97
+
+  Alignments for each domain:
+  == domain 1  score: 123.9 bits;  conditional E-value: 5e-40
+                            Pou   3 eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae 75 
+                                    ++ ++ele+fak +kq+ri+Lg+tqadvg +lg+l+Gk+fsqttIcrFEalqLslknmckL+pllekW+eea+
+  gi|125490392|ref|NP_038661.2| 133 KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD 205
+                                    67899******************************************************************96 PP
+
+>> Homeobox  Homeobox domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   64.9   1.1   1.2e-21   3.4e-18       1      57 []     224     280 ..     224     280 .. 0.98
+
+  Alignments for each domain:
+  == domain 1  score: 64.9 bits;  conditional E-value: 1.2e-21
+                                    TT--SS--HHHHHHHHHHHHHSSS--HHHHHHHHHHCTS-HHHHHHHHHHHHHHHHC CS
+                       Homeobox   1 rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk 57 
+                                    +rkRt++++     Le++F k+++ps ++++++A++lgL++++V+vWF+NrR+k k+
+  gi|125490392|ref|NP_038661.2| 224 KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR 280
+                                    79****************************************************997 PP
+
+>> HTH_31  Helix-turn-helix domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   5.9e-05      0.18       1      35 [.     141     181 ..     141     185 .. 0.95
+   2 ?    0.9   0.0      0.18   5.3e+02      39      62 ..     245     268 ..     243     270 .. 0.85
+
+  Alignments for each domain:
+  == domain 1  score: 12.0 bits;  conditional E-value: 5.9e-05
+                         HTH_31   1 aLGarLralReraGLsqeevAerag......vSastlsriE 35 
+                                    +++ +L++ R + G +q++v+  +g      +S++t++r E
+  gi|125490392|ref|NP_038661.2| 141 QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE 181
+                                    7999**************************99*******99 PP
+
+  == domain 2  score: 0.9 bits;  conditional E-value: 0.18
+                         HTH_31  39 rgrpslavlaalaralgldeaera 62 
+                                    ++ psl++++ +a+ lgl+ + ++
+  gi|125490392|ref|NP_038661.2| 245 CPKPSLQQITHIANQLGLEKDVVR 268
+                                    678**************9988765 PP
+
+>> Homeobox_KN  Homeobox KN domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.2   0.0   3.5e-05       0.1       7      39 ..     244     276 ..     241     277 .. 0.91
+
+  Alignments for each domain:
+  == domain 1  score: 12.2 bits;  conditional E-value: 3.5e-05
+                    Homeobox_KN   7 hnPYPskevkeelakqTglsrkqidnWFiNaRr 39 
+                                    + P Ps +++  +a+q gl  + +  WF N R 
+  gi|125490392|ref|NP_038661.2| 244 KCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQ 276
+                                    56779*************************996 PP
+
+>> DUF521  Protein of unknown function (DUF521)
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    9.6   0.1   9.4e-05      0.28     273     334 ..     221     280 ..     197     294 .. 0.77
+
+  Alignments for each domain:
+  == domain 1  score: 9.6 bits;  conditional E-value: 9.4e-05
+                         DUF521 273 adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk 334
+                                    + +++ + +++++   +++ ++l cP  sl++++++a++l  +k    v+++ +  r+  ++
+  gi|125490392|ref|NP_038661.2| 221 QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR 280
+                                    345666667778888899************************99..9999999988876554 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (352 residues searched)
+Target model(s):                       14831  (2610332 nodes)
+Passed MSV filter:                       663  (0.0447037); expected 296.6 (0.02)
+Passed bias filter:                      493  (0.0332412); expected 296.6 (0.02)
+Passed Vit filter:                        45  (0.00303419); expected 14.8 (0.001)
+Passed Fwd filter:                         5  (0.000337132); expected 0.1 (1e-05)
+Initial search space (Z):              14831  [actual number of targets]
+Domain search space  (domZ):               5  [number of targets reported over threshold]
+# CPU time: 0.43u 0.33s 00:00:00.76 Elapsed: 00:00:04.08
+# Mc/sec: 225.21
+//
+[ok]

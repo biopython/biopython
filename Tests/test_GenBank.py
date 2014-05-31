@@ -23,9 +23,6 @@ from Bio.GenBank import utils
 
 from Bio.Alphabet import _get_base_alphabet, ProteinAlphabet
 
-#TODO - Test we get the warnings we expect on the bad input files
-warnings.simplefilter('ignore', BiopythonParserWarning)
-
 gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
@@ -73,7 +70,10 @@ for parser in all_parsers:
         iterator = GenBank.Iterator(handle, parser)
 
         while True:
-            cur_record = next(iterator)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                #e.g. BiopythonParserWarning: Premature end of file in sequence data
+                cur_record = next(iterator)
 
             if cur_record is None:
                 break

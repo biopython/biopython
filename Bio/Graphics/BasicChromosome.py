@@ -659,11 +659,11 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 end = f.location.end
                 strand = f.strand
                 try:
-                    #Mimic the GenomeDiagram code
-                    color = _color_trans.artemis_color(
-                                             f.qualifiers['color'][0])
+                    #Handles Artemis colour integers, HTML colors, etc
+                    color = _color_trans.translate(f.qualifiers['color'][0])
                 except:
                     color = self.default_feature_color
+                fill_color = color
                 name = ""
                 for qualifier in self.name_qualifiers:
                     if qualifier in f.qualifiers:

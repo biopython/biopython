@@ -603,7 +603,8 @@ class SummaryInfo(object):
         return total_info
 
     def get_column(self, col):
-        return self.alignment.get_column(col)
+        #TODO - Deprecate this and implement slicing?
+        return self.alignment[:, col]
 
 
 class PSSM(object):

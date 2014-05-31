@@ -97,7 +97,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
                 prev_qid = cur_qid
                 prev_hid = cur_hid
             # only parse the line if it's not EOF
-            if self.line:
+            if self.line and not self.line.startswith('#'):
                 cur = self._parse_row()
                 cur_qid = cur['qresult']['id']
                 cur_hid = cur['hit']['id']

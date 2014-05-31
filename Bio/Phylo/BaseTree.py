@@ -235,7 +235,7 @@ class TreeElement(object):
             return "%s=%s" % (key, val)
         return u'%s(%s)' % (self.__class__.__name__,
                             ', '.join(pair_as_kwarg_string(key, val)
-                                  for key, val in self.__dict__.items()
+                                  for key, val in sorted(self.__dict__.items())
                                   if val is not None and
                                   type(val) in (str, int, float, bool, unicode)
                                   ))

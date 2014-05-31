@@ -8,6 +8,8 @@ from __future__ import print_function
 import os
 import platform
 import unittest
+import tempfile
+import time
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
@@ -17,7 +19,6 @@ from Bio._py3k import basestring
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
 import warnings
 from Bio import BiopythonWarning
-warnings.simplefilter('ignore', BiopythonWarning)
 
 # local stuff
 from Bio import MissingExternalDependencyError
@@ -39,6 +40,19 @@ global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
 global SYSTEM
 
 SYSTEM = platform.system()
+
+def temp_db_filename():
+    # In memory SQLite does not work with current test structure since the tests
+    # expect databases to be retained between individual tests.
+    # TESTDB = ':memory:'
+    # Instead, we use (if we can) /dev/shm
+    try:
+        h, test_db_fname = tempfile.mkstemp("_BioSQL.db", dir='/dev/shm')
+    except OSError:
+        # We can't use /dev/shm
+        h, test_db_fname = tempfile.mkstemp("_BioSQL.db")
+    os.close(h)
+    return test_db_fname
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
@@ -114,7 +128,6 @@ def _do_db_create():
         # with Postgres, can get errors about database still being used and
         # not able to be dropped. Wait briefly to be sure previous tests are
         # done with it.
-        import time
         time.sleep(1)
 
         sql = r"DROP DATABASE " + TESTDB
@@ -126,6 +139,7 @@ def _do_db_create():
     except (server.module.IntegrityError,
             server.module.ProgrammingError) as e:  # ditto--perhaps
         if str(e).find('database "%s" does not exist' % TESTDB) == -1:
+            server.close()
             raise
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
@@ -136,8 +150,22 @@ def _do_db_create():
 def create_database():
     """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
     if DBDRIVER in ["sqlite3"]:
+        global TESTDB
         if os.path.exists(TESTDB):
-            os.remove(TESTDB)
+            try:
+                os.remove(TESTDB)
+            except:
+                time.sleep(1)
+                try:
+                    os.remove(TESTDB)
+                except:
+                    # Seen this with PyPy 2.1 (and older) on Windows -
+                    # which suggests an open handle still exists?
+                    print("Could not remove %r" % TESTDB)
+                    pass
+        # Now pick a new filename - just in case there is a stale handle
+        # (which might be happening under Windows...)
+        TESTDB = temp_db_filename()
     else:
         _do_db_create()
 
@@ -145,9 +173,14 @@ def create_database():
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                           user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST, db = TESTDB)
-    server.load_database_sql(SQL_FILE)
-    server.commit()
-    server.close()
+    try:
+        server.load_database_sql(SQL_FILE)
+        server.commit()
+        server.close()
+    except:
+        # Failed, but must close the handle...
+        server.close()
+        raise
 
 
 def destroy_database():
@@ -157,7 +190,7 @@ def destroy_database():
             os.remove(TESTDB)
 
 
-def load_database(gb_handle):
+def load_database(gb_filename_or_handle):
     """Load a GenBank file into a new BioSQL database.
 
     This is useful for running tests against a newly created database.
@@ -172,7 +205,7 @@ def load_database(gb_handle):
     db = server.new_database(db_name)
 
     # get the GenBank file we are going to put into it
-    iterator = SeqIO.parse(gb_handle, "gb")
+    iterator = SeqIO.parse(gb_filename_or_handle, "gb")
     # finally put it in the database
     count = db.load(iterator)
     server.commit()
@@ -188,10 +221,7 @@ class ReadTest(unittest.TestCase):
     def setUp(self):
         """Connect to and load up the database.
         """
-        gb_file = "GenBank/cor6_6.gb"
-        gb_handle = open(gb_file, "r")
-        load_database(gb_handle)
-        gb_handle.close()
+        load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER,
@@ -274,10 +304,7 @@ class SeqInterfaceTest(unittest.TestCase):
     def setUp(self):
         """Load a database.
         """
-        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file, "r")
-        load_database(gb_handle)
-        gb_handle.close()
+        load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER, passwd = DBPASSWD,
@@ -414,9 +441,7 @@ class LoaderTest(unittest.TestCase):
         self.db = self.server.new_database(db_name)
 
         # get the GenBank file we are going to put into it
-        input_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        handle = open(input_file, "r")
-        self.iterator = SeqIO.parse(handle, "gb")
+        self.iterator = SeqIO.parse("GenBank/cor6_6.gb", "gb")
 
     def tearDown(self):
         self.server.close()
@@ -550,7 +575,7 @@ class ClosedLoopTest(unittest.TestCase):
         self.loop("GenBank/arab1.gb", "gb")
 
     def loop(self, filename, format):
-        original_records = list(SeqIO.parse(open(filename, "rU"), format))
+        original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
@@ -580,6 +605,7 @@ class ClosedLoopTest(unittest.TestCase):
                     del old.annotations[key]
             self.assertTrue(compare_record(old, new))
         #Done
+        handle.close()
         server.close()
 
 
@@ -624,7 +650,7 @@ class TransferTest(unittest.TestCase):
         self.trans("GenBank/arab1.gb", "gb")
 
     def trans(self, filename, format):
-        original_records = list(SeqIO.parse(open(filename, "rU"), format))
+        original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
@@ -661,9 +687,7 @@ class InDepthLoadTest(unittest.TestCase):
     """
     def setUp(self):
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file, "r")
-        load_database(gb_handle)
-        gb_handle.close()
+        load_database(gb_file)
 
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER, passwd = DBPASSWD,
@@ -807,12 +831,12 @@ class AutoSeqIOTests(unittest.TestCase):
     def check(self, t_format, t_filename, t_count=1):
         db = self.db
 
-        iterator = SeqIO.parse(handle=open(t_filename, "r"), format=t_format)
+        iterator = SeqIO.parse(t_filename, t_format)
         count = db.load(iterator)
         assert count == t_count
         self.server.commit()
 
-        iterator = SeqIO.parse(handle=open(t_filename, "r"), format=t_format)
+        iterator = SeqIO.parse(t_filename, t_format)
         for record in iterator:
             #print(" - %s, %s" % (checksum_summary(record), record.id))
             key = record.name
@@ -884,13 +908,19 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('genbank', 'GenBank/iro.gb')
         self.check('genbank', 'GenBank/pri1.gb')
         self.check('genbank', 'GenBank/arab1.gb')
-        self.check('genbank', 'GenBank/protein_refseq2.gb')
+        with warnings.catch_warnings():
+            #BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.check('genbank', 'GenBank/protein_refseq2.gb')
         self.check('genbank', 'GenBank/extra_keywords.gb')
         self.check('genbank', 'GenBank/one_of.gb')
         self.check('genbank', 'GenBank/NT_019265.gb')
         self.check('genbank', 'GenBank/origin_line.gb')
         self.check('genbank', 'GenBank/blank_seq.gb')
-        self.check('genbank', 'GenBank/dbsource_wrap.gb')
+        with warnings.catch_warnings():
+            #BiopythonWarning: bond location operators are not fully supported
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.check('genbank', 'GenBank/dbsource_wrap.gb')
         self.check('genbank', 'GenBank/NC_005816.gb')
         self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
         self.check('genbank', 'GFF/NC_001422.gbk')

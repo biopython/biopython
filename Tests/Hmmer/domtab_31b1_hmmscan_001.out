@@ -1,0 +1,28 @@
+#                                                                            --- full sequence --- -------------- this domain -------------   hmm coord   ali coord   env coord
+# target name        accession   tlen query name           accession   qlen   E-value  score  bias   #  of  c-Evalue  i-Evalue  score  bias  from    to  from    to  from    to  acc description of target
+#------------------- ---------- ----- -------------------- ---------- ----- --------- ------ ----- --- --- --------- --------- ------ ----- ----- ----- ----- ----- ----- ----- ---- ---------------------
+Globin               PF00042.17   110 gi|4885477|ref|NP_005359.1| -            154     1e-22   80.5   0.3   1   1   1.1e-26   1.6e-22   79.8   0.3     1   109     7   112     7   113 0.97 Globin
+Ig_3                 PF13927.1     75 gi|126362951|ref|NP_001075106.1| -            106   9.3e-10   38.8   0.4   1   1   1.8e-13   1.4e-09   38.3   0.4     1    73     8    83     8    87 0.95 Immunoglobulin domain
+Ig_2                 PF13895.1     80 gi|126362951|ref|NP_001075106.1| -            106   1.6e-06   28.1   0.1   1   1   2.6e-10     2e-06   27.8   0.1     1    80     8   103     8   103 0.75 Immunoglobulin domain
+Xpo1                 PF08389.7    148 gi|22748937|ref|NP_065801.1| -           1204   8.5e-34  116.6   7.8   1   2   2.3e-37   1.2e-33  116.1   4.9     2   148   110   271   109   271 0.98 Exportin 1-like protein
+Xpo1                 PF08389.7    148 gi|22748937|ref|NP_065801.1| -           1204   8.5e-34  116.6   7.8   2   2      0.52   2.6e+03   -1.8   0.0   112   139   499   525   496   529 0.86 Exportin 1-like protein
+IBN_N                PF03810.14    77 gi|22748937|ref|NP_065801.1| -           1204    0.0044   16.9   0.0   1   2   7.3e-06     0.036   13.9   0.0     4    75    36    98    33   100 0.87 Importin-beta N-terminal domain
+IBN_N                PF03810.14    77 gi|22748937|ref|NP_065801.1| -           1204    0.0044   16.9   0.0   2   2         2     1e+04   -3.5   0.0    57    74   168   185   165   186 0.84 Importin-beta N-terminal domain
+Rac1                 PF09632.5    297 gi|22748937|ref|NP_065801.1| -           1204     0.095   11.7   0.3   1   2   0.00026       1.3    8.0   0.3    94   171    89   169    82   254 0.75 Rac1-binding domain
+Rac1                 PF09632.5    297 gi|22748937|ref|NP_065801.1| -           1204     0.095   11.7   0.3   2   2     0.041     2e+02    0.8   0.0   150   181   310   341   296   354 0.82 Rac1-binding domain
+Pou                  PF00157.12    75 gi|125490392|ref|NP_038661.2| -            352   7.6e-37  124.8   0.5   1   1     5e-40   1.5e-36  123.9   0.5     3    75   133   205   131   205 0.97 Pou domain - N-terminal to homeobox domain
+Homeobox             PF00046.24    57 gi|125490392|ref|NP_038661.2| -            352   1.8e-18   65.8   1.1   1   1   1.2e-21   3.4e-18   64.9   1.1     1    57   224   280   224   280 0.98 Homeobox domain
+HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -            352     0.013   15.6   0.0   1   2   5.9e-05      0.18   12.0   0.0     1    35   141   181   141   185 0.95 Helix-turn-helix domain
+HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -            352     0.013   15.6   0.0   2   2      0.18   5.3e+02    0.9   0.0    39    62   245   268   243   270 0.85 Helix-turn-helix domain
+Homeobox_KN          PF05920.6     40 gi|125490392|ref|NP_038661.2| -            352     0.043   13.5   0.0   1   1   3.5e-05       0.1   12.2   0.0     7    39   244   276   241   277 0.91 Homeobox KN domain
+DUF521               PF04412.8    400 gi|125490392|ref|NP_038661.2| -            352      0.15   10.5   0.1   1   1   9.4e-05      0.28    9.6   0.1   273   334   221   280   197   294 0.77 Protein of unknown function (DUF521)
+#
+# Program:         hmmscan
+# Version:         3.1b1 (May 2013)
+# Pipeline mode:   SCAN
+# Query file:      prot_multi.fa
+# Target file:     /home/bow/db/hmmer/protdb/Pfam-A.hmm
+# Option settings: hmmscan -o hmmscan/text_31b1_hmmscan_001.out --tblout hmmscan/tab_31b1_hmmscan_001.out --domtblout hmmscan/domtab_31b1_hmmscan_001.out --pfamtblout hmmscan/pfamtab_31b1_hmmscan_001.out --cpu 2 /home/bow/db/hmmer/protdb/Pfam-A.hmm prot_multi.fa 
+# Current dir:     /home/bow/devel/sandbox/biopy_cases
+# Date:            Sun May 11 21:26:57 2014
+# [ok]

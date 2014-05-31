@@ -62,8 +62,10 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import Motif
-    >>> for motif in Motif.parse(open("Motif/alignace.out"), "AlignAce"):
-    ...     print(motif.consensus())
+    >>> with open("Motif/alignace.out") as handle:
+    ...     for motif in Motif.parse(handle, "AlignAce"):
+    ...         print(motif.consensus())
+    ...
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
     GTGCCCTAAGCATACTAGGCG
@@ -103,14 +105,18 @@ def read(handle, format):
     reading a pfm file:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/SRF.pfm"), "jaspar-pfm")
+    >>> with open("Motif/SRF.pfm") as handle:
+    ...     motif = Motif.read(handle, "jaspar-pfm")
+    ...
     >>> motif.consensus()
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import Motif
-    >>> motif =  Motif.read(open("Motif/meme.out"), "MEME")
+    >>> with open("Motif/meme.out") as handle:
+    ...     motif =  Motif.read(handle, "MEME")
+    ...
     >>> motif.consensus()
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -118,7 +124,9 @@ def read(handle, format):
     an exception is raised:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/alignace.out"), "AlignAce")
+    >>> with open("Motif/alignace.out") as handle:
+    ...     motif = Motif.read(handle, "AlignAce")
+    ...
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -128,7 +136,9 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import Motif
-    >>> motif = next(Motif.parse(open("Motif/alignace.out"), "AlignAce"))
+    >>> with open("Motif/alignace.out") as handle:
+    ...    motif = next(Motif.parse(handle, "AlignAce"))
+    ...
     >>> motif.consensus()
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
@@ -151,23 +161,6 @@ def read(handle, format):
     return first
 
 
-def _test():
-    """Run the Bio.Motif module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print("Runing doctests...")
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print("Done")
-
 if __name__ == "__main__":
-    #Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

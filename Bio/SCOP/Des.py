@@ -37,7 +37,7 @@ class Record(object):
         self.nodetype = ''
         self.sccs = ''
         self.name = ''
-        self.description =''
+        self.description = ''
         if line:
             self._process(line)
 

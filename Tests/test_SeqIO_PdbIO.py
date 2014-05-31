@@ -20,9 +20,6 @@ except ImportError:
 from Bio import SeqIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
-warnings.simplefilter('ignore', PDBConstructionWarning)
-
-
 class TestPdbSeqres(unittest.TestCase):
     def test_seqres_parse(self):
         """Parse a multi-chain PDB by SEQRES entries.
@@ -72,7 +69,9 @@ class TestPdbAtom(unittest.TestCase):
             self.assertEqual(chain.annotations['chain'], chn_id)
             self.assertEqual(str(chain.seq), actual_seq)
 
-        chains = list(SeqIO.parse('PDB/2XHE.pdb', 'pdb-atom'))
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            chains = list(SeqIO.parse('PDB/2XHE.pdb', 'pdb-atom'))
         actual_seq = 'DRLSRLRQMAAENQXXXXXXXXXXXXXXXXXXXXXXXPEPFMADFFNRVK'\
                      'RIRDNIEDIEQAIEQVAQLHTESLVAVSKEDRDRLNEKLQDTMARISALG'\
                      'NKIRADLKQIEKENKRAQQEGTFEDGTVSTDLRIRQSQHSSLSRKFVKVM'\
@@ -94,7 +93,9 @@ class TestPdbAtom(unittest.TestCase):
         self.assertEqual(str(chain.seq),
                          'MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL'
                          'KALGPGATLEEMMTACQG')
-        chain = SeqIO.read('PDB/a_structure.pdb', 'pdb-atom')
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            chain = SeqIO.read('PDB/a_structure.pdb', 'pdb-atom')
         self.assertEqual(chain.id, '????:A')
         self.assertEqual(chain.annotations['chain'], 'A')
         self.assertEqual(str(chain.seq), 'E')

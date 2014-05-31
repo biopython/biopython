@@ -4,8 +4,9 @@
 # as part of this package.
 """Python 3 compatibility tools (PRIVATE).
 
-We currently have lines like this under Python 2 in order
-to use iterator based zip, map and filter:
+We used to have lines like this under Python 2 in order to use
+iterator based zip, map and filter (in Python 3 these functions
+are all iterator based):
 
     from future_builtins import zip
 
@@ -19,7 +20,7 @@ or:
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
-Under Python 3 this imports need to be removed. Also, deliberate
+Under Python 3 these imports need to be removed. Also, deliberate
 importing of built in functions like open changes from Python 2:
 
     from __builtin__ import open
@@ -115,6 +116,9 @@ if sys.version_info[0] >= 3:
 
         return EvilHandleHack(handle)
 
+    #This is to avoid the deprecation warning from open(filename, "rU")
+    _universal_read_mode = "r" # text mode does universal new lines
+
     #On Python 3, can depend on OrderedDict being present:
     from collections import OrderedDict
 
@@ -158,6 +162,10 @@ else:
     def _binary_to_string_handle(handle):
         """Treat a binary handle like a text handle."""
         return handle
+
+    # This private variable is set to "r" on Python 3 for text
+    # mode which include universal readlines mode
+    _universal_read_mode = "rU"
 
     try:
         #Present on Python 2.7

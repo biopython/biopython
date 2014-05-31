@@ -72,7 +72,17 @@ def get_emboss_version():
     del child
     assert stderr is None  # Send to stdout instead
     for line in stdout.split("\n"):
-        if line.strip()=="Reports the current EMBOSS version number":
+        if line.strip()=="Report the current EMBOSS version number":
+            # e.g.
+            # $ embossversion
+            # Report the current EMBOSS version number
+            # 6.5.7.0
+            pass
+        elif line.strip()=="Reports the current EMBOSS version number":
+            # e.g.
+            # $ embossversion
+            # Reports the current EMBOSS version number
+            # 6.3.1
             pass
         elif line.startswith("Writes the current EMBOSS version number"):
             pass

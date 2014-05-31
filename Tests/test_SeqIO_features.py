@@ -13,6 +13,7 @@ from __future__ import print_function
 import os
 import unittest
 from Bio._py3k import StringIO
+from Bio._py3k import _universal_read_mode
 
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
@@ -193,7 +194,7 @@ def make_join_feature(f_list, ftype="misc_feature"):
 
 #Prepare a single GenBank record with one feature with a %s place holder for
 #the feature location
-with open("GenBank/iro.gb", "rU") as handle:
+with open("GenBank/iro.gb", _universal_read_mode) as handle:
     gbk_template = handle.read()
 gbk_template = gbk_template.replace('     gene            341..756\n'
                                     '                     /gene="FTCD"\n',

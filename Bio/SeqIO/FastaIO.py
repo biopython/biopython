@@ -27,8 +27,10 @@ def SimpleFastaParser(handle):
     whitespace removed). The title line is not divided up into an
     identifier (the first word) and comment or description.
 
-    >>> for values in SimpleFastaParser(open("Fasta/dups.fasta")):
-    ...     print(values)
+    >>> with open("Fasta/dups.fasta") as handle:
+    ...     for values in SimpleFastaParser(handle):
+    ...         print(values)
+    ...
     ('alpha', 'ACGTA')
     ('beta', 'CGTC')
     ('gamma', 'CCGCC')
@@ -85,8 +87,10 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     By default this will act like calling Bio.SeqIO.parse(handle, "fasta")
     with no custom handling of the title lines:
 
-    >>> for record in FastaIterator(open("Fasta/dups.fasta")):
-    ...     print(record.id)
+    >>> with open("Fasta/dups.fasta") as handle:
+    ...     for record in FastaIterator(handle):
+    ...         print(record.id)
+    ...
     alpha
     beta
     gamma
@@ -97,8 +101,10 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     >>> def take_upper(title):
     ...     return title.split(None, 1)[0].upper(), "", title
-    >>> for record in FastaIterator(open("Fasta/dups.fasta"), title2ids=take_upper):
-    ...     print(record.id)
+    >>> with open("Fasta/dups.fasta") as handle:
+    ...     for record in FastaIterator(handle, title2ids=take_upper):
+    ...         print(record.id)
+    ...
     ALPHA
     BETA
     GAMMA
@@ -140,19 +146,24 @@ class FastaWriter(SequentialSequenceWriter):
                  is used.  If the record.description starts with the
                  record.id, then just the record.description is used.
 
-        You can either use:
+        You can either use::
 
-        myWriter = FastaWriter(open(filename,"w"))
-        writer.write_file(myRecords)
+            handle = open(filename, "w")
+            myWriter = FastaWriter(handle)
+            writer.write_file(myRecords)
+            handle.close()
 
         Or, follow the sequential file writer system, for example:
 
-        myWriter = FastaWriter(open(filename,"w"))
-        writer.write_header() # does nothing for Fasta files
-        ...
-        Multiple calls to writer.write_record() and/or writer.write_records()
-        ...
-        writer.write_footer() # does nothing for Fasta files
+            handle = open(filename, "w")
+            myWriter = FastaWriter(handle)
+            writer.write_header() # does nothing for Fasta files
+            ...
+            Multiple calls to writer.write_record() and/or writer.write_records()
+            ...
+            writer.write_footer() # does nothing for Fasta files
+            handle.close()
+
         """
         SequentialSequenceWriter.__init__(self, handle)
         #self.handle = handle
@@ -233,7 +244,8 @@ if __name__ == "__main__":
     if os.path.isfile(fna_filename):
         print("--------")
         print("FastaIterator (single sequence)")
-        iterator = FastaIterator(open(fna_filename, "r"), alphabet=generic_nucleotide, title2ids=genbank_name_function)
+        with open(fna_filename, "r") as h:
+            iterator = FastaIterator(h, alphabet=generic_nucleotide, title2ids=genbank_name_function)
         count = 0
         for record in iterator:
             count += 1
@@ -244,7 +256,8 @@ if __name__ == "__main__":
     if os.path.isfile(faa_filename):
         print("--------")
         print("FastaIterator (multiple sequences)")
-        iterator = FastaIterator(open(faa_filename, "r"), alphabet=generic_protein, title2ids=genbank_name_function)
+        with open(faa_filename, "r") as h:
+            iterator = FastaIterator(h, alphabet=generic_protein, title2ids=genbank_name_function)
         count = 0
         for record in iterator:
             count += 1

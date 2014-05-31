@@ -116,7 +116,7 @@ class Hmmer3TextParser(object):
             }
 
             # get description and accession, if they exist
-            desc = '' # placeholder
+            qdesc = '<unknown description>' # placeholder
             while not self.line.startswith('Scores for '):
                 self.line = read_forward(self.handle)
 
@@ -124,12 +124,12 @@ class Hmmer3TextParser(object):
                     acc = self.line.strip().split(' ', 1)[1]
                     qresult_attrs['accession'] = acc.strip()
                 elif self.line.startswith('Description:'):
-                    desc = self.line.strip().split(' ', 1)[1]
-                    qresult_attrs['description'] = desc.strip()
+                    qdesc = self.line.strip().split(' ', 1)[1].strip()
+                    qresult_attrs['description'] = qdesc
 
             # parse the query hits
             while self.line and '//' not in self.line:
-                hit_list = self._parse_hit(qid)
+                hit_list = self._parse_hit(qid, qdesc)
                 # read through the statistics summary
                 # TODO: parse and store this information?
                 if self.line.startswith('Internal pipeline'):
@@ -139,17 +139,18 @@ class Hmmer3TextParser(object):
             # create qresult, set its attributes and yield
             # not initializing hit_list directly to handle empty hits
             # (i.e. need to set its query description manually)
-            qresult = QueryResult(id=qid)
-            for hit in hit_list:
-                if not hit:
-                    hit.query_description = qresult.description
-                qresult.append(hit)
+            qresult = QueryResult(id=qid, hits=hit_list)
             for attr, value in qresult_attrs.items():
                 setattr(qresult, attr, value)
             yield qresult
             self.line = read_forward(self.handle)
 
-    def _parse_hit(self, qid):
+            # HMMER >= 3.1 outputs '[ok]' at the end of all results file,
+            # which means we can break the main loop when we see the line
+            if '[ok]' in self.line:
+                break
+
+    def _parse_hit(self, qid, qdesc):
         """Parses a HMMER3 hit block, beginning with the hit table."""
         # get to the end of the hit table delimiter and read one more line
         self._read_until(lambda line:
@@ -178,7 +179,7 @@ class Hmmer3TextParser(object):
                         assert len(hit_attr_list) == 0
                         return []
             elif self.line.startswith('Domain annotation for each '):
-                hit_list = self._create_hits(hit_attr_list, qid)
+                hit_list = self._create_hits(hit_attr_list, qid, qdesc)
                 return hit_list
             # entering hit results row
             # parse the columns into a list
@@ -208,7 +209,7 @@ class Hmmer3TextParser(object):
 
             self.line = read_forward(self.handle)
 
-    def _create_hits(self, hit_attrs, qid):
+    def _create_hits(self, hit_attrs, qid, qdesc):
         """Parses a HMMER3 hsp block, beginning with the hsp table."""
         # read through until the beginning of the hsp block
         self._read_until(lambda line: line.startswith('Internal pipeline')
@@ -245,6 +246,8 @@ class Hmmer3TextParser(object):
                     hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
                         setattr(hit, attr, value)
+                    if not hit:
+                        hit.query_description = qdesc
                     hit_list.append(hit)
                     break
 

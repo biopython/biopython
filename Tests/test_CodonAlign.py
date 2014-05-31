@@ -11,7 +11,13 @@ import tempfile
 import platform
 import unittest
 
-from Bio import CodonAlign, SeqIO, AlignIO
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+   from Bio import CodonAlign, SeqIO, AlignIO
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
@@ -85,11 +91,13 @@ class TestBuildAndIO(unittest.TestCase):
             elif i[1] == 'id':
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
-                id = dict((i.split()[0], i.split()[1]) for i in open(i[0][2]).readlines())
+                with open(i[0][2]) as handle:
+                    id = dict((i.split()[0], i.split()[1]) for i in handle)
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
                     caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
             alns.append(caln)
+            nucl.close() # Close the indexed FASTA file
         self.alns = alns
 
     def test_IO(self):
@@ -133,7 +141,8 @@ class Test_dn_ds(unittest.TestCase):
     def setUp(self):
         nucl = SeqIO.parse(TEST_ALIGN_FILE6[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
         prot = AlignIO.read(TEST_ALIGN_FILE6[0][1], 'clustal', alphabet=IUPAC.protein)
-        id_corr = dict((i.split()[0], i.split()[1]) for i in open(TEST_ALIGN_FILE6[0][2]).readlines())
+        with open(TEST_ALIGN_FILE6[0][2]) as handle:
+            id_corr = dict((i.split()[0], i.split()[1]) for i in handle)
         aln = CodonAlign.build(prot, nucl, corr_dict=id_corr, alphabet=CodonAlign.default_codon_alphabet)
         self.aln = aln
 
@@ -142,43 +151,48 @@ class Test_dn_ds(unittest.TestCase):
         codon_seq1 = self.aln[0]
         codon_seq2 = self.aln[1]
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='NG86')
-        self.assertAlmostEquals(round(dN, 4), 0.0209, places=4)
-        self.assertAlmostEquals(round(dS, 4), 0.0178, places=4)
+        self.assertAlmostEqual(round(dN, 4), 0.0209, places=4)
+        self.assertAlmostEqual(round(dS, 4), 0.0178, places=4)
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='LWL85')
-        self.assertAlmostEquals(round(dN, 4), 0.0203, places=4)
-        self.assertAlmostEquals(round(dS, 4), 0.0164, places=4)
+        self.assertAlmostEqual(round(dN, 4), 0.0203, places=4)
+        self.assertAlmostEqual(round(dS, 4), 0.0164, places=4)
+
         try:
-            from scipy.linalg import expm
-            dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
-            self.assertAlmostEquals(round(dN, 4), 0.0198, places=4)
-            self.assertAlmostEquals(round(dS, 4), 0.0222, places=4)
+            import scipy
         except ImportError:
-            warnings.warn('Importing scipy.linalg.expm failed. Skip testing ML method for dN/dS estimation')
-            pass
+            # Silently skip the rest of the test
+            return
+
+        # This should be present:
+        from scipy.linalg import expm
+        dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='YN00')
+        self.assertAlmostEqual(round(dN, 4), 0.0198, places=4)
+        self.assertAlmostEqual(round(dS, 4), 0.0222, places=4)
+
         try:
+            # New in scipy v0.11
             from scipy.optimize import minimize
             dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='ML')
-            self.assertAlmostEquals(round(dN, 4), 0.0194, places=4)
-            self.assertAlmostEquals(round(dS, 4), 0.0217, places=4)
+            self.assertAlmostEqual(round(dN, 4), 0.0194, places=4)
+            self.assertAlmostEqual(round(dS, 4), 0.0217, places=4)
         except ImportError:
-            warnings.warn('Importing scipy.optimize.minimize failed. Skip testing ML method for dN/dS estimation')
+            # TODO - Show a warning?
             pass
 
-class Test_MK(unittest.TestCase):
-    def test_mk(self):
-        ver = sys.version_info
-        if ver[0] == 2 and ver[1] == 6:
-            warnings.warn('Python 2.6 detected. Skip testing MK method')
-            pass
-        else:
-            from run_tests import is_numpy
-            if is_numpy():
-                p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
-                pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
-                codon_aln = CodonAlign.build(pro_aln, p)
-                self.assertAlmostEquals(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
-            else:
-                warnings.warn('Numpy not installed. Skip MK test.')
+
+from run_tests import is_numpy
+try:
+    from math import lgamma # New in Python 2.7
+except ImportError:
+    lgamma = None
+if is_numpy() and lgamma:
+    class Test_MK(unittest.TestCase):
+        def test_mk(self):
+            p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
+            pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
+            codon_aln = CodonAlign.build(pro_aln, p)
+            p.close() # Close indexed FASTA file
+            self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
 
 
 if __name__ == "__main__":

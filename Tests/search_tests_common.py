@@ -18,6 +18,12 @@ from Bio import SearchIO
 from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+   from Bio import SearchIO
 
 class CheckRaw(unittest.TestCase):
 

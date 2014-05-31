@@ -5,7 +5,7 @@
 
 """Run BioSQL tests using SQLite"""
 import os
-import tempfile
+
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from BioSQL import BioSeqDatabase
@@ -20,18 +20,7 @@ DBPASSWD = ''
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
 
-# In memory SQLite does not work with current test structure since the tests
-# expect databases to be retained between individual tests.
-#TESTDB = ':memory:'
-# Instead, we use (if we can) /dev/shm
-try:
-    test_db_fname = tempfile.mkstemp(dir='/dev/shm')[1]
-except OSError:
-    # We can't use /dev/shm
-    h, test_db_fname = tempfile.mkstemp("_BioSQL.db")
-    os.close(h)
-
-TESTDB = test_db_fname
+TESTDB = temp_db_filename()
 
 
 #This will abort if driver not installed etc:

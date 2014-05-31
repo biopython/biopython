@@ -177,10 +177,10 @@ class Motif(object):
         """
         if not self.has_instances:
             raise ValueError ("This motif has no instances")
-        for pos in range(0, len(sequence)-self.length+1):
+        for pos in range(0, len(sequence) - self.length + 1):
             for instance in self.instances:
-                if instance.tostring()==sequence[pos:pos+self.length].tostring():
-                    yield(pos, instance)
+                if str(instance) == str(sequence[pos:pos + self.length]):
+                    yield (pos, instance)
                     break # no other instance will fit (we don't want to return multiple hits)
 
     def score_hit(self,sequence,position,normalized=0,masked=0):
@@ -210,8 +210,8 @@ class Motif(object):
         if both:
             rc = self.reverse_complement()
             
-        sequence=sequence.tostring().upper()
-        for pos in range(0, len(sequence)-self.length+1):
+        sequence = str(sequence).upper()
+        for pos in range(0, len(sequence) - self.length + 1):
             score = self.score_hit(sequence, pos, normalized, masked)
             if score > threshold:
                 yield (pos, score)
@@ -367,17 +367,15 @@ class Motif(object):
     def __str__(self,masked=False):
         """ string representation of a motif.
         """
-        str = ""
-        for inst in self.instances:
-            str = str + inst.tostring() + "\n"
+        str = "".join(str(inst) + "\n" for inst in self.instances)
 
         if masked:
             for i in range(self.length):
                 if self.mask[i]:
-                    str = str + "*"
+                    str += "*"
                 else:
-                    str = str + " "
-            str = str + "\n"
+                    str += " "
+            str += "\n"
         return str
 
     def __len__(self):
@@ -405,11 +403,7 @@ class Motif(object):
         """
         if not self.has_instances:
             self.make_instances_from_counts()
-        str = ""
-        for i, inst in enumerate(self.instances):
-            str = str + ">instance%d\n"%i + inst.tostring() + "\n"
-            
-        return str       
+        return "".join(">instance%d\n%s\n" % (i, inst) for i, inst in enumerate(self.instances))
 
     def reverse_complement(self):
         """
@@ -779,7 +773,7 @@ class Motif(object):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences" \
                                  % sequence.alphabet)
 
-        seq = seq.tostring()
+        seq = str(seq)
 
         # check if the fast C code can be used
         try:

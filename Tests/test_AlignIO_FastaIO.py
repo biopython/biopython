@@ -40,7 +40,8 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    alignments = list(AlignIO.parse(handle=open(t_filename, "r"), format=t_format))
+    with open(t_filename, "r") as handle:
+        alignments = list(AlignIO.parse(handle, format=t_format))
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:

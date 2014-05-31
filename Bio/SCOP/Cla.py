@@ -41,7 +41,7 @@ class Record(object):
         self.sid = ''
         self.residues = None
         self.sccs = ''
-        self.sunid =''
+        self.sunid = ''
         self.hierarchy = {}
         if line:
             self._process(line)

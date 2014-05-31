@@ -13,9 +13,10 @@ import warnings
 
 from Bio._py3k import range
 from Bio._py3k import StringIO
+from Bio._py3k import _universal_read_mode
 from io import BytesIO
 
-from Bio import BiopythonWarning
+from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio.Alphabet import generic_dna
 from Bio.SeqIO import QualityIO
 from Bio import SeqIO
@@ -138,7 +139,7 @@ class TestFastqErrors(unittest.TestCase):
         if not formats:
             formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
         for format in formats:
-            handle = open(filename, "rU")
+            handle = open(filename, _universal_read_mode)
             records = SeqIO.parse(handle, format)
             for i in range(good_count):
                 record = next(records)  # Make sure no errors!
@@ -147,7 +148,7 @@ class TestFastqErrors(unittest.TestCase):
             handle.close()
 
     def check_general_fails(self, filename, good_count):
-        handle = open(filename, "rU")
+        handle = open(filename, _universal_read_mode)
         tuples = QualityIO.FastqGeneralIterator(handle)
         for i in range(good_count):
             title, seq, qual = next(tuples)  # Make sure no errors!
@@ -155,7 +156,7 @@ class TestFastqErrors(unittest.TestCase):
         handle.close()
 
     def check_general_passes(self, filename, record_count):
-        handle = open(filename, "rU")
+        handle = open(filename, _universal_read_mode)
         tuples = QualityIO.FastqGeneralIterator(handle)
         #This "raw" parser doesn't check the ASCII characters which means
         #certain invalid FASTQ files will get parsed without errors.
@@ -276,28 +277,30 @@ class TestReferenceFastqConversions(unittest.TestCase):
     """Tests where we have reference output."""
     def simple_check(self, base_name, in_variant):
         for out_variant in ["sanger", "solexa", "illumina"]:
-            if out_variant != "sanger":
-                #Ignore data loss warnings from max qualities
-                warnings.simplefilter('ignore', BiopythonWarning)
             in_filename = "Quality/%s_original_%s.fastq" \
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
-            #Load the reference output...
-            with open("Quality/%s_as_%s.fastq"
-                      % (base_name, out_variant), "rU") as handle:
+            # Load the reference output...
+            with open("Quality/%s_as_%s.fastq" % (base_name, out_variant),
+                      _universal_read_mode) as handle:
                 expected = handle.read()
-            #Check matches using convert...
-            handle = StringIO()
-            SeqIO.convert(in_filename, "fastq-"+in_variant,
-                          handle, "fastq-"+out_variant)
-            self.assertEqual(expected, handle.getvalue())
-            #Check matches using parse/write
-            handle = StringIO()
-            SeqIO.write(SeqIO.parse(in_filename, "fastq-"+in_variant),
-                        handle, "fastq-"+out_variant)
-            self.assertEqual(expected, handle.getvalue())
-            if out_variant != "sanger":
-                warnings.filters.pop()
+
+            with warnings.catch_warnings():
+                if out_variant != "sanger":
+                    # Ignore data loss warnings from max qualities
+                    warnings.simplefilter("ignore", BiopythonWarning)
+                    warnings.simplefilter("ignore", UserWarning)
+                # Check matches using convert...
+                handle = StringIO()
+                SeqIO.convert(in_filename, "fastq-"+in_variant,
+                              handle, "fastq-"+out_variant)
+                self.assertEqual(expected, handle.getvalue())
+                # Check matches using parse/write
+                handle = StringIO()
+                SeqIO.write(SeqIO.parse(in_filename, "fastq-"+in_variant),
+                            handle, "fastq-"+out_variant)
+                self.assertEqual(expected, handle.getvalue())
+
 
 #Now add methods at run time...
 tests = [("illumina_full_range", "illumina"),
@@ -371,7 +374,9 @@ class TestQual(unittest.TestCase):
 16 22 -1 -1 -1 33 -1 -1 30 27 -1 27 28 32 -1 29 -1 -1 -1 27 -1 18 9 6 -1 -1 23 16 -1 26 -1 5 7 -1 22 7 -1 18 14 8 -1 8 -1 -1 -1 11 -1 -1 4 24"""
         h = StringIO(data)
         h2 = StringIO()
-        self.assertEqual(4, SeqIO.convert(h, "qual", h2, "fastq"))
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            self.assertEqual(4, SeqIO.convert(h, "qual", h2, "fastq"))
         self.assertEqual(h2.getvalue(), """@1117_10_107_F3
 ??????????????????????????????????????????????????
 +
@@ -470,17 +475,16 @@ class TestWriteRead(unittest.TestCase):
                            letter_annotations={"solexa_quality":[0, 10, 100, 1000]})
         #TODO - Record with no identifier?
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
-        #TODO - Have a Biopython defined "DataLossWarning?"
-        warnings.simplefilter('ignore', BiopythonWarning)
-        #TODO - Include phd output?
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"]:
             handle = StringIO()
-            SeqIO.write(records, handle, format)
+            with warnings.catch_warnings():
+                #TODO - Have a Biopython defined "DataLossWarning?"
+                warnings.simplefilter('ignore', BiopythonWarning)
+                SeqIO.write(records, handle, format)
             handle.seek(0)
             compare_records(records,
                             list(SeqIO.parse(handle, format)),
                             truncation_expected(format))
-        warnings.filters.pop()
 
     def check(self, filename, format, out_formats):
         for f in out_formats:
@@ -496,12 +500,8 @@ class TestWriteRead(unittest.TestCase):
         """Write and read back sanger_93.fastq"""
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                    ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
-        #TODO - Have a Biopython defined "DataLossWarning?"
-        #TODO - On Python 2.6+ we can check this warning is really triggered
-        warnings.simplefilter('ignore', BiopythonWarning)
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                    ["fastq-solexa", "fastq-illumina"])
-        warnings.filters.pop()
 
     def test_sanger_faked(self):
         """Write and read back sanger_faked.fastq"""
@@ -652,12 +652,11 @@ class MappingTests(unittest.TestCase):
                         for q in range(0, 94)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
-        #Want to ignore the data loss warning
-        #(on Python 2.6 we could check for it!)
-        warnings.simplefilter('ignore', BiopythonWarning)
-        SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
-                    out_handle, "fastq-solexa")
-        warnings.filters.pop()
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", BiopythonWarning)
+            SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
+                        out_handle, "fastq-solexa")
+            self.assertTrue(len(w) <= 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-solexa")
         self.assertEqual(str(record.seq), seq)
@@ -675,12 +674,8 @@ class MappingTests(unittest.TestCase):
                           for q in range(-5, 63)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
-        #Want to ignore the data loss warning
-        #(on Python 2.6 we could check for it!)
-        warnings.simplefilter('ignore', BiopythonWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"),
                     out_handle, "fastq-sanger")
-        warnings.filters.pop()
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-sanger")
         self.assertEqual(str(record.seq), seq)
@@ -694,12 +689,11 @@ class MappingTests(unittest.TestCase):
         expected_phred = [min(62, q) for q in range(0, 94)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
         out_handle = StringIO()
-        #Want to ignore the data loss warning
-        #(on Python 2.6 we could check for it!)
-        warnings.simplefilter('ignore', BiopythonWarning)
-        SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
-                    out_handle, "fastq-illumina")
-        warnings.filters.pop()
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", BiopythonWarning)
+            SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
+                        out_handle, "fastq-illumina")
+            self.assertTrue(len(w) <= 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-illumina")
         self.assertEqual(str(record.seq), seq)
@@ -720,6 +714,55 @@ class MappingTests(unittest.TestCase):
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.letter_annotations["phred_quality"],
                          expected_phred)
+
+
+class TestSFF(unittest.TestCase):
+    """Test SFF specific details."""
+    def test_overlapping_clip(self):
+        with open("Roche/greek.sff", "rb") as handle:
+            record = next(SeqIO.parse(handle, "sff"))
+        self.assertEqual(len(record), 395)
+        s = str(record.seq.lower())
+        # Apply overlapping clipping
+        record.annotations['clip_qual_left'] = 51
+        record.annotations['clip_qual_right'] = 44
+        record.annotations['clip_adapter_left'] = 50
+        record.annotations['clip_adapter_right'] = 75
+        self.assertEqual(len(record), 395)
+        self.assertEqual(len(record.seq), 395)
+        # Save the clipped record...
+        h = BytesIO()
+        count = SeqIO.write(record, h, "sff")
+        # Now reload it...
+        h.seek(0)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", BiopythonParserWarning)
+            record = SeqIO.read(h, "sff")
+            self.assertEqual(len(w), 1, w)
+        self.assertEqual(record.annotations['clip_qual_left'], 51)
+        self.assertEqual(record.annotations['clip_qual_right'], 44)
+        self.assertEqual(record.annotations['clip_adapter_left'], 50)
+        self.assertEqual(record.annotations['clip_adapter_right'], 75)
+        self.assertEqual(len(record), 395)
+        self.assertEqual(s, str(record.seq.lower()))
+        # And check with trimming applied...
+        h.seek(0)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", BiopythonParserWarning)
+            record = SeqIO.read(h, "sff-trim")
+            self.assertEqual(len(w), 1, w)
+        self.assertEqual(len(record), 0)
+
+    def test_negative_clip(self):
+        for clip in ["clip_qual_left", "clip_qual_right",
+                     "clip_adapter_left", "clip_adapter_right"]:
+            with open("Roche/greek.sff", "rb") as handle:
+                record = next(SeqIO.parse(handle, "sff"))
+            self.assertEqual(len(record), 395)
+            self.assertTrue(0 <= record.annotations[clip], record.annotations[clip])
+            record.annotations[clip] = -1
+            with BytesIO() as h:
+                self.assertRaises(ValueError, SeqIO.write, record, h, "sff")
 
 
 if __name__ == "__main__":

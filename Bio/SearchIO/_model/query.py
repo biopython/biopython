@@ -214,7 +214,7 @@ class QueryResult(_BaseSearchObject):
     if hasattr(OrderedDict, 'iteritems'):
 
         def __iter__(self):
-            return iter(self.iterhits())
+            return self.iterhits()
 
         @property
         def hits(self):
@@ -233,17 +233,17 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
-            for hit in self._items.values():
+            for hit in self._items.itervalues():
                 yield hit
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._items.keys():
+            for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
             """Returns an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.items():
+            for item in self._items.iteritems():
                 yield item
 
     else:
@@ -355,7 +355,16 @@ class QueryResult(_BaseSearchObject):
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
-            return list(self._items.values())[hit_key]
+            length = len(self)
+            if 0 <= hit_key < length:
+                for idx, item in enumerate(self.iterhits()):
+                    if idx == hit_key:
+                        return item
+            elif -1 * length <= hit_key < 0:
+                for idx, item in enumerate(self.iterhits()):
+                    if length + hit_key == idx:
+                        return item
+            raise IndexError("list index out of range")
 
         # if key is a string, then do a regular dictionary retrieval
         return self._items[hit_key]
@@ -367,23 +376,26 @@ class QueryResult(_BaseSearchObject):
         # hit must be a Hit object
         if not isinstance(hit, Hit):
             raise TypeError("QueryResult objects can only contain Hit objects.")
+        qid = self.id
+        hqid = hit.query_id
         # and it must have the same query ID as this object's ID
         # unless it's the query ID is None (default for empty objects), in which
         # case we want to use the hit's query ID as the query ID
-        if self.id is not None:
-            if hit.query_id != self.id:
+        if qid is not None:
+            if hqid != qid:
                 raise ValueError("Expected Hit with query ID %r, found %r "
-                        "instead." % (self.id, hit.query_id))
+                        "instead." % (qid, hqid))
         else:
-            self.id = hit.query_id
+            self.id = hqid
         # same thing with descriptions
-        if self.description is not None:
-            if hit.query_description != self.description:
+        qdesc = self.description
+        hqdesc = hit.query_description
+        if qdesc is not None:
+            if hqdesc != qdesc:
                 raise ValueError("Expected Hit with query description %r, "
-                        "found %r instead." % (self.description,
-                        hit.query_description))
+                        "found %r instead." % (qdesc, hqdesc))
         else:
-            self.description = hit.query_description
+            self.description = hqdesc
 
         self._items[hit_key] = hit
 

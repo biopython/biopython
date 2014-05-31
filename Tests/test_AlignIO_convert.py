@@ -15,7 +15,7 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 def check_convert(in_filename, in_format, out_format, alphabet=None):
     #Write it out using parse/write
     handle = StringIO()
-    aligns = list(AlignIO.parse(open(in_filename), in_format, None, alphabet))
+    aligns = list(AlignIO.parse(in_filename, in_format, None, alphabet))
     try:
         count = AlignIO.write(aligns, handle, out_format)
     except ValueError:
@@ -31,7 +31,8 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     #Write it out using convert passing handle and handle
     handle2 = StringIO()
     try:
-        count2 = AlignIO.convert(open(in_filename), in_format, handle2, out_format, alphabet)
+        with open(in_filename) as handle1:
+            count2 = AlignIO.convert(handle1, in_format, handle2, out_format, alphabet)
     except ValueError:
         count2 = 0
     assert count == count2

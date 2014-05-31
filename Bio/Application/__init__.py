@@ -66,7 +66,7 @@ class ApplicationError(_ProcessCalledError):
     >>> err.returncode, err.cmd, err.stdout, err.stderr
     (-11, 'helloworld', '', 'Some error text')
     >>> print(err)
-    Command 'helloworld' returned non-zero exit status -11, 'Some error text'
+    Non-zero return code -11 from 'helloworld', message 'Some error text'
 
     """
     def __init__(self, returncode, cmd, stdout="", stderr=""):
@@ -82,11 +82,11 @@ class ApplicationError(_ProcessCalledError):
         except:
             msg = ""
         if msg:
-            return "Command '%s' returned non-zero exit status %d, %r" \
-                   % (self.cmd, self.returncode, msg)
+            return "Non-zero return code %d from %r, message %r" \
+                   % (self.returncode, self.cmd, msg)
         else:
-            return "Command '%s' returned non-zero exit status %d" \
-                   % (self.cmd, self.returncode)
+            return "Non-zero return code %d from %r" \
+                   % (self.returncode, self.cmd)
 
     def __repr__(self):
         return "ApplicationError(%i, %s, %s, %s)" \
@@ -460,23 +460,23 @@ class AbstractCommandline(object):
             stderr_arg = open(os.devnull, "w")
         elif isinstance(stderr, basestring):
             if stdout == stderr:
-                stderr_arg = stdout_arg #Write both to the same file
+                stderr_arg = stdout_arg # Write both to the same file
             else:
                 stderr_arg = open(stderr, "w")
         else:
             stderr_arg = subprocess.PIPE
 
-        #We may not need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
+        # We may not need to supply any piped input, but we setup the
+        # standard input pipe anyway as a work around for a python
+        # bug if this is called from a Windows GUI program.  For
+        # details, see http://bugs.python.org/issue1124861
         #
-        #Using universal newlines is important on Python 3, this
-        #gives unicode handles rather than bytes handles.
+        # Using universal newlines is important on Python 3, this
+        # gives unicode handles rather than bytes handles.
 
-	#Windows 7 and 8 want shell = True
-	#platform is easier to understand that sys to determine
-	#windows version
+	# Windows 7 and 8 want shell = True
+	# platform is easier to understand that sys to determine
+	# windows version
         if sys.platform != "win32":
             use_shell = True
         else:
@@ -490,7 +490,7 @@ class AbstractCommandline(object):
                                          universal_newlines=True,
                                          cwd=cwd, env=env,
                                          shell=use_shell)
-        #Use .communicate as can get deadlocks with .wait(), see Bug 2804
+        # Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
         if not stdout:
             assert not stdout_str, stdout_str
@@ -498,12 +498,14 @@ class AbstractCommandline(object):
             assert not stderr_str, stderr_str
         return_code = child_process.returncode
 
-        #Particularly important to close handles on Jython and PyPy
-        #(where garbage collection is less predictable) and on Windows
-        #(where cannot delete files with an open handle):
-        if stdout and isinstance(stdout, basestring):
+        # Particularly important to close handles on Jython and PyPy
+        # (where garbage collection is less predictable) and on Windows
+        # (where cannot delete files with an open handle):
+        if not stdout or isinstance(stdout, basestring):
+            # We opened /dev/null or a file
             stdout_arg.close()
-        if stderr and isinstance(stderr, basestring) and stdout != stderr:
+        if not stderr or (isinstance(stderr, basestring) and stdout != stderr):
+            # We opened /dev/null or a file
             stderr_arg.close()
 
         if return_code:
@@ -540,7 +542,7 @@ class _Option(_AbstractParameter):
     (eg ["-a", "--append", "append"]). The first name in list is used
     when building the command line. The last name in the list is a
     "human readable" name describing the option in one word. This
-    must be a valid Python identifer as it is used as the property
+    must be a valid Python identifier as it is used as the property
     name and as a keyword argument, and should therefore follow PEP8
     naming.
 

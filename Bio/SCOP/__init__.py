@@ -211,8 +211,8 @@ class Scop(object):
 
                 root = Node()
                 domains = []
-                root.sunid=0
-                root.type='ro'
+                root.sunid = 0
+                root.type = 'ro'
                 sunidDict[root.sunid] = root
                 self.root = root
                 root.description = 'SCOP Root'
@@ -220,7 +220,7 @@ class Scop(object):
                 # Build the rest of the nodes using the DES file
                 records = Des.parse(des_handle)
                 for record in records:
-                    if record.nodetype =='px':
+                    if record.nodetype == 'px':
                         n = Domain()
                         n.sid = record.name
                         domains.append(n)
@@ -520,13 +520,13 @@ class Node(object):
         constructor, this will be used to lookup related references using the SQL
         methods.  If no instance is provided, it is assumed the whole tree exists
         and is connected."""
-        self.sunid=''
+        self.sunid = ''
         self.parent = None
-        self.children=[]
+        self.children = []
         self.sccs = ''
-        self.type =''
-        self.description =''
-        self.scop=scop
+        self.type = ''
+        self.description = ''
+        self.scop = scop
 
     def __str__(self):
         s = []

@@ -1,7 +1,7 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2014 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
-# Revisions 2013 copyright by Tiago Antao.  All rights reserved.
+# Revisions 2013-2014 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -14,7 +14,9 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 import os
+import sys
 
+from Bio._py3k import _universal_read_mode
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -57,18 +59,20 @@ def open_database(driver="MySQLdb", **kwargs):
             url_pref = "jdbc:postgresql://" + kwargs["host"] + "/"
 
     else:
-        module = __import__(driver)
-    connect = getattr(module, "connect")
+        module = __import__(driver, fromlist=["connect"])
+    connect = module.connect
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver == "MySQLdb" and os.name != "java":
+    if driver in ["MySQLdb", "mysql.connector"] and os.name != "java":
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
         if "password" in kw:
             kw["passwd"] = kw["password"]
             del kw["password"]
+        #kw["charset"] = "utf8"
+        #kw["use_unicode"] = True
     else:
         # DB-API recommendations
         if "db" in kw:
@@ -91,19 +95,7 @@ def open_database(driver="MySQLdb", **kwargs):
     elif driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
-        try:
-            conn = connect(**kw)
-        except module.InterfaceError:
-            # Ok, so let's try building a DSN
-            # (older releases of psycopg need this)
-            if "database" in kw:
-                kw["dbname"] = kw["database"]
-                del kw["database"]
-            elif "db" in kw:
-                kw["dbname"] = kw["db"]
-                del kw["db"]
-            dsn = ' '.join('='.join(i) for i in kw.items())
-            conn = connect(dsn)
+        conn = connect(**kw)
 
     if os.name == "java":
         server = DBServer(conn, module, driver)
@@ -143,7 +135,11 @@ class DBServer:
         self.module = module
         if module_name is None:
             module_name = module.__name__
-        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name))
+        if module_name == "mysql.connector" and sys.version_info[0] == 3:
+            wrap_cursor = True
+        else:
+            wrap_cursor = False
+        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor)
         self.module_name = module_name
 
     def __repr__(self):
@@ -214,7 +210,9 @@ class DBServer:
         """Remove a namespace and all its entries."""
         if name not in self:
             raise KeyError(name)
-        self.remove_database(name)
+        db_id = self.adaptor.fetch_dbid_by_dbname(name)
+        remover = Loader.DatabaseRemover(self.adaptor, db_id)
+        remover.remove()
 
     def remove_database(self, db_name):
         """Remove a namespace and all its entries (OBSOLETE).
@@ -231,9 +229,7 @@ class DBServer:
         warnings.warn("This method is deprecated.  In keeping with the "
                       "dictionary interface, you can now use 'del "
                       "server[name]' instead", BiopythonDeprecationWarning)
-        db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
-        remover = Loader.DatabaseRemover(self.adaptor, db_id)
-        remover.remove()
+        self.__delitem__(db_name)
 
     def new_database(self, db_name, authority=None, description=None):
         """Add a new database to the server and return it.
@@ -256,16 +252,15 @@ class DBServer:
         # the default and removing the simple-minded approach.
 
         # read the file with all comment lines removed
-        sql_handle = open(sql_file, "rU")
-        sql = r""
-        for line in sql_handle:
-            if line.startswith("--"):  # don't include comment lines
-                pass
-            elif line.startswith("#"):  # ditto for MySQL comments
-                pass
-            elif line.strip():  # only include non-blank lines
-                sql += line.strip()
-                sql += ' '
+        sql = ""
+        with open(sql_file, _universal_read_mode) as sql_handle:
+            for line in sql_handle:
+                if line.startswith("--"):  # don't include comment lines
+                    pass
+                elif line.startswith("#"):  # ditto for MySQL comments
+                    pass
+                elif line.strip():  # only include non-blank lines
+                    sql += line.strip() + " "
 
         # two ways to load the SQL
         # 1. PostgreSQL can load it all at once and actually needs to
@@ -275,7 +270,7 @@ class DBServer:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
-        elif self.module_name in ["MySQLdb", "sqlite3"]:
+        elif self.module_name in ["mysql.connector", "MySQLdb", "sqlite3"]:
             sql_parts = sql.split(";")  # one line per sql command
             for sql_line in sql_parts[:-1]:  # don't use the last item, it's blank
                 self.adaptor.cursor.execute(sql_line)
@@ -295,11 +290,44 @@ class DBServer:
         """Close the connection. No further activity possible."""
         return self.adaptor.close()
 
+class _CursorWrapper:
+    """A wraper for mysql.connector resolving bytestring representations."""
+    def __init__(self, real_cursor):
+        self.real_cursor = real_cursor
+
+    def execute(self, operation, params=None, multi=False):
+        self.real_cursor.execute(operation, params, multi)
+
+    def _convert_tuple(self, tuple_):
+        tuple_list = list(tuple_)
+        for i, elem in enumerate(tuple_list):
+            if type(elem) is bytes:
+                tuple_list[i] = elem.decode("utf-8")
+        return tuple(tuple_list)
+
+    def _convert_list(self, lst):
+        ret_lst = []
+        for tuple_ in lst:
+            new_tuple = self._convert_tuple(tuple_)
+            ret_lst.append(new_tuple)
+        return ret_lst
+
+    def fetchall(self):
+        rv = self.real_cursor.fetchall()
+        return self._convert_list(rv)
+
+    def fetchone(self):
+        tuple_ = self.real_cursor.fetchone()
+        return self._convert_tuple(tuple_)
+
 
 class Adaptor:
-    def __init__(self, conn, dbutils):
+    def __init__(self, conn, dbutils, wrap_cursor=False):
         self.conn = conn
-        self.cursor = conn.cursor()
+        if wrap_cursor:
+            self.cursor = _CursorWrapper(conn.cursor())
+        else:
+            self.cursor = conn.cursor()
         self.dbutils = dbutils
 
     def last_id(self, table):

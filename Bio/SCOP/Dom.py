@@ -53,7 +53,7 @@ class Record(object):
             raise ValueError("I don't understand the format of %s" % line)
         self.sid, pdbid, res, self.hierarchy = columns
         self.residues = Residues(res)
-        self.residues.pdbid =pdbid
+        self.residues.pdbid = pdbid
 
     def __str__(self):
         s = []

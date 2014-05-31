@@ -19,7 +19,7 @@ except ImportError:
     from io import StringIO # Python 3
 from io import BytesIO
 
-from Bio import BiopythonWarning
+from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -31,7 +31,6 @@ from Bio.Align import MultipleSeqAlignment
 # are issued. Used to do that by capturing warnings to stdout and
 # verifying via the print-and-compare check. However, there was some
 # frustrating cross-platform inconsistency I couldn't resolve.
-warnings.simplefilter('ignore', BiopythonWarning)
 
 protein_alphas = [Alphabet.generic_protein]
 dna_alphas = [Alphabet.generic_dna]
@@ -309,13 +308,13 @@ def alignment_summary(alignment, index=" "):
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     for i in range(min(5, alignment_len)):
-        answer.append(index + col_summary(alignment.get_column(i))
+        answer.append(index + col_summary(alignment[:, i])
                             + " alignment column %i" % i)
     if alignment_len > 5:
         i = alignment_len - 1
         answer.append(index + col_summary("|" * rec_count)
                             + " ...")
-        answer.append(index + col_summary(alignment.get_column(i))
+        answer.append(index + col_summary(alignment[:, i])
                             + " alignment column %i" % i)
     return "\n".join(answer)
 
@@ -338,7 +337,10 @@ def check_simple_write_read(records, indent=" "):
             handle = StringIO()
 
         try:
-            c = SeqIO.write(sequences=records, handle=handle, format=format)
+            with warnings.catch_warnings():
+                #e.g. data loss
+                warnings.simplefilter("ignore", BiopythonWarning)
+                c = SeqIO.write(sequences=records, handle=handle, format=format)
             assert c == len(records)
         except (TypeError, ValueError) as e:
             #This is often expected to happen, for example when we try and
@@ -445,67 +447,71 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     print("Testing reading %s format file %s" % (t_format, t_filename))
     assert os.path.isfile(t_filename), t_filename
 
-    #Try as an iterator using handle
-    h = open(t_filename, mode)
-    records = list(SeqIO.parse(handle=h, format=t_format))
-    h.close()
-    assert len(records) == t_count, \
-         "Found %i records but expected %i" % (len(records), t_count)
+    with warnings.catch_warnings():
+        # e.g. BiopythonParserWarning: Dropping bond qualifier in feature location
+        warnings.simplefilter("ignore", BiopythonParserWarning)
 
-    #Try using the iterator with a for loop, and a filename not handle
-    records2 = []
-    for record in SeqIO.parse(t_filename, format=t_format):
-        records2.append(record)
-    assert len(records2) == t_count
+        #Try as an iterator using handle
+        h = open(t_filename, mode)
+        records = list(SeqIO.parse(handle=h, format=t_format))
+        h.close()
+        assert len(records) == t_count, \
+            "Found %i records but expected %i" % (len(records), t_count)
 
-    #Try using the iterator with the next() method
-    records3 = []
-    h = open(t_filename, mode)
-    seq_iterator = SeqIO.parse(handle=h, format=t_format)
-    while True:
+        #Try using the iterator with a for loop, and a filename not handle
+        records2 = []
+        for record in SeqIO.parse(t_filename, format=t_format):
+            records2.append(record)
+        assert len(records2) == t_count
+
+        #Try using the iterator with the next() method
+        records3 = []
+        h = open(t_filename, mode)
+        seq_iterator = SeqIO.parse(handle=h, format=t_format)
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            assert record is not None, "Should raise StopIteration not return None"
+            records3.append(record)
+        h.close()
+
+        #Try a mixture of next() and list (a torture test!)
+        h = open(t_filename, mode)
+        seq_iterator = SeqIO.parse(handle=h, format=t_format)
         try:
             record = next(seq_iterator)
         except StopIteration:
-            break
-        assert record is not None, "Should raise StopIteration not return None"
-        records3.append(record)
-    h.close()
+            record = None
+        if record is not None:
+            records4 = [record]
+            records4.extend(list(seq_iterator))
+        else:
+            records4 = []
+        assert len(records4) == t_count
+        h.close()
 
-    #Try a mixture of next() and list (a torture test!)
-    h = open(t_filename, mode)
-    seq_iterator = SeqIO.parse(handle=h, format=t_format)
-    try:
-        record = next(seq_iterator)
-    except StopIteration:
-        record = None
-    if record is not None:
-        records4 = [record]
-        records4.extend(list(seq_iterator))
-    else:
-        records4 = []
-    assert len(records4) == t_count
-    h.close()
-
-    #Try a mixture of next() and for loop (a torture test!)
-    #with a forward-only-handle
-    if t_format == "abi":
-        #Temp hack
-        h = open(t_filename, mode)
-    else:
-        h = ForwardOnlyHandle(open(t_filename, mode))
-    seq_iterator = SeqIO.parse(h, format=t_format)
-    try:
-        record = next(seq_iterator)
-    except StopIteration:
-        record = None
-    if record is not None:
-        records5 = [record]
-        for record in seq_iterator:
-            records5.append(record)
-    else:
-        records5 = []
-    assert len(records5) == t_count
-    h.close()
+        #Try a mixture of next() and for loop (a torture test!)
+        #with a forward-only-handle
+        if t_format == "abi":
+            #Temp hack
+            h = open(t_filename, mode)
+        else:
+            h = ForwardOnlyHandle(open(t_filename, mode))
+        seq_iterator = SeqIO.parse(h, format=t_format)
+        try:
+            record = next(seq_iterator)
+        except StopIteration:
+            record = None
+        if record is not None:
+            records5 = [record]
+            for record in seq_iterator:
+                records5.append(record)
+        else:
+            records5 = []
+        assert len(records5) == t_count
+        h.close()
 
     for i in range(t_count):
         record = records[i]

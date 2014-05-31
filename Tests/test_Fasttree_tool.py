@@ -86,7 +86,7 @@ except ApplicationError as err:
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "Cannot open sequence file" in str(err) or \
            "Cannot open input file" in str(err) or \
-           "non-zero exit status" in str(err), str(err)
+           "Non-zero return code " in str(err), str(err)
 
 print("")
 print("Single sequence")
@@ -123,7 +123,7 @@ except ApplicationError as err:
     assert "invalid format" in str(err) \
            or "not produced" in str(err) \
            or "No sequences in file" in str(err) \
-           or "non-zero exit status " in str(err), str(err)
+           or "Non-zero return code " in str(err), str(err)
 
 #################################################################
 print("")

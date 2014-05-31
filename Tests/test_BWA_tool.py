@@ -9,12 +9,12 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
-from Bio import SeqIO
-from Bio import AlignIO
-from Bio.Sequencing.Applications import BwaIndexCommandline, BwaAlignCommandline
-from Bio.Sequencing.Applications import BwaSamseCommandline, BwaSampeCommandline
-from Bio.Sequencing.Applications import BwaBwaswCommandline
-from Bio.Application import ApplicationError
+#TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
+from Bio.Sequencing.Applications import BwaIndexCommandline
+from Bio.Sequencing.Applications import BwaAlignCommandline
+from Bio.Sequencing.Applications import BwaSamseCommandline
+from Bio.Sequencing.Applications import BwaSampeCommandline
+
 
 #################################################################
 
@@ -47,25 +47,44 @@ else:
     #really the bwa tool's output
     bwa_found = False
     if "not found" not in output and "bwa" in output \
-    and "alignment via Burrows-Wheeler transformation" in output:
+            and "alignment via Burrows-Wheeler transformation" in output:
         bwa_exe = "bwa"
+    skip_aln_tests = False
+    aln_output = getoutput("bwa aln")
+    if "unrecognized" in aln_output:
+        skip_aln_tests = True
+        print("'bwa aln' is unrecognized, skipping aln/samse/sampe tests")
 
 if not bwa_exe:
-    raise MissingExternalDependencyError(\
-        "Install bwa and correctly set the file path to the program if you want to use it from Biopython")
+    raise MissingExternalDependencyError("Install bwa and correctly set"
+                                         " the file path to the program if"
+                                         " you want to use it from Biopython")
 
 
 class BwaTestCase(unittest.TestCase):
     """Class for implementing BWA test cases"""
     def setUp(self):
-        self.reference_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "human_g1k_v37_truncated.fasta")
-        self.infile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "HNSCC1_1_truncated.fastq")
-        self.infile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "HNSCC1_2_truncated.fastq")
-        self.saifile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "1.sai")
-        self.saifile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "2.sai")
-        self.samfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "1.sam")
-        self.samfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "2.sam")
-        self.samfile = os.path.join(os.path.dirname(os.path.abspath(__file__)), "BWA", "out.sam")
+        self.reference_file = "BWA/human_g1k_v37_truncated.fasta"
+        self.reference_extensions = ['amb', 'ann', 'bwt', 'pac', 'sa']
+        self.infile1 = "BWA/HNSCC1_1_truncated.fastq"
+        self.infile2 = "BWA/HNSCC1_2_truncated.fastq"
+        self.saifile1 = "BWA/1.sai"
+        self.saifile2 = "BWA/2.sai"
+        self.samfile1 = "BWA/1.sam"
+        self.samfile2 = "BWA/2.sam"
+        self.samfile = "BWA/out.sam"
+        self.files_to_clean = [self.saifile1, self.saifile2,
+                               self.samfile1, self.samfile2,
+                               self.samfile]
+
+    def tearDown(self):
+        for filename in self.files_to_clean:
+            if os.path.isfile(filename):
+                os.remove(filename)
+        for extension in self.reference_extensions:
+            index_file = self.reference_file + "." + extension
+            if os.path.exists(index_file):
+                os.remove(index_file)
 
     def test_index(self):
         """Test for creating index files for the reference genome fasta file"""
@@ -73,9 +92,13 @@ class BwaTestCase(unittest.TestCase):
         cmdline.set_parameter("infile", self.reference_file)
         cmdline.set_parameter("algorithm", "bwtsw")
         stdout, stderr = cmdline()
-        output = stdout.startswith("[bwt_gen]")
+        for extension in self.reference_extensions:
+            index_file = self.reference_file + "." + extension
+            self.assertTrue(os.path.exists(index_file),
+                            "Index File %s not found"
+                            % (index_file))
         self.assertTrue(stdout.startswith("[bwt_gen]"),
-                        "FASTA indexing failed:\n%s\nStdout:%s" \
+                        "FASTA indexing failed:\n%s\nStdout:%s"
                         % (cmdline, stdout))
 
     def do_aln(self, in_file, out_file):
@@ -87,42 +110,60 @@ class BwaTestCase(unittest.TestCase):
         stdout, stderr = cmdline(stdout=out_file)
 
         self.assertTrue("fail to locate the index" not in stderr,
-                        "Error aligning sequence to reference:\n%s\nStderr:%s" \
+                        "Error aligning sequence to reference:\n%s\nStderr:%s"
                         % (cmdline, stderr))
 
-    def test_samse(self):
-        """Test for single end sequencing """
-        cmdline = BwaSamseCommandline(bwa_exe)
-        cmdline.set_parameter("reference", self.reference_file)
-        cmdline.set_parameter("read_file", self.infile1)
-        cmdline.set_parameter("sai_file", self.saifile1)
-        stdout, stderr = cmdline(stdout=self.samfile1)
+    def create_fasta_index(self):
+        """Creates index for fasta file.
 
-        with open(self.samfile1, "r") as handle:
-            headline = handle.readline()
-        self.assertTrue(headline.startswith("@SQ"),
-                        "Error generating sam files:\n%s\nOutput starts:%s" \
-                        % (cmdline, headline))
+        BWA requires an indexed fasta for each alignment operation.
+        This should be called to create an index before any alignment
+        operation.
+        """
+        cmdline = BwaIndexCommandline(bwa_exe)
+        cmdline.set_parameter("infile", self.reference_file)
+        cmdline.set_parameter("algorithm", "bwtsw")
+        stdout, stderr = cmdline()
 
-    def test_sampe(self):
-        """Test for generating samfile by paired end sequencing"""
-        ##Generate sai files from paired end data
-        self.do_aln(self.infile1, self.saifile1)
-        self.do_aln(self.infile2, self.saifile2)
+    if not skip_aln_tests:
 
-        cmdline = BwaSampeCommandline(bwa_exe)
-        cmdline.set_parameter("reference", self.reference_file)
-        cmdline.set_parameter("sai_file1", self.saifile1)
-        cmdline.set_parameter("sai_file2", self.saifile2)
-        cmdline.set_parameter("read_file1", self.infile1)
-        cmdline.set_parameter("read_file2", self.infile2)
-        stdout, stderr = cmdline(stdout=self.samfile)
+        def test_samse(self):
+            """Test for single end sequencing """
+            self.create_fasta_index()
+            self.do_aln(self.infile1, self.saifile1)
+            cmdline = BwaSamseCommandline(bwa_exe)
+            cmdline.set_parameter("reference", self.reference_file)
+            cmdline.set_parameter("read_file", self.infile1)
+            cmdline.set_parameter("sai_file", self.saifile1)
+            stdout, stderr = cmdline(stdout=self.samfile1)
 
-        with open(self.samfile, "r") as handle:
-            headline = handle.readline()
-        self.assertTrue(headline.startswith("@SQ"),
-                        "Error generating sam files:\n%s\nOutput starts:%s" \
-                        % (cmdline, headline))
+            with open(self.samfile1, "r") as handle:
+                headline = handle.readline()
+            self.assertTrue(headline.startswith("@SQ"),
+                            "Error generating sam files:\n%s\nOutput starts:%s"
+                            % (cmdline, headline))
+
+        def test_sampe(self):
+            """Test for generating samfile by paired end sequencing"""
+            self.create_fasta_index()
+
+            ##Generate sai files from paired end data
+            self.do_aln(self.infile1, self.saifile1)
+            self.do_aln(self.infile2, self.saifile2)
+
+            cmdline = BwaSampeCommandline(bwa_exe)
+            cmdline.set_parameter("reference", self.reference_file)
+            cmdline.set_parameter("sai_file1", self.saifile1)
+            cmdline.set_parameter("sai_file2", self.saifile2)
+            cmdline.set_parameter("read_file1", self.infile1)
+            cmdline.set_parameter("read_file2", self.infile2)
+            stdout, stderr = cmdline(stdout=self.samfile)
+
+            with open(self.samfile, "r") as handle:
+                headline = handle.readline()
+            self.assertTrue(headline.startswith("@SQ"),
+                            "Error generating sam files:\n%s\nOutput starts:%s"
+                            % (cmdline, headline))
 
 
 if __name__ == "__main__":

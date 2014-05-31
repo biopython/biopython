@@ -57,8 +57,8 @@ class AppTest(unittest.TestCase):
         liter = list(iter)
         assert len(liter) == 37
         assert liter[0][0] == "Locus1"
-        assert len(avg_fis)==10
-        assert len(avg_Qintra)==10
+        assert len(avg_fis) == 10
+        assert len(avg_Qintra) == 10
 
     def test_estimate_nm(self):
         """Test Nm estimation.
@@ -90,5 +90,5 @@ class AppTest(unittest.TestCase):
         assert litr[36][0] == "Locus37"
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

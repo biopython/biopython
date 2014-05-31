@@ -147,7 +147,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
-                            "non-zero exit status" in str(err))
+                            "Non-zero return code " in str(err), str(err))
         else:
             self.fail("expected an ApplicationError")
 
@@ -190,7 +190,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             self.assertTrue("invalid format" in str(err) or
                             "not produced" in str(err) or
                             "No sequences in file" in str(err) or
-                            "non-zero exit status " in str(err))
+                            "Non-zero return code " in str(err))
         else:
             self.fail("expected an ApplicationError")
 

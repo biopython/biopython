@@ -10,11 +10,6 @@ This version will run Sincoal2 (if necessary) Asynchrously.
 """
 
 import os
-import warnings
-warnings.warn("Bio.PopGen.SimCoal.Async has been deprecated, and we intend to"
-              " remove it in a future release of Biopython.",
-              DeprecationWarning)
-
 from . import Cache
 
 

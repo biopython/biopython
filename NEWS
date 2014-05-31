@@ -10,10 +10,17 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.64
+29 May 2013: Biopython 1.64 released.
+
+This release of Biopython supports Python 2.6 and 2.7, 3.3 and also the
+new 3.4 version. It is also tested on PyPy 2.0 to 2.3, and Jython 2.7b2.
+
+The new experimental module Bio.CodonAlign facilitates building codon
+alignment and further analysis upon it. This work is from the Google
+Summer of Code (GSoC) project by Zheng Ruan.
 
 Bio.Phylo now has tree construction and consensus modules, from on the
-Google Summer of Code (GSoC) work by Yanbo Ye.
+GSoC work by Yanbo Ye.
 
 Bio.Entrez will now automatically download and cache new NCBI DTD files for
 XML parsing under the user's home directory (using ``~/.biopython`` on
@@ -24,10 +31,21 @@ line tool.
 
 Bio.PopGen.SimCoal now also supports fastsimcoal.
 
+SearchIO hmmer3-text, hmmer3-tab, and hmmer3-domtab now support output from
+hmmer3.1b1.
+
+The 'accession' of QueryResult and Hit objects created when using the
+'hmmer3-tab' format are now properly named as 'accession' (previously they
+were acc, deviating from the documentation).
+
 The `homology` key in the `aln_annotation` attribute of an HSP object in
 Bio.SearchIO has been renamed to `similarity`.
 
 The Bio.SeqUtils masses and molecular_weight function have been updated.
+
+BioSQL can now use the mysql-connector package (available for Python 2, 3
+and PyPy) as an alternative to MySQLdb (Python 2 only) to connect to a MySQL
+database.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
@@ -36,6 +54,7 @@ Chunlei Wu (first contribution)
 Edward Liaw (first contribution)
 Eric Talevich
 Leighton Pritchard
+Manlio Calvi (first contribution)
 Markus Piotrowski (first contribution)
 Melissa Gymrek (first contribution)
 Michiel de Hoon
@@ -46,6 +65,7 @@ Tiago Antao
 Vincent Davis (first contribution)
 Wibowo 'Bow' Arindrarto
 Yanbo Ye (first contribution)
+Zheng Ruan (first contribution)
 
 ===================================================================
 
