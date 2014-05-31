@@ -149,7 +149,7 @@ def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         line_read_in = _bytes_to_string(handle.readline())
         next_position = handle.tell()
         #check for 
-        if line_read_in[0] == ">":
+        if line_read_in and line_read_in[0] == ">":
             yield FastaSeqRecProxy(handle, position, single_letter_alphabet)
             handle.seek(next_position)
 
@@ -163,14 +163,14 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
         self._pre_index_record(title2ids)
         
     def _pre_index_record(self, title2ids):
-        """This determines the values needed for lazy loading
+        """(private) set the values needed for lazy loading
 
         The self._index dictionary is only set with the file
         start location on instantiation. This function sets the
         following variables in _index
             "sequencestart" : the file index where the seq. starts
-            "sequencewidth" : the number of amino acids per line
-            "linewidth"     : the number of characters per line
+            "sequencewidth" : the number of sequence letters per line
+            "linewidth"     : the number of bytes per line
         
         This function also parses the title line and sets the following
         attributes:
@@ -209,14 +209,15 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
             self.descr = title
 
     def _read_seq(self):
-        """implements standard sequence getter required by base class"""
+        """(private) implements standard sequence getter for base class"""
+
         begin = self._index_begin
         end = self._index_end
 
         linewidth = self._index["linewidth"]
         sequencewidth = self._index["sequencewidth"]
 
-        readFrom = intbegin/sequencewidth
+        first_line_to_read = int(begin/sequencewidth)
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""

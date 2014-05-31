@@ -1,13 +1,66 @@
 import unittest
-#from Bio import SeqRecord
-#from Bio.SeqIO import _lazy
-#from Bio.Seq import Seq
-if __name__=="__main__":
-    import imp
-    import os
-    from Bio.Seq import Seq
-    from Bio.SeqIO._lazy import *
 
+import sys
+import imp
+import os
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqIO._lazy import *
+from Bio._py3k import _bytes_to_string
+from io import StringIO, BytesIO
+
+test_seq_unix = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1 SV=2\nMAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\nRSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\nTKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG"
+test_seq_win = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1 SV=2\r\nMAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\r\nRSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\r\nTKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG"
+
+
+if sys.version[0] == "3":
+    enc = sys.getdefaultencoding()
+    test_seq_unix = BytesIO(bytes(test_seq_unix, enc))
+    test_seq_win = BytesIO(bytes(test_seq_win, enc))
+else:
+    test_seq_unix = BytesIO(test_seq_unix)
+    test_seq_win = BytesIO(test_seq_win)
+
+
+class SeqRecordProxyBaseClassTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_iterator_finishes_win_type(self):
+        """The iterator must finish"""
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        for count, rec in enumerate(lazyiterator):
+            pass
+        self.assertEqual(count, 0)
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        for count, rec in enumerate(lazyiterator):
+            pass
+        self.assertEqual(count, 0)
+    
+    def test_iterator_returns_a_lazy_record(self):
+        """checks the iterator returns the correct record"""
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        first_seq = next(lazyiterator)
+        self.assertTrue(isinstance(first_seq,SeqIO.FastaIO.FastaSeqRecProxy))
+
+    def test_indexing_simple_record_win(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        first_seq = next(lazyiterator)
+        idx = first_seq._index
+        self.assertEqual(idx["sequencewidth"], 60)
+        self.assertEqual(idx["linewidth"], 62)
+
+    def test_indexing_simple_record_unix(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        first_seq = next(lazyiterator)
+        idx = first_seq._index
+        self.assertEqual(idx["sequencewidth"], 60)
+        self.assertEqual(idx["linewidth"], 61)
+unittest.main( exit=False )
+a = raw_input()
+if a == "":
+    sys.exit()
 
 class TestSeqRecordBaseClass(SeqRecordProxyBase):
     """ this class implements the minimum functionality for a working proxy
