@@ -10,7 +10,7 @@ from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC, quick_FASTA_reader, seq1, seq3
+from Bio.SeqUtils import GC, seq1, seq3
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
@@ -44,16 +44,6 @@ class SeqUtilsTests(unittest.TestCase):
         self.str_light_chain_two = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
                         + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
                         + "YCCSYAGSSTWVFGGGTKLTVL"
-
-    def test_quick_fasta_reader(self):
-        dna_fasta_filename = "Fasta/f002"
-
-        tuple_records = quick_FASTA_reader(dna_fasta_filename)
-        self.assertEqual(len(tuple_records), 3)
-        seq_records = list(SeqIO.parse(dna_fasta_filename, "fasta"))
-        self.assertEqual(len(seq_records), 3)
-        for tuple_record, seq_record in zip(tuple_records, seq_records):
-            self.assertEqual(tuple_record, (seq_record.description, str(seq_record.seq)))
 
     def test_codon_usage_ecoli(self):
         """Test Codon Adaptation Index (CAI) using default E. coli data."""

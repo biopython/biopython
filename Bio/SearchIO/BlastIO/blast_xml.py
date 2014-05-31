@@ -462,8 +462,8 @@ class BlastXmlParser(object):
                         value = caster(value)
                     setattr(frag, val_info[0], value)
 
-            # set the homology characters into aln_annotation dict
-            frag.aln_annotation['homology'] = \
+            # set the similarity characters into aln_annotation dict
+            frag.aln_annotation['similarity'] = \
                     hsp_frag_elem.findtext('Hsp_midline')
 
             # process coordinates
@@ -872,7 +872,7 @@ class BlastXmlWriter(object):
         elif elem in ('Hsp_hseq', 'Hsp_qseq'):
             content = str(getattr(hsp, attr).seq)
         elif elem == 'Hsp_midline':
-            content = hsp.aln_annotation['homology']
+            content = hsp.aln_annotation['similarity']
         elif elem in ('Hsp_evalue', 'Hsp_bit-score'):
             # adapted from src/algo/blast/format/blastxml_format.cpp#L138-140
             content = '%.*g' % (6, getattr(hsp, attr))

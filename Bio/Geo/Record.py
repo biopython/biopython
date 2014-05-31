@@ -57,7 +57,7 @@ class Record(object):
                 print(contents)
                 output += '%s: %s\n' % (key, val[:40])
                 output += out_block(val[40:])
-        col_keys = sorted(self.col_defs.keys())
+        col_keys = sorted(self.col_defs)
         output += 'Column Header Definitions\n'
         for key in col_keys:
             val = self.col_defs[key]

@@ -286,8 +286,8 @@ class Hmmer2TextParser(object):
 
             self.push_back(self.line)
 
-            # add homology sequence to annotation
-            frag.aln_annotation['homology'] = consensus
+            # add similarity sequence to annotation
+            frag.aln_annotation['similarity'] = consensus
 
             # if there's structure information, add it to the fragment
             if structureseq:

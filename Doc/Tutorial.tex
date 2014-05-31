@@ -298,7 +298,7 @@ from __future__ import print_function
   You need Biopython 1.54 or later, or just wrap the item with \verb|[...]| to create a list of one element.
 
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
-  You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
+  You need Biopython 1.45 or later.
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
   The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is/was an ongoing struggle.
@@ -744,13 +744,9 @@ Section~\ref{sec:SeqRecord-format} describes a neat way to get a FASTA formatted
 string from a \verb|SeqRecord| object, while the more general topic of reading and
 writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}.
 
-\emph{NOTE:} If you are using Biopython 1.44 or older, using \verb|str(my_seq)|
-will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
-(which is still available in the current Biopython releases for backwards compatibility):
-
 %cont-doctest
 \begin{verbatim}
->>> my_seq.tostring()
+>>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
 \end{verbatim}
 
@@ -4431,8 +4427,8 @@ object into an array of letters -- and you can do this with NumPy:
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
->>> align_array.shape
-(7, 52)
+>>> print("Array shape %i by %i" % align_array.shape)
+Array shape 7 by 52
 \end{verbatim}
 
 If you will be working heavily with the columns, you can tell NumPy to store
@@ -10077,14 +10073,15 @@ demographic parameters of real populations or disease gene mapping.
 
 The strategy followed in the Biopython implementation of the coalescent was not
 to create a new, built-in, simulator from scratch but to use an existing one,
-SIMCOAL2 (\url{http://cmpg.unibe.ch/software/simcoal2/}). SIMCOAL2 allows for,
+Fastsimcoal2 (\url{http://cmpg.unibe.ch/software/fastsimcoal2/}). Fastsimcoal2 allows for,
 among others, population structure, multiple demographic events, simulation
 of multiple types of loci (SNPs, sequences, STRs/microsatellites and RFLPs)
 with recombination, diploidy multiple chromosomes or ascertainment bias. Notably
-SIMCOAL2 doesn't support any selection model. We recommend reading SIMCOAL2's
+Fastsimcoal2 doesn't support any selection model. We recommend reading
+Fastsimcoal2's
 documentation, available in the link above.
 
-The input for SIMCOAL2 is a file specifying the desired demography and genome,
+The input for Fastsimcoal2 is a file specifying the desired demography and genome,
 the output is a set of files (typically around 1000) with the simulated genomes
 of a sample of individuals per subpopulation. This set of files can be used
 in many ways, like to compute confidence intervals where which certain
@@ -10092,7 +10089,7 @@ statistics (e.g., $F_{st}$ or Tajima D) are expected to lie. Real population
 genetics datasets statistics can then be compared to those confidence intervals.
 
 Biopython coalescent code allows to create demographic scenarios and genomes and
-to run SIMCOAL2.
+to run Fastsimcoal2.
 
 \subsection{Creating scenarios}
 
@@ -10158,8 +10155,9 @@ generate_simcoal_from_template('simple',
 \end{verbatim}
 
 Executing this code snippet will generate a file on the current directory called
-simple\_100\_300.par this file can be given as input to SIMCOAL2 to simulate the
-demography (below we will see how Biopython can take care of calling SIMCOAL2).
+simple\_100\_300.par this file can be given as input to Fastsimcoal2 to simulate the
+demography (below we will see how Biopython can take care of calling
+Fastsimcoal2).
 
 This code consists of a single function call, let's discuss it parameter by parameter.
 
@@ -10202,10 +10200,10 @@ version of this document.
 
 \subsubsection{Chromosome structure}
 
-We strongly recommend reading SIMCOAL2 documentation to understand the full potential
+We strongly recommend reading Fastsimcoal2 documentation to understand the full potential
 available in modeling chromosome structures. In this subsection we only discuss how
 to implement chromosome structures using the Biopython interface, not the underlying
-SIMCOAL2 capabilities.
+Fastsimcoal2 capabilities.
 
 We will start by implementing a single chromosome, with 24 SNPs with
 a recombination rate immediately on the right of each locus of 0.0005 and a
@@ -10263,27 +10261,28 @@ is a single microsatellite which has no loci following, this
 recombination rate here is irrelevant), with a mutation rate
 of 0.001, geometric parameter of 0.0 and a range constraint
 of 0.0 (for information about this parameters please consult
-the SIMCOAL2 documentation, you can use them to simulate
+the Fastsimcoal2 documentation, you can use them to simulate
 various mutation models, including the typical  -- for microsatellites --
 stepwise mutation model among others).
 
 
-\subsection{Running SIMCOAL2}
+\subsection{Running Fastsimcoal2}
 
-We now discuss how to run SIMCOAL2 from inside Biopython. It is required
-that the binary for SIMCOAL2 is called simcoal2 (or simcoal2.exe on Windows
+We now discuss how to run Fastsimcoal2 from inside Biopython. It is required
+that the binary for Fastsimcoal2 is called fastsimcoal21 (or fastsimcoal21.exe on Windows
 based platforms), please note that the typical name when downloading the
-program is in the format simcoal2\_x\_y. As such, when installing SIMCOAL2
+program is in the format fastsimcoal2\_x\_y. As such, when installing
+Fastsimcoal2
 you will need to rename of the downloaded executable so that Biopython can
 find it.
 
-It is possible to run SIMCOAL2 on files that were not generated using the method
+It is possible to run Fastsimcoal2 on files that were not generated using the method
 above (e.g., writing a parameter file by hand), but we will show an
 example by creating a model using the framework presented above.
 
 \begin{verbatim}
 from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
-from Bio.PopGen.SimCoal.Controller import SimCoalController
+from Bio.PopGen.SimCoal.Controller import FastSimCoalController
 
 
 generate_simcoal_from_template('simple',
@@ -10302,8 +10301,8 @@ generate_simcoal_from_template('simple',
     [('sample_size', [30]),
     ('pop_size', [100])])
 
-ctrl = SimCoalController('.')
-ctrl.run_simcoal('simple_100_30.par', 50)
+ctrl = FastSimCoalController()
+ctrl.run_fastsimcoal('simple_100_30.par', 50)
 \end{verbatim}
 
 The lines of interest are the last two (plus the new import).
@@ -10317,11 +10316,12 @@ simulation parameter file created. We then specify
 that we want to run 50 independent simulations, by default Biopython
 requests a simulation of diploid data, but a third parameter can
 be added to simulate haploid data (adding as a parameter the
-string '0'). SIMCOAL2 will now run (please
+string '0'). Fastsimcoal2 will now run (please
 note that this can take quite a lot of time) and will create a directory
 with the simulation results. The results can now be analysed (typically
 studying the data with Arlequin3). In the future Biopython might support
-reading the Arlequin3 format and thus allowing for the analysis of SIMCOAL2
+reading the Arlequin3 format and thus allowing for the analysis of
+Fastsimcoal2
 data inside Biopython.
 
 
@@ -13243,7 +13243,7 @@ The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 \begin{verbatim}
 >>> for pos, seq in m.search_instances(test_seq):
-...     print(pos, seq.tostring())
+...     print("%i %s" % (pos, seq))
 ... 
 10 TATAA
 15 TATAA
@@ -13252,7 +13252,7 @@ the true instances of the motif:
 We can do the same with the reverse complement (to find instances on the complementary strand):
 \begin{verbatim}
 >>> for pos, seq in m.reverse_complement().search_instances(test_seq):
-...     print(pos, seq.tostring())
+...     print("%i %s" % (pos, seq))
 ... 
 12 TAATA
 20 TTATA

@@ -16,7 +16,7 @@ from Bio.Alphabet import generic_protein
 
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
-from .exonerate_vulgar import parse_vulgar_comp, _RE_VULGAR
+from .exonerate_vulgar import _RE_VULGAR
 
 
 __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
@@ -125,7 +125,7 @@ def _stitch_rows(raw_rows):
     return cmbn_rows
 
 
-def _get_row_dict(row_len):
+def _get_row_dict(row_len, model):
     """Returns a dictionary of row indices for parsing alignment blocks."""
     idx = {}
     # 3 lines, usually in dna vs dna models
@@ -134,13 +134,24 @@ def _get_row_dict(row_len):
         idx['midline'] = 1
         idx['hit'] = 2
         idx['qannot'], idx['hannot'] = None, None
-    # 4 lines, in protein vs dna models
+    # 4 lines, in protein vs dna models or dna vs protein models
+    # TODO: currently we check this from the model string; is there
+    # a better way to do it?
     elif row_len == 4:
-        idx['query'] = 0
-        idx['midline'] = 1
-        idx['hit'] = 2
-        idx['hannot'] = 3
-        idx['qannot'] = None
+        if 'protein2' in model:
+            idx['query'] = 0
+            idx['midline'] = 1
+            idx['hit'] = 2
+            idx['hannot'] = 3
+            idx['qannot'] = None
+        elif '2protein' in model:
+            idx['query'] = 1
+            idx['midline'] = 2
+            idx['hit'] = 3
+            idx['hannot'] = None
+            idx['qannot'] = 0
+        else:
+            raise ValueError("Unexpected model: " + model)
     # 5 lines, translated dna vs translated dna
     elif row_len == 5:
         # set sequence indexes
@@ -165,7 +176,7 @@ def _get_blocks(rows, coords, idx):
         # get seqs according to index
         block['query'] = rows[idx['query']][start:end]
         block['hit'] = rows[idx['hit']][start:end]
-        block['homology'] = rows[idx['midline']][start:end]
+        block['similarity'] = rows[idx['midline']][start:end]
         if idx['qannot'] is not None:
             block['query_annotation'] = rows[idx['qannot']][start:end]
         if idx['hannot'] is not None:
@@ -323,7 +334,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         raw_aln_blocks, vulgar_comp = self._read_alignment()
         # cmbn_rows still has split codon markers (curly braces)
         cmbn_rows = _stitch_rows(raw_aln_blocks)
-        row_dict = _get_row_dict(len(cmbn_rows))
+        row_dict = _get_row_dict(len(cmbn_rows), qresult['model'])
         # get the sequence blocks
         has_ner = 'NER' in qresult['model'].upper()
         seq_coords = _get_block_coords(cmbn_rows, row_dict, has_ner)
@@ -350,10 +361,11 @@ class ExonerateTextParser(_BaseExonerateParser):
         hsp['aln_annotation'] = {}
         # set the alphabet
         # currently only limited to models with protein queries
-        if 'protein2' in qresult['model'] or 'coding2' in qresult['model']:
+        if 'protein2' in qresult['model'] or 'coding2' in qresult['model'] \
+                or '2protein' in qresult['model']:
             hsp['alphabet'] = generic_protein
         # get the annotations if they exist
-        for annot_type in ('homology', 'query_annotation', 'hit_annotation'):
+        for annot_type in ('similarity', 'query_annotation', 'hit_annotation'):
             try:
                 hsp['aln_annotation'][annot_type] = \
                         [x[annot_type] for x in seq_blocks]

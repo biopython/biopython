@@ -933,15 +933,24 @@ def _check_eof(handle, index_offset, index_length):
                          "null padding region ended '.sff' which could "
                          "be the start of a concatenated SFF file? "
                          "See offset %i" % (padding, offset))
+    if padding and not extra:
+        #TODO - Is this error harmless enough to just ignore?
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Your SFF file is technically invalid as it is missing "
+                      "a terminal %i byte null padding region." % padding,
+                      BiopythonParserWarning)
+        return
     if extra.count(_null) != padding:
         import warnings
         from Bio import BiopythonParserWarning
         warnings.warn("Your SFF file is invalid, post index %i byte "
-                      "null padding region contained data." % padding,
-                      BiopythonParserWarning)
+                      "null padding region contained data: %r"
+                      % (padding, extra), BiopythonParserWarning)
 
     offset = handle.tell()
-    assert offset % 8 == 0
+    assert offset % 8 == 0, \
+        "Wanted offset %i %% 8 = %i to be zero" % (offset, offset % 8)
     # Should now be at the end of the file...
     extra = handle.read(4)
     if extra == _sff:

@@ -304,12 +304,6 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(str(example1[i:j:step]),
                                              str1[i:j:step])
 
-    def test_tostring(self):
-        """Check str(obj) and obj.tostring() match."""
-        for example1 in self._examples:
-            str1 = str(example1)
-            self.assertEqual(example1.tostring(), str1)
-
     def test_tomutable(self):
         """Check obj.tomutable() method."""
         for example1 in self._examples:

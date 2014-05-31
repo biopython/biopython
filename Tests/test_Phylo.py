@@ -19,6 +19,7 @@ EX_NEWICK = 'Nexus/int_node_labels.nwk'
 EX_NEWICK2 = 'Nexus/test.new'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
 EX_NEXUS2 = 'Nexus/bats.nex'
+EX_NEWICK_BOM= 'Nexus/ByteOrderMarkFile.nwk'
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
@@ -29,11 +30,13 @@ EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 class IOTests(unittest.TestCase):
     """Tests for parsing and writing the supported formats."""
 
-    def test_newick_read_single(self):
-        """Read a Newick file with one tree."""
+    def test_newick_read_single1(self):
+        """Read first Newick file with one tree."""
         tree = Phylo.read(EX_NEWICK, 'newick')
         self.assertEqual(len(tree.get_terminals()), 28)
-        
+
+    def test_newick_read_single2(self):
+        """Read second Newick file with one tree."""
         tree = Phylo.read(EX_NEWICK2, 'newick')
         self.assertEqual(len(tree.get_terminals()), 33)
         self.assertEqual(tree.find_any('Homo sapiens').comment, 'modern human')
@@ -41,9 +44,21 @@ class IOTests(unittest.TestCase):
         self.assertEqual(tree.root.confidence, 80)
         tree = Phylo.read(EX_NEWICK2, 'newick', comments_are_confidence=True)
         self.assertEqual(tree.root.confidence, 100)
-        
+
+    def test_newick_read_single3(self):
+        """Read Nexus file with one tree."""
         tree = Phylo.read(EX_NEXUS2, 'nexus')
         self.assertEqual(len(tree.get_terminals()), 658)
+
+    def test_unicode_exception(self):
+        """Read a Newick file with a unicode byte order mark (BOM)."""
+        if sys.version_info[0] < 3:
+            self.assertRaises(NewickIO.NewickError, Phylo.read, EX_NEWICK_BOM, "newick")
+        else:
+            # Must specify the encoding on Windows
+            with open(EX_NEWICK_BOM, encoding="utf-8") as handle:
+                tree = Phylo.read(handle, 'newick')
+            self.assertEqual(len(tree.get_terminals()), 3)
 
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""

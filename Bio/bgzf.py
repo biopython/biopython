@@ -319,10 +319,15 @@ def split_virtual_offset(virtual_offset):
 def BgzfBlocks(handle):
     """Low level debugging function to inspect BGZF blocks.
 
+    Expects a BGZF compressed file opened in binary read mode using
+    the builtin open function. Do not use a handle from this bgzf
+    module or the gzip module's open function which will decompress
+    the file.
+
     Returns the block start offset (see virtual offsets), the block
     length (add these for the start of the next block), and the
     decompressed length of the blocks contents (limited to 65536 in
-    BGZF).
+    BGZF), as an iterator - one tuple per BGZF block.
 
     >>> try:
     ...     from __builtin__ import open # Python 2
@@ -701,6 +706,12 @@ class BgzfReader(object):
     def fileno(self):
         return self._handle.fileno()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
+
 
 class BgzfWriter(object):
 
@@ -802,6 +813,12 @@ class BgzfWriter(object):
 
     def fileno(self):
         return self._handle.fileno()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
 
 
 if __name__ == "__main__":

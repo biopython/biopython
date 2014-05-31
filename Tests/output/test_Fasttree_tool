@@ -1,0 +1,32 @@
+test_Fasttree_tool
+Checking error conditions
+=========================
+Empty file
+Failed (good)
+
+Single sequence
+Failed (good)
+
+Invalid sequence
+Failed (good)
+
+Checking normal situations
+==========================
+
+Calling fasttree on 'Quality/example.fasta' (with 3 records)
+
+Checking generation of tree terminals
+Success
+
+Checking distances between tree terminals
+Success
+
+Calling fasttree on 'Clustalw/temp horses.fasta' (with 10 records)
+
+Checking generation of tree terminals
+Success
+
+Checking distances between tree terminals
+Success
+
+Done

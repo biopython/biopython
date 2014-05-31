@@ -39,8 +39,8 @@ if sys.platform == "win32":
     # was chosen here but users can alter the path according to where
     # fasttree is located on their systems
 
-    likely_dirs = ["Fasttree", "fasttree", "FastTree"]
-    likely_exes = ["Fasttree.exe", "fasttree.exe", "FastTree.exe"]
+    likely_dirs = ["", "FastTree"]
+    likely_exes = ["FastTree.exe"]
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
@@ -51,18 +51,21 @@ if sys.platform == "win32":
                 break
 else:
     from Bio._py3k import getoutput
-    # Checking the -help argument
-    output = getoutput("fasttree -help")
-    # Since "is not recognized" may be in another language, try and be sure this
-    # is really the fasttree tool's output
-    fasttree_found = False
-    if "is not recognized" not in output and "protein_alignment" in output \
-    and "nucleotide_alignment" in output:
-        fasttree_exe = "fasttree"
+    # Website uses 'FastTree', Nate's system had 'fasttree'
+    likely_exes = ["FastTree", "fasttree"]
+    for filename in likely_exes:
+        # Checking the -help argument
+        output = getoutput("%s -help" % filename)
+        # Since "is not recognized" may be in another language, try and be sure this
+        # is really the fasttree tool's output
+        if "is not recognized" not in output and "protein_alignment" in output \
+        and "nucleotide_alignment" in output:
+            fasttree_exe = filename
+            break
 
 if not fasttree_exe:
     raise MissingExternalDependencyError(
-        "Install fasttree and correctly set the file path to the program "
+        "Install FastTree and correctly set the file path to the program "
         "if you want to use it from Biopython.")
 
 #################################################################
@@ -141,7 +144,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
 
     #Any filesnames with spaces should get escaped with quotes automatically.
     #Using keyword arguments here.
-    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file)
+    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file, nt=True)
     assert str(eval(repr(cline)))==str(cline)
 
     out, err = cline()

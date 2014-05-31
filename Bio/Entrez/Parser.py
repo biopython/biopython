@@ -38,6 +38,7 @@ be used directly.
 import os
 import warnings
 from xml.parsers import expat
+from io import BytesIO
 
 #Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
@@ -514,15 +515,14 @@ class DataHandler(object):
         if not handle:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
-            from Bio._py3k import StringIO
             try:
                 handle = _urlopen(url)
             except IOError:
-                raise RuntimeException("Failed to access %s at %s" % (filename, url))
+                raise RuntimeError("Failed to access %s at %s" % (filename, url))
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
-            handle = StringIO(text)
+            handle = BytesIO(text)
 
         parser = self.parser.ExternalEntityParserCreate(context)
         parser.ElementDeclHandler = self.elementDecl

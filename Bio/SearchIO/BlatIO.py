@@ -6,7 +6,7 @@
 """Bio.SearchIO parser for BLAT output formats.
 
 This module adds support for parsing BLAT outputs. BLAT (BLAST-Like Alignment
-Tool) is a sequence homology search program initially built for annotating
+Tool) is a sequence similarity search program initially built for annotating
 the human genome.
 
 Bio.SearchIO.BlastIO was tested using standalone BLAT version 34, psLayout

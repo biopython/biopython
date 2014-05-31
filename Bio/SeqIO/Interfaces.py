@@ -72,60 +72,6 @@ class SequenceIterator(object):
         return iter(self.__next__, None)
 
 
-class InterlacedSequenceIterator(SequenceIterator):
-    """Base class for any iterator of a non-sequential file type (DEPRECATED).
-
-    This object was not intended for direct use, and is now deprecated.
-    """
-
-    def __init__(self):
-        """Create the object.
-
-        This method should be replaced by any derived class to do something useful."""
-        #We assume that your implementation of __init__ will ensure self._n=0
-        self.move_start()
-        raise NotImplementedError("This object method should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
-    def __len__(self):
-        """Return the number of records.
-
-        This method should be replaced by any derived class to do something useful."""
-        raise NotImplementedError("This object method should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
-    def __getitem__(self, i):
-        """Return the requested record.
-
-        This method should be replaced by any derived class to do something
-        useful.
-
-        It should NOT touch the value of self._n"""
-        raise NotImplementedError("This object method should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
-    def move_start(self):
-        self._n = 0
-
-    def __next__(self):
-        next_record = self._n
-        if next_record < len(self):
-            self._n = next_record + 1
-            return self[next_record]
-        else:
-            #StopIteration
-            return None
-
-    def __iter__(self):
-        return iter(self.__next__, None)
-
-
 class SequenceWriter(object):
     """This class should be subclassed.
 

@@ -5,6 +5,7 @@
 # as part of this package.
 
 import unittest
+from io import BytesIO
 
 try:
     from Bio import trie
@@ -16,8 +17,6 @@ except ImportError:
     else:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingPythonDependencyError(message)
-
-from Bio._py3k import StringIO
 
 class TestTrie(unittest.TestCase):
 
@@ -91,7 +90,7 @@ class TestTrie(unittest.TestCase):
             y[z] = y.get(z, 0) + 1
         x = sorted(y.items())
         self.assertEqual(x, [(('foo', 1, 0), 1), (('hello', '55a', 4), 6)])
-        h = StringIO()
+        h = BytesIO()
         trie.save(h, trieobj)
         h.seek(0)
         trieobj = trie.load(h)

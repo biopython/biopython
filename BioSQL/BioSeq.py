@@ -101,10 +101,14 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
             return Seq(full[::index.step], self.alphabet)
 
     def tostring(self):
-        """Returns the full sequence as a python string.
+        """Returns the full sequence as a python string (DEPRECATED).
 
-        Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring()."""
+        You are now encouraged to use str(my_seq) instead of
+        my_seq.tostring()."""
+        import warnings
+        warnings.warn("This method is obsolete; please use str(my_seq) "
+                      "instead of my_seq.tostring().",
+                      PendingDeprecationWarning)
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,
                                                  self.start + self._length)

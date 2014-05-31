@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO objects to model homology search program outputs.
+"""Bio.SearchIO objects to model similarity search program outputs.
 
 The SearchIO object model consists of a hierarchy of four nested objects:
 

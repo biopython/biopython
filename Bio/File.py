@@ -71,8 +71,14 @@ def as_handle(handleish, mode='r', **kwargs):
     >>> fp.closed
     False
     >>> fp.close()
+
+    Note that if the mode argument includes U (for universal new lines)
+    this will be removed under Python 3 where is is redundant and has
+    been deprecated (this happens automatically in text mode).
     """
     if isinstance(handleish, basestring):
+        if sys.version_info[0] >= 3 and "U" in mode:
+            mode = mode.replace("U", "")
         if 'encoding' in kwargs:
             with codecs.open(handleish, mode, **kwargs) as fp:
                 yield fp

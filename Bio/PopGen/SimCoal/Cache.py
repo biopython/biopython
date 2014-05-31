@@ -1,6 +1,7 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
 
 """
+(DEPRECATED)
 This module allows to cache Simcoal2 results, and return on the fly
 in case the calculation was done.
 
@@ -8,7 +9,11 @@ in case the calculation was done.
 
 import os
 import tarfile
+import warnings
 from .Controller import SimCoalController
+warnings.warn("Bio.PopGen.SimCoal.Cache has been deprecated, and we intend to"
+              " remove it in a future release of Biopython.",
+              DeprecationWarning)
 
 
 class SimCoalCache(object):

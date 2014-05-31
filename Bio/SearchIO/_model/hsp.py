@@ -760,15 +760,16 @@ class HSPFragment(_BaseHSP):
             except AttributeError:  # hit is None
                 hseq = '?'
 
-            # homology line
-            homol = ''
-            if 'homology' in self.aln_annotation:
-                homol = self.aln_annotation['homology']
+            # similarity line
+            simil = ''
+            if 'similarity' in self.aln_annotation and \
+                    isinstance(self.aln_annotation.get('similarity'), basestring):
+                simil = self.aln_annotation['similarity']
 
             if self.aln_span <= 67:
                 lines.append("%10s - %s" % ('Query', qseq))
-                if homol:
-                    lines.append("             %s" % homol)
+                if simil:
+                    lines.append("             %s" % simil)
                 lines.append("%10s - %s" % ('Hit', hseq))
             else:
                 # adjust continuation character length, so we don't display
@@ -779,9 +780,9 @@ class HSPFragment(_BaseHSP):
                     cont = '~' * (self.aln_span - 66)
                 lines.append("%10s - %s%s%s" % ('Query',
                                 qseq[:59], cont, qseq[-5:]))
-                if homol:
+                if simil:
                     lines.append("             %s%s%s" %
-                            (homol[:59], cont, homol[-5:]))
+                            (simil[:59], cont, simil[-5:]))
                 lines.append("%10s - %s%s%s" % ('Hit',
                                 hseq[:59], cont, hseq[-5:]))
 

@@ -22,6 +22,11 @@ Python 3.0, 3.1, 3.2
 Never officially supported, these trigger a warning in Release 1.62
 recommending Python 3.3 or later if you wish to use Python 3.
 
+Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
+========================================================
+Deprecated as of Release 1.64. You should now use str(Bio.Seq.Seq) or
+str(Bio.Seq.MutableSeq) instead of the tostring() methods.
+
 Iterator .next() methods
 ========================
 The .next() method defined for any Biopython iterator is deprecated as of
@@ -67,16 +72,19 @@ be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================
-Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
+Unused class InterlacedSequenceIterator was deprecated in Release 1.61, and
+removed in Release 1.64.
 
 Bio.HotRand
 ===========
-Obsolete file Bio/HotRand.py was deprecated in Release 1.61, consider using
-an alternative RNG, or the Python module "randomdotorg".
+Obsolete file Bio/HotRand.py was deprecated in Release 1.61, and removed in
+Release 1.64. Consider using an alternative RNG, or the Python module
+"randomdotorg".
 
 Bio.Search
 ==========
-Long obsolete file Bio/Search.py was deprecated in Release 1.61.
+Long obsolete file Bio/Search.py was deprecated in Release 1.61, and removed
+in Release 1.64.
 
 Bio.Pathway.Rep.HashSet
 =======================
@@ -127,8 +135,8 @@ Bio.Blast.NCBIStandalone
 ========================
 The three functions for calling the "legacy" NCBI BLAST command line tools
 blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
-1.53, and deprecated in Release 1.61. Please use the BLAST+ wrappers in
-Bio.Blast.Applications instead.
+1.53, deprecated in Release 1.61, and removed in Release 1.64. Please use
+the BLAST+ wrappers in Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
 which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
@@ -141,9 +149,9 @@ Bio.Blast.Applications
 ======================
 NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
 BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
-1.53 and deprecated in Release 1.61, having been replaced with wrappers for
-the new NCBI BLAST+ tools (e.g.  NcbiblastpCommandline and
-NcbipsiblastCommandline).
+1.53, deprecated in Release 1.61, and removed in Release 1.64, having been
+replaced with wrappers for the new NCBI BLAST+ tools (e.g.
+NcbiblastpCommandline and NcbipsiblastCommandline).
 
 Bio.Clustalw
 ============
@@ -463,9 +471,10 @@ Functions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
 quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
 in Release 1.58.
 
-Function quick_FASTA_reader was declared obsolete in Release 1.61. Use
-function list(SimpleFastaParser(handle)) in Bio.SeqIO.FastaIO instead
-(but ideally convert your code to using an iterator approach).
+Function quick_FASTA_reader was declared obsolete in Release 1.61, and
+deprecated in Release 1.64. Use function list(SimpleFastaParser(handle))
+from Bio.SeqIO.FastaIO instead (but ideally convert your code to using
+an iterator approach).
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
@@ -560,8 +569,9 @@ UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
 and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
-The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59,
-and deprecated in Release 1.61.
+
+Submodule Bio.UniGene.UniGene which was an HTML parser was declared obsolete
+in Release 1.59, deprecated in Release 1.61, and removed in Release 1.64.
 
 Bio.SubsMat
 ===========
@@ -581,3 +591,12 @@ Release 1.63.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.
+
+Bio.PopGen.SimCoal
+==================
+The modules Bio.PopGen.SimCoal.Async and Bio.PopGen.SimCoal.Cache were
+deprecated since Release 1.64.
+
+The class SimCoalController in Bio.PopGen.SimCoal.Controller was
+also deprecated in favour of FastSimCoalController (i.e. Simcoal2 was
+deprecated for fastsimcoal).

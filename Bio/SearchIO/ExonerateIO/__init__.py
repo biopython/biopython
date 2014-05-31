@@ -134,7 +134,7 @@ For 'exonerate-text', ExonerateIO provides the following object attributes:
 |                 | query_split_codons      | list of split codon coordinates  |
 |                 |                         | in the query sequence            |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | aln_annotation          | alignment homology string, hit   |
+| HSPFragment     | aln_annotation          | alignment similarity string, hit |
 |                 |                         | sequence annotation, and/or      |
 |                 |                         | query sequence annotation        |
 |                 +-------------------------+----------------------------------+

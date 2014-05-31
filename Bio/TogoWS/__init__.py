@@ -162,10 +162,14 @@ def search_count(db, query):
         import warnings
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
-    handle = _open(_BASE_URL + "/search/%s/%s/count"
-                   % (db, _quote(query)))
-    count = int(handle.read().strip())
+    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+    handle = _open(url)
+    data = handle.read()
     handle.close()
+    try:
+        count = int(data.strip())
+    except ValueError:
+        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
     return count
 
 

@@ -368,7 +368,7 @@ The blast-text parser provides the following object attributes:
 |                 | pos_num                 | number of positive matches in    |
 |                 |                         | alignment                        |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | aln_annotation          | alignment homology string        |
+| HSPFragment     | aln_annotation          | alignment similarity string      |
 | (also via       +-------------------------+----------------------------------+
 | HSP)            | aln_span                | length of alignment fragment     |
 |                 +-------------------------+----------------------------------+

@@ -56,12 +56,13 @@ class BgzfTests(unittest.TestCase):
         data = h.read()
         h.close()
 
-        h = bgzf.BgzfWriter(output_file, "wb")
-        h.write(data)
-        self.assertFalse(h.seekable())
-        self.assertFalse(h.isatty())
-        self.assertEqual(h.fileno(), h._handle.fileno())
-        h.close()  # Gives empty BGZF block as BAM EOF marker
+        with bgzf.BgzfWriter(output_file, "wb") as h:
+            h.write(data)
+            self.assertFalse(h.seekable())
+            self.assertFalse(h.isatty())
+            self.assertEqual(h.fileno(), h._handle.fileno())
+        #Context manager should call close(),
+        #Gives empty BGZF block as BAM EOF marker
 
         h = gzip.open(output_file)
         new_data = h.read()
@@ -83,6 +84,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_text(self, old_file, new_file):
+        """Check text mode using explicit open/close"""
         h = open(old_file)  # text mode!
         old_line = h.readline()
         old = old_line + h.read()
@@ -92,6 +94,20 @@ class BgzfTests(unittest.TestCase):
         new_line = h.readline()
         new = new_line + h.read(len(old))
         h.close()
+
+        self.assertEqual(old_line, new_line)
+        self.assertEqual(len(old), len(new))
+        self.assertEqual(old, new)
+
+    def check_text_with(self, old_file, new_file):
+        """Check text mode using context manager (with statement)"""
+        with open(old_file) as h: # text mode!
+            old_line = h.readline()
+            old = old_line + h.read()
+
+        with bgzf.BgzfReader(new_file, "r") as h: # Text mode!
+            new_line = h.readline()
+            new = new_line + h.read(len(old))
 
         self.assertEqual(old_line, new_line)
         self.assertEqual(len(old), len(new))
@@ -171,7 +187,7 @@ class BgzfTests(unittest.TestCase):
         blocks = list(bgzf.BgzfBlocks(h))
         h.close()
 
-        #Forward
+        #Forward, using explicit open/close
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         self.assertTrue(h.seekable())
@@ -188,16 +204,15 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
-        #Reverse
+        #Reverse, using with statement
         new = _empty_bytes_string
-        h = bgzf.BgzfReader(filename, "rb")
-        for start, raw_len, data_start, data_len in blocks[::-1]:
-            h.seek(bgzf.make_virtual_offset(start, 0))
-            data = h.read(data_len)
-            self.assertEqual(len(data), data_len)
-            #self.assertEqual(start + raw_len, h._handle.tell())
-            new = data + new
-        h.close()
+        with bgzf.BgzfReader(filename, "rb") as h:
+            for start, raw_len, data_start, data_len in blocks[::-1]:
+                h.seek(bgzf.make_virtual_offset(start, 0))
+                data = h.read(data_len)
+                self.assertEqual(len(data), data_len)
+                #self.assertEqual(start + raw_len, h._handle.tell())
+                new = data + new
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
@@ -278,10 +293,12 @@ class BgzfTests(unittest.TestCase):
     def test_text_wnts_xml(self):
         """Check text mode access to Blast/wnts.xml.bgz"""
         self.check_text("Blast/wnts.xml", "Blast/wnts.xml.bgz")
+        self.check_text_with("Blast/wnts.xml", "Blast/wnts.xml.bgz")
 
     def test_text_example_fastq(self):
         """Check text mode access to Quality/example.fastq.bgz"""
         self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
+        self.check_text_with("Quality/example.fastq", "Quality/example.fastq.bgz")
 
     def test_iter_wnts_xml(self):
         """Check iteration over Blast/wnts.xml.bgz"""

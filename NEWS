@@ -22,15 +22,27 @@ Unix like systems, and ``$APPDATA/biopython`` on Windows).
 Bio.Sequencing.Applications now includes a wrapper for the samtools command
 line tool.
 
+Bio.PopGen.SimCoal now also supports fastsimcoal.
+
+The `homology` key in the `aln_annotation` attribute of an HSP object in
+Bio.SearchIO has been renamed to `similarity`.
+
+The Bio.SeqUtils masses and molecular_weight function have been updated.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Chunlei Wu (first contribution)
 Edward Liaw (first contribution)
 Eric Talevich
 Leighton Pritchard
+Markus Piotrowski (first contribution)
+Melissa Gymrek (first contribution)
 Michiel de Hoon
+Nigel Delaney (first contribution)
 Peter Cock
 Saket Choudhary
+Tiago Antao
 Vincent Davis (first contribution)
 Wibowo 'Bow' Arindrarto
 Yanbo Ye (first contribution)

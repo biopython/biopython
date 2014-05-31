@@ -579,8 +579,8 @@ class SummaryInfo(object):
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
                                      "do not match observed %s"
-                                     % (list(e_freq_table.keys()),
-                                        list(obs_freq.keys()) - [gap_char]))
+                                     % (list(e_freq_table),
+                                        list(obs_freq) - [gap_char]))
 
         total_info = 0.0
 
@@ -697,7 +697,7 @@ if __name__ == "__main__":
 
     alignment = AlignIO.read(open(filename), format)
     for record in alignment:
-        print(str(record.seq))
+        print(record.seq)
     print("="*alignment.get_alignment_length())
 
     summary = SummaryInfo(alignment)

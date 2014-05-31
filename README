@@ -38,7 +38,7 @@ directory at the command line, and type::
     sudo python setup.py install
 
 Windows users are instead recommended to use the installation packages provided
-on our website, http://biopython.org
+on our website, http://biopython.org -- further instructions are given below.
 
 
 Python Requirements
@@ -48,15 +48,15 @@ We currently recommend using Python 2.7 from http://www.python.org which
 is the final version of Python 2. Early adopters are encouraged to try
 Biopython under Python 3.3 as well.
 
-Biopython is currently supported and tested on the following Python verions:
+Biopython is currently supported and tested on the following Python versions:
 
-- Python 2.6, 2.7, 3.3 -- see http://www.python.org
+- Python 2.6, 2.7, 3.3, 3.4 -- see http://www.python.org
 
   This is the currently the primary development platform for Biopython.
 
 - PyPy 1.9, 2.0, 2.1, 2.2 -- see http://www.pypy.org
 
-  Aside from modules with C code or dependent of NumPy, everything should
+  Aside from modules with C code or dependent on NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
 
 - Jython 2.7 -- see http://www.jython.org

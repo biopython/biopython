@@ -292,16 +292,14 @@ class Seq(object):
             raise TypeError
 
     def tostring(self):                            # Seq API requirement
-        """Returns the full sequence as a python string (semi-obsolete).
+        """Returns the full sequence as a python string (DEPRECATED).
 
-        Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring()."""
-        #TODO - Fix all places elsewhere in Biopython using this method,
-        #then start deprecation process?
-        #import warnings
-        #warnings.warn("This method is obsolete; please use str(my_seq) "
-        #              "instead of my_seq.tostring().",
-        #              PendingDeprecationWarning)
+        You are now encouraged to use str(my_seq) instead of
+        my_seq.tostring()."""
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("This method is obsolete; please use str(my_seq) "
+                      "instead of my_seq.tostring().",
+                      BiopythonDeprecationWarning)
         return str(self)
 
     def tomutable(self):   # Needed?  Or use a function?
@@ -379,7 +377,7 @@ class Seq(object):
         >>> print(Seq("AAAA").count("AA"))
         2
 
-        A non-overlapping search would give the answer as three!
+        An overlapping search would give the answer as three!
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
@@ -1556,7 +1554,6 @@ class MutableSeq(object):
         """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
-            import warnings
             warnings.warn("In future comparing incompatible alphabets will "
                           "only trigger a warning (not an exception). In "
                           "the interim please use id(seq1)==id(seq2) or "
@@ -1718,11 +1715,11 @@ class MutableSeq(object):
         >>> print(MutableSeq("AAAA").count("AA"))
         2
 
-        A non-overlapping search would give the answer as three!
+        An overlapping search would give the answer as three!
         """
         try:
             #TODO - Should we check the alphabet?
-            search = sub.tostring()
+            search = str(sub)
         except AttributeError:
             search = sub
 
@@ -1738,7 +1735,7 @@ class MutableSeq(object):
             return count
         else:
             #TODO - Can we do this more efficiently?
-            return self.tostring().count(search, start, end)
+            return str(self).count(search, start, end)
 
     def index(self, item):
         for i in range(len(self.data)):
@@ -1801,10 +1798,10 @@ class MutableSeq(object):
                 self.data.append(c)
 
     def tostring(self):
-        """Returns the full sequence as a python string (semi-obsolete).
+        """Returns the full sequence as a python string (DEPRECATED).
 
-        Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring().
+        You are now encouraged to use str(my_seq) instead of my_seq.tostring()
+        as this method is officially deprecated.
 
         Because str(my_seq) will give you the full sequence as a python string,
         there is often no need to make an explicit conversion.  For example,
@@ -1815,6 +1812,10 @@ class MutableSeq(object):
 
         print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
         """
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("This method is obsolete; please use str(my_seq) "
+                      "instead of my_seq.tostring().",
+                      BiopythonDeprecationWarning)
         return "".join(self.data)
 
     def toseq(self):
@@ -1968,7 +1969,6 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         n -= 6
         amino_acids = ["M"]
     elif n % 3 != 0:
-        import warnings
         from Bio import BiopythonWarning
         warnings.warn("Partial codon, len(sequence) not a multiple of three. "
                       "Explicitly trim the sequence or add trailing N before "
