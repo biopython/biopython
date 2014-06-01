@@ -13,6 +13,7 @@ from io import StringIO, BytesIO
 tsu1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
         "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\n" + \
         "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\n" + \
+        "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\n" + \
         "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG\n" + \
         ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\n" + \
         "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\n"
@@ -20,11 +21,13 @@ tsu1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
 tsu2 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
         "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\n" + \
         "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\n" + \
+        "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\n" + \
         "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG\n\n" + \
         ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\n" + \
         "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\n"
 #the exact sequence of O15205 [1:164]
 tsuseq = "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR" + \
+         "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE" + \
          "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE" + \
          "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG"
 #sigle fasta record
@@ -33,6 +36,7 @@ tsu3 = ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\n" + \
 #a windows formatted fasta
 tsw1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\r\n" + \
         "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\r\n" + \
+        "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\r\n" + \
         "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\r\n" + \
         "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG\r\n" + \
         ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\r\n" + \
@@ -86,12 +90,12 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         idx = second_seq._index
         self.assertEqual(idx["sequencewidth"], 51)
         self.assertEqual(idx["linewidth"], 52)
-        self.assertEqual(idx["start"], 229)
+        self.assertEqual(idx["start"], 290)
     
     def test_len_win(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
         first_seq = next(lazyiterator)
-        self.assertEqual(first_seq._len, 165)
+        self.assertEqual(first_seq._len, 225)
 
     def test_indexing_2nd_record_win(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
@@ -100,7 +104,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         idx = second_seq._index
         self.assertEqual(idx["sequencewidth"], 51)
         self.assertEqual(idx["linewidth"], 53)
-        self.assertEqual(idx["start"], 233)
+        self.assertEqual(idx["start"], 295)
 
     def test_sequence_getter_zero_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
@@ -126,50 +130,51 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         s = firstseq[6:10]
         self.assertEqual(str(s.seq), "CLCV")  
 
-    def test_sequence_getter_unix_2_line_span(self):
+    def test_sequence_getter_unix_2_line_span1(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
         firstseq = next(lazyiterator)
-        s = firstseq[59:61]
+        s = firstseq[59:62]
         self.assertEqual(str(s.seq), "RRS")
 
-    def test_sequence_getter_unix_2_line_span(self):
+    def test_sequence_getter_unix_2_line_span2(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_gaped)
         firstseq = next(lazyiterator)
         secondseq = next(lazyiterator)
         s = secondseq[40:43]
         self.assertEqual(str(s.seq), "RGY")
 
-    def test_sequence_getter_win_2_line_span(self):
+    def test_sequence_getter_unix_2_line_span3(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
         firstseq = next(lazyiterator)
-        s = firstseq[59:61]
-        self.assertEqual(str(s.seq), "RRS")
+        s = firstseq[58:62]
+        self.assertEqual(str(s.seq), tsuseq[58:62])
 
     def test_sequence_getter_win_2_line_span(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
         firstseq = next(lazyiterator)
         s = firstseq[59:61]
-        self.assertEqual(str(s.seq), "RRS")
+        self.assertEqual(str(s.seq), tsuseq[59:61])
 
     def test_sequence_getter_full_span(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq
-        self.assertEqual(str(s.seq), tsuseq)   
+        self.assertEqual(str(s.seq), tsuseq)
     
     def test_sequence_getter_explicit_full_span(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
         firstseq = next(lazyiterator)
-        s = firstseq[0:165]
-        self.assertEqual(str(s.seq), tsuseq)
+        s = firstseq[3:225]
+        self.assertEqual(str(s.seq), tsuseq[3:225])
 
     def test_sequence_getter_inset_full_span(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
         firstseq = next(lazyiterator)
-        s = firstseq[1:164]
-        self.assertEqual(len(s), 163)
-        #self.assertEqual(len(s.seq), 163)
-        self.assertEqual(str(s.seq), tsuseq[1:164])   
+        s = firstseq[0:161]
+        self.assertEqual(len(tsuseq[0:161]), 161)
+        self.assertEqual(len(s), 161)
+        self.assertEqual(len(s.seq), 161)
+        self.assertEqual(str(s.seq), tsuseq[0:161]) 
 
 unittest.main( exit=False )
 a = raw_input()

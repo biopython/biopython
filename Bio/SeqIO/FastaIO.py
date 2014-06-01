@@ -238,35 +238,39 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
     def _read_seq(self):
         """(private) implements standard sequence getter for base class"""
         
-        #localize some instance attributes
+        #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
         lengthtoget = end - begin
         handle = self._handle
-        linewidth = self._index["linewidth"]
         sequencewidth = self._index["sequencewidth"]
-        seqstart = self._index["sequencestart"]
-
+        
         #find first line to read
+        seqstart = self._index["sequencestart"]
+        linewidth = self._index["linewidth"]
         first_line_to_read = int(begin/sequencewidth)
         handle.seek(seqstart + first_line_to_read*linewidth)
 
-        #fix characters from first line
+        #pull characters from first line and return early if possible
         letters_firstline = begin%sequencewidth
         firstline = _bytes_to_string(handle.readline().strip()[letters_firstline:])
+        if len(firstline) >= lengthtoget:
+            self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
+            return
+        
+        #extract the rest of the lines
         readchars = len(firstline)
         linelist = [firstline]
         while readchars < lengthtoget:
-            next_line = _bytes_to_string(handle.readline())
-            fileposition = handle.tell()
+            next_line = _bytes_to_string(handle.readline()).strip()
             if not next_line:
                 break
             else:
-                linelist.append(next_line.strip())
+                linelist.append(next_line)
                 readchars += sequencewidth
 
         #fix the last line and assign the _seq attribute
-        last_line_index = lengthtoget%sequencewidth
+        last_line_index = end%sequencewidth
         linelist[-1] = linelist[-1][0:last_line_index]
         sequence = "".join(linelist)
         self._seq = Seq(sequence, self._alphabet)
