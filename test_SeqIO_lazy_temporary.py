@@ -9,17 +9,44 @@ from Bio.SeqIO._lazy import *
 from Bio._py3k import _bytes_to_string
 from io import StringIO, BytesIO
 
-test_seq_unix = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1 SV=2\nMAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\nRSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\nTKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG"
-test_seq_win = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1 SV=2\r\nMAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\r\nRSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\r\nTKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG"
-
+#a 2 record unix formatted fasta
+tsu1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
+        "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\n" + \
+        "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\n" + \
+        "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG\n" + \
+        ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\n" + \
+        "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\n"
+#extra newline after ..YCIGG in tsu2
+tsu2 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
+        "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\n" + \
+        "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\n" + \
+        "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG\n\n" + \
+        ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\n" + \
+        "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\n"
+#the exact sequence of O15205 [1:164]
+tsuseq = "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR" + \
+         "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE" + \
+         "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG"
+#sigle fasta record
+tsu3 = ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\n" + \
+        "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\n"
+#a windows formatted fasta
+tsw1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\r\n" + \
+        "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\r\n" + \
+        "RSLSSYGIDKEKTIHLTLKVVKPSDEELPLFLVESGDEAKRHLLQVRRSSSVAQVKAMIE\r\n" + \
+        "TKTGIIPETQIVTCNGKRLEDGKMMADYGIRKGNLLFLACYCIGG\r\n" + \
+        ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\r\n" + \
+        "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\r\n"
 
 if sys.version[0] == "3":
     enc = sys.getdefaultencoding()
-    test_seq_unix = BytesIO(bytes(test_seq_unix, enc))
-    test_seq_win = BytesIO(bytes(test_seq_win, enc))
+    test_seq_unix = BytesIO(bytes(tsu1, enc))
+    test_seq_gaped = BytesIO(bytes(tsu2, enc))
+    test_seq_win = BytesIO(bytes(tsw1, enc))
 else:
-    test_seq_unix = BytesIO(test_seq_unix)
-    test_seq_win = BytesIO(test_seq_win)
+    test_seq_unix = BytesIO(tsu1)
+    test_seq_gaped = BytesIO(tsu2)
+    test_seq_win = BytesIO(tsw1)
 
 
 class SeqRecordProxyBaseClassTests(unittest.TestCase):
@@ -32,11 +59,11 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
         for count, rec in enumerate(lazyiterator):
             pass
-        self.assertEqual(count, 0)
+        self.assertEqual(count, 1)
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
         for count, rec in enumerate(lazyiterator):
             pass
-        self.assertEqual(count, 0)
+        self.assertEqual(count, 1)
     
     def test_iterator_returns_a_lazy_record(self):
         """checks the iterator returns the correct record"""
@@ -50,13 +77,100 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         idx = first_seq._index
         self.assertEqual(idx["sequencewidth"], 60)
         self.assertEqual(idx["linewidth"], 62)
+        self.assertEqual(idx["start"], 0)
 
-    def test_indexing_simple_record_unix(self):
+    def test_indexing_2nd_record_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        second_seq = next(lazyiterator)
+        second_seq = next(lazyiterator)
+        idx = second_seq._index
+        self.assertEqual(idx["sequencewidth"], 51)
+        self.assertEqual(idx["linewidth"], 52)
+        self.assertEqual(idx["start"], 229)
+    
+    def test_len_win(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
         first_seq = next(lazyiterator)
-        idx = first_seq._index
-        self.assertEqual(idx["sequencewidth"], 60)
-        self.assertEqual(idx["linewidth"], 61)
+        self.assertEqual(first_seq._len, 165)
+
+    def test_indexing_2nd_record_win(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        second_seq = next(lazyiterator)
+        second_seq = next(lazyiterator)
+        idx = second_seq._index
+        self.assertEqual(idx["sequencewidth"], 51)
+        self.assertEqual(idx["linewidth"], 53)
+        self.assertEqual(idx["start"], 233)
+
+    def test_sequence_getter_zero_unix(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        firstseq = next(lazyiterator)
+        s = firstseq[0:10]
+        self.assertEqual(str(s.seq), "MAPNASCLCV")
+
+    def test_sequence_getter_zero_win(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        firstseq = next(lazyiterator)
+        s = firstseq[0:10]
+        self.assertEqual(str(s.seq), "MAPNASCLCV")
+
+    def test_sequence_getter_unix(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        firstseq = next(lazyiterator)
+        s = firstseq[6:10]
+        self.assertEqual(str(s.seq), "CLCV")   
+
+    def test_sequence_getter_win(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        firstseq = next(lazyiterator)
+        s = firstseq[6:10]
+        self.assertEqual(str(s.seq), "CLCV")  
+
+    def test_sequence_getter_unix_2_line_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        firstseq = next(lazyiterator)
+        s = firstseq[59:61]
+        self.assertEqual(str(s.seq), "RRS")
+
+    def test_sequence_getter_unix_2_line_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_gaped)
+        firstseq = next(lazyiterator)
+        secondseq = next(lazyiterator)
+        s = secondseq[40:43]
+        self.assertEqual(str(s.seq), "RGY")
+
+    def test_sequence_getter_win_2_line_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        firstseq = next(lazyiterator)
+        s = firstseq[59:61]
+        self.assertEqual(str(s.seq), "RRS")
+
+    def test_sequence_getter_win_2_line_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        firstseq = next(lazyiterator)
+        s = firstseq[59:61]
+        self.assertEqual(str(s.seq), "RRS")
+
+    def test_sequence_getter_full_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        firstseq = next(lazyiterator)
+        s = firstseq
+        self.assertEqual(str(s.seq), tsuseq)   
+    
+    def test_sequence_getter_explicit_full_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        firstseq = next(lazyiterator)
+        s = firstseq[0:165]
+        self.assertEqual(str(s.seq), tsuseq)
+
+    def test_sequence_getter_inset_full_span(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        firstseq = next(lazyiterator)
+        s = firstseq[1:164]
+        self.assertEqual(len(s), 163)
+        #self.assertEqual(len(s.seq), 163)
+        self.assertEqual(str(s.seq), tsuseq[1:164])   
+
 unittest.main( exit=False )
 a = raw_input()
 if a == "":

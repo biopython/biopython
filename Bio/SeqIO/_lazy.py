@@ -85,16 +85,16 @@ class SeqRecordProxyBase(SeqRecord):
      -      self.__init__    ::: the init provided in the base class is for testing
      -      self._read_seq    ::: gets the sequence from file and sets it
 
-
-
     """
+    
     def __init__(self):
         raise NotImplementedError( \
             "__init__ must be implemented in the derived class")
     
+    _seq = None
     
     def _return_seq(self):
-        """this simple function removes getter logic from _read_seq"""
+        """(private) removes getter logic from _read_seq"""
         if not self._seq:
             self._read_seq()
         return self._seq
