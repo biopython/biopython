@@ -457,7 +457,7 @@ sys.path.insert(0, src_path)
 setup_args = {
     "name": 'biopython',
     "version": __version__,
-    "author": 'The Biopython Consortium',
+    "author": 'The Biopython Contributors',
     "author_email": 'biopython@biopython.org',
     "url": 'http://www.biopython.org/',
     "description": 'Freely available tools for computational molecular biology.',
