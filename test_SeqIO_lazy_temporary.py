@@ -6,7 +6,7 @@ import os
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqIO._lazy import *
-from Bio._py3k import _bytes_to_string
+from Bio._py3k import _bytes_to_string, basestring
 from io import StringIO, BytesIO
 
 #a 2 record unix formatted fasta
@@ -53,7 +53,7 @@ else:
     test_seq_win = BytesIO(tsw1)
 
 
-class SeqRecordProxyBaseClassTests(unittest.TestCase):
+class LazyFastaIOSimpleTests(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -176,10 +176,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual(len(s.seq), 161)
         self.assertEqual(str(s.seq), tsuseq[0:161]) 
 
-unittest.main( exit=False )
-a = raw_input()
-if a == "":
-    sys.exit()
+
 
 class TestSeqRecordBaseClass(SeqRecordProxyBase):
     """ this class implements the minimum functionality for a working proxy
@@ -580,8 +577,9 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertIn(testTuple3,self.bins[8388605:8388606])
         self.assertEqual([],self.bins[8388603:8388604])
 
-a = TestSeqRecordBaseClass("seQUencefake", "fakeid")
-unittest.main( exit=False )
-"""if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
-    unittest.main(testRunner=runner)"""
+#a = TestSeqRecordBaseClass("seQUencefake", "fakeid")
+#unittest.main( exit=False )
+if __name__ == "__main__":
+    #Run the test cases
+    runner = unittest.TextTestRunner(verbosity=1)
+    unittest.main(testRunner=runner)
