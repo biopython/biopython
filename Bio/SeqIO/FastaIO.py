@@ -133,19 +133,24 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
             yield SeqRecord(Seq(sequence, alphabet),
                             id=first_word, name=first_word, description=title)
 
+
 def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Returns FastaLazyRecords in the order that they are stored"""
     offsetiterator = sequential_record_offset_iterator(handle, rec_marker=">")
-    for offset_begin, last_line_offset, offset_end in offsetiterator:
-        yield FastaSeqRecProxy(handle, offset_begin, last_line_offset, offset_end, alphabet)
+    for offset_begin, offset_end, padding in offsetiterator:
+        yield FastaSeqRecProxy(handle, offset_begin, offset_end, padding, alphabet)
+
 
 class FastaSeqRecProxy(SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
-    def __init__(self, handle, startoffset, lastlineoffset, endoffset, alphabet, title2ids = None):
+    def __init__(self, handle, startoffset=None, endoffset=None,\
+                 padding=None, alphabet=None, title2ids = None):
         self._handle = handle
         self._alphabet = alphabet
-        self._index = {"recstartoffset":startoffset, "lastlineoffset":lastlineoffset, "recendoffset":endoffset}
+        self._index = {"recordstartoffset":startoffset, 
+                       "recordendoffset":endoffset,
+                       "padding":padding}
         self._pre_index_sequence_portion(title2ids)
         self._index_begin = 0
         self._index_end = self._len
@@ -156,9 +161,9 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
         The self._index dictionary is only set with the file
         start location on instantiation. This function sets the
         following variables in _index
-           "sequencestart" : the file index where the seq. starts
-           "sequencewidth" : the number of sequence letters per line
-           "linewidth"     : the number of bytes per line
+           "sequencestart"       : the file index where the seq. starts
+           "sequencelinewidth"   : the number of sequence letters per line
+           "sequenceletterwidth" : the number of bytes per line
         
         This function also parses the title line and sets the following
         attributes:
@@ -167,32 +172,36 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
            self.descr
         """
         handle = self._handle
-        startoffset = self._index["recstartoffset"]
-        lastlineoffset = self._index["lastlineoffset"]
-        handle.seek(startoffset)
+        start_offset = self._index["recordstartoffset"]
+        end_offset = self._index["recordendoffset"]
+        padding_length = self._index["padding"]
+        unpadded_end = end_offset - padding_length
+        handle.seek(start_offset)
 
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()
         firstlineoffset = handle.tell()
         self._index["sequencestart"] = firstlineoffset
         firstseqline = _bytes_to_string(handle.readline())
+        offset_after_first_seqline = handle.tell()
 
-        #this segment fills out the regarding the beginning
+        #Find the width of all lines
         linewidth = len(firstseqline)
-        self._index["linewidth"] = linewidth
         sequencewidth = len(firstseqline.strip())
-        self._index["sequencewidth"] = sequencewidth
+        self._index["sequencelinewidth"] = linewidth
+        self._index["sequenceletterwidth"] = sequencewidth
 
-        if lastlineoffset == firstlineoffset:
-            self._len = self._index["sequencewidth"]
-        else:
-            seqlen = int((lastlineoffset - firstlineoffset)/linewidth)*sequencewidth
-            handle.seek(lastlineoffset)
-            lastline =  _bytes_to_string(handle.readline().strip())
-            seqlen = seqlen + len(lastline)
-            self._len = seqlen
+        #Find the last line and save the _len property
+        seqlen = int((unpadded_end - firstlineoffset)/linewidth)*sequencewidth
+        seq_last_ln_mod = (unpadded_end - firstlineoffset)%linewidth
+        seq_last_ln = unpadded_end - seq_last_ln_mod
+        handle.seek(seq_last_ln)
+        possiblelastline = handle.readline()
+        if seq_last_ln_mod > 0:
+            seqlen += len(possiblelastline.strip())
+        self._len = seqlen
 
-        #This segment of code sets attibutes of the SeqRecord proxy
+        #Set attibutes of the SeqRecord proxy
         if title2ids:
             id, name, descr = title2ids(title)
             self.id = id
@@ -216,11 +225,11 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
         end = self._index_end
         lengthtoget = end - begin
         handle = self._handle
-        sequencewidth = self._index["sequencewidth"]
+        sequencewidth = self._index["sequenceletterwidth"]
         
         #find first line to read
         seqstart = self._index["sequencestart"]
-        linewidth = self._index["linewidth"]
+        linewidth = self._index["sequencelinewidth"]
         first_line_to_read = int(begin/sequencewidth)
         handle.seek(seqstart + first_line_to_read*linewidth)
 

@@ -216,15 +216,24 @@ def sequential_record_offset_iterator(handle, rec_marker=">"):
 
     This function will step through a sequentially oriented sequence
     record file and return offset tuples for each format compliant record.
+
+    The yield format is a 3-tuple representing the following
+      (record_begin_offset, record_end_offset, total_padding)
+
+      record_begin_offset = the index of the first character of the record
+      record_end_offset = the index of the first character of the next record
+      padding = the number of extra characters (espc, blank and newline) 
+                added to the end of the record prior to the next record
     """
     # Set handle to beginning and set offsets to valid initial values
     handle.seek(0)
     current_offset, next_offset = -1, 0
     end_offset = None
+    padding = 0
     while True:
         #check if the file has ended then yield the last record
         if current_offset == next_offset:
-            yield current_record_offset, end_offset, next_offset
+            yield current_record_offset, current_offset, padding
             break
         
         # Advance the current_offset markers, using handle.readline().
@@ -242,13 +251,17 @@ def sequential_record_offset_iterator(handle, rec_marker=">"):
         # Encountering any record but the first will return the most recent
         # fully-read record
         elif currentline and currentline[0] == rec_marker:
-            yield current_record_offset, end_offset, next_offset
+            yield current_record_offset, current_offset, padding
             current_record_offset = current_offset
             # One cannot assume the handle will retain position.
             handle.seek(next_offset)
+        elif currentline.strip() == "":
+            padding += len(currentline)
+            end_offset = current_offset
         else:
             #save position if no marker is found in order to denote
             #the end of the feature when a new marker is found
+            padding = 0
             end_offset = current_offset
 
 class FeatureBinCollection(object):
