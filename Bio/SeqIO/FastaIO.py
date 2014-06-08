@@ -18,7 +18,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio._py3k import _bytes_to_string, _as_bytes
-from ._lazy import SeqRecordProxyBase
+from ._lazy import SeqRecordProxyBase, sequential_record_offset_iterator
 
 __docformat__ = "restructuredtext en"
 
@@ -134,50 +134,23 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
                             id=first_word, name=first_word, description=title)
 
 def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
-    """Steps through the fast file and returns lazy loading SeqRecord
-
-    This function will 
-    """
-    #set handle to beginning
-    handle.seek(0)
-    position, next_position = -1, 0
-    prevposition = None
-    while True:
-        #check if iteration has ended then yield the last record
-        if position == next_position:
-            yield FastaSeqRecProxy(handle, currentRecordPosition, \
-                                   prevposition, single_letter_alphabet)
-            break
-        #Advance the position markers
-        position = next_position
-        line_read_in = _bytes_to_string(handle.readline())
-        next_position = handle.tell()
-        #check if we encounter the first record
-        if line_read_in and line_read_in[0] == ">" and not prevposition:
-            currentRecordPosition = position
-        #check if a record is ready to return
-        elif line_read_in and line_read_in[0] == ">":
-            yield FastaSeqRecProxy(handle, currentRecordPosition, \
-                                   prevposition, single_letter_alphabet)
-            currentRecordPosition = position
-            #one cannot assume the handle will retain position
-            handle.seek(next_position)
-        else:
-            #save position if no '>'' is found
-            prevposition = position
+    """Returns FastaLazyRecords in the order that they are stored"""
+    offsetiterator = sequential_record_offset_iterator(handle, rec_marker=">")
+    for offset_begin, last_line_offset, offset_end in offsetiterator:
+        yield FastaSeqRecProxy(handle, offset_begin, last_line_offset, offset_end, alphabet)
 
 class FastaSeqRecProxy(SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
-    def __init__(self, handle, startoffset, lastlineoffset, alphabet, title2ids = None):
+    def __init__(self, handle, startoffset, lastlineoffset, endoffset, alphabet, title2ids = None):
         self._handle = handle
         self._alphabet = alphabet
-        self._index = {"start":startoffset, "lastlineoffset":lastlineoffset}
-        self._pre_index_record(title2ids)
+        self._index = {"recstartoffset":startoffset, "lastlineoffset":lastlineoffset, "recendoffset":endoffset}
+        self._pre_index_sequence_portion(title2ids)
         self._index_begin = 0
         self._index_end = self._len
         
-    def _pre_index_record(self, title2ids):
+    def _pre_index_sequence_portion(self, title2ids):
         """(private) set the values needed for lazy loading
 
         The self._index dictionary is only set with the file
@@ -194,9 +167,9 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
            self.descr
         """
         handle = self._handle
-        start = self._index["start"]
+        startoffset = self._index["recstartoffset"]
         lastlineoffset = self._index["lastlineoffset"]
-        handle.seek(start)
+        handle.seek(startoffset)
 
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()

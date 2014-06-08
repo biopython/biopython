@@ -32,7 +32,7 @@ records may not trigger an exception unless the problem region is requested.
 This is by design.
 """
 
-from Bio._py3k import _is_int_or_long
+from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_bytes
 from ..SeqRecord import SeqRecord, _RestrictedDict
 from copy import copy
 from math import floor, ceil, log
@@ -210,6 +210,46 @@ class SeqRecordProxyBase(SeqRecord):
     #def __repr__(self):
     #def __contains__(self, char):
     #def __iter__(self):
+
+def sequential_record_offset_iterator(handle, rec_marker=">"):
+    """Steps through a sequence file and returns offset pairs
+
+    This function will step through a sequentially oriented sequence
+    record file and return offset tuples for each format compliant record.
+    """
+    # Set handle to beginning and set offsets to valid initial values
+    handle.seek(0)
+    current_offset, next_offset = -1, 0
+    end_offset = None
+    while True:
+        #check if the file has ended then yield the last record
+        if current_offset == next_offset:
+            yield current_record_offset, end_offset, next_offset
+            break
+        
+        # Advance the current_offset markers, using handle.readline().
+        # unlike iterators, reaching the end of the handle and calling
+        # readline will not raise StopIteration, instead it will return
+        # a an empty string and the file offset will not advance
+        current_offset = next_offset
+        currentline = _bytes_to_string(handle.readline())
+        next_offset = handle.tell()
+
+        # Check if we encounter the first record then save the offset
+        #  
+        if currentline and currentline[0] == rec_marker and not end_offset:
+            current_record_offset = current_offset
+        # Encountering any record but the first will return the most recent
+        # fully-read record
+        elif currentline and currentline[0] == rec_marker:
+            yield current_record_offset, end_offset, next_offset
+            current_record_offset = current_offset
+            # One cannot assume the handle will retain position.
+            handle.seek(next_offset)
+        else:
+            #save position if no marker is found in order to denote
+            #the end of the feature when a new marker is found
+            end_offset = current_offset
 
 class FeatureBinCollection(object):
     """this class manages the creation and maintenance of feature indices
