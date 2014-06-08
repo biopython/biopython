@@ -42,15 +42,26 @@ tsw1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\r\n" + \
         ">sp|P15516|HIS3_HUMAN Histatin-3 OS=Homo sapiens GN=HTN3 PE=1\r\n" + \
         "MKFFVFALILALMLSMTGADSHAKRHHGYKRKFHEKHHSHRGYRSNYLYDN\r\n"
 
+double_padded = ">sp|O15205|UBD_HUMAN Ubiquitin D\r\n" + \
+                "MAPNASCLCVHVRSEEW\r\n" + \
+                "MANSANCLLCPPPPPPP\r\n" + \
+                "MANSAC\r\n\r\n" + \
+                ">spfake some label\r\n" + \
+                "HHHHHHHH\r\n\r\n" + \
+                ">spfake2 some other label\r\n" + \
+                "IIIIIIII\r\n\r\n"
+
 if sys.version[0] == "3":
     enc = sys.getdefaultencoding()
     test_seq_unix = BytesIO(bytes(tsu1, enc))
     test_seq_gaped = BytesIO(bytes(tsu2, enc))
     test_seq_win = BytesIO(bytes(tsw1, enc))
+    test_double_padded = BytesIO(bytes(double_padded, enc))
 else:
     test_seq_unix = BytesIO(tsu1)
     test_seq_gaped = BytesIO(tsu2)
     test_seq_win = BytesIO(tsw1)
+    test_double_padded = BytesIO(double_padded)
 
 
 class LazyFastaIOSimpleTests(unittest.TestCase):
@@ -79,18 +90,18 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
         first_seq = next(lazyiterator)
         idx = first_seq._index
-        self.assertEqual(idx["sequencewidth"], 60)
-        self.assertEqual(idx["linewidth"], 62)
-        self.assertEqual(idx["recstartoffset"], 0)
+        self.assertEqual(idx["sequenceletterwidth"], 60)
+        self.assertEqual(idx["sequencelinewidth"], 62)
+        self.assertEqual(idx["recordstartoffset"], 0)
 
     def test_indexing_2nd_record_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
         second_seq = next(lazyiterator)
         second_seq = next(lazyiterator)
         idx = second_seq._index
-        self.assertEqual(idx["sequencewidth"], 51)
-        self.assertEqual(idx["linewidth"], 52)
-        self.assertEqual(idx["recstartoffset"], 290)
+        self.assertEqual(idx["sequenceletterwidth"], 51)
+        self.assertEqual(idx["sequencelinewidth"], 52)
+        self.assertEqual(idx["recordstartoffset"], 290)
     
     def test_len_win(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
@@ -102,9 +113,9 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         second_seq = next(lazyiterator)
         second_seq = next(lazyiterator)
         idx = second_seq._index
-        self.assertEqual(idx["sequencewidth"], 51)
-        self.assertEqual(idx["linewidth"], 53)
-        self.assertEqual(idx["recstartoffset"], 295)
+        self.assertEqual(idx["sequenceletterwidth"], 51)
+        self.assertEqual(idx["sequencelinewidth"], 53)
+        self.assertEqual(idx["recordstartoffset"], 295)
 
     def test_sequence_getter_zero_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
@@ -117,6 +128,19 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         firstseq = next(lazyiterator)
         s = firstseq[0:10]
         self.assertEqual(str(s.seq), "MAPNASCLCV")
+   
+    def test_double_padded_len(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_double_padded)
+        firstseq = next(lazyiterator)
+        self.assertEqual(2, firstseq._index["padding"])
+        self.assertEqual(len(firstseq), 40)
+
+    def test_double_padded_len_oneline(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_double_padded)
+        firstseq = next(lazyiterator)
+        firstseq = next(lazyiterator)
+        self.assertEqual(2, firstseq._index["padding"])
+        self.assertEqual(len(firstseq), 8)
 
     def test_sequence_getter_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
