@@ -81,7 +81,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         idx = first_seq._index
         self.assertEqual(idx["sequencewidth"], 60)
         self.assertEqual(idx["linewidth"], 62)
-        self.assertEqual(idx["start"], 0)
+        self.assertEqual(idx["recstartoffset"], 0)
 
     def test_indexing_2nd_record_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
@@ -90,7 +90,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         idx = second_seq._index
         self.assertEqual(idx["sequencewidth"], 51)
         self.assertEqual(idx["linewidth"], 52)
-        self.assertEqual(idx["start"], 290)
+        self.assertEqual(idx["recstartoffset"], 290)
     
     def test_len_win(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
@@ -104,7 +104,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         idx = second_seq._index
         self.assertEqual(idx["sequencewidth"], 51)
         self.assertEqual(idx["linewidth"], 53)
-        self.assertEqual(idx["start"], 295)
+        self.assertEqual(idx["recstartoffset"], 295)
 
     def test_sequence_getter_zero_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
