@@ -60,9 +60,9 @@ bad_header = ">sp|O15205|UBD_HUMAN Ubiquitin D\n" + \
 
 bad_line = ">sp|O15205|UBD_HUMAN Ubiquitin D\n" + \
              "MAPNCVHVRSEEW\n" + \
-             "MANSLCPPPPPPPP\n" + \
-             "MANSLCPPPPPPP\n" + \
-             "MANSAC\n" + \
+             "MANSLCPPPPPDEM\n" + \
+             "ANSLCPPPPPPPM\n" + \
+             "ANSAC\n" + \
              ">wellformatted label\n" + \
              "HHHHHHHH\n"
 
@@ -160,6 +160,20 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         firstseq = next(lazyiterator)
         self.assertEqual(2, firstseq._index["padding"])
         self.assertEqual(len(firstseq), 8)
+
+    def test_one_bad_sequence_line(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_bad_line)
+        firstseq = next(lazyiterator)
+        #self.assertEqual(45, len(firstseq))
+        #self.assertEqual("DEMANS", str(firstseq[24:30].seq))
+        self.assertRaises(ValueError, firstseq._read_seq)
+
+    def test_one_bad_sequence_header(self):
+        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_bad_header)
+        firstseq = next(lazyiterator)
+        #self.assertEqual(45, len(firstseq))
+        #self.assertEqual("DEMANS", str(firstseq[24:30].seq))
+        self.assertRaises(ValueError, firstseq._read_seq)
 
     def test_sequence_getter_unix(self):
         lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)

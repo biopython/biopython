@@ -259,6 +259,9 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
         linelist = [firstline]
         while readchars < lengthtoget:
             next_line = _bytes_to_string(handle.readline()).strip()
+            if " " in next_line:
+                raise ValueError \
+                    ("No spaces permitted: see line '%s'"%(next_line))
             if not next_line:
                 break
             else:
@@ -269,6 +272,8 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
         last_line_index = end%sequencewidth
         linelist[-1] = linelist[-1][0:last_line_index]
         sequence = "".join(linelist)
+        if len(sequence) != len(self):
+            raise ValueError("File not formatted correctly")
         self._seq = Seq(sequence, self._alphabet)
 
 
