@@ -145,17 +145,42 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
     def __init__(self, handle, startoffset=None, endoffset=None,\
-                 padding=None, alphabet=None, title2ids = None):
+                 padding=None, alphabet=None, title2ids = None,\
+                 index=None, featurelist=None):
         self._handle = handle
         self._alphabet = alphabet
         self._index = {"recordstartoffset":startoffset, 
                        "recordendoffset":endoffset,
                        "padding":padding}
-        self._pre_index_sequence_portion(title2ids)
+        self._pre_index_sequence_portion()
         self._index_begin = 0
+        self._load_non_lazy_values(title2ids)
         self._index_end = self._len
-        
-    def _pre_index_sequence_portion(self, title2ids):
+    
+    def _load_non_lazy_values(self, title2ids):
+        """(private) set static seqrecord values"""
+        handle = self._handle
+        start_offset = self._index["recordstartoffset"]
+        handle.seek(start_offset)
+        titleline = _bytes_to_string(handle.readline())
+        title = titleline[1:].rstrip()
+        #Set attibutes of the SeqRecord proxy
+        if title2ids:
+            id, name, descr = title2ids(title)
+            self.id = id
+            self.name = name
+            self.description = descr
+        else:
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                first_word = ""
+            self.id = first_word
+            self.name = first_word
+            self.description = title
+
+    def _pre_index_sequence_portion(self):
         """(private) set the values needed for lazy loading
 
         The self._index dictionary is only set with the file
@@ -185,9 +210,12 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
         firstseqline = _bytes_to_string(handle.readline())
         offset_after_first_seqline = handle.tell()
 
-        #Find the width of all lines
+        #Find the width of the average line
         linewidth = len(firstseqline)
-        sequencewidth = len(firstseqline.strip())
+        strippedline = firstseqline.strip()
+        sequencewidth = len(strippedline)
+        if " " in strippedline:
+            raise ValueError("Check file format at '%s'"%(strippedline))
         self._index["sequencelinewidth"] = linewidth
         self._index["sequenceletterwidth"] = sequencewidth
 
@@ -201,21 +229,7 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
             seqlen += len(possiblelastline.strip())
         self._len = seqlen
 
-        #Set attibutes of the SeqRecord proxy
-        if title2ids:
-            id, name, descr = title2ids(title)
-            self.id = id
-            self.name = name
-            self.description = descr
-        else:
-            try:
-                first_word = title.split(None, 1)[0]
-            except IndexError:
-                assert not title, repr(title)
-                first_word = ""
-            self.id = first_word
-            self.name = first_word
-            self.description = title
+        
 
     def _read_seq(self):
         """(private) implements standard sequence getter for base class"""

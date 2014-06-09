@@ -117,27 +117,40 @@ class SeqRecordProxyBase(SeqRecord):
         or a copy of itself with new marker indices.
         """
         if isinstance(index, int):
-            #This mimics the behavior of the current SeqRecord
-            #The recursive call is required to prevent full parsing while
-            #only calling a single resiude
+            #The recursive call is required to prevent full parsing when
+            # only calling a single resiude
             return self[index:index+1].seq[0]
         
         elif isinstance(index, slice):
+            #Raise an error if there is no seq to access.
             parent_length = len(self)
-            if parent_length <= 0:
-                raise ValueError("If the sequence length is zero, we cannot slice it.")
-            
-            #this is what will be returned
-            seq_proxy_copy = copy(self)
-            #do some index math
             start, stop, step = index.indices(parent_length)
-            seq_proxy_copy._index_begin = self._index_begin + start
-            seq_proxy_copy._index_end = self._index_begin + stop
-            #fix _seq property when set
-            if self._seq:
-                seq_proxy_copy._seq = self._seq[start:stop]
+            if parent_length <= 0:
+                raise ValueError("Cannot slice sequence length <= 0.")
+            #For step values != 1, return a SeqRecord instance mimicing
+            # the return behavior of SeqRecord. Some lazy loading is still
+            # performed by pre-narrowing the sequence window
+            if step != 1:
+                indexsmall = min(start,stop)
+                indexlarge = max(start,stop)
+                if self.seq is None:
+                    raise ValueError("If the sequence is None, we cannot slice it.")
+                return SeqRecord(self[indexsmall:indexlarge].seq[::step],
+                                 id=self.id,
+                                 name=self.name,
+                                 description=self.description)
+            elif step == 1:
+                #this is what will be returned
+                seq_proxy_copy = copy(self)
+                #do some index math
+                seq_proxy_copy._index_begin = self._index_begin + start
+                seq_proxy_copy._index_end = self._index_begin + stop
+                #fix _seq property when set
+                if self._seq:
+                    seq_proxy_copy._seq = self._seq[start:stop]
 
-            return seq_proxy_copy
+                return seq_proxy_copy
+
         raise ValueError("Invalid index")
     
     
@@ -263,6 +276,7 @@ def sequential_record_offset_iterator(handle, rec_marker=">"):
             #the end of the feature when a new marker is found
             padding = 0
             end_offset = current_offset
+
 
 class FeatureBinCollection(object):
     """this class manages the creation and maintenance of feature indices

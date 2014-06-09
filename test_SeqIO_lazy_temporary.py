@@ -51,17 +51,36 @@ double_padded = ">sp|O15205|UBD_HUMAN Ubiquitin D\r\n" + \
                 ">spfake2 some other label\r\n" + \
                 "IIIIIIII\r\n\r\n"
 
+bad_header = ">sp|O15205|UBD_HUMAN Ubiquitin D\n" + \
+             "MAPNASCLCVHVRSEEW\n" + \
+             "MANSANCLLCPPPPPPP\n" + \
+             "MANSAC\n" + \
+             "badlyformatted some label\n" + \
+             "HHHHHHHH\n"
+
+bad_line = ">sp|O15205|UBD_HUMAN Ubiquitin D\n" + \
+             "MAPNCVHVRSEEW\n" + \
+             "MANSLCPPPPPPPP\n" + \
+             "MANSLCPPPPPPP\n" + \
+             "MANSAC\n" + \
+             ">wellformatted label\n" + \
+             "HHHHHHHH\n"
+
 if sys.version[0] == "3":
     enc = sys.getdefaultencoding()
     test_seq_unix = BytesIO(bytes(tsu1, enc))
     test_seq_gaped = BytesIO(bytes(tsu2, enc))
     test_seq_win = BytesIO(bytes(tsw1, enc))
     test_double_padded = BytesIO(bytes(double_padded, enc))
+    test_bad_line = BytesIO(byte(bad_line, enc))
+    test_bad_header = BytesIO(byte(bad_header, enc))
 else:
     test_seq_unix = BytesIO(tsu1)
     test_seq_gaped = BytesIO(tsu2)
     test_seq_win = BytesIO(tsw1)
     test_double_padded = BytesIO(double_padded)
+    test_bad_line = BytesIO(bad_line)
+    test_bad_header = BytesIO(bad_header)
 
 
 class LazyFastaIOSimpleTests(unittest.TestCase):
