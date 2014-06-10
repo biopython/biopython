@@ -131,7 +131,7 @@ def parse_pdb_header(infile):
     return _parse_pdb_header_list(header)
 
 
-def _parse_pdb_header_list(header):
+def _parse_pdb_header_list(header,header_line_handler=None):
     # database fields
     dict={'name':"",
         'head':'',
@@ -250,8 +250,9 @@ def _parse_pdb_header_list(header):
                     #print('nonstandard resolution %r' % r)
                     dict['resolution']=None
         else:
-            # print(key)
-            pass
+            pass        
+        if header_line_handler:
+                    header_line_handler(dict,hh) 
     if dict['structure_method']=='unknown':
         if dict['resolution']>0.0:
             dict['structure_method']='x-ray diffraction'

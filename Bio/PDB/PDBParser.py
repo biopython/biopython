@@ -63,8 +63,13 @@ class PDBParser(object):
         self.line_counter = 0
         self.PERMISSIVE = bool(PERMISSIVE)
         self.QUIET = bool(QUIET)
+        self._header_line_handler = None
 
+    
     # Public methods
+    
+    def set_header_line_handler(self,fn_header_line_handler):
+        self._header_line_handler = fn_header_line_handler
 
     def get_structure(self, id, file):
         """Return the structure.
@@ -122,7 +127,7 @@ class PDBParser(object):
         # Return the rest of the coords+trailer for further processing
         self.line_counter = i
         coords_trailer = header_coords_trailer[i:]
-        header_dict = _parse_pdb_header_list(header)
+        header_dict = _parse_pdb_header_list(header,self._header_line_handler)
         return header_dict, coords_trailer
 
     def _parse_coordinates(self, coords_trailer):
@@ -215,10 +220,21 @@ class PDBParser(object):
                 elif current_residue_id != residue_id or current_resname != resname:
                     current_residue_id = residue_id
                     current_resname = resname
-                    try:
-                        structure_builder.init_residue(resname, hetero_flag, resseq, icode)
+                    
+                    
+                    try: 
+                        field = hetero_flag
+                        if field == "H":
+                                # The hetero field consists of H_ + the residue name (e.g. H_FUC)
+                                field="H_"+resname
+                        res_id=(field, resseq, icode)
+                        if not structure_builder.chain.has_id(res_id) or (structure_builder.chain.has_id(res_id) and
+                            len([atom_repeated for atom_repeated in structure_builder.chain[res_id] if atom_repeated.id == name])>0):
+                            structure_builder.init_residue(resname, hetero_flag, resseq, icode) 
+                        else:
+                            structure_builder.residue = structure_builder.chain[res_id]
                     except PDBConstructionException as message:
-                        self._handle_PDB_exception(message, global_line_counter)
+                            self._handle_PDB_exception(message, global_line_counter)
                 # init atom
                 try:
                     structure_builder.init_atom(name, coord, bfactor, occupancy, altloc,
