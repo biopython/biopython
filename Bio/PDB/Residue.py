@@ -77,7 +77,7 @@ class Residue(Entity):
         PDBConstructionException if so.
         """
         atom_id=atom.get_id()
-        if self.has_id(atom_id):
+        if self.has_id(atom_id) and self.resname != "STP":
             raise PDBConstructionException(
                 "Atom %s defined twice in residue %s" % (atom_id, self))
         Entity.add(self, atom)
