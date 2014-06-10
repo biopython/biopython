@@ -81,7 +81,7 @@ class Entity(object):
     def add(self, entity):
         "Add a child to the Entity."
         entity_id=entity.get_id()
-        if self.has_id(entity_id) and (self.resname != "STP"):
+        if self.has_id(entity_id) and (self.resname != "STP"): 
             raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)

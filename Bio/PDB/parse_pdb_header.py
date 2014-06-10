@@ -252,7 +252,7 @@ def _parse_pdb_header_list(header,header_line_handler=None):
         else:
             pass        
         if header_line_handler:
-                    header_line_handler(dict,hh)
+                    header_line_handler(dict,hh) 
     if dict['structure_method']=='unknown':
         if dict['resolution']>0.0:
             dict['structure_method']='x-ray diffraction'

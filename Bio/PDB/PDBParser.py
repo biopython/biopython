@@ -234,7 +234,7 @@ class PDBParser(object):
                         res_id=(field, resseq, icode)
                         if not structure_builder.chain.has_id(res_id) or (structure_builder.chain.has_id(res_id) and
                             len([atom_repeated for atom_repeated in structure_builder.chain[res_id] if atom_repeated.id == name])>0):
-                            structure_builder.init_residue(resname, hetero_flag, resseq, icode)
+                            structure_builder.init_residue(resname, hetero_flag, resseq, icode) 
                         else:
                             structure_builder.residue = structure_builder.chain[res_id]
                     except PDBConstructionException as message:
