@@ -9,6 +9,7 @@ from Bio.SeqIO._lazy import *
 from Bio._py3k import _bytes_to_string, basestring
 from io import StringIO, BytesIO
 
+
 #a 2 record unix formatted fasta
 tsu1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
         "MAPNASCLCVHVRSEEWDLMTFDANPYDSVKKIKEHVRSKTKVPVQDQVLLLGSKILKPR\n" + \
@@ -86,146 +87,153 @@ else:
 class LazyFastaIOSimpleTests(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.parser = SeqIO.FastaIO.FastaLazyIterator
 
     def test_iterator_finishes_win_type(self):
         """The iterator must finish"""
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         for count, rec in enumerate(lazyiterator):
             pass
         self.assertEqual(count, 1)
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         for count, rec in enumerate(lazyiterator):
             pass
         self.assertEqual(count, 1)
     
     def test_iterator_returns_a_lazy_record(self):
         """checks the iterator returns the correct record"""
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         first_seq = next(lazyiterator)
         self.assertTrue(isinstance(first_seq,SeqIO.FastaIO.FastaSeqRecProxy))
 
     def test_indexing_simple_record_win(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         first_seq = next(lazyiterator)
         idx = first_seq._index
         self.assertEqual(idx["sequenceletterwidth"], 60)
         self.assertEqual(idx["sequencelinewidth"], 62)
-        self.assertEqual(idx["recordstartoffset"], 0)
+        self.assertEqual(idx["recordoffsetstart"], 0)
 
     def test_indexing_2nd_record_unix(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         second_seq = next(lazyiterator)
         second_seq = next(lazyiterator)
         idx = second_seq._index
         self.assertEqual(idx["sequenceletterwidth"], 51)
         self.assertEqual(idx["sequencelinewidth"], 52)
-        self.assertEqual(idx["recordstartoffset"], 290)
+        self.assertEqual(idx["recordoffsetstart"], 290)
     
     def test_len_win(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         first_seq = next(lazyiterator)
         self.assertEqual(first_seq._len, 225)
 
     def test_indexing_2nd_record_win(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         second_seq = next(lazyiterator)
         second_seq = next(lazyiterator)
         idx = second_seq._index
         self.assertEqual(idx["sequenceletterwidth"], 51)
         self.assertEqual(idx["sequencelinewidth"], 53)
-        self.assertEqual(idx["recordstartoffset"], 295)
+        self.assertEqual(idx["recordoffsetstart"], 295)
 
     def test_sequence_getter_zero_unix(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq[0:10]
         self.assertEqual(str(s.seq), "MAPNASCLCV")
 
     def test_sequence_getter_zero_win(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         firstseq = next(lazyiterator)
         s = firstseq[0:10]
         self.assertEqual(str(s.seq), "MAPNASCLCV")
    
-    def test_double_padded_len(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_double_padded)
+    def test_double_padded_seq_len(self):
+        lazyiterator = self.parser(test_double_padded)
         firstseq = next(lazyiterator)
-        self.assertEqual(2, firstseq._index["padding"])
         self.assertEqual(len(firstseq), 40)
 
-    def test_double_padded_len_oneline(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_double_padded)
+    def test_double_padded_padding_difference(self):
+        lazyiterator = self.parser(test_double_padded)
         firstseq = next(lazyiterator)
-        firstseq = next(lazyiterator)
-        self.assertEqual(2, firstseq._index["padding"])
-        self.assertEqual(len(firstseq), 8)
+        secondseq = next(lazyiterator)
+        firstseqi =firstseq._index
+        firstseqend = firstseqi["recordoffsetstart"] + firstseqi["recordoffsetlength"]
+        padding = secondseq._index["recordoffsetstart"] - firstseqend
+        self.assertEqual(2, padding)
 
     def test_one_bad_sequence_line(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_bad_line)
+        lazyiterator = self.parser(test_bad_line)
         firstseq = next(lazyiterator)
         #self.assertEqual(45, len(firstseq))
         #self.assertEqual("DEMANS", str(firstseq[24:30].seq))
         self.assertRaises(ValueError, firstseq._read_seq)
 
+    def test_end_iteration(self):
+        lazyiterator = self.parser(test_seq_unix)
+        firstseq = next(lazyiterator)
+        secondseq = next(lazyiterator)
+        self.assertRaises(StopIteration, next, lazyiterator)
+
     def test_one_bad_sequence_header(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_bad_header)
+        lazyiterator = self.parser(test_bad_header)
         firstseq = next(lazyiterator)
         #self.assertEqual(45, len(firstseq))
         #self.assertEqual("DEMANS", str(firstseq[24:30].seq))
         self.assertRaises(ValueError, firstseq._read_seq)
 
     def test_sequence_getter_unix(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq[6:10]
         self.assertEqual(str(s.seq), "CLCV")   
 
     def test_sequence_getter_win(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         firstseq = next(lazyiterator)
         s = firstseq[6:10]
         self.assertEqual(str(s.seq), "CLCV")  
 
     def test_sequence_getter_unix_2_line_span1(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq[59:62]
         self.assertEqual(str(s.seq), "RRS")
 
     def test_sequence_getter_unix_2_line_span2(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_gaped)
+        lazyiterator = self.parser(test_seq_gaped)
         firstseq = next(lazyiterator)
         secondseq = next(lazyiterator)
         s = secondseq[40:43]
         self.assertEqual(str(s.seq), "RGY")
 
     def test_sequence_getter_unix_2_line_span3(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         firstseq = next(lazyiterator)
         s = firstseq[58:62]
         self.assertEqual(str(s.seq), tsuseq[58:62])
 
     def test_sequence_getter_win_2_line_span(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_win)
+        lazyiterator = self.parser(test_seq_win)
         firstseq = next(lazyiterator)
         s = firstseq[59:61]
         self.assertEqual(str(s.seq), tsuseq[59:61])
 
     def test_sequence_getter_full_span(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq
         self.assertEqual(str(s.seq), tsuseq)
     
     def test_sequence_getter_explicit_full_span(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq[3:225]
         self.assertEqual(str(s.seq), tsuseq[3:225])
 
     def test_sequence_getter_inset_full_span(self):
-        lazyiterator = SeqIO.FastaIO.FastaLazyIterator(test_seq_unix)
+        lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq[0:161]
         self.assertEqual(len(tsuseq[0:161]), 161)
@@ -233,7 +241,13 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(len(s.seq), 161)
         self.assertEqual(str(s.seq), tsuseq[0:161]) 
 
+class LazyFastaIOSimpleTestsGenericIterator(LazyFastaIOSimpleTests):
+    """This tests the generic iterator using the same test suite"""
 
+    def setUp(self):
+        returncls = SeqIO.FastaIO.FastaSeqRecProxy
+        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
+                                                returncls, 'fasta')
 
 class TestSeqRecordBaseClass(SeqRecordProxyBase):
     """ this class implements the minimum functionality for a working proxy
@@ -489,7 +503,6 @@ class TestFeatureBinCollection(unittest.TestCase):
         testTuple3 = (8388607, 8388607)
         self.bins.insert(testTuple3)
         self.assertIn(testTuple3, self.bins._bins[37448])
-        
     
     def test_insertion_once_smallestbin_rightmost_lv4(self):
         testTuple4 = (8388608-257, 8388608)

@@ -360,6 +360,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
+from . import _lazy
 from . import AbiIO
 from . import AceIO
 from . import FastaIO
@@ -493,7 +494,7 @@ def write(sequences, handle, format):
     return count
 
 
-def parse(handle, format, alphabet=None, lazy=False):
+def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
         - handle   - handle to the file, or the filename as a string
@@ -607,7 +608,7 @@ def _force_alphabet(record_iterator, alphabet):
                              % (repr(alphabet), repr(record.seq.alphabet)))
 
 
-def read(handle, format, alphabet=None, lazy=False):
+def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
         - handle   - handle to the file, or the filename as a string
@@ -650,7 +651,7 @@ def read(handle, format, alphabet=None, lazy=False):
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    iterator = parse(handle, format, alphabet, lazy)
+    iterator = parse(handle, format, alphabet)
     try:
         first = next(iterator)
     except StopIteration:

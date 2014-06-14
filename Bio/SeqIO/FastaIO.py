@@ -18,7 +18,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio._py3k import _bytes_to_string, _as_bytes
-from ._lazy import SeqRecordProxyBase, sequential_record_offset_iterator
+from Bio.SeqIO import _lazy
 
 __docformat__ = "restructuredtext en"
 
@@ -136,22 +136,23 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Returns FastaLazyRecords in the order that they are stored"""
-    offsetiterator = sequential_record_offset_iterator(handle, rec_marker=">")
-    for offset_begin, offset_end, padding in offsetiterator:
-        yield FastaSeqRecProxy(handle, offset_begin, offset_end, padding, alphabet)
+    offsetiterator = _lazy.sequential_record_offset_iterator(handle, format='fasta')
+    for offset_begin, length in offsetiterator:
+        #length = (offset_end - padding) - offset_begin
+        yield FastaSeqRecProxy(handle, offset_begin, \
+                               length, alphabet, title2ids)
 
 
-class FastaSeqRecProxy(SeqRecordProxyBase):
+class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
-    def __init__(self, handle, startoffset=None, endoffset=None,\
-                 padding=None, alphabet=None, title2ids = None,\
+    def __init__(self, handle, startoffset=None, length=None,\
+                 alphabet=None, title2ids = None,\
                  index=None, featurelist=None):
         self._handle = handle
         self._alphabet = alphabet
-        self._index = {"recordstartoffset":startoffset, 
-                       "recordendoffset":endoffset,
-                       "padding":padding}
+        self._index = {"recordoffsetstart":startoffset, 
+                       "recordoffsetlength":length}
         self._pre_index_sequence_portion()
         self._index_begin = 0
         self._load_non_lazy_values(title2ids)
@@ -160,7 +161,7 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
     def _load_non_lazy_values(self, title2ids):
         """(private) set static seqrecord values"""
         handle = self._handle
-        start_offset = self._index["recordstartoffset"]
+        start_offset = self._index["recordoffsetstart"]
         handle.seek(start_offset)
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()
@@ -197,10 +198,10 @@ class FastaSeqRecProxy(SeqRecordProxyBase):
            self.descr
         """
         handle = self._handle
-        start_offset = self._index["recordstartoffset"]
-        end_offset = self._index["recordendoffset"]
-        padding_length = self._index["padding"]
-        unpadded_end = end_offset - padding_length
+        start_offset = self._index["recordoffsetstart"]
+        #end_offset = self._index["recordendoffset"]
+        #padding_length = self._index["padding"]
+        unpadded_end = start_offset + self._index["recordoffsetlength"]
         handle.seek(start_offset)
 
         titleline = _bytes_to_string(handle.readline())

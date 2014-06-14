@@ -35,7 +35,10 @@ This is by design.
 from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_bytes
 from ..SeqRecord import SeqRecord, _RestrictedDict
 from copy import copy
+import re
 from math import floor, ceil, log
+
+#imports for format to proxy class
 
 
 class SeqRecordProxyBase(SeqRecord):
@@ -224,31 +227,40 @@ class SeqRecordProxyBase(SeqRecord):
     #def __contains__(self, char):
     #def __iter__(self):
 
-def sequential_record_offset_iterator(handle, rec_marker=">"):
+def lazy_iterator(handle, return_class=None, format = None, alphabet=None):
+    """A general iterator for sequential sequence files
+
+    This function steps through a sequentially oriented sequence
+    record file and returns SeqRecordProxy objects correspoding 
+    to the suported file formats.
+    """
+    offsetiterator = sequential_record_offset_iterator(handle, format='fasta')
+    for offset_begin, length in offsetiterator:
+        yield return_class(handle, offset_begin, length, alphabet)
+
+def sequential_record_offset_iterator(handle, format = None):
     """Steps through a sequence file and returns offset pairs
 
     This function will step through a sequentially oriented sequence
     record file and return offset tuples for each format compliant record.
 
-    The yield format is a 3-tuple representing the following
-      (record_begin_offset, record_end_offset, total_padding)
+    The yield format is a 2-tuple representing the following:
+    (record_begin_offset, record_offset_length)
 
-      record_begin_offset = the index of the first character of the record
-      record_end_offset = the index of the first character of the next record
-      padding = the number of extra characters (espc, blank and newline) 
-                added to the end of the record prior to the next record
+    record_begin_offset = the index of the first character of the record
+    record_offset_length = the length (bytes) of the record, accounting
+                             for padding and/or EOF
     """
+    
+    marker = {"fasta": ">"}[format]
+    marker_re = re.compile(marker)
+
     # Set handle to beginning and set offsets to valid initial values
     handle.seek(0)
     current_offset, next_offset = -1, 0
     end_offset = None
     padding = 0
     while True:
-        #check if the file has ended then yield the last record
-        if current_offset == next_offset:
-            yield current_record_offset, current_offset, padding
-            break
-        
         # Advance the current_offset markers, using handle.readline().
         # unlike iterators, reaching the end of the handle and calling
         # readline will not raise StopIteration, instead it will return
@@ -258,14 +270,16 @@ def sequential_record_offset_iterator(handle, rec_marker=">"):
         next_offset = handle.tell()
 
         # Check if we encounter the first record then save the offset
-        #  
-        if currentline and currentline[0] == rec_marker and not end_offset:
+        if marker_re.match(currentline) and not end_offset:
             current_record_offset = current_offset
         # Encountering any record but the first will return the most recent
         # fully-read record
-        elif currentline and currentline[0] == rec_marker:
-            yield current_record_offset, current_offset, padding
+        elif marker_re.match(currentline) or not currentline:
+            length = current_offset - padding - current_record_offset
+            yield current_record_offset, length
             current_record_offset = current_offset
+            if not currentline:
+                break
             # One cannot assume the handle will retain position.
             handle.seek(next_offset)
         elif currentline.strip() == "":
