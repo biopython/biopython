@@ -147,18 +147,14 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
     def __init__(self, handle, startoffset=None, length=None,\
-                 alphabet=None, title2ids = None,\
-                 index=None, featurelist=None):
-        self._handle = handle
-        self._alphabet = alphabet
-        self._index = {"recordoffsetstart":startoffset, 
-                       "recordoffsetlength":length}
-        self._pre_index_sequence_portion()
-        self._index_begin = 0
-        self._load_non_lazy_values(title2ids)
-        self._index_end = self._len
+                 index = None, alphabet=None, title2ids = None):
+        
+        #The title2ids function can be passed to the Fasta proxy
+        self.__title2ids = title2ids
+        _lazy.SeqRecordProxyBase.__init__( \
+                    self, handle, startoffset, length, index, alphabet)
     
-    def _load_non_lazy_values(self, title2ids):
+    def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
         handle = self._handle
         start_offset = self._index["recordoffsetstart"]
@@ -166,8 +162,8 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()
         #Set attibutes of the SeqRecord proxy
-        if title2ids:
-            id, name, descr = title2ids(title)
+        if self.__title2ids:
+            id, name, descr = self.__title2ids(title)
             self.id = id
             self.name = name
             self.description = descr
@@ -177,11 +173,13 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
             except IndexError:
                 assert not title, repr(title)
                 first_word = ""
+            #this ignores the index["id"] since title2id may be present
             self.id = first_word
             self.name = first_word
             self.description = title
+            self.dbxrefs = []
 
-    def _pre_index_sequence_portion(self):
+    def _make_record_index(self, new_index):
         """(private) set the values needed for lazy loading
 
         The self._index dictionary is only set with the file
@@ -198,16 +196,22 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
            self.descr
         """
         handle = self._handle
-        start_offset = self._index["recordoffsetstart"]
-        #end_offset = self._index["recordendoffset"]
-        #padding_length = self._index["padding"]
-        unpadded_end = start_offset + self._index["recordoffsetlength"]
+        start_offset = new_index["recordoffsetstart"]
+        unpadded_end = start_offset + new_index["recordoffsetlength"]
         handle.seek(start_offset)
 
+        #set the "id"
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            assert not title, repr(title)
+            first_word = ""
+        new_index["id"] = first_word
+        #set sequence start
         firstlineoffset = handle.tell()
-        self._index["sequencestart"] = firstlineoffset
+        new_index["sequencestart"] = firstlineoffset
         firstseqline = _bytes_to_string(handle.readline())
         offset_after_first_seqline = handle.tell()
 
@@ -217,8 +221,8 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         sequencewidth = len(strippedline)
         if " " in strippedline:
             raise ValueError("Check file format at '%s'"%(strippedline))
-        self._index["sequencelinewidth"] = linewidth
-        self._index["sequenceletterwidth"] = sequencewidth
+        new_index["sequencelinewidth"] = linewidth
+        new_index["sequenceletterwidth"] = sequencewidth
 
         #Find the last line and save the _len property
         seqlen = int((unpadded_end - firstlineoffset)/linewidth)*sequencewidth
@@ -228,7 +232,8 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         possiblelastline = handle.readline()
         if seq_last_ln_mod > 0:
             seqlen += len(possiblelastline.strip())
-        self._len = seqlen
+        new_index["seqlen"] = seqlen
+        self._index = new_index
 
         
 

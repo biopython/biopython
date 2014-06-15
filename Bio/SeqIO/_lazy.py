@@ -70,31 +70,50 @@ class SeqRecordProxyBase(SeqRecord):
 
     #subclassing to-do list
     attributes that must be managed or utilized 
-     -   self._seq         :::   sequence type, set by _read_seq
-     -   self.name         :::   this should be identical
-     -   self.dbxrefs      :::   [] db cross references
-     -   self.id           :::   id string
-     -   self._features    :::   list of SeqFeatures
-     -   self._annotations :::   dict of annotations
-     -   self._letter_an...:::   per letter information
+     -   _seq         ::   sequence type, set by _read_seq
+     -   name
+     -   dbxrefs      ::   [] db cross references
+     -   id           ::   id string
+     -   _features    ::   list of SeqFeatures
+     -   _annotations ::   dict of annotations
+     -   _letter_an...::   per letter information
 
-
-     -   self._index_begin :::   defines begin index w/r/t global
-     -   self._index_end   :::   defines end index w/r/t global
+     -   _index_begin ::   defines begin index w/r/t global
+     -   _index_end   ::   defines end index w/r/t global
 
      
 
     methods need implementation by derived class:
-     -      self.__init__    ::: the init provided in the base class is for testing
-     -      self._read_seq    ::: gets the sequence from file and sets it
+     - _read_seq             :: gets the sequence from file and sets it
+     - _make_record_index       :: index the nce portion
+              the record index is primarily format specific
+              but it must contain the keys "id" and "seqlen"
+     - _load_non_lazy_values :: load all values from lazy
 
     """
     
-    def __init__(self):
-        raise NotImplementedError( \
-            "__init__ must be implemented in the derived class")
-    
+    _index = None
     _seq = None
+
+    def __init__(self, handle, startoffset=None, length=None,\
+                 index = None, id = None, alphabet=None):
+
+        self._handle = handle
+        self._alphabet = alphabet
+        self._id = id
+        
+        # create the index or load an existing one from file 
+        if self._index is None:
+            new_index = {"recordoffsetstart":startoffset, 
+                           "recordoffsetlength":length}
+            self._make_record_index(new_index)
+        else:
+            raise NotImplementedError("index loading behavior pending")
+
+        #set base values
+        self._load_non_lazy_values()
+        self._index_begin = 0
+        self._index_end = self._index["seqlen"]
     
     def _return_seq(self):
         """(private) removes getter logic from _read_seq"""

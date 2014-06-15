@@ -4,6 +4,8 @@ import sys
 import imp
 import os
 from Bio import SeqIO
+from Bio.Alphabet import single_letter_alphabet
+from Bio._py3k import _bytes_to_string, _as_bytes
 from Bio.Seq import Seq
 from Bio.SeqIO._lazy import *
 from Bio._py3k import _bytes_to_string, basestring
@@ -67,21 +69,12 @@ bad_line = ">sp|O15205|UBD_HUMAN Ubiquitin D\n" + \
              ">wellformatted label\n" + \
              "HHHHHHHH\n"
 
-if sys.version[0] == "3":
-    enc = sys.getdefaultencoding()
-    test_seq_unix = BytesIO(bytes(tsu1, enc))
-    test_seq_gaped = BytesIO(bytes(tsu2, enc))
-    test_seq_win = BytesIO(bytes(tsw1, enc))
-    test_double_padded = BytesIO(bytes(double_padded, enc))
-    test_bad_line = BytesIO(bytes(bad_line, enc))
-    test_bad_header = BytesIO(bytes(bad_header, enc))
-else:
-    test_seq_unix = BytesIO(tsu1)
-    test_seq_gaped = BytesIO(tsu2)
-    test_seq_win = BytesIO(tsw1)
-    test_double_padded = BytesIO(double_padded)
-    test_bad_line = BytesIO(bad_line)
-    test_bad_header = BytesIO(bad_header)
+test_seq_unix = BytesIO(_as_bytes(tsu1))
+test_seq_gaped = BytesIO(_as_bytes(tsu2))
+test_seq_win = BytesIO(_as_bytes(tsw1))
+test_double_padded = BytesIO(_as_bytes(double_padded))
+test_bad_line = BytesIO(_as_bytes(bad_line))
+test_bad_header = BytesIO(_as_bytes(bad_header))
 
 
 class LazyFastaIOSimpleTests(unittest.TestCase):
@@ -126,7 +119,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
     def test_len_win(self):
         lazyiterator = self.parser(test_seq_win)
         first_seq = next(lazyiterator)
-        self.assertEqual(first_seq._len, 225)
+        self.assertEqual(first_seq._index["seqlen"], 225)
 
     def test_indexing_2nd_record_win(self):
         lazyiterator = self.parser(test_seq_win)
@@ -250,155 +243,144 @@ class LazyFastaIOSimpleTestsGenericIterator(LazyFastaIOSimpleTests):
                                                 returncls, 'fasta')
 
 class TestSeqRecordBaseClass(SeqRecordProxyBase):
-    """ this class implements the minimum functionality for a working proxy
+    """ this class implements the minimum functionality for a SeqRecordProxy
     
     This class must be defined in the test suite to implement the basic hook
     methods used by the newer proxy class. Additional parsers should add rudundant
-    code, but proper testing here will catch errors before they are invoked
-    by a derived class.
+    code, but proper testing here will catch some errors before they present in
+    a derived class.
     """
-    def __init__(self, handle, id = "<unknown id>", name = "<unknown name>",
-                 description = "<unknown description>", dbxrefs = None,
-                 features = None, annotations = None,
-                 letter_annotations = None, index_begin=0,
-                 index_end=None):
-        """Create a SeqRecord.
 
-        Arguments:
-         - handle      - Sequence string, required (string)
-         - id          - Sequence identifier, recommended (string)
-         - name        - Sequence name, optional (string)
-         - description - Sequence description, optional (string)
-         - dbxrefs     - Database cross references, optional (list of strings)
-         - features    - Any (sub)features, optional (list of SeqFeature objects)
-         - annotations - Dictionary of annotations for the whole sequence
-         - letter_annotations - Dictionary of per-letter-annotations, values
-                                should be strings, list or tuples of the same
-                                length as the full sequence.
+    def _make_record_index(self, new_index):
+        new_index["id"] = _bytes_to_string(self._handle.readline()).strip()
+        seqstart = self._handle.tell()
+        new_index["sequencestart"] = seqstart
+        new_index["seqlen"] = len(self._handle.readline())
+        self._index = new_index
 
-        """
-        self._index_begin = index_begin
-        self._index_end = len(handle)
-        self._seq = None
-
-        if id is not None and not isinstance(id, basestring):
-            #Lots of existing code uses id=None... this may be a bad idea.
-            raise TypeError("id argument should be a string")
-        if not isinstance(name, basestring):
-            raise TypeError("name argument should be a string")
-        if not isinstance(description, basestring):
-            raise TypeError("description argument should be a string")
-        self._handle = handle
-        self.id = id
-        self.name = name
-        self.description = description
-
-        # database cross references (for the whole sequence)
-        if dbxrefs is None:
-            dbxrefs = []
-        elif not isinstance(dbxrefs, list):
-            raise TypeError("dbxrefs argument should be a list (of strings)")
-        self.dbxrefs = dbxrefs
-
-        # annotations about the whole sequence
-        if annotations is None:
-            annotations = {}
-        elif not isinstance(annotations, dict):
-            raise TypeError("annotations argument should be a dict")
-        self.annotations = annotations
-
-        #TODO handle letter annotations properly
-        self.letter_annotations = letter_annotations
-
-        #TODO handle features annotations about parts of the sequence
-        if features is None:
-            features = []
-        elif not isinstance(features, list):
-            raise TypeError("features argument should be a list (of SeqFeature objects)")
-        self.features = features
-    
     def _read_seq(self):
-        if self._seq:
-            pass
-        else:
-            i = self._index_begin
-            j = self._index_end 
-            self._seq = Seq(self._handle[i:j])
+        self._handle.seek(self._index["sequencestart"])
+        seqstr = _bytes_to_string(self._handle.readline())
+        self._seq = Seq(seqstr, self._alphabet)
+
+    def _load_non_lazy_values(self):
+        self.id = self._index["id"]
+        self.name = "<unknown name>"
+        self.description = "<unknown description>"
+        self.dbxrefs = []
 
 
 class SeqRecordProxyBaseClassTests(unittest.TestCase):
 
     def setUp(self):
+        self.ab = single_letter_alphabet
         pass
-
-    def test_nothing(self):
-        """An addition test"""
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
-        self.assertEqual(5, 5)
-        self.assertRaises(NotImplementedError, SeqRecordProxyBase)
 
     def test_simple_tester(self):
         """checks on basic definitions in tester class"""
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         self.assertEqual(0, a._index_begin)
         self.assertEqual(12, a._index_end)
         self.assertEqual(None, a._seq)
-        self.assertEqual("sequencefake", a._handle)
+        #self.assertEqual("sequencefake", a._handle)
 
     def test_seq_reader(self):
         """checks on basic worksing of _read_seq"""
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         self.assertEqual(None, a._seq)
         self.assertEqual("sequencefake", str(a.seq))
         self.assertEqual("sequencefake", str(a._seq))
 
     def test_simple_index_grab(self):
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a[1:9]
         self.assertEqual(1, b._index_begin)
         self.assertEqual(9, b._index_end)
 
     def test_simple_index_grab_handle_identity(self):
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a[1:9]
         self.assertTrue(a._handle is b._handle)
         self.assertTrue(a is not b)
 
     def test_two_level_getter_indexes(self):
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a[1:9]
         c = b[1:8]
         self.assertEqual(2, c._index_begin)
         self.assertEqual(9, c._index_end)
 
     def test_two_level_getter_handle_identity(self):
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a[1:9]
         c = b[1:8]
         self.assertTrue(a._handle is c._handle)
 
     def test_upper(self):
-        a = TestSeqRecordBaseClass("seQUencefake", "fakeid")
+        handle = "fakeid\nseQUencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a.upper()
         self.assertEqual("SEQUENCEFAKE", str(b._seq))
 
     def test_lower(self):
-        a = TestSeqRecordBaseClass("seQUEncefake", "fakeid")
+        handle = "fakeid\nseQUEncefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a.lower()
         self.assertEqual("sequencefake", str(b._seq))
 
     def test_repr(self):
         out = r"""TestSeqRecordBaseClass(seq=NOT_READ, id=fakeid, """ + \
-              r"""name=<unknown name>, description=<unknown description>, dbxrefs=[])"""
-        out2 = r"""TestSeqRecordBaseClass(seq=Seq('sequencefake', Alphabet()), id=fakeid, """ + \
-              r"""name=<unknown name>, description=<unknown description>, dbxrefs=[])"""
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+              r"""name=<unknown name>, description=<unknown description>,"""+\
+              r""" dbxrefs=[])"""
+        out2 = r"""TestSeqRecordBaseClass(seq=Seq('sequencefake', """ +\
+               r"""SingleLetterAlphabet()), id=fakeid, """ + \
+               r"""name=<unknown name>, description=<unknown description>"""+\
+               r""", dbxrefs=[])"""
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         self.assertEqual(out, repr(a))
         s = a.seq 
         self.assertEqual(out2, repr(a))
 
     def test_len_method(self):
-        a = TestSeqRecordBaseClass("sequencefake", "fakeid")
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        a = TestSeqRecordBaseClass(handle, 0, lenhandle,
+                                   alphabet = self.ab)
         b = a[3:6]
         self.assertEqual(3, len(b))
         self.assertEqual(None, b._seq)
