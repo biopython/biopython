@@ -39,9 +39,32 @@ import re
 from math import floor, ceil, log
 
 #imports for format to proxy class
+class IndexDbIO(object):
+    #the real index is hidden from external view
+    __index = None
+    
+    def _load_and_return_index(self):
+        #case; index is loaded and setup
+        if isinstance(self.__index, dict):
+            return self.__index
+        #case; index is not loaded, and no indexdb exists
+        if self.__index is None:
+            if self._indexdb is None:
+                self.__index = None
+                return None
 
+    def _set_and_save_index(self, indexdict):
+        if isinstance(indexdict, dict):
+            self.__index = indexdict
+        else:
+            raise ValueError("cannot set _index to a non-dict value")
 
-class SeqRecordProxyBase(SeqRecord):
+    _index = property(fget = _load_and_return_index,
+                      fset = _set_and_save_index,
+                      doc="the index may be loaded from a DB")
+    
+
+class SeqRecordProxyBase(SeqRecord, IndexDbIO):
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
@@ -92,14 +115,14 @@ class SeqRecordProxyBase(SeqRecord):
 
     """
     
-    _index = None
     _seq = None
 
     def __init__(self, handle, startoffset=None, length=None,\
-                 index = None, id = None, alphabet=None):
+                 indexdb = None, id = None, alphabet=None):
 
         self._handle = handle
         self._alphabet = alphabet
+        self._indexdb = indexdb
         self._id = id
         
         # create the index or load an existing one from file 
@@ -309,7 +332,6 @@ def sequential_record_offset_iterator(handle, format = None):
             #the end of the feature when a new marker is found
             padding = 0
             end_offset = current_offset
-
 
 class FeatureBinCollection(object):
     """this class manages the creation and maintenance of feature indices
