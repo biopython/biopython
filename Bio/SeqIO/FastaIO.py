@@ -147,12 +147,12 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
     def __init__(self, handle, startoffset=None, length=None,\
-                 index = None, alphabet=None, title2ids = None):
+                 indexdb = None, id=None, alphabet=None, title2ids = None):
         
         #The title2ids function can be passed to the Fasta proxy
         self.__title2ids = title2ids
         _lazy.SeqRecordProxyBase.__init__( \
-                    self, handle, startoffset, length, index, alphabet)
+                    self, handle, startoffset, length, indexdb, id, alphabet)
     
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
