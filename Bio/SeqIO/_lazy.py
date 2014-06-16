@@ -37,32 +37,121 @@ from ..SeqRecord import SeqRecord, _RestrictedDict
 from copy import copy
 import re
 from math import floor, ceil, log
+from os import path
+try:
+    from sqlite3 import dbapi2 as _sqlite
+    from sqlite3 import IntegrityError as _IntegrityError
+    from sqlite3 import OperationalError as _OperationalError
+except ImportError:
+    #Not present on Jython, but should be included in Python 2.5
+    #or later (unless compiled from source without its dependencies)
+    #Still want to offer in-memory indexing.
+    _sqlite = None
+    pass
 
 #imports for format to proxy class
 class IndexDbIO(object):
+    
     #the real index is hidden from external view
     __index = None
+    __con = None
     
-    def _load_and_return_index(self):
-        #case; index is loaded and setup
+    def __load_and_return_index(self):
+        """Returns the index dictionary from memory or from database
+        
+        When the database is not provided:
+        This function will preferentially supply an index from memory.
+        Since the _indexdb is None, it will provide None for the _index
+        indicating to the lazy loading proxy that an index must be created.
+        
+        When the database (_indexdb) is provided:
+        This function will still preferentially supply an index from memory.
+        if the database is valid and empty it will provide None for the _index
+        indicating to the lazy loading proxy that an index must be created. If
+        an indexdb is present and valid, it will be queried to produce the 
+        _index dictionary which will be loaded into memory"""
+        
+        #case: index already exists in memory
         if isinstance(self.__index, dict):
             return self.__index
-        #case; index is not loaded, and no indexdb exists
+        
+        #case: index is not loaded and no db has been used
         if self.__index is None:
+            #case: indexdb does not exist
             if self._indexdb is None:
                 self.__index = None
                 return None
+        
+        #this will connect to the db and validate the format
+        cursor = self.__connect_return_cursor()
+        
+        #case: indexdb provided but it is empty
+        if not self.__is_valid_db_with_tables(cursor):
+            return None
+        #case: indexdb is provided and has records
+        else:
+            raise NotImplementedError("getter is pending")
 
-    def _set_and_save_index(self, indexdict):
+    def __set_and_save_index(self, indexdict):
+        """Save a new index dict to the database
+        
+        (stub)
+        """
         if isinstance(indexdict, dict):
             self.__index = indexdict
-        else:
-            raise ValueError("cannot set _index to a non-dict value")
-
-    _index = property(fget = _load_and_return_index,
-                      fset = _set_and_save_index,
-                      doc="the index may be loaded from a DB")
+            #case, no indexdb
+            if self._indexdb is None:
+                return
+        
+        cursor = self.__connect_return_cursor()
+        raise NotImplementedError("implementation pending")
     
+    def __connect_return_cursor(self):
+        """do some basic checking and return a cursor"""
+        if not _sqlite:
+            # Hack for Jython (or if Python is compiled without it)
+            from Bio import MissingPythonDependencyError
+            raise MissingPythonDependencyError("Requires sqlite3, which is "
+                                               "included Python 2.5+")
+        if not path.isfile(self._indexdb):
+            raise ValueError("A valid database or None must be provided")
+        #case: connection does not exist yet
+        if self.__con is None:
+            con = _sqlite.connect(self._indexdb)
+            self.__con = con
+            cursor = con.cursor()
+        else:
+            cursor = self.__con.cursor()
+        return cursor
+    
+    def __is_valid_db_with_tables(self, cursor):
+        """if db is empty False, if correct tables True, else raise"""
+        #case: database is empty
+        tableNames = cursor.execute(
+                    "SELECT name FROM sqlite_master WHERE" + \
+                    " type='table' ORDER BY name;").fetchall()
+        if len(tableNames) == 0:
+            return False
+        #case: database is valid and has correct format
+        tableNames = [name[0] for name in tableNames]
+        expectedTables = ['features', 'indexed_files', 'meta_data', 'records']
+        if tableNames == expectedTables:
+            #quick check: format matches self._format
+            format, = cursor.execute(
+                          "SELECT value FROM meta_data WHERE key=?;",
+                          ("format",)).fetchone()
+            if format != self._format:
+                raise ValueError("provided database is for % files"%(format,))
+            return True    
+        #something was wrong with the database
+        else:
+            raise ValueError("provided database is incomplete or corrupt")
+
+
+    _index = property(fget = __load_and_return_index,
+                      fset = __set_and_save_index,
+                      doc="the index may be loaded from a sqlite db")
+
 
 class SeqRecordProxyBase(SeqRecord, IndexDbIO):
     """A SeqRecord object holds a sequence and information about it.
@@ -101,14 +190,15 @@ class SeqRecordProxyBase(SeqRecord, IndexDbIO):
      -   _annotations ::   dict of annotations
      -   _letter_an...::   per letter information
 
-     -   _index_begin ::   defines begin index w/r/t global
-     -   _index_end   ::   defines end index w/r/t global
+     -   _index_begin ::   defines begin index w/r/t global seq position
+     -   _index_end   ::   defines end index w/r/t global seq position
 
      
 
     methods need implementation by derived class:
+     - _format               :: a text string of the format
      - _read_seq             :: gets the sequence from file and sets it
-     - _make_record_index       :: index the nce portion
+     - _make_record_index    :: index the nce portion
               the record index is primarily format specific
               but it must contain the keys "id" and "seqlen"
      - _load_non_lazy_values :: load all values from lazy
@@ -118,12 +208,12 @@ class SeqRecordProxyBase(SeqRecord, IndexDbIO):
     _seq = None
 
     def __init__(self, handle, startoffset=None, length=None,\
-                 indexdb = None, id = None, alphabet=None):
+                 indexdb = None, indexkey = None, alphabet=None):
 
         self._handle = handle
         self._alphabet = alphabet
         self._indexdb = indexdb
-        self._id = id
+        self._indexkey = indexkey
         
         # create the index or load an existing one from file 
         if self._index is None:

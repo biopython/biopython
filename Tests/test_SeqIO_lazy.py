@@ -251,6 +251,8 @@ class TestSeqRecordBaseClass(SeqRecordProxyBase):
     a derived class.
     """
 
+    _format = "testclass"
+
     def _make_record_index(self, new_index):
         new_index["id"] = _bytes_to_string(self._handle.readline()).strip()
         seqstart = self._handle.tell()

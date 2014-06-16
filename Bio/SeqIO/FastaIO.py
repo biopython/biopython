@@ -136,23 +136,27 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Returns FastaLazyRecords in the order that they are stored"""
-    offsetiterator = _lazy.sequential_record_offset_iterator(handle, format='fasta')
-    for offset_begin, length in offsetiterator:
+    offsetiter = _lazy.sequential_record_offset_iterator(handle, 
+                                                         format='fasta')
+    for offset_begin, length in offsetiter:
         #length = (offset_end - padding) - offset_begin
         yield FastaSeqRecProxy(handle, offset_begin, \
-                               length, alphabet, title2ids)
+                               length, alphabet=alphabet, title2ids = title2ids)
 
 
 class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
     
+    _format = "fasta"
+
     def __init__(self, handle, startoffset=None, length=None,\
-                 indexdb = None, id=None, alphabet=None, title2ids = None):
+                 indexdb = None, indexkey=None, alphabet=None, \
+                 title2ids = None):
         
         #The title2ids function can be passed to the Fasta proxy
         self.__title2ids = title2ids
         _lazy.SeqRecordProxyBase.__init__( \
-                    self, handle, startoffset, length, indexdb, id, alphabet)
+                self, handle, startoffset, length, indexdb, indexkey, alphabet)
     
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
