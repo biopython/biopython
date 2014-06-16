@@ -51,6 +51,15 @@ except ImportError:
 
 #imports for format to proxy class
 class IndexDbIO(object):
+    """ The indexDbIO class manages access to the _index
+
+    this class checks if the criteria are met to store or 
+    load an index dictionary from a sqlite database. This
+    should be inhereted by the lazy loading base class and
+    all methods should be private (by name mangling) except
+    for the quasi-public _index property which will be the 
+    primary interface to the methods contained herein.
+    """
     
     #the real index is hidden from external view
     __index = None
