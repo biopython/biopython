@@ -113,10 +113,40 @@ class IndexDbIO(object):
                 return
         
         cursor = self.__connect_return_cursor()
+        #case: indexdb provided but it is empty
+        if not self.__is_valid_db_with_tables(cursor):
+            self.__create_tables(cursor, indexdict)
+            
+        #case: indexdb provided and has correct format/table
         raise NotImplementedError("implementation pending")
     
+    def __create_tables(self, cursor, indexdict):
+        #create metadata table and populate format
+        cursor.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
+        cursor.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                      ("count", -1))
+        cursor.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                      ("format", self._format))
+        
+        #create basic index table:
+        # The (less secure) string manipulation is used because sqlite3
+        # API does not provide rich logic in their simple parameter 
+        # substitution query interface. The variant nature of each file
+        # format will necessitate that index db's are format specific.
+        rows = sorted(list(indexdict.keys()))
+        indextab = ", ".join([str(key) + " INT" for key in rows])
+        indextab = "CREATE TABLE main_index(filename TEXT, "+indextab+ ");"
+        cursor.execute(indextab)
+        
+        #create features table
+        feattab = "CREATE TABLE features(filename TEXT, featurenumber INT," + \
+                  "offsetbegin INT, offsetend INT, " +\
+                  "seqbegin INT, seqend INT, meta TEXT)"
+        cursor.execute(feattab)
+        
     def __connect_return_cursor(self):
-        """do some basic checking and return a cursor"""
+        """do some basic checking and return a cursor
+        """
         if not _sqlite:
             # Hack for Jython (or if Python is compiled without it)
             from Bio import MissingPythonDependencyError
@@ -129,6 +159,8 @@ class IndexDbIO(object):
             con = _sqlite.connect(self._indexdb)
             self.__con = con
             cursor = con.cursor()
+            cursor.execute("PRAGMA synchronous=OFF")
+            cursor.execute("PRAGMA locking_mode=EXCLUSIVE")
         else:
             cursor = self.__con.cursor()
         return cursor
