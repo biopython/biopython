@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-29 May 2013: Biopython 1.64 released.
+29 May 2014: Biopython 1.64 released.
 
 This release of Biopython supports Python 2.6 and 2.7, 3.3 and also the
 new 3.4 version. It is also tested on PyPy 2.0 to 2.3, and Jython 2.7b2.
