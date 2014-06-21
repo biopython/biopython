@@ -5,12 +5,12 @@ import imp
 import os
 from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
-from Bio._py3k import _bytes_to_string, _as_bytes
+from Bio._py3k import _bytes_to_string, _as_bytes, _is_int_or_long
 from Bio.Seq import Seq
 from Bio.SeqIO._lazy import *
 from Bio._py3k import _bytes_to_string, basestring
 from io import StringIO, BytesIO
-
+from collections import namedtuple
 
 #a 2 record unix formatted fasta
 tsu1 = ">sp|O15205|UBD_HUMAN Ubiquitin D OS=Homo sapiens GN=UBD PE=1\n" + \
@@ -630,6 +630,253 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertIn(testTuple3,self.bins[8388604:8388605])
         self.assertIn(testTuple3,self.bins[8388605:8388606])
         self.assertEqual([],self.bins[8388603:8388604])
+
+
+
+File = namedtuple('File', 'name')
+testfile = File("fake.fasta")
+
+class IndexDbIO(SeqRecordProxyBase):
+    _handle = testfile
+    _indexkey = None
+    _format = 'fake'
+    def __init__(self):
+        pass
+        
+class IndexDbIOCreateDb(unittest.TestCase):
+
+    def setUp(self):
+        dbFile = os.path.join('SeqIO_lazy', 'emptyindex.sqlite.db')
+        self.dbfilename = dbFile
+        dbFile = open(dbFile, 'w')
+        dbFile.close()
+        
+        
+    def cleanUp(self):
+        dbFile = open(self.dbfilename, 'w')
+        dbFile.close()
+    
+
+    def test_index_getter_empty_database(self):
+        """empty databases should return an empty dict"""
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._handle = testfile
+        self.assertEqual(testIO._index, None)
+            
+    def test_index_creates_table_without_raising(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._handle = testfile
+        con = testIO._SeqRecordProxyBase__connect_db_return_connection()
+        testIO._SeqRecordProxyBase__create_tables(con, testindex)
+        
+        
+    def test_index_creates_table_and_check(self):
+        """tests creation of table and class that checks tables"""
+        #index setup
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._handle = testfile
+        con = testIO._SeqRecordProxyBase__connect_db_return_connection()
+        cursor = con.cursor()
+        #no
+        a = testIO._SeqRecordProxyBase__is_valid_db_with_tables(con)
+        self.assertFalse(a)
+        #create tables
+        testIO._SeqRecordProxyBase__create_tables(con, testindex)
+        #make sure a valid sequence is found after creating tables
+        a = testIO._SeqRecordProxyBase__is_valid_db_with_tables(con)
+        self.assertTrue(a)
+        one = cursor.execute("SELECT rowid, * FROM main_index")
+        onedata = one.fetchone()
+        colnames = [ d[0] for d in one.description ]
+        colnames.sort()
+        expected = ['fileid', 'id', 'recordoffsetlength', \
+                    'recordoffsetstart', 'rowid', 'seqstart',]
+        self.assertEqual(colnames, expected)
+        
+        
+    
+    def test_fileid_getter_method(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        con = testIO._SeqRecordProxyBase__connect_db_return_connection()
+        #make the tables first
+        testIO._SeqRecordProxyBase__create_tables(con, testindex)
+        cursor = con.cursor()
+        #invoke file id finder
+        testIO._SeqRecordProxyBase__get_fileid(con)
+        name = cursor.execute("SELECT filename " +\
+                       "FROM indexed_files WHERE " +\
+                       "filename=?;",('fake.fasta',))
+        self.assertEqual(name.fetchone(), None)
+        found_id = testIO._SeqRecordProxyBase__get_fileid(con, write=True)
+        name = cursor.execute("SELECT filename, fileid " +\
+                       "FROM indexed_files WHERE " +\
+                       "filename=?;",('fake.fasta',))
+        name, fileid = name.fetchone()
+        self.assertEqual(name, 'fake.fasta')
+        self.assertTrue(_is_int_or_long(fileid))
+        self.assertEqual(found_id, fileid)
+        
+    def test_write_index_filename_is_written(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex
+        #get cursor
+        con = testIO._SeqRecordProxyBase__connect_db_return_connection()
+        cursor = con.cursor()
+        name = cursor.execute("SELECT filename " +\
+                       "FROM indexed_files WHERE " +\
+                       "filename=?;",('fake.fasta',))
+        name = name.fetchone()[0]
+        self.assertEqual(name, 'fake.fasta')
+        
+    def test_write_index_contents_arewritten(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex
+        #get cursor
+        con = testIO._SeqRecordProxyBase__connect_db_return_connection()
+        cursor = con.cursor()
+        recordindex = cursor.execute("SELECT main_index.* " +\
+                       "FROM main_index " +\
+                       "INNER JOIN indexed_files " +\
+                       "ON main_index.fileid = indexed_files.fileid " +\
+                       "WHERE indexed_files.filename=?;",('fake.fasta',))
+        record_keys = [key[0] for key in recordindex.description]
+        record_index = recordindex.fetchone()
+        record_indexdict = dict((record_keys[i], record_index[i]) for \
+                                i in range(len(record_keys)))
+        del(record_indexdict["fileid"])
+        self.assertEqual(testindex, record_indexdict)
+    
+    def test_write_retrieve_with_shortcut_from_memory(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex
+        self.assertEqual(testIO._index, testindex)
+        
+    def test_write_retrieve_from_db(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._indexkey = None
+        con = testIO._SeqRecordProxyBase__connect_db_return_connection()
+        #invoke writer
+        testIO._index = testindex
+        testIO._indexkey = "test1"
+        #reset memory index to None so that getter touches db
+        testIO._SeqRecordProxyBase__index = None
+        isvalid = testIO._SeqRecordProxyBase__is_valid_db_with_tables(con)
+        self.assertTrue(isvalid)
+        #activate getter and compare
+        self.assertEqual(testIO._index, testindex)
+        
+    def test_write_two_records_overlapping(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex
+        testIO2 = IndexDbIO()
+        testIO2._indexdb = self.dbfilename
+        #invoke writer
+        setter = testIO2._SeqRecordProxyBase__set_and_save_index
+        self.assertRaises(ValueError, setter, testindex)
+        
+    def test_write_two_records_overlapping_id(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testindex2 = {"recordoffsetstart":220, 
+                 "recordoffsetlength":3000,
+                 "seqstart":43, "id":"test1"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex
+        testIO2 = IndexDbIO()
+        testIO2._indexdb = self.dbfilename
+        #invoke writer
+        setter = testIO2._SeqRecordProxyBase__set_and_save_index
+        self.assertRaises(ValueError, setter, testindex2)
+    
+    def test_write_two_records_distinct(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testindex2 = {"recordoffsetstart":220, 
+                 "recordoffsetlength":3000,
+                 "seqstart":43, "id":"test2"}
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex
+        testIO2 = IndexDbIO()
+        testIO2._indexdb = self.dbfilename
+        #invoke writer
+        testIO._index = testindex2     
+        
+    def test_read_two_records_distinct_idkeys(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testindex2 = {"recordoffsetstart":220, 
+                 "recordoffsetlength":3000,
+                 "seqstart":43, "id":"test2"}
+        self.test_write_two_records_distinct()
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._indexkey = "test1"
+        self.assertEqual(testIO._index, testindex)
+        testIO2 = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._indexkey = "test2"
+        self.assertEqual(testIO._index, testindex)
+        
+    def test_read_two_records_distinct_intkeys(self):
+        testindex = {"recordoffsetstart":0, 
+                 "recordoffsetlength":200,
+                 "seqstart":43, "id":"test1"}
+        testindex2 = {"recordoffsetstart":220, 
+                 "recordoffsetlength":3000,
+                 "seqstart":43, "id":"test2"}
+        self.test_write_two_records_distinct()
+        testIO = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._indexkey = 0
+        self.assertEqual(testIO._index, testindex)
+        testIO2 = IndexDbIO()
+        testIO._indexdb = self.dbfilename
+        testIO._indexkey = 1
+        self.assertEqual(testIO._index, testindex)
 
 #a = TestSeqRecordBaseClass("seQUencefake", "fakeid")
 #unittest.main( exit=False )
