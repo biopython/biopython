@@ -299,6 +299,8 @@ class SeqRecordProxyBase(SeqRecord):
                            (basename(self._handle.name), self._indexkey))
         record_keys = [key[0] for key in recordindex.description]
         record_index = recordindex.fetchone()
+        con.commit()
+        con.close()
         if not record_index:
             con.close()
             raise KeyError("_indexkey must match a stored record")
@@ -306,8 +308,6 @@ class SeqRecordProxyBase(SeqRecord):
                                     i in range(len(record_keys)))
         del(record_indexdict["fileid"])
         self.__index = record_indexdict
-        con.commit()
-        con.close()
         return record_indexdict                     
 
 
@@ -352,6 +352,7 @@ class SeqRecordProxyBase(SeqRecord):
                        "main_index.id=?;", \
                        (basename(self._handle.name), \
                        indexdict["id"]))
+        con.commit()
         sameid = cursor.fetchone()
         if samefileposition is not None or sameid is not None:
             raise ValueError("indexdb already contains a similar record")
@@ -454,12 +455,12 @@ class SeqRecordProxyBase(SeqRecord):
                 cursor.execute("INSERT INTO indexed_files " +\
                                "(filename, count) VALUES (?, ?);",
                                (basename(self._handle.name), 0))
-                con.commit()
                 name = cursor.execute("SELECT fileid " +\
                            "FROM indexed_files WHERE " +\
                            "filename=?;", \
                            (basename(self._handle.name),)).fetchone()
                 self.__file_id = name[0]
+                con.commit()
                 return name[0]
             else:
                 return None
