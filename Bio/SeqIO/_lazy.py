@@ -37,7 +37,7 @@ from ..SeqRecord import SeqRecord, _RestrictedDict
 from copy import copy
 import re
 from math import floor, ceil, log
-from os import path
+from os.path import isfile, basename
 try:
     from sqlite3 import dbapi2 as _sqlite
     from sqlite3 import IntegrityError as _IntegrityError
@@ -117,8 +117,6 @@ class SeqRecordProxyBase(SeqRecord):
             new_index = {"recordoffsetstart":startoffset, 
                            "recordoffsetlength":length}
             self._make_record_index(new_index)
-        else:
-            raise NotImplementedError("index loading behavior pending")
 
         #set base values
         self._load_non_lazy_values()
@@ -266,17 +264,21 @@ class SeqRecordProxyBase(SeqRecord):
         
         #case: index is not loaded and no db has been used
         if self.__index is None:
-            #case: indexdb does not exist
-            if self._indexdb is None:
+            #case: no index key provided thus no record will be searched
+            if self._indexkey is None:
                 return None
-        
+            #case: a key request was made but no db was given
+            if self._indexdb is None and self._indexkey is not None:
+                raise KeyError("cannot retrieve by key from no db")
+        #case: retrieve from db because a key was given and a db exists
+
         #this will connect to the db
         con = self.__connect_db_return_connection()
         cursor = con.cursor()
         
         #case: indexdb provided but it is empty
         if not self.__is_valid_db_with_tables(con):
-            return None
+            raise KeyError("_indexkey must match a stored record")
         #case: indexdb is provided and has records
         if _is_int_or_long(self._indexkey):
             recordindex = cursor.execute("SELECT main_index.* " +\
@@ -286,7 +288,7 @@ class SeqRecordProxyBase(SeqRecord):
                            "WHERE indexed_files.filename=? " +\
                            "ORDER BY main_index.recordoffsetstart " + \
                            "LIMIT 2 OFFSET ?;",
-                           (self._handle.name,self._indexkey))
+                           (basename(self._handle.name),self._indexkey))
         elif isinstance(self._indexkey, str):
             recordindex = cursor.execute("SELECT main_index.* " +\
                            "FROM main_index " +\
@@ -294,12 +296,12 @@ class SeqRecordProxyBase(SeqRecord):
                            "ON main_index.fileid = indexed_files.fileid " +\
                            "WHERE indexed_files.filename=? AND " +\
                            "main_index.id=?;", \
-                           (self._handle.name, self._indexkey))
+                           (basename(self._handle.name), self._indexkey))
         record_keys = [key[0] for key in recordindex.description]
         record_index = recordindex.fetchone()
-        if record_index is None:
-            raise KeyError("indexkey must match a stored record")
+        if not record_index:
             con.close()
+            raise KeyError("_indexkey must match a stored record")
         record_indexdict = dict((record_keys[i], record_index[i]) for \
                                     i in range(len(record_keys)))
         del(record_indexdict["fileid"])
@@ -328,8 +330,6 @@ class SeqRecordProxyBase(SeqRecord):
         if not self.__is_valid_db_with_tables(con):
             self.__create_tables(con, indexdict)
             con.commit()
-            con.close()
-            con = self.__connect_db_return_connection()
         cursor = con.cursor()
         fileid = self.__get_fileid(con, write=True)
         
@@ -341,7 +341,8 @@ class SeqRecordProxyBase(SeqRecord):
                        "ON main_index.fileid = indexed_files.fileid " +\
                        "WHERE indexed_files.filename=? AND " +\
                        "main_index.recordoffsetstart=?;", \
-                       (self._handle.name, indexdict["recordoffsetstart"]))
+                       (basename(self._handle.name), \
+                       indexdict["recordoffsetstart"]))
         samefileposition = cursor.fetchone()
         cursor.execute("SELECT main_index.* " +\
                        "FROM main_index " +\
@@ -349,10 +350,11 @@ class SeqRecordProxyBase(SeqRecord):
                        "ON main_index.fileid = indexed_files.fileid " +\
                        "WHERE indexed_files.filename=? AND " +\
                        "main_index.id=?;", \
-                       (self._handle.name, indexdict["id"]))
+                       (basename(self._handle.name), \
+                       indexdict["id"]))
         sameid = cursor.fetchone()
         if samefileposition is not None or sameid is not None:
-            raise ValueError("indexdb already contains a matching record")
+            raise ValueError("indexdb already contains a similar record")
         
         #create main index input table
         # using 'insecure' string format query generation
@@ -363,8 +365,11 @@ class SeqRecordProxyBase(SeqRecord):
             placehold += ",?"
             values.append(value)
         values = tuple(values)
-        con.execute("INSERT INTO main_index ({})".format(keys) +\
-                       "VALUES ({})".format(placehold), values)
+        con.execute("INSERT INTO main_index ({0})".format(keys) +\
+                       "VALUES ({0})".format(placehold), values)
+        #increment the file record counter
+        con.execute("UPDATE indexed_files SET count=count + 1 "
+                    "WHERE filename=?", (basename(self._handle.name),))
         con.commit()
         con.close()
         #case: indexdb provided and has correct format/table
@@ -380,20 +385,17 @@ class SeqRecordProxyBase(SeqRecord):
         con.execute( \
                 "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                      ("indexedfiles", 0))
-        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                       ("format", self._format))
         #create file table
         con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY " +\
                         "KEY, filename TEXT UNIQUE, count INTEGER);")
                         
-        
         #create basic index table:
         # The (less secure) string manipulation is used because sqlite3
-        # API does not provide rich logic in their simple parameter 
-        # substitution query interface. The variant nature of each file's
-        # index will necessitate that index db's are format specific.
-        # and may contain fewer or more fields
+        # API does not provide rich logic in the parameter substitution
+        # query interface. The variant nature of each file's index
+        # requires that index db's are format specific and may contain
+        # a variable number of fields
         rows = sorted(list(indexdict.keys()))
         indextab = ", ".join([str(key) + " INTEGER" for key in rows \
                               if key != "id"])
@@ -404,14 +406,14 @@ class SeqRecordProxyBase(SeqRecord):
         
         #create features table
         feattab = "CREATE TABLE features(" + \
-                  "file INTEGER, " + \
+                  "fileid INTEGER, " + \
                   "featurenumber INTEGER, " + \
                   "offsetbegin INTEGER, " + \
                   "offsetend INTEGER, " +\
                   "seqbegin INTEGER, " + \
                   "seqend INTEGER, " + \
                   "meta TEXT, " + \
-                  "FOREIGN KEY(file) REFERENCES indexed_files(fileid));"
+                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
         con.execute(feattab)
         con.commit()
         
@@ -422,7 +424,7 @@ class SeqRecordProxyBase(SeqRecord):
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError("Requires sqlite3, which is "
                                                "included Python 2.5+")
-        if not path.isfile(self._indexdb):
+        if not isfile(self._indexdb):
             raise ValueError("A valid database or None must be provided")
         #case: connection does not exist yet
         con = _sqlite.connect(self._indexdb)
@@ -442,7 +444,8 @@ class SeqRecordProxyBase(SeqRecord):
             cursor = con.cursor()
             name = cursor.execute("SELECT fileid " +\
                            "FROM indexed_files WHERE " +\
-                           "filename=?;",(self._handle.name,))
+                           "filename=?;", \
+                           (basename(self._handle.name),))
             name = name.fetchone()
             if name is not None:
                 self.__file_id = name[0]
@@ -450,11 +453,12 @@ class SeqRecordProxyBase(SeqRecord):
             elif write:
                 cursor.execute("INSERT INTO indexed_files " +\
                                "(filename, count) VALUES (?, ?);",
-                               (self._handle.name, 0))
+                               (basename(self._handle.name), 0))
                 con.commit()
                 name = cursor.execute("SELECT fileid " +\
                            "FROM indexed_files WHERE " +\
-                           "filename=?;",(self._handle.name,)).fetchone()
+                           "filename=?;", \
+                           (basename(self._handle.name),)).fetchone()
                 self.__file_id = name[0]
                 return name[0]
             else:
@@ -507,16 +511,55 @@ class SeqRecordProxyBase(SeqRecord):
     #def __contains__(self, char):
     #def __iter__(self):
 
-def lazy_iterator(handle, return_class=None, format = None, alphabet=None):
+def lazy_iterator(handle, return_class=None, format = None,
+                  alphabet=None, index=None):
     """A general iterator for sequential sequence files
 
     This function steps through a sequentially oriented sequence
     record file and returns SeqRecordProxy objects correspoding 
     to the suported file formats.
     """
-    offsetiterator = sequential_record_offset_iterator(handle, format='fasta')
+    if index is None:
+        offsetiterator = sequential_record_offset_iterator(handle, format=format)
+        for offset_begin, length in offsetiterator:
+            yield return_class(handle, startoffset=offset_begin, \
+                               length=length, indexdb = None, \
+                               indexkey = None, alphabet=alphabet)
+    else:
+        #test that the db is populated by pulling the first record
+        try:
+            return_class(handle, indexdb = index, \
+                         indexkey = 0, alphabet=alphabet)
+        except KeyError:
+            _make_index_db(handle, return_class =return_class,
+                            indexdb = index, format=format,
+                            alphabet=alphabet)
+
+        #find the number of records
+        if not _sqlite:
+            # Hack for Jython (or if Python is compiled without it)
+            from Bio import MissingPythonDependencyError
+            raise MissingPythonDependencyError("Requires sqlite3, which is "
+                                               "included Python 2.5+")
+        con = _sqlite.connect(index)
+        count = con.execute("SELECT count " +\
+                            "FROM indexed_files WHERE " +\
+                            "filename=?;", \
+                            (basename(handle.name),)).fetchone()[0]
+        for idx in range(count):
+            yield return_class(handle, indexdb = index, \
+                                indexkey = idx, alphabet=alphabet)
+        
+
+def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
+    """(private) populate index db with file's index information"""
+    #this is used privately, but ensure it was used correctly
+    offsetiterator = sequential_record_offset_iterator(handle, format=format)
     for offset_begin, length in offsetiterator:
-        yield return_class(handle, offset_begin, length, alphabet)
+        temp = return_class(handle, startoffset=offset_begin, \
+                           length=length, indexdb = indexdb, \
+                           indexkey = None, alphabet=alphabet)
+
 
 def sequential_record_offset_iterator(handle, format = None):
     """Steps through a sequence file and returns offset pairs
@@ -702,7 +745,7 @@ class FeatureBinCollection(object):
                     self._dynamic_size = False
                     break
             if self._dynamic_size: #this should have been set to False
-                error_string = "Sequence length is {}: must be less than 2^41".format(length)
+                error_string = "Sequence length is {0}: must be less than 2^41".format(length)
                 raise ValueError(error_string)
         
     def _increase_bin_sizes(self):
@@ -887,7 +930,7 @@ class FeatureBinCollection(object):
             if self._dynamic_size:
                 assert begin+span <= 2**41   # len(seq) > 2.19 trillion is not reasonable
             elif not self._dynamic_size and begin+span > 2**self._max_bin_power:
-                error_string = "feature index at {}: must be less than 2^{}".format \
+                error_string = "feature index at {0}: must be less than 2^{1}".format \
                                                 (begin+span, self._max_bin_power)
                 raise ValueError(error_string)
             self._increase_bin_sizes()
