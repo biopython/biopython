@@ -547,6 +547,7 @@ def lazy_iterator(handle, return_class=None, format = None,
                             "FROM indexed_files WHERE " +\
                             "filename=?;", \
                             (basename(handle.name),)).fetchone()[0]
+        con.close()
         for idx in range(count):
             yield return_class(handle, indexdb = index, \
                                 indexkey = idx, alphabet=alphabet)
