@@ -3,6 +3,7 @@ import unittest
 import sys
 import imp
 import os
+import tempfile
 from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
 from Bio._py3k import _bytes_to_string, _as_bytes, _is_int_or_long
@@ -295,10 +296,9 @@ class TestFastaFromIndexDb( TestFastaSeqRecord):
     """Test iterating using a premade index database compare to standard"""
     fastafile = "Fasta/f002"
     def setUp(self):
-        #db setup: clear the file in case it contains data
-        self.dbfilename = os.path.join('SeqIO_lazy', 'emptyindex.sqlite.db')
-        dbfile = open(self.dbfilename, 'w')
-        dbfile.close()
+        #db setup: make tempfile and close os handle to help with cleanup
+        oshandle, self.dbfilename = tempfile.mkstemp()
+        os.close(oshandle)
         #iter setup lazy
         self.file = open(self.fastafile, 'rb')
         returncls = SeqIO.FastaIO.FastaSeqRecProxy
@@ -310,9 +310,8 @@ class TestFastaFromIndexDb( TestFastaSeqRecord):
         self.standard_iter = SeqIO.parse(self.fastafile, 'fasta') 
         
     def tearDown(self):
-        #clear db file
-        dbfile = open(self.dbfilename, 'w')
-        dbfile.close()
+        #delete db temp file
+        os.remove(self.dbfilename)
         #close sequence file
         self.file.close()
     
@@ -736,16 +735,13 @@ class IndexDbIO(SeqRecordProxyBase):
 class IndexDbIOCreateDb(unittest.TestCase):
 
     def setUp(self):
-        dbfile = os.path.join('SeqIO_lazy', 'emptyindex.sqlite.db')
-        self.dbfilename = dbfile
-        dbfile = open(dbfile, 'w')
-        dbfile.close()
-        
+        #db setup: make tempfile and close os handle to help with cleanup
+        oshandle, self.dbfilename = tempfile.mkstemp()
+        os.close(oshandle)
         
     def tearDown(self):
-        dbfile = open(self.dbfilename, 'w')
-        dbfile.close()
-    
+        os.remove(self.dbfilename)
+        
 
     def test_index_getter_empty_database(self):
         """empty databases follwed by a get call should raise KeyError"""
