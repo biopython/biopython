@@ -43,8 +43,13 @@ warn_files = [File(path.join(gb_file_dir, f), f) for f in warn_files]
 class GenBankTestsManyFiles(unittest.TestCase):
     
     def generic_parse_one(self,filetuple):
-        parse = lambda ft: next(SeqIO.parse(ft.path, 'genbank'))
-        self.assertNoWarn(BiopythonParserWarning, parse, filetuple)
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            ft = next(SeqIO.parse(filetuple.path, 'genbank'))
+            # Verify some things
+            assert len(w) == 0
 
     def generic_parse_seq_id(self,filetuple):
         rec = next(SeqIO.parse(filetuple.path, 'genbank'))
@@ -52,21 +57,14 @@ class GenBankTestsManyFiles(unittest.TestCase):
         id = rec.id
 
     def warn_inducing_parse(self,filetuple):
-        parse = lambda ft: next(SeqIO.parse(ft.path, 'genbank'))
-        self.assertWarns(BiopythonParserWarning, parse, filetuple)
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            ft = next(SeqIO.parse(filetuple.path, 'genbank'))
+            # Verify some things
 
-    def assertWarns(self, warning, callable, *args, **kwds):
-        with warnings.catch_warnings(record=True) as warning_list:
-            warnings.simplefilter('always')
-            result = callable(*args, **kwds)
-            self.assertTrue(any(item.category == warning for item in warning_list))
-
-    def assertNoWarn(self, warning, callable, *args, **kwds):
-        with warnings.catch_warnings(record=True) as warning_list:
-            warnings.simplefilter('always')
-            result = callable(*args, **kwds)
-            self.assertTrue(not any(item.category == warning for item in warning_list))
-
+#set up tests that expect no warnings
 for filetuple in test_files:
     name = filetuple.name.split(".")[0]
 
@@ -85,6 +83,7 @@ for filetuple in test_files:
             funct2(filetuple))
     del funct
 
+#set up tests that expect a warning
 for filetuple in warn_files:
     name = filetuple.name.split(".")[0]
 
@@ -92,11 +91,94 @@ for filetuple in warn_files:
         f = lambda x : x.warn_inducing_parse(fn)
         f.__doc__ = "Checking nucleotide file %s" % fn.name
         return f
-
+    
     setattr(GenBankTestsManyFiles, "test_warnings_from_%s"%name, \
             funct(filetuple))
     del funct
 
+
+#tests that check granular consumer behavior
+import re
+from Bio.GenBank import _FeatureConsumer
+from Bio.GenBank.utils import FeatureValueCleaner
+from Bio.GenBank.Scanner import GenBankScanner
+from Bio._py3k import StringIO
+
+class ConsumerBehaviorTest(unittest.TestCase):
+    
+    recordfile = "brca_FJ940752.gb" 
+
+    def setUp(self):
+        self.handle.seek(0)
+        self.scanner = GenBankScanner(debug=0)
+        self.consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+
+    @classmethod
+    def setUpClass(cls):
+        cls.handle = open(path.join('GenBank', cls.recordfile), 'r')
+    
+    @classmethod
+    def tearDownClass(cls):
+        cls.handle.close()
+                
+    def test_handle_assignment(self):
+        self.scanner.set_handle(self.handle)
+        self.assertEqual(self.scanner.line, "")
+
+    def test_complete_(self):
+        scanner = self.scanner
+        consumer = self.consumer
+        #step 0: manually setting the handle
+        # same as >>> scanner.set_handle(self.handle)
+        scanner.handle = self.handle
+        scanner.line = ""
+        #step 1: find_start
+        scanner.find_start()
+        self.assertEqual(scanner.line[0:20], "LOCUS       FJ940752")
+        self.assertTrue(bool(re.match(r"^LOCUS(\s)*",scanner.line)))
+        #step 2: feed_first_line (expect no advancement)
+        scanner._feed_first_line(self.consumer, line=scanner.line)
+        self.assertEqual(scanner.line[0:20], "LOCUS       FJ940752")
+        self.assertTrue(bool(re.match(r"^LOCUS(\s)*",scanner.line)))
+        #step 3: feed all header data
+        scanner._feed_header_lines(consumer, scanner.parse_header())
+        self.assertEqual(scanner.line[0:40], "FEATURES             Location/Qualifiers")
+        self.assertTrue(bool(re.match(r"^FEATURES(\s)*Location/Qualifiers",scanner.line)))
+        #step 4: feed the features
+        featuretuple = scanner.parse_features(skip=False)
+        testline = scanner.line
+        scanner._feed_feature_table(consumer, featuretuple)
+        self.assertEqual(testline[0:6], "ORIGIN")
+        self.assertTrue(bool(re.match(r"^ORIGIN",testline)))
+        #step 5: feed the footer
+        misc_lines, sequence_string = scanner.parse_footer()
+        self.assertEqual("//", scanner.line)
+        self.assertTrue(bool(re.match(r"^//",scanner.line)))
+        #step 6: finish the consumer
+        scanner._feed_misc_lines(consumer, misc_lines)
+        consumer.sequence(sequence_string)
+
+    def test_get_start_by_cut(self):
+        #get positions
+        position = 0
+        while True:
+            line = self.handle.readline()
+            if re.match(r"^FEATURES(\s)*Location/Qualifiers",line):
+                position = self.handle.tell()
+                break
+            if not line:
+                raise ValueError("record has bad header")
+        self.handle.seek(0)
+        top = StringIO(self.handle.read(position-0))
+        #use the fake thing
+        scanner = self.scanner
+        consumer = self.consumer
+        scanner.set_handle(top)
+        scanner.find_start()
+        scanner._feed_first_line(self.consumer, line=scanner.line)
+        scanner._feed_header_lines(consumer, scanner.parse_header())
+        self.assertEqual(consumer.data.id, "FJ940752")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

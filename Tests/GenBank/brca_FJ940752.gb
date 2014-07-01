@@ -1,0 +1,55 @@
+LOCUS       FJ940752                 349 bp    DNA     linear   PRI 27-MAY-2009
+DEFINITION  Homo sapiens BRCA1 (BRCA1) gene, exon 18 and partial cds.
+ACCESSION   FJ940752
+VERSION     FJ940752.1  GI:237930355
+KEYWORDS    .
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 349)
+  AUTHORS   Rajkumar,T., Parija,T. and Meenakumari,B.
+  TITLE     Novel mutation (c.5118-20 del AAT; p.1707 del isoleucine) in exon
+            18 of BRCA1 gene
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 349)
+  AUTHORS   Rajkumar,T., Parija,T. and Meenakumari,B.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (17-APR-2009) Molecular Oncology, Cancer Institute (WIA),
+            Sardar Patel Road, Chennai, Tamilnadu 600036, India
+FEATURES             Location/Qualifiers
+     source          1..349
+                     /organism="Homo sapiens"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:9606"
+     gene            <1..>349
+                     /gene="BRCA1"
+     primer_bind     1..22
+     mRNA            <79..>153
+                     /gene="BRCA1"
+                     /product="BRCA1"
+     CDS             <79..>153
+                     /gene="BRCA1"
+                     /note="contains isoleucine deletion"
+                     /codon_start=3
+                     /product="BRCA1"
+                     /protein_id="ACR33809.1"
+                     /db_xref="GI:237930356"
+                     /translation="AEFVCERTLKYFLGAGGKWVVSYF"
+     exon            79..153
+                     /gene="BRCA1"
+                     /number=18
+     variation       121^122
+                     /gene="BRCA1"
+                     /replace="aat"
+     primer_bind     complement(337..>349)
+ORIGIN      
+        1 ggctctttag cttcttagga cagcacttcc tgattttgtt ttcaacttct aatcctttga
+       61 gtgtttttca ttctgcagat gctgagtttg tgtgtgaacg gacactgaaa tattttctag
+      121 gtgcgggagg aaaatgggta gttagctatt tctgtaagta taatactatt tctcccctcc
+      181 tccctttaac acctcagaat tgcattttta cacctaacgt ttaacaccta aggtttttgc
+      241 tgatgctgag tctgagttac caaaaggtct ttaattgtaa tactaaacta cttttatctt
+      301 taatatcact ttgttcagat aagctggtga tgctgggaaa atgggtctc
+//
+
