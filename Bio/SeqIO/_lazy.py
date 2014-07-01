@@ -577,7 +577,9 @@ def sequential_record_offset_iterator(handle, format = None):
                              for padding and/or EOF
     """
     
-    marker = {"fasta": ">"}[format]
+    marker = {"fasta": ">",
+              "genbank": "LOCUS",
+              "gb": "LOCUS"}[format]
     marker_re = re.compile(marker)
 
     # Set handle to beginning and set offsets to valid initial values
