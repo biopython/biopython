@@ -324,8 +324,46 @@ class TestFastaFromIndexDb( TestFastaSeqRecord):
 class TestFastaAlignAgainst(TestFastaSeqRecord):
     fastafile = "Fasta/fa01"
 
+#
+### tests for GenBank IO
+#
 
+from Bio.SeqIO.InsdcIO import GenbankSeqRecProxy
 
+class TestGenbankLazy(unittest.TestCase):
+    recordfile = "brca_FJ940752.gb" 
+
+    def setUp(self):
+        returncls = GenbankSeqRecProxy
+        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
+                                                returncls, 'genbank')
+        self.handle.seek(0)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.handle = open(os.path.join('GenBank', cls.recordfile), 'rb')
+        
+    
+    @classmethod
+    def tearDownClass(cls):
+        cls.handle.close()
+
+    def test_parser_init(self):
+        recordgen = self.parser(self.handle)
+        record = next(recordgen)
+
+    def test_id_name(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(record.id, 'FJ940752.1')
+        self.assertEqual(record.name, 'FJ940752')
+
+    def test_id_seq(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(str(record[0:5].seq), 'ggctc')
+        self.assertEqual(str(record[-5:].seq), 'gtctc')
+        self.assertEqual(str(record[70:75].seq), "ttctg")
 #
 ### tests for base class
 #

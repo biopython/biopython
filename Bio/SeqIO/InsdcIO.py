@@ -33,14 +33,20 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 from __future__ import print_function
 
-from Bio.Seq import UnknownSeq
+from Bio.Seq import UnknownSeq, Seq
+from Bio.SeqIO import _lazy
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
+from Bio.GenBank import _FeatureConsumer
+from Bio.GenBank.utils import FeatureValueCleaner
 from Bio import Alphabet
 from .Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
-from Bio._py3k import _is_int_or_long
-from Bio._py3k import basestring
+from Bio._py3k import _is_int_or_long, _bytes_to_string
+from Bio._py3k import basestring, StringIO
+
+import re
+from copy import copy
 
 __docformat__ = "restructuredtext en"
 
@@ -1257,3 +1263,158 @@ if __name__ == "__main__":
             records = list(SeqIO.parse(handle, "swiss"))
 
         check_genbank_writer(records)
+
+class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
+    """Implements the getter metods required to run the SeqRecordProxy"""
+    
+    _format = "genbank"
+
+    #def __init__(self, handle, startoffset=None, length=None,\
+    #             indexdb = None, indexkey=None, alphabet=None):
+    def _make_record_index(self, new_index):
+        """(private) set the values needed for lazy loading
+
+        The self._index dictionary is only set with the file
+        start location on instantiation. This function sets the
+        following variables in _index
+           "sequencestart"       : the file index where the seq. starts
+           "sequencelinewidth"   : the number of sequence letters per line
+           "sequenceletterwidth" : the number of bytes per line
+        
+        This function also parses the title line and sets the following
+        attributes:
+           self.id
+           self.name
+           self.descr
+        """
+        handle = self._handle
+        start_offset = new_index["recordoffsetstart"]
+        unpadded_end = start_offset + new_index["recordoffsetlength"]
+        handle.seek(start_offset)
+
+        #Make index for header group of data, also set id
+        id_is_set = False
+        firstline = _bytes_to_string(handle.readline())
+        assert bool(re.match("LOCUS", firstline))
+        seqlen = [char for char in firstline.split()[2] if char.isdigit()]
+        new_index["seqlen"] = int("".join(seqlen))
+
+        while True:
+            old_position = handle.tell()
+            line = _bytes_to_string(handle.readline())
+            new_position = handle.tell()
+            if re.match(r"(FEATURES)(\s)*(Location/Qualifiers)", line):
+                new_index["features_begin"] = old_position
+                new_index["header_end"] = new_position 
+                break           
+            if line[0:9] == "ACCESSION" and not id_is_set:
+                id = line.split()[1]
+                new_index["id"] = id.strip()
+            if line[0:7] == "VERSION":
+                id_is_set = True
+                id = line.split()[1]
+                new_index["id"] = id.strip()
+        
+        while True:
+            old_position = handle.tell()
+            line = _bytes_to_string(handle.readline())
+            new_position = handle.tell()    
+            if re.match(r"^ORIGIN",line):
+                new_index["sequencestart"] = new_position
+                new_index["features_end"] = new_position
+                old_position = new_position
+                line = _bytes_to_string(handle.readline())
+                new_position = handle.tell()
+                new_index["sequencelinewidth"] = new_position - old_position
+                seqnumbers, seqletters = line.strip().split(None, 1)
+                real_letters_len = sum(1 for let in seqletters if let != " ")
+                new_index["sequenceletterwidth"] = real_letters_len
+            if re.match("//", line):
+                break
+            if not line:
+                raise ValueError("Record ended prematurely or lacks '//'")
+            if re.match(r"(FEATURES)(\s)*(Location)", line):
+                raise ValueError("Multiple records are unseparated")
+        #set the index
+        self._index = new_index
+
+    def _load_non_lazy_values(self):
+        """(private) set static seqrecord values"""
+        handle = self._handle
+        _index = self._index
+        start_offset = _index["recordoffsetstart"]
+        header_end = _index["header_end"]
+        handle.seek(start_offset)
+        header_lines = handle.read(header_end - start_offset)
+        header_lines = StringIO(_bytes_to_string(header_lines))
+
+        #set up scanner
+        scanner = GenBankScanner(debug=0)
+        consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+        #parse record header
+        scanner.set_handle(header_lines)
+        scanner.find_start()
+        scanner._feed_first_line(consumer, line=scanner.line)
+        scanner._feed_header_lines(consumer, scanner.parse_header())
+
+        self._parse_aparatus = (scanner,consumer)
+        #copy consumer and check final ID assignment
+        contemp = copy(consumer)
+        contemp.record_end("//")
+
+        self.id = _index["id"]
+        self.name = contemp.data.name 
+        self.description = contemp.data.description
+        self.dbxrefs = contemp.data.dbxrefs
+        self._alphabet = contemp.data.seq.alphabet
+
+        del(contemp)
+
+    def _read_seq(self):
+        """(private) implements standard sequence getter for base class"""
+        
+        #localize some instance attributes used throughout this
+        begin = self._index_begin
+        end = self._index_end
+        lengthtoget = end - begin
+        handle = self._handle
+        sequencewidth = self._index["sequenceletterwidth"]
+        
+        #find first line to read
+        seqstart = self._index["sequencestart"]
+        linewidth = self._index["sequencelinewidth"]
+        first_line_to_read = int(begin/sequencewidth)
+        handle.seek(seqstart + first_line_to_read*linewidth)
+
+        #pull characters from first line and return early if possible
+        letters_firstline = begin%sequencewidth
+        firstline = _bytes_to_string(handle.readline().rstrip())
+        firstline = firstline[10:]
+        firstline = "".join(let for let in firstline if let != " ")
+        firstline = firstline[letters_firstline:]
+        if len(firstline) >= lengthtoget:
+            self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
+            return
+        
+        #extract the rest of the lines
+        readchars = len(firstline)
+        linelist = [firstline]
+        while readchars < lengthtoget:
+            next_line = _bytes_to_string(handle.readline())[10:].strip()
+            next_line = "".join(next_line.split())
+            next_line = "".join(let for let in next_line if let != " ")
+            if not next_line:
+                break
+            else:
+                linelist.append(next_line)
+                readchars += sequencewidth
+
+        #fix the last line and assign the _seq attribute
+        last_line_index = end%sequencewidth
+        linelist[-1] = linelist[-1][0:last_line_index]
+        sequence = "".join(linelist)
+        print(sequence)
+        if len(sequence) != len(self):
+            raise ValueError("File not formatted correctly")
+        self._seq = Seq(sequence, self._alphabet)
