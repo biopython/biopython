@@ -1394,6 +1394,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         firstline = "".join(let for let in firstline if let != " ")
         firstline = firstline[letters_firstline:]
         if len(firstline) >= lengthtoget:
+            firstline = firstline.upper()
             self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
             return
         
@@ -1417,4 +1418,5 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         print(sequence)
         if len(sequence) != len(self):
             raise ValueError("File not formatted correctly")
+        sequence = sequence.upper()
         self._seq = Seq(sequence, self._alphabet)
