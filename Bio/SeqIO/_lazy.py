@@ -103,6 +103,8 @@ class SeqRecordProxyBase(SeqRecord):
     """
     
     _seq = None
+    _features = None
+    _feature_index = None
 
     def __init__(self, handle, startoffset=None, length=None,\
                  indexdb = None, indexkey = None, alphabet=None):
@@ -114,9 +116,13 @@ class SeqRecordProxyBase(SeqRecord):
         
         # create the index or load an existing one from file 
         if self._index is None:
+            # make main index and sets _index
             new_index = {"recordoffsetstart":startoffset, 
                            "recordoffsetlength":length}
             self._make_record_index(new_index)
+            # make feature index and sets _feature_index
+            new_feature_index = []
+            self._make_feature_index(new_feature_index)
 
         #set base values
         self._load_non_lazy_values()
@@ -136,6 +142,20 @@ class SeqRecordProxyBase(SeqRecord):
 
     seq = property(fget=_return_seq,
                    doc="The sequence itself, as a Seq or MutableSeq object.")
+
+    def _return_features(self):
+        """(private) removes getter logic from _read_seq"""
+        if not self._features:
+            self._read_features()
+        return self._features
+    
+    def _read_features(self):
+        """this is implemented to handle file access for setting _seq"""
+        raise NotImplementedError( \
+            "_read_properties must be implemented in the derived class")
+
+    features = property(fget=_return_features,
+                        doc="list of SeqFeature objects")
 
     #TODO - letter annotations?
     letter_annotations = None

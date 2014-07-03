@@ -239,7 +239,8 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         new_index["seqlen"] = seqlen
         self._index = new_index
 
-        
+    def _read_features(self):
+        self._features = []
 
     def _read_seq(self):
         """(private) implements standard sequence getter for base class"""
@@ -285,6 +286,12 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         if len(sequence) != len(self):
             raise ValueError("File not formatted correctly")
         self._seq = Seq(sequence, self._alphabet)
+    
+    def _make_feature_index(self, new_list):
+        pass
+
+    def _read_features(self):
+        self._features = None
 
 
 
