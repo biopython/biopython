@@ -342,7 +342,6 @@ class TestGenbankLazy(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.handle = open(os.path.join('GenBank', cls.recordfile), 'rb')
-        
     
     @classmethod
     def tearDownClass(cls):
@@ -358,12 +357,18 @@ class TestGenbankLazy(unittest.TestCase):
         self.assertEqual(record.id, 'FJ940752.1')
         self.assertEqual(record.name, 'FJ940752')
 
+    def test_record_description(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        descr = "Homo sapiens BRCA1 (BRCA1) gene, exon 18 and partial cds."
+        self.assertEqual(record.description, descr)
+
     def test_id_seq(self):
         record = self.parser(self.handle)
         record = next(record)
-        self.assertEqual(str(record[0:5].seq), 'ggctc')
-        self.assertEqual(str(record[-5:].seq), 'gtctc')
-        self.assertEqual(str(record[70:75].seq), "ttctg")
+        self.assertEqual(str(record[0:5].seq), 'GGCTC')
+        self.assertEqual(str(record[-5:].seq), 'GTCTC')
+        self.assertEqual(str(record[70:75].seq), "TTCTG")
 #
 ### tests for base class
 #
@@ -397,6 +402,12 @@ class MinimalLazySeqRecord(SeqRecordProxyBase):
         self.name = "<unknown name>"
         self.description = "<unknown description>"
         self.dbxrefs = []
+
+    def _make_feature_index(self, new_list):
+        pass
+
+    def _read_features(self):
+        return []
 
 
 class SeqRecordProxyBaseClassTests(unittest.TestCase):

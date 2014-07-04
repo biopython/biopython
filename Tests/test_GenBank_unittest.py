@@ -102,7 +102,7 @@ import re
 from Bio.GenBank import _FeatureConsumer
 from Bio.GenBank.utils import FeatureValueCleaner
 from Bio.GenBank.Scanner import GenBankScanner
-from Bio._py3k import StringIO
+from Bio._py3k import StringIO, _as_string
 
 class ConsumerBehaviorTest(unittest.TestCase):
     
@@ -159,18 +159,38 @@ class ConsumerBehaviorTest(unittest.TestCase):
         scanner._feed_misc_lines(consumer, misc_lines)
         consumer.sequence(sequence_string)
 
+class PartialSequenceAndPartialResultTest(unittest.TestCase):
+    
+    recordfile = "brca_FJ940752.gb" 
+
+    def setUp(self):
+        self.handle.seek(0)
+        self.scanner = GenBankScanner(debug=0)
+        self.consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+
+    @classmethod
+    def setUpClass(cls):
+        cls.handle = open(path.join('GenBank', cls.recordfile), 'rb')
+    
+    @classmethod
+    def tearDownClass(cls):
+        cls.handle.close()
+
     def test_get_start_by_cut(self):
         #get positions
         position = 0
         while True:
             line = self.handle.readline()
-            if re.match(r"^FEATURES(\s)*Location/Qualifiers",line):
+            print(repr(line))
+            if re.match(r"^FEATURES(\s)*Location/Qu",_as_string(line)):
                 position = self.handle.tell()
                 break
             if not line:
                 raise ValueError("record has bad header")
         self.handle.seek(0)
-        top = StringIO(self.handle.read(position-0))
+        headertext = self.handle.read(position-0)
+        top = StringIO(_as_string(headertext))
         #use the fake thing
         scanner = self.scanner
         consumer = self.consumer
