@@ -1996,18 +1996,16 @@ class OneOfPosition(int, AbstractPosition):
         if not identifier:
             identifier = ','.join(str(pos) for pos in self.position_choices)
 
-        positions = "<%s%s> a <%s> .\n"%(
+        positions = "<%s%s> a <%s> ."%(
             prefix,
             identifier,
             'http://biohackathon.org/resource/faldo#OneOfPosition',
         )
         for index, pos in enumerate(self.position_choices):
-            positions += pos._rdfize(prefix + identifier + '/',
+            positions += "\n" + pos._rdfize(prefix + identifier + '/',
                                      offset,
                                      str(index))
-            positions += """
-<%s%s> <%s> <%s> .
-"""%(
+            positions += "\n<%s%s> <%s> <%s> ."%(
             prefix,
             identifier,
             'http://biohackathon.org/resource/faldo#position',
