@@ -7,7 +7,10 @@
 # as part of this package.
 
 import unittest
+from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
 from Bio.SeqUtils import ProtParam, ProtParamData
+from Bio.SeqUtils import molecular_weight
 
 
 class ProtParamTest(unittest.TestCase):
@@ -31,13 +34,27 @@ class ProtParamTest(unittest.TestCase):
     def test_get_molecular_weight(self):
         "Test calculating protein molecular weight"
         self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
-                               17102.45)
+                               17103.16)
 
     def test_get_monoisotopic_molecular_weight(self):
         "Test calculating the monoisotopic molecular weight"
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
         self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
-                               17092.70)
+                               17092.61)
+
+    def test_get_molecular_weight_identical(self):
+        "Test calculating the protein molecular weight agrees with calculation from Bio.SeqUtils"
+        mw_1 = self.analysis.molecular_weight()
+        mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein))
+        self.assertAlmostEqual(mw_1, mw_2)
+
+    def test_get_monoisotopic_molecular_weight_identical(self):
+        "Test calculating the protein molecular weight agrees with calculation from Bio.SeqUtils"
+        self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
+        mw_1 = self.analysis.molecular_weight()
+        mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein), monoisotopic=True)
+        self.assertAlmostEqual(mw_1, mw_2)
+
 
     def test_aromaticity(self):
         "Test calculating protein aromaticity"
