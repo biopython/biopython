@@ -865,7 +865,7 @@ class FeatureBinCollection(object):
         """This getter efficiently retrieves the required entries
         
         This getter primarily works as expected and in a pythonic
-        fashion, one exception it it's treatment of slices indices
+        fashion, one exception is it's treatment of slices indices
         where the start is greater than the stop. Rather than just 
         throwing calculated output, an IndexError is raised.
         """    
