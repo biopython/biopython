@@ -43,6 +43,7 @@ from .Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
 from Bio._py3k import _is_int_or_long, _bytes_to_string
+from Bio._py3k import _binary_to_string_handle
 from Bio._py3k import basestring, StringIO
 
 import re
@@ -1266,7 +1267,14 @@ if __name__ == "__main__":
 
 class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
-    
+
+    def __init__(self, *args, **kwargs):
+        scanner = GenBankScanner(debug=0)
+        consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+        self._parse_aparatus = (scanner,consumer)
+        super(GenbankSeqRecProxy, self).__init__(*args, **kwargs)
+
     _format = "genbank"
 
     #def __init__(self, handle, startoffset=None, length=None,\
@@ -1280,7 +1288,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
            "sequencestart"       : the file index where the seq. starts
            "sequencelinewidth"   : the number of sequence letters per line
            "sequenceletterwidth" : the number of bytes per line
-        
+
         This function also parses the title line and sets the following
         attributes:
            self.id
@@ -1305,8 +1313,9 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             new_position = handle.tell()
             if re.match(r"(FEATURES)(\s)*(Location/Qualifiers)", line):
                 new_index["features_begin"] = old_position
-                new_index["header_end"] = new_position 
-                break           
+                new_index["header_end"] = new_position
+                new_index["has_features"] = 1
+                break
             if line[0:9] == "ACCESSION" and not id_is_set:
                 id = line.split()[1]
                 new_index["id"] = id.strip()
@@ -1314,11 +1323,19 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                 id_is_set = True
                 id = line.split()[1]
                 new_index["id"] = id.strip()
-        
+            if re.match(r"^ORIGIN",line):
+                #features_begin will be ignored later
+                new_index["features_begin"] = 0
+                new_index["header_end"] = new_position
+                new_index["has_features"] = 0
+                break
+
+        assert "id" in new_index
+
         while True:
             old_position = handle.tell()
             line = _bytes_to_string(handle.readline())
-            new_position = handle.tell()    
+            new_position = handle.tell()
             if re.match(r"^ORIGIN",line):
                 new_index["sequencestart"] = new_position
                 new_index["features_end"] = new_position
@@ -1349,22 +1366,20 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         header_lines = StringIO(_bytes_to_string(header_lines))
 
         #set up scanner
-        scanner = GenBankScanner(debug=0)
-        consumer = _FeatureConsumer(use_fuzziness=1,
-                            feature_cleaner=FeatureValueCleaner())
+        scanner, consumer = self._parse_aparatus
         #parse record header
         scanner.set_handle(header_lines)
         scanner.find_start()
         scanner._feed_first_line(consumer, line=scanner.line)
         scanner._feed_header_lines(consumer, scanner.parse_header())
 
-        self._parse_aparatus = (scanner,consumer)
         #copy consumer and check final ID assignment
         contemp = copy(consumer)
+        contemp.start_feature_table() #feeds references
         contemp.record_end("//")
 
         self.id = _index["id"]
-        self.name = contemp.data.name 
+        self.name = contemp.data.name
         self.description = contemp.data.description
         self.dbxrefs = contemp.data.dbxrefs
         self._alphabet = contemp.data.seq.alphabet
@@ -1373,14 +1388,14 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     def _read_seq(self):
         """(private) implements standard sequence getter for base class"""
-        
+
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
         lengthtoget = end - begin
         handle = self._handle
         sequencewidth = self._index["sequenceletterwidth"]
-        
+
         #find first line to read
         seqstart = self._index["sequencestart"]
         linewidth = self._index["sequencelinewidth"]
@@ -1397,7 +1412,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             firstline = firstline.upper()
             self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
             return
-        
+
         #extract the rest of the lines
         readchars = len(firstline)
         linelist = [firstline]
@@ -1422,7 +1437,155 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         self._seq = Seq(sequence, self._alphabet)
 
     def _make_feature_index(self, new_list):
-        pass
+        """Return list of tuples for the features (if present)
+
+        Each feature is returned as a tuple (key, location, qualifiers)
+        where key and location are strings (e.g. "CDS" and
+        "complement(join(490883..490885,1..879))") while qualifiers
+        is a list of two string tuples (feature qualifier keys and values).
+
+        Assumes you have already read to the start of the features table.
+        """
+        #use handle hack: this is a wrapper that operates on a
+        # binary file returning string values. Only readline, read,
+        # seek, __iter__, close, tell, and seek are implemented in
+        # the wrapper for python 3.x, In py2 this simply returns
+        # the passed handle.
+        handle = _binary_to_string_handle(self._handle)
+
+        #line values:
+        RECORD_START = "LOCUS       "
+        HEADER_WIDTH = 12
+        FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers",
+                                 "FEATURES"]
+        FEATURE_END_MARKERS = []
+        FEATURE_QUALIFIER_INDENT = 21
+        FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
+        SEQUENCE_HEADERS = ["CONTIG", "ORIGIN", "BASE COUNT", "WGS"]
+
+        #to make the feature index, pull the features portion of the file
+        ft_begin = self._index["features_begin"]
+        ft_end = self._index["features_end"]
+        handle.seek(ft_begin)
+        line_begin_offset = handle.tell()
+        line = handle.readline()
+
+        #fetch the captive parsers
+        scanner, consumer = self._parse_aparatus
+
+        #begin parsing
+        if line.rstrip() not in FEATURE_START_MARKERS:
+            return []
+        line_begin_offset = handle.tell()
+        line = handle.readline()
+
+        features = []
+        while True:
+            #cases that end iteration early
+            if not line:
+                raise ValueError("Premature end of file during ft indexing")
+            if line[:HEADER_WIDTH].strip() in SEQUENCE_HEADERS:
+                #found start of sequence, no more features can be indexed
+                break
+            line = line.rstrip()
+            if line == "//":
+                raise ValueError("Premature end of feature table; '//' found")
+            if line in FEATURE_END_MARKERS:
+                #found feature end maker, indexing over
+                line_begin_offset = handle.tell()
+                line = handle.readline()
+                break
+
+            #cases that continue iteration without building an index
+            if line[2:FEATURE_QUALIFIER_INDENT].strip() == "":
+                #This is an empty feature line between qualifiers. Empty
+                #feature lines within qualifiers are handled below (ignored).
+                line_begin_offset = handle.tell()
+                line = handle.readline()
+                continue
+            if len(line) < FEATURE_QUALIFIER_INDENT:
+                warnings.warn("line too short to contain a feature: %r" % line,
+                              BiopythonParserWarning)
+                line_begin_offset = handle.tell()
+                line = handle.readline()
+                continue
+
+            #Build up a list of the lines making up this feature:
+            if line[FEATURE_QUALIFIER_INDENT] != " " \
+                    and " " in line[FEATURE_QUALIFIER_INDENT:]:
+                #The feature table design enforces a length limit on the feature keys.
+                #Some third party files (e.g. IGMT's EMBL like files) solve this by
+                #over indenting the location and qualifiers.
+                feature_begin_offset = line_begin_offset
+                feature_end_offset = handle.tell()
+                feature_key, line = line[2:].strip().split(None, 1)
+                feature_lines = [line]
+                warnings.warn("Overindented %s feature?" % feature_key,
+                              BiopythonParserWarning)
+            else:
+                feature_begin_offset = line_begin_offset
+                feature_end_offset = handle.tell()
+                feature_key = line[2:FEATURE_QUALIFIER_INDENT].strip()
+                feature_lines = [line[FEATURE_QUALIFIER_INDENT:]]
+            line_begin_offset = handle.tell()
+            feature_end_offset = line_begin_offset
+            line = handle.readline()
+            while line[:FEATURE_QUALIFIER_INDENT] == FEATURE_QUALIFIER_SPACER \
+                    or line.rstrip() == "":  # cope with blank lines in the midst of a feature
+                #Use strip to remove any harmless trailing white space AND and leading
+                #white space (e.g. out of spec files with too much indentation)
+                feature_lines.append(line[FEATURE_QUALIFIER_INDENT:].strip())
+                line_begin_offset = handle.tell()
+                feature_end_offset = line_begin_offset
+                line = handle.readline()
+
+            tempfeature = [scanner.parse_feature(feature_key, feature_lines)]
+            tempfeature = scanner._feed_feature_table(consumer, tempfeature)
+            tempfeature = consumer.data.features.pop()
+            feature_begin_position = tempfeature.location.nofuzzy_start
+            feature_end_position = tempfeature.location.nofuzzy_end
+            if isinstance(tempfeature.type, str):
+                qualifier = tempfeature.type
+            else:
+                qualifier = ""
+            index_tuple = (feature_begin_position, feature_end_position,
+                           feature_begin_offset, feature_end_offset,
+                           qualifier)
+            new_list.insert(index_tuple)
+        self._feature_index = new_list
+
 
     def _read_features(self):
-        return []
+        #set some constants:
+        QUALIFIER_INDENT = 21
+
+        #localize some instance attributes used throughout this
+        begin = self._index_begin
+        end = self._index_end
+        lengthtoget = end - begin
+        handle = _binary_to_string_handle(self._handle)
+        scanner, consumer = self._parse_aparatus
+
+        #index format (begin_pos, end_pos, begin_offset, end_offset, qualify)
+        feature_index_list = self._feature_index[begin:end]
+
+        #make the feature list
+        featurelist = []
+        for feature_index in feature_index_list:
+            current_position, end_offset = feature_index[2:4]
+            handle.seek(current_position)
+            line = handle.readline()
+            feature_key = line[2:QUALIFIER_INDENT].strip()
+            feature_lines = [line[QUALIFIER_INDENT:].rstrip()]
+            current_position = handle.tell()
+            while current_position != end_offset:
+                line = handle.readline()
+                current_position = handle.tell()
+                feature_lines.append(line[QUALIFIER_INDENT:].strip())
+            feature = [scanner.parse_feature(feature_key, feature_lines)]
+            feature = scanner._feed_feature_table(consumer, feature)
+            feature = consumer.data.features.pop()
+            if begin != 0:
+                feature = feature._shift(-begin)
+            featurelist.append(feature)
+        self._features = featurelist

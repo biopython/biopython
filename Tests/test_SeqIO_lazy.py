@@ -335,6 +335,7 @@ class TestFastaAlignAgainst(TestFastaSeqRecord):
 #
 
 from Bio.SeqIO.InsdcIO import GenbankSeqRecProxy
+from Bio.SeqFeature import SeqFeature
 
 class TestGenbankLazy(unittest.TestCase):
     recordfile = "brca_FJ940752.gb" 
@@ -348,7 +349,7 @@ class TestGenbankLazy(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.handle = open(os.path.join('GenBank', cls.recordfile), 'rb')
-    
+
     @classmethod
     def tearDownClass(cls):
         cls.handle.close()
@@ -375,6 +376,83 @@ class TestGenbankLazy(unittest.TestCase):
         self.assertEqual(str(record[0:5].seq), 'GGCTC')
         self.assertEqual(str(record[-5:].seq), 'GTCTC')
         self.assertEqual(str(record[70:75].seq), "TTCTG")
+
+
+class TestGenbankLazyComparitive(unittest.TestCase):
+    recordfile = "brca_FJ940752.gb"
+
+    def setUp(self):
+        returncls = GenbankSeqRecProxy
+        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
+                                                returncls, 'genbank')
+        self.handle.seek(0)
+
+    @classmethod
+    def setUpClass(cls):
+        filename = os.path.join('GenBank', cls.recordfile)
+        cls.olditer = SeqIO.parse(filename, 'genbank')
+        cls.oldrec = next(cls.olditer)
+        cls.handle = open(filename, 'rb')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.handle.close()
+
+    def test_parser_init(self):
+        recordgen = self.parser(self.handle)
+        record = next(recordgen)
+
+    def test_id_name(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(record.id, self.oldrec.id)
+        self.assertEqual(record.name, self.oldrec.name)
+
+    def test_record_description(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(record.description, self.oldrec.description)
+
+    def test_id_seq(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(str(record[0:5].seq), str(self.oldrec[0:5].seq))
+        self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
+        self.assertEqual(str(record[70:75].seq), str(self.oldrec[70:75].seq))
+
+    def base_test_multiple_seq(self):
+        recorditer = self.parser(self.handle)
+        r = next(recorditer)
+        for record, oldrec in zip(recorditer, self.olditer):
+            self.assertEqual(str(record[0:5].seq), str(oldrec[0:5].seq))
+            self.assertEqual(str(record[-5:].seq), str(oldrec[-5:].seq))
+            self.assertEqual(str(record[70:75].seq), str(oldrec[70:75].seq))
+
+    def test_record_has_features(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertTrue(isinstance(self.oldrec.features[0], SeqFeature))
+        self.assertTrue(isinstance(record.features[0], SeqFeature))
+
+    def make_feature_tuple_list(self, featurelist):
+        returnlist = [(f.location.nofuzzy_start,
+                       f.location.nofuzzy_end,
+                       f.type) for f in featurelist]
+        returnlist.sort(key = lambda t: t[0]+(t[1]/100.0) + \
+                          sum(ord(c) for c in t[2])/100000)
+        return returnlist
+
+    def test_record_has_same_set_of_features(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        features = record.features
+        #check lengths
+        self.assertEqual(len(self.oldrec.features), len(features))
+        #default features don't allow comparison
+        oldset = self.make_feature_tuple_list(self.oldrec.features)
+        newset = self.make_feature_tuple_list(features)
+        self.assertEqual(oldset, newset)
+
 #
 ### tests for base class
 #
