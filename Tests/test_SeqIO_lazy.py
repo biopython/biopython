@@ -283,6 +283,12 @@ class TestFastaSeqRecord(unittest.TestCase):
             self.assertEqual(std.description, lzy.description)
             self.assertEqual(std.name, lzy.name)
 
+    def test_same_features(self):
+        for std, lzy in zip(self.standard_iter, self.lazy_iter):
+            self.assertEqual(std.features, [])
+            self.assertEqual(lzy.features, [])
+            self.assertEqual(std.features, lzy.features)
+
     def test_slicing_behavior(self):
         for std, lzy in zip(self.standard_iter, self.lazy_iter):
             S1, L1 = std[50:], lzy[50:]

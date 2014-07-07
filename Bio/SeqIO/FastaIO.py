@@ -291,7 +291,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         pass
 
     def _read_features(self):
-        self._features = None
+        self._features = []
 
 
 
