@@ -121,8 +121,8 @@ class SeqRecordProxyBase(SeqRecord):
                            "recordoffsetlength":length}
             self._make_record_index(new_index)
             # make feature index and sets _feature_index
-            new_feature_index = []
-            self._make_feature_index(new_feature_index)
+            feature_index = FeatureBinCollection()
+            self._make_feature_index(feature_index)
 
         #set base values
         self._load_non_lazy_values()
