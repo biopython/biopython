@@ -724,8 +724,10 @@ class FeatureBinCollection(object):
        at zero. Any index transformation must be done at a higher level. It is important
        that all sequences and features stored here are indexed to zero.
        """
-    
-    def __init__(self, length = None, beginindex=0, endindex=1):
+
+    def __init__(self, length = None,
+                 beginindex=0, endindex=1,
+                 bounded_only_returns=True):
         """ initialize the class and set standard attributes
 
         kwargs:
@@ -750,6 +752,7 @@ class FeatureBinCollection(object):
 
         # this defines the indices of the begin and end sequence info
         # in the tuple structures stored in the bins
+        self.bounded_only_returns = bounded_only_returns
         self._beginindex = beginindex
         self._endindex = endindex
 
@@ -911,18 +914,24 @@ class FeatureBinCollection(object):
             for binn in set([k1,k2-1]):
                 #for binn in range(k1,k2):
                 for feature in self._bins[binn]:
-                    #this covers fully bound sequence and left overlap
-                    if keystart <= feature[beginindex] < keystop:
-                        return_entries.append(feature)
-                    #this covers left sequence right sequence overlap 
-                    elif keystart < feature[endindex] <= keystop:
-                        return_entries.append(feature)
-                    #this covers seqyebces fully bound by a feature      
-                    elif keystart > feature[beginindex] and\
-                         keystop < feature[endindex]:
-                        return_entries.append(feature)
-                    if keystop < feature[beginindex]:
-                        break
+                    if self.bounded_only_returns:
+                        #this covers fully bound sequence and left overlap
+                        if keystart <= feature[beginindex] and \
+                                       feature[endindex] <= keystop:
+                            return_entries.append(feature)
+                    else:
+                        #this covers fully bound sequence and left overlap
+                        if keystart <= feature[beginindex] < keystop:
+                            return_entries.append(feature)
+                        #this covers left sequence right sequence overlap
+                        elif keystart < feature[endindex] <= keystop:
+                            return_entries.append(feature)
+                        #this covers seqyebces fully bound by a feature
+                        elif keystart > feature[beginindex] and \
+                             keystop < feature[endindex]:
+                            return_entries.append(feature)
+                        if keystop < feature[beginindex]:
+                            break
         return return_entries
 
     def _calculate_bin_index(self, begin,span):

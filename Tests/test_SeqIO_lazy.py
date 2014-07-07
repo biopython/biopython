@@ -528,7 +528,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         
 class TestFeatureBinCollection(unittest.TestCase):
     def setUp(self):
-        self.bins = FeatureBinCollection()
+        self.bins = FeatureBinCollection(bounded_only_returns = False)
     
     def test_initial_state_max_bin_power(self):
         self.assertEqual(self.bins._max_bin_power, 23)
@@ -658,7 +658,6 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertTrue(test_tuple_lv5 in self.bins._bins[4682])
         self.assertEqual(self.bins._max_bin_power, 29)
         
-        
     def test_overflows_of_static_defined_lists(self):
         staticbins = FeatureBinCollection(length=67108864)
         #insert a chunk of data
@@ -767,8 +766,23 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertTrue(testTuple3 in self.bins[8388604:8388606])
         self.assertTrue(testTuple3 in self.bins[8388604:8388605])
         self.assertTrue(testTuple3 in self.bins[8388605:8388606])
-        self.assertEqual([],self.bins[8388603:8388604])
+        self.assertEqual([], self.bins[8388603:8388604])
 
+    def test_getter_bounded_only_returns(self):
+        testTuple3 = (200, 400)
+        self.bins.insert(testTuple3)
+        #test non-promiscuous feature returns
+        self.bins.bounded_only_returns = True
+        self.assertEqual([testTuple3], self.bins[200:400])
+        self.assertEqual([testTuple3], self.bins[199:410])
+        self.assertEqual([], self.bins[200:399])
+        self.assertEqual([], self.bins[201:400])
+        #sanity check: can promiscuous returns be enforced
+        self.bins.bounded_only_returns = False
+        self.assertEqual([testTuple3], self.bins[200:400])
+        self.assertEqual([testTuple3], self.bins[199:410])
+        self.assertEqual([testTuple3], self.bins[200:399])
+        self.assertEqual([testTuple3], self.bins[201:400])
 
 
 File = namedtuple('File', 'name')
