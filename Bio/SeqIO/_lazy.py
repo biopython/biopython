@@ -60,20 +60,20 @@ class SeqRecordProxyBase(SeqRecord):
     Additional attributes:
      - name        - Sequence name, e.g. gene name (string)
      - description - Additional text (string)
-     - dbxrefs     - List of database cross references (list of strings)
-     - features    - Any (sub)features defined (list of SeqFeature objects)
-     - annotations - Further information about the whole sequence (dictionary).
+     - dbxrefs     - List of database cross references.
+     - features    - Any (sub)features, as SeqFeature objects
+     - annotations - Further information about the whole sequence.
                      Most entries are strings, or lists of strings.
      - letter_annotations - Per letter/symbol annotation (restricted
-                     dictionary). This holds Python sequences (lists, strings
-                     or tuples) whose length matches that of the sequence.
-                     A typical use would be to hold a list of integers
-                     representing sequencing quality scores, or a string
-                     representing the secondary structure.
+                     dictionary). This holds Python sequences (lists,
+                     strings or tuples) whose length matches that of
+                     the sequence. A typical use would be to hold a
+                     list of integers representing sequencing quality
+                     scores, or representing the secondary structure.
 
-    You will typically use Bio.SeqIO to read in sequences from files as
-    SeqRecord objects.  However, you may want to create your own SeqRecord
-    objects directly (see the __init__ method for further details):
+    You will typically use Bio.SeqIO to read in sequences from files
+    as SeqRecord objects.  However, you may want to create your own
+    SeqRecord objects directly (see the __init__ method for details):
 
 
 
@@ -98,6 +98,8 @@ class SeqRecordProxyBase(SeqRecord):
      - _make_record_index    :: index the nce portion
               the record index is primarily format specific
               but it must contain the keys "id" and "seqlen"
+     - _read_features        :: read features from ft. index
+     - _make_feature_index   :: make feature index
      - _load_non_lazy_values :: load all values from lazy
 
     """
@@ -269,13 +271,14 @@ class SeqRecordProxyBase(SeqRecord):
         When the database is not provided:
         This function will preferentially supply an index from memory.
         Since the _indexdb is None, it will provide None for the _index
-        indicating to the lazy loading proxy that an index must be created.
+        indicating to the lazy loading proxy that an index must be
+        created.
         
         When the database (_indexdb) is provided:
         This function will still preferentially supply an index from memory.
         if the database is valid and empty it will provide None for the _index
         indicating to the lazy loading proxy that an index must be created. If
-        an indexdb is present and valid, it will be queried to produce the 
+        an indexdb is present and valid, it will be queried to produce the
         _index dictionary which will be loaded into memory"""
         
         #case: index already exists in memory
@@ -537,7 +540,7 @@ def lazy_iterator(handle, return_class=None, format = None,
     """A general iterator for sequential sequence files
 
     This function steps through a sequentially oriented sequence
-    record file and returns SeqRecordProxy objects correspoding 
+    record file and returns SeqRecordProxy objects correspoding
     to the suported file formats.
     """
     if index is None:
@@ -587,14 +590,15 @@ def sequential_record_offset_iterator(handle, format = None):
     """Steps through a sequence file and returns offset pairs
 
     This function will step through a sequentially oriented sequence
-    record file and return offset tuples for each format compliant record.
+    record file and return offset tuples for each format compliant
+    record.
 
     The yield format is a 2-tuple representing the following:
     (record_begin_offset, record_offset_length)
 
-    record_begin_offset = the index of the first character of the record
-    record_offset_length = the length (bytes) of the record, accounting
-                             for padding and/or EOF
+    record_begin_offset = the index of the first character
+    record_offset_length = the length (bytes) of the record,
+                           accounting for padding and/or EOF
     """
     
     marker = {"fasta": ">",
@@ -639,91 +643,101 @@ def sequential_record_offset_iterator(handle, format = None):
             end_offset = current_offset
 
 class FeatureBinCollection(object):
-    """this class manages the creation and maintenance of feature indices
+    """Manage efficient creation and retrieval of feature indices
 
-       This class is used to organize feature data in a quickly retrievable
-       data structure. The feature data must be added as a tuple containing
-       at least two indices: first annotated residue and the last as a half
-       open half closed interval [first, last). The indices are assumed to be
-       the first two elements of the stored tuple, but they may be re-assigned
-       on instantiation via the beginindex and endindex kwarks.
+    This class is used to organize feature data in a quickly
+    retrievable data structure. The feature data must be added as a
+    tuple containing at least two indices: first annotated residue
+    and the last as a half open half closed interval [first, last).
+    The indices are assumed to be the first two elements of the stored
+    tuple, but they may be re-assigned on instantiation via the
+    beginindex and endindex kwarks.
 
-       EXAMPLE
-       -------
-       defined below is a 3-tuple format of (beginindex, endindex, fileidx)
-       three features are added to a newly initialized featurebin 
+    EXAMPLE
+    -------
+    defined below is this 3-tuple: (beginindex, endindex, fileidx),
+    three features are added to a newly initialized featurebin.
 
-       >>> ft0 = (5574, 5613, 2300) 
-       >>> ft1 = (0, 18141, 1300 )
-       >>> ft2 = (5298, 6416, 3540)
-       >>> featurebin = FeatureBinCollection()
-       >>> featurebin.insert( ft0 )
-       >>> featurebin.insert( ft1 )
-       >>> featurebin.insert( ft2 )
-       >>> len(featurebin)
-       3
-       
-       Now that the 'featurebin' instance has some features, they can be
-       retrieved with a standard getter using single integer indices or
-       slice notation.
+    >>> ft0 = (5574, 5613, 2300)
+    >>> ft1 = (0, 18141, 1300 )
+    >>> ft2 = (5298, 6416, 3540)
+    >>> featurebin = FeatureBinCollection(bounded_only_returns=False)
+    >>> featurebin.insert( ft0 )
+    >>> featurebin.insert( ft1 )
+    >>> featurebin.insert( ft2 )
+    >>> len(featurebin)
+    3
 
-       >>> featurebin[1]
-       [(0, 18141, 1300)]
-       >>> sliceresult = featurebin[5200:5300]
-       >>> sliceresult.sort()
-       >>> sliceresult
-       [(0, 18141, 1300), (5298, 6416, 3540)]
+    Now that the 'featurebin' instance has some features, they can be
+    retrieved with a standard getter using single integer indices or
+    slice notation.
+
+    >>> featurebin[1]
+    [(0, 18141, 1300)]
+    >>> sliceresult = featurebin[5200:5300]
+    >>> sliceresult.sort()
+    >>> sliceresult
+    [(0, 18141, 1300), (5298, 6416, 3540)]
 
 
-       BACKGROUND:
-       -----------
-       The basic idea of using feature bins is to group features into 
-       bins organized by their span and sequence location. These bins then allow
-       only likely candidate features to be queried rather than all features. The 
-       example below illustrated with Figure 1 shows a similar scheme where feature1 
-       is stored in bin-0, feature2 in bin-4 and feature3 in bin-2. Each sequence is
-       stored in the smallest bin that will fully contain the sequence. A query of 
-       all features in the region denoted by query1 could be quickly performed by 
-       only searching through bins 0, 2, 5, and 6. Were this data structure many 
-       levels deep, the performance savings would be large
+    BACKGROUND:
+    -----------
+    The basic idea of using feature bins is to group features into
+    bins organized by their span and sequence location. These bins then
+    allow only likely candidate features to be queried rather than all
+    features. The example below illustrated with Figure 1 shows a
+    similar scheme where feature1 is stored in bin-0, feature2 in
+    bin-4, and feature3 in bin-2. Each sequence is stored in the
+    smallest bin that will fully contain the sequence. A query of all
+    features in the region denoted by query1 could be quickly performed
+    by only searching through bins 0, 2, 5, and 6. Were this data
+    structure many levels deep, the performance savings would be large.
+    It is also useful to see that any bin fully bound by a query can
+    have the full contents returned without individual comparison
+    operations.
 
-       ___Figure 1_________________________________________________
-       |                                                           |
-       |    feature1  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              |
-       |    feature2  |       ~~~~                  |              |
-       |    feature3  |       |  |               ~~~~~~~~~~~~~     |
-       |              |       |  |               |  |        |     |
-       | bins:        |       |  |               |  |        |     |
-       |    0_________|_______|__|_______._______|__|____.___|_    |
-       |    1_________________|__|__   2_:_______|_______:___|_    |
-       |    3__________  4____|__|__   5_:________  6____:_____    |
-       |                                 :               :         |
-       |                                 :               :         |
-       |    query1                       [ ? ? ? ? ? ? ? ]         |
-       |...........................................................|
+    ___Figure 1_________________________________________________
+    |                                                           |
+    |    feature1  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              |
+    |    feature2  |       ~~~~                  |              |
+    |    feature3  |       |  |               ~~~~~~~~~~~~~     |
+    |              |       |  |               |  |        |     |
+    | bins:        |       |  |               |  |        |     |
+    |    0_________|_______|__|_______._______|__|____.___|_    |
+    |    1_________________|__|__   2_:_______|_______:___|_    |
+    |    3__________  4____|__|__   5_:________  6____:_____    |
+    |                                 :               :         |
+    |                                 :               :         |
+    |    query1                       [ ? ? ? ? ? ? ? ]         |
+    |...........................................................|
 
-       Further reading on the math behind the idea can be found in: 
-           Journal:  Bioinformatics Vol 27 no. 5 2011, pages 718-719
-           Article:  "Tabix: fast retrieval of sequence features from generic
-                      tab delimited files"
-           Author:   Heng Li
+    Further reading on the math behind the idea can be found in:
+        Journal:  Bioinformatics Vol 27 no. 5 2011, pages 718-719
+        Article:  "Tabix: fast retrieval of sequence features from
+                  generic tab delimited files"
+        Author:   Heng Li
 
-       The implementation by Li has, as its largest bin ~500 million (2^29) and its smallest
-       bin ~16000 (2^14). Each level of binning is separated by a factor of 8 (2^3).
-       The implementation herein abandons a static binning scheme and instead
-       starts with the smallest and largest bins as 256 and 8 million respectively. 
-       These bins can then be dynamically expanded increasing by a factor of 8
-       every time new data is found to be larger than the largest bin. As a practical
-       matter of sanity checking, bin sizes are capped at 2.2 trillion residues (2^41).
+    The implementation by Li has, as its largest bin ~500 million
+    (2^29) and its smallest bin ~16000 (2^14). Each level of binning
+    is separated by a factor of 8 (2^3). The implementation herein
+    abandons a static binning scheme and instead starts with the
+    smallest and largest bins as 256 and 8 million respectively. These
+    bins can then be dynamically expanded increasing by a factor of 8
+    every time new data is found to be larger than the largest bin.
+    As a practical matter of sanity checking, bin sizes are capped at
+    2.2 trillion residues (2^41).
 
-       Under some circumstances the exact size of a sequence and all related annotations
-       is known beforehand. If this is the case the length kwarg allows the binning object
-       to be solidified on instantiation at the correct length.
-       
-       This structure knows nothing about the global sequence index and is indexed 
-       at zero. Any index transformation must be done at a higher level. It is important
-       that all sequences and features stored here are indexed to zero.
-       """
+    Under some circumstances the exact size of a sequence and all
+    related annotations is known beforehand. If this is the case the
+    length kwarg allows the binning object to be solidified on
+    instantiation at the correct length. Attempts to add data outside
+    of this range will raise an error.
+
+    This structure knows nothing about the global sequence index and
+    is indexed at zero. Any index transformation must be done at a
+    higher level. It is important that all sequences and features
+    stored here are indexed to zero.
+    """
 
     def __init__(self, length = None,
                  beginindex=0, endindex=1,
@@ -734,7 +748,7 @@ class FeatureBinCollection(object):
 
           length:
             when length == None, the bins are dynamically sized.
-            when length is a positive integer, the appropriate bin 
+            when length is a positive integer, the appropriate bin
             size is selected and locked. Exceeding this value will
             cause exceptions when the max bin size is locked
 
@@ -743,9 +757,9 @@ class FeatureBinCollection(object):
             be stored with the FeatureBinCollection.
 
           endindex:
-            the index of the last residue (as a open interval) inside 
+            the index of the last residue (as a open interval) inside
             the tuple that will be stored with FeatureBinCollection
-        """ 
+        """
         #these should not be changed
         self._bin_level_count = 6
         self._bins = [[] for i in range(37449)]
