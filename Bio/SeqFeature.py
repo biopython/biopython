@@ -678,9 +678,9 @@ class FeatureLocation(object):
         location_uri = prefix + \
                        'Location' + \
                        str(self._start) + \
-                       ',' + \
+                       '-' + \
                        str(self._end) + \
-                       ',' + \
+                       ':' + \
                        str(strand)
 
         faldo_begin = self._start._rdfize(location_uri + '/',
@@ -1994,7 +1994,7 @@ class OneOfPosition(int, AbstractPosition):
         the position.
         """
         if not identifier:
-            identifier = ','.join(str(pos) for pos in self.position_choices)
+            identifier = ':'.join(str(pos) for pos in self.position_choices)
 
         positions = "<%s%s> a <%s> ."%(
             prefix,

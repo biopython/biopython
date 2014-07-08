@@ -23,26 +23,26 @@ class RDFizationMethodTests(unittest.TestCase):
         """Check RDFization of a FeatureLocation object."""
         rdf = FeatureLocation(5, 10)._rdfize('http://unit-test/')
         self.assertEqual(rdf,
-                         """<http://unit-test/Location5,10,0> a <http://biohackathon.org/resource/faldo#Region> ;
-    <http://biohackathon.org/resource/faldo#begin> <http://unit-test/Location5,10,0/5> ;
-    <http://biohackathon.org/resource/faldo#end> <http://unit-test/Location5,10,0/10> .
+                         """<http://unit-test/Location5-10:0> a <http://biohackathon.org/resource/faldo#Region> ;
+    <http://biohackathon.org/resource/faldo#begin> <http://unit-test/Location5-10:0/5> ;
+    <http://biohackathon.org/resource/faldo#end> <http://unit-test/Location5-10:0/10> .
 
-<http://unit-test/Location5,10,0/5> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+<http://unit-test/Location5-10:0/5> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 6 .
-<http://unit-test/Location5,10,0/10> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+<http://unit-test/Location5-10:0/10> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 10 .""")
 
         rdf = FeatureLocation(5, 10, strand = -1)._rdfize('http://unit-test/')
         self.assertEqual(rdf,
-                         """<http://unit-test/Location5,10,-1/5> a <http://biohackathon.org/resource/faldo#ReverseStrandPosition> .
-<http://unit-test/Location5,10,-1/10> a <http://biohackathon.org/resource/faldo#ReverseStrandPosition> .
-<http://unit-test/Location5,10,-1> a <http://biohackathon.org/resource/faldo#Region> ;
-    <http://biohackathon.org/resource/faldo#begin> <http://unit-test/Location5,10,-1/10> ;
-    <http://biohackathon.org/resource/faldo#end> <http://unit-test/Location5,10,-1/5> .
+                         """<http://unit-test/Location5-10:-1/5> a <http://biohackathon.org/resource/faldo#ReverseStrandPosition> .
+<http://unit-test/Location5-10:-1/10> a <http://biohackathon.org/resource/faldo#ReverseStrandPosition> .
+<http://unit-test/Location5-10:-1> a <http://biohackathon.org/resource/faldo#Region> ;
+    <http://biohackathon.org/resource/faldo#begin> <http://unit-test/Location5-10:-1/10> ;
+    <http://biohackathon.org/resource/faldo#end> <http://unit-test/Location5-10:-1/5> .
 
-<http://unit-test/Location5,10,-1/10> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+<http://unit-test/Location5-10:-1/10> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 10 .
-<http://unit-test/Location5,10,-1/5> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+<http://unit-test/Location5-10:-1/5> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 6 .""")
 
     def test_exact_position(self):
@@ -109,16 +109,16 @@ class RDFizationMethodTests(unittest.TestCase):
                                 ExactPosition(11)
                             ])._rdfize('http://unit-test/')
         self.assertEqual(rdf,
-                         """<http://unit-test/9,10,11> a <http://biohackathon.org/resource/faldo#OneOfPosition> .
-<http://unit-test/9,10,11/0> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+                         """<http://unit-test/9:10:11> a <http://biohackathon.org/resource/faldo#OneOfPosition> .
+<http://unit-test/9:10:11/0> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 9 .
-<http://unit-test/9,10,11> <http://biohackathon.org/resource/faldo#position> <http://unit-test/9,10,11/0> .
-<http://unit-test/9,10,11/1> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+<http://unit-test/9:10:11> <http://biohackathon.org/resource/faldo#position> <http://unit-test/9:10:11/0> .
+<http://unit-test/9:10:11/1> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 10 .
-<http://unit-test/9,10,11> <http://biohackathon.org/resource/faldo#position> <http://unit-test/9,10,11/1> .
-<http://unit-test/9,10,11/2> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+<http://unit-test/9:10:11> <http://biohackathon.org/resource/faldo#position> <http://unit-test/9:10:11/1> .
+<http://unit-test/9:10:11/2> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 11 .
-<http://unit-test/9,10,11> <http://biohackathon.org/resource/faldo#position> <http://unit-test/9,10,11/2> .""")
+<http://unit-test/9:10:11> <http://biohackathon.org/resource/faldo#position> <http://unit-test/9:10:11/2> .""")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
