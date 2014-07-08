@@ -6,7 +6,7 @@
 These tables are based on parsing the NCBI file:
 ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 
-Last updated for Version 3.9
+Last updated after Version 3.9 on 8 July 2014
 """
 
 from __future__ import print_function
@@ -858,6 +858,25 @@ register_ncbi_table(name = 'Thraustochytrium Mitochondrial',
      'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G', },
                     stop_codons = [ 'TTA', 'TAA', 'TAG', 'TGA', ],
                     start_codons = [ 'ATT', 'ATG', 'GTG', ]
+                    )
+register_ncbi_table(name = 'Pterobranchia Mitochondrial',
+                    alt_name = None, id = 24,
+                    table = {
+     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
+     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
+     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
+     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
+     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
+     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
+     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
+     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'S',
+     'AGG': 'K', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
+     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
+     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
+     'GGA': 'G', 'GGG': 'G', },
+                    stop_codons = [ 'TAA', 'TAG', ],
+                    start_codons = [ 'TTG', 'CTG', 'ATG', 'GTG', ]
                     )
 
 #Basic sanity test,
