@@ -518,6 +518,72 @@ class SeqRecordProxyBase(SeqRecord):
                       fset = __set_and_save_index,
                       doc="the index may be loaded from a sqlite db")
 
+
+    def __set_and_save_feature_index(self, feature_index_list):
+        """Save a new index dict to the database
+
+        (stub)
+        """
+        if isinstance(feature_index_list, list):
+            self.__feature_index = feature_index_list
+            #case, no indexdb
+            if self._indexdb is None \
+                or self._indexkey is not None:
+                return
+        else:
+            raise ValueError("_feature_index must be a list")
+
+        #case: indexdb provided but it is empty
+        con = self.__connect_db_return_connection()
+        if not self.__is_valid_db_with_tables(con):
+            raise ValueError("_index must be set before _feature_index")
+
+        cursor = con.cursor()
+        fileid = self.__get_fileid(con, write=True)
+
+        #--------------------- unedited below -------------------------------------------------------
+        #case: indexdb is provided but already contains
+        # this specific record. This operation should raise
+        features_begin = self.__index.get("featuresoffsetstart")
+        if features_begin:
+            cursor.execute("SELECT features.* " +\
+                           "FROM features " +\
+                           "INNER JOIN indexed_files " +\
+                           "ON features.fileid = indexed_files.fileid " +\
+                           "INNER JOIN main_index " +\
+                           "ON main_index.fileid = features.fileid " +\
+                           "WHERE indexed_files.filename=? AND " +\
+                           "main_index.featuresoffsetstart=?" +\
+                           "LIMIT 2;", \
+                           (basename(self._handle.name), \
+                           features_begin))
+            samefileposition = cursor.fetchone()
+        else:
+            raise ValueError("cannot save feature indexes without idx. begin")
+        if samefileposition is not None:
+            raise ValueError("indexdb already contains a similar record")
+
+        #create main index input table
+        # using 'insecure' string format query generation
+        # due to the lack of flexible substitution syntax
+        keys, placehold, values = "fileid", "?", [fileid]
+        for key, value in indexdict.items():
+            keys += ", " + key
+            placehold += ",?"
+            values.append(value)
+        values = tuple(values)
+        con.execute("INSERT INTO main_index ({0})".format(keys) +\
+                       "VALUES ({0})".format(placehold), values)
+        #increment the file record counter
+        con.execute("UPDATE indexed_files SET count=count + 1 "
+                    "WHERE filename=?", (basename(self._handle.name),))
+        con.commit()
+        con.close()
+        #case: indexdb provided and has correct format/table
+        #self.__insert_index("implementation pending")
+    _feature_index = property(fget = __load_and_return_feature_index,
+                              fset = __set_and_save_feature_index)
+
     # All methods tagged below are implemented in the base class
     #
     #def __bool__(self):

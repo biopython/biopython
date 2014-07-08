@@ -1312,7 +1312,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             line = _bytes_to_string(handle.readline())
             new_position = handle.tell()
             if re.match(r"(FEATURES)(\s)*(Location/Qualifiers)", line):
-                new_index["features_begin"] = old_position
+                new_index["featuresoffsetstart"] = old_position
                 new_index["header_end"] = new_position
                 new_index["has_features"] = 1
                 break
@@ -1324,8 +1324,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                 id = line.split()[1]
                 new_index["id"] = id.strip()
             if re.match(r"^ORIGIN",line):
-                #features_begin will be ignored later
-                new_index["features_begin"] = 0
+                #featuresoffsetstart will be ignored later
+                new_index["featuresoffsetstart"] = 0
                 new_index["header_end"] = new_position
                 new_index["has_features"] = 0
                 break
@@ -1338,7 +1338,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             new_position = handle.tell()
             if re.match(r"^ORIGIN",line):
                 new_index["sequencestart"] = new_position
-                new_index["features_end"] = new_position
+                new_index["featuresoffsetend"] = new_position
                 old_position = new_position
                 line = _bytes_to_string(handle.readline())
                 new_position = handle.tell()
@@ -1360,7 +1360,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         handle = self._handle
         _index = self._index
         start_offset = _index["recordoffsetstart"]
-        header_end = _index["header_end"]
+        header_end = _index["featuresoffsetend"]
         handle.seek(start_offset)
         header_lines = handle.read(header_end - start_offset)
         header_lines = StringIO(_bytes_to_string(header_lines))
@@ -1464,8 +1464,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         SEQUENCE_HEADERS = ["CONTIG", "ORIGIN", "BASE COUNT", "WGS"]
 
         #to make the feature index, pull the features portion of the file
-        ft_begin = self._index["features_begin"]
-        ft_end = self._index["features_end"]
+        ft_begin = self._index["featuresoffsetstart"]
+        ft_end = self._index["featuresoffsetend"]
         handle.seek(ft_begin)
         line_begin_offset = handle.tell()
         line = handle.readline()
