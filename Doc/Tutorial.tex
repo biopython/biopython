@@ -4606,8 +4606,8 @@ In case you are interested (and this is an aside from the main thrust of this
 chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
 Newick tree file, and \verb|Bio.Phylo| can parse these:
 
-%Possible regression, output not showing branch lengths now?
-%TODO: doctest examples
+
+%doctest examples
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("opuntia.dnd", "newick")
@@ -4625,7 +4625,7 @@ _|_________________ gi|6273287|gb|AF191661.1|AF191661
  |    __ gi|6273285|gb|AF191659.1|AF191659
  |___|
      | gi|6273284|gb|AF191658.1|AF191658
-
+<BLANKLINE>
 \end{verbatim}
 
 \noindent Chapter \ref{sec:Phylo} covers Biopython's support for phylogenetic trees in more
