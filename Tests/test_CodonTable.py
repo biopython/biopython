@@ -126,5 +126,6 @@ assert "TAR" in ambiguous_generic_by_id[2].stop_codons
 assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
+assert ambiguous_generic_by_id[24].stop_codons == ambiguous_generic_by_name["Pterobranchia Mitochondrial"].stop_codons
 
 print("Done")
