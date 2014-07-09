@@ -184,7 +184,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
-def draw_ascii(tree, file=sys.stdout, column_width=80):
+def draw_ascii(tree, file=None, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
     The printed result looks like::
@@ -202,10 +202,14 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
 
     :Parameters:
         file : file-like object
-            File handle opened for writing the output drawing.
+            File handle opened for writing the output drawing. (Default:
+            standard output)
         column_width : int
             Total number of text columns used by the drawing.
     """
+    if file is None:
+        file = sys.stdout
+
     taxa = tree.get_terminals()
     # Some constants for the drawing calculations
     max_label_width = max(len(str(taxon)) for taxon in taxa)
