@@ -24,7 +24,7 @@ class Tree(BaseTree.Tree):
 class Clade(BaseTree.Clade):
     """Newick Clade (sub-tree) object."""
 
-    def __init__(self, branch_length=1.0, name=None, clades=None,
+    def __init__(self, branch_length=None, name=None, clades=None,
                  confidence=None, comment=None):
         BaseTree.Clade.__init__(self, branch_length=branch_length,
                 name=name, clades=clades, confidence=confidence)
