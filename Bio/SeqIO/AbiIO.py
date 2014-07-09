@@ -1,5 +1,5 @@
 # Copyright 2011 by Wibowo Arindrarto (w.arindrarto@gmail.com)
-# Revisions copyright 2011 by Peter Cock.
+# Revisions copyright 2011, 2014 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -115,6 +115,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     header = struct.unpack(_HEADFMT,
                            handle.read(struct.calcsize(_HEADFMT)))
 
+    raw = dict()
     for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
         # stop iteration if all desired tags have been extracted
         # 4 tags from _EXTRACT + 2 time tags from _SPCTAGS - 3,
@@ -122,6 +123,9 @@ def AbiIterator(handle, alphabet=None, trim=False):
         # todo
 
         key = tag_name + str(tag_number)
+
+        # TODO - Why not store the raw data in bytes, not as strings?
+        raw[key] = tag_data
 
         # PBAS2 is base-called sequence
         if key == 'PBAS2':
@@ -148,6 +152,9 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # set time annotations
     annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
     annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
+
+    # raw data (for advanced end users benefit)
+    annot['abif_raw'] = raw
 
     # use the file name as SeqRecord.name if available
     try:
