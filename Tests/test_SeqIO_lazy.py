@@ -928,16 +928,14 @@ class IndexDbIOCreateDb(unittest.TestCase):
         #make sure a valid sequence is found after creating tables
         a = testIO._SeqRecordProxyBase__is_valid_db_with_tables(con)
         self.assertTrue(a)
-        one = cursor.execute("SELECT rowid, * FROM main_index")
+        one = cursor.execute("SELECT * FROM main_index")
         onedata = one.fetchone()
         colnames = [ d[0] for d in one.description ]
         colnames.sort()
-        expected = ['fileid', 'id', 'recordoffsetlength', \
-                    'recordoffsetstart', 'rowid', 'seqstart',]
+        expected = ['fileid', 'id', 'indexid', 'recordoffsetlength', \
+                    'recordoffsetstart', 'seqstart',]
         self.assertEqual(colnames, expected)
-        
-        
-    
+
     def test_fileid_getter_method(self):
         testindex = {"recordoffsetstart":0, 
                  "recordoffsetlength":200,
@@ -1002,6 +1000,7 @@ class IndexDbIOCreateDb(unittest.TestCase):
         record_indexdict = dict((record_keys[i], record_index[i]) for \
                                 i in range(len(record_keys)))
         del(record_indexdict["fileid"])
+        del(record_indexdict["indexid"])
         self.assertEqual(testindex, record_indexdict)
     
     def test_write_retrieve_with_shortcut_from_memory(self):

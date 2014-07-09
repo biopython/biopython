@@ -329,9 +329,12 @@ class SeqRecordProxyBase(SeqRecord):
             raise KeyError("_indexkey must match a stored record")
         record_indexdict = dict((record_keys[i], record_index[i]) for \
                                     i in range(len(record_keys)))
+        # remove two ids not used elseware
         del(record_indexdict["fileid"])
+        del(record_indexdict["indexid"])
+        # return the index
         self.__index = record_indexdict
-        return record_indexdict                     
+        return record_indexdict
 
 
     def __set_and_save_index(self, indexdict):
@@ -398,14 +401,14 @@ class SeqRecordProxyBase(SeqRecord):
         con.close()
         #case: indexdb provided and has correct format/table
         #self.__insert_index("implementation pending")
-    
+
     def __create_tables(self, con, indexdict):
         #create metadata table and populate format
         #set locking mode and synchronous
         con.execute("PRAGMA synchronous=0")
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
         con.commit()
-        
+
         con.execute( \
                 "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
@@ -413,7 +416,7 @@ class SeqRecordProxyBase(SeqRecord):
         #create file table
         con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY " +\
                         "KEY, filename TEXT UNIQUE, count INTEGER);")
-                        
+
         #create basic index table:
         # The (less secure) string manipulation is used because sqlite3
         # API does not provide rich logic in the parameter substitution
@@ -424,23 +427,25 @@ class SeqRecordProxyBase(SeqRecord):
         indextab = ", ".join([str(key) + " INTEGER" for key in rows \
                               if key != "id"])
         indextab = "CREATE TABLE main_index(" + \
+                   "indexid INTEGER PRIMARY KEY, " + \
                    "id TEXT, fileid INTEGER, "+ indextab + \
                    ", FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
         con.execute(indextab)
-        
+
         #create features table
         feattab = "CREATE TABLE features(" + \
                   "fileid INTEGER, " + \
-                  "featurenumber INTEGER, " + \
+                  "indexid INTEGER " + \
                   "offsetbegin INTEGER, " + \
                   "offsetend INTEGER, " +\
                   "seqbegin INTEGER, " + \
                   "seqend INTEGER, " + \
-                  "meta TEXT, " + \
-                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
+                  "qualifier TEXT, " + \
+                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid)" + \
+                  "FOREIGN KEY(indexid) REFERENCES main_index(indexid));"
         con.execute(feattab)
         con.commit()
-        
+
     def __connect_db_return_connection(self):
         """do some basic checking and return a connection to the db"""
         if not _sqlite:
@@ -487,8 +492,7 @@ class SeqRecordProxyBase(SeqRecord):
                 return name[0]
             else:
                 return None
-            
-                
+
     def __is_valid_db_with_tables(self, con):
         """if db is empty False, if correct tables True, else raise"""
         cursor = con.cursor()
