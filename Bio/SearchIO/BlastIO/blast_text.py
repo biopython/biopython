@@ -22,6 +22,8 @@ with warnings.catch_warnings():
 
 __all__ = ['BlastTextParser']
 
+__docformat__ = "restructuredtext en"
+
 
 class BlastTextParser(object):
 

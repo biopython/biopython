@@ -16,6 +16,8 @@ from ._base import _BaseHmmerTextIndexer
 
 __all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
 
+__docformat__ = "restructuredtext en"
+
 
 # precompile regex patterns for faster processing
 # regex for program name capture

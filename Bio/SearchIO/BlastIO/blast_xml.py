@@ -37,6 +37,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
 
+__docformat__ = "restructuredtext en"
+
 
 # element - optional qresult attribute name mapping
 _ELEM_QRESULT_OPT = {
@@ -349,9 +351,10 @@ class BlastXmlParser(object):
     def _parse_hit(self, root_hit_elem, query_id):
         """Generator that transforms Iteration_hits XML elements into Hit objects.
 
-        Arguments:
-        root_hit_elem -- Element object of the Iteration_hits tag.
-        query_id -- String of QueryResult ID of this Hit
+        :param root_hit_elem: root element of the Iteration_hits tag.
+        :type root_hit_elem: XML element tag
+        :param query_id: QueryResult ID of this Hit
+        :type query_id: string
 
         """
         # Hit level processing
@@ -411,10 +414,12 @@ class BlastXmlParser(object):
     def _parse_hsp(self, root_hsp_frag_elem, query_id, hit_id):
         """Iterator that transforms Hit_hsps XML elements into HSP objects.
 
-        Arguments:
-        root_hsp_frag_elem -- Element object of the Hit_hsps tag.
-        query_id -- Query ID string.
-        hit_id -- Hit ID string.
+        :param root_hsp_frag_elem: the ``Hit_hsps`` tag
+        :type root_hsp_frag_elem: XML element tag
+        :param query_id: query ID
+        :type query_id: string
+        :param hit_id: hit ID
+        :type hit_id: string
 
         """
         # Hit_hsps DTD:
@@ -624,10 +629,12 @@ class _BlastXmlGenerator(XMLGenerator):
     def startElement(self, name, attrs={}, children=False):
         """Starts an XML element.
 
-        Arguments:
-        name -- String of element name.
-        attrs -- Dictionary of element attributes.
-        children -- Boolean, whether the element has children or not.
+        :param name: element name
+        :type name: string
+        :param attrs: element attributes
+        :type attrs: dictionary {string: object}
+        :param children: whether the element has children or not
+        :type children: bool
 
         """
         self.ignorableWhitespace(self._indent * self._level)
@@ -641,9 +648,10 @@ class _BlastXmlGenerator(XMLGenerator):
     def startParent(self, name, attrs={}):
         """Starts an XML element which has children.
 
-        Arguments:
-        name -- String of element name.
-        attrs -- Dictionary of element attributes.
+        :param name: element name
+        :type name: string
+        :param attrs: element attributes
+        :type attrs: dictionary {string: object}
 
         """
         self.startElement(name, attrs, children=True)
@@ -714,11 +722,14 @@ class BlastXmlWriter(object):
     def _write_elem_block(self, block_name, map_name, obj, opt_dict={}):
         """Writes sibling XML elements.
 
-        Arguments:
-        block_name -- String of common element name prefix.
-        map_name -- Dictionary name to for mapping element and attribute names.
-        obj -- Object whose attribute values will be used.
-        opt_dict -- Dictionary for custom element-attribute mapping.
+        :param block_name: common element name prefix
+        :type block_name: string
+        :param map_name: name of mapping between element and attribute names
+        :type map_name: string
+        :param obj: object whose attribute value will be used
+        :type obj: object
+        :param opt_dict: custom element-attribute mapping
+        :type opt_dict: dictionary {string: string}
 
         """
         for elem, attr in _WRITE_MAPS[map_name]:

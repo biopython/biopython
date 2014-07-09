@@ -24,6 +24,9 @@ from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
 from ._base import _BaseHSP
 
 
+__docformat__ = "restructuredtext en"
+
+
 class HSP(_BaseHSP):
 
     """Class representing high-scoring region(s) between query and hit.
@@ -41,82 +44,82 @@ class HSP(_BaseHSP):
     are called 'blocks' while in Exonerate they are called exons or NER.
 
     Here are examples from each type of HSP. The first one comes from a BLAST
-    search:
+    search::
 
-    >>> from Bio import SearchIO
-    >>> blast_qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
-    >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
-    >>> blast_hsp
-    HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
-    >>> print(blast_hsp)
-          Query: 33211 mir_1
-            Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
-    Query range: [1:61] (1)
-      Hit range: [0:60] (1)
-    Quick stats: evalue 1.7e-22; bitscore 109.49
-      Fragments: 1 (60 columns)
-         Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-                 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-           Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+        >>> from Bio import SearchIO
+        >>> blast_qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+        >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
+        >>> blast_hsp
+        HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
+        >>> print(blast_hsp)
+              Query: 33211 mir_1
+                Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+        Query range: [1:61] (1)
+          Hit range: [0:60] (1)
+        Quick stats: evalue 1.7e-22; bitscore 109.49
+          Fragments: 1 (60 columns)
+             Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+               Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 
-    For HSPs with a single HSPFragment, you can invoke `print` on it and see the
+    For HSPs with a single HSPFragment, you can invoke ``print`` on it and see the
     underlying sequence alignment, if it exists. This is not the case for HSPs
     with more than one HSPFragment. Below is an example, using an HSP from a
-    BLAT search. Invoking `print` on these HSPs will instead show a table of the
-    HSPFragment objects it contains:
+    BLAT search. Invoking ``print`` on these HSPs will instead show a table of the
+    HSPFragment objects it contains::
 
-    >>> blat_qresult = SearchIO.read('Blat/mirna.pslx', 'blat-psl', pslx=True)
-    >>> blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
-    >>> blat_hsp
-    HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
-    >>> print(blat_hsp)
-          Query: blat_1 <unknown description>
-            Hit: chr11 <unknown description>
-    Query range: [42:67] (-1)
-      Hit range: [59018929:59018955] (1)
-    Quick stats: evalue ?; bitscore ?
-      Fragments: ---  --------------  ----------------------  ----------------------
-                   #            Span             Query range               Hit range
-                 ---  --------------  ----------------------  ----------------------
-                   0               6                 [61:67]     [59018929:59018935]
-                   1              16                 [42:58]     [59018939:59018955]
+        >>> blat_qresult = SearchIO.read('Blat/mirna.pslx', 'blat-psl', pslx=True)
+        >>> blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
+        >>> blat_hsp
+        HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
+        >>> print(blat_hsp)
+              Query: blat_1 <unknown description>
+                Hit: chr11 <unknown description>
+        Query range: [42:67] (-1)
+          Hit range: [59018929:59018955] (1)
+        Quick stats: evalue ?; bitscore ?
+          Fragments: ---  --------------  ----------------------  ----------------------
+                       #            Span             Query range               Hit range
+                     ---  --------------  ----------------------  ----------------------
+                       0               6                 [61:67]     [59018929:59018935]
+                       1              16                 [42:58]     [59018939:59018955]
 
-    Notice that in HSPs with more than one HSPFragments, the HSP's `query_range`
-    `hit_range` properties encompasses all fragments it contains.
+    Notice that in HSPs with more than one HSPFragments, the HSP's ``query_range``
+    ``hit_range`` properties encompasses all fragments it contains.
 
     You can check whether an HSP has more than one HSPFragments or not using the
-    `is_fragmented` property:
+    ``is_fragmented`` property::
 
-    >>> blast_hsp.is_fragmented
-    False
-    >>> blat_hsp.is_fragmented
-    True
+        >>> blast_hsp.is_fragmented
+        False
+        >>> blat_hsp.is_fragmented
+        True
 
     Since HSP objects are also containers similar to Python lists, you can
-    access a single fragment in an HSP using its integer index:
+    access a single fragment in an HSP using its integer index::
 
-    >>> blat_fragment = blat_hsp[0]
-    >>> print(blat_fragment)
-          Query: blat_1 <unknown description>
-            Hit: chr11 <unknown description>
-    Query range: [61:67] (-1)
-      Hit range: [59018929:59018935] (1)
-      Fragments: 1 (6 columns)
-         Query - tatagt
-           Hit - tatagt
+        >>> blat_fragment = blat_hsp[0]
+        >>> print(blat_fragment)
+              Query: blat_1 <unknown description>
+                Hit: chr11 <unknown description>
+        Query range: [61:67] (-1)
+          Hit range: [59018929:59018935] (1)
+          Fragments: 1 (6 columns)
+             Query - tatagt
+               Hit - tatagt
 
-    This applies to HSPs objects with a single fragment as well:
+    This applies to HSPs objects with a single fragment as well::
 
-    >>> blast_fragment = blast_hsp[0]
-    >>> print(blast_fragment)
-          Query: 33211 mir_1
-            Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
-    Query range: [1:61] (1)
-      Hit range: [0:60] (1)
-      Fragments: 1 (60 columns)
-         Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-                 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-           Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+        >>> blast_fragment = blast_hsp[0]
+        >>> print(blast_fragment)
+              Query: 33211 mir_1
+                Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+        Query range: [1:61] (1)
+          Hit range: [0:60] (1)
+          Fragments: 1 (60 columns)
+             Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+               Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 
     Regardless of the search output file format, HSP objects provide the
     properties listed below. These properties always return values in a list,
@@ -184,7 +187,6 @@ class HSP(_BaseHSP):
     |                      |                     | coordinates of each query   |
     |                      |                     | fragment                    |
     +----------------------+---------------------+-----------------------------+
-    * may be used in HSPs with multiple fragments
 
     For all types of HSP objects, the property will return the values in a list.
     Shorcuts are only applicable for HSPs with one fragment. Except the ones
@@ -192,7 +194,7 @@ class HSP(_BaseHSP):
     will be raised.
 
     For properties that may be used in HSPs with multiple or single fragments
-    (`*_start`, `*_end`, and `*_span` properties), their interpretation depends
+    (``*_start``, ``*_end``, and ``*_span`` properties), their interpretation depends
     on how many fragment the HSP has:
 
     +------------+---------------------------------------------------+
@@ -202,13 +204,14 @@ class HSP(_BaseHSP):
     +------------+---------------------------------------------------+
     | hit_end    | largest coordinate value of all hit fragments     |
     +------------+---------------------------------------------------+
-    | hit_span   | difference between `hit_start` and `hit_end`      |
+    | hit_span   | difference between ``hit_start`` and ``hit_end``  |
     +------------+---------------------------------------------------+
     | query_start| smallest coordinate value of all query fragments  |
     +------------+---------------------------------------------------+
     | query_end  | largest coordinate value of all query fragments   |
     +------------+---------------------------------------------------+
-    | query_span | difference between `query_start` and `query_end`  |
+    | query_span | difference between ``query_start`` and            |
+    |            | ``query_end``                                     |
     +------------+---------------------------------------------------+
 
     In addition to the objects listed above, HSP objects also provide the
@@ -240,8 +243,10 @@ class HSP(_BaseHSP):
     |                    | between fragments                                    |
     +--------------------+------------------------------------------------------+
     | query_inter_spans  | list of lengths of the regions between query         |
-    |                    |fragments                                             |
+    |                    | fragments                                            |
     +--------------------+------------------------------------------------------+
+
+    .. [1] may be used in HSPs with multiple fragments
 
     """
     # attributes we don't want to transfer when creating a new Hit class
@@ -251,13 +256,13 @@ class HSP(_BaseHSP):
     def __init__(self, fragments=[]):
         """Initializes an HSP object.
 
-        Arguments:
-        fragments -- List of HSPFragment objects.
+        :param fragments: fragments contained in the HSP object
+        :type fragments: iterable yielding HSPFragment
 
         HSP objects must be initialized with a list containing at least one
         HSPFragment object. If multiple HSPFragment objects are used for
-        initialization, they must all have the same `query_id`,
-        `query_description`, `hit_id`, `hit_description`, and alphabet
+        initialization, they must all have the same ``query_id``,
+        ``query_description``, ``hit_id``, ``hit_description``, and alphabet
         properties.
 
         """
@@ -792,9 +797,10 @@ class HSPFragment(_BaseHSP):
     def _set_seq(self, seq, seq_type):
         """Checks the given sequence for attribute setting
 
-        Arguments:
-        seq -- String or SeqRecord to check
-        seq_type -- String of sequence type, must be 'hit' or 'query'
+        :param seq: sequence to check
+        :type seq: string or SeqRecord
+        :param seq_type: sequence type
+        :type seq_type: string, choice of 'hit' or 'query'
 
         """
         assert seq_type in ('hit', 'query')

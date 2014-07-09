@@ -9,8 +9,8 @@ The SearchIO object model consists of a hierarchy of four nested objects:
 
     * QueryResult, to represent a search query.
 
-      This is the top-level object returned by the main SearchIO `parse` and
-      `read` functions. QueryResult objects may contain zero or more Hit
+      This is the top-level object returned by the main SearchIO ``parse`` and
+      ``read`` functions. QueryResult objects may contain zero or more Hit
       objects, each accessible by its ID string (like in Python dictionaries)
       or integer index (like in Python lists).
 
@@ -50,6 +50,8 @@ from .hsp import HSP, HSPFragment
 
 
 __all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
+
+__docformat__ = "restructuredtext en"
 
 
 # if not used as a module, run the doctest
