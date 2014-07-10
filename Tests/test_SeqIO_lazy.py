@@ -341,18 +341,14 @@ class TestGenbankLazy(unittest.TestCase):
     recordfile = "brca_FJ940752.gb" 
 
     def setUp(self):
+        self.handle = open(os.path.join('GenBank', self.recordfile), 'rb')
         returncls = GenbankSeqRecProxy
         self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
                                                 returncls, 'genbank')
         self.handle.seek(0)
 
-    @classmethod
-    def setUpClass(cls):
-        cls.handle = open(os.path.join('GenBank', cls.recordfile), 'rb')
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.handle.close()
+    def tearDown(self):
+        self.handle.close()
 
     def test_parser_init(self):
         recordgen = self.parser(self.handle)
@@ -382,21 +378,18 @@ class TestGenbankLazyComparitive(unittest.TestCase):
     recordfile = "brca_FJ940752.gb"
 
     def setUp(self):
+
+        filename = os.path.join('GenBank', self.recordfile)
+        self.handle = open(filename, 'rb')
+        self.olditer = SeqIO.parse(filename, 'genbank')
+        self.oldrec = next(self.olditer)
         returncls = GenbankSeqRecProxy
         self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
                                                 returncls, 'genbank')
         self.handle.seek(0)
 
-    @classmethod
-    def setUpClass(cls):
-        filename = os.path.join('GenBank', cls.recordfile)
-        cls.olditer = SeqIO.parse(filename, 'genbank')
-        cls.oldrec = next(cls.olditer)
-        cls.handle = open(filename, 'rb')
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.handle.close()
+    def tearDown(self):
+        self.handle.close()
 
     def test_parser_init(self):
         recordgen = self.parser(self.handle)
@@ -452,6 +445,135 @@ class TestGenbankLazyComparitive(unittest.TestCase):
         oldset = self.make_feature_tuple_list(self.oldrec.features)
         newset = self.make_feature_tuple_list(features)
         self.assertEqual(oldset, newset)
+
+    def test_record_slice_before_lazy_loading(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        newfeatures = record[20:300].features
+        oldfeatures = self.oldrec[20:300].features
+        #check lengths
+        self.assertEqual(len(newfeatures), len(oldfeatures))
+        #default features don't allow comparison
+        oldset = self.make_feature_tuple_list(oldfeatures)
+        newset = self.make_feature_tuple_list(newfeatures)
+        self.assertEqual(repr(oldset), repr(newset))
+
+    def test_record_slice_after_lazy_loading(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        temponew = record.features
+        tempold = self.oldrec.features
+        newfeatures = record[20:300].features
+        oldfeatures = self.oldrec[20:300].features
+        #check lengths
+        self.assertEqual(len(newfeatures), len(oldfeatures))
+        #default features don't allow comparison
+        oldset = self.make_feature_tuple_list(oldfeatures)
+        newset = self.make_feature_tuple_list(newfeatures)
+        self.assertEqual(repr(oldset), repr(newset))
+
+    def test_record_slice_after_lazy_loading_after_slice(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        tempnew = record[20:300]
+        tempold = self.oldrec[20:300]
+        temptempnew = tempnew.features
+        temptempold = tempold.features
+        newfeatures = tempnew[200:280].features
+        oldfeatures = tempold[200:280].features
+        #check lengths
+        self.assertEqual(len(newfeatures), len(oldfeatures))
+        #default features don't allow comparison
+        oldset = self.make_feature_tuple_list(oldfeatures)
+        newset = self.make_feature_tuple_list(newfeatures)
+        self.assertEqual(repr(oldset), repr(newset))
+
+class TestGenbankLazyComparitive1(TestGenbankLazyComparitive):
+    recordfile = "brca_FJ940752.gb"
+
+    def test_record_features_length_brca_record(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        features = record.features
+        #check lengths
+        self.assertEqual(len(self.oldrec.features), 8)
+        self.assertEqual(len(features), 8)
+
+class TestGenbankLazyComparitive3(TestGenbankLazyComparitive):
+    recordfile = "pri1.gb"
+
+class TestGenbankLazyComparitive2(TestGenbankLazyComparitive):
+    recordfile = "cor6_6.gb"
+    test_multiple_seq = TestGenbankLazyComparitive.base_test_multiple_seq
+
+class TestGenbankLazyComparitive_features(TestGenbankLazyComparitive):
+    recordfile = "brca_FJ940752.gb"
+
+class TestGenBankDb_reading( TestGenbankLazyComparitive):
+    """Test iterating using a premade index database compare to standard"""
+    recordfile = "1MRR_A.gp"
+    def setUp(self):
+        #db setup: make tempfile and close os handle to help with cleanup
+        oshandle, self.dbfilename = tempfile.mkstemp()
+        recordfile = os.path.join("GenBank", self.recordfile)
+        os.close(oshandle)
+        #iter setup lazy
+        tempopen = open(recordfile, 'rb')
+        #make index
+        returncls = SeqIO.InsdcIO.GenbankSeqRecProxy
+        SeqIO._lazy._make_index_db(handle = tempopen,
+                             return_class = returncls,
+                             indexdb = self.dbfilename,
+                             format = 'genbank' )
+        tempopen.close()
+        self.file = open(recordfile, 'rb')
+        self.handle = self.file
+        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
+                                        returncls, 'genbank', \
+                                        index=self.dbfilename)
+        self.lazy_iter = self.parser(self.file)
+        self.standard_iter = SeqIO.parse(recordfile, 'genbank') 
+        self.oldrec = next(self.standard_iter)
+
+    def tearDown(self):
+        #delete db temp file
+        os.remove(self.dbfilename)
+        #close sequence file
+        self.file.close()
+
+    def test_setup_cleanup(self):
+        for lzy in zip(self.lazy_iter):
+            pass
+        self.assertRaises(StopIteration, next, self.lazy_iter)
+
+class TestGenBankDbWritingOnly(unittest.TestCase):
+
+    recordfile = "brca_FJ940752.gb"
+
+    def setUp(self):
+        #db setup: make tempfile and close os handle to help with cleanup
+        oshandle, dbfilename = tempfile.mkstemp()
+        self.dbfilename = dbfilename
+        os.close(oshandle)
+        returncls = GenbankSeqRecProxy
+
+        #gb parsing setup:
+        filename = os.path.join('GenBank', self.recordfile)
+        self.handle = open(filename, 'rb')
+        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
+                                     returncls, 'genbank', index=dbfilename)
+        self.handle.seek(0)
+
+    def tearDown(self):
+        os.remove(self.dbfilename)
+        self.handle.close()
+
+
+    def test_index_db_creation_single_file(self):
+        """empty databases follwed by a get call should raise KeyError"""
+        fileiter = self.parser(self.handle)
+        firstrec = next(fileiter)
+        self.assertEqual(len(firstrec.features), 8)
 
 #
 ### tests for base class
