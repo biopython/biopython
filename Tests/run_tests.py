@@ -314,10 +314,15 @@ class ComparisonTestCase(unittest.TestCase):
             raise ValueError("\nOutput:   %s\nExpected: %s"
                   % (self.name, expected_test))
 
+        # Track the line number. Starts at 1 to account for the output file
+        # header line.
+        line_number = 1
+
         # now loop through the output and compare it to the expected file
         while True:
             expected_line = expected.readline()
             output_line = self.output.readline()
+            line_number += 1
 
             # stop looping if either of the info handles reach the end
             if not(expected_line) or not(output_line):
@@ -338,8 +343,11 @@ class ComparisonTestCase(unittest.TestCase):
             # otherwise make sure the two lines are the same
             elif expected_line != output_line:
                 expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s"
-                      % (repr(output_line), repr(expected_line)))
+                raise ValueError("\nOutput  : %s\nExpected: %s\n%s line %s"
+                      % (repr(output_line), repr(expected_line), outputfile, 
+                         line_number))
+                    
+            
         expected.close()
 
     def generate_output(self):
