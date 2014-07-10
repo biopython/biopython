@@ -20,6 +20,8 @@ test_data = {
               'machine_model': '3730',
               'run_start': '2009-12-12 09:56:53',
               'run_finish': '2009-12-12 11:44:49',
+              'abif_raw_keys': set(['RUND2', 'RUND1', 'DySN1', 'SMPL1', 'GTyp1',
+                                    'PCON2', 'RUNT2', 'PBAS2', 'RUNT1', 'MODL1', 'TUBE1']),
               },
 'data_3730': {
              'path': ['Abi', '3730.ab1'],
@@ -34,6 +36,8 @@ test_data = {
              'machine_model': '3730',
              'run_start': '2009-12-12 09:56:53',
              'run_finish': '2009-12-12 11:44:49',
+             'abif_raw_keys': set(['RUND2', 'RUND1', 'DySN1', 'SMPL1', 'GTyp1',
+                                   'PCON2', 'RUNT2', 'PBAS2', 'RUNT1', 'MODL1', 'TUBE1']),
             },
 'data_3100': {
              'path': ['Abi', '3100.ab1'],
@@ -48,6 +52,8 @@ test_data = {
              'machine_model': '3100',
              'run_start': '2010-01-27 09:52:45',
              'run_finish': '2010-01-27 10:41:07',
+             'abif_raw_keys': set(['RUND2', 'RUND1', 'DySN1', 'SMPL1', 'GTyp1',
+                                   'PCON2', 'RUNT2', 'PBAS2', 'RUNT1', 'MODL1', 'TUBE1']),
             },
 'data_310': {
             'path': ['Abi', '310.ab1'],
@@ -62,6 +68,8 @@ test_data = {
             'machine_model': '310 ',
             'run_start': '2009-02-19 01:19:30',
             'run_finish': '2009-02-19 04:04:15',
+             'abif_raw_keys': set(['RUND2', 'RUND1', 'SMPL1',
+                                   'PCON2', 'RUNT2', 'PBAS2', 'RUNT1', 'MODL1', 'TUBE1']),
            },
 }
 
@@ -112,6 +120,7 @@ class TestAbi(unittest.TestCase):
             self.assertEqual(test_data[trace]['machine_model'], record.annotations['machine_model'])
             self.assertEqual(test_data[trace]['run_start'], record.annotations['run_start'])
             self.assertEqual(test_data[trace]['run_finish'], record.annotations['run_finish'])
+            self.assertEqual(test_data[trace]['abif_raw_keys'], set(record.annotations['abif_raw']))
 
     def test_trim(self):
         """Test if trim works."""
@@ -122,6 +131,27 @@ class TestAbi(unittest.TestCase):
                 self.assertTrue(str(record.seq) in test_data[trace]['seq'])
             else:
                 self.assertEqual(str(record.seq), test_data[trace]['seq'])
+
+    def test_raw(self):
+        """Test access to raw ABIF tags."""
+        record = SeqIO.read("Abi/A6_1-DB3.ab1", "abi")
+        self.assertEqual(set(record.annotations),
+                         set(["polymer", "run_finish", "sample_well", "run_start",
+                              "machine_model", "dye", "abif_raw"]))
+        self.assertEqual(set(record.annotations["abif_raw"]),
+                         set(["RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1", "PCON2",
+                              "RUNT2", "PBAS2", "RUNT1", "MODL1", "TUBE1"]))
+        self.assertEqual(record.annotations["abif_raw"]['RUND2'], '2014-06-04')
+        self.assertEqual(record.annotations["abif_raw"]['RUND1'], '2014-06-04')
+        self.assertEqual(record.annotations["abif_raw"]['DySN1'], 'Z-BigDyeV3')
+        self.assertEqual(record.annotations["abif_raw"]['SMPL1'], 'A6_1-DB3')
+        self.assertEqual(record.annotations["abif_raw"]['GTyp1'], 'POP7                            ')
+        self.assertEqual(record.annotations["abif_raw"]['PCON2'], '\x02\x02\x03\x04\x06\x05\x04\x04\t\x05\n\x04\x04\t\x05\x05\x06\x13\x1e\x0b\t\x06\t\x06\x05"\x16\'\x17\x12\x11):\x18"\x13\x0e:*\x1a\x14\x1444)6:6\'\x15*"/)/>>>>>>>>%\'6,,>>>>>>>;>88$&!.;>;+;>>>>>>;\'>>>>>>;>>>>;>;>>>>>>>;>>>>;;>>>>>>>;>>>>>>>>;>>>>>>>>>>>>>>>>>>>>>>>>>>>6>>>>>>>>>>>>;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>61>>>>>>>>>>>;;>>>>>>>>>>>>>6666;>>>>>>;;>>>>>>>11>>>>;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>;>>>>>>>>>;;>>>>>;;>>>>>>>>>>>>>>>>>>>;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>8>>>>1>>>>>>>>>>>>>>6>>>>>>>>>>>>>>>>>>>/6>>>6:/::::6::6:::::6:::::::60::::::::::::66:::::::6::6:6:::::::::-*:::.15355)::3::322::+)0::4:.:::636*:3:36:5:5::31.$-5+1.463:4::::(5423 :\x1b221:2,,%:2+*64:25%:\x1f234:2:\')466312(25413116\'%63\x1f\' \x1661\x1762\r1\x10\'-"\'6-56 5"5/(4\'*6663%\x1b3*(4 \'"6/(6/)65*45 *(5\x1f\x1f\x1f -#\x1e(  %*/(\x11\r\x13\x18 \x15/\x1d / 4\x17\x1e %(\x1d 5 \x1f%!\x1f\x1f( %\x19\x1d\x0c\x0f\x12$\x1f\x1f3\x1a\x1e\x1f\x1d\x1e\x1f\x1e\x15 "\x1f\x1e\x1e\x12\x1e\x1a\x13\x1a!\'\x19\x1d\x1a\x1e* \x1f\x1d"\x1d\x1c\x1f\x1f\x1a"\x1f\x1a\x1b\x19&\x17/\x1f\x0e\x0e\n')
+        self.assertEqual(record.annotations["abif_raw"]['RUNT2'], '01:57:17')
+        self.assertEqual(record.annotations["abif_raw"]['PBAS2'], 'NNNNNNNNNNCNNNNNNGCTNNNNNGCTCACGTTGATTGCCATATCCTCACAGATTGCCTTCTCACCATTTGTCCCTTCTGATTGATCTATCGGATCGAGTGGTATATTTAACTTTGACATTAGCTGCTTGATATACTTGAAGCATAACATCTTGTTATTGGCAATTGACACAGTTCCACGATCAAGCGTCAAATCCGTCGTTGAATCGAATAGCTTTTTTAAATTCGGATTTTCAAAAACTGTGATAGCATATAGATTTCTGAACAGTGACTTTGCCTCAATACGTCGTAAATTCCGGAACATGTTCAACGAGATAAACGGTGACGATTGACGTACCAACAGGTAGCCGGTGATCGTGTAAATGTTCGCAAATATATCCTTCAACTCGGACGCCATTCCCGAATCCTGTTTTCCGCGAATCTCGATCGTCAGATTTCCGTCAATAATATTGCATAGCCTGATCGCCTGTGCCTTCGGAAACGTATCAATGACGTGATTGATCTCGCACACAATCTCACACTTGCCAACGCATTTTCGGCATTCTCGATGATCATCCGGGTTGATTTGATAACCATCGGGACATTTATCCGAGCAAAGGCCTGCCGTCGCCTTGATAGGCACTGTTTTGTTCGAGAGCACCGGATTCAGCTGCAGACACTGCTCACGGGTCACACAACGACGTTGAAGGAGAAGGTACAGGTGAGCATCACACTTTTCGATACACTTTCCCTTGTGATAGACATTCTTGCACGCGTGGCATGCTGTCGCATCATTCACACGCTCACAACCGCCCACGCATTGATCGTGACATCGATCGCCGTTCGCATCACATCCCGGG')
+        self.assertEqual(record.annotations["abif_raw"]['RUNT1'], '00:10:18')
+        self.assertEqual(record.annotations["abif_raw"]['MODL1'], '3730')
+        self.assertEqual(record.annotations["abif_raw"]['TUBE1'], 'C12')
 
 
 class TestAbiWrongMode(unittest.TestCase):
