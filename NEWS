@@ -16,6 +16,9 @@ The Bio.SeqIO parser for the ABI capillary file format now exposes
 all the raw data in the SeqRecord's annotation as a dictionary. This
 allows further in-depth analysis by advanced users.
 
+Bio.SearchIO QueryResult objects now allow Hit retrieval using
+its alternative IDs (any IDs listed after the first one).
+
 ===================================================================
 
 29 May 2014: Biopython 1.64 released.
