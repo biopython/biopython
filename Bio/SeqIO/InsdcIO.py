@@ -1387,7 +1387,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         del(contemp)
 
     def _read_seq(self):
-        """(private) implements standard sequence getter for base class"""
+        """(private) implements sequence getter for base class"""
 
         #localize some instance attributes used throughout this
         begin = self._index_begin
@@ -1567,7 +1567,10 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         scanner, consumer = self._parse_aparatus
 
         #index format (begin_pos, end_pos, begin_offset, end_offset, qualify)
-        feature_index_list = self._feature_index[begin:end]
+        if self._feature_index:
+            feature_index_list = self._feature_index[begin:end]
+        else:
+            feature_index_list = []
 
         #make the feature list
         featurelist = []
