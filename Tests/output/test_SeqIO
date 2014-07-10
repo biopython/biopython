@@ -2250,6 +2250,7 @@ Testing reading genbank format file GenBank/NP_416719.gbwithparts
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading genbank format file GenBank/1MRR_A.gp
@@ -2277,6 +2278,7 @@ Testing reading genbank format file GenBank/1MRR_A.gp
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading embl format file EMBL/epo_prt_selection.embl
@@ -2357,6 +2359,8 @@ Testing reading embl format file EMBL/patents.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -2446,6 +2450,7 @@ Testing reading embl format file EMBL/DD231055_edited2.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip-sequential' format
@@ -2600,6 +2605,7 @@ Testing reading embl format file EMBL/location_wrap.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip-sequential' format
@@ -3915,6 +3921,7 @@ Testing reading fastq format file Quality/example_dos.fastq as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip-sequential' format
@@ -4156,6 +4163,8 @@ Testing reading seqxml format file SeqXML/dna_example.xml
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -4199,6 +4208,8 @@ Testing reading seqxml format file SeqXML/rna_example.xml
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -4240,6 +4251,8 @@ Testing reading seqxml format file SeqXML/protein_example.xml
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -4264,6 +4277,7 @@ Testing reading abi format file Abi/310.ab1
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading abi format file Abi/3100.ab1
@@ -4286,6 +4300,7 @@ Testing reading abi format file Abi/3100.ab1
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading abi format file Abi/3730.ab1
@@ -4308,6 +4323,7 @@ Testing reading abi format file Abi/3730.ab1
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Finished tested reading files
