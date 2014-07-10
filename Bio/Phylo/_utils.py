@@ -226,7 +226,7 @@ def draw_ascii(tree, file=None, column_width=80):
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
         cols_per_branch_unit = ((drawing_width - fudge_margin)
                                 / float(max(depths.values())))
-        return dict((clade, int(round(blen*cols_per_branch_unit + 0.5)))
+        return dict((clade, int(blen*cols_per_branch_unit + 1.0))
                     for clade, blen in depths.items())
 
     def get_row_positions(tree):
