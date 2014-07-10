@@ -10619,26 +10619,24 @@ The function \verb|draw_ascii| creates a simple ASCII-art (plain text) dendrogra
 convenient visualization for interactive exploration, in case better graphical tools aren't
 available.
 
-%TODO: doctest examples
-%Suspect this fails via mass run_test.py due to abuse of sys.stdout
-%(but works if just running test_Tutorial.py alone)
+%doctest examples
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("simple.dnd", "newick")
 >>> Phylo.draw_ascii(tree)
-                                                          __________________ A
-                                       __________________|
-                                      |                  |__________________ B
-                    __________________|
-                   |                  |                   __________________ C
-                   |                  |__________________|
-___________________|                                     |__________________ D
-                   |
-                   |                   __________________ E
-                   |                  |
-                   |__________________|__________________ F
-                                      |
-                                      |__________________ G
+                                                    ________________________ A
+                           ________________________|
+                          |                        |________________________ B
+  ________________________|
+ |                        |                         ________________________ C
+ |                        |________________________|
+_|                                                 |________________________ D
+ |
+ |                         ________________________ E
+ |                        |
+ |________________________|________________________ F
+                          |
+                          |________________________ G
 <BLANKLINE>
 \end{verbatim}
 
@@ -10819,20 +10817,21 @@ To handle multiple (or an unknown number of) trees, use the \verb|parse| functio
 through each of the trees in the given file: 
 
 \begin{verbatim}
->>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
+>>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
 ...     print(tree)
 \end{verbatim}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
 
+%cont-doctest
 \begin{verbatim}
->>> trees = list(Phylo.parse("phyloxml_examples.xml", "phyloxml"))
+>>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
 >>> tree1 = trees[0]
 >>> others = trees[1:]
->>> Phylo.write(tree1, "tree1.xml", "phyloxml")
+>>> Phylo.write(tree1, "tree1.nwk", "newick")
 1
->>> Phylo.write(others, "other_trees.xml", "phyloxml")
+>>> Phylo.write(others, "other_trees.nwk", "newick")
 12
 \end{verbatim}
 
