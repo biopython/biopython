@@ -389,12 +389,20 @@ class BlastXmlParser(object):
             else:
                 blast_hit_id = ''
 
+            # combine primary ID and defline first before splitting
+            full_id_desc = hit_id + ' ' + hit_desc
+            id_descs = [(x.strip(), y.strip()) for x, y in \
+                    [a.split(' ', 1) for a in full_id_desc.split(' >')]]
+            hit_id, hit_desc = id_descs[0] 
+
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
                         query_id, hit_id)]
 
             hit = Hit(hsps)
             hit.description = hit_desc
+            hit._id_alt = [x[0] for x in id_descs[1:]]
+            hit._description_alt = [x[1] for x in id_descs[1:]]
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id
 

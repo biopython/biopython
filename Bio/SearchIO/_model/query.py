@@ -186,7 +186,7 @@ class QueryResult(_BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new QueryResult class
     # from this one
-    _NON_STICKY_ATTRS = ('_items',)
+    _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
 
     def __init__(self, hits=[], id=None,
             hit_key_function=lambda hit: hit.id):
@@ -205,6 +205,7 @@ class QueryResult(_BaseSearchObject):
         self._hit_key_function = hit_key_function
         self._items = OrderedDict()
         self._description = None
+        self.__alt_hit_ids = {}
         self.program = '<unknown program>'
         self.target = '<unknown target>'
         self.version = '<unknown version>'
@@ -288,7 +289,7 @@ class QueryResult(_BaseSearchObject):
     def __contains__(self, hit_key):
         if isinstance(hit_key, Hit):
             return self._hit_key_function(hit_key) in self._items
-        return hit_key in self._items
+        return hit_key in self._items or hit_key in self.__alt_hit_ids
 
     def __len__(self):
         return len(self._items)
@@ -371,7 +372,11 @@ class QueryResult(_BaseSearchObject):
             raise IndexError("list index out of range")
 
         # if key is a string, then do a regular dictionary retrieval
-        return self._items[hit_key]
+        # falling back on alternative hit IDs
+        try:
+            return self._items[hit_key]
+        except KeyError:
+            return self._items[self.__alt_hit_ids[hit_key]]
 
     def __setitem__(self, hit_key, hit):
         # only accept string keys
@@ -401,7 +406,19 @@ class QueryResult(_BaseSearchObject):
         else:
             self.description = hqdesc
 
+        # remove existing alt_id references, if hit_key already exists
+        if hit_key in self._items:
+            for alt_key in self._items[hit_key].id_all[1:]:
+                del self.__alt_hit_ids[alt_key]
+
+        # if hit_key is already present as an alternative ID
+        # delete it from the alternative ID dict
+        if hit_key in self.__alt_hit_ids:
+            del self.__alt_hit_ids[hit_key]
+
         self._items[hit_key] = hit
+        for alt_id in hit.id_all[1:]:
+            self.__alt_hit_ids[alt_id] = hit_key
 
     def __delitem__(self, hit_key):
         # if hit_key an integer or slice, get the corresponding key first
@@ -416,7 +433,16 @@ class QueryResult(_BaseSearchObject):
             hit_keys = [hit_key]
 
         for key in hit_keys:
-            del self._items[key]
+            deleted = False
+            if key in self._items:
+                del self._items[key]
+                deleted = True
+            if key in self.__alt_hit_ids:
+                del self._items[self.__alt_hit_ids[key]]
+                del self.__alt_hit_ids[key]
+                deleted = True
+            if not deleted:
+                raise KeyError('%r'.format(key))
         return
 
     ## properties ##
@@ -474,11 +500,11 @@ class QueryResult(_BaseSearchObject):
         else:
             hit_key = hit.id
 
-        if hit_key not in self:
+        if hit_key not in self and all([pid not in self for pid in hit.id_all[1:]]):
             self[hit_key] = hit
         else:
-            raise ValueError("Hit '%s' already present in this QueryResult." %
-                    hit_key)
+            raise ValueError("The ID or alternative IDs of Hit %r exists in "
+                    "this QueryResult." % hit_key)
 
     def hit_filter(self, func=None):
         """Creates a new QueryResult object whose Hit objects pass the filter
@@ -663,8 +689,17 @@ class QueryResult(_BaseSearchObject):
             hit_key = list(self.hit_keys)[hit_key]
 
         try:
-            return self._items.pop(hit_key)
+            hit = self._items.pop(hit_key)
+            # remove all alternative IDs of the popped hit
+            for alt_id in hit.id_all[1:]:
+                try:
+                    del self.__alt_hit_ids[alt_id]
+                except KeyError:
+                    pass
+            return hit
         except KeyError:
+            if hit_key in self.__alt_hit_ids:
+                return self.pop(self.__alt_hit_ids[hit_key], default)
             # if key doesn't exist and no default is set, raise a KeyError
             if default is self.__marker:
                 raise KeyError(hit_key)
@@ -688,7 +723,12 @@ class QueryResult(_BaseSearchObject):
         """
         if isinstance(hit_key, Hit):
             return list(self.hit_keys).index(hit_key.id)
-        return list(self.hit_keys).index(hit_key)
+        try:
+            return list(self.hit_keys).index(hit_key)
+        except ValueError:
+            if hit_key in self.__alt_hit_ids:
+                return self.index(self.__alt_hit_ids[hit_key])
+            raise
 
     def sort(self, key=None, reverse=False, in_place=True):
         # no cmp argument to make sort more Python 3-like
