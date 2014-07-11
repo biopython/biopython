@@ -43,7 +43,7 @@ records may not trigger an exception until the problem region is
 requested. This is by design.
 """
 
-from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_bytes
+from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_bytes, _as_string
 from ..SeqRecord import SeqRecord, _RestrictedDict
 from copy import copy
 import re
@@ -680,7 +680,7 @@ class LazyIterator(object):
         #check and fix index existence
         if isinstance(index, bool):
             use_an_index = False
-        if isfile(index):
+        elif isfile(index):
             use_an_index = True
         else:
             temp = open(index, 'wb')
@@ -701,15 +701,20 @@ class LazyIterator(object):
                                format = self.format,
                                alphabet = self.alphabet)
 
+    def _get_db_connection(self):
+        """Make and return a SQLite connection """
+        if not _sqlite:
+            # Hack for Jython (or if Python is compiled without it)
+            from Bio import MissingPythonDependencyError
+            raise MissingPythonDependencyError("Requires sqlite3, "
+                                    "which is included Python 2.5+")
+        con = _sqlite.connect(self.index)
+        return con
+
     def __iter__(self):
         return_class = self.return_class
         if self.use_an_index:
-            if not _sqlite:
-                # Hack for Jython (or if Python is compiled without it)
-                from Bio import MissingPythonDependencyError
-                raise MissingPythonDependencyError("Requires sqlite3, "
-                                        "which is included Python 2.5+")
-            con = _sqlite.connect(self.index)
+            con = self._get_db_connection()
             #find the number of records
             count = con.execute("SELECT count " +\
                                 "FROM indexed_files WHERE " +\
@@ -721,13 +726,28 @@ class LazyIterator(object):
                 yield return_class(self.handle, indexdb = self.index, \
                                    indexkey = idx, alphabet=self.alphabet)
         else:
-            offsetiterator = sequential_record_offset_iterator(handle, \
-                                                    format=format)
+            offsetiterator = sequential_record_offset_iterator(self.handle, \
+                                                        format=self.format)
             for offset_begin, length in offsetiterator:
                 yield return_class(self.handle,
                                    startoffset=offset_begin, \
                                    length=length, indexdb = None, \
                                    indexkey = None, alphabet=self.alphabet)
+
+    def keys(self):
+        if not self.use_an_index:
+            raise ValueError("No keys or dict-type access without a db-index")
+        else:
+            con = self._get_db_connection()
+            keys = con.execute("SELECT idx.id " + \
+                               "FROM main_index idx " +\
+                               "INNER JOIN indexed_files idxf " +\
+                               "ON idxf.fileid = idx.fileid " +\
+                               "WHERE idxf.filename = ?",
+                               (basename(self.handle.name),))
+            return_list = [_as_string(key[0]) for key in keys]
+            con.close()
+            return return_list
 
     def __getitem__(self, key):
         if not self.use_an_index:

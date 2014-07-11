@@ -597,8 +597,6 @@ class TestWrapperWithGenBank(unittest.TestCase):
         self.handle = open(filename, 'rb')
         filename2 = os.path.join('GenBank', self.recordfile2)
         self.handle2 = open(filename, 'rb')
-        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                     returncls, 'genbank', index=dbfilename)
         self.handle.seek(0)
 
     def tearDown(self):
@@ -618,19 +616,46 @@ class TestWrapperWithGenBank(unittest.TestCase):
             self.assertTrue(isinstance(r, GenbankSeqRecProxy))
         self.assertTrue(isinstance(temprec, GenbankSeqRecProxy))
 
-    def test_make_two_records_with_db(self):
+    def test_make_two_records_with_same_db(self):
         #make the iter
         lazy_iter = LazyIterator(handle = self.handle,
                                  return_class = self.returncls,
                                  index = self.dbfilename)
-        lazy_iter2 = LazyIterator(handle = self.handle,
+        lazy_iter2 = LazyIterator(handle = self.handle2,
                                  return_class = self.returncls,
                                  index = self.dbfilename)
         #test that it iterates
+
+        self.assertEqual(lazy_iter.keys(), ["FJ940752.1"])
+        self.assertEqual(lazy_iter2.keys(), ["FJ940752.1"])
         for r in lazy_iter2:
             self.assertTrue(isinstance(r, GenbankSeqRecProxy))
         for r in lazy_iter:
             self.assertTrue(isinstance(r, GenbankSeqRecProxy))
+
+    def test_make_one_record_without_db(self):
+        #make the iter
+        lazy_iter = LazyIterator(handle = self.handle,
+                                 return_class = self.returncls,
+                                 index = True)
+        #test that it iterates and assigns temprec as a record
+        temprec = None
+        for r in lazy_iter:
+            temprec = r
+            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
+        self.assertTrue(isinstance(temprec, GenbankSeqRecProxy))
+
+    def test_getter_using_brca_id(self):
+        lazydict = LazyIterator(handle = self.handle,
+                         return_class = self.returncls,
+                         index = self.dbfilename)
+        del(lazydict)
+        d = LazyIterator(handle = self.handle,
+                         return_class = self.returncls,
+                         index = self.dbfilename)
+        self.assertTrue(isinstance(d["FJ940752.1"], GenbankSeqRecProxy))
+
+
 #
 ### tests for base class
 #
