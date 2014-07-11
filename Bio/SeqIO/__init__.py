@@ -431,6 +431,10 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "seqxml": SeqXmlIO.SeqXmlWriter,
                    }
 
+_FormatToLazyLoad = {"gb": InsdcIO.GenbankSeqRecProxy,
+                     "genbank": InsdcIO.GenbankSeqRecProxy,
+                     "fasta": FastaIO.FastaSeqRecProxy}
+
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 
@@ -494,7 +498,7 @@ def write(sequences, handle, format):
     return count
 
 
-def parse(handle, format, alphabet=None):
+def parse(handle, format, alphabet=None, lazy=False):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
         - handle   - handle to the file, or the filename as a string
@@ -554,7 +558,7 @@ def parse(handle, format, alphabet=None):
     from Bio import AlignIO
 
     # Hack for SFF, will need to make this more general in future
-    if format in _BinaryFormats:
+    if lazy or format in _BinaryFormats:
         mode = 'rb'
     else:
         mode = 'rU'
@@ -572,7 +576,11 @@ def parse(handle, format, alphabet=None):
 
     with as_handle(handle, mode) as fp:
         # Map the file format to a sequence iterator:
-        if format in _FormatToIterator:
+        if lazy and format in _FormatToLazyLoad:
+            i = _lazy.LazyIterator(handle = fp,
+                        return_class = _FormatToLazyLoad[format],
+                        index=lazy, alphabet=alphabet)
+        elif format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
             if alphabet is None:
                 i = iterator_generator(fp)
