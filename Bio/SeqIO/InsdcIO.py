@@ -1378,7 +1378,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         contemp.start_feature_table() #feeds references
         contemp.record_end("//")
 
-        self.id = _index["id"]
+        self.id = contemp.data.id
         self.name = contemp.data.name
         self.description = contemp.data.description
         self.dbxrefs = contemp.data.dbxrefs
