@@ -420,6 +420,8 @@ class TestGenbankLazyComparitive(unittest.TestCase):
             self.assertEqual(str(record[0:5].seq), str(oldrec[0:5].seq))
             self.assertEqual(str(record[-5:].seq), str(oldrec[-5:].seq))
             self.assertEqual(str(record[70:75].seq), str(oldrec[70:75].seq))
+            #multiples of 60 are edge cases
+            self.assertEqual(str(record[0:180].seq), str(oldrec[0:180].seq))
 
     def test_record_has_features(self):
         record = self.parser(self.handle)
