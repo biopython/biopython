@@ -98,7 +98,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         for count, rec in enumerate(lazyiterator):
             pass
         self.assertEqual(count, 1)
-    
+
     def test_iterator_returns_a_lazy_record(self):
         """checks the iterator returns the correct record"""
         lazyiterator = self.parser(test_seq_win)
@@ -121,7 +121,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(idx["sequenceletterwidth"], 51)
         self.assertEqual(idx["sequencelinewidth"], 52)
         self.assertEqual(idx["recordoffsetstart"], 290)
-    
+
     def test_len_win(self):
         lazyiterator = self.parser(test_seq_win)
         first_seq = next(lazyiterator)
@@ -147,7 +147,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         firstseq = next(lazyiterator)
         s = firstseq[0:10]
         self.assertEqual(str(s.seq), "MAPNASCLCV")
-   
+
     def test_double_padded_seq_len(self):
         lazyiterator = self.parser(test_double_padded)
         firstseq = next(lazyiterator)
@@ -186,13 +186,13 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         s = firstseq[6:10]
-        self.assertEqual(str(s.seq), "CLCV")   
+        self.assertEqual(str(s.seq), "CLCV")
 
     def test_sequence_getter_win(self):
         lazyiterator = self.parser(test_seq_win)
         firstseq = next(lazyiterator)
         s = firstseq[6:10]
-        self.assertEqual(str(s.seq), "CLCV")  
+        self.assertEqual(str(s.seq), "CLCV")
 
     def test_sequence_getter_unix_2_line_span1(self):
         lazyiterator = self.parser(test_seq_unix)
@@ -224,7 +224,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         firstseq = next(lazyiterator)
         s = firstseq
         self.assertEqual(str(s.seq), tsuseq)
-    
+
     def test_sequence_getter_explicit_full_span(self):
         lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
@@ -238,7 +238,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(len(tsuseq[0:161]), 161)
         self.assertEqual(len(s), 161)
         self.assertEqual(len(s.seq), 161)
-        self.assertEqual(str(s.seq), tsuseq[0:161]) 
+        self.assertEqual(str(s.seq), tsuseq[0:161])
 
 class LazyFastaIOSimpleTestsGenericIterator(LazyFastaIOSimpleTests):
     """Tests the generic iterator using tests from format specific iterator"""
@@ -258,7 +258,7 @@ class TestFastaSeqRecord(unittest.TestCase):
     def setUp(self):
         self.standard_iter = SeqIO.parse(self.fastafile, 'fasta')
         self.file = open(self.fastafile, 'rb')
-        lazyiter = SeqIO.FastaIO.FastaLazyIterator    
+        lazyiter = SeqIO.FastaIO.FastaLazyIterator
         self.lazy_iter = lazyiter(self.file)
 
     def tearDown(self):
@@ -313,14 +313,14 @@ class TestFastaFromIndexDb( TestFastaSeqRecord):
                                         index=self.dbfilename)
         self.lazy_iter = lazyiter(self.file)
         #iter setup regular
-        self.standard_iter = SeqIO.parse(self.fastafile, 'fasta') 
-        
+        self.standard_iter = SeqIO.parse(self.fastafile, 'fasta')
+
     def tearDown(self):
         #delete db temp file
         os.remove(self.dbfilename)
         #close sequence file
         self.file.close()
-    
+
     def test_setup_cleanup(self):
         for std, lzy in zip(self.standard_iter, self.lazy_iter):
             pass
@@ -338,7 +338,7 @@ from Bio.SeqIO.InsdcIO import GenbankSeqRecProxy
 from Bio.SeqFeature import SeqFeature
 
 class TestGenbankLazy(unittest.TestCase):
-    recordfile = "brca_FJ940752.gb" 
+    recordfile = "brca_FJ940752.gb"
 
     def setUp(self):
         self.handle = open(os.path.join('GenBank', self.recordfile), 'rb')
@@ -532,7 +532,7 @@ class TestGenBankDb_reading( TestGenbankLazyComparitive):
                                         returncls, 'genbank', \
                                         index=self.dbfilename)
         self.lazy_iter = self.parser(self.file)
-        self.standard_iter = SeqIO.parse(recordfile, 'genbank') 
+        self.standard_iter = SeqIO.parse(recordfile, 'genbank')
         self.oldrec = next(self.standard_iter)
 
     def tearDown(self):
@@ -575,16 +575,72 @@ class TestGenBankDbWritingOnly(unittest.TestCase):
         firstrec = next(fileiter)
         self.assertEqual(len(firstrec.features), 8)
 
+
+#
+### tests for base class wrapper
+#
+
+class TestWrapperWithGenBank(unittest.TestCase):
+
+    recordfile = "brca_FJ940752.gb"
+    recordfile2 = "cor6_6.gb"
+
+    def setUp(self):
+        #db setup: make tempfile and close os handle to help with cleanup
+        oshandle, dbfilename = tempfile.mkstemp()
+        self.dbfilename = dbfilename
+        os.close(oshandle)
+        self.returncls = GenbankSeqRecProxy
+
+        #gb parsing setup:
+        filename = os.path.join('GenBank', self.recordfile)
+        self.handle = open(filename, 'rb')
+        filename2 = os.path.join('GenBank', self.recordfile2)
+        self.handle2 = open(filename, 'rb')
+        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
+                                     returncls, 'genbank', index=dbfilename)
+        self.handle.seek(0)
+
+    def tearDown(self):
+        os.remove(self.dbfilename)
+        self.handle2.close()
+        self.handle.close()
+
+    def test_make_one_record_with_db(self):
+        #make the iter
+        lazy_iter = LazyIterator(handle = self.handle,
+                                 return_class = self.returncls,
+                                 index = self.dbfilename)
+        #test that it iterates and assigns temprec as a record
+        temprec = None
+        for r in lazy_iter:
+            temprec = r
+            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
+        self.assertTrue(isinstance(temprec, GenbankSeqRecProxy))
+
+    def test_make_two_records_with_db(self):
+        #make the iter
+        lazy_iter = LazyIterator(handle = self.handle,
+                                 return_class = self.returncls,
+                                 index = self.dbfilename)
+        lazy_iter2 = LazyIterator(handle = self.handle,
+                                 return_class = self.returncls,
+                                 index = self.dbfilename)
+        #test that it iterates
+        for r in lazy_iter2:
+            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
+        for r in lazy_iter:
+            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
 #
 ### tests for base class
 #
 
 class MinimalLazySeqRecord(SeqRecordProxyBase):
     """ this class implements the minimum functionality for a SeqRecordProxy
-    
+
     This class must be defined in the test suite to implement the basic hook
-    methods used by the new proxy class. Additional parsers should add 
-    redundant code, but proper testing here will catch some errors before 
+    methods used by the new proxy class. Additional parsers should add
+    redundant code, but proper testing here will catch some errors before
     they present in a derived class.
     """
 
@@ -718,7 +774,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         a = MinimalLazySeqRecord(handle, 0, lenhandle,
                                    alphabet = self.ab)
         self.assertEqual(out, repr(a))
-        s = a.seq 
+        s = a.seq
         self.assertEqual(out2, repr(a))
 
     def test_len_method(self):
@@ -731,11 +787,11 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual(3, len(b))
         self.assertEqual(None, b._seq)
         self.assertEqual(len("sequencefake"), len(a))
-        
+
 class TestFeatureBinCollection(unittest.TestCase):
     def setUp(self):
         self.bins = FeatureBinCollection(bounded_only_returns = False)
-    
+
     def test_initial_state_max_bin_power(self):
         self.assertEqual(self.bins._max_bin_power, 23)
 
@@ -745,7 +801,7 @@ class TestFeatureBinCollection(unittest.TestCase):
     def test_bin_index_finder_smallest_bin_and_leftmost(self):
         k_0_256 = self.bins._calculate_bin_index(0,256)
         self.assertEqual(k_0_256, 4681) #this is the leftmost level 5 bin
-    
+
     def test_bin_index_finder_negative_span(self):
         #k_0_256 = self.bins._calculate_bin_index(0,-56)
         #self.assertEqual(k_0_256, 4681) #this is the leftmost level 5 bin
@@ -761,34 +817,34 @@ class TestFeatureBinCollection(unittest.TestCase):
     def test_bin_index_finder_smallest_bin_and_2ndleftmost(self):
         k_256_256 = self.bins._calculate_bin_index(256,256)
         #this is the second leftmost level 5 bin
-        self.assertEqual(k_256_256, 4682) 
-        
+        self.assertEqual(k_256_256, 4682)
+
     def test_bin_index_finder_smallest_bin_and_2ndleftmost_zero_length(self):
         k_256_0 = self.bins._calculate_bin_index(256,0)
-        self.assertEqual(k_256_0, 4682) 
-    
+        self.assertEqual(k_256_0, 4682)
+
     def test_bin_index_finder_smallest_bin_last_index(self):
         k_1_256 = self.bins._calculate_bin_index(1,256)
-        self.assertEqual(k_1_256, 585) 
-     
+        self.assertEqual(k_1_256, 585)
+
     def test_bin_index_finder_smallest_bin_last_index(self):
         k_big_256 = self.bins._calculate_bin_index(8388352,256)
         self.assertEqual(k_big_256, 37448) # this is the rightmost lv5 bin
-    
+
     def test_bin_index_finder_largest_bin_and_ensure_no_recalculation(self):
         k_small_big = self.bins._calculate_bin_index(0, 8388608)
         self.assertEqual(k_small_big, 0)
         self.assertEqual(self.bins._max_bin_power, 23)
         #value below should not have changed
-        
+
     def test_bin_index_finder_smallest_bin_largest_index(self):
         """ this should return the index of the last bin"""
         k_big_256 = self.bins._calculate_bin_index(8388352,256)
         self.assertEqual(k_big_256, 37448)
         self.assertEqual(self.bins._max_bin_power, 23)
-      
+
     def test_binning_size_changer_once(self):
-        """ test that the bin size chnges when list is 1-over"""            
+        """ test that the bin size chnges when list is 1-over"""
         k_overFull = self.bins._calculate_bin_index(1,8388608)
         k_full = self.bins._calculate_bin_index(0,8388608)
         self.assertEqual(self.bins._max_sequence_length, 8388608*8)
@@ -797,7 +853,7 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertEqual(k_overFull, 0)
         self.assertEqual(k_full, 1)
         self.assertEqual(self.bins._max_bin_power, 26)
-    
+
     def test_binning_size_changer_multiple_steps(self):
         """trigger a size rearrangement twice"""
         k_overFull = self.bins._calculate_bin_index(1,8388608*8)
@@ -807,21 +863,21 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertEqual(k_full, 1)
         self.assertEqual(self.bins._max_bin_power, 29)
         self.assertTrue(2048 not in self.bins._size_list)
-    
+
     def test_insertion_bad_negative_val(self):
         testTuple1 = (-1, 56)
         self.assertRaises(AssertionError,self.bins.insert,testTuple1)
-        
+
     def test_insertion_once_smallest(self):
         testTuple1 = (0, 256)
         self.bins.insert(testTuple1)
         self.assertTrue(testTuple1 in self.bins._bins[4681])
-        
+
     def test_insertion_once_smallest_but_overlaps(self):
         testTuple2 = (1, 257)
         self.bins.insert(testTuple2)
         self.assertTrue(testTuple2 in self.bins._bins[585])
-        
+
     def test_insertion_once_smallestbin_rightmost(self):
         testTuple3 = (8388608-256, 8388608)
         self.bins.insert(testTuple3)
@@ -831,11 +887,11 @@ class TestFeatureBinCollection(unittest.TestCase):
         testTuple3 = (8388607, 8388607)
         self.bins.insert(testTuple3)
         self.assertTrue(testTuple3 in self.bins._bins[37448])
-    
+
     def test_insertion_once_smallestbin_rightmost_lv4(self):
         testTuple4 = (8388608-257, 8388608)
         self.bins.insert(testTuple4)
-        self.assertTrue(testTuple4 in self.bins._bins[4680])    
+        self.assertTrue(testTuple4 in self.bins._bins[4680])
 
     def test_insertion_with_rearrangement(self):
         testTuple3 = (256, 256+256)
@@ -850,7 +906,7 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertTrue(256 not in self.bins._size_list)
         self.assertTrue(2048 in self.bins._size_list)
         self.assertEqual(self.bins._max_bin_power, 26)
-    
+
     def test_insertion_level3_and_level5_then_resize_to_fit_in_same_bin(self):
         test_tuple_lv3 = (16384 , 16384+16384)
         test_tuple_lv5 = (16384+16384-256 , 16384+16384)
@@ -863,7 +919,7 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertTrue(test_tuple_lv3 in self.bins._bins[4682])
         self.assertTrue(test_tuple_lv5 in self.bins._bins[4682])
         self.assertEqual(self.bins._max_bin_power, 29)
-        
+
     def test_overflows_of_static_defined_lists(self):
         staticbins = FeatureBinCollection(length=67108864)
         #insert a chunk of data
@@ -875,39 +931,39 @@ class TestFeatureBinCollection(unittest.TestCase):
         overSizedTuple2 = (67108864, 67108865)
         self.assertRaises(ValueError, staticbins.insert, overSizedTuple1)
         self.assertRaises(ValueError, staticbins.insert, overSizedTuple2)
-        
-    def test_oversized_definition_of_the_collection(self):    
+
+    def test_oversized_definition_of_the_collection(self):
         reallyReallyoversizedEnd = 1+2**41
         self.assertRaises(ValueError, FeatureBinCollection, reallyReallyoversizedEnd)
 
     def test_getter_get_values_from_empty_set(self):
         resultsEmpty = self.bins[2**20]
         self.assertEqual([], resultsEmpty)
-        
+
     def test_getter_get_values_edge_cases(self):
         resultsEdgeRight = self.bins[-1+2**23]
         resultsEdgeLeft = self.bins[0]
         self.assertEqual([], resultsEdgeRight)
         self.assertEqual([], resultsEdgeLeft)
-        
+
     def test_getter_get_values_from_out_of_bounds(self):
         self.assertRaises(IndexError, self.bins.__getitem__, -1)
         self.assertRaises(IndexError, self.bins.__getitem__, 1+2**23)
-        
+
     def test_getter_typeError_string(self):
         self.assertRaises(TypeError, self.bins.__getitem__, "hello")
-        
+
     def test_getter_typeError_float(self):
-        self.assertRaises(TypeError, self.bins.__getitem__, 5.45)          
-        
+        self.assertRaises(TypeError, self.bins.__getitem__, 5.45)
+
     def test_getter_typeError_stepped_slice(self):
         self.assertRaises(KeyError, self.bins.__getitem__, slice(0,25,2))
-    
+
     def test_getter_reversed_index(self):
         resultR = (20000,30000)
         self.bins.insert(resultR)
         self.assertRaises(IndexError, self.bins.__getitem__, slice(23000,21000))
-        
+
     def test_getter_half_slices(self):
         emptyL = self.bins[:50]
         emptyR = self.bins[50:]
@@ -925,7 +981,7 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertEqual([], emptyL)
         self.assertTrue(resultR in emptyR)
         self.assertTrue(resultR in emptyM)
-    
+
     def test_getter_half_slices_with_result_left_border(self):
         resultL = (10000,20000)
         self.bins.insert(resultL)
@@ -935,7 +991,7 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertEqual([], emptyR)
         self.assertTrue(resultL in emptyL)
         self.assertTrue(resultL in emptyM)
-        
+
     def test_insertion_where_medium_sized_bin_is_out_of_bounds(self):
         resultL = (8388608, 8388608+2047)
         self.bins.insert(resultL)
@@ -947,7 +1003,7 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.bins.insert(feature)
         result = self.bins[99000:101000]
         self.assertTrue(feature in result)
-    
+
     def test_getter_overlap_right(self):
         feature = (100000,200000)
         self.bins.insert(feature)
@@ -958,14 +1014,14 @@ class TestFeatureBinCollection(unittest.TestCase):
         feature = (100000,200000)
         self.bins.insert(feature)
         result = self.bins[99000:201000]
-        self.assertTrue(feature in result) 
-        
+        self.assertTrue(feature in result)
+
     def test_getter_region_inside_feature(self):
         feature = (100000,200000)
         self.bins.insert(feature)
         result = self.bins[101000:199000]
-        self.assertTrue(feature in result) 
-    
+        self.assertTrue(feature in result)
+
     def test_getter_zero_length_inside(self):
         testTuple3 = (8388605, 8388605)
         self.bins.insert(testTuple3)
@@ -1000,17 +1056,17 @@ class IndexDbIO(SeqRecordProxyBase):
     _format = 'fake'
     def __init__(self):
         pass
-        
+
 class IndexDbIOCreateDb(unittest.TestCase):
 
     def setUp(self):
         #db setup: make tempfile and close os handle to help with cleanup
         oshandle, self.dbfilename = tempfile.mkstemp()
         os.close(oshandle)
-        
+
     def tearDown(self):
         os.remove(self.dbfilename)
-        
+
 
     def test_index_getter_empty_database(self):
         """empty databases follwed by a get call should raise KeyError"""
@@ -1019,9 +1075,9 @@ class IndexDbIOCreateDb(unittest.TestCase):
         testIO._indexdb = self.dbfilename
         gettermethod = testIO._SeqRecordProxyBase__load_and_return_index
         self.assertRaises(KeyError, gettermethod)
-            
+
     def test_index_creates_table_without_raising(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1029,12 +1085,12 @@ class IndexDbIOCreateDb(unittest.TestCase):
         testIO._handle = testfile
         con = testIO._SeqRecordProxyBase__connect_db_return_connection()
         testIO._SeqRecordProxyBase__create_tables(con, testindex)
-        
-        
+
+
     def test_index_creates_table_and_check(self):
         """tests creation of table and class that checks tables"""
         #index setup
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1059,7 +1115,7 @@ class IndexDbIOCreateDb(unittest.TestCase):
         self.assertEqual(colnames, expected)
 
     def test_fileid_getter_method(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1082,9 +1138,9 @@ class IndexDbIOCreateDb(unittest.TestCase):
         self.assertEqual(name, 'fake.fasta')
         self.assertTrue(_is_int_or_long(fileid))
         self.assertEqual(found_id, fileid)
-        
+
     def test_write_index_filename_is_written(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1100,9 +1156,9 @@ class IndexDbIOCreateDb(unittest.TestCase):
                        "filename=?;",('fake.fasta',))
         name = name.fetchone()[0]
         self.assertEqual(name, 'fake.fasta')
-        
+
     def test_write_index_contents_arewritten(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1124,9 +1180,9 @@ class IndexDbIOCreateDb(unittest.TestCase):
         del(record_indexdict["fileid"])
         del(record_indexdict["indexid"])
         self.assertEqual(testindex, record_indexdict)
-    
+
     def test_write_retrieve_with_shortcut_from_memory(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1134,9 +1190,9 @@ class IndexDbIOCreateDb(unittest.TestCase):
         #invoke writer
         testIO._index = testindex
         self.assertEqual(testIO._index, testindex)
-        
+
     def test_write_retrieve_from_db(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1152,9 +1208,9 @@ class IndexDbIOCreateDb(unittest.TestCase):
         self.assertTrue(isvalid)
         #activate getter and compare
         self.assertEqual(testIO._index, testindex)
-        
+
     def test_write_two_records_overlapping(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1166,12 +1222,12 @@ class IndexDbIOCreateDb(unittest.TestCase):
         #invoke writer
         setter = testIO2._SeqRecordProxyBase__set_and_save_index
         self.assertRaises(ValueError, setter, testindex)
-        
+
     def test_write_two_records_overlapping_id(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
-        testindex2 = {"recordoffsetstart":220, 
+        testindex2 = {"recordoffsetstart":220,
                  "recordoffsetlength":3000,
                  "seqstart":43, "id":"test1"}
         testIO = IndexDbIO()
@@ -1183,12 +1239,12 @@ class IndexDbIOCreateDb(unittest.TestCase):
         #invoke writer
         setter = testIO2._SeqRecordProxyBase__set_and_save_index
         self.assertRaises(ValueError, setter, testindex2)
-    
+
     def test_write_two_records_distinct(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
-        testindex2 = {"recordoffsetstart":220, 
+        testindex2 = {"recordoffsetstart":220,
                  "recordoffsetlength":3000,
                  "seqstart":43, "id":"test2"}
         testIO = IndexDbIO()
@@ -1198,13 +1254,13 @@ class IndexDbIOCreateDb(unittest.TestCase):
         testIO2 = IndexDbIO()
         testIO2._indexdb = self.dbfilename
         #invoke writer
-        testIO._index = testindex2     
-        
+        testIO._index = testindex2
+
     def test_read_two_records_distinct_idkeys(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
-        testindex2 = {"recordoffsetstart":220, 
+        testindex2 = {"recordoffsetstart":220,
                  "recordoffsetlength":3000,
                  "seqstart":43, "id":"test2"}
         self.test_write_two_records_distinct()
@@ -1216,12 +1272,12 @@ class IndexDbIOCreateDb(unittest.TestCase):
         testIO._indexdb = self.dbfilename
         testIO._indexkey = "test2"
         self.assertEqual(testIO._index, testindex)
-        
+
     def test_read_two_records_distinct_intkeys(self):
-        testindex = {"recordoffsetstart":0, 
+        testindex = {"recordoffsetstart":0,
                  "recordoffsetlength":200,
                  "seqstart":43, "id":"test1"}
-        testindex2 = {"recordoffsetstart":220, 
+        testindex2 = {"recordoffsetstart":220,
                  "recordoffsetlength":3000,
                  "seqstart":43, "id":"test2"}
         self.test_write_two_records_distinct()

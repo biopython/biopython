@@ -660,6 +660,82 @@ class SeqRecordProxyBase(SeqRecord):
     #def __contains__(self, char):
     #def __iter__(self):
 
+class LazyIterator(object):
+    """wrapper for most lazy-loading/indexing access routes for SeqIO
+
+    This class is used to combine most workflows for the lazy loading
+    module. Use of this will allow SeqIO.parse, and SeqIO.index to
+    use the contents of the lazy loading module through sparse code
+    additions
+    """
+
+    def __init__(self, handle, return_class, index=True, alphabet=None):
+        #set locals
+        self.handle = handle
+        self.return_class = return_class
+        self.alphabet = alphabet
+        self.index = index
+        self.format = return_class._format
+
+        #check and fix index existence
+        if isinstance(index, bool):
+            use_an_index = False
+        if isfile(index):
+            use_an_index = True
+        else:
+            temp = open(index, 'wb')
+            temp.close()
+            use_an_index = True
+
+        self.use_an_index = use_an_index
+        if use_an_index:
+            #try getting the first record to test db contents
+            try:
+                return_class(handle, indexdb = index, \
+                         indexkey = 0, alphabet=alphabet)
+            #no record exists; populate the index
+            except KeyError:
+                _make_index_db(handle = self.handle,
+                               return_class = self.return_class,
+                               indexdb = self.index,
+                               format = self.format,
+                               alphabet = self.alphabet)
+
+    def __iter__(self):
+        return_class = self.return_class
+        if self.use_an_index:
+            if not _sqlite:
+                # Hack for Jython (or if Python is compiled without it)
+                from Bio import MissingPythonDependencyError
+                raise MissingPythonDependencyError("Requires sqlite3, "
+                                        "which is included Python 2.5+")
+            con = _sqlite.connect(self.index)
+            #find the number of records
+            count = con.execute("SELECT count " +\
+                                "FROM indexed_files WHERE " +\
+                                "filename=?;", \
+                                (basename(self.handle.name),)).fetchone()[0]
+            con.commit()
+            con.close()
+            for idx in range(count):
+                yield return_class(self.handle, indexdb = self.index, \
+                                   indexkey = idx, alphabet=self.alphabet)
+        else:
+            offsetiterator = sequential_record_offset_iterator(handle, \
+                                                    format=format)
+            for offset_begin, length in offsetiterator:
+                yield return_class(self.handle,
+                                   startoffset=offset_begin, \
+                                   length=length, indexdb = None, \
+                                   indexkey = None, alphabet=self.alphabet)
+
+    def __getitem__(self, key):
+        if not self.use_an_index:
+            raise TypeError("An index file is required to use '__getitem__'")
+        return self.return_class(self.handle, indexkey = key, \
+                                 indexdb = self.index, \
+                                 alphabet = self.alphabet)
+
 def lazy_iterator(handle, return_class=None, format = None,
                   alphabet=None, index=None):
     """A general iterator for sequential sequence files
