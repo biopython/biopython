@@ -135,6 +135,8 @@ class SeqRecordProxyBase(SeqRecord):
 
         #set base values
         self._load_non_lazy_values()
+        if self.id != self._index["id"]:
+            raise ValueError("The index does not contain the correct id.")
         self._index_begin = 0
         self._index_end = self._index["seqlen"]
 
