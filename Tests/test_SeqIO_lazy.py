@@ -274,8 +274,18 @@ class TestFastaSeqRecord(unittest.TestCase):
         for std, lzy in zip(self.standard_iter, self.lazy_iter):
             self.assertEqual(std.id, lzy.id)
 
-    def test_same_seq(self):
+    def test_same_seq_and_post_read_slicing(self):
         for std, lzy in zip(self.standard_iter, self.lazy_iter):
+            self.assertEqual(str(std.seq), str(lzy.seq))
+            #this test conforms that slicing edge cases aren't present
+            for i in range(461, 643):
+                self.assertEqual(str(std.seq[460:i]), str(lzy[460:i].seq))
+
+    def test_same_seq_and_pre_read_slicing(self):
+        for std, lzy in zip(self.standard_iter, self.lazy_iter):
+            #this test conforms that slicing edge cases aren't present
+            for i in range(461, 643):
+                self.assertEqual(str(std.seq[460:i]), str(lzy[460:i].seq))
             self.assertEqual(str(std.seq), str(lzy.seq))
 
     def test_same_name_description(self):

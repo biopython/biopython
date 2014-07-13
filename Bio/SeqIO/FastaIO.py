@@ -189,15 +189,10 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         The self._index dictionary is only set with the file
         start location on instantiation. This function sets the
         following variables in _index
-           "sequencestart"       : the file index where the seq. starts
-           "sequencelinewidth"   : the number of sequence letters per line
+           "sequencestart"  : the file index where the seq. starts
+           "sequencelinewidth" : number of sequence letters per line
            "sequenceletterwidth" : the number of bytes per line
-        
-        This function also parses the title line and sets the following
-        attributes:
-           self.id
-           self.name
-           self.descr
+
         """
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
@@ -243,15 +238,15 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         self._features = []
 
     def _read_seq(self):
-        """(private) implements standard sequence getter for base class"""
-        
+        """(private) implements fasta sequence getter for base class"""
+
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
         lengthtoget = end - begin
         handle = self._handle
         sequencewidth = self._index["sequenceletterwidth"]
-        
+
         #find first line to read
         seqstart = self._index["sequencestart"]
         linewidth = self._index["sequencelinewidth"]
@@ -260,11 +255,12 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
         #pull characters from first line and return early if possible
         letters_firstline = begin%sequencewidth
-        firstline = _bytes_to_string(handle.readline().strip()[letters_firstline:])
+        firstline = _bytes_to_string(handle.readline()).strip()
+        firstline = firstline[letters_firstline:]
         if len(firstline) >= lengthtoget:
             self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
             return
-        
+
         #extract the rest of the lines
         readchars = len(firstline)
         linelist = [firstline]
@@ -281,19 +277,18 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
         #fix the last line and assign the _seq attribute
         last_line_index = end%sequencewidth
-        linelist[-1] = linelist[-1][0:last_line_index]
+        if last_line_index:
+            linelist[-1] = linelist[-1][0:last_line_index]
         sequence = "".join(linelist)
         if len(sequence) != len(self):
             raise ValueError("File not formatted correctly")
         self._seq = Seq(sequence, self._alphabet)
-    
+
     def _make_feature_index(self, new_list):
         pass
 
     def _read_features(self):
         self._features = []
-
-
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""
