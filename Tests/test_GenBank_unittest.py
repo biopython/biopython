@@ -35,13 +35,13 @@ test_files = [File(path.join(gb_file_dir, f), f) for f in test_files]
 
 #files that induce warnings
 warn_files = ['no_end_marker.gb', 'wrong_sequence_indent.gb',
-              'invalid_locus_line_spacing.gb', 'invalid_misc_feature.gb', 
+              'invalid_locus_line_spacing.gb', 'invalid_misc_feature.gb',
               '1MRR_A.gp']
 warn_files = [File(path.join(gb_file_dir, f), f) for f in warn_files]
 
 
 class GenBankTestsManyFiles(unittest.TestCase):
-    
+
     def generic_parse_one(self,filetuple):
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
@@ -91,7 +91,7 @@ for filetuple in warn_files:
         f = lambda x : x.warn_inducing_parse(fn)
         f.__doc__ = "Checking nucleotide file %s" % fn.name
         return f
-    
+
     setattr(GenBankTestsManyFiles, "test_warnings_from_%s"%name, \
             funct(filetuple))
     del funct
@@ -105,23 +105,18 @@ from Bio.GenBank.Scanner import GenBankScanner
 from Bio._py3k import StringIO, _as_string
 
 class ConsumerBehaviorTest(unittest.TestCase):
-    
-    recordfile = "brca_FJ940752.gb" 
+
+    recordfile = "brca_FJ940752.gb"
 
     def setUp(self):
-        self.handle.seek(0)
+        self.handle = open(path.join('GenBank', self.recordfile), 'r')
         self.scanner = GenBankScanner(debug=0)
         self.consumer = _FeatureConsumer(use_fuzziness=1,
                             feature_cleaner=FeatureValueCleaner())
 
-    @classmethod
-    def setUpClass(cls):
-        cls.handle = open(path.join('GenBank', cls.recordfile), 'r')
-    
-    @classmethod
-    def tearDownClass(cls):
-        cls.handle.close()
-                
+    def tearDown(self):
+        self.handle.close()
+
     def test_handle_assignment(self):
         self.scanner.set_handle(self.handle)
         self.assertEqual(self.scanner.line, "")
@@ -160,22 +155,17 @@ class ConsumerBehaviorTest(unittest.TestCase):
         consumer.sequence(sequence_string)
 
 class PartialSequenceAndPartialResultTest(unittest.TestCase):
-    
-    recordfile = "brca_FJ940752.gb" 
+
+    recordfile = "brca_FJ940752.gb"
 
     def setUp(self):
-        self.handle.seek(0)
+        self.handle = open(path.join('GenBank', self.recordfile), 'rb')
         self.scanner = GenBankScanner(debug=0)
         self.consumer = _FeatureConsumer(use_fuzziness=1,
                             feature_cleaner=FeatureValueCleaner())
 
-    @classmethod
-    def setUpClass(cls):
-        cls.handle = open(path.join('GenBank', cls.recordfile), 'rb')
-    
-    @classmethod
-    def tearDownClass(cls):
-        cls.handle.close()
+    def tearDown(self):
+        self.handle.close()
 
     def test_get_start_by_cut(self):
         #get positions
