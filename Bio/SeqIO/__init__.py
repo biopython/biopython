@@ -574,13 +574,20 @@ def parse(handle, format, alphabet=None, lazy=False):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
+    if lazy and format in _FormatToLazyLoad:
+        filehandle = open(handle, mode)
+        i = _lazy.LazyIterator(handle = filehandle,
+                               return_class = _FormatToLazyLoad[format],
+                               index=lazy, alphabet=alphabet)
+        for r in i:
+            yield r
+        return
+    elif lazy:
+        raise ValueError("Unknown format for lazy index: '%s'" % format)
+
     with as_handle(handle, mode) as fp:
         # Map the file format to a sequence iterator:
-        if lazy and format in _FormatToLazyLoad:
-            i = _lazy.LazyIterator(handle = fp,
-                        return_class = _FormatToLazyLoad[format],
-                        index=lazy, alphabet=alphabet)
-        elif format in _FormatToIterator:
+        if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
             if alphabet is None:
                 i = iterator_generator(fp)
