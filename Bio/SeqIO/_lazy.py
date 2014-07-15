@@ -628,9 +628,11 @@ class SeqRecordProxyBase(SeqRecord):
         featureindexes = cursor.execute("SELECT f.seqbegin, " +\
                        "f.seqend, f.offsetbegin, f.offsetend, f.qualifier " +\
                        "FROM features f " +\
-                       "WHERE f.indexid=? " +\
+                       "WHERE f.indexid = ? " +\
+                       "AND f.seqbegin >= ? " +\
+                       "AND f.seqend <= ?"
                        "ORDER BY f.seqbegin;",
-                       (self.__indexid,))
+                       (self.__indexid, self._index_begin, self._index_end))
 
         container = FeatureBinCollection()
         for featureindex in featureindexes:

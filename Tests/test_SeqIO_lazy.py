@@ -558,6 +558,9 @@ class TestGenBankDb_reading( TestGenbankLazyComparitive):
             pass
         self.assertRaises(StopIteration, next, self.lazy_iter)
 
+class TestGenBankDb_reading2(TestGenBankDb_reading):
+    recordfile = "brca_FJ940752.gb"
+
 class TestGenBankDbWritingOnly(unittest.TestCase):
 
     recordfile = "brca_FJ940752.gb"
