@@ -112,10 +112,11 @@ class FDistController(object):
            Parameter:
            data_dir - data directory
         """
-        with open(data_dir + os.sep + 'INTFILE', 'w') as inf:
-            for i in range(98):
-                inf.write(str(randint(-sys.maxsize + 1, sys.maxsize - 1)) + '\n')
-            inf.write('8\n')
+        inf = open(data_dir + os.sep + 'INTFILE', 'w')
+        for i in range(98):
+            inf.write(str(randint(-sys.maxsize + 1, sys.maxsize - 1)) + '\n')
+        inf.write('8\n')
+        inf.close()
 
     def run_fdist(self, npops, nsamples, fst, sample_size,
                   mut=0, num_sims=50000, data_dir='.',
@@ -153,19 +154,20 @@ class FDistController(object):
         else:
             config_name = "fdist_params2.dat"
 
-        with open(data_dir + os.sep + config_name, 'w') as f:
-            f.write(str(npops) + '\n')
-            f.write(str(nsamples) + '\n')
-            f.write(str(fst) + '\n')
-            f.write(str(sample_size) + '\n')
-            if is_dominant:
-                f.write(str(theta) + '\n')
-            else:
-                f.write(str(mut) + '\n')
-            f.write(str(num_sims) + '\n')
-            if is_dominant:
-                f.write("%f %f\n" % beta)
-                f.write("%f\n" % max_freq)
+        f = open(data_dir + os.sep + config_name, 'w')
+        f.write(str(npops) + '\n')
+        f.write(str(nsamples) + '\n')
+        f.write(str(fst) + '\n')
+        f.write(str(sample_size) + '\n')
+        if is_dominant:
+            f.write(str(theta) + '\n')
+        else:
+            f.write(str(mut) + '\n')
+        f.write(str(num_sims) + '\n')
+        if is_dominant:
+            f.write("%f %f\n" % beta)
+            f.write("%f\n" % max_freq)
+        f.close()
 
         self._generate_intfile(data_dir)
 
@@ -249,16 +251,18 @@ class FDistController(object):
                 "data_fst_outfile out.cpl out.dat",
                 str(ci), str(smooth)]))
 
-        with open(data_dir + os.sep + 'out.cpl') as f:
-            conf_lines = []
-            l = f.readline()
-            try:
-                while l != '':
-                    conf_lines.append(
-                        tuple(my_float(x) for x in l.rstrip().split(' ')))
-                    l = f.readline()
-            except ValueError:
-                return []
+        f = open(data_dir + os.sep + 'out.cpl')
+        conf_lines = []
+        l = f.readline()
+        try:
+            while l != '':
+                conf_lines.append(
+                    tuple(my_float(x) for x in l.rstrip().split(' ')))
+                l = f.readline()
+        except ValueError:
+            f.close()
+            return []
+        f.close()
         return conf_lines
 
     def run_pv(self, out_file='probs.dat', data_dir='.',
@@ -283,6 +287,7 @@ class FDistController(object):
                                 universal_newlines=True)
         proc.communicate('data_fst_outfile ' + out_file +
                          ' out.dat\n' + str(smooth) + '\n')
-        with open(data_dir + os.sep + out_file, 'r') as pvf:
-            result = [tuple(my_float(y) for y in x.rstrip().split(' ')) for x in pvf.readlines()]
+        pvf = open(data_dir + os.sep + out_file, 'r')
+        result = [tuple(my_float(y) for y in x.rstrip().split(' ')) for x in pvf.readlines()]
+        pvf.close()
         return result
