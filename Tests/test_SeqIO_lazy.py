@@ -434,6 +434,31 @@ class TestGenbankLazyComparitive(unittest.TestCase):
         self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
         self.assertEqual(str(record[70:75].seq), str(self.oldrec[70:75].seq))
 
+    def test_same_annotations(self):
+        record = self.parser(self.handle)
+        lzy = next(record)
+        old = self.oldrec
+        self.assertEqual(len(old.annotations), len(lzy.annotations))
+        oldkeys = [repr(v) for v in old.annotations.keys()]
+        lzykeys = [repr(v) for v in lzy.annotations.keys()]
+        oldkeys.sort()
+        lzykeys.sort()
+        self.assertEqual(oldkeys, lzykeys)
+        oldvals = [repr(v) for v in old.annotations.values()]
+        lzyvals = [repr(v) for v in lzy.annotations.values()]
+        oldvals.sort()
+        lzyvals.sort()
+        self.assertEqual(oldvals, lzyvals)
+
+    def test_same_per_letter_annotations(self):
+        record = self.parser(self.handle)
+        lzy = next(record)
+        old = self.oldrec
+        self.assertEqual(old._per_letter_annotations,
+                         lzy._per_letter_annotations)
+        self.assertEqual(old.letter_annotations,
+                         lzy.letter_annotations)
+
     def base_test_multiple_seq(self):
         recorditer = self.parser(self.handle)
         r = next(recorditer)

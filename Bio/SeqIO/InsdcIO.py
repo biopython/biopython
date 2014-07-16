@@ -1381,6 +1381,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         self.id = contemp.data.id
         self.name = contemp.data.name
         self.description = contemp.data.description
+        self.annotations = contemp.data.annotations
         self.dbxrefs = contemp.data.dbxrefs
         self._alphabet = contemp.data.seq.alphabet
 
