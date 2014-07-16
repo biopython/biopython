@@ -1346,12 +1346,17 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                 seqnumbers, seqletters = line.strip().split(None, 1)
                 real_letters_len = sum(1 for let in seqletters if let != " ")
                 new_index["sequenceletterwidth"] = real_letters_len
-            if re.match("//", line):
+                #fastforward through some lines without using tell
+                while True:
+                    line = _bytes_to_string(handle.readline())
+                    if line[0:2] == "//":
+                        break
+                    if not line:
+                        raise ValueError("Record ended early or lacks '//'")
+                    if re.match(r"(FEATURES)(\s)*(Location)", line):
+                        raise ValueError("Multiple records are unseparated")
+            if line[0:2] == "//":
                 break
-            if not line:
-                raise ValueError("Record ended prematurely or lacks '//'")
-            if re.match(r"(FEATURES)(\s)*(Location)", line):
-                raise ValueError("Multiple records are unseparated")
         #set the index
         self._index = new_index
 
