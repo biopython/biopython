@@ -114,6 +114,8 @@ class SeqRecordProxyBase(SeqRecord):
     _seq = None
     _features = None
     _feature_index = None
+    _per_letter_annotations = {}
+    annotations = {}
 
     def __init__(self, handle, startoffset=None, length=None,\
                  indexdb = None, indexkey = None, alphabet=None):
@@ -167,9 +169,6 @@ class SeqRecordProxyBase(SeqRecord):
 
     features = property(fget=_return_features,
                         doc="list of SeqFeature objects")
-
-    #TODO - letter annotations?
-    letter_annotations = None
 
     def __getitem__(self, index):
         """Returns a sub-sequence or an individual letter.

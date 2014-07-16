@@ -274,6 +274,17 @@ class TestFastaSeqRecord(unittest.TestCase):
         for std, lzy in zip(self.standard_iter, self.lazy_iter):
             self.assertEqual(std.id, lzy.id)
 
+    def test_same_annotations(self):
+        for std, lzy in zip(self.standard_iter, self.lazy_iter):
+            self.assertEqual(std.annotations, lzy.annotations)
+
+    def test_same_per_letter_annotations(self):
+        for std, lzy in zip(self.standard_iter, self.lazy_iter):
+            self.assertEqual(std._per_letter_annotations,
+                             lzy._per_letter_annotations)
+            self.assertEqual(std.letter_annotations,
+                             lzy.letter_annotations)
+
     def test_same_seq_and_post_read_slicing(self):
         for std, lzy in zip(self.standard_iter, self.lazy_iter):
             self.assertEqual(str(std.seq), str(lzy.seq))
