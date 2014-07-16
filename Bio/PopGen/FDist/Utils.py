@@ -4,8 +4,6 @@
 # as part of this package.
 
 
-from __future__ import print_function
-
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 
@@ -65,8 +63,6 @@ def _convert_genepop_to_fdist(gp_rec):
             for allele in alleles:
                 allele_array.append(allele_counts.get(allele, 0))
             pop_data.append(allele_array)
-            #if lc_i==3:
-            #    print alleles, allele_counts#, pop_data
         fd_rec.loci_data.append((len(alleles), pop_data))
     return fd_rec
 
