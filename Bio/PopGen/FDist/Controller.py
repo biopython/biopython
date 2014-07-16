@@ -114,7 +114,7 @@ class FDistController(object):
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
-            inf.write(str(randint(-sys.maxsize + 1, sys.maxsize - 1)) + '\n')
+            inf.write(str(randint(-2**32 + 1, 2**32 - 1)) + '\n')
         inf.write('8\n')
         inf.close()
 
