@@ -757,7 +757,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         self.assertEqual(0, a._index_begin)
         self.assertEqual(12, a._index_end)
@@ -769,7 +769,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         self.assertEqual(None, a._seq)
         self.assertEqual("sequencefake", str(a.seq))
@@ -779,7 +779,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a[1:9]
         self.assertEqual(1, b._index_begin)
@@ -789,7 +789,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a[1:9]
         self.assertTrue(a._handle is b._handle)
@@ -799,7 +799,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a[1:9]
         c = b[1:8]
@@ -810,7 +810,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a[1:9]
         c = b[1:8]
@@ -820,7 +820,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nseQUencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a.upper()
         self.assertEqual("SEQUENCEFAKE", str(b._seq))
@@ -829,7 +829,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nseQUEncefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a.lower()
         self.assertEqual("sequencefake", str(b._seq))
@@ -845,7 +845,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         self.assertEqual(out, repr(a))
         s = a.seq
@@ -855,7 +855,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
-        a = MinimalLazySeqRecord(handle, 0, lenhandle,
+        a = MinimalLazySeqRecord(handle, 0,
                                    alphabet = self.ab)
         b = a[3:6]
         self.assertEqual(3, len(b))

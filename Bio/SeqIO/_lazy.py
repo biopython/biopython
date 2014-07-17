@@ -117,8 +117,8 @@ class SeqRecordProxyBase(SeqRecord):
     _per_letter_annotations = {}
     annotations = {}
 
-    def __init__(self, handle, startoffset=None, length=None,\
-                 indexdb = None, indexkey = None, alphabet=None):
+    def __init__(self, handle, startoffset=None, indexdb = None, \
+                 indexkey = None, alphabet=None):
 
         self._handle = handle
         self._alphabet = alphabet
@@ -128,8 +128,7 @@ class SeqRecordProxyBase(SeqRecord):
         # create the index or load an existing one from file
         if self._index is None:
             # make main index and sets _index
-            new_index = {"recordoffsetstart":startoffset,
-                           "recordoffsetlength":length}
+            new_index = {"recordoffsetstart":startoffset}
             self._make_record_index(new_index)
             # make feature index and sets _feature_index
             feature_index = FeatureBinCollection()
@@ -276,6 +275,9 @@ class SeqRecordProxyBase(SeqRecord):
         return self.__class__.__name__ \
          + "(%s, %s, %s, %s, %s)" \
          % (seqrepr, idrepr, namerepr, descriptionrepr, dbxrefsrepr)
+
+    def _next_record_offset(self):
+        return self._index["nextrecordoffset"]
 
     #
     # the following section defines behavior specific to index database io
@@ -729,13 +731,15 @@ class LazyIterator(object):
                 yield return_class(self.handle, indexdb = self.index, \
                                    indexkey = idx, alphabet=self.alphabet)
         else:
-            offsetiterator = sequential_record_offset_iterator(self.handle, \
+            record_offset = _get_first_record_start_offset(self.handle, \
                                                         format=self.format)
-            for offset_begin, length in offsetiterator:
-                yield return_class(self.handle,
-                                   startoffset=offset_begin, \
-                                   length=length, indexdb = None, \
+            while record_offset is not None:
+                result = return_class(self.handle,
+                                   startoffset=record_offset, \
+                                   indexdb = None, \
                                    indexkey = None, alphabet=self.alphabet)
+                record_offset = result._next_record_offset()
+                yield result
 
     def keys(self):
         if not self.use_an_index:
@@ -761,29 +765,15 @@ class LazyIterator(object):
 
 def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
     """(private) populate index db with file's index information"""
-    #this is used privately, but ensure it was used correctly
-    offsetiterator = sequential_record_offset_iterator(handle, format=format)
-    for offset_begin, length in offsetiterator:
-        temp = return_class(handle, startoffset=offset_begin, \
-                           length=length, indexdb = indexdb, \
+    record_offset = _get_first_record_start_offset(handle, format)
+    while record_offset is not None:
+        temp = return_class(handle, startoffset=record_offset, \
+                           indexdb = indexdb, \
                            indexkey = None, alphabet=alphabet)
+        record_offset = temp._next_record_offset()
 
-
-def sequential_record_offset_iterator(handle, format = None):
-    """Steps through a sequence file and returns offset pairs
-
-    This function will step through a sequentially oriented sequence
-    record file and return offset tuples for each format compliant
-    record.
-
-    The yield format is a 2-tuple representing the following:
-    (record_begin_offset, record_offset_length)
-
-    record_begin_offset = the index of the first character
-    record_offset_length = the length (bytes) of the record,
-                           accounting for padding and/or EOF
-    """
-
+def _get_first_record_start_offset(handle, format = None):
+    """(private) return the offset of the first record, or None"""
     marker = {"fasta": ">",
               "genbank": "LOCUS",
               "gb": "LOCUS"}[format]
@@ -791,39 +781,22 @@ def sequential_record_offset_iterator(handle, format = None):
 
     # Set handle to beginning and set offsets to valid initial values
     handle.seek(0)
-    current_offset, next_offset = -1, 0
-    end_offset = None
+    current_offset, working_offset = -1, 0
     padding = 0
     while True:
         # Advance the current_offset markers, using handle.readline().
         # unlike iterators, reaching the end of the handle and calling
         # readline will not raise StopIteration, instead it will return
         # a an empty string and the file offset will not advance
-        current_offset = next_offset
+        current_offset = working_offset
         currentline = _bytes_to_string(handle.readline())
-        next_offset = handle.tell()
+        working_offset = handle.tell()
 
         # Check if we encounter the first record then save the offset
-        if marker_re.match(currentline) and not end_offset:
-            current_record_offset = current_offset
-        # Encountering any record but the first will return the most recent
-        # fully-read record
-        elif marker_re.match(currentline) or not currentline:
-            length = current_offset - padding - current_record_offset
-            yield current_record_offset, length
-            current_record_offset = current_offset
-            if not currentline:
-                break
-            # One cannot assume the handle will retain position.
-            handle.seek(next_offset)
-        elif currentline.strip() == "":
-            padding += len(currentline)
-            end_offset = current_offset
-        else:
-            #save position if no marker is found in order to denote
-            #the end of the feature when a new marker is found
-            padding = 0
-            end_offset = current_offset
+        if marker_re.match(currentline):
+            return current_offset
+        if not currentline:
+            return None
 
 class FeatureBinCollection(object):
     """Manage efficient creation and retrieval of feature indices

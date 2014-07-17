@@ -1297,7 +1297,6 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         """
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
-        unpadded_end = start_offset + new_index["recordoffsetlength"]
         handle.seek(start_offset)
 
         #Make index for header group of data, also set id
@@ -1346,7 +1345,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                 seqnumbers, seqletters = line.strip().split(None, 1)
                 real_letters_len = sum(1 for let in seqletters if let != " ")
                 new_index["sequenceletterwidth"] = real_letters_len
-                #fastforward through some lines without using tell
+                # fastforward through sequence lines without using tell
                 while True:
                     line = _bytes_to_string(handle.readline())
                     if line[0:2] == "//":
@@ -1355,7 +1354,23 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                         raise ValueError("Record ended early or lacks '//'")
                     if re.match(r"(FEATURES)(\s)*(Location)", line):
                         raise ValueError("Multiple records are unseparated")
+            #denote record end and the start of the following record
             if line[0:2] == "//":
+                record_end = handle.tell()
+                new_index["recordoffsetlength"] = record_end - start_offset
+                nextline = _bytes_to_string(handle.readline())
+                while nextline:
+                    if nextline.strip() == "":
+                        nextline = _bytes_to_string(handle.readline())
+                        record_end = handle.tell()
+                    else:
+                        record_end = handle.tell()
+                        break
+                if not nextline:
+                    new_index["nextrecordoffset"] = None
+                else:
+                    new_index["nextrecordoffset"] = record_end - len(nextline)
+
                 break
         #set the index
         self._index = new_index
