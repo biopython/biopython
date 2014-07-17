@@ -245,8 +245,8 @@ class LazyFastaIOSimpleTestsGenericIterator(LazyFastaIOSimpleTests):
 
     def setUp(self):
         returncls = SeqIO.FastaIO.FastaSeqRecProxy
-        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                                returncls, 'fasta')
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator( \
+                                            handle, returncls))
 
 #
 ### tests for Fasta comparison
@@ -329,9 +329,8 @@ class TestFastaFromIndexDb( TestFastaSeqRecord):
         #iter setup lazy
         self.file = open(self.fastafile, 'rb')
         returncls = SeqIO.FastaIO.FastaSeqRecProxy
-        lazyiter = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                        returncls, 'fasta', \
-                                        index=self.dbfilename)
+        lazyiter = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
+                                        returncls, index=self.dbfilename))
         self.lazy_iter = lazyiter(self.file)
         #iter setup regular
         self.standard_iter = SeqIO.parse(self.fastafile, 'fasta')
@@ -364,8 +363,8 @@ class TestGenbankLazy(unittest.TestCase):
     def setUp(self):
         self.handle = open(os.path.join('GenBank', self.recordfile), 'rb')
         returncls = GenbankSeqRecProxy
-        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                                returncls, 'genbank')
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle,
+                                                              returncls))
         self.handle.seek(0)
 
     def tearDown(self):
@@ -405,8 +404,8 @@ class TestGenbankLazyComparitive(unittest.TestCase):
         self.olditer = SeqIO.parse(filename, 'genbank')
         self.oldrec = next(self.olditer)
         returncls = GenbankSeqRecProxy
-        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                                returncls, 'genbank')
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
+                                                            returncls))
         self.handle.seek(0)
 
     def tearDown(self):
@@ -576,9 +575,8 @@ class TestGenBankDb_reading( TestGenbankLazyComparitive):
         tempopen.close()
         self.file = open(recordfile, 'rb')
         self.handle = self.file
-        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                        returncls, 'genbank', \
-                                        index=self.dbfilename)
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
+                                        returncls, index=self.dbfilename))
         self.lazy_iter = self.parser(self.file)
         self.standard_iter = SeqIO.parse(recordfile, 'genbank')
         self.oldrec = next(self.standard_iter)
@@ -611,8 +609,8 @@ class TestGenBankDbWritingOnly(unittest.TestCase):
         #gb parsing setup:
         filename = os.path.join('GenBank', self.recordfile)
         self.handle = open(filename, 'rb')
-        self.parser = lambda handle: SeqIO._lazy.lazy_iterator(handle, \
-                                     returncls, 'genbank', index=dbfilename)
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
+                                     returncls, index=dbfilename))
         self.handle.seek(0)
 
     def tearDown(self):

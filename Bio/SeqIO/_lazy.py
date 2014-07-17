@@ -759,48 +759,6 @@ class LazyIterator(object):
                                  indexdb = self.index, \
                                  alphabet = self.alphabet)
 
-def lazy_iterator(handle, return_class=None, format = None,
-                  alphabet=None, index=None):
-    """A general iterator for sequential sequence files
-
-    This function steps through a sequentially oriented sequence
-    record file and returns SeqRecordProxy objects correspoding
-    to the suported file formats.
-    """
-    if index is None:
-        offsetiterator = sequential_record_offset_iterator(handle, \
-                                                    format=format)
-        for offset_begin, length in offsetiterator:
-            yield return_class(handle, startoffset=offset_begin, \
-                               length=length, indexdb = None, \
-                               indexkey = None, alphabet=alphabet)
-    else:
-        #test that the db is populated by pulling the first record
-        try:
-            return_class(handle, indexdb = index, \
-                         indexkey = 0, alphabet=alphabet)
-        except KeyError:
-            _make_index_db(handle, return_class =return_class,
-                            indexdb = index, format=format,
-                            alphabet=alphabet)
-
-        #find the number of records
-        if not _sqlite:
-            # Hack for Jython (or if Python is compiled without it)
-            from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, which is "
-                                               "included Python 2.5+")
-        con = _sqlite.connect(index)
-        count = con.execute("SELECT count " +\
-                            "FROM indexed_files WHERE " +\
-                            "filename=?;", \
-                            (basename(handle.name),)).fetchone()[0]
-        con.commit()
-        con.close()
-        for idx in range(count):
-            yield return_class(handle, indexdb = index, \
-                                indexkey = idx, alphabet=alphabet)
-
 def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
     """(private) populate index db with file's index information"""
     #this is used privately, but ensure it was used correctly
