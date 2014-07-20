@@ -624,6 +624,83 @@ class TestGenBankDbWritingOnly(unittest.TestCase):
         firstrec = next(fileiter)
         self.assertEqual(len(firstrec.features), 8)
 
+#
+### tests for EMBL format
+#
+
+from Bio.SeqIO.InsdcIO import EmblSeqRecProxy
+
+class EmblLazyComparitiveBase(unittest.TestCase):
+    recordfile = "AAA03323.embl"
+
+    def setUp(self):
+
+        filename = os.path.join('EMBL', self.recordfile)
+        self.handle = open(filename, 'rb')
+        self.olditer = SeqIO.parse(filename, 'embl')
+        self.oldrec = next(self.olditer)
+        returncls = EmblSeqRecProxy
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
+                                                            returncls))
+        self.handle.seek(0)
+
+    def tearDown(self):
+        self.handle.close()
+
+class EmblLazyComparitive(EmblLazyComparitiveBase):
+
+    def test_parser_init(self):
+        recordgen = self.parser(self.handle)
+        record = next(recordgen)
+
+    def test_id_name(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(record.id, self.oldrec.id)
+
+    def test_id_name(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(record.name, self.oldrec.name)
+
+    def test_record_description(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(record.description, self.oldrec.description)
+
+    def test_id_seq(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(str(record[0:5].seq), str(self.oldrec[0:5].seq))
+        self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
+        self.assertEqual(str(record[70:75].seq), str(self.oldrec[70:75].seq))
+
+    def test_same_annotations(self):
+        record = self.parser(self.handle)
+        lzy = next(record)
+        old = self.oldrec
+        self.assertEqual(len(old.annotations), len(lzy.annotations))
+        oldkeys = [repr(v) for v in old.annotations.keys()]
+        lzykeys = [repr(v) for v in lzy.annotations.keys()]
+        oldkeys.sort()
+        lzykeys.sort()
+        self.assertEqual(oldkeys, lzykeys)
+        oldvals = [repr(v) for v in old.annotations.values()]
+        lzyvals = [repr(v) for v in lzy.annotations.values()]
+        oldvals.sort()
+        lzyvals.sort()
+        self.assertEqual(oldvals, lzyvals)
+
+class EmblDeepSeq(EmblLazyComparitiveBase):
+    def test_seq_deep_reading(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        for i in range(1400, 1545):
+            self.assertEqual(str(record[0:i].seq), \
+                             str(self.oldrec[0:i].seq))
+        for i in range(0, 61):
+            self.assertEqual(str(record[i:1545].seq), \
+                             str(self.oldrec[i:1545].seq))
 
 #
 ### tests for base class wrapper
