@@ -1277,8 +1277,16 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     _format = "genbank"
 
-    #def __init__(self, handle, startoffset=None, length=None,\
-    #             indexdb = None, indexkey=None, alphabet=None):
+    _format_components = {"record_start":"LOCUS       ",
+        "ft_start":["FEATURES             Location/Qual","FEATURES"],
+        "header_width":12,
+        "ft_end_markers":[],
+        "ft_qualifier_indent":21,
+        "ft_qualifer_spacer":" "*21,
+        "sequence_headers":["CONTIG", "ORIGIN", "BASE COUNT", "WGS"],
+        "seq_line_letters_begin":10,
+        "seq_line_letters_end":None}
+
     def _make_record_index(self, new_index):
         """(private) set the values needed for lazy loading
 
@@ -1306,27 +1314,29 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         seqlen = [char for char in firstline.split()[2] if char.isdigit()]
         new_index["seqlen"] = int("".join(seqlen))
 
+        featuresre = re.compile(r"(FEATURES)(\s)*(Location)")
         while True:
             old_position = handle.tell()
             line = _bytes_to_string(handle.readline())
             new_position = handle.tell()
-            if re.match(r"(FEATURES)(\s)*(Location/Qualifiers)", line):
+            if featuresre.match(line):
                 new_index["featuresoffsetstart"] = old_position
                 new_index["header_end"] = new_position
                 new_index["has_features"] = 1
                 break
-            if line[0:9] == "ACCESSION" and not id_is_set:
+            if line.startswith("ACCESSION") and not id_is_set:
                 id = line.split()[1]
                 new_index["id"] = id.strip()
-            if line[0:7] == "VERSION":
+            if line.startswith("VERSION"):
                 id_is_set = True
                 id = line.split()[1]
                 new_index["id"] = id.strip()
-            if re.match(r"^ORIGIN",line):
+            if line.startswith("ORIGIN"):
                 #featuresoffsetstart will be ignored later
                 new_index["featuresoffsetstart"] = 0
                 new_index["header_end"] = new_position
                 new_index["has_features"] = 0
+                handle.seek(-1*len(line), 1)
                 break
 
         assert "id" in new_index
@@ -1335,7 +1345,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             old_position = handle.tell()
             line = _bytes_to_string(handle.readline())
             new_position = handle.tell()
-            if re.match(r"^ORIGIN",line):
+            if line.startswith("ORIGIN"):
                 new_index["sequencestart"] = new_position
                 new_index["featuresoffsetend"] = new_position
                 old_position = new_position
@@ -1352,10 +1362,11 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                         break
                     if not line:
                         raise ValueError("Record ended early or lacks '//'")
-                    if re.match(r"(FEATURES)(\s)*(Location)", line):
+                    if featuresre.match(line):
                         raise ValueError("Multiple records are unseparated")
+
             #denote record end and the start of the following record
-            if line[0:2] == "//":
+            if line.startswith("//"):
                 record_end = handle.tell()
                 new_index["recordoffsetlength"] = record_end - start_offset
                 nextline = _bytes_to_string(handle.readline())
@@ -1416,6 +1427,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         lengthtoget = end - begin
         handle = self._handle
         sequencewidth = self._index["sequenceletterwidth"]
+        lettersbegin = self._format_components["seq_line_letters_begin"]
+        lettersend= self._format_components["seq_line_letters_end"]
 
         #find first line to read
         seqstart = self._index["sequencestart"]
@@ -1426,7 +1439,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         #pull characters from first line and return early if possible
         letters_firstline = begin%sequencewidth
         firstline = _bytes_to_string(handle.readline().rstrip())
-        firstline = firstline[10:]
+        firstline = firstline[lettersbegin:lettersend]
         firstline = "".join(let for let in firstline if let != " ")
         firstline = firstline[letters_firstline:]
         if len(firstline) >= lengthtoget:
@@ -1438,7 +1451,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         readchars = len(firstline)
         linelist = [firstline]
         while readchars < lengthtoget:
-            next_line = _bytes_to_string(handle.readline())[10:].strip()
+            next_line = _bytes_to_string(handle.readline())
+            next_line = next_line[lettersbegin:lettersend].strip()
             next_line = "".join(next_line.split())
             if not next_line:
                 break
@@ -1474,18 +1488,17 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         handle = _binary_to_string_handle(self._handle)
 
         #line values:
-        RECORD_START = "LOCUS       "
-        HEADER_WIDTH = 12
-        FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers",
-                                 "FEATURES"]
-        FEATURE_END_MARKERS = []
-        FEATURE_QUALIFIER_INDENT = 21
-        FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
-        SEQUENCE_HEADERS = ["CONTIG", "ORIGIN", "BASE COUNT", "WGS"]
+        _format_components = self._format_components
+        RECORD_START = _format_components["record_start"]
+        HEADER_WIDTH = _format_components["header_width"]
+        FEATURE_START_MARKERS = _format_components["ft_start"]
+        FEATURE_END_MARKERS = _format_components["ft_end_markers"]
+        FEATURE_QUALIFIER_INDENT = _format_components["ft_qualifier_indent"]
+        FEATURE_QUALIFIER_SPACER = _format_components["ft_qualifer_spacer"]
+        SEQUENCE_HEADERS = _format_components["sequence_headers"]
 
         #to make the feature index, pull the features portion of the file
         ft_begin = self._index["featuresoffsetstart"]
-        ft_end = self._index["featuresoffsetend"]
         handle.seek(ft_begin)
         line_begin_offset = handle.tell()
         line = handle.readline()
@@ -1494,8 +1507,9 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         scanner, consumer = self._parse_aparatus
 
         #begin parsing
-        if line.rstrip() not in FEATURE_START_MARKERS:
-            return []
+        if not any(map(line.startswith, FEATURE_START_MARKERS)):
+            raise NotImplementedError("must return empty feature collection with correct length and set _feature_index")
+            #return []
         line_begin_offset = handle.tell()
         line = handle.readline()
 
@@ -1612,3 +1626,132 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                 feature = feature._shift(-begin)
             featurelist.append(feature)
         self._features = featurelist
+
+class EmblSeqRecProxy(GenbankSeqRecProxy):
+
+    _format = "embl"
+
+    _format_components = {"record_start":"ID   ",
+        "ft_start": ["FH   Key             Location/Qualifiers", "FH"],
+        "header_width":5,
+        "ft_end_markers":["XX"], # XX can also mark the end of many things!
+        "ft_qualifier_indent":21,
+        "ft_qualifer_spacer": "FT" + " "*19,
+        "sequence_headers":["SQ", "CO"],
+        "seq_line_letters_begin":5,
+        "seq_line_letters_end":70}
+
+    def __init__(self, *args, **kwargs):
+        scanner = EmblScanner(debug=0)
+        consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+        self._parse_aparatus = (scanner,consumer)
+        super(GenbankSeqRecProxy, self).__init__(*args, **kwargs)
+
+    def _make_record_index(self, new_index):
+        """(private) set the values needed for lazy loading
+
+        The self._index dictionary is only set with the file
+        start location on instantiation. This function sets the
+        following variables in _index
+           "sequencestart"       : the file index where the seq. starts
+           "sequencelinewidth"   : the number of sequence letters per line
+           "sequenceletterwidth" : the number of bytes per line
+        """
+        handle = self._handle
+        start_offset = new_index["recordoffsetstart"]
+        handle.seek(start_offset)
+
+        #Make index for header group of data, also set id
+        id_is_set = False
+        firstline = _bytes_to_string(handle.readline())
+        assert bool(re.match("ID   ", firstline))
+        seqlen = [char for char in firstline.split()[2] if char.isdigit()]
+
+        # parse basic info from header line
+        seqversion = None
+        seqlength = None
+        accession = None
+        for part in firstline.split(";"):
+            part = part.strip()
+            if part.startswith("SV ") and len(part.split()) > 1:
+                seqversion = "." + part.split()[1]
+            elif part.endswith("BP."):
+                seqlength = int(part.split()[0])
+            elif part.startswith("ID") and len(part.split()) > 1:
+                accession = part.split()[1]
+        # validate headerline
+        if accession is None:
+            raise ValueError("Record does not contain valid ID")
+        if seqlength is None:
+            raise ValueError("Record ID line doesn't contain sequence length")
+        if seqversion is not None:
+            accession += seqversion
+        # add values to index
+        new_index["id"] = accession
+        new_index["seqlen"] = seqlength
+
+        featuresre = re.compile(r"(FH)(\s)*(Key)(\s)*(Location)")
+        while True:
+            old_position = handle.tell()
+            line = _bytes_to_string(handle.readline())
+            new_position = handle.tell()
+            if featuresre.match(line):
+                new_index["featuresoffsetstart"] = old_position
+                new_index["header_end"] = new_position
+                new_index["has_features"] = 1
+                break
+            if line.startswith("SQ   "):
+                #featuresoffsetstart will be ignored later
+                new_index["featuresoffsetstart"] = 0
+                new_index["header_end"] = new_position
+                new_index["has_features"] = 0
+                handle.seek(-1*len(line), 1)
+                break
+
+        while True:
+            old_position = handle.tell()
+            line = _bytes_to_string(handle.readline())
+            new_position = handle.tell()
+            if line.startswith("SQ   "):
+                new_index["sequencestart"] = new_position
+                new_index["featuresoffsetend"] = new_position
+                old_position = new_position
+                line = _bytes_to_string(handle.readline())
+                new_position = handle.tell()
+                new_index["sequencelinewidth"] = new_position - old_position
+                lettrbegin = self._format_components["seq_line_letters_begin"]
+                lettrend = self._format_components["seq_line_letters_end"]
+                seqletters = line[lettrbegin:lettrend]
+                real_letters_len = sum(1 for let in seqletters if let != " ")
+                new_index["sequenceletterwidth"] = real_letters_len
+                # fastforward through sequence lines without using tell
+                while True:
+                    line = _bytes_to_string(handle.readline())
+                    if line[0:2] == "//":
+                        break
+                    if not line:
+                        raise ValueError("Record ended early or lacks '//'")
+                    if featuresre.match(line):
+                        raise ValueError("Multiple records are unseparated")
+
+            #denote record end and the start of the following record
+            if line.startswith("//"):
+                record_end = handle.tell()
+                new_index["recordoffsetlength"] = record_end - start_offset
+                nextline = _bytes_to_string(handle.readline())
+                while nextline:
+                    if nextline.strip() == "":
+                        nextline = _bytes_to_string(handle.readline())
+                        record_end = handle.tell()
+                    else:
+                        record_end = handle.tell()
+                        break
+                if not nextline:
+                    new_index["nextrecordoffset"] = None
+                else:
+                    new_index["nextrecordoffset"] = record_end - len(nextline)
+
+                break
+        #set the index
+        self._index = new_index

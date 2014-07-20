@@ -776,7 +776,8 @@ def _get_first_record_start_offset(handle, format = None):
     """(private) return the offset of the first record, or None"""
     marker = {"fasta": ">",
               "genbank": "LOCUS",
-              "gb": "LOCUS"}[format]
+              "gb": "LOCUS",
+              "embl":"ID   "}[format]
     marker_re = re.compile(marker)
 
     # Set handle to beginning and set offsets to valid initial values
