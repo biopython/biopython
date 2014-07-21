@@ -319,7 +319,7 @@ class TestFastaSeqRecord(unittest.TestCase):
             self.assertEqual(str(S2.seq), str(L2.seq))
             self.assertEqual(str(S3.seq), str(L3.seq))
 
-class TestFastaFromIndexDb( TestFastaSeqRecord):
+class TestFastaFromIndexDb(TestFastaSeqRecord):
     """Test iterating using a premade index database compare to standard"""
     fastafile = "Fasta/f002"
     def setUp(self):
@@ -546,10 +546,10 @@ class TestGenbankLazyComparitive1(TestGenbankLazyComparitive):
         self.assertEqual(len(self.oldrec.features), 8)
         self.assertEqual(len(features), 8)
 
-class TestGenbankLazyComparitive3(TestGenbankLazyComparitive):
+class TestGenbankLazyComparitive2(TestGenbankLazyComparitive):
     recordfile = "pri1.gb"
 
-class TestGenbankLazyComparitive2(TestGenbankLazyComparitive):
+class TestGenbankLazyComparitive3(TestGenbankLazyComparitive):
     recordfile = "cor6_6.gb"
     test_multiple_seq = TestGenbankLazyComparitive.base_test_multiple_seq
 
@@ -668,12 +668,11 @@ class EmblLazyComparitive(EmblLazyComparitiveBase):
         record = next(record)
         self.assertEqual(record.description, self.oldrec.description)
 
-    def test_id_seq(self):
+    def test_seq(self):
         record = self.parser(self.handle)
         record = next(record)
         self.assertEqual(str(record[0:5].seq), str(self.oldrec[0:5].seq))
         self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
-        self.assertEqual(str(record[70:75].seq), str(self.oldrec[70:75].seq))
 
     def test_same_annotations(self):
         record = self.parser(self.handle)
@@ -701,6 +700,40 @@ class EmblDeepSeq(EmblLazyComparitiveBase):
         for i in range(0, 61):
             self.assertEqual(str(record[i:1545].seq), \
                              str(self.oldrec[i:1545].seq))
+
+class EmblLazyComparitive2(EmblLazyComparitive):
+
+    recordfile = "SC10H5.embl"
+
+    def test_seq2(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(str(record[69:451].seq), str(self.oldrec[69:451].seq))
+        self.assertEqual(str(record[30:39].seq), str(self.oldrec[30:39].seq))
+
+
+class EmblLazyComparitive3(EmblLazyComparitive):
+
+    recordfile = "AE017046.embl"
+
+    def test_seq2(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        self.assertEqual(str(record[0:6540].seq), str(self.oldrec[0:6540].seq))
+        self.assertEqual(str(record.seq), str(self.oldrec.seq))
+
+
+class EmblLazyComparitive_unknownseq(EmblLazyComparitive):
+
+    recordfile = "patents.embl"
+
+    def test_seq2(self):
+        parser = self.parser(self.handle)
+        record = next(parser)
+        self.assertEqual(str(record.seq), str(self.oldrec.seq))
+        for old, new in zip(self.olditer, parser):
+            self.assertEqual(str(old.seq), str(new.seq))
+            self.assertEqual(old.seq.alphabet, new.seq.alphabet)
 
 #
 ### tests for base class wrapper
