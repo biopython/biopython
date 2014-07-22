@@ -1288,6 +1288,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         "main_seq_header":"ORIGIN",
         "seq_line_letters_begin":10,
         "seq_line_letters_end":None,
+        "version_line":"VERSION",
         "accession_line":"ACCESSION"}
 
     def _parse_first_line(self, new_index, firstline):
@@ -1323,6 +1324,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         ft_start_re = fmt_components["ft_start_re"]
         main_seq_header = fmt_components["main_seq_header"]
         accession_line = fmt_components["accession_line"]
+        version_line = fmt_components["version_line"]
 
         #Make index for header group of data, also set id
         id_is_set = False
@@ -1347,13 +1349,12 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                 new_index["has_features"] = 0
                 handle.seek(-1*len(line), 1)
                 break
-            if not id_is_set and line.startswith(accession_line):
-                id = line.split(";")[0]
-                id = id.split()[1]
-                new_index["id"] = id.strip() + version
-            # This is required to set versioned id in GenBank files
-            elif not id_is_set and self._format == "genbank":
-                if line.startswith("VERSION"):
+            if not id_is_set:
+                if line.startswith(accession_line):
+                    id = line.split(";")[0]
+                    id = id.split()[1]
+                    new_index["id"] = id.strip() + version
+                if line.startswith(version_line):
                     id_is_set = True
                     id = line.split()[1]
                     new_index["id"] = id.strip()
@@ -1679,6 +1680,7 @@ class EmblSeqRecProxy(GenbankSeqRecProxy):
         "main_seq_header":"SQ   ",
         "seq_line_letters_begin":5,
         "seq_line_letters_end":70,
+        "version_line":"SV   ",
         "accession_line":"AC   "}
 
     def __init__(self, *args, **kwargs):
