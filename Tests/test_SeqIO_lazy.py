@@ -650,33 +650,27 @@ class EmblLazyComparitiveBase(unittest.TestCase):
 class EmblLazyComparitive(EmblLazyComparitiveBase):
 
     def test_parser_init(self):
-        recordgen = self.parser(self.handle)
-        record = next(recordgen)
+        record = next(self.parser(self.handle))
 
     def test_id_name(self):
-        record = self.parser(self.handle)
-        record = next(record)
+        record = next(self.parser(self.handle))
         self.assertEqual(record.id, self.oldrec.id)
 
     def test_id_name(self):
-        record = self.parser(self.handle)
-        record = next(record)
+        record = next(self.parser(self.handle))
         self.assertEqual(record.name, self.oldrec.name)
 
     def test_record_description(self):
-        record = self.parser(self.handle)
-        record = next(record)
+        record = next(self.parser(self.handle))
         self.assertEqual(record.description, self.oldrec.description)
 
     def test_seq(self):
-        record = self.parser(self.handle)
-        record = next(record)
+        record = next(self.parser(self.handle))
         self.assertEqual(str(record[0:5].seq), str(self.oldrec[0:5].seq))
         self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
 
     def test_same_annotations(self):
-        record = self.parser(self.handle)
-        lzy = next(record)
+        lzy = next(self.parser(self.handle))
         old = self.oldrec
         self.assertEqual(len(old.annotations), len(lzy.annotations))
         oldkeys = [repr(v) for v in old.annotations.keys()]
@@ -706,8 +700,7 @@ class EmblLazyComparitive2(EmblLazyComparitive):
     recordfile = "SC10H5.embl"
 
     def test_seq2(self):
-        record = self.parser(self.handle)
-        record = next(record)
+        record = next(self.parser(self.handle))
         self.assertEqual(str(record[69:451].seq), str(self.oldrec[69:451].seq))
         self.assertEqual(str(record[30:39].seq), str(self.oldrec[30:39].seq))
 
@@ -717,8 +710,7 @@ class EmblLazyComparitive3(EmblLazyComparitive):
     recordfile = "AE017046.embl"
 
     def test_seq2(self):
-        record = self.parser(self.handle)
-        record = next(record)
+        record = next(self.parser(self.handle))
         self.assertEqual(str(record[0:6540].seq), str(self.oldrec[0:6540].seq))
         self.assertEqual(str(record.seq), str(self.oldrec.seq))
 
