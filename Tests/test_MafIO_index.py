@@ -123,7 +123,7 @@ if sqlite3:
         """Test creation of new indices"""
 
         def setUp(self):
-            self.tmpdir = os.mkdtemp()
+            self.tmpdir = tempfile.mkdtemp()
             self.tmpfile = self.tmpdir + "/database.sqlite3"
 
         def tearDown(self):
