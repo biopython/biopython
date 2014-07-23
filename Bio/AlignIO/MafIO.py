@@ -15,7 +15,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import SequentialAlignmentWriter
+from .Interfaces import SequentialAlignmentWriter
 import shlex
 
 MAFINDEX_VERSION = 1
@@ -102,7 +102,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
     while True:
         # allows parsing of the last bundle without duplicating code
         try:
-            line = handle.next()
+            line = next(handle)
         except StopIteration:
             line = ""
         
@@ -111,7 +111,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 # add a SeqRecord to the bundle
                 line_split = line.strip().split()
 
-                if len(line_split) <> 7:
+                if len(line_split) != 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
                 # convert MAF-style +/- strand to biopython-stype +1/-1
@@ -244,11 +244,11 @@ class MafIndex():
                 raise ValueError("Unfinished/partial database provided")
                 
             records_found = int(self._con.execute("SELECT COUNT(*) FROM offset_data").fetchone()[0])
-            if records_found <> record_count:
+            if records_found != record_count:
                 raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
 
             return records_found
-        except (_OperationalError, _DatabaseError), err:
+        except (_OperationalError, _DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err)
 
     def __make_new_index(self):
@@ -313,7 +313,7 @@ class MafIndex():
                             start = int(line_split[2])
                             end = int(line_split[2]) + int(line_split[3])
                             
-                            if end - start <> len(line_split[6].replace("-", "")):
+                            if end - start != len(line_split[6].replace("-", "")):
                                 raise ValueError("Invalid length for target coordinates (expected %s, found %s)" % \
                                                 (end - start, len(line_split[6].replace("-", ""))))
 
@@ -377,7 +377,7 @@ class MafIndex():
         """Searches index database for MAF records overlapping ranges provided."""
         
         # verify the provided exon coordinates
-        if len(starts) <> len(ends):
+        if len(starts) != len(ends):
             raise ValueError("Every position in starts must have a match in ends")
         
         for exonstart, exonend in zip(starts, ends):
@@ -506,7 +506,7 @@ class MafIndex():
                 if track_val != "-" and real_pos < rec_end - 1: real_pos += 1
                 
         # make sure the number of bp entries equals the sum of the record lengths
-        if len(split_by_position[self._target_seqname]) <> total_rec_length:
+        if len(split_by_position[self._target_seqname]) != total_rec_length:
             raise ValueError("Target seqname (%s) has %s records, expected %s" % \
             (self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
 
@@ -549,7 +549,7 @@ class MafIndex():
         ref_subseq_len = len(subseq[self._target_seqname])
         
         for seqid, seq in subseq.items():
-            if len(seq) <> ref_subseq_len:
+            if len(seq) != ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % \
                 (len(seq), seqid, ref_subseq_len))
                 
