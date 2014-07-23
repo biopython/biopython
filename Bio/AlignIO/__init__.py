@@ -150,13 +150,7 @@ from . import NexusIO
 from . import PhylipIO
 from . import EmbossIO
 from . import FastaIO
-import StockholmIO
-import ClustalIO
-import NexusIO
-import PhylipIO
-import EmbossIO
-import FastaIO
-import MafIO
+from . import MafIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
