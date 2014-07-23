@@ -122,7 +122,8 @@ if sqlite3:
         """Test creation of new indices"""
 
         def setUp(self):
-            self.tmpfile = tempfile.NamedTemporaryFile("w+").name
+            (handle, self.tmpfile) = tempfile.mkstemp()
+            handle.close()
 
         def tearDown(self):
             if os.path.isfile(self.tmpfile):
