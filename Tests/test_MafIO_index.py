@@ -14,6 +14,7 @@ except ImportError:
 import os
 import unittest
 import tempfile
+import shutil
 
 from Bio.AlignIO.MafIO import MafIndex
 from Bio import SeqIO
@@ -122,12 +123,12 @@ if sqlite3:
         """Test creation of new indices"""
 
         def setUp(self):
-            (handle, self.tmpfile) = tempfile.mkstemp()
-            handle.close()
+            self.tmpdir = os.mkdtemp()
+            self.tmpfile = self.tmpdir + "/database.sqlite3"
 
         def tearDown(self):
-            if os.path.isfile(self.tmpfile):
-                os.remove(self.tmpfile)
+            if os.path.isdir(self.tmpdir):
+                shutil.rmtree(self.tmpdir)
             
         def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
