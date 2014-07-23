@@ -371,10 +371,11 @@ class MafIndex():
         """Retrieves a single MAF record located at the offset provided."""
         
         self._maf_fp.seek(offset)
-        return self._mafiter.next()
+        return next(self._mafiter)
         
     def search(self, starts, ends):
-        """Searches index database for MAF records overlapping ranges provided."""
+        """Searches index database for MAF records overlapping ranges provided.
+        Returns results in no particular order."""
         
         # verify the provided exon coordinates
         if len(starts) != len(ends):
@@ -408,7 +409,8 @@ class MafIndex():
                 hits[i[3]] = (i[1], i[2])
         
         # iterate through hits, fetching alignments from the MAF file and checking
-        # to be sure we've retrieved the expected record
+        # to be sure we've retrieved the expected record. Does not go in any 
+        # particular order.
         for offset, (rec_start, rec_end) in hits.items():
             fetched = self._get_record(int(offset))
             
