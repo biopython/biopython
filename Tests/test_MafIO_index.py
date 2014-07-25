@@ -262,19 +262,19 @@ if sqlite3:
 
         def test_invalid_type_1(self):
             search = self.idx.search((500, 1000), ("string", 1500))
-            self.assertRaises(TypeError, lambda: next(search))
+            self.assertRaises(TypeError, next, search)
 
         def test_invalid_type_2(self):
             search = self.idx.search((500, 1000), (750, 1500.25))
-            self.assertRaises(TypeError, lambda: next(search))
+            self.assertRaises(TypeError, next, search)
 
         def test_invalid_exon_count(self):
             search = self.idx.search((0, 1000, 2000), (500, 1500))
-            self.assertRaises(ValueError, lambda: next(search))
+            self.assertRaises(ValueError, next, search)
         
         def test_invalid_exon_schema(self):
             search = self.idx.search((0, 1000, 2000), (250, 500, 2500))
-            self.assertRaises(ValueError, lambda: next(search))
+            self.assertRaises(ValueError, next, search)
         
         def test_correct_retrieval_1(self):
             search = self.idx.search((3014742, 3018161), (3015028, 3018644))
@@ -332,7 +332,7 @@ if sqlite3:
         
         def test_incorrect_bundle_coords(self):
             search = self.idx.search((3013219,), (3013319,))
-            self.assertRaises(ValueError, lambda: next(search))
+            self.assertRaises(ValueError, next, search)
 
     class TestSpliceGoodMAF(unittest.TestCase):
         """Test in silico splicing on a correctly-formatted MAF"""
