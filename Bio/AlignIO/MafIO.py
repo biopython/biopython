@@ -375,7 +375,8 @@ class MafIndex():
         
     def search(self, starts, ends):
         """Searches index database for MAF records overlapping ranges provided.
-        Returns results in no particular order."""
+        Returns results in order by start, then end, then internal offset 
+        field."""
         
         # verify the provided exon coordinates
         if len(starts) != len(ends):
@@ -387,9 +388,7 @@ class MafIndex():
         
         con = self._con
         
-        # search for every exon, put hits in a dict where offset is the key
-        # this will automatically prevent retrieval of duplicate records
-        hits = {}
+        # search for every exon
         
         for exonstart, exonend in zip(starts, ends):
             try:
@@ -398,32 +397,32 @@ class MafIndex():
                 raise TypeError("Exon coordinates must be integers "
                                  "(start=%s, end=%s)" % (exonstart, exonend))
             
-            result = con.execute("SELECT * FROM offset_data WHERE bin IN (%s) "
-                     "AND (end BETWEEN %s AND %s OR %s BETWEEN start AND end) "
-                     "ORDER BY start ASC;" \
+            result = con.execute("SELECT DISTINCT start, end, offset FROM "
+                     "offset_data WHERE bin IN (%s) AND (end BETWEEN %s AND %s "
+                     "OR %s BETWEEN start AND end) ORDER BY start, end, "
+                     "offset ASC;" \
                      % (possible_bins, exonstart, exonend, exonend))
     
             rows = result.fetchall()
             
-            for i in rows:
-                hits[i[3]] = (i[1], i[2])
+            for rec_start, rec_end, offset in rows:
+                # Iterate through hits, fetching alignments from the MAF file
+                # and checking to be sure we've retrieved the expected record.
         
-        # iterate through hits, fetching alignments from the MAF file and checking
-        # to be sure we've retrieved the expected record. Does not go in any 
-        # particular order.
-        for offset, (rec_start, rec_end) in hits.items():
-            fetched = self._get_record(int(offset))
-            
-            for record in fetched:
-                if record.id == self._target_seqname:
-                    start = record.annotations["start"]
-                    end = record.annotations["start"] + record.annotations["size"]
-                    
-                    if not (start == rec_start and end == rec_end):
-                        raise ValueError("Expected %s-%s @ offset %s, found %s-%s" % \
-                        (rec_start, rec_end, offset, start, end))
+                fetched = self._get_record(int(offset))
+                
+                for record in fetched:
+                    if record.id == self._target_seqname:
+                        start = record.annotations["start"]
+                        end = record.annotations["start"] + \
+                            record.annotations["size"]
                         
-            yield fetched
+                        if not (start == rec_start and end == rec_end):
+                            raise ValueError(
+                                "Expected %s-%s @ offset %s, found %s-%s" % \
+                                (rec_start, rec_end, offset, start, end))
+                            
+                yield fetched
             
     def get_spliced(self, starts, ends, strand = "+1"):
         """Returns a multiple alignment of the exact sequence range provided.
