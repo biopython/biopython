@@ -1030,7 +1030,7 @@ class FeatureBinCollection(object):
         #this is a bit slower but accomodates diverse data structures
         else:
             for i in range(len(self._bins)):
-                self.bins[i].sort(key = lambda tup: tup[self._beginindex])
+                self._bins[i].sort(key = lambda tup: tup[self._beginindex])
         #reset sorted quality
         self._sorted = True
 
