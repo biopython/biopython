@@ -43,23 +43,18 @@ records may not trigger an exception until the problem region is
 requested. This is by design.
 """
 
-from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_bytes, _as_string
-from ..SeqRecord import SeqRecord, _RestrictedDict
 from copy import copy
 import re
 from math import floor, ceil, log
 from os.path import isfile, basename
 try:
     from sqlite3 import dbapi2 as _sqlite
-    from sqlite3 import IntegrityError as _IntegrityError
-    from sqlite3 import OperationalError as _OperationalError
 except ImportError:
-    #Not present on Jython, but should be included in Python 2.5
-    #or later (unless compiled from source without its dependencies)
-    #Still want to offer in-memory indexing.
+    #Even without sqlite we still want to offer in-memory indexing.
     _sqlite = None
-    pass
 
+from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_string
+from ..SeqRecord import SeqRecord, _RestrictedDict
 
 class SeqRecordProxyBase(SeqRecord):
     """A SeqRecord object holds a sequence and information about it.
@@ -732,7 +727,7 @@ class LazyIterator(object):
                                    indexkey = idx, alphabet=self.alphabet)
         else:
             record_offset = _get_first_record_start_offset(self.handle, \
-                                                        format=self.format)
+                                                    file_format=self.format)
             while record_offset is not None:
                 result = return_class(self.handle,
                                    startoffset=record_offset, \
@@ -772,18 +767,17 @@ def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
                            indexkey = None, alphabet=alphabet)
         record_offset = temp._next_record_offset()
 
-def _get_first_record_start_offset(handle, format = None):
+def _get_first_record_start_offset(handle, file_format = None):
     """(private) return the offset of the first record, or None"""
     marker = {"fasta": ">",
               "genbank": "LOCUS",
               "gb": "LOCUS",
-              "embl":"ID   "}[format]
+              "embl":"ID   "}[file_format]
     marker_re = re.compile(marker)
 
     # Set handle to beginning and set offsets to valid initial values
     handle.seek(0)
     current_offset, working_offset = -1, 0
-    padding = 0
     while True:
         # Advance the current_offset markers, using handle.readline().
         # unlike iterators, reaching the end of the handle and calling
@@ -1025,7 +1019,7 @@ class FeatureBinCollection(object):
         self._bins[bin_index].append(feature_tuple)
 
     def __len__(self):
-        return sum(len(bin) for bin in self._bins)
+        return sum(len(binn) for binn in self._bins)
 
     def sort(self):
         """perform bin-centric sorting for faster retrieval"""
@@ -1061,15 +1055,15 @@ class FeatureBinCollection(object):
                 raise TypeError("lookups in the feature bin" + \
                                 " must use slice or int keys")
 
-        #any integers are just converted to a 'len() == 1' slice
-        if key.step is not None and key.step != 1:
-            raise KeyError("lookups in the feature bin may not use" + \
-                           " slice stepping ex. bins[0:50:2]")
-
         #fix begin or end index for slicing of forms: bins[50:] or bins[:]
         keystart, keystop, keystep = key.indices(self._max_sequence_length)
         if keystart > keystop:
             raise IndexError("key not valid, slice.start > slice.stop")
+
+        #any integers are just converted to a 'len() == 1' slice
+        if keystep is not None and keystep != 1:
+            raise KeyError("lookups in the feature bin may not use" + \
+                           " slice stepping ex. bins[0:50:2]")
 
         #pre-sort if necessary
         if not self._sorted:
@@ -1077,7 +1071,6 @@ class FeatureBinCollection(object):
 
         #code taken from self._calculate_bin_index(), comments removed
         return_entries = []
-        possible_entries = []
         bin_level_count = self._bin_level_count
         max_bin_power = self._max_bin_power
         for l_inverse in range(bin_level_count):
@@ -1088,8 +1081,8 @@ class FeatureBinCollection(object):
             #k2 is incremented since range is used
             k2 = int(ceil(oL - 1 + (keystop)/sL)) + 1
             if k2-k1 > 2:
-                for bin in range(k1+1, k2-1):
-                    return_entries.extend( self._bins[bin])
+                for entry in range(k1+1, k2-1):
+                    return_entries.extend( self._bins[entry])
             for binn in set([k1,k2-1]):
                 #for binn in range(k1,k2):
                 for feature in self._bins[binn]:
