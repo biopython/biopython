@@ -54,7 +54,7 @@ except ImportError:
     _sqlite = None
 
 from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_string
-from ..SeqRecord import SeqRecord, _RestrictedDict
+from ..SeqRecord import SeqRecord
 
 class SeqRecordProxyBase(SeqRecord):
     """A SeqRecord object holds a sequence and information about it.
@@ -107,6 +107,7 @@ class SeqRecordProxyBase(SeqRecord):
     """
 
     _seq = None
+    _format = None
     _features = None
     _feature_index = None
     _per_letter_annotations = {}
@@ -135,6 +136,21 @@ class SeqRecordProxyBase(SeqRecord):
             raise ValueError("The index does not contain the correct id.")
         self._index_begin = 0
         self._index_end = self._index["seqlen"]
+
+    def _load_non_lazy_values(self):
+        """this is implemented to save the non-lazy values from a seq file"""
+        raise NotImplementedError( \
+            "_load_non_lazy_values must be implemented in the derived class")
+
+    def _make_record_index(self, new_index):
+        """this is implemented to set the index from a seq file"""
+        raise NotImplementedError( \
+            "_make_record_index must be implemented in the derived class")
+
+    def _make_feature_index(self, new_index):
+        """this is implemented to set the feature index from a seq file"""
+        raise NotImplementedError( \
+            "_make_feature_index must be implemented in the derived class")
 
     def _return_seq(self):
         """(private) removes getter logic from _read_seq"""
@@ -937,8 +953,8 @@ class FeatureBinCollection(object):
                     self._dynamic_size = False
                     break
             if self._dynamic_size: #this should have been set to False
-                error_string = "Sequence length is {0}:" +\
-                               " must be less than 2^41".format(length)
+                error_string = "Sequence length is {0}:".format(length) +\
+                               " must be less than 2^41"
                 raise ValueError(error_string)
 
     def _increase_bin_sizes(self):
