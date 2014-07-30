@@ -4,25 +4,30 @@ from io import BytesIO
 from Bio.SeqIO import _lazy
 from Bio._py3k import _string_to_bytes
 
-simplexml = '<begin>\n  <acount n="3" />\n  <a>\n    <b number="1">\n      ' +\
-            '<c>\n        text for c\n      </c>\n    </b>\n  </a>\n  ' +\
-            '<a>\n    <b number="2">\n      <c>\n        textc1\n      ' +\
-            '</c>\n      <c>\n        textc2\n      </c>\n    </b>\n  ' +\
-            '</a>\n</begin>\n'
-simplexmlio = BytesIO(_string_to_bytes(simplexml))
-condensed = '<begin><acount n="3"> <a> <b number="1"> ' +\
-            '<c> text for c </c> </b> </a> ' +\
-            '<a> <b number="2"><c> textc1 ' +\
-            '</c> <c> textc2 </c> </b> ' +\
-            '</a></begin>'
-condensedio = BytesIO(_string_to_bytes(condensed))
-weirdxml = '<begin>\n <acount   n="3"/>\n <a>\n <b number="1">\n ' +\
-           '<c>\n text for c\n </c>\n </b>\n </a>\n ' +\
-           '<a>\n <b number="2">\n<c>\n textc1\n ' +\
-           '</c>\n <c >\n textc2\n </c>          </b>\n ' +\
-           '</a>\n</begin>\n'
-weirdxmlio = BytesIO(_string_to_bytes(weirdxml))
+SIMPLEXML = ['<begin>\n  <acount n="3" />\n"',
+             '<a>\n    <b number="1">\n      ',
+             '<c>\n        text for c\n      </c>\n    </b>\n  </a>',
+             '\n  ',
+             '<a>\n    <b number="2">\n      <c>\n        textc1\n      ',
+             '</c>\n      <c>\n        textc2\n      </c>\n    </b>\n  </a>',
+             '\n</begin>\n']
 
+# No newlines
+CONDENSEDXML = ['<begin><acount n="3">',
+                '<a><b number="1">',
+                '<c>text for c</c></b></a>',
+                '',
+                '<a><b number="2"><c>textc1',
+                '</c><c>textc2</c></b></a>',
+                '</begin>']
+# Erratic newline use and somewhat nonstandard whitespace
+WEIRDXML = ['<begin>\n <acount   n="3"/>\n ',
+            '<a>\n <b number="1">\n ',
+            '<c>\n text for c\n </c>\n </b>\n </a>',
+            '\n ',
+            '<a>\n <b number="2">\n<c>\n textc1\n ',
+            '</c>\n <c >\n textc2\n </c>          </b>\n </a>',
+            '\n</begin>\n']
 
 def xml_parser_iter(ioobject, targetfield, tagstoparse):
     """Use ExpatHandler to iterate through all 'a' records
@@ -38,12 +43,15 @@ def xml_parser_iter(ioobject, targetfield, tagstoparse):
         yield root
         if root.lastrecord is True:
             break
-        position = root.indexend
+        position = root.nextelementoffset
 
 
 class XmlIndexerTests(unittest.TestCase):
-    ioobject = simplexmlio
+
+    xmllist = SIMPLEXML
+
     def setUp(self):
+        self.ioobject = BytesIO(_string_to_bytes(''.join(self.xmllist)))
         targetfield = "a"
         tagstoparse = ["a", "b", "c"]
         self.resultparser = xml_parser_iter(self.ioobject, \
@@ -59,6 +67,7 @@ class XmlIndexerTests(unittest.TestCase):
     def test_each_root_contains_correct_tree(self):
         for root in self.resultparser:
             #test children of root
+
             a = root.children[0]
             rootchildrenlen = len(root.children)
             self.assertEqual(a.tag, 'a')
@@ -78,11 +87,21 @@ class XmlIndexerTests(unittest.TestCase):
             self.assertTrue(any(map(lambda c: c.tag == "c", ctags)))
             self.assertEqual(bchildrenlen, correctblen)
 
-class XmlIndexerTestsCondensed(XmlIndexerTests):
-    ioobject = condensedio
+    def test_root_extracts_tag(self):
+        root1 = next(self.resultparser)
+        extractedtext = repr(root1.extract_from_handle(self.ioobject))
+        knowntext = repr("".join(self.xmllist[1:3]))
+        self.assertEqual(extractedtext, knowntext)
+        root2 = next(self.resultparser)
+        extractedtext = repr(root2.extract_from_handle(self.ioobject))
+        knowntext = repr("".join(self.xmllist[4:6]))
+        self.assertEqual(extractedtext, knowntext)
+
+class XmlIndexerTestsCONDENSEDXML(XmlIndexerTests):
+    xmllist = CONDENSEDXML
 
 class XmlIndexerTestsErraticFormat(XmlIndexerTests):
-    ioobject = weirdxmlio
+    xmllist = WEIRDXML
 
 class UniProtXmlTest(unittest.TestCase):
 
