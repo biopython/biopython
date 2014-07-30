@@ -449,12 +449,12 @@ class SeqRecordProxyBase(SeqRecord):
         con.commit()
 
         con.execute( \
-                "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
+            "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                      ("format", self._format))
+                    ("format", self._format))
         #create file table
         con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY " +\
-                        "KEY, filename TEXT UNIQUE, count INTEGER);")
+                    "KEY, filename TEXT UNIQUE, count INTEGER);")
 
         #create basic index table:
         # The (less secure) string manipulation is used because sqlite3
@@ -779,11 +779,10 @@ def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
     record_offset = _get_first_record_start_offset(handle, format)
     while record_offset is not None:
         temp = return_class(handle, startoffset=record_offset, \
-                           indexdb = indexdb, \
-                           indexkey = None, alphabet=alphabet)
+                           indexdb=indexdb, indexkey=None, alphabet=alphabet)
         record_offset = temp._next_record_offset()
 
-def _get_first_record_start_offset(handle, file_format = None):
+def _get_first_record_start_offset(handle, file_format=None):
     """(private) return the offset of the first record, or None"""
     marker = {"fasta": ">",
               "genbank": "LOCUS",
@@ -906,8 +905,7 @@ class FeatureBinCollection(object):
     stored here are indexed to zero.
     """
 
-    def __init__(self, length = None,
-                 beginindex=0, endindex=1,
+    def __init__(self, length=None, beginindex=0, endindex=1,
                  bounded_only_returns=True):
         """ initialize the class and set standard attributes
 
@@ -1190,7 +1188,7 @@ def xml_index_iter(filename, targetfield, tagstoparse=None, returndict=True):
     tag that interupts a set of targetfield tags will result in the end
     of iteration.
 
-    tagstoparse 
+    tagstoparse
     """
     if not hasattr(filename, "read"):
         handle = open(filename, 'rb')
