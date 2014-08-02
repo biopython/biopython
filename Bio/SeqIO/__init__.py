@@ -434,7 +434,8 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
 _FormatToLazyLoad = {"gb": InsdcIO.GenbankSeqRecProxy,
                      "genbank": InsdcIO.GenbankSeqRecProxy,
                      "fasta": FastaIO.FastaSeqRecProxy,
-                     "embl": InsdcIO.EmblSeqRecProxy}
+                     "embl": InsdcIO.EmblSeqRecProxy,
+                     "uniprot-xml": UniprotIO.UniprotXMLSeqRecProxy}
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 

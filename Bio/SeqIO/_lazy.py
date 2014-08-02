@@ -787,7 +787,8 @@ def _get_first_record_start_offset(handle, file_format=None):
     marker = {"fasta": ">",
               "genbank": "LOCUS",
               "gb": "LOCUS",
-              "embl":"ID   "}[file_format]
+              "uniprot-xml": "<",
+              "embl": "ID   "}[file_format]
     marker_re = re.compile(marker)
 
     # Set handle to beginning and set offsets to valid initial values
@@ -1180,7 +1181,7 @@ class FeatureBinCollection(object):
         assert False # the assignment loop failed
 from xml.parsers import expat
 
-def xml_index_iter(filename, targetfield, tagstoparse=None, returndict=True):
+def xml_index_iter(filename, targetfield, tagstoparse=None, returndict=False):
     """A xml file iter that returns indexes for sequential tags
 
     targetfield is a text field that defines the tag over which this
@@ -1243,12 +1244,19 @@ class LinkedElement(object):
         child.parent = self
         self.children.append(child)
 
-    def find_children_by_tag(self, tag):
+    def find_all_children_by_tag(self, tag):
         validchildren = []
         for child in self.children:
             if child.tag == tag:
                 validchildren.append(child)
             validchildren.extend(child.find_children_by_tag(tag))
+        return validchildren
+
+    def find_children_by_tag(self, tag):
+        validchildren = []
+        for child in self.children:
+            if child.tag == tag:
+                validchildren.append(child)
         return validchildren
 
     def first_child(self):
@@ -1258,7 +1266,7 @@ class LinkedElement(object):
             return self.children[0]
 
     def __repr__(self):
-        return "< LinkedElement tag={}, position=({},{}) >". \
+        return "< LinkedElement tag={0}, position=({1},{2}) >". \
                 format(self.tag, self.indexbegin, self.indexend)
 
     def depth(self):
@@ -1328,31 +1336,34 @@ class ExpatHandler(object):
         except StopIteration:
             pass
         # fix index for end-tags and next file begin
-        handle.seek(self.rootelem.indexend)
+        handle.seek(self.rootelem.indexend - 1)
         readlen = 100
         padding = 0
         endfound = False
-        given_end = self.rootelem.indexend
+        given_end = self.rootelem.indexend - 1
+        rootschild = rootelem.first_child()
         c = None
         while True:
             if not c:
                 endregion = _bytes_to_string(handle.read(readlen))
                 if not endregion or len(endregion) == 0:
                     raise ValueError( \
-                        "file does not contain end tag on/after line {}"\
+                        "file does not contain end tag on/after line {0}"\
                         .format(parser.CurrentLineNumber))
                 c = endregion[padding%readlen]
             if c == "<":
                 next = given_end + padding
                 self.rootelem.nextelementoffset = next
+                rootschild.nextelementoffset = next
                 if not endfound:
                     raise ValueError( \
-                        "file does not contain end tag on/after line {}"\
+                        "file does not contain end tag on/after line {0}"\
                         .format(parser.CurrentLineNumber))
                 break
             padding += 1
             if c == ">":
                 self.rootelem.indexend = given_end + padding
+                rootschild.indexend = given_end + padding
                 endfound = True
 
             c = endregion[padding%readlen]
@@ -1360,13 +1371,15 @@ class ExpatHandler(object):
         #check the next tag
         handle.seek(self.rootelem.nextelementoffset+1)
         beginregion = _bytes_to_string(handle.read(len(self.targetfield)))
+        print(rootelem.children)
         if self.targetfield == beginregion:
             self.rootelem.lastrecord = False
+            rootschild.lastrecord = False
 
 
         if len(rootelem.children) == 0:
-            raise ValueError("The XML @ offset={} did not contain a '{}' tag".\
-                              format(position, self.targetfield))
+            raise ValueError("The XML @ offset={0} did not contain a '{1}' tag"\
+                              .format(position, self.targetfield))
 
         return rootelem
 
@@ -1390,7 +1403,7 @@ class ExpatHandler(object):
         if tag == self.targetfield:
             #for a compact xml file, this will produce the index of the end
             # tag without the trailing '>'. The parser fixes this.
-            end = self._parser.CurrentByteIndex + len(self.targetfield) + 2 \
+            end = self._parser.CurrentByteIndex + len(self.targetfield) + 3 \
                   + self.baseposition
             self.currentelem.indexend = end
             self.rootelem.indexend = end

@@ -1,7 +1,10 @@
 import unittest
+import os
 from io import BytesIO
 
-from Bio.SeqIO import _lazy
+from Bio.SeqIO import _lazy, UniprotIO
+from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
 from Bio._py3k import _string_to_bytes
 
 SIMPLEXML = ['<begin>\n  <acount n="3" />\n"',
@@ -121,6 +124,102 @@ class UniProtXmlTest(unittest.TestCase):
             self.assertTrue(len(root.children) == 1)
             self.assertTrue(len(root.children[0].children) >= 2)
         self.assertTrue(count >= 1)
+
+class TestUniprot_copy_delete_this(unittest.TestCase):
+
+    def test_uni001(self):
+        "Parsing Uniprot file uni001"
+        filename = 'uni001'
+        # test the record parser
+
+        datafile = os.path.join('SwissProt', filename)
+
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "uniprot-xml")
+
+        self.assertTrue(isinstance(seq_record, SeqRecord))
+
+        # test a couple of things on the record -- this is not exhaustive
+        self.assertEqual(seq_record.id, "Q91G55")
+        self.assertEqual(seq_record.name, "043L_IIV6")
+        self.assertEqual(seq_record.description, "Uncharacterized protein 043L")
+        self.assertEqual(repr(seq_record.seq), "Seq('MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKI...IPI', ProteinAlphabet())")
+
+        # self.assertEqual(seq_record.accessions, ['Q91G55']) #seq_record.accessions does not exist
+        # self.assertEqual(seq_record.organism_classification, ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo'])
+        # self.assertEqual(record.seqinfo, (348, 39676, '75818910'))
+
+        self.assertEqual(len(seq_record.features), 1)
+        self.assertEqual(repr(seq_record.features[0]), "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')")
+
+        self.assertEqual(len(seq_record.annotations['references']), 2)
+        self.assertEqual(seq_record.annotations['references'][0].authors, 'Jakob N.J., Mueller K., Bahr U., Darai G.')
+        self.assertEqual(seq_record.annotations['references'][0].title, 'Analysis of the first complete DNA sequence of an invertebrate iridovirus: coding strategy of the genome of Chilo iridescent virus.')
+        self.assertEqual(seq_record.annotations['references'][0].journal, 'Virology 286:182-196(2001)')
+        self.assertEqual(seq_record.annotations['references'][0].comment, 'journal article | 2001 | Scope: NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA] | ')
+
+        self.assertEqual(len(seq_record.dbxrefs), 11)
+        self.assertEqual(seq_record.dbxrefs[0], 'DOI:10.1006/viro.2001.0963')
+
+        self.assertEqual(seq_record.annotations['sequence_length'], 116)
+        self.assertEqual(seq_record.annotations['sequence_checksum'], '4A29B35FB716523C')
+        self.assertEqual(seq_record.annotations['modified'], '2009-07-07')
+        self.assertEqual(seq_record.annotations['accessions'], ['Q91G55'])
+        self.assertEqual(seq_record.annotations['taxonomy'], ['Viruses', 'dsDNA viruses, no RNA stage', 'Iridoviridae', 'Iridovirus'])
+        self.assertEqual(seq_record.annotations['sequence_mass'], 13673)
+        self.assertEqual(seq_record.annotations['dataset'], 'Swiss-Prot')
+        self.assertEqual(seq_record.annotations['gene_name_ORF'], ['IIV6-043L'])
+        self.assertEqual(seq_record.annotations['version'], 21)
+        self.assertEqual(seq_record.annotations['sequence_modified'], '2001-12-01')
+        self.assertEqual(seq_record.annotations['keywords'], ['Complete proteome', 'Virus reference strain'])
+        self.assertEqual(seq_record.annotations['organism_host'], ['Acheta domesticus', 'House cricket', 'Chilo suppressalis', 'striped riceborer', 'Gryllus bimaculatus', 'Two-spotted cricket', 'Gryllus campestris', 'Spodoptera frugiperda', 'Fall armyworm'])
+        self.assertEqual(seq_record.annotations['created'], '2009-06-16')
+        self.assertEqual(seq_record.annotations['organism_name'], ['Chilo iridescent virus'])
+        self.assertEqual(seq_record.annotations['organism'], 'Invertebrate iridescent virus 6 (IIV-6)')
+        self.assertEqual(seq_record.annotations['recommendedName_fullName'], ['Uncharacterized protein 043L'])
+        self.assertEqual(seq_record.annotations['sequence_version'], 1)
+        self.assertEqual(seq_record.annotations['proteinExistence'], ['Predicted'])
+
+class TestUniprotLazyComparison(unittest.TestCase):
+    recordfile = "uni001"
+
+    def setUp(self):
+        self.filename = os.path.join('SwissProt', self.recordfile)
+        self.handle = open(self.filename, 'rb')
+        returncls = UniprotIO.UniprotXMLSeqRecProxy
+        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle,
+                                                              returncls))
+        self.oldparser = SeqIO.parse(self.filename, "uniprot-xml")
+        self.handle.seek(0)
+
+    def tearDown(self):
+        self.handle.close()
+
+    def test_parser_init(self):
+        recordgen = self.parser(self.handle)
+        record = next(recordgen)
+
+    def test_id_name(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        oldrecord = next(self.oldparser)
+        self.assertEqual(record.id, oldrecord.id)
+        self.assertEqual(record.name, oldrecord.name)
+
+    def test_record_description_annotations(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        oldrecord = next(self.oldparser)
+        self.maxDiff = None
+        self.assertEqual(repr(record.description), repr(oldrecord.description))
+        self.assertEqual(repr(record.annotations), repr(oldrecord.annotations))
+
+    def test_id_seq(self):
+        record = self.parser(self.handle)
+        record = next(record)
+        oldrecord = next(self.oldparser)
+        self.assertEqual(str(record[0:5].seq), str(oldrecord[0:5].seq))
+        self.assertEqual(str(record.seq), str(oldrecord.seq))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -16,12 +16,14 @@ The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 """
 import sys
+from io import BytesIO
 
 from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import StringIO
+from Bio.SeqIO._lazy import SeqRecordProxyBase, ExpatHandler
 
 __docformat__ = "restructuredtext en"
 
@@ -823,3 +825,143 @@ class Parser(object):
             self.ParsedSeqRecord.id = self.ParsedSeqRecord.annotations['accessions'][0]
 
         return self.ParsedSeqRecord
+
+class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
+    """Implements the getter metods required to run the SeqRecordProxy"""
+
+    _format = "uniprot-xml"
+
+    _tags_to_parse = ["entry", "accession", "name",
+                      "feature", "location", "begin",
+                      "end", "position", "sequence"]
+
+    def _make_record_index(self, new_index):
+        """(private) set the values needed for lazy loading
+
+        The self._index dictionary is only set with the file
+        start location on instantiation. This function sets the
+        following variables in _index
+           "sequencestart"       : the file index where the seq. starts
+           "sequencelinewidth"   : the number of sequence letters per line
+           "sequenceletterwidth" : the number of bytes per line
+
+        This function also parses the title line and sets the following
+        attributes:
+        """
+        handle = self._handle
+        start_offset = new_index["recordoffsetstart"]
+
+         #get the XML entry
+        tagstoparse = self._tags_to_parse
+        handler = ExpatHandler(handle, tagstoparse[0], tagstoparse)
+        root = handler.parse_from_position(start_offset)
+        entry = root.first_child()
+
+        #fix start and end
+        new_index["recordoffsetstart"] = entry.indexbegin
+        new_index["recordoffsetlength"] = entry.indexend - entry.indexbegin
+
+        #pre index features
+        features = entry.find_children_by_tag("feature")
+        if len(features) > 0:
+            new_index["has_features"] = 1
+            new_index["featuresoffsetstart"] = features[-1].indexbegin
+            new_index["featuresoffsetend"] = features[-1].indexend
+            self._feature_nodes = features
+        else:
+            new_index["has_features"] = 0
+            new_index["featuresoffsetstart"] = 0
+            new_index["featuresoffsetend"] = 0
+            self._feature_nodes = []
+
+        #get accession
+        accessions = entry.find_children_by_tag("accession")
+        if len(accessions) == 0:
+            raise ValueError("Record does not contain accession")
+        new_index["id"] = accessions[0].text
+
+        sequences = entry.find_children_by_tag("sequence")
+        if len(sequences) == 0:
+            raise ValueError("Record does not contain accession")
+        elif len(sequences) > 1:
+            raise ValueError("Record contains multiple sequences")
+        seqnode = sequences[0]
+        new_index["seqlen"] = int(seqnode.attributes["length"])
+        new_index["sequencestart"] = seqnode.indexbegin
+        new_index["seqoffsetend"] = seqnode.indexend
+        #TODO: handle uknown sequences... do they even exist in this format?
+        #new_index["unknownseq"] = 0
+
+        #set next record
+        if entry.lastrecord:
+            new_index["nextrecordoffset"] = None
+        else:
+            new_index["nextrecordoffset"] = entry.nextelementoffset
+
+        self._index = new_index
+
+    def _make_feature_index(self, new_list):
+        """Return list of tuples for the features (if present)
+
+        Each feature is returned as a tuple (key, location, qualifiers)
+        where key and location are strings (e.g. "CDS" and
+        "complement(join(490883..490885,1..879))") while qualifiers
+        is a list of two string tuples (feature qualifier keys and values).
+
+        Assumes you have already read to the start of the features table.
+        """
+        #this works even if there are no features since
+        # _feature_nodes will be an empty list
+        for feature in self._feature_nodes:
+            qualifier = feature.attributes.get("type", "None")
+            location_node = feature.find_children_by_tag("location")[0]
+            if location_node.first_child().tag == "position":
+                position = int(location_node.first_child().attributes["position"])
+                feature_begin_position = position - 1
+                feature_end_position = position
+            else:
+                begin = location_node.find_children_by_tag("begin")[0]
+                end = location_node.find_children_by_tag("end")[0]
+                feature_begin_position = int(begin.attributes["position"]) - 1
+                feature_end_position = int(end.attributes["position"])
+            feature_begin_offset = feature.indexbegin
+            feature_end_offset = feature.indexend
+            index_tuple = (feature_begin_position, feature_end_position,
+                           feature_begin_offset, feature_end_offset,
+                           qualifier)
+            new_list.insert(index_tuple)
+
+        #no continued references to _feature_nodes are required
+        del self._feature_nodes
+        self._feature_index = new_list
+
+    def _load_non_lazy_values(self):
+        """(private) set static seqrecord values"""
+        index = self._index
+        if index["has_features"] == 1:
+            pre_len = index["featuresoffsetstart"] - index["recordoffsetstart"]
+            self._handle.seek(index["recordoffsetstart"])
+            pre_data = self._handle.read(pre_len)
+            post_len = index["seqoffsetend"] - index["featuresoffsetend"]
+            self._handle.seek(index["featuresoffsetend"])
+            post_data = self._handle.read(post_len)
+            non_lazy_data = pre_data + post_data
+        elif index["has_features"] == 0:
+            read_len = index["seqoffsetend"] - index["recordoffsetstart"]
+            self._handle.seek(index["recordoffsetstart"])
+            non_lazy_data = self._handle.read(read_len)
+        entry_element = ElementTree.fromstring(non_lazy_data)
+
+        parser = Parser(entry_element)
+        parser.NS = ""
+        record_result = parser.parse()
+
+        self.id = record_result.id
+        self.name = record_result.name
+        self.description = record_result.description
+        self.annotations = record_result.annotations
+        self.dbxrefs = record_result.dbxrefs
+        self._seq = record_result.seq
+
+        del parser
+        del record_result
