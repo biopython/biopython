@@ -19,7 +19,8 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
 #Misc command line tools we can call
   - "sudo apt-get install clustalw clustalo"
-  - "sudo apt-get install t-coffee muscle mafft probcons wise emboss"
+  - "sudo apt-get install muscle mafft probcons wise emboss"
+  - "sudo apt-get install --no-install-recommends t-coffee"
   - "sudo apt-get install samtools bwa"
 #Misc python modules we can use as soft dependencies
   - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy' ]]; then pip install reportlab; fi"
