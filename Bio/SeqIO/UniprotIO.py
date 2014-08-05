@@ -22,7 +22,7 @@ from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
-from Bio._py3k import StringIO
+from Bio._py3k import StringIO, _bytes_to_string
 from Bio.SeqIO._lazy import SeqRecordProxyBase, ExpatHandler
 
 __docformat__ = "restructuredtext en"
@@ -758,14 +758,17 @@ class Parser(object):
         seq = ''.join((element.text.split()))
         self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
 
-    def parse(self):
+    def parse(self, partial_seqrecord=None):
         """Parse the input."""
         NS = self.NS
         assert self.entry.tag == NS + 'entry'
 
-        # ============================================#
-        # Initialize SeqRecord
-        self.ParsedSeqRecord = SeqRecord('', id='')
+        #============================================#
+        #Initialize SeqRecord
+        if isinstance(partial_seqrecord, SeqRecord):
+            self.ParsedSeqRecord = partial_seqrecord
+        else:
+            self.ParsedSeqRecord = SeqRecord('', id='')
 
         # Entry attribs parsing
         # Unknown dataset should not happen!
@@ -850,7 +853,6 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         """
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
-
          #get the XML entry
         tagstoparse = self._tags_to_parse
         handler = ExpatHandler(handle, tagstoparse[0], tagstoparse)
@@ -865,7 +867,7 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         features = entry.find_children_by_tag("feature")
         if len(features) > 0:
             new_index["has_features"] = 1
-            new_index["featuresoffsetstart"] = features[-1].indexbegin
+            new_index["featuresoffsetstart"] = features[0].indexbegin
             new_index["featuresoffsetend"] = features[-1].indexend
             self._feature_nodes = features
         else:
@@ -881,11 +883,8 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         new_index["id"] = accessions[0].text
 
         sequences = entry.find_children_by_tag("sequence")
-        if len(sequences) == 0:
-            raise ValueError("Record does not contain accession")
-        elif len(sequences) > 1:
-            raise ValueError("Record contains multiple sequences")
-        seqnode = sequences[0]
+        #the last <sequence> node in the file is the real sequence
+        seqnode = sequences[-1]
         new_index["seqlen"] = int(seqnode.attributes["length"])
         new_index["sequencestart"] = seqnode.indexbegin
         new_index["seqoffsetend"] = seqnode.indexend
@@ -963,5 +962,34 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         self.dbxrefs = record_result.dbxrefs
         self._seq = record_result.seq
 
-        del parser
-        del record_result
+        self._captive_parser = parser
+        self._captive_record = record_result
+
+    def _read_features(self):
+        #localize some instance attributes used throughout this
+        begin = self._index_begin
+        end = self._index_end
+        handle = self._handle
+        #index format (begin_pos, end_pos, begin_offset, end_offset, qualify)
+        if self._feature_index:
+            feature_index_list = self._feature_index[begin:end]
+        else:
+            feature_index_list = []
+
+        #make the feature list
+        feature_strings = ["<entry>"]
+        for fidx in feature_index_list:
+            handle.seek(fidx[2])
+            feature_strings.append(\
+                _bytes_to_string(handle.read(fidx[3] - fidx[2])))
+        feature_strings.append("</entry>")
+        feature_element = ElementTree.fromstring("".join(feature_strings))
+
+        #Alter the captive parser to accept
+        parser = self._captive_parser
+        parser.entry = feature_element
+        partial_seqrecord = self._captive_record
+        record_result = parser.parse(partial_seqrecord)
+        #Set self._features and reset captive record features.
+        self._features = record_result.features
+        self._captive_record.features = []

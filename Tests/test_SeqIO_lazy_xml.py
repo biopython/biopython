@@ -1,11 +1,20 @@
 import unittest
 import os
+import sys
 from io import BytesIO
 
 from Bio.SeqIO import _lazy, UniprotIO
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature
 from Bio import SeqIO
 from Bio._py3k import _string_to_bytes
+
+#when possible, use 'zip_longest'
+if sys.version[0] == "3":
+    from itertools import zip_longest
+    compatible_zip = zip_longest
+elif sys.version[0] == "2":
+    compatible_zip = zip
 
 SIMPLEXML = ['<begin>\n  <acount n="3" />\n"',
              '<a>\n    <b number="1">\n      ',
@@ -187,8 +196,7 @@ class TestUniprotLazyComparison(unittest.TestCase):
         self.filename = os.path.join('SwissProt', self.recordfile)
         self.handle = open(self.filename, 'rb')
         returncls = UniprotIO.UniprotXMLSeqRecProxy
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle,
-                                                              returncls))
+        self.parser = SeqIO._lazy.LazyIterator(self.handle, returncls)
         self.oldparser = SeqIO.parse(self.filename, "uniprot-xml")
         self.handle.seek(0)
 
@@ -196,33 +204,54 @@ class TestUniprotLazyComparison(unittest.TestCase):
         self.handle.close()
 
     def test_parser_init(self):
-        recordgen = self.parser(self.handle)
-        record = next(recordgen)
+        record = next(iter(self.parser))
 
     def test_id_name(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        oldrecord = next(self.oldparser)
-        self.assertEqual(record.id, oldrecord.id)
-        self.assertEqual(record.name, oldrecord.name)
+        for old, lazy in compatible_zip(self.oldparser, self.parser):
+            self.assertEqual(old.id, lazy.id)
+            self.assertEqual(old.name, lazy.name)
 
     def test_record_description_annotations(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        oldrecord = next(self.oldparser)
-        self.maxDiff = None
-        self.assertEqual(repr(record.description), repr(oldrecord.description))
-        self.assertEqual(repr(record.annotations), repr(oldrecord.annotations))
+        for old, lazy in compatible_zip(self.oldparser, self.parser):
+            self.assertEqual(repr(old.description), repr(lazy.description))
+            self.assertEqual(repr(old.annotations), repr(lazy.annotations))
 
     def test_id_seq(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        oldrecord = next(self.oldparser)
-        self.assertEqual(str(record[0:5].seq), str(oldrecord[0:5].seq))
-        self.assertEqual(str(record.seq), str(oldrecord.seq))
+        for old, lazy in compatible_zip(self.oldparser, self.parser):
+            self.assertEqual(str(old[0:5].seq), str(lazy[0:5].seq))
+            self.assertEqual(str(old[50:60].seq), str(lazy[50:60].seq))
+            self.assertEqual(str(old.seq), str(lazy.seq))
+            self.assertEqual(str(old[50:60].seq), str(lazy[50:60].seq))
+
+    def test_lazy_record_has_features(self):
+        for old, lazy in compatible_zip(self.oldparser, self.parser):
+            #if the old parser has features, then we can check the lazy
+            if len(old.features) > 0:
+                self.assertTrue(isinstance(old.features[0], SeqFeature))
+                self.assertTrue(isinstance(lazy.features[0], SeqFeature))
+
+    def make_feature_tuple_list(self, featurelist):
+        returnlist = [(f.location.nofuzzy_start,
+                       f.location.nofuzzy_end,
+                       f.type) for f in featurelist]
+        returnlist.sort(key = lambda t: t[0]+(t[1]/100.0) + \
+                          sum(ord(c) for c in t[2])/100000)
+        return returnlist
+
+    def test_record_has_same_set_of_features(self):
+        for old, lazy in compatible_zip(self.oldparser, self.parser):
+            self.assertEqual(len(old.features), len(lazy.features))
+            #default features don't allow comparison
+            oldset = self.make_feature_tuple_list(old.features)
+            newset = self.make_feature_tuple_list(lazy.features)
+            self.assertEqual(oldset, newset)
+
+class TestUniprotLazyComparison002(TestUniprotLazyComparison):
+    recordfile = "uni002"
+
+class TestUniprotLazyComparison003(TestUniprotLazyComparison):
+    recordfile = "uni003"
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
-

@@ -1371,7 +1371,6 @@ class ExpatHandler(object):
         #check the next tag
         handle.seek(self.rootelem.nextelementoffset+1)
         beginregion = _bytes_to_string(handle.read(len(self.targetfield)))
-        print(rootelem.children)
         if self.targetfield == beginregion:
             self.rootelem.lastrecord = False
             rootschild.lastrecord = False
