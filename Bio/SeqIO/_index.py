@@ -284,6 +284,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
         semi_char = _as_bytes(";")
         dot_char = _as_bytes(".")
         sv_marker = _as_bytes("SV ")
+        ac_marker = _as_bytes("AC ")
         #Skip any header before first record
         while True:
             start_offset = handle.tell()
@@ -294,6 +295,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
         while marker_re.match(line):
             #We cannot assume the record.id is the first word after ID,
             #normally the SV line is used.
+            setbysv = False  #resets sv as false
             length = len(line)
             if line[2:].count(semi_char) == 6:
                 #Looks like the semi colon separated style introduced in 2006
@@ -302,11 +304,14 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     #The SV bit gives the version
                     key = parts[0].strip() + dot_char + \
                         parts[1].strip().split()[1]
+                    setbysv = True
                 else:
                     key = parts[0].strip()
             elif line[2:].count(semi_char) == 3:
                 #Looks like the pre 2006 style, take first word only
                 key = line[3:].strip().split(None, 1)[0]
+                if key.endswith(semi_char):
+                    key = key[:-1]
             else:
                 raise ValueError(
                     'Did not recognise the ID line layout:\n' + line)
@@ -318,8 +323,13 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     yield _bytes_to_string(key), start_offset, length
                     start_offset = end_offset
                     break
+                elif line.startswith(ac_marker) and not setbysv:
+                    key = line.rstrip().split()[1]
+                    if key.endswith(semi_char):
+                        key = key[:-1]
                 elif line.startswith(sv_marker):
                     key = line.rstrip().split()[1]
+                    setbysv = True
                 length += len(line)
         assert not line, repr(line)
 
