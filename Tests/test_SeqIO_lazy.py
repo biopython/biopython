@@ -4,11 +4,13 @@ import sys
 import imp
 import os
 import tempfile
+
 from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
 from Bio._py3k import _bytes_to_string, _as_bytes, _is_int_or_long
 from Bio.Seq import Seq
 from Bio.SeqIO._lazy import *
+from Bio.SeqIO import InsdcIO
 from Bio._py3k import _bytes_to_string, basestring
 from io import StringIO, BytesIO
 from collections import namedtuple
@@ -240,492 +242,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(len(s.seq), 161)
         self.assertEqual(str(s.seq), tsuseq[0:161])
 
-class LazyFastaIOSimpleTestsGenericIterator(LazyFastaIOSimpleTests):
-    """Tests the generic iterator using tests from format specific iterator"""
 
-    def setUp(self):
-        returncls = SeqIO.FastaIO.FastaSeqRecProxy
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator( \
-                                            handle, returncls))
-
-#
-### tests for Fasta comparison
-#
-
-class TestFastaSeqRecord(unittest.TestCase):
-    fastafile = "Fasta/f002"
-
-    def setUp(self):
-        self.standard_iter = SeqIO.parse(self.fastafile, 'fasta')
-        self.file = open(self.fastafile, 'rb')
-        lazyiter = SeqIO.FastaIO.FastaLazyIterator
-        self.lazy_iter = lazyiter(self.file)
-
-    def tearDown(self):
-        self.file.close()
-
-    def test_same_length_and_end_behavior(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            pass
-        self.assertRaises(StopIteration, next, self.standard_iter)
-        self.assertRaises(StopIteration, next, self.lazy_iter)
-
-    def test_same_id(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            self.assertEqual(std.id, lzy.id)
-
-    def test_same_annotations(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            self.assertEqual(std.annotations, lzy.annotations)
-
-    def test_same_per_letter_annotations(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            self.assertEqual(std._per_letter_annotations,
-                             lzy._per_letter_annotations)
-            self.assertEqual(std.letter_annotations,
-                             lzy.letter_annotations)
-
-    def test_same_seq_and_post_read_slicing(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            self.assertEqual(str(std.seq), str(lzy.seq))
-            #this test conforms that slicing edge cases aren't present
-            for i in range(461, 643):
-                self.assertEqual(str(std.seq[460:i]), str(lzy[460:i].seq))
-
-    def test_same_seq_and_pre_read_slicing(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            #this test conforms that slicing edge cases aren't present
-            for i in range(461, 643):
-                self.assertEqual(str(std.seq[460:i]), str(lzy[460:i].seq))
-            self.assertEqual(str(std.seq), str(lzy.seq))
-
-    def test_same_name_description(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            self.assertEqual(std.description, lzy.description)
-            self.assertEqual(std.name, lzy.name)
-
-    def test_same_features(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            self.assertEqual(std.features, [])
-            self.assertEqual(lzy.features, [])
-            self.assertEqual(std.features, lzy.features)
-
-    def test_slicing_behavior(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            S1, L1 = std[50:], lzy[50:]
-            S2, L2 = std[:50], lzy[:50]
-            S3, L3 = std[261:380], lzy[261:380]
-            self.assertEqual(str(S1.seq), str(L1.seq))
-            self.assertEqual(str(S2.seq), str(L2.seq))
-            self.assertEqual(str(S3.seq), str(L3.seq))
-
-class TestFastaFromIndexDb(TestFastaSeqRecord):
-    """Test iterating using a premade index database compare to standard"""
-    fastafile = "Fasta/f002"
-    def setUp(self):
-        #db setup: make tempfile and close os handle to help with cleanup
-        oshandle, self.dbfilename = tempfile.mkstemp()
-        os.close(oshandle)
-        #iter setup lazy
-        self.file = open(self.fastafile, 'rb')
-        returncls = SeqIO.FastaIO.FastaSeqRecProxy
-        lazyiter = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
-                                        returncls, index=self.dbfilename))
-        self.lazy_iter = lazyiter(self.file)
-        #iter setup regular
-        self.standard_iter = SeqIO.parse(self.fastafile, 'fasta')
-
-    def tearDown(self):
-        #delete db temp file
-        os.remove(self.dbfilename)
-        #close sequence file
-        self.file.close()
-
-    def test_setup_cleanup(self):
-        for std, lzy in zip(self.standard_iter, self.lazy_iter):
-            pass
-        self.assertRaises(StopIteration, next, self.standard_iter)
-        self.assertRaises(StopIteration, next, self.lazy_iter)
-
-class TestFastaAlignAgainst(TestFastaSeqRecord):
-    fastafile = "Fasta/fa01"
-
-#
-### tests for GenBank IO
-#
-
-from Bio.SeqIO.InsdcIO import GenbankSeqRecProxy
-from Bio.SeqFeature import SeqFeature
-
-class TestGenbankLazy(unittest.TestCase):
-    recordfile = "brca_FJ940752.gb"
-
-    def setUp(self):
-        self.handle = open(os.path.join('GenBank', self.recordfile), 'rb')
-        returncls = GenbankSeqRecProxy
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle,
-                                                              returncls))
-        self.handle.seek(0)
-
-    def tearDown(self):
-        self.handle.close()
-
-    def test_parser_init(self):
-        recordgen = self.parser(self.handle)
-        record = next(recordgen)
-
-    def test_id_name(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        self.assertEqual(record.id, 'FJ940752.1')
-        self.assertEqual(record.name, 'FJ940752')
-
-    def test_record_description(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        descr = "Homo sapiens BRCA1 (BRCA1) gene, exon 18 and partial cds."
-        self.assertEqual(record.description, descr)
-
-    def test_id_seq(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        self.assertEqual(str(record[0:5].seq), 'GGCTC')
-        self.assertEqual(str(record[-5:].seq), 'GTCTC')
-        self.assertEqual(str(record[70:75].seq), "TTCTG")
-
-
-class TestGenbankLazyComparitive(unittest.TestCase):
-    recordfile = "brca_FJ940752.gb"
-
-    def setUp(self):
-
-        filename = os.path.join('GenBank', self.recordfile)
-        self.handle = open(filename, 'rb')
-        self.olditer = SeqIO.parse(filename, 'genbank')
-        self.oldrec = next(self.olditer)
-        returncls = GenbankSeqRecProxy
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
-                                                            returncls))
-        self.handle.seek(0)
-
-    def tearDown(self):
-        self.handle.close()
-
-    def test_parser_init(self):
-        recordgen = self.parser(self.handle)
-        record = next(recordgen)
-
-    def test_id_name(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        self.assertEqual(record.id, self.oldrec.id)
-        self.assertEqual(record.name, self.oldrec.name)
-
-    def test_record_description(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        self.assertEqual(record.description, self.oldrec.description)
-
-    def test_id_seq(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        self.assertEqual(str(record[0:5].seq), str(self.oldrec[0:5].seq))
-        self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
-        self.assertEqual(str(record[70:75].seq), str(self.oldrec[70:75].seq))
-
-    def test_same_annotations(self):
-        record = self.parser(self.handle)
-        lzy = next(record)
-        old = self.oldrec
-        self.assertEqual(len(old.annotations), len(lzy.annotations))
-        oldkeys = [repr(v) for v in old.annotations.keys()]
-        lzykeys = [repr(v) for v in lzy.annotations.keys()]
-        oldkeys.sort()
-        lzykeys.sort()
-        self.assertEqual(oldkeys, lzykeys)
-        oldvals = [repr(v) for v in old.annotations.values()]
-        lzyvals = [repr(v) for v in lzy.annotations.values()]
-        oldvals.sort()
-        lzyvals.sort()
-        self.assertEqual(oldvals, lzyvals)
-
-    def test_same_per_letter_annotations(self):
-        record = self.parser(self.handle)
-        lzy = next(record)
-        old = self.oldrec
-        self.assertEqual(old._per_letter_annotations,
-                         lzy._per_letter_annotations)
-        self.assertEqual(old.letter_annotations,
-                         lzy.letter_annotations)
-
-    def base_test_multiple_seq(self):
-        recorditer = self.parser(self.handle)
-        r = next(recorditer)
-        for record, oldrec in zip(recorditer, self.olditer):
-            self.assertEqual(str(record[0:5].seq), str(oldrec[0:5].seq))
-            self.assertEqual(str(record[-5:].seq), str(oldrec[-5:].seq))
-            self.assertEqual(str(record[70:75].seq), str(oldrec[70:75].seq))
-            #multiples of 60 are edge cases
-            self.assertEqual(str(record[0:180].seq), str(oldrec[0:180].seq))
-
-    def test_record_has_features(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        self.assertTrue(isinstance(self.oldrec.features[0], SeqFeature))
-        self.assertTrue(isinstance(record.features[0], SeqFeature))
-
-    def make_feature_tuple_list(self, featurelist):
-        returnlist = [(f.location.nofuzzy_start,
-                       f.location.nofuzzy_end,
-                       f.type) for f in featurelist]
-        returnlist.sort(key = lambda t: t[0]+(t[1]/100.0) + \
-                          sum(ord(c) for c in t[2])/100000)
-        return returnlist
-
-    def test_record_has_same_set_of_features(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        features = record.features
-        #check lengths
-        self.assertEqual(len(self.oldrec.features), len(features))
-        #default features don't allow comparison
-        oldset = self.make_feature_tuple_list(self.oldrec.features)
-        newset = self.make_feature_tuple_list(features)
-        self.assertEqual(oldset, newset)
-
-    def test_record_slice_before_lazy_loading(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        newfeatures = record[20:300].features
-        oldfeatures = self.oldrec[20:300].features
-        #check lengths
-        self.assertEqual(len(newfeatures), len(oldfeatures))
-        #default features don't allow comparison
-        oldset = self.make_feature_tuple_list(oldfeatures)
-        newset = self.make_feature_tuple_list(newfeatures)
-        self.assertEqual(repr(oldset), repr(newset))
-
-    def test_record_slice_after_lazy_loading(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        temponew = record.features
-        tempold = self.oldrec.features
-        newfeatures = record[20:300].features
-        oldfeatures = self.oldrec[20:300].features
-        #check lengths
-        self.assertEqual(len(newfeatures), len(oldfeatures))
-        #default features don't allow comparison
-        oldset = self.make_feature_tuple_list(oldfeatures)
-        newset = self.make_feature_tuple_list(newfeatures)
-        self.assertEqual(repr(oldset), repr(newset))
-
-    def test_record_slice_after_lazy_loading_after_slice(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        tempnew = record[20:300]
-        tempold = self.oldrec[20:300]
-        temptempnew = tempnew.features
-        temptempold = tempold.features
-        newfeatures = tempnew[200:280].features
-        oldfeatures = tempold[200:280].features
-        #check lengths
-        self.assertEqual(len(newfeatures), len(oldfeatures))
-        #default features don't allow comparison
-        oldset = self.make_feature_tuple_list(oldfeatures)
-        newset = self.make_feature_tuple_list(newfeatures)
-        self.assertEqual(repr(oldset), repr(newset))
-
-class TestGenbankLazyComparitive1(TestGenbankLazyComparitive):
-    recordfile = "brca_FJ940752.gb"
-
-    def test_record_features_length_brca_record(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        features = record.features
-        #check lengths
-        self.assertEqual(len(self.oldrec.features), 8)
-        self.assertEqual(len(features), 8)
-
-class TestGenbankLazyComparitive2(TestGenbankLazyComparitive):
-    recordfile = "pri1.gb"
-
-class TestGenbankLazyComparitive3(TestGenbankLazyComparitive):
-    recordfile = "cor6_6.gb"
-    test_multiple_seq = TestGenbankLazyComparitive.base_test_multiple_seq
-
-class TestGenbankLazyComparitive_features(TestGenbankLazyComparitive):
-    recordfile = "brca_FJ940752.gb"
-
-class TestGenBankDb_reading( TestGenbankLazyComparitive):
-    """Test iterating using a premade index database compare to standard"""
-    recordfile = "1MRR_A.gp"
-    def setUp(self):
-        #db setup: make tempfile and close os handle to help with cleanup
-        oshandle, self.dbfilename = tempfile.mkstemp()
-        recordfile = os.path.join("GenBank", self.recordfile)
-        os.close(oshandle)
-        #iter setup lazy
-        tempopen = open(recordfile, 'rb')
-        #make index
-        returncls = SeqIO.InsdcIO.GenbankSeqRecProxy
-        SeqIO._lazy._make_index_db(handle = tempopen,
-                             return_class = returncls,
-                             indexdb = self.dbfilename,
-                             format = 'genbank' )
-        tempopen.close()
-        self.file = open(recordfile, 'rb')
-        self.handle = self.file
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
-                                        returncls, index=self.dbfilename))
-        self.lazy_iter = self.parser(self.file)
-        self.standard_iter = SeqIO.parse(recordfile, 'genbank')
-        self.oldrec = next(self.standard_iter)
-
-    def tearDown(self):
-        #delete db temp file
-        os.remove(self.dbfilename)
-        #close sequence file
-        self.file.close()
-
-    def test_setup_cleanup(self):
-        for lzy in zip(self.lazy_iter):
-            pass
-        self.assertRaises(StopIteration, next, self.lazy_iter)
-
-class TestGenBankDb_reading2(TestGenBankDb_reading):
-    recordfile = "brca_FJ940752.gb"
-
-class TestGenBankDbWritingOnly(unittest.TestCase):
-
-    recordfile = "brca_FJ940752.gb"
-
-    def setUp(self):
-        #db setup: make tempfile and close os handle to help with cleanup
-        oshandle, dbfilename = tempfile.mkstemp()
-        self.dbfilename = dbfilename
-        os.close(oshandle)
-        returncls = GenbankSeqRecProxy
-
-        #gb parsing setup:
-        filename = os.path.join('GenBank', self.recordfile)
-        self.handle = open(filename, 'rb')
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
-                                     returncls, index=dbfilename))
-        self.handle.seek(0)
-
-    def tearDown(self):
-        os.remove(self.dbfilename)
-        self.handle.close()
-
-
-    def test_index_db_creation_single_file(self):
-        """empty databases follwed by a get call should raise KeyError"""
-        fileiter = self.parser(self.handle)
-        firstrec = next(fileiter)
-        self.assertEqual(len(firstrec.features), 8)
-
-#
-### tests for EMBL format
-#
-
-from Bio.SeqIO.InsdcIO import EmblSeqRecProxy
-
-class EmblLazyComparitiveBase(unittest.TestCase):
-    recordfile = "AAA03323.embl"
-
-    def setUp(self):
-
-        filename = os.path.join('EMBL', self.recordfile)
-        self.handle = open(filename, 'rb')
-        self.olditer = SeqIO.parse(filename, 'embl')
-        self.oldrec = next(self.olditer)
-        returncls = EmblSeqRecProxy
-        self.parser = lambda handle: iter(SeqIO._lazy.LazyIterator(handle, \
-                                                            returncls))
-        self.handle.seek(0)
-
-    def tearDown(self):
-        self.handle.close()
-
-class EmblLazyComparitive(EmblLazyComparitiveBase):
-
-    def test_parser_init(self):
-        record = next(self.parser(self.handle))
-
-    def test_id_name(self):
-        record = next(self.parser(self.handle))
-        self.assertEqual(record.id, self.oldrec.id)
-
-    def test_id_name(self):
-        record = next(self.parser(self.handle))
-        self.assertEqual(record.name, self.oldrec.name)
-
-    def test_record_description(self):
-        record = next(self.parser(self.handle))
-        self.assertEqual(record.description, self.oldrec.description)
-
-    def test_seq(self):
-        record = next(self.parser(self.handle))
-        self.assertEqual(str(record[0:5].seq), str(self.oldrec[0:5].seq))
-        self.assertEqual(str(record[-5:].seq), str(self.oldrec[-5:].seq))
-
-    def test_same_annotations(self):
-        lzy = next(self.parser(self.handle))
-        old = self.oldrec
-        self.assertEqual(len(old.annotations), len(lzy.annotations))
-        oldkeys = [repr(v) for v in old.annotations.keys()]
-        lzykeys = [repr(v) for v in lzy.annotations.keys()]
-        oldkeys.sort()
-        lzykeys.sort()
-        self.assertEqual(oldkeys, lzykeys)
-        oldvals = [repr(v) for v in old.annotations.values()]
-        lzyvals = [repr(v) for v in lzy.annotations.values()]
-        oldvals.sort()
-        lzyvals.sort()
-        self.assertEqual(oldvals, lzyvals)
-
-class EmblDeepSeq(EmblLazyComparitiveBase):
-    def test_seq_deep_reading(self):
-        record = self.parser(self.handle)
-        record = next(record)
-        for i in range(1400, 1545):
-            self.assertEqual(str(record[0:i].seq), \
-                             str(self.oldrec[0:i].seq))
-        for i in range(0, 61):
-            self.assertEqual(str(record[i:1545].seq), \
-                             str(self.oldrec[i:1545].seq))
-
-class EmblLazyComparitive2(EmblLazyComparitive):
-
-    recordfile = "SC10H5.embl"
-
-    def test_seq2(self):
-        record = next(self.parser(self.handle))
-        self.assertEqual(str(record[69:451].seq), str(self.oldrec[69:451].seq))
-        self.assertEqual(str(record[30:39].seq), str(self.oldrec[30:39].seq))
-
-
-class EmblLazyComparitive3(EmblLazyComparitive):
-
-    recordfile = "AE017046.embl"
-
-    def test_seq2(self):
-        record = next(self.parser(self.handle))
-        self.assertEqual(str(record[0:6540].seq), str(self.oldrec[0:6540].seq))
-        self.assertEqual(str(record.seq), str(self.oldrec.seq))
-
-
-class EmblLazyComparitive_unknownseq(EmblLazyComparitive):
-
-    recordfile = "patents.embl"
-
-    def test_seq2(self):
-        parser = self.parser(self.handle)
-        record = next(parser)
-        self.assertEqual(str(record.seq), str(self.oldrec.seq))
-        for old, new in zip(self.olditer, parser):
-            self.assertEqual(str(old.seq), str(new.seq))
-            self.assertEqual(old.seq.alphabet, new.seq.alphabet)
 
 #
 ### tests for base class wrapper
@@ -733,78 +250,71 @@ class EmblLazyComparitive_unknownseq(EmblLazyComparitive):
 
 class TestWrapperWithGenBank(unittest.TestCase):
 
-    recordfile = "brca_FJ940752.gb"
-    recordfile2 = "cor6_6.gb"
+    filename = os.path.join('GenBank', "brca_FJ940752.gb")
+    filename2 = os.path.join('GenBank',"cor6_6.gb")
 
     def setUp(self):
         #db setup: make tempfile and close os handle to help with cleanup
         oshandle, dbfilename = tempfile.mkstemp()
         self.dbfilename = dbfilename
         os.close(oshandle)
-        self.returncls = GenbankSeqRecProxy
-
-        #gb parsing setup:
-        filename = os.path.join('GenBank', self.recordfile)
-        self.handle = open(filename, 'rb')
-        filename2 = os.path.join('GenBank', self.recordfile2)
-        self.handle2 = open(filename, 'rb')
-        self.handle.seek(0)
+        self.returncls = InsdcIO.GenbankSeqRecProxy
 
     def tearDown(self):
         os.remove(self.dbfilename)
-        self.handle2.close()
-        self.handle.close()
 
     def test_make_one_record_with_db(self):
         #make the iter
-        lazy_iter = LazyIterator(handle = self.handle,
+        lazy_iter = LazyIterator(files = [self.filename],
                                  return_class = self.returncls,
                                  index = self.dbfilename)
         #test that it iterates and assigns temprec as a record
         temprec = None
         for r in lazy_iter:
             temprec = r
-            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
-        self.assertTrue(isinstance(temprec, GenbankSeqRecProxy))
+            self.assertTrue(isinstance(r, InsdcIO.GenbankSeqRecProxy))
+        self.assertTrue(isinstance(temprec, InsdcIO.GenbankSeqRecProxy))
 
     def test_make_two_records_with_same_db(self):
         #make the iter
-        lazy_iter = LazyIterator(handle = self.handle,
+        lazy_iter = LazyIterator(files = [self.filename],
                                  return_class = self.returncls,
                                  index = self.dbfilename)
-        lazy_iter2 = LazyIterator(handle = self.handle2,
+        lazy_iter2 = LazyIterator(files = [self.filename2],
                                  return_class = self.returncls,
                                  index = self.dbfilename)
         #test that it iterates
 
         self.assertEqual(lazy_iter.keys(), ["FJ940752.1"])
-        self.assertEqual(lazy_iter2.keys(), ["FJ940752.1"])
+        self.assertEqual(lazy_iter2.keys(), ['X55053.1', 'X62281.1', \
+                'M81224.1', 'AJ237582.1', 'L31939.1', 'AF297471.1'])
         for r in lazy_iter2:
-            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
+            self.assertTrue(isinstance(r, InsdcIO.GenbankSeqRecProxy))
         for r in lazy_iter:
-            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
+            self.assertTrue(isinstance(r, InsdcIO.GenbankSeqRecProxy))
 
     def test_make_one_record_without_db(self):
         #make the iter
-        lazy_iter = LazyIterator(handle = self.handle,
+        lazy_iter = LazyIterator(files = [self.filename],
                                  return_class = self.returncls,
                                  index = True)
         #test that it iterates and assigns temprec as a record
         temprec = None
         for r in lazy_iter:
             temprec = r
-            self.assertTrue(isinstance(r, GenbankSeqRecProxy))
-        self.assertTrue(isinstance(temprec, GenbankSeqRecProxy))
+            self.assertTrue(isinstance(r, InsdcIO.GenbankSeqRecProxy))
+        self.assertTrue(isinstance(temprec, InsdcIO.GenbankSeqRecProxy))
 
     def test_getter_using_brca_id(self):
-        lazydict = LazyIterator(handle = self.handle,
+        lazydict = LazyIterator(files = [self.filename],
                          return_class = self.returncls,
                          index = self.dbfilename)
         del(lazydict)
-        d = LazyIterator(handle = self.handle,
+        d = LazyIterator(files = [self.filename],
                          return_class = self.returncls,
                          index = self.dbfilename)
-        self.assertTrue(isinstance(d["FJ940752.1"], GenbankSeqRecProxy))
+        self.assertTrue(isinstance(d["FJ940752.1"], \
+                        InsdcIO.GenbankSeqRecProxy))
 
 
 #

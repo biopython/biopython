@@ -676,6 +676,75 @@ class SeqRecordProxyBase(SeqRecord):
     #def __contains__(self, char):
     #def __iter__(self):
 
+class HandleQueueLRU(object):
+    """A simplified LRU cache that serves handles to HandleWrapper
+
+    Because this LRU cache uses a simple list to store the cached
+    handles, this cache operates at O(n) with respect to the number
+    of cached handles. For a deep cache a different implementation
+    would be needed, but for this specific application where the
+    number of concurrently open files is very small, this is fine
+    """
+    def __init__(self, filenames, cachelen = 5):
+        if cachelen > 10:
+            raise ValueError("cachelen must not exceed 10")
+        if isinstance(filenames, str):
+            raise ValueError("filenames must be a list, not a str")
+        self.cachelen = min(len(filenames), cachelen)
+
+        #initialize namedict and fill the cache
+        self.namedict = {}
+        self.stack = []
+        stackinitializerlen = 0
+        for fname in filenames:
+            value = {"fullpath":fname, "handle":None}
+            self.namedict[basename(fname)] = value
+            if stackinitializerlen < self.cachelen:
+                value["handle"] = open(value["fullpath"], 'rb')
+                self.stack.append(value)
+                stackinitializerlen += 1
+
+    def __getitem__(self, key):
+        if key not in self.namedict:
+            raise KeyError("HandleQueueLRU does not contain '{}'".format(key))
+        record = self.namedict[key]
+        #case: record is the most recent
+        if record == self.stack[-1]:
+            pass
+        #case: record isn't in the stack
+        elif record["handle"] is None:
+            oldrec = self.stack.pop(0)
+            oldrec["handle"].close()
+            oldrec["handle"] = None
+            record["handle"] = open(record["fullpath"], 'rb')
+            self.stack.append(record)
+        #case: record is in the stack but not at the top
+        else:
+            recordpos = self.stack.index(record) #this is O(n) for stack len
+            self.stack.pop(recordpos) #this is O(n) for stack len
+            self.stack.append(record)
+        return record["handle"]
+
+    def __contains__(self, key):
+        if key in self.namedict:
+            return True
+        return False
+
+class HandleWrapper(object):
+    """Simple tool to wrap handles being provided by the queue
+
+    This will only work when duck typing is used since __class__
+    will return HandleWrapper no.
+    """
+    def __init__(self, filekey, handle_queue):
+        self.handle_queue = handle_queue
+        self.filekey = filekey
+
+    def __getattr__(self, name):
+        if self.filekey in self.handle_queue:
+            realhandle = self.handle_queue[self.filekey]
+            return getattr(realhandle, name)
+
 class LazyIterator(object):
     """wrapper for most lazy-loading/indexing access routes for SeqIO
 
@@ -685,9 +754,15 @@ class LazyIterator(object):
     additions
     """
 
-    def __init__(self, handle, return_class, index=True, alphabet=None):
-        #set locals
-        self.handle = handle
+    def __init__(self, files, return_class, index=True, alphabet=None):
+        #set up files and file keys
+        if isinstance(files, list) and len(files) > 0:
+            self.files = files
+            self.filekeys = [basename(f) for f in files]
+        else:
+            raise ValueError("files must be a non-empty list")
+
+        #other default values
         self.return_class = return_class
         self.alphabet = alphabet
         self.index = index
@@ -695,27 +770,53 @@ class LazyIterator(object):
 
         #check and fix index existence
         if isinstance(index, bool):
-            use_an_index = False
+            self.use_an_index = False
         elif isfile(index):
-            use_an_index = True
+            self.use_an_index = True
         else:
+            #make a new file
             temp = open(index, 'wb')
             temp.close()
-            use_an_index = True
+            self.use_an_index = True
 
-        self.use_an_index = use_an_index
-        if use_an_index:
-            #try getting the first record to test db contents
-            try:
-                return_class(handle, indexdb = index, \
-                         indexkey = 0, alphabet=alphabet)
-            #no record exists; populate the index
-            except KeyError:
-                _make_index_db(handle = self.handle,
-                               return_class = self.return_class,
-                               indexdb = self.index,
-                               format = self.format,
-                               alphabet = self.alphabet)
+        if self.use_an_index:
+            #since an index is being used, the HandleQueue is needed
+            for f in files:
+                assert isfile(f), "File '{}' doesn't exist".format(f)
+            handle_queue = HandleQueueLRU(files)
+            self.handles = {}
+            for f in files:
+                fkey = basename(f)
+                self.handles[fkey] = HandleWrapper(fkey, handle_queue)
+            #Check if the database is empty and which files are indexed
+            con = self._get_db_connection()
+            table_exists = con.execute("SELECT name FROM sqlite_master " +\
+                "WHERE type='table' AND name='indexed_files'")
+            table_exists = True and [val for val in table_exists]
+            if table_exists:
+                filesquery = con.execute("SELECT filename FROM indexed_files;")
+                return_keys = [_as_string(key[0]) for key in filesquery]
+            else:
+                return_keys = []
+            con.close()
+            for fname in self.files:
+                key = basename(fname)
+                if key not in return_keys:
+                    temphandle = open(fname, 'rb')
+                    try:
+                        _make_index_db(handle = temphandle,
+                                       return_class = self.return_class,
+                                       indexdb = self.index,
+                                       format = self.format,
+                                       alphabet = self.alphabet)
+                    except ValueError as e:
+                        if "corrupt" in str(e):
+                            raise ValueError("database is corrupt, please d" +\
+                                "elete it and make a new one", e)
+                        else:
+                            raise e
+                    temphandle.close()
+            self._get_keys()
 
     def _get_db_connection(self):
         """Make and return a SQLite connection """
@@ -731,48 +832,70 @@ class LazyIterator(object):
         return_class = self.return_class
         if self.use_an_index:
             con = self._get_db_connection()
-            #find the number of records
-            count = con.execute("SELECT count " +\
-                                "FROM indexed_files WHERE " +\
-                                "filename=?;", \
-                                (basename(self.handle.name),)).fetchone()[0]
-            con.commit()
+            for f in self.files:
+                #find the number of records
+                handle = self.handles[basename(f)]
+                count = con.execute("SELECT count " +\
+                    "FROM indexed_files WHERE " +\
+                    "filename=?;", \
+                    (basename(f),)).fetchone()[0]
+                for idx in range(count):
+                    yield return_class(handle, indexdb = self.index, \
+                                       indexkey = idx, alphabet=self.alphabet)
             con.close()
-            for idx in range(count):
-                yield return_class(self.handle, indexdb = self.index, \
-                                   indexkey = idx, alphabet=self.alphabet)
         else:
-            record_offset = _get_first_record_start_offset(self.handle, \
-                                                    file_format=self.format)
-            while record_offset is not None:
-                result = return_class(self.handle,
-                                   startoffset=record_offset, \
-                                   indexdb = None, \
-                                   indexkey = None, alphabet=self.alphabet)
-                record_offset = result._next_record_offset()
-                yield result
+            for f in self.files:
+                handle = open(f, 'rb')
+                record_offset = _get_first_record_start_offset(handle, \
+                    file_format=self.format)
+                while record_offset is not None:
+                    result = return_class(handle, startoffset=record_offset, \
+                        indexdb=None, indexkey=None, alphabet=self.alphabet)
+                    record_offset = result._next_record_offset()
+                    yield result
 
-    def keys(self):
+    def _get_keys(self):
         if not self.use_an_index:
             raise ValueError("No keys or dict-type access without a db-index")
         else:
+            self.record_to_file = {}
+            keys = []
             con = self._get_db_connection()
-            keys = con.execute("SELECT idx.id " + \
-                               "FROM main_index idx " +\
-                               "INNER JOIN indexed_files idxf " +\
-                               "ON idxf.fileid = idx.fileid " +\
-                               "WHERE idxf.filename = ?",
-                               (basename(self.handle.name),))
-            return_list = [_as_string(key[0]) for key in keys]
+            for f in self.files:
+                fname = basename(f)
+                tempkeys = con.execute("SELECT idx.id " + \
+                    "FROM main_index idx " +\
+                    "INNER JOIN indexed_files idxf " +\
+                    "ON idxf.fileid = idx.fileid " +\
+                    "WHERE idxf.filename = ?",
+                    (fname,))
+                tempkeys = [_as_string(k[0]) for k in tempkeys]
+                for key in tempkeys:
+                    self.record_to_file[key] = fname
+                keys.extend(tempkeys)
             con.close()
-            return return_list
+            self._keys = keys
 
-    def __getitem__(self, key):
+    def keys(self):
+        if not self.use_an_index:
+            raise TypeError("An index file is required to use 'keys'")
+        return self._keys
+
+    def __contains__(self, key):
         if not self.use_an_index:
             raise TypeError("An index file is required to use '__getitem__'")
-        return self.return_class(self.handle, indexkey = key, \
-                                 indexdb = self.index, \
-                                 alphabet = self.alphabet)
+        if key in self.record_to_file:
+            return True
+        return False
+
+    def __getitem__(self, recordid):
+        if not self.use_an_index:
+            raise TypeError("An index file is required to use '__getitem__'")
+        filekey = self.record_to_file[recordid]
+        handle = self.handles[filekey]
+        return self.return_class(handle, indexkey=recordid, \
+                                 indexdb=self.index, \
+                                 alphabet=self.alphabet)
 
 def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
     """(private) populate index db with file's index information"""
