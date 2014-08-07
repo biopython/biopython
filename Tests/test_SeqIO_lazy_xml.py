@@ -194,14 +194,9 @@ class TestUniprotLazyComparison(unittest.TestCase):
 
     def setUp(self):
         self.filename = os.path.join('SwissProt', self.recordfile)
-        self.handle = open(self.filename, 'rb')
         returncls = UniprotIO.UniprotXMLSeqRecProxy
-        self.parser = SeqIO._lazy.LazyIterator(self.handle, returncls)
+        self.parser = SeqIO._lazy.LazyIterator([self.filename], returncls)
         self.oldparser = SeqIO.parse(self.filename, "uniprot-xml")
-        self.handle.seek(0)
-
-    def tearDown(self):
-        self.handle.close()
 
     def test_parser_init(self):
         record = next(iter(self.parser))
