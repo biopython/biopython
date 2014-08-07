@@ -991,5 +991,11 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         partial_seqrecord = self._captive_record
         record_result = parser.parse(partial_seqrecord)
         #Set self._features and reset captive record features.
-        self._features = record_result.features
+        if begin != 0:
+            newfeaturelist = []
+            for f in record_result.features:
+                newfeaturelist.append(f._shift(-begin))
+        else:
+            newfeaturelist = record_result.features
+        self._features = newfeaturelist
         self._captive_record.features = []
