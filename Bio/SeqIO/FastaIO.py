@@ -152,6 +152,9 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
                  indexdb = None, indexkey=None, alphabet=None, \
                  title2ids = None):
 
+        if alphabet is None:
+            alphabet = single_letter_alphabet
+
         #The title2ids function can be passed to the Fasta proxy
         self.__title2ids = title2ids
         _lazy.SeqRecordProxyBase.__init__( \
