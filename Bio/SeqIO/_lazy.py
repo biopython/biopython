@@ -291,6 +291,12 @@ class SeqRecordProxyBase(SeqRecord):
         """return the offset of the next record"""
         return self._index["nextrecordoffset"]
 
+    def get_raw(self):
+        begin_offset = self._index["recordoffsetstart"]
+        recordoffsetlength = self._index["recordoffsetlength"]
+        self._handle.seek(begin_offset)
+        return self._handle.read(recordoffsetlength)
+
     #
     # the following section defines behavior specific to index database io
     #
@@ -898,6 +904,13 @@ class LazyIterator(object):
             return self[key]
         else:
             return d
+
+    def get_raw(self, key):
+        """D.get_raw(k), returns raw file data for record [k]."""
+        if not self.use_an_index:
+            raise TypeError("An index file is required to use 'get_raw'")
+        rec = self[key]
+        return rec.get_raw()
 
     def items(self):
         """D.items() -> a set-like object providing a view on D's items"""

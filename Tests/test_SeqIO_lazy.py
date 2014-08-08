@@ -7,12 +7,12 @@ import tempfile
 
 from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
-from Bio._py3k import _bytes_to_string, _as_bytes, _is_int_or_long
+from Bio._py3k import _bytes_to_string, _as_bytes, _is_int_or_long, StringIO
 from Bio.Seq import Seq
 from Bio.SeqIO._lazy import *
 from Bio.SeqIO import InsdcIO
 from Bio._py3k import _bytes_to_string, basestring
-from io import StringIO, BytesIO
+from io import BytesIO
 from collections import namedtuple
 
 
@@ -1021,6 +1021,35 @@ class TestSeqIOBindings(unittest.TestCase):
         parseriter = SeqIO.parse(fasta, "fasta", lazy=True)
         for index, record in enumerate(parseriter):
             self.assertEqual(str(record[:10].seq), firstten[index])
+
+    def test_seqio_parse_get_raw(self):
+        """test that an aggressive key function throws an error"""
+        fasta = self.onefile
+        parseriter = SeqIO.parse(fasta, "fasta", lazy=True)
+        firstrec = next(parseriter)
+        raw = _bytes_to_string(firstrec.get_raw())
+        fakefile = StringIO(raw)
+        fakerec = SeqIO.read(fakefile, 'fasta')
+        self.assertEqual(str(firstrec.seq), str(fakerec.seq))
+        self.assertEqual(str(firstrec[0:10].seq), "CGGACCAGAC")
+        self.assertEqual(firstrec.id, fakerec.id)
+
+    def test_seqio_indexdb_get_raw(self):
+        """test that an aggressive key function throws an error"""
+        fasta = self.onefile
+        dbf = self.dbfile
+        def key_fx(key):
+            newkey = key.split("|")
+            return newkey[3].strip()
+        lazydict = SeqIO.index_db(dbf, fasta, "fasta",
+                                  key_function=key_fx, lazy=True)
+        raw = _bytes_to_string(lazydict.get_raw("G26685"))
+        fakefile = StringIO(raw)
+        fakerec = SeqIO.read(fakefile, 'fasta')
+        firstrec = lazydict["G26685"]
+        self.assertEqual(str(firstrec.seq), str(fakerec.seq))
+        self.assertEqual(str(firstrec[0:10].seq), "CGGAGCCAGC")
+        self.assertEqual(firstrec.id, fakerec.id)
 
     def test_seqio_parse_withdb(self):
         """test that an aggressive key function throws an error"""
