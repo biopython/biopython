@@ -251,9 +251,9 @@ class SeqRecordProxyBase(SeqRecord):
         """Returns copy of the record with an upper case sequence. """
         if not self._seq:
             self._read_seq()
-        newSelf = copy(self)
-        newSelf._seq = self._seq.upper()
-        return newSelf
+        newself = copy(self)
+        newself._seq = self._seq.upper()
+        return newself
 
 
     def lower(self):
@@ -287,7 +287,8 @@ class SeqRecordProxyBase(SeqRecord):
          + "(%s, %s, %s, %s, %s)" \
          % (seqrepr, idrepr, namerepr, descriptionrepr, dbxrefsrepr)
 
-    def _next_record_offset(self):
+    def next_record_offset(self):
+        """return the offset of the next record"""
         return self._index["nextrecordoffset"]
 
     #
@@ -538,8 +539,8 @@ class SeqRecordProxyBase(SeqRecord):
         tempcursor = con.cursor()
         #case: database is empty
         tablenames = cursor.execute(
-                    "SELECT name FROM sqlite_master WHERE " + \
-                    "type='table' ORDER BY name;").fetchall()
+            "SELECT name FROM sqlite_master WHERE " + \
+            "type='table' ORDER BY name;").fetchall()
         if len(tablenames) == 0:
             return False
         #case: database is valid and has correct format
@@ -549,8 +550,8 @@ class SeqRecordProxyBase(SeqRecord):
         if tablenames == expectedtables:
             #quick check: format matches self._format
             format, = cursor.execute(
-                          "SELECT value FROM meta_data WHERE key=?;",
-                          ("format",)).fetchone()
+                "SELECT value FROM meta_data WHERE key=?;",
+                ("format",)).fetchone()
             if format != self._format:
                 raise ValueError("provided database is for % files"%(format,))
             return True
@@ -558,8 +559,8 @@ class SeqRecordProxyBase(SeqRecord):
         else:
             raise ValueError("provided database is incomplete or corrupt")
 
-    _index = property(fget = __load_and_return_index,
-                      fset = __set_and_save_index,
+    _index = property(fget=__load_and_return_index,
+                      fset=__set_and_save_index,
                       doc="the index may be loaded from a sqlite db")
 
     __feature_index = None
@@ -638,13 +639,13 @@ class SeqRecordProxyBase(SeqRecord):
 
         #case: indexdb is provided and has records
         featureindexes = cursor.execute("SELECT f.seqbegin, " +\
-                       "f.seqend, f.offsetbegin, f.offsetend, f.qualifier " +\
-                       "FROM features f " +\
-                       "WHERE f.indexid = ? " +\
-                       "AND f.seqbegin >= ? " +\
-                       "AND f.seqend <= ?"
-                       "ORDER BY f.seqbegin;",
-                       (self.__indexid, self._index_begin, self._index_end))
+            "f.seqend, f.offsetbegin, f.offsetend, f.qualifier " +\
+            "FROM features f " +\
+            "WHERE f.indexid = ? " +\
+            "AND f.seqbegin >= ? " +\
+            "AND f.seqend <= ?"
+            "ORDER BY f.seqbegin;",
+            (self.__indexid, self._index_begin, self._index_end))
 
         container = FeatureBinCollection()
         for featureindex in featureindexes:
@@ -656,8 +657,8 @@ class SeqRecordProxyBase(SeqRecord):
         self.__feature_index = container
         return container
 
-    _feature_index = property(fget = __load_and_return_feature_index,
-                              fset = __set_and_save_feature_index)
+    _feature_index = property(fget=__load_and_return_feature_index,
+                              fset=__set_and_save_feature_index)
 
     # All methods tagged below are implemented in the base class
     #
@@ -685,7 +686,7 @@ class HandleQueueLRU(object):
     would be needed, but for this specific application where the
     number of concurrently open files is very small, this is fine
     """
-    def __init__(self, filenames, cachelen = 5):
+    def __init__(self, filenames, cachelen=5):
         if cachelen > 10:
             raise ValueError("cachelen must not exceed 10")
         if isinstance(filenames, str):
@@ -806,11 +807,11 @@ class LazyIterator(object):
                 if key not in return_keys:
                     temphandle = open(fname, 'rb')
                     try:
-                        _make_index_db(handle = temphandle,
-                                       return_class = self.return_class,
-                                       indexdb = self.index,
-                                       format = self.format,
-                                       alphabet = self.alphabet)
+                        _make_index_db(handle=temphandle,
+                                       return_class=self.return_class,
+                                       indexdb=self.index,
+                                       format=self.format,
+                                       alphabet=self.alphabet)
                     except ValueError as e:
                         if "corrupt" in str(e):
                             raise ValueError("database is corrupt, please d" +\
@@ -825,8 +826,8 @@ class LazyIterator(object):
         if not _sqlite:
             # Hack for Jython (or if Python is compiled without it)
             from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, "
-                                    "which is included Python 2.5+")
+            raise MissingPythonDependencyError("Requires sqlite3, " +
+                "which is included Python 2.5+")
         con = _sqlite.connect(self.index)
         return con
 
@@ -846,7 +847,7 @@ class LazyIterator(object):
                 while record_offset is not None:
                     result = return_class(handle, startoffset=record_offset, \
                         indexdb=None, indexkey=None, alphabet=self.alphabet)
-                    record_offset = result._next_record_offset()
+                    record_offset = result.next_record_offset()
                     yield result
 
     def _get_keys(self):
@@ -858,7 +859,7 @@ class LazyIterator(object):
             con = self._get_db_connection()
             for f in self.files:
                 fname = basename(f)
-                tempkeys = con.execute("SELECT idx.id " + \
+                tempkeys = con.execute("SELECT idx.id " +\
                     "FROM main_index idx " +\
                     "INNER JOIN indexed_files idxf " +\
                     "ON idxf.fileid = idx.fileid " +\
@@ -917,7 +918,7 @@ def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
     while record_offset is not None:
         temp = return_class(handle, startoffset=record_offset, \
                            indexdb=indexdb, indexkey=None, alphabet=alphabet)
-        record_offset = temp._next_record_offset()
+        record_offset = temp.next_record_offset()
 
 def _get_first_record_start_offset(handle, file_format=None):
     """(private) return the offset of the first record, or None"""
@@ -1452,6 +1453,13 @@ class ExpatHandler(object):
         self.targetfield = targetfield
         self.tagstoparse = tagstoparse
 
+        #values used in self.parse_from_position
+        self.currentelem = None
+        self.rootelem = None
+        self.savetext = False
+        self.baseposition = None
+        self._parser = None
+
     def parse_from_position(self, position=0):
         """Parse XML from a position and return an indexed root node"""
         handle = self._handle
@@ -1479,31 +1487,31 @@ class ExpatHandler(object):
         endfound = False
         given_end = self.rootelem.indexend - 1
         rootschild = rootelem.first_child()
-        c = None
+        char = None
         while True:
-            if not c:
+            if not char:
                 endregion = _bytes_to_string(handle.read(readlen))
                 if not endregion or len(endregion) == 0:
                     raise ValueError( \
                         "file does not contain end tag on/after line {0}"\
                         .format(parser.CurrentLineNumber))
-                c = endregion[padding%readlen]
-            if c == "<":
-                next = given_end + padding
-                self.rootelem.nextelementoffset = next
-                rootschild.nextelementoffset = next
+                char = endregion[padding%readlen]
+            if char == "<":
+                nexttag = given_end + padding
+                self.rootelem.nextelementoffset = nexttag
+                rootschild.nextelementoffset = nexttag
                 if not endfound:
                     raise ValueError( \
                         "file does not contain end tag on/after line {0}"\
                         .format(parser.CurrentLineNumber))
                 break
             padding += 1
-            if c == ">":
+            if char == ">":
                 self.rootelem.indexend = given_end + padding
                 rootschild.indexend = given_end + padding
                 endfound = True
 
-            c = endregion[padding%readlen]
+            char = endregion[padding%readlen]
 
         #check the next tag
         handle.seek(self.rootelem.nextelementoffset+1)
@@ -1520,8 +1528,9 @@ class ExpatHandler(object):
         return rootelem
 
     def start_element(self, tag, attrs):
+        """handle expat sart element"""
         if self.currentelem.indexend is True:
-            self._finish_LinkedElement()
+            self._finish_linked_element()
 
         if tag in self.tagstoparse:
             self.savetext = True
@@ -1536,6 +1545,7 @@ class ExpatHandler(object):
             self.savetext = False
 
     def end_element(self, tag):
+        """handle expat end element"""
         if tag == self.targetfield:
             #for a compact xml file, this will produce the index of the end
             # tag without the trailing '>'. The parser fixes this.
@@ -1545,15 +1555,16 @@ class ExpatHandler(object):
             self.rootelem.indexend = end
             raise StopIteration()
         if self.currentelem.indexend is True:
-            self._finish_LinkedElement()
+            self._finish_linked_element()
         if tag == self.currentelem.tag:
             self.currentelem.indexend = True
 
     def char_data(self, data):
+        """handle expat character data"""
         if data.strip() and self.savetext:
             self.currentelem.text += data.strip()
 
-    def _finish_LinkedElement(self):
+    def _finish_linked_element(self):
         """ any LinkedElement eligible for finishing is saved here
 
         An LinkedElement has ended; fix the end byte index and fetch

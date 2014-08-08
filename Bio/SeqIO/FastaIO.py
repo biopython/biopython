@@ -17,7 +17,7 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
-from Bio._py3k import _bytes_to_string, _as_bytes, _string_to_bytes
+from Bio._py3k import _bytes_to_string, _string_to_bytes
 from Bio.SeqIO import _lazy
 
 __docformat__ = "restructuredtext en"
@@ -141,7 +141,7 @@ def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         result = FastaSeqRecProxy(handle, startoffset=record_offset, \
                                alphabet=alphabet, title2ids = title2ids)
         yield result
-        record_offset = result._next_record_offset()
+        record_offset = result.next_record_offset()
 
 class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements the getter metods required to run the SeqRecordProxy"""
@@ -311,9 +311,6 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     def _make_feature_index(self, new_list):
         pass
-
-    def _read_features(self):
-        self._features = []
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""
