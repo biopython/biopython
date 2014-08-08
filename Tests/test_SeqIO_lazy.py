@@ -976,6 +976,84 @@ class IndexDbIOCreateDb(unittest.TestCase):
         testIO._indexkey = 1
         self.assertEqual(testIO._index, testindex)
 
+#
+## Test the SeqIO.parse and SeqIO.index_db bindings
+#
+
+class TestSeqIOBindings(unittest.TestCase):
+
+    def setUp(self):
+        oshandlelazy, db_name = tempfile.mkstemp()
+        os.close(oshandlelazy)
+        self.dbfile = db_name
+        self.returnclass = SeqIO.FastaIO.FastaSeqRecProxy
+        #set files for later tests
+        self.onefile = os.path.join("Fasta", "f002")
+        duplicates = ["f002", "f002_duplicate_for_test.fasta"]
+        self.duplicatefiles = [os.path.join("Fasta", f) for f in duplicates]
+
+    def tearDown(self):
+        os.remove(self.dbfile)
+
+    def test_bad_key_function(self):
+        """test that an aggressive key function throws an error"""
+        dbf = self.dbfile
+        fasta = self.onefile
+        key_fx = lambda x: "returnval"
+        indexer = lambda f: SeqIO.index_db(dbf, fasta, format="fasta", \
+                                           key_function=f, lazy=True)
+        self.assertRaises(KeyError, indexer, key_fx)
+
+    def test_bad_file_set(self):
+        """test that an aggressive key function throws an error"""
+        dbf = self.dbfile
+        fastas = self.duplicatefiles
+        indexer = lambda f: SeqIO.index_db(dbf, f, format="fasta", lazy=True)
+        self.assertRaises(KeyError, indexer, fastas)
+
+    def test_seqio_parse_nodb(self):
+        """test that an aggressive key function throws an error"""
+        fasta = self.onefile
+        key_fx = lambda x: "returnval"
+        firstten = ["CGGACCAGAC",
+                    "CGGAGCCAGC",
+                    "GATCAAATCT"]
+        parseriter = SeqIO.parse(fasta, "fasta", lazy=True)
+        for index, record in enumerate(parseriter):
+            self.assertEqual(str(record[:10].seq), firstten[index])
+
+    def test_seqio_parse_withdb(self):
+        """test that an aggressive key function throws an error"""
+        dbf = self.dbfile
+        fasta = self.onefile
+        key_fx = lambda x: "returnval"
+        firstten = ["CGGACCAGAC",
+                    "CGGAGCCAGC",
+                    "GATCAAATCT"]
+        parseriter = SeqIO.parse(fasta, "fasta", lazy=dbf)
+        for index, record in enumerate(parseriter):
+            self.assertEqual(str(record[:10].seq), firstten[index])
+
+    def test_good_key_function(self):
+        """test that an nice key function works as expected"""
+        dbf = self.dbfile
+        fasta = self.onefile
+        def key_fx(key):
+            newkey = key.split("|")
+            return newkey[3].strip()
+        index = SeqIO.index_db(dbf, fasta, format="fasta", \
+                               key_function=key_fx, lazy=True)
+        keys = list(index.keys())
+        self.assertTrue(len(keys) == 3)
+        self.assertTrue("G26680" in keys)
+        self.assertTrue("G26685" in keys)
+        self.assertTrue("G29385" in keys)
+        onerec = index["G26685"]
+        self.assertTrue(isinstance(onerec, self.returnclass))
+        self.assertEqual(onerec.id, "gi|1348917|gb|G26685|G26685")
+        self.assertEqual(str(onerec[0:10].seq), "CGGAGCCAGC")
+        self.assertEqual(str(onerec[0:10].seq), "CGGAGCCAGC")
+
 #a = MinimalLazySeqRecord("seQUencefake", "fakeid")
 #unittest.main( exit=False )
 if __name__ == "__main__":

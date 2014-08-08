@@ -755,14 +755,18 @@ class LazyIterator(object):
     additions
     """
 
-    def __init__(self, files, return_class,
-                 index=True, alphabet=None, asdict=False):
+    def __init__(self, files, return_class, index=True,
+                 alphabet=None, asdict=False, key_function=None):
         #set up files and file keys
         if isinstance(files, list) and len(files) > 0:
             self.files = files
             self.filekeys = [basename(f) for f in files]
         else:
             raise ValueError("files must be a non-empty list")
+
+        #set key_function
+        if not hasattr(key_function, "__call__"):
+            key_function = lambda keyin: keyin
 
         #other default values
         self.return_class = return_class
@@ -819,7 +823,18 @@ class LazyIterator(object):
                         else:
                             raise e
                     temphandle.close()
-            self._get_keys()
+            #set keys in light of key_function
+            realkeylist = self._get_keys_from_db()
+            self._keymap = {}
+            self._keys = []
+            for key in realkeylist:
+                modifiedkey = key_function(key)
+                if modifiedkey in self._keymap:
+                    raise KeyError("key_function induces key conflict; " +
+                        "{0}, and {1} both produce {2}"\
+                        .format(self._keymap[modifiedkey], key, modifiedkey))
+                self._keymap[key_function(key)] = key
+                self._keys.append(modifiedkey)
 
     def _get_db_connection(self):
         """Make and return a SQLite connection """
@@ -850,7 +865,7 @@ class LazyIterator(object):
                     record_offset = result.next_record_offset()
                     yield result
 
-    def _get_keys(self):
+    def _get_keys_from_db(self):
         if not self.use_an_index:
             raise ValueError("No keys or dict-type access without a db-index")
         else:
@@ -870,7 +885,10 @@ class LazyIterator(object):
                     self.record_to_file[key] = fname
                 keys.extend(tempkeys)
             con.close()
-            self._keys = keys
+            if len(keys) != len(set(keys)):
+                raise KeyError("Files contain overlapping records and " +\
+                               "can only be loaded separately.")
+            return keys
 
     def get(self, key, d=None):
         """D.get(k[,d]) -> D[k] if k in D, else d. d defaults to None."""
@@ -903,9 +921,10 @@ class LazyIterator(object):
             return True
         return False
 
-    def __getitem__(self, recordid):
+    def __getitem__(self, key):
         if not self.use_an_index:
             raise TypeError("An index file is required to use '__getitem__'")
+        recordid = self._keymap[key]
         filekey = self.record_to_file[recordid]
         handle = self.handles[filekey]
         return self.return_class(handle, indexkey=recordid, \

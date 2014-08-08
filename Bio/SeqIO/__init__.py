@@ -359,6 +359,7 @@ from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
+import warnings
 
 from . import _lazy
 from . import AbiIO
@@ -577,10 +578,9 @@ def parse(handle, format, alphabet=None, lazy=False):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     if lazy and format in _FormatToLazyLoad:
-        filehandle = open(handle, mode)
-        i = _lazy.LazyIterator(handle = filehandle,
-                               return_class = _FormatToLazyLoad[format],
-                               index=lazy, alphabet=alphabet)
+        i = _lazy.LazyIterator([handle],
+                        return_class=_FormatToLazyLoad[format],
+                        index=lazy, alphabet=alphabet)
         for r in i:
             yield r
         return
@@ -880,7 +880,7 @@ def index(filename, format, alphabet=None, key_function=None):
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
-             key_function=None):
+             key_function=None, lazy=False):
     """Index several sequence files and return a dictionary like object.
 
     The index is stored in an SQLite database rather than in memory (as in the
@@ -946,7 +946,21 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
+<<<<<<< HEAD
     # Map the file format to a sequence iterator:
+=======
+    #Return a lazy dictionary if possible:
+    if lazy and format in _FormatToLazyLoad:
+        lazydict = _lazy.LazyIterator(files=filenames, \
+            return_class=_FormatToLazyLoad[format], index=index_filename, \
+            alphabet=alphabet, asdict=True, key_function=key_function)
+        return lazydict
+    elif lazy:
+        warnings.warn("No lazy parser for '{0}' format".format(format) +\
+                      ", defaulting to full record iter")
+
+    #Map the file format to a sequence iterator:
+>>>>>>> SeqIO._lazy: integration to SeqIO.parse, SeqIO.index_db. Added key_function.
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \

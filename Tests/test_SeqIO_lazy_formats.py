@@ -30,7 +30,7 @@ test_files = [ \
     ("SwissProt", ["uni001"], "uniprot-xml")]
 
 test_only_lazy = [ \
-    ("SwissProt", ["uni001", "uni002", "uni003"], "uniprot-xml")]
+    ("SwissProt", ["uni002", "uni003"], "uniprot-xml")]
 
 class TestMultipleFormats(unittest.TestCase):
 
