@@ -387,6 +387,8 @@ tests = [
     ("EMBL/TRBG361.embl", "embl", None),
     ("EMBL/A04195.imgt", "embl", None),  # Not a proper EMBL file, an IMGT file
     ("EMBL/A04195.imgt", "imgt", None),
+    ("EMBL/patents.embl", "embl", generic_protein),
+    ("EMBL/AAA03323.embl", "embl", None),
     ("GenBank/NC_000932.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.tsv", "tab", generic_protein),
