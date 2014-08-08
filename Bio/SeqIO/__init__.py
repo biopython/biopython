@@ -625,7 +625,7 @@ def _force_alphabet(record_iterator, alphabet):
                              % (repr(alphabet), repr(record.seq.alphabet)))
 
 
-def read(handle, format, alphabet=None):
+def read(handle, format, alphabet=None, lazy=False):
     """Turns a sequence file into a single SeqRecord.
 
         - handle   - handle to the file, or the filename as a string
@@ -668,7 +668,7 @@ def read(handle, format, alphabet=None):
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    iterator = parse(handle, format, alphabet)
+    iterator = parse(handle, format, alphabet, lazy=lazy)
     try:
         first = next(iterator)
     except StopIteration:
