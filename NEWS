@@ -19,6 +19,17 @@ allows further in-depth analysis by advanced users.
 Bio.SearchIO QueryResult objects now allow Hit retrieval using
 its alternative IDs (any IDs listed after the first one).
 
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Eric Talevich
+Evan Parker (first contribution)
+Kai Blin
+Mike Cariaso (first contribution)
+Peter Cock
+Tiago Antao
+Wibowo 'Bow' Arindrarto
+
 ===================================================================
 
 29 May 2014: Biopython 1.64 released.
