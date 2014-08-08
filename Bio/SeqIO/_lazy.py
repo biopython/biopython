@@ -754,7 +754,8 @@ class LazyIterator(object):
     additions
     """
 
-    def __init__(self, files, return_class, index=True, alphabet=None):
+    def __init__(self, files, return_class,
+                 index=True, alphabet=None, asdict=False):
         #set up files and file keys
         if isinstance(files, list) and len(files) > 0:
             self.files = files
@@ -767,6 +768,7 @@ class LazyIterator(object):
         self.alphabet = alphabet
         self.index = index
         self.format = return_class._format
+        self.asdict = asdict
 
         #check and fix index existence
         if isinstance(index, bool):
@@ -831,18 +833,11 @@ class LazyIterator(object):
     def __iter__(self):
         return_class = self.return_class
         if self.use_an_index:
-            con = self._get_db_connection()
-            for f in self.files:
-                #find the number of records
-                handle = self.handles[basename(f)]
-                count = con.execute("SELECT count " +\
-                    "FROM indexed_files WHERE " +\
-                    "filename=?;", \
-                    (basename(f),)).fetchone()[0]
-                for idx in range(count):
-                    yield return_class(handle, indexdb = self.index, \
-                                       indexkey = idx, alphabet=self.alphabet)
-            con.close()
+            for k in self._keys:
+                if self.asdict:
+                    yield k
+                else:
+                    yield self[k]
         else:
             for f in self.files:
                 handle = open(f, 'rb')
@@ -876,7 +871,26 @@ class LazyIterator(object):
             con.close()
             self._keys = keys
 
+    def get(self, key, d=None):
+        """D.get(k[,d]) -> D[k] if k in D, else d. d defaults to None."""
+        if not self.use_an_index:
+            raise TypeError("An index file is required to use 'get'")
+        if key in self._keys:
+            return self[key]
+        else:
+            return d
+
+    def items(self):
+        """D.items() -> a set-like object providing a view on D's items"""
+        if not self.use_an_index:
+            raise TypeError("An index file is required to use 'items'")
+        for k in self._keys:
+            yield (k, self[k])
+
+    iteritems = items
+
     def keys(self):
+        """"D.keys() -> a set-like object providing a view on D's keys"""
         if not self.use_an_index:
             raise TypeError("An index file is required to use 'keys'")
         return self._keys
