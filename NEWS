@@ -12,16 +12,18 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.65
 
-The Bio.SeqIO parser for the ABI capillary file format now exposes
-all the raw data in the SeqRecord's annotation as a dictionary. This
-allows further in-depth analysis by advanced users.
+The Bio.SeqIO parser for the ABI capillary file format now exposes all the raw
+data in the SeqRecord's annotation as a dictionary. This allows further
+in-depth analysis by advanced users.
 
-Bio.SearchIO QueryResult objects now allow Hit retrieval using
-its alternative IDs (any IDs listed after the first one).
+Bio.SearchIO QueryResult objects now allow Hit retrieval using its alternative
+IDs (any IDs listed after the first one, for example as used with the NCBI
+BLAST NR database).
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+David Bulger (first contribution)
 Eric Talevich
 Evan Parker (first contribution)
 Kai Blin
