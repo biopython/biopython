@@ -163,7 +163,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
         handle = self._handle
-        start_offset = self._index["recordoffsetstart"]
+        start_offset = self._index.record["recordoffsetstart"]
         handle.seek(start_offset)
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()
@@ -257,7 +257,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         if seq_last_ln_mod > 0:
             seqlen += len(possiblelastline.strip())
         new_index["seqlen"] = seqlen
-        self._index = new_index
+        return new_index
 
     def _read_features(self):
         self._features = []
@@ -270,11 +270,11 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         end = self._index_end
         lengthtoget = end - begin
         handle = self._handle
-        sequencewidth = self._index["sequenceletterwidth"]
+        sequencewidth = self._index.record["sequenceletterwidth"]
 
         #find first line to read
-        seqstart = self._index["sequencestart"]
-        linewidth = self._index["sequencelinewidth"]
+        seqstart = self._index.record["sequencestart"]
+        linewidth = self._index.record["sequencelinewidth"]
         first_line_to_read = int(begin/sequencewidth)
         handle.seek(seqstart + first_line_to_read*linewidth)
 
@@ -310,7 +310,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         self._seq = Seq(sequence, self._alphabet)
 
     def _make_feature_index(self, new_list):
-        pass
+        return new_list
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""

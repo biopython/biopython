@@ -897,7 +897,7 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         else:
             new_index["nextrecordoffset"] = entry.nextelementoffset
 
-        self._index = new_index
+        return new_index
 
     def _make_feature_index(self, new_list):
         """Return list of tuples for the features (if present)
@@ -932,11 +932,11 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
 
         #no continued references to _feature_nodes are required
         del self._feature_nodes
-        self._feature_index = new_list
+        return new_list
 
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
-        index = self._index
+        index = self._index.record
         if index["has_features"] == 1:
             pre_len = index["featuresoffsetstart"] - index["recordoffsetstart"]
             self._handle.seek(index["recordoffsetstart"])
@@ -971,10 +971,8 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         end = self._index_end
         handle = self._handle
         #index format (begin_pos, end_pos, begin_offset, end_offset, qualify)
-        if self._feature_index:
-            feature_index_list = self._feature_index[begin:end]
-        else:
-            feature_index_list = []
+        feature_index_list = self._index.get_features(begin, end)
+        feature_index_list = feature_index_list[begin:end]
 
         #make the feature list
         feature_strings = ["<entry>"]

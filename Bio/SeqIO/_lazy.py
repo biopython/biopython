@@ -56,6 +56,376 @@ except ImportError:
 from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_string
 from ..SeqRecord import SeqRecord
 
+def _get_db_connection(dbfile):
+    """do some basic checking and return a connection to the db"""
+    if not _sqlite:
+        # Hack for Jython (or if Python is compiled without it)
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Requires sqlite3, which is "
+                                           "included Python 2.5+")
+    if not isfile(dbfile):
+        raise ValueError("A valid database or None must be provided")
+    #case: connection does not exist yet
+    con = _sqlite.connect(dbfile)
+    return con
+
+class SeqProxyIndexManager(object):
+    """Class to manage the index and any sqlite db-IO required
+
+    From the perspective of SeqRecordProxyBase derived classes,
+    this index manager will provide the following public attriubes
+    and method.
+
+    record  - (dict) stores the main record index
+    set_record_index() - (method) allows the setting and storage
+                         of a new record index
+    set_feature_index() - (method) allows the setting and storage
+                          of a new set of feature indexes
+    get_features() - (method) retrieves the stored feature index
+    """
+
+    def __init__(self, format, indexdb=None, recordkey=None, handlename=None):
+        #recordkey should never be passed in the absence of a valid indexdb
+        if recordkey is not None and indexdb is None:
+            raise ValueError("SeqProxyIndexManager requires an indexdb" +\
+                             " to fetch by key.")
+        elif indexdb is not None and handlename is None:
+            raise ValueError("SeqProxyIndexManager requires handlename" +\
+                             " to store records.")
+        self._format = format
+        self._recordkey = recordkey
+        self.record = {}
+        self._features = None
+        self._handlename = handlename
+        self._indexdb = indexdb
+        self._handle_id = None
+        self._index_id = None
+        self.index_exists = False
+
+        if self._indexdb is not None and recordkey is not None:
+            self.record.update(self._load_record_index())
+            self.index_exists = True
+
+    def _load_record_index(self):
+        """Returns the index dictionary from memory or from database
+
+        When the database is not provided:
+        This function will preferentially supply an index from memory.
+        Since the _indexdb is None, it will provide None for the _index
+        indicating to the lazy loading proxy that an index must be
+        created.
+
+        When the database (_indexdb) is provided:
+        This function will still preferentially supply an index from
+        memory. If the database is valid and empty it will provide None
+        for the _index indicating to the lazy loading proxy that an
+        index must be created. If an indexdb is present and valid,
+        it will be queried to produce the _index dictionary which
+        will be loaded into memory.
+        """
+
+        #this will connect to the db
+        con = _get_db_connection(self._indexdb)
+        cursor = con.cursor()
+
+        #case: indexdb is provided and has records
+        if _is_int_or_long(self._recordkey):
+            recordindex = cursor.execute("SELECT main_index.* " +\
+               "FROM main_index " +\
+               "INNER JOIN indexed_files " +\
+               "ON main_index.fileid = indexed_files.fileid " +\
+               "WHERE indexed_files.filename=? " +\
+               "ORDER BY main_index.recordoffsetstart " + \
+               "LIMIT 2 OFFSET ?;",
+               (self._handlename,self._recordkey))
+        elif isinstance(self._recordkey, str):
+            recordindex = cursor.execute("SELECT main_index.* " +\
+               "FROM main_index " +\
+               "INNER JOIN indexed_files " +\
+               "ON main_index.fileid = indexed_files.fileid " +\
+               "WHERE indexed_files.filename=? AND " +\
+               "main_index.id=?;", \
+               (self._handlename, self._recordkey))
+        #description is always set, so this is safe to do first
+        record_keys = [key[0] for key in recordindex.description]
+        record_index = recordindex.fetchone()
+        con.commit()
+        con.close()
+        if record_index is None:
+            raise KeyError("key {0} not found".format(self._recordkey))
+        record_indexdict = dict((record_keys[i], record_index[i]) for \
+                                    i in range(len(record_keys)))
+        # save some usefulreturn the index
+        self._index_id = record_indexdict.pop("indexid")
+        self._handle_id = record_indexdict.pop("fileid")
+        #the return
+        return record_indexdict
+
+
+    def set_record_index(self, indexdict):
+        """Save a new index dict to the database
+
+        (stub)
+        """
+        if not isinstance(indexdict, dict):
+            raise ValueError("New index must be a dictionary")
+        if self._indexdb is None:
+            self.record.update(indexdict)
+            index_exists = True
+            return
+
+        con = _get_db_connection(self._indexdb)
+        #case: indexdb provided but it is empty
+        if not self._is_valid_db_with_tables(con):
+            self._create_tables(con, indexdict)
+            con.commit()
+        cursor = con.cursor()
+        fileid = self._get_handle_id(con, write=True)
+
+        #case: indexdb is provided but already contains
+        # this specific record. This operation should raise
+        cursor.execute("SELECT main_index.* " +\
+                       "FROM main_index " +\
+                       "INNER JOIN indexed_files " +\
+                       "ON main_index.fileid = indexed_files.fileid " +\
+                       "WHERE indexed_files.filename=? AND " +\
+                       "main_index.recordoffsetstart=?;", \
+                       (basename(self._handlename), \
+                       indexdict["recordoffsetstart"]))
+        samefileposition = cursor.fetchone()
+        cursor.execute("SELECT main_index.* " +\
+                       "FROM main_index " +\
+                       "INNER JOIN indexed_files " +\
+                       "ON main_index.fileid = indexed_files.fileid " +\
+                       "WHERE indexed_files.filename=? AND " +\
+                       "main_index.id=?;", \
+                       (basename(self._handlename), \
+                       indexdict["id"]))
+        con.commit()
+        sameid = cursor.fetchone()
+        if samefileposition is not None or sameid is not None:
+            raise ValueError("indexdb already contains a similar record")
+
+        #create main index input table
+        # using 'insecure' string format query generation
+        # due to the lack of flexible substitution syntax
+        keys, placehold, values = "fileid", "?", [fileid]
+        for key, value in indexdict.items():
+            keys += ", " + key
+            placehold += ",?"
+            values.append(value)
+        values = tuple(values)
+        cur = con.cursor()
+        cur.execute("INSERT INTO main_index ({0})".format(keys) +\
+                       "VALUES ({0})".format(placehold), values)
+        indexid = cur.lastrowid
+        #increment the file record counter
+        cur.execute("UPDATE indexed_files SET count=count + 1 "
+                    "WHERE filename=?", (basename(self._handlename),))
+        con.commit()
+        con.close()
+        self._index_id = indexid
+        self.record.update(indexdict)
+        index_exists = True
+
+    def _create_tables(self, con, indexdict):
+        #create metadata table and populate format
+        #set locking mode and synchronous
+        con.execute("PRAGMA synchronous=0")
+        con.execute("PRAGMA locking_mode=EXCLUSIVE")
+        con.commit()
+
+        con.execute( \
+            "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ("format", self._format))
+        #create file table
+        con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY " +\
+                    "KEY, filename TEXT UNIQUE, count INTEGER);")
+
+        #create basic index table:
+        # The (less secure) string manipulation is used because sqlite3
+        # API does not provide rich logic in the parameter substitution
+        # query interface. The variant nature of each file's index
+        # requires that index db's are format specific and may contain
+        # a variable number of fields
+        rows = sorted(list(indexdict.keys()))
+        indextab = ", ".join([str(key) + " INTEGER" for key in rows \
+                              if key != "id"])
+        indextab = "CREATE TABLE main_index(" + \
+                   "indexid INTEGER PRIMARY KEY, " + \
+                   "id TEXT, fileid INTEGER, "+ indextab + \
+                   ", FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
+        con.execute(indextab)
+
+        #create features table
+        feattab = "CREATE TABLE features(" + \
+                  "fileid INTEGER, " + \
+                  "indexid INTEGER, " + \
+                  "offsetbegin INTEGER, " + \
+                  "offsetend INTEGER, " +\
+                  "seqbegin INTEGER, " + \
+                  "seqend INTEGER, " + \
+                  "qualifier TEXT, " + \
+                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid)" + \
+                  "FOREIGN KEY(indexid) REFERENCES main_index(indexid));"
+        con.execute(feattab)
+        con.commit()
+
+    def _get_handle_id(self, con, write=False):
+        """Return the file id from the DB, write an entry if necessary
+
+        returns fileid for a filename. If write is False a fileid not
+        found in the database will return None while setting write to
+        True will require that the file is written prior to returning
+        the fileid
+        """
+        if self._handle_id is not None:
+            return self._handle_id
+        if self._handle_id is None:
+            cursor = con.cursor()
+            name = cursor.execute("SELECT fileid " +\
+                           "FROM indexed_files WHERE " +\
+                           "filename=?;", \
+                           (self._handlename,))
+            name = name.fetchone()
+            if name is not None:
+                self._handle_id = name[0]
+                return name[0]
+            elif write:
+                cursor.execute("INSERT INTO indexed_files " +\
+                               "(filename, count) VALUES (?, ?);",
+                               (self._handlename, 0))
+                name = cursor.execute("SELECT fileid " +\
+                           "FROM indexed_files WHERE " +\
+                           "filename=?;", \
+                           (self._handlename,)).fetchone()
+                self._handle_id = name[0]
+                con.commit()
+                return name[0]
+            else:
+                return None
+
+    def _is_valid_db_with_tables(self, con):
+        """if db is empty False, if correct tables True, else raise"""
+        cursor = con.cursor()
+        tempcursor = con.cursor()
+        #case: database is empty
+        tablenames = cursor.execute(
+            "SELECT name FROM sqlite_master WHERE " + \
+            "type='table' ORDER BY name;").fetchall()
+        if len(tablenames) == 0:
+            return False
+        #case: database is valid and has correct format
+        tablenames = [name[0] for name in tablenames]
+        expectedtables = ['features', 'indexed_files', \
+                          'main_index', 'meta_data']
+        if tablenames == expectedtables:
+            #quick check: format matches self._format
+            format, = cursor.execute(
+                "SELECT value FROM meta_data WHERE key=?;",
+                ("format",)).fetchone()
+            if format != self._format:
+                raise ValueError("provided database is for % files"%(format,))
+            return True
+        #something was wrong with the database
+        else:
+            raise ValueError("provided database is incomplete or corrupt")
+
+
+    def set_feature_index(self, feature_index_list):
+        """Save a new index dict to the database"""
+
+        if not isinstance(feature_index_list, FeatureBinCollection):
+            raise ValueError("_feature_index must be a FeatureBinCollection")
+        self._features = feature_index_list
+        if self._indexdb is None:
+            return
+
+        #from this point, do database interaction
+        feature_index_list = feature_index_list[:]
+        con = _get_db_connection(self._indexdb)
+        if not self._is_valid_db_with_tables(con):
+            raise ValueError("_index must be set before _feature_index")
+
+        cursor = con.cursor()
+        fileid = self._get_handle_id(con, write=False)
+
+        #this will raise a NameError if the __indexid has not been set
+        assert self._index_id is not None
+        cursor.execute("SELECT features.* " +\
+                       "FROM features " + \
+                       "INNER JOIN main_index mi " + \
+                       "ON mi.indexid = features.indexid " +\
+                       "WHERE features.indexid=? " +\
+                       "LIMIT 1;", \
+                       (self._index_id,))
+        samefileposition = cursor.fetchone()
+
+        if samefileposition is not None:
+            raise ValueError("indexdb already contains a similar record")
+
+        #create featuresdict table
+        # using 'insecure' string format query generation
+        # due to the lack of flexible substitution syntax
+        for feature in feature_index_list:
+            begin, end, beginoffset, endoffset, qualifier = feature
+            #these assertions are done because SQLite is not static typed
+            assert _is_int_or_long(begin)
+            assert _is_int_or_long(end)
+            assert _is_int_or_long(beginoffset)
+            assert _is_int_or_long(endoffset)
+            cursor.execute("INSERT INTO features "
+                           "(indexid, fileid, offsetbegin, offsetend, " +\
+                           "seqbegin, seqend, qualifier) " + \
+                           "VALUES (?, ?, ?, ?, ?, ?, ?);", \
+                           (self._index_id, fileid, beginoffset, \
+                           endoffset, begin, end, qualifier))
+        con.commit()
+        con.close()
+
+    def get_features(self, begin, end):
+        """Return all features related to the protein from begin to end"""
+        truebegin, trueend = 0, self.record["seqlen"]
+
+        if isinstance(self._features, FeatureBinCollection):
+            return self._features
+
+        #case: index is not loaded and no db has been used
+        if self._indexdb is None:
+            #case: no index key provided thus no record will be searched
+            if self._recordkey is None:
+                return None
+
+        #case: retrieve from db because a key was given and a db exists
+        #      this will connect to the db (this is implicit since the
+        #      _index getter must have already run successfully)
+        con = _get_db_connection(self._indexdb)
+        cursor = con.cursor()
+
+        #case: empty db, this is already dealt with in _index getter
+
+        #case: indexdb is provided and has records
+        featureindexes = cursor.execute("SELECT f.seqbegin, " +\
+            "f.seqend, f.offsetbegin, f.offsetend, f.qualifier " +\
+            "FROM features f " +\
+            "WHERE f.indexid = ? " +\
+            "AND f.seqbegin >= ? " +\
+            "AND f.seqend <= ? " +\
+            "ORDER BY f.seqbegin;",
+            (self._index_id, begin, end))
+
+        container = FeatureBinCollection()
+        for featureindex in featureindexes:
+            container.insert(featureindex)
+
+        con.commit()
+        con.close()
+
+        if begin == truebegin and end == trueend:
+            self._features = container
+        return container
+
 class SeqRecordProxyBase(SeqRecord):
     """A SeqRecord object holds a sequence and information about it.
 
@@ -114,28 +484,37 @@ class SeqRecordProxyBase(SeqRecord):
     annotations = {}
 
     def __init__(self, handle, startoffset=None, indexdb = None, \
-                 indexkey = None, alphabet=None):
+                 indexkey=None, alphabet=None):
 
         self._handle = handle
         self._alphabet = alphabet
         self._indexdb = indexdb
         self._indexkey = indexkey
+        if hasattr(handle, "name"):
+            name = basename(handle.name)
+        else:
+            name = None
+        self._index = SeqProxyIndexManager(self._format,
+            indexdb=indexdb, recordkey=indexkey,
+            handlename=name)
 
         # create the index or load an existing one from file
-        if self._index is None:
+        if self._index.index_exists is False:
             # make main index and sets _index
             new_index = {"recordoffsetstart":startoffset}
-            self._make_record_index(new_index)
+            new_index = self._make_record_index(new_index)
+            self._index.set_record_index(new_index)
             # make feature index and sets _feature_index
             feature_index = FeatureBinCollection()
-            self._make_feature_index(feature_index)
+            feature_index = self._make_feature_index(feature_index)
+            self._index.set_feature_index(feature_index)
 
         #set base values
         self._load_non_lazy_values()
-        if self.id != self._index["id"]:
+        if self.id != self._index.record["id"]:
             raise ValueError("The index does not contain the correct id.")
         self._index_begin = 0
-        self._index_end = self._index["seqlen"]
+        self._index_end = self._index.record["seqlen"]
 
     def _load_non_lazy_values(self):
         """this is implemented to save the non-lazy values from a seq file"""
@@ -201,8 +580,8 @@ class SeqRecordProxyBase(SeqRecord):
             # the return behavior of SeqRecord. Some lazy loading is still
             # performed by pre-narrowing the sequence window
             if step != 1:
-                indexsmall = min(start,stop)
-                indexlarge = max(start,stop)
+                indexsmall = min(start, stop)
+                indexlarge = max(start, stop)
                 if self.seq is None:
                     raise ValueError("If the sequence is None, " +\
                                      "we cannot slice it.")
@@ -289,382 +668,16 @@ class SeqRecordProxyBase(SeqRecord):
 
     def next_record_offset(self):
         """return the offset of the next record"""
-        return self._index["nextrecordoffset"]
+        return self._index.record["nextrecordoffset"]
 
     def get_raw(self):
-        begin_offset = self._index["recordoffsetstart"]
-        recordoffsetlength = self._index["recordoffsetlength"]
+        begin_offset = self._index.record["recordoffsetstart"]
+        recordoffsetlength = self._index.record["recordoffsetlength"]
         self._handle.seek(begin_offset)
         return self._handle.read(recordoffsetlength)
 
-    #
-    # the following section defines behavior specific to index database io
-    #
-
-    __index = None
-    __file_id = None
-
-    def __load_and_return_index(self):
-        """Returns the index dictionary from memory or from database
-
-        When the database is not provided:
-        This function will preferentially supply an index from memory.
-        Since the _indexdb is None, it will provide None for the _index
-        indicating to the lazy loading proxy that an index must be
-        created.
-
-        When the database (_indexdb) is provided:
-        This function will still preferentially supply an index from
-        memory. If the database is valid and empty it will provide None
-        for the _index indicating to the lazy loading proxy that an
-        index must be created. If an indexdb is present and valid,
-        it will be queried to produce the _index dictionary which
-        will be loaded into memory.
-        """
-
-        #case: index already exists in memory
-        if isinstance(self.__index, dict):
-            return self.__index
-
-        #case: index is not loaded and no db has been used
-        if self.__index is None:
-            #case: no index key provided thus no record will be searched
-            if self._indexkey is None:
-                return None
-            #case: a key request was made but no db was given
-            if self._indexdb is None and self._indexkey is not None:
-                raise KeyError("cannot retrieve by key from no db")
-        #case: retrieve from db because a key was given and a db exists
-
-        #this will connect to the db
-        con = self.__connect_db_return_connection()
-        cursor = con.cursor()
-
-        #case: indexdb provided but it is empty
-        if not self.__is_valid_db_with_tables(con):
-            raise KeyError("_indexkey must match a stored record")
-        #case: indexdb is provided and has records
-        if _is_int_or_long(self._indexkey):
-            recordindex = cursor.execute("SELECT main_index.* " +\
-                           "FROM main_index " +\
-                           "INNER JOIN indexed_files " +\
-                           "ON main_index.fileid = indexed_files.fileid " +\
-                           "WHERE indexed_files.filename=? " +\
-                           "ORDER BY main_index.recordoffsetstart " + \
-                           "LIMIT 2 OFFSET ?;",
-                           (basename(self._handle.name),self._indexkey))
-        elif isinstance(self._indexkey, str):
-            recordindex = cursor.execute("SELECT main_index.* " +\
-                           "FROM main_index " +\
-                           "INNER JOIN indexed_files " +\
-                           "ON main_index.fileid = indexed_files.fileid " +\
-                           "WHERE indexed_files.filename=? AND " +\
-                           "main_index.id=?;", \
-                           (basename(self._handle.name), self._indexkey))
-        record_keys = [key[0] for key in recordindex.description]
-        record_index = recordindex.fetchone()
-        con.commit()
-        con.close()
-        if not record_index:
-            con.close()
-            raise KeyError("_indexkey must match a stored record")
-        record_indexdict = dict((record_keys[i], record_index[i]) for \
-                                    i in range(len(record_keys)))
-        indexid = record_indexdict["indexid"]
-        # remove two ids not used elseware
-        del(record_indexdict["fileid"])
-        del(record_indexdict["indexid"])
-        # save the index dict to self then return the index
-        self.__index = record_indexdict
-        self.__indexid = indexid
-        return record_indexdict
 
 
-    def __set_and_save_index(self, indexdict):
-        """Save a new index dict to the database
-
-        (stub)
-        """
-        if isinstance(indexdict, dict):
-            self.__index = indexdict
-            #case, no indexdb
-            if self._indexdb is None \
-                or self._indexkey is not None:
-                return
-        else:
-            raise ValueError("_index must be a dictionary")
-
-        con = self.__connect_db_return_connection()
-        #case: indexdb provided but it is empty
-        if not self.__is_valid_db_with_tables(con):
-            self.__create_tables(con, indexdict)
-            con.commit()
-        cursor = con.cursor()
-        fileid = self.__get_fileid(con, write=True)
-
-        #case: indexdb is provided but already contains
-        # this specific record. This operation should raise
-        cursor.execute("SELECT main_index.* " +\
-                       "FROM main_index " +\
-                       "INNER JOIN indexed_files " +\
-                       "ON main_index.fileid = indexed_files.fileid " +\
-                       "WHERE indexed_files.filename=? AND " +\
-                       "main_index.recordoffsetstart=?;", \
-                       (basename(self._handle.name), \
-                       indexdict["recordoffsetstart"]))
-        samefileposition = cursor.fetchone()
-        cursor.execute("SELECT main_index.* " +\
-                       "FROM main_index " +\
-                       "INNER JOIN indexed_files " +\
-                       "ON main_index.fileid = indexed_files.fileid " +\
-                       "WHERE indexed_files.filename=? AND " +\
-                       "main_index.id=?;", \
-                       (basename(self._handle.name), \
-                       indexdict["id"]))
-        con.commit()
-        sameid = cursor.fetchone()
-        if samefileposition is not None or sameid is not None:
-            raise ValueError("indexdb already contains a similar record")
-
-        #create main index input table
-        # using 'insecure' string format query generation
-        # due to the lack of flexible substitution syntax
-        keys, placehold, values = "fileid", "?", [fileid]
-        for key, value in indexdict.items():
-            keys += ", " + key
-            placehold += ",?"
-            values.append(value)
-        values = tuple(values)
-        cur = con.cursor()
-        cur.execute("INSERT INTO main_index ({0})".format(keys) +\
-                       "VALUES ({0})".format(placehold), values)
-        indexid = cur.lastrowid
-        #increment the file record counter
-        cur.execute("UPDATE indexed_files SET count=count + 1 "
-                    "WHERE filename=?", (basename(self._handle.name),))
-        con.commit()
-        con.close()
-        self.__indexid = indexid
-        #case: indexdb provided and has correct format/table
-        #self.__insert_index("implementation pending")
-
-    def __create_tables(self, con, indexdict):
-        #create metadata table and populate format
-        #set locking mode and synchronous
-        con.execute("PRAGMA synchronous=0")
-        con.execute("PRAGMA locking_mode=EXCLUSIVE")
-        con.commit()
-
-        con.execute( \
-            "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
-        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                    ("format", self._format))
-        #create file table
-        con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY " +\
-                    "KEY, filename TEXT UNIQUE, count INTEGER);")
-
-        #create basic index table:
-        # The (less secure) string manipulation is used because sqlite3
-        # API does not provide rich logic in the parameter substitution
-        # query interface. The variant nature of each file's index
-        # requires that index db's are format specific and may contain
-        # a variable number of fields
-        rows = sorted(list(indexdict.keys()))
-        indextab = ", ".join([str(key) + " INTEGER" for key in rows \
-                              if key != "id"])
-        indextab = "CREATE TABLE main_index(" + \
-                   "indexid INTEGER PRIMARY KEY, " + \
-                   "id TEXT, fileid INTEGER, "+ indextab + \
-                   ", FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
-        con.execute(indextab)
-
-        #create features table
-        feattab = "CREATE TABLE features(" + \
-                  "fileid INTEGER, " + \
-                  "indexid INTEGER, " + \
-                  "offsetbegin INTEGER, " + \
-                  "offsetend INTEGER, " +\
-                  "seqbegin INTEGER, " + \
-                  "seqend INTEGER, " + \
-                  "qualifier TEXT, " + \
-                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid)" + \
-                  "FOREIGN KEY(indexid) REFERENCES main_index(indexid));"
-        con.execute(feattab)
-        con.commit()
-
-    def __connect_db_return_connection(self):
-        """do some basic checking and return a connection to the db"""
-        if not _sqlite:
-            # Hack for Jython (or if Python is compiled without it)
-            from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, which is "
-                                               "included Python 2.5+")
-        if not isfile(self._indexdb):
-            raise ValueError("A valid database or None must be provided")
-        #case: connection does not exist yet
-        con = _sqlite.connect(self._indexdb)
-        return con
-
-    def __get_fileid(self, con, write=False):
-        """Return the file id from the DB, write an entry if necessary
-
-        returns fileid for a filename. If write is False a fileid not
-        found in the database will return None while setting write to
-        True will require that the file is written prior to returning
-        the fileid
-        """
-        if self.__file_id is not None:
-            return self.__file_id
-        if self.__file_id is None:
-            cursor = con.cursor()
-            name = cursor.execute("SELECT fileid " +\
-                           "FROM indexed_files WHERE " +\
-                           "filename=?;", \
-                           (basename(self._handle.name),))
-            name = name.fetchone()
-            if name is not None:
-                self.__file_id = name[0]
-                return name[0]
-            elif write:
-                cursor.execute("INSERT INTO indexed_files " +\
-                               "(filename, count) VALUES (?, ?);",
-                               (basename(self._handle.name), 0))
-                name = cursor.execute("SELECT fileid " +\
-                           "FROM indexed_files WHERE " +\
-                           "filename=?;", \
-                           (basename(self._handle.name),)).fetchone()
-                self.__file_id = name[0]
-                con.commit()
-                return name[0]
-            else:
-                return None
-
-    def __is_valid_db_with_tables(self, con):
-        """if db is empty False, if correct tables True, else raise"""
-        cursor = con.cursor()
-        tempcursor = con.cursor()
-        #case: database is empty
-        tablenames = cursor.execute(
-            "SELECT name FROM sqlite_master WHERE " + \
-            "type='table' ORDER BY name;").fetchall()
-        if len(tablenames) == 0:
-            return False
-        #case: database is valid and has correct format
-        tablenames = [name[0] for name in tablenames]
-        expectedtables = ['features', 'indexed_files', \
-                          'main_index', 'meta_data']
-        if tablenames == expectedtables:
-            #quick check: format matches self._format
-            format, = cursor.execute(
-                "SELECT value FROM meta_data WHERE key=?;",
-                ("format",)).fetchone()
-            if format != self._format:
-                raise ValueError("provided database is for % files"%(format,))
-            return True
-        #something was wrong with the database
-        else:
-            raise ValueError("provided database is incomplete or corrupt")
-
-    _index = property(fget=__load_and_return_index,
-                      fset=__set_and_save_index,
-                      doc="the index may be loaded from a sqlite db")
-
-    __feature_index = None
-
-    def __set_and_save_feature_index(self, feature_index_list):
-        """Save a new index dict to the database"""
-
-        if isinstance(feature_index_list, FeatureBinCollection):
-            self.__feature_index = feature_index_list
-            feature_index_list = feature_index_list[:]
-            #case, no indexdb
-            if self._indexdb is None \
-                or self._indexkey is not None:
-                return
-        else:
-            raise ValueError("_feature_index must be a FeatureBinCollection")
-
-        #case: indexdb provided but it is empty
-        con = self.__connect_db_return_connection()
-        if not self.__is_valid_db_with_tables(con):
-            raise ValueError("_index must be set before _feature_index")
-
-        cursor = con.cursor()
-        fileid = self.__get_fileid(con, write=True)
-
-        #this will raise a NameError if the __indexid has not been set
-        assert self.__indexid is not None
-        cursor.execute("SELECT features.* " +\
-                       "FROM features " + \
-                       "INNER JOIN main_index mi " + \
-                       "ON mi.indexid = features.indexid " +\
-                       "WHERE features.indexid=? " +\
-                       "LIMIT 1;", \
-                       (self.__indexid,))
-        samefileposition = cursor.fetchone()
-
-        if samefileposition is not None:
-            raise ValueError("indexdb already contains a similar record")
-
-        #create featuresdict table
-        # using 'insecure' string format query generation
-        # due to the lack of flexible substitution syntax
-        for feature in feature_index_list:
-            begin, end, beginoffset, endoffset, qualifier = feature
-            #these assertions are done because SQLite is not static typed
-            assert _is_int_or_long(begin)
-            assert _is_int_or_long(end)
-            assert _is_int_or_long(beginoffset)
-            assert _is_int_or_long(endoffset)
-            cursor.execute("INSERT INTO features "
-                           "(indexid, fileid, offsetbegin, offsetend, " +\
-                           "seqbegin, seqend, qualifier) " + \
-                           "VALUES (?, ?, ?, ?, ?, ?, ?);", \
-                           (self.__indexid, fileid, beginoffset, \
-                           endoffset, begin, end, qualifier))
-        con.commit()
-        con.close()
-
-    def __load_and_return_feature_index(self):
-        if isinstance(self.__feature_index, FeatureBinCollection):
-            return self.__feature_index
-
-        #case: index is not loaded and no db has been used
-        if self.__index is None:
-            #case: no index key provided thus no record will be searched
-            if self._indexkey is None:
-                return None
-
-        #case: retrieve from db because a key was given and a db exists
-        #      this will connect to the db (this is implicit since the
-        #      _index getter must have already run successfully)
-        con = self.__connect_db_return_connection()
-        cursor = con.cursor()
-
-        #case: empty db, this is already dealt with in _index getter
-
-        #case: indexdb is provided and has records
-        featureindexes = cursor.execute("SELECT f.seqbegin, " +\
-            "f.seqend, f.offsetbegin, f.offsetend, f.qualifier " +\
-            "FROM features f " +\
-            "WHERE f.indexid = ? " +\
-            "AND f.seqbegin >= ? " +\
-            "AND f.seqend <= ?"
-            "ORDER BY f.seqbegin;",
-            (self.__indexid, self._index_begin, self._index_end))
-
-        container = FeatureBinCollection()
-        for featureindex in featureindexes:
-            container.insert(featureindex)
-
-        con.commit()
-        con.close()
-
-        self.__feature_index = container
-        return container
-
-    _feature_index = property(fget=__load_and_return_feature_index,
-                              fset=__set_and_save_feature_index)
 
     # All methods tagged below are implemented in the base class
     #
@@ -1115,7 +1128,7 @@ class FeatureBinCollection(object):
         #alternate action if a sequence length is provided
         # set to smallest power able to fully contain
         elif _is_int_or_long(length) and length > 0:
-            default_powers = [23,26,29,32,35,38,41]
+            default_powers = [23, 26, 29, 32, 35, 38, 41]
             for power in default_powers:
                 if length <= 2**power:
                     self._set_max_bin_power(power)
@@ -1162,7 +1175,7 @@ class FeatureBinCollection(object):
         #then, move everything down.
         for k_inverse in range(4681):
             k = 4680 - k_inverse
-            level = int( floor( log((7*k + 1),2)/3.0 ) )
+            level = int(floor(log((7*k + 1), 2)/3.0))
             new_level = level + 1
             oL = int((2**(3*level) - 1)/7.0)
             new_oL = int((2**(3*new_level) - 1)/7.0)

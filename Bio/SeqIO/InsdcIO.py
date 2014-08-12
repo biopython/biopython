@@ -1423,14 +1423,14 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
                 break
         #set the index
-        self._index = new_index
+        return new_index
 
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
         handle = self._handle
         _index = self._index
-        start_offset = _index["recordoffsetstart"]
-        header_end = _index["featuresoffsetend"]
+        start_offset = _index.record["recordoffsetstart"]
+        header_end = _index.record["featuresoffsetend"]
         handle.seek(start_offset)
         header_lines = handle.read(header_end - start_offset)
         header_lines = StringIO(_bytes_to_string(header_lines))
@@ -1465,18 +1465,18 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         end = self._index_end
         lengthtoget = end - begin
         handle = self._handle
-        sequencewidth = self._index["sequenceletterwidth"]
+        sequencewidth = self._index.record["sequenceletterwidth"]
         lettersbegin = self._format_components["seq_line_letters_begin"]
         lettersend= self._format_components["seq_line_letters_end"]
 
         #return unknown sequence if possible
-        if self._index["unknownseq"] == 1:
+        if self._index.record["unknownseq"] == 1:
             self._seq = UnknownSeq(len(self), self._alphabet)
             return None
 
         #find first line to read
-        seqstart = self._index["sequencestart"]
-        linewidth = self._index["sequencelinewidth"]
+        seqstart = self._index.record["sequencestart"]
+        linewidth = self._index.record["sequencelinewidth"]
         first_line_to_read = int(begin/sequencewidth)
         handle.seek(seqstart + first_line_to_read*linewidth)
 
@@ -1542,7 +1542,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         SEQUENCE_HEADERS = _format_components["sequence_headers"]
 
         #to make the feature index, pull the features portion of the file
-        ft_begin = self._index["featuresoffsetstart"]
+        ft_begin = self._index.record["featuresoffsetstart"]
         handle.seek(ft_begin)
         line_begin_offset = handle.tell()
         line = handle.readline()
@@ -1553,7 +1553,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         #begin parsing by returning when no features are present
         if not any(map(line.startswith, FEATURE_START_MARKERS)):
             self._feature_index = new_list
-            return
+            return new_list
 
         line_begin_offset = handle.tell()
         line = handle.readline()
@@ -1630,7 +1630,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
                            feature_begin_offset, feature_end_offset,
                            qualifier)
             new_list.insert(index_tuple)
-        self._feature_index = new_list
+        return new_list
 
 
     def _read_features(self):
@@ -1644,11 +1644,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         scanner, consumer = self._parse_aparatus
 
         #index format (begin_pos, end_pos, begin_offset, end_offset, qualify)
-        if self._feature_index:
-            feature_index_list = self._feature_index[begin:end]
-        else:
-            feature_index_list = []
-
+        feature_index_list = self._index.get_features(begin, end)
+        feature_index_list = feature_index_list[begin:end]
         #make the feature list
         featurelist = []
         for feature_index in feature_index_list:
