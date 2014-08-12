@@ -351,7 +351,7 @@ class SeqProxyIndexManager(object):
         cursor = con.cursor()
         fileid = self._get_handle_id(con, write=False)
 
-        #this will raise a NameError if the __indexid has not been set
+        #this will raise a NameError if the _index_id has not been set
         assert self._index_id is not None
         cursor.execute("SELECT features.* " +\
                        "FROM features " + \
@@ -815,7 +815,7 @@ class LazyIterator(object):
                 fkey = basename(f)
                 self.handles[fkey] = HandleWrapper(fkey, handle_queue)
             #Check if the database is empty and which files are indexed
-            con = self._get_db_connection()
+            con = _get_db_connection(self.index)
             table_exists = con.execute("SELECT name FROM sqlite_master " +\
                 "WHERE type='table' AND name='indexed_files'")
             table_exists = True and [val for val in table_exists]
@@ -855,16 +855,6 @@ class LazyIterator(object):
                 self._keymap[key_function(key)] = key
                 self._keys.append(modifiedkey)
 
-    def _get_db_connection(self):
-        """Make and return a SQLite connection """
-        if not _sqlite:
-            # Hack for Jython (or if Python is compiled without it)
-            from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, " +
-                "which is included Python 2.5+")
-        con = _sqlite.connect(self.index)
-        return con
-
     def __iter__(self):
         return_class = self.return_class
         if self.use_an_index:
@@ -890,7 +880,7 @@ class LazyIterator(object):
         else:
             self.record_to_file = {}
             keys = []
-            con = self._get_db_connection()
+            con = _get_db_connection(self.index)
             for f in self.files:
                 fname = basename(f)
                 tempkeys = con.execute("SELECT idx.id " +\
