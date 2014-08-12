@@ -87,10 +87,10 @@ class SeqProxyIndexManager(object):
     def __init__(self, format, indexdb=None, recordkey=None, handlename=None):
         #recordkey should never be passed in the absence of a valid indexdb
         if recordkey is not None and indexdb is None:
-            raise ValueError("SeqProxyIndexManager requires an indexdb" +\
+            raise ValueError("SeqProxyIndexManager requires an indexdb"
                              " to fetch by key.")
         elif indexdb is not None and handlename is None:
-            raise ValueError("SeqProxyIndexManager requires handlename" +\
+            raise ValueError("SeqProxyIndexManager requires handlename"
                              " to store records.")
         self._format = format
         self._recordkey = recordkey
@@ -130,21 +130,21 @@ class SeqProxyIndexManager(object):
 
         #case: indexdb is provided and has records
         if _is_int_or_long(self._recordkey):
-            recordindex = cursor.execute("SELECT main_index.* " +\
-               "FROM main_index " +\
-               "INNER JOIN indexed_files " +\
-               "ON main_index.fileid = indexed_files.fileid " +\
-               "WHERE indexed_files.filename=? " +\
-               "ORDER BY main_index.recordoffsetstart " + \
+            recordindex = cursor.execute("SELECT main_index.* "
+               "FROM main_index "
+               "INNER JOIN indexed_files "
+               "ON main_index.fileid = indexed_files.fileid "
+               "WHERE indexed_files.filename=? "
+               "ORDER BY main_index.recordoffsetstart "
                "LIMIT 2 OFFSET ?;",
                (self._handlename,self._recordkey))
         elif isinstance(self._recordkey, str):
-            recordindex = cursor.execute("SELECT main_index.* " +\
-               "FROM main_index " +\
-               "INNER JOIN indexed_files " +\
-               "ON main_index.fileid = indexed_files.fileid " +\
-               "WHERE indexed_files.filename=? AND " +\
-               "main_index.id=?;", \
+            recordindex = cursor.execute("SELECT main_index.* "
+               "FROM main_index "
+               "INNER JOIN indexed_files "
+               "ON main_index.fileid = indexed_files.fileid "
+               "WHERE indexed_files.filename=? AND "
+               "main_index.id=?;",
                (self._handlename, self._recordkey))
         #description is always set, so this is safe to do first
         record_keys = [key[0] for key in recordindex.description]
@@ -184,22 +184,22 @@ class SeqProxyIndexManager(object):
 
         #case: indexdb is provided but already contains
         # this specific record. This operation should raise
-        cursor.execute("SELECT main_index.* " +\
-                       "FROM main_index " +\
-                       "INNER JOIN indexed_files " +\
-                       "ON main_index.fileid = indexed_files.fileid " +\
-                       "WHERE indexed_files.filename=? AND " +\
-                       "main_index.recordoffsetstart=?;", \
-                       (basename(self._handlename), \
+        cursor.execute("SELECT main_index.* "
+                       "FROM main_index "
+                       "INNER JOIN indexed_files "
+                       "ON main_index.fileid = indexed_files.fileid "
+                       "WHERE indexed_files.filename=? AND "
+                       "main_index.recordoffsetstart=?;",
+                       (basename(self._handlename),
                        indexdict["recordoffsetstart"]))
         samefileposition = cursor.fetchone()
-        cursor.execute("SELECT main_index.* " +\
-                       "FROM main_index " +\
-                       "INNER JOIN indexed_files " +\
-                       "ON main_index.fileid = indexed_files.fileid " +\
-                       "WHERE indexed_files.filename=? AND " +\
-                       "main_index.id=?;", \
-                       (basename(self._handlename), \
+        cursor.execute("SELECT main_index.* "
+                       "FROM main_index "
+                       "INNER JOIN indexed_files "
+                       "ON main_index.fileid = indexed_files.fileid "
+                       "WHERE indexed_files.filename=? AND "
+                       "main_index.id=?;",
+                       (basename(self._handlename),
                        indexdict["id"]))
         con.commit()
         sameid = cursor.fetchone()
@@ -217,7 +217,7 @@ class SeqProxyIndexManager(object):
         values = tuple(values)
         cur = con.cursor()
         cur.execute("INSERT INTO main_index ({0})".format(keys) +\
-                       "VALUES ({0})".format(placehold), values)
+                    "VALUES ({0})".format(placehold), values)
         indexid = cur.lastrowid
         #increment the file record counter
         cur.execute("UPDATE indexed_files SET count=count + 1 "
@@ -240,7 +240,7 @@ class SeqProxyIndexManager(object):
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("format", self._format))
         #create file table
-        con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY " +\
+        con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY "
                     "KEY, filename TEXT UNIQUE, count INTEGER);")
 
         #create basic index table:
@@ -252,22 +252,22 @@ class SeqProxyIndexManager(object):
         rows = sorted(list(indexdict.keys()))
         indextab = ", ".join([str(key) + " INTEGER" for key in rows \
                               if key != "id"])
-        indextab = "CREATE TABLE main_index(" + \
-                   "indexid INTEGER PRIMARY KEY, " + \
-                   "id TEXT, fileid INTEGER, "+ indextab + \
+        indextab = "CREATE TABLE main_index(" +\
+                   "indexid INTEGER PRIMARY KEY, " +\
+                   "id TEXT, fileid INTEGER, " + indextab +\
                    ", FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
         con.execute(indextab)
 
         #create features table
-        feattab = "CREATE TABLE features(" + \
-                  "fileid INTEGER, " + \
-                  "indexid INTEGER, " + \
-                  "offsetbegin INTEGER, " + \
+        feattab = "CREATE TABLE features(" +\
+                  "fileid INTEGER, " +\
+                  "indexid INTEGER, " +\
+                  "offsetbegin INTEGER, " +\
                   "offsetend INTEGER, " +\
-                  "seqbegin INTEGER, " + \
-                  "seqend INTEGER, " + \
-                  "qualifier TEXT, " + \
-                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid)" + \
+                  "seqbegin INTEGER, " +\
+                  "seqend INTEGER, " +\
+                  "qualifier TEXT, " +\
+                  "FOREIGN KEY(fileid) REFERENCES indexed_files(fileid) " +\
                   "FOREIGN KEY(indexid) REFERENCES main_index(indexid));"
         con.execute(feattab)
         con.commit()
@@ -284,21 +284,21 @@ class SeqProxyIndexManager(object):
             return self._handle_id
         if self._handle_id is None:
             cursor = con.cursor()
-            name = cursor.execute("SELECT fileid " +\
-                           "FROM indexed_files WHERE " +\
-                           "filename=?;", \
+            name = cursor.execute("SELECT fileid "
+                           "FROM indexed_files WHERE "
+                           "filename=?;",
                            (self._handlename,))
             name = name.fetchone()
             if name is not None:
                 self._handle_id = name[0]
                 return name[0]
             elif write:
-                cursor.execute("INSERT INTO indexed_files " +\
+                cursor.execute("INSERT INTO indexed_files "
                                "(filename, count) VALUES (?, ?);",
                                (self._handlename, 0))
-                name = cursor.execute("SELECT fileid " +\
-                           "FROM indexed_files WHERE " +\
-                           "filename=?;", \
+                name = cursor.execute("SELECT fileid "
+                           "FROM indexed_files WHERE "
+                           "filename=?;",
                            (self._handlename,)).fetchone()
                 self._handle_id = name[0]
                 con.commit()
@@ -312,13 +312,13 @@ class SeqProxyIndexManager(object):
         tempcursor = con.cursor()
         #case: database is empty
         tablenames = cursor.execute(
-            "SELECT name FROM sqlite_master WHERE " + \
+            "SELECT name FROM sqlite_master WHERE "
             "type='table' ORDER BY name;").fetchall()
         if len(tablenames) == 0:
             return False
         #case: database is valid and has correct format
         tablenames = [name[0] for name in tablenames]
-        expectedtables = ['features', 'indexed_files', \
+        expectedtables = ['features', 'indexed_files',
                           'main_index', 'meta_data']
         if tablenames == expectedtables:
             #quick check: format matches self._format
@@ -353,12 +353,12 @@ class SeqProxyIndexManager(object):
 
         #this will raise a NameError if the _index_id has not been set
         assert self._index_id is not None
-        cursor.execute("SELECT features.* " +\
-                       "FROM features " + \
-                       "INNER JOIN main_index mi " + \
-                       "ON mi.indexid = features.indexid " +\
-                       "WHERE features.indexid=? " +\
-                       "LIMIT 1;", \
+        cursor.execute("SELECT features.* "
+                       "FROM features "
+                       "INNER JOIN main_index mi "
+                       "ON mi.indexid = features.indexid "
+                       "WHERE features.indexid=? "
+                       "LIMIT 1;",
                        (self._index_id,))
         samefileposition = cursor.fetchone()
 
@@ -376,10 +376,10 @@ class SeqProxyIndexManager(object):
             assert _is_int_or_long(beginoffset)
             assert _is_int_or_long(endoffset)
             cursor.execute("INSERT INTO features "
-                           "(indexid, fileid, offsetbegin, offsetend, " +\
-                           "seqbegin, seqend, qualifier) " + \
-                           "VALUES (?, ?, ?, ?, ?, ?, ?);", \
-                           (self._index_id, fileid, beginoffset, \
+                           "(indexid, fileid, offsetbegin, offsetend, "
+                           "seqbegin, seqend, qualifier) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?);",
+                           (self._index_id, fileid, beginoffset,
                            endoffset, begin, end, qualifier))
         con.commit()
         con.close()
@@ -406,12 +406,12 @@ class SeqProxyIndexManager(object):
         #case: empty db, this is already dealt with in _index getter
 
         #case: indexdb is provided and has records
-        featureindexes = cursor.execute("SELECT f.seqbegin, " +\
-            "f.seqend, f.offsetbegin, f.offsetend, f.qualifier " +\
-            "FROM features f " +\
-            "WHERE f.indexid = ? " +\
-            "AND f.seqbegin >= ? " +\
-            "AND f.seqend <= ? " +\
+        featureindexes = cursor.execute("SELECT f.seqbegin, "
+            "f.seqend, f.offsetbegin, f.offsetend, f.qualifier "
+            "FROM features f "
+            "WHERE f.indexid = ? "
+            "AND f.seqbegin >= ? "
+            "AND f.seqend <= ? "
             "ORDER BY f.seqbegin;",
             (self._index_id, begin, end))
 
@@ -483,7 +483,7 @@ class SeqRecordProxyBase(SeqRecord):
     _per_letter_annotations = {}
     annotations = {}
 
-    def __init__(self, handle, startoffset=None, indexdb = None, \
+    def __init__(self, handle, startoffset=None, indexdb = None,
                  indexkey=None, alphabet=None):
 
         self._handle = handle
@@ -583,7 +583,7 @@ class SeqRecordProxyBase(SeqRecord):
                 indexsmall = min(start, stop)
                 indexlarge = max(start, stop)
                 if self.seq is None:
-                    raise ValueError("If the sequence is None, " +\
+                    raise ValueError("If the sequence is None, "
                                      "we cannot slice it.")
                 return SeqRecord(self[indexsmall:indexlarge].seq[::step],
                                  id=self.id,
@@ -606,13 +606,13 @@ class SeqRecordProxyBase(SeqRecord):
                         if f.ref or f.ref_db:
                             #TODO - Implement this (with lots of tests)?
                             import warnings
-                            warnings.warn("When slicing SeqRecord objects, "+\
-                                  "any SeqFeature referencing other "+\
-                                  "sequences (e.g. from segmented GenBank"+\
+                            warnings.warn("When slicing SeqRecord objects, "
+                                  "any SeqFeature referencing other "
+                                  "sequences (e.g. from segmented GenBank"
                                   " records) are ignored.")
                             continue
                         if start <= f.location.nofuzzy_start \
-                        and f.location.nofuzzy_end <= stop:
+                            and f.location.nofuzzy_end <= stop:
                             seq_proxy_copy._features.append(f._shift(-start))
                 return seq_proxy_copy
 
@@ -816,7 +816,7 @@ class LazyIterator(object):
                 self.handles[fkey] = HandleWrapper(fkey, handle_queue)
             #Check if the database is empty and which files are indexed
             con = _get_db_connection(self.index)
-            table_exists = con.execute("SELECT name FROM sqlite_master " +\
+            table_exists = con.execute("SELECT name FROM sqlite_master "
                 "WHERE type='table' AND name='indexed_files'")
             table_exists = True and [val for val in table_exists]
             if table_exists:
@@ -837,8 +837,8 @@ class LazyIterator(object):
                                        alphabet=self.alphabet)
                     except ValueError as e:
                         if "corrupt" in str(e):
-                            raise ValueError("database is corrupt, please d" +\
-                                "elete it and make a new one", e)
+                            raise ValueError("database is corrupt, please"
+                                " delete it and make a new one", e)
                         else:
                             raise e
                     temphandle.close()
@@ -866,10 +866,10 @@ class LazyIterator(object):
         else:
             for f in self.files:
                 handle = open(f, 'rb')
-                record_offset = _get_first_record_start_offset(handle, \
+                record_offset = _get_first_record_start_offset(handle,
                     file_format=self.format)
                 while record_offset is not None:
-                    result = return_class(handle, startoffset=record_offset, \
+                    result = return_class(handle, startoffset=record_offset,
                         indexdb=None, indexkey=None, alphabet=self.alphabet)
                     record_offset = result.next_record_offset()
                     yield result
@@ -883,10 +883,10 @@ class LazyIterator(object):
             con = _get_db_connection(self.index)
             for f in self.files:
                 fname = basename(f)
-                tempkeys = con.execute("SELECT idx.id " +\
-                    "FROM main_index idx " +\
-                    "INNER JOIN indexed_files idxf " +\
-                    "ON idxf.fileid = idx.fileid " +\
+                tempkeys = con.execute("SELECT idx.id "
+                    "FROM main_index idx "
+                    "INNER JOIN indexed_files idxf "
+                    "ON idxf.fileid = idx.fileid "
                     "WHERE idxf.filename = ?",
                     (fname,))
                 tempkeys = [_as_string(k[0]) for k in tempkeys]
@@ -895,7 +895,7 @@ class LazyIterator(object):
                 keys.extend(tempkeys)
             con.close()
             if len(keys) != len(set(keys)):
-                raise KeyError("Files contain overlapping records and " +\
+                raise KeyError("Files contain overlapping records and "
                                "can only be loaded separately.")
             return keys
 
@@ -943,16 +943,16 @@ class LazyIterator(object):
         recordid = self._keymap[key]
         filekey = self.record_to_file[recordid]
         handle = self.handles[filekey]
-        return self.return_class(handle, indexkey=recordid, \
-                                 indexdb=self.index, \
+        return self.return_class(handle, indexkey=recordid,
+                                 indexdb=self.index,
                                  alphabet=self.alphabet)
 
 def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
     """(private) populate index db with file's index information"""
     record_offset = _get_first_record_start_offset(handle, format)
     while record_offset is not None:
-        temp = return_class(handle, startoffset=record_offset, \
-                           indexdb=indexdb, indexkey=None, alphabet=alphabet)
+        temp = return_class(handle, startoffset=record_offset,
+                            indexdb=indexdb, indexkey=None, alphabet=alphabet)
         record_offset = temp.next_record_offset()
 
 def _get_first_record_start_offset(handle, file_format=None):
@@ -1240,7 +1240,7 @@ class FeatureBinCollection(object):
             if _is_int_or_long(key):
                 key = slice(key, key+1)
             else:
-                raise TypeError("lookups in the feature bin" + \
+                raise TypeError("lookups in the feature bin"
                                 " must use slice or int keys")
 
         #fix begin or end index for slicing of forms: bins[50:] or bins[:]
@@ -1250,7 +1250,7 @@ class FeatureBinCollection(object):
 
         #any integers are just converted to a 'len() == 1' slice
         if keystep is not None and keystep != 1:
-            raise KeyError("lookups in the feature bin may not use" + \
+            raise KeyError("lookups in the feature bin may not use"
                            " slice stepping ex. bins[0:50:2]")
 
         #pre-sort if necessary
@@ -1439,8 +1439,8 @@ class LinkedElement(object):
             return self.children[0]
 
     def __repr__(self):
-        return "< LinkedElement tag={0}, position=({1},{2}) >". \
-                format(self.tag, self.indexbegin, self.indexend)
+        return "< LinkedElement tag={0}, position=({1},{2}) >"\
+                .format(self.tag, self.indexbegin, self.indexend)
 
     def depth(self):
         """Recursive call; mostly useful for debugging"""
@@ -1480,7 +1480,7 @@ class ExpatHandler(object):
     validation of data.
     """
 
-    def __init__(self, handle, targetfield, tagstoparse, \
+    def __init__(self, handle, targetfield, tagstoparse,
                  parser_class=expat.ParserCreate):
         self._handle = handle
         self._parser_class = parser_class
@@ -1557,7 +1557,7 @@ class ExpatHandler(object):
 
 
         if len(rootelem.children) == 0:
-            raise ValueError("The XML @ offset={0} did not contain a '{1}' tag"\
+            raise ValueError("The XML @ offset={0} didn't contain a '{1}' tag"\
                               .format(position, self.targetfield))
 
         return rootelem
