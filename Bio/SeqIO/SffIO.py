@@ -798,7 +798,7 @@ class _AddTellHandle(object):
 
     def seek(self, offset):
         if offset < self._offset:
-            raise RunTimeError("Can't seek backwards")
+            raise RuntimeError("Can't seek backwards")
         self._handle.read(offset - self._offset)
 
     def close(self):
