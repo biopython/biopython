@@ -91,7 +91,7 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.parser = SeqIO.FastaIO.FastaLazyIterator
 
     def test_iterator_finishes_win_type(self):
-        """The iterator must finish"""
+        """Test lazy iterator finishes with correct number of records"""
         lazyiterator = self.parser(test_seq_win)
         for count, rec in enumerate(lazyiterator):
             pass
@@ -102,22 +102,22 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(count, 1)
 
     def test_iterator_returns_a_lazy_record(self):
-        """checks the iterator returns the correct record"""
-        lazyiterator = self.parser(test_seq_win)
-        first_seq = next(lazyiterator)
+        """Checks the lazy iterator returns the correct record"""
+        first_seq = next(self.parser(test_seq_win))
         self.assertTrue(isinstance(first_seq,SeqIO.FastaIO.FastaSeqRecProxy))
 
     def test_indexing_simple_record_win(self):
-        lazyiterator = self.parser(test_seq_win)
-        first_seq = next(lazyiterator)
+        """Test indexing of a record with windows line endings"""
+        first_seq = next(self.parser(test_seq_win))
         idx = first_seq._index.record
         self.assertEqual(idx["sequenceletterwidth"], 60)
         self.assertEqual(idx["sequencelinewidth"], 62)
         self.assertEqual(idx["recordoffsetstart"], 0)
 
     def test_indexing_2nd_record_unix(self):
+        """Test indexing of a record with unix line endings"""
         lazyiterator = self.parser(test_seq_unix)
-        second_seq = next(lazyiterator)
+        first_seq = next(lazyiterator)
         second_seq = next(lazyiterator)
         idx = second_seq._index.record
         self.assertEqual(idx["sequenceletterwidth"], 51)
@@ -125,13 +125,15 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(idx["recordoffsetstart"], 290)
 
     def test_len_win(self):
+        """Test that the 'seqlen' index value is correct"""
         lazyiterator = self.parser(test_seq_win)
         first_seq = next(lazyiterator)
         self.assertEqual(first_seq._index.record["seqlen"], 225)
 
     def test_indexing_2nd_record_win(self):
+        """Test several index values on the second record"""
         lazyiterator = self.parser(test_seq_win)
-        second_seq = next(lazyiterator)
+        first_seq = next(lazyiterator)
         second_seq = next(lazyiterator)
         idx = second_seq._index.record
         self.assertEqual(idx["sequenceletterwidth"], 51)
@@ -139,70 +141,69 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(idx["recordoffsetstart"], 295)
 
     def test_sequence_getter_zero_unix(self):
-        lazyiterator = self.parser(test_seq_unix)
-        firstseq = next(lazyiterator)
+        """Test sequence getting from unix endlines"""
+        firstseq = next(self.parser(test_seq_unix))
         s = firstseq[0:10]
         self.assertEqual(str(s.seq), "MAPNASCLCV")
 
     def test_sequence_getter_zero_win(self):
-        lazyiterator = self.parser(test_seq_win)
-        firstseq = next(lazyiterator)
+        """Test sequence getting from unix endlines"""
+        firstseq = next(self.parser(test_seq_win))
         s = firstseq[0:10]
         self.assertEqual(str(s.seq), "MAPNASCLCV")
 
     def test_double_padded_seq_len(self):
-        lazyiterator = self.parser(test_double_padded)
-        firstseq = next(lazyiterator)
+        """Test sequence getting when padded with extra newline"""
+        firstseq = next(self.parser(test_double_padded))
         self.assertEqual(len(firstseq), 40)
 
     def test_double_padded_padding_difference(self):
+        """Sequence getting 2nd record padded with extra newline"""
         lazyiterator = self.parser(test_double_padded)
         firstseq = next(lazyiterator)
         secondseq = next(lazyiterator)
-        idx =firstseq._index.record
+        idx = firstseq._index.record
         firstseqend = idx["recordoffsetstart"] + idx["recordoffsetlength"]
         padding = secondseq._index.record["recordoffsetstart"] - firstseqend
         self.assertEqual(2, padding)
 
     def test_one_bad_sequence_line(self):
-        lazyiterator = self.parser(test_bad_line)
-        firstseq = next(lazyiterator)
-        #self.assertEqual(45, len(firstseq))
-        #self.assertEqual("DEMANS", str(firstseq[24:30].seq))
+        """Test corrupt record raises"""
+        firstseq = next(self.parser(test_bad_line))
         self.assertRaises(ValueError, firstseq._read_seq)
 
     def test_end_iteration(self):
+        """Test StopIteration happens properly"""
         lazyiterator = self.parser(test_seq_unix)
         firstseq = next(lazyiterator)
         secondseq = next(lazyiterator)
         self.assertRaises(StopIteration, next, lazyiterator)
 
     def test_one_bad_sequence_header(self):
-        lazyiterator = self.parser(test_bad_header)
-        firstseq = next(lazyiterator)
-        #self.assertEqual(45, len(firstseq))
-        #self.assertEqual("DEMANS", str(firstseq[24:30].seq))
+        """Test poorly formatted seq-header raises ValueError"""
+        firstseq = next(self.parser(test_bad_header))
         self.assertRaises(ValueError, firstseq._read_seq)
 
     def test_sequence_getter_unix(self):
-        lazyiterator = self.parser(test_seq_unix)
-        firstseq = next(lazyiterator)
+        """Test sequence getter for unix formatted endlines"""
+        firstseq = next(self.parser(test_seq_unix))
         s = firstseq[6:10]
         self.assertEqual(str(s.seq), "CLCV")
 
     def test_sequence_getter_win(self):
-        lazyiterator = self.parser(test_seq_win)
-        firstseq = next(lazyiterator)
+        """Test sequence getter for windows formatted endlines"""
+        firstseq = next(self.parser(test_seq_win))
         s = firstseq[6:10]
         self.assertEqual(str(s.seq), "CLCV")
 
     def test_sequence_getter_unix_2_line_span1(self):
-        lazyiterator = self.parser(test_seq_unix)
-        firstseq = next(lazyiterator)
+        """Test seq getter slicing in for unix endlines"""
+        firstseq = next(self.parser(test_seq_unix))
         s = firstseq[59:62]
         self.assertEqual(str(s.seq), "RRS")
 
     def test_sequence_getter_unix_2_line_span2(self):
+        """Test seq getter in 2nd record with unix endlines"""
         lazyiterator = self.parser(test_seq_gaped)
         firstseq = next(lazyiterator)
         secondseq = next(lazyiterator)
@@ -210,39 +211,31 @@ class LazyFastaIOSimpleTests(unittest.TestCase):
         self.assertEqual(str(s.seq), "RGY")
 
     def test_sequence_getter_unix_2_line_span3(self):
-        lazyiterator = self.parser(test_seq_win)
-        firstseq = next(lazyiterator)
+        """Test sequence getter for win endlines 2line span + 1 char"""
+        firstseq = next(self.parser(test_seq_win))
         s = firstseq[58:62]
         self.assertEqual(str(s.seq), tsuseq[58:62])
 
     def test_sequence_getter_win_2_line_span(self):
-        lazyiterator = self.parser(test_seq_win)
-        firstseq = next(lazyiterator)
+        """tet sequence getter win endlines 2 line span"""
+        firstseq = next(self.parser(test_seq_win))
         s = firstseq[59:61]
         self.assertEqual(str(s.seq), tsuseq[59:61])
 
-    def test_sequence_getter_full_span(self):
-        lazyiterator = self.parser(test_seq_unix)
-        firstseq = next(lazyiterator)
-        s = firstseq
-        self.assertEqual(str(s.seq), tsuseq)
-
     def test_sequence_getter_explicit_full_span(self):
-        lazyiterator = self.parser(test_seq_unix)
-        firstseq = next(lazyiterator)
+        """test near-full sequence getter unix endlines"""
+        firstseq = next(self.parser(test_seq_unix))
         s = firstseq[3:225]
         self.assertEqual(str(s.seq), tsuseq[3:225])
 
     def test_sequence_getter_inset_full_span(self):
-        lazyiterator = self.parser(test_seq_unix)
-        firstseq = next(lazyiterator)
+        """Test sequence getter fullspan with unix endlines"""
+        firstseq = next(self.parser(test_seq_unix))
         s = firstseq[0:161]
         self.assertEqual(len(tsuseq[0:161]), 161)
         self.assertEqual(len(s), 161)
         self.assertEqual(len(s.seq), 161)
         self.assertEqual(str(s.seq), tsuseq[0:161])
-
-
 
 #
 ### tests for base class wrapper
