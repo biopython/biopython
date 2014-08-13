@@ -885,16 +885,15 @@ class TestSeqIOBindings(unittest.TestCase):
         self.assertRaises(KeyError, indexer, key_fx)
 
     def test_bad_file_set(self):
-        """test that an aggressive key function throws an error"""
+        """test that adding redundant files will raise an error"""
         dbf = self.dbfile
         fastas = self.duplicatefiles
         indexer = lambda f: SeqIO.index_db(dbf, f, format="fasta", lazy=True)
         self.assertRaises(KeyError, indexer, fastas)
 
     def test_seqio_parse_nodb(self):
-        """test that an aggressive key function throws an error"""
+        """test seqio parser without db"""
         fasta = self.onefile
-        key_fx = lambda x: "returnval"
         firstten = ["CGGACCAGAC",
                     "CGGAGCCAGC",
                     "GATCAAATCT"]
@@ -903,7 +902,7 @@ class TestSeqIOBindings(unittest.TestCase):
             self.assertEqual(str(record[:10].seq), firstten[index])
 
     def test_seqio_parse_get_raw(self):
-        """test that an aggressive key function throws an error"""
+        """Test get_raw on a lazy record"""
         fasta = self.onefile
         parseriter = SeqIO.parse(fasta, "fasta", lazy=True)
         firstrec = next(parseriter)
@@ -915,7 +914,7 @@ class TestSeqIOBindings(unittest.TestCase):
         self.assertEqual(firstrec.id, fakerec.id)
 
     def test_seqio_indexdb_get_raw(self):
-        """test that an aggressive key function throws an error"""
+        """test get_raw(key) in a lazy index_db"""
         fasta = self.onefile
         dbf = self.dbfile
         def key_fx(key):
@@ -932,7 +931,7 @@ class TestSeqIOBindings(unittest.TestCase):
         self.assertEqual(firstrec.id, fakerec.id)
 
     def test_seqio_parse_withdb(self):
-        """test that an aggressive key function throws an error"""
+        """test seqio parse with lazy database"""
         dbf = self.dbfile
         fasta = self.onefile
         key_fx = lambda x: "returnval"
