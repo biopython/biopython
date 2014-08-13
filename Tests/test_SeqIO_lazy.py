@@ -355,7 +355,6 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
 
     def setUp(self):
         self.ab = single_letter_alphabet
-        pass
 
     def test_simple_tester(self):
         """checks on basic definitions in tester class"""
@@ -364,7 +363,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         handle = BytesIO(_as_bytes(handle))
         handle.name = "fake"
         a = MinimalLazySeqRecord(handle, 0,
-                                   alphabet = self.ab)
+                                 alphabet = self.ab)
         self.assertEqual(0, a._index_begin)
         self.assertEqual(12, a._index_end)
         self.assertEqual(None, a._seq)
@@ -383,6 +382,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual("sequencefake", str(a._seq))
 
     def test_simple_index_grab(self):
+        """Test simple index getting"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
@@ -394,17 +394,19 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual(9, b._index_end)
 
     def test_simple_index_grab_handle_identity(self):
+        """Test simple index slicing, handle identity"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
         handle.name = "fake"
         a = MinimalLazySeqRecord(handle, 0,
-                                   alphabet = self.ab)
+                                 alphabet = self.ab)
         b = a[1:9]
         self.assertTrue(a._handle is b._handle)
         self.assertTrue(a is not b)
 
     def test_two_level_getter_indexes(self):
+        """Test private index position has changed"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
@@ -417,6 +419,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual(9, c._index_end)
 
     def test_two_level_getter_handle_identity(self):
+        """Test multi level getting and handle identity"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
@@ -428,6 +431,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertTrue(a._handle is c._handle)
 
     def test_upper(self):
+        """Test upper function"""
         handle = "fakeid\nseQUencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
@@ -438,6 +442,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual("SEQUENCEFAKE", str(b._seq))
 
     def test_lower(self):
+        """Test lower function"""
         handle = "fakeid\nseQUEncefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
@@ -448,12 +453,13 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual("sequencefake", str(b._seq))
 
     def test_repr(self):
-        out = r"""MinimalLazySeqRecord(seq=NOT_READ, id=fakeid, """ + \
-              r"""name=<unknown name>, description=<unknown description>,"""+\
+        """Test modified lazy repr function"""
+        out = r"""MinimalLazySeqRecord(seq=NOT_READ, id=fakeid, """ +\
+              r"""name=<unknown name>, description=<unknown description>,""" +\
               r""" dbxrefs=[])"""
         out2 = r"""MinimalLazySeqRecord(seq=Seq('sequencefake', """ +\
-               r"""SingleLetterAlphabet()), id=fakeid, """ + \
-               r"""name=<unknown name>, description=<unknown description>"""+\
+               r"""SingleLetterAlphabet()), id=fakeid, """ +\
+               r"""name=<unknown name>, description=<unknown description>""" +\
                r""", dbxrefs=[])"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
@@ -466,6 +472,7 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual(out2, repr(a))
 
     def test_len_method(self):
+        """Test lazy record length method"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
@@ -544,7 +551,6 @@ class TestFeatureBinCollection(unittest.TestCase):
         self.assertEqual(self.bins._max_bin_power, 26)
 
     def test_binning_size_changer_multiple_steps(self):
-        """trigger a size rearrangement twice"""
         k_overFull = self.bins._calculate_bin_index(1,8388608*8)
         self.assertEqual(self.bins._max_sequence_length, 8388608*8*8)
         k_full = self.bins._calculate_bin_index(0,8388608*8)
