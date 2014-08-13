@@ -910,7 +910,7 @@ class LazyIterator(object):
     def _get_keys_from_db(self):
         """For a list of handle name, return all record keys"""
         if not self.use_an_index:
-            raise ValueError("No keys or dict-type access without a db-index")
+            raise RuntimeError("No dict-type access without a db-index")
         else:
             self.record_to_file = {}
             keys = []
@@ -936,7 +936,7 @@ class LazyIterator(object):
     def get(self, key, d=None):
         """D.get(k[,d]) -> D[k] if k in D, else d. d defaults to None."""
         if not self.use_an_index:
-            raise TypeError("An index file is required to use 'get'")
+            raise RuntimeError("An index file is required to use 'get'")
         if key in self._keys:
             return self[key]
         else:
@@ -945,14 +945,14 @@ class LazyIterator(object):
     def get_raw(self, key):
         """D.get_raw(k), returns raw file data for record [k]."""
         if not self.use_an_index:
-            raise TypeError("An index file is required to use 'get_raw'")
+            raise RuntimeError("An index file is required to use 'get_raw'")
         rec = self[key]
         return rec.get_raw()
 
     def items(self):
         """D.items() -> a set-like object providing a view on D's items"""
         if not self.use_an_index:
-            raise TypeError("An index file is required to use 'items'")
+            raise RuntimeError("An index file is required to use 'items'")
         for k in self._keys:
             yield (k, self[k])
 
@@ -961,19 +961,19 @@ class LazyIterator(object):
     def keys(self):
         """"D.keys() -> a set-like object providing a view on D's keys"""
         if not self.use_an_index:
-            raise TypeError("An index file is required to use 'keys'")
+            raise RuntimeError("An index file is required to use 'keys'")
         return self._keys
 
     def __contains__(self, key):
         if not self.use_an_index:
-            raise TypeError("An index file is required to use '__getitem__'")
+            raise RuntimeError("An index file is required for '__contains__'")
         if key in self.record_to_file:
             return True
         return False
 
     def __getitem__(self, key):
         if not self.use_an_index:
-            raise TypeError("An index file is required to use '__getitem__'")
+            raise RuntimeError("An index file is required for '__getitem__'")
         recordid = self._keymap[key]
         filekey = self.record_to_file[recordid]
         handle = self.handles[filekey]
