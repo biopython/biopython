@@ -257,6 +257,7 @@ class TestWrapperWithGenBank(unittest.TestCase):
         os.remove(self.dbfilename)
 
     def test_make_one_record_with_db(self):
+        """Test lazy class wrapper with database input"""
         #make the iter
         lazy_iter = LazyIterator(files = [self.filename],
                                  return_class = self.returncls,
@@ -269,15 +270,13 @@ class TestWrapperWithGenBank(unittest.TestCase):
         self.assertTrue(isinstance(temprec, InsdcIO.GenbankSeqRecProxy))
 
     def test_make_two_records_with_same_db(self):
-        #make the iter
+        """test making 2 lazy records sequentially accessing same DB"""
         lazy_iter = LazyIterator(files = [self.filename],
                                  return_class = self.returncls,
                                  index = self.dbfilename)
         lazy_iter2 = LazyIterator(files = [self.filename2],
                                  return_class = self.returncls,
                                  index = self.dbfilename)
-        #test that it iterates
-
         self.assertEqual(lazy_iter.keys(), ["FJ940752.1"])
         self.assertEqual(lazy_iter2.keys(), ['X55053.1', 'X62281.1', \
                 'M81224.1', 'AJ237582.1', 'L31939.1', 'AF297471.1'])
@@ -287,7 +286,7 @@ class TestWrapperWithGenBank(unittest.TestCase):
             self.assertTrue(isinstance(r, InsdcIO.GenbankSeqRecProxy))
 
     def test_make_one_record_without_db(self):
-        #make the iter
+        """Test using the lazy iter without a db"""
         lazy_iter = LazyIterator(files = [self.filename],
                                  return_class = self.returncls,
                                  index = True)
@@ -299,6 +298,7 @@ class TestWrapperWithGenBank(unittest.TestCase):
         self.assertTrue(isinstance(temprec, InsdcIO.GenbankSeqRecProxy))
 
     def test_getter_using_brca_id(self):
+        """Test get-by-ID using the lazy-iter"""
         lazydict = LazyIterator(files = [self.filename],
                          return_class = self.returncls,
                          index = self.dbfilename)
