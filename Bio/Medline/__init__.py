@@ -13,9 +13,6 @@ read             Reads one Medline record
 parse            Allows you to iterate over a bunch of Medline records
 """
 
-
-from __future__ import print_function
-
 class Record(dict):
     """A dictionary holding information from a Medline record.
     All data are stored under the mnemonic appearing in the Medline
@@ -96,6 +93,10 @@ class Record(dict):
     ORI       Original report in
     """
 
+textkeys = frozenset(["ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", 
+    "TT", "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
+    "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
+    "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT"])
 
 def parse(handle):
     """Read Medline records one by one from the handle.
@@ -113,44 +114,31 @@ def parse(handle):
 
     """
     #TODO - Turn that into a working doctest
-    # These keys point to string values
-    textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
-                "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
-                "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
-                "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT")
     handle = iter(handle)
-    # First skip blank lines
+
+    key = ""
+    record = Record()
     for line in handle:
         line = line.rstrip()
-        if line:
-            break
-    else:
-        return
-    record = Record()
-    finished = False
-    while not finished:
         if line[:6] == "      ":  # continuation line
             record[key].append(line[6:])
         elif line:
             key = line[:4].rstrip()
-            if not key in record:
+            if key not in record:
                 record[key] = []
             record[key].append(line[6:])
-        try:
-            line = next(handle)
-        except StopIteration:
-            finished = True
-        else:
-            line = line.rstrip()
-            if line:
-                continue
-        # Join each list of strings into one string.
-        for key in textkeys:
-            if key in record:
-                record[key] = " ".join(record[key])
-        if record:
+        elif record:
+            # Join each list of strings into one string.
+            for key in record:
+                if key in textkeys:
+                    record[key] = " ".join(record[key])
             yield record
-        record = Record()
+            record = Record()
+    if record:  # catch last one
+        for key in record:
+            if key in textkeys:
+                record[key] = " ".join(record[key])
+        yield record
 
 
 def read(handle):
