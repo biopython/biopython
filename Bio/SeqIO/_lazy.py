@@ -1020,7 +1020,8 @@ class LazyIterator(object):
                     "FROM main_index idx "
                     "INNER JOIN indexed_files idxf "
                     "ON idxf.fileid = idx.fileid "
-                    "WHERE idxf.filename = ?",
+                    "WHERE idxf.filename = ? "
+                    "ORDER BY idx.indexid;",
                     (fname,))
                 tempkeys = [_as_string(k[0]) for k in tempkeys]
                 for key in tempkeys:
