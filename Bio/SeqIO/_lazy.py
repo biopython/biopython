@@ -711,6 +711,16 @@ class SeqRecordProxyBase(SeqRecord):
     #def __contains__(self, char):
     #def __iter__(self):
 
+def inherit_lazy_method_doc(meth):
+    """Use as a decorator to fix docstrings of lazy derived methods"""
+    methodname = meth.__name__
+    if hasattr(SeqRecordProxyBase, methodname):
+        meth.__doc__ = getattr(SeqRecordProxyBase, methodname).__doc__
+    else:
+        raise ValueError("'{0}' is not defined in SeqRecordProxyBase"\
+                         .format(methodname))
+    return meth
+
 class HandleQueueLRU(object):
     """A simplified LRU cache that serves handles to HandleWrapper
 
