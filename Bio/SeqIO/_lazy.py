@@ -80,15 +80,27 @@ class SeqProxyIndexManager(object):
     this index manager will provide the following public attriubes
     and method.
 
-    record  - (dict) stores the main record index
-    set_record_index() - (method) allows the setting and storage
-                         of a new record index
-    set_feature_index() - (method) allows the setting and storage
-                          of a new set of feature indexes
-    get_features() - (method) retrieves the stored feature index
+    Attributes:
+      record (dict): stores the main record index
     """
 
-    def __init__(self, format, indexdb=None, recordkey=None, handlename=None):
+    def __init__(self, filefmt, indexdb=None, recordkey=None, handlename=None):
+        """Initialize SeqProxyIndexManager
+
+        The SeqProxyIndexManager may be initialized with or without an
+        index database file, this init must adjust behavior of the class
+        to account for both cases.
+
+        Args:
+          filefmt (str): The format of files to be indexed.
+          indexdb (str): A string with the full path to the SQLite
+            index bein used
+          recordkey (str or int): When fetching from the database, the
+            `recordkey` is used to grab a specific record. int type keys
+            will fetch a record by the order in which it was added.
+          handlename (str): The basename of the file a record is
+            associated with. This is used for both storage and lookup.
+        """
         #recordkey should never be passed in the absence of a valid indexdb
         if recordkey is not None and indexdb is None:
             raise ValueError("SeqProxyIndexManager requires an indexdb"
@@ -99,7 +111,7 @@ class SeqProxyIndexManager(object):
         #public attributes
         self.record = {}
         #private attributes
-        self._format = format
+        self._format = filefmt
         self._recordkey = recordkey
         self._features = None
         self._handlename = handlename
@@ -115,13 +127,13 @@ class SeqProxyIndexManager(object):
     def _load_record_index(self):
         """Returns the index dictionary from memory or from database
 
-        When the database is not provided:
+        When the database (_indexdb) is None:
         This function will preferentially supply an index from memory.
         Since the _indexdb is None, it will provide None for the _index
         indicating to the lazy loading proxy that an index must be
         created.
 
-        When the database (_indexdb) is provided:
+        When the database (_indexdb) is set:
         This function will still preferentially supply an index from
         memory. If the database is valid and empty it will provide None
         for the _index indicating to the lazy loading proxy that an
@@ -169,7 +181,19 @@ class SeqProxyIndexManager(object):
 
 
     def set_record_index(self, indexdict):
-        """Save a new index dict to the database"""
+        """Save a new index dict to the database
+
+        Given a new indexdict, the database will be loaded with the
+        record unless the database already contains the given record.
+        Should a conflict be found, a ValueError will be raised.
+
+        When no database exists, using this just sets the dict in
+        memory for later retrieval.
+
+        Args:
+          indexdict (dict): A dictionary corresponding to an indexed
+            sequence record.
+        """
         if not isinstance(indexdict, dict):
             raise ValueError("New index must be a dictionary")
         if self._indexdb is None:
@@ -232,7 +256,17 @@ class SeqProxyIndexManager(object):
         index_exists = True
 
     def _create_tables(self, con, indexdict):
-        """create metadata table and populate format"""
+        """create metadata table and populate format
+
+        For a blank database, a valid indexdict is used as the template
+        for creating the correct rows in the record index.
+
+        Args:
+          con (sqlite db connection): a connection to the sqlite db
+          indexdict (dict): A dictionary corresponding to an indexed
+            sequence record. This is a template for the main_index
+            table
+        """
         #set locking mode and synchronous
         con.execute("PRAGMA synchronous=0")
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
@@ -282,6 +316,11 @@ class SeqProxyIndexManager(object):
         found in the database will return None while setting write to
         True will require that the file is written prior to returning
         the fileid
+
+        Args:
+          con (sqlite db connection): a connection to the sqlite db
+          write (bool): if write is True, the handle id will be added
+            to the indexed_files table.
         """
         if self._handle_id is not None:
             return self._handle_id
@@ -310,7 +349,11 @@ class SeqProxyIndexManager(object):
                 return None
 
     def _is_valid_db_with_tables(self, con):
-        """if db is empty False, if correct tables True, else raise"""
+        """if db is empty False, if correct tables True, else raise
+
+        Args:
+          con (sqlite db connection): a connection to the sqlite db
+        """
         cursor = con.cursor()
         #case: database is empty
         tablenames = cursor.execute(
@@ -336,7 +379,12 @@ class SeqProxyIndexManager(object):
 
 
     def set_feature_index(self, feature_index_list):
-        """Save a new index dict to the database"""
+        """Save feature index to the database and set to memory
+
+         Args:
+          feature_index_list (FeatureBinCollection): All features made
+            by the feature indexer
+        """
 
         if not isinstance(feature_index_list, FeatureBinCollection):
             raise ValueError("_feature_index must be a FeatureBinCollection")
@@ -387,7 +435,12 @@ class SeqProxyIndexManager(object):
         con.close()
 
     def get_features(self, begin, end):
-        """Return all features related to the protein from begin to end"""
+        """Return all features contained the defined range
+
+        Args:
+          begin (int): inclusive beginning of features to fetch
+          end (int): exclusive endpoint of features to fetch
+        """
         truebegin, trueend = 0, self.record["seqlen"]
 
         if isinstance(self._features, FeatureBinCollection):
