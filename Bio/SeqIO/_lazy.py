@@ -482,53 +482,58 @@ class SeqProxyIndexManager(object):
         return container
 
 class SeqRecordProxyBase(SeqRecord):
-    """A SeqRecord object holds a sequence and information about it.
+    """Base class for lazy-SeqRecord objects
 
-    Main attributes:
-     - id          - Identifier such as a locus tag (string)
-     - seq         - The sequence itself (Seq object or similar)
+    This implements the parser base for lazy seq record objects. In
+    order to implement lazy seq record objects, this class defines
+    a parser interface that, when implemented will generate indexes
+    and allow their loading. This class also implements a compatability
+    layer to allow access to all methods of the standard seq record
+    even while using a lazy record.
 
-    Additional attributes:
-     - name        - Sequence name, e.g. gene name (string)
-     - description - Additional text (string)
-     - dbxrefs     - List of database cross references.
-     - features    - Any (sub)features, as SeqFeature objects
-     - annotations - Further information about the whole sequence.
-                     Most entries are strings, or lists of strings.
-     - letter_annotations - Per letter/symbol annotation (restricted
-                     dictionary). This holds Python sequences (lists,
-                     strings or tuples) whose length matches that of
-                     the sequence. A typical use would be to hold a
-                     list of integers representing sequencing quality
-                     scores, or representing the secondary structure.
+    Attributes:
+      id (str): Identifier such as a locus tag.
+      seq (Seq): The genetic or protein sequence.
+      name (str): Sequence name, e.g. gene name (string)
+      description (str): Additional text, long form
+      dbxrefs (str[]): list of database cross references
+      features (SeqFeature[]): a list of an SeqFeature objects
+      annotations (dict) - Further information about the whole sequence.
+        Most entries are strings, or lists of strings.
+      letter_annotations () - Per letter/symbol annotation (restricted
+        dictionary). This holds Python sequences (lists, strings or
+        tuples) whose length matches that of the sequence. A typical
+        use would be to hold a list of integers representing sequencing
+        quality scores, or representing the secondary structure.
 
-    You will typically use Bio.SeqIO to read in sequences from files
-    as SeqRecord objects.  However, you may want to create your own
-    SeqRecord objects directly (see the __init__ method for details):
+    In order to implemet a new lazy loading class, the following
+    methods must be implemented in a derived classe:
+      _read_seq(): gets the sequence from file and sets it
+        to the _seq attribute
+      _make_record_index(dict): index the record and return
+        a dict. Each record index must contain all possible
+        index keys, even if the specific record does not contain
+        specific indexable attributes. Keys must be strings and
+        values must be integers. The "id" key is the only key
+        that can be set as a str.
+      _read_features(): read features from ft. index
+      _make_feature_index(): make feature index by inserting
+        feature index tuples into a provided index manager
+      _load_non_lazy_values(): load all values from the record
+        that aren't explicitly loaded on demand.
 
-    #subclassing to-do list
-    attributes that must be managed or utilized
-     -   _seq         ::  sequence type, set by _read_seq
-     -   name
-     -   dbxrefs      ::  [] db cross references
-     -   id           ::  id string
-     -   _features    ::  list of SeqFeatures
-     -   _annotations ::  dict of annotations
-     -   _letter_an...::  per letter information
+    In addition to the methods, the following attribute must be set:
+      _format (str): a text string of the file format
 
-     -   _index_begin ::  defines begin index w/r/t global seq position
-     -   _index_end   ::  defines end index w/r/t global seq position
-
-    methods need implementation by derived class:
-     - _format               :: a text string of the format
-     - _read_seq             :: gets the sequence from file and sets it
-     - _make_record_index    :: index the nce portion
-              the record index is primarily format specific
-              but it must contain the keys "id" and "seqlen"
-     - _read_features        :: read features from ft. index
-     - _make_feature_index   :: make feature index
-     - _load_non_lazy_values :: load all values from lazy
-
+    The following are imporant private attributes created and managed
+    by the lazy objects that may need to be tracked to implement
+    the various hook methods.
+      _seq (Seq): sequence type, set by _read_seq
+      _features (list): list of SeqFeatures made by _read_features()
+      _index_begin (int): defines the inclusive position with respect
+        to the original record's sequence (the least sliced version)
+      _index_end (int): defines end (exclusive) with respect to the
+        original record's sequence
     """
 
     _seq = None
@@ -540,7 +545,7 @@ class SeqRecordProxyBase(SeqRecord):
 
     def __init__(self, handle, startoffset=None, indexdb=None,
                  indexkey=None, alphabet=None):
-
+        """Initialize the lazy-seq-record and build the index object"""
         self._handle = handle
         self._alphabet = alphabet
         self._indexdb = indexdb
@@ -549,6 +554,7 @@ class SeqRecordProxyBase(SeqRecord):
             name = basename(handle.name)
         else:
             name = None
+        #Inializing the index object
         self._index = SeqProxyIndexManager(self._format,
             indexdb=indexdb, recordkey=indexkey,
             handlename=name)
@@ -572,7 +578,7 @@ class SeqRecordProxyBase(SeqRecord):
         self._index_end = self._index.record["seqlen"]
 
     def _load_non_lazy_values(self):
-        """this is implemented to save the non-lazy values from a seq file"""
+        """ (private) on init, load non-lazy values from the record"""
         raise NotImplementedError( \
             "_load_non_lazy_values must be implemented in the derived class")
 
@@ -581,8 +587,22 @@ class SeqRecordProxyBase(SeqRecord):
         raise NotImplementedError( \
             "_make_record_index must be implemented in the derived class")
 
-    def _make_feature_index(self, new_index):
-        """this is implemented to set the feature index from a seq file"""
+    def _make_feature_index(self, new_list):
+        """Return list of tuples for the features (if present)
+
+        _make_feature_index accepts an empty FeatureBinCollection
+        and then each feature index tuple is inserted into the
+        collection via the insert method. The populated list
+        is returned by this method.
+
+        Each feature is inserted as the following 5-tuple
+            (seq_begin, seq_end, offset_begin, offset_end, id)
+        with types:
+            (int, int, int, int, str)
+
+        the id value may be null but must be included. This exists
+        because future versions may support richer feature slicing.
+        """
         raise NotImplementedError( \
             "_make_feature_index must be implemented in the derived class")
 
@@ -593,7 +613,7 @@ class SeqRecordProxyBase(SeqRecord):
         return self._seq
 
     def _set_seq_by_user(self, newseq):
-        """allow the user to set a sequence, avoid some errors"""
+        """(private) allows user to set seq by the seq property"""
         if newseq is None:
             raise ValueError("Setting seq to 'None' is reserved "
                              "for lazy proxy.")
@@ -602,7 +622,20 @@ class SeqRecordProxyBase(SeqRecord):
         self._seq = newseq
 
     def _read_seq(self):
-        """this is implemented to handle file access for setting _seq"""
+        """(private) load the sequence from file and set _seq on demand
+
+        This is never invoked by the user and instead is invoked when
+        the seq property is accessed and the private _seq attribute is
+        not yet set.
+
+        how to implement:
+        using _index_begin and _index_end, determine what portion
+        of the sequence should be loaded. Reference the _index.record
+        dictionary to get values used to predict read and seek operations.
+        Read the sequence and do necessay cleanup. Finally make a
+        Biopython Seq object (using self._alphabet) and set it to
+        the _seq attribute before returning None
+        """
         raise NotImplementedError( \
             "_read_seq must be implemented in the derived class")
 
@@ -617,7 +650,7 @@ class SeqRecordProxyBase(SeqRecord):
         return self._features
 
     def _set_features_by_user(self, newfeatures):
-        """allow users to change _features"""
+        """(private) allow user directly modify features property"""
         if newfeatures is None:
             raise ValueError("Setting features to 'None' is reserved "
                              "for lazy proxy")
@@ -629,14 +662,11 @@ class SeqRecordProxyBase(SeqRecord):
             "_read_properties must be implemented in the derived class")
 
     features = property(fget=_return_features,
+                        fset=_set_features_by_user,
                         doc="list of SeqFeature objects")
 
     def __getitem__(self, index):
-        """Returns a sub-sequence or an individual letter.
-
-        This will need to cleverly either return a sequence letter
-        or a copy of itself with new marker indices.
-        """
+        """Returns a sub-sequence or an individual letter."""
         if isinstance(index, int):
             #The recursive call is required to prevent full parsing when
             # only calling a single resiude
@@ -691,14 +721,11 @@ class SeqRecordProxyBase(SeqRecord):
         raise ValueError("Invalid index")
 
     def __len__(self):
-        """Returns the length of the sequence.
-
-        The derived class must set attribute _seq_len
-        """
+        """Returns the length of the sequence"""
         return self._index_end - self._index_begin
 
     def upper(self):
-        """Returns copy of the record with an upper case sequence. """
+        """Returns copy of the record with an upper case sequence"""
         if not self._seq:
             self._read_seq()
         newself = copy(self)
@@ -707,7 +734,7 @@ class SeqRecordProxyBase(SeqRecord):
 
 
     def lower(self):
-        """Returns copy of the record with a lower case sequence. """
+        """Returns copy of the record with a lower case sequence"""
         if not self._seq:
             self._read_seq()
         newself = copy(self)
@@ -738,11 +765,16 @@ class SeqRecordProxyBase(SeqRecord):
          % (seqrepr, idrepr, namerepr, descriptionrepr, dbxrefsrepr)
 
     def next_record_offset(self):
-        """return the offset of the next record"""
+        """return the offset of the next record.
+
+        This method allows the lazy iterator or index builder
+        to forward the position of the next record to a new
+        index constructor.
+        """
         return self._index.record["nextrecordoffset"]
 
     def get_raw(self):
-        """Get the raw text of the lazy record"""
+        """Get the raw text of the referenced record (binary format)"""
         begin_offset = self._index.record["recordoffsetstart"]
         recordoffsetlength = self._index.record["recordoffsetlength"]
         self._handle.seek(begin_offset)
