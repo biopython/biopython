@@ -148,6 +148,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     _format = "fasta"
 
+    @_lazy.inherit_lazy_method_doc
     def __init__(self, handle, startoffset=None,\
                  indexdb = None, indexkey=None, alphabet=None, \
                  title2ids = None):
@@ -160,6 +161,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         _lazy.SeqRecordProxyBase.__init__( \
                 self, handle, startoffset, indexdb, indexkey, alphabet)
 
+    @_lazy.inherit_lazy_method_doc
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
         handle = self._handle
@@ -185,17 +187,9 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
             self.description = title
             self.dbxrefs = []
 
+    @_lazy.inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) set the values needed for lazy loading
-
-        The self._index dictionary is only set with the file
-        start location on instantiation. This function sets the
-        following variables in _index
-           "sequencestart"  : the file index where the seq. starts
-           "sequencelinewidth" : number of sequence letters per line
-           "sequenceletterwidth" : the number of bytes per line
-
-        """
+        """(private) make the index needed for lazy loading"""
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
         handle.seek(start_offset)
@@ -259,9 +253,12 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         new_index["seqlen"] = seqlen
         return new_index
 
+    @_lazy.inherit_lazy_method_doc
     def _read_features(self):
+        """(private) no features for Fasta files"""
         self._features = []
 
+    @_lazy.inherit_lazy_method_doc
     def _read_seq(self):
         """(private) implements fasta sequence getter for base class"""
 
