@@ -1308,19 +1308,9 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         """ (private) parse GenBank ORIGIN line """
         pass
 
+    @_lazy.inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) set the values needed for lazy loading
-
-        The self._index dictionary is only set with the file
-        start location on instantiation. This function sets the
-        following variables in _index
-           "sequencestart"       : the file index where the seq. starts
-           "sequencelinewidth"   : the number of sequence letters per line
-           "sequenceletterwidth" : the number of bytes per line
-
-        This function also parses the title line and sets the following
-        attributes:
-        """
+        """(private) implements record index maker"""
         handle = self._handle
         fmt_components = self._format_components
         start_offset = new_index["recordoffsetstart"]
@@ -1425,6 +1415,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         #set the index
         return new_index
 
+    @_lazy.inherit_lazy_method_doc
     def _load_non_lazy_values(self):
         """(private) set static seqrecord values"""
         handle = self._handle
@@ -1457,9 +1448,9 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
         del(contemp)
 
+    @_lazy.inherit_lazy_method_doc
     def _read_seq(self):
         """(private) implements sequence getter for base class"""
-
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
@@ -1514,16 +1505,9 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         sequence = sequence.upper()
         self._seq = Seq(sequence, self._alphabet)
 
+    @_lazy.inherit_lazy_method_doc
     def _make_feature_index(self, new_list):
-        """Return list of tuples for the features (if present)
-
-        Each feature is returned as a tuple (key, location, qualifiers)
-        where key and location are strings (e.g. "CDS" and
-        "complement(join(490883..490885,1..879))") while qualifiers
-        is a list of two string tuples (feature qualifier keys and values).
-
-        Assumes you have already read to the start of the features table.
-        """
+        """(private) implements feature index maker"""
         #use handle hack: this is a wrapper that operates on a
         # binary file returning string values. Only readline, read,
         # seek, __iter__, close, tell, and seek are implemented in
@@ -1632,8 +1616,9 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             new_list.insert(index_tuple)
         return new_list
 
-
+    @_lazy.inherit_lazy_method_doc
     def _read_features(self):
+        """(private) implements feature getter"""
         #set some constants:
         QUALIFIER_INDENT = 21
 
@@ -1715,7 +1700,7 @@ class EmblSeqRecProxy(GenbankSeqRecProxy):
         return seqversion
 
     def _parse_seq_header_line(self, new_index, line):
-        """ (private) parse EMBL SQ line for length """
+        """(private) parse EMBL SQ line for length """
         line = line[self._format_components["header_width"]:]
         seqlength = int(line.split()[1])
         new_index["seqlen"] = seqlength
