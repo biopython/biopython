@@ -7,21 +7,26 @@
 You are not expected to access this module, or any of its code,
 directly. This is all handled internally by the following functions
 when accessed with the lazy=True kwarg.
-Bio.SeqIO.parse(.... lazy=True)
-Bio.SeqIO.index(..., lazy=True)
-Bio.SeqIO.read(..., lazy=True)
+
+    Bio.SeqIO.read(..., lazy=True)
+    Bio.SeqIO.parse(.... lazy=True)
+    Bio.SeqIO.index(..., lazy=True)
 
 The lazy loading parsers will read an entire record efficiently storing
 and parsing only the mimimum amount of information to provide fast
-lookup. Records returned from parse(), index(), and read() will act
-as a proxy to a regular SeqRecord class. Internally they will be quite
-different but externally accessing any property shared by the typical
-SeqRecord will return the correct value. The same set of methods is
-also available.
+lookup. Lazy records returned from parse(), index_db(), and read() will
+act as a proxy to a regular SeqRecord class. Internally they will be
+quite different but externally accessing any property shared by the
+typical SeqRecord will return the correct value. Because the lazy record
+inherits from SeqRecord, all SeqRecord methods are available.
 
-The lazy loading strategy is, for large sequences, faster to initialize
-than SeqIO.parse() and more memory efficient. It is slower to
-initialize than SeqIO.index() but also more memory efficient.
+The lazy loading strategy is, for very large sequences, faster to
+initialize than SeqIO.parse() and SeqIO.index_db() but also more
+memory efficient. The when fully accessing SeqRecord attributes
+the lazy loading parser reaches performance parity with both standard
+parsers. Partial record access, such as only using the seq attribute
+or slicing the record beore use, gives significant performance
+advantages to using the lazy parser.
 
 The lazy loader will partially parse a sequence file noting the
 sequence span and file position of sequence annoations. These
@@ -30,17 +35,16 @@ requested. Sequence data will also be efficiently pulled from
 structured regions and file so that long sequences aren't necessarily
 loaded into memory fully.
 
-To take full advantage of the lazy loading strategy operate slices on
-the lazy record whenever possible. See the example below using a lazy
-loading record 'bigrecord'
+To take full advantage of the lazy loading strategy, operate slices on
+the lazy record whenever possible instead of the record attributes. See
+the example below using a lazy loading record 'bigrecord'
 
-#getting sequence information
-bigrecord.seq[2000000:3000000]  # bad; this parses the whole seq
-bigrecord[2000000:3000000].seq  # good; only 10M bases are loaded
+    #getting sequence information
+    bigrecord.seq[2000000:3000000]  # bad: this parses the whole seq
+    bigrecord[2000000:3000000].seq  # good: only 10M bases are loaded
 
-Note that this means all parsing is on demand, so improperly formatted
-records may not trigger an exception until the problem region is
-requested. This is by design.
+Because all parsing is on demand, improperly formatted records may not
+trigger an exception until the problem region is requested.
 """
 
 from copy import copy
