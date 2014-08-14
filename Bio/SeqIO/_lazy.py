@@ -61,7 +61,7 @@ from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_string
 from ..SeqRecord import SeqRecord
 
 def _get_db_connection(dbfile):
-    """do some basic checking and return a connection to the db"""
+    """Do some basic checking and return a connection to the db."""
     if not _sqlite:
         # Hack for Jython (or if Python is compiled without it)
         from Bio import MissingPythonDependencyError
@@ -74,7 +74,7 @@ def _get_db_connection(dbfile):
     return con
 
 class SeqProxyIndexManager(object):
-    """Class to manage the index and any sqlite db-IO required
+    """Class to manage the index and any sqlite db-IO required.
 
     From the perspective of SeqRecordProxyBase derived classes,
     this index manager will provide the following public attriubes
@@ -85,7 +85,7 @@ class SeqProxyIndexManager(object):
     """
 
     def __init__(self, filefmt, indexdb=None, recordkey=None, handlename=None):
-        """Initialize SeqProxyIndexManager
+        """Initialize SeqProxyIndexManager.
 
         The SeqProxyIndexManager may be initialized with or without an
         index database file, this init must adjust behavior of the class
@@ -125,7 +125,7 @@ class SeqProxyIndexManager(object):
             self.index_exists = True
 
     def _load_record_index(self):
-        """Returns the index dictionary from memory or from database
+        """Returns the index dictionary from memory or from database.
 
         When the database (_indexdb) is None:
         This function will preferentially supply an index from memory.
@@ -181,7 +181,7 @@ class SeqProxyIndexManager(object):
 
 
     def set_record_index(self, indexdict):
-        """Save a new index dict to the database
+        """Save a new index dict to the database.
 
         Given a new indexdict, the database will be loaded with the
         record unless the database already contains the given record.
@@ -256,7 +256,7 @@ class SeqProxyIndexManager(object):
         index_exists = True
 
     def _create_tables(self, con, indexdict):
-        """create metadata table and populate format
+        """Create metadata table and populate format.
 
         For a blank database, a valid indexdict is used as the template
         for creating the correct rows in the record index.
@@ -310,7 +310,7 @@ class SeqProxyIndexManager(object):
         con.commit()
 
     def _get_handle_id(self, con, write=False):
-        """Return the file id from the DB, write an entry if necessary
+        """Return the file id from the DB, write an entry if necessary.
 
         returns fileid for a filename. If write is False a fileid not
         found in the database will return None while setting write to
@@ -349,7 +349,11 @@ class SeqProxyIndexManager(object):
                 return None
 
     def _is_valid_db_with_tables(self, con):
-        """if db is empty False, if correct tables True, else raise
+        """Enforce valid database, check if tables are present.
+
+        If db is empty: False
+        If correct tables exist: True
+        Else: raise
 
         Args:
           con (sqlite db connection): a connection to the sqlite db
@@ -379,7 +383,7 @@ class SeqProxyIndexManager(object):
 
 
     def set_feature_index(self, feature_index_list):
-        """Save feature index to the database and set to memory
+        """Save feature index to the database and set to memory.
 
          Args:
           feature_index_list (FeatureBinCollection): All features made
@@ -435,7 +439,7 @@ class SeqProxyIndexManager(object):
         con.close()
 
     def get_features(self, begin, end):
-        """Return all features contained the defined range
+        """Return all features contained the defined range.
 
         Args:
           begin (int): inclusive beginning of features to fetch
@@ -482,7 +486,7 @@ class SeqProxyIndexManager(object):
         return container
 
 class SeqRecordProxyBase(SeqRecord):
-    """Base class for lazy-SeqRecord objects
+    """Base class for lazy-SeqRecord objects.
 
     This implements the parser base for lazy seq record objects. In
     order to implement lazy seq record objects, this class defines
@@ -545,7 +549,7 @@ class SeqRecordProxyBase(SeqRecord):
 
     def __init__(self, handle, startoffset=None, indexdb=None,
                  indexkey=None, alphabet=None):
-        """Initialize the lazy-seq-record and build the index object"""
+        """Initialize the lazy-seq-record and build the index object."""
         self._handle = handle
         self._alphabet = alphabet
         self._indexdb = indexdb
@@ -578,17 +582,17 @@ class SeqRecordProxyBase(SeqRecord):
         self._index_end = self._index.record["seqlen"]
 
     def _load_non_lazy_values(self):
-        """ (private) on init, load non-lazy values from the record"""
+        """(private) on init, load non-lazy values from the record."""
         raise NotImplementedError( \
             "_load_non_lazy_values must be implemented in the derived class")
 
     def _make_record_index(self, new_index):
-        """this is implemented to set the index from a seq file"""
+        """Implemented to set the index from a seq file."""
         raise NotImplementedError( \
             "_make_record_index must be implemented in the derived class")
 
     def _make_feature_index(self, new_list):
-        """Return list of tuples for the features (if present)
+        """Return list of tuples for the features (if present).
 
         _make_feature_index accepts an empty FeatureBinCollection
         and then each feature index tuple is inserted into the
@@ -607,13 +611,13 @@ class SeqRecordProxyBase(SeqRecord):
             "_make_feature_index must be implemented in the derived class")
 
     def _return_seq(self):
-        """(private) removes getter logic from _read_seq"""
+        """(private) removes getter logic from _read_seq."""
         if self._seq is None:
             self._read_seq()
         return self._seq
 
     def _set_seq_by_user(self, newseq):
-        """(private) allows user to set seq by the seq property"""
+        """(private) allows user to set seq by the seq property."""
         if newseq is None:
             raise ValueError("Setting seq to 'None' is reserved "
                              "for lazy proxy.")
@@ -622,7 +626,7 @@ class SeqRecordProxyBase(SeqRecord):
         self._seq = newseq
 
     def _read_seq(self):
-        """(private) load the sequence from file and set _seq on demand
+        """(private) load the sequence from file and set _seq.
 
         This is never invoked by the user and instead is invoked when
         the seq property is accessed and the private _seq attribute is
@@ -644,29 +648,29 @@ class SeqRecordProxyBase(SeqRecord):
                    doc="The sequence itself, as a Seq or MutableSeq object.")
 
     def _return_features(self):
-        """(private) removes getter logic from _read_seq"""
+        """(private) removes getter logic from _read_features."""
         if self._features is None:
             self._read_features()
         return self._features
 
     def _set_features_by_user(self, newfeatures):
-        """(private) allow user directly modify features property"""
+        """(private) allow user directly modify features property."""
         if newfeatures is None:
             raise ValueError("Setting features to 'None' is reserved "
                              "for lazy proxy")
         self._features = newfeatures
 
     def _read_features(self):
-        """this is implemented in the derived class to set _seq"""
+        """(private) read features from file and set _features."""
         raise NotImplementedError( \
-            "_read_properties must be implemented in the derived class")
+            "_read_features must be implemented in the derived class")
 
     features = property(fget=_return_features,
                         fset=_set_features_by_user,
                         doc="list of SeqFeature objects")
 
     def __getitem__(self, index):
-        """Returns a sub-sequence or an individual letter."""
+        """Returns a record slice or an individual letter."""
         if isinstance(index, int):
             #The recursive call is required to prevent full parsing when
             # only calling a single resiude
@@ -721,11 +725,11 @@ class SeqRecordProxyBase(SeqRecord):
         raise ValueError("Invalid index")
 
     def __len__(self):
-        """Returns the length of the sequence"""
+        """Returns the length of the sequence."""
         return self._index_end - self._index_begin
 
     def upper(self):
-        """Returns copy of the record with an upper case sequence"""
+        """Returns copy of the record with an upper case sequence."""
         if not self._seq:
             self._read_seq()
         newself = copy(self)
@@ -734,7 +738,7 @@ class SeqRecordProxyBase(SeqRecord):
 
 
     def lower(self):
-        """Returns copy of the record with a lower case sequence"""
+        """Returns copy of the record with a lower case sequence."""
         if not self._seq:
             self._read_seq()
         newself = copy(self)
@@ -742,7 +746,7 @@ class SeqRecordProxyBase(SeqRecord):
         return newself
 
     def __repr__(self):
-        """this is a shortened repr for the lazy loading parsers
+        """A shortened repr for the lazy loading parsers.
 
         modification of the repr() magic method is required to prevent
         simple command line options from unnecessarily invoking full
@@ -765,7 +769,7 @@ class SeqRecordProxyBase(SeqRecord):
          % (seqrepr, idrepr, namerepr, descriptionrepr, dbxrefsrepr)
 
     def next_record_offset(self):
-        """return the offset of the next record.
+        """Return the offset of the next record.
 
         This method allows the lazy iterator or index builder
         to forward the position of the next record to a new
@@ -774,7 +778,7 @@ class SeqRecordProxyBase(SeqRecord):
         return self._index.record["nextrecordoffset"]
 
     def get_raw(self):
-        """Get the raw text of the referenced record (binary format)"""
+        """Get the raw text of the referenced record (binary format)."""
         begin_offset = self._index.record["recordoffsetstart"]
         recordoffsetlength = self._index.record["recordoffsetlength"]
         self._handle.seek(begin_offset)
@@ -801,7 +805,7 @@ class SeqRecordProxyBase(SeqRecord):
     #def __iter__(self):
 
 def inherit_lazy_method_doc(meth):
-    """Use as a decorator to fix docstrings of lazy derived methods"""
+    """Use as a decorator to fix docstrings of lazy derived methods."""
     methodname = meth.__name__
     if hasattr(SeqRecordProxyBase, methodname):
         meth.__doc__ = getattr(SeqRecordProxyBase, methodname).__doc__
@@ -811,7 +815,7 @@ def inherit_lazy_method_doc(meth):
     return meth
 
 class HandleQueueLRU(object):
-    """A simplified LRU cache that serves handles to HandleWrapper
+    """A simplified LRU cache that serves handles to HandleWrapper.
 
     Because this LRU cache uses a simple list to store the cached
     handles, this cache operates at O(n) with respect to the number
@@ -820,6 +824,7 @@ class HandleQueueLRU(object):
     number of concurrently open files is very small, this is fine
     """
     def __init__(self, filenames, cachelen=5):
+        """Initialize the HandleQueueLRU."""
         if cachelen > 10:
             raise ValueError("cachelen must not exceed 10")
         if isinstance(filenames, str):
@@ -839,7 +844,7 @@ class HandleQueueLRU(object):
                 stackinitializerlen += 1
 
     def __getitem__(self, key):
-        """Get a file handle from the LRU cache
+        """Get a file handle from the LRU cache.
 
         This if the handle is at the top of the cache, it is returned
         quickly without making any changes. If the handle is deeper in
@@ -871,12 +876,13 @@ class HandleQueueLRU(object):
         return record["handle"]
 
     def __contains__(self, key):
+        """Truth test if the queue can return a file."""
         if key in self.namedict:
             return True
         return False
 
 class HandleWrapper(object):
-    """Simple tool to wrap handles being provided by the queue
+    """Simple tool to wrap handles being provided by the queue.
 
     This will only work when duck typing is used since __class__
     will return HandleWrapper no.
@@ -891,7 +897,7 @@ class HandleWrapper(object):
             return getattr(realhandle, requested_attribute)
 
 class LazyIterator(object):
-    """wrapper for most lazy-loading/indexing access routes for SeqIO
+    """Wrapper for most lazy-loading/indexing access routes for SeqIO.
 
     This class is used to combine most workflows for the lazy loading
     module. Use of this will allow SeqIO.parse, and SeqIO.index to
@@ -981,7 +987,7 @@ class LazyIterator(object):
                 self._keys.append(modifiedkey)
 
     def __iter__(self):
-        """This can do both dict-type key iteration or list iteration
+        """This can do both dict-type key iteration or list iteration.
 
         when this class is invoked with asdict=True, this iterator
         will iterate over keys, if this is invoked with asdict=False
@@ -1007,7 +1013,7 @@ class LazyIterator(object):
                     yield result
 
     def _get_keys_from_db(self):
-        """For a list of handle name, return all record keys"""
+        """For a list of handle name, return all record keys."""
         if not self.use_an_index:
             raise RuntimeError("No dict-type access without a db-index")
         else:
@@ -1050,7 +1056,7 @@ class LazyIterator(object):
         return rec.get_raw()
 
     def items(self):
-        """D.items() -> a set-like object providing a view on D's items"""
+        """D.items() -> a set-like object provides view on D's items."""
         if not self.use_an_index:
             raise RuntimeError("An index file is required to use 'items'")
         for k in self._keys:
@@ -1059,7 +1065,7 @@ class LazyIterator(object):
     iteritems = items
 
     def keys(self):
-        """"D.keys() -> a set-like object providing a view on D's keys"""
+        """"D.keys() -> a set-like object providing a view on D's keys."""
         if not self.use_an_index:
             raise RuntimeError("An index file is required to use 'keys'")
         return self._keys
@@ -1082,7 +1088,7 @@ class LazyIterator(object):
                                  alphabet=self.alphabet)
 
 def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
-    """(private) populate index db with file's index information"""
+    """(private) populate index db with file's index information."""
     record_offset = _get_first_record_start_offset(handle, format)
     while record_offset is not None:
         temp = return_class(handle, startoffset=record_offset,
@@ -1090,7 +1096,7 @@ def _make_index_db(handle, return_class, indexdb, format, alphabet=None):
         record_offset = temp.next_record_offset()
 
 def _get_first_record_start_offset(handle, file_format=None):
-    """(private) return the offset of the first record, or None"""
+    """(private) return the offset of the first record, or None."""
     marker = {"fasta": ">",
               "genbank": "LOCUS",
               "gb": "LOCUS",
@@ -1117,7 +1123,7 @@ def _get_first_record_start_offset(handle, file_format=None):
             return None
 
 class FeatureBinCollection(object):
-    """Manage efficient creation and retrieval of feature indices
+    """Manage efficient creation and retrieval of feature indices.
 
     This class is used to organize feature data in a quickly
     retrievable data structure. The feature data must be added as a
@@ -1215,7 +1221,7 @@ class FeatureBinCollection(object):
 
     def __init__(self, length=None, beginindex=0, endindex=1,
                  bounded_only_returns=True):
-        """ initialize the class and set standard attributes
+        """Initialize the class and set standard attributes.
 
         kwargs:
 
@@ -1264,7 +1270,7 @@ class FeatureBinCollection(object):
                 raise ValueError(error_string)
 
     def _increase_bin_sizes(self):
-        """increase max bin size 8x and reorganize existing binned data
+        """Increase max bin size 8x and reorganize existing binned data.
 
         In order to increase the total maximum bin size, the set with
         smallest bins is merged with the next level of larger bins.
@@ -1309,7 +1315,7 @@ class FeatureBinCollection(object):
             self._bins[k] = []
 
     def _set_max_bin_power(self, power):
-        """Set the maximum bin power and fix other attributes"""
+        """Set the maximum bin power and fix other attributes."""
 
         self._max_bin_power = power
         self._min_bin_power = power - 3*(self._bin_level_count-1)
@@ -1318,7 +1324,7 @@ class FeatureBinCollection(object):
         self._max_sequence_length = self._size_list[-1]
 
     def insert(self, feature_tuple):
-        """inserts a tuple with a sequence range into the feature bins
+        """Inserts a tuple with a sequence range into the feature bins.
 
         data is assumed to be somewhat scrubbed, coming from a parser
         or a parser consumer."""
@@ -1341,11 +1347,11 @@ class FeatureBinCollection(object):
         self._bins[bin_index].append(feature_tuple)
 
     def __len__(self):
-        """return the count of elements contained in all bins"""
+        """Return the count of elements contained in all bins."""
         return sum(len(binn) for binn in self._bins)
 
     def sort(self):
-        """perform bin-centric sorting for faster retrieval"""
+        """Perform bin-centric sorting for faster retrieval."""
         #bins must be sorted by the begin index, this is fastest
         if self._beginindex == 0:
             for i in range(len(self._bins)):
@@ -1358,7 +1364,7 @@ class FeatureBinCollection(object):
         self._sorted = True
 
     def __getitem__(self, key):
-        """Efficiently retrieves the required entries, return as a list
+        """Efficiently retrieves the required entries, return as a list.
 
         This getter primarily works as expected with the exception
         of is the treatment of slices indices where the start is
@@ -1430,7 +1436,7 @@ class FeatureBinCollection(object):
         return return_entries
 
     def _calculate_bin_index(self, begin, span):
-        """ Returns a bin index given a (begin, span) interval
+        """Returns a bin index given a (begin, span) interval.
 
         The equations in the Tabix paper (see class docstring)
         are used to determine the bin index
@@ -1490,7 +1496,7 @@ class FeatureBinCollection(object):
 from xml.parsers import expat
 
 def xml_index_iter(filename, targetfield, tagstoparse=None, returndict=False):
-    """A xml file iter that returns indexes for sequential tags
+    """A xml file iter that returns indexes for sequential tags.
 
     targetfield is a text field that defines the tag over which this
     function iterates. All targetfield tags must be sequential and any
@@ -1523,7 +1529,7 @@ def xml_index_iter(filename, targetfield, tagstoparse=None, returndict=False):
 
 
 class LinkedElement(object):
-    """A simple to use LinkedElement class for indexing
+    """A simple to use LinkedElement class for indexing.
 
     The LinkedElement is an element class that references it's
     parent and makes explicit the use of index positions.
@@ -1578,7 +1584,7 @@ class LinkedElement(object):
                 .format(self.tag, self.indexbegin, self.indexend)
 
     def depth(self):
-        """Recursive call; mostly useful for debugging"""
+        """Recursive call; mostly useful for debugging."""
         if self.parent is None:
             return 0
         else:
@@ -1601,7 +1607,7 @@ class LinkedElement(object):
         return asdict
 
 class ExpatHandler(object):
-    """ExpatHandler class will return an indexed LinkedElement tree
+    """ExpatHandler class will return an indexed LinkedElement tree.
 
     The  targetfield attribute is the fundamental unit of indexing,
     these xml tags must be a sequential list with no tags in between
@@ -1631,7 +1637,7 @@ class ExpatHandler(object):
         self._parser = None
 
     def parse_from_position(self, position=0):
-        """Parse XML from a position and return an indexed root node"""
+        """Parse XML from a position and return an indexed root node."""
         handle = self._handle
         #initialize the parser
         parser = self._parser = self._parser_class()
@@ -1698,7 +1704,7 @@ class ExpatHandler(object):
         return rootelem
 
     def start_element(self, tag, attrs):
-        """handle expat sart element"""
+        """Handle expat 'start_element' call."""
         if self.currentelem.indexend is True:
             self._finish_linked_element()
 
@@ -1715,7 +1721,7 @@ class ExpatHandler(object):
             self.savetext = False
 
     def end_element(self, tag):
-        """handle expat end element"""
+        """Handle expat 'end_element' call."""
         if tag == self.targetfield:
             #for a compact xml file, this will produce the index of the end
             # tag without the trailing '>'. The parser fixes this.
@@ -1730,12 +1736,12 @@ class ExpatHandler(object):
             self.currentelem.indexend = True
 
     def char_data(self, data):
-        """handle expat character data"""
+        """Handle expat character data."""
         if data.strip() and self.savetext:
             self.currentelem.text += data.strip()
 
     def _finish_linked_element(self):
-        """ any LinkedElement eligible for finishing is saved here
+        """Any LinkedElement eligible for finishing is saved here.
 
         An LinkedElement has ended; fix the end byte index and fetch
         the parent node fixing it to currentelem.
