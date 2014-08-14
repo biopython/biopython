@@ -325,6 +325,7 @@ class MinimalLazySeqRecord(SeqRecordProxyBase):
 
     _format = "testclass"
 
+    @inherit_lazy_method_doc
     def _make_record_index(self, new_index):
         self._handle.seek(0)
         new_index["id"] = _bytes_to_string(self._handle.readline()).strip()
@@ -333,23 +334,30 @@ class MinimalLazySeqRecord(SeqRecordProxyBase):
         new_index["seqlen"] = len(self._handle.readline())
         return new_index
 
+    @inherit_lazy_method_doc
     def _read_seq(self):
         self._handle.seek(self._index.record["sequencestart"])
         seqstr = _bytes_to_string(self._handle.readline())
         self._seq = Seq(seqstr, self._alphabet)
 
+    @inherit_lazy_method_doc
     def _load_non_lazy_values(self):
         self.id = self._index.record["id"]
         self.name = "<unknown name>"
         self.description = "<unknown description>"
         self.dbxrefs = []
 
+    @inherit_lazy_method_doc
     def _make_feature_index(self, new_list):
         return new_list
 
+    @inherit_lazy_method_doc
     def _read_features(self):
         return []
 
+    def unused_method(self):
+        """use this to test inherit_lazy_method_doc"""
+        pass
 
 class SeqRecordProxyBaseClassTests(unittest.TestCase):
 
@@ -368,6 +376,19 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
         self.assertEqual(12, a._index_end)
         self.assertEqual(None, a._seq)
         #self.assertEqual("sequencefake", a._handle)
+
+    def test_docstring_reasignment(self):
+        """test that the docstring is reassigned"""
+        handle = "fakeid\nsequencefake"
+        lenhandle = len(handle)
+        handle = BytesIO(_as_bytes(handle))
+        handle.name = "fake"
+        a = MinimalLazySeqRecord(handle, 0,
+                                 alphabet = self.ab)
+        self.assertEqual(a._load_non_lazy_values.__doc__,
+                         SeqRecordProxyBase._load_non_lazy_values.__doc__)
+        self.assertRaises(ValueError, inherit_lazy_method_doc,
+                          MinimalLazySeqRecord.unused_method)
 
     def test_seq_reader(self):
         """checks on basic worksing of _read_seq"""
