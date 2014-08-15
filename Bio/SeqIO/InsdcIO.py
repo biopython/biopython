@@ -1273,7 +1273,7 @@ if __name__ == "__main__":
 =======
 >>>>>>> Cleanup of _lazy.py, InsdcIO.py, and FastaIO.py
 class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
-    """Implements the getter metods required to run the SeqRecordProxy"""
+    """Implements SeqIO._lazy.SeqRecordProxyBase for Genbank format."""
 
     def __init__(self, *args, **kwargs):
         scanner = GenBankScanner(debug=0)
@@ -1299,18 +1299,18 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         "accession_line":"ACCESSION"}
 
     def _parse_first_line(self, new_index, firstline):
-        """ (private) parse GenBank LOCUS line """
+        """(private) parse GenBank LOCUS line."""
         seqlen = [char for char in firstline.split()[2] if char.isdigit()]
         new_index["seqlen"] = int("".join(seqlen))
         return ""
 
     def _parse_seq_header_line(self, new_index, line):
-        """ (private) parse GenBank ORIGIN line """
+        """ (private) parse GenBank ORIGIN line."""
         pass
 
     @_lazy.inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) implements record index maker"""
+        """(private) implements record index maker."""
         handle = self._handle
         fmt_components = self._format_components
         start_offset = new_index["recordoffsetstart"]
@@ -1417,7 +1417,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _load_non_lazy_values(self):
-        """(private) set static seqrecord values"""
+        """(private) Set static seqrecord values."""
         handle = self._handle
         _index = self._index
         start_offset = _index.record["recordoffsetstart"]
@@ -1450,7 +1450,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _read_seq(self):
-        """(private) implements sequence getter for base class"""
+        """(private) Implements sequence getter for base class."""
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
@@ -1507,7 +1507,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _make_feature_index(self, new_list):
-        """(private) implements feature index maker"""
+        """(private) Implements feature index maker."""
         #use handle hack: this is a wrapper that operates on a
         # binary file returning string values. Only readline, read,
         # seek, __iter__, close, tell, and seek are implemented in
@@ -1618,7 +1618,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _read_features(self):
-        """(private) implements feature getter"""
+        """(private) implements feature getter."""
         #set some constants:
         QUALIFIER_INDENT = 21
 
@@ -1653,7 +1653,7 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         self._features = featurelist
 
 class EmblSeqRecProxy(GenbankSeqRecProxy):
-
+    """Implements SeqIO._lazy.SeqRecordProxyBase for EMBL format."""
     _format = "embl"
 
     _format_components = {"record_start":"ID   ",
@@ -1679,7 +1679,7 @@ class EmblSeqRecProxy(GenbankSeqRecProxy):
         super(GenbankSeqRecProxy, self).__init__(*args, **kwargs)
 
     def _parse_first_line(self, new_index, firstline):
-        """ (private) parse EMBL id line for self.id"""
+        """(private) parse EMBL id line for self.id."""
         seqversion = None
         accession = None
         for part in firstline.split(";"):
@@ -1700,7 +1700,7 @@ class EmblSeqRecProxy(GenbankSeqRecProxy):
         return seqversion
 
     def _parse_seq_header_line(self, new_index, line):
-        """(private) parse EMBL SQ line for length """
+        """(private) parse EMBL SQ line for length."""
         line = line[self._format_components["header_width"]:]
         seqlength = int(line.split()[1])
         new_index["seqlen"] = seqlength
