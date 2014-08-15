@@ -831,7 +831,7 @@ class Parser(object):
         return self.ParsedSeqRecord
 
 class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
-    """Implements the getter metods required to run the SeqRecordProxy"""
+    """Implements SeqIO._lazy.SeqRecordProxyBase for uniprot-xml."""
 
     _format = "uniprot-xml"
 
@@ -841,7 +841,7 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
 
     @inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) make the record index for lazy loading"""
+        """(private) Make the record index for lazy loading."""
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
          #get the XML entry
@@ -892,7 +892,7 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
 
     @inherit_lazy_method_doc
     def _make_feature_index(self, new_list):
-        """(private) make index of features"""
+        """(private) Make index of features."""
         #this works even if there are no features since
         # _feature_nodes will be an empty list
         for feature in self._feature_nodes:
@@ -920,7 +920,7 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
 
     @inherit_lazy_method_doc
     def _load_non_lazy_values(self):
-        """(private) set static seqrecord values"""
+        """(private) set static seqrecord values."""
         index = self._index.record
         if index["has_features"] == 1:
             pre_len = index["featuresoffsetstart"] - index["recordoffsetstart"]
@@ -952,7 +952,7 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
 
     @inherit_lazy_method_doc
     def _read_features(self):
-        """(private) implements feature reader"""
+        """(private) implements feature reader."""
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
