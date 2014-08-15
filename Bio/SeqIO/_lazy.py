@@ -758,9 +758,9 @@ class SeqRecordProxyBase(SeqRecord):
         method that is left to the base class since invoking the str()
         is less used and more likely in output focused programs.
         """
-        idrepr = "id=%s" % str(self.id)
-        namerepr = "name=%s" % str(self.name)
-        descriptionrepr = "description=%s" % str(self.description)
+        idrepr = "id=%s" % repr(self.id)
+        namerepr = "name=%s" % repr(self.name)
+        descriptionrepr = "description=%s" % repr(self.description)
         dbxrefsrepr = "dbxrefs=%s" % repr(self.dbxrefs)
         if self._seq is None:
             seqrepr = "seq=NOT_READ"

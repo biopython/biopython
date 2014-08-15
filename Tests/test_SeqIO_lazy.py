@@ -453,13 +453,13 @@ class SeqRecordProxyBaseClassTests(unittest.TestCase):
 
     def test_repr(self):
         """Test modified lazy repr function"""
-        out = r"""MinimalLazySeqRecord(seq=NOT_READ, id=fakeid, """ +\
-              r"""name=<unknown name>, description=<unknown description>,""" +\
-              r""" dbxrefs=[])"""
+        out = r"""MinimalLazySeqRecord(seq=NOT_READ, id='fakeid', """ +\
+              r"""name='<unknown name>', description=""" +\
+              r"""'<unknown description>', dbxrefs=[])"""
         out2 = r"""MinimalLazySeqRecord(seq=Seq('sequencefake', """ +\
-               r"""SingleLetterAlphabet()), id=fakeid, """ +\
-               r"""name=<unknown name>, description=<unknown description>""" +\
-               r""", dbxrefs=[])"""
+               r"""SingleLetterAlphabet()), id='fakeid', """ +\
+               r"""name='<unknown name>', description=""" +\
+               r"""'<unknown description>', dbxrefs=[])"""
         handle = "fakeid\nsequencefake"
         lenhandle = len(handle)
         handle = BytesIO(_as_bytes(handle))
