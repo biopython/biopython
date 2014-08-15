@@ -16,7 +16,6 @@ The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 """
 import sys
-from io import BytesIO
 
 from Bio import Seq
 from Bio import SeqFeature
@@ -397,8 +396,8 @@ class Parser(object):
         self.ParsedSeqRecord.dbxrefs.append(self.dbname + ':' + element.text)
 
     def _parse_protein(self, element):
-        NS = self.NS
         """Parse protein names (PRIVATE)."""
+        NS = self.NS
         descr_set = False
         for protein_element in element:
             if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
@@ -697,7 +696,7 @@ class Parser(object):
     def _parse_position(self, element, offset=0):
         try:
             position = int(element.attrib['position']) + offset
-        except KeyError as err:
+        except KeyError:
             position = None
         status = element.attrib.get('status', '')
         if status == 'unknown':
