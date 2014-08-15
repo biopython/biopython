@@ -135,7 +135,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 
 def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
-    """Returns FastaLazyRecords in the order that they are stored"""
+    """Returns FastaLazyRecords in the order that they are stored."""
     record_offset = _lazy._get_first_record_start_offset(handle, 'fasta')
     while record_offset is not None:
         result = FastaSeqRecProxy(handle, startoffset=record_offset, \
@@ -144,7 +144,7 @@ def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         record_offset = result.next_record_offset()
 
 class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
-    """Implements the getter metods required to run the SeqRecordProxy"""
+    """Implements SeqIO._lazy.SeqRecordProxyBase for Fasta."""
 
     _format = "fasta"
 
@@ -163,7 +163,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _load_non_lazy_values(self):
-        """(private) set static seqrecord values"""
+        """(private) set static seqrecord values."""
         handle = self._handle
         start_offset = self._index.record["recordoffsetstart"]
         handle.seek(start_offset)
@@ -189,7 +189,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) make the index needed for lazy loading"""
+        """(private) make the index needed for lazy loading."""
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
         handle.seek(start_offset)
@@ -255,12 +255,12 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
     @_lazy.inherit_lazy_method_doc
     def _read_features(self):
-        """(private) no features for Fasta files"""
+        """(private) No features for Fasta files."""
         self._features = []
 
     @_lazy.inherit_lazy_method_doc
     def _read_seq(self):
-        """(private) implements fasta sequence getter for base class"""
+        """(private) Implements fasta sequence getter for base class."""
 
         #localize some instance attributes used throughout this
         begin = self._index_begin
