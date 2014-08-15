@@ -371,11 +371,13 @@ class SeqProxyIndexManager(object):
                           'main_index', 'meta_data']
         if tablenames == expectedtables:
             #quick check: format matches self._format
-            format, = cursor.execute(
+            db_record_format, = cursor.execute(
                 "SELECT value FROM meta_data WHERE key=?;",
                 ("format",)).fetchone()
-            if format != self._format:
-                raise ValueError("provided database is for % files"%(format,))
+            db_record_format = _as_string(db_record_format)
+            if db_record_format != self._format:
+                raise ValueError("provided database is for {0} files"\
+                                 .format(db_record_format))
             return True
         #something was wrong with the database
         else:
