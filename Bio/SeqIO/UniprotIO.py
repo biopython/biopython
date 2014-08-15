@@ -22,8 +22,7 @@ from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import StringIO, _bytes_to_string
-from Bio.SeqIO._lazy import SeqRecordProxyBase, ExpatHandler, \
-                            inherit_lazy_method_doc
+from Bio.SeqIO._lazy import SeqRecordProxyBase, ExpatHandler
 
 __docformat__ = "restructuredtext en"
 
@@ -838,9 +837,11 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
                       "feature", "location", "begin",
                       "end", "position", "sequence"]
 
-    @inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) Make the record index for lazy loading."""
+        """(private) Make the record index for lazy loading.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         handle = self._handle
         start_offset = new_index["recordoffsetstart"]
          #get the XML entry
@@ -889,9 +890,11 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
 
         return new_index
 
-    @inherit_lazy_method_doc
     def _make_feature_index(self, new_list):
-        """(private) Make index of features."""
+        """(private) Make index of features.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         #this works even if there are no features since
         # _feature_nodes will be an empty list
         for feature in self._feature_nodes:
@@ -917,9 +920,11 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         del self._feature_nodes
         return new_list
 
-    @inherit_lazy_method_doc
     def _load_non_lazy_values(self):
-        """(private) set static seqrecord values."""
+        """(private) set static seqrecord values.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         index = self._index.record
         if index["has_features"] == 1:
             pre_len = index["featuresoffsetstart"] - index["recordoffsetstart"]
@@ -949,9 +954,11 @@ class UniprotXMLSeqRecProxy(SeqRecordProxyBase):
         self._captive_parser = parser
         self._captive_record = record_result
 
-    @inherit_lazy_method_doc
     def _read_features(self):
-        """(private) implements feature reader."""
+        """(private) implements feature reader.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
