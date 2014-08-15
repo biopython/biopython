@@ -1308,9 +1308,11 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         """ (private) parse GenBank ORIGIN line."""
         pass
 
-    @_lazy.inherit_lazy_method_doc
     def _make_record_index(self, new_index):
-        """(private) implements record index maker."""
+        """(private) implements record index maker.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         handle = self._handle
         fmt_components = self._format_components
         start_offset = new_index["recordoffsetstart"]
@@ -1415,9 +1417,11 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         #set the index
         return new_index
 
-    @_lazy.inherit_lazy_method_doc
     def _load_non_lazy_values(self):
-        """(private) Set static seqrecord values."""
+        """(private) Set static seqrecord values.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         handle = self._handle
         _index = self._index
         start_offset = _index.record["recordoffsetstart"]
@@ -1448,9 +1452,11 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
 
         del(contemp)
 
-    @_lazy.inherit_lazy_method_doc
     def _read_seq(self):
-        """(private) Implements sequence getter for base class."""
+        """(private) Implements sequence getter for base class.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         #localize some instance attributes used throughout this
         begin = self._index_begin
         end = self._index_end
@@ -1505,9 +1511,11 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         sequence = sequence.upper()
         self._seq = Seq(sequence, self._alphabet)
 
-    @_lazy.inherit_lazy_method_doc
     def _make_feature_index(self, new_list):
-        """(private) Implements feature index maker."""
+        """(private) Implements feature index maker.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         #use handle hack: this is a wrapper that operates on a
         # binary file returning string values. Only readline, read,
         # seek, __iter__, close, tell, and seek are implemented in
@@ -1616,9 +1624,11 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             new_list.insert(index_tuple)
         return new_list
 
-    @_lazy.inherit_lazy_method_doc
     def _read_features(self):
-        """(private) implements feature getter."""
+        """(private) implements feature getter.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
         #set some constants:
         QUALIFIER_INDENT = 21
 
