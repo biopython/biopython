@@ -93,10 +93,6 @@ class Record(dict):
     ORI       Original report in
     """
 
-textkeys = frozenset(["ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY",
-    "TT", "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
-    "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
-    "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT"])
 
 def parse(handle):
     """Read Medline records one by one from the handle.
@@ -114,6 +110,11 @@ def parse(handle):
 
     """
     #TODO - Turn that into a working doctest
+    # These keys point to string values
+    textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
+                "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
+                "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
+                "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT")
     handle = iter(handle)
 
     key = ""
