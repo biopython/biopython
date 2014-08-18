@@ -210,7 +210,6 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         firstlineoffset = handle.tell()
         new_index["sequencestart"] = firstlineoffset
         firstseqline = _bytes_to_string(handle.readline())
-        offset_after_first_seqline = handle.tell()
 
         #find the record end and next record start
         newrecordstart = ">"
