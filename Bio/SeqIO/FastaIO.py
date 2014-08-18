@@ -156,7 +156,7 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
             alphabet = single_letter_alphabet
 
         #The title2ids function can be passed to the Fasta proxy
-        self.__title2ids = title2ids
+        self._title2ids = title2ids
         _lazy.SeqRecordProxyBase.__init__( \
                 self, handle, startoffset, indexdb, indexkey, alphabet)
 
@@ -171,8 +171,8 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         titleline = _bytes_to_string(handle.readline())
         title = titleline[1:].rstrip()
         #Set attibutes of the SeqRecord proxy
-        if self.__title2ids:
-            id, name, descr = self.__title2ids(title)
+        if self._title2ids:
+            id, name, descr = self._title2ids(title)
             self.id = id
             self.name = name
             self.description = descr
