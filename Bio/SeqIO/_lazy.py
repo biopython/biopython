@@ -421,22 +421,13 @@ class SeqProxyIndexManager(object):
         if samefileposition is not None:
             raise ValueError("indexdb already contains a similar record")
 
-        #create featuresdict table
-        # using 'insecure' string format query generation
-        # due to the lack of flexible substitution syntax
-        for feature in feature_index_list:
-            begin, end, beginoffset, endoffset, qualifier = feature
-            #these assertions are done because SQLite is not static typed
-            assert _is_int_or_long(begin)
-            assert _is_int_or_long(end)
-            assert _is_int_or_long(beginoffset)
-            assert _is_int_or_long(endoffset)
-            cursor.execute("INSERT INTO features "
-                           "(indexid, fileid, offsetbegin, offsetend, "
-                           "seqbegin, seqend, qualifier) "
-                           "VALUES (?, ?, ?, ?, ?, ?, ?);",
-                           (self._index_id, fileid, beginoffset,
-                           endoffset, begin, end, qualifier))
+        #inserting feature_index_list into DB
+        cursor.executemany("INSERT INTO features "
+                           "(indexid, fileid, seqbegin, seqend, "
+                           "offsetbegin, offsetend, qualifier) "
+                           "VALUES (" + str(self._index_id) + ", " +\
+                           str(fileid) + ", ?, ?, ?, ?, ?);",
+                           feature_index_list)
         con.commit()
         con.close()
 
