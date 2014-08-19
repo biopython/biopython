@@ -1,4 +1,4 @@
-# Copyright 2009-2011 by Peter Cock.  All rights reserved.
+# Copyright 2014 by Evan Parker.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -13,7 +13,7 @@ when accessed with the lazy=True kwarg.
     Bio.SeqIO.index(..., lazy=True)
 
 The lazy loading parsers will read an entire record efficiently storing
-and parsing only the mimimum amount of information to provide fast
+and parsing only the minimum amount of information to provide fast
 lookup. Lazy records returned from parse(), index_db(), and read() will
 act as a proxy to a regular SeqRecord class. Internally they will be
 quite different but externally accessing any property shared by the
@@ -22,14 +22,14 @@ inherits from SeqRecord, all SeqRecord methods are available.
 
 The lazy loading strategy is, for very large sequences, faster to
 initialize than SeqIO.parse() and SeqIO.index_db() but also more
-memory efficient. The when fully accessing SeqRecord attributes
-the lazy loading parser reaches performance parity with both standard
+memory efficient. When accessing all attributes of a lazy SeqRecord
+the lazy loading parser reaches performance parity with the standard
 parsers. Partial record access, such as only using the seq attribute
 or slicing the record beore use, gives significant performance
 advantages to using the lazy parser.
 
 The lazy loader will partially parse a sequence file noting the
-sequence span and file position of sequence annoations. These
+sequence span and file position of sequence annotations. These
 annotations will be stored for efficient retrieval from the file when
 requested. Sequence data will also be efficiently pulled from
 structured regions and file so that long sequences aren't necessarily
