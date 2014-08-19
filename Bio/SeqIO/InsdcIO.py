@@ -1,4 +1,6 @@
-# Copyright 2007-2011 by Peter Cock.  All rights reserved.
+# Copyright 2007-2011 by Peter Cock.
+# Revisions copyright 2014 by Evan Parker.
+# All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included

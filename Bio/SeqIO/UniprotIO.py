@@ -1,5 +1,6 @@
 # Copyright 2010 by Andrea Pierleoni
 # Revisions copyright 2010 by Peter Cock
+# Revisions copyright 2014 by Evan Parker.
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
