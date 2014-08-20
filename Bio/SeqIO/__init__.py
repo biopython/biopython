@@ -504,12 +504,26 @@ def write(sequences, handle, format):
 def parse(handle, format, alphabet=None, lazy=False):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
+<<<<<<< HEAD
         - handle   - handle to the file, or the filename as a string
           (note older versions of Biopython only took a handle).
         - format   - lower case string describing the file format.
         - alphabet - optional Alphabet object, useful when the sequence type
           cannot be automatically inferred from the file itself
           (e.g. format="fasta" or "tab")
+=======
+     - handle   - handle to the file, or the filename as a string
+                  (note older versions of Biopython only took a handle).
+     - format   - lower case string describing the file format.
+     - alphabet - optional Alphabet object, useful when the sequence type
+                  cannot be automatically inferred from the file itself
+                  (e.g. format="fasta" or "tab")
+     - lazy     - optional argument (default=False). Used to access the
+                  lazy loading parser. Set to True for memory-only lazy
+                  loading. Set to a file-name to make an index and/or
+                  load from an existing index. The use of an index file
+                  is strongly recommended.
+>>>>>>> SeqIO.__init__: updated function docstrings for lazy loading
 
     Typical usage, opening a file to read in, and looping over the record(s):
 
@@ -628,12 +642,17 @@ def _force_alphabet(record_iterator, alphabet):
 def read(handle, format, alphabet=None, lazy=False):
     """Turns a sequence file into a single SeqRecord.
 
-        - handle   - handle to the file, or the filename as a string
-          (note older versions of Biopython only took a handle).
-        - format   - string describing the file format.
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
+     - handle   - handle to the file, or the filename as a string
+                  (note older versions of Biopython only took a handle).
+     - format   - string describing the file format.
+     - alphabet - optional Alphabet object, useful when the sequence type
+                  cannot be automatically inferred from the file itself
+                  (e.g. format="fasta" or "tab")
+     - lazy     - optional argument (default=False). Used to access the
+                  lazy loading parser. Set to True for memory-only lazy
+                  loading. Set to a file-name to make an index and/or
+                  load from an existing index. The use of an index file
+                  is strongly recommended.
 
     This function is for use parsing sequence files containing
     exactly one record.  For example, reading a GenBank file:
@@ -886,6 +905,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     The index is stored in an SQLite database rather than in memory (as in the
     Bio.SeqIO.index(...) function).
 
+<<<<<<< HEAD
         - index_filename - Where to store the SQLite index
         - filenames - list of strings specifying file(s) to be indexed, or when
           indexing a single file this can be given as a string.
@@ -898,6 +918,22 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         - key_function - Optional callback function which when given a
           SeqRecord identifier string should return a unique
           key for the dictionary.
+=======
+     - index_filename - Where to store the SQLite index
+     - filenames - list of strings specifying file(s) to be indexed, or when
+                  indexing a single file this can be given as a string.
+                  (optional if reloading an existing index, but must match)
+     - format   - lower case string describing the file format
+                  (optional if reloading an existing index, but must match)
+     - alphabet - optional Alphabet object, useful when the sequence type
+                  cannot be automatically inferred from the file itself
+                  (e.g. format="fasta" or "tab")
+     - key_function - Optional callback function which when given a
+                  SeqRecord identifier string should return a unique
+                  key for the dictionary.
+     - lazy     - optional argument (default=False). Used to access the
+                  lazy loading indexer and parser.
+>>>>>>> SeqIO.__init__: updated function docstrings for lazy loading
 
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
