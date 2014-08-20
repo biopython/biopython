@@ -198,7 +198,7 @@ class SeqProxyIndexManager(object):
             raise ValueError("New index must be a dictionary")
         if self._indexdb is None:
             self.record.update(indexdict)
-            index_exists = True
+            self.index_exists = True
             return
 
         con = _get_db_connection(self._indexdb)
@@ -253,7 +253,7 @@ class SeqProxyIndexManager(object):
         con.close()
         self._index_id = indexid
         self.record.update(indexdict)
-        index_exists = True
+        self.index_exists = True
 
     def _create_tables(self, con, indexdict):
         """Create metadata table and populate format.
