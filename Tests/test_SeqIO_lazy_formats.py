@@ -97,6 +97,7 @@ class TestMultipleFormats(unittest.TestCase):
         fttostrings = self.features_to_strings
         if len(default) > 100:
             self.features_to_strings
+            # Testing fetching features from db
             self.assertEqual(fttostrings(lazy[:].features),
                              fttostrings(default[:].features))
             self.assertEqual(fttostrings(lazy[99:].features),
@@ -111,6 +112,12 @@ class TestMultipleFormats(unittest.TestCase):
                              fttostrings(default[99:].features))
             self.assertEqual(fttostrings(lazy[:99].features),
                              fttostrings(default[:99].features))
+            # Test slicing features saved to memory
+            lazyfeatures = lazy.features
+            self.assertEqual(fttostrings(lazyfeatures),
+                             fttostrings(default[:].features))
+            self.assertEqual(fttostrings(lazy[99:].features),
+                             fttostrings(default[99:].features))
         else:
             self.assertEqual(fttostrings(lazy[:].features),
                              fttostrings(default[:].features))
