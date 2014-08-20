@@ -1643,7 +1643,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         feature_index_list = self._index.get_features(begin, end)
         feature_index_list = feature_index_list[begin:end]
         #make the feature list
-        featurelist = []
+        prefeature_list = []
+        #use the scanner's parse_feature method to make a list of pre-features
         for feature_index in feature_index_list:
             current_position, end_offset = feature_index[2:4]
             handle.seek(current_position)
@@ -1651,16 +1652,21 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
             feature_key = line[2:QUALIFIER_INDENT].strip()
             feature_lines = [line[QUALIFIER_INDENT:].rstrip()]
             current_position = handle.tell()
-            while current_position != end_offset:
-                line = handle.readline()
-                current_position = handle.tell()
+            lines = handle.read(end_offset - current_position)
+            lines = lines.split("\n")
+            for line in lines:
                 feature_lines.append(line[QUALIFIER_INDENT:].strip())
-            feature = [scanner.parse_feature(feature_key, feature_lines)]
-            feature = scanner._feed_feature_table(consumer, feature)
-            feature = consumer.data.features.pop()
-            if begin != 0:
-                feature = feature._shift(-begin)
-            featurelist.append(feature)
+            prefeature_list.append(scanner.parse_feature(feature_key,
+                                                         feature_lines))
+        #feed the prefeatures to the consumer
+        scanner._feed_feature_table(consumer, prefeature_list)
+        featurelist = consumer.data.features
+        #reset consumer in case it is used later
+        consumer.data.features = []
+        #all features are parsed from the original context, adjust the
+        # feature positions when necessary
+        if begin != 0:
+            featurelist = [f._shift(-begin) for f in featurelist]
         self._features = featurelist
 
 class EmblSeqRecProxy(GenbankSeqRecProxy):
