@@ -39,7 +39,7 @@ To take full advantage of the lazy loading strategy, operate slices on
 the lazy record whenever possible instead of the record attributes. See
 the example below using a lazy loading record 'bigrecord'
 
-    #getting sequence information
+    # getting sequence information
     bigrecord.seq[2000000:3000000]  # bad: this parses the whole seq
     bigrecord[2000000:3000000].seq  # good: only 10M bases are loaded
 
@@ -69,7 +69,7 @@ def _get_db_connection(dbfile):
                                            "included Python 2.5+")
     if not isfile(dbfile):
         raise ValueError("A valid database or None must be provided")
-    #case: connection does not exist yet
+    # case: connection does not exist yet
     con = _sqlite.connect(dbfile)
     return con
 
@@ -101,16 +101,16 @@ class SeqProxyIndexManager(object):
           handlename (str): The basename of the file a record is
             associated with. This is used for both storage and lookup.
         """
-        #recordkey should never be passed in the absence of a valid indexdb
+        # recordkey should never be passed in the absence of a valid indexdb
         if recordkey is not None and indexdb is None:
             raise ValueError("SeqProxyIndexManager requires an indexdb"
                              " to fetch by key.")
         elif indexdb is not None and handlename is None:
             raise ValueError("SeqProxyIndexManager requires handlename"
                              " to store records.")
-        #public attributes
+        # public attributes
         self.record = {}
-        #private attributes
+        # private attributes
         self._format = filefmt
         self._recordkey = recordkey
         self._features = None
@@ -142,11 +142,11 @@ class SeqProxyIndexManager(object):
         will be loaded into memory.
         """
 
-        #this will connect to the db
+        # this will connect to the db
         con = _get_db_connection(self._indexdb)
         cursor = con.cursor()
 
-        #case: indexdb is provided and has records
+        # case: indexdb is provided and has records
         if _is_int_or_long(self._recordkey):
             recordindex = cursor.execute("SELECT main_index.* "
                "FROM main_index "
@@ -164,7 +164,7 @@ class SeqProxyIndexManager(object):
                "WHERE indexed_files.filename=? AND "
                "main_index.id=?;",
                (self._handlename, self._recordkey))
-        #description is always set, so this is safe to do first
+        # description is always set, so this is safe to do first
         record_keys = [key[0] for key in recordindex.description]
         record_index = recordindex.fetchone()
         con.commit()
@@ -173,10 +173,9 @@ class SeqProxyIndexManager(object):
             raise KeyError("key {0} not found".format(self._recordkey))
         record_indexdict = dict((record_keys[i], record_index[i]) for \
                                     i in range(len(record_keys)))
-        # save some usefulreturn the index
+        # save some useful values and return the index
         self._index_id = record_indexdict.pop("indexid")
         self._handle_id = record_indexdict.pop("fileid")
-        #the return
         return record_indexdict
 
 
@@ -202,14 +201,14 @@ class SeqProxyIndexManager(object):
             return
 
         con = _get_db_connection(self._indexdb)
-        #case: indexdb provided but it is empty
+        # case: indexdb provided but it is empty
         if not self._is_valid_db_with_tables(con):
             self._create_tables(con, indexdict)
             con.commit()
         cursor = con.cursor()
         fileid = self._get_handle_id(con, write=True)
 
-        #case: indexdb is provided but already contains
+        # case: indexdb is provided but already contains
         # this specific record. This operation should raise
         cursor.execute("SELECT main_index.* "
                        "FROM main_index "
@@ -233,8 +232,8 @@ class SeqProxyIndexManager(object):
         if samefileposition is not None or sameid is not None:
             raise ValueError("indexdb already contains a similar record")
 
-        #create main index input table
-        # using 'insecure' string format query generation
+        # create main index input table
+        # using insecure string format query generation
         # due to the lack of flexible substitution syntax
         keys, placehold, values = "fileid", "?", [fileid]
         for key, value in indexdict.items():
@@ -246,7 +245,7 @@ class SeqProxyIndexManager(object):
         cur.execute("INSERT INTO main_index ({0})".format(keys) +\
                     "VALUES ({0})".format(placehold), values)
         indexid = cur.lastrowid
-        #increment the file record counter
+        # increment the file record counter
         cur.execute("UPDATE indexed_files SET count=count + 1 "
                     "WHERE filename=?", (basename(self._handlename),))
         con.commit()
@@ -267,7 +266,7 @@ class SeqProxyIndexManager(object):
             sequence record. This is a template for the main_index
             table
         """
-        #set locking mode and synchronous
+        # set locking mode and synchronous for faster IO
         con.execute("PRAGMA synchronous=0")
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
         con.commit()
@@ -276,11 +275,11 @@ class SeqProxyIndexManager(object):
             "CREATE TABLE meta_data(key TEXT UNIQUE, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("format", self._format))
-        #create file table
+        # create file table
         con.execute("CREATE TABLE indexed_files(fileid INTEGER PRIMARY "
                     "KEY, filename TEXT UNIQUE, count INTEGER);")
 
-        #create basic index table:
+        # create basic index table:
         # The (less secure) string manipulation is used because sqlite3
         # API does not provide rich logic in the parameter substitution
         # query interface. The variant nature of each file's index
@@ -295,7 +294,7 @@ class SeqProxyIndexManager(object):
                    ", FOREIGN KEY(fileid) REFERENCES indexed_files(fileid));"
         con.execute(indextab)
 
-        #create features table
+        # create features table
         feattab = "CREATE TABLE features(" +\
                   "fileid INTEGER, " +\
                   "indexid INTEGER, " +\
@@ -318,30 +317,33 @@ class SeqProxyIndexManager(object):
         the fileid
 
         Args:
-          con (sqlite db connection): a connection to the sqlite db
+          con (sqlite3.Connection): a connection to the sqlite db
           write (bool): if write is True, the handle id will be added
             to the indexed_files table.
         """
+        # Several functions will set _handle_id (including this function),
+        # return this attribute if it is not the default value (None)
         if self._handle_id is not None:
             return self._handle_id
         if self._handle_id is None:
             cursor = con.cursor()
             name = cursor.execute("SELECT fileid "
-                           "FROM indexed_files WHERE "
-                           "filename=?;",
-                           (self._handlename,))
+                                  "FROM indexed_files WHERE "
+                                  "filename=?;",
+                                  (self._handlename,))
             name = name.fetchone()
             if name is not None:
                 self._handle_id = name[0]
                 return name[0]
+            # If this is called with write=True, update the index
             elif write:
                 cursor.execute("INSERT INTO indexed_files "
                                "(filename, count) VALUES (?, ?);",
                                (self._handlename, 0))
                 name = cursor.execute("SELECT fileid "
-                           "FROM indexed_files WHERE "
-                           "filename=?;",
-                           (self._handlename,)).fetchone()
+                                      "FROM indexed_files WHERE "
+                                      "filename=?;",
+                                      (self._handlename,)).fetchone()
                 self._handle_id = name[0]
                 con.commit()
                 return name[0]
@@ -356,21 +358,21 @@ class SeqProxyIndexManager(object):
         Else: raise
 
         Args:
-          con (sqlite db connection): a connection to the sqlite db
+          con (sqlite3.Connection): a connection to the sqlite db
         """
         cursor = con.cursor()
-        #case: database is empty
+        # case: database is empty
         tablenames = cursor.execute(
             "SELECT name FROM sqlite_master WHERE "
             "type='table' ORDER BY name;").fetchall()
         if len(tablenames) == 0:
             return False
-        #case: database is valid and has correct format
+        # case: database is valid and has correct format
         tablenames = [name[0] for name in tablenames]
         expectedtables = ['features', 'indexed_files',
                           'main_index', 'meta_data']
         if tablenames == expectedtables:
-            #quick check: format matches self._format
+            # quick check: format matches self._format
             db_record_format, = cursor.execute(
                 "SELECT value FROM meta_data WHERE key=?;",
                 ("format",)).fetchone()
@@ -379,7 +381,7 @@ class SeqProxyIndexManager(object):
                 raise ValueError("provided database is for {0} files"\
                                  .format(db_record_format))
             return True
-        #something was wrong with the database
+        # something was wrong with the database
         else:
             raise ValueError("provided database is incomplete or corrupt")
 
@@ -398,7 +400,7 @@ class SeqProxyIndexManager(object):
         if self._indexdb is None:
             return
 
-        #from this point, do database interaction
+        # There is a DB and a valid feature list; insert the list
         feature_index_list = feature_index_list[:]
         con = _get_db_connection(self._indexdb)
         if not self._is_valid_db_with_tables(con):
@@ -407,7 +409,7 @@ class SeqProxyIndexManager(object):
         cursor = con.cursor()
         fileid = self._get_handle_id(con, write=False)
 
-        #this will raise a NameError if the _index_id has not been set
+        # This will raise a NameError if the _index_id has not been set
         assert self._index_id is not None
         cursor.execute("SELECT features.* "
                        "FROM features "
@@ -421,7 +423,7 @@ class SeqProxyIndexManager(object):
         if samefileposition is not None:
             raise ValueError("indexdb already contains a similar record")
 
-        #inserting feature_index_list into DB
+        # Inserting feature_index_list into DB
         cursor.executemany("INSERT INTO features "
                            "(indexid, fileid, seqbegin, seqend, "
                            "offsetbegin, offsetend, qualifier) "
@@ -443,21 +445,22 @@ class SeqProxyIndexManager(object):
         if isinstance(self._features, FeatureBinCollection):
             return self._features
 
-        #case: index is not loaded and no db has been used
+        # case: index is not loaded and no db has been used
         if self._indexdb is None:
-            #case: no index key provided thus no record will be searched
+            # case: no index key provided thus no record will be searched
             if self._recordkey is None:
                 return None
 
-        #case: retrieve from db because a key was given and a db exists
-        #      this will connect to the db (this is implicit since the
-        #      _index getter must have already run successfully)
+        # case: retrieve from db because a key was given and a db exists
+        # this will connect to the db (this is implicit since the
+        # _index getter must have already run successfully)
         con = _get_db_connection(self._indexdb)
         cursor = con.cursor()
 
-        #case: empty db, this is already dealt with in _index getter
-
-        #case: indexdb is provided and has records
+        # case: indexdb is provided and has records.
+        #
+        # Return the indexes as a list of tuples, each tuple should have the
+        # form (seqbegin, seqend, offsetbegin, offsetend, qualifier)
         featureindexes = cursor.execute("SELECT f.seqbegin, "
             "f.seqend, f.offsetbegin, f.offsetend, f.qualifier "
             "FROM features f "
@@ -466,7 +469,7 @@ class SeqProxyIndexManager(object):
             "AND f.seqend <= ? "
             "ORDER BY f.seqbegin;",
             (self._index_id, begin, end))
-
+        # Insert index list into the collection object required for return
         container = FeatureBinCollection()
         for featureindex in featureindexes:
             container.insert(featureindex)
@@ -497,8 +500,8 @@ class SeqRecordProxyBase(SeqRecord):
       features (SeqFeature[]): a list of an SeqFeature objects
       annotations (dict) - Further information about the whole sequence.
         Most entries are strings, or lists of strings.
-      letter_annotations () - Per letter/symbol annotation (restricted
-        dictionary). This holds Python sequences (lists, strings or
+      letter_annotations (restricted dictionary)- Per letter/symbol
+        annotation. This holds Python sequences (lists, strings or
         tuples) whose length matches that of the sequence. A typical
         use would be to hold a list of integers representing sequencing
         quality scores, or representing the secondary structure.
@@ -551,7 +554,7 @@ class SeqRecordProxyBase(SeqRecord):
             name = basename(handle.name)
         else:
             name = None
-        #Inializing the index object
+        # Inializing the index object
         self._index = SeqProxyIndexManager(self._format,
             indexdb=indexdb, recordkey=indexkey,
             handlename=name)
@@ -567,7 +570,7 @@ class SeqRecordProxyBase(SeqRecord):
             feature_index = self._make_feature_index(feature_index)
             self._index.set_feature_index(feature_index)
 
-        #set base values
+        # Load non lazy values from sequence file, validate the record by id.
         self._load_non_lazy_values()
         if self.id != self._index.record["id"]:
             raise ValueError("The index does not contain the correct id.")
@@ -665,17 +668,17 @@ class SeqRecordProxyBase(SeqRecord):
     def __getitem__(self, index):
         """Returns a record slice or an individual letter."""
         if isinstance(index, int):
-            #The recursive call is required to prevent full parsing when
+            # The recursive call is required to prevent full parsing when
             # only calling a single resiude
             return self[index:index+1].seq[0]
 
         elif isinstance(index, slice):
-            #Raise an error if there is no seq to access.
+            # Raise an error if there is no seq to access.
             parent_length = len(self)
             start, stop, step = index.indices(parent_length)
             if parent_length <= 0:
                 raise ValueError("Cannot slice sequence length <= 0.")
-            #For step values != 1, return a SeqRecord instance mimicing
+            # For step values != 1, return a SeqRecord instance mimicking
             # the return behavior of SeqRecord. Some lazy loading is still
             # performed by pre-narrowing the sequence window
             if step != 1:
@@ -689,21 +692,20 @@ class SeqRecordProxyBase(SeqRecord):
                                  name=self.name,
                                  description=self.description)
             elif step == 1:
-                #this is what will be returned
+                # this is what will be returned after some modifications
                 seq_proxy_copy = copy(self)
-                #do some index math
+                # Update the global index positions
                 seq_proxy_copy._index_begin = self._index_begin + start
                 seq_proxy_copy._index_end = self._index_begin + stop
-                #fix _seq property when set
+                # Update _seq property when set
                 if self._seq:
                     seq_proxy_copy._seq = self._seq[start:stop]
-
-                #fix _features property when set
+                # Fix _features property when set
                 if self._features:
                     seq_proxy_copy._features = []
                     for f in self._features:
                         if f.ref or f.ref_db:
-                            #TODO - Implement this (with lots of tests)?
+                            # TODO - Implement this (with lots of tests)?
                             import warnings
                             warnings.warn("When slicing SeqRecord objects, "
                                   "any SeqFeature referencing other "
@@ -777,26 +779,6 @@ class SeqRecordProxyBase(SeqRecord):
         self._handle.seek(begin_offset)
         return self._handle.read(recordoffsetlength)
 
-
-
-
-    # All methods tagged below are implemented in the base class
-    #
-    #def __bool__(self):
-    #__nonzero__= __bool__
-    #def reverse_complement(self, id=False, name=False, description=False,
-    #def __radd__(self, other):
-    #def format(self, format):
-    #def __format__(self, format_spec):
-    #def __add__(self, other):
-    #    returns non-proxy class where possible
-    #def __radd__(self, other):
-    #    returns non-proxy class where possible
-    #def __str__(self):
-    #def __repr__(self):
-    #def __contains__(self, char):
-    #def __iter__(self):
-
 class HandleQueueLRU(object):
     """A simplified LRU cache that serves handles to HandleWrapper.
 
@@ -814,7 +796,7 @@ class HandleQueueLRU(object):
             raise ValueError("filenames must be a list, not a str")
         self.cachelen = min(len(filenames), cachelen)
 
-        #initialize namedict and fill the cache
+        # initialize namedict and fill the cache
         self.namedict = {}
         self.stack = []
         stackinitializerlen = 0
@@ -841,20 +823,20 @@ class HandleQueueLRU(object):
         if key not in self.namedict:
             raise KeyError("HandleQueueLRU does not contain '{}'".format(key))
         record = self.namedict[key]
-        #case: record is the most recent
+        # case: record is the most recent
         if record == self.stack[-1]:
             pass
-        #case: record isn't in the stack
+        # case: record isn't in the stack
         elif record["handle"] is None:
             oldrec = self.stack.pop(0)
             oldrec["handle"].close()
             oldrec["handle"] = None
             record["handle"] = open(record["fullpath"], 'rb')
             self.stack.append(record)
-        #case: record is in the stack but not at the top
+        # case: record is in the stack but not at the top
         else:
-            recordpos = self.stack.index(record) #this is O(n) for stack len
-            self.stack.pop(recordpos) #this is O(n) for stack len
+            recordpos = self.stack.index(record)  # this is O(n) for stack len
+            self.stack.pop(recordpos) # this is O(n) for stack len
             self.stack.append(record)
         return record["handle"]
 
@@ -890,37 +872,37 @@ class LazyIterator(object):
 
     def __init__(self, files, return_class, index=True,
                  alphabet=None, asdict=False, key_function=None):
-        #set up files and file keys
+        # set up files and file keys
         if isinstance(files, list) and len(files) > 0:
             self.files = files
             self.filekeys = [basename(f) for f in files]
         else:
             raise ValueError("files must be a non-empty list")
 
-        #set key_function
+        # set key_function
         if not hasattr(key_function, "__call__"):
             key_function = lambda keyin: keyin
 
-        #other default values
+        # other default values
         self.return_class = return_class
         self.alphabet = alphabet
         self.index = index
         self.format = return_class._format
         self.asdict = asdict
 
-        #check and fix index existence
+        # check and fix index existence
         if isinstance(index, bool):
             self.use_an_index = False
         elif isfile(index):
             self.use_an_index = True
         else:
-            #make a new file
+            # make a new file
             temp = open(index, 'wb')
             temp.close()
             self.use_an_index = True
 
         if self.use_an_index:
-            #since an index is being used, the HandleQueue is needed
+            # since an index is being used, the HandleQueue is needed
             for f in files:
                 assert isfile(f), "File '{}' doesn't exist".format(f)
             handle_queue = HandleQueueLRU(files)
@@ -928,7 +910,7 @@ class LazyIterator(object):
             for f in files:
                 fkey = basename(f)
                 self.handles[fkey] = HandleWrapper(fkey, handle_queue)
-            #Check if the database is empty and which files are indexed
+            # Check if the database is empty and which files are indexed
             con = _get_db_connection(self.index)
             table_exists = con.execute("SELECT name FROM sqlite_master "
                 "WHERE type='table' AND name='indexed_files'")
@@ -956,7 +938,7 @@ class LazyIterator(object):
                         else:
                             raise e
                     temphandle.close()
-            #set keys in light of key_function
+            # set keys in light of key_function
             realkeylist = self._get_keys_from_db()
             self._keymap = {}
             self._keys = []
@@ -1222,7 +1204,7 @@ class FeatureBinCollection(object):
             the index of the last residue (as a open interval) inside
             the tuple that will be stored with FeatureBinCollection
         """
-        #these should not be changed
+        # Default values from literature that set up the number of bins
         self._bin_level_count = 6
         self._bins = [[] for i in range(37449)]
 
@@ -1232,14 +1214,14 @@ class FeatureBinCollection(object):
         self._beginindex = beginindex
         self._endindex = endindex
 
-        #default action: start small (8M) and allow expansion
+        # default action: start small (8M) and allow expansion
         self._sorted = False
         self._dynamic_size = True
         if length is None:
             self._set_max_bin_power(23)
 
-        #alternate action if a sequence length is provided
-        # set to smallest power able to fully contain
+        # alternate action if a sequence length is provided
+        # set to smallest power able to fully contain the length
         elif _is_int_or_long(length) and length > 0:
             default_powers = [23, 26, 29, 32, 35, 38, 41]
             for power in default_powers:
@@ -1247,7 +1229,7 @@ class FeatureBinCollection(object):
                     self._set_max_bin_power(power)
                     self._dynamic_size = False
                     break
-            if self._dynamic_size: #this should have been set to False
+            if self._dynamic_size: # this should have been set to False
                 error_string = "Sequence length is {0}:".format(length) +\
                                " must be less than 2^41"
                 raise ValueError(error_string)
@@ -1281,11 +1263,11 @@ class FeatureBinCollection(object):
         for k in range(4681, 37449):
             bin_begin_old = (k-oL)*old_size
             k_new = int(floor(new_oL + (bin_begin_old/new_size)))
-            #extend required to save existing data
+            # extend required to save existing data
             self._bins[k_new].extend(self._bins[k])
             self._bins[k] = []
 
-        #then, move everything down.
+        # then, move all bins down one level to make an empty top level bin.
         for k_inverse in range(4681):
             k = 4680 - k_inverse
             level = int(floor(log((7*k + 1), 2)/3.0))
@@ -1299,7 +1281,6 @@ class FeatureBinCollection(object):
 
     def _set_max_bin_power(self, power):
         """Set the maximum bin power and fix other attributes."""
-
         self._max_bin_power = power
         self._min_bin_power = power - 3*(self._bin_level_count-1)
         self._size_list = [2**(self._min_bin_power+3*n) \
@@ -1315,12 +1296,11 @@ class FeatureBinCollection(object):
         beginindex = self._beginindex
         endindex = self._endindex
 
-        #reset sorted quality
+        # reset sorted attribute
         self._sorted = False
 
         begin = feature_tuple[beginindex]
         end = feature_tuple[endindex]
-        #use _py3k module later
         assert _is_int_or_long(begin)
         assert _is_int_or_long(end)
         assert begin <= end
@@ -1335,15 +1315,15 @@ class FeatureBinCollection(object):
 
     def sort(self):
         """Perform bin-centric sorting for faster retrieval."""
-        #bins must be sorted by the begin index, this is fastest
+        # bins must be sorted by the begin index, this is fastest
         if self._beginindex == 0:
             for i in range(len(self._bins)):
                 self._bins[i].sort()
-        #this is a bit slower but accomodates diverse data structures
+        # this is a bit slower but accomodates diverse data structures
         else:
             for i in range(len(self._bins)):
                 self._bins[i].sort(key=lambda tup: tup[self._beginindex])
-        #reset sorted quality
+        # reset sorted attribute
         self._sorted = True
 
     def __getitem__(self, key):
@@ -1355,11 +1335,11 @@ class FeatureBinCollection(object):
         output (generally no matches would be returned for sequence
         based data sets) an IndexError is raised.
         """
-        #set some locals
+        # set some locals
         beginindex = self._beginindex
         endindex = self._endindex
 
-        #check that it is a slice and it has no step property (or step==1)
+        # check that it is a slice and it has no step property (or step==1)
         if not isinstance(key, slice):
             if _is_int_or_long(key):
                 key = slice(key, key+1)
@@ -1367,21 +1347,23 @@ class FeatureBinCollection(object):
                 raise TypeError("lookups in the feature bin"
                                 " must use slice or int keys")
 
-        #fix begin or end index for slicing of forms: bins[50:] or bins[:]
+        # fix begin or end index for slicing of forms: bins[50:] or bins[:]
         keystart, keystop, keystep = key.indices(self._max_sequence_length)
         if keystart > keystop:
             raise IndexError("key not valid, slice.start > slice.stop")
 
-        #any integers are just converted to a 'len() == 1' slice
+        # any integers are just converted to a 'len() == 1' slice
         if keystep is not None and keystep != 1:
             raise KeyError("lookups in the feature bin may not use"
                            " slice stepping ex. bins[0:50:2]")
 
-        #pre-sort if necessary
+        # pre-sort if necessary
         if not self._sorted:
             self.sort()
 
-        #code taken from self._calculate_bin_index(), comments removed
+        # code adapted from self._calculate_bin_index()
+        # see that function for a more annotated version
+        # of what this does.
         return_entries = []
         bin_level_count = self._bin_level_count
         max_bin_power = self._max_bin_power
@@ -1390,27 +1372,26 @@ class FeatureBinCollection(object):
             oL = (2**(3*L) - 1)/7
             sL = float(2**(max_bin_power-3*L))
             k1 = int(floor(oL + (keystart/sL)))
-            #k2 is incremented since range is used
+            # k2 is incremented since range is used
             k2 = int(ceil(oL - 1 + (keystop)/sL)) + 1
             if k2-k1 > 2:
                 for entry in range(k1+1, k2-1):
                     return_entries.extend(self._bins[entry])
             for binn in set([k1, k2-1]):
-                #for binn in range(k1,k2):
                 for feature in self._bins[binn]:
                     if self.bounded_only_returns:
-                        #this covers fully bound sequence and left overlap
+                        # this covers fully bound sequence and left overlap
                         if keystart <= feature[beginindex] and \
                                        feature[endindex] <= keystop:
                             return_entries.append(feature)
                     else:
-                        #this covers fully bound sequence and left overlap
+                        # this covers fully bound sequence and left overlap
                         if keystart <= feature[beginindex] < keystop:
                             return_entries.append(feature)
-                        #this covers left sequence right sequence overlap
+                        # this covers left sequence right sequence overlap
                         elif keystart < feature[endindex] <= keystop:
                             return_entries.append(feature)
-                        #this covers seqyebces fully bound by a feature
+                        # this covers seqyebces fully bound by a feature
                         elif keystart > feature[beginindex] and \
                              keystop < feature[endindex]:
                             return_entries.append(feature)
@@ -1434,10 +1415,8 @@ class FeatureBinCollection(object):
         yet can be run efficiently using alternate bin index
         relationships.
         """
-
-        #take care base cases with the span parameter
         assert span >= 0
-        #determination of bin location for zero length seq's
+        # determination of bin location for zero length seq's
         span = max(1, span)
 
         # fix bin sizes if needed. Also, if the bin size is
@@ -1453,7 +1432,7 @@ class FeatureBinCollection(object):
                 raise ValueError(error_string)
             self._increase_bin_sizes()
 
-        #run the assignment loop
+        # run the assignment loop
         bin_level_count = self._bin_level_count
         max_bin_power = self._max_bin_power
         for l_inverse in range(bin_level_count):
@@ -1461,7 +1440,7 @@ class FeatureBinCollection(object):
             # calculate offset (oL) of the list at level L
             offset_at_L = (2**(3*level) - 1)/7
             group_length = (2**(3*(level+1)) - 1)/7
-            #calculate size (sL) of the list: the number of residues in width
+            # calculate size (sL) of the list: the number of residues in width
             size_at_L = float(2**(max_bin_power-3*level))
             # interval[0] >= (k - oL)*sL
             # rearrange to form
@@ -1533,7 +1512,7 @@ class LinkedElement(object):
         self.indexbegin = begin
         self.indexend = end
 
-        #used for looking at next element
+        # used for looking at next element
         self.lastrecord = True
         self.nextelementoffset = None
 
@@ -1612,7 +1591,7 @@ class ExpatHandler(object):
         self.targetfield = targetfield
         self.tagstoparse = tagstoparse
 
-        #values used in self.parse_from_position
+        # values used in self.parse_from_position
         self.currentelem = None
         self.rootelem = None
         self.savetext = False
@@ -1622,7 +1601,7 @@ class ExpatHandler(object):
     def parse_from_position(self, position=0):
         """Parse XML from a position and return an indexed root node."""
         handle = self._handle
-        #initialize the parser
+        # initialize the parser
         parser = self._parser = self._parser_class()
         parser.StartElementHandler = self.start_element
         parser.EndElementHandler = self.end_element
@@ -1634,7 +1613,7 @@ class ExpatHandler(object):
         self.rootelem = rootelem
         self.currentelem = rootelem
 
-        #make the index
+        # make the index
         try:
             parser.ParseFile(handle)
         except StopIteration:
@@ -1672,7 +1651,7 @@ class ExpatHandler(object):
 
             char = endregion[padding%readlen]
 
-        #check the next tag
+        # check the next tag
         handle.seek(self.rootelem.nextelementoffset+1)
         beginregion = _bytes_to_string(handle.read(len(self.targetfield)))
         if self.targetfield == beginregion:
@@ -1706,7 +1685,7 @@ class ExpatHandler(object):
     def end_element(self, tag):
         """Handle expat 'end_element' call."""
         if tag == self.targetfield:
-            #for a compact xml file, this will produce the index of the end
+            # for a compact xml file, this will produce the index of the end
             # tag without the trailing '>'. The parser fixes this.
             end = self._parser.CurrentByteIndex + len(self.targetfield) + 3 \
                   + self.baseposition
