@@ -51,10 +51,11 @@ from copy import copy
 import re
 from math import floor, ceil, log
 from os.path import isfile, basename
+from xml.parsers import expat
 try:
     from sqlite3 import dbapi2 as _sqlite
 except ImportError:
-    #Even without sqlite we still want to offer in-memory indexing.
+    # Even without sqlite we still want to offer in-memory indexing.
     _sqlite = None
 
 from Bio._py3k import _is_int_or_long, _bytes_to_string, _as_string
@@ -1448,14 +1449,13 @@ class FeatureBinCollection(object):
             k1 = int(floor(offset_at_L + (begin/size_at_L)))
             # interval[1] < (k - oL + 1)*sL
             # rearrange to form
-            #k > 1 + oL + (interval[1])/sL
-            #k2 = oL - 1 + (begin+span)/sL
+            # k > 1 + oL + (interval[1])/sL
+            # k2 = oL - 1 + (begin+span)/sL
             k2 = int(ceil(offset_at_L - 1 + (begin+span)/size_at_L))
             if k1 == k2 and k1 < group_length:
                 return k1
-
-        assert False # the assignment loop failed
-from xml.parsers import expat
+        # the assignment loop failed if false is returned
+        assert False
 
 def xml_index_iter(filename, targetfield, tagstoparse=None, returndict=False):
     """A xml file iter that returns indexes for sequential tags.
