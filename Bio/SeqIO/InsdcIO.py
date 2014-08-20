@@ -1494,9 +1494,8 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         readchars = len(firstline)
         linelist = [firstline]
         while readchars < lengthtoget:
-            next_line = _bytes_to_string(handle.readline())
-            next_line = next_line[lettersbegin:lettersend].strip()
-            next_line = "".join(next_line.split())
+            next_line = handle.readline()[lettersbegin:lettersend].rstrip()
+            next_line = _bytes_to_string(next_line.replace(b' ', b''))
             if not next_line:
                 break
             else:
