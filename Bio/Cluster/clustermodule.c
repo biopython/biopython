@@ -44,7 +44,7 @@ distance_converter(PyObject* object, void* pointer)
     return 0;
   }
   if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "distance should be a single character");
+  { PyErr_Format(PyExc_ValueError, "distance should be a single character (not '%s')", data);
     return 0;
   }
   c = data[0];
@@ -73,7 +73,7 @@ method_treecluster_converter(PyObject* object, void* pointer)
     return 0;
   }
   if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
+  { PyErr_Format(PyExc_ValueError, "method should be a single character (not '%s')", data);
     return 0;
   }
   c = data[0];
@@ -102,7 +102,7 @@ method_kcluster_converter(PyObject* object, void* pointer)
     return 0;
   }
   if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
+  { PyErr_Format(PyExc_ValueError, "method should be a single character (not '%s')", data);
     return 0;
   }
   c = data[0];
@@ -131,7 +131,7 @@ method_clusterdistance_converter(PyObject* object, void* pointer)
     return 0;
   }
   if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
+  { PyErr_Format(PyExc_ValueError, "method should be a single character (not '%s')", data);
     return 0;
   }
   c = data[0];
