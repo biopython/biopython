@@ -286,8 +286,41 @@ Declared obsolete in Release 1.48, deprecated in Release 1.51, and removed
 in Release 1.55 final. Please use the "fasta" support in Bio.SeqIO or
 Bio.AlignIO instead.
 
+Note that ``Bio.Fasta`` could be used with a ``RecordParser`` which gave
+``FastaRecord`` objects, for example:
+
+    # Old code which won't work	any more
+    from Bio import Fasta
+    handle = open("example.fas")
+    for record in Fasta.Iterator(handle, Fasta.RecordParser()) :
+        # Here record was a Bio.Fasta.Record object
+        print record.title # The full title line as a string
+        print record.sequence # The sequence as a string
+    handle.close()
+
+Alternatively using the old ``SequenceParser`` would give ``SeqRecord``
+objects like those from the new ``Bio.SeqIO`` code, for example:
+
+    # Old code which won't work any more
+    from Bio import Fasta
+    handle = open("example.fas")
+    for seq_record in Fasta.Iterator(handle, Fasta.SequenceParser()) :
+        print seq_record.description # The full title line as a string
+        print str(seq_record.seq) # The sequence as a string
+    handle.close()
+
+Either of those examples using ``Bio.SeqIO`` becomes just:
+
+    # Updated versions of above examples using Bio.SeqIO instead
+    from Bio import SeqIO
+    for seq_record in SeqIO.parse("example.fas", "fasta") :
+        print seq_record.description # The full title line as a string
+        print str(seq_record.seq) # The sequence as a string
+
+You can also continue to use handles with ``Bio.SeqIO`` if you want to.
+
 Bio.Align.FormatConvert
-======================
+=======================
 Declared obsolete in Release 1.48, deprecated in Release 1.51, and
 removed in Release 1.55 final. Please use Bio.AlignIO or the Alignment
 object's format method instead.

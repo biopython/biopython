@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 29 May 2014 (Biopython 1.64+)}
+\date{Last Update -- 24 August 2014 (Biopython 1.64+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -352,6 +352,10 @@ from __future__ import print_function
 
  \item \emph{Why does the code from CVS seem out of date?} \\
   In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
+
+  \item \emph{Why doesn't} \verb|Bio.Fasta| \emph{work?} \\
+  We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{http://biopython.org/SRC/biopython/DEPRECATED}{DEPRECATED} file.
+
 \end{enumerate}
 
 \noindent For more general questions, the Python FAQ pages \url{http://www.python.org/doc/faq/} may be useful.
