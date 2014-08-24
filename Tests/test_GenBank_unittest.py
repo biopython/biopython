@@ -1,15 +1,23 @@
 # Copyright 2013 by Kai Blin.
+# Revisions copyright 2014 by Evan Parker.
+# All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 import unittest
 import warnings
+import re
 from os import path, getcwd
 from collections import namedtuple
 
 from Bio import SeqIO
 from Bio import BiopythonParserWarning
+from Bio.GenBank import _FeatureConsumer
+from Bio.GenBank.utils import FeatureValueCleaner
+from Bio.GenBank.Scanner import GenBankScanner
+from Bio._py3k import StringIO, _as_string
 
 class GenBankTests(unittest.TestCase):
     def test_invalid_product_line_raises_value_error(self):
@@ -96,16 +104,14 @@ for filetuple in warn_files:
             funct(filetuple))
     del funct
 
-
-#tests that check granular consumer behavior
-import re
-from Bio.GenBank import _FeatureConsumer
-from Bio.GenBank.utils import FeatureValueCleaner
-from Bio.GenBank.Scanner import GenBankScanner
-from Bio._py3k import StringIO, _as_string
-
 class ConsumerBehaviorTest(unittest.TestCase):
+    """Test genbank consumer behavior
 
+    This TestCase implements the sequence of operations to
+    parse a GenBank record. This was initially written to help
+    learn the GenBank parser process, but it should be useful
+    to debug future modifications of the GenBank parser suite.
+    """
     recordfile = "brca_FJ940752.gb"
 
     def setUp(self):
@@ -124,37 +130,47 @@ class ConsumerBehaviorTest(unittest.TestCase):
     def test_complete_(self):
         scanner = self.scanner
         consumer = self.consumer
-        #step 0: manually setting the handle
+        # step 0: manually setting the handle
         # same as >>> scanner.set_handle(self.handle)
         scanner.handle = self.handle
         scanner.line = ""
-        #step 1: find_start
+        # step 1: find_start
         scanner.find_start()
         self.assertEqual(scanner.line[0:20], "LOCUS       FJ940752")
         self.assertTrue(bool(re.match(r"^LOCUS(\s)*",scanner.line)))
-        #step 2: feed_first_line (expect no advancement)
+        # step 2: feed_first_line (expect no advancement)
         scanner._feed_first_line(self.consumer, line=scanner.line)
         self.assertEqual(scanner.line[0:20], "LOCUS       FJ940752")
         self.assertTrue(bool(re.match(r"^LOCUS(\s)*",scanner.line)))
-        #step 3: feed all header data
+        # step 3: feed all header data
         scanner._feed_header_lines(consumer, scanner.parse_header())
-        self.assertEqual(scanner.line[0:40], "FEATURES             Location/Qualifiers")
-        self.assertTrue(bool(re.match(r"^FEATURES(\s)*Location/Qualifiers",scanner.line)))
-        #step 4: feed the features
+        self.assertEqual(scanner.line[0:40], "FEATURES             "
+                         "Location/Qualifiers")
+        self.assertTrue(bool(re.match(r"^FEATURES(\s)*Location/Qualifiers",
+                        scanner.line)))
+        # step 4: feed the features
         featuretuple = scanner.parse_features(skip=False)
         testline = scanner.line
         scanner._feed_feature_table(consumer, featuretuple)
         self.assertEqual(testline[0:6], "ORIGIN")
         self.assertTrue(bool(re.match(r"^ORIGIN",testline)))
-        #step 5: feed the footer
+        # step 5: feed the footer
         misc_lines, sequence_string = scanner.parse_footer()
         self.assertEqual("//", scanner.line)
         self.assertTrue(bool(re.match(r"^//",scanner.line)))
-        #step 6: finish the consumer
+        # step 6: finish the consumer
         scanner._feed_misc_lines(consumer, misc_lines)
         consumer.sequence(sequence_string)
 
 class PartialSequenceAndPartialResultTest(unittest.TestCase):
+    """Test that parsing a record lacking features and sequence
+
+    Lazy loading uses the genbank parser suite by passing it the
+    header information lacking both the features and the sequence.
+    This test verifies that this behavior produces the expected
+    results and does not raise errors. Changes causing this test
+    to fail will also break lazy loading.
+    """
 
     recordfile = "brca_FJ940752.gb"
 
@@ -168,7 +184,7 @@ class PartialSequenceAndPartialResultTest(unittest.TestCase):
         self.handle.close()
 
     def test_get_start_by_cut(self):
-        #get positions
+        # Get FEATURES header line position
         position = 0
         while True:
             line = self.handle.readline()
@@ -181,7 +197,7 @@ class PartialSequenceAndPartialResultTest(unittest.TestCase):
         self.handle.seek(0)
         headertext = self.handle.read(position-0)
         top = StringIO(_as_string(headertext))
-        #use the fake thing
+        # Use StringIO handle with scanner
         scanner = self.scanner
         consumer = self.consumer
         scanner.set_handle(top)
