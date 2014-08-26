@@ -1,7 +1,10 @@
-import unittest
+# Copyright 2014 by Evan Parker.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
+import unittest
 import sys
-import imp
 import os
 import tempfile
 
@@ -961,8 +964,6 @@ class TestSeqIOBindings(unittest.TestCase):
         self.assertEqual(str(onerec[0:10].seq), "CGGAGCCAGC")
         self.assertEqual(str(onerec[0:10].seq), "CGGAGCCAGC")
 
-#a = MinimalLazySeqRecord("seQUencefake", "fakeid")
-#unittest.main( exit=False )
 if __name__ == "__main__":
     #Run the test cases
     runner = unittest.TextTestRunner(verbosity=2)
