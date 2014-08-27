@@ -286,22 +286,23 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
 
         #pull characters from first line and return early if possible
         letters_firstline = begin%sequencewidth
-        firstline = _bytes_to_string(handle.readline()).strip()
+        firstline = handle.readline().strip()
         firstline = firstline[letters_firstline:]
         if len(firstline) >= lengthtoget:
-            self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
+            self._seq = Seq(_bytes_to_string(firstline[0:lengthtoget]),
+                            self._alphabet)
             return
 
         #extract the rest of the lines
         readchars = len(firstline)
         linelist = [firstline]
-        while readchars < lengthtoget:
-            next_line = _bytes_to_string(handle.readline()).strip()
-            if " " in next_line:
+        for next_line in handle:
+            if readchars >= lengthtoget:
+                break
+            next_line = next_line.strip()
+            if b" " in next_line:
                 raise ValueError \
                     ("No spaces permitted: see line '%s'"%(next_line))
-            if not next_line:
-                break
             else:
                 linelist.append(next_line)
                 readchars += sequencewidth
@@ -310,10 +311,10 @@ class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
         last_line_index = end%sequencewidth
         if last_line_index:
             linelist[-1] = linelist[-1][0:last_line_index]
-        sequence = "".join(linelist)
+        sequence = b"".join(linelist)
         if len(sequence) != len(self):
             raise ValueError("File not formatted correctly")
-        self._seq = Seq(sequence, self._alphabet)
+        self._seq = Seq(_bytes_to_string(sequence), self._alphabet)
 
     def _make_feature_index(self, new_list):
         return new_list
