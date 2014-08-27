@@ -1493,14 +1493,13 @@ class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
         #extract the rest of the lines
         readchars = len(firstline)
         linelist = [firstline]
-        while readchars < lengthtoget:
-            next_line = handle.readline()[lettersbegin:lettersend].rstrip()
-            next_line = _bytes_to_string(next_line.replace(b' ', b''))
-            if not next_line:
+        for next_line in handle:
+            if readchars >= lengthtoget:
                 break
-            else:
-                linelist.append(next_line)
-                readchars += sequencewidth
+            next_line = next_line[lettersbegin:lettersend].rstrip()
+            next_line = _bytes_to_string(next_line.replace(b' ', b''))
+            linelist.append(next_line)
+            readchars += sequencewidth
 
         #fix the last line and assign the _seq attribute
         last_line_index = end%sequencewidth
