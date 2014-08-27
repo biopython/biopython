@@ -862,6 +862,12 @@ class HandleWrapper(object):
             realhandle = self.handle_queue[self.filekey]
             return getattr(realhandle, requested_attribute)
 
+    def __iter__(self):
+        if self.filekey in self.handle_queue:
+            realhandle = self.handle_queue[self.filekey]
+            for line in realhandle:
+                yield line
+
 class LazyIterator(object):
     """Wrapper for most lazy-loading/indexing access routes for SeqIO.
 
