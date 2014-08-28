@@ -6,7 +6,7 @@
 These tables are based on parsing the NCBI file:
 ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 
-Last updated after Version 3.9 on 8 July 2014
+Last updated at Version 4.0
 """
 
 from __future__ import print_function
