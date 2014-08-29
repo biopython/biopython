@@ -6,19 +6,24 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-from Bio.KEGG.KGML.KGML_pathway import Pathway
+from __future__ import print_function
+
+import os
+import tempfile
+from itertools import chain
+from io import BytesIO
 
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
 from reportlab.graphics.shapes import *
 from reportlab.pdfgen import canvas
-from itertools import chain
-import urllib2
+
 from PIL import Image
-import os
-import StringIO
-import tempfile
+
+from Bio._py3k import urlopen as _urlopen
+
+from Bio.KEGG.KGML.KGML_pathway import Pathway
 
 def hexdarken(hexcolour, factor=0.7):
     """ Take a passed hex colour and return an RGB colour that is 
@@ -33,8 +38,8 @@ def get_temp_imagefilename(url):
     """ Create a new temporary file to hold the image file at the passed URL,
         and return the filename
     """
-    img = urllib2.urlopen(url).read()
-    im = Image.open(StringIO.StringIO(img))
+    img = _urlopen(url).read()
+    im = Image.open(BtyesIO(img))
     #im.transpose(Image.FLIP_TOP_BOTTOM)
     f = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
     fname = f.name
@@ -331,11 +336,11 @@ class KGMLCanvas(object):
         centre_to = (0.5 * (bounds_to[0][0] + bounds_to[1][0]),
                      0.5 * (bounds_to[0][1] + bounds_to[1][1]))
         p = self.drawing.beginPath()
-        #print True, g_from.name, g_to.name, bounds_to, bounds_from
+        #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
         # If the 'from' and 'to' graphics are vertically-aligned, draw a line
         # from the 'from' to the 'to' entity
         if bounds_to[0][0] < centre_from[0] < bounds_to[1][0]:
-            #print True, g_from.name, g_to.name, bounds_to, bounds_from
+            #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
             if centre_to[1] > centre_from[1]: # to above from
                 p.moveTo(centre_from[0], bounds_from[1][1])
                 p.lineTo(centre_from[0], bounds_to[0][1])
@@ -345,7 +350,7 @@ class KGMLCanvas(object):
                 p.lineTo(centre_from[0], bounds_to[1][1])
                 # Draw arrow point - TODO
         elif bounds_from[0][0] < centre_to[0] < bounds_from[1][0]:
-            print True, g_from.name, g_to.name, bounds_to, bounds_from
+            #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
             if centre_to[1] > centre_from[1]: # to above from
                 p.moveTo(centre_to[0], bounds_from[1][1])
                 p.lineTo(centre_to[0], bounds_to[0][1])
@@ -355,10 +360,10 @@ class KGMLCanvas(object):
                 p.lineTo(centre_to[0], bounds_to[1][1])
                 # Draw arrow point - TODO 
         self.drawing.drawPath(p)    # Draw arrow shaft
-        #print g_from
-        #print bounds_from
-        #print g_to
-        #print bounds_to
+        #print(g_from)
+        #print(bounds_from)
+        #print(g_to)
+        #print(bounds_to)
 
 
 
@@ -367,14 +372,14 @@ if __name__ == '__main__':
     # Test production of Reportlab Canvas PDF visualisation
     # Try a default KO metabolic map with ortholog lines given 
     pathway = KGML_parser.read(open('ko01100.xml', 'rU'))
-    print pathway
+    print(pathway)
     kgml_map = KGMLCanvas(pathway)
     kgml_map.draw('KGML_canvas_test.pdf')
 
     # Try a Dickeya metabolic map with ortholog lines, modifying reaction
     # graphics
     pathway = KGML_parser.read(open('ddc01100.xml', 'rU'))
-    print pathway
+    print(pathway)
     kgml_map = KGMLCanvas(pathway)
     # Set all reaction linewidths to 3 units
     for r in pathway.reaction_entries:
@@ -385,7 +390,7 @@ if __name__ == '__main__':
     # Try a KO metabolic map with no ortholog lines, using a local .png 
     pathway = KGML_parser.read(open('ko_metabolic/ko00910.xml', 'rU'))
     pathway.image = 'map/map00910.png'
-    print pathway
+    print(pathway)
     kgml_map = KGMLCanvas(pathway)
     kgml_map.import_imagemap = True
     kgml_map.show_maps = False
@@ -393,7 +398,7 @@ if __name__ == '__main__':
 
     # Try a KO metabolic map with no ortholog lines, using the KEGG .png 
     pathway = KGML_parser.read(open('ko_metabolic/ko00253.xml', 'rU'))
-    print pathway
+    print(pathway)
     kgml_map = KGMLCanvas(pathway)
     kgml_map.import_imagemap = True
     kgml_map.show_maps = False
@@ -402,7 +407,7 @@ if __name__ == '__main__':
     # Try a KO metabolic map with no ortholog lines using the KEGG .png, 
     # but this time using a Dickeya XML file
     pathway = KGML_parser.read(open('dda00190.xml', 'rU'))
-    print pathway
+    print(pathway)
     kgml_map = KGMLCanvas(pathway)
     kgml_map.import_imagemap = True
     kgml_map.show_maps = True
@@ -411,7 +416,7 @@ if __name__ == '__main__':
     # Try a KO metabolic map with no ortholog lines using the KEGG .png, 
     # but this time using a Dickeya XML file
     pathway = KGML_parser.read(open('test_retrieve_ddc00190.kgml', 'rU'))
-    print pathway
+    print(pathway)
     kgml_map = KGMLCanvas(pathway)
     kgml_map.import_imagemap = True
     kgml_map.show_maps = True
