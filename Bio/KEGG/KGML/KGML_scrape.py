@@ -8,8 +8,10 @@
 TODO: Replace this by using a proper KEGG REST API wrapper.
 """
 
-import urllib2
-from KGML_parser import read
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import _as_string
+
+from Bio.KEGG.KGML.KGML_parser import read
 
 # List of 2010 IDs for metabolic pathways
 metabolic = ["ko00010", "ko00020", "ko00030", "ko00040", "ko00051", "ko00052", 
@@ -78,18 +80,19 @@ non_metabolic = ["ko02010", "ko02020", "ko02030", "ko02040", "ko02060",
 # Replacing .../kgml with /image will give a PNG file.
 url_template = 'http://rest.kegg.jp/get/%s/kgml'
 
+
 def retrieve_kgml(map_id):
     """ Returns the raw KGML response from KEGG for the passed KEGG map ID
     """
-    f = urllib2.urlopen(url_template % map_id)
-    return f.read()
+    f = _urlopen(url_template % map_id)
+    return _as_string(f.read())
+
 
 def retrieve_kgml_stream(map_id):
     """ Returns a stream containing the raw KGML response from KEGG for 
         the passed KEGG map ID
     """
-    f = urllib2.urlopen(url_template % map_id)
-    return f
+    return _urlopen(url_template % map_id)
 
 
 def retrieve_kgml_to_file(map_id, filename):
@@ -99,6 +102,7 @@ def retrieve_kgml_to_file(map_id, filename):
     outfh = open(filename, 'w')
     outfh.write(retrieve_kgml(map_id))
     outfh.close()
+
 
 def retrieve_KEGG_pathway(map_id):
     """ Returns a KEGGPathway object, downloaded from KEGG, for the passed

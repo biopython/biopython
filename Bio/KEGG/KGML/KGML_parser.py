@@ -16,15 +16,18 @@ read                   Returns a single Pathway object, using KGMLParser
                        internally
 """
 
-from KGML_pathway import *
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from __future__ import print_function
+
 try:
     import xml.etree.cElementTree as ElementTree
 except ImportError:
     import xml.etree.ElementTree as ElementTree
+
+
+from Bio._py3k import StringIO
+
+from Bio.KEGG.KGML.KGML_pathway import *
+
 
 def read(handle, debug=0):
     """ Returns a single Pathway object.  There should be one and only 
@@ -33,13 +36,13 @@ def read(handle, debug=0):
     """
     iterator = parse(handle, debug)
     try:
-        first = iterator.next()
+        first = next(iterator)
     except StopIteration:
         first = None
     if first is None:
         raise ValueError("No pathways found in handle")
     try:
-        second = iterator.next()
+        second = next(iterator)
     except StopIteration:
         second = None
     if second is not None:
@@ -144,41 +147,43 @@ class KGMLParser(object):
             # Parsing of some elements not implemented - no examples yet
             else:
                 # This should warn us of any unimplemented tags
-                print "Warning: tag %s not implemented in parser" % element.tag
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Warning: tag %s not implemented in parser" % element.tag,
+                              BiopythonParserWarning)
         return self.pathway
         
 
 if __name__ == '__main__':
     # Check large metabolism
     pathway = read(open('ko01100.xml', 'rU'))
-    print pathway
-    for k, v in pathway.entries.items()[:20]:
-        print v
-    for r in pathway.reactions[:20]:
-        print r
-    print len(pathway.maps)
+    print(pathway)
+    for k, v in list(pathway.entries.items())[:20]:
+        print(v)
+    for r in list(pathway.reactions)[:20]:
+        print(r)
+    print(len(pathway.maps))
 
     # Check relations
     pathway = read(open('ko_metabolic/ko00010.xml', 'rU'))
-    print pathway
-    for k, v in pathway.entries.items()[:20]:
-        print v
-    for r in pathway.reactions[:20]:
-        print r
-    for r in pathway.relations[:20]:
-        print r
-    print len(pathway.maps)
+    print(pathway)
+    for k, v in list(pathway.entries.items())[:20]:
+        print(v)
+    for r in list(pathway.reactions[:20]):
+        print(r)
+    for r in list(pathway.relations[:20]):
+        print(r)
+    print(len(pathway.maps))
 
     # Check components
     pathway = read(open('ko_metabolic/ko00253.xml', 'rU'))
-    print pathway
+    print(pathway)
     for k, v in pathway.entries.items():
-        print v
-    print len(pathway.maps)
+        print(v)
+    print(len(pathway.maps))
 
     # Test XML representation
-    print pathway.get_KGML()
+    print(pathway.get_KGML())
 
     # Test bounds of pathway
-    print pathway.bounds
-    
+    print(pathway.bounds)

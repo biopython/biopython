@@ -24,6 +24,7 @@ from itertools import chain
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
+from Bio._py3k import _is_int_or_long, _as_string
 
 # Pathway
 class Pathway(object):
@@ -67,12 +68,11 @@ class Pathway(object):
         self._relations = set()
 
     def get_KGML(self):
-        """ Return the pathway in prettified KGML format
-        """
+        """Return the pathway as a string in prettified KGML format."""
         header = '\n'.join(['<?xml version="1.0"?>',
-  '<!DOCTYPE pathway SYSTEM "http://www.genome.jp/kegg/xml/KGML_v0.7.1_.dtd">',
-  '<!-- Created by KGML_Pathway.py %s -->' % time.asctime()])
-        rough_xml = header + ET.tostring(self.element, 'utf-8')
+                            '<!DOCTYPE pathway SYSTEM "http://www.genome.jp/kegg/xml/KGML_v0.7.1_.dtd">',
+                            '<!-- Created by KGML_Pathway.py %s -->' % time.asctime()])
+        rough_xml = header + _as_string(ET.tostring(self.element, 'utf-8'))
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
                   
@@ -81,7 +81,7 @@ class Pathway(object):
         """ Add an Entry element to the pathway
         """
         # We insist that the node ID is an integer
-        assert isinstance(entry.id, (int, long)), \
+        assert _is_int_or_long(entry.id), \
             "Node ID must be an integer, got %s (%s)" % (type(entry.id),
                                                          entry.id)
         entry._pathway = self           # Let the entry know about the pathway
@@ -90,7 +90,7 @@ class Pathway(object):
     def remove_entry(self, entry):
         """ Remove an Entry element from the pathway
         """
-        assert isinstance(entry.id, (int, long)), \
+        assert _is_int_or_long(entry.id), \
             "Node ID must be an integer, got %s (%s)" % (type(entry.id),
                                                          entry.id)
         # We need to remove the entry from any other elements that may 
@@ -102,7 +102,7 @@ class Pathway(object):
         """ Add a Reaction element to the pathway
         """
         # We insist that the node ID is an integer and corresponds to an entry
-        assert isinstance(reaction.id, (int, long)), \
+        assert _is_int_or_long(reaction.id), \
             "Node ID must be an integer, got %s (%s)" % (type(reaction.id),
                                                          reaction.id)
         assert reaction.id in self.entries, \
@@ -113,7 +113,7 @@ class Pathway(object):
     def remove_reaction(self, reaction):
         """ Remove an Reaction element from the pathway
         """
-        assert isinstance(reaction.id, (int, long)), \
+        assert _is_int_or_long(reaction.id), \
             "Node ID must be an integer, got %s (%s)" % (type(reaction.id),
                                                          reaction.id)
         # We need to remove the reaction from any other elements that may 
