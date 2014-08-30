@@ -85,12 +85,28 @@ if sys.version_info[0] >= 3:
 
     def _binary_to_string_handle(handle):
         """Treat a binary (bytes) handle like a text (unicode) handle."""
-        #See also http://bugs.python.org/issue5628
-        #and http://bugs.python.org/issue13541
-        #and http://bugs.python.org/issue13464 which should be fixed in Python 3.3
-        #return io.TextIOWrapper(io.BufferedReader(handle))
-        #TODO - Re-evaluate this workaround under Python 3.3
-        #(perhaps we will only need it on Python 3.1 and 3.2?)
+        # TODO, once drop all of Python 3.0 - 3.3, replace this with just:
+        #
+        # return io.TextIOWrapper(io.BufferedReader(handle))
+        #
+        # See also http://bugs.python.org/issue5628
+        # and http://bugs.python.org/issue13541
+        # and http://bugs.python.org/issue13464 which should be fixed in Python 3.3
+        #
+        # However, still have problems under Python 3.3.0, e.g.
+        #
+        # $ python3.3 test_SeqIO_online.py
+        # test_nuccore_X52960 (__main__.EntrezTests)
+        # Bio.Entrez.efetch('nuccore', id='X52960', ...) ... ERROR
+        # test_nucleotide_6273291 (__main__.EntrezTests)
+        # Bio.Entrez.efetch('nucleotide', id='6273291', ...) ... ERROR
+        # test_protein_16130152 (__main__.EntrezTests)
+        # Bio.Entrez.efetch('protein', id='16130152', ...) ... ERROR
+        # test_get_sprot_raw (__main__.ExPASyTests)
+        # Bio.ExPASy.get_sprot_raw("O23729") ... ok
+        # ..
+        # ValueError: I/O operation on closed file.
+        #
         class EvilHandleHack(object):
             def __init__(self, handle):
                 self._handle = handle
