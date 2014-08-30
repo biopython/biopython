@@ -12,6 +12,9 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.65
 
+The Bio.KEGG and Bio.Graphics modules have been expanded with support for
+parsing, representing and drawing KGML pathways.
+
 The Pterobranchia Mitochondrial genetic code has been added to Bio.Data (and
 the translation functionality), which is the new NCBI genetic code table 24.
 
@@ -32,6 +35,7 @@ David Bulger (first contribution)
 Eric Talevich
 Evan Parker (first contribution)
 Kai Blin
+Leighton Pritchard
 Matt Shirley (first contribution)
 Mike Cariaso (first contribution)
 Peter Cock
