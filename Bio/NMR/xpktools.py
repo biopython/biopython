@@ -136,8 +136,8 @@ class Peaklist(object):
         >>> from Bio.NMR.xpktools import Peaklist
         >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
         >>> residue_d = peaklist.residue_dict('H1')
-        >>> residue_d.keys()
-        ['10', 'maxres', 'minres', '3', '5', '4', '7', '6', '9', '8']
+        >>> sorted(residue_d.keys())
+        ['10', '3', '4', '5', '6', '7', '8', '9', 'maxres', 'minres']
         >>> residue_d['10']
         ['8  10.hn   7.663   0.021   0.010   ++   0.000   10.n   118.341   0.324   0.010   +E   0.000   10.n   118.476   0.324   0.010   +E   0.000  0.49840 0.49840 0']
 
