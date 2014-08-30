@@ -43,8 +43,8 @@ try:
     del i
 except:
     raise MissingPythonDependencyError(
-        "Install PIL (Python Imaging Library) if you want to create "
-        "bitmaps with Bio.Graphics.")
+        "Install Pillow or its predecessor PIL (Python Imaging Library) "
+        "if you want to create bitmaps with Bio.Graphics.")
 
 from reportlab.graphics.renderPM import RenderPMError
 
