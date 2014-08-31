@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" This module provides a function to scrape specific KGML files from KEGG
+"""This module provides a function to scrape specific KGML files from KEGG.
 
 TODO: Replace this by using a proper KEGG REST API wrapper.
 """
@@ -82,22 +82,27 @@ url_template = 'http://rest.kegg.jp/get/%s/kgml'
 
 
 def retrieve_kgml(map_id):
-    """ Returns the raw KGML response from KEGG for the passed KEGG map ID
+    """Returns the raw KGML response from KEGG for the passed KEGG map ID.
+
+    Returns a string.
     """
     f = _urlopen(url_template % map_id)
     return _as_string(f.read())
 
 
 def retrieve_kgml_stream(map_id):
-    """ Returns a stream containing the raw KGML response from KEGG for 
-        the passed KEGG map ID
+    """Returns stream containing the raw KGML response from KEGG for given ID.
+
+    Returns a handle.
     """
     return _urlopen(url_template % map_id)
 
 
 def retrieve_kgml_to_file(map_id, filename):
-    """ Retrieves raw KGML from KEGG for the passed KEGG map ID, and writes it
-        to a new file
+    """Downloads KGML from KEGG for given ID to specified file.
+
+    Retrieves raw KGML from KEGG for the passed KEGG map ID, and writes it
+    to a new file
     """
     outfh = open(filename, 'w')
     outfh.write(retrieve_kgml(map_id))
@@ -105,12 +110,13 @@ def retrieve_kgml_to_file(map_id, filename):
 
 
 def retrieve_KEGG_pathway(map_id):
-    """ Returns a KEGGPathway object, downloaded from KEGG, for the passed
-        KEGG map ID
+    """Downloads and parse given KEGG map ID.
+
+    Returns a KEGGPathway object, downloaded from KEGG, for the passed
+    KEGG map ID
     """
     return read(retrieve_kgml_stream(map_id))
 
 
 if __name__ == '__main__':
     retrieve_kgml_to_file('ddc00190', 'test_retrieve_ddc00190.kgml')
-

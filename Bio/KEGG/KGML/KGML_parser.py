@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" This module provides classes and functions to parse a KGML pathway map
+"""This module provides classes and functions to parse a KGML pathway map.
 
 The KGML pathway map is parsed into the object structure defined in  
 KGML_Pathway.py in this module.
@@ -30,9 +30,11 @@ from Bio.KEGG.KGML.KGML_pathway import *
 
 
 def read(handle, debug=0):
-    """ Returns a single Pathway object.  There should be one and only 
-        one pathway in each file, but there may well be pathological
-        examples out there.
+    """Parses a single KEGG Pathway from given file handle.
+
+    Returns a single Pathway object.  There should be one and only 
+    one pathway in each file, but there may well be pathological
+    examples out there.
     """
     iterator = parse(handle, debug)
     try:
@@ -50,12 +52,13 @@ def read(handle, debug=0):
     return first
 
 def parse(handle, debug=0):
-    """ Returns an iterator over Pathway elements
+    """Returns an iterator over Pathway elements.
 
-        handle               file handle to a KGML file for parsing
-        debug                integer for amount of debug information 
-                              to print
-        This is a generator for the return of multiple Pathway objects.
+    Arguments:
+    - handle - file handle to a KGML file for parsing
+    - debug - integer for amount of debug information to print
+                              
+    This is a generator for the return of multiple Pathway objects.
     """
     # Check handle
     if not hasattr(handle, 'read'):
@@ -73,14 +76,14 @@ def parse(handle, debug=0):
             elem.clear()
 
 class KGMLParser(object):
-    """ Parse a KGML XML Pathway entry into a Pathway object
-    """ 
+    """Parses a KGML XML Pathway entry into a Pathway object."""
+
     def __init__(self, elem):
         self.entry = elem
 
     def parse(self):
-        """ Parse the input elements
-        """
+        """Parse the input elements."""
+
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)
