@@ -144,25 +144,24 @@ class Pathway(object):
         return '\n'.join(outstr) + '\n'
 
     # Assert correct formatting of the pathway name, and other attributes
-    def getname(self):
+    def _getname(self):
         return self._name
-    def setname(self, value):
+    def _setname(self, value):
         assert value.startswith('path:'), \
             "Pathway name should begin with 'path:', got %s" % value
         self._name = value
-    def delname(self):
+    def _delname(self):
         del self._name
-
-    def getnumber(self):
-        return self._number
-    def setnumber(self, value):
-        self._number = int(value)
-    def delnumber(self):
-        del self._number
-
-    name = property(getname, setname, delname,
+    name = property(_getname, _setname, _delname,
                     "The KEGGID for the pathway map.")
-    number = property(getnumber, setnumber, delnumber,
+
+    def _getnumber(self):
+        return self._number
+    def _setnumber(self, value):
+        self._number = int(value)
+    def _delnumber(self):
+        del self._number
+    number = property(_getnumber, _setnumber, _delnumber,
                       "The KEGG map number.")
 
     @property
@@ -305,35 +304,34 @@ class Entry(object):
         self.graphics.remove(entry)
 
     # Names may be given as a space-separated list of KEGG identifiers
-    def getname(self):
+    def _getname(self):
         return ' '.join(self._names)
-    def setname(self, value):
+    def _setname(self, value):
         self._names = value.split()
-    def delname(self):
+    def _delname(self):
         self._names = []
+    name = property(_getname, _setname, _delname,
+                    "List of KEGG identifiers for the Entry.")
 
     # Reactions may be given as a space-separated list of KEGG identifiers
-    def getreaction(self):
+    def _getreaction(self):
         return ' '.join(self._reactions)
-    def setreaction(self, value):
+    def _setreaction(self, value):
         self._reactions = value.split()
-    def delreaction(self):
+    def _delreaction(self):
         self._reactions = []
+    reaction = property(_getreaction, _setreaction, _delreaction,
+                        "List of reaction KEGG IDs for this Entry.")
 
     # We make sure that the node ID is an integer
-    def getid(self):
+    def _getid(self):
         return self._id
-    def setid(self, value):
+    def _setid(self, value):
         self._id = int(value)
-    def delid(self):
+    def _delid(self):
         del self._id
-
-    id = property(getid, setid, delid, 
+    id = property(_getid, _setid, _delid, 
                   "The pathway graph node ID for the Entry.")
-    name = property(getname, setname, delname, 
-                    "List of KEGG identifiers for the Entry.")
-    reaction = property(getreaction, setreaction, delreaction,
-                        "List of reaction KEGG IDs for this Entry.")
 
     @property
     def element(self):
@@ -397,14 +395,14 @@ class Component(object):
         self._parent = parent
 
     # We make sure that the node ID is an integer
-    def getid(self):
+    def _getid(self):
         return self._id
-    def setid(self, value):
+    def _setid(self, value):
         self._id = int(value)
-    def delid(self):
+    def _delid(self):
         del self._id
 
-    id = property(getid, setid, delid, 
+    id = property(_getid, _setid, _delid, 
                   "The pathway graph node ID for the Entry")    
 
     @property
@@ -453,73 +451,76 @@ class Graphics(object):
         self._parent = parent
     
     # We make sure that the XY coordinates, width and height are numbers
-    def getx(self):
+    def _getx(self):
         return self._x
-    def setx(self, value):
+    def _setx(self, value):
         self._x = float(value)
-    def delx(self):
+    def _delx(self):
         del self._x
-    def gety(self):
+    x = property(_getx, _setx, _delx,
+                 "The X coordinate for the graphics element.")
+
+    def _gety(self):
         return self._y
-    def sety(self, value):
+    def _sety(self, value):
         self._y = float(value)
-    def dely(self):
+    def _dely(self):
         del self._y
-    def getwidth(self):
+    y = property(_gety, _sety, _dely,
+                 "The Y coordinate for the graphics element.")
+
+    def _getwidth(self):
         return self._width
-    def setwidth(self, value):
+    def _setwidth(self, value):
         self._width = float(value)
-    def delwidth(self):
+    def _delwidth(self):
         del self._width
-    def getheight(self):
+    width = property(_getwidth, _setwidth, _delwidth,
+                     "The width of the graphics element.")
+
+    def _getheight(self):
         return self._height
-    def setheight(self, value):
+    def _setheight(self, value):
         self._height = float(value)
-    def delheight(self):
+    def _delheight(self):
         del self._height
+    height = property(_getheight, _setheight, _delheight,
+                      "The height of the graphics element.")
 
     # We make sure that the polyline co-ordinates are integers, too
-    def getcoords(self):
+    def _getcoords(self):
         return self._coords
-    def setcoords(self, value):
+    def _setcoords(self, value):
         clist = [int(e) for e in value.split(',')]
         self._coords = [tuple(clist[i:i+2]) for i in range(0, len(clist), 2)]
-    def delcoords(self):
+    def _delcoords(self):
         del self._coords
+    coords = property(_getcoords, _setcoords, _delcoords,
+                      "Polyline coordinates for the graphics element.")
 
     # Set default colors
-    def getfgcolor(self):
+    def _getfgcolor(self):
         return self._fgcolor
-    def setfgcolor(self, value):
+    def _setfgcolor(self, value):
         if value == 'none':
             self._fgcolor = '#000000' # this default defined in KGML spec
         else:
             self._fgcolor = value
-    def delfgcolor(self):
+    def _delfgcolor(self):
         del self._fgcolor
-    def getbgcolor(self):
+    fgcolor = property(_getfgcolor, _setfgcolor, _delfgcolor,
+                       "Foreground color.")
+
+    def _getbgcolor(self):
         return self._bgcolor
-    def setbgcolor(self, value):
+    def _setbgcolor(self, value):
         if value == 'none':
             self._bgcolor = '#000000' # this default defined in KGML spec
         else:
             self._bgcolor = value
-    def delbgcolor(self):
+    def _delbgcolor(self):
         del self._bgcolor
-
-    x = property(getx, setx, delx,
-                 "The X coordinate for the graphics element.")
-    y = property(gety, sety, dely,
-                 "The Y coordinate for the graphics element.")
-    width = property(getwidth, setwidth, delwidth, 
-                     "The width of the graphics element.")
-    height = property(getheight, setheight, delheight, 
-                      "The height of the graphics element.")
-    coords = property(getcoords, setcoords, delcoords,
-                      "Polyline coordinates for the graphics element.")
-    fgcolor = property(getfgcolor, setfgcolor, delfgcolor,
-                       "Foreground color.")
-    bgcolor = property(getbgcolor, setbgcolor, delbgcolor,
+    bgcolor = property(_getbgcolor, _setbgcolor, _delbgcolor,
                        "Background color.")
 
     @property
@@ -624,23 +625,23 @@ class Reaction(object):
     # The node ID is also the node ID of the Entry that corresponds to the
     # reaction; we get the corresponding Entry when there is an associated 
     # Pathway
-    def getid(self):
+    def _getid(self):
         return self._id
-    def setid(self, value):
+    def _setid(self, value):
         self._id = int(value)
-    def delid(self):
+    def _delid(self):
         del self._id
-    id = property(getid, setid, delid,
+    id = property(_getid, _setid, _delid,
                   "Node ID for the reaction.")
 
     # Names may show up as a space-separated list of several KEGG identifiers
-    def getnames(self):
+    def _getnames(self):
         return ' '.join(self._names)
-    def setnames(self, value):
+    def _setnames(self, value):
         self._names.extend(value.split())
-    def delnames(self):
+    def _delnames(self):
         del self.names
-    name = property(getnames, setnames, delnames, 
+    name = property(_getnames, _setnames, _delnames, 
                     "List of KEGG identifiers for the reaction.")
 
     # products and substrates are read-only properties, returning lists
@@ -723,26 +724,26 @@ class Relation(object):
         return '\n'.join(outstr)
 
     # Properties entry1 and entry2
-    def getentry1(self):
+    def _getentry1(self):
         if self._pathway is not None:
             return self._pathway.entries[self._entry1]
         return self._entry1
-    def setentry1(self, value):
+    def _setentry1(self, value):
         self._entry1 = int(value)
-    def delentry1(self):
+    def _delentry1(self):
         del self._entry1
-    def getentry2(self):
+    entry1 = property(_getentry1, _setentry1, _delentry1,
+                      "Entry1 of the relation.")
+
+    def _getentry2(self):
         if self._pathway is not None:
             return self._pathway.entries[self._entry2]
         return self._entry2
-    def setentry2(self, value):
+    def _setentry2(self, value):
         self._entry2 = int(value)
-    def delentry2(self):
+    def _delentry2(self):
         del self._entry2
-
-    entry1 = property(getentry1, setentry1, delentry1,
-                      "Entry1 of the relation.")
-    entry2 = property(getentry2, setentry2, delentry2,
+    entry2 = property(_getentry2, _setentry2, _delentry2,
                       "Entry2 of the relation.")
 
     @property 
