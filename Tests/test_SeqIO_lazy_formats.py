@@ -7,8 +7,9 @@ import unittest
 import sys
 import os
 import tempfile
+import warnings
 
-from Bio import SeqIO
+from Bio import SeqIO, BiopythonParserWarning
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature
@@ -61,12 +62,16 @@ class TestMultipleFormats(unittest.TestCase):
         return returnlist
 
     def _test_iter(self, folder, files, format):
-        files = [os.path.join(folder, f) for f in files]
-        memoryparser = list(self._multifile_iter_old(files, format))
-        returnclass = self._returnclasses[format]
-        lazyparser = iter(_lazy.LazyIterator(files, returnclass))
-        for lazy, default in zip(lazyparser, memoryparser):
-            self.compare_lazy_and_default(lazy, default)
+        with warnings.catch_warnings():
+            # 1MRR_A issues expected warnings on parsing
+            if "1MRR_A.gp" in files:
+                warnings.simplefilter('ignore', BiopythonParserWarning)
+            files = [os.path.join(folder, f) for f in files]
+            memoryparser = list(self._multifile_iter_old(files, format))
+            returnclass = self._returnclasses[format]
+            lazyparser = iter(_lazy.LazyIterator(files, returnclass))
+            for lazy, default in zip(lazyparser, memoryparser):
+                self.compare_lazy_and_default(lazy, default)
 
     def compare_lazy_and_default(self, lazy, default):
         #check name, id
@@ -75,55 +80,57 @@ class TestMultipleFormats(unittest.TestCase):
         #check self reported length
         self.assertEqual(len(default), len(lazy))
         #check seq slicing and reading
-        if len(default) > 100:
-            self.assertEqual(str(default[50:100].seq),
-                             str(lazy[50:100].seq))
-            self.assertEqual(str(default[:65].seq),
-                             str(lazy[:65].seq))
-            self.assertEqual(str(default[50:].seq),
-                             str(lazy[50:].seq))
-            self.assertEqual(str(default.seq), str(lazy.seq))
-            self.assertEqual(str(default[50:100].seq),
-                             str(lazy[50:100].seq))
-            self.assertEqual(str(default[:65].seq),
-                             str(lazy[:65].seq))
-            self.assertEqual(str(default[50:].seq),
-                             str(lazy[50:].seq))
-            #check alphabet
-            self.assertTrue(default.seq.alphabet is not None)
-            self.assertTrue(lazy.seq.alphabet is not None)
-            self.assertEqual(repr(default.seq.alphabet),
-                             repr(lazy.seq.alphabet))
-        else:
-            self.assertEqual(str(default.seq), str(lazy.seq))
-        #now check features
-        fttostrings = self.features_to_strings
-        if len(default) > 100:
-            self.features_to_strings
-            # Testing fetching features from db
-            self.assertEqual(fttostrings(lazy[:].features),
-                             fttostrings(default[:].features))
-            self.assertEqual(fttostrings(lazy[99:].features),
-                             fttostrings(default[99:].features))
-            self.assertEqual(fttostrings(lazy[:99].features),
-                             fttostrings(default[:99].features))
-            self.assertEqual(fttostrings(lazy[:].features),
-                             fttostrings(default[:].features))
-            self.assertEqual(fttostrings(lazy[:].features),
-                             fttostrings(default[:].features))
-            self.assertEqual(fttostrings(lazy[99:].features),
-                             fttostrings(default[99:].features))
-            self.assertEqual(fttostrings(lazy[:99].features),
-                             fttostrings(default[:99].features))
-            # Test slicing features saved to memory
-            lazyfeatures = lazy.features
-            self.assertEqual(fttostrings(lazyfeatures),
-                             fttostrings(default[:].features))
-            self.assertEqual(fttostrings(lazy[99:].features),
-                             fttostrings(default[99:].features))
-        else:
-            self.assertEqual(fttostrings(lazy[:].features),
-                             fttostrings(default[:].features))
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', UserWarning)
+            if len(default) > 100:
+                self.assertEqual(str(default[50:100].seq),
+                                 str(lazy[50:100].seq))
+                self.assertEqual(str(default[:65].seq),
+                                 str(lazy[:65].seq))
+                self.assertEqual(str(default[50:].seq),
+                                 str(lazy[50:].seq))
+                self.assertEqual(str(default.seq), str(lazy.seq))
+                self.assertEqual(str(default[50:100].seq),
+                                 str(lazy[50:100].seq))
+                self.assertEqual(str(default[:65].seq),
+                                 str(lazy[:65].seq))
+                self.assertEqual(str(default[50:].seq),
+                                 str(lazy[50:].seq))
+                #check alphabet
+                self.assertTrue(default.seq.alphabet is not None)
+                self.assertTrue(lazy.seq.alphabet is not None)
+                self.assertEqual(repr(default.seq.alphabet),
+                                 repr(lazy.seq.alphabet))
+            else:
+                self.assertEqual(str(default.seq), str(lazy.seq))
+            #now check features
+            fttostrings = self.features_to_strings
+            if len(default) > 100:
+                self.features_to_strings
+                # Testing fetching features from db
+                self.assertEqual(fttostrings(lazy[:].features),
+                                 fttostrings(default[:].features))
+                self.assertEqual(fttostrings(lazy[99:].features),
+                                 fttostrings(default[99:].features))
+                self.assertEqual(fttostrings(lazy[:99].features),
+                                 fttostrings(default[:99].features))
+                self.assertEqual(fttostrings(lazy[:].features),
+                                 fttostrings(default[:].features))
+                self.assertEqual(fttostrings(lazy[:].features),
+                                 fttostrings(default[:].features))
+                self.assertEqual(fttostrings(lazy[99:].features),
+                                 fttostrings(default[99:].features))
+                self.assertEqual(fttostrings(lazy[:99].features),
+                                 fttostrings(default[:99].features))
+                # Test slicing features saved to memory
+                lazyfeatures = lazy.features
+                self.assertEqual(fttostrings(lazyfeatures),
+                                 fttostrings(default[:].features))
+                self.assertEqual(fttostrings(lazy[99:].features),
+                                 fttostrings(default[99:].features))
+            else:
+                self.assertEqual(fttostrings(lazy[:].features),
+                                 fttostrings(default[:].features))
         #check annotations
         try:
             self.assertEqual(len(default.annotations), len(lazy.annotations))
@@ -170,22 +177,26 @@ class TestMultipleFormats(unittest.TestCase):
         os.close(oshandlelazy)
         os.close(oshandleold)
         os.remove(old_db_name)
-
-        files = [os.path.join(folder, f) for f in files]
-        old_db = SeqIO.index_db(old_db_name, files, format)
-        returnclass = self._returnclasses[format]
-        lazyparser = _lazy.LazyIterator(files, returnclass, index=lazy_db_name)
-        newkeylist = [k for k in lazyparser.keys()]
-        oldkeylist = [k for k in old_db.keys()]
-        newkeylist.sort()
-        oldkeylist.sort()
-        self.assertEqual(newkeylist, oldkeylist)
-        for key in newkeylist:
-            lazy = lazyparser[key]
-            default = old_db[key]
-            self.assertTrue(isinstance(default, SeqRecord))
-            self.assertTrue(isinstance(lazy, returnclass))
-            self.compare_lazy_and_default(lazy, default)
+        with warnings.catch_warnings():
+            # 1MRR_A issues expected warnings on parsing
+            if "1MRR_A.gp" in files:
+                warnings.simplefilter('ignore', BiopythonParserWarning)
+            files = [os.path.join(folder, f) for f in files]
+            old_db = SeqIO.index_db(old_db_name, files, format)
+            returnclass = self._returnclasses[format]
+            lazyparser = _lazy.LazyIterator(files, returnclass,
+                                            index=lazy_db_name)
+            newkeylist = [k for k in lazyparser.keys()]
+            oldkeylist = [k for k in old_db.keys()]
+            newkeylist.sort()
+            oldkeylist.sort()
+            self.assertEqual(newkeylist, oldkeylist)
+            for key in newkeylist:
+                lazy = lazyparser[key]
+                default = old_db[key]
+                self.assertTrue(isinstance(default, SeqRecord))
+                self.assertTrue(isinstance(lazy, returnclass))
+                self.compare_lazy_and_default(lazy, default)
         del(lazy)
         del(default)
         del(lazyparser)
