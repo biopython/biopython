@@ -304,11 +304,11 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phlip" and "stockholm", which gives you access to the individual sequences
 making up each alignment as SeqRecords.
 """
-
 from __future__ import print_function
 from Bio._py3k import basestring
 
 __docformat__ = "restructuredtext en"  # not just plaintext
+
 
 # TODO
 # - define policy on reading aligned sequences with gaps in
@@ -353,13 +353,14 @@ See also http://biopython.org/wiki/SeqIO_dev
 
 --Peter
 """
+import warnings
 
-
+from Bio import BiopythonExperimentalWarning
+from Bio._py3k import basestring
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
-import warnings
 
 from . import _lazy
 from . import AbiIO
@@ -504,14 +505,6 @@ def write(sequences, handle, format):
 def parse(handle, format, alphabet=None, lazy=False):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
-<<<<<<< HEAD
-        - handle   - handle to the file, or the filename as a string
-          (note older versions of Biopython only took a handle).
-        - format   - lower case string describing the file format.
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
-=======
      - handle   - handle to the file, or the filename as a string
                   (note older versions of Biopython only took a handle).
      - format   - lower case string describing the file format.
@@ -523,7 +516,6 @@ def parse(handle, format, alphabet=None, lazy=False):
                   loading. Set to a file-name to make an index and/or
                   load from an existing index. The use of an index file
                   is strongly recommended.
->>>>>>> SeqIO.__init__: updated function docstrings for lazy loading
 
     Typical usage, opening a file to read in, and looping over the record(s):
 
@@ -573,7 +565,11 @@ def parse(handle, format, alphabet=None, lazy=False):
     # for the StringIO example, hense the whole docstring is in raw
     # string mode (see the leading r before the opening quote).
     from Bio import AlignIO
-
+    if lazy:
+        warnings.warn("SeqIO's lazy loading parsers are an experimental "
+                      "feature which may undergo significant changes prior "
+                      "to its future official release.",
+                      BiopythonExperimentalWarning)
     # Hack for SFF, will need to make this more general in future
     if lazy or format in _BinaryFormats:
         mode = 'rb'
@@ -905,20 +901,6 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     The index is stored in an SQLite database rather than in memory (as in the
     Bio.SeqIO.index(...) function).
 
-<<<<<<< HEAD
-        - index_filename - Where to store the SQLite index
-        - filenames - list of strings specifying file(s) to be indexed, or when
-          indexing a single file this can be given as a string.
-          (optional if reloading an existing index, but must match)
-        - format   - lower case string describing the file format
-          (optional if reloading an existing index, but must match)
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
-        - key_function - Optional callback function which when given a
-          SeqRecord identifier string should return a unique
-          key for the dictionary.
-=======
      - index_filename - Where to store the SQLite index
      - filenames - list of strings specifying file(s) to be indexed, or when
                   indexing a single file this can be given as a string.
@@ -933,7 +915,6 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
                   key for the dictionary.
      - lazy     - optional argument (default=False). Used to access the
                   lazy loading indexer and parser.
->>>>>>> SeqIO.__init__: updated function docstrings for lazy loading
 
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
@@ -982,10 +963,12 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-<<<<<<< HEAD
-    # Map the file format to a sequence iterator:
-=======
-    #Return a lazy dictionary if possible:
+    # Return a lazy dictionary if possible:
+    if lazy:
+        warnings.warn("SeqIO's lazy loading parsers are an experimental "
+                      "feature which may undergo significant changes prior "
+                      "to its future official release.",
+                      BiopythonExperimentalWarning)
     if lazy and format in _FormatToLazyLoad:
         lazydict = _lazy.LazyIterator(files=filenames, \
             return_class=_FormatToLazyLoad[format], index=index_filename, \
@@ -995,8 +978,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         warnings.warn("No lazy parser for '{0}' format".format(format) +\
                       ", defaulting to full record iter")
 
-    #Map the file format to a sequence iterator:
->>>>>>> SeqIO._lazy: integration to SeqIO.parse, SeqIO.index_db. Added key_function.
+    # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
