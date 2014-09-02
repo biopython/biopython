@@ -7,8 +7,9 @@ import unittest
 import sys
 import os
 import tempfile
+import warnings
 
-from Bio import SeqIO
+from Bio import SeqIO, BiopythonExperimentalWarning
 from Bio.Alphabet import single_letter_alphabet
 from Bio._py3k import _bytes_to_string, _as_bytes, _is_int_or_long, StringIO
 from Bio.Seq import Seq
@@ -862,6 +863,25 @@ class TestIndexManager(unittest.TestCase):
 ## Test the SeqIO.parse and SeqIO.index_db bindings
 #
 
+def index_db_wrapped(*args, **kwargs):
+    """implements index_db without issuing BiopythonExperimentalWarning"""
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+        return SeqIO.index_db(*args, **kwargs)
+
+def read_wrapped(*args, **kwargs):
+    """implements read without issuing BiopythonExperimentalWarning"""
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+        return SeqIO.read(*args, **kwargs)
+
+def parse_wrapped(*args, **kwargs):
+    """implements parse without issuing BiopythonExperimentalWarning"""
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+        for record in SeqIO.parse(*args, **kwargs):
+            yield record
+
 class TestSeqIOBindings(unittest.TestCase):
 
     def setUp(self):
@@ -882,15 +902,15 @@ class TestSeqIOBindings(unittest.TestCase):
         dbf = self.dbfile
         fasta = self.onefile
         key_fx = lambda x: "returnval"
-        indexer = lambda f: SeqIO.index_db(dbf, fasta, format="fasta", \
-                                           key_function=f, lazy=True)
+        indexer = lambda f: index_db_wrapped(dbf, fasta, format="fasta", \
+                                             key_function=f, lazy=True)
         self.assertRaises(KeyError, indexer, key_fx)
 
     def test_bad_file_set(self):
         """test that adding redundant files will raise an error"""
         dbf = self.dbfile
         fastas = self.duplicatefiles
-        indexer = lambda f: SeqIO.index_db(dbf, f, format="fasta", lazy=True)
+        indexer = lambda f: index_db_wrapped(dbf, f, format="fasta", lazy=True)
         self.assertRaises(KeyError, indexer, fastas)
 
     def test_seqio_parse_nodb(self):
@@ -899,14 +919,14 @@ class TestSeqIOBindings(unittest.TestCase):
         firstten = ["CGGACCAGAC",
                     "CGGAGCCAGC",
                     "GATCAAATCT"]
-        parseriter = SeqIO.parse(fasta, "fasta", lazy=True)
+        parseriter = parse_wrapped(fasta, "fasta", lazy=True)
         for index, record in enumerate(parseriter):
             self.assertEqual(str(record[:10].seq), firstten[index])
 
     def test_seqio_parse_get_raw(self):
         """Test get_raw on a lazy record"""
         fasta = self.onefile
-        parseriter = SeqIO.parse(fasta, "fasta", lazy=True)
+        parseriter = parse_wrapped(fasta, "fasta", lazy=True)
         firstrec = next(parseriter)
         raw = _bytes_to_string(firstrec.get_raw())
         fakefile = StringIO(raw)
@@ -922,8 +942,8 @@ class TestSeqIOBindings(unittest.TestCase):
         def key_fx(key):
             newkey = key.split("|")
             return newkey[3].strip()
-        lazydict = SeqIO.index_db(dbf, fasta, "fasta",
-                                  key_function=key_fx, lazy=True)
+        lazydict = index_db_wrapped(dbf, fasta, "fasta",
+                                    key_function=key_fx, lazy=True)
         raw = _bytes_to_string(lazydict.get_raw("G26685"))
         fakefile = StringIO(raw)
         fakerec = SeqIO.read(fakefile, 'fasta')
@@ -940,7 +960,7 @@ class TestSeqIOBindings(unittest.TestCase):
         firstten = ["CGGACCAGAC",
                     "CGGAGCCAGC",
                     "GATCAAATCT"]
-        parseriter = SeqIO.parse(fasta, "fasta", lazy=dbf)
+        parseriter = parse_wrapped(fasta, "fasta", lazy=dbf)
         for index, record in enumerate(parseriter):
             self.assertEqual(str(record[:10].seq), firstten[index])
 
@@ -951,8 +971,8 @@ class TestSeqIOBindings(unittest.TestCase):
         def key_fx(key):
             newkey = key.split("|")
             return newkey[3].strip()
-        index = SeqIO.index_db(dbf, fasta, format="fasta", \
-                               key_function=key_fx, lazy=True)
+        index = index_db_wrapped(dbf, fasta, format="fasta", \
+                                 key_function=key_fx, lazy=True)
         keys = list(index.keys())
         self.assertTrue(len(keys) == 3)
         self.assertTrue("G26680" in keys)
