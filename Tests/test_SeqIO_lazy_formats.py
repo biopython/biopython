@@ -81,7 +81,8 @@ class TestMultipleFormats(unittest.TestCase):
         self.assertEqual(len(default), len(lazy))
         #check seq slicing and reading
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', UserWarning)
+            warnings.filterwarnings('ignore', "When slicing SeqRecord",
+                                    UserWarning)
             if len(default) > 100:
                 self.assertEqual(str(default[50:100].seq),
                                  str(lazy[50:100].seq))
