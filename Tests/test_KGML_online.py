@@ -19,6 +19,8 @@ requires_internet.check()
 # Biopython Bio.KEGG.KGML
 from Bio.KEGG.KGML.KGML_scrape import *
 
+from Bio._py3k import _as_string
+
 class KGMLPathwayTest(unittest.TestCase):
     """ Import the ko01100 metabolic map from a local .xml KGML file, and from
         the KEGG site, and write valid KGML output for each
@@ -41,14 +43,17 @@ class KGMLPathwayTest(unittest.TestCase):
         """ Download a KEGG pathway from the KEGG server and write KGML.
         """
         # Download the KEGG ko03070 pathway as a Pathway object
-        retrieve_KEGG_pathway("ko03070")
-        
+        pathway = retrieve_KEGG_pathway("ko03070")
+        self.assertEqual(pathway.name, "path:ko03070")
+
     def test_KEGG_download_handle(self):
         """ Download a KEGG pathway from the KEGG server and write KGML.
         """
         # Download the KEGG ko03070 pathway as a filehandle
-        retrieve_kgml_stream("ko03070")
-        
+        h = retrieve_kgml_stream("ko03070")
+        kgml = _as_string(h.read())
+        h.close()
+        self.assertTrue("ko03070" in kgml)
 
 
 if __name__ == '__main__':
