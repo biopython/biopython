@@ -12,6 +12,10 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.65
 
+The Biopython sequence objects now use string comparison, rather than Python's
+object comparison. This has been planned for a long time with warning messages
+in place (under Python 2, the warnings were sadly missing under Python 3).
+
 The Bio.KEGG and Bio.Graphics modules have been expanded with support for
 the online KEGG REST API, and parsing, representing and drawing KGML pathways.
 
