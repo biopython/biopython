@@ -210,12 +210,6 @@ class HasStopCodon(AlphabetEncoder):
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
         self.stop_symbol = stop_symbol
 
-    def __cmp__(self, other):
-        x = cmp(self.alphabet, other.alphabet)
-        if x == 0:
-            return cmp(self.stop_symbol, other.stop_symbol)
-        return x
-
     def contains(self, other):
         """Does this alphabet 'contain' the other (OBSOLETE?).
 
