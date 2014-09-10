@@ -217,9 +217,10 @@ class Parser(object):
     def process_clade(self, clade):
         """Final processing of a parsed clade. Removes the node's parent and
         returns it."""
-        if (clade.name and not (self.values_are_confidence or
-                                self.comments_are_confidence)
-            and clade.confidence is None):
+        if ((clade.name) and not
+            (self.values_are_confidence or self.comments_are_confidence) and
+            (clade.confidence is None) and
+            (clade.clades)):
             clade.confidence = _parse_confidence(clade.name)
             if not clade.confidence is None:
                 clade.name = None

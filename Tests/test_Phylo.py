@@ -114,6 +114,13 @@ class IOTests(unittest.TestCase):
         tree = Phylo.read(mem_file_3, 'newick')
         self.assertEqual(len(tree.get_terminals()), 28)
 
+    def test_int_labels(self):
+        """Read newick formatted tree with numeric labels."""
+        tree = Phylo.read(StringIO('(((0:0.1,1:0.1)0.99:0.1,2:0.1)0.98:0.0);'),
+                          'newick')
+        self.assertEqual(set(leaf.name for leaf in tree.get_terminals()),
+                         set(['0', '1', '2']))
+
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
