@@ -6,15 +6,18 @@
 """Unittests for the Seq objects."""
 from __future__ import print_function
 
+import warnings
 import unittest
 import sys
-if sys.version_info[0] == 3:
+if sys.version_info[0] >= 3:
     maketrans = str.maketrans
 else:
     from string import maketrans
 
+from Bio import BiopythonWarning
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
+from Bio.Alphabet import _check_type_compatible
 from Bio.Alphabet.IUPAC import protein, extended_protein
 from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
@@ -281,6 +284,72 @@ class StringMethodTests(unittest.TestCase):
                 continue
             str1 = str(example1)
             self.assertEqual(str(example1.lower()), str1.lower())
+
+    def test_str_hash(self):
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            with warnings.catch_warnings():
+                #Silence change in behaviour warning
+                warnings.simplefilter('ignore', FutureWarning)
+                self.assertEqual(hash(id(example1)), hash(example1),
+                                 "Hash mismatch, %r for %r vs %r for %r"
+                                 % (hash(id(example1)), id(example1),
+                                    hash(example1), example1))
+
+    def test_str_comparison(self):
+        if sys.version_info[0] >= 3:
+            #TODO - replace __cmp__ with specific methods for Python 3                                           
+            return
+        for example1 in self._examples:
+            for example2 in self._examples:
+                #Currently Seq vs MutableSeq use different rules,
+                #
+                # >>> MutableSeq('ACGTGGGGT') == Seq('ACGTGGGGT')
+                # True
+                # >>> MutableSeq('ACGTGGGGT') == MutableSeq('ACGTGGGGT')
+                # True
+                # >>> Seq('ACGTGGGGT') == MutableSeq('ACGTGGGGT')
+                # False
+                # >>> Seq('ACGTGGGGT') == Seq('ACGTGGGGT')
+                # False
+                #
+                #i.e. This is a mess but we will make both use string equality
+                if isinstance(example1, MutableSeq):
+                    rule = str
+                    if not _check_type_compatible([example1.alphabet, example2.alphabet]):
+                        #Would raise TypeError...
+                        continue
+                else:
+                    rule = id
+                with warnings.catch_warnings():
+                    #Silence change in behaviour warning
+                    warnings.simplefilter('ignore', FutureWarning)
+                    #Equality
+                    self.assertEqual(rule(example1) == rule(example2),
+                                     example1 == example2,
+                                     "Checking %r == %r" % (example1, example2))
+                    #Not equal
+                    self.assertEqual(rule(example1) != rule(example2),
+                                     example1 != example2,
+                                     "Checking %r != %r" % (example1, example2))
+                    #Less than
+                    self.assertEqual(rule(example1) < rule(example2),
+                                     example1 < example2,
+                                     "Checking %r < %r" % (example1, example2))
+                    #Less than or equal
+                    self.assertEqual(rule(example1) <= rule(example2),
+                                     example1 <= example2,
+                                     "Checking %r <= %r" % (example1, example2))
+                    #Greater than
+                    self.assertEqual(rule(example1) > rule(example2),
+                                     example1 > example2,
+                                     "Checking %r > %r" % (example1, example2))
+                    #Greater than or equal
+                    self.assertEqual(rule(example1) >= rule(example2),
+                                     example1 >= example2,
+                                     "Checking %r >= %r" % (example1, example2))
+
 
     def test_str_getitem(self):
         """Check slicing and indexing works like a string."""
