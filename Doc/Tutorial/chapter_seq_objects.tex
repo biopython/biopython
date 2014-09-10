@@ -377,7 +377,7 @@ The example in Section~\ref{sec:SeqIO-reverse-complement} combines the \verb|Seq
 object's reverse complement method with \verb|Bio.SeqIO| for sequence input/output.
 
 \section{Transcription}
-Before talking about transcription, I want to try and clarify the strand issue.
+Before talking about transcription, I want to try to clarify the strand issue.
 Consider the following (made up) stretch of double stranded DNA which
 encodes a short peptide:
 
@@ -667,9 +667,9 @@ Sequence comparison is actually a very complicated topic, and there is no easy
 way to decide if two sequences are equal. The basic problem is the meaning of
 the letters in a sequence are context dependent - the letter ``A'' could be part
 of a DNA, RNA or protein sequence. Biopython uses alphabet objects as part of
-each \verb|Seq| object to try and capture this information - so comparing two
-\verb|Seq| objects means considering both the sequence strings \emph{and} the
-alphabets.
+each \verb|Seq| object to try to capture this information - so comparing two
+\verb|Seq| objects could mean considering both the sequence strings \emph{and}
+the alphabets.
 
 For example, you might argue that the two DNA \verb|Seq| objects
 \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and
@@ -684,53 +684,61 @@ and \texttt{Seq("ACGT")} should also be equal. Now, in logic if $A=B$ and
 $B=C$, by transitivity we expect $A=C$. So for logical consistency we'd
 require \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT",
 IUPAC.protein)} to be equal -- which most people would agree is just not right.
-This transitivity problem would also have implications for using \verb|Seq|
-objects as Python dictionary keys.
+This transitivity also has implications for using \verb|Seq| objects as
+Python dictionary keys.
 
+Now, in everyday use, your sequences will probably all have the same
+alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
+all protein). What you probably want is to just compare the sequences as
+strings -- which you can do explicitly:
 %doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> seq1 = Seq("ACGT", IUPAC.unambiguous_dna)
->>> seq2 = Seq("ACGT", IUPAC.unambiguous_dna)
-\end{verbatim}
-
-So, what does Biopython do? Well, the equality test is the default for Python
-objects -- it tests to see if they are the same object in memory. This is a
-very strict test:
-%TODO - silence FutureWarning from this doctest?
-\begin{verbatim}
->>> seq1 == seq2
-False
->>> seq1 == seq1
-True
-\end{verbatim}
-
-If you actually want to do this, you can be more explicit by using the Python
-\verb|id| function,
-%cont-doctest
-\begin{verbatim}
->>> id(seq1) == id(seq2)
-False
->>> id(seq1) == id(seq1)
-True
-\end{verbatim}
-
-Now, in every day use, your sequences will probably all have the same
-alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
-all protein). What you probably want is to just compare the sequences as
-strings -- so do this explicitly:
-%cont-doctest
-\begin{verbatim}
+>>> seq2 = Seq("ACGT", IUPAC.ambiguous_dna)
 >>> str(seq1) == str(seq2)
 True
 >>> str(seq1) == str(seq1)
 True
 \end{verbatim}
 
-\noindent As an extension to this, while you can use a Python dictionary with
-\verb|Seq| objects as keys, it is generally more useful to use the sequence a
-string for the key. See also Section~\ref{sec:seq-to-string}.
+So, what does Biopython do? Well, as of Biopython 1.65, sequence comparison
+only looks at the sequence, essentially ignoring the alphabet:
+
+%cont-doctest
+\begin{verbatim}
+>>> seq1 == seq2
+True
+>>> seq1 == "ACGT"
+True
+\end{verbatim}
+
+As an extension to this, using sequence objects as keys in a Python dictionary
+is now equivalent to using the sequence as a plain string for the key.
+See also Section~\ref{sec:seq-to-string}.
+
+Note if you compare sequences with incompatible alphabets (e.g. DNA vs RNA,
+or nucleotide versus protein), then you will get a warning but for the
+comparison itself only the string of letters in the sequence is used:
+%Can we do a doctest with a warning?
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna, generic_protein
+>>> dna_seq = Seq("ACGT", generic_dna)
+>>> prot_seq = Seq(``ACGT'', generic_protein)
+>>> dna_seq == prot_seq
+BiopythonWarning: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
+True
+\end{verbatim}
+
+\noindent
+\emph{WARNING:} Older versions of Biopython instead used to check if the
+\verb|Seq| objects were the same object in memory.
+This is important if you need to support scripts on both old and new
+versions of Biopython. Here make the comparison explicit by wrapping
+your sequence objects with either \verb|str(...)| for string based
+comparison or \verb|id(...)| for object instance based comparison.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}

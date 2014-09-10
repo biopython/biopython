@@ -186,6 +186,20 @@ from __future__ import print_function
   \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.pdf}
   \end{itemize}
 
+
+  \item \emph{What is wrong with my sequence comparisons?} \\
+  There was a major change in Biopython 1.65 making the \verb|Seq| and
+  \verb|MutableSeq| classes (and subclasses) use simple string-based
+  comparison (ignoring the alphabet other than if giving a warning),
+  which you can do explicitly with \verb|str(seq1) == str(seq2)|.
+
+  Older versions of Biopython would use instance-based comparison
+  for \verb|Seq| objects which you can do explicitly with
+  \verb|id(seq1) == id(seq2)|.
+
+  If you still need to support old versions of Biopython, use these
+  explicit forms to avoid problems. See Section~\ref{sec:seq-comparison}.
+
   \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
   You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
   If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
