@@ -95,7 +95,7 @@ class NexusWriter(AlignmentWriter):
         self.write_alignment(first_alignment)
         return 1  # we only support writing one alignment!
 
-    def write_alignment(self, alignment):
+    def write_alignment(self, alignment, interleave=True):
         #Creates an empty Nexus object, adds the sequences,
         #and then gets Nexus to prepare the output.
         if len(alignment) == 0:
@@ -114,7 +114,10 @@ class NexusWriter(AlignmentWriter):
         #For larger alginments, interleave to avoid very long lines
         #in the output - something MrBayes can't handle.
         #TODO - Default to always interleaving?
-        n.write_nexus_data(self.handle, interleave=(columns > 1000))
+        if(interleave):
+            n.write_nexus_data(self.handle, interleave=(columns > 1000))
+        else:
+            n.write_nexus_data(self.handle, interleave=False)
 
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
