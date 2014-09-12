@@ -459,6 +459,10 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._max_open = max_open
         self._proxies = {}
 
+        # Note if using SQLite :memory: trick index filename, this will
+        # give $PWD as the relative path (which is fine).
+        self._relative_path = os.path.abspath(os.path.dirname(index_filename))
+
         if os.path.isfile(index_filename):
             self._load_index()
         else:
@@ -467,6 +471,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def _load_index(self):
         """Called from __init__ to re-use an existing index (PRIVATE)."""
         index_filename = self._index_filename
+        relative_path = self._relative_path
         filenames = self._filenames
         format = self._format
         proxy_factory = self._proxy_factory
@@ -495,16 +500,47 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.close()
                 raise ValueError("Index file says format %s, not %s"
                                  % (self._format, format))
+            try:
+                filenames_relative_to_index, = con.execute(
+                    "SELECT value FROM meta_data WHERE key=?;",
+                    ("filenames_relative_to_index",)).fetchone()
+                filenames_relative_to_index = (filenames_relative_to_index.upper() == "TRUE")
+            except TypeError:
+                # Original behaviour, assume if meta_data missing
+                filenames_relative_to_index = False
             self._filenames = [row[0] for row in
                                con.execute("SELECT name FROM file_data "
                                            "ORDER BY file_number;").fetchall()]
+            if filenames_relative_to_index:
+                # Not implicitly relative to $PWD, explicitly relative to index file
+                relative_path = os.path.abspath(os.path.dirname(index_filename))
+                tmp = []
+                for f in self._filenames:
+                    if os.path.isabs(f):
+                        tmp.append(f)
+                    else:
+                        tmp.append(os.path.join(relative_path, f))
+                self._filenames = tmp
+                del tmp
             if filenames and len(filenames) != len(self._filenames):
                 con.close()
                 raise ValueError("Index file says %i files, not %i"
                                  % (len(self._filenames), len(filenames)))
             if filenames and filenames != self._filenames:
-                con.close()
-                raise ValueError("Index file has different filenames")
+                for old, new in zip(self._filenames, filenames):
+                    # Want exact match (after making relative to the index above)
+                    if os.path.abspath(old) != os.path.abspath(new):
+                        con.close()
+                        if filenames_relative_to_index:
+                            raise ValueError("Index file has different filenames, e.g. %r != %r"
+                                             % (os.path.abspath(old), os.path.abspath(new)))
+                        else:
+                            raise ValueError("Index file has different filenames "
+                                             "[This is an old index where any relative paths "
+                                             "were relative to the original working directory]. "
+                                             "e.g. %r != %r"
+                                             % (os.path.abspath(old), os.path.abspath(new)))
+                #Filenames are equal (after imposing abspath)
         except _OperationalError as err:
             con.close()
             raise ValueError("Not a Biopython index database? %s" % err)
@@ -516,6 +552,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def _build_index(self):
         """Called from __init__ to create a new index (PRIVATE)."""
         index_filename = self._index_filename
+        relative_path = self._relative_path
         filenames = self._filenames
         format = self._format
         key_function = self._key_function
@@ -542,6 +579,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     ("count", -1))
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("format", format))
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ("filenames_relative_to_index", "True"))
         # TODO - Record the alphabet?
         # TODO - Record the file size and modified date?
         con.execute(
@@ -549,9 +588,18 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
         count = 0
         for i, filename in enumerate(filenames):
+            if os.path.isabs(filename):
+                # Store it as it is :)
+                f = filename
+            elif os.path.isabs(index_filename):
+                # ah... a relative path does not seem wise?
+                f = os.path.abspath(filename)
+            else:
+                # Store this relative to the index file
+                f = os.path.relpath(filename, relative_path)
             con.execute(
                 "INSERT INTO file_data (file_number, name) VALUES (?,?);",
-                (i, filename))
+                (i, f))
             random_access_proxy = proxy_factory(format, filename)
             if key_function:
                 offset_iter = ((key_function(k), i, o, l)
