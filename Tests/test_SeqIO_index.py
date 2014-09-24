@@ -263,11 +263,15 @@ class IndexDictTests(unittest.TestCase):
         del rec_dict
 
         # Now reload without passing filenames and format
+        # and switch directory to check  paths still work
+        index_tmp = os.path.abspath(index_tmp)
+        os.chdir(os.path.dirname(filename))
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
+
         os.remove(index_tmp)
 
     def key_check(self, filename, format, alphabet, comp):
