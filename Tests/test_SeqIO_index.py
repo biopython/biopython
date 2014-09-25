@@ -86,10 +86,23 @@ if sqlite3:
             self.assertEqual(54, len(d))
             self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
 
+        def test_old_rel(self):
+            """Load existing index (with relative paths) with no options (from parent directory)."""
+            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
+            self.assertEqual(54, len(d))
+            self.assertEqual(395, len(d["alpha"]))
+
         def test_old_same_dir(self):
             """Load existing index with no options (from same directory)."""
             os.chdir("Roche")
             d = SeqIO.index_db("triple_sff.idx")
+            self.assertEqual(54, len(d))
+            self.assertEqual(395, len(d["alpha"]))
+
+        def test_old_same_dir_rel(self):
+            """Load existing index (with relative paths) with no options (from same directory)."""
+            os.chdir("Roche")
+            d = SeqIO.index_db("triple_sff_rel_paths.idx")
             self.assertEqual(54, len(d))
             self.assertEqual(395, len(d["alpha"]))
 
