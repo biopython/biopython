@@ -588,15 +588,19 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
         count = 0
         for i, filename in enumerate(filenames):
-            if os.path.isabs(filename):
-                # Store it as it is :)
-                f = filename
-            elif os.path.isabs(index_filename):
-                # ah... a relative path does not seem wise?
-                f = os.path.abspath(filename)
-            else:
-                # Store this relative to the index file
+            # Default to storing as an absolute path,
+            f = os.path.abspath(filename)
+            if not os.path.isabs(filename) and not os.path.isabs(index_filename):
+                # Since user gave BOTH filename & index as relative paths,
+                # we will store this relative to the index file even though
+                # if it may now start ../ (meaning up a level)
                 f = os.path.relpath(filename, relative_path)
+            elif (os.path.dirname(os.path.abspath(filename)) + "/").startswith(relative_path + "/"):
+                # Since sequence file is in same directory or sub directory,
+                # might as well make this into a relative path:
+                f = os.path.relpath(filename, relative_path)
+                assert not f.startswith("../"), f
+            #print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
                 "INSERT INTO file_data (file_number, name) VALUES (?,?);",
                 (i, f))
