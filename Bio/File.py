@@ -430,13 +430,12 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def __init__(self, index_filename, filenames,
                  proxy_factory, format,
                  key_function, repr, max_open=10):
-        self._proxy_factory = proxy_factory
-        self._repr = repr
-        random_access_proxies = {}
+        """Loads or creates an SQLite based index."""
         #TODO? - Don't keep filename list in memory (just in DB)?
         #Should save a chunk of memory if dealing with 1000s of files.
         #Furthermore could compare a generator to the DB on reloading
         #(no need to turn it into a list)
+
         if not _sqlite:
             # Hack for Jython (of if Python is compiled without it)
             from Bio import MissingPythonDependencyError
@@ -444,122 +443,147 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                                                "included Python 2.5+")
         if filenames is not None:
             filenames = list(filenames)  # In case it was a generator
-        if os.path.isfile(index_filename):
-            #Reuse the index.
-            con = _sqlite.connect(index_filename)
-            self._con = con
-            #Check the count...
-            try:
-                count, = con.execute(
-                    "SELECT value FROM meta_data WHERE key=?;",
-                    ("count",)).fetchone()
-                self._length = int(count)
-                if self._length == -1:
-                    con.close()
-                    raise ValueError("Unfinished/partial database")
-                count, = con.execute(
-                    "SELECT COUNT(key) FROM offset_data;").fetchone()
-                if self._length != int(count):
-                    con.close()
-                    raise ValueError("Corrupt database? %i entries not %i"
-                                     % (int(count), self._length))
-                self._format, = con.execute(
-                    "SELECT value FROM meta_data WHERE key=?;",
-                                           ("format",)).fetchone()
-                if format and format != self._format:
-                    con.close()
-                    raise ValueError("Index file says format %s, not %s"
-                                     % (self._format, format))
-                self._filenames = [row[0] for row in
-                                   con.execute("SELECT name FROM file_data "
-                                               "ORDER BY file_number;").fetchall()]
-                if filenames and len(filenames) != len(self._filenames):
-                    con.close()
-                    raise ValueError("Index file says %i files, not %i"
-                                     % (len(self._filenames), len(filenames)))
-                if filenames and filenames != self._filenames:
-                    con.close()
-                    raise ValueError("Index file has different filenames")
-            except _OperationalError as err:
-                con.close()
-                raise ValueError("Not a Biopython index database? %s" % err)
-            #Now we have the format (from the DB if not given to us),
-            if not proxy_factory(self._format):
-                con.close()
-                raise ValueError("Unsupported format '%s'" % self._format)
-        else:
-            self._filenames = filenames
-            self._format = format
-            if not format or not filenames:
-                raise ValueError("Filenames to index and format required")
-            if not proxy_factory(format):
-                raise ValueError("Unsupported format '%s'" % format)
-            #Create the index
-            con = _sqlite.connect(index_filename)
-            self._con = con
-            #print("Creating index")
-            # Sqlite PRAGMA settings for speed
-            con.execute("PRAGMA synchronous=OFF")
-            con.execute("PRAGMA locking_mode=EXCLUSIVE")
-            #Don't index the key column until the end (faster)
-            #con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
-            # "offset INTEGER);")
-            con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
-            con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                        ("count", -1))
-            con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                        ("format", format))
-            #TODO - Record the alphabet?
-            #TODO - Record the file size and modified date?
-            con.execute(
-                "CREATE TABLE file_data (file_number INTEGER, name TEXT);")
-            con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
-            count = 0
-            for i, filename in enumerate(filenames):
-                con.execute(
-                    "INSERT INTO file_data (file_number, name) VALUES (?,?);",
-                    (i, filename))
-                random_access_proxy = proxy_factory(format, filename)
-                if key_function:
-                    offset_iter = ((key_function(
-                        k), i, o, l) for (k, o, l) in random_access_proxy)
-                else:
-                    offset_iter = (
-                        (k, i, o, l) for (k, o, l) in random_access_proxy)
-                while True:
-                    batch = list(itertools.islice(offset_iter, 100))
-                    if not batch:
-                        break
-                    #print("Inserting batch of %i offsets, %s ... %s" \
-                    # % (len(batch), batch[0][0], batch[-1][0]))
-                    con.executemany(
-                        "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
-                        batch)
-                    con.commit()
-                    count += len(batch)
-                if len(random_access_proxies) < max_open:
-                    random_access_proxies[i] = random_access_proxy
-                else:
-                    random_access_proxy._handle.close()
-            self._length = count
-            #print("About to index %i entries" % count)
-            try:
-                con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
-                            "key_index ON offset_data(key);")
-            except _IntegrityError as err:
-                self._proxies = random_access_proxies
-                self.close()
-                con.close()
-                raise ValueError("Duplicate key? %s" % err)
-            con.execute("PRAGMA locking_mode=NORMAL")
-            con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
-                        (count, "count"))
-            con.commit()
-            #print("Index created")
-        self._proxies = random_access_proxies
-        self._max_open = max_open
+
+        # Cache the arguments as private variables
         self._index_filename = index_filename
+        self._filenames = filenames
+        self._format = format
         self._key_function = key_function
+        self._proxy_factory = proxy_factory
+        self._repr = repr
+        self._max_open = max_open
+        self._proxies = {}
+
+        if os.path.isfile(index_filename):
+            self._load_index()
+        else:
+            self._build_index()
+
+    def _load_index(self):
+        """Called from __init__ to re-use an existing index (PRIVATE)."""
+        index_filename = self._index_filename
+        filenames = self._filenames
+        format = self._format
+        proxy_factory = self._proxy_factory
+
+        con = _sqlite.connect(index_filename)
+        self._con = con
+        #Check the count...
+        try:
+            count, = con.execute(
+                "SELECT value FROM meta_data WHERE key=?;",
+                ("count",)).fetchone()
+            self._length = int(count)
+            if self._length == -1:
+                con.close()
+                raise ValueError("Unfinished/partial database")
+            count, = con.execute(
+                "SELECT COUNT(key) FROM offset_data;").fetchone()
+            if self._length != int(count):
+                con.close()
+                raise ValueError("Corrupt database? %i entries not %i"
+                                 % (int(count), self._length))
+            self._format, = con.execute(
+                "SELECT value FROM meta_data WHERE key=?;",
+                ("format",)).fetchone()
+            if format and format != self._format:
+                con.close()
+                raise ValueError("Index file says format %s, not %s"
+                                 % (self._format, format))
+            self._filenames = [row[0] for row in
+                               con.execute("SELECT name FROM file_data "
+                                           "ORDER BY file_number;").fetchall()]
+            if filenames and len(filenames) != len(self._filenames):
+                con.close()
+                raise ValueError("Index file says %i files, not %i"
+                                 % (len(self._filenames), len(filenames)))
+            if filenames and filenames != self._filenames:
+                con.close()
+                raise ValueError("Index file has different filenames")
+        except _OperationalError as err:
+            con.close()
+            raise ValueError("Not a Biopython index database? %s" % err)
+        #Now we have the format (from the DB if not given to us),
+        if not proxy_factory(self._format):
+            con.close()
+            raise ValueError("Unsupported format '%s'" % self._format)
+
+    def _build_index(self):
+        """Called from __init__ to create a new index (PRIVATE)."""
+        index_filename = self._index_filename
+        filenames = self._filenames
+        format = self._format
+        key_function = self._key_function
+        proxy_factory = self._proxy_factory
+        max_open = self._max_open
+        random_access_proxies = self._proxies
+
+        if not format or not filenames:
+            raise ValueError("Filenames to index and format required")
+        if not proxy_factory(format):
+            raise ValueError("Unsupported format '%s'" % format)
+        #Create the index
+        con = _sqlite.connect(index_filename)
+        self._con = con
+        #print("Creating index")
+        # Sqlite PRAGMA settings for speed
+        con.execute("PRAGMA synchronous=OFF")
+        con.execute("PRAGMA locking_mode=EXCLUSIVE")
+        #Don't index the key column until the end (faster)
+        #con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
+        # "offset INTEGER);")
+        con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ("count", -1))
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ("format", format))
+        #TODO - Record the alphabet?
+        #TODO - Record the file size and modified date?
+        con.execute(
+            "CREATE TABLE file_data (file_number INTEGER, name TEXT);")
+        con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
+        count = 0
+        for i, filename in enumerate(filenames):
+            con.execute(
+                "INSERT INTO file_data (file_number, name) VALUES (?,?);",
+                (i, filename))
+            random_access_proxy = proxy_factory(format, filename)
+            if key_function:
+                offset_iter = ((key_function(k), i, o, l)
+                               for (k, o, l) in random_access_proxy)
+            else:
+                offset_iter = ((k, i, o, l)
+                               for (k, o, l) in random_access_proxy)
+            while True:
+                batch = list(itertools.islice(offset_iter, 100))
+                if not batch:
+                    break
+                #print("Inserting batch of %i offsets, %s ... %s" \
+                # % (len(batch), batch[0][0], batch[-1][0]))
+                con.executemany(
+                    "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
+                    batch)
+                con.commit()
+                count += len(batch)
+            if len(random_access_proxies) < max_open:
+                random_access_proxies[i] = random_access_proxy
+            else:
+                random_access_proxy._handle.close()
+        self._length = count
+        #print("About to index %i entries" % count)
+        try:
+            con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
+                        "key_index ON offset_data(key);")
+        except _IntegrityError as err:
+            self._proxies = random_access_proxies
+            self.close()
+            con.close()
+            raise ValueError("Duplicate key? %s" % err)
+        con.execute("PRAGMA locking_mode=NORMAL")
+        con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
+                    (count, "count"))
+        con.commit()
+        #print("Index created")
 
     def __repr__(self):
         return self._repr
