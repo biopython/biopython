@@ -519,7 +519,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         random_access_proxies = self._proxies
 
         if not format or not filenames:
-            raise ValueError("Filenames to index and format required")
+            raise ValueError("Filenames to index and format required to build %r" % index_filename)
         if not proxy_factory(format):
             raise ValueError("Unsupported format '%s'" % format)
         #Create the index
