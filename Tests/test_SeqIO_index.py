@@ -168,9 +168,9 @@ if sqlite3:
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
             d.close()
-            self.assertEqual([os.path.abspath(f) for f in sff_files],
-                             [os.path.abspath(f) for f in d._filenames])
             os.remove(index_file)
+            d.close()
+            self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
