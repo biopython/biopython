@@ -23,6 +23,13 @@ from io import BytesIO
 from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
 from Bio._py3k import _universal_read_mode
 
+try:
+    #Defined on Python 3
+    FileNotFoundError
+except NameError:
+    #Python 2 does not have this,
+    FileNotFoundError = IOError
+
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToRandomAccess
@@ -37,6 +44,8 @@ try:
     do_bgzf = _have_bug17666()
 except MissingPythonDependencyError:
     do_bgzf = False
+
+CUR_DIR = os.getcwd()
 
 def add_prefix(key):
     """Dummy key_function for testing index code."""
@@ -64,10 +73,24 @@ if sqlite3:
         >>> len(d)
         54
         """
+        def setUp(self):
+            os.chdir(CUR_DIR)
+
+        def tearDown(self):
+            os.chdir(CUR_DIR)
+
         def test_old(self):
-            """Load existing index with no options."""
+            """Load existing index with no options (from parent directory)."""
             d = SeqIO.index_db("Roche/triple_sff.idx")
             self.assertEqual(54, len(d))
+            self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
+
+        def test_old_same_dir(self):
+            """Load existing index with no options (from same directory)."""
+            os.chdir("Roche")
+            d = SeqIO.index_db("triple_sff.idx")
+            self.assertEqual(54, len(d))
+            self.assertEqual(395, len(d["alpha"]))
 
         def test_old_format(self):
             """Load existing index with correct format."""
@@ -80,10 +103,19 @@ if sqlite3:
                               "Roche/triple_sff.idx", format="fasta")
 
         def test_old_files(self):
-            """Load existing index with correct files."""
+            """Load existing index with correct files (from parent directory)."""
             d = SeqIO.index_db("Roche/triple_sff.idx",
                                ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
             self.assertEqual(54, len(d))
+            self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
+
+        def test_old_files_same_dir(self):
+            """Load existing index with correct files (from same directory)."""
+            os.chdir("Roche")
+            d = SeqIO.index_db("triple_sff.idx",
+                               ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+            self.assertEqual(54, len(d))
+            self.assertEqual(395, len(d["alpha"]))
 
         def test_old_files_wrong(self):
             """Load existing index with wrong files."""
@@ -100,10 +132,12 @@ if sqlite3:
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def setUp(self):
+        os.chdir(CUR_DIR)
         h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
         os.close(h)
 
     def tearDown(self):
+        os.chdir(CUR_DIR)
         if os.path.isfile(self.index_tmp):
             os.remove(self.index_tmp)
 
