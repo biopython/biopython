@@ -129,6 +129,71 @@ if sqlite3:
                               ["E3MFGYR02_no_manifest.sff", "greek.sff"])
 
 
+    class NewIndexTest(unittest.TestCase):
+        """Check paths etc in newly built index."""
+        def setUp(self):
+            os.chdir(CUR_DIR)
+
+        def tearDown(self):
+            os.chdir(CUR_DIR)
+            for i in ["temp.idx", "Roche/temp.idx"]:
+                if os.path.isfile(i):
+                    os.remove(i)
+
+        def check(self, index_file, sff_files):
+            if os.path.isfile(index_file):
+                os.remove(index_file)
+            #Build index...
+            d = SeqIO.index_db(index_file, sff_files, "sff")
+            self.assertEqual(395, len(d["alpha"]))
+            d.close()
+            self.assertEqual([os.path.abspath(f) for f in sff_files],
+                             [os.path.abspath(f) for f in d._filenames])
+            #Load index...
+            d = SeqIO.index_db(index_file, sff_files)
+            self.assertEqual(395, len(d["alpha"]))
+            d.close()
+            self.assertEqual([os.path.abspath(f) for f in sff_files],
+                             [os.path.abspath(f) for f in d._filenames])
+
+
+        def test_child_folder_rel(self):
+            """Check relative links to child folder."""
+            self.check("temp.idx",
+                       ["Roche/E3MFGYR02_no_manifest.sff",
+                        "Roche/greek.sff",
+                        "Roche/paired.sff"])
+            #Here index is given as abs
+            self.check(os.path.abspath("temp.idx"),
+                       ["Roche/E3MFGYR02_no_manifest.sff",
+                        os.path.abspath("Roche/greek.sff"),
+                        "Roche/paired.sff"])
+            # Here index is given as relative path
+            self.check("temp.idx",
+                       ["Roche/E3MFGYR02_no_manifest.sff",
+                        os.path.abspath("Roche/greek.sff"),
+                        "Roche/paired.sff"])
+
+        def test_same_folder(self):
+            """Check relative links in same folder."""
+            os.chdir("Roche")
+
+            #Here everything is relative,
+            self.check("temp.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+            self.check(os.path.abspath("temp.idx"),
+                       ["E3MFGYR02_no_manifest.sff",
+                        os.path.abspath("greek.sff"),
+                        "../Roche/paired.sff"])
+            self.check("temp.idx",
+                       ["E3MFGYR02_no_manifest.sff",
+                        os.path.abspath("greek.sff"),
+                        "../Roche/paired.sff"])
+            self.check("../Roche/temp.idx",
+                       ["E3MFGYR02_no_manifest.sff",
+                        os.path.abspath("greek.sff"),
+                        "../Roche/paired.sff"])
+
+
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def setUp(self):
