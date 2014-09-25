@@ -32,6 +32,13 @@ The new experimental module Bio.CodonAlign has been renamed Bio.codonalign
 (and similar lower case PEP8 style module names have been used for the
 sub-modules within this).
 
+Bio.SeqIO.index_db(...) and Bio.SearchIO.index_db(...) now store any relative
+filenames relative to the index file, rather than (as before) relative to the
+current directory at the time the index was built. This makes the indexes
+less fragile, so that they can be used from other working directories. NOTE:
+This change is backward compatible (old index files work as before), however
+relative paths in new indexes will not work on older versions of Biopython!
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
