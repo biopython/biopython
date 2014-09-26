@@ -146,16 +146,18 @@ if sqlite3:
             #Build index...
             d = SeqIO.index_db(index_file, sff_files, "sff")
             self.assertEqual(395, len(d["alpha"]))
+            d._con.close()  # hack for PyPy
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files],
                              [os.path.abspath(f) for f in d._filenames])
             #Load index...
             d = SeqIO.index_db(index_file, sff_files)
             self.assertEqual(395, len(d["alpha"]))
+            d._con.close()  # hack for PyPy
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files],
                              [os.path.abspath(f) for f in d._filenames])
-
+            os.remove(index_file)
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
