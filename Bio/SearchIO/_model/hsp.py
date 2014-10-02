@@ -608,13 +608,13 @@ class HSP(_BaseHSP):
     hit_start_all = allitems('hit_start',
             doc="""List of all fragments' hit start coordinates""")
 
-    query_start_all = allitems('query_starts',
+    query_start_all = allitems('query_start',
             doc="""List of all fragments' query start coordinates""")
 
-    hit_end_all = allitems('hit_ends',
+    hit_end_all = allitems('hit_end',
             doc="""List of all fragments' hit end coordinates""")
 
-    query_end_all = allitems('query_ends',
+    query_end_all = allitems('query_end',
             doc="""List of all fragments' query end coordinates""")
 
     hit_span_all = allitems('hit_span',

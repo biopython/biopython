@@ -247,7 +247,11 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual([6, 38], hsp.query_span_all)
         self.assertEqual([6, 38], hsp.hit_span_all)
         self.assertEqual([(1, 7), (11, 49)], hsp.query_range_all)
+        self.assertEqual([1, 11], hsp.query_start_all)
+        self.assertEqual([7, 49], hsp.query_end_all)
         self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_range_all)
+        self.assertEqual([183925984, 183925990], hsp.hit_start_all)
+        self.assertEqual([183925990, 183926028], hsp.hit_end_all)
         # second qresult, fourth hit, second hsp
         hsp = qresult[3].hsps[1]
         self.assertEqual(35, hsp.match_num)
