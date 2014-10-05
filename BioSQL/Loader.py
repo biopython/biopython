@@ -757,12 +757,26 @@ class DatabaseLoader(object):
     def _load_seqfeature(self, feature, feature_rank, bioentry_id):
         """Load a biopython SeqFeature into the database (PRIVATE).
         """
-        seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
-                                                    bioentry_id)
+        # records loaded from a gff file using BCBio.GFF will contain the value
+        # of the 2nd column of the gff as a feature qualifier. The BioSQL wiki
+        # suggests that the source should not go in with the other feature 
+        # mappings but instead be put in the term table
+        # (http://www.biosql.org/wiki/Annotation_Mapping)
+        try:
+            source = feature.qualifiers['source']
+            if isinstance(source, list):
+                source = source[0]
+            seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
+                                                bioentry_id, source=source)
+            del feature.qualifiers['source']
+        except KeyError:
+            seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
+                                                bioentry_id)
+
         self._load_seqfeature_locations(feature, seqfeature_id)
         self._load_seqfeature_qualifiers(feature.qualifiers, seqfeature_id)
 
-    def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id):
+    def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id, source='EMBL/GenBank/SwissProt'):
         """Load the first tables of a seqfeature and returns the id (PRIVATE).
 
         This loads the "key" of the seqfeature (ie. CDS, gene) and
@@ -771,10 +785,8 @@ class DatabaseLoader(object):
         ontology_id = self._get_ontology_id('SeqFeature Keys')
         seqfeature_key_id = self._get_term_id(feature_type,
                                               ontology_id=ontology_id)
-        # XXX source is always EMBL/GenBank/SwissProt here; it should depend on
-        # the record (how?)
         source_cat_id = self._get_ontology_id('SeqFeature Sources')
-        source_term_id = self._get_term_id('EMBL/GenBank/SwissProt',
+        source_term_id = self._get_term_id(source,
                                            ontology_id=source_cat_id)
 
         sql = r"INSERT INTO seqfeature (bioentry_id, type_term_id, " \
