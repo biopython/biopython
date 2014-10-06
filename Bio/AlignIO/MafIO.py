@@ -22,7 +22,7 @@ MAFINDEX_VERSION = 1
 
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file"""
-    
+
     def write_header(self):
         """Writes the MAF header"""
 
@@ -32,10 +32,10 @@ class MafWriter(SequentialAlignmentWriter):
     def _write_record (self, record):
         """Writes a single SeqRecord object to an 's' line in a MAF block"""
 
-        # convert biopython-style +1/-1 strand to MAF-style +/- strand
-        if record.annotations.get("strand") == "+1":
+        # convert biopython-style 1/-1 strand to MAF-style +/- strand
+        if record.annotations.get("strand") == 1:
             strand = "+"
-        elif record.annotations.get("strand") == "-1":
+        elif record.annotations.get("strand") == -1:
             strand = "-"
         else:
             strand = "+"
@@ -55,10 +55,10 @@ class MafWriter(SequentialAlignmentWriter):
         Writes every SeqRecord in a MultipleSeqAlignment object to its own
         MAF block (beginning with an 'a' line, containing 's' lines)
         """
-        
+
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an alignment object")
-        
+
         if len(set([len(x) for x in alignment])) > 1:
             raise ValueError("Sequences must all be the same length")
 
@@ -86,26 +86,26 @@ class MafWriter(SequentialAlignmentWriter):
         self.handle.write("\n")
 
         return recs_out
-        
+
 def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
     """
     Iterates over lines in a MAF file-like object (handle), yielding
-    MultipleSeqAlignment objects. SeqRecord IDs generally correspond to 
+    MultipleSeqAlignment objects. SeqRecord IDs generally correspond to
     species names
     """
 
     in_a_bundle = False
-    
+
     annotations = []
     records = []
-    
+
     while True:
         # allows parsing of the last bundle without duplicating code
         try:
             line = handle.next()
         except StopIteration:
             line = ""
-        
+
         if in_a_bundle:
             if line.startswith("s"):
                 # add a SeqRecord to the bundle
@@ -114,35 +114,35 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 if len(line_split) <> 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
-                # convert MAF-style +/- strand to biopython-stype +1/-1
+                # convert MAF-style +/- strand to biopython-type 1/-1
                 if line_split[4] == "+":
-                    strand = "+1"
+                    strand = 1
                 elif line_split[4] == "-":
-                    strand = "-1"
+                    strand = -1
                 else:
-                    strand = "+1"
+                    strand = 1
 
                 # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
                 anno = {"start": int(line_split[2]),
                         "size": int(line_split[3]),
                         "strand": strand,
                         "srcSize": int(line_split[5])}
-                        
+
                 sequence = line_split[6]
-                
+
                 # interpret a dot/period to mean same the first sequence
                 if "." in sequence:
                     if not records:
                         raise ValueError("Found dot/period in first sequence of alignment")
-                        
+
                     ref = str(records[0].seq)
                     new = []
-                    
+
                     for (s, r) in zip(sequence, ref):
                         new.append(r if s == "." else s)
-                             
+
                     sequence = "".join(new)
-                    
+
                 records.append(SeqRecord(Seq(sequence, alphabet),
                                id = line_split[1],
                                name = line_split[1],
@@ -157,17 +157,17 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 # end a bundle of records
                 if seq_count is not None:
                     assert len(records) == seq_count
-                    
+
                 alignment = MultipleSeqAlignment(records, alphabet)
                 #TODO - Introduce an annotated alignment class?
-                #See also Bio/AlignIO/FastaIO.py for same requirement.        
+                #See also Bio/AlignIO/FastaIO.py for same requirement.
                 #For now, store the annotation a new private property:
                 alignment._annotations = annotations
-                
+
                 yield alignment
-                
+
                 in_a_bundle = False
-                
+
                 annotations = []
                 records = []
             else:
@@ -175,7 +175,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
         elif line.startswith("a"):
             # start a bundle of records
             in_a_bundle = True
-            
+
             if len(line.strip().split()[1:]) != line.count("="):
                 raise ValueError("Error parsing alignment - invalid key in 'a' line")
 
@@ -186,28 +186,28 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
         elif not line:
             break
 
-class MafIndex():
+class MafIndex(object):
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
 
         import os
-        
+
         try:
             from sqlite3 import dbapi2 as _sqlite
         except ImportError:
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError("Requires sqlite3, which is "
                                                "included Python 2.5+")
-        
+
         self._target_seqname = target_seqname
         self._maf_file = maf_file
-        
+
         # make sure maf_file exists, then open it up
         if os.path.isfile(self._maf_file):
             self._maf_fp = open(self._maf_file, "r")
         else:
             raise ValueError("Error opening %s -- file not found" % (self._maf_file,))
-        
+
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
             self._con = _sqlite.connect(sqlite_file)
@@ -215,7 +215,7 @@ class MafIndex():
         else:
             self._con = _sqlite.connect(sqlite_file)
             self._record_count = self.__make_new_index()
-            
+
         # lastly, setup a MafIterator pointing at the open maf_file
         self._mafiter = MafIterator(self._maf_fp)
 
@@ -227,7 +227,7 @@ class MafIndex():
         from sqlite3 import DatabaseError as _DatabaseError
 
         try:
-            idx_version = int(self._con.execute("SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])   
+            idx_version = int(self._con.execute("SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])
             if idx_version != MAFINDEX_VERSION:
                 raise ValueError("Index version (%s) incompatible with this version of MafIndex" % (idx_version,))
 
@@ -239,10 +239,10 @@ class MafIndex():
             if db_target != self._target_seqname:
                 raise ValueError("Provided database indexed for %s, expected %s" % (db_target, self._target_seqname))
 
-            record_count = int(self._con.execute("SELECT value FROM meta_data WHERE key = 'record_count'").fetchone()[0])          
+            record_count = int(self._con.execute("SELECT value FROM meta_data WHERE key = 'record_count'").fetchone()[0])
             if record_count == -1:
                 raise ValueError("Unfinished/partial database provided")
-                
+
             records_found = int(self._con.execute("SELECT COUNT(*) FROM offset_data").fetchone()[0])
             if records_found <> record_count:
                 raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
@@ -253,7 +253,7 @@ class MafIndex():
 
     def __make_new_index(self):
         """Read MAF file and generate SQLite index"""
-        
+
         import itertools
 
         # make the tables
@@ -263,32 +263,32 @@ class MafIndex():
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');" % (self._target_seqname,))
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" % (self._maf_file,))
         self._con.execute("CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);")
-        
+
         insert_count = 0
-        
+
         # iterate over the entire file and insert in batches
         mafindex_func = self.__maf_indexer()
-                    
+
         while True:
             batch = list(itertools.islice(mafindex_func, 100))
             if not batch: break
-        
+
             self._con.executemany("INSERT INTO offset_data (bin, start, end, offset) VALUES (?,?,?,?);", batch)
             self._con.commit()
-            
+
             insert_count += len(batch)
-        
+
         # then make indexes on the relevant fields
         self._con.execute("CREATE INDEX IF NOT EXISTS bin_index ON offset_data(bin);")
         self._con.execute("CREATE INDEX IF NOT EXISTS start_index ON offset_data(start);")
         self._con.execute("CREATE INDEX IF NOT EXISTS end_index ON offset_data(end);")
-        
+
         self._con.execute("UPDATE meta_data SET value = '%s' WHERE key = 'record_count'" % (insert_count,))
-        
+
         self._con.commit()
-        
+
         return insert_count
-        
+
     def __maf_indexer(self):
         """Generator function, returns index information for each bundle"""
 
@@ -298,35 +298,35 @@ class MafIndex():
             if line.startswith("a"):
                 # note the offset
                 offset = self._maf_fp.tell() - len(line)
-                
+
                 # search the following lines for a match to target_seqname
                 while True:
                     line = self._maf_fp.readline()
-                    
+
                     if not line.strip() or line.startswith("a"):
                         raise ValueError("Target for indexing (%s) not found in this bundle" % (self._target_seqname,))
                     elif line.startswith("s"):
                         # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
                         line_split = line.strip().split()
-                        
+
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
                             end = int(line_split[2]) + int(line_split[3])
-                            
+
                             if end - start <> len(line_split[6].replace("-", "")):
                                 raise ValueError("Invalid length for target coordinates (expected %s, found %s)" % \
                                                 (end - start, len(line_split[6].replace("-", ""))))
 
                             yield (self._ucscbin(start, end), start, end, offset)
-                            
-                            break                    
+
+                            break
 
             line = self._maf_fp.readline()
 
     @staticmethod
     def _region2bin(start, end):
         """Finds bins that a region may belong to.
-        
+
         Converts a region to a list of bins that it may belong to, including largest
         and smallest bins.
         """
@@ -343,7 +343,7 @@ class MafIndex():
     @staticmethod
     def _ucscbin(start, end):
         """Returns the smallest bin a given region will fit into.
-        
+
         Taken from http://genomewiki.ucsc.edu/index.php/Bin_indexing_system
         """
 
@@ -366,98 +366,98 @@ class MafIndex():
             endBin >>= _binNextShift
 
         return 0
-            
+
     def _get_record(self, offset):
         """Retrieves a single MAF record located at the offset provided."""
-        
+
         self._maf_fp.seek(offset)
         return self._mafiter.next()
-        
+
     def search(self, starts, ends):
         """Searches index database for MAF records overlapping ranges provided."""
-        
+
         # verify the provided exon coordinates
         if len(starts) <> len(ends):
             raise ValueError("Every position in starts must have a match in ends")
-        
+
         for exonstart, exonend in zip(starts, ends):
             if exonstart >= exonend:
                 raise ValueError("Exon coordinates invalid (%s >= %s)" % (exonstart, exonend))
-        
+
         con = self._con
-        
+
         # search for every exon, put hits in a dict where offset is the key
         # this will automatically prevent retrieval of duplicate records
         hits = {}
-        
+
         for exonstart, exonend in zip(starts, ends):
             try:
                 possible_bins = ", ".join(map(str, self._region2bin(exonstart, exonend)))
             except TypeError:
                 raise TypeError("Exon coordinates must be integers "
                                  "(start=%s, end=%s)" % (exonstart, exonend))
-            
+
             result = con.execute("SELECT * FROM offset_data WHERE bin IN (%s) "
                      "AND (end BETWEEN %s AND %s OR %s BETWEEN start AND end) "
                      "ORDER BY start ASC;" \
                      % (possible_bins, exonstart, exonend, exonend))
-    
+
             rows = result.fetchall()
-            
+
             for i in rows:
                 hits[i[3]] = (i[1], i[2])
-        
+
         # iterate through hits, fetching alignments from the MAF file and checking
         # to be sure we've retrieved the expected record
         for offset, (rec_start, rec_end) in hits.items():
             fetched = self._get_record(int(offset))
-            
+
             for record in fetched:
                 if record.id == self._target_seqname:
                     start = record.annotations["start"]
                     end = record.annotations["start"] + record.annotations["size"]
-                    
+
                     if not (start == rec_start and end == rec_end):
                         raise ValueError("Expected %s-%s @ offset %s, found %s-%s" % \
                         (rec_start, rec_end, offset, start, end))
-                        
+
             yield fetched
-            
-    def get_spliced(self, starts, ends, strand = "+1"):
+
+    def get_spliced(self, starts, ends, strand = 1):
         """Returns a multiple alignment of the exact sequence range provided.
-        
+
         Accepts two lists of start and end positions on target_seqname, representing
         exons to be spliced in silico.  Returns a MultipleSeqAlignment of the
         desired sequences spliced together.
         """
 
         # validate strand
-        if strand not in ("+1", "-1"):
-            raise ValueError("Strand must be +1 or -1")
-                
+        if strand not in (1, -1):
+            raise ValueError("Strand must be 1 or -1")
+
         # pull all alignments that span the desired intervals
         fetched = [x for x in self.search(starts, ends)]
-        
+
         # keep track of the expected letter count
         expected_letters = sum([y - x for x, y in zip(starts,ends)])
-        
+
         # if there's no alignment, return filler for the assembly of the length given
         if len(fetched) == 0:
             return MultipleSeqAlignment([SeqRecord(Seq("N" * expected_letters),
                                                    id=self._target_seqname)])
-        
+
         # find the union of all IDs in these alignments
         all_seqnames = set([x.id for y in fetched for x in y])
-                
+
         # split every record by base position
         split_by_position = dict([(x, {}) for x in all_seqnames])
-        
+
         # keep track of what the total number of (unspliced) letters should be
         total_rec_length = 0
-        
+
         # track first strand encountered on the target seqname
         ref_first_strand = None
-        
+
         for multiseq in fetched:
             # find the target_seqname in this MultipleSeqAlignment and use it to
             # set the parameters for the rest of this iteration
@@ -466,66 +466,66 @@ class MafIndex():
                     try:
                         if ref_first_strand == None:
                             ref_first_strand = seqrec.annotations["strand"]
-                            
-                            if ref_first_strand not in ("+1", "-1"):
-                                raise ValueError("Strand must be +1 or -1")
+
+                            if ref_first_strand not in (1, -1):
+                                raise ValueError("Strand must be 1 or -1")
                         elif ref_first_strand != seqrec.annotations["strand"]:
                             raise ValueError("Encountered strand='%s' on target seqname, expected '%s'" % \
                             (seqrec.annotations["strand"], ref_first_strand))
                     except KeyError:
                         raise ValueError("No strand information for target seqname (%s)" % \
                         (self._target_seqname,))
-                        
+
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
                     rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
 
                     total_rec_length += rec_end - rec_start
-                    
+
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
                         for pos in range(rec_start, rec_end):
                             split_by_position[seqrec.id][pos] = ""
-                    
+
                     break
             else:
                 raise ValueError("Did not find %s in alignment bundle" % (self._target_seqname,))
-                
+
             # the true, chromosome/contig/etc position in the target seqname
             real_pos = rec_start
-            
+
             for gapped_pos in range(0, rec_length):
                 for seqrec in multiseq:
                     # keep track of this position's value for the target seqname
                     if seqrec.id == self._target_seqname: track_val = seqrec.seq[gapped_pos]
-                    
+
                     split_by_position[seqrec.id][real_pos] += seqrec.seq[gapped_pos]
-                    
+
                 # increment the real_pos counter only when non-gaps are found in
                 # the target_seqname, and we haven't reached the end of the record
                 if track_val != "-" and real_pos < rec_end - 1: real_pos += 1
-                
+
         # make sure the number of bp entries equals the sum of the record lengths
         if len(split_by_position[self._target_seqname]) <> total_rec_length:
             raise ValueError("Target seqname (%s) has %s records, expected %s" % \
             (self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
 
-        # translates a position in the target_seqname sequence to its gapped length        
+        # translates a position in the target_seqname sequence to its gapped length
         realpos_to_len = dict([(x, len(y)) for x, y in split_by_position[self._target_seqname].items() if len(y) > 1])
 
-        # splice together the exons            
+        # splice together the exons
         subseq = {}
-        
+
         for seqid in all_seqnames:
             seq_split = split_by_position[seqid]
             seq_splice = []
-            
+
             filler_char = "N" if seqid == self._target_seqname else "-"
 
             # iterate from start to end, taking bases from split_by_position when
-            # they exist, using N or - for gaps when there is no alignment.            
+            # they exist, using N or - for gaps when there is no alignment.
             append = seq_splice.append
-            
+
             for exonstart, exonend in zip(starts, ends):
                 for real_pos in range(exonstart, exonend):
                     # if this seqname has this position, add it
@@ -537,37 +537,37 @@ class MafIndex():
                     # it's not in either, so add a single filler character
                     else:
                         append(filler_char)
-                        
+
             subseq[seqid] = "".join(seq_splice)
 
         # make sure we're returning the right number of letters
         if len(subseq[self._target_seqname].replace("-", "")) != expected_letters:
             raise ValueError("Returning %s letters for target seqname (%s), expected %s" % \
             (len(subseq[self._target_seqname].replace("-", "")), self._target_seqname, expected_letters))
-                
+
         # check to make sure all sequences are the same length as the target seqname
         ref_subseq_len = len(subseq[self._target_seqname])
-        
+
         for seqid, seq in subseq.items():
             if len(seq) <> ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % \
                 (len(seq), seqid, ref_subseq_len))
-                
+
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []
-        
+
         for seqid, seq in subseq.items():
             seq = Seq(seq)
-            
+
             seq = seq if strand == ref_first_strand else seq.reverse_complement()
-            
+
             result_multiseq.append(SeqRecord(seq,
                                              id = seqid,
                                              name = seqid,
                                              description = ""))
-                                             
+
         return MultipleSeqAlignment(result_multiseq)
-        
+
 
     def __repr__(self):
         return "MafIO.MafIndex(%r, target_seqname=%r)" % (self._maf_fp.name,
