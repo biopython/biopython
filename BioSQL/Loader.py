@@ -768,7 +768,6 @@ class DatabaseLoader(object):
                 source = source[0]
             seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
                                                 bioentry_id, source=source)
-            del feature.qualifiers['source']
         except KeyError:
             seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
                                                 bioentry_id)
