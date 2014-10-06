@@ -15,7 +15,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import SequentialAlignmentWriter
+from .Interfaces import SequentialAlignmentWriter
 import shlex
 
 MAFINDEX_VERSION = 1
@@ -102,7 +102,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
     while True:
         # allows parsing of the last bundle without duplicating code
         try:
-            line = handle.next()
+            line = next(handle)
         except StopIteration:
             line = ""
 
@@ -111,7 +111,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 # add a SeqRecord to the bundle
                 line_split = line.strip().split()
 
-                if len(line_split) <> 7:
+                if len(line_split) != 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
                 # convert MAF-style +/- strand to biopython-type 1/-1
@@ -244,11 +244,11 @@ class MafIndex(object):
                 raise ValueError("Unfinished/partial database provided")
 
             records_found = int(self._con.execute("SELECT COUNT(*) FROM offset_data").fetchone()[0])
-            if records_found <> record_count:
+            if records_found != record_count:
                 raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
 
             return records_found
-        except (_OperationalError, _DatabaseError), err:
+        except (_OperationalError, _DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err)
 
     def __make_new_index(self):
@@ -312,8 +312,7 @@ class MafIndex(object):
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
                             end = int(line_split[2]) + int(line_split[3])
-
-                            if end - start <> len(line_split[6].replace("-", "")):
+                            if end - start != len(line_split[6].replace("-", "")):
                                 raise ValueError("Invalid length for target coordinates (expected %s, found %s)" % \
                                                 (end - start, len(line_split[6].replace("-", ""))))
 
@@ -371,13 +370,16 @@ class MafIndex(object):
         """Retrieves a single MAF record located at the offset provided."""
 
         self._maf_fp.seek(offset)
-        return self._mafiter.next()
+
+        return next(self._mafiter)
 
     def search(self, starts, ends):
-        """Searches index database for MAF records overlapping ranges provided."""
+        """Searches index database for MAF records overlapping ranges provided.
+        Returns results in order by start, then end, then internal offset
+        field."""
 
         # verify the provided exon coordinates
-        if len(starts) <> len(ends):
+        if len(starts) != len(ends):
             raise ValueError("Every position in starts must have a match in ends")
 
         for exonstart, exonend in zip(starts, ends):
@@ -386,10 +388,7 @@ class MafIndex(object):
 
         con = self._con
 
-        # search for every exon, put hits in a dict where offset is the key
-        # this will automatically prevent retrieval of duplicate records
-        hits = {}
-
+        # search for every exon
         for exonstart, exonend in zip(starts, ends):
             try:
                 possible_bins = ", ".join(map(str, self._region2bin(exonstart, exonend)))
@@ -397,33 +396,34 @@ class MafIndex(object):
                 raise TypeError("Exon coordinates must be integers "
                                  "(start=%s, end=%s)" % (exonstart, exonend))
 
-            result = con.execute("SELECT * FROM offset_data WHERE bin IN (%s) "
-                     "AND (end BETWEEN %s AND %s OR %s BETWEEN start AND end) "
-                     "ORDER BY start ASC;" \
+            result = con.execute("SELECT DISTINCT start, end, offset FROM "
+                     "offset_data WHERE bin IN (%s) AND (end BETWEEN %s AND %s "
+                     "OR %s BETWEEN start AND end) ORDER BY start, end, "
+                     "offset ASC;" \
                      % (possible_bins, exonstart, exonend, exonend))
 
             rows = result.fetchall()
 
-            for i in rows:
-                hits[i[3]] = (i[1], i[2])
+            for rec_start, rec_end, offset in rows:
+                # Iterate through hits, fetching alignments from the MAF file
+                # and checking to be sure we've retrieved the expected record.
 
-        # iterate through hits, fetching alignments from the MAF file and checking
-        # to be sure we've retrieved the expected record
-        for offset, (rec_start, rec_end) in hits.items():
-            fetched = self._get_record(int(offset))
+                fetched = self._get_record(int(offset))
 
-            for record in fetched:
-                if record.id == self._target_seqname:
-                    start = record.annotations["start"]
-                    end = record.annotations["start"] + record.annotations["size"]
+                for record in fetched:
+                    if record.id == self._target_seqname:
+                        start = record.annotations["start"]
+                        end = record.annotations["start"] + \
+                            record.annotations["size"]
 
-                    if not (start == rec_start and end == rec_end):
-                        raise ValueError("Expected %s-%s @ offset %s, found %s-%s" % \
-                        (rec_start, rec_end, offset, start, end))
+                        if not (start == rec_start and end == rec_end):
+                            raise ValueError(
+                                "Expected %s-%s @ offset %s, found %s-%s" % \
+                                (rec_start, rec_end, offset, start, end))
 
-            yield fetched
+                yield fetched
 
-    def get_spliced(self, starts, ends, strand = 1):
+    def get_spliced(self, starts, ends, strand = "+1"):
         """Returns a multiple alignment of the exact sequence range provided.
 
         Accepts two lists of start and end positions on target_seqname, representing
@@ -506,7 +506,7 @@ class MafIndex(object):
                 if track_val != "-" and real_pos < rec_end - 1: real_pos += 1
 
         # make sure the number of bp entries equals the sum of the record lengths
-        if len(split_by_position[self._target_seqname]) <> total_rec_length:
+        if len(split_by_position[self._target_seqname]) != total_rec_length:
             raise ValueError("Target seqname (%s) has %s records, expected %s" % \
             (self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
 
@@ -549,7 +549,7 @@ class MafIndex(object):
         ref_subseq_len = len(subseq[self._target_seqname])
 
         for seqid, seq in subseq.items():
-            if len(seq) <> ref_subseq_len:
+            if len(seq) != ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % \
                 (len(seq), seqid, ref_subseq_len))
 
