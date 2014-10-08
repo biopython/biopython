@@ -25,8 +25,9 @@ before_install:
 #Misc python modules we can use as soft dependencies
   - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy' ]]; then pip install reportlab; fi"
   - "pip install rdflib"
+#Hack for issue #370, current mysql-connection fails under TravisCI
 #Not hosted on PyPI so this need allow external switch:
-  - "pip install --allow-all-external mysql-connector-python"
+#  - "pip install --allow-all-external mysql-connector-python"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
