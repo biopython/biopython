@@ -503,30 +503,32 @@ class Adaptor(object):
         return self.cursor.fetchall()
 
 
-class MySqlAdaptor(Adaptor):
+class MysqlConnectorAdaptor(Adaptor):
     """A BioSQL Adaptor class with fixes for the MySQL interface
 
     BioSQL was failing due to returns of bytearray objects from
-    the MySQL database connector. This adaptor class scrubbs returns
-    of bytearrays and of byte strings.
+    the mysql-connector-python database connector. This adaptor
+    class scrubs returns of bytearrays and of byte strings converting
+    them to string objects instead. This adaptor class was made in
+    response to backwards incompatible changes added to
+    mysql-connector-python in release 2.0.0 of the package.
     """
     def execute_one(self, sql, args=None):
-        out = super(MySqlAdaptor, self).execute_one(sql, args)
+        out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
         return tuple(bytearray_to_str(v) for v in out)
 
     def execute_and_fetch_col0(self, sql, args=None):
-        out = super(MySqlAdaptor, self).execute_and_fetch_col0(sql, args)
+        out = super(MysqlConnectorAdaptor, self).execute_and_fetch_col0(sql, args)
         return [bytearray_to_str(column) for column in out]
 
     def execute_and_fetchall(self, sql, args=None):
-        out = super(MySqlAdaptor, self).execute_and_fetchall(sql, args)
+        out = super(MysqlConnectorAdaptor, self).execute_and_fetchall(sql, args)
         return [tuple(bytearray_to_str(v) for v in o) for o in out]
 
 
 _interface_specific_adaptors = {
     # If SQL interfaces require a specific adaptor, use this to map the adaptor
-    "MySQLdb":          MySqlAdaptor,
-    "mysql.connector":  MySqlAdaptor
+    "mysql.connector":  MysqlConnectorAdaptor
     }
 
 _allowed_lookups = {
