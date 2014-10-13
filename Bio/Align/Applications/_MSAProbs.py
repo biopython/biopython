@@ -8,7 +8,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Argument, _Option, _Switch, AbstractCommandline
 
@@ -19,6 +19,7 @@ class MSAProbsCommandline(AbstractCommandline):
     http://msaprobs.sourceforge.net
 
     Example:
+    --------
 
     >>> from Bio.Align.Applications import MSAProbsCommandline
     >>> in_file = "unaligned.fasta"
@@ -31,6 +32,7 @@ class MSAProbsCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
+    ---------
 
     Yongchao Liu, Bertil Schmidt, Douglas L. Maskell: "MSAProbs: multiple
     sequence alignment based on pair hidden Markov models and partition

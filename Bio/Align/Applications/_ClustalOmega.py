@@ -13,7 +13,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -24,6 +24,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     http://www.clustal.org/omega
 
     Example:
+    --------
 
     >>> from Bio.Align.Applications import ClustalOmegaCommandline
     >>> in_file = "unaligned.fasta"
@@ -37,6 +38,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
+    ---------
 
     Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
     McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).

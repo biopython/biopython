@@ -8,10 +8,6 @@
 In order to try and avoid huge alignment objects with tons of functions,
 functions which return summary type information about alignments should
 be put into classes in this module.
-
-classes:
-o SummaryInfo
-o PSSM
 """
 
 from __future__ import print_function
@@ -59,15 +55,15 @@ class SummaryInfo(object):
         into account), but it just meant for a quick and dirty consensus.
 
         Arguments:
-        o threshold - The threshold value that is required to add a particular
-        atom.
-        o ambiguous - The ambiguous character to be added when the threshold is
-        not reached.
-        o consensus_alpha - The alphabet to return for the consensus sequence.
-        If this is None, then we will try to guess the alphabet.
-        o require_multiple - If set as 1, this will require that more than
-        1 sequence be part of an alignment to put it in the consensus (ie.
-        not just 1 sequence and gaps).
+            - threshold - The threshold value that is required to add a particular
+              atom.
+            - ambiguous - The ambiguous character to be added when the threshold is
+              not reached.
+            - consensus_alpha - The alphabet to return for the consensus sequence.
+              If this is None, then we will try to guess the alphabet.
+            - require_multiple - If set as 1, this will require that more than
+              1 sequence be part of an alignment to put it in the consensus (ie.
+              not just 1 sequence and gaps).
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
@@ -121,9 +117,11 @@ class SummaryInfo(object):
                        consensus_alpha=None, require_multiple=0):
         """Same as dumb_consensus(), but allows gap on the output.
 
-        Things to do: Let the user define that with only one gap, the result
-        character in consensus is gap. Let the user select gap character, now
-        it takes the same is input.
+        Things to do:
+            - Let the user define that with only one gap, the result
+              character in consensus is gap.
+            - Let the user select gap character, now
+              it takes the same is input.
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
@@ -243,7 +241,8 @@ class SummaryInfo(object):
         up with the replacement dictionary.
 
         Arguments:
-        o skip_chars - A list of characters to skip when creating the dictionary.
+            - skip_chars - A list of characters to skip when creating the dictionary.
+
         For instance, you might have Xs (screened stuff) or Ns, and not want
         to include the ambiguity characters in the dictionary.
         """
@@ -271,16 +270,16 @@ class SummaryInfo(object):
         """Compare two sequences and generate info on the replacements seen.
 
         Arguments:
-        o seq1, seq2 - The two sequences to compare.
-        o weight1, weight2 - The relative weights of seq1 and seq2.
-        o start_dict - The dictionary containing the starting replacement
-        info that we will modify.
-        o ignore_chars - A list of characters to ignore when calculating
-        replacements (ie. '-').
+            - seq1, seq2 - The two sequences to compare.
+            - weight1, weight2 - The relative weights of seq1 and seq2.
+            - start_dict - The dictionary containing the starting replacement
+              info that we will modify.
+            - ignore_chars - A list of characters to ignore when calculating
+              replacements (ie. '-').
 
         Returns:
-        o A replacment dictionary which is modified from initial_dict with
-        the information from the sequence comparison.
+            - A replacment dictionary which is modified from initial_dict with
+              the information from the sequence comparison.
         """
         # loop through each residue in the sequences
         for residue_num in range(len(seq1)):
@@ -333,11 +332,12 @@ class SummaryInfo(object):
         letters as keys (ie. ('A', 'G')) and sets the values as zero.
 
         Returns:
-        o The base dictionary created
-        o A list of alphabet items to skip when filling the dictionary.Right
-        now the only thing I can imagine in this list is gap characters, but
-        maybe X's or something else might be useful later. This will also
-        include any characters that are specified to be skipped.
+            - The base dictionary created
+            - A list of alphabet items to skip when filling the dictionary.
+              (Right now the only thing I can imagine in this list is gap 
+              characters, but maybe X's or something else might be useful later.
+              This will also include any characters that are specified to be
+              skipped.)
         """
         base_dictionary = {}
         all_letters = self._get_all_letters()
@@ -365,16 +365,16 @@ class SummaryInfo(object):
         alternative method to look at a consensus sequence.
 
         Arguments:
-        o chars_to_ignore - A listing of all characters not to include in
-        the pssm.  If the alignment alphabet declares a gap character,
-        then it will be excluded automatically.
-        o axis_seq - An optional argument specifying the sequence to
-        put on the axis of the PSSM. This should be a Seq object. If nothing
-        is specified, the consensus sequence, calculated with default
-        parameters, will be used.
+            - chars_to_ignore - A listing of all characters not to include in
+              the pssm.  If the alignment alphabet declares a gap character,
+              then it will be excluded automatically.
+            - axis_seq - An optional argument specifying the sequence to
+              put on the axis of the PSSM. This should be a Seq object. If nothing
+              is specified, the consensus sequence, calculated with default
+              parameters, will be used.
 
         Returns:
-        o A PSSM (position specific score matrix) object.
+            - A PSSM (position specific score matrix) object.
         """
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
@@ -439,23 +439,23 @@ class SummaryInfo(object):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
-        o start, end - The starting an ending points to calculate the
-        information content. These points should be relative to the first
-        sequence in the alignment, starting at zero (ie. even if the 'real'
-        first position in the seq is 203 in the initial sequence, for
-        the info content, we need to use zero). This defaults to the entire
-        length of the first sequence.
-        o e_freq_table - A FreqTable object specifying the expected frequencies
-        for each letter in the alphabet we are using (e.g. {'G' : 0.4,
-        'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
-        included, since these should not have expected frequencies.
-        o log_base - The base of the logathrim to use in calculating the
-        information content. This defaults to 2 so the info is in bits.
-        o chars_to_ignore - A listing of characterw which should be ignored
-        in calculating the info content.
+            - start, end - The starting an ending points to calculate the
+              information content. These points should be relative to the first
+              sequence in the alignment, starting at zero (ie. even if the 'real'
+              first position in the seq is 203 in the initial sequence, for
+              the info content, we need to use zero). This defaults to the entire
+              length of the first sequence.
+            - e_freq_table - A FreqTable object specifying the expected frequencies
+              for each letter in the alphabet we are using (e.g. {'G' : 0.4,
+              'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
+              included, since these should not have expected frequencies.
+            - log_base - The base of the logathrim to use in calculating the
+              information content. This defaults to 2 so the info is in bits.
+            - chars_to_ignore - A listing of characterw which should be ignored
+              in calculating the info content.
 
         Returns:
-        o A number representing the info content for the specified region.
+            - A number representing the info content for the specified region.
 
         Please see the Biopython manual for more information on how information
         content is calculated.
@@ -513,12 +513,12 @@ class SummaryInfo(object):
         """Determine the frequency of specific letters in the alignment.
 
         Arguments:
-        o residue_num - The number of the column we are getting frequencies
-        from.
-        o all_records - All of the SeqRecords in the alignment.
-        o letters - The letters we are interested in getting the frequency
-        for.
-        o to_ignore - Letters we are specifically supposed to ignore.
+            - residue_num - The number of the column we are getting frequencies
+              from.
+            - all_records - All of the SeqRecords in the alignment.
+            - letters - The letters we are interested in getting the frequency
+              for.
+            - to_ignore - Letters we are specifically supposed to ignore.
 
         This will calculate the frequencies of each of the specified letters
         in the alignment at the given frequency, and return this as a
@@ -558,11 +558,11 @@ class SummaryInfo(object):
         """Calculate the information content for a column.
 
         Arguments:
-        o obs_freq - The frequencies observed for each letter in the column.
-        o e_freq_table - An optional argument specifying the expected
-        frequencies for each letter. This is a SubsMat.FreqTable instance.
-        o log_base - The base of the logathrim to use in calculating the
-        info content.
+            - obs_freq - The frequencies observed for each letter in the column.
+            - e_freq_table - An optional argument specifying the expected
+              frequencies for each letter. This is a SubsMat.FreqTable instance.
+            - log_base - The base of the logathrim to use in calculating the
+              info content.
         """
         try:
             gap_char = self.alignment._alphabet.gap_char
@@ -613,19 +613,20 @@ class PSSM(object):
     This class is meant to make it easy to access the info within a PSSM
     and also make it easy to print out the information in a nice table.
 
-    Let's say you had an alignment like this:
-    GTATC
-    AT--C
-    CTGTC
+    Let's say you had an alignment like this::
+    
+        GTATC
+        AT--C
+        CTGTC
 
-    The position specific score matrix (when printed) looks like:
+    The position specific score matrix (when printed) looks like::
 
-      G A T C
-    G 1 1 0 1
-    T 0 0 3 0
-    A 1 1 0 0
-    T 0 0 2 0
-    C 0 0 0 3
+          G A T C
+        G 1 1 0 1
+        T 0 0 3 0
+        A 1 1 0 0
+        T 0 0 2 0
+        C 0 0 0 3
 
     You can access a single element of the PSSM using the following:
 
