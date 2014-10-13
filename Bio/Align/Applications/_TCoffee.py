@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -22,6 +22,7 @@ class TCoffeeCommandline(AbstractCommandline):
     would like to help improve it please get in touch.
 
     Example:
+    --------
 
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format (file aligned.aln), and otherwise default settings, use:
@@ -37,6 +38,7 @@ class TCoffeeCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
+    ---------
 
     T-Coffee: A novel method for multiple sequence alignments.
     Notredame, Higgins, Heringa, JMB,302(205-217) 2000

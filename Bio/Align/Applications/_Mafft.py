@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"
 
 import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
@@ -19,6 +19,7 @@ class MafftCommandline(AbstractCommandline):
     http://align.bmr.kyushu-u.ac.jp/mafft/software/
 
     Example:
+    --------
 
     >>> from Bio.Align.Applications import MafftCommandline
     >>> mafft_exe = "/opt/local/mafft"
@@ -56,6 +57,7 @@ class MafftCommandline(AbstractCommandline):
         align = AlignIO.read(StringIO(stdout), "fasta")
 
     Citations:
+    ----------
 
     Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
     multiple ncRNA alignment by incorporating structural information into
