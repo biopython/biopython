@@ -14,7 +14,7 @@ http://www.appliedbiosystem.com/support/software_community/ABIF_File_Format.pdf
 
 """
 
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 import datetime
 import struct
@@ -224,7 +224,8 @@ def _abi_parse_header(header, handle):
 def _abi_trim(seq_record):
     """Trims the sequence using Richard Mott's modified trimming algorithm.
 
-    seq_record - SeqRecord object to be trimmed.
+    Arguments:
+        - seq_record - SeqRecord object to be trimmed.
 
     Trimmed bases are determined from their segment score, which is a
     cumulative sum of each base's score. Base scores are calculated from
@@ -273,9 +274,10 @@ def _abi_trim(seq_record):
 def _parse_tag_data(elem_code, elem_num, raw_data):
     """Returns single data value.
 
-    elem_code - What kind of data
-    elem_num - How many data points
-    raw_data - abi file object from which the tags would be unpacked
+    Arguments:
+        - elem_code - What kind of data
+        - elem_num - How many data points
+        - raw_data - abi file object from which the tags would be unpacked
     """
     if elem_code in _BYTEFMT:
         # because '>1s' unpack differently from '>s'
