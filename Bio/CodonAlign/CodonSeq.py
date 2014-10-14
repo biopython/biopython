@@ -21,7 +21,7 @@ from Bio.Data.CodonTable import generic_by_id
 
 from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_table
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 class CodonSeq(Seq):
     """CodonSeq is designed to be within the SeqRecords of a 
@@ -33,7 +33,7 @@ class CodonSeq(Seq):
     CodonSeq also accepts codon style slice by calling
     get_codon() method.
 
-    Important: Ungapped CodonSeq can be any length if you
+    **Important:** Ungapped CodonSeq can be any length if you
     specify the rf_table. Gapped CodonSeq should be a
     multiple of three.
 
@@ -310,8 +310,8 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     Arguments:
         - w  - transition/transvertion ratio
         - cfreq - Current codon frequency vector can only be specified
-                    when you are using ML method. Possible ways of
-                    getting cfreq are: F1x4, F3x4 and F61.
+          when you are using ML method. Possible ways of
+          getting cfreq are: F1x4, F3x4 and F61.
     """
     if all([isinstance(codon_seq1, CodonSeq), 
            isinstance(codon_seq2, CodonSeq)]):
@@ -394,7 +394,7 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
     (PRIVATE).
     Argument:
         - codon_lst - A three letter codon list from a CodonSeq object.
-                      This can be returned from _get_codon_list method.
+          This can be returned from _get_codon_list method.
         - k         - transition/transversion rate ratio
     """
     S_site = 0 # synonymous sites
@@ -771,8 +771,8 @@ def _yn00(seq1, seq2, k, codon_table):
 def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
     """
     Argument:
-        -   T - proportions of transitional differences
-        -   V - proportions of transversional differences
+        - T - proportions of transitional differences
+        - V - proportions of transversional differences
     """
     purine = ('A', 'G')
     pyrimidine = ('C', 'T')
