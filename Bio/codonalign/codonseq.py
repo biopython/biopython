@@ -33,7 +33,7 @@ class CodonSeq(Seq):
     CodonSeq also accepts codon style slice by calling
     get_codon() method.
 
-    Important: Ungapped CodonSeq can be any length if you
+    **Important:** Ungapped CodonSeq can be any length if you
     specify the rf_table. Gapped CodonSeq should be a
     multiple of three.
 
@@ -316,8 +316,8 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         - codon_seq2 - CodonSeq or or SeqRecord that contains a CodonSeq
         - w  - transition/transvertion ratio
         - cfreq - Current codon frequency vector can only be specified
-                    when you are using ML method. Possible ways of
-                    getting cfreq are: F1x4, F3x4 and F61.
+          when you are using ML method. Possible ways of
+          getting cfreq are: F1x4, F3x4 and F61.
     """
     if all([isinstance(codon_seq1, CodonSeq),
            isinstance(codon_seq2, CodonSeq)]):

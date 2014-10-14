@@ -22,7 +22,7 @@ The DSSP codes for secondary structure used here are:
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 import re
 from Bio._py3k import StringIO
@@ -85,14 +85,17 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     Create a DSSP dictionary from a PDB file.
 
     Example:
-        >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
-        >>> aa, ss, acc=dssp_dict[('A', 1)]
+    --------
+    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
+    >>> aa, ss, acc=dssp_dict[('A', 1)]
+
+    ::
 
     @param in_file: pdb file
-    @type in_file: string
+    @type in_file: string ::
 
     @param DSSP: DSSP executable (argument to os.system)
-    @type DSSP: string
+    @type DSSP: string ::
 
     @return: a dictionary that maps (chainid, resid) to
         amino acid type, secondary structure code and
@@ -111,7 +114,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 def make_dssp_dict(filename):
     """
     Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from a DSSP file.
+    aa, ss and accessibility, from a DSSP file. ::
 
     @param filename: the DSSP output file
     @type filename: string
@@ -123,7 +126,7 @@ def make_dssp_dict(filename):
 def _make_dssp_dict(handle):
     """
     Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from an open DSSP file object.
+    aa, ss and accessibility, from an open DSSP file object. ::
 
     @param handle: the open DSSP output file handle
     @type handle: file
@@ -179,34 +182,37 @@ class DSSP(AbstractResiduePropertyMap):
     Run DSSP on a pdb file, and provide a handle to the
     DSSP secondary structure and accessibility.
 
-    Note that DSSP can only handle one model.
+    **Note** that DSSP can only handle one model.
 
     Example:
+    --------
 
-        >>> p = PDBParser()
-        >>> structure = p.get_structure("1MOT", "1MOT.pdb")
-        >>> model = structure[0]
-        >>> dssp = DSSP(model, "1MOT.pdb")
-        >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-        >>> a_key = list(dssp)[2]
-        >>> # residue object, secondary structure, solvent accessibility,
-        >>> # relative accessiblity, phi, psi
-        >>> dssp[a_key]
-        (<Residue ALA het=  resseq=251 icode= >,
-        'H',
-        72,
-        0.67924528301886788,
-        -61.200000000000003,
-        -42.399999999999999)
+    >>> p = PDBParser()
+    >>> structure = p.get_structure("1MOT", "1MOT.pdb")
+    >>> model = structure[0]
+    >>> dssp = DSSP(model, "1MOT.pdb")
+    >>> # DSSP data is accessed by a tuple (chain_id, res_id)
+    >>> a_key = list(dssp)[2]
+    >>> # residue object, secondary structure, solvent accessibility,
+    >>> # relative accessiblity, phi, psi
+    >>> dssp[a_key]
+    (<Residue ALA het=  resseq=251 icode= >,
+    'H',
+    72,
+    0.67924528301886788,
+    -61.200000000000003,
+    -42.399999999999999)
     """
 
     def __init__(self, model, pdb_file, dssp="dssp"):
         """
+        ::
+
         @param model: the first model of the structure
-        @type model: L{Model}
+        @type model: L{Model} ::
 
         @param pdb_file: a PDB file
-        @type pdb_file: string
+        @type pdb_file: string ::
 
         @param dssp: the dssp executable (ie. the argument to os.system)
         @type dssp: string
