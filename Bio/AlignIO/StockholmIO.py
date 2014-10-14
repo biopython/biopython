@@ -131,7 +131,7 @@ AUCGUUUUAC
 """
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # not just plaintext
+__docformat__ = "restructuredtext en"  # not just plaintext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment

@@ -2,7 +2,7 @@
 # Last Checked with samtools [0.1.18 (r982:295)]
 
 from __future__ import print_function
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument
@@ -12,7 +12,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     """Command line wrapper for samtools view.
 
-    Extract/print all or sub alignments in SAM or BAM format, equivalent to:
+    Extract/print all or sub alignments in SAM or BAM format, equivalent to::
 
     $ samtools view [-bchuHS] [-t in.refList] [-o output] [-f reqFlag]
                     [-F skipFlag] [-q minMapQ] [-l library] [-r readGroup]
@@ -20,13 +20,14 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Example
+    -------
 
-        >>> from Bio.Sequencing.Applications import SamtoolsViewCommandline
-        >>> input_file = "/path/to/sam_or_bam_file"
-        >>> samtools_view_cmd = SamtoolsViewCommandline(input_file=input_file)
-        >>> print(samtools_view_cmd)
-        samtools view /path/to/sam_or_bam_file
+    >>> from Bio.Sequencing.Applications import SamtoolsViewCommandline
+    >>> input_file = "/path/to/sam_or_bam_file"
+    >>> samtools_view_cmd = SamtoolsViewCommandline(input_file=input_file)
+    >>> print(samtools_view_cmd)
+    samtools view /path/to/sam_or_bam_file
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -105,7 +106,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
 class SamtoolsMpileupCommandline(AbstractCommandline):
     """Command line wrapper for samtools mpileup.
 
-    Generate BCF or pileup for one or multiple BAM files, equivalent to:
+    Generate BCF or pileup for one or multiple BAM files, equivalent to::
 
     $ samtools mpileup [-EBug] [-C capQcoef] [-r reg] [-f in.fa]
                        [-l list] [-M capMapQ] [-Q minBaseQ]
@@ -115,11 +116,11 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-        >>> input = ["/path/to/sam_or_bam_file"]
-        >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
-        >>> print(samtools_mpileup_cmd)
-        samtools mpileup /path/to/sam_or_bam_file
+    >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
+    >>> input = ["/path/to/sam_or_bam_file"]
+    >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
+    >>> print(samtools_mpileup_cmd)
+    samtools mpileup /path/to/sam_or_bam_file
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -243,7 +244,7 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
     """Command line wrapper for samtools reheader.
 
     Replace the header in in.bam with the header
-    in in.header.sam, equivalent to:
+    in in.header.sam, equivalent to::
 
     $ samtools reheader <in.header.sam> <in.bam>
 
@@ -251,14 +252,14 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
-        >>> input_header = "/path/to/header_sam_file"
-        >>> input_bam = "/path/to/input_bam_file"
-        >>> samtools_reheader_cmd = SamtoolsReheaderCommandline(\
-                                        input_header=input_header,\
-                                        input_bam=input_bam)
-        >>> print(samtools_reheader_cmd)
-        samtools reheader /path/to/header_sam_file /path/to/input_bam_file
+    >>> from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
+    >>> input_header = "/path/to/header_sam_file"
+    >>> input_bam = "/path/to/input_bam_file"
+    >>> samtools_reheader_cmd = SamtoolsReheaderCommandline(\
+                                    input_header=input_header,\
+                                    input_bam=input_bam)
+    >>> print(samtools_reheader_cmd)
+    samtools reheader /path/to/header_sam_file /path/to/input_bam_file
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -278,7 +279,7 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
 class SamtoolsCatCommandline(AbstractCommandline):
     """Command line wrapper for samtools cat.
 
-    Concatenate BAMs, equivalent to:
+    Concatenate BAMs, equivalent to::
 
     $ samtools cat [-h header.sam] [-o out.bam] <in1.bam> <in2.bam> [ ... ]
 
@@ -286,13 +287,13 @@ class SamtoolsCatCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsCatCommandline
-        >>> input_bam1 = "/path/to/input_bam1"
-        >>> input_bam2 = "/path/to/input_bam2"
-        >>> input_bams = [input_bam1, input_bam2]
-        >>> samtools_cat_cmd = SamtoolsCatCommandline(input_bam=input_bams)
-        >>> print(samtools_cat_cmd)
-        samtools cat /path/to/input_bam1 /path/to/input_bam2
+    >>> from Bio.Sequencing.Applications import SamtoolsCatCommandline
+    >>> input_bam1 = "/path/to/input_bam1"
+    >>> input_bam2 = "/path/to/input_bam2"
+    >>> input_bams = [input_bam1, input_bam2]
+    >>> samtools_cat_cmd = SamtoolsCatCommandline(input_bam=input_bams)
+    >>> print(samtools_cat_cmd)
+    samtools cat /path/to/input_bam1 /path/to/input_bam2
 
      """
     def __init__(self, cmd="samtools", **kwargs):
@@ -315,22 +316,23 @@ class SamtoolsCatCommandline(AbstractCommandline):
 class SamtoolsSortCommandline(AbstractCommandline):
     """Command line wrapper for samtools sort.
 
-    Concatenate BAMs, equivalent to:
+    Concatenate BAMs, equivalent to::
 
     $ samtools sort [-no] [-m maxMem] <in.bam> <out.prefix>
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Example
+    -------
 
-        >>> from Bio.Sequencing.Applications import SamtoolsSortCommandline
-        >>> input_bam = "/path/to/input_bam"
-        >>> out_prefix = "/path/to/out_prefix"
-        >>> samtools_sort_cmd = SamtoolsSortCommandline(\
-                                                        input_bam=input_bam,\
-                                                        out_prefix=out_prefix)
-        >>> print(samtools_sort_cmd)
-        samtools sort /path/to/input_bam /path/to/out_prefix
+    >>> from Bio.Sequencing.Applications import SamtoolsSortCommandline
+    >>> input_bam = "/path/to/input_bam"
+    >>> out_prefix = "/path/to/out_prefix"
+    >>> samtools_sort_cmd = SamtoolsSortCommandline(\
+                                                    input_bam=input_bam,\
+                                                    out_prefix=out_prefix)
+    >>> print(samtools_sort_cmd)
+    samtools sort /path/to/input_bam /path/to/out_prefix
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -355,23 +357,24 @@ class SamtoolsSortCommandline(AbstractCommandline):
 class SamtoolsMergeCommandline(AbstractCommandline):
     """Command line wrapper for samtools merge.
 
-    Merge multiple sorted alignments, equivalent to:
+    Merge multiple sorted alignments, equivalent to::
 
     $ samtools merge [-nur1f] [-h inh.sam] [-R reg]
                      <out.bam> <in1.bam> <in2.bam> [...]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Example
+    -------
 
-        >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
-        >>> out_bam = "/path/to/out_bam"
-        >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
-        >>> samtools_merge_cmd = SamtoolsMergeCommandline(\
-                                                          out_bam=out_bam,\
-                                                          input_bam=in_bam)
-        >>> print(samtools_merge_cmd)
-        samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
+    >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
+    >>> out_bam = "/path/to/out_bam"
+    >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
+    >>> samtools_merge_cmd = SamtoolsMergeCommandline(\
+                                                      out_bam=out_bam,\
+                                                      input_bam=in_bam)
+    >>> print(samtools_merge_cmd)
+    samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -409,7 +412,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
 class SamtoolsIndexCommandline(AbstractCommandline):
     """Command line wrapper for samtools index.
 
-    Index sorted alignment for fast random access, equivalent to:
+    Index sorted alignment for fast random access, equivalent to::
 
     $ samtools index <aln.bam>
 
@@ -417,11 +420,11 @@ class SamtoolsIndexCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsIndexCommandline
-        >>> input = "/path/to/aln_bam"
-        >>> samtools_index_cmd = SamtoolsIndexCommandline(input_bam=input)
-        >>> print(samtools_index_cmd)
-        samtools index /path/to/aln_bam
+    >>> from Bio.Sequencing.Applications import SamtoolsIndexCommandline
+    >>> input = "/path/to/aln_bam"
+    >>> samtools_index_cmd = SamtoolsIndexCommandline(input_bam=input)
+    >>> print(samtools_index_cmd)
+    samtools index /path/to/aln_bam
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -437,7 +440,7 @@ class SamtoolsIndexCommandline(AbstractCommandline):
 class SamtoolsIdxstatsCommandline(AbstractCommandline):
     """Command line wrapper for samtools idxstats.
 
-    Retrieve and print stats in the index file, equivalent to:
+    Retrieve and print stats in the index file, equivalent to::
 
     $ samtools idxstats <aln.bam>
 
@@ -445,11 +448,11 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
-        >>> input = "/path/to/aln_bam"
-        >>> samtools_idxstats_cmd = SamtoolsIdxstatsCommandline(input_bam=input)
-        >>> print(samtools_idxstats_cmd)
-        samtools idxstats /path/to/aln_bam
+    >>> from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
+    >>> input = "/path/to/aln_bam"
+    >>> samtools_idxstats_cmd = SamtoolsIdxstatsCommandline(input_bam=input)
+    >>> print(samtools_idxstats_cmd)
+    samtools idxstats /path/to/aln_bam
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -465,19 +468,20 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
 class SamtoolsFaidxCommandline(AbstractCommandline):
     """Command line wrapper for samtools faidx.
 
-    Retrieve and print stats in the index file, equivalent to:
+    Retrieve and print stats in the index file, equivalent to::
 
     $ samtools faidx <ref.fasta> [region1 [...]]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Example
+    -------
 
-        >>> from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
-        >>> reference = "/path/to/reference.fasta"
-        >>> samtools_faidx_cmd = SamtoolsFaidxCommandline(reference=reference)
-        >>> print(samtools_faidx_cmd)
-        samtools faidx /path/to/reference.fasta
+    >>> from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
+    >>> reference = "/path/to/reference.fasta"
+    >>> samtools_faidx_cmd = SamtoolsFaidxCommandline(reference=reference)
+    >>> print(samtools_faidx_cmd)
+    samtools faidx /path/to/reference.fasta
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -496,7 +500,7 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
     """Command line wrapper for samtools fixmate.
 
     Fill in mate coordinates, ISIZE and mate related
-    flags from a name-sorted alignment, equivalent to:
+    flags from a name-sorted alignment, equivalent to::
 
     $ samtools fixmate <in.nameSrt.bam> <out.bam>
 
@@ -504,14 +508,14 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
-        >>> in_bam = "/path/to/in.nameSrt.bam"
-        >>> out_bam = "/path/to/out.bam"
-        >>> samtools_fixmate_cmd = SamtoolsFixmateCommandline(\
-                                                              input_bam=in_bam,\
-                                                              out_bam=out_bam)
-        >>> print(samtools_fixmate_cmd)
-        samtools fixmate /path/to/in.nameSrt.bam /path/to/out.bam
+    >>> from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
+    >>> in_bam = "/path/to/in.nameSrt.bam"
+    >>> out_bam = "/path/to/out.bam"
+    >>> samtools_fixmate_cmd = SamtoolsFixmateCommandline(\
+                                                          input_bam=in_bam,\
+                                                          out_bam=out_bam)
+    >>> print(samtools_fixmate_cmd)
+    samtools fixmate /path/to/in.nameSrt.bam /path/to/out.bam
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -532,7 +536,7 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
 class SamtoolsRmdupCommandline(AbstractCommandline):
     """Command line wrapper for samtools rmdup.
 
-    Remove potential PCR duplicates, equivalent to:
+    Remove potential PCR duplicates, equivalent to::
 
     $ samtools rmdup [-sS] <input.srt.bam> <out.bam>
 
@@ -540,14 +544,14 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
-        >>> input_sorted_bam = "/path/to/input.srt.bam"
-        >>> out_bam = "/path/to/out.bam"
-        >>> samtools_rmdup_cmd = SamtoolsRmdupCommandline(\
-                                                          input_bam=input_sorted_bam,\
-                                                          out_bam=out_bam)
-        >>> print(samtools_rmdup_cmd)
-        samtools rmdup /path/to/input.srt.bam /path/to/out.bam
+    >>> from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
+    >>> input_sorted_bam = "/path/to/input.srt.bam"
+    >>> out_bam = "/path/to/out.bam"
+    >>> samtools_rmdup_cmd = SamtoolsRmdupCommandline(\
+                                                      input_bam=input_sorted_bam,\
+                                                      out_bam=out_bam)
+    >>> print(samtools_rmdup_cmd)
+    samtools rmdup /path/to/input.srt.bam /path/to/out.bam
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -575,7 +579,7 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
 class SamtoolsCalmdCommandline(AbstractCommandline):
     """Command line wrapper for samtools calmd.
 
-    Generate the MD tag, equivalent to:
+    Generate the MD tag, equivalent to::
 
     $ samtools calmd [-EeubSr] [-C capQcoef] <aln.bam> <ref.fasta>
 
@@ -583,14 +587,14 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
-        >>> input_bam = "/path/to/aln.bam"
-        >>> reference_fasta = "/path/to/reference.fasta"
-        >>> samtools_calmd_cmd = SamtoolsCalmdCommandline(\
-                                                          input_bam=input_bam,\
-                                                          reference=reference_fasta)
-        >>> print(samtools_calmd_cmd)
-        samtools calmd /path/to/aln.bam /path/to/reference.fasta
+    >>> from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
+    >>> input_bam = "/path/to/aln.bam"
+    >>> reference_fasta = "/path/to/reference.fasta"
+    >>> samtools_calmd_cmd = SamtoolsCalmdCommandline(\
+                                                      input_bam=input_bam,\
+                                                      reference=reference_fasta)
+    >>> print(samtools_calmd_cmd)
+    samtools calmd /path/to/aln.bam /path/to/reference.fasta
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -637,7 +641,7 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
     This command identifies target regions by examining the continuity
     of read depth, computes haploid consensus sequences of targets
     and outputs a SAM with each sequence corresponding to a target,
-    equivalent to:
+    equivalent to::
 
     $ samtools targetcut [-Q minBaseQ] [-i inPenalty] [-0 em0]
                          [-1 em1] [-2 em2] [-f ref] <in.bam>
@@ -646,11 +650,11 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
-        >>> input_bam = "/path/to/aln.bam"
-        >>> samtools_targetcut_cmd = SamtoolsTargetcutCommandline(input_bam=input_bam)
-        >>> print(samtools_targetcut_cmd)
-        samtools targetcut /path/to/aln.bam
+    >>> from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
+    >>> input_bam = "/path/to/aln.bam"
+    >>> samtools_targetcut_cmd = SamtoolsTargetcutCommandline(input_bam=input_bam)
+    >>> print(samtools_targetcut_cmd)
+    samtools targetcut /path/to/aln.bam
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -683,7 +687,7 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
 class SamtoolsPhaseCommandline(AbstractCommandline):
     """Command line wrapper for samtools phase.
 
-    Call and phase heterozygous SNPs, equivalent to:
+    Call and phase heterozygous SNPs, equivalent to::
 
     $ samtools phase [-AF] [-k len] [-b prefix]
                      [-q minLOD] [-Q minBaseQ] <in.bam>
@@ -692,11 +696,11 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
 
     Example:
 
-        >>> from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
-        >>> input_bam = "/path/to/in.bam"
-        >>> samtools_phase_cmd = SamtoolsPhaseCommandline(input_bam=input_bam)
-        >>> print(samtools_phase_cmd)
-        samtools phase /path/to/in.bam
+    >>> from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
+    >>> input_bam = "/path/to/in.bam"
+    >>> samtools_phase_cmd = SamtoolsPhaseCommandline(input_bam=input_bam)
+    >>> print(samtools_phase_cmd)
+    samtools phase /path/to/in.bam
 
     """
     def __init__(self, cmd="samtools", **kwargs):
