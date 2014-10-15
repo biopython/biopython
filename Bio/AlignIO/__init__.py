@@ -13,8 +13,8 @@ can read in the sequences within these alignmenta using Bio.SeqIO.
 
 Bio.AlignIO is also documented at AlignIO_ and by
 a whole chapter in our tutorial:
-    - `HTML Tutorial`_
-    - `PDF Tutorial`_
+  - `HTML Tutorial`_
+  - `PDF Tutorial`_
 
 .. _AlignIO: http://biopython.org/wiki/AlignIO
 .. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html

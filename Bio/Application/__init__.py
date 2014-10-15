@@ -433,12 +433,12 @@ class AbstractCommandline(object):
 
         Default example usage:
 
-        from Bio.Emboss.Applications import WaterCommandline
-        water_cmd = WaterCommandline(gapopen=10, gapextend=0.5,
-                                     stdout=True, auto=True,
-                                     asequence="a.fasta", bsequence="b.fasta")
-        print "About to run:\n%s" % water_cmd
-        std_output, err_output = water_cmd()
+        >>> from Bio.Emboss.Applications import WaterCommandline
+        >>> water_cmd = WaterCommandline(gapopen=10, gapextend=0.5,
+        ... stdout=True, auto=True,
+        ... asequence="a.fasta", bsequence="b.fasta")
+        >>> print "About to run:\n%s" % water_cmd
+        >>> std_output, err_output = water_cmd()
 
         This functionality is similar to subprocess.check_output() added in
         Python 2.7. In general if you require more control over running the

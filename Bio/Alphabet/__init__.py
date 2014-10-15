@@ -17,9 +17,9 @@ class Alphabet(object):
     This class is used as a base class for other types of alphabets.
 
     Attributes:
-    letters -- list-like object containing the letters of the alphabet.
+        - letters - list-like object containing the letters of the alphabet.
                Usually it is a string when letters are single characters.
-    size    -- size of the alphabet's letters (e.g. 1 when letters are
+        - size    - size of the alphabet's letters (e.g. 1 when letters are
                single characters).
 
     """

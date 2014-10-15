@@ -27,16 +27,18 @@ class AlignmentIterator(object):
                  alphabet=single_letter_alphabet):
         """Create an AlignmentIterator object.
 
-        handle   - input file
-        count    - optional, expected number of records per alignment
-                   Recommend for fasta file format.
-        alphabet - optional, e.g. Bio.Alphabet.generic_protein
+            - handle   - input file
+            - count    - optional, expected number of records per alignment
+              Recommend for fasta file format.
+            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
-        - there should be a single non-optional argument, the handle,
-          and optional count and alphabet IN THAT ORDER.
-        - you do not have to require an alphabet (?).
-        - you can add additional optional arguments."""
+            - there should be a single non-optional argument, the handle,
+              and optional count and alphabet IN THAT ORDER.
+            - you do not have to require an alphabet (?).
+            - you can add additional optional arguments.
+
+        """
         self.handle = handle
         self.records_per_alignment = seq_count
         self.alphabet = alphabet
@@ -68,12 +70,12 @@ class AlignmentIterator(object):
 
         Example usage for (concatenated) PHYLIP files:
 
-        with open("many.phy","r") as myFile:
-            for alignment in PhylipIterator(myFile):
-                print "New alignment:"
-                for record in alignment:
-                    print record.id
-                    print record.seq
+        >>> with open("many.phy","r") as myFile:
+        ... for alignment in PhylipIterator(myFile):
+        ...   print "New alignment:"
+        ...   for record in alignment:
+        ...     print record.id
+        ...     print record.seq
         """
         return iter(self.__next__, None)
 

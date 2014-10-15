@@ -8,18 +8,6 @@
 following the DTD available on the NCBI FTP
 ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 
-Classes:
-BlastParser         Parses XML output from BLAST (direct use discouraged).
-                    This (now) returns a list of Blast records.
-                    Historically it returned a single Blast record.
-                    You are expected to use this via the parse or read functions.
-
-_XMLParser          Generic SAX parser (private).
-
-Functions:
-parse               Incremental parser, this is an iterator that returns
-                    Blast records.  It uses the BlastParser internally.
-read                Returns a single Blast record. Uses the BlastParser internally.
 """
 from __future__ import print_function
 
@@ -30,7 +18,7 @@ from functools import reduce
 
 
 class _XMLparser(ContentHandler):
-    """Generic SAX Parser
+    """Generic SAX Parser (private)
 
     Just a very basic SAX parser.
 
@@ -122,9 +110,14 @@ class _XMLparser(ContentHandler):
 class BlastParser(_XMLparser):
     """Parse XML BLAST data into a Record.Blast object
 
+    Parses XML output from BLAST (direct use discouraged).
+    This (now) returns a list of Blast records.
+    Historically it returned a single Blast record.
+    You are expected to use this via the parse or read functions.
+
     All XML 'action' methods are private methods and may be:
-    _start_TAG      called when the start tag is found
-    _end_TAG        called when the end tag is found
+        - `_start_TAG`     called when the start tag is found
+        - `_end_TAG`        called when the end tag is found
     """
 
     def __init__(self, debug=0):
@@ -569,6 +562,8 @@ class BlastParser(_XMLparser):
 def read(handle, debug=0):
     """Returns a single Blast record (assumes just one query).
 
+    Uses the BlastParser internally.
+
     This function is for use when there is one and only one BLAST
     result in your XML file.
 
@@ -594,6 +589,9 @@ def read(handle, debug=0):
 
 def parse(handle, debug=0):
     """Returns an iterator a Blast record for each query.
+
+    Incremental parser, this is an iterator that returns
+    Blast records.  It uses the BlastParser internally.
 
     handle - file handle to and XML file to parse
     debug - integer, amount of debug information to print

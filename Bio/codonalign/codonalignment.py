@@ -138,7 +138,9 @@ class CodonAlignment(MultipleSeqAlignment):
 
     def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
         """Method for constructing dn tree and ds tree.
+
         Argument:
+
             - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
             - tree_method  - Available methods include UPGMA and NJ.
         """
@@ -172,6 +174,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     """McDonald-Kreitman test for neutrality (PMID: 1904993) This method
     counts changes rather than sites (http://mkt.uab.es/mkt/help_mkt.asp).
     Arguments:
+
         - codon_alns  - list of CodonAlignment to compare (each
           CodonAlignment object corresponds to gene
           sampled from a species)
@@ -286,15 +289,17 @@ def _dijkstra(graph, start, end):
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
     However, an abvious bug in::
 
-    if D[child_node] >(<) D[node] + child_value:
+        if D[child_node] >(<) D[node] + child_value:
 
     is fixed.
     This function will return the distance between start and end.
 
     Arguments:
+
         - graph: Dictionnary of dictionnary (keys are vertices).
         - start: Start vertex.
         - end: End vertex.
+
     Output:
         List of vertices from the beggining to the end.
     """
@@ -360,8 +365,7 @@ def _count_replacement(codon_set, G):
 
 
 def _prim(G):
-    """Prim's algorithm to find minimum spanning tree. Code is adapted
-    from
+    """Prim's algorithm to find minimum spanning tree. Code is adapted from
     http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
     (PRIVATE).
     """
@@ -412,6 +416,7 @@ def _get_subgraph(codons, G):
 def _G_test(site_counts):
     """G test for 2x2 contingency table (PRIVATE).
     Argument:
+
         - site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
 
     >>> round(_G_test([17, 7, 42, 2]), 7)

@@ -74,13 +74,13 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
     This class is intended to be used via the Bio.AlignIO.parse() function
     by specifying the format as "fasta-m10" as shown in the following code:
 
-        from Bio import AlignIO
-        handle = ...
-        for a in AlignIO.parse(handle, "fasta-m10"):
-            assert len(a) == 2, "Should be pairwise!"
-            print("Alignment length %i" % a.get_alignment_length())
-            for record in a:
-                print("%s %s %s" % (record.seq, record.name, record.id))
+    >>> from Bio import AlignIO
+    >>> handle = ...
+    >>> for a in AlignIO.parse(handle, "fasta-m10"):
+    ...   assert len(a) == 2, "Should be pairwise!"
+    ...   print("Alignment length %i" % a.get_alignment_length())
+    ...   for record in a:
+    ...     print("%s %s %s" % (record.seq, record.name, record.id))
 
     Note that this is not a full blown parser for all the information
     in the FASTA output - for example, most of the header and all of the
