@@ -154,10 +154,12 @@ class PDBIO(object):
         @param select: selects which entities will be written.
         @type select:
             select hould have the following methods:
+
                 - accept_model(model)
                 - accept_chain(chain)
                 - accept_residue(residue)
                 - accept_atom(atom)
+                
             These methods should return 1 if the entity
             is to be written out, 0 otherwise.
 

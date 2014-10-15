@@ -233,18 +233,20 @@ class FragmentMapper(object):
     """
     def __init__(self, model, lsize=20, flength=5, fdir="."):
         """
-        @param model: the model that will be mapped
-        @type model: L{Model}
+        ::
+        
+            @param model: the model that will be mapped
+            @type model: L{Model}
 
-        @param lsize: number of fragments in the library
-        @type lsize: int
+            @param lsize: number of fragments in the library
+            @type lsize: int
 
-        @param flength: length of fragments in the library
-        @type flength: int
+            @param flength: length of fragments in the library
+            @type flength: int
 
-        @param fdir: directory where the definition files are
+            @param fdir: directory where the definition files are
             found (default=".")
-        @type fdir: string
+            @type fdir: string
         """
         if flength==5:
             self.edge=2

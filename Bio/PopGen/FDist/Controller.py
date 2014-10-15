@@ -33,7 +33,7 @@ class FDistController(object):
 
         fdist_dir is the directory where fdist2 is.
         ext is the extension of binaries (.exe on windows,
-          none on Unix)
+        none on Unix)
 
         """
         self.tmp_idx = 0
@@ -125,21 +125,23 @@ class FDistController(object):
         """Executes (d)fdist.
 
         Parameters:
-        npops - Number of populations
-        nsamples - Number of populations sampled
-        fst - expected Fst
-        sample_size - Sample size per population
-                For dfdist: if zero a sample size file has to be provided
-        mut - 1=Stepwise, 0=Infinite allele
-        num_sims - number of simulations
-        data_dir - Where the data is found
-        is_dominant - If true executes dfdist
-        theta - Theta (=2Nmu)
-        beta - Parameters for the beta prior
-        max_freq - Maximum allowed frequency of the commonest allele
+
+            - npops - Number of populations
+            - nsamples - Number of populations sampled
+            - fst - expected Fst
+            - sample_size - Sample size per population
+              For dfdist: if zero a sample size file has to be provided
+            - mut - 1=Stepwise, 0=Infinite allele
+            - num_sims - number of simulations
+            - data_dir - Where the data is found
+            - is_dominant - If true executes dfdist
+            - theta - Theta (=2Nmu)
+            - beta - Parameters for the beta prior
+            - max_freq - Maximum allowed frequency of the commonest allele
 
         Returns:
-        fst - Average Fst
+
+        - fst - Average Fst
 
         Important Note: This can take quite a while to run!
         """
@@ -194,9 +196,11 @@ class FDistController(object):
         """Executes fdist trying to force Fst.
 
         Parameters:
-        try_runs - Number of simulations on the part trying to get
-                   Fst correct
-        limit - Interval limit
+
+            - try_runs - Number of simulations on the part trying to get
+                       Fst correct
+            - limit - Interval limit
+            
         Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1

@@ -481,10 +481,11 @@ def get_support(target_tree, trees):
     """Calculate branch support given a target tree and a list of bootstrap
     replicate trees
 
-    :Parameters:
-        target_tree: Tree
-        trees: list
-            list of trees calculate branch support.
+    Attributes:
+
+        - target_tree: Tree
+        - trees: list
+          list of trees calculate branch support.
     """
     term_names = sorted(term.name
                         for term in target_tree.find_clades(terminal=True))

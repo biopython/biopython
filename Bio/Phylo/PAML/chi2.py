@@ -51,16 +51,18 @@ def _ln_gamma_function(alpha):
 def _incomplete_gamma(x, alpha):
     """Compute an incomplete gamma ratio.
 
-    Comments from Z. Yang:
-    Returns the incomplete gamma ratio I(x,alpha) where x is the upper
-           limit of the integration and alpha is the shape parameter.
-    returns (-1) if in error
-    ln_gamma_alpha = ln(Gamma(alpha)), is almost redundant.
-    (1) series expansion     if alpha>x or x<=1
-    (2) continued fraction   otherwise
-    RATNEST FORTRAN by
-    Bhattacharjee GP (1970) The incomplete gamma integral.  Applied Statistics,
-    19: 285-287 (AS32)
+    Comments from Z. Yang::
+
+        Returns the incomplete gamma ratio I(x,alpha) where x is the upper
+               limit of the integration and alpha is the shape parameter.
+        returns (-1) if in error
+        ln_gamma_alpha = ln(Gamma(alpha)), is almost redundant.
+        (1) series expansion     if alpha>x or x<=1
+        (2) continued fraction   otherwise
+        RATNEST FORTRAN by
+        Bhattacharjee GP (1970) The incomplete gamma integral.  Applied Statistics,
+        19: 285-287 (AS32)
+        
     """
     p = alpha
     g = _ln_gamma_function(alpha)
