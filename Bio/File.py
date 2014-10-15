@@ -10,7 +10,7 @@
 
 Classes:
 
-UndoHandle     File object decorator with support for undo-like operations.
+    - UndoHandle     File object decorator with support for undo-like operations.
 
 Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
@@ -54,9 +54,9 @@ def as_handle(handleish, mode='r', **kwargs):
 
     All other inputs are returned, and are *not* closed
 
-    - handleish  - Either a string or file handle
-    - mode       - Mode to open handleish (used only if handleish is a string)
-    - kwargs     - Further arguments to pass to open(...)
+        - handleish  - Either a string or file handle
+        - mode       - Mode to open handleish (used only if handleish is a string)
+        - kwargs     - Further arguments to pass to open(...)
 
     Example:
 
@@ -112,8 +112,9 @@ class UndoHandle(object):
     Saves lines in a LIFO fashion.
 
     Added methods:
-    saveline    Save a line to be returned next time.
-    peekline    Peek at the next line without consuming it.
+
+        - saveline    Save a line to be returned next time.
+        - peekline    Peek at the next line without consuming it.
 
     """
     def __init__(self, handle):
@@ -655,7 +656,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         Note that on Python 3 a bytes string is returned, not a typical
         unicode string.
 
-        NOTE - This functionality is not supported for every file format.
+        **NOTE** - This functionality is not supported for every file format.
         """
         # Pass the offset to the proxy
         row = self._con.execute(

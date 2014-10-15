@@ -293,12 +293,12 @@ class Motif(object):
         r"""Calculates the DPQ distance measure between motifs.
 
         It is calculated as a maximal value of DPQ formula (shown using LaTeX
-        markup, familiar to mathematicians):
+        markup, familiar to mathematicians)::
 
-        \sqrt{\sum_{i=1}^{alignment.len()} \sum_{k=1}^alphabet.len() \
-        \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
-           m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
-        }
+            \sqrt{\sum_{i=1}^{alignment.len()} \sum_{k=1}^alphabet.len() \
+            \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
+               m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
+            }
 
         over possible non-spaced alignemts of two motifs.  See this reference:
 
@@ -614,7 +614,7 @@ class Motif(object):
         uses the Berkeley weblogo service to download and save a weblogo of itself
 
         requires an internet connection.
-        The parameters from **kwds are passed directly to the weblogo server.
+        The parameters from ``**kwds`` are passed directly to the weblogo server.
         """
         from Bio._py3k import urlopen, urlencode, Request
 

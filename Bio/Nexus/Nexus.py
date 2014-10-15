@@ -1273,12 +1273,12 @@ class Nexus(object):
         still point to the same sites (not necessarily same positions),
         without including the deleted characters.
 
-        filename - Either a filename as a string (which will be opened,
-                   written to and closed), or a handle object (which will
-                   be written to but NOT closed).
-        interleave_by_partition - Optional name of partition (string)
-        omit_NEXUS - Boolean.  If true, the '#NEXUS' line normally at the
-                   start of the file is omitted.
+        - filename - Either a filename as a string (which will be opened,
+          written to and closed), or a handle object (which will
+          be written to but NOT closed).
+        - interleave_by_partition - Optional name of partition (string)
+        - omit_NEXUS - Boolean.  If true, the '#NEXUS' line normally at the
+          start of the file is omitted.
 
         Returns the filename/handle used to write the data.
         """

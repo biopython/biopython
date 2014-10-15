@@ -8,12 +8,14 @@
 The KGML pathway map is parsed into the object structure defined in
 KGML_Pathway.py in this module.
 
-Classes
-KGMLParser             Parses KGML file
+Classes:
 
-Functions
-read                   Returns a single Pathway object, using KGMLParser
-                       internally
+    - KGMLParser             Parses KGML file
+
+Functions:
+
+    - read                   Returns a single Pathway object, using KGMLParser
+      internally
 """
 
 from __future__ import print_function

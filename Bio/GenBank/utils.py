@@ -12,12 +12,13 @@ class FeatureValueCleaner(object):
 
     This class is designed to provide a mechanism to clean up and process
     values in the key/value pairs of GenBank features. This is useful
-    because in cases like:
+    because in cases like::
 
          /translation="MED
          YDPWNLRFQSKYKSRDA"
 
-    you'll end up with a value with \012s and spaces in it like:
+    you'll end up with a value with \012s and spaces in it like::
+    
         "MED\012 YDPWEL..."
 
     which you probably don't want.

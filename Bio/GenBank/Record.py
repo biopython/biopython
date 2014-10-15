@@ -6,10 +6,12 @@
 """Hold GenBank data in a straightforward format.
 
 classes:
-o Record - All of the information in a GenBank record.
-o Reference - hold reference data for a record.
-o Feature - Hold the information in a Feature Table.
-o Qualifier - Qualifiers on a Feature.
+
+    - Record - All of the information in a GenBank record.
+    - Reference - hold reference data for a record.
+    - Feature - Hold the information in a Feature Table.
+    - Qualifier - Qualifiers on a Feature.
+
 17-MAR-2009: added support for WGS and WGS_SCAFLD lines.  Ying Huang & Iddo Friedberg
 """
 # local stuff
@@ -25,16 +27,16 @@ def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
 
     Arguments:
 
-    o information - The string holding the information we want
-    wrapped in GenBank method.
+        - information - The string holding the information we want
+          wrapped in GenBank method.
 
-    o indent - The indentation on the lines we are writing.
+        - indent - The indentation on the lines we are writing.
 
-    o wrap_space - Whether or not to wrap only on spaces in the
-    information.
+        - wrap_space - Whether or not to wrap only on spaces in the
+          information.
 
-    o split_char - A specific character to split the lines on. By default
-    spaces are used.
+        - split_char - A specific character to split the lines on. By default
+          spaces are used.
     """
     info_length = Record.GB_LINE_LENGTH - indent
 
@@ -105,39 +107,40 @@ class Record(object):
     just interested in looking at GenBank data.
 
     Attributes:
-    o locus - The name specified after the LOCUS keyword in the GenBank
-    record. This may be the accession number, or a clone id or something else.
-    o size - The size of the record.
-    o residue_type - The type of residues making up the sequence in this
-    record. Normally something like RNA, DNA or PROTEIN, but may be as
-    esoteric as 'ss-RNA circular'.
-    o data_file_division - The division this record is stored under in
-    GenBank (ie. PLN -> plants; PRI -> humans, primates; BCT -> bacteria...)
-    o date - The date of submission of the record, in a form like '28-JUL-1998'
-    o accession - list of all accession numbers for the sequence.
-    o nid - Nucleotide identifier number.
-    o pid - Proteint identifier number
-    o version - The accession number + version (ie. AB01234.2)
-    o db_source - Information about the database the record came from
-    o gi - The NCBI gi identifier for the record.
-    o keywords - A list of keywords related to the record.
-    o segment - If the record is one of a series, this is info about which
-    segment this record is (something like '1 of 6').
-    o source - The source of material where the sequence came from.
-    o organism - The genus and species of the organism (ie. 'Homo sapiens')
-    o taxonomy - A listing of the taxonomic classification of the organism,
-    starting general and getting more specific.
-    o references - A list of Reference objects.
-    o comment - Text with any kind of comment about the record.
-    o features - A listing of Features making up the feature table.
-    o base_counts - A string with the counts of bases for the sequence.
-    o origin - A string specifying info about the origin of the sequence.
-    o sequence - A string with the sequence itself.
-    o contig - A string of location information for a CONTIG in a RefSeq file
-    o project - The genome sequencing project numbers
-                (will be replaced by the dblink cross-references in 2009).
-    o dblinks - The genome sequencing project number(s) and other links.
-                (will replace the project information in 2009).
+
+        - locus - The name specified after the LOCUS keyword in the GenBank
+          record. This may be the accession number, or a clone id or something else.
+        - size - The size of the record.
+        - residue_type - The type of residues making up the sequence in this
+          record. Normally something like RNA, DNA or PROTEIN, but may be as
+          esoteric as 'ss-RNA circular'.
+        - data_file_division - The division this record is stored under in
+          GenBank (ie. PLN -> plants; PRI -> humans, primates; BCT -> bacteria...)
+        - date - The date of submission of the record, in a form like '28-JUL-1998'
+        - accession - list of all accession numbers for the sequence.
+        - nid - Nucleotide identifier number.
+        - pid - Proteint identifier number
+        - version - The accession number + version (ie. AB01234.2)
+        - db_source - Information about the database the record came from
+        - gi - The NCBI gi identifier for the record.
+        - keywords - A list of keywords related to the record.
+        - segment - If the record is one of a series, this is info about which
+          segment this record is (something like '1 of 6').
+        - source - The source of material where the sequence came from.
+        - organism - The genus and species of the organism (ie. 'Homo sapiens')
+        - taxonomy - A listing of the taxonomic classification of the organism,
+          starting general and getting more specific.
+        - references - A list of Reference objects.
+        - comment - Text with any kind of comment about the record.
+        - features - A listing of Features making up the feature table.
+        - base_counts - A string with the counts of bases for the sequence.
+        - origin - A string specifying info about the origin of the sequence.
+        - sequence - A string with the sequence itself.
+        - contig - A string of location information for a CONTIG in a RefSeq file
+        - project - The genome sequencing project numbers
+          (will be replaced by the dblink cross-references in 2009).
+        - dblinks - The genome sequencing project number(s) and other links.
+          (will replace the project information in 2009).
     """
     # constants for outputting GenBank information
     GB_LINE_LENGTH = 79
@@ -509,15 +512,16 @@ class Reference(object):
     """Hold information from a GenBank reference.
 
     Attributes:
-    o number - The number of the reference in the listing of references.
-    o bases - The bases in the sequence the reference refers to.
-    o authors - String with all of the authors.
-    o consrtm - Consortium the authors belong to.
-    o title - The title of the reference.
-    o journal - Information about the journal where the reference appeared.
-    o medline_id - The medline id for the reference.
-    o pubmed_id - The pubmed_id for the reference.
-    o remark - Free-form remarks about the reference.
+
+        - number - The number of the reference in the listing of references.
+        - bases - The bases in the sequence the reference refers to.
+        - authors - String with all of the authors.
+        - consrtm - Consortium the authors belong to.
+        - title - The title of the reference.
+        - journal - Information about the journal where the reference appeared.
+        - medline_id - The medline id for the reference.
+        - pubmed_id - The pubmed_id for the reference.
+        - remark - Free-form remarks about the reference.
     """
     def __init__(self):
         self.number = ''
@@ -624,9 +628,10 @@ class Feature(object):
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
-    o key - The key name of the featue (ie. source)
-    o location - The string specifying the location of the feature.
-    o qualfiers - A listing Qualifier objects in the feature.
+
+        - key - The key name of the featue (ie. source)
+        - location - The string specifying the location of the feature.
+        - qualfiers - A listing Qualifier objects in the feature.
     """
     def __init__(self):
         self.key = ''
@@ -656,8 +661,9 @@ class Qualifier(object):
     """Hold information about a qualifier in a GenBank feature.
 
     Attributes:
-    o key - The key name of the qualifier (ie. /organism=)
-    o value - The value of the qualifier ("Dictyostelium discoideum").
+
+        - key - The key name of the qualifier (ie. /organism=)
+        - value - The value of the qualifier ("Dictyostelium discoideum").
     """
     def __init__(self):
         self.key = ''

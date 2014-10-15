@@ -52,13 +52,15 @@ def parse(handle, format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats:
-     - AlignAce
-     - MEME
+
+        - AlignAce
+        - MEME
 
     You can also use single-motif formats, although the Bio.Motif.read()
     function is simpler to use in this situation.
-     - jaspar-pfm
-     - jaspar-sites
+
+        - jaspar-pfm
+        - jaspar-sites
 
     For example:
 

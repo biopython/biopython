@@ -9,14 +9,15 @@ The KGML definition is as of release KGML v0.7.1
 (http://www.kegg.jp/kegg/xml/docs/)
 
 Classes:
-Pathway              Specifies graph information for the pathway map
-Relation             Specifies a relationship between two proteins or KOs, or
-                      protein and compound. There is an implied direction to
-                      the relationship in some cases.
-Reaction             A specific chemical reaction between a substrate and a
-                     product.
-Entry                A node in the pathway graph
-Graphics             Entry subelement describing its visual representation
+
+    - Pathway              Specifies graph information for the pathway map
+    - Relation             Specifies a relationship between two proteins or KOs, or
+                          protein and compound. There is an implied direction to
+                          the relationship in some cases.
+    - Reaction             A specific chemical reaction between a substrate and a 
+                         product.
+    - Entry                A node in the pathway graph
+    - Graphics             Entry subelement describing its visual representation
 """
 
 import time
@@ -248,15 +249,15 @@ class Entry(object):
     release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
-    id           The ID of the entry in the pathway map (integer)
-    names        List of KEGG IDs for the entry
-    type         The type of the entry
-    link         URL of information about the entry
-    reaction     List of KEGG IDs of the corresponding reactions (integer)
-    graphics     List of Graphics objects describing the Entry's visual
-                 representation
-    components   List of component node ID for this Entry ('group')
-    alt          List of alternate names for the Entry
+        - id           The ID of the entry in the pathway map (integer)
+        - names        List of KEGG IDs for the entry
+        - type         The type of the entry
+        - link         URL of information about the entry
+        - reaction     List of KEGG IDs of the corresponding reactions (integer)
+        - graphics     List of Graphics objects describing the Entry's visual 
+          representation
+        - components   List of component node ID for this Entry ('group')
+        - alt          List of alternate names for the Entry
 
     NOTE: The alt attribute represents a subelement of the substrate and
     product elements in the KGML file
@@ -733,11 +734,13 @@ class Relation(object):
     (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
-    entry1       The first Entry object node ID defining the relation (int)
-    entry2       The second Entry object node ID defining the relation (int)
-    type         The relation type
-    subtypes     List of subtypes for the relation, as a list of
-                 (name, value) tuples
+    
+        - entry1       The first Entry object node ID defining the relation (int)
+        - entry2       The second Entry object node ID defining the relation (int)
+        - type         The relation type
+        - subtypes     List of subtypes for the relation, as a list of 
+                     (name, value) tuples
+
     """
     def __init__(self):
         self._entry1 = None

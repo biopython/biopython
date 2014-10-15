@@ -70,7 +70,7 @@ class InsdcScanner(object):
     def find_start(self):
         """Read in lines until find the ID/LOCUS line, which is returned.
 
-        Any preamble (such as the header used by the NCBI on *.seq.gz archives)
+        Any preamble (such as the header used by the NCBI on ``*.seq.gz`` archives)
         will we ignored."""
         while True:
             if self.line:
@@ -211,7 +211,7 @@ class InsdcScanner(object):
     def parse_feature(self, feature_key, lines):
         """Expects a feature as a list of strings, returns a tuple (key, location, qualifiers)
 
-        For example given this GenBank feature:
+        For example given this GenBank feature::
 
              CDS             complement(join(490883..490885,1..879))
                              /locus_tag="NEQ001"
@@ -393,14 +393,16 @@ class InsdcScanner(object):
         This method is intended for use with the "old" code in Bio.GenBank
 
         Arguments:
-        handle - A handle with the information to parse.
-        consumer - The consumer that should be informed of events.
-        do_features - Boolean, should the features be parsed?
-                      Skipping the features can be much faster.
+
+            - handle - A handle with the information to parse.
+            - consumer - The consumer that should be informed of events.
+            - do_features - Boolean, should the features be parsed?
+                          Skipping the features can be much faster.
 
         Return values:
-        true  - Passed a record
-        false - Did not find a record
+
+            - true  - Passed a record
+            - false - Did not find a record
         """
         # Should work with both EMBL and GenBank files provided the
         # equivalent Bio.GenBank._FeatureConsumer methods are called...
@@ -482,8 +484,8 @@ class InsdcScanner(object):
 
         Each CDS feature becomes a SeqRecord.
 
-        alphabet - Used for any sequence found in a translation field.
-        tags2id  - Tupple of three strings, the feature keys to use
+            - alphabet - Used for any sequence found in a translation field.
+            - tags2id  - Tupple of three strings, the feature keys to use
                    for the record id, name and description,
 
         This method is intended for use in Bio.SeqIO
@@ -643,6 +645,7 @@ class EmblScanner(InsdcScanner):
         fields = [entry.strip() for entry in fields]
         """
         The tokens represent:
+        
            0. Primary accession number
            (space sep)
            1. ??? (e.g. standard)
@@ -665,6 +668,7 @@ class EmblScanner(InsdcScanner):
         assert len(fields) == 7
         """
         The tokens represent:
+
            0. Primary accession number
            1. Sequence version number
            2. Topology: 'circular' or 'linear'

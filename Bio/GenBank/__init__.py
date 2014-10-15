@@ -18,25 +18,27 @@ the FeatureParser (used in Bio.SeqIO).
 
 To use the Bio.GenBank parser, there are two helper functions:
 
-read                  Parse a handle containing a single GenBank record
-                      as Bio.GenBank specific Record objects.
-parse                 Iterate over a handle containing multiple GenBank
-                      records as Bio.GenBank specific Record objects.
+    - read                  Parse a handle containing a single GenBank record
+      as Bio.GenBank specific Record objects.
+    - parse                 Iterate over a handle containing multiple GenBank
+      records as Bio.GenBank specific Record objects.
 
 The following internal classes are not intended for direct use and may
 be deprecated in a future release.
 
 Classes:
-Iterator              Iterate through a file of GenBank entries
-ErrorFeatureParser    Catch errors caused during parsing.
-FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
-RecordParser          Parse GenBank data into a Record object.
+
+    - Iterator              Iterate through a file of GenBank entries
+    - ErrorFeatureParser    Catch errors caused during parsing.
+    - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
+    - RecordParser          Parse GenBank data into a Record object.
 
 Exceptions:
-ParserFailureError    Exception indicating a failure in the parser (ie.
-                      scanner or consumer)
-LocationParserError   Exception indiciating a problem with the spark based
-                      location parser.
+
+    - ParserFailureError    Exception indicating a failure in the parser (ie.
+      scanner or consumer)
+    - LocationParserError   Exception indiciating a problem with the spark based
+      location parser.
 
 """
 from __future__ import print_function
@@ -370,9 +372,10 @@ class Iterator(object):
         """Initialize the iterator.
 
         Arguments:
-        o handle - A handle with GenBank entries to iterate through.
-        o parser - An optional parser to pass the entries through before
-        returning them. If None, then the raw entry will be returned.
+
+            - handle - A handle with GenBank entries to iterate through.
+            - parser - An optional parser to pass the entries through before
+              returning them. If None, then the raw entry will be returned.
         """
         self.handle = handle
         self._parser = parser
@@ -431,16 +434,17 @@ class FeatureParser(object):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
-        o debug_level - An optional argument that species the amount of
-        debugging information the parser should spit out. By default we have
-        no debugging info (the fastest way to do things), but if you want
-        you can set this as high as two and see exactly where a parse fails.
-        o use_fuzziness - Specify whether or not to use fuzzy representations.
-        The default is 1 (use fuzziness).
-        o feature_cleaner - A class which will be used to clean out the
-        values of features. This class must implement the function
-        clean_value. GenBank.utils has a "standard" cleaner class, which
-        is used by default.
+
+            - debug_level - An optional argument that species the amount of
+              debugging information the parser should spit out. By default we have
+              no debugging info (the fastest way to do things), but if you want
+              you can set this as high as two and see exactly where a parse fails.
+            - use_fuzziness - Specify whether or not to use fuzzy representations.
+              The default is 1 (use fuzziness).
+            - feature_cleaner - A class which will be used to clean out the
+              values of features. This class must implement the function
+              clean_value. GenBank.utils has a "standard" cleaner class, which
+              is used by default.
         """
         self._scanner = GenBankScanner(debug_level)
         self.use_fuzziness = use_fuzziness
@@ -468,10 +472,11 @@ class RecordParser(object):
         """Initialize the parser.
 
         Arguments:
-        o debug_level - An optional argument that species the amount of
-        debugging information the parser should spit out. By default we have
-        no debugging info (the fastest way to do things), but if you want
-        you can set this as high as two and see exactly where a parse fails.
+
+            - debug_level - An optional argument that species the amount of
+              debugging information the parser should spit out. By default we have
+              no debugging info (the fastest way to do things), but if you want
+              you can set this as high as two and see exactly where a parse fails.
         """
         self._scanner = GenBankScanner(debug_level)
 
@@ -605,10 +610,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return (PRIVATE).
 
     Attributes:
-    o use_fuzziness - specify whether or not to parse with fuzziness in
-    feature locations.
-    o feature_cleaner - a class that will be used to provide specialized
-    cleaning-up of feature values.
+
+        - use_fuzziness - specify whether or not to parse with fuzziness in
+        feature locations.
+        - feature_cleaner - a class that will be used to provide specialized
+        cleaning-up of feature values.
     """
     def __init__(self, use_fuzziness, feature_cleaner=None):
         from Bio.SeqRecord import SeqRecord
@@ -709,11 +715,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def project(self, content):
         """Handle the information from the PROJECT line as a list of projects.
 
-        e.g.
-        PROJECT     GenomeProject:28471
+        e.g.::
 
-        or:
-        PROJECT     GenomeProject:13543  GenomeProject:99999
+            PROJECT     GenomeProject:28471
+
+        or::
+            
+            PROJECT     GenomeProject:13543  GenomeProject:99999
 
         This is stored as dbxrefs in the SeqRecord to be consistent with the
         projected switch of this line to DBLINK in future GenBank versions.
@@ -728,23 +736,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         This line type is expected to replace the PROJECT line in 2009. e.g.
 
-        During transition:
+        During transition::
 
-        PROJECT     GenomeProject:28471
-        DBLINK      Project:28471
-                    Trace Assembly Archive:123456
+            PROJECT     GenomeProject:28471
+            DBLINK      Project:28471
+                        Trace Assembly Archive:123456
 
-        Once the project line is dropped:
+        Once the project line is dropped::
 
-        DBLINK      Project:28471
-                    Trace Assembly Archive:123456
+            DBLINK      Project:28471
+                        Trace Assembly Archive:123456
 
         Note GenomeProject -> Project.
 
         We'll have to see some real examples to be sure, but based on the
         above example we can expect one reference per line.
 
-        Note that at some point the NCBI have included an extra space, e.g.
+        Note that at some point the NCBI have included an extra space, e.g.::
 
         DBLINK      Project: 28471
         """
@@ -869,7 +877,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def _split_reference_locations(self, location_string):
         """Get reference locations out of a string of reference information
 
-        The passed string should be of the form:
+        The passed string should be of the form::
 
             1 to 20; 20 to 100
 
