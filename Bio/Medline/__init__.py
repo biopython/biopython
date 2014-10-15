@@ -102,11 +102,11 @@ def parse(handle):
 
     Typical usage:
 
-        from Bio import Medline
-        with open("mymedlinefile") as handle:
-            records = Medline.parse(handle)
-            for record in record:
-                print(record['TI'])
+        >>> from Bio import Medline
+        >>> with open("mymedlinefile") as handle:
+        ...     records = Medline.parse(handle)
+        ...     for record in record:
+        ...         print(record['TI'])
 
     """
     #TODO - Turn that into a working doctest
@@ -150,10 +150,10 @@ def read(handle):
 
     Typical usage:
 
-        from Bio import Medline
-        with open("mymedlinefile") as handle:
-            record = Medline.read(handle)
-            print(record['TI'])
+        >>> from Bio import Medline
+        >>> with open("mymedlinefile") as handle:
+        ...     record = Medline.read(handle)
+        ...     print(record['TI'])
 
     """
     #TODO - Turn that into a working doctest

@@ -11,11 +11,11 @@ to work from, these classes will estimate parameters of the model.
 
 This aims to estimate two parameters:
 
-* a_{kl} -- the number of times there is a transition from k to l in the
-training data.
+    - a_{kl} -- the number of times there is a transition from k to l in the
+      training data.
 
-* e_{k}(b) -- the number of emissions of the state b from the letter k
-in the training data.
+    - e_{k}(b) -- the number of emissions of the state b from the letter k
+      in the training data.
 """
 # standard modules
 import math

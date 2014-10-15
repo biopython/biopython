@@ -12,11 +12,13 @@ http://www.expasy.ch/enzyme/
 Tested with the release of 03-Mar-2009.
 
 Functions:
-read       Reads a file containing one ENZYME entry
-parse      Reads a file containing multiple ENZYME entries
+
+    - read       Reads a file containing one ENZYME entry
+    - parse      Reads a file containing multiple ENZYME entries
 
 Classes:
-Record     Holds ENZYME data.
+
+    - Record     Holds ENZYME data.
 
 """
 
@@ -57,16 +59,16 @@ class Record(dict):
 Holds information from an ExPASy ENZYME record as a Python dictionary.
 
 Each record contains the following keys:
-    ID: EC number
-    DE: Recommended name
-    AN: Alternative names (if any)
-    CA: Catalytic activity
-    CF: Cofactors (if any)
-    PR: Pointers to the Prosite documentation entrie(s) that
-        correspond to the enzyme (if any)
-    DR: Pointers to the Swiss-Prot protein sequence entrie(s)
-        that correspond to the enzyme (if any)
-    CC: Comments
+    - ID: EC number
+    - DE: Recommended name
+    - AN: Alternative names (if any)
+    - CA: Catalytic activity
+    - CF: Cofactors (if any)
+    - PR: Pointers to the Prosite documentation entrie(s) that
+      correspond to the enzyme (if any)
+    - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
+      that correspond to the enzyme (if any)
+    - CC: Comments
 """
 
     def __init__(self):

@@ -13,59 +13,61 @@ A list of the Entrez utilities is available at:
 http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
 
 Variables:
-email        Set the Entrez email parameter (default is not set).
-tool         Set the Entrez tool parameter (default is  biopython).
+
+    - email        Set the Entrez email parameter (default is not set).
+    - tool         Set the Entrez tool parameter (default is  biopython).
 
 Functions:
-efetch       Retrieves records in the requested format from a list of one or
-             more primary IDs or from the user's environment
-epost        Posts a file containing a list of primary IDs for future use in
-             the user's environment to use with subsequent search strategies
-esearch      Searches and retrieves primary IDs (for use in EFetch, ELink,
-             and ESummary) and term translations and optionally retains
-             results for future use in the user's environment.
-elink        Checks for the existence of an external or Related Articles link
-             from a list of one or more primary IDs.  Retrieves primary IDs
-             and relevancy scores for links to Entrez databases or Related
-             Articles;  creates a hyperlink to the primary LinkOut provider
-             for a specific ID and database, or lists LinkOut URLs
-             and Attributes for multiple IDs.
-einfo        Provides field index term counts, last update, and available
-             links for each database.
-esummary     Retrieves document summaries from a list of primary IDs or from
-             the user's environment.
-egquery      Provides Entrez database counts in XML for a single search
-             using Global Query.
-espell       Retrieves spelling suggestions.
 
-read         Parses the XML results returned by any of the above functions.
-             Typical usage is:
+    - efetch       Retrieves records in the requested format from a list of one or
+      more primary IDs or from the user's environment
+    - epost        Posts a file containing a list of primary IDs for future use in
+      the user's environment to use with subsequent search strategies
+    - esearch      Searches and retrieves primary IDs (for use in EFetch, ELink,
+      and ESummary) and term translations and optionally retains
+      results for future use in the user's environment.
+    - elink        Checks for the existence of an external or Related Articles link
+      from a list of one or more primary IDs.  Retrieves primary IDs
+      and relevancy scores for links to Entrez databases or Related
+      Articles;  creates a hyperlink to the primary LinkOut provider
+      for a specific ID and database, or lists LinkOut URLs
+      and Attributes for multiple IDs.
+    - einfo        Provides field index term counts, last update, and available
+      links for each database.
+    - esummary     Retrieves document summaries from a list of primary IDs or from
+      the user's environment.
+    - egquery      Provides Entrez database counts in XML for a single search
+      using Global Query.
+    - espell       Retrieves spelling suggestions.
 
-             >>> from Bio import Entrez
-             >>> Entrez.email = "Your.Name.Here@example.org"
-             >>> handle = Entrez.einfo() # or esearch, efetch, ...
-             >>> record = Entrez.read(handle)
-             >>> handle.close()
+    - read         Parses the XML results returned by any of the above functions.
+      Typical usage is:
 
-             where record is now a Python dictionary or list.
+          >>> from Bio import Entrez
+          >>> Entrez.email = "Your.Name.Here@example.org"
+          >>> handle = Entrez.einfo() # or esearch, efetch, ...
+          >>> record = Entrez.read(handle)
+          >>> handle.close()
 
-parse        Parses the XML results returned by those of the above functions
-             which can return multiple records - such as efetch, esummary
-             and elink. Typical usage is:
+       where record is now a Python dictionary or list.
 
-             >>> handle = Entrez.efetch("pubmed", id="19304878,14630660", retmode="xml")
-             >>> records = Entrez.parse(handle)
-             >>> for record in records:
-             ...     # each record is a Python dictionary or list.
-             ...     print(record['MedlineCitation']['Article']['ArticleTitle'])
-             Biopython: freely available Python tools for computational molecular biology and bioinformatics.
-             PDB file parser and structure class implemented in Python.
-             >>> handle.close()
+    - parse        Parses the XML results returned by those of the above functions
+      which can return multiple records - such as efetch, esummary
+      and elink. Typical usage is:
 
-             This function is appropriate only if the XML file contains
-             multiple records, and is particular useful for large files.
+          >>> handle = Entrez.efetch("pubmed", id="19304878,14630660", retmode="xml")
+          >>> records = Entrez.parse(handle)
+          >>> for record in records:
+          ...     # each record is a Python dictionary or list.
+          ...     print(record['MedlineCitation']['Article']['ArticleTitle'])
+          Biopython: freely available Python tools for computational molecular biology and bioinformatics.
+          PDB file parser and structure class implemented in Python.
+          >>> handle.close()
 
-_open        Internally used function.
+      This function is appropriate only if the XML file contains
+      multiple records, and is particular useful for large files.
+
+    - _open        Internally used function.
 
 """
 from __future__ import print_function
@@ -127,7 +129,7 @@ def efetch(db, **keywords):
     LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
     >>> handle.close()
 
-    Warning: The NCBI changed the default retmode in Feb 2012, so many
+    **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
