@@ -141,19 +141,19 @@ class PDBList(object):
 
         Gets and parses the file from the PDB server in the format
         (the first pdb_code column is the one used). The file looks
-        like this:
+        like this::
 
-         LIST OF OBSOLETE COORDINATE ENTRIES AND SUCCESSORS
-        OBSLTE    31-JUL-94 116L     216L
-        ...
-        OBSLTE    29-JAN-96 1HFT     2HFT
-        OBSLTE    21-SEP-06 1HFV     2J5X
-        OBSLTE    21-NOV-03 1HG6
-        OBSLTE    18-JUL-84 1HHB     2HHB 3HHB
-        OBSLTE    08-NOV-96 1HID     2HID
-        OBSLTE    01-APR-97 1HIU     2HIU
-        OBSLTE    14-JAN-04 1HKE     1UUZ
-        ...
+             LIST OF OBSOLETE COORDINATE ENTRIES AND SUCCESSORS
+            OBSLTE    31-JUL-94 116L     216L
+            ...
+            OBSLTE    29-JAN-96 1HFT     2HFT
+            OBSLTE    21-SEP-06 1HFV     2J5X
+            OBSLTE    21-NOV-03 1HG6
+            OBSLTE    18-JUL-84 1HHB     2HHB 3HHB
+            OBSLTE    08-NOV-96 1HID     2HID
+            OBSLTE    01-APR-97 1HIU     2HIU
+            OBSLTE    14-JAN-04 1HKE     1UUZ
+            ...
 
         """
         url = self.pdb_server + '/pub/pdb/data/status/obsolete.dat'
@@ -174,7 +174,7 @@ class PDBList(object):
         stores it in a local file tree.
 
         The PDB structure's file name is returned as a single string.
-        If obsolete == True, the file will be saved in a special file tree.
+        If obsolete ``==`` True, the file will be saved in a special file tree.
 
         @param pdir: put the file in this directory (default: create a PDB-style directory tree)
         @type pdir: string

@@ -44,9 +44,9 @@ class Reaction(object):
       a S1 + b S2 + ... --> c P1 + d P2 + ...
 
     where
-    - a, b, c, d ... are positive numeric stochiometric coefficients,
-    - S1, S2, ... are substrates
-    - P1, P2, ... are products
+        - a, b, c, d ... are positive numeric stochiometric coefficients,
+        - S1, S2, ... are substrates
+        - P1, P2, ... are products
 
     A Reaction should be viewed as the net result of one or more individual
     reaction steps, where each step is potentially facilitated by a different
@@ -55,16 +55,16 @@ class Reaction(object):
 
     Attributes:
 
-    reactants   -- map of involved species to their stochiometric coefficients:
-                     reactants[S] = stochiometric constant for S
-    catalysts   -- list of tuples of catalysts required for this reaction
-    reversible  -- true iff reaction is reversible
-    data        -- reference to arbitrary additional data
+        - reactants   -- map of involved species to their stochiometric coefficients:
+          reactants[S] = stochiometric constant for S
+        - catalysts   -- list of tuples of catalysts required for this reaction
+        - reversible  -- true iff reaction is reversible
+        - data        -- reference to arbitrary additional data
 
     Invariants:
 
-    for all S in reactants: reactants[S] != 0
-    for all C in catalysts: catalysts[C] != 0
+        - for all S in reactants: reactants[S] != 0
+        - for all C in catalysts: catalysts[C] != 0
 
     """
 
@@ -198,11 +198,11 @@ class System(object):
 
         Returns (species, reactions, stoch) where
 
-            species    = ordered list of species in this system
-            reactions  = ordered list of reactions in this system
-            stoch      = 2D array where stoch[i][j] is coef of the
-                         jth species in the ith reaction, as defined
-                         by species and reactions above
+            - species    = ordered list of species in this system
+            - reactions  = ordered list of reactions in this system
+            - stoch      = 2D array where stoch[i][j] is coef of the
+              jth species in the ith reaction, as defined
+              by species and reactions above
         """
         # Note: This an inefficient and ugly temporary implementation.
         #       To be practical, stochiometric matrices should probably
@@ -228,7 +228,7 @@ class Interaction(object):
 
     Attributes:
 
-    data      -- reference to arbitrary additional data
+        - data      -- reference to arbitrary additional data
     """
 
     def __init_(self, data):

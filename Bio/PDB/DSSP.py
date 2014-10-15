@@ -91,16 +91,16 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     ::
 
-    @param in_file: pdb file
-    @type in_file: string ::
+        @param in_file: pdb file
+        @type in_file: string ::
 
-    @param DSSP: DSSP executable (argument to os.system)
-    @type DSSP: string ::
+        @param DSSP: DSSP executable (argument to os.system)
+        @type DSSP: string ::
 
-    @return: a dictionary that maps (chainid, resid) to
-        amino acid type, secondary structure code and
-        accessibility.
-    @rtype: {}
+        @return: a dictionary that maps (chainid, resid) to
+            amino acid type, secondary structure code and
+            accessibility.
+        @rtype: {}
     """
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.

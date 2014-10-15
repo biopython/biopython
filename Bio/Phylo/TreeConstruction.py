@@ -22,15 +22,17 @@ class _Matrix(object):
     """A base class for distance matrix or scoring matrix that accepts
     a list of names and a lower triangular matrix.
 
-    matrix = [[0],
-              [1, 0],
-              [2, 3, 0],
-              [4, 5, 6, 0]]
-    represents the symmetric matrix of
-    [0,1,2,4]
-    [1,0,3,5]
-    [2,3,0,6]
-    [4,5,6,0]
+    ::
+    
+        matrix = [[0],
+                  [1, 0],
+                  [2, 3, 0],
+                  [4, 5, 6, 0]]
+        represents the symmetric matrix of
+        [0,1,2,4]
+        [1,0,3,5]
+        [2,3,0,6]
+        [4,5,6,0]
 
     :Parameters:
         names : list
@@ -290,8 +292,7 @@ class _Matrix(object):
 
 
 class _DistanceMatrix(_Matrix):
-    """Distance matrix class that can be used for distance based tree
-     algorithms.
+    """Distance matrix class that can be used for distance based tree algorithms.
     All diagonal elements will be zero no matter what the users provide.
     """
 
@@ -337,28 +338,29 @@ class DistanceCalculator(object):
     GAGATCTCCGCCC Epsilon
     CAGTTCGCCACAA Gamma
 
-    DNA calculator with 'identity' model:
+    DNA calculator with 'identity' model::
 
-    >>> calculator = DistanceCalculator('identity')
-    >>> dm = calculator.get_distance(aln)
-    >>> print dm
-    Alpha   0
-    Beta    0.230769230769  0
-    Gamma   0.384615384615  0.230769230769  0
-    Delta   0.538461538462  0.538461538462  0.538461538462  0
-    Epsilon 0.615384615385  0.384615384615  0.461538461538  0.153846153846  0
-            Alpha           Beta            Gamma           Delta           Epsilon
+        >>> calculator = DistanceCalculator('identity')
+        >>> dm = calculator.get_distance(aln)
+        >>> print dm
+        Alpha   0
+        Beta    0.230769230769  0
+        Gamma   0.384615384615  0.230769230769  0
+        Delta   0.538461538462  0.538461538462  0.538461538462  0
+        Epsilon 0.615384615385  0.384615384615  0.461538461538  0.153846153846  0
+                Alpha           Beta            Gamma           Delta           Epsilon
 
-    Protein calculator with 'blosum62' model:
-    >>> calculator = DistanceCalculator('blosum62')
-    >>> dm = calculator.get_distance(aln)
-    >>> print dm
-    Alpha   0
-    Beta    0.369047619048  0
-    Gamma   0.493975903614  0.25            0
-    Delta   0.585365853659  0.547619047619  0.566265060241  0
-    Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
-            Alpha           Beta            Gamma           Delta           Epsilon
+    Protein calculator with 'blosum62' model::
+
+        >>> calculator = DistanceCalculator('blosum62')
+        >>> dm = calculator.get_distance(aln)
+        >>> print dm
+        Alpha   0
+        Beta    0.369047619048  0
+        Gamma   0.493975903614  0.25            0
+        Delta   0.585365853659  0.547619047619  0.566265060241  0
+        Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
+                Alpha           Beta            Gamma           Delta           Epsilon
     """
 
     dna_alphabet = ['A', 'T', 'C', 'G']

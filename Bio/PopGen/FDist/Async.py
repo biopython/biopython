@@ -27,10 +27,11 @@ class FDistAsync(FDistController):
         """Constructor.
 
         Parameters:
-        fdist_dir - Where fdist can be found, if = "", then it
-            should be on the path.
-        ext - Extension of binary names (e.g. nothing on Unix,
-              ".exe" on Windows
+        
+          - fdist_dir - Where fdist can be found, if = "", then it
+              should be on the path.
+          - ext - Extension of binary names (e.g. nothing on Unix,
+                ".exe" on Windows
         """
         FDistController.__init__(self, fdist_dir, ext)
 
@@ -77,12 +78,13 @@ class SplitFDist(object):
         """Constructor.
 
            Parameters:
-           report_fun - Function that is called when a single packet is
+           
+             - report_fun - Function that is called when a single packet is
                run, it should have a single parameter: Fst.
-           num_thr - Number of desired threads, typically the number
+             - num_thr - Number of desired threads, typically the number
                of cores.
-           split_size - Size that a full simulation will be split in.
-           ext - Binary extension name (e.g. nothing on Unix, '.exe' on
+             - split_size - Size that a full simulation will be split in.
+             - ext - Binary extension name (e.g. nothing on Unix, '.exe' on
                Windows).
         """
         self.async = Local.Local(num_thr)
