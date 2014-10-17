@@ -731,4 +731,3 @@ class JASPAR5(object):
             return True
 
         return False
-

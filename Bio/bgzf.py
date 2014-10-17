@@ -849,4 +849,3 @@ if __name__ == "__main__":
     #Doing close with write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")
-

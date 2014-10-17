@@ -295,4 +295,3 @@ class DisorderedEntityWrapper(object):
     def disordered_get_list(self):
         "Return list of children."
         return list(self.child_dict.values())
-

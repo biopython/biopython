@@ -759,4 +759,3 @@ class Relation(object):
             subtype.attrib[name] = str(value)
             relation.append(subtype)
         return relation
-        

@@ -141,4 +141,3 @@ def _igam(a, x):
 #    from scipy.stats import chisqprob
 #except ImportError:
 #    pass
-

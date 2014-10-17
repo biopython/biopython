@@ -71,4 +71,3 @@ default_codon_alphabet = get_codon_alphabet(default_codon_table)
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

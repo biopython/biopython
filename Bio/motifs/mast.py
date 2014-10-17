@@ -161,4 +161,3 @@ def __read_section_iii(record, handle):
     for line in handle:
         if line.strip():
             break
-

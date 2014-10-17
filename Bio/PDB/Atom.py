@@ -333,4 +333,3 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy>self.last_occupancy:
             self.last_occupancy=occupancy
             self.disordered_select(altloc)
-

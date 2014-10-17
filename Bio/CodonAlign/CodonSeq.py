@@ -1214,4 +1214,3 @@ def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

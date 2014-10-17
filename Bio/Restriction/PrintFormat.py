@@ -419,4 +419,3 @@ class PrintFormat(object):
             into = Join((into,
                          str(name).ljust(self.NameWidth), ' :  ', stringsite, '\n'))
         return into
-
