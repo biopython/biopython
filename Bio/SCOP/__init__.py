@@ -60,6 +60,7 @@ from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
+__docformat__ = "restructuredtext en"
 
 nodeCodeDict = { 'cl':'class', 'cf':'fold', 'sf':'superfamily',
                  'fa':'family', 'dm':'protein', 'sp':'species', 'px':'domain'}

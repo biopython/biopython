@@ -71,11 +71,12 @@ except:
     raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                        "Bio.motifs.jaspar.db")
 
-
 from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 
 from Bio.motifs import jaspar, matrix
 from warnings import warn
+
+__docformat__ = "restructuredtext en"
 
 JASPAR_DFLT_COLLECTION = 'CORE'
 

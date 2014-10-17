@@ -36,6 +36,7 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 from Bio.SCOP.Residues import Residues
 
+__docformat__ = "restructuredtext en"
 
 def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.

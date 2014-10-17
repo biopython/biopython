@@ -17,6 +17,8 @@ function. If you ran eprimer3 with multiple targets, use the parse
 function to iterate over the retsults.
 """
 
+__docformat__ = "restructuredtext en"
+
 # --- primer3
 
 

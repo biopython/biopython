@@ -16,6 +16,7 @@ import xml.sax
 from xml.sax.handler import ContentHandler
 from functools import reduce
 
+__docformat__ = "restructuredtext en"
 
 class _XMLparser(ContentHandler):
     """Generic SAX Parser (private)

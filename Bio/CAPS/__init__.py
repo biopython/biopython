@@ -14,6 +14,7 @@ http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=8
 Copyright Jonathan Taylor 2005
 """
 
+__docformat__ = "restructuredtext en"
 
 class DifferentialCutsite(object):
     """A differential cutsite is a location in an alignment where an enzyme cuts

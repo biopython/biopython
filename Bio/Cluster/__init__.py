@@ -7,6 +7,7 @@ import numpy
 
 from Bio.Cluster.cluster import *
 
+__docformat__ = "restructuredtext en"
 
 def _treesort(order, nodeorder, nodecounts, tree):
     # Find the order of the nodes consistent with the hierarchical clustering

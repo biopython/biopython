@@ -14,6 +14,8 @@ from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
 import math, random
 
+__docformat__ = "restructuredtext en"
+
 class Motif(object):
     """
     A class representing sequence motifs.

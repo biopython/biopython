@@ -12,6 +12,9 @@ The info on this page was obtained from::
     
 and was extracted using the code in 'get_matrices.py.'
 """
+
+__docformat__ = "restructuredtext en"
+
 # a list of all available substitution matrices
 available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'blosum30', 'blosum35', 'blosum40', 'blosum45',

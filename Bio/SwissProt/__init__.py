@@ -26,6 +26,7 @@ from __future__ import print_function
 
 from Bio._py3k import _as_string
 
+__docformat__ = "restructuredtext en"
 
 class Record(object):
     """Holds information from a SwissProt record.

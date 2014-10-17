@@ -251,6 +251,7 @@ _srt = b".srt"
 _mft = b".mft"
 _flag = b"\xff"
 
+__docformat__ = "restructuredtext en"
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).

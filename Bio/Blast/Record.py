@@ -24,6 +24,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
+__docformat__ = "restructuredtext en"
 
 class Header(object):
     """Saves information from a blast header.

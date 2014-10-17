@@ -14,6 +14,7 @@ from Bio.Data import SCOPData
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
+__docformat__ = "restructuredtext en"
 
 class StructureAlignment(object):
     """

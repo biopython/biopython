@@ -50,6 +50,7 @@ from reportlab.graphics.shapes import *
 
 from math import pi
 
+__docformat__ = "restructuredtext en"
 
 ################################################################################
 # METHODS

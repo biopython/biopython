@@ -21,6 +21,7 @@ rapid mutation-behavior.
 # standard modules
 import random
 
+__docformat__ = "restructuredtext en"
 
 class UniformCrossover(object):
     """Perform single point crossover between genomes at some defined rates.

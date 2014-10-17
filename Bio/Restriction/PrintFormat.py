@@ -16,6 +16,8 @@ from Bio._py3k import range
 
 from Bio.Restriction import RanaConfig as RanaConf
 
+__docformat__ = "restructuredtext en"
+
 """
 Usage:
 

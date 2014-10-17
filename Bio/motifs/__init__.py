@@ -19,6 +19,7 @@ from Bio._py3k import range
 
 import math
 
+__docformat__ = "restructuredtext en"
 
 def create(instances, alphabet=None):
     instances = Instances(instances, alphabet)

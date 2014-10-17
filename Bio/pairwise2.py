@@ -155,6 +155,8 @@ type help(pairwise2.align.localds) at the Python prompt.
 
 from __future__ import print_function
 
+__docformat__ = "restructuredtext en"
+
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 

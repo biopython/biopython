@@ -19,6 +19,8 @@ internally.  This will give SeqRecord objects for each contig sequence.
 from Bio import Seq
 from Bio.Alphabet import generic_dna
 
+__docformat__ = "restructuredtext en"
+
 CKEYWORDS = ['CHROMAT_FILE', 'ABI_THUMBPRINT', 'PHRED_VERSION', 'CALL_METHOD',
         'QUALITY_LEVELS', 'TIME', 'TRACE_ARRAY_MIN_INDEX', 'TRACE_ARRAY_MAX_INDEX',
         'TRIM', 'TRACE_PEAK_AREA_RATIO', 'CHEM', 'DYE']

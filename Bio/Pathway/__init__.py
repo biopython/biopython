@@ -34,6 +34,7 @@ from functools import reduce
 
 from Bio.Pathway.Rep.MultiGraph import *
 
+__docformat__ = "restructuredtext en"
 
 class Reaction(object):
     """Abstraction for a biochemical transformation.

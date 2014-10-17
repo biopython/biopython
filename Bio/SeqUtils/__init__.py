@@ -21,6 +21,7 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
+__docformat__ = "restructuredtext en"
 
 ######################################
 # DNA

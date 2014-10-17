@@ -96,6 +96,7 @@ from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
 
+__docformat__ = "restructuredtext en"
 
 #Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
 #namespace), but have deprecated that module.

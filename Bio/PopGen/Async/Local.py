@@ -13,6 +13,7 @@ from Bio.PopGen.Async import Async
 
 import threading
 
+__docformat__ = "restructuredtext en"
 
 class Local(Async):
     '''Execution on Local machine.

@@ -18,6 +18,7 @@ from time import sleep
 from Bio.PopGen.Async import Local
 from Bio.PopGen.FDist.Controller import FDistController
 
+__docformat__ = "restructuredtext en"
 
 class FDistAsync(FDistController):
     """Asynchronous FDist execution.

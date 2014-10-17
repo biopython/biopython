@@ -78,6 +78,7 @@ Here is an overview of the flat file format that this parser deals with:
                          NCBI Trace Archive
 """
 
+__docformat__ = "restructuredtext en"
 
 class SequenceLine(object):
     """Store the information for one SEQUENCE line from a Unigene file
