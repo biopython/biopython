@@ -126,13 +126,16 @@ class JASPAR5(object):
         (e.g. 'MA0001.1').
 
         Arguments:
-        id - JASPAR matrix ID. This may be a fully specified ID including the
-             version number (e.g. MA0049.2) or just the base ID (e.g. MA0049).
-             If only a base ID is provided, the latest version is returned.
-        Returns:
-        A Bio.motifs.jaspar.Motif object
 
-        NOTE: The perl TFBS module allows you to specify the type of matrix to
+            - id - JASPAR matrix ID. This may be a fully specified ID including the
+              version number (e.g. MA0049.2) or just the base ID (e.g. MA0049).
+              If only a base ID is provided, the latest version is returned.
+
+        Returns:
+
+            - A Bio.motifs.jaspar.Motif object
+
+        **NOTE:** The perl TFBS module allows you to specify the type of matrix to
         return (PFM, PWM, ICM) but matrices are always stored in JASAPR as
         PFMs so this does not really belong here. Once a PFM is fetched the
         pwm() and pssm() methods can be called to return the normalized and
@@ -188,57 +191,59 @@ class JASPAR5(object):
         Fetch a jaspar.Record (list) of motifs based on the provided selection
         criteria.
 
-        Arguments:
-        Except where obvious, all selection criteria arguments may be specified
-        as a single value or a list of values. Motifs must meet ALL the
-        specified selection criteria to be returned with the precedent
-        exceptions noted below.
+        Arguments::
 
-        all         - Takes precedent of all other selection criteria.
-                      Every motif is returned. If 'all_versions' is also
-                      specified, all versions of every motif are returned,
-                      otherwise just the latest version of every motif is
-                      returned.
-        matrix_id   - Takes precedence over all other selection criteria except
-                      'all'.  Only motifs with the given JASPAR matrix ID(s)
-                      are returned. A matrix ID may be specified as just a base
-                      ID or full JASPAR IDs including version number. If only a
-                      base ID is provided for specific motif(s), then just the
-                      latest version of those motif(s) are returned unless
-                      'all_versions' is also specified.
-        collection  - Only motifs from the specified JASPAR collection(s)
-                      are returned. NOTE - if not specified, the collection
-                      defaults to CORE for all other selection criteria except
-                      'all' and 'matrix_id'. To apply the other selection
-                      criteria across all JASPAR collections, explicitly set
-                      collection=None.
-        tf_name     - Only motifs with the given name(s) are returned.
-        tf_class    - Only motifs of the given TF class(es) are returned.
-        tf_family   - Only motifs from the given TF families are returned.
-        tax_group   - Only motifs belonging to the given taxonomic supergroups
-                      are returned (e.g. 'vertebrates', 'insects', 'nematodes'
-                      etc.)
-        species     - Only motifs derived from the given species are returned.
-                      Species are specified as taxonomy IDs.
-        data_type   - Only motifs generated with the given data type (e.g.
-                      ('ChIP-seq', 'PBM', 'SELEX' etc.) are returned. NOTE -
-                      must match exactly as stored in the database.
-        pazar_id    - Only motifs with the given PAZAR TF ID are returned.
-        medline     - Only motifs with the given medline (PubmMed IDs) are
-                      returned.
-        min_ic      - Only motifs whose profile matrices have at least this
-                      information content (specificty) are returned.
-        min_length  - Only motifs whose profiles are of at least this length
-                      are returned.
-        min_sites   - Only motifs compiled from at least these many binding
-                      sites are returned.
-        all_versions- Unless specified, just the latest version of motifs
-                      determined by the other selection criteria are returned
-                      otherwise all versions of the selected motifs are
-                      returned.
+            Except where obvious, all selection criteria arguments may be specified
+            as a single value or a list of values. Motifs must meet ALL the
+            specified selection criteria to be returned with the precedent
+            exceptions noted below.
+
+            all         - Takes precedent of all other selection criteria.
+                          Every motif is returned. If 'all_versions' is also
+                          specified, all versions of every motif are returned,
+                          otherwise just the latest version of every motif is
+                          returned.
+            matrix_id   - Takes precedence over all other selection criteria except
+                          'all'.  Only motifs with the given JASPAR matrix ID(s)
+                          are returned. A matrix ID may be specified as just a base
+                          ID or full JASPAR IDs including version number. If only a
+                          base ID is provided for specific motif(s), then just the
+                          latest version of those motif(s) are returned unless
+                          'all_versions' is also specified.
+            collection  - Only motifs from the specified JASPAR collection(s)
+                          are returned. NOTE - if not specified, the collection
+                          defaults to CORE for all other selection criteria except
+                          'all' and 'matrix_id'. To apply the other selection
+                          criteria across all JASPAR collections, explicitly set
+                          collection=None.
+            tf_name     - Only motifs with the given name(s) are returned.
+            tf_class    - Only motifs of the given TF class(es) are returned.
+            tf_family   - Only motifs from the given TF families are returned.
+            tax_group   - Only motifs belonging to the given taxonomic supergroups
+                          are returned (e.g. 'vertebrates', 'insects', 'nematodes'
+                          etc.)
+            species     - Only motifs derived from the given species are returned.
+                          Species are specified as taxonomy IDs.
+            data_type   - Only motifs generated with the given data type (e.g.
+                          ('ChIP-seq', 'PBM', 'SELEX' etc.) are returned. NOTE -
+                          must match exactly as stored in the database.
+            pazar_id    - Only motifs with the given PAZAR TF ID are returned.
+            medline     - Only motifs with the given medline (PubmMed IDs) are 
+                          returned.
+            min_ic      - Only motifs whose profile matrices have at least this
+                          information content (specificty) are returned.
+            min_length  - Only motifs whose profiles are of at least this length
+                          are returned.
+            min_sites   - Only motifs compiled from at least these many binding
+                          sites are returned.
+            all_versions- Unless specified, just the latest version of motifs
+                          determined by the other selection criteria are returned
+                          otherwise all versions of the selected motifs are
+                          returned.
 
         Returns:
-        A Bio.motifs.jaspar.Record (list) of motifs.
+
+            - A Bio.motifs.jaspar.Record (list) of motifs.
 
         """
 

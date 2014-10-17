@@ -29,13 +29,15 @@ def parse(handle, format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats (case is ignored):
-     - AlignAce:      AlignAce output file format
-     - MEME:          MEME output file motif
-     - MAST:          MAST output file motif
-     - TRANSFAC:      TRANSFAC database file format
-     - pfm:           JASPAR-style position-frequency matrix
-     - jaspar:        JASPAR-style multiple PFM format
-     - sites:         JASPAR-style sites file
+
+        - AlignAce:      AlignAce output file format
+        - MEME:          MEME output file motif
+        - MAST:          MAST output file motif
+        - TRANSFAC:      TRANSFAC database file format
+        - pfm:           JASPAR-style position-frequency matrix
+        - jaspar:        JASPAR-style multiple PFM format
+        - sites:         JASPAR-style sites file
+     
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
     for those.
@@ -392,7 +394,7 @@ The same rules are used by TRANSFAC."""
         itself
 
         requires an internet connection.
-        The parameters from **kwds are passed directly to the weblogo server.
+        The parameters from ``**kwds`` are passed directly to the weblogo server.
 
         Currently, this method uses WebLogo version 3.3.
         These are the arguments and their default values passed to

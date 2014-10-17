@@ -9,21 +9,25 @@ k Nearest Neighbors is a supervised learning algorithm that classifies
 a new observation based the classes in its surrounding neighborhood.
 
 Glossary:
-distance   The distance between two points in the feature space.
-weight     The importance given to each point for classification.
+
+    - distance   The distance between two points in the feature space.
+    - weight     The importance given to each point for classification.
 
 
 Classes:
-kNN           Holds information for a nearest neighbors classifier.
+
+    - kNN           Holds information for a nearest neighbors classifier.
 
 
 Functions:
-train        Train a new kNN classifier.
-calculate    Calculate the probabilities of each class, given an observation.
-classify     Classify an observation into a class.
 
-    Weighting Functions:
-equal_weight    Every example is given a weight of 1.
+    - train        Train a new kNN classifier.
+    - calculate    Calculate the probabilities of each class, given an observation.
+    - classify     Classify an observation into a class.
+
+Weighting Functions:
+
+    - equal_weight    Every example is given a weight of 1.
 
 """
 
@@ -34,10 +38,11 @@ class kNN(object):
     """Holds information necessary to do nearest neighbors classification.
 
     Members:
-    classes  Set of the possible classes.
-    xs       List of the neighbors.
-    ys       List of the classes that the neighbors belong to.
-    k        Number of neighbors to look at.
+    
+        - classes  Set of the possible classes.
+        - xs       List of the neighbors.
+        - ys       List of the classes that the neighbors belong to.
+        - k        Number of neighbors to look at.
 
     """
     def __init__(self):
