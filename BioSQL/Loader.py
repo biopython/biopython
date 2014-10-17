@@ -38,15 +38,15 @@ class DatabaseLoader:
         """Initialize with connection information for the database.
 
         Creating a DatabaseLoader object is normally handled via the
-        BioSeqDatabase DBServer object, for example:
+        BioSeqDatabase DBServer object, for example::
 
-        >>> from BioSQL import BioSeqDatabase
-        >>> server = BioSeqDatabase.open_database(driver="MySQLdb", user="gbrowse",
+            from BioSQL import BioSeqDatabase
+            server = BioSeqDatabase.open_database(driver="MySQLdb", user="gbrowse",
                              passwd = "biosql", host = "localhost", db="test_biosql")
-        >>> try:
-        ...     db = server["test"]
-        >>> except KeyError:
-        ...     db = server.new_database("test", description="For testing GBrowse")
+            try:
+                db = server["test"]
+            except KeyError:
+                db = server.new_database("test", description="For testing GBrowse")
         """
         self.adaptor = adaptor
         self.dbid = dbid
