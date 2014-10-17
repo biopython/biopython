@@ -205,18 +205,18 @@ Output
 Use the function Bio.SeqIO.write(...), which takes a complete set of
 SeqRecord objects (either as a list, or an iterator), an output file handle
 (or in recent versions of Biopython an output filename as a string) and of
-course the file format:
+course the file format::
 
->>> from Bio import SeqIO
->>> records = ...
->>> SeqIO.write(records, "example.faa", "fasta")
+  from Bio import SeqIO
+  records = ...
+  SeqIO.write(records, "example.faa", "fasta")
 
-Or, using a handle:
+Or, using a handle::
 
-    >>> from Bio import SeqIO
-    >>> records = ...
-    >>> with open("example.faa", "w") as handle:
-    ...  SeqIO.write(records, handle, "fasta")
+    from Bio import SeqIO
+    records = ...
+    with open("example.faa", "w") as handle:
+      SeqIO.write(records, handle, "fasta")
 
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.

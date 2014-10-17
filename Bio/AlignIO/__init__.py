@@ -59,18 +59,18 @@ Output
 ------
 Use the function Bio.AlignIO.write(...), which takes a complete set of
 Alignment objects (either as a list, or an iterator), an output file handle
-(or filename in recent versions of Biopython) and of course the file format:
+(or filename in recent versions of Biopython) and of course the file format::
 
->>> from Bio import AlignIO
->>> alignments = ...
->>> count = SeqIO.write(alignments, "example.faa", "fasta")
+  from Bio import AlignIO
+  alignments = ...
+  count = SeqIO.write(alignments, "example.faa", "fasta")
 
-If using a handle make sure to close it to flush the data to the disk:
+If using a handle make sure to close it to flush the data to the disk::
 
->>>from Bio import AlignIO
->>>alignments = ...
->>>with open("example.faa", "w") as handle:
-...  count = SeqIO.write(alignments, handle, "fasta")
+  from Bio import AlignIO
+  alignments = ...
+  with open("example.faa", "w") as handle:
+    count = SeqIO.write(alignments, handle, "fasta")
 
 In general, you are expected to call this function once (with all your
 alignments) and then close the file handle.  However, for file formats
