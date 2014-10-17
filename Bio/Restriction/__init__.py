@@ -9,7 +9,7 @@
 #
 """
 Usage:
-=====
+======
 
     >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.
@@ -30,7 +30,7 @@ Usage:
     >>> b = a.without_site()
     >>> a.print_that(b, '', '\n Enzymes which do not cut pBR322.\n\n')
 
-     Enzymes which do not cut pBR322.
+    Enzymes which do not cut pBR322.
 
     AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
     AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI

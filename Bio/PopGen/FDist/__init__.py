@@ -49,14 +49,15 @@ class Record(object):
     """Holds information from a FDist record.
 
     Members:
-    data_org    Data organization (0 pops by rows, 1 alleles by rows).
-                The Record will behave as if data was 0 (converting if needed)
 
-    num_pops       Number of populations
+        - data_org    Data organization (0 pops by rows, 1 alleles by rows).
+          The Record will behave as if data was 0 (converting if needed)
 
-    num_loci       Number of loci
+        - num_pops       Number of populations
 
-    loci_data      Loci data
+        - num_loci       Number of loci
+
+        - loci_data      Loci data
 
     loci_data is a list, where each element represents a locus. Each element
     is a tuple, the first element is the number of alleles, the second
