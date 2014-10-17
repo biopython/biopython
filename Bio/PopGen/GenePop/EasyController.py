@@ -92,9 +92,10 @@ class EasyController(object):
            Below CW means Cockerham and Weir and RH means Robertson and Hill.
 
            Returns a pair:
-           dictionary [allele] = (repetition count, frequency, Fis CW )
-               with information for each allele
-           a triple with total number of alleles, Fis CW, Fis RH
+
+                - dictionary [allele] = (repetition count, frequency, Fis CW )
+                  with information for each allele
+                - a triple with total number of alleles, Fis CW, Fis RH
 
 
         """

@@ -8,74 +8,74 @@
 # as part of this package.
 #
 
-""" Notes about the diverses class of the restriction enzyme implementation.
+""" Notes about the diverses class of the restriction enzyme implementation::
 
-        RestrictionType is the type of all restriction enzymes.
-    ----------------------------------------------------------------------------
-        AbstractCut implements some methods that are common to all enzymes.
-    ----------------------------------------------------------------------------
-        NoCut, OneCut,TwoCuts   represent the number of double strand cuts
-                                produced by the enzyme.
-                                they correspond to the 4th field of the rebase
-                                record emboss_e.NNN.
-                0->NoCut    : the enzyme is not characterised.
-                2->OneCut   : the enzyme produce one double strand cut.
-                4->TwoCuts  : two double strand cuts.
-    ----------------------------------------------------------------------------
-        Meth_Dep, Meth_Undep    represent the methylation susceptibility to
-                                the enzyme.
-                                Not implemented yet.
-    ----------------------------------------------------------------------------
-        Palindromic,            if the site is palindromic or not.
-        NotPalindromic          allow some optimisations of the code.
-                                No need to check the reverse strand
-                                with palindromic sites.
-    ----------------------------------------------------------------------------
-        Unknown, Blunt,         represent the overhang.
-        Ov5, Ov3                Unknown is here for symetry reasons and
-                                correspond to enzymes that are not characterised
-                                in rebase.
-    ----------------------------------------------------------------------------
-        Defined, Ambiguous,     represent the sequence of the overhang.
-        NotDefined
-                                NotDefined is for enzymes not characterised in
-                                rebase.
+            RestrictionType is the type of all restriction enzymes.
+        ----------------------------------------------------------------------------
+            AbstractCut implements some methods that are common to all enzymes.
+        ----------------------------------------------------------------------------
+            NoCut, OneCut,TwoCuts   represent the number of double strand cuts
+                                    produced by the enzyme.
+                                    they correspond to the 4th field of the rebase
+                                    record emboss_e.NNN.
+                    0->NoCut    : the enzyme is not characterised.
+                    2->OneCut   : the enzyme produce one double strand cut.
+                    4->TwoCuts  : two double strand cuts.
+        ----------------------------------------------------------------------------
+            Meth_Dep, Meth_Undep    represent the methylation susceptibility to
+                                    the enzyme.
+                                    Not implemented yet.
+        ----------------------------------------------------------------------------
+            Palindromic,            if the site is palindromic or not.
+            NotPalindromic          allow some optimisations of the code.
+                                    No need to check the reverse strand
+                                    with palindromic sites.
+        ----------------------------------------------------------------------------
+            Unknown, Blunt,         represent the overhang.
+            Ov5, Ov3                Unknown is here for symetry reasons and
+                                    correspond to enzymes that are not characterised
+                                    in rebase.
+        ----------------------------------------------------------------------------
+            Defined, Ambiguous,     represent the sequence of the overhang.
+            NotDefined
+                                    NotDefined is for enzymes not characterised in
+                                    rebase.
 
-                                Defined correspond to enzymes that display a
-                                constant overhang whatever the sequence.
-                                ex : EcoRI. G^AATTC -> overhang :AATT
-                                            CTTAA^G
+                                    Defined correspond to enzymes that display a
+                                    constant overhang whatever the sequence.
+                                    ex : EcoRI. G^AATTC -> overhang :AATT
+                                                CTTAA^G
 
-                                Ambiguous : the overhang varies with the
-                                sequence restricted.
-                                Typically enzymes which cut outside their
-                                restriction site or (but not always)
-                                inside an ambiguous site.
-                                ex:
-                                AcuI CTGAAG(22/20)  -> overhang : NN
-                                AasI GACNNN^NNNGTC  -> overhang : NN
-                                     CTGN^NNNNNCAG
+                                    Ambiguous : the overhang varies with the
+                                    sequence restricted.
+                                    Typically enzymes which cut outside their
+                                    restriction site or (but not always)
+                                    inside an ambiguous site.
+                                    ex:
+                                    AcuI CTGAAG(22/20)  -> overhang : NN
+                                    AasI GACNNN^NNNGTC  -> overhang : NN
+                                         CTGN^NNNNNCAG
 
-            note : these 3 classes refers to the overhang not the site.
-               So the enzyme ApoI (RAATTY) is defined even if its restriction
-               site is ambiguous.
+                note : these 3 classes refers to the overhang not the site.
+                   So the enzyme ApoI (RAATTY) is defined even if its restriction
+                   site is ambiguous.
 
-                    ApoI R^AATTY -> overhang : AATT -> Defined
-                         YTTAA^R
-               Accordingly, blunt enzymes are always Defined even
-               when they cut outside their restriction site.
-    ----------------------------------------------------------------------------
-        Not_available,          as found in rebase file emboss_r.NNN files.
-        Commercially_available
-                                allow the selection of the enzymes according to
-                                their suppliers to reduce the quantity
-                                of results.
-                                Also will allow the implementation of buffer
-                                compatibility tables. Not implemented yet.
+                        ApoI R^AATTY -> overhang : AATT -> Defined
+                             YTTAA^R
+                   Accordingly, blunt enzymes are always Defined even
+                   when they cut outside their restriction site.
+        ----------------------------------------------------------------------------
+            Not_available,          as found in rebase file emboss_r.NNN files.
+            Commercially_available
+                                    allow the selection of the enzymes according to
+                                    their suppliers to reduce the quantity
+                                    of results.
+                                    Also will allow the implementation of buffer
+                                    compatibility tables. Not implemented yet.
 
-                                the list of suppliers is extracted from
-                                emboss_s.NNN
-    ----------------------------------------------------------------------------
+                                    the list of suppliers is extracted from
+                                    emboss_s.NNN
+        ----------------------------------------------------------------------------
         """
 
 from __future__ import print_function
@@ -604,7 +604,8 @@ class NoCut(AbstractCut):
         the enzyme pattern in the sequence.
         _modify returns the real place where the enzyme will cut.
 
-        example:
+        example::
+
             EcoRI pattern : GAATTC
             EcoRI will cut after the G.
             so in the sequence:
@@ -676,7 +677,8 @@ class OneCut(AbstractCut):
         the enzyme pattern in the sequence.
         _modify returns the real place where the enzyme will cut.
 
-        example:
+        example::
+
             EcoRI pattern : GAATTC
             EcoRI will cut after the G.
             so in the sequence:
@@ -748,7 +750,8 @@ class TwoCuts(AbstractCut):
         the enzyme pattern in the sequence.
         _modify returns the real place where the enzyme will cut.
 
-        example:
+        example::
+        
             EcoRI pattern : GAATTC
             EcoRI will cut after the G.
             so in the sequence:

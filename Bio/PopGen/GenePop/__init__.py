@@ -93,31 +93,34 @@ class Record(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).
 
-    comment_line       Comment line.
+        - marker_len         The marker length (2 or 3 digit code per allele).
 
-    loci_list          List of loci names.
+        - comment_line       Comment line.
 
-    pop_list           List of population names.
+        - loci_list          List of loci names.
 
-    populations        List of population data.
+        - pop_list           List of population names.
+
+        - populations        List of population data.
 
     In most genepop files, the population name is not trustable.
     It is strongly recommended that populations are referred by index.
 
     populations has one element per population. Each element is itself
     a list of individuals, each individual is a pair composed by individual
-    name and a list of alleles (2 per marker or 1 for haploids): Example
-    [
+    name and a list of alleles (2 per marker or 1 for haploids):
+    Example::
+
         [
-            ('Ind1', [(1,2),    (3,3), (200,201)],
-            ('Ind2', [(2,None), (3,3), (None,None)],
-        ],
-        [
-            ('Other1', [(1,1),  (4,3), (200,200)],
+            [
+                ('Ind1', [(1,2),    (3,3), (200,201)],
+                ('Ind2', [(2,None), (3,3), (None,None)],
+            ],
+            [
+                ('Other1', [(1,1),  (4,3), (200,200)],
+            ]
         ]
-    ]
 
     """
     def __init__(self):

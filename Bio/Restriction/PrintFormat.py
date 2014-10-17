@@ -143,13 +143,13 @@ class PrintFormat(object):
 
         return a string of form:
 
-        title.
-
-            enzyme1, position
-            |
-        AAAAAAAAAAAAAAAAAAAAA...
-        |||||||||||||||||||||
-        TTTTTTTTTTTTTTTTTTTTT...
+            | title.
+            | 
+            |     enzyme1, position
+            |     |
+            | AAAAAAAAAAAAAAAAAAAAA...
+            | |||||||||||||||||||||
+            | TTTTTTTTTTTTTTTTTTTTT...
 
         ls is a list of cutting enzymes.
         title is the title.
@@ -271,13 +271,13 @@ class PrintFormat(object):
 
         return a string of form:
 
-        title.
-
-            enzyme1, position
+            | title.
             |
-        AAAAAAAAAAAAAAAAAAAAA...
-        |||||||||||||||||||||
-        TTTTTTTTTTTTTTTTTTTTT...
+            |     enzyme1, position
+            |     |
+            | AAAAAAAAAAAAAAAAAAAAA...
+            | |||||||||||||||||||||
+            | TTTTTTTTTTTTTTTTTTTTT...
 
         ls is a list of results.
         title is a string.
