@@ -55,7 +55,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     # Dimensionality of the data is the dimensionality of the
     # observations plus a constant dimension.
     N, ndims = len(xs), len(xs[0]) + 1
-    if N==0 or ndims==1:
+    if N == 0 or ndims == 1:
         raise ValueError("No observations or observation of 0 dimension.")
 
     # Make an X array, with a constant first dimension.
