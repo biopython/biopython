@@ -66,6 +66,30 @@ def gzip_open(filename, format):
 
 
 if sqlite3:
+
+    def raw_filenames(index_filename):
+        """Open SQLite index and extract filenames (as is).
+
+        Returns a 2-tuple, holding a list of strings, and the value
+        of the meta_data.filenames_relative_to_index (of None).
+        """
+        con = sqlite3.dbapi2.connect(index_filename)
+
+        filenames = [row[0] for row in
+                     con.execute("SELECT name FROM file_data "
+                                 "ORDER BY file_number;").fetchall()]
+
+        try:
+            filenames_relative_to_index, = con.execute(
+                "SELECT value FROM meta_data WHERE key=?;",
+                ("filenames_relative_to_index",)).fetchone()
+            filenames_relative_to_index = (filenames_relative_to_index.upper() == "TRUE")
+        except TypeError:
+            filenames_relative_to_index = None
+        
+        con.close()
+        return filenames, filenames_relative_to_index
+
     class OldIndexTest(unittest.TestCase):
         """Testing a pre-built index (make sure cross platform etc).
 
@@ -91,6 +115,16 @@ if sqlite3:
             d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
             self.assertEqual(54, len(d))
             self.assertEqual(395, len(d["alpha"]))
+
+        def test_old_contents(self):
+            """Check actual filenames in existing indexes."""
+            filenames, flag = raw_filenames("Roche/triple_sff.idx")
+            self.assertEqual(flag, None)
+            self.assertEqual(filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+
+            filenames, flag = raw_filenames("Roche/triple_sff_rel_paths.idx")
+            self.assertEqual(flag, True)
+            self.assertEqual(filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
 
         def test_old_same_dir(self):
             """Load existing index with no options (from same directory)."""
@@ -153,7 +187,7 @@ if sqlite3:
                 if os.path.isfile(i):
                     os.remove(i)
 
-        def check(self, index_file, sff_files):
+        def check(self, index_file, sff_files, expt_sff_files):
             if os.path.isfile(index_file):
                 os.remove(index_file)
             # Build index...
@@ -168,45 +202,57 @@ if sqlite3:
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
             d.close()
-            os.remove(index_file)
-            d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
+
+            #Now directly check the filenames inside the SQLite index:
+            filenames, flag = raw_filenames(index_file)
+            self.assertEqual(flag, True)
+            self.assertEqual(filenames, expt_sff_files)
+
+            os.remove(index_file)
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
-            self.check("temp.idx",
-                       ["Roche/E3MFGYR02_no_manifest.sff",
-                        "Roche/greek.sff",
-                        "Roche/paired.sff"])
-            # Here index is given as abs
+            expt_sff_files = ["Roche/E3MFGYR02_no_manifest.sff",
+                              "Roche/greek.sff",
+                              "Roche/paired.sff"]
+
+            self.check("temp.idx", expt_sff_files, expt_sff_files)
+            #Here index is given as abs
             self.check(os.path.abspath("temp.idx"),
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         os.path.abspath("Roche/greek.sff"),
-                        "Roche/paired.sff"])
+                        "Roche/paired.sff"],
+                       expt_sff_files)
             # Here index is given as relative path
             self.check("temp.idx",
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         os.path.abspath("Roche/greek.sff"),
-                        "Roche/paired.sff"])
+                        "Roche/paired.sff"],
+                       expt_sff_files)
 
         def test_same_folder(self):
             """Check relative links in same folder."""
             os.chdir("Roche")
+            expt_sff_files = ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
 
-            # Here everything is relative,
-            self.check("temp.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+            #Here everything is relative,
+            self.check("temp.idx", expt_sff_files, expt_sff_files)
             self.check(os.path.abspath("temp.idx"),
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
-                        "../Roche/paired.sff"])
+                        "../Roche/paired.sff"],
+                       expt_sff_files)
             self.check("temp.idx",
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
-                        "../Roche/paired.sff"])
+                        "../Roche/paired.sff"],
+                       expt_sff_files)
             self.check("../Roche/temp.idx",
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
-                        "../Roche/paired.sff"])
+                        "../Roche/paired.sff"],
+                       expt_sff_files)
 
 
 class IndexDictTests(unittest.TestCase):
