@@ -11,12 +11,12 @@ format names (lower case strings).  From the user's perspective, you can read
 in a PHYLIP file containing one or more alignments using Bio.AlignIO, or you
 can read in the sequences within these alignmenta using Bio.SeqIO.
 
-Bio.AlignIO is also documented at AlignIO_ and by
+Bio.AlignIO is also documented at http://biopython.org/wiki/AlignIO and by
 a whole chapter in our tutorial:
-  - `HTML Tutorial`_
-  - `PDF Tutorial`_
 
-.. _AlignIO: http://biopython.org/wiki/AlignIO
+* `HTML Tutorial`_
+* `PDF Tutorial`_
+
 .. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
