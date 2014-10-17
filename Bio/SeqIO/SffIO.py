@@ -809,10 +809,10 @@ class _AddTellHandle(object):
 def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
-    handle - input file, an SFF file, e.g. from Roche 454 sequencing.
-             This must NOT be opened in universal read lines mode!
-    alphabet - optional alphabet, defaults to generic DNA.
-    trim - should the sequences be trimmed?
+        - handle - input file, an SFF file, e.g. from Roche 454 sequencing.
+          This must NOT be opened in universal read lines mode!
+        - alphabet - optional alphabet, defaults to generic DNA.
+        - trim - should the sequences be trimmed?
 
     The resulting SeqRecord objects should match those from a paired FASTA
     and QUAL file converted from the SFF file using the Roche 454 tool
@@ -1003,9 +1003,9 @@ class SffWriter(SequenceWriter):
     def __init__(self, handle, index=True, xml=None):
         """Creates the writer object.
 
-        handle - Output handle, ideally in binary write mode.
-        index - Boolean argument, should we try and write an index?
-        xml - Optional string argument, xml manifest to be recorded in the index
+            - handle - Output handle, ideally in binary write mode.
+            - index - Boolean argument, should we try and write an index?
+            - xml - Optional string argument, xml manifest to be recorded in the index
               block (see function ReadRocheXmlManifest for reading this data).
         """
         if hasattr(handle, "mode") and "U" in handle.mode.upper():

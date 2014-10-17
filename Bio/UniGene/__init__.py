@@ -13,7 +13,8 @@
 """Parse Unigene flat file format files such as the Hs.data file.
 
 Here is an overview of the flat file format that this parser deals with:
-   Line types/qualifiers:
+
+   Line types/qualifiers::
 
        ID           UniGene cluster ID
        TITLE        Title for the cluster
@@ -200,7 +201,7 @@ class STSLine(object):
 class Record(object):
     """Store a Unigene record
 
-    Here is what is stored:
+    Here is what is stored::
 
         self.ID           = ''  # ID line
         self.species      = ''  # Hs, Bt, etc.

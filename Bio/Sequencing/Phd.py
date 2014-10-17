@@ -130,9 +130,9 @@ def parse(handle):
 
     Typical usage:
 
-    records = parse(handle)
-    for record in records:
-        # do something with the record object
+    >>> records = parse(handle)
+    >>> for record in records:
+    ...     # do something with the record object
     """
     while True:
         record = read(handle)

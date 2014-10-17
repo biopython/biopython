@@ -3,17 +3,17 @@
 
 """Calculate isoelectric points of polypeptides using methods of Bjellqvist.
 
-pK values and the methos are taken from:
+pK values and the methos are taken from::
 
-* Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,
-J.-Ch., Frutiger, S. & Hochstrasser, D.F.
-The focusing positions of polypeptides in immobilized pH gradients can be predicted
-from their amino acid sequences. Electrophoresis 1993, 14, 1023-1031.
+    * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,
+    J.-Ch., Frutiger, S. & Hochstrasser, D.F.
+    The focusing positions of polypeptides in immobilized pH gradients can be predicted
+    from their amino acid sequences. Electrophoresis 1993, 14, 1023-1031.
 
-* Bjellqvist, B., Basse, B., Olsen, E. and Celis, J.E.
-Reference points for comparisons of two-dimensional maps of proteins from
-different human cell types defined in a pH scale where isoelectric points correlate
-with polypeptide compositions. Electrophoresis 1994, 15, 529-539.
+    * Bjellqvist, B., Basse, B., Olsen, E. and Celis, J.E.
+    Reference points for comparisons of two-dimensional maps of proteins from
+    different human cell types defined in a pH scale where isoelectric points correlate
+    with polypeptide compositions. Electrophoresis 1994, 15, 529-539.
 
 I designed the algorithm according to a note by David L. Tabb, available at:
 http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
