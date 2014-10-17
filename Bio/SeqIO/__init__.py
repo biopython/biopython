@@ -10,6 +10,7 @@ r"""Sequence input/output as SeqRecord objects.
 
 Bio.SeqIO is also documented at SeqIO_ and by
 a whole chapter in our tutorial:
+
   - `HTML Tutorial`_
   - `PDF Tutorial`_
 

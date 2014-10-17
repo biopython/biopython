@@ -8,7 +8,7 @@
 """Substitution matrices, log odds matrices, and operations on them.
 
 General:
--------
+--------
 
 This module provides a class and a few routines for generating
 substitution matrices, similar ot BLOSUM or PAM matrices, but based on
@@ -23,14 +23,14 @@ Pij: frequency of substitution of letter (residue/nucleotide) i by j
 Pi, Pj: expected frequencies of i and j, respectively.
 
 Usage:
------
+------
 The following section is laid out in the order by which most people wish
 to generate a log-odds matrix. Of course, interim matrices can be
 generated and investigated. Most people just want a log-odds matrix,
 that's all.
 
 Generating an Accepted Replacement Matrix:
------------------------------------------
+------------------------------------------
 Initially, you should generate an accepted replacement matrix (ARM)
 from your data. The values in ARM are the _counted_ number of
 replacements according to your data. The data could be a set of pairs
@@ -59,26 +59,26 @@ a ('A','C') not a ('C','A').
 Internal functions:
 
 Generating the observed frequency matrix (OFM):
-----------------------------------------------
+-----------------------------------------------
 Use: OFM = _build_obs_freq_mat(ARM)
 The OFM is generated from the ARM, only instead of replacement counts, it
 contains replacement frequencies.
 
 Generating an expected frequency matrix (EFM):
----------------------------------------------
+----------------------------------------------
 Use: EFM = _build_exp_freq_mat(OFM,exp_freq_table)
 exp_freq_table: should be a freqTableC instantiation. See freqTable.py for
 detailed information. Briefly, the expected frequency table has the
 frequencies of appearance for each member of the alphabet
 
 Generating a substitution frequency matrix (SFM):
-------------------------------------------------
+-------------------------------------------------
 Use: SFM = _build_subs_mat(OFM,EFM)
 Accepts an OFM, EFM. Provides the division product of the corresponding
 values.
 
 Generating a log-odds matrix (LOM):
-----------------------------------
+-----------------------------------
 Use: LOM=_build_log_odds_mat(SFM[,logbase=10,factor=10.0,roundit=1])
 Accepts an SFM. logbase: base of the logarithm used to generate the
 log-odds values. factor: factor used to multiply the log-odds values.

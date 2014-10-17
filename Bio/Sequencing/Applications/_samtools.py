@@ -14,9 +14,9 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     Extract/print all or sub alignments in SAM or BAM format, equivalent to::
 
-    $ samtools view [-bchuHS] [-t in.refList] [-o output] [-f reqFlag]
-                    [-F skipFlag] [-q minMapQ] [-l library] [-r readGroup]
-                    [-R rgFile] <in.bam>|<in.sam> [region1 [...]]
+        $ samtools view [-bchuHS] [-t in.refList] [-o output] [-f reqFlag]
+                        [-F skipFlag] [-q minMapQ] [-l library] [-r readGroup]
+                        [-R rgFile] <in.bam>|<in.sam> [region1 [...]]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -108,9 +108,9 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
     Generate BCF or pileup for one or multiple BAM files, equivalent to::
 
-    $ samtools mpileup [-EBug] [-C capQcoef] [-r reg] [-f in.fa]
-                       [-l list] [-M capMapQ] [-Q minBaseQ]
-                       [-q minMapQ] in.bam [in2.bam [...]]
+        $ samtools mpileup [-EBug] [-C capQcoef] [-r reg] [-f in.fa]
+                           [-l list] [-M capMapQ] [-Q minBaseQ]
+                           [-q minMapQ] in.bam [in2.bam [...]]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -359,8 +359,8 @@ class SamtoolsMergeCommandline(AbstractCommandline):
 
     Merge multiple sorted alignments, equivalent to::
 
-    $ samtools merge [-nur1f] [-h inh.sam] [-R reg]
-                     <out.bam> <in1.bam> <in2.bam> [...]
+        $ samtools merge [-nur1f] [-h inh.sam] [-R reg]
+                         <out.bam> <in1.bam> <in2.bam> [...]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -643,8 +643,8 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
     and outputs a SAM with each sequence corresponding to a target,
     equivalent to::
 
-    $ samtools targetcut [-Q minBaseQ] [-i inPenalty] [-0 em0]
-                         [-1 em1] [-2 em2] [-f ref] <in.bam>
+        $ samtools targetcut [-Q minBaseQ] [-i inPenalty] [-0 em0]
+                             [-1 em1] [-2 em2] [-f ref] <in.bam>
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -689,8 +689,8 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
 
     Call and phase heterozygous SNPs, equivalent to::
 
-    $ samtools phase [-AF] [-k len] [-b prefix]
-                     [-q minLOD] [-Q minBaseQ] <in.bam>
+        $ samtools phase [-AF] [-k len] [-b prefix]
+                         [-q minLOD] [-Q minBaseQ] <in.bam>
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 

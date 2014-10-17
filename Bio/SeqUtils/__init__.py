@@ -323,13 +323,13 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
     Only unambiguous letters are allowed. Nucleotide sequences are assumed to
     have a 5' phosphate.
 
-    seq: String or Biopython sequence object.
-    seq_type: The default (None) is to take the alphabet from the seq argument,
-              or assume DNA if the seq argument is a string. Override this with
-              a string 'DNA', 'RNA', or 'protein'.
-    double_stranded: Calculate the mass for the double stranded molecule?
-    circular: Is the molecule circular (has no ends)?
-    monoisotopic: Use the monoisotopic mass tables?
+        - seq: String or Biopython sequence object.
+        - seq_type: The default (None) is to take the alphabet from the seq argument,
+          or assume DNA if the seq argument is a string. Override this with
+          a string 'DNA', 'RNA', or 'protein'.
+        - double_stranded: Calculate the mass for the double stranded molecule?
+        - circular: Is the molecule circular (has no ends)?
+        - monoisotopic: Use the monoisotopic mass tables?
 
     Note that for backwards compatibility, if the seq argument is a string,
     or Seq object with a generic alphabet, and no seq_type is specified
