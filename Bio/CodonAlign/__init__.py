@@ -655,7 +655,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                         max_score -= 1
                         warnings.warn("Codon of {0}({1} {2}) does not "
                                       "correspond to {3}({4})".format(
-                                          pro.id, aa, aa_num, nucl.id, 
+                                          pro.id, aa, aa_num, nucl.id,
                                           this_codon)
                                       )
                 if max_score == 0:

@@ -136,7 +136,7 @@ def parse(handle):
     >>> with open("KEGG/compound.sample") as handle:
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
-    ... 
+    ...
     C00023 Iron
     C00017 Protein
     C00099 beta-Alanine

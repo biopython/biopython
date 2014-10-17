@@ -24,7 +24,7 @@ from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_t
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 class CodonSeq(Seq):
-    """CodonSeq is designed to be within the SeqRecords of a 
+    """CodonSeq is designed to be within the SeqRecords of a
     CodonAlignment class.
 
     CodonSeq is useful as it allows the user to specify
@@ -52,7 +52,7 @@ class CodonSeq(Seq):
     >>> p = CodonSeq('AAATTTCCCGGGAA-TTTTAA', rf_table=(0, 3, 6, 9, 14, 17))
     >>> print(p.get_full_rf_table())
     [0, 3, 6, 9, 12.0, 15, 18]
-    >>> p = CodonSeq('AAA------------TAA', rf_table=(0, 3)) 
+    >>> p = CodonSeq('AAA------------TAA', rf_table=(0, 3))
     >>> print(p.get_full_rf_table())
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
@@ -81,7 +81,7 @@ class CodonSeq(Seq):
             self.rf_table = list(filter(lambda x: x%3 == 0,
                                         range(len(seq_ungapped))))
             # check alphabet
-            # Not use Alphabet._verify_alphabet function because it 
+            # Not use Alphabet._verify_alphabet function because it
             # only works for single alphabet
             for i in self.rf_table:
                 if self._data[i:i+3] not in alphabet.letters:
@@ -124,10 +124,10 @@ class CodonSeq(Seq):
                 return self._data[index*3:]
         else:
         # This slice ensures that codon will always be the unit
-        # in slicing (it won't change to other codon if you are 
+        # in slicing (it won't change to other codon if you are
         # using reverse slicing such as [::-1]).
         # The idea of the code below is to first map the slice
-        # to amino acid sequence and then transform it into 
+        # to amino acid sequence and then transform it into
         # codon sequence.
             aa_index = range(len(self)//3)
             def cslice(p):
@@ -195,7 +195,7 @@ class CodonSeq(Seq):
 
     def get_full_rf_table(self):
         """This function returns a full rf_table of the given
-        CodonSeq records. A full rf_table is different from 
+        CodonSeq records. A full rf_table is different from
         normal rf_table in that it translate gaps in CodonSeq.
         It is helpful to construct alignment containing
         frameshift.
@@ -313,10 +313,10 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                     when you are using ML method. Possible ways of
                     getting cfreq are: F1x4, F3x4 and F61.
     """
-    if all([isinstance(codon_seq1, CodonSeq), 
+    if all([isinstance(codon_seq1, CodonSeq),
            isinstance(codon_seq2, CodonSeq)]):
         pass
-    elif all([isinstance(codon_seq1, SeqRecord), 
+    elif all([isinstance(codon_seq1, SeqRecord),
              isinstance(codon_seq2, SeqRecord)]):
         codon_seq1 = codon_seq1.seq
         codon_seq2 = codon_seq2.seq
@@ -327,7 +327,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
             len(codon_seq2.get_full_rf_table()):
         raise RuntimeError("full_rf_table length of seq1 ({0}) and seq2 ({1}) "
                            "are not the same".format(
-                               len(codon_seq1.get_full_rf_table()), 
+                               len(codon_seq1.get_full_rf_table()),
                                len(codon_seq2.get_full_rf_table()))
                           )
     if cfreq is None:
@@ -372,7 +372,7 @@ def _ng86(seq1, seq2, k, codon_table):
     SN = [0, 0]
     for i, j in zip(seq1, seq2):
         SN = [m+n for m,n in zip(SN, _count_diff_NG86(
-                                                 i, j, 
+                                                 i, j,
                                                  codon_table=codon_table)
                                  )
               ]
@@ -421,7 +421,7 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
                     codon_chars[n] = j
                     this_codon = ''.join(codon_chars)
                     neighbor_codon['transition'].append(this_codon)
-                else: 
+                else:
                     codon_chars = [c for c in codon]
                     codon_chars[n] = j
                     this_codon = ''.join(codon_chars)
@@ -482,13 +482,13 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
         for i, k in enumerate(zip(codon1, codon2)):
             if k[0] != k[1]:
                 diff_pos.append(i)
-        def compare_codon(codon1, codon2, codon_table=default_codon_table, 
+        def compare_codon(codon1, codon2, codon_table=default_codon_table,
                           weight=1):
             """Method to compare two codon accounting for different
             pathways
             """
             sd = nd = 0
-            if len(set(map(codon_table.forward_table.get, 
+            if len(set(map(codon_table.forward_table.get,
                            [codon1, codon2]))) == 1:
                 sd += weight
             else:
@@ -727,7 +727,7 @@ def _yn00(seq1, seq2, k, codon_table):
     SN = [0, 0]
     for i, j in zip(seq1, seq2):
         SN = [m+n for m, n in zip(SN, _count_diff_NG86(
-                                                  i, j, 
+                                                  i, j,
                                                   codon_table=codon_table)
                                   )
               ]
@@ -952,7 +952,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
             path_prob = []
             for i in tmp_codon:
                 codon_idx = list(map(codon_lst.index, [codon1, i, codon2]))
-                prob = (P[codon_idx[0], codon_idx[1]], 
+                prob = (P[codon_idx[0], codon_idx[1]],
                         P[codon_idx[1], codon_idx[2]])
                 path_prob.append(prob[0]*prob[1])
             path_prob = [2*i/sum(path_prob) for i in path_prob]

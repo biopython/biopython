@@ -206,7 +206,7 @@ def parse(handle):
     >>> with open("KEGG/enzyme.sample") as handle:
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
-    ... 
+    ...
     1.1.1.1 Alcohol dehydrogenase
     1.1.1.62 Estradiol 17beta-dehydrogenase
     1.1.1.68 Transferred to EC 1.7.99.5

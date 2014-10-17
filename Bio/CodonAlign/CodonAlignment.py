@@ -52,7 +52,7 @@ class CodonAlignment(MultipleSeqAlignment):
     def __str__(self):
         """Return a multi-line string summary of the alignment.
 
-        This output is indicated to be readable, but large alignment 
+        This output is indicated to be readable, but large alignment
         is shown truncated. A maximum of 20 rows (sequences) and
         60 columns (20 codons) are shown, with the record identifiers.
         This should fit nicely on a single screen. e.g.
@@ -105,7 +105,7 @@ class CodonAlignment(MultipleSeqAlignment):
 
     def toMultipleSeqAlignment(self):
         """Return a MultipleSeqAlignment containing all the
-        SeqRecord in the CodonAlignment using Seq to store 
+        SeqRecord in the CodonAlignment using Seq to store
         sequences
         """
         alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for \

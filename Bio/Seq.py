@@ -1960,7 +1960,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                 "First codon '%s' is not a start codon" % sequence[:3])
         if n % 3 != 0:
             raise CodonTable.TranslationError(
-                "Sequence length %i is not a multiple of three" % n) 
+                "Sequence length %i is not a multiple of three" % n)
         if str(sequence[-3:]).upper() not in stop_codons:
             raise CodonTable.TranslationError(
                 "Final codon '%s' is not a stop codon" % sequence[-3:])

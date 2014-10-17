@@ -21,11 +21,11 @@ def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
     ----------
     peaklist : xprtools.Peaklist
         List of peaks from which to derive predictions
-    originNuc : str 
+    originNuc : str
         Name of originating nucleus.
     originResNum : int
         Index of originating residue.
-    detectedNuc : str 
+    detectedNuc : str
         Name of detected nucleus.
 
     toResNum : int

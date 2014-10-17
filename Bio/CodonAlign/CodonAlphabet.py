@@ -28,7 +28,7 @@ default_codon_table = copy.deepcopy(generic_by_id[1])
 
 def get_codon_alphabet(alphabet, gap="-", stop="*"):
     """function to get alignment alphabet for codon alignment. Only
-    nucleotide alphabet is accepted. Raise an error when the type of 
+    nucleotide alphabet is accepted. Raise an error when the type of
     alphabet is incompatible.
     """
     from Bio.Alphabet import NucleotideAlphabet

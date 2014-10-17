@@ -5,7 +5,7 @@
 
 """This module provides classes and functions to parse a KGML pathway map.
 
-The KGML pathway map is parsed into the object structure defined in  
+The KGML pathway map is parsed into the object structure defined in
 KGML_Pathway.py in this module.
 
 Classes
@@ -32,7 +32,7 @@ from Bio.KEGG.KGML.KGML_pathway import *
 def read(handle, debug=0):
     """Parses a single KEGG Pathway from given file handle.
 
-    Returns a single Pathway object.  There should be one and only 
+    Returns a single Pathway object.  There should be one and only
     one pathway in each file, but there may well be pathological
     examples out there.
     """

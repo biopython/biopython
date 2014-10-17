@@ -310,7 +310,7 @@ class SeqFeature(object):
                             location_operator = self.location_operator,
                             id = self.id,
                             qualifiers = dict(self.qualifiers.items()))
-        #This is to avoid the deprecation warning: 
+        #This is to avoid the deprecation warning:
         answer._sub_features = [f._flip(length) for f in self._sub_features[::-1]]
         return answer
 

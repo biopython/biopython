@@ -225,7 +225,7 @@ class BwaSamseCommandline(AbstractCommandline):
 class BwaSampeCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
 
-    Generate alignments in the SAM format given paired-end reads. 
+    Generate alignments in the SAM format given paired-end reads.
     Equivalent to::
 
         $ bwa sampe [...] <in.db.fasta> <in1.sai> <in2.sai> <in1.fq> <in2.fq> > <out.sam>

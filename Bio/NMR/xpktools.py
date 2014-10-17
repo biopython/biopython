@@ -1,7 +1,7 @@
 # Copyright 2004 by Bob Bussell.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package. 
+# as part of this package.
 """Tools to manipulate data from nmrview .xpk peaklist files.
 """
 
@@ -17,9 +17,9 @@ HEADERLEN = 6
 class XpkEntry(object):
     """Provide dictonary access to single entry from nmrview .xpk file.
 
-    This class is suited for handling single lines of non-header data 
+    This class is suited for handling single lines of non-header data
     from an nmrview .xpk file. This class provides methods for extracting
-    data by the field name which is listed in the last line of the 
+    data by the field name which is listed in the last line of the
     peaklist header.
 
     Parameters
@@ -71,7 +71,7 @@ class Peaklist(object):
     firstline  : str
         The first line in the header.
     axislabels : str
-        The axis labels. 
+        The axis labels.
     dataset    : str
         The label of the dataset.
     sw         : str
@@ -117,7 +117,7 @@ class Peaklist(object):
     def residue_dict(self, index):
         """Return a dict of lines in `data` indexed by residue number or a nucleus.
 
-        The nucleus should be given as the input argument in the same form as 
+        The nucleus should be given as the input argument in the same form as
         it appears in the xpk label line (H1, 15N for example)
 
         Parameters

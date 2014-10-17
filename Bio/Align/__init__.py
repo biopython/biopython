@@ -181,10 +181,10 @@ class MultipleSeqAlignment(_Alignment):
                                                               if rec.seq is not None)
 
         # Annotations about the whole alignment
-        if annotations is None: 
-            annotations = {} 
-        elif not isinstance(annotations, dict): 
-            raise TypeError("annotations argument should be a dict") 
+        if annotations is None:
+            annotations = {}
+        elif not isinstance(annotations, dict):
+            raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
     def extend(self, records):
