@@ -128,11 +128,11 @@ def parse(handle):
     of lines, an open file, or similar; the only requirement is that we can
     iterate over the handle to retrieve lines from it.
 
-    Typical usage:
+    Typical usage::
 
-    >>> records = parse(handle)
-    >>> for record in records:
-    ...     # do something with the record object
+        records = parse(handle)
+        for record in records:
+            # do something with the record object
     """
     while True:
         record = read(handle)

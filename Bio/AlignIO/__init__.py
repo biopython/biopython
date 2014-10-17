@@ -324,11 +324,11 @@ def parse(handle, format, seq_count=None, alphabet=None):
     Alignment of length 118
     Alignment of length 125
 
-    If you have a string 'data' containing the file contents, use:
+    If you have a string 'data' containing the file contents, use::
 
-    >>> from Bio import AlignIO
-    >>> from StringIO import StringIO
-    >>> my_iterator = AlignIO.parse(StringIO(data), format)
+      from Bio import AlignIO
+      from StringIO import StringIO
+      my_iterator = AlignIO.parse(StringIO(data), format)
 
     Use the Bio.AlignIO.read() function when you expect a single record only.
     """

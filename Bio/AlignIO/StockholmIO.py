@@ -27,75 +27,75 @@ For example, consider a Stockholm alignment file containing the following::
 This is a single multiple sequence alignment, so you would probably load this
 using the Bio.AlignIO.read() function:
 
->>> from Bio import AlignIO
->>> align = AlignIO.read("Stockholm/simple.sth", "stockholm")
->>> print(align)
-SingleLetterAlphabet() alignment with 2 rows and 104 columns
-UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
-AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
->>> for record in align:
-...     print("%s %i" % (record.id, len(record)))
-AP001509.1 104
-AE007476.1 104
+    >>> from Bio import AlignIO
+    >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm")
+    >>> print(align)
+    SingleLetterAlphabet() alignment with 2 rows and 104 columns
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
+    >>> for record in align:
+    ...     print("%s %i" % (record.id, len(record)))
+    AP001509.1 104
+    AE007476.1 104
 
 This example file is clearly using RNA, so you might want the alignment object
 (and the SeqRecord objects it holds) to reflect this, rather than simple using
 the default single letter alphabet as shown above.  You can do this with an
 optional argument to the Bio.AlignIO.read() function:
 
->>> from Bio import AlignIO
->>> from Bio.Alphabet import generic_rna
->>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
-...                      alphabet=generic_rna)
->>> print(align)
-RNAAlphabet() alignment with 2 rows and 104 columns
-UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
-AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
+    >>> from Bio import AlignIO
+    >>> from Bio.Alphabet import generic_rna
+    >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
+    ...                      alphabet=generic_rna)
+    >>> print(align)
+    RNAAlphabet() alignment with 2 rows and 104 columns
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
 
 In addition to the sequences themselves, this example alignment also includes
 some GR lines for the secondary structure of the sequences.  These are
 strings, with one character for each letter in the associated sequence:
 
->>> for record in align:
-...     print(record.id)
-...     print(record.seq)
-...     print(record.letter_annotations['secondary_structure'])
-AP001509.1
-UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
------------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
-AE007476.1
-AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
------------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    >>> for record in align:
+    ...     print(record.id)
+    ...     print(record.seq)
+    ...     print(record.letter_annotations['secondary_structure'])
+    AP001509.1
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
 Any general annotation for each row is recorded in the SeqRecord's annotations
 dictionary.  You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
->>> print(align.format("fasta"))
->AP001509.1
-UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
-GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
->AE007476.1
-AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAA
-GGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-<BLANKLINE>
+    >>> print(align.format("fasta"))
+    >AP001509.1
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
+    GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    >AE007476.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAA
+    GGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    <BLANKLINE>
 
 Most output formats won't be able to hold the annotation possible in a
 Stockholm file:
 
->>> print(align.format("stockholm"))
-# STOCKHOLM 1.0
-#=GF SQ 2
-AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
-#=GS AP001509.1 AC AP001509.1
-#=GS AP001509.1 DE AP001509.1
-#=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
-AE007476.1 AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-#=GS AE007476.1 AC AE007476.1
-#=GS AE007476.1 DE AE007476.1
-#=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
-//
-<BLANKLINE>
+    >>> print(align.format("stockholm"))
+    # STOCKHOLM 1.0
+    #=GF SQ 2
+    AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    #=GS AP001509.1 AC AP001509.1
+    #=GS AP001509.1 DE AP001509.1
+    #=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1 AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    #=GS AE007476.1 AC AE007476.1
+    #=GS AE007476.1 DE AE007476.1
+    #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    //
+    <BLANKLINE>
 
 Note that when writing Stockholm files, AlignIO does not break long sequences
 up and interleave them (as in the input file shown above).  The standard
@@ -106,28 +106,28 @@ Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
 iterate over the alignment rows as SeqRecord objects - rather than working
 with Alignnment objects. Again, if you want to you can specify this is RNA:
 
->>> from Bio import SeqIO
->>> from Bio.Alphabet import generic_rna
->>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm",
-...                           alphabet=generic_rna):
-...     print(record.id)
-...     print(record.seq)
-...     print(record.letter_annotations['secondary_structure'])
-AP001509.1
-UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
------------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
-AE007476.1
-AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
------------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    >>> from Bio import SeqIO
+    >>> from Bio.Alphabet import generic_rna
+    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm",
+    ...                           alphabet=generic_rna):
+    ...     print(record.id)
+    ...     print(record.seq)
+    ...     print(record.letter_annotations['secondary_structure'])
+    AP001509.1
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
 Remember that if you slice a SeqRecord, the per-letter-annotions like the
 secondary structure string here, are also sliced:
 
->>> sub_record = record[10:20]
->>> print(sub_record.seq)
-AUCGUUUUAC
->>> print(sub_record.letter_annotations['secondary_structure'])
--------<<<
+    >>> sub_record = record[10:20]
+    >>> print(sub_record.seq)
+    AUCGUUUUAC
+    >>> print(sub_record.letter_annotations['secondary_structure'])
+    -------<<<
 """
 from __future__ import print_function
 
