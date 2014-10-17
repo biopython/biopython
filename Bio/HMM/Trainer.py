@@ -23,6 +23,7 @@ import math
 # local stuff
 from .DynamicProgramming import ScaledDPAlgorithms
 
+__docformat__ = "restructuredtext en"
 
 class TrainingSequence(object):
     """Hold a training sequence with emissions and optionally, a state path.

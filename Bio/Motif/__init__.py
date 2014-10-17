@@ -31,6 +31,8 @@ from Bio.Motif.Parsers.AlignAce import read as _AlignAce_read
 from Bio.Motif.Parsers.MEME import read as _MEME_read
 from Bio.Motif.Thresholds import ScoreDistribution
 
+__docformat__ = "restructuredtext en"
+
 _parsers={"AlignAce": _AlignAce_read,
           "MEME": _MEME_read,
           }

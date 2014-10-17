@@ -16,6 +16,8 @@ from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
+__docformat__ = "restructuredtext en"
+
 
 class SequenceIterator(object):
     """Base class for building SeqRecord iterators.

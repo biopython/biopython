@@ -17,6 +17,7 @@ import itertools
 from ast import literal_eval
 from Bio.Phylo import BaseTree
 
+__docformat__ = "restructuredtext en"
 
 class _BitString(str):
     """Assistant class of binary string data used for storing and

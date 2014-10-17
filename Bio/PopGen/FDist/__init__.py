@@ -20,6 +20,7 @@ read             Parses a FDist record (file) into a Record object.
 
 """
 
+__docformat__ = "restructuredtext en"
 
 def read(handle):
     """Parses FDist data into a Record object.

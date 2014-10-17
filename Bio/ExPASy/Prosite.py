@@ -24,6 +24,7 @@ Classes:
     - Record                Holds Prosite data.
 """
 
+__docformat__ = "restructuredtext en"
 
 def parse(handle):
     """Parse Prosite records.

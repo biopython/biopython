@@ -40,6 +40,7 @@ import random
 
 from Bio._py3k import range
 
+__docformat__ = "restructuredtext en"
 
 class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.

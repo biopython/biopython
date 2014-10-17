@@ -41,6 +41,7 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 
+__docformat__ = "restructuredtext en"
 
 # fragment file (lib_SIZE_z_LENGTH.txt)
 # SIZE=number of fragments

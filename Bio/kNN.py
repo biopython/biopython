@@ -33,6 +33,8 @@ Weighting Functions:
 
 import numpy
 
+__docformat__ = "restructuredtext en"
+
 
 class kNN(object):
     """Holds information necessary to do nearest neighbors classification.

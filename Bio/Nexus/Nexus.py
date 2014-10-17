@@ -28,6 +28,8 @@ from Bio.Seq import Seq
 
 from .Trees import Tree
 
+__docformat__ = "restructuredtext en"
+
 INTERLEAVE = 70
 SPECIAL_COMMANDS = ['charstatelabels', 'charlabels', 'taxlabels', 'taxset',
                     'charset', 'charpartition', 'taxpartition', 'matrix',

@@ -32,6 +32,8 @@ from subprocess import CalledProcessError as _ProcessCalledError
 
 from Bio import File
 
+__docformat__ = "restructuredtext en"
+
 # Use this regular expression to test the property names are going to
 # be valid as Python properties or arguments
 _re_prop_name = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")

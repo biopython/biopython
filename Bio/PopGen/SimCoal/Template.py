@@ -11,6 +11,7 @@ from functools import reduce
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir
 
+__docformat__ = "restructuredtext en"
 
 def exec_template(template):
     executed_template = template

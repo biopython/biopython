@@ -19,6 +19,7 @@ from random import randint
 from time import strftime, clock
 # from logging import debug
 
+__docformat__ = "restructuredtext en"
 
 def my_float(f):
     # Because of Jython, mostly
