@@ -170,9 +170,9 @@ def get_colors(k, **kwargs):
 
        Arguments:
 
-       o k - the number of colours to return
+         - k - the number of colours to return
 
-       o **kwargs - pass-through arguments to the ColorSpiral object
+         - **kwargs - pass-through arguments to the ColorSpiral object
     """
     cs = ColorSpiral(**kwargs)
     return cs.get_colors(k)
@@ -186,9 +186,9 @@ def get_color_dict(l, **kwargs):
 
        Arguments:
 
-       o l - an iterable representing classes to be coloured
+         - l - an iterable representing classes to be coloured
 
-       o **kwargs - pass-through arguments to the ColorSpiral object
+         - **kwargs - pass-through arguments to the ColorSpiral object
     """
     cs = ColorSpiral(**kwargs)
     colors = cs.get_colors(len(l))

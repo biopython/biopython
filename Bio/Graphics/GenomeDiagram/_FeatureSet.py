@@ -106,9 +106,9 @@ class FeatureSet(object):
     def add_feature(self, feature, **kwargs):
         """ add_feature(self, feature, **args)
 
-            o feature       Bio.SeqFeature object
+                - feature       Bio.SeqFeature object
 
-            o **kwargs      Keyword arguments for Feature.  Named attributes
+                - **kwargs      Keyword arguments for Feature.  Named attributes
                             of the Feature
 
             Add a Bio.SeqFeature object to the diagram (will be stored
@@ -133,7 +133,7 @@ class FeatureSet(object):
     def del_feature(self, feature_id):
         """ del_feature(self, feature_id)
 
-            o feature_id        Unique id of the feature to delete
+                - feature_id        Unique id of the feature to delete
 
             Remove a feature from the set, indicated by its id
         """
@@ -142,9 +142,9 @@ class FeatureSet(object):
     def set_all_features(self, attr, value):
         """ set_all_features(self, attr, value)
 
-            o attr      An attribute of the Feature class
+                - attr      An attribute of the Feature class
 
-            o value     The value to set that attribute
+                - value     The value to set that attribute
 
             Set the passed attribute of all features in the set to the
             passed value
@@ -165,12 +165,12 @@ class FeatureSet(object):
         """ get_features(self, attribute=None, value=None, comparator=None) ->
                                             [Feature, Feature, ...]
 
-            o attribute        String, attribute of a Feature object
+                - attribute        String, attribute of a Feature object
 
-            o value            The value desired of the attribute
+                - value            The value desired of the attribute
 
-            o comparator       String, how to compare the Feature attribute to the
-                               passed value
+                - comparator       String, how to compare the Feature attribute to the
+                  passed value
 
             If no attribute or value is given, return a list of all features in the
             feature set.  If both an attribute and value are given, then depending
@@ -231,8 +231,8 @@ class FeatureSet(object):
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""
 
-            o verbose       Boolean indicating whether a short or complete
-                            account of the set is required
+                - verbose       Boolean indicating whether a short or complete
+                  account of the set is required
 
             Returns a formatted string with information about the set
         """

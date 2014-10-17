@@ -617,10 +617,10 @@ class Node(object):
 class Domain(Node):
     """ A SCOP domain. A leaf node in the Scop hierarchy.
 
-    sid      -- The SCOP domain identifier. e.g. 'd5hbib_'
+        - sid      -- The SCOP domain identifier. e.g. 'd5hbib_'
 
-    residues -- A Residue object. It defines the collection
-                  of PDB atoms that make up this domain.
+        - residues -- A Residue object. It defines the collection
+          of PDB atoms that make up this domain.
     """
     def __init__(self,scop=None):
         Node.__init__(self, scop=scop)
@@ -681,19 +681,19 @@ class Astral(object):
 
         You must provide either a directory of SCOP files:
 
-        dir_path - string, the path to location of the scopseq-x.xx directory
-                   (not the directory itself), and
-        version   -a version number.
+            - dir_path - string, the path to location of the scopseq-x.xx directory
+                       (not the directory itself), and
+            - version   -a version number.
 
         or, a FASTA file:
 
-        astral_file - string, a path to a fasta file (which will be loaded in memory)
+            - astral_file - string, a path to a fasta file (which will be loaded in memory)
 
         or, a MYSQL database:
 
-        db_handle - a database handle for a MYSQL database containing a table
-                    'astral' with the astral data in it.  This can be created
-                    using writeToSQL.
+            - db_handle - a database handle for a MYSQL database containing a table
+              'astral' with the astral data in it.  This can be created
+              using writeToSQL.
         """
 
         if astral_file is None and dir_path is None and db_handle is None:

@@ -9,13 +9,10 @@
 
 Contains classes to deal with generic sequence alignment stuff not
 specific to a particular program or format.
-
-Classes:
- - Alignment
 """
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 # biopython
 from Bio.Seq import Seq
@@ -37,8 +34,8 @@ class Alignment(object):
         """Initialize a new Alignment object.
 
         Arguments:
-         - alphabet - The alphabet to use for the sequence objects that are
-                      created. This alphabet must be a gapped type.
+            - alphabet - The alphabet to use for the sequence objects that are
+              created. This alphabet must be a gapped type.
 
         e.g.
 
@@ -87,7 +84,7 @@ class Alignment(object):
         This output is intended to be readable, but large alignments are
         shown truncated.  A maximum of 20 rows (sequences) and 50 columns
         are shown, with the record identifiers.  This should fit nicely on a
-        single screen.  e.g.
+        single screen. e.g.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
@@ -233,10 +230,10 @@ class Alignment(object):
         """Retrieve a sequence by row number (DEPRECATED).
 
         Returns:
-         - A Seq object for the requested sequence.
+            - A Seq object for the requested sequence.
 
         Raises:
-         - IndexError - If the specified number is out of range.
+            - IndexError - If the specified number is out of range.
 
         NOTE: This is a legacy method.  In new code where you need to access
         the rows of the alignment (i.e. the sequences) consider iterating
@@ -298,19 +295,19 @@ class Alignment(object):
         sequences.
 
         Arguments:
-         - descriptor - The descriptive id of the sequence being added.
-                       This will be used as the resulting SeqRecord's
-                       .id property (and, for historical compatibility,
-                       also the .description property)
-         - sequence - A string with sequence info.
-         - start - You can explicitly set the start point of the sequence.
-                   This is useful (at least) for BLAST alignments, which can
-                   just be partial alignments of sequences.
-         - end - Specify the end of the sequence, which is important
-                 for the same reason as the start.
-         - weight - The weight to place on the sequence in the alignment.
-                    By default, all sequences have the same weight. (0.0 =>
-                    no weight, 1.0 => highest weight)
+            - descriptor - The descriptive id of the sequence being added.
+              This will be used as the resulting SeqRecord's
+              .id property (and, for historical compatibility,
+              also the .description property)
+            - sequence - A string with sequence info.
+            - start - You can explicitly set the start point of the sequence.
+              This is useful (at least) for BLAST alignments, which can
+              just be partial alignments of sequences.
+            - end - Specify the end of the sequence, which is important
+              for the same reason as the start.
+            - weight - The weight to place on the sequence in the alignment.
+              By default, all sequences have the same weight. (0.0 =>
+              no weight, 1.0 => highest weight)
         """
         new_seq = Seq(sequence, self._alphabet)
 

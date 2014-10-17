@@ -38,11 +38,11 @@ see _RecordConsumer for details.
 
 2) Or you can iterate over the contigs of an ace file one by one in the ususal way:
 
-        from Bio.Sequencing import Ace
-        contigs=Ace.parse(open('my_ace_file.ace'))
-        for contig in contigs:
-            print(contig.name)
-            ...
+    from Bio.Sequencing import Ace
+    contigs=Ace.parse(open('my_ace_file.ace'))
+    for contig in contigs:
+        print(contig.name)
+        ...
 
 Please note that for memory efficiency, when using the iterator approach, only one
 contig is kept in memory at once.  However, there can be a footer to the ACE file

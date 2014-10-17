@@ -12,26 +12,28 @@ For odd values of N, perform symmetric N+1 point crossover
   (select N/2 points for both genomes)
 
 N-Point introduction (my notation):
-    genome 1:    A-----B-----C-----D-----E-----F-----G
-    genome 2:    a=====b=====c=====d=====e=====f=====g
 
-    2-point, symmetric (points=1):
-                 A-----B-----C- 1 -D-----E-----F-----G
-                 a=====b=====c= 2 =d=====e=====f=====g
-    returns: (ABCdefg, abcDEFG)
-
-    2-point, asymmetric (points=2):
-                 A-----B- 1 -C-----D-----E-----F-----G
-                 a=====b=====c=====d=====e= 2 =f=====g
-    returns: (ABfg, abcdeCDEFG)
+    | genome 1:    A-----B-----C-----D-----E-----F-----G
+    | genome 2:    a=====b=====c=====d=====e=====f=====g
+    |
+    | 2-point, symmetric (points=1):
+    |              A-----B-----C- 1 -D-----E-----F-----G
+    |              a=====b=====c= 2 =d=====e=====f=====g
+    | returns: (ABCdefg, abcDEFG)
+    |
+    | 2-point, asymmetric (points=2):
+    |              A-----B- 1 -C-----D-----E-----F-----G
+    |              a=====b=====c=====d=====e= 2 =f=====g
+    | returns: (ABfg, abcdeCDEFG)
 
 and for the drastic (n can be arbitrary to the length of the genome!):
-    12-point, symmetric (points=11):
-                 A- 1 -B- 2 -C- 3 -D- 4 -E- 5 -F- 6 -G
-                 a= 7 =b= 8 =c= 9 =d= 10 e= 11 f= 12 g
-    returns: (AbCdEfG, aBcDeFg)
-    (note that points=12 will yield the same result, but 11
-     may be somewhat faster)
+
+    | 12-point, symmetric (points=11):
+    |              A- 1 -B- 2 -C- 3 -D- 4 -E- 5 -F- 6 -G
+    |              a= 7 =b= 8 =c= 9 =d= 10 e= 11 f= 12 g
+    | returns: (AbCdEfG, aBcDeFg)
+    | (note that points=12 will yield the same result, but 11
+    |  may be somewhat faster)
 """
 # standard modules
 import random
@@ -43,6 +45,7 @@ class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.
 
        Ideas on how to use this class:
+
            - Call it directly ( construct, do_crossover )
            - Use one of the provided subclasses
            - Inherit from it:
@@ -102,7 +105,8 @@ class GeneralPointCrossover(object):
         """Generalized Location Generator:
 
            arguments:
-               bound (int)   - upper bound
+
+              - bound (int)   - upper bound
 
            returns: [0]+x_0...x_n+[bound]
              where n=self._npoints-1
@@ -121,13 +125,16 @@ class GeneralPointCrossover(object):
         """Generalized Crossover Function:
 
            arguments:
-               x (int)        - genome number [0|1]
-               no (organism,organism)
-                              - new organisms
-               locs (int list, int list)
-                              - lists of locations,
-                                [0, +n points+, bound]
-                                for each genome (sync'd with x)
+               - x (int)        - genome number [0|1]
+               - no (organism,organism)
+
+                - new organisms
+
+               - locs (int list, int list)
+               
+                - lists of locations,
+                  [0, +n points+, bound]
+                  for each genome (sync'd with x)
 
             return type: sequence (to replace no[x])
         """

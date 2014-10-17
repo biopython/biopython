@@ -78,22 +78,22 @@ def _get_convert_formats():
 def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
 
-    db - database (string), see list below.
-    id - identier (string) or a list of identifiers (either as a list of
-         strings or a single string with comma separators).
-    format - return data file format (string), options depend on the database
-             e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
-    field - specific field from within the database record (string)
-            e.g. "au" or "authors" for pubmed.
+        - db - database (string), see list below.
+        - id - identier (string) or a list of identifiers (either as a list of
+          strings or a single string with comma separators).
+        - format - return data file format (string), options depend on the database
+          e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
+        - field - specific field from within the database record (string)
+          e.g. "au" or "authors" for pubmed.
 
-    At the time of writing, this includes the following:
+    At the time of writing, this includes the following::
 
-    KEGG: compound, drug, enzyme, genes, glycan, orthology, reaction,
-          module, pathway
-    DDBj: ddbj, dad, pdb
-    NCBI: nuccore, nucest, nucgss, nucleotide, protein, gene, onim,
-          homologue, snp, mesh, pubmed
-    EBI:  embl, uniprot, uniparc, uniref100, uniref90, uniref50
+        KEGG: compound, drug, enzyme, genes, glycan, orthology, reaction,
+              module, pathway
+        DDBj: ddbj, dad, pdb
+        NCBI: nuccore, nucest, nucgss, nucleotide, protein, gene, onim,
+              homologue, snp, mesh, pubmed
+        EBI:  embl, uniprot, uniparc, uniref100, uniref90, uniref50
 
     For the current list, please see http://togows.dbcls.jp/entry/
 
@@ -176,11 +176,11 @@ def search_count(db, query):
 def search_iter(db, query, limit=None, batch=100):
     """TogoWS search iteratating over the results (generator function).
 
-    db - database (string), see http://togows.dbcls.jp/search
-    query - search term (string)
-    limit - optional upper bound on number of search results
-    batch - number of search results to pull back each time talk to
-            TogoWS (currently limited to 100).
+        - db - database (string), see http://togows.dbcls.jp/search
+        - query - search term (string)
+        - limit - optional upper bound on number of search results
+        - batch - number of search results to pull back each time talk to
+          TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
 
@@ -225,12 +225,12 @@ def search(db, query, offset=None, limit=None, format=None):
     can return results in a several formats. In general, the search_iter
     function is more suitable for end users.
 
-    db - database (string), see http://togows.dbcls.jp/search/
-    query - search term (string)
-    offset, limit - optional integers specifying which result to start from
-            (1 based) and the number of results to return.
-    format - return data file format (string), e.g. "json", "ttl" (RDF)
-             By default plain text is returned, one result per line.
+        - db - database (string), see http://togows.dbcls.jp/search/
+        - query - search term (string)
+        - offset, limit - optional integers specifying which result to start from
+          (1 based) and the number of results to return.
+        - format - return data file format (string), e.g. "json", "ttl" (RDF)
+          By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS applies a default count limit of 100
     search results, and this is an upper bound. To access more results,

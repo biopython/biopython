@@ -87,7 +87,7 @@ CPU load).
 Warning about namespaces
 ------------------------
 
-It is considered a bad idea to use "from XXX import *" in Python, because
+It is considered a bad idea to use "from XXX import ``*``" in Python, because
 it pollutes the namespace. This is a real issue with Bio.bgzf (and the
 standard Python library gzip) because they contain a function called open
 i.e. Suppose you do this:

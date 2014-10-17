@@ -75,17 +75,17 @@ produce FASTQ files using the standard Sanger encoding.
 You are expected to use this module via the Bio.SeqIO functions, with the
 following format names:
 
- - "qual" means simple quality files using PHRED scores (e.g. from Roche 454)
- - "fastq" means Sanger style FASTQ files using PHRED scores and an ASCII
-    offset of 33 (e.g. from the NCBI Short Read Archive and Illumina 1.8+).
-    These can potentially hold PHRED scores from 0 to 93.
- - "fastq-sanger" is an alias for "fastq".
- - "fastq-solexa" means old Solexa (and also very early Illumina) style FASTQ
-    files, using Solexa scores with an ASCII offset 64. These can hold Solexa
-    scores from -5 to 62.
- - "fastq-illumina" means newer Illumina 1.3 to 1.7 style FASTQ files, using
-    PHRED scores but with an ASCII offset 64, allowing PHRED scores from 0
-    to 62.
+    - "qual" means simple quality files using PHRED scores (e.g. from Roche 454)
+    - "fastq" means Sanger style FASTQ files using PHRED scores and an ASCII
+      offset of 33 (e.g. from the NCBI Short Read Archive and Illumina 1.8+).
+      These can potentially hold PHRED scores from 0 to 93.
+    - "fastq-sanger" is an alias for "fastq".
+    - "fastq-solexa" means old Solexa (and also very early Illumina) style FASTQ
+      files, using Solexa scores with an ASCII offset 64. These can hold Solexa
+      scores from -5 to 62.
+    - "fastq-illumina" means newer Illumina 1.3 to 1.7 style FASTQ files, using
+      PHRED scores but with an ASCII offset 64, allowing PHRED scores from 0
+      to 62.
 
 We could potentially add support for "qual-solexa" meaning QUAL files which
 contain Solexa scores, but thus far there isn't any reason to use such files.
@@ -111,61 +111,61 @@ follows the Sanger FASTQ convention (PHRED style qualities with an ASCII
 offet of 33).  This means we can parse this file using Bio.SeqIO using
 "fastq" as the format name:
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Quality/example.fastq", "fastq"):
-    ...     print("%s %s" % (record.id, record.seq))
-    EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
-    EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
-    EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
+>>> from Bio import SeqIO
+>>> for record in SeqIO.parse("Quality/example.fastq", "fastq"):
+...     print("%s %s" % (record.id, record.seq))
+EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
+EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
+EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
 
 The qualities are held as a list of integers in each record's annotation:
 
-    >>> print(record)
-    ID: EAS54_6_R1_2_1_443_348
-    Name: EAS54_6_R1_2_1_443_348
-    Description: EAS54_6_R1_2_1_443_348
-    Number of features: 0
-    Per letter annotation for: phred_quality
-    Seq('GTTGCTTCTGGCGTGGGTGGGGGGG', SingleLetterAlphabet())
-    >>> print(record.letter_annotations["phred_quality"])
-    [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+>>> print(record)
+ID: EAS54_6_R1_2_1_443_348
+Name: EAS54_6_R1_2_1_443_348
+Description: EAS54_6_R1_2_1_443_348
+Number of features: 0
+Per letter annotation for: phred_quality
+Seq('GTTGCTTCTGGCGTGGGTGGGGGGG', SingleLetterAlphabet())
+>>> print(record.letter_annotations["phred_quality"])
+[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
 You can use the SeqRecord format method to show this in the QUAL format:
 
-    >>> print(record.format("qual"))
-    >EAS54_6_R1_2_1_443_348
-    26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
-    24 18 18 18 18
-    <BLANKLINE>
+>>> print(record.format("qual"))
+>EAS54_6_R1_2_1_443_348
+26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
+24 18 18 18 18
+<BLANKLINE>
 
 Or go back to the FASTQ format, use "fastq" (or "fastq-sanger"):
 
-    >>> print(record.format("fastq"))
-    @EAS54_6_R1_2_1_443_348
-    GTTGCTTCTGGCGTGGGTGGGGGGG
-    +
-    ;;;;;;;;;;;9;7;;.7;393333
-    <BLANKLINE>
+>>> print(record.format("fastq"))
+@EAS54_6_R1_2_1_443_348
+GTTGCTTCTGGCGTGGGTGGGGGGG
++
+;;;;;;;;;;;9;7;;.7;393333
+<BLANKLINE>
 
 Or, using the Illumina 1.3+ FASTQ encoding (PHRED values with an ASCII offset
 of 64):
 
-    >>> print(record.format("fastq-illumina"))
-    @EAS54_6_R1_2_1_443_348
-    GTTGCTTCTGGCGTGGGTGGGGGGG
-    +
-    ZZZZZZZZZZZXZVZZMVZRXRRRR
-    <BLANKLINE>
+>>> print(record.format("fastq-illumina"))
+@EAS54_6_R1_2_1_443_348
+GTTGCTTCTGGCGTGGGTGGGGGGG
++
+ZZZZZZZZZZZXZVZZMVZRXRRRR
+<BLANKLINE>
 
 You can also get Biopython to convert the scores and show a Solexa style
 FASTQ file:
 
-    >>> print(record.format("fastq-solexa"))
-    @EAS54_6_R1_2_1_443_348
-    GTTGCTTCTGGCGTGGGTGGGGGGG
-    +
-    ZZZZZZZZZZZXZVZZMVZRXRRRR
-    <BLANKLINE>
+>>> print(record.format("fastq-solexa"))
+@EAS54_6_R1_2_1_443_348
+GTTGCTTCTGGCGTGGGTGGGGGGG
++
+ZZZZZZZZZZZXZVZZMVZRXRRRR
+<BLANKLINE>
 
 Notice that this is actually the same output as above using "fastq-illumina"
 as the format! The reason for this is all these scores are high enough that
@@ -176,58 +176,58 @@ phred_quality_from_solexa for more details.
 If you wanted to trim your sequences (perhaps to remove low quality regions,
 or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
 
-    >>> sub_rec = record[5:15]
-    >>> print(sub_rec)
-    ID: EAS54_6_R1_2_1_443_348
-    Name: EAS54_6_R1_2_1_443_348
-    Description: EAS54_6_R1_2_1_443_348
-    Number of features: 0
-    Per letter annotation for: phred_quality
-    Seq('TTCTGGCGTG', SingleLetterAlphabet())
-    >>> print(sub_rec.letter_annotations["phred_quality"])
-    [26, 26, 26, 26, 26, 26, 24, 26, 22, 26]
-    >>> print(sub_rec.format("fastq"))
-    @EAS54_6_R1_2_1_443_348
-    TTCTGGCGTG
-    +
-    ;;;;;;9;7;
-    <BLANKLINE>
+>>> sub_rec = record[5:15]
+>>> print(sub_rec)
+ID: EAS54_6_R1_2_1_443_348
+Name: EAS54_6_R1_2_1_443_348
+Description: EAS54_6_R1_2_1_443_348
+Number of features: 0
+Per letter annotation for: phred_quality
+Seq('TTCTGGCGTG', SingleLetterAlphabet())
+>>> print(sub_rec.letter_annotations["phred_quality"])
+[26, 26, 26, 26, 26, 26, 24, 26, 22, 26]
+>>> print(sub_rec.format("fastq"))
+@EAS54_6_R1_2_1_443_348
+TTCTGGCGTG
++
+;;;;;;9;7;
+<BLANKLINE>
 
 If you wanted to, you could read in this FASTQ file, and save it as a QUAL file:
 
-    >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
-    >>> with open("Quality/temp.qual", "w") as out_handle:
-    ...     SeqIO.write(record_iterator, out_handle, "qual")
-    3
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
+>>> with open("Quality/temp.qual", "w") as out_handle:
+...     SeqIO.write(record_iterator, out_handle, "qual")
+3
 
 You can of course read in a QUAL file, such as the one we just created:
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Quality/temp.qual", "qual"):
-    ...     print("%s %s" % (record.id, record.seq))
-    EAS54_6_R1_2_1_413_324 ?????????????????????????
-    EAS54_6_R1_2_1_540_792 ?????????????????????????
-    EAS54_6_R1_2_1_443_348 ?????????????????????????
+>>> from Bio import SeqIO
+>>> for record in SeqIO.parse("Quality/temp.qual", "qual"):
+...     print("%s %s" % (record.id, record.seq))
+EAS54_6_R1_2_1_413_324 ?????????????????????????
+EAS54_6_R1_2_1_540_792 ?????????????????????????
+EAS54_6_R1_2_1_443_348 ?????????????????????????
 
 Notice that QUAL files don't have a proper sequence present!  But the quality
 information is there:
 
-    >>> print(record)
-    ID: EAS54_6_R1_2_1_443_348
-    Name: EAS54_6_R1_2_1_443_348
-    Description: EAS54_6_R1_2_1_443_348
-    Number of features: 0
-    Per letter annotation for: phred_quality
-    UnknownSeq(25, alphabet = SingleLetterAlphabet(), character = '?')
-    >>> print(record.letter_annotations["phred_quality"])
-    [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+>>> print(record)
+ID: EAS54_6_R1_2_1_443_348
+Name: EAS54_6_R1_2_1_443_348
+Description: EAS54_6_R1_2_1_443_348
+Number of features: 0
+Per letter annotation for: phred_quality
+UnknownSeq(25, alphabet = SingleLetterAlphabet(), character = '?')
+>>> print(record.letter_annotations["phred_quality"])
+[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
 Just to keep things tidy, if you are following this example yourself, you can
 delete this temporary file now:
 
-    >>> import os
-    >>> os.remove("Quality/temp.qual")
+>>> import os
+>>> os.remove("Quality/temp.qual")
 
 Sometimes you won't have a FASTQ file, but rather just a pair of FASTA and QUAL
 files.  Because the Bio.SeqIO system is designed for reading single files, you
@@ -238,20 +238,20 @@ defined in this module that does this for you - PairedFastaQualIterator.
 Alternatively, if you have enough RAM to hold all the records in memory at once,
 then a simple dictionary approach would work:
 
-    >>> from Bio import SeqIO
-    >>> reads = SeqIO.to_dict(SeqIO.parse("Quality/example.fasta", "fasta"))
-    >>> for rec in SeqIO.parse("Quality/example.qual", "qual"):
-    ...     reads[rec.id].letter_annotations["phred_quality"]=rec.letter_annotations["phred_quality"]
+>>> from Bio import SeqIO
+>>> reads = SeqIO.to_dict(SeqIO.parse("Quality/example.fasta", "fasta"))
+>>> for rec in SeqIO.parse("Quality/example.qual", "qual"):
+...     reads[rec.id].letter_annotations["phred_quality"]=rec.letter_annotations["phred_quality"]
 
 You can then access any record by its key, and get both the sequence and the
 quality scores.
 
-    >>> print(reads["EAS54_6_R1_2_1_540_792"].format("fastq"))
-    @EAS54_6_R1_2_1_540_792
-    TTGGCAGGCCAAGGCCGATGGATCA
-    +
-    ;;;;;;;;;;;7;;;;;-;;;3;83
-    <BLANKLINE>
+>>> print(reads["EAS54_6_R1_2_1_540_792"].format("fastq"))
+@EAS54_6_R1_2_1_540_792
+TTGGCAGGCCAAGGCCGATGGATCA
++
+;;;;;;;;;;;7;;;;;-;;;3;83
+<BLANKLINE>
 
 It is important that you explicitly tell Bio.SeqIO which FASTQ variant you are
 using ("fastq" or "fastq-sanger" for the Sanger standard using PHRED values,
@@ -261,66 +261,66 @@ automatically.
 
 To illustrate this problem, let's consider an artifical example:
 
-    >>> from Bio.Seq import Seq
-    >>> from Bio.Alphabet import generic_dna
-    >>> from Bio.SeqRecord import SeqRecord
-    >>> test = SeqRecord(Seq("NACGTACGTA", generic_dna), id="Test",
-    ... description="Made up!")
-    >>> print(test.format("fasta"))
-    >Test Made up!
-    NACGTACGTA
-    <BLANKLINE>
-    >>> print(test.format("fastq"))
-    Traceback (most recent call last):
-     ...
-    ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
+>>> from Bio.SeqRecord import SeqRecord
+>>> test = SeqRecord(Seq("NACGTACGTA", generic_dna), id="Test",
+... description="Made up!")
+>>> print(test.format("fasta"))
+>Test Made up!
+NACGTACGTA
+<BLANKLINE>
+>>> print(test.format("fastq"))
+Traceback (most recent call last):
+ ...
+ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
 
 We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
 or FASTQ format we need to provide some quality scores. These are held as a
 list of integers (one for each base) in the letter_annotations dictionary:
 
-    >>> test.letter_annotations["phred_quality"] = [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
-    >>> print(test.format("qual"))
-    >Test Made up!
-    0 1 2 3 4 5 10 20 30 40
-    <BLANKLINE>
-    >>> print(test.format("fastq"))
-    @Test Made up!
-    NACGTACGTA
-    +
-    !"#$%&+5?I
-    <BLANKLINE>
+>>> test.letter_annotations["phred_quality"] = [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
+>>> print(test.format("qual"))
+>Test Made up!
+0 1 2 3 4 5 10 20 30 40
+<BLANKLINE>
+>>> print(test.format("fastq"))
+@Test Made up!
+NACGTACGTA
++
+!"#$%&+5?I
+<BLANKLINE>
 
 We can check this FASTQ encoding - the first PHRED quality was zero, and this
 mapped to a exclamation mark, while the final score was 40 and this mapped to
 the letter "I":
 
-    >>> ord('!') - 33
-    0
-    >>> ord('I') - 33
-    40
-    >>> [ord(letter)-33 for letter in '!"#$%&+5?I']
-    [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
+>>> ord('!') - 33
+0
+>>> ord('I') - 33
+40
+>>> [ord(letter)-33 for letter in '!"#$%&+5?I']
+[0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Similarly, we could produce an Illumina 1.3 to 1.7 style FASTQ file using PHRED
 scores with an offset of 64:
 
-    >>> print(test.format("fastq-illumina"))
-    @Test Made up!
-    NACGTACGTA
-    +
-    @ABCDEJT^h
-    <BLANKLINE>
+>>> print(test.format("fastq-illumina"))
+@Test Made up!
+NACGTACGTA
++
+@ABCDEJT^h
+<BLANKLINE>
 
 And we can check this too - the first PHRED score was zero, and this mapped to
 "@", while the final score was 40 and this mapped to "h":
 
-    >>> ord("@") - 64
-    0
-    >>> ord("h") - 64
-    40
-    >>> [ord(letter)-64 for letter in "@ABCDEJT^h"]
-    [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
+>>> ord("@") - 64
+0
+>>> ord("h") - 64
+40
+>>> [ord(letter)-64 for letter in "@ABCDEJT^h"]
+[0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Notice how different the standard Sanger FASTQ and the Illumina 1.3 to 1.7 style
 FASTQ files look for the same data! Then we have the older Solexa/Illumina
@@ -329,32 +329,32 @@ format to consider which encodes Solexa scores instead of PHRED scores.
 First let's see what Biopython says if we convert the PHRED scores into Solexa
 scores (rounding to one decimal place):
 
-    >>> for q in [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]:
-    ...     print("PHRED %i maps to Solexa %0.1f" % (q, solexa_quality_from_phred(q)))
-    PHRED 0 maps to Solexa -5.0
-    PHRED 1 maps to Solexa -5.0
-    PHRED 2 maps to Solexa -2.3
-    PHRED 3 maps to Solexa -0.0
-    PHRED 4 maps to Solexa 1.8
-    PHRED 5 maps to Solexa 3.3
-    PHRED 10 maps to Solexa 9.5
-    PHRED 20 maps to Solexa 20.0
-    PHRED 30 maps to Solexa 30.0
-    PHRED 40 maps to Solexa 40.0
+>>> for q in [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]:
+...     print("PHRED %i maps to Solexa %0.1f" % (q, solexa_quality_from_phred(q)))
+PHRED 0 maps to Solexa -5.0
+PHRED 1 maps to Solexa -5.0
+PHRED 2 maps to Solexa -2.3
+PHRED 3 maps to Solexa -0.0
+PHRED 4 maps to Solexa 1.8
+PHRED 5 maps to Solexa 3.3
+PHRED 10 maps to Solexa 9.5
+PHRED 20 maps to Solexa 20.0
+PHRED 30 maps to Solexa 30.0
+PHRED 40 maps to Solexa 40.0
 
 Now here is the record using the old Solexa style FASTQ file:
 
-    >>> print(test.format("fastq-solexa"))
-    @Test Made up!
-    NACGTACGTA
-    +
-    ;;>@BCJT^h
-    <BLANKLINE>
+>>> print(test.format("fastq-solexa"))
+@Test Made up!
+NACGTACGTA
++
+;;>@BCJT^h
+<BLANKLINE>
 
 Again, this is using an ASCII offset of 64, so we can check the Solexa scores:
 
-    >>> [ord(letter)-64 for letter in ";;>@BCJT^h"]
-    [-5, -5, -2, 0, 2, 3, 10, 20, 30, 40]
+>>> [ord(letter)-64 for letter in ";;>@BCJT^h"]
+[-5, -5, -2, 0, 2, 3, 10, 20, 30, 40]
 
 This explains why the last few letters of this FASTQ output matched that using
 the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
@@ -363,7 +363,7 @@ are approximately equal.
 """
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
@@ -392,19 +392,19 @@ def solexa_quality_from_phred(phred_quality):
     How does this work exactly? Well the PHRED quality is minus ten times the
     base ten logarithm of the probability of error::
 
-     phred_quality = -10*log(error,10)
+        phred_quality = -10*log(error,10)
 
     Therefore, turning this round::
 
-     error = 10 ** (- phred_quality / 10)
+        error = 10 ** (- phred_quality / 10)
 
     Now, Solexa qualities use a different log transformation::
 
-     solexa_quality = -10*log(error/(1-error),10)
+        solexa_quality = -10*log(error/(1-error),10)
 
     After substitution and a little manipulation we get::
 
-      solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
+         solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
 
     However, real Solexa files use a minimum quality of -5. This does have a
     good reason - a random base call would be correct 25% of the time,
@@ -485,7 +485,7 @@ def phred_quality_from_solexa(solexa_quality):
     The underlying formulas are given in the documentation for the sister
     function solexa_quality_from_phred, in this case the operation is::
 
-     phred_quality = 10*log(10**(solexa_quality/10.0) + 1, 10)
+        phred_quality = 10*log(10**(solexa_quality/10.0) + 1, 10)
 
     This will return a floating point number, it is up to you to round this to
     the nearest integer if appropriate.  e.g.
@@ -817,7 +817,7 @@ def FastqGeneralIterator(handle):
     for the FASTA file format line breaks between 60 and 80 characters are
     the norm.
 
-    WARNING - Because the "@" character can appear in the quality string,
+    **WARNING** - Because the "@" character can appear in the quality string,
     this can cause problems as this is also the marker for the start of
     a new sequence.  In fact, the "+" sign can also appear as well.  Some
     sources recommended having no line breaks in the  quality to avoid this,
@@ -960,14 +960,14 @@ def FastqGeneralIterator(handle):
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over FASTQ records (as SeqRecord objects).
 
-     - handle - input file
-     - alphabet - optional alphabet
-     - title2ids - A function that, when given the title line from the FASTQ
-                   file (without the beginning >), will return the id, name and
-                   description (in that order) for the record as a tuple of
-                   strings.  If this is not given, then the entire title line
-                   will be used as the description, and the first word as the
-                   id and name.
+        - handle - input file
+        - alphabet - optional alphabet
+        - title2ids - A function that, when given the title line from the FASTQ
+          file (without the beginning >), will return the id, name and
+          description (in that order) for the record as a tuple of
+          strings.  If this is not given, then the entire title line
+          will be used as the description, and the first word as the
+          id and name.
 
     Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
 

@@ -26,14 +26,15 @@ class SequenceIterator(object):
     def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
-        handle - input file
-        alphabet - optional, e.g. Bio.Alphabet.generic_protein
+            - handle - input file
+            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
-        - there should be a single non-optional argument,
-          the handle.
-        - you do not have to require an alphabet.
-        - you can add additional optional arguments."""
+
+            - there should be a single non-optional argument,
+              the handle.
+            - you do not have to require an alphabet.
+            - you can add additional optional arguments."""
         self.handle = handle
         self.alphabet = alphabet
         #####################################################

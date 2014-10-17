@@ -6,20 +6,22 @@
 """Code to support writing parsers (DEPRECATED).
 
 Classes:
-AbstractParser         Base class for parsers.
-AbstractConsumer       Base class of all Consumers.
-TaggingConsumer        Consumer that tags output with its event.  For debugging
-EventGenerator         Generate Biopython Events from Martel XML output
-                       (note that Martel has been removed)
+
+    - AbstractParser         Base class for parsers.
+    - AbstractConsumer       Base class of all Consumers.
+    - TaggingConsumer        Consumer that tags output with its event.  For debugging
+    - EventGenerator         Generate Biopython Events from Martel XML output
+      (note that Martel has been removed)
 
 Functions:
-safe_readline          Read a line from a handle, with check for EOF.
-safe_peekline          Peek at next line, with check for EOF.
-read_and_call          Read a line from a handle and pass it to a method.
-read_and_call_while    Read many lines, as long as a condition is met.
-read_and_call_until    Read many lines, until a condition is met.
-attempt_read_and_call  Like read_and_call, but forgiving of errors.
-is_blank_line          Test whether a line is blank.
+
+    - safe_readline          Read a line from a handle, with check for EOF.
+    - safe_peekline          Peek at next line, with check for EOF.
+    - read_and_call          Read a line from a handle and pass it to a method.
+    - read_and_call_while    Read many lines, as long as a condition is met.
+    - read_and_call_until    Read many lines, until a condition is met.
+    - attempt_read_and_call  Like read_and_call, but forgiving of errors.
+    - is_blank_line          Test whether a line is blank.
 
 """
 

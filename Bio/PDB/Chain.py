@@ -25,7 +25,8 @@ class Chain(Entity):
         same resseq's are sorted according to icode.
 
         Arguments:
-        o r1, r2 - Residue objects
+
+            - r1, r2 - Residue objects
         """
         hetflag1, resseq1, icode1=r1.id
         hetflag2, resseq2, icode2=r2.id
@@ -108,11 +109,13 @@ class Chain(Entity):
         """Return 1 if a residue with given id is present.
 
         The id of a residue is (hetero flag, sequence identifier, insertion code).
-                If id is an int, it is translated to (" ", id, " ") by the _translate_id
+        
+        If id is an int, it is translated to (" ", id, " ") by the _translate_id
         method.
 
         Arguments:
-        o id - (string, int, string) or int
+        
+            - id - (string, int, string) or int
         """
         id=self._translate_id(id)
         return Entity.has_id(self, id)

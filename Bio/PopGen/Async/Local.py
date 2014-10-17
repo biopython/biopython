@@ -22,7 +22,8 @@ class Local(Async):
         '''Constructor.
 
            parameters:
-           num_cores - Number of cores (for multiprocessor machines,
+
+             - num_cores - Number of cores (for multiprocessor machines,
                multiply accordingly)
         '''
         Async.__init__(self)

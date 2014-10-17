@@ -22,10 +22,12 @@ class StructureAlignment(object):
     """
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
         """
-        fasta_align --- Alignment object
-        m1, m2 --- two models
-        si, sj --- the sequences in the Alignment object that
-                correspond to the structures
+        Attributes:
+    
+            - fasta_align --- Alignment object
+            - m1, m2 --- two models
+            - si, sj --- the sequences in the Alignment object that
+              correspond to the structures
         """
         l=fasta_align.get_alignment_length()
         # Get the residues in the models

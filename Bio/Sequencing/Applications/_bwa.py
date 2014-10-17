@@ -9,7 +9,7 @@
 from __future__ import print_function
 from Bio._py3k import basestring
 
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 from Bio.Application import _StaticArgument
@@ -24,7 +24,8 @@ class BwaIndexCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
+    Example
+    -------
 
     >>> from Bio.Sequencing.Applications import BwaIndexCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
@@ -45,13 +46,13 @@ class BwaIndexCommandline(AbstractCommandline):
                             """Algorithm for constructing BWT index.
 
                             Available options are:
-                             - is:    IS linear-time algorithm for constructing suffix array.
-                                      It requires 5.37N memory where N is the size of the database.
-                                      IS is moderately fast, but does not work with database larger
-                                      than 2GB. IS is the default algorithm due to its simplicity.
-                             - bwtsw: Algorithm implemented in BWT-SW. This method works with the
-                                      whole human genome, but it does not work with database
-                                      smaller than 10MB and it is usually slower than IS.""",
+                                - is:    IS linear-time algorithm for constructing suffix array.
+                                  It requires 5.37N memory where N is the size of the database.
+                                  IS is moderately fast, but does not work with database larger
+                                  than 2GB. IS is the default algorithm due to its simplicity.
+                                - bwtsw: Algorithm implemented in BWT-SW. This method works with the
+                                  whole human genome, but it does not work with database
+                                  smaller than 10MB and it is usually slower than IS.""",
                             checker_function=lambda x: x in ["is", "bwtsw"],
                             equate=False, is_required=True),
                     _Option(["-p", "p", "prefix"],

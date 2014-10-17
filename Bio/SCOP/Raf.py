@@ -55,7 +55,7 @@ class SeqMapIndex(dict):
     access of RAF records without having to load the entire file into memory.
 
     The index key is a concatenation of the  PDB ID and chain ID. e.g
-    "2drcA", "155c_". RAF uses an underscore to indicate blank
+    "2drcA", ``"155c_"``. RAF uses an underscore to indicate blank
     chain IDs.
     """
 

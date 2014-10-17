@@ -44,7 +44,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
         @type hse_down_key: string
 
         @param angle_key: key used to store the angle between CA-CB and CA-pCB in
-            the entity.xtra attribute
+        the entity.xtra attribute
         @type angle_key: string
         """
         assert(offset>=0)

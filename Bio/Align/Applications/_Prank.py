@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -18,6 +18,7 @@ class PrankCommandline(AbstractCommandline):
     http://www.ebi.ac.uk/goldman-srv/prank/prank/
 
     Example:
+    --------
 
     To align a FASTA file (unaligned.fasta) with the output in aligned
     FASTA format with the output filename starting with "aligned" (you
@@ -36,6 +37,7 @@ class PrankCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citations:
+    ----------
 
     Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
     multiple alignment of sequences with insertions. Proceedings of

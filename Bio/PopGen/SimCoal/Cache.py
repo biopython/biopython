@@ -16,13 +16,13 @@ class SimCoalCache(object):
     def __init__(self, data_dir, simcoal_dir):
         """Initializes the cache.
 
-        data_dir - Where the cache can be found
-        simcoal_dir - where the binaries are
+            - data_dir - Where the cache can be found
+            - simcoal_dir - where the binaries are
 
         IMPORTANT: The cache only makes sense if the file name univocally
         identifies the model.
-          For now use use the model name as key,
-          and it will probably stay like that.
+        For now use use the model name as key,
+        and it will probably stay like that.
         """
         self.dataDir = data_dir
         self.cacheDir = os.sep.join([data_dir, 'SimCoal', 'cache'])

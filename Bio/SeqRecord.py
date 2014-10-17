@@ -10,7 +10,7 @@
 
 from Bio._py3k import basestring
 
-__docformat__ = "epytext en"  # Simple markup to show doctests nicely
+__docformat__ = "restructuredtext en"  # Simple markup to show doctests nicely
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
@@ -93,22 +93,22 @@ class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
-     - id          - Identifier such as a locus tag (string)
-     - seq         - The sequence itself (Seq object or similar)
+        - id          - Identifier such as a locus tag (string)
+        - seq         - The sequence itself (Seq object or similar)
 
     Additional attributes:
-     - name        - Sequence name, e.g. gene name (string)
-     - description - Additional text (string)
-     - dbxrefs     - List of database cross references (list of strings)
-     - features    - Any (sub)features defined (list of SeqFeature objects)
-     - annotations - Further information about the whole sequence (dictionary).
-                     Most entries are strings, or lists of strings.
-     - letter_annotations - Per letter/symbol annotation (restricted
-                     dictionary). This holds Python sequences (lists, strings
-                     or tuples) whose length matches that of the sequence.
-                     A typical use would be to hold a list of integers
-                     representing sequencing quality scores, or a string
-                     representing the secondary structure.
+        - name        - Sequence name, e.g. gene name (string)
+        - description - Additional text (string)
+        - dbxrefs     - List of database cross references (list of strings)
+        - features    - Any (sub)features defined (list of SeqFeature objects)
+        - annotations - Further information about the whole sequence (dictionary).
+          Most entries are strings, or lists of strings.
+        - letter_annotations - Per letter/symbol annotation (restricted
+          dictionary). This holds Python sequences (lists, strings
+          or tuples) whose length matches that of the sequence.
+          A typical use would be to hold a list of integers
+          representing sequencing quality scores, or a string
+          representing the secondary structure.
 
     You will typically use Bio.SeqIO to read in sequences from files as
     SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -156,16 +156,16 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
-         - id          - Sequence identifier, recommended (string)
-         - name        - Sequence name, optional (string)
-         - description - Sequence description, optional (string)
-         - dbxrefs     - Database cross references, optional (list of strings)
-         - features    - Any (sub)features, optional (list of SeqFeature objects)
-         - annotations - Dictionary of annotations for the whole sequence
-         - letter_annotations - Dictionary of per-letter-annotations, values
-                                should be strings, list or tuples of the same
-                                length as the full sequence.
+            - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
+            - id          - Sequence identifier, recommended (string)
+            - name        - Sequence name, optional (string)
+            - description - Sequence description, optional (string)
+            - dbxrefs     - Database cross references, optional (list of strings)
+            - features    - Any (sub)features, optional (list of SeqFeature objects)
+            - annotations - Dictionary of annotations for the whole sequence
+            - letter_annotations - Dictionary of per-letter-annotations, values
+              should be strings, list or tuples of the same
+              length as the full sequence.
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord

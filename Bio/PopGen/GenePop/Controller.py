@@ -273,15 +273,18 @@ class GenePopController(object):
         """Global Hardy-Weinberg test for heterozygote deficiency/excess.
 
            Returns a triple with:
-             A list per population containg
-               (pop_name, P-val, SE, switches)
-                 Some pops have a None if the info is not available
-                 SE might be none (for enumerations)
-             A list per loci containg
-               (locus_name, P-val, SE, switches)
-                 Some loci have a None if the info is not available
-                 SE might be none (for enumerations)
-             Overall results (P-val, SE, switches)
+
+            - A list per population containg
+              (pop_name, P-val, SE, switches)
+              Some pops have a None if the info is not available
+              SE might be none (for enumerations)
+
+            - A list per loci containg
+              (locus_name, P-val, SE, switches)
+              Some loci have a None if the info is not available
+              SE might be none (for enumerations)
+
+            - Overall results (P-val, SE, switches)
 
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
@@ -346,19 +349,23 @@ class GenePopController(object):
                          iterations=5000):
         """Hardy-Weinberg test based on probability.
 
-           Returns 2 iterators and a final tuple:
+          Returns 2 iterators and a final tuple:
 
-          1. Returns a loci iterator containing
-               b. A dictionary[pop_pos]=(P-val, SE, Fis-WC, Fis-RH, steps)
-                 Some pops have a None if the info is not available
-                 SE might be none (for enumerations)
-               c. Result of Fisher's test (Chi2, deg freedom, prob)
-          2. Returns a population iterator containg
-               a. A dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps)
-                 Some loci have a None if the info is not available
-                 SE might be none (for enumerations)
-               b. Result of Fisher's test (Chi2, deg freedom, prob)
-          3. (Chi2, deg freedom, prob)
+            1. Returns a loci iterator containing
+
+              b. A dictionary[pop_pos]=(P-val, SE, Fis-WC, Fis-RH, steps)
+                Some pops have a None if the info is not available
+                SE might be none (for enumerations)
+              c. Result of Fisher's test (Chi2, deg freedom, prob)
+
+            2. Returns a population iterator containg
+
+              a. A dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps)
+                Some loci have a None if the info is not available
+                SE might be none (for enumerations)
+              b. Result of Fisher's test (Chi2, deg freedom, prob)
+
+            3. (Chi2, deg freedom, prob)
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
         self._run_genepop([ext], [1, 3], fname, opts)
@@ -380,15 +387,16 @@ class GenePopController(object):
         """Global Hardy-Weinberg test for heterozygote deficiency.
 
            Returns a triple with:
-             An list per population containg
+
+             - An list per population containg
                (pop_name, P-val, SE, switches)
-                 Some pops have a None if the info is not available
-                 SE might be none (for enumerations)
-             An list per loci containg
+               Some pops have a None if the info is not available
+               SE might be none (for enumerations)
+             - An list per loci containg
                (locus_name, P-val, SE, switches)
-                 Some loci have a None if the info is not available
-                 SE might be none (for enumerations)
-             Overall results (P-val, SE, switches)
+               Some loci have a None if the info is not available
+               SE might be none (for enumerations)
+             - Overall results (P-val, SE, switches)
         """
         return self._test_global_hz_both(fname, 4, ".DG", enum_test,
                                          dememorization, batches, iterations)
@@ -400,15 +408,16 @@ class GenePopController(object):
         """Global Hardy-Weinberg test for heterozygote excess.
 
            Returns a triple with:
-             An list per population containg
-               (pop_name, P-val, SE, switches)
-                 Some pops have a None if the info is not available
-                 SE might be none (for enumerations)
-             An list per loci containg
-               (locus_name, P-val, SE, switches)
-                 Some loci have a None if the info is not available
-                 SE might be none (for enumerations)
-             Overall results (P-val, SE, switches)
+
+            - An list per population containg
+             (pop_name, P-val, SE, switches)
+             Some pops have a None if the info is not available
+             SE might be none (for enumerations)
+            - An list per loci containg
+             (locus_name, P-val, SE, switches)
+             Some loci have a None if the info is not available
+             SE might be none (for enumerations)
+            - Overall results (P-val, SE, switches)
         """
         return self._test_global_hz_both(fname, 5, ".EG", enum_test,
                                          dememorization, batches, iterations)
@@ -520,29 +529,35 @@ class GenePopController(object):
         """Calculates allele and genotype frequencies per locus and per sample.
 
         Parameters:
-        fname - file name
+
+          - fname - file name
 
         Returns tuple with 2 elements:
-        Population iterator with
-            population name
-            Locus dictionary with key = locus name and content tuple as
-              Genotype List with
-                (Allele1, Allele2, observed, expected)
-              (expected homozygotes, observed hm,
-              expected heterozygotes, observed ht)
-              Allele frequency/Fis dictionary with allele as key and
-                (count, frequency, Fis Weir & Cockerham)
-              Totals as a pair
-                count
-                Fis Weir & Cockerham,
-                Fis Robertson & Hill
-        Locus iterator with
-            Locus name
-            allele list
-            Population list with a triple
-               population name
-               list of allele frequencies in the same order as allele list above
-               number of genes
+
+        - Population iterator with
+
+          - population name
+          - Locus dictionary with key = locus name and content tuple as
+            Genotype List with
+            (Allele1, Allele2, observed, expected)
+            (expected homozygotes, observed hm,
+            expected heterozygotes, observed ht)
+          - Allele frequency/Fis dictionary with allele as key and
+            (count, frequency, Fis Weir & Cockerham)
+          - Totals as a pair
+          - count
+          - Fis Weir & Cockerham,
+          - Fis Robertson & Hill
+
+        - Locus iterator with
+
+          - Locus name
+          - allele list
+          - Population list with a triple
+
+            - population name
+            - list of allele frequencies in the same order as allele list above
+            - number of genes
 
         Will create a file called fname.INF
         """
@@ -707,11 +722,13 @@ class GenePopController(object):
         """Executes GenePop and gets Fst/Fis/Fit (all populations)
 
         Parameters:
-        fname - file name
+
+        - fname - file name
 
         Returns:
-        (multiLocusFis, multiLocusFst, multiLocus Fit),
-        Iterator of tuples
+
+        - (multiLocusFis, multiLocusFst, multiLocus Fit),
+        - Iterator of tuples
           (Locus name, Fis, Fst, Fit, Qintra, Qinter)
 
         Will create a file called fname.FST .
