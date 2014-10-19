@@ -16,23 +16,26 @@ from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
 
 class NeighborSearch(object):
-    """
+    """Class for neighbor searching,
+
     This class can be used for two related purposes:
 
-    1. To find all atoms/residues/chains/models/structures within radius
-    of a given query position.
-
-    2. To find all atoms/residues/chains/models/structures that are within
-    a fixed radius of each other.
+     1. To find all atoms/residues/chains/models/structures within radius
+        of a given query position.
+     2. To find all atoms/residues/chains/models/structures that are within
+        a fixed radius of each other.
 
     NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
     """
     def __init__(self, atom_list, bucket_size=10):
-        """
-        o atom_list - list of atoms. This list is used in the queries.
-        It can contain atoms from different structures.
-        o bucket_size - bucket size of KD tree. You can play around
-        with this to optimize speed if you feel like it.
+        """Create the object.
+
+        Arguments:
+
+         - atom_list - list of atoms. This list is used in the queries.
+           It can contain atoms from different structures.
+         - bucket_size - bucket size of KD tree. You can play around
+           with this to optimize speed if you feel like it.
         """
         self.atom_list=atom_list
         # get the coordinates
@@ -75,9 +78,11 @@ class NeighborSearch(object):
         is determined by level (A=atoms, R=residues, C=chains,
         M=models, S=structures).
 
-        o center - Numeric array
-        o radius - float
-        o level - char (A, R, C, M, S)
+        Arguments:
+
+         - center - Numeric array
+         - radius - float
+         - level - char (A, R, C, M, S)
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
@@ -99,8 +104,10 @@ class NeighborSearch(object):
         Search all entities that have atoms pairs within
         radius.
 
-        o radius - float
-        o level - char (A, R, C, M, S)
+        Arguments:
+
+         - radius - float
+         - level - char (A, R, C, M, S)
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
