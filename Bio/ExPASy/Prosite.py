@@ -99,16 +99,15 @@ class Record(object):
         - cc_ft_desc
         - cc_version     version number (introduced in release 19.0)
 
-    `DATA BANK REFERENCES - The following are all
-                           lists of tuples (swiss-prot accession,
-                                            swiss-prot name)`
+    The following are all lists if tuples (swiss-prot accession, swiss-prot name).
+
+    DATA BANK REFERENCES
 
         - dr_positive
         - dr_false_neg
         - dr_false_pos
         - dr_potential   Potential hits, but fingerprint region not yet available.
         - dr_unknown     Could possibly belong
-
         - pdb_structs    List of PDB entries.
 
     """
