@@ -65,13 +65,13 @@ class SequenceIterator(object):
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
 
-        Example usage for Fasta files:
+        Example usage for Fasta files::
 
-        with open("example.fasta","r") as myFile:
-            myFastaReader = FastaIterator(myFile)
-            for record in myFastaReader:
-                print(record.id)
-                print(record.seq)
+            with open("example.fasta","r") as myFile:
+                myFastaReader = FastaIterator(myFile)
+                for record in myFastaReader:
+                    print(record.id)
+                    print(record.seq)
         """
         return iter(self.__next__, None)
 
