@@ -28,48 +28,44 @@ __docformat__ = "restructuredtext en"
 class ColorSpiral(object):
     """Implement a spiral path through HSV colour space.
 
-       This class provides functions for sampling points along a logarithmic
-       spiral path through HSV colour space.
+    This class provides functions for sampling points along a logarithmic
+    spiral path through HSV colour space.
 
-       The spiral is described by r = a * exp(b * t) where r is the distance
-       from the axis of the HSV cylinder to the current point in the spiral,
-       and t is the angle through which the spiral has turned to reach the
-       current point. a and b are (positive, real) parameters that control the
-       shape of the spiral.
+    The spiral is described by r = a * exp(b * t) where r is the distance
+    from the axis of the HSV cylinder to the current point in the spiral,
+    and t is the angle through which the spiral has turned to reach the
+    current point. a and b are (positive, real) parameters that control the
+    shape of the spiral.
 
-       a: the starting direction of the spiral
-       b: the number of revolutions about the axis made by the spiral
+     - a: the starting direction of the spiral
+     - b: the number of revolutions about the axis made by the spiral
 
-       We permit the spiral to move along the cylinder ('in V-space') between
-       v_init and v_final, to give a gradation in V (essentially, brightness),
-       along the path, where v_init, v_final are in [0,1].
+    We permit the spiral to move along the cylinder ('in V-space') between
+    v_init and v_final, to give a gradation in V (essentially, brightness),
+    along the path, where v_init, v_final are in [0,1].
 
-       A brightness 'jitter' may also be provided as an absolute value in
-       V-space, to aid in distinguishing consecutive colour points on the
-       path.
+    A brightness 'jitter' may also be provided as an absolute value in
+    V-space, to aid in distinguishing consecutive colour points on the
+    path.
     """
     def __init__(self, a=1, b=0.33, v_init=0.85, v_final=0.5,
                  jitter=0.05):
         """Initialise a logarithmic spiral path through HSV colour space
 
-           Arguments:
+        Arguments:
 
-           o a - Parameter a for the spiral, controls the initial spiral
-                 direction. a > 0
-
-           o b - parameter b for the spiral, controls the rate at which the
-                 spiral revolves around the axis. b > 0
-
-           o v_init - initial value of V (brightness) for the spiral.
-                      v_init in [0,1]
-
-           o v_final - final value of V (brightness) for the spiral
-                      v_final in [0,1]
-
-           o jitter - the degree of V (brightness) jitter to add to each
-                      selected colour. The amount of jitter will be selected
-                      from a uniform random distribution [-jitter, jitter],
-                      and V will be maintained in [0,1].
+         - a - Parameter a for the spiral, controls the initial spiral
+           direction. a > 0
+         - b - parameter b for the spiral, controls the rate at which the
+           spiral revolves around the axis. b > 0
+         - v_init - initial value of V (brightness) for the spiral.
+           v_init in [0,1]
+         - v_final - final value of V (brightness) for the spiral
+           v_final in [0,1]
+         - jitter - the degree of V (brightness) jitter to add to each
+           selected colour. The amount of jitter will be selected
+           from a uniform random distribution [-jitter, jitter],
+           and V will be maintained in [0,1].
         """
         # Initialise attributes
         self.a = a
@@ -81,14 +77,13 @@ class ColorSpiral(object):
     def get_colors(self, k, offset=0.1):
         """Generate k different RBG colours evenly-space on the spiral.
 
-            A generator returning the RGB colour space values for k
-            evenly-spaced points along the defined spiral in HSV space.
+        A generator returning the RGB colour space values for k
+        evenly-spaced points along the defined spiral in HSV space.
 
-            Arguments:
+        Arguments:
 
-            o k - the number of points to return
-
-            o offset - how far along the spiral path to start.
+         - k - the number of points to return
+         - offset - how far along the spiral path to start.
         """
         # We use the offset to skip a number of similar colours near to HSV axis
         assert offset > 0 and offset < 1, "offset must be in (0,1)"
@@ -169,11 +164,10 @@ class ColorSpiral(object):
 def get_colors(k, **kwargs):
     """Returns k colours selected by the ColorSpiral object, as a generator.
 
-       Arguments:
+    Arguments:
 
-         - k - the number of colours to return
-
-         - **kwargs - pass-through arguments to the ColorSpiral object
+     - k - the number of colours to return
+     - kwargs - pass-through arguments to the ColorSpiral object
     """
     cs = ColorSpiral(**kwargs)
     return cs.get_colors(k)
@@ -182,14 +176,13 @@ def get_colors(k, **kwargs):
 def get_color_dict(l, **kwargs):
     """Returns a dictionary of colours using the provided values as keys.
 
-       Returns a dictionary, keyed by the members of iterable l, with a
-       colour assigned to each member.
+    Returns a dictionary, keyed by the members of iterable l, with a
+    colour assigned to each member.
 
-       Arguments:
+    Arguments:
 
-         - l - an iterable representing classes to be coloured
-
-         - **kwargs - pass-through arguments to the ColorSpiral object
+     - l - an iterable representing classes to be coloured
+     - kwargs - pass-through arguments to the ColorSpiral object
     """
     cs = ColorSpiral(**kwargs)
     colors = cs.get_colors(len(l))
