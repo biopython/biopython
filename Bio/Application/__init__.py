@@ -439,7 +439,7 @@ class AbstractCommandline(object):
             water_cmd = WaterCommandline(gapopen=10, gapextend=0.5,
                                          stdout=True, auto=True,
                                          asequence="a.fasta", bsequence="b.fasta")
-            print "About to run:\n%s" % water_cmd
+            print("About to run: %s" % water_cmd)
             std_output, err_output = water_cmd()
 
         This functionality is similar to subprocess.check_output() added in
