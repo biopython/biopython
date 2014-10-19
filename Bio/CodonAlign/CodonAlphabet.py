@@ -23,8 +23,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
 from Bio.Data.CodonTable import generic_by_id
 
-
 default_codon_table = copy.deepcopy(generic_by_id[1])
+
 
 def get_codon_alphabet(alphabet, gap="-", stop="*"):
     """function to get alignment alphabet for codon alignment. Only
@@ -44,11 +44,13 @@ def get_codon_alphabet(alphabet, gap="-", stop="*"):
 
 default_alphabet = get_codon_alphabet(IUPAC.unambiguous_dna)
 
+
 class CodonAlphabet(Alphabet):
     """Generic Codon Alphabet with a size of three"""
     size = 3
     letters = None
     name = ''
+
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.names[0])
 

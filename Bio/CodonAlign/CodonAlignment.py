@@ -20,6 +20,7 @@ from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alph
 from Bio.CodonAlign.CodonSeq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.CodonAlign.chisq import chisqprob
 
+
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
 

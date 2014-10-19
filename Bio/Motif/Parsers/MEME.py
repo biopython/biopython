@@ -14,7 +14,6 @@ import sys
 from Bio.Motif import Motif
 
 
-
 def read(handle):
     """Parses the text output of the MEME program into MEME.Record object.
 
@@ -119,7 +118,6 @@ class MEMEInstance(Seq.Seq):
         self.strand = 0
         self.length = 0
         self.motif_name = ""
-
 
     def _seqname (self, name):
         self.sequence_name = name

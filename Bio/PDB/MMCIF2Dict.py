@@ -11,6 +11,7 @@ from Bio._py3k import input as _input
 
 import shlex
 
+
 class MMCIF2Dict(dict):
 
     def __init__(self, filename):

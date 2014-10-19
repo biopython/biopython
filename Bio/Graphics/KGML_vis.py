@@ -25,6 +25,7 @@ from Bio._py3k import urlopen as _urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
+
 def hexdarken(hexcolor, factor=0.7):
     """Returns darkened hex color as a ReportLab RGB color.
 
@@ -35,6 +36,7 @@ def hexdarken(hexcolor, factor=0.7):
     for a in ['red', 'green', 'blue']:
         setattr(c, a, factor * getattr(c, a))
     return c
+
 
 def get_temp_imagefilename(url):
     """Returns filename of temporary file containing downloaded image.
@@ -289,7 +291,6 @@ class KGMLCanvas(object):
                     self.drawing.setFillColor(hexdarken(g.fgcolor))
                     self.__add_labels(g)
 
-
     def __add_relations(self):
         """Adds relations to the map (PRIVATE).
 
@@ -365,8 +366,6 @@ class KGMLCanvas(object):
         #print(bounds_from)
         #print(g_to)
         #print(bounds_to)
-
-
 
 
 if __name__ == '__main__':

@@ -17,6 +17,7 @@ from Bio import _py3k
 def _is_numeric(x):
     return _py3k._is_int_or_long(x) or isinstance(x, (float, complex))
 
+
 class _Matrix(object):
     """A base class for distance matrix or scoring matrix that accepts
     a list of names and a lower triangular matrix.
@@ -702,6 +703,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return height
 
 ##################### Tree Scoring and Searching Classes #####################
+
 
 class Scorer(object):
     """Base class for all tree scoring methods"""

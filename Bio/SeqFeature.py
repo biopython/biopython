@@ -170,6 +170,7 @@ class SeqFeature(object):
             warnings.warn("Rather using f.sub_features, f.location should be a CompoundFeatureLocation",
                           BiopythonDeprecationWarning)
         return self._sub_features
+
     def _set_sub_features(self, value):
         if value:
             import warnings
@@ -204,6 +205,7 @@ class SeqFeature(object):
             return self.location.ref
         except AttributeError:
             return None
+
     def _set_ref(self, value):
         try:
             self.location.ref = value
@@ -224,6 +226,7 @@ class SeqFeature(object):
             return self.location.ref_db
         except AttributeError:
             return None
+
     def _set_ref_db(self, value):
         self.location.ref_db = value
     ref_db = property(fget = _get_ref_db, fset = _set_ref_db,
@@ -237,6 +240,7 @@ class SeqFeature(object):
             return self.location.operator
         except AttributeError:
             return None
+
     def _set_location_operator(self, value):
         if value:
             if isinstance(self.location, CompoundLocation):
@@ -1022,6 +1026,7 @@ class CompoundLocation(object):
             return self.parts[0].strand
         else:
             return None # i.e. mixed strands
+
     def _set_strand(self, value):
         # Should this be allowed/encouraged?
         for loc in self.parts:
@@ -1111,7 +1116,6 @@ class CompoundLocation(object):
             return self._shift(other)
         else:
             raise NotImplementedError
-
 
     def __contains__(self, value):
         """Check if an integer position is within the location."""

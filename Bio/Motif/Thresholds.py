@@ -7,6 +7,7 @@
 """
 import math, random
 
+
 class ScoreDistribution(object):
     """ Class representing approximate score distribution for a given motif.
 

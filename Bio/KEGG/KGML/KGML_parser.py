@@ -51,6 +51,7 @@ def read(handle, debug=0):
         raise ValueError("More than one pathway found in handle")
     return first
 
+
 def parse(handle, debug=0):
     """Returns an iterator over Pathway elements.
 
@@ -74,6 +75,7 @@ def parse(handle, debug=0):
         if event == "end" and elem.tag == "pathway":
             yield KGMLParser(elem).parse()
             elem.clear()
+
 
 class KGMLParser(object):
     """Parses a KGML XML Pathway entry into a Pathway object."""

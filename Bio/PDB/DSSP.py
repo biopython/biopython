@@ -119,6 +119,7 @@ def make_dssp_dict(filename):
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
 
+
 def _make_dssp_dict(handle):
     """
     Return a DSSP dictionary that maps (chainid, resid) to

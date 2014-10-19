@@ -79,6 +79,7 @@ from warnings import warn
 
 JASPAR_DFLT_COLLECTION = 'CORE'
 
+
 class JASPAR5(object):
     """
     Class representing a JASPAR5 DB. The methods within are loosely based
@@ -325,7 +326,6 @@ class JASPAR5(object):
         int_id = cur.fetchone()[0]
 
         return int_id
-
 
     def _fetch_motif_by_internal_id(self, int_id):
         # fetch basic motif information

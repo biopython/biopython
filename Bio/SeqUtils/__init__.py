@@ -207,6 +207,7 @@ def nt_search(seq, subseq):
 ######################
 # {{{
 
+
 def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 

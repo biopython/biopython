@@ -121,6 +121,7 @@ GPI11FIELDS = [
       'Annotation_Target_Set',
       'GO_Annotation_Complete']
 
+
 def _gpi10iterator(handle):
     """Read GPI 1.0 format files (PRIVATE).
 
@@ -136,6 +137,7 @@ def _gpi10iterator(handle):
         inrec[5] = inrec[5].split('|') # DB_Object_Synonym(s)
         inrec[8] = inrec[8].split('|') # Annotation_Target_Set
         yield dict(zip(GPI10FIELDS, inrec))
+
 
 def _gpi11iterator(handle):
     """Read GPI 1.0 format files (PRIVATE).
@@ -154,6 +156,7 @@ def _gpi11iterator(handle):
         inrec[7] = inrec[7].split('|') # DB_Xref(s)
         inrec[8] = inrec[8].split('|') # Properties
         yield dict(zip(GPI11FIELDS, inrec))
+
 
 def gpi_iterator(handle):
     """Read GPI format files.

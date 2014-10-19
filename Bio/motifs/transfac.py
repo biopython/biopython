@@ -136,6 +136,7 @@ def read(handle):
             annotations[key] = value
     return record
 
+
 def write(motifs):
     """Write the representation of a motif in TRANSFAC format
     """

@@ -23,6 +23,7 @@ try:
 except ImportError:
     import pickle # Python 3
 
+
 class _ShelveIndex(dict):
     """An index file wrapped around shelve.
 
