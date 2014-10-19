@@ -18,8 +18,7 @@ from Bio.Data import IUPACData
 class Atom(object):
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
                  element=None):
-        """
-        Atom object.
+        """Atom object.
 
         The Atom object stores atom name (both with and without spaces),
         coordinates, B factor, occupancy, alternative location specifier
@@ -46,7 +45,7 @@ class Atom(object):
         @type fullname: string
 
         @param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
-        @type fullname: uppercase string (or None if unknown)
+        @type element: uppercase string (or None if unknown)
         """
         self.level="A"
         # Reference to the residue
