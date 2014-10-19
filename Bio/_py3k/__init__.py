@@ -6,30 +6,30 @@
 
 We used to have lines like this under Python 2 in order to use
 iterator based zip, map and filter (in Python 3 these functions
-are all iterator based):
+are all iterator based)::
 
     from future_builtins import zip
 
-There is no similar option for range yet, other than:
+There is no similar option for range yet, other than::
 
     range = xrange
     input = raw_input
 
-or:
+or::
 
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
 Under Python 3 these imports need to be removed. Also, deliberate
-importing of built in functions like open changes from Python 2:
+importing of built in functions like open changes from Python 2::
 
     from __builtin__ import open
 
-to this under Python 3:
+to this under Python 3::
 
     from builtins import open
 
-Instead, we can do this under either Python 2 or 3:
+Instead, we can do this under either Python 2 or 3::
 
     from Bio._py3k import open
     from Bio._py3k import zip
