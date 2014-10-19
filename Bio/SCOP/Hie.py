@@ -19,11 +19,11 @@ The latest HIE file can be found
 class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
-    sunid      -- SCOP unique identifiers of this node
+    Attributes:
 
-    parent     -- Parents sunid
-
-    children   -- Sequence of childrens sunids
+     - sunid - SCOP unique identifiers of this node
+     - parent - Parents sunid
+     - children - Sequence of childrens sunids
     """
     def __init__(self, line=None):
         self.sunid = ''
@@ -87,12 +87,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a HIE file, returning a Hie record for each line
-    in the file.
+    """Iterates over a HIE file as Hie records for each line.
 
     Arguments:
 
-        handle -- file-like object.
+     - handle - file-like object.
     """
     for line in handle:
         if line.startswith('#'):

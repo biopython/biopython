@@ -21,11 +21,11 @@ from .Residues import Residues
 class Record(object):
     """Holds information for one SCOP domain.
 
-    sid -- The SCOP ID of the entry, e.g. d1anu1
+    Attribues:
 
-    residues -- The domain definition as a Residues object
-
-    hierarchy -- A string specifying where this domain is in the hierarchy.
+     - sid - The SCOP ID of the entry, e.g. d1anu1
+     - residues - The domain definition as a Residues object
+     - hierarchy - A string specifying where this domain is in the hierarchy.
     """
     def __init__(self, line=None):
         self.sid = ''
@@ -64,12 +64,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DOM file, returning a Dom record for each line
-    in the file.
+    """Iterates over a DOM file as a Dom record for each line.
 
     Arguments:
 
-        handle -- file-like object.
+     - handle -- file-like object.
     """
     for line in handle:
         if line.startswith('#'):
