@@ -8,7 +8,9 @@
 # as part of this package.
 #
 
-""" Notes about the diverses class of the restriction enzyme implementation::
+"""Restriction Enzyme classes.
+
+Notes about the diverses class of the restriction enzyme implementation::
 
             RestrictionType is the type of all restriction enzymes.
         ----------------------------------------------------------------------------
@@ -76,7 +78,7 @@
                                     the list of suppliers is extracted from
                                     emboss_s.NNN
         ----------------------------------------------------------------------------
-        """
+"""
 
 from __future__ import print_function
 from Bio._py3k import zip
