@@ -613,10 +613,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     Attributes:
 
-        - use_fuzziness - specify whether or not to parse with fuzziness in
-        feature locations.
-        - feature_cleaner - a class that will be used to provide specialized
-        cleaning-up of feature values.
+     - use_fuzziness - specify whether or not to parse with fuzziness in
+       feature locations.
+     - feature_cleaner - a class that will be used to provide specialized
+       cleaning-up of feature values.
     """
     def __init__(self, use_fuzziness, feature_cleaner=None):
         from Bio.SeqRecord import SeqRecord
@@ -756,7 +756,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         Note that at some point the NCBI have included an extra space, e.g.::
 
-        DBLINK      Project: 28471
+            DBLINK      Project: 28471
+
         """
         # During the transition period with both PROJECT and DBLINK lines,
         # we don't want to add the same cross reference twice.
