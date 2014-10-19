@@ -10,36 +10,38 @@ Cymon J. Cox (cymon@duke.edu)
 Usage:
 
 There are two ways of reading an ace file:
-1) The function 'read' reads the whole file at once;
-2) The function 'parse' reads the file contig after contig.
 
-1) Parse whole ace file at once:
+1. The function 'read' reads the whole file at once;
+2. The function 'parse' reads the file contig after contig.
+
+First option, parse whole ace file at once::
 
         from Bio.Sequencing import Ace
-        acefilerecord=Ace.read(open('my_ace_file.ace'))
+        acefilerecord = Ace.read(open('my_ace_file.ace'))
 
 This gives you:
-        acefilerecord.ncontigs (the number of contigs in the ace file)
-        acefilerecord.nreads (the number of reads in the ace file)
-        acefilerecord.contigs[] (one instance of the Contig class for each contig)
+ - acefilerecord.ncontigs (the number of contigs in the ace file)
+ - acefilerecord.nreads (the number of reads in the ace file)
+ - acefilerecord.contigs[] (one instance of the Contig class for each contig)
 
 The Contig class holds the info of the CO tag, CT and WA tags, and all the reads used
-for this contig in a list of instances of the Read class, e.g.:
+for this contig in a list of instances of the Read class, e.g.::
 
-        contig3=acefilerecord.contigs[2]
-        read4=contig3.reads[3]
-        RD_of_read4=read4.rd
-        DS_of_read4=read4.ds
+        contig3 = acefilerecord.contigs[2]
+        read4 = contig3.reads[3]
+        RD_of_read4 = read4.rd
+        DS_of_read4 = read4.ds
 
 CT, WA, RT tags from the end of the file can appear anywhere are automatically
 sorted into the right place.
 
 see _RecordConsumer for details.
 
-2) Or you can iterate over the contigs of an ace file one by one in the ususal way:
+The second option is to  iterate over the contigs of an ace file one by one
+in the ususal way::
 
     from Bio.Sequencing import Ace
-    contigs=Ace.parse(open('my_ace_file.ace'))
+    contigs = Ace.parse(open('my_ace_file.ace'))
     for contig in contigs:
         print(contig.name)
         ...
@@ -254,12 +256,12 @@ class Contig(object):
 
 
 def parse(handle):
-    """parse(handle)
+    """Iterate of ACE file contig by contig.
 
-    where handle is a file-like object.
+    Argument handle is a file-like object.
 
     This function returns an iterator that allows you to iterate
-    over the ACE file record by record:
+    over the ACE file record by record::
 
         records = parse(handle)
         for record in records:
