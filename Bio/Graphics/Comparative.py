@@ -28,17 +28,18 @@ class ComparativeScatterPlot(object):
 
     Attributes;
 
-    o display_info -- a 2D list of the information we'll be outputting. Each
+     - display_info - a 2D list of the information we'll be outputting. Each
     top level list is a different data type, and each data point is a two-tuple
-    of the coordinates of a point. So if you had two distributions of points,
-    it should look like:
+    of the coordinates of a point.
 
-    display_info = [[(1, 2), (3, 4)],
-                    [(5, 6), (7, 8)]]
+    So if you had two distributions of points, it should look like::
 
-    if everything is just one set of points, display_info can look like:
+       display_info = [[(1, 2), (3, 4)],
+                       [(5, 6), (7, 8)]]
 
-    display_info = [[(1, 2), (3, 4), (5, 6)]]
+    If everything is just one set of points, display_info can look like::
+
+        display_info = [[(1, 2), (3, 4), (5, 6)]]
     """
     def __init__(self, output_format='pdf'):
         # customizable attributes
@@ -63,10 +64,9 @@ class ComparativeScatterPlot(object):
 
         Arguments:
 
-        o output_file - The name of the file to output the information to,
-                        or a handle to write to.
-
-        o title - A title to display on the graphic.
+         - output_file - The name of the file to output the information to,
+           or a handle to write to.
+         - title - A title to display on the graphic.
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -93,8 +93,7 @@ class ComparativeScatterPlot(object):
 
     def _draw_scatter_plot(self, cur_drawing, x_start, y_start,
                            x_end, y_end):
-        """Draw a scatter plot on the drawing with the given coordinates.
-        """
+        """Draw a scatter plot on the drawing with the given coordinates."""
         scatter_plot = LinePlot()
 
         # set the dimensions of the scatter plot
@@ -149,8 +148,7 @@ class ComparativeScatterPlot(object):
                   self.shape_choices[-1]
 
     def _find_min_max(self, info):
-        """Find the min and max for the x and y coordinates in the given data.
-        """
+        """Find the min and max for the x and y coordinates in the given data."""
         x_min = info[0][0][0]
         x_max = info[0][0][0]
         y_min = info[0][0][1]
