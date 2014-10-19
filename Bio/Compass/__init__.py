@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Code to deal with COMPASS output, a program for profile/profile comparison.
+"""Code to deal with COMPASS output, a program for profile/profile comparison.
 
 Compass is described in:
 
@@ -15,11 +14,11 @@ alignments with assessment of statistical significance. J Mol Biol. 2003 Feb
 Tested with COMPASS 1.24.
 
 Functions:
-read          Reads a COMPASS file containing one COMPASS record
-parse         Iterates over records in a COMPASS file.
+ - read - Reads a COMPASS file containing one COMPASS record
+ - parse - Iterates over records in a COMPASS file.
 
 Classes:
-Record        One result of a COMPASS file
+ - Record - One result of a COMPASS file
 """
 import re
 
@@ -97,8 +96,8 @@ def parse(handle):
 
 
 class Record(object):
-    """
-    Hold information from one compass hit.
+    """Hold information from one compass hit.
+
     Ali1 is the query, Ali2 the hit.
     """
 
@@ -146,11 +145,9 @@ __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
 
 
 def __read_names(record, line):
-    """
-    Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
-          ------query-----        -------hit-------------
-    """
-    if "Ali1:" not in line:
+    # Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
+    #       ------query-----        -------hit-------------
+    if not "Ali1:" in line:
         raise ValueError("Line does not contain 'Ali1:':\n%s" % line)
     m = __regex["names"].search(line)
     record.query = m.group(1)
