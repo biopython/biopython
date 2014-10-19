@@ -9,16 +9,16 @@
 
 Wrappers for the new NCBI BLAST+ tools (written in C++):
 
-- NcbiblastpCommandline - Protein-Protein BLAST
-- NcbiblastnCommandline - Nucleotide-Nucleotide BLAST
-- NcbiblastxCommandline - Translated Query-Protein Subject BLAST
-- NcbitblastnCommandline - Protein Query-Translated Subject BLAST
-- NcbitblastxCommandline - Translated Query-Protein Subject BLAST
-- NcbipsiblastCommandline - Position-Specific Initiated BLAST
-- NcbirpsblastCommandline - Reverse Position Specific BLAST
-- NcbirpstblastnCommandline - Translated Reverse Position Specific BLAST
-- NcbideltablastCommandline - Protein-Protein domain enhanced lookup time accelerated blast
-- NcbiblastformatterCommandline - Convert ASN.1 to other BLAST output formats
+ - NcbiblastpCommandline - Protein-Protein BLAST
+ - NcbiblastnCommandline - Nucleotide-Nucleotide BLAST
+ - NcbiblastxCommandline - Translated Query-Protein Subject BLAST
+ - NcbitblastnCommandline - Protein Query-Translated Subject BLAST
+ - NcbitblastxCommandline - Translated Query-Protein Subject BLAST
+ - NcbipsiblastCommandline - Position-Specific Initiated BLAST
+ - NcbirpsblastCommandline - Reverse Position Specific BLAST
+ - NcbirpstblastnCommandline - Translated Reverse Position Specific BLAST
+ - NcbideltablastCommandline - Protein-Protein domain enhanced lookup time accelerated blast
+ - NcbiblastformatterCommandline - Convert ASN.1 to other BLAST output formats
 
 For further details, see:
 
