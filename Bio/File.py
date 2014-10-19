@@ -42,7 +42,8 @@ except ImportError:
     _sqlite = None
     pass
 
-__docformat__ = "restructuredtext en"
+#Seems epydoc does not like \n inside a docstring doctest
+#__docformat__ = "restructuredtext en"
 
 
 @contextlib.contextmanager

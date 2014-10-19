@@ -6,7 +6,8 @@
 """Useful utilities for helping in parsing GenBank files.
 """
 
-__docformat__ = "restructuredtext en"
+#TODO: Resolve epydoc RST warning from slash escaped characters
+#__docformat__ = "restructuredtext en"
 
 class FeatureValueCleaner(object):
     """Provide specialized capabilities for cleaning up values in features.

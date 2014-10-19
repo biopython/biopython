@@ -35,7 +35,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
 from Bio import BiopythonParserWarning
 
-__docformat__ = "restructuredtext en"
+#TODO: Resolve epydoc RST warnings from \n in some docstrings
+#__docformat__ = "restructuredtext en"
 
 class InsdcScanner(object):
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
