@@ -23,6 +23,7 @@ from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_t
 
 __docformat__ = "restructuredtext en"
 
+
 class CodonSeq(Seq):
     """CodonSeq is designed to be within the SeqRecords of a CodonAlignment class.
 
@@ -129,12 +130,14 @@ class CodonSeq(Seq):
         # to amino acid sequence and then transform it into
         # codon sequence.
             aa_index = range(len(self)//3)
+
             def cslice(p):
                 aa_slice = aa_index[p]
                 codon_slice = ''
                 for i in aa_slice:
                     codon_slice += self._data[i*3:i*3+3]
                 return codon_slice
+
             codon_slice = cslice(index)
             return CodonSeq(codon_slice, alphabet=self.alphabet)
 
@@ -485,6 +488,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
         for i, k in enumerate(zip(codon1, codon2)):
             if k[0] != k[1]:
                 diff_pos.append(i)
+
         def compare_codon(codon1, codon2, codon_table=default_codon_table,
                           weight=1):
             """Method to compare two codon accounting for different pathways."""
@@ -495,6 +499,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
             else:
                 nd += weight
             return (sd, nd)
+
         if len(diff_pos) == 1:
             SN = [i+j for i,j in zip(SN,
                     compare_codon(codon1, codon2, codon_table=codon_table))]
@@ -922,6 +927,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
         for i, k in enumerate(zip(codon1, codon2)):
             if k[0] != k[1]:
                 diff_pos.append(i)
+
         def count_TV(codon1, codon2, diff, codon_table, weight=1):
             purine = ('A', 'G')
             pyrimidine = ('T', 'C')
@@ -949,6 +955,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
                     return [0, 0, weight, 0]
                 else:
                     return [0, 0, 0, weight]
+
         if len(diff_pos) == 1:
             prob = 1
             TV = [p+q for p,q in zip(TV,count_TV(codon1, codon2, diff_pos[0], codon_table))]
@@ -1024,6 +1031,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
     codon_lst = [i for i in \
             list(codon_table.forward_table.keys()) + codon_table.stop_codons \
             if 'U' not in i]
+
     # apply optimization
     def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst,
              codon_table=codon_table):
@@ -1032,6 +1040,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     params[0], params[1], params[2], pi,
                     codon_cnt, codon_lst=codon_lst,
                     codon_table=codon_table)
+
     # count sites
     opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
                        bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)),

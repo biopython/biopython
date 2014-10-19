@@ -157,7 +157,6 @@ class Hmmer2TextParser(object):
             bitscore = float(fields.pop())
             description = ' '.join(fields).strip()
 
-
             hit = _HitPlaceholder()
             hit.id_ = id_
             hit.evalue = evalue

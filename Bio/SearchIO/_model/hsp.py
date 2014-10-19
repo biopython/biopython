@@ -391,7 +391,6 @@ class HSP(_BaseHSP):
                         "found %r instead." % (self.query_description,
                         fragment.query_description))
 
-
     def _aln_span_get(self):
         # length of all alignments
         # alignment span can be its own attribute, or computed from

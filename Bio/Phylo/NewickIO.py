@@ -75,6 +75,7 @@ def _parse_confidence(text):
 def _format_comment(text):
     return '[%s]' % (text.replace('[', '\\[').replace(']', '\\]'))
 
+
 def _get_comment(clade):
     if hasattr(clade, 'comment') and clade.comment:
         return _format_comment(str(clade.comment))

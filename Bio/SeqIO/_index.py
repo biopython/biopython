@@ -132,7 +132,6 @@ class SffRandomAccess(SeqFileRandomAccess):
             "Indexed %i records, expected %i" % (count, number_of_reads)
         SeqIO.SffIO._check_eof(handle, index_offset, index_length)
 
-
     def get(self, offset):
         handle = self._handle
         handle.seek(offset)

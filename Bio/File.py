@@ -88,6 +88,7 @@ def as_handle(handleish, mode='r', **kwargs):
     else:
         yield handleish
 
+
 def _open_for_random_access(filename):
     """Open a file in binary mode, spot if it is BGZF format etc (PRIVATE).
 

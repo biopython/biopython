@@ -62,9 +62,11 @@ def qUri(s):
     '''Given a prefixed URI, return the full URI.'''
     return resolve_uri(s, namespaces=NAMESPACES, xml_style=True)
 
+
 def cdao_to_obo(s):
     '''Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI.'''
     return 'obo:%s' % cdao_elements[s[len('cdao:'):]]
+
 
 def matches(s):
     '''Check for matches in both CDAO and OBO namespaces.'''
@@ -72,6 +74,7 @@ def matches(s):
         return (s, cdao_to_obo(s))
     else:
         return (s,)
+
 
 class NeXMLError(Exception):
     """Exception raised when NeXML object construction cannot continue."""
@@ -189,7 +192,6 @@ class Parser(object):
 
                 yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
 
-
     @classmethod
     def _make_tree(cls, node, node_dict, children):
         '''Return a NeXML.Clade, and calls itself recursively for each child,
@@ -206,6 +208,7 @@ class Parser(object):
 
 # ---------------------------------------------------------
 # Output
+
 
 class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""

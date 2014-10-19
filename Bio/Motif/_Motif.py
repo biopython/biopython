@@ -14,6 +14,7 @@ from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
 import math, random
 
+
 class Motif(object):
     """
     A class representing sequence motifs.
@@ -67,7 +68,6 @@ class Motif(object):
 
         self._pwm_is_current = False
         self._log_odds_is_current = False
-
 
     def set_mask(self, mask):
         """
@@ -555,7 +555,6 @@ class Motif(object):
 
         self.set_mask("*"*len(inst))
         return self
-
 
     def __getitem__(self, index):
         """Returns the probability distribution over symbols at a given position, padding with background.

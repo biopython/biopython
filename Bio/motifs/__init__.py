@@ -202,6 +202,7 @@ class Instances(list):
                 if str(instance) == str(sequence[pos:pos+self.length]):
                     yield(pos, instance)
                     break # no other instance will fit (we don't want to return multiple hits)
+
     def reverse_complement(self):
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
