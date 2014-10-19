@@ -71,9 +71,9 @@ def SwissIterator(handle):
     a single SeqRecord with associated annotation and features.
 
     This parser is for the flat file "swiss" format as used by:
-     * Swiss-Prot aka SwissProt
-     * TrEMBL
-     * UniProtKB aka UniProt Knowledgebase
+     - Swiss-Prot aka SwissProt
+     - TrEMBL
+     - UniProtKB aka UniProt Knowledgebase
 
     For consistency with BioPerl and EMBOSS we call this the "swiss"
     format. See also the SeqIO support for "uniprot-xml" format.
