@@ -310,7 +310,7 @@ def _dijkstra(graph, start, end):
         shortest = None
         node = ''
         for temp_node in unseen_nodes:
-            if shortest == None:
+            if shortest is None:
                 shortest = D[temp_node]
                 node = temp_node
             elif D[temp_node] < shortest:
