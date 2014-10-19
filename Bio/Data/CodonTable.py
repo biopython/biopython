@@ -67,6 +67,7 @@ class CodonTable(object):
         """Returns a simple text representation of the codon table
 
         e.g.
+
         >>> import Bio.Data.CodonTable
         >>> print(Bio.Data.CodonTable.standard_dna_table)
         >>> print(Bio.Data.CodonTable.generic_by_id[1])
@@ -208,13 +209,17 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     """Extends a codon list to include all possible ambigous codons.
 
-    e.g. ['TAG', 'TAA'] -> ['TAG', 'TAA', 'TAR']
+    e.g.::
+
+         ['TAG', 'TAA'] -> ['TAG', 'TAA', 'TAR']
          ['UAG', 'UGA'] -> ['UAG', 'UGA', 'URA']
 
     Note that ['TAG', 'TGA'] -> ['TAG', 'TGA'], this does not add 'TRR'.
     Thus only two more codons are added in the following:
 
-    e.g. ['TGA', 'TAA', 'TAG'] -> ['TGA', 'TAA', 'TAG', 'TRA', 'TAR']
+    e.g.::
+
+        ['TGA', 'TAA', 'TAG'] -> ['TGA', 'TAA', 'TAG', 'TRA', 'TAR']
 
     Returns a new (longer) list of codon strings.
     """
