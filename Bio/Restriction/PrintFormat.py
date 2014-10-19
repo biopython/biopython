@@ -7,23 +7,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
+"""Print the results of restriction enzyme analysis.
 
-from __future__ import print_function
+PrintFormat prints the results from restriction analysis in 3  different
+format: list, column or map.
 
-import re
-
-from Bio._py3k import range
-
-from Bio.Restriction import RanaConfig as RanaConf
-
-"""
-Usage:
-
-    PrintFormat allow to print the results from restriction analysis in 3
-    different format.
-    List, column or map.
-
-    the easiest way to use it is:
+The easiest way to use it is:
 
     >>> from Bio.Restriction.PrintFormat import PrintFormat
     >>> from Bio.Restriction.Restriction import AllEnzymes
@@ -34,23 +23,15 @@ Usage:
     >>> handle.close()
     >>> dct = AllEnzymes.search(pBR322.seq)
     >>> new = PrintFormat()
-    >>> new.print_that(dct, '\n my pBR322 analysis\n\n', '\n no site :\n\n')
-
-     my pBR322 analysis
-
+    >>> new.print_that(dct, 'My pBR322 analysis:\n', 'No site:\n')
+    My pBR322 analysis:
     AasI       :  2169, 2582.
     AatII      :  4289.
     ...
-            More enzymes.
-    ...
     ZraI       :  4287.
     ZrmI       :  3847.
-
-     no site:
-
+    No site:
     AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
-    ...
-            More enzymes.
     ...
     Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
     Zsp2I
@@ -60,9 +41,17 @@ Usage:
     >>> new.print_that(dct)
     ...
 
-    Some of the methods of PrintFormat are meant to be overridden by derived
-    class.
+Some of the methods of PrintFormat are meant to be overridden by derived
+class.
 """
+
+from __future__ import print_function
+
+import re
+
+from Bio._py3k import range
+
+from Bio.Restriction import RanaConfig as RanaConf
 
 
 class PrintFormat(object):
