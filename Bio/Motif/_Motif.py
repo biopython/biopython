@@ -736,9 +736,9 @@ class Motif(object):
         """
 
         formatters={
-            "jaspar-pfm":   self._to_jaspar_pfm,
-            "transfac":     self._to_transfac,
-            "fasta":       self._to_fasta,
+            "jaspar-pfm": self._to_jaspar_pfm,
+            "transfac": self._to_transfac,
+            "fasta": self._to_fasta,
             }
 
         try:
