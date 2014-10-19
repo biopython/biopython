@@ -433,8 +433,7 @@ Return values:
       members of the clusters
 
   - transpose: if equal to 0: clusters of genes (rows) are considered;
-    if equal to 1: clusters of microarrays (columns) are
-                            considered.
+    if equal to 1: clusters of microarrays (columns) are considered.
 
 """
 
