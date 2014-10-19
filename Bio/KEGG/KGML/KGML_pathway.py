@@ -77,7 +77,7 @@ class Pathway(object):
         rough_xml = header + _as_string(ET.tostring(self.element, 'utf-8'))
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
-                  
+
 
     def add_entry(self, entry):
         """Add an Entry element to the pathway."""
@@ -290,7 +290,7 @@ class Entry(object):
             assert element.id in self._pathway.entries, \
                 "Component %s is not an entry in the pathway" % value
         self.components.add(element)
-    
+
     def remove_component(self, value):
         """Remove the entry with the passed ID from the group."""
         self.components.remove(value)
@@ -298,7 +298,7 @@ class Entry(object):
     def add_graphics(self, entry):
         """Add the Graphics entry."""
         self.graphics.append(entry)
-    
+
     def remove_graphics(self, entry):
         """Remove the Graphics entry with the passed ID from the group."""
         self.graphics.remove(entry)
@@ -449,7 +449,7 @@ class Graphics(object):
         self.fgcolor = ''
         self.bgcolor = ''
         self._parent = parent
-    
+
     # We make sure that the XY coordinates, width and height are numbers
     def _getx(self):
         return self._x

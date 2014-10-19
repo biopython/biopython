@@ -393,7 +393,7 @@ class BlastXmlParser(object):
             full_id_desc = hit_id + ' ' + hit_desc
             id_descs = [(x.strip(), y.strip()) for x, y in \
                     [a.split(' ', 1) for a in full_id_desc.split(' >')]]
-            hit_id, hit_desc = id_descs[0] 
+            hit_id, hit_desc = id_descs[0]
 
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),

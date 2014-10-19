@@ -337,7 +337,7 @@ class SeqFeature(object):
         Note - currently only sub-features of type "join" are supported.
         """
         return self.location.extract(parent_sequence)
-    
+
     #Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).

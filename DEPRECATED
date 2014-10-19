@@ -527,7 +527,7 @@ Use Bio.SeqUtils instead.
 Bio.SVM
 =======
 Deprecated as of Release 1.30, removed in Release 1.42.
-The Support Vector Machine code in Biopython has been superseded by a 
+The Support Vector Machine code in Biopython has been superseded by a
 more robust (and maintained) SVM library, which includes a python
 interface. We recommend using LIBSVM:
 

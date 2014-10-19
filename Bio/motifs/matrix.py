@@ -144,7 +144,7 @@ class GenericPositionMatrix(dict):
             return d
         else:
             raise RuntimeError("Should not get here")
-        
+
     @property
     def consensus(self):
         """Returns the consensus sequence.

@@ -14,9 +14,9 @@ __docformat__ = "restructuredtext en"
 
 from Bio import File
 from Bio.Phylo import (
-                       BaseTree, 
-                       NewickIO, 
-                       NexusIO, 
+                       BaseTree,
+                       NewickIO,
+                       NexusIO,
                        PhyloXMLIO,
                        NeXMLIO,
                        )
@@ -28,7 +28,7 @@ supported_formats = {
         'nexml':    NeXMLIO,
         }
 
-try: 
+try:
     from Bio.Phylo import CDAOIO
     supported_formats['cdao'] = CDAOIO
 except:

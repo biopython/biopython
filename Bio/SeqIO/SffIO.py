@@ -943,7 +943,7 @@ def _check_eof(handle, index_offset, index_length):
                              "before %i where index starts?"
                              % (index_offset - offset, offset, index_offset))
         # Doing read to jump the index rather than a seek
-        # in case this is a network handle or similar 
+        # in case this is a network handle or similar
         handle.read(index_offset + index_length - offset)
         offset = index_offset + index_length
         assert offset == handle.tell(), \
