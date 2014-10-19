@@ -65,7 +65,7 @@ def qUri(s):
 def cdao_to_obo(s):
     '''Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI.'''
     return 'obo:%s' % cdao_elements[s[len('cdao:'):]]
-    
+
 def matches(s):
     '''Check for matches in both CDAO and OBO namespaces.'''
     if s.startswith('cdao:'):
@@ -119,7 +119,7 @@ class Parser(object):
             prop = meta_node.attrib['property']
         else:
             prop = 'meta'
-        
+
         if prop in matches('cdao:has_Support_Value'):
             node_dict['confidence'] = float(meta_node.text)
         else:
@@ -129,13 +129,13 @@ class Parser(object):
         """Parse the text stream this object was initialized with."""
 
         nexml_doc = ElementTree.iterparse(self.handle, events=('end',))
-        
+
         for event, node in nexml_doc:
             if node.tag == qUri('nex:tree'):
                 node_dict = {}
                 node_children = {}
                 root = None
-                
+
                 child_tags = node.getchildren()
                 nodes = []
                 edges = []
@@ -144,7 +144,7 @@ class Parser(object):
                         nodes.append(child)
                     if child.tag == qUri('nex:edge'):
                         edges.append(child)
-                    
+
                 for node in nodes:
                     node_id = node.attrib['id']
                     this_node = node_dict[node_id] = {}
@@ -152,11 +152,11 @@ class Parser(object):
                         this_node['name'] = node.attrib['otu']
                     if 'root' in node.attrib and node.attrib['root'] == 'true':
                         root = node_id
-                    
+
                     for child in node.getchildren():
                         if child.tag == qUri('nex:meta'):
                             self.add_annotation(node_dict[node_id], child)
-                    
+
                 srcs = set()
                 tars = set()
                 for edge in edges:
@@ -165,17 +165,17 @@ class Parser(object):
                     tars.add(tar)
                     if not src in node_children:
                         node_children[src] = set()
-                    
+
                     node_children[src].add(tar)
                     if 'length' in edge.attrib:
                         node_dict[tar]['branch_length'] = float(edge.attrib['length'])
                     if 'property' in edge.attrib and edge.attrib['property'] in matches('cdao:has_Support_Value'):
                         node_dict[tar]['confidence'] = float(edge.attrib['content'])
-                        
+
                     for child in edge.getchildren():
                         if child.tag == qUri('nex:meta'):
                             self.add_annotation(node_dict[tar], child)
-                    
+
                 if root is None:
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
@@ -186,22 +186,22 @@ class Parser(object):
                     root = next(possible_roots)
                 else:
                     rooted = True
-                    
+
                 yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
 
 
     @classmethod
     def _make_tree(cls, node, node_dict, children):
-        '''Return a NeXML.Clade, and calls itself recursively for each child, 
-        traversing the  entire tree and creating a nested structure of NeXML.Clade 
+        '''Return a NeXML.Clade, and calls itself recursively for each child,
+        traversing the  entire tree and creating a nested structure of NeXML.Clade
         objects.'''
-        
+
         this_node = node_dict[node]
         clade = NeXML.Clade(**this_node)
-        
+
         if node in children:
             clade.clades = [cls._make_tree(child, node_dict, children) for child in children[node]]
-        
+
         return clade
 
 # ---------------------------------------------------------
@@ -216,7 +216,7 @@ class Writer(object):
         self.node_counter = 0
         self.edge_counter = 0
         self.tree_counter = 0
-        
+
     def new_label(self, obj_type):
         counter = '%s_counter' % obj_type
         setattr(self, counter, getattr(self, counter) + 1)
@@ -224,9 +224,9 @@ class Writer(object):
 
     def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
-        
+
         self.cdao_to_obo = cdao_to_obo
-        
+
         # set XML namespaces
         root_node = ElementTree.Element('nex:nexml')
         root_node.set('version', VERSION)
@@ -237,23 +237,23 @@ class Writer(object):
             root_node.set('xmlns:%s' % prefix, uri)
 
         otus = ElementTree.SubElement(root_node, 'otus', **{'id': 'tax', 'label': 'RootTaxaBlock'})
-        
+
         # create trees
         trees = ElementTree.SubElement(root_node, 'trees', **{'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
         count = 0
         tus = set()
         for tree in self.trees:
             this_tree = ElementTree.SubElement(trees, 'tree', **{'id':self.new_label('tree')})
-            
+
             first_clade = tree.clade
             tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
 
             count += 1
-        
+
         # create OTUs
         for tu in tus:
             otu = ElementTree.SubElement(otus, 'otu', **{'id':tu})
-        
+
         # write XML document to file handle
         #xml_doc = ElementTree.ElementTree(root_node)
         #xml_doc.write(handle,
@@ -268,16 +268,16 @@ class Writer(object):
         except TypeError:
             # for compatibility with Python 3
             handle.write(bytes(reparsed.toprettyxml(indent="  "), 'utf8'))
-        
+
         return count
-    
+
     def _write_tree(self, clade, tree, parent=None, rooted=False):
-        '''Recursively process tree, adding nodes and edges to Tree object. 
+        '''Recursively process tree, adding nodes and edges to Tree object.
         Returns a set of all OTUs encountered.'''
         tus = set()
 
         convert_uri = cdao_to_obo if self.cdao_to_obo else (lambda s: s)
-        
+
         node_id = self.new_label('node')
         clade.node_id = node_id
         attrib={'id':node_id, 'label':node_id}
@@ -288,7 +288,7 @@ class Writer(object):
             tus.add(clade.name)
             attrib['otu'] = clade.name
         node = ElementTree.SubElement(tree, 'node', **attrib)
-        
+
         if not parent is None:
             edge_id = self.new_label('edge')
             attrib={
@@ -303,11 +303,11 @@ class Writer(object):
                                'content': '%1.2f' % clade.confidence,
                                })
             node = ElementTree.SubElement(tree, 'edge', **attrib)
-    
+
         if not clade.is_terminal():
             for new_clade in clade.clades:
                 tus.update(self._write_tree(new_clade, tree, parent=clade))
 
         del clade.node_id
-                
+
         return tus

@@ -57,7 +57,7 @@ def parse(handle, debug=0):
     Arguments:
     - handle - file handle to a KGML file for parsing
     - debug - integer for amount of debug information to print
-                              
+
     This is a generator for the return of multiple Pathway objects.
     """
     # Check handle
@@ -155,7 +155,7 @@ class KGMLParser(object):
                 warnings.warn("Warning: tag %s not implemented in parser" % element.tag,
                               BiopythonParserWarning)
         return self.pathway
-        
+
 
 if __name__ == '__main__':
     # Check large metabolism

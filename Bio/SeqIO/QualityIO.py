@@ -870,7 +870,7 @@ def FastqGeneralIterator(handle):
     ...     for (title, sequence, quality) in FastqGeneralIterator(handle):
     ...         print(title)
     ...         print("%s %s" % (sequence, quality))
-    ... 
+    ...
     071113_EAS56_0053:1:1:998:236
     TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA IIIIIIIIIIIIIIIIIIIIIIIIIIIIICII+III
     071113_EAS56_0053:1:1:182:712

@@ -617,7 +617,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         while line:
             if seq_len == qual_len:
                 if seq_len == 0:
-                    #Special case, quality line should be just "\n"                                                                                                                      
+                    #Special case, quality line should be just "\n"
                     line = handle.readline()
                     if line.strip():
                         raise ValueError("Expected blank quality line, not %r" % line)

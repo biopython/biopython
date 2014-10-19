@@ -103,7 +103,7 @@ class CodonSeq(Seq):
                                      "from alphabet "
                                      "({0})!".format(seq_ungapped[i:i+3]))
             self.rf_table = rf_table
-    
+
     def __getitem__(self, index):
         # TODO: handle alphabet elegantly
         return Seq(self._data[index], alphabet=generic_dna)
@@ -238,7 +238,7 @@ class CodonSeq(Seq):
         full_rf_table = self.get_full_rf_table()
         return self.translate(codon_table=codon_table, stop_symbol=stop_symbol,
                               rf_table=full_rf_table, ungap_seq=False)
-        
+
     def ungap(self, gap=None):
         if hasattr(self.alphabet, "gap_char"):
             if not gap:
@@ -533,7 +533,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                                                            weight=0.5/3))
                       ]
     return SN
-        
+
 
 #################################################################
 #               private functions for LWL85 method
@@ -818,7 +818,7 @@ def _get_kappa_t(pi, TV, t=False):
         t = (4*pi['T']*pi['C']*(1+kappaF84/pi['Y'])+\
              4*pi['A']*pi['G']*(1+kappaF84/pi['R'])+4*pi['Y']*pi['R'])*b
         return t
-    
+
 
 def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
         codon_table=default_codon_table):

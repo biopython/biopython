@@ -33,7 +33,7 @@ class _Matrix(object):
 
     :Parameters:
         names : list
-            names of elements, used for indexing 
+            names of elements, used for indexing
         matrix : list
             nested list of numerical lists in lower triangular format
 
@@ -46,9 +46,9 @@ class _Matrix(object):
     >>> m = _Matrix(names, matrix)
     >>> m
     _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])
-    
+
     You can use two indices to get or assign an element in the matrix.
-    
+
     >>> m[1,2]
     3
     >>> m['Beta','Gamma']
@@ -58,7 +58,7 @@ class _Matrix(object):
     4
 
     Further more, you can use one index to get or assign a list of elements related to that index.
-    
+
     >>> m[0]
     [0, 1, 2, 4]
     >>> m['Alpha']
@@ -273,7 +273,7 @@ class _Matrix(object):
     def __len__(self):
         """Matrix length"""
         return len(self.names)
-    
+
     def __repr__(self):
         return self.__class__.__name__ \
         + "(names=%s, matrix=%s)" \
@@ -442,7 +442,7 @@ class DistanceCalculator(object):
 
         :Parameters:
             msa : MultipleSeqAlignment
-                DNA or Protein multiple sequence alignment.  
+                DNA or Protein multiple sequence alignment.
 
         """
 
@@ -478,7 +478,7 @@ class DistanceTreeConstructor(TreeConstructor):
 
     :Parameters:
         method : str
-            Distance tree construction method, 'nj'(default) or 'upgma'. 
+            Distance tree construction method, 'nj'(default) or 'upgma'.
         distance_calculator : DistanceCalculator
             The distance matrix calculator for multiple sequence alignment.
             It must be provided if `build_tree` will be called.
@@ -489,7 +489,7 @@ class DistanceTreeConstructor(TreeConstructor):
     >>> from TreeConstruction import DistanceTreeConstructor
     >>> constructor = DistanceTreeConstructor()
 
-    UPGMA Tree: 
+    UPGMA Tree:
 
     >>> upgmatree = constructor.upgma(dm)
     >>> print upgmatree
@@ -550,7 +550,7 @@ class DistanceTreeConstructor(TreeConstructor):
     def upgma(self, distance_matrix):
         """Construct and return an UPGMA(Unweighted Pair Group Method
         with Arithmetic mean) tree.
-        
+
         :Parameters:
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
@@ -872,7 +872,7 @@ class NNITreeSearcher(TreeSearcher):
 class ParsimonyScorer(Scorer):
     """Parsimony scorer with a scoring matrix.
 
-    This is a combination of Fitch algorithm and Sankoff algorithm. 
+    This is a combination of Fitch algorithm and Sankoff algorithm.
     See ParsimonyTreeConstructor for usage.
 
     :Parameters:
@@ -1023,7 +1023,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
             alignment: MultipleSeqAlignment
                 multiple sequence alignment to calculate parsimony tree.
         """
-        # if starting_tree is none, 
+        # if starting_tree is none,
         # create a upgma tree with 'identity' scoring matrix
         if self.starting_tree is None:
             dtc = DistanceTreeConstructor(DistanceCalculator("identity"),

@@ -1,6 +1,6 @@
 """ This module provides classes and functions to visualise a KGML Pathway Map
 
-The KGML definition is as of release KGML v0.7.1 
+The KGML definition is as of release KGML v0.7.1
 (http://www.kegg.jp/kegg/xml/docs/)
 
 Classes:
@@ -28,14 +28,14 @@ from Bio.KEGG.KGML.KGML_pathway import Pathway
 def hexdarken(hexcolor, factor=0.7):
     """Returns darkened hex color as a ReportLab RGB color.
 
-    Take a passed hex color and return an RGB color that is 
+    Take a passed hex color and return an RGB color that is
     slightly darker (if possible).
     """
     c = colors.HexColor(hexcolor)
     for a in ['red', 'green', 'blue']:
         setattr(c, a, factor * getattr(c, a))
     return c
-    
+
 def get_temp_imagefilename(url):
     """Returns filename of temporary file containing downloaded image.
 
@@ -50,7 +50,7 @@ def get_temp_imagefilename(url):
     f.close()
     im.save(fname, 'PNG')
     return fname
-    
+
 
 class KGMLCanvas(object):
     """Reportlab Canvas-based representation of a KGML pathway map."""
@@ -75,7 +75,7 @@ class KGMLCanvas(object):
         self.draw_relations = draw_relations
         self.non_reactant_transparency = 0.3
         self.import_imagemap = import_imagemap # Import the map .png from URL
-        # percentage of canvas that will be margin in on either side in the 
+        # percentage of canvas that will be margin in on either side in the
         # X and Y directions
         self.margins = margins
 
@@ -99,9 +99,9 @@ class KGMLCanvas(object):
                                self.pathway.bounds[1][1])
         # Instantiate canvas
         self.drawing = \
-            canvas.Canvas(filename, bottomup=0, 
+            canvas.Canvas(filename, bottomup=0,
                           pagesize=(cwidth * \
-                                        (1 + 2 * self.margins[0]), 
+                                        (1 + 2 * self.margins[0]),
                                     cheight * \
                                         (1 + 2 * self.margins[1])))
         self.drawing.setFont(self.fontname, self.fontsize)
@@ -116,7 +116,7 @@ class KGMLCanvas(object):
             self.drawing.drawImage(imfilename, 0, 0)
             self.drawing.restoreState()
         # Add the reactions, compounds and maps
-        # Maps go on first, to be overlaid by more information. 
+        # Maps go on first, to be overlaid by more information.
         # By default, they're slightly transparent.
         if self.show_maps:
             self.__add_maps()
@@ -136,10 +136,10 @@ class KGMLCanvas(object):
     def __add_maps(self):
         """Adds maps to the drawing of the map.
 
-        We do this first, as they're regional labels to be overlaid by 
+        We do this first, as they're regional labels to be overlaid by
         information.  Also, we want to set the color to something subtle.
 
-        We're using Hex colors because that's what KGML uses, and 
+        We're using Hex colors because that's what KGML uses, and
         Reportlab doesn't mind.
         """
         for m in self.pathway.maps:
@@ -177,13 +177,13 @@ class KGMLCanvas(object):
             self.drawing.circle(graphics.x, graphics.y, graphics.width*0.5,
                                 stroke=1, fill=1)
         elif graphics.type == 'roundrectangle':
-            self.drawing.roundRect(graphics.x - graphics.width * 0.5, 
+            self.drawing.roundRect(graphics.x - graphics.width * 0.5,
                                    graphics.y - graphics.height * 0.5,
                                    graphics.width, graphics.height,
                                    min(graphics.width, graphics.height) * 0.1,
                                    stroke=1, fill=1)
         elif graphics.type == 'rectangle':
-            self.drawing.rect(graphics.x - graphics.width * 0.5, 
+            self.drawing.rect(graphics.x - graphics.width * 0.5,
                               graphics.y - graphics.height * 0.5,
                               graphics.width, graphics.height,
                               stroke=1, fill=1)
@@ -196,9 +196,9 @@ class KGMLCanvas(object):
         """
         if graphics.type == 'line':
             # We use the midpoint of the line - sort of - we take the median
-            # line segment (list-wise, not in terms of length), and use the 
-            # midpoint of that line.  We could have other options here, 
-            # maybe even parameterising it to a proportion of the total line 
+            # line segment (list-wise, not in terms of length), and use the
+            # midpoint of that line.  We could have other options here,
+            # maybe even parameterising it to a proportion of the total line
             # length.
             mid_idx = len(graphics.coords) * 0.5
             if not int(mid_idx) == mid_idx:
@@ -222,7 +222,7 @@ class KGMLCanvas(object):
             text = graphics.name[:12] + '...'
         self.drawing.drawCentredString(x, y, text)
         self.drawing.setFont(self.fontname, self.fontsize)
-                    
+
     def __add_orthologs(self):
         """Adds 'ortholog' Entry elements to the drawing of the map (PRIVATE).
 
@@ -272,7 +272,7 @@ class KGMLCanvas(object):
                 if self.label_compounds:
                     if not compound.is_reactant:
                         t = 0.3
-                    else: 
+                    else:
                         t = 1
                     self.drawing.setFillColor(colors.Color(0.2, 0.2, 0.2, t))
                     self.__add_labels(g)
@@ -288,20 +288,20 @@ class KGMLCanvas(object):
                 if self.label_compounds:
                     self.drawing.setFillColor(hexdarken(g.fgcolor))
                     self.__add_labels(g)
-            
+
 
     def __add_relations(self):
         """Adds relations to the map (PRIVATE).
 
-        This is tricky. There is no defined graphic in KGML for a 
+        This is tricky. There is no defined graphic in KGML for a
         relation, and the corresponding entries are typically defined
         as objects 'to be connected somehow'.  KEGG uses KegSketch, which
         is not public, and most third-party software draws straight line
         arrows, with heads to indicate the appropriate direction
-        (at both ends for reversible reactions), using solid lines for 
+        (at both ends for reversible reactions), using solid lines for
         ECrel relation types, and dashed lines for maplink relation types.
 
-        The relation has: 
+        The relation has:
         - entry1: 'from' node
         - entry2: 'to' node
         - subtype: what the relation refers to
@@ -346,7 +346,7 @@ class KGMLCanvas(object):
                 p.moveTo(centre_from[0], bounds_from[1][1])
                 p.lineTo(centre_from[0], bounds_to[0][1])
                 # Draw arrow point - TODO
-            else:                             # to below from 
+            else:                             # to below from
                 p.moveTo(centre_from[0], bounds_from[0][1])
                 p.lineTo(centre_from[0], bounds_to[1][1])
                 # Draw arrow point - TODO
@@ -356,10 +356,10 @@ class KGMLCanvas(object):
                 p.moveTo(centre_to[0], bounds_from[1][1])
                 p.lineTo(centre_to[0], bounds_to[0][1])
                 # Draw arrow point - TODO
-            else:                             # to below from 
+            else:                             # to below from
                 p.moveTo(centre_to[0], bounds_from[0][1])
                 p.lineTo(centre_to[0], bounds_to[1][1])
-                # Draw arrow point - TODO 
+                # Draw arrow point - TODO
         self.drawing.drawPath(p)    # Draw arrow shaft
         #print(g_from)
         #print(bounds_from)
@@ -371,7 +371,7 @@ class KGMLCanvas(object):
 
 if __name__ == '__main__':
     # Test production of Reportlab Canvas PDF visualisation
-    # Try a default KO metabolic map with ortholog lines given 
+    # Try a default KO metabolic map with ortholog lines given
     pathway = KGML_parser.read(open('ko01100.xml', 'rU'))
     print(pathway)
     kgml_map = KGMLCanvas(pathway)
@@ -388,7 +388,7 @@ if __name__ == '__main__':
             g.width = 3
     kgml_map.draw('KGML_canvas_ddc_test.pdf')
 
-    # Try a KO metabolic map with no ortholog lines, using a local .png 
+    # Try a KO metabolic map with no ortholog lines, using a local .png
     pathway = KGML_parser.read(open('ko_metabolic/ko00910.xml', 'rU'))
     pathway.image = 'map/map00910.png'
     print(pathway)
@@ -397,7 +397,7 @@ if __name__ == '__main__':
     kgml_map.show_maps = False
     kgml_map.draw('KGML_canvas_map_local_test.pdf')
 
-    # Try a KO metabolic map with no ortholog lines, using the KEGG .png 
+    # Try a KO metabolic map with no ortholog lines, using the KEGG .png
     pathway = KGML_parser.read(open('ko_metabolic/ko00253.xml', 'rU'))
     print(pathway)
     kgml_map = KGMLCanvas(pathway)
@@ -405,7 +405,7 @@ if __name__ == '__main__':
     kgml_map.show_maps = False
     kgml_map.draw('KGML_canvas_map_test.pdf')
 
-    # Try a KO metabolic map with no ortholog lines using the KEGG .png, 
+    # Try a KO metabolic map with no ortholog lines using the KEGG .png,
     # but this time using a Dickeya XML file
     pathway = KGML_parser.read(open('dda00190.xml', 'rU'))
     print(pathway)
@@ -414,7 +414,7 @@ if __name__ == '__main__':
     kgml_map.show_maps = True
     kgml_map.draw('KGML_canvas_dda_map_test.pdf')
 
-    # Try a KO metabolic map with no ortholog lines using the KEGG .png, 
+    # Try a KO metabolic map with no ortholog lines using the KEGG .png,
     # but this time using a Dickeya XML file
     pathway = KGML_parser.read(open('test_retrieve_ddc00190.kgml', 'rU'))
     print(pathway)

@@ -660,7 +660,7 @@ class QueryResult(_BaseSearchObject):
             100
             >>> for hit in qresult[:5]:
             ...     print(hit.id)
-            ... 
+            ...
             gi|262205317|ref|NR_030195.1|
             gi|301171311|ref|NR_035856.1|
             gi|270133242|ref|NR_032573.1|
