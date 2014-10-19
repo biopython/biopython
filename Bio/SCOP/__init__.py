@@ -618,7 +618,7 @@ class Node(object):
 class Domain(Node):
     """ A SCOP domain. A leaf node in the Scop hierarchy.
 
-        - sid      -- The SCOP domain identifier. e.g. 'd5hbib_'
+        - sid      -- The SCOP domain identifier. e.g. ``"d5hbib_"``
 
         - residues -- A Residue object. It defines the collection
           of PDB atoms that make up this domain.
