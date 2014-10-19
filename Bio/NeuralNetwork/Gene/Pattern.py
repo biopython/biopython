@@ -124,7 +124,7 @@ class PatternRepository(object):
         Arguments:
 
             - pattern_info - A representation of all of the patterns found in
-              a *Finder search. This should be a dictionary, where the keys
+              a finder search. This should be a dictionary, where the keys
               are patterns, and the values are the number of times a pattern is
               found.
 
