@@ -11,8 +11,8 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 Support for "relaxed phylip" format is also provided. Relaxed phylip differs
 from standard phylip format in the following ways:
 
- * No whitespace is allowed in the sequence ID.
- * No truncation is performed. Instead, sequence IDs are padded to the longest
+ - No whitespace is allowed in the sequence ID.
+ - No truncation is performed. Instead, sequence IDs are padded to the longest
    ID length, rather than 10 characters. A space separates the sequence
    identifier from the sequence.
 
@@ -20,13 +20,14 @@ Relaxed phylip is supported by RAxML and PHYML.
 
 Note
 ====
+
 In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
 a dot/period (".") in a sequence is interpreted as meaning the same
 character as in the first sequence.  The PHYLIP documentation from 3.3 to 3.69
 http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 
-   "a period was also previously allowed but it is no longer allowed,
-   because it sometimes is used in different senses in other programs"
+"a period was also previously allowed but it is no longer allowed,
+because it sometimes is used in different senses in other programs"
 
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
@@ -175,11 +176,9 @@ class PhylipIterator(AlignmentIterator):
             return False  # First line should have two integers
 
     def _split_id(self, line):
-        """
-        Extracts the sequence ID from a Phylip line, returning a tuple
-        containing:
+        """Extracts the sequence ID from a Phylip line (PRIVATE).
 
-            (sequence_id, sequence_residues)
+        Returning a tuple containing: (sequence_id, sequence_residues)
 
         The first 10 characters in the line are are the sequence id, the
         remainder are sequence data.
@@ -293,18 +292,14 @@ class RelaxedPhylipWriter(PhylipWriter):
 
 
 class RelaxedPhylipIterator(PhylipIterator):
-    """
-    Relaxed Phylip format Iterator
-    """
+    """Relaxed Phylip format Iterator."""
 
     def _split_id(self, line):
-        """Returns the ID, sequence data from a line
-        Extracts the sequence ID from a Phylip line, returning a tuple
-        containing:
+        """Extracts the sequence ID from a Phylip line (PRIVATE).
 
-            (sequence_id, sequence_residues)
+        Returns a tuple containing: (sequence_id, sequence_residues)
 
-        For relaxed format - split at the first whitespace character
+        For relaxed format split at the first whitespace character.
         """
         seq_id, sequence = line.split(None, 1)
         sequence = sequence.strip().replace(" ", "")
@@ -312,9 +307,8 @@ class RelaxedPhylipIterator(PhylipIterator):
 
 
 class SequentialPhylipWriter(SequentialAlignmentWriter):
-    """
-    Sequential Phylip format Writer
-    """
+    """Sequential Phylip format Writer."""
+
     def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
         handle = self.handle
 
