@@ -207,6 +207,7 @@ def nt_search(seq, subseq):
 ######################
 # {{{
 
+
 def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
@@ -371,7 +372,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
 
     """
     # Rewritten by Markus Piotrowski, 2014
-    
+
     # Find the alphabet type
     tmp_type = ''
     if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
@@ -384,7 +385,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
             tmp_type = 'protein'
         elif isinstance(base_alphabet, Alphabet.ThreeLetterProtein):
             tmp_type = 'protein'
-            # Convert to one-letter sequence. Have to use a string for seq1  
+            # Convert to one-letter sequence. Have to use a string for seq1
             seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
         elif not isinstance(base_alphabet, Alphabet.Alphabet):
             raise TypeError("%s is not a valid alphabet for mass calculations"
@@ -443,7 +444,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
         if circular:
             weight -= water
     elif seq_type == 'protein' and double_stranded:
-        raise ValueError('double-stranded proteins await their discovery') 
+        raise ValueError('double-stranded proteins await their discovery')
 
     return weight
 

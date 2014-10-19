@@ -76,6 +76,7 @@ class Record(object):
         self.outliers = None
         self.modified = None
 
+
 def read(handle):
     """
     Read the information in a cel file, and store it in a Record.

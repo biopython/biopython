@@ -23,6 +23,7 @@ from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_t
 
 __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
+
 class CodonSeq(Seq):
     """CodonSeq is designed to be within the SeqRecords of a
     CodonAlignment class.
@@ -104,7 +105,7 @@ class CodonSeq(Seq):
                                      "from alphabet "
                                      "({0})!".format(seq_ungapped[i:i+3]))
             self.rf_table = rf_table
-    
+
     def __getitem__(self, index):
         # TODO: handle alphabet elegantly
         return Seq(self._data[index], alphabet=generic_dna)
@@ -130,12 +131,14 @@ class CodonSeq(Seq):
         # to amino acid sequence and then transform it into
         # codon sequence.
             aa_index = range(len(self)//3)
+
             def cslice(p):
                 aa_slice = aa_index[p]
                 codon_slice = ''
                 for i in aa_slice:
                     codon_slice += self._data[i*3:i*3+3]
                 return codon_slice
+
             codon_slice = cslice(index)
             return CodonSeq(codon_slice, alphabet=self.alphabet)
 
@@ -239,7 +242,7 @@ class CodonSeq(Seq):
         full_rf_table = self.get_full_rf_table()
         return self.translate(codon_table=codon_table, stop_symbol=stop_symbol,
                               rf_table=full_rf_table, ungap_seq=False)
-        
+
     def ungap(self, gap=None):
         if hasattr(self.alphabet, "gap_char"):
             if not gap:
@@ -306,7 +309,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
         - LWL85 - PMID: 3916709
         - ML    - PMID: 7968486
         - YN00  - PMID: 10666704
-    
+
     Arguments:
         - w  - transition/transvertion ratio
         - cfreq - Current codon frequency vector can only be specified
@@ -482,6 +485,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
         for i, k in enumerate(zip(codon1, codon2)):
             if k[0] != k[1]:
                 diff_pos.append(i)
+
         def compare_codon(codon1, codon2, codon_table=default_codon_table,
                           weight=1):
             """Method to compare two codon accounting for different
@@ -494,6 +498,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
             else:
                 nd += weight
             return (sd, nd)
+
         if len(diff_pos) == 1:
             SN = [i+j for i,j in zip(SN,
                     compare_codon(codon1, codon2, codon_table=codon_table))]
@@ -532,7 +537,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                                                            weight=0.5/3))
                       ]
     return SN
-        
+
 
 #################################################################
 #               private functions for LWL85 method
@@ -816,7 +821,7 @@ def _get_kappa_t(pi, TV, t=False):
         t = (4*pi['T']*pi['C']*(1+kappaF84/pi['Y'])+\
              4*pi['A']*pi['G']*(1+kappaF84/pi['R'])+4*pi['Y']*pi['R'])*b
         return t
-    
+
 
 def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
         codon_table=default_codon_table):
@@ -915,6 +920,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
         for i, k in enumerate(zip(codon1, codon2)):
             if k[0] != k[1]:
                 diff_pos.append(i)
+
         def count_TV(codon1, codon2, diff, codon_table, weight=1):
             purine = ('A', 'G')
             pyrimidine = ('T', 'C')
@@ -942,6 +948,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
                     return [0, 0, weight, 0]
                 else:
                     return [0, 0, 0, weight]
+
         if len(diff_pos) == 1:
             prob = 1
             TV = [p+q for p,q in zip(TV,count_TV(codon1, codon2, diff_pos[0], codon_table))]
@@ -1018,6 +1025,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
     codon_lst = [i for i in \
             list(codon_table.forward_table.keys()) + codon_table.stop_codons \
             if 'U' not in i]
+
     # apply optimization
     def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst,
              codon_table=codon_table):
@@ -1026,6 +1034,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     params[0], params[1], params[2], pi,
                     codon_cnt, codon_lst=codon_lst,
                     codon_table=codon_table)
+
     # count sites
     opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
                        bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)),

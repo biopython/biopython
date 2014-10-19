@@ -35,8 +35,10 @@ _parsers={"AlignAce": _AlignAce_read,
           "MEME": _MEME_read,
           }
 
+
 def _from_pfm(handle):
     return Motif()._from_jaspar_pfm(handle)
+
 
 def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
@@ -46,7 +48,6 @@ _readers={"jaspar-pfm": _from_pfm,
           }
 
 
-          
 def parse(handle, format):
     """Parses an output file of motif finding programs.
 
@@ -85,17 +86,18 @@ def parse(handle, format):
     """
     try:
         parser=_parsers[format]
-        
+
     except KeyError:
         try: #not a true parser, try reader formats
             reader=_readers[format]
         except:
             raise ValueError("Wrong parser format")
-        else: #we have a proper reader 
+        else: #we have a proper reader
             yield reader(handle)
     else: # we have a proper reader
         for m in parser(handle).motifs:
             yield m
+
 
 def read(handle, format):
     """Reads a motif from a handle using a specified file-format.

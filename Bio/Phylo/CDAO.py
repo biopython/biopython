@@ -20,7 +20,7 @@ class Tree(BaseTree.Tree):
         BaseTree.Tree.__init__(self, root=root or Clade(),
                 rooted=rooted, id=id, name=name)
         self.weight = weight
-        # a list of (predicate, object) pairs, containing additional triples 
+        # a list of (predicate, object) pairs, containing additional triples
         # using this tree as subject
         self.attributes = []
 
@@ -33,7 +33,7 @@ class Clade(BaseTree.Clade):
         BaseTree.Clade.__init__(self, branch_length=branch_length,
                 name=name, clades=clades, confidence=confidence)
         self.comment = comment
-        # a list of (predicate, object) pairs, containing additional triples 
+        # a list of (predicate, object) pairs, containing additional triples
         # using this clade as subject
         self.attributes = []
         self.tu_attributes = []

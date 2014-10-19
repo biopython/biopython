@@ -176,7 +176,7 @@ Martin Mokrejs
 Matsuyuki Shirota (first contribution)
 
 ===================================================================
- 
+
 15 July 2013: Biopython 1.62 beta released.
 
 This is a beta release for testing purposes, both for new features added,
@@ -522,13 +522,13 @@ as quality scores from FASTQ) or features (such as annotation from GenBank).
 Bio.SeqIO.write's QUAL output has been sped up, and Bio.SeqIO.convert now
 uses an optimised routine for FASTQ to QUAL making this much faster.
 
-Biopython can now be installed with pip. Thanks to David Koppstein and 
+Biopython can now be installed with pip. Thanks to David Koppstein and
 James Casbon for reporting the problem.
 
 Bio.SeqIO.write now uses lower case for the sequence for GenBank, EMBL and
 IMGT output.
 
-The Bio.PDB module received several fixes and improvements, including starting 
+The Bio.PDB module received several fixes and improvements, including starting
 to merge João's work from GSoC 2010; consequently Atom objects now know
 their element type and IUPAC mass. (The new features that use these
 attributes won't be included in Biopython until the next release, though, so
@@ -1333,10 +1333,10 @@ Added secondary structure support (through DSSP)
 Added Accessible Surface Area support (through DSSP)
 Added Residue Depth support (through MSMS)
 Added Half Sphere Exposure.
-Added Fragment classification of the protein backbone (see Kolodny et al., 
+Added Fragment classification of the protein backbone (see Kolodny et al.,
 JMB, 2002)
 Corrected problem on Windows with PDBList (thanks to Matt Dimmic)
-Added StructureAlignment module to superimpose structures based on a FASTA 
+Added StructureAlignment module to superimpose structures based on a FASTA
 sequence alignment.
 Various additions to Polypeptide.
 Various bug corrections in Vector.
@@ -1358,18 +1358,18 @@ will modify the MutableSeq object itself, and don't return anything.
 ===================================================================
 
 May 14, 2004: Biopython 1.30
- Affy package added for dealing with Affymetrix cel files -- thanks to Harry 
+ Affy package added for dealing with Affymetrix cel files -- thanks to Harry
   Zuzan.
  Added code for parsing Blast XML output -- thanks to Bertrand Frottier.
  Added code for parsing Compass output -- thanks to James Casbon.
  New melting temperature calculation module -- thanks to Sebastian Bassi.
  Added lowess function for non-parameteric regression -- thanks to Michiel.
  Reduced protein alphabet supported added -- thanks to Iddo.
- 
+
  Added documentation for Logistic Regression and Bio.PDB -- thanks to Michiel
   and Thomas.
  Documentation added for converting between file formats.
- Updates to install documentation for non-root users -- thanks to Jakob 
+ Updates to install documentation for non-root users -- thanks to Jakob
   Fredslund.
  epydoc now used for automatic generation of documentation.
 
@@ -1379,7 +1379,7 @@ May 14, 2004: Biopython 1.30
   retrieval options, including embl, fasta, genbak, interpro, prodoc and swissprot.
  GenBank parser uses new Martel format. GenBank retrieval now uses EUtils instead
   of the old non-working entrez scripts. GenBank indexing uses standard Mindy
-  indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton 
+  indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton
   Pritchard.
  Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse headers
   -- thanks to Kristian Rother.
@@ -1389,7 +1389,7 @@ May 14, 2004: Biopython 1.30
  Fix problems with using py2exe and Biopython -- thanks to Michael Cariaso.
  PSIBlast parser fixes -- thanks to Jer-Yee John Chuang and James Casbon.
  Fix to NCBIWWW retrieval so that HTML results are returned correctly.
- Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh 
+ Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh
   Smythe.
  Fix to NBRF parsing to it accepts files produced by Clustalw -- thanks to
   Ashleigh Smythe.
@@ -1421,20 +1421,20 @@ Feb 16, 2004: Biopython 1.24
   protein properties -- thanks to Yair Benita
  New code for dealing with Wise contributed by Michael
  EZ-Retrieve sequence retrieval now supported thanks to Jeff
- Bio.Cluster updated along with documentation by Michiel 
+ Bio.Cluster updated along with documentation by Michiel
  BioSQL fixed so it now works with the current SQL schema -- thanks to Yves
   Bastide for patches
- Patches to Bio/__init__ to make it compatible with py2exe -- thanks to 
+ Patches to Bio/__init__ to make it compatible with py2exe -- thanks to
   Leighton Pritchard
  Added __iter__ to all Biopython Iterators to make them Python 2.2 compatible
  Fixes to NCBIWWW for retrieving from NCBI -- thanks to Chris Wroe
- Retrieval of multiple alignment objects from BLAST records -- thanks to 
+ Retrieval of multiple alignment objects from BLAST records -- thanks to
   James Casbon
  Fixes to GenBank format for new tags by Peter
  Parsing fixes in clustalw parsed -- thanks to Greg Singer and Iddo
  Fasta Indexes can have a specified filename -- thanks to Chunlei Wu
  Fix to Prosite parser -- thanks to Mike Liang
- Fix in GenBank parsing -- mRNAs now get strand information 
+ Fix in GenBank parsing -- mRNAs now get strand information
 
 
 Oct 18, 2003: Biopython 1.23
@@ -1545,7 +1545,7 @@ Sept 3, 2001: Biopython1.00a3
   added sequtils module for computations on sequences
   added pairwise sequence alignment algorithm
   major bug fixes in UndoHandle
-  format updates in PubMed  
+  format updates in PubMed
   Tk interface to kMeans clustering
 
 July 5, 2001: Biopython1.00a2

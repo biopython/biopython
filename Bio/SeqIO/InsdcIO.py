@@ -219,6 +219,7 @@ def _insdc_location_string(location, rec_length):
         else:
             return loc
 
+
 def _insdc_feature_location_string(feature, rec_length):
     """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE, OBSOLETE).
 

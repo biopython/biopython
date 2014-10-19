@@ -14,19 +14,18 @@ import sys
 from Bio.Motif import Motif
 
 
-
 def read(handle):
     """Parses the text output of the MEME program into MEME.Record object.
-    
+
     Example:
-    
+
     >>> from Bio.Motif.Parsers import MEME
     >>> with open("meme.output.txt") as f:
     ...     record = MEME.read(f)
     >>> for motif in record.motifs:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
-    
+
     """
     record = MEMERecord()
     __read_version(record, handle)
@@ -59,10 +58,10 @@ def read(handle):
 
 class MEMEMotif (Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
-    
-    This sublcass defines functions and data specific to MEME motifs. 
+
+    This sublcass defines functions and data specific to MEME motifs.
     This includes the evalue for a motif and the PSSM of the motif.
-    
+
     Methods:
     add_instance_from_values (name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = +): create a new instance of the motif with the specified values.
     add_to_pssm (position): add a new position to the pssm. The position should be a list of nucleotide/amino acid frequencies
@@ -72,7 +71,7 @@ class MEMEMotif (Motif):
     def __init__ (self):
         Motif.__init__(self)
         self.evalue = 0.0
-    
+
     def _numoccurrences (self, number):
         if isinstance(number, int):
             self.num_occurrences = number
@@ -99,17 +98,17 @@ class MEMEMotif (Motif):
         if self.name:
             inst._motifname(self.name)
         self.add_instance(inst)
-    
+
     def _evalue (self, evalue):
         if isinstance(evalue, float):
             self.evalue = evalue
         else:
             evalue = float(evalue)
             self.evalue = evalue
-    
+
 
 class MEMEInstance(Seq.Seq):
-    """A class describing the instances of a MEME motif, and the data thereof. 
+    """A class describing the instances of a MEME motif, and the data thereof.
     """
     def __init__ (self,*args,**kwds):
         Seq.Seq.__init__(self,*args,**kwds)
@@ -119,39 +118,38 @@ class MEMEInstance(Seq.Seq):
         self.strand = 0
         self.length = 0
         self.motif_name = ""
-        
-    
+
     def _seqname (self, name):
         self.sequence_name = name
-        
+
     def _motifname (self, name):
         self.motif_name = name
-    
+
     def _start (self, start):
         start = int(start)
         self.start = start
-    
+
     def _pvalue (self, pval):
         pval = float(pval)
         self.pvalue = pval
-    
+
     def _score (self, score):
         score = float(score)
         self.score = score
-    
+
     def _strand (self, strand):
         self.strand = strand
-    
+
     def _length (self, length):
         self.length = length
-    
+
 
 class MEMERecord(object):
     """A class for holding the results of a MEME run.
-    
+
     A MEMERecord is an object that holds the results from running
     MEME. It implements no methods of its own.
-        
+
     """
     def __init__ (self):
         """__init__ (self)"""
@@ -161,7 +159,7 @@ class MEMERecord(object):
         self.command = ""
         self.alphabet = None
         self.sequence_names = []
-        
+
     def get_motif_by_name (self, name):
         for m in self.motifs:
             if m.name == name:

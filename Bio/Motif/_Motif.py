@@ -14,6 +14,7 @@ from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
 import math, random
 
+
 class Motif(object):
     """
     A class representing sequence motifs.
@@ -49,7 +50,7 @@ class Motif(object):
             self.alphabet=alphabet
         elif self.alphabet != alphabet:
                 raise ValueError("Wrong Alphabet")
-        
+
     def add_instance(self, instance):
         """
         adds new instance to the motif
@@ -64,11 +65,10 @@ class Motif(object):
         if self.has_instances or not self.has_counts:
             self.instances.append(instance)
             self.has_instances=True
-            
+
         self._pwm_is_current = False
         self._log_odds_is_current = False
 
- 
     def set_mask(self, mask):
         """
         sets the mask for the motif
@@ -84,14 +84,13 @@ class Motif(object):
                 self.mask.append(0)
             else:
                 raise ValueError("Mask should contain only '*' or ' ' and not a '%s'"%char)
-    
+
     def pwm(self,laplace=True):
         """
         returns the PWM computed for the set of instances
 
         if laplace=True (default), pseudocounts equal to self.background multiplied by self.beta are added to all positions.
         """
-        
         if self._pwm_is_current:
             return self._pwm
         #we need to compute new pwm
@@ -116,7 +115,7 @@ class Motif(object):
                         dict[seq[i]]+=1
                     except KeyError: #we need to ignore non-alphabet letters
                         pass
-            self._pwm.append(FreqTable.FreqTable(dict, FreqTable.COUNT, self.alphabet)) 
+            self._pwm.append(FreqTable.FreqTable(dict, FreqTable.COUNT, self.alphabet))
         self._pwm_is_current=1
         return self._pwm
 
@@ -124,7 +123,7 @@ class Motif(object):
         """
         returns the logg odds matrix computed for the set of instances
         """
-        
+
         if self._log_odds_is_current:
             return self._log_odds
         #we need to compute new pwm
@@ -202,14 +201,14 @@ class Motif(object):
             else:
                 score/=len([x for x in self.mask if x])
         return score
-    
+
     def search_pwm(self,sequence,normalized=0,masked=0,threshold=0.0,both=True):
         """
         a generator function, returning found hits in a given sequence with the pwm score higher than the threshold
         """
         if both:
             rc = self.reverse_complement()
-            
+
         sequence = str(sequence).upper()
         for pos in range(0, len(sequence) - self.length + 1):
             score = self.score_hit(sequence, pos, normalized, masked)
@@ -236,7 +235,7 @@ class Motif(object):
                 p = self.dist_pearson_at(motif, -offset)
             else: #offset>=0
                 p = motif.dist_pearson_at(self, offset)
-            
+
             if max_p<p:
                 max_p=p
                 max_o=-offset
@@ -249,7 +248,7 @@ class Motif(object):
         sy = 0  # \sum y
         syy = 0 # \sum x^2
         norm=max(self.length, offset+motif.length)
-        
+
         for pos in range(max(self.length, offset+motif.length)):
             for l in self.alphabet.letters:
                 xi = self[pos][l]
@@ -279,7 +278,7 @@ class Motif(object):
                 max_p=p
                 max_o=-offset
         return 1-max_p/self.dist_product_at(self, 0), max_o
-            
+
     def dist_product_at(self, other, offset):
         s=0
         for i in range(max(self.length, offset+other.length)):
@@ -294,19 +293,19 @@ class Motif(object):
 
         It is calculated as a maximal value of DPQ formula (shown using LaTeX
         markup, familiar to mathematicians):
-        
+
         \sqrt{\sum_{i=1}^{alignment.len()} \sum_{k=1}^alphabet.len() \
         \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
            m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
         }
-        
+
         over possible non-spaced alignemts of two motifs.  See this reference:
 
         D. M Endres and J. E Schindelin, "A new metric for probability
         distributions", IEEE transactions on Information Theory 49, no. 7
         (July 2003): 1858-1860.
         """
-        
+
         min_d=float("inf")
         min_o=-1
         d_s=[]
@@ -329,7 +328,7 @@ class Motif(object):
                 min_d = d
                 min_o = -offset
         return min_d, min_o #,d_s
-            
+
     def dist_dpq_at(self, other, offset):
         """
         calculates the dist_dpq measure with a given offset.
@@ -342,28 +341,28 @@ class Motif(object):
                 avg=(f1[n]+f2[n])/2
                 s+=f1[n]*math.log(f1[n]/avg, 2)+f2[n]*math.log(f2[n]/avg, 2)
             return math.sqrt(s)
-                
-        s=0        
+
+        s=0
         for i in range(max(self.length, offset+other.length)):
             f1=self[i]
             f2=other[i-offset]
             s+=dpq(f1, f2, self.alphabet)
         return s
-            
+
     def _read(self, stream):
         """Reads the motif from the stream (in AlignAce format).
 
         the self.alphabet variable must be set beforehand.
         If the last line contains asterisks it is used for setting mask
         """
-        
+
         while True:
             ln = stream.readline()
             if "*" in ln:
                 self.set_mask(ln.strip("\n\c"))
                 break
             self.add_instance(Seq(ln.strip(), self.alphabet))
-        
+
     def __str__(self,masked=False):
         """ string representation of a motif.
         """
@@ -387,15 +386,13 @@ class Motif(object):
             return 0
         else:
             return self.length
-        
+
     def _write(self, stream):
         """
         writes the motif to the stream
         """
 
         stream.write(self.__str__())
-            
-            
 
     def _to_fasta(self):
         """
@@ -427,7 +424,6 @@ class Motif(object):
         res.mask = self.mask
         return res
 
-        
     def _from_jaspar_pfm(self,stream,make_instances=False):
         """
         reads the motif from Jaspar .pfm file
@@ -456,7 +452,7 @@ class Motif(object):
         if make_instances is True:
             self.make_instances_from_counts()
         return self
-        
+
     def _from_horiz_matrix(self,stream,letters=None,make_instances=False):
         """reads a horizontal count matrix from stream and fill in the counts.
         """
@@ -476,7 +472,7 @@ class Motif(object):
             except ValueError: #not integers
                 self.counts[i] = [float(x) for x in ln]
             #print(counts[i])
-        
+
         s = sum(self.counts[nuc][0] for nuc in letters)
         l = len(self.counts[letters[0]])
         self.length=l
@@ -484,7 +480,6 @@ class Motif(object):
         if make_instances is True:
             self.make_instances_from_counts()
         return self
-        
 
     def make_instances_from_counts(self):
         """Creates "fake" instances for a motif created from a count matrix.
@@ -507,12 +502,12 @@ class Motif(object):
                 col[i] += (alpha*s)[:(s-len(col[i]))]
             #print("column %i, %s" % (i, col[i]))
         #iterate over instances
-        for i in range(s): 
+        for i in range(s):
             inst = "" #start with empty seq
             for j in range(self.length): #iterate over positions
                 inst += col[j][i]
             #print("%i %s" % (i,inst)
-            inst = Seq(inst, self.alphabet)                
+            inst = Seq(inst, self.alphabet)
             self.add_instance(inst)
         return self.instances
 
@@ -542,12 +537,11 @@ class Motif(object):
 
         The instances and pwm are OK.
         """
-        
         while True:
             ln = stream.readline()# read the header "$>...."
             if ln=="" or ln[0]!=">":
                 break
-            
+
             ln=stream.readline().strip()#read the actual sequence
             i=0
             while ln[i]==ln[i].lower():
@@ -556,12 +550,11 @@ class Motif(object):
             while i<len(ln) and ln[i]==ln[i].upper():
                 inst+=ln[i]
                 i+=1
-            inst=Seq(inst, self.alphabet)                
+            inst=Seq(inst, self.alphabet)
             self.add_instance(inst)
 
         self.set_mask("*"*len(inst))
         return self
-
 
     def __getitem__(self, index):
         """Returns the probability distribution over symbols at a given position, padding with background.
@@ -607,7 +600,7 @@ class Motif(object):
         returns the score computed for the consensus sequence.
         """
         return self.score_hit(self.consensus(), 0)
-    
+
     def min_score(self):
         """Minimal possible score for this motif.
 
@@ -618,7 +611,7 @@ class Motif(object):
     def weblogo(self,fname,format="PNG",**kwds):
         """
         uses the Berkeley weblogo service to download and save a weblogo of itself
-        
+
         requires an internet connection.
         The parameters from **kwds are passed directly to the weblogo server.
         """
@@ -660,14 +653,13 @@ class Motif(object):
                   }
         for k, v in kwds.items():
             values[k]=str(v)
-            
+
         data = urlencode(values)
         req = Request(url, data)
         response = urlopen(req)
         with open(fname,"w") as f:
             im=response.read()
             f.write(im)
-  
 
     def _to_transfac(self):
         """Write the representation of a motif in TRANSFAC format
@@ -695,8 +687,7 @@ class Motif(object):
         return res
 
     def _to_vertical_matrix(self,letters=None):
-        """Return string representation of the motif as  a matrix.
-        
+        """Return string representation of the motif as a matrix.
         """
         if letters is None:
             letters = self.alphabet.letters
@@ -707,10 +698,9 @@ class Motif(object):
             res += "\t".join(str(pwm[i][a]) for a in letters)
             res += "\n"
         return res
-    
+
     def _to_horizontal_matrix(self,letters=None,normalized=True):
-        """Return string representation of the motif as  a matrix.
-        
+        """Return string representation of the motif as a matrix.
         """
         if letters is None:
             letters = self.alphabet.letters
@@ -745,9 +735,9 @@ class Motif(object):
         """
 
         formatters={
-            "jaspar-pfm":   self._to_jaspar_pfm,
-            "transfac":     self._to_transfac,
-            "fasta":       self._to_fasta,
+            "jaspar-pfm": self._to_jaspar_pfm,
+            "transfac": self._to_transfac,
+            "fasta": self._to_fasta,
             }
 
         try:
@@ -757,7 +747,7 @@ class Motif(object):
 
     def scanPWM(self, seq):
         """Matrix of log-odds scores for a nucleotide sequence.
- 
+
         scans a nucleotide sequence and returns the matrix of log-odds
         scores for all positions.
 
@@ -781,7 +771,7 @@ class Motif(object):
         except ImportError:
             # use the slower Python code otherwise
             return self._pwm_calculate(seq)
-        
+
         # get the log-odds matrix into a proper shape
         # (each row contains sorted (ACGT) log-odds values)
         logodds=[[y[1] for y in sorted(x.items())] for x in self.log_odds()]

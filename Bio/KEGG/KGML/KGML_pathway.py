@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
 
 from Bio._py3k import _is_int_or_long, _as_string
 
+
 # Pathway
 class Pathway(object):
     """Represents a KGML pathway from KEGG.
@@ -77,7 +78,6 @@ class Pathway(object):
         rough_xml = header + _as_string(ET.tostring(self.element, 'utf-8'))
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
-                  
 
     def add_entry(self, entry):
         """Add an Entry element to the pathway."""
@@ -290,7 +290,7 @@ class Entry(object):
             assert element.id in self._pathway.entries, \
                 "Component %s is not an entry in the pathway" % value
         self.components.add(element)
-    
+
     def remove_component(self, value):
         """Remove the entry with the passed ID from the group."""
         self.components.remove(value)
@@ -298,7 +298,7 @@ class Entry(object):
     def add_graphics(self, entry):
         """Add the Graphics entry."""
         self.graphics.append(entry)
-    
+
     def remove_graphics(self, entry):
         """Remove the Graphics entry with the passed ID from the group."""
         self.graphics.remove(entry)
@@ -379,6 +379,7 @@ class Entry(object):
                 return True
         return False
 
+
 # Component
 class Component(object):
     """An Entry subelement used to represents a complex node.
@@ -449,7 +450,7 @@ class Graphics(object):
         self.fgcolor = ''
         self.bgcolor = ''
         self._parent = parent
-    
+
     # We make sure that the XY coordinates, width and height are numbers
     def _getx(self):
         return self._x
@@ -572,6 +573,7 @@ class Graphics(object):
         """Return the centre of the Graphics object as an (x, y) tuple."""
         return (0.5 * (self.bounds[0][0] + self.bounds[1][0]),
                 0.5 * (self.bounds[0][1] + self.bounds[1][1]))
+
 
 # Reaction
 class Reaction(object):

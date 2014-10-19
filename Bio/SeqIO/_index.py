@@ -132,7 +132,6 @@ class SffRandomAccess(SeqFileRandomAccess):
             "Indexed %i records, expected %i" % (count, number_of_reads)
         SeqIO.SffIO._check_eof(handle, index_offset, index_length)
 
-
     def get(self, offset):
         handle = self._handle
         handle.seek(offset)
@@ -617,7 +616,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         while line:
             if seq_len == qual_len:
                 if seq_len == 0:
-                    #Special case, quality line should be just "\n"                                                                                                                      
+                    #Special case, quality line should be just "\n"
                     line = handle.readline()
                     if line.strip():
                         raise ValueError("Expected blank quality line, not %r" % line)

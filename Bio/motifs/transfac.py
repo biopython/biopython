@@ -91,7 +91,7 @@ def read(handle):
         key, value = line[:2], line[4:]
         if key=='VV':
             record.version = value
-        elif key in ('P0', 'PO'): # Old TRANSFAC files use PO instead of P0 
+        elif key in ('P0', 'PO'): # Old TRANSFAC files use PO instead of P0
             counts = {}
             assert value.split()[:4]==['A', 'C', 'G', 'T']
             length = 0
@@ -135,6 +135,7 @@ def read(handle):
         else:
             annotations[key] = value
     return record
+
 
 def write(motifs):
     """Write the representation of a motif in TRANSFAC format

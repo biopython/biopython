@@ -30,6 +30,7 @@ from Bio.CodonAlign.CodonAlphabet import CodonAlphabet
 from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alphabet
 from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
 
+
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
           codon_table=default_codon_table, alphabet=None,
           complete_protein=False, anchor_len=10, max_score=10):

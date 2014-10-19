@@ -145,7 +145,6 @@ class _BitString(str):
         resultint = selfint ^ otherint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
-
     def __rand__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
@@ -215,7 +214,6 @@ class _BitString(str):
     @classmethod
     def from_bool(cls, bools):
         return cls(''.join(map(str, map(int, bools))))
-
 
 
 def strict_consensus(trees):

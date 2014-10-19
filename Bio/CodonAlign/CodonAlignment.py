@@ -20,6 +20,7 @@ from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alph
 from Bio.CodonAlign.CodonSeq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.CodonAlign.chisq import chisqprob
 
+
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
 
@@ -62,7 +63,7 @@ class CodonAlignment(MultipleSeqAlignment):
         lines = ["%s CodonAlignment with %i rows and %i columns (%i codons)"
                  % (str(self._alphabet), rows, \
                     self.get_alignment_length(), self.get_aln_length())]
-        
+
         if rows <= 60:
             lines.extend([self._str_line(rec, length=60) \
                     for rec in self._records])
@@ -310,7 +311,7 @@ def _dijkstra(graph, start, end):
         shortest = None
         node = ''
         for temp_node in unseen_nodes:
-            if shortest == None:
+            if shortest is None:
                 shortest = D[temp_node]
                 node = temp_node
             elif D[temp_node] < shortest:

@@ -27,6 +27,7 @@ from Bio.Phylo import CDAO
 from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 
+
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
     pass
@@ -48,8 +49,10 @@ RDF_NAMESPACES.update(cdao_namespaces)
 # pad node ids with zeroes until they're at least this length
 ZEROES = 8
 
+
 def qUri(x):
     return resolve_uri(x, namespaces=RDF_NAMESPACES)
+
 
 def format_label(x):
     return x.replace('_', ' ')
@@ -119,7 +122,6 @@ class Parser(object):
 
         return self.parse_graph(graph, context=context)
 
-
     def parse_graph(self, graph=None, context=None):
         '''Generator that yields CDAO.Tree instances from an RDF model.'''
 
@@ -133,7 +135,6 @@ class Parser(object):
             clade = self.parse_children(root_node)
 
             yield CDAO.Tree(root=clade, rooted=self.rooted)
-
 
     def new_clade(self, node):
         '''Returns a CDAO.Clade object for a given named node.'''
@@ -151,7 +152,6 @@ class Parser(object):
         clade = CDAO.Clade(**kwargs)
 
         return clade
-
 
     def get_node_info(self, graph, context=None):
         '''Creates a dictionary containing information about all nodes in the tree.'''
@@ -223,7 +223,6 @@ class Parser(object):
                     self.children[parent] = []
                 self.children[parent].append(node)
 
-
     def parse_children(self, node):
         '''Return a CDAO.Clade, and calls itself recursively for each child,
         traversing the  entire tree and creating a nested structure of CDAO.Clade
@@ -269,7 +268,6 @@ class Writer(object):
 
         handle.write('<%s> a owl:Ontology .\n' % self.prefixes['cdao'])
 
-
         for tree in trees:
             self.tree_counter += 1
             self.tree_uri = 'tree%s'
@@ -278,7 +276,6 @@ class Writer(object):
             statements = self.process_clade(first_clade, root=tree)
             for stmt in statements:
                 self.add_stmt_to_handle(handle, stmt)
-
 
     def add_stmt_to_handle(self, handle, stmt):
         # apply URI prefixes
@@ -375,7 +372,6 @@ class Writer(object):
                 confidence = rdflib.Literal(clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
 
                 statements += [(nUri(clade.uri), pUri('cdao:has_Support_Value'), confidence)]
-
 
             if self.record_complete_ancestry and len(clade.ancestors) > 0:
                 statements += [(nUri(clade.uri), pUri('cdao:has_Ancestor'), nUri(ancestor))
