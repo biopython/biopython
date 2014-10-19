@@ -70,9 +70,9 @@ def write(obj, handle, **kwargs):
                                           **kwargs))]
     tax_labels = [str(x) for x in chain(*(t.get_terminals() for t in trees))]
     text = NEX_TEMPLATE % {
-            'count':    len(tax_labels),
-            'labels':   ' '.join(tax_labels),
-            'trees':    '\n'.join(nexus_trees),
+            'count': len(tax_labels),
+            'labels': ' '.join(tax_labels),
+            'trees': '\n'.join(nexus_trees),
             }
     handle.write(text)
     return len(nexus_trees)

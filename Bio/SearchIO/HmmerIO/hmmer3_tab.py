@@ -277,8 +277,8 @@ class Hmmer3TabWriter(object):
                 "--- domain number estimation ----")
         header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
                 "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew-1, " target name",
-                        taccw, "accession",  qnamew, "query name", qaccw,
-                        "accession",  "  E-value", " score", " bias",
+                        taccw, "accession", qnamew, "query name", qaccw,
+                        "accession", "  E-value", " score", " bias",
                         "  E-value", " score", " bias", "exp",
                         "reg", "clu", " ov", "env", "dom", "rep",
                         "inc", "description of target")
