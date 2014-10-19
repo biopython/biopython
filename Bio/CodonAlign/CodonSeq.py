@@ -21,11 +21,10 @@ from Bio.Data.CodonTable import generic_by_id
 
 from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_table
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"
 
 class CodonSeq(Seq):
-    """CodonSeq is designed to be within the SeqRecords of a
-    CodonAlignment class.
+    """CodonSeq is designed to be within the SeqRecords of a CodonAlignment class.
 
     CodonSeq is useful as it allows the user to specify
     reading frame when translate CodonSeq
@@ -57,8 +56,8 @@ class CodonSeq(Seq):
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
-    def __init__(self, data='', alphabet=default_codon_alphabet, \
-            gap_char="-", rf_table=None):
+    def __init__(self, data='', alphabet=default_codon_alphabet,
+                 gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
         # sequence = 'AAATTTGGGCCAAATTT'
@@ -140,13 +139,14 @@ class CodonSeq(Seq):
             return CodonSeq(codon_slice, alphabet=self.alphabet)
 
     def get_codon_num(self):
-        """Return the number of codons in the CodonSeq"""
+        """Return the number of codons in the CodonSeq."""
         return len(self.rf_table)
 
     def translate(self, codon_table=default_codon_table,
-            stop_symbol="*", rf_table=None, ungap_seq=True):
-        """Translate the CodonSeq based on the reading frame
-        in rf_table. It is possible for the user to specify
+                  stop_symbol="*", rf_table=None, ungap_seq=True):
+        """Translate the CodonSeq based on the reading frame in rf_table.
+
+        It is possible for the user to specify
         a rf_table at this point. If you want to include
         gaps in the translated sequence, this is the only
         way. ungap_seq should be set to true for this
@@ -194,11 +194,11 @@ class CodonSeq(Seq):
         return Seq(self._data, generic_dna)
 
     def get_full_rf_table(self):
-        """This function returns a full rf_table of the given
-        CodonSeq records. A full rf_table is different from
-        normal rf_table in that it translate gaps in CodonSeq.
-        It is helpful to construct alignment containing
-        frameshift.
+        """Returns full rf_table of the CodonSeq records.
+
+        A full rf_table is different from a normal rf_table in that
+        it translate gaps in CodonSeq. It is helpful to construct
+        alignment containing frameshift.
         """
         ungap_seq = self._data.replace("-", "")
         codon_lst = [ungap_seq[i:i+3] for i in self.rf_table]
@@ -234,8 +234,7 @@ class CodonSeq(Seq):
         return full_rf_table
 
     def full_translate(self, codon_table=default_codon_table, stop_symbol="*"):
-        """Apply full translation with gaps considered.
-        """
+        """Apply full translation with gaps considered."""
         full_rf_table = self.get_full_rf_table()
         return self.translate(codon_table=codon_table, stop_symbol=stop_symbol,
                               rf_table=full_rf_table, ungap_seq=False)
@@ -267,9 +266,7 @@ class CodonSeq(Seq):
 
 
 def _get_codon_list(codonseq):
-    """get a list of codons according to full_rf_table for counting
-    (PRIVATE).
-    """
+    """List of codons according to full_rf_table for counting (PRIVATE)."""
     #if not isinstance(codonseq, CodonSeq):
     #    raise TypeError("_get_codon_list accept a CodonSeq object "
     #                    "({0} detected)".format(type(codonseq)))
@@ -298,16 +295,22 @@ def _get_codon_list(codonseq):
 
 def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
               codon_table=default_codon_table, k=1, cfreq=None):
-    """Function to calculate the dN and dS of the given two CodonSeq
-    or SeqRecord that contain CodonSeq objects.
+    """Calculate dN and dS of the given two sequences.
 
     Available methods:
-        - NG86  - PMID: 3444411
-        - LWL85 - PMID: 3916709
-        - ML    - PMID: 7968486
-        - YN00  - PMID: 10666704
+        - NG86  - `Nei and Gojobori (1986)`_ (PMID 3444411).
+        - LWL85 - `Li et al. (1985)`_ (PMID 3916709).
+        - ML    - `Goldman and Yang (1994)`_ (PMID 7968486).
+        - YN00  - `Yang and Nielsen (2000)`_ (PMID 10666704).
+
+    .. _`Nei and Gojobori (1986)`: http://www.ncbi.nlm.nih.gov/pubmed/3444411
+    .. _`Li et al. (1985)`: http://www.ncbi.nlm.nih.gov/pubmed/3916709
+    .. _`Goldman and Yang (1994)`: http://mbe.oxfordjournals.org/content/11/5/725
+    .. _`Yang and Nielsen (2000)`: http://dx.doi.org/10.1093/oxfordjournals.molbev.a026236
     
     Arguments:
+        - codon_seq1 - CodonSeq or or SeqRecord that contains a CodonSeq
+        - codon_seq2 - CodonSeq or or SeqRecord that contains a CodonSeq
         - w  - transition/transvertion ratio
         - cfreq - Current codon frequency vector can only be specified
                     when you are using ML method. Possible ways of
@@ -361,8 +364,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
 #################################################################
 
 def _ng86(seq1, seq2, k, codon_table):
-    """Main function for NG86 method (PRIVATE).
-    """
+    """Main function for NG86 method (PRIVATE)."""
     S_sites1, N_sites1 = _count_site_NG86(seq1,
                                           codon_table=codon_table, k=k)
     S_sites2, N_sites2 = _count_site_NG86(seq2,
@@ -390,12 +392,12 @@ def _ng86(seq1, seq2, k, codon_table):
 
 
 def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
-    """count synonymous and non-synonymous sites of a list of codons
-    (PRIVATE).
-    Argument:
+    """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
+
+    Arguments:
         - codon_lst - A three letter codon list from a CodonSeq object.
-                      This can be returned from _get_codon_list method.
-        - k         - transition/transversion rate ratio
+          This can be returned from _get_codon_list method.
+        - k - transition/transversion rate ratio.
     """
     S_site = 0 # synonymous sites
     N_site = 0 # non-synonymous sites
@@ -450,9 +452,10 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
 
 
 def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
-    """Count differences between two codons (three-letter string).
+    """Count differences between two codons (three-letter string; PRIVATE).
+
     The function will take multiple pathways from codon1 to codon2
-    into account (PRIVATE).
+    into account.
     """
     if not all([isinstance(codon1, str), isinstance(codon2, str)]):
         raise TypeError("_count_diff_NG86 accept string object to represent "
@@ -484,9 +487,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                 diff_pos.append(i)
         def compare_codon(codon1, codon2, codon_table=default_codon_table,
                           weight=1):
-            """Method to compare two codon accounting for different
-            pathways
-            """
+            """Method to compare two codon accounting for different pathways."""
             sd = nd = 0
             if len(set(map(codon_table.forward_table.get,
                            [codon1, codon2]))) == 1:
@@ -539,9 +540,10 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
 #################################################################
 
 def _lwl85(seq1, seq2, k, codon_table):
-    """Main function fo LWL85 method (PRIVATE).
+    """Main function for LWL85 method (PRIVATE).
+
+    Nomenclature is according to Li et al. (1985), PMID 3916709.
     """
-    # Nomenclature is according to PMID (3916709)
     codon_fold_dict = _get_codon_fold(codon_table)
     # count number of sites in different degenerate classes
     fold0 = [0, 0]
@@ -580,9 +582,7 @@ def _lwl85(seq1, seq2, k, codon_table):
 
 
 def _get_codon_fold(codon_table):
-    """function to classify different position in a codon into
-    different fold (PRIVATE).
-    """
+    """Classify different position in a codon into different folds (PRIVATE)."""
     def find_fold_class(codon, forward_table):
         base = set(['A', 'T', 'C', 'G'])
         fold = ''
@@ -617,11 +617,11 @@ def _get_codon_fold(codon_table):
 
 
 def _diff_codon(codon1, codon2, fold_dict):
-    """function to get the differences of two codon and return
-    number of different types substitutions
+    """Number of different types substitutions between two codons (PRIVATE).
 
-    return (P0, P2, P4, Q0, Q2, Q4)
-    Nomenclature is according to PMID (3916709)
+    returns tuple (P0, P2, P4, Q0, Q2, Q4)
+
+    Nomenclature is according to Li et al. (1958), PMID 3916709.
     """
     P0 = P2 = P4 = Q0 = Q2 = Q4 = 0
     fold_num = fold_dict[codon1]
@@ -665,8 +665,9 @@ def _diff_codon(codon1, codon2, fold_dict):
 
 def _yn00(seq1, seq2, k, codon_table):
     """Main function for yn00 method (PRIVATE).
+
+    Nomenclature is according to Yang and Nielsen (2000), PMID 10666704.
     """
-    # nomenclature is according to PMID: 10666704
     from collections import defaultdict
     from scipy.linalg import expm
     fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
@@ -769,10 +770,11 @@ def _yn00(seq1, seq2, k, codon_table):
 
 
 def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
-    """
-    Argument:
-        -   T - proportions of transitional differences
-        -   V - proportions of transversional differences
+    """Get TV (PRIVATE).
+
+    Arguments:
+        - T - proportions of transitional differences
+        - V - proportions of transversional differences
     """
     purine = ('A', 'G')
     pyrimidine = ('C', 'T')
@@ -820,11 +822,15 @@ def _get_kappa_t(pi, TV, t=False):
 
 def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
         codon_table=default_codon_table):
-    """Site counting method from Ina 1995, PMID: 7699723 and modified
-    by Yang, PMID: 10666704. The method will return the total number of
-    synonymous and nonsynonymous sites and base frequencies in each
-    category. The function is equivalent to CountSites() function in
-    yn00.c of PAML.
+    """Site counting method from Ina / Yang and Nielsen (PRIVATE).
+
+    Method from `Ina (1995)`_ as modified by `Yang and Nielsen (2000)`_.
+    This will return the total number of synonymous and nonsynonymous sites
+    and base frequencies in each category. The function is equivalent to
+    the ``CountSites()`` function in ``yn00.c`` of PAML.
+
+    .. _`Ina (1995)`: http://dx.doi.org/10.1007/BF00167113
+    .. _`Yang and Nielsen (2000)`: http://dx.doi.org/10.1093/oxfordjournals.molbev.a026236
     """
     if len(codon_lst1) != len(codon_lst2):
         raise RuntimeError("Length of two codon_lst should be the same "
@@ -880,11 +886,12 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
 
 def _count_diff_YN00(codon1, codon2, P, codon_lst,
                      codon_table=default_codon_table):
-    """Count differences between two codons (three-letter string).
+    """Count differences between two codons (three-letter string; PRIVATE).
+
     The function will weighted multiple pathways from codon1 to codon2
     according to P matrix of codon substitution. The proportion
     of transition and transvertion (TV) will also be calculated in
-    the function (PRIVATE).
+    the function.
     """
     if not all([isinstance(codon1, str), isinstance(codon2, str)]):
         raise TypeError("_count_diff_YN00 accept string object to represent "
@@ -1005,8 +1012,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
 #################################################################
 
 def _ml(seq1, seq2, cmethod, codon_table):
-    """Main function for ML method (PRIVATE).
-    """
+    """Main function for ML method (PRIVATE)."""
     from collections import Counter
     from scipy.optimize import minimize
     codon_cnt = Counter()
@@ -1079,6 +1085,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
 
 def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
     """Obtain codon frequency dict (pi) from two codon list (PRIVATE).
+
     This function is designed for ML method. Available counting methods
     (cfreq) are F1x4, F3x4 and F64.
     """
@@ -1174,7 +1181,7 @@ def _q(i, j, pi, k, w, codon_table=default_codon_table):
 
 
 def _get_Q(pi, k, w, codon_lst, codon_table):
-    """Q matrix for codon substitution"""
+    """Q matrix for codon substitution (PRIVATE)."""
     import numpy as np
     codon_num = len(codon_lst)
     Q = np.zeros((codon_num, codon_num))
@@ -1195,8 +1202,7 @@ def _get_Q(pi, k, w, codon_lst, codon_table):
 
 
 def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):
-    """likelihood function for ML method
-    """
+    """Likelihood function for ML method (PRIVATE)."""
     from scipy.linalg import expm
     Q = _get_Q(pi, k, w, codon_lst, codon_table)
     P = expm(Q*t)
