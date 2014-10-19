@@ -71,8 +71,10 @@ class NexusWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects.
-                     This should hold ONE and only one alignment.
+        Arguments:
+
+         - alignments - A list or iterator returning MultipleSeqAlignment objects.
+           This should hold ONE and only one alignment.
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
