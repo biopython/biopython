@@ -70,8 +70,8 @@ how big it is from this 'BC' header, and thus seek immediately to
 the second block, and so on.
 
 The BAM indexing scheme records read positions using a 64 bit
-'virtual offset', comprising coffset<<16|uoffset, where coffset is
-the file offset of the BGZF block containing the start of the read
+'virtual offset', comprising coffset << 16 | uoffset, where coffset
+is the file offset of the BGZF block containing the start of the read
 (unsigned integer using up to 64-16 = 48 bits), and uoffset is the
 offset within the (decompressed) block (unsigned 16 bit integer).
 
@@ -258,7 +258,7 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     The BAM indexing scheme records read positions using a 64 bit
     'virtual offset', comprising in C terms:
 
-    block_start_offset<<16 | within_block_offset
+    block_start_offset << 16 | within_block_offset
 
     Here block_start_offset is the file offset of the BGZF block
     start (unsigned integer using up to 64-16 = 48 bits), and
@@ -300,7 +300,7 @@ def make_virtual_offset(block_start_offset, within_block_offset):
         raise ValueError("Require 0 <= within_block_offset < 2**16, got %i" % within_block_offset)
     if block_start_offset < 0 or block_start_offset >= 281474976710656:
         raise ValueError("Require 0 <= block_start_offset < 2**48, got %i" % block_start_offset)
-    return (block_start_offset<<16) | within_block_offset
+    return (block_start_offset << 16) | within_block_offset
 
 
 def split_virtual_offset(virtual_offset):
@@ -312,8 +312,8 @@ def split_virtual_offset(virtual_offset):
     True
 
     """
-    start = virtual_offset>>16
-    return start, virtual_offset ^ (start<<16)
+    start = virtual_offset >>16
+    return start, virtual_offset ^ (start << 16)
 
 
 def BgzfBlocks(handle):
@@ -597,14 +597,14 @@ class BgzfReader(object):
             #return make_virtual_offset(self._block_start_offset,
             #                           self._within_block_offset)
             #TODO - Include bounds checking as in make_virtual_offset?
-            return (self._block_start_offset<<16) | self._within_block_offset
+            return (self._block_start_offset << 16) | self._within_block_offset
 
     def seek(self, virtual_offset):
         """Seek to a 64-bit unsigned BGZF virtual offset."""
         #Do this inline to avoid a function call,
         #start_offset, within_block = split_virtual_offset(virtual_offset)
-        start_offset = virtual_offset>>16
-        within_block = virtual_offset ^ (start_offset<<16)
+        start_offset = virtual_offset >> 16
+        within_block = virtual_offset ^ (start_offset << 16)
         if start_offset != self._block_start_offset:
             #Don't need to load the block if already there
             #(this avoids a function call since _load_block would do nothing)
@@ -672,7 +672,7 @@ class BgzfReader(object):
             return data
         else:
             #Found new line, not at end of block (easy case, no IO)
-            data = self._buffer[self._within_block_offset:i+1]
+            data = self._buffer[self._within_block_offset:i + 1]
             self._within_block_offset = i + 1
             #assert data.endswith(self._newline)
             return data
@@ -751,7 +751,7 @@ class BgzfWriter(object):
             crc = struct.pack("<i", crc)
         else:
             crc = struct.pack("<I", crc)
-        bsize = struct.pack("<H", len(compressed)+25)  # includes -1
+        bsize = struct.pack("<H", len(compressed) + 25)  # includes -1
         crc = struct.pack("<I", zlib.crc32(block) & 0xffffffff)
         uncompressed_length = struct.pack("<I", len(block))
         #Fixed 16 bytes,
