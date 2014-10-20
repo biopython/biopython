@@ -24,10 +24,8 @@ from Bio.KEGG import _wrap_kegg
 name_wrap = [0, "",
              (" ", "$", 1, 1),
              ("-", "$", 1, 1)]
-id_wrap = lambda indent : [indent, "",
-                           (" ", "", 1, 0)]
-struct_wrap = lambda indent : [indent, "",
-                               ("  ", "", 1, 1)]
+id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
+struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 
 
 class Record(object):
