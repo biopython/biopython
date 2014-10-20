@@ -180,7 +180,7 @@ class SeqMap(object):
         self.flags = line[21:27]
 
         for i in range(header_len, len(line), 7):
-            f = line[i : i+7]
+            f = line[i:i+7]
             if len(f)!=7:
                 raise ValueError("Corrupt Field: ("+f+")")
             r = Res()
