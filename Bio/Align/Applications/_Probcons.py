@@ -65,7 +65,7 @@ class ProbconsCommandline(AbstractCommandline):
             #cmdline.pre = 3
             _Switch(["-clustalw", "clustalw"],
                     "Use CLUSTALW output format instead of MFA"),
-            _Option(["-c", "c", "--consistency", "consistency" ],
+            _Option(["-c", "c", "--consistency", "consistency"],
                     "Use 0 <= REPS <= 5 (default: 2) passes of consistency transformation",
                     checker_function=lambda x: x in range(0, 6),
                     equate=False),

@@ -25,7 +25,7 @@ class CrystalError(Exception):
 def wrap_line(line):
     output = ''
     for i in range(0, len(line), 80):
-        output = output + '%s\n' % line[ i: i + 80 ]
+        output = output + '%s\n' % line[i: i + 80]
     return output
 
 

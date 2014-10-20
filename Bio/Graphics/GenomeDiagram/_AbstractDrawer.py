@@ -308,11 +308,11 @@ def intermediate_points(start, end, graph_data):
         lastxval, lastyval = graph_data[index-1]
         xval, yval = graph_data[index]
         nextxval, nextyval = graph_data[index+1]
-        newdata.append( (lastxval+(xval-lastxval)/2.,
-                         xval+(nextxval-xval)/2., yval) )
+        newdata.append((lastxval+(xval-lastxval)/2.,
+                        xval+(nextxval-xval)/2., yval))
     # add last block
-    newdata.append( (xval+(nextxval-xval)/2.,
-                         end, graph_data[-1][1]) )
+    newdata.append((xval+(nextxval-xval)/2.,
+                         end, graph_data[-1][1]))
     #print newdata[-1]
     #print newdata
     return newdata

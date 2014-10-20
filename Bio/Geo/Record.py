@@ -36,7 +36,7 @@ class Record(object):
         self.col_defs = {}
         self.table_rows = []
 
-    def __str__( self ):
+    def __str__(self):
         output = ''
         output += 'GEO Type: %s\n' % self.entity_type
         output += 'GEO Id: %s\n' % self.entity_id
@@ -82,7 +82,7 @@ class Record(object):
         return output
 
 
-def out_block( text, prefix = '' ):
+def out_block(text, prefix = ''):
     output = ''
     for j in range(0, len(text), 80):
         output += '%s%s\n' % (prefix, text[j:j+80])
