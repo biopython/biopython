@@ -398,7 +398,7 @@ class CircularDrawer(AbstractDrawer):
 
         #Support for clickable links... needs ReportLab 2.4 or later
         #which added support for links in SVG output.
-        if hasattr(feature, "url") :
+        if hasattr(feature, "url"):
             kwargs["hrefURL"] = feature.url
             kwargs["hrefTitle"] = feature.name
 

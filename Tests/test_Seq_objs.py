@@ -385,9 +385,9 @@ class StringMethodTests(unittest.TestCase):
     def test_toseq(self):
         """Check obj.toseq() method."""
         for example1 in self._examples:
-            try :
+            try:
                 seq = example1.toseq()
-            except AttributeError :
+            except AttributeError:
                 self.assertTrue(isinstance(example1, Seq))
                 continue
             self.assertTrue(isinstance(seq, Seq))
@@ -400,7 +400,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try :
+            try:
                 comp = example1.complement()
             except ValueError as e:
                 self.assertEqual(str(e), "Proteins do not have complements!")
@@ -416,7 +416,7 @@ class StringMethodTests(unittest.TestCase):
                 mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
-            else :
+            else:
                 # TODO - look at alphabet?
                 raise ValueError(example1)
             self.assertEqual(str1.translate(mapping), str(comp))
@@ -428,7 +428,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try :
+            try:
                 comp = example1.reverse_complement()
             except ValueError as e:
                 self.assertEqual(str(e), "Proteins do not have complements!")
@@ -444,7 +444,7 @@ class StringMethodTests(unittest.TestCase):
                 mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
-            else :
+            else:
                 # TODO - look at alphabet?
                 continue
             self.assertEqual(str1.translate(mapping)[::-1], str(comp))
@@ -456,7 +456,7 @@ class StringMethodTests(unittest.TestCase):
             for example1 in self._examples:
                 if isinstance(example1, MutableSeq):
                     continue
-                try :
+                try:
                     tran = example1.transcribe()
                 except ValueError as e:
                     if str(e) == "Proteins cannot be transcribed!":
@@ -477,7 +477,7 @@ class StringMethodTests(unittest.TestCase):
             for example1 in self._examples:
                 if isinstance(example1, MutableSeq):
                     continue
-                try :
+                try:
                     tran = example1.back_transcribe()
                 except ValueError as e:
                     if str(e) == "Proteins cannot be back transcribed!":
@@ -498,7 +498,7 @@ class StringMethodTests(unittest.TestCase):
                 if len(example1) % 3 != 0:
                     # TODO - Check for or silence the expected warning?
                     continue
-                try :
+                try:
                     tran = example1.translate()
                 except ValueError as e:
                     if str(e) == "Proteins cannot be translated!":
@@ -559,16 +559,16 @@ class StringMethodTests(unittest.TestCase):
                         Seq(codon, generic_nucleotide),
                         Seq(codon, generic_dna),
                         Seq(codon, unambiguous_dna)]:
-                try :
+                try:
                     print(nuc.translate())
                     self.assertTrue(False, "Transating %s should fail" % codon)
-                except TranslationError :
+                except TranslationError:
                     pass
 
     def test_the_translation_of_ambig_codons(self):
         """Check obj.translate() method with ambiguous codons."""
         for letters, ambig_values in [(ambiguous_dna.letters, ambiguous_dna_values),
-                                      (ambiguous_rna.letters, ambiguous_rna_values)] :
+                                      (ambiguous_rna.letters, ambiguous_rna_values)]:
             ambig = set(letters)
             for c1 in ambig:
                 for c2 in ambig:

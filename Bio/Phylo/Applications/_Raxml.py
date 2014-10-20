@@ -362,8 +362,7 @@ class RaxmlCommandline(AbstractCommandline):
                     "Note that '-N' has been added as an alternative since "
                     "'-#' sometimes caused problems with certain MPI job "
                     "submission systems, since '-#' is often used to start "
-                    "comments. "
-                    ,
+                    "comments. ",
                     equate=False,
                     ),
                 ]

@@ -278,9 +278,9 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
 class TestPairwiseMatchDictionary(unittest.TestCase):
 
     match_dict = {
-        ("A", "A") : 1.5,
-        ("A", "T") : 0.5,
-        ("T", "T") : 1.0
+        ("A", "A"): 1.5,
+        ("A", "T"): 0.5,
+        ("T", "T"): 1.0
         }
 
     def test_match_dictionary1(self):

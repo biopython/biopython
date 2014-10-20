@@ -18,13 +18,13 @@ from Bio.Graphics.BasicChromosome import TelomereSegment
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV
-RAINBOW_COLORS = {(1, 1)  : colors.violet,
-                  (2, 2)  : colors.indigo,
-                  (3, 3)  : colors.blue,
-                  (4, 4)  : colors.green,
-                  (5, 5)  : colors.yellow,
-                  (6, 6)  : colors.orange,
-                  (7, 20) : colors.red}
+RAINBOW_COLORS = {(1, 1): colors.violet,
+                  (2, 2): colors.indigo,
+                  (3, 3): colors.blue,
+                  (4, 4): colors.green,
+                  (5, 5): colors.yellow,
+                  (6, 6): colors.orange,
+                  (7, 20): colors.red}
 
 
 class ChromosomeCounts(object):

@@ -251,7 +251,7 @@ class PrintFormat(object):
         Non cutting enzymes are not included."""
         if not ls:
             return title
-        ls.sort(lambda x, y : cmp(len(x[1]), len(y[1])))
+        ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
         iterator = iter(ls)
         cur_len = 1
         new_sect = []
@@ -337,8 +337,8 @@ class PrintFormat(object):
                 line2 = Join((line[0:(k-1)], a, line[k:], '\n'))
                 linetot = Join((lineo, line2))
                 map = Join((map, linetot))
-            mapunit = '\n'.join((sequence[counter : base], a * 60,
-                                 revsequence[counter : base],
+            mapunit = '\n'.join((sequence[counter: base], a * 60,
+                                 revsequence[counter: base],
                                  Join((str.ljust(str(counter+1), 15), ' '* 30,
                                         str.rjust(str(base), 15), '\n\n'))
                                  ))
@@ -364,7 +364,7 @@ class PrintFormat(object):
             linetot = Join((lineo, line2))
             map = Join((map, linetot))
         mapunit = ''
-        mapunit = Join((sequence[base : length], '\n'))
+        mapunit = Join((sequence[base: length], '\n'))
         mapunit = Join((mapunit, a * (length-base), '\n'))
         mapunit = Join((mapunit, revsequence[base:length], '\n'))
         mapunit = Join((mapunit, Join((str.ljust(str(base+1), 15), ' '*(

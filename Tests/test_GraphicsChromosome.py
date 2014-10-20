@@ -77,10 +77,10 @@ chr4_info = (("", None, 1.5),
              ("", colors.blue, 1),
              ("AC22222", colors.blue, 1))
 
-all_chr_info = {"I" : chr1_info,
-                "II" : chr2_info,
-                "III" : chr3_info,
-                "IV" : chr4_info}
+all_chr_info = {"I": chr1_info,
+                "II": chr2_info,
+                "III": chr3_info,
+                "IV": chr4_info}
 
 
 def load_chromosome(chr_name):
@@ -255,7 +255,7 @@ class OrganismGraphicTest(unittest.TestCase):
         self.assertEqual(properties["label_size"], 6,
                "Unexpected results from getProperties: %s" % properties)
 
-        test_widget.setProperties({"start_x_position" : 12})
+        test_widget.setProperties({"start_x_position": 12})
         self.assertEqual(test_widget.start_x_position, 12,
                "setProperties doesn't seem to work right: %s"
                % test_widget.start_x_position)

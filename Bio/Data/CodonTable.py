@@ -889,7 +889,7 @@ del key, val
 for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
-    if n != 23 :
+    if n != 23:
         #For table 23, UUN = F, L or stop.
         assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X"  # F or L
     #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons

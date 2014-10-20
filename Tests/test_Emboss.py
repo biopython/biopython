@@ -214,7 +214,7 @@ def compare_records(old_list, new_list):
         if len(old.seq) != len(new.seq):
             raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
         if str(old.seq).upper() != str(new.seq).upper():
-            if str(old.seq).replace("X", "N")==str(new.seq) :
+            if str(old.seq).replace("X", "N")==str(new.seq):
                 raise ValueError("X -> N (protein forced into nucleotide?)")
             if len(old.seq) < 200:
                 raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
@@ -486,7 +486,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             self.assertEqual(stdout.strip(), "")
             self.assertTrue(os.path.isfile(cline.outfile),
                             "Missing output file %r from:\n%s" % (cline.outfile, cline))
-        else :
+        else:
             # Don't use this yet... could return stdout handle instead?
             return stdout
 
@@ -762,7 +762,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         child.stdin.close()
         # Check we could read it's output
-        for align in AlignIO.parse(child.stdout, "emboss") :
+        for align in AlignIO.parse(child.stdout, "emboss"):
             self.assertEqual(len(align), 2)
             self.assertEqual(align.get_alignment_length(), 9)
         # Check no error output:

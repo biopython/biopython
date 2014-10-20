@@ -26,7 +26,7 @@ class SeqRecordCreation(unittest.TestCase):
         self.assertEqual(rec.annotations, {})
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test",
-                        annotations={"test" : ["a test"]})
+                        annotations={"test": ["a test"]})
         self.assertEqual(rec.annotations["test"], ["a test"])
 
     def test_letter_annotations(self):
@@ -36,7 +36,7 @@ class SeqRecordCreation(unittest.TestCase):
         self.assertEqual(rec.annotations, {})
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test",
-                        letter_annotations={"test" : [1, 2, 3, 4]})
+                        letter_annotations={"test": [1, 2, 3, 4]})
         self.assertEqual(rec.letter_annotations["test"], [1, 2, 3, 4])
         # Now try modifying it to a bad value...
         try:
@@ -48,7 +48,7 @@ class SeqRecordCreation(unittest.TestCase):
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
         try:
-            rec.letter_annotations={"test" : [1, 2, 3]}
+            rec.letter_annotations={"test": [1, 2, 3]}
             self.assertTrue(False, "Changing to bad letter_annotations should fail!")
         except (TypeError, ValueError) as e:
             pass
@@ -56,7 +56,7 @@ class SeqRecordCreation(unittest.TestCase):
         try:
             rec = SeqRecord(Seq("ACGT", generic_dna),
                             id="Test", name="Test", description="Test",
-                            letter_annotations={"test" : [1, 2, 3]})
+                            letter_annotations={"test": [1, 2, 3]})
             self.assertTrue(False, "Wrong length letter_annotations should fail!")
         except (TypeError, ValueError) as e:
             pass
@@ -65,7 +65,7 @@ class SeqRecordCreation(unittest.TestCase):
 class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
 
-    def setUp(self) :
+    def setUp(self):
         f0 = SeqFeature(FeatureLocation(0, 26), type="source",
                         qualifiers={"mol_type":["fake protein"]})
         f1 = SeqFeature(FeatureLocation(0, ExactPosition(10)))
@@ -80,8 +80,8 @@ class SeqRecordMethods(unittest.TestCase):
 
     def test_slice_variantes(self):
         """Simple slices using different start/end values"""
-        for start in list(range(-30, 30)) + [None] :
-            for end in list(range(-30, 30)) + [None] :
+        for start in list(range(-30, 30)) + [None]:
+            for end in list(range(-30, 30)) + [None]:
                 if start is None and end is None:
                     continue
                 rec = self.record[start:end]
@@ -101,7 +101,7 @@ class SeqRecordMethods(unittest.TestCase):
         self.assertEqual(str(right.seq), str(rec.seq[-10:]))
         mid = rec[12:22]
         self.assertEqual(str(mid.seq), str(rec.seq[12:22]))
-        for sub in [left, right, mid] :
+        for sub in [left, right, mid]:
             self.assertEqual(len(sub), 10)
             self.assertEqual(sub.id, "TestID")
             self.assertEqual(sub.name, "TestName")
@@ -136,7 +136,7 @@ class SeqRecordMethods(unittest.TestCase):
 
     def test_add_seq(self):
         """Simple addition of Seq or string"""
-        for other in [Seq("BIO"), "BIO"] :
+        for other in [Seq("BIO"), "BIO"]:
             rec = self.record + other  # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), str(self.record.seq)+"BIO")
@@ -176,7 +176,7 @@ class SeqRecordMethods(unittest.TestCase):
 
     def test_add_seq_left(self):
         """Simple left addition of Seq or string"""
-        for other in [Seq("BIO"), "BIO"] :
+        for other in [Seq("BIO"), "BIO"]:
             rec = other + self.record  # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), "BIO"+str(self.record.seq))
@@ -193,7 +193,7 @@ class SeqRecordMethods(unittest.TestCase):
 
     def test_slice_add_simple(self):
         """Simple slice and add"""
-        for cut in range(27) :
+        for cut in range(27):
             rec = self.record[:cut] + self.record[cut:]
             self.assertEqual(str(rec.seq), str(self.record.seq))
             self.assertEqual(len(rec), 26)
@@ -207,7 +207,7 @@ class SeqRecordMethods(unittest.TestCase):
 
     def test_slice_add_shift(self):
         """Simple slice and add to shift"""
-        for cut in range(27) :
+        for cut in range(27):
             rec = self.record[cut:] + self.record[:cut]
             self.assertEqual(str(rec.seq), str(self.record.seq[cut:] + self.record.seq[:cut]))
             self.assertEqual(len(rec), 26)

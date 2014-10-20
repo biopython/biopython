@@ -224,7 +224,7 @@ class Scop(object):
                         n = Domain()
                         n.sid = record.name
                         domains.append(n)
-                    else :
+                    else:
                         n = Node()
                     n.sunid = record.sunid
                     n.type = record.nodetype
@@ -241,7 +241,7 @@ class Scop(object):
 
                     n = sunidDict[record.sunid]
 
-                    if record.parent != '' : # Not root node
+                    if record.parent != '': # Not root node
 
                         if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
@@ -861,8 +861,8 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     Raises an IOError if there's a network error.
 
     """
-    params = {'pdb' : pdb, 'key' : key, 'sid' : sid, 'disp' : disp,
-              'dir' : dir, 'loc' : loc}
+    params = {'pdb': pdb, 'key': key, 'sid': sid, 'disp': disp,
+              'dir': dir, 'loc': loc}
     variables = {}
     for k, v in params.items():
         if v is not None:

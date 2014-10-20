@@ -136,7 +136,7 @@ class BootstrapTest(unittest.TestCase):
 
     def test_bootstrap_consensus(self):
         calculator = DistanceCalculator('blosum62')
-        constructor = DistanceTreeConstructor(calculator , 'nj')
+        constructor = DistanceTreeConstructor(calculator, 'nj')
         tree = Consensus.bootstrap_consensus(self.msa, 100, constructor, Consensus.majority_consensus)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
         Phylo.write(tree, './TreeConstruction/bootstrap_consensus.tre', 'newick')

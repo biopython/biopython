@@ -678,7 +678,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 else:
                     fill_color = color
             assert 0 <= start <= end <= self.bp_length
-            if strand == +1 :
+            if strand == +1:
                 #Right side only
                 x = segment_x + segment_width * 0.6
                 w = segment_width * 0.4

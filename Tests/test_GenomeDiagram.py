@@ -632,10 +632,10 @@ class DiagramTest(unittest.TestCase):
 
             # This URL should work in SVG output from recent versions
             # of ReportLab.  You need ReportLab 2.4 or later
-            try :
+            try:
                 url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
                       "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
-            except KeyError :
+            except KeyError:
                 url = None
 
             # Note that I am using strings for color names, instead
@@ -720,10 +720,10 @@ class DiagramTest(unittest.TestCase):
 
                 # This URL should work in SVG output from recent versions
                 # of ReportLab.  You need ReportLab 2.4 or later
-                try :
+                try:
                     url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
                           "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
-                except KeyError :
+                except KeyError:
                     url = None
 
                 gds_features.add_feature(feature, color = color,

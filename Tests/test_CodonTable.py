@@ -23,27 +23,27 @@ assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'], IUPACData.ambiguous_dna_valu
 for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X"  # F or L
 
     assert ambiguous_dna_by_id[n].forward_table["GTT"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_dna_by_id[n].forward_table["TTN"] == "X"  # F or L
     assert ambiguous_dna_by_id[n].forward_table["GTN"] == "V"
 
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table.get("TTN") == "X"
     assert ambiguous_generic_by_id[n].forward_table["ACN"] == "T"
     assert ambiguous_generic_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_generic_by_id[n].forward_table["GUN"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table["UUN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["GTT"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table["TTN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["GTN"] == "V"
     # And finally something evil, an RNA-DNA mixture:
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table["UTN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["UTU"] == "F"
 

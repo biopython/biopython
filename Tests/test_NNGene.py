@@ -134,11 +134,11 @@ class PatternRepositoryTest(unittest.TestCase):
     """Tests for retrieving info from a repository of patterns.
     """
     def setUp(self):
-        self.motifs = {"GATC" : 30,
-                       "GGGG" : 10,
-                       "GTAG" : 0,
-                       "AAAA" : -10,
-                       "ATAT" : -20}
+        self.motifs = {"GATC": 30,
+                       "GGGG": 10,
+                       "GTAG": 0,
+                       "AAAA": -10,
+                       "ATAT": -20}
 
         self.repository = Pattern.PatternRepository(self.motifs)
 
@@ -313,12 +313,12 @@ class SchemaTest(unittest.TestCase):
     """Matching ambiguous motifs with multiple ambiguity characters.
     """
     def setUp(self):
-        ambiguity_chars = {"G" : "G",
-                           "A" : "A",
-                           "T" : "T",
-                           "C" : "C",
-                           "R" : "AG",
-                           "*" : "AGTC"}
+        ambiguity_chars = {"G": "G",
+                           "A": "A",
+                           "T": "T",
+                           "C": "C",
+                           "R": "AG",
+                           "*": "AGTC"}
 
         self.motif_coder = Schema.Schema(ambiguity_chars)
 
@@ -453,12 +453,12 @@ class SchemaCoderTest(unittest.TestCase):
     """Test encoding sequences as a grouping of motifs.
     """
     def setUp(self):
-        ambiguity_chars = {"G" : "G",
-                           "A" : "A",
-                           "T" : "T",
-                           "C" : "C",
-                           "R" : "AG",
-                           "*" : "AGTC"}
+        ambiguity_chars = {"G": "G",
+                           "A": "A",
+                           "T": "T",
+                           "C": "C",
+                           "R": "AG",
+                           "*": "AGTC"}
 
         motif_representation = Schema.Schema(ambiguity_chars)
         motifs = ("GA", "GATAG", "GA*AG", "GATRG", "*A")
@@ -522,22 +522,22 @@ class SchemaFactoryTest(unittest.TestCase):
 
         self.test_file = os.path.join(os.getcwd(), "NeuralNetwork", "enolase.fasta")
 
-        ambiguity_chars = {"G" : "G",
-                           "A" : "A",
-                           "T" : "T",
-                           "C" : "C",
-                           "R" : "AG",
-                           "*" : "AGTC"}
+        ambiguity_chars = {"G": "G",
+                           "A": "A",
+                           "T": "T",
+                           "C": "C",
+                           "R": "AG",
+                           "*": "AGTC"}
 
         self.schema = Schema.Schema(ambiguity_chars)
 
     def test_easy_from_motifs(self):
         """Generating schema from a simple list of motifs.
         """
-        motifs = {"GATCGAA" : 20,
-                  "GATCGAT" : 15,
-                  "GATTGAC" : 25,
-                  "TTTTTTT" : 10}
+        motifs = {"GATCGAA": 20,
+                  "GATCGAT": 15,
+                  "GATTGAC": 25,
+                  "TTTTTTT": 10}
 
         motif_bank = Pattern.PatternRepository(motifs)
 

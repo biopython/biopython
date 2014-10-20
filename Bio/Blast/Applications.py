@@ -227,11 +227,11 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
 
     def _validate(self):
         incompatibles = {"remote":["gilist", "negative_gilist", "num_threads"],
-                         "import_search_strategy" : ["export_search_strategy"],
+                         "import_search_strategy": ["export_search_strategy"],
                          "gilist":["negative_gilist"],
                          "seqidlist":["gilist", "negative_gilist", "remote"]}
         self._validate_incompatibilities(incompatibles)
-        if self.entrez_query and not self.remote :
+        if self.entrez_query and not self.remote:
             raise ValueError("Option entrez_query requires remote option.")
         AbstractCommandline._validate(self)
 
@@ -376,7 +376,7 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
             #General search options:
             _Option(["-task", "task"],
                     "Task to execute (string, blastp (default) or blastp-short).",
-                    checker_function=lambda value : value in ["blastp",
+                    checker_function=lambda value: value in ["blastp",
                                                               "blastp-short"],
                     equate=False),
             _Option(["-matrix", "matrix"],
@@ -392,7 +392,7 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
                     Bioinformatics 21:902-911, 2005, conditioned on sequence properties
 
                     Note that tblastn also supports values of 1 and 3.""",
-                    checker_function=lambda value : value in "0Ft2TtDd",
+                    checker_function=lambda value: value in "0Ft2TtDd",
                     equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],
@@ -440,7 +440,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     """Query strand(s) to search against database/subject.
 
                     Values allowed are "both" (default), "minus", "plus".""",
-                    checker_function=lambda value : value in ["both",
+                    checker_function=lambda value: value in ["both",
                                                               "minus",
                                                               "plus"],
                     equate=False),
@@ -450,7 +450,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
                     Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast'
                     (the default), or 'vecscreen'.""",
-                    checker_function=lambda value : value in ['blastn',
+                    checker_function=lambda value: value in ['blastn',
                                                               'blastn-short',
                                                               'dc-megablast',
                                                               'megablast',
@@ -496,7 +496,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
                     Allowed values: 'coding', 'coding_and_optimal' or 'optimal'
                     Requires: template_length.""",
-                    checker_function=lambda value : value in ['coding', 'coding_and_optimal', 'optimal'],
+                    checker_function=lambda value: value in ['coding', 'coding_and_optimal', 'optimal'],
                     equate=False),
             _Option(["-template_length", "template_length"],
                     """Discontiguous MegaBLAST template length (integer).
@@ -504,7 +504,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Allowed values: 16, 18, 21
 
                     Requires: template_type.""",
-                    checker_function=lambda value : value in [16, 18, 21, '16', '18', '21'],
+                    checker_function=lambda value: value in [16, 18, 21, '16', '18', '21'],
                     equate=False),
             #Extension options:
             _Switch(["-no_greedy", "no_greedy"],
@@ -528,7 +528,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
     def _validate(self):
         if (self.template_type and not self.template_length) \
-        or (self.template_length and not self.template_type) :
+        or (self.template_length and not self.template_type):
             raise ValueError("Options template_type and template_type require each other.")
         _NcbiblastMain2SeqCommandline._validate(self)
 
@@ -557,7 +557,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     """Query strand(s) to search against database/subject.
 
                     Values allowed are "both" (default), "minus", "plus".""",
-                    checker_function=lambda value : value in ["both", "minus", "plus"],
+                    checker_function=lambda value: value in ["both", "minus", "plus"],
                     equate=False),
             #Input query options:
             _Option(["-query_gencode", "query_gencode"],
@@ -663,7 +663,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                        2005, unconditionally
 
                     Note that only tblastn supports values of 1 and 3.""",
-                    checker_function=lambda value : value in "0Ft12TtDd3",
+                    checker_function=lambda value: value in "0Ft12TtDd3",
                     equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],
@@ -713,7 +713,7 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
                     """Query strand(s) to search against database/subject.
 
                     Values allowed are "both" (default), "minus", "plus".""",
-                    checker_function=lambda value : value in ["both", "minus", "plus"],
+                    checker_function=lambda value: value in ["both", "minus", "plus"],
                     equate=False),
             #Input query options:
             _Option(["-query_gencode", "query_gencode"],
@@ -782,7 +782,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     sequence properties
 
                     Note that tblastn also supports values of 1 and 3.""",
-                    checker_function=lambda value : value in "0Ft2TtDd",
+                    checker_function=lambda value: value in "0Ft2TtDd",
                     equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],
@@ -929,7 +929,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
 
                     Default = `0'
                     """,
-                    checker_function=lambda value : value in "Dd0Ff1Tt",
+                    checker_function=lambda value: value in "Dd0Ff1Tt",
                     equate=False),
             #Misc options:
             _Switch(["-use_sw_tback", "use_sw_tback"],
@@ -967,7 +967,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     """Query strand(s) to search against database/subject.
 
                     Values allowed are "both" (default), "minus", "plus".""",
-                    checker_function=lambda value : value in ["both",
+                    checker_function=lambda value: value in ["both",
                                                               "minus",
                                                               "plus"],
                     equate=False),
@@ -1073,7 +1073,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     Bioinformatics 21:902-911, 2005, conditioned on sequence properties
 
                     Note that tblastn also supports values of 1 and 3.""",
-                    checker_function=lambda value : value in "0Ft2TtDd",
+                    checker_function=lambda value: value in "0Ft2TtDd",
                     equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],

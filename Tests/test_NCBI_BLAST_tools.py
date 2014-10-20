@@ -33,7 +33,7 @@ if sys.platform=="win32":
     # On Windows the environment variable name isn't case senstive,
     # but must split on ";" not ":"
     likely_dirs = os.environ.get("PATH", "").split(";")
-else :
+else:
     likely_dirs = os.environ.get("PATH", "").split(":")
 
 for folder in likely_dirs:
@@ -159,7 +159,7 @@ class Pairwise(unittest.TestCase):
 
 
 class CheckCompleteArgList(unittest.TestCase):
-    def check(self, exe_name, wrapper) :
+    def check(self, exe_name, wrapper):
         global exe_names
         exe = exe_names[exe_name]
         cline = wrapper(exe, h=True)
@@ -176,7 +176,7 @@ class CheckCompleteArgList(unittest.TestCase):
         self.assertEqual(stderrdata, "",
                          "%s\n%s" % (str(cline), stderrdata))
         names_in_tool = set()
-        while stdoutdata :
+        while stdoutdata:
             index = stdoutdata.find("[")
             if index == -1:
                 break
@@ -191,19 +191,19 @@ class CheckCompleteArgList(unittest.TestCase):
 
         extra = names.difference(names_in_tool)
         missing = names_in_tool.difference(names)
-        if "-soft_masking" in missing :
+        if "-soft_masking" in missing:
             # Known issue, need to establish how this option works
             missing.remove("-soft_masking")
-        if "-use_index" in missing :
+        if "-use_index" in missing:
             # Known issue, need to establish how this option works
             missing.remove("-use_index")
-        if "-verbose" in missing :
+        if "-verbose" in missing:
             # Known issue, seems to be present in some builds (Bug 3043)
             missing.remove("-verbose")
-        if "-remote_verbose" in missing :
+        if "-remote_verbose" in missing:
             # Known issue, seems to be present in some builds (Bug 3043)
             missing.remove("-remote_verbose")
-        if "-use_test_remote_service" in missing :
+        if "-use_test_remote_service" in missing:
             # Known issue, seems to be present in some builds (Bug 3043)
             missing.remove("-use_test_remote_service")
         if exe_name == "blastn" and "-off_diagonal_range" in extra:

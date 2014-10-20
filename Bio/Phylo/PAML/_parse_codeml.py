@@ -98,12 +98,12 @@ def parse_nssites(lines, results, multi_models, multi_genes):
         # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
-        current_model = {"one-ratio" : 0,
-                        "NearlyNeutral" : 1,
-                        "PositiveSelection" : 2,
-                        "discrete" : 3,
-                        "beta" : 7,
-                        "beta&w>1" : 8}[siteclass_model]
+        current_model = {"one-ratio": 0,
+                        "NearlyNeutral": 1,
+                        "PositiveSelection": 2,
+                        "discrete": 3,
+                        "beta": 7,
+                        "beta&w>1": 8}[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
@@ -121,7 +121,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
                 model_results = parse_model(lines[gene_start:], model_results)
                 genes[current_gene-1] = model_results
         else:
-            model_results = {"description" : siteclass_model}
+            model_results = {"description": siteclass_model}
             model_results = parse_model(lines, model_results)
             ns_sites[current_model] = model_results
     else:
@@ -320,14 +320,14 @@ def parse_model(lines, results):
             line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
             parameters["branches"][branch]= {
-                "t" : _nan_float(params[0].strip()),
-                "N" : _nan_float(params[1].strip()),
-                "S" : _nan_float(params[2].strip()),
-                "omega" :_nan_float(params[3].strip()),
-                "dN" : _nan_float(params[4].strip()),
-                "dS" : _nan_float(params[5].strip()),
-                "N*dN" : _nan_float(params[6].strip()),
-                "S*dS" : _nan_float(params[7].strip())}
+                "t": _nan_float(params[0].strip()),
+                "N": _nan_float(params[1].strip()),
+                "S": _nan_float(params[2].strip()),
+                "omega":_nan_float(params[3].strip()),
+                "dN": _nan_float(params[4].strip()),
+                "dS": _nan_float(params[5].strip()),
+                "N*dN": _nan_float(params[6].strip()),
+                "S*dS": _nan_float(params[7].strip())}
         # Find model parameters, which can be spread across multiple
         # lines.
         # Example matches:
@@ -349,7 +349,7 @@ def parse_siteclass_proportions(line_floats):
     site_classes = {}
     if len(line_floats) > 0:
         for n in range(len(line_floats)):
-            site_classes[n] = {"proportion" : line_floats[n]}
+            site_classes[n] = {"proportion": line_floats[n]}
     return site_classes
 
 
@@ -423,15 +423,15 @@ def parse_pairwise(lines, results):
             if pairwise.get(seq2) is None:
                 pairwise[seq2] = {}
             if len(line_floats) == 1:
-                pairwise[seq1][seq2] = {"lnL" : line_floats[0]}
+                pairwise[seq1][seq2] = {"lnL": line_floats[0]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
             elif len(line_floats) == 6:
-                pairwise[seq1][seq2] = {"t" : line_floats[0],
-                        "S" : line_floats[1],
-                        "N" : line_floats[2],
-                        "omega" : line_floats[3],
-                        "dN" : line_floats[4],
-                        "dS" : line_floats[5]}
+                pairwise[seq1][seq2] = {"t": line_floats[0],
+                        "S": line_floats[1],
+                        "N": line_floats[2],
+                        "omega": line_floats[3],
+                        "dN": line_floats[4],
+                        "dS": line_floats[5]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if len(pairwise) > 0:
         results["pairwise"] = pairwise

@@ -117,10 +117,10 @@ print('entire alignment: %0.2f'
       % align_info.information_content(chars_to_ignore = ['N']))
 
 print('relative information content')
-e_freq = {'G' : 0.25,
-          'C' : 0.25,
-          'A' : 0.25,
-          'T' : 0.25}
+e_freq = {'G': 0.25,
+          'C': 0.25,
+          'A': 0.25,
+          'T': 0.25}
 
 e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)

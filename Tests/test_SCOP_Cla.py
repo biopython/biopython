@@ -70,13 +70,13 @@ class ClaTests(unittest.TestCase):
         self.assertEqual(record.residues.fragments, (('T', '', ''), ('U', '91', '106')))
         self.assertEqual(record.sccs, 'b.1.2.1')
         self.assertEqual(record.sunid, 21953)
-        self.assertEqual(record.hierarchy, {'cl' : 48724,
-                                            'cf' : 48725,
-                                            'sf' : 49265,
-                                            'fa' : 49266,
-                                            'dm' : 49267,
-                                            'sp' : 49268,
-                                            'px' : 21953})
+        self.assertEqual(record.hierarchy, {'cl': 48724,
+                                            'cf': 48725,
+                                            'sf': 49265,
+                                            'fa': 49266,
+                                            'dm': 49267,
+                                            'sp': 49268,
+                                            'px': 21953})
 
     def testIndex(self):
         """Test CLA file indexing"""

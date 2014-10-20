@@ -133,7 +133,7 @@ for name, example, folder, deps in extract_doctests(tutorial):
 
     def funct(n, d, f):
         global tutorial_base
-        method = lambda x : None
+        method = lambda x: None
         if f:
             p = os.path.join(tutorial_base, f)
             method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
