@@ -13,8 +13,8 @@ from Bio.PopGen import FDist
 from Bio.PopGen.FDist import Controller
 from Bio import MissingExternalDependencyError
 
-#Tests FDist2 related code. Note: this case requires fdist2 (four binaries)
-#test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
+# Tests FDist2 related code. Note: this case requires fdist2 (four binaries)
+# test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
 
 
 def is_pypy():
@@ -23,7 +23,7 @@ def is_pypy():
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        #New in Python 2.6, not in Jython yet either
+        # New in Python 2.6, not in Jython yet either
         pass
     return False
 
@@ -65,8 +65,8 @@ class AppTest(unittest.TestCase):
         self._copyfile('out.cpl', 'out.cpl')
 
     def tearDown(self):
-        #Not sure how exactly, but its possible the temp directory
-        #may not (still) exist.
+        # Not sure how exactly, but its possible the temp directory
+        # may not (still) exist.
         if os.path.isdir(self.dirname):
             for file in os.listdir(self.dirname):
                 os.remove(self.dirname + os.sep + file)
@@ -82,8 +82,8 @@ class AppTest(unittest.TestCase):
     def test_fdist(self):
         """Test fdist execution.
         """
-        #The number of simulations in real life should be at least 10000,
-        #see the fdist2 documentation.
+        # The number of simulations in real life should be at least 10000,
+        # see the fdist2 documentation.
         fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname)
@@ -93,8 +93,8 @@ class AppTest(unittest.TestCase):
     def test_fdist_force_fst(self):
         """Test fdist execution approximating Fst.
         """
-        #The number of simulations in real life should be at least 10000,
-        #see the fdist2 documentation.
+        # The number of simulations in real life should be at least 10000,
+        # see the fdist2 documentation.
         fst = self.ctrl.run_fdist_force_fst(npops = 15, nsamples = 10,
                 fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,

@@ -856,7 +856,7 @@ def print_matrix(matrix):
             matrixT[j].append(len(str(matrix[i][j])))
     ndigits = [max(x) for x in matrixT]
     for i in range(len(matrix)):
-        #Using string formatting trick to add leading spaces,
+        # Using string formatting trick to add leading spaces,
         print(" ".join("%*s " % (ndigits[j], matrix[i][j])
                        for j in range(len(matrix[i]))))
 

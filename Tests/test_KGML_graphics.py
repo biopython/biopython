@@ -26,7 +26,7 @@ except ImportError:
     raise MissingExternalDependencyError(
             "Install reportlab if you want to use Bio.Graphics.")
 
-#Do we have PIL?
+# Do we have PIL?
 try:
     from PIL import Image
 except ImportError:

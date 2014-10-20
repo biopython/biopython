@@ -72,7 +72,7 @@ def extract_doctests(latex_filename):
         line = handle.readline()
         line_number += 1
         if not line:
-            #End of file
+            # End of file
             break
         elif line.startswith("%cont-doctest"):
             x = _extract(handle)
@@ -99,7 +99,7 @@ def extract_doctests(latex_filename):
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
         yield name, "".join(lines), folder, deps
-    #yield "dummy", ">>> 2 + 2\n5\n"
+    # yield "dummy", ">>> 2 + 2\n5\n"
 
 
 class TutorialDocTestHolder(object):
@@ -119,7 +119,7 @@ def check_deps(dependencies):
             missing.append(lib)
     return missing
 
-#Create dummy methods on the object purely to hold doctests
+# Create dummy methods on the object purely to hold doctests
 missing_deps = set()
 for name, example, folder, deps in extract_doctests(tutorial):
     missing = check_deps(deps)
@@ -149,10 +149,10 @@ for name, example, folder, deps in extract_doctests(tutorial):
     del funct
 
 
-#This is a TestCase class so it is found by run_tests.py
+# This is a TestCase class so it is found by run_tests.py
 class TutorialTestCase(unittest.TestCase):
     """Python doctests extracted from the Biopython Tutorial."""
-    #Single method to be invoked by run_tests.py
+    # Single method to be invoked by run_tests.py
     def test_doctests(self):
         """Run tutorial doctests."""
         runner = doctest.DocTestRunner()
@@ -173,7 +173,7 @@ class TutorialTestCase(unittest.TestCase):
         os.chdir(original_path)
 
 
-#This is to run the doctests if the script is called directly:
+# This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
     if missing_deps:
         print("Skipping tests needing the following:")
@@ -183,6 +183,6 @@ if __name__ == "__main__":
     import doctest
     tests = doctest.testmod()
     if tests[0]:
-        #Note on Python 2.5+ can use tests.failed rather than tests[0]
+        # Note on Python 2.5+ can use tests.failed rather than tests[0]
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")

@@ -10,8 +10,8 @@ from Bio.PopGen import FDist
 from Bio.PopGen.GenePop import FileParser
 from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
 
-#Tests fdist related code. Note: this case doesn't require fdist
-#test_PopGen_FDist tests code that requires fdist
+# Tests fdist related code. Note: this case doesn't require fdist
+# test_PopGen_FDist tests code that requires fdist
 
 
 class RecordTest(unittest.TestCase):

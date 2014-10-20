@@ -40,7 +40,7 @@ class CheckRaw(unittest.TestCase):
                 idx.get_raw(id).replace(b'\r\n', b'\n'))
         idx.close()
 
-        #Now again, but using SQLite backend
+        # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             self.assertEqual(raw.replace(b'\r\n', b'\n'),
@@ -48,7 +48,7 @@ class CheckRaw(unittest.TestCase):
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
-            #Do the tests again with the BGZF compressed file
+            # Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
@@ -100,7 +100,7 @@ class CheckIndex(unittest.TestCase):
             db_indexed._con.close()
 
         if os.path.isfile(filename + ".bgz"):
-            #Do the tests again with the BGZF compressed file
+            # Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_index(filename + ".bgz", format, **kwargs)
 

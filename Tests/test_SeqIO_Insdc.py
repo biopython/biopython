@@ -16,14 +16,14 @@ class TestEmbl(unittest.TestCase):
         """Check parsing of annotation from EMBL files (1)."""
         record = SeqIO.read("EMBL/TRBG361.embl", "embl")
         self.assertEqual(len(record), 1859)
-        #Single keyword:
+        # Single keyword:
         self.assertEqual(record.annotations["keywords"], ["beta-glucosidase"])
 
     def test_annotation2(self):
         """Check parsing of annotation from EMBL files (2)."""
         record = SeqIO.read("EMBL/DD231055_edited.embl", "embl")
         self.assertEqual(len(record), 315)
-        #Multiple keywords:
+        # Multiple keywords:
         self.assertEqual(record.annotations["keywords"],
                          ['JP 2005522996-A/12', 'test-data',
                           'lot and lots of keywords for this example',
@@ -34,7 +34,7 @@ class TestEmblRewrite(unittest.TestCase):
     def check_rewrite(self, filename):
         old = SeqIO.read(filename, "embl")
 
-        #TODO - Check these properties:
+        # TODO - Check these properties:
         old.dbxrefs = []
         old.annotations['accessions'] = old.annotations['accessions'][:1]
         del old.annotations['references']

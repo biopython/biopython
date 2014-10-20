@@ -2,7 +2,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#TODO - Don't use "from XXX import *"
+# TODO - Don't use "from XXX import *"
 from __future__ import print_function
 
 try:

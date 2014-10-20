@@ -14,10 +14,10 @@ from Bio._py3k import StringIO
 import requires_internet
 requires_internet.check()
 
-#We want to test these:
+# We want to test these:
 from Bio import TogoWS
 
-#In order to check any sequences returned
+# In order to check any sequences returned
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
 from Bio import Medline
@@ -100,7 +100,7 @@ class TogoFields(unittest.TestCase):
 class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885(self):
         """Bio.TogoWS.entry("pubmed", "16381885")"""
-        #Gives Medline plain text
+        # Gives Medline plain text
         handle = TogoWS.entry("pubmed", "16381885")
         data = Medline.read(handle)
         handle.close()
@@ -129,7 +129,7 @@ class TogoEntry(unittest.TestCase):
 
     def test_pubmed_16381885_au(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="au")"""
-        #Gives one name per line (i.e. \n separated), no dots
+        # Gives one name per line (i.e. \n separated), no dots
         handle = TogoWS.entry("pubmed", "16381885", field="au")
         data = handle.read().strip().split("\n")
         handle.close()
@@ -140,7 +140,7 @@ class TogoEntry(unittest.TestCase):
 
     def test_pubmed_16381885_authors(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="authors")"""
-        #Gives names tab separated (i.e. \t separated)
+        # Gives names tab separated (i.e. \t separated)
         handle = TogoWS.entry("pubmed", "16381885", field="authors")
         data = handle.read().strip().split("\t")
         handle.close()
@@ -188,7 +188,7 @@ class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885_and_19850725_authors(self):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725", field="authors")"""
         handle = TogoWS.entry("pubmed", "16381885,19850725", field="authors")
-        #Little hack to remove blank lines...
+        # Little hack to remove blank lines...
         #names = handle.read().replace("\n\n", "\n").strip().split("\n")
         names = handle.read().strip().split("\n")
         handle.close()
@@ -294,7 +294,7 @@ class TogoEntry(unittest.TestCase):
 
     def test_genbank_gff3(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
-        #Note - Using manual URL with genbank instead of nucleotide works
+        # Note - Using manual URL with genbank instead of nucleotide works
         handle = TogoWS.entry("nucleotide", "X52960", format="gff")
         data = handle.read()
         handle.close()
@@ -305,19 +305,19 @@ class TogoEntry(unittest.TestCase):
 #        handle = TogoWS.entry("embl", "AM905444", format="gff")
 #        data = handle.read()
 #        handle.close()
-#        self.assertTrue(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
+# self.assertTrue(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
 
 #    def test_embl_AM905444_seq(self):
 #        """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
 #        handle = TogoWS.entry("embl", "AM905444", field="seq")
-#        data = handle.read().strip()  # ignore any trailing \n
+# data = handle.read().strip()  # ignore any trailing \n
 #        handle.close()
 #        self.assertEqual(seguid(data), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
 #    def test_embl_AM905444_definition(self):
 #        """Bio.TogoWS.entry("embl", "AM905444", field="definition")"""
 #        handle = TogoWS.entry("embl", "AM905444", field="definition")
-#        data = handle.read().strip()  # ignore any trailing \n
+# data = handle.read().strip()  # ignore any trailing \n
 #        handle.close()
 #        self.assertEqual(data, "Herbaspirillum seropedicae locus tag HS193.0074 for porin")
 
@@ -344,7 +344,7 @@ class TogoEntry(unittest.TestCase):
 
     def test_uniprot_swiss(self):
         """Bio.TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])"""
-        #Returns "swiss" format:
+        # Returns "swiss" format:
         handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN", "A1AG1_MOUSE"])
         record1, record2 = SeqIO.parse(handle, "swiss")
         handle.close()
@@ -374,7 +374,7 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("protein", "16130152", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
-        #Could use assertIn but requires Python 2.7+
+        # Could use assertIn but requires Python 2.7+
         self.assertTrue("16130152" in record.id, record.id)
         self.assertTrue("16130152" in record.name, record.name)
         self.assertTrue("porin protein" in record.description, record.description)
@@ -472,7 +472,7 @@ class TogoSearch(unittest.TestCase):
         else:
             count = search_count
 
-        #Iteration should find everything... unless a limit is used
+        # Iteration should find everything... unless a limit is used
         search_iter = list(TogoWS.search_iter(database, search_term, limit))
         self.assertEqual(count, len(search_iter))
         for match in expected_matches:

@@ -36,9 +36,9 @@ try:
     from sqlite3 import IntegrityError as _IntegrityError
     from sqlite3 import OperationalError as _OperationalError
 except ImportError:
-    #Not present on Jython, but should be included in Python 2.5
-    #or later (unless compiled from source without its dependencies)
-    #Still want to offer in-memory indexing.
+    # Not present on Jython, but should be included in Python 2.5
+    # or later (unless compiled from source without its dependencies)
+    # Still want to offer in-memory indexing.
     _sqlite = None
     pass
 
@@ -101,7 +101,7 @@ def _open_for_random_access(filename):
         return bgzf.BgzfReader(mode="rb", fileobj=handle)
     except ValueError as e:
         assert "BGZF" in str(e)
-        #Not a BGZF file after all, rewind to start:
+        # Not a BGZF file after all, rewind to start:
         handle.seek(0)
     return handle
 
@@ -191,8 +191,8 @@ class UndoHandle(object):
         self._handle.close()
 
 
-#The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
-#for indexing
+# The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
+# for indexing
 
 class _IndexedSeqFileProxy(object):
     """Base class for file format specific random access (PRIVATE).
@@ -214,13 +214,13 @@ class _IndexedSeqFileProxy(object):
 
     def get(self, offset):
         """Returns parsed object for this entry."""
-        #Most file formats with self contained records can be handled by
-        #parsing StringIO(_bytes_to_string(self.get_raw(offset)))
+        # Most file formats with self contained records can be handled by
+        # parsing StringIO(_bytes_to_string(self.get_raw(offset)))
         raise NotImplementedError("Subclass should implement this")
 
     def get_raw(self, offset):
         """Returns bytes string (if implemented for this file format)."""
-        #Should be done by each sub-class (if possible)
+        # Should be done by each sub-class (if possible)
         raise NotImplementedError("Not available for this file format.")
 
 
@@ -250,7 +250,7 @@ class _IndexedSeqFileDict(_dict_base):
     """
     def __init__(self, random_access_proxy, key_function,
                  repr, obj_repr):
-        #Use key_function=None for default value
+        # Use key_function=None for default value
         self._proxy = random_access_proxy
         self._key_function = key_function
         self._repr = repr
@@ -262,13 +262,13 @@ class _IndexedSeqFileDict(_dict_base):
             offset_iter = random_access_proxy
         offsets = {}
         for key, offset, length in offset_iter:
-            #Note - we don't store the length because I want to minimise the
-            #memory requirements. With the SQLite backend the length is kept
-            #and is used to speed up the get_raw method (by about 3 times).
-            #The length should be provided by all the current backends except
-            #SFF where there is an existing Roche index we can reuse (very fast
-            #but lacks the record lengths)
-            #assert length or format in ["sff", "sff-trim"], \
+            # Note - we don't store the length because I want to minimise the
+            # memory requirements. With the SQLite backend the length is kept
+            # and is used to speed up the get_raw method (by about 3 times).
+            # The length should be provided by all the current backends except
+            # SFF where there is an existing Roche index we can reuse (very fast
+            # but lacks the record lengths)
+            # assert length or format in ["sff", "sff-trim"], \
             #       "%s at offset %i given length %r (%s format %s)" \
             #       % (key, offset, length, filename, format)
             if key in offsets:
@@ -282,7 +282,7 @@ class _IndexedSeqFileDict(_dict_base):
         return self._repr
 
     def __str__(self):
-        #TODO - How best to handle the __str__ for SeqIO and SearchIO?
+        # TODO - How best to handle the __str__ for SeqIO and SearchIO?
         if self:
             return "{%r : %s(...), ...}" % (list(self.keys())[0], self._obj_repr)
         else:
@@ -322,7 +322,7 @@ class _IndexedSeqFileDict(_dict_base):
         return self.__iter__()
 
     if hasattr(dict, "iteritems"):
-        #Python 2, also define iteritems etc
+        # Python 2, also define iteritems etc
         def itervalues(self):
             """Iterate over the SeqRecord) items."""
             for key in self.__iter__():
@@ -343,7 +343,7 @@ class _IndexedSeqFileDict(_dict_base):
 
     def __getitem__(self, key):
         """x.__getitem__(y) <==> x[y]"""
-        #Pass the offset to the proxy
+        # Pass the offset to the proxy
         record = self._proxy.get(self._offsets[key])
         if self._key_function:
             key2 = self._key_function(record.id)
@@ -370,7 +370,7 @@ class _IndexedSeqFileDict(_dict_base):
 
         NOTE - This functionality is not supported for every file format.
         """
-        #Pass the offset to the proxy
+        # Pass the offset to the proxy
         return self._proxy.get_raw(self._offsets[key])
 
     def __setitem__(self, key, value):
@@ -432,9 +432,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                  proxy_factory, format,
                  key_function, repr, max_open=10):
         """Loads or creates an SQLite based index."""
-        #TODO? - Don't keep filename list in memory (just in DB)?
-        #Should save a chunk of memory if dealing with 1000s of files.
-        #Furthermore could compare a generator to the DB on reloading
+        # TODO? - Don't keep filename list in memory (just in DB)?
+        # Should save a chunk of memory if dealing with 1000s of files.
+        # Furthermore could compare a generator to the DB on reloading
         #(no need to turn it into a list)
 
         if not _sqlite:
@@ -469,7 +469,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
         con = _sqlite.connect(index_filename)
         self._con = con
-        #Check the count...
+        # Check the count...
         try:
             count, = con.execute(
                 "SELECT value FROM meta_data WHERE key=?;",
@@ -504,7 +504,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         except _OperationalError as err:
             con.close()
             raise ValueError("Not a Biopython index database? %s" % err)
-        #Now we have the format (from the DB if not given to us),
+        # Now we have the format (from the DB if not given to us),
         if not proxy_factory(self._format):
             con.close()
             raise ValueError("Unsupported format '%s'" % self._format)
@@ -523,23 +523,23 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             raise ValueError("Filenames to index and format required to build %r" % index_filename)
         if not proxy_factory(format):
             raise ValueError("Unsupported format '%s'" % format)
-        #Create the index
+        # Create the index
         con = _sqlite.connect(index_filename)
         self._con = con
         #print("Creating index")
         # Sqlite PRAGMA settings for speed
         con.execute("PRAGMA synchronous=OFF")
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
-        #Don't index the key column until the end (faster)
-        #con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
+        # Don't index the key column until the end (faster)
+        # con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
         # "offset INTEGER);")
         con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("count", -1))
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("format", format))
-        #TODO - Record the alphabet?
-        #TODO - Record the file size and modified date?
+        # TODO - Record the alphabet?
+        # TODO - Record the file size and modified date?
         con.execute(
             "CREATE TABLE file_data (file_number INTEGER, name TEXT);")
         con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
@@ -559,7 +559,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 batch = list(itertools.islice(offset_iter, 100))
                 if not batch:
                     break
-                #print("Inserting batch of %i offsets, %s ... %s" \
+                # print("Inserting batch of %i offsets, %s ... %s" \
                 # % (len(batch), batch[0][0], batch[-1][0]))
                 con.executemany(
                     "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
@@ -597,7 +597,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def __len__(self):
         """How many records are there?"""
         return self._length
-        #return self._con.execute("SELECT COUNT(key) FROM offset_data;").fetchone()[0]
+        # return self._con.execute("SELECT COUNT(key) FROM offset_data;").fetchone()[0]
 
     def __iter__(self):
         """Iterate over the keys."""
@@ -605,8 +605,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             yield str(row[0])
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems but not items etc
-        #Just need to override this...
+        # Python 2, use iteritems but not items etc
+        # Just need to override this...
         def keys(self):
             """Return a list of all the keys (SeqRecord identifiers)."""
             return [str(row[0]) for row in
@@ -614,7 +614,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
     def __getitem__(self, key):
         """x.__getitem__(y) <==> x[y]"""
-        #Pass the offset to the proxy
+        # Pass the offset to the proxy
         row = self._con.execute(
             "SELECT file_number, offset FROM offset_data WHERE key=?;",
             (key,)).fetchone()
@@ -626,9 +626,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             record = proxies[file_number].get(offset)
         else:
             if len(proxies) >= self._max_open:
-                #Close an old handle...
+                # Close an old handle...
                 proxies.popitem()[1]._handle.close()
-            #Open a new handle...
+            # Open a new handle...
             proxy = self._proxy_factory(self._format, self._filenames[file_number])
             record = proxy.get(offset)
             proxies[file_number] = proxy
@@ -657,7 +657,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
         NOTE - This functionality is not supported for every file format.
         """
-        #Pass the offset to the proxy
+        # Pass the offset to the proxy
         row = self._con.execute(
             "SELECT file_number, offset, length FROM offset_data WHERE key=?;",
             (key,)).fetchone()
@@ -667,22 +667,22 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         proxies = self._proxies
         if file_number in proxies:
             if length:
-                #Shortcut if we have the length
+                # Shortcut if we have the length
                 h = proxies[file_number]._handle
                 h.seek(offset)
                 return h.read(length)
             else:
                 return proxies[file_number].get_raw(offset)
         else:
-            #This code is duplicated from __getitem__ to avoid a function call
+            # This code is duplicated from __getitem__ to avoid a function call
             if len(proxies) >= self._max_open:
-                #Close an old handle...
+                # Close an old handle...
                 proxies.popitem()[1]._handle.close()
-            #Open a new handle...
+            # Open a new handle...
             proxy = self._proxy_factory(self._format, self._filenames[file_number])
             proxies[file_number] = proxy
             if length:
-                #Shortcut if we have the length
+                # Shortcut if we have the length
                 h = proxy._handle
                 h.seek(offset)
                 return h.read(length)

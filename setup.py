@@ -89,14 +89,14 @@ def is_pypy():
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        #New in Python 2.6, not in Jython yet either
+        # New in Python 2.6, not in Jython yet either
         pass
     return False
 
 
 def is_ironpython():
     return sys.platform == "cli"
-    #TODO - Use platform as in Pypy test?
+    # TODO - Use platform as in Pypy test?
 
 
 def get_yes_or_no(question, default):
@@ -375,7 +375,7 @@ PACKAGES = [
     'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
-    #Other top level packages,
+    # Other top level packages,
     'BioSQL',
     ]
 
@@ -407,7 +407,7 @@ else:
               ),
     ]
 
-#Add extensions that requires NumPy to build
+# Add extensions that requires NumPy to build
 if is_Numpy_installed():
     import numpy
     numpy_include_dir = numpy.get_include()
@@ -435,18 +435,18 @@ if is_Numpy_installed():
                   ))
 
 
-#We now define the Biopython version number in Bio/__init__.py
-#Here we can't use "import Bio" then "Bio.__version__" as that would
-#tell us the version of Biopython already installed (if any).
+# We now define the Biopython version number in Bio/__init__.py
+# Here we can't use "import Bio" then "Bio.__version__" as that would
+# tell us the version of Biopython already installed (if any).
 __version__ = "Undefined"
 for line in open('Bio/__init__.py'):
     if (line.startswith('__version__')):
         exec(line.strip())
 
-#Simple trick to use the 2to3 converted source under Python 3,
-#change the current directory before/after running setup.
-#Note as a side effect there will be a build folder underneath
-#the python3_source folder.
+# Simple trick to use the 2to3 converted source under Python 3,
+# change the current directory before/after running setup.
+# Note as a side effect there will be a build folder underneath
+# the python3_source folder.
 old_path = os.getcwd()
 try:
     src_path = python3_source

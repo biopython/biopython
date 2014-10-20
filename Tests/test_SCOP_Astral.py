@@ -48,8 +48,8 @@ class AstralTests(unittest.TestCase):
         self.assertEqual(len(domains2), 1)
 
         #d1 = scop.getDomainBySid("d3sdha_")
-        #self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByPercentId(20))
-        #self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByEv(-15))
+        # self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByPercentId(20))
+        # self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByEv(-15))
 
 
 if __name__=='__main__':

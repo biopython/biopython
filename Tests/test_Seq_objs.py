@@ -24,7 +24,7 @@ from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
-#This is just the standard table with less stop codons
+# This is just the standard table with less stop codons
 #(replaced with coding for O as an artifical example)
 special_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
@@ -69,7 +69,7 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
 
 class StringMethodTests(unittest.TestCase):
     _examples = [
-        #These are length 9, a multiple of 3 for translation tests:
+        # These are length 9, a multiple of 3 for translation tests:
         Seq("ACGTGGGGT", generic_protein),
         Seq("ACGTGGGGT", generic_nucleotide),
         Seq("ACGTGGGGT", generic_dna),
@@ -104,13 +104,13 @@ class StringMethodTests(unittest.TestCase):
         self.assertTrue(isinstance(method_name, str))
         for example1 in self._examples:
             if not hasattr(example1, method_name):
-                #e.g. MutableSeq does not support find
+                # e.g. MutableSeq does not support find
                 continue
             str1 = str(example1)
 
             for example2 in self._examples:
                 if not hasattr(example2, method_name):
-                    #e.g. MutableSeq does not support find
+                    # e.g. MutableSeq does not support find
                     continue
                 str2 = str(example2)
 
@@ -141,7 +141,7 @@ class StringMethodTests(unittest.TestCase):
                                             i,
                                             j))
                 except TypeError:
-                    #TODO - Check the alphabets do clash!
+                    # TODO - Check the alphabets do clash!
                     pass
 
                 if start_end:
@@ -193,10 +193,10 @@ class StringMethodTests(unittest.TestCase):
         self._test_method("startswith", start_end=True)
         self.assertTrue("ABCDE".startswith(("ABE", "OBE", "ABC")))
 
-        #Now check with a tuple of sub sequences
+        # Now check with a tuple of sub sequences
         for example1 in self._examples:
             if not hasattr(example1, "startswith"):
-                #e.g. MutableSeq does not support this
+                # e.g. MutableSeq does not support this
                 continue
             subs = tuple([example1[start:start+2] for start
                           in range(0, len(example1)-2, 3)])
@@ -216,10 +216,10 @@ class StringMethodTests(unittest.TestCase):
         self._test_method("endswith", start_end=True)
         self.assertTrue("ABCDE".endswith(("ABE", "OBE", "CDE")))
 
-        #Now check with a tuple of sub sequences
+        # Now check with a tuple of sub sequences
         for example1 in self._examples:
             if not hasattr(example1, "endswith"):
-                #e.g. MutableSeq does not support this
+                # e.g. MutableSeq does not support this
                 continue
             subs = tuple([example1[start:start+2] for start
                           in range(0, len(example1)-2, 3)])
@@ -244,22 +244,22 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_split(self):
         """Check matches the python string rstrip method."""
-        #Calling (r)split should return a list of Seq-like objects, we'll
-        #just apply str() to each of them so it matches the string method
+        # Calling (r)split should return a list of Seq-like objects, we'll
+        # just apply str() to each of them so it matches the string method
         self._test_method("rstrip",
                           pre_comp_function=lambda x: [str(y) for y in x])
 
     def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
-        #Calling (r)split should return a list of Seq-like objects, we'll
-        #just apply str() to each of them so it matches the string method
+        # Calling (r)split should return a list of Seq-like objects, we'll
+        # just apply str() to each of them so it matches the string method
         self._test_method("rstrip",
                           pre_comp_function=lambda x: [str(y) for y in x])
 
     def test_str_lsplit(self):
         """Check matches the python string rstrip method."""
-        #Calling (r)split should return a list of Seq-like objects, we'll
-        #just apply str() to each of them so it matches the string method
+        # Calling (r)split should return a list of Seq-like objects, we'll
+        # just apply str() to each of them so it matches the string method
         self._test_method("rstrip",
                           pre_comp_function=lambda x: [str(y) for y in x])
 
@@ -290,7 +290,7 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             with warnings.catch_warnings():
-                #Silence change in behaviour warning
+                # Silence change in behaviour warning
                 warnings.simplefilter('ignore', FutureWarning)
                 self.assertEqual(hash(id(example1)), hash(example1),
                                  "Hash mismatch, %r for %r vs %r for %r"
@@ -299,11 +299,11 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_comparison(self):
         if sys.version_info[0] >= 3:
-            #TODO - replace __cmp__ with specific methods for Python 3                                           
+            # TODO - replace __cmp__ with specific methods for Python 3                                           
             return
         for example1 in self._examples:
             for example2 in self._examples:
-                #Currently Seq vs MutableSeq use different rules,
+                # Currently Seq vs MutableSeq use different rules,
                 #
                 # >>> MutableSeq('ACGTGGGGT') == Seq('ACGTGGGGT')
                 # True
@@ -314,38 +314,38 @@ class StringMethodTests(unittest.TestCase):
                 # >>> Seq('ACGTGGGGT') == Seq('ACGTGGGGT')
                 # False
                 #
-                #i.e. This is a mess but we will make both use string equality
+                # i.e. This is a mess but we will make both use string equality
                 if isinstance(example1, MutableSeq):
                     rule = str
                     if not _check_type_compatible([example1.alphabet, example2.alphabet]):
-                        #Would raise TypeError...
+                        # Would raise TypeError...
                         continue
                 else:
                     rule = id
                 with warnings.catch_warnings():
-                    #Silence change in behaviour warning
+                    # Silence change in behaviour warning
                     warnings.simplefilter('ignore', FutureWarning)
-                    #Equality
+                    # Equality
                     self.assertEqual(rule(example1) == rule(example2),
                                      example1 == example2,
                                      "Checking %r == %r" % (example1, example2))
-                    #Not equal
+                    # Not equal
                     self.assertEqual(rule(example1) != rule(example2),
                                      example1 != example2,
                                      "Checking %r != %r" % (example1, example2))
-                    #Less than
+                    # Less than
                     self.assertEqual(rule(example1) < rule(example2),
                                      example1 < example2,
                                      "Checking %r < %r" % (example1, example2))
-                    #Less than or equal
+                    # Less than or equal
                     self.assertEqual(rule(example1) <= rule(example2),
                                      example1 <= example2,
                                      "Checking %r <= %r" % (example1, example2))
-                    #Greater than
+                    # Greater than
                     self.assertEqual(rule(example1) > rule(example2),
                                      example1 > example2,
                                      "Checking %r > %r" % (example1, example2))
-                    #Greater than or equal
+                    # Greater than or equal
                     self.assertEqual(rule(example1) >= rule(example2),
                                      example1 >= example2,
                                      "Checking %r >= %r" % (example1, example2))
@@ -406,7 +406,7 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
-            #This only does the unambiguous cases
+            # This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
             or example1.alphabet==generic_rna:
                 mapping = maketrans("ACGUacgu", "UGCAugca")
@@ -417,7 +417,7 @@ class StringMethodTests(unittest.TestCase):
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
             else :
-                #TODO - look at alphabet?
+                # TODO - look at alphabet?
                 raise ValueError(example1)
             self.assertEqual(str1.translate(mapping), str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
@@ -434,7 +434,7 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
-            #This only does the unambiguous cases
+            # This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
             or example1.alphabet==generic_rna:
                 mapping = maketrans("ACGUacgu", "UGCAugca")
@@ -445,7 +445,7 @@ class StringMethodTests(unittest.TestCase):
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
             else :
-                #TODO - look at alphabet?
+                # TODO - look at alphabet?
                 continue
             self.assertEqual(str1.translate(mapping)[::-1], str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
@@ -466,7 +466,7 @@ class StringMethodTests(unittest.TestCase):
                     raise e
                 str1 = str(example1)
                 if len(str1) % 3 != 0:
-                    #TODO - Check for or silence the expected warning?
+                    # TODO - Check for or silence the expected warning?
                     continue
                 self.assertEqual(str1.replace("T", "U").replace("t", "u"), str(tran))
                 self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
@@ -496,7 +496,7 @@ class StringMethodTests(unittest.TestCase):
                 if isinstance(example1, MutableSeq):
                     continue
                 if len(example1) % 3 != 0:
-                    #TODO - Check for or silence the expected warning?
+                    # TODO - Check for or silence the expected warning?
                     continue
                 try :
                     tran = example1.translate()
@@ -504,11 +504,11 @@ class StringMethodTests(unittest.TestCase):
                     if str(e) == "Proteins cannot be translated!":
                         continue
                     raise e
-                #This is based on the limited example not having stop codons:
+                # This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:
                     print(tran.alphabet)
                     self.assertTrue(False)
-                #TODO - check the actual translation, and all the optional args
+                # TODO - check the actual translation, and all the optional args
 
     def test_the_translation_of_stops(self):
         """Check obj.translate() method with stop codons."""
@@ -531,7 +531,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("", str(nuc.translate(to_stop=True)))
             self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
             self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
-            #These test the Bio.Seq.translate() function - move these?:
+            # These test the Bio.Seq.translate() function - move these?:
             self.assertEqual("*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table))
             self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
             self.assertEqual("", translate(str(nuc), to_stop=True))
@@ -592,16 +592,16 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(values, set("LI"))
                         else:
                             self.assertEqual(values, set(t))
-                        #TODO - Use the Bio.Data.IUPACData module for the
-                        #ambiguous protein mappings?
+                        # TODO - Use the Bio.Data.IUPACData module for the
+                        # ambiguous protein mappings?
 
     def test_init_typeerror(self):
         """Check Seq __init__ gives TypeError exceptions."""
-        #Only expect it to take strings and unicode - not Seq objects!
+        # Only expect it to take strings and unicode - not Seq objects!
         self.assertRaises(TypeError, Seq, (1066))
         self.assertRaises(TypeError, Seq, (Seq("ACGT", generic_dna)))
 
-    #TODO - Addition...
+    # TODO - Addition...
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

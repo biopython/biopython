@@ -38,13 +38,13 @@ class SeqRecordCreation(unittest.TestCase):
                         id="Test", name="Test", description="Test",
                         letter_annotations={"test" : [1, 2, 3, 4]})
         self.assertEqual(rec.letter_annotations["test"], [1, 2, 3, 4])
-        #Now try modifying it to a bad value...
+        # Now try modifying it to a bad value...
         try:
             rec.letter_annotations["bad"] = "abc"
             self.assertTrue(False, "Adding a bad letter_annotation should fail!")
         except (TypeError, ValueError) as e:
             pass
-        #Now try setting it afterwards to a bad value...
+        # Now try setting it afterwards to a bad value...
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
         try:
@@ -52,7 +52,7 @@ class SeqRecordCreation(unittest.TestCase):
             self.assertTrue(False, "Changing to bad letter_annotations should fail!")
         except (TypeError, ValueError) as e:
             pass
-        #Now try setting it at creation time to a bad value...
+        # Now try setting it at creation time to a bad value...
         try:
             rec = SeqRecord(Seq("ACGT", generic_dna),
                             id="Test", name="Test", description="Test",
@@ -110,7 +110,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(sub.dbxrefs, [])  # May change this...
             self.assertEqual(sub.annotations, {})  # May change this...
             self.assertEqual(len(sub.features), 1)
-            #By construction, each feature matches the full sliced region:
+            # By construction, each feature matches the full sliced region:
             self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
             self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
 

@@ -56,7 +56,7 @@ def is_pypy():
         if platform.python_implementation()=='PyPy':
             return True
     except AttributeError:
-        #New in Python 2.6, not in Jython yet either
+        # New in Python 2.6, not in Jython yet either
         pass
     return False
 
@@ -130,7 +130,7 @@ DOCTEST_MODULES = [
                    "Bio.Wise",
                    "Bio.Wise.psw",
                   ]
-#Silently ignore any doctests for modules requiring numpy!
+# Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
                             "Bio.Statistics.lowess",
@@ -143,16 +143,16 @@ try:
     import sqlite3
     del sqlite3
 except ImportError:
-    #Missing on Jython or Python 2.4
+    # Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
 
-#Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
+# Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
 
 
-#Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
+# Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
 def _have_bug17666():
     """Debug function to check if Python's gzip is broken (PRIVATE).
 
@@ -160,10 +160,10 @@ def _have_bug17666():
     3.2.4 and 3.3.1 only.
     """
     if os.name == 'java':
-        #Jython not affected
+        # Jython not affected
         return False
     import gzip
-    #Would like to use byte literal here:
+    # Would like to use byte literal here:
     bgzf_eof = "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
                "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
     if sys.version_info[0] >= 3:
@@ -176,7 +176,7 @@ def _have_bug17666():
         assert not data, "Should be zero length, not %i" % len(data)
         return False
     except TypeError as err:
-        #TypeError: integer argument expected, got 'tuple'
+        # TypeError: integer argument expected, got 'tuple'
         h.close()
         return True
 if _have_bug17666():
@@ -227,10 +227,10 @@ def main(argv):
             return 0
         if o == "--offline":
             print("Skipping any tests requiring internet access")
-            #This is a bit of a hack...
+            # This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
-            #The check() function should now report internet not available
+            # The check() function should now report internet not available
         if o == "-g" or o == "--generate":
             if len(args) > 1:
                 print("Only one argument (the test name) needed for generate")
@@ -403,7 +403,7 @@ class TestRunner(unittest.TextTestRunner):
             sys.stdout = output
             if name.startswith("test_"):
                 sys.stderr.write("%s ... " % name)
-                #It's either a unittest or a print-and-compare test
+                # It's either a unittest or a print-and-compare test
                 suite = unittest.TestLoader().loadTestsFromName(name)
                 if suite.countTestCases()==0:
                     # This is a print-and-compare test instead of a
@@ -411,9 +411,9 @@ class TestRunner(unittest.TextTestRunner):
                     test = ComparisonTestCase(name, output)
                     suite = unittest.TestSuite([test])
             else:
-                #It's a doc test
+                # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                #Can't use fromlist=name.split(".") until python 2.5+
+                # Can't use fromlist=name.split(".") until python 2.5+
                 module = __import__(name, None, None, name.split("."))
                 suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)
                 del module
@@ -463,7 +463,7 @@ class TestRunner(unittest.TextTestRunner):
             return False
         finally:
             sys.stdout = stdout
-            #Running under PyPy we were leaking file handles...
+            # Running under PyPy we were leaking file handles...
             gc.collect()
 
     def run(self):
@@ -490,5 +490,5 @@ class TestRunner(unittest.TextTestRunner):
 if __name__ == "__main__":
     errors = main(sys.argv[1:])
     if errors:
-        #Doing a sys.exit(...) isn't nice if run from IDLE...
+        # Doing a sys.exit(...) isn't nice if run from IDLE...
         sys.exit(1)

@@ -17,8 +17,8 @@ from __future__ import print_function
 import os
 if os.name == 'java':
     from Bio import MissingExternalDependencyError
-    #This is a slight miss-use of MissingExternalDependencyError,
-    #but it will do in the short term to skip this unit test on Jython
+    # This is a slight miss-use of MissingExternalDependencyError,
+    # but it will do in the short term to skip this unit test on Jython
     raise MissingExternalDependencyError("This test can cause a fatal error "
         "on Jython with some versions of Java")
 

@@ -66,7 +66,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     DBPASSWD = dbpasswd
     TESTDB = testdb
 
-    #Check the database driver is installed:
+    # Check the database driver is installed:
     if SYSTEM == "Java":
         try:
             if DBDRIVER in ["MySQLdb"]:
@@ -243,7 +243,7 @@ class ReadTest(unittest.TestCase):
         self.assertTrue("biosql-test" in server)
         self.assertEqual(1, len(server))
         self.assertEqual(["biosql-test"], list(server.keys()))
-        #Check we can delete the namespace...
+        # Check we can delete the namespace...
         del server["biosql-test"]
         self.assertEqual(0, len(server))
         try:
@@ -476,13 +476,13 @@ class LoaderTest(unittest.TestCase):
 class DupLoadTest(unittest.TestCase):
     """Check a few duplicate conditions fail."""
     def setUp(self):
-        #drop any old database and create a new one:
+        # drop any old database and create a new one:
         create_database()
-        #connect to new database:
+        # connect to new database:
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                                    user = DBUSER, passwd = DBPASSWD,
                                                    host = DBHOST, db = TESTDB)
-        #Create new namespace within new empty database:
+        # Create new namespace within new empty database:
         self.db = self.server.new_database("biosql-test")
 
     def tearDown(self):
@@ -498,9 +498,9 @@ class DupLoadTest(unittest.TestCase):
         try:
             count = self.db.load([record, record])
         except Exception as err:
-            #Good!
-            #Note we don't do a specific exception handler because the
-            #exception class will depend on which DB back end is in use.
+            # Good!
+            # Note we don't do a specific exception handler because the
+            # exception class will depend on which DB back end is in use.
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError",
                                                        "OperationalError"],
@@ -516,7 +516,7 @@ class DupLoadTest(unittest.TestCase):
         try:
             count = self.db.load([record])
         except Exception as err:
-            #Good!
+            # Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError"],
                             err.__class__.__name__)
@@ -530,7 +530,7 @@ class DupLoadTest(unittest.TestCase):
         try:
             count = self.db.load([record1, record2])
         except Exception as err:
-            #Good!
+            # Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError"],
                             err.__class__.__name__)
@@ -540,8 +540,8 @@ class DupLoadTest(unittest.TestCase):
 
 class ClosedLoopTest(unittest.TestCase):
     """Test file -> BioSQL -> file."""
-    #NOTE - For speed I don't bother to create a new database each time,
-    #simple a new unique namespace is used for each test.
+    # NOTE - For speed I don't bother to create a new database each time,
+    # simple a new unique namespace is used for each test.
 
     def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
@@ -586,34 +586,34 @@ class ClosedLoopTest(unittest.TestCase):
         count = db.load(original_records)
         self.assertEqual(count, len(original_records))
         server.commit()
-        #Now read them back...
+        # Now read them back...
         biosql_records = [db.lookup(name=rec.name)
                           for rec in original_records]
-        #And check they agree
+        # And check they agree
         self.assertTrue(compare_records(original_records, biosql_records))
-        #Now write to a handle...
+        # Now write to a handle...
         handle = StringIO()
         SeqIO.write(biosql_records, handle, "gb")
-        #Now read them back...
+        # Now read them back...
         handle.seek(0)
         new_records = list(SeqIO.parse(handle, "gb"))
-        #And check they still agree
+        # And check they still agree
         self.assertEqual(len(new_records), len(original_records))
         for old, new in zip(original_records, new_records):
-            #TODO - remove this hack because we don't yet write these (yet):
+            # TODO - remove this hack because we don't yet write these (yet):
             for key in ["comment", "references", "db_source"]:
                 if key in old.annotations and key not in new.annotations:
                     del old.annotations[key]
             self.assertTrue(compare_record(old, new))
-        #Done
+        # Done
         handle.close()
         server.close()
 
 
 class TransferTest(unittest.TestCase):
     """Test file -> BioSQL, BioSQL -> BioSQL."""
-    #NOTE - For speed I don't bother to create a new database each time,
-    #simple a new unique namespace is used for each test.
+    # NOTE - For speed I don't bother to create a new database each time,
+    # simple a new unique namespace is used for each test.
 
     def setUp(self):
         create_database()
@@ -661,22 +661,22 @@ class TransferTest(unittest.TestCase):
         count = db.load(original_records)
         self.assertEqual(count, len(original_records))
         server.commit()
-        #Now read them back...
+        # Now read them back...
         biosql_records = [db.lookup(name=rec.name)
                           for rec in original_records]
-        #And check they agree
+        # And check they agree
         self.assertTrue(compare_records(original_records, biosql_records))
-        #Now write to a second name space...
+        # Now write to a second name space...
         db_name = "test_trans2_%s" % filename  # new namespace!
         db = server.new_database(db_name)
         count = db.load(biosql_records)
         self.assertEqual(count, len(original_records))
-        #Now read them back again,
+        # Now read them back again,
         biosql_records2 = [db.lookup(name=rec.name)
                            for rec in original_records]
-        #And check they also agree
+        # And check they also agree
         self.assertTrue(compare_records(original_records, biosql_records2))
-        #Done
+        # Done
         server.close()
 
     def tearDown(self):
@@ -703,11 +703,11 @@ class InDepthLoadTest(unittest.TestCase):
 
     def test_transfer(self):
         """Make sure can load record into another namespace."""
-        #Should be in database already...
+        # Should be in database already...
         db_record = self.db.lookup(accession = "X55053")
-        #Make a new namespace
+        # Make a new namespace
         db2 = self.server.new_database("biosql-test-alt")
-        #Should be able to load this DBSeqRecord there...
+        # Should be able to load this DBSeqRecord there...
         count = db2.load([db_record])
         self.assertEqual(count, 1)
 
@@ -717,17 +717,17 @@ class InDepthLoadTest(unittest.TestCase):
         gb_handle = open(gb_file, "r")
         record = next(SeqIO.parse(gb_handle, "gb"))
         gb_handle.close()
-        #Should be in database already...
+        # Should be in database already...
         db_record = self.db.lookup(accession = "X55053")
         self.assertEqual(db_record.id, record.id)
         self.assertEqual(db_record.name, record.name)
         self.assertEqual(db_record.description, record.description)
         self.assertEqual(str(db_record.seq), str(record.seq))
-        #Good... now try reloading it!
+        # Good... now try reloading it!
         try:
             count = self.db.load([record])
         except Exception as err:
-            #Good!
+            # Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
                                                        "AttributeError"],
                             err.__class__.__name__)
@@ -854,7 +854,7 @@ class AutoSeqIOTests(unittest.TestCase):
                 compare_record(record, db_rec)
 
             if "accessions" in record.annotations:
-                #Only expect FIRST accession to work!
+                # Only expect FIRST accession to work!
                 key = record.annotations["accessions"][0]
                 assert key, "Blank accession in annotation %s" % repr(record.annotations)
                 if key != record.id:
@@ -910,7 +910,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('genbank', 'GenBank/pri1.gb')
         self.check('genbank', 'GenBank/arab1.gb')
         with warnings.catch_warnings():
-            #BiopythonWarning: order location operators are not fully supported
+            # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter("ignore", BiopythonWarning)
             self.check('genbank', 'GenBank/protein_refseq2.gb')
         self.check('genbank', 'GenBank/extra_keywords.gb')
@@ -919,7 +919,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('genbank', 'GenBank/origin_line.gb')
         self.check('genbank', 'GenBank/blank_seq.gb')
         with warnings.catch_warnings():
-            #BiopythonWarning: bond location operators are not fully supported
+            # BiopythonWarning: bond location operators are not fully supported
             warnings.simplefilter("ignore", BiopythonWarning)
             self.check('genbank', 'GenBank/dbsource_wrap.gb')
         self.check('genbank', 'GenBank/NC_005816.gb')

@@ -9,8 +9,8 @@ from Bio.PopGen import SimCoal
 from Bio.PopGen.SimCoal.Controller import SimCoalController
 from Bio import MissingExternalDependencyError
 
-#Tests simcoal related code. Note: this case requires simcoal
-#test_PopGen_SimCoal_nodepend tests code that does not require simcoal
+# Tests simcoal related code. Note: this case requires simcoal
+# test_PopGen_SimCoal_nodepend tests code that does not require simcoal
 
 found = False
 for path in os.environ['PATH'].split(os.pathsep):
@@ -38,8 +38,8 @@ class AppTest(unittest.TestCase):
 
     def tidy(self):
         if not os.path.isdir(os.path.join('PopGen', 'simple')):
-            #Unit test must have failed to invoke simcaol,
-            #and thus it never created the directory.
+            # Unit test must have failed to invoke simcaol,
+            # and thus it never created the directory.
             return
         for file in os.listdir(os.path.join('PopGen', 'simple')):
             os.remove(os.sep.join(['PopGen', 'simple', file]))

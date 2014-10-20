@@ -74,7 +74,7 @@ class ConsensusTest(unittest.TestCase):
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
-        #tree_file.close()
+        # tree_file.close()
 
     def test_majority_consensus(self):
         ref_trees = Phylo.parse('./TreeConstruction/majority_ref.tre', 'newick')
@@ -103,7 +103,7 @@ class ConsensusTest(unittest.TestCase):
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
-        #tree_file.close()
+        # tree_file.close()
 
     def test_get_support(self):
         support_tree = Consensus.get_support(self.trees[0], self.trees)

@@ -23,7 +23,7 @@ def pb(b):
         return 1
     return 0
 
-### TaggingConsumer
+# TaggingConsumer
 
 print("Running tests on TaggingConsumer")
 
@@ -39,7 +39,7 @@ tc.test1('myline')  # 'test1: myline\n'
 tc.end_section()    # '***** end_section\n'
 
 
-### is_blank_line
+# is_blank_line
 
 print("Running tests on is_blank_line")
 
@@ -59,7 +59,7 @@ print(is_blank_line('hello', allow_spaces=0))           # 0
 print(is_blank_line(string.whitespace, allow_spaces=0))  # 0
 
 
-### safe_readline
+# safe_readline
 
 print("Running tests on safe_readline")
 
@@ -79,7 +79,7 @@ else:
     print("ERROR, should have failed")
 
 
-### safe_peekline
+# safe_peekline
 
 print("Running tests on safe_peekline")
 safe_peekline = ParserSupport.safe_peekline
@@ -103,7 +103,7 @@ h.saveline('hello')
 print(safe_peekline(h))  # 'hello'
 
 
-### read_and_call
+# read_and_call
 
 print("Running tests on read_and_call")
 
@@ -168,7 +168,7 @@ else:
     print("ERROR, should have failed")
 
 
-### attempt_read_and_call
+# attempt_read_and_call
 
 print("Running tests on attempt_read_and_call")
 

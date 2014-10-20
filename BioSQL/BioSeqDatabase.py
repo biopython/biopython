@@ -160,11 +160,11 @@ class DBServer:
 
     def __iter__(self):
         """Iterate over namespaces (sub-databases) in the database."""
-        #TODO - Iterate over the cursor, much more efficient
+        # TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_biodatabase_names())
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems etc
+        # Python 2, use iteritems etc
         def keys(self):
             """List of namespaces (sub-databases) in the database."""
             return self.adaptor.list_biodatabase_names()
@@ -191,7 +191,7 @@ class DBServer:
             for key in self:
                 yield key, self[key]
     else:
-        #Python 3, items etc are all iterators
+        # Python 3, items etc are all iterators
         def keys(self):
             """Iterate over namespaces (sub-databases) in the database."""
             return iter(self)
@@ -472,7 +472,7 @@ class Adaptor:
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
         # does it need dbutils?
-        #return self.execute_one(
+        # return self.execute_one(
         #    """select SUBSTRING(seq FROM %s FOR %s)
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
@@ -584,7 +584,7 @@ class BioSeqDatabase:
         """Remove an entry and all its annotation."""
         if key not in self:
             raise KeyError(key)
-        #Assuming this will automatically cascade to the other tables...
+        # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
         self.adaptor.execute(sql, (self.dbid, key))
@@ -599,8 +599,8 @@ class BioSeqDatabase:
         """Check if a primary (internal) id is this namespace (sub database)."""
         sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
-        #The bioentry_id field is an integer in the schema.
-        #PostgreSQL will throw an error if we use a non integer in the query.
+        # The bioentry_id field is an integer in the schema.
+        # PostgreSQL will throw an error if we use a non integer in the query.
         try:
             bioentry_id = int(value)
         except ValueError:
@@ -610,11 +610,11 @@ class BioSeqDatabase:
 
     def __iter__(self):
         """Iterate over ids (which may not be meaningful outside this database)."""
-        #TODO - Iterate over the cursor, much more efficient
+        # TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_bioentry_ids(self.dbid))
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems etc
+        # Python 2, use iteritems etc
         def keys(self):
             """List of ids which may not be meaningful outside this database."""
             return self.adaptor.list_bioentry_ids(self.dbid)
@@ -641,7 +641,7 @@ class BioSeqDatabase:
             for key in self:
                 yield key, self[key]
     else:
-        #Python 3, items etc are all iterators
+        # Python 3, items etc are all iterators
         def keys(self):
             """Iterate over ids (which may not be meaningful outside this database)."""
             return iter(self)
@@ -707,10 +707,10 @@ class BioSeqDatabase:
         global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
             num_records += 1
-            #Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
-            #the RULES are present check for a duplicate record before loading
+            # Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
+            # the RULES are present check for a duplicate record before loading
             if _POSTGRES_RULES_PRESENT:
-                #Recreate what the Loader's _load_bioentry_table will do:
+                # Recreate what the Loader's _load_bioentry_table will do:
                 if cur_record.id.count(".") == 1:
                     accession, version = cur_record.id.split('.')
                     try:
@@ -729,6 +729,6 @@ class BioSeqDatabase:
                 if self.adaptor.cursor.fetchone():
                     raise self.adaptor.conn.IntegrityError("Duplicate record "
                                      "detected: record has not been inserted")
-            #End of hack
+            # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records

@@ -16,7 +16,7 @@ import subprocess
 from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import MafftCommandline
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 mafft_exe = None
@@ -47,8 +47,8 @@ def check_mafft_version(mafft_exe):
         raise MissingExternalDependencyError(
             "MAFFT does not seem to be correctly installed.")
 
-    #e.g. "MAFFT version 5.732 (2005/09/14)\n"
-    #e.g. "  MAFFT v6.717b (2009/12/03)\n"
+    # e.g. "MAFFT version 5.732 (2005/09/14)\n"
+    # e.g. "  MAFFT v6.717b (2009/12/03)\n"
     for marker in ["MAFFT version", "MAFFT v"]:
         index = output.find(marker)
         if index == -1:
@@ -61,7 +61,7 @@ def check_mafft_version(mafft_exe):
         return (major, version)
     raise MissingExternalDependencyError("Couldn't determine MAFFT version.")
 
-#This also checks it actually runs!
+# This also checks it actually runs!
 version_major, version_string = check_mafft_version(mafft_exe)
 
 
@@ -78,7 +78,7 @@ class MafftApplication(unittest.TestCase):
         """Simple round-trip through app with infile.
         Result passed to stdout.
         """
-        #Use a keyword argument at init,
+        # Use a keyword argument at init,
         cmdline = MafftCommandline(mafft_exe, input=self.infile1)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdoutdata, stderrdata = cmdline()
@@ -102,13 +102,13 @@ class MafftApplication(unittest.TestCase):
     def test_Mafft_with_Clustalw_output(self):
         """Simple round-trip through app with clustal output"""
         cmdline = MafftCommandline(mafft_exe)
-        #Use some properties:
+        # Use some properties:
         cmdline.input = self.infile1
         cmdline.clustalout = True
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdoutdata, stderrdata = cmdline()
-        #e.g. "CLUSTAL format alignment by MAFFT ..."
-        #or "CLUSTAL (-like) formatted alignment by MAFFT FFT-NS-2 (v6.240)"
+        # e.g. "CLUSTAL format alignment by MAFFT ..."
+        # or "CLUSTAL (-like) formatted alignment by MAFFT FFT-NS-2 (v6.240)"
         self.assertTrue(stdoutdata.startswith("CLUSTAL"), stdoutdata)
         self.assertTrue("$#=0" not in stderrdata)
 
@@ -119,7 +119,7 @@ class MafftApplication(unittest.TestCase):
                                        phylipout=True)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
             stdoutdata, stderrdata = cmdline()
-            #e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
+            # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
             self.assertTrue(stdoutdata.startswith(" 3 68") or
                             stdoutdata.startswith(" 3 69") or
                             stdoutdata.startswith(" 3 70"), stdoutdata)
@@ -135,7 +135,7 @@ class MafftApplication(unittest.TestCase):
                                        phylipout=True, namelength=50)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
             stdoutdata, stderrdata = cmdline()
-            #e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
+            # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
             self.assertTrue(stdoutdata.startswith(" 3 68") or
                             stdoutdata.startswith(" 3 69") or
                             stdoutdata.startswith(" 3 70"), stdoutdata)

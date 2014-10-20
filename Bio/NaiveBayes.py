@@ -195,7 +195,7 @@ def train(training_set, results, priors=None, typecode=None):
             values = class_observations[:, j]
 
             # Add pseudocounts here.  This needs to be parameterized.
-            #values = list(values) + range(len(nb.classes))  # XXX add 1
+            # values = list(values) + range(len(nb.classes))  # XXX add 1
 
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = _contents(values)

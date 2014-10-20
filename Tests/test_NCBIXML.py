@@ -1591,7 +1591,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2222_blastx_001(self):
         "Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)"
-        #See also plain text file bt081.txt (matching output from blastx tool)
+        # See also plain text file bt081.txt (matching output from blastx tool)
 
         filename = 'xml_2222_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1715,7 +1715,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2222_blastp_001(self):
         "Parsing BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)"
-        #This is from blastp NOT blastall
+        # This is from blastp NOT blastall
 
         filename = 'xml_2222_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1755,10 +1755,10 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2218L_rpsblast_001(self):
         "Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)"
-        #This is from old pgpblast command line tool, NOT new psiblast
-        #NOTE - The parser currently returns three BLAST record objects.
-        #The old text parser would return a single PSI BLAST record object with three rounds.
-        #This may change... although it may require a PSI BLAST specific XML parser.
+        # This is from old pgpblast command line tool, NOT new psiblast
+        # NOTE - The parser currently returns three BLAST record objects.
+        # The old text parser would return a single PSI BLAST record object with three rounds.
+        # This may change... although it may require a PSI BLAST specific XML parser.
 
         filename = 'xml_2218L_rpsblast_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1861,7 +1861,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 131)
 
-        #TODO - Can we detect the convergence status:
+        # TODO - Can we detect the convergence status:
         #<Iteration_message>CONVERGED</Iteration_message>
         self.assertRaises(StopIteration, next, records)
         handle.close()

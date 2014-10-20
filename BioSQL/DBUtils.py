@@ -58,12 +58,12 @@ class Mysql_dbutils(Generic_dbutils):
         if os.name == "java":
             return Generic_dbutils.last_id(self, cursor, table)
         try:
-            #This worked on older versions of MySQL
+            # This worked on older versions of MySQL
             return cursor.insert_id()
         except AttributeError:
-            #See bug 2390
-            #Google suggests this is the new way,
-            #same fix also suggested by Eric Gibert:
+            # See bug 2390
+            # Google suggests this is the new way,
+            # same fix also suggested by Eric Gibert:
             return cursor.lastrowid
 
 _dbutils["MySQLdb"] = Mysql_dbutils

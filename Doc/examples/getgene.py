@@ -308,5 +308,5 @@ if __name__ == '__main__':
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)
     for id in ids:
-        #print(db_index.Get(id))
+        # print(db_index.Get(id))
         print(func(id))

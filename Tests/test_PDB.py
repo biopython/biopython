@@ -426,7 +426,7 @@ class ParseTest(unittest.TestCase):
         structure = self.structure
         self.assertEqual(len(structure), 2)
 
-        #First model
+        # First model
         model = structure[0]
         self.assertEqual(model.id, 0)
         self.assertEqual(model.level, "M")
@@ -440,7 +440,7 @@ class ParseTest(unittest.TestCase):
                          "N CA CB CG CD OE C O CA  ")
         self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
                          "N C C C C O C O CA")
-        #Second model
+        # Second model
         model = structure[1]
         self.assertEqual(model.id, 1)
         self.assertEqual(model.level, "M")
@@ -542,7 +542,7 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             #==========================================================
-            #First try allowing non-standard amino acids,
+            # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
             self.assertEqual(len(polypeptides), 1)
             pp = polypeptides[0]
@@ -553,16 +553,16 @@ class ParseReal(unittest.TestCase):
             s = pp.get_sequence()
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
-            #Here non-standard MSE are shown as M
+            # Here non-standard MSE are shown as M
             self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                              "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
             #==========================================================
-            #Now try strict version with only standard amino acids
-            #Should ignore MSE 151 at start, and then break the chain
-            #at MSE 185, and MSE 214,215
+            # Now try strict version with only standard amino acids
+            # Should ignore MSE 151 at start, and then break the chain
+            # at MSE 185, and MSE 214,215
             polypeptides = ppbuild.build_peptides(structure[0], True)
             self.assertEqual(len(polypeptides), 3)
-            #First fragment
+            # First fragment
             pp = polypeptides[0]
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
@@ -570,7 +570,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
-            #Second fragment
+            # Second fragment
             pp = polypeptides[1]
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
@@ -578,7 +578,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
-            #Third fragment
+            # Third fragment
             pp = polypeptides[2]
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
@@ -825,7 +825,7 @@ class Exposure(unittest.TestCase):
             warnings.simplefilter("ignore", PDBConstructionWarning)
             structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         self.model=structure[1]
-        #Look at first chain only
+        # Look at first chain only
         a_residues=list(self.model["A"].child_list)
         self.assertEqual(86, len(a_residues))
         self.assertEqual(a_residues[0].get_resname(), "CYS")
@@ -976,7 +976,7 @@ class IterationTests(unittest.TestCase):
         self.assertEqual(len(atoms), 756)
 
 
-#class RenumberTests(unittest.TestCase):
+# class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
 #
 #    def setUp(self):

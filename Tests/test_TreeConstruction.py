@@ -71,21 +71,21 @@ class DistanceMatrixTest(unittest.TestCase):
 
     def test_bad_manipulation(self):
         dm = _DistanceMatrix(self.names, self.matrix)
-        #getitem
+        # getitem
         self.assertRaises(ValueError, dm.__getitem__, 'A')
         self.assertRaises(ValueError, dm.__getitem__, ('Alpha', 'A'))
         self.assertRaises(TypeError, dm.__getitem__, (1, 'A'))
         self.assertRaises(TypeError, dm.__getitem__, (1, 1.2))
         self.assertRaises(IndexError, dm.__getitem__, 6)
         self.assertRaises(IndexError, dm.__getitem__, (10, 10))
-        #setitem: item or index test
+        # setitem: item or index test
         self.assertRaises(ValueError, dm.__setitem__, 'A', [1, 3, 4])
         self.assertRaises(ValueError, dm.__setitem__, ('Alpha', 'A'), 4)
         self.assertRaises(TypeError, dm.__setitem__, (1, 'A'), 3)
         self.assertRaises(TypeError, dm.__setitem__, (1, 1.2), 2)
         self.assertRaises(IndexError, dm.__setitem__, 6, [1, 3, 4])
         self.assertRaises(IndexError, dm.__setitem__, (10, 10), 1)
-        #setitem: value test
+        # setitem: value test
         self.assertRaises(ValueError, dm.__setitem__, 0, [1, 2])
         self.assertRaises(TypeError, dm.__setitem__, ('Alpha', 'Beta'), 'a')
         self.assertRaises(TypeError, dm.__setitem__, 'Alpha', ['a', 'b', 'c'])
@@ -129,7 +129,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         #Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read('./TreeConstruction/upgma.tre', 'newick')
         self.assertTrue(Consensus._equal_topology(tree, ref_tree))
-        #ref_tree.close()
+        # ref_tree.close()
 
     def test_nj(self):
         tree = self.constructor.nj(self.dm)
@@ -138,7 +138,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         #Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read('./TreeConstruction/nj.tre', 'newick')
         self.assertTrue(Consensus._equal_topology(tree, ref_tree))
-        #ref_tree.close()
+        # ref_tree.close()
 
     def test_built_tree(self):
         tree = self.constructor.build_tree(self.aln)
@@ -147,7 +147,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         #Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read('./TreeConstruction/nj.tre', 'newick')
         self.assertTrue(Consensus._equal_topology(tree, ref_tree))
-        #ref_tree.close()
+        # ref_tree.close()
 
 
 class ParsimonyScorerTest(unittest.TestCase):

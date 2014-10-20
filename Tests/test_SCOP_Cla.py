@@ -41,7 +41,7 @@ class ClaTests(unittest.TestCase):
                 # that the list of classification hierarchy key-value pairs is
                 # unordered, therefore we need only check that they are all
                 # there, NOT that they are in the same order.
-                #End of line is platform dependent. Strip it off
+                # End of line is platform dependent. Strip it off
                 expected_hierarchy = line.rstrip().split('\t')[5].split(',')
                 expected_hierarchy = dict(pair.split('=') for pair
                                           in expected_hierarchy)

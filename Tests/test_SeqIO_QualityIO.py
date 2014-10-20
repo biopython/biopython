@@ -37,7 +37,7 @@ def truncation_expected(format):
         return None
 
 
-#Top level function as this makes it easier to use for debugging:
+# Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format, out_format):
     if in_format in BINARY_FORMATS:
         mode = "rb"
@@ -45,14 +45,14 @@ def write_read(filename, in_format, out_format):
         mode = "r"
     with open(filename, mode) as handle:
         records = list(SeqIO.parse(handle, in_format))
-    #Write it out...
+    # Write it out...
     if out_format in BINARY_FORMATS:
         handle = BytesIO()
     else :
         handle = StringIO()
     SeqIO.write(records, handle, out_format)
     handle.seek(0)
-    #Now load it back and check it agrees,
+    # Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle, out_format))
     compare_records(records, records2, truncation_expected(out_format))
 
@@ -95,8 +95,8 @@ def compare_record(old, new, truncate=None):
             raise ValueError("Mismatch in phred_quality")
     if "phred_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations:
-        #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
-        #Assume "old" is the original, and "new" has been converted.
+        # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
+        # Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
@@ -109,8 +109,8 @@ def compare_record(old, new, truncate=None):
             raise ValueError("Mismatch in phred_quality vs solexa_quality")
     if "solexa_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations:
-        #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
-        #Assume "old" is the original, and "new" has been converted.
+        # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
+        # Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
@@ -158,8 +158,8 @@ class TestFastqErrors(unittest.TestCase):
     def check_general_passes(self, filename, record_count):
         handle = open(filename, _universal_read_mode)
         tuples = QualityIO.FastqGeneralIterator(handle)
-        #This "raw" parser doesn't check the ASCII characters which means
-        #certain invalid FASTQ files will get parsed without errors.
+        # This "raw" parser doesn't check the ASCII characters which means
+        # certain invalid FASTQ files will get parsed without errors.
         count = 0
         for title, seq, qual in tuples:
             self.assertEqual(len(seq), len(qual))
@@ -175,8 +175,8 @@ class TestFastqErrors(unittest.TestCase):
         self.check_fails(filename, good_count)
         self.check_general_passes(filename, count)
 
-#Now add methods at run time... these FASTQ files will be rejected
-#by both the low level parser AND the high level SeqRecord parser:
+# Now add methods at run time... these FASTQ files will be rejected
+# by both the low level parser AND the high level SeqRecord parser:
 tests = [("diff_ids", 2),
          ("no_qual", 0),
          ("long_qual", 3),
@@ -201,8 +201,8 @@ for base_name, good_count in tests:
             funct(base_name, good_count))
     del funct
 
-#Now add methods for FASTQ files which will be rejected by the high
-#level SeqRecord parser, but will be accepted by the low level parser:
+# Now add methods for FASTQ files which will be rejected by the high
+# level SeqRecord parser, but will be accepted by the low level parser:
 tests = [("del", 3, 5),
          ("space", 3, 5),
          ("vtab", 0, 5),
@@ -302,7 +302,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
                 self.assertEqual(expected, handle.getvalue())
 
 
-#Now add methods at run time...
+# Now add methods at run time...
 tests = [("illumina_full_range", "illumina"),
          ("sanger_full_range", "sanger"),
          ("longreads", "sanger"),
@@ -337,7 +337,7 @@ class TestQual(unittest.TestCase):
         """Check FASTQ parsing matches QUAL parsing"""
         records1 = list(SeqIO.parse("Quality/example.qual", "qual"))
         records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
-        #Will ignore the unknown sequences :)
+        # Will ignore the unknown sequences :)
         self.assertTrue(compare_records(records1, records2))
 
     def test_qual_out(self):
@@ -416,7 +416,7 @@ class TestReadWrite(unittest.TestCase):
 
     def test_fastq_dna(self):
         """Read and write back simple example with ambiguous DNA"""
-        #First in upper case...
+        # First in upper case...
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here",
                   ambiguous_dna_letters.upper(),
@@ -424,7 +424,7 @@ class TestReadWrite(unittest.TestCase):
         handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
-        #Now in lower case...
+        # Now in lower case...
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here",
                   ambiguous_dna_letters.lower(),
@@ -435,7 +435,7 @@ class TestReadWrite(unittest.TestCase):
 
     def test_fastq_rna(self):
         """Read and write back simple example with ambiguous RNA"""
-        #First in upper case...
+        # First in upper case...
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here",
                   ambiguous_rna_letters.upper(),
@@ -443,7 +443,7 @@ class TestReadWrite(unittest.TestCase):
         handle = StringIO()
         self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
         self.assertEqual(data, handle.getvalue())
-        #Now in lower case...
+        # Now in lower case...
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here",
                   ambiguous_rna_letters.lower(),
@@ -473,12 +473,12 @@ class TestWriteRead(unittest.TestCase):
                            letter_annotations={"solexa_quality":[40, 30, 0, -5]*500})
         record8 = SeqRecord(Seq("ACGT"),  id="HighQual", description="With very large qualities that even Sanger FASTQ can't hold!",
                            letter_annotations={"solexa_quality":[0, 10, 100, 1000]})
-        #TODO - Record with no identifier?
+        # TODO - Record with no identifier?
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"]:
             handle = StringIO()
             with warnings.catch_warnings():
-                #TODO - Have a Biopython defined "DataLossWarning?"
+                # TODO - Have a Biopython defined "DataLossWarning?"
                 warnings.simplefilter('ignore', BiopythonWarning)
                 SeqIO.write(records, handle, format)
             handle.seek(0)
@@ -512,7 +512,7 @@ class TestWriteRead(unittest.TestCase):
     def test_example_fasta(self):
         """Write and read back example.fasta"""
         write_read(os.path.join("Quality", "example.fasta"), "fasta", "fasta")
-        #TODO - tests to check can't write FASTQ or QUAL...
+        # TODO - tests to check can't write FASTQ or QUAL...
 
     def test_example_fastq(self):
         """Write and read back example.fastq"""
@@ -643,9 +643,9 @@ class MappingTests(unittest.TestCase):
 
     def test_sanger_to_solexa(self):
         """Mapping check for FASTQ Sanger (0 to 93) to Solexa (-5 to 62)"""
-        #The point of this test is the writing code doesn't actually use the
-        #solexa_quality_from_phred function directly. For speed it uses a
-        #cached dictionary of the mappings.
+        # The point of this test is the writing code doesn't actually use the
+        # solexa_quality_from_phred function directly. For speed it uses a
+        # cached dictionary of the mappings.
         seq = "N"*94
         qual = "".join(chr(33+q) for q in range(0, 94))
         expected_sol = [min(62, int(round(QualityIO.solexa_quality_from_phred(q))))
@@ -665,9 +665,9 @@ class MappingTests(unittest.TestCase):
 
     def test_solexa_to_sanger(self):
         """Mapping check for FASTQ Solexa (-5 to 62) to Sanger (0 to 62)"""
-        #The point of this test is the writing code doesn't actually use the
-        #solexa_quality_from_phred function directly. For speed it uses a
-        #cached dictionary of the mappings.
+        # The point of this test is the writing code doesn't actually use the
+        # solexa_quality_from_phred function directly. For speed it uses a
+        # cached dictionary of the mappings.
         seq = "N"*68
         qual = "".join(chr(64+q) for q in range(-5, 63))
         expected_phred = [round(QualityIO.phred_quality_from_solexa(q))

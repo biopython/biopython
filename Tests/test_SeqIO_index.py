@@ -8,8 +8,8 @@
 try:
     import sqlite3
 except ImportError:
-    #Try and run what tests we can on Python 2.4 or Jython
-    #where we don't expect this to be installed.
+    # Try and run what tests we can on Python 2.4 or Jython
+    # where we don't expect this to be installed.
     sqlite3 = None
 
 import sys
@@ -24,10 +24,10 @@ from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
 from Bio._py3k import _universal_read_mode
 
 try:
-    #Defined on Python 3
+    # Defined on Python 3
     FileNotFoundError
 except NameError:
-    #Python 2 does not have this,
+    # Python 2 does not have this,
     FileNotFoundError = IOError
 
 from Bio.SeqRecord import SeqRecord
@@ -54,9 +54,9 @@ def add_prefix(key):
 
 
 def gzip_open(filename, format):
-    #At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
-    #insists on giving byte strings (i.e. binary mode)
-    #See http://bugs.python.org/issue13989
+    # At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
+    # insists on giving byte strings (i.e. binary mode)
+    # See http://bugs.python.org/issue13989
     if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
         return gzip.open(filename)
     handle = gzip.open(filename)
@@ -143,14 +143,14 @@ if sqlite3:
         def check(self, index_file, sff_files):
             if os.path.isfile(index_file):
                 os.remove(index_file)
-            #Build index...
+            # Build index...
             d = SeqIO.index_db(index_file, sff_files, "sff")
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files],
                              [os.path.abspath(f) for f in d._filenames])
-            #Load index...
+            # Load index...
             d = SeqIO.index_db(index_file, sff_files)
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
@@ -165,7 +165,7 @@ if sqlite3:
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         "Roche/greek.sff",
                         "Roche/paired.sff"])
-            #Here index is given as abs
+            # Here index is given as abs
             self.check(os.path.abspath("temp.idx"),
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         os.path.abspath("Roche/greek.sff"),
@@ -180,7 +180,7 @@ if sqlite3:
             """Check relative links in same folder."""
             os.chdir("Roche")
 
-            #Here everything is relative,
+            # Here everything is relative,
             self.check("temp.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
             self.check(os.path.abspath("temp.idx"),
                        ["E3MFGYR02_no_manifest.sff",
@@ -225,28 +225,28 @@ class IndexDictTests(unittest.TestCase):
         if not sqlite3:
             return
 
-        #In memory,
-        #note here give filenames as list of strings
+        # In memory,
+        # note here give filenames as list of strings
         rec_dict = SeqIO.index_db(":memory:", [filename], format,
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
 
-        #check error conditions
+        # check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy")
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"])
 
-        #Saving to file...
+        # Saving to file...
         index_tmp = self.index_tmp
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
 
-        #To disk,
-        #note here we give the filename as a single string
-        #to confirm that works too (convience feature).
+        # To disk,
+        # note here we give the filename as a single string
+        # to confirm that works too (convience feature).
         rec_dict = SeqIO.index_db(index_tmp, filename, format,
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -254,7 +254,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload it...
+        # Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format,
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -262,7 +262,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload without passing filenames and format
+        # Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
@@ -288,11 +288,11 @@ class IndexDictTests(unittest.TestCase):
         if not sqlite3:
             return
 
-        #In memory,
+        # In memory,
         rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        #check error conditions
+        # check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy",
                           key_function=add_prefix)
@@ -302,7 +302,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict.close()
         del rec_dict
 
-        #Saving to file...
+        # Saving to file...
         index_tmp = filename + ".key.idx"
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
@@ -313,7 +313,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload it...
+        # Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
@@ -321,7 +321,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload without passing filenames and format
+        # Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
                                   key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
@@ -329,19 +329,19 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
         os.remove(index_tmp)
-        #Done
+        # Done
 
     def check_dict_methods(self, rec_dict, keys, ids):
         self.assertEqual(set(keys), set(rec_dict))
-        #This is redundant, I just want to make sure len works:
+        # This is redundant, I just want to make sure len works:
         self.assertEqual(len(keys), len(rec_dict))
-        #Make sure boolean evaluation works
+        # Make sure boolean evaluation works
         self.assertEqual(bool(keys), bool(rec_dict))
         for key, id in zip(keys, ids):
             self.assertTrue(key in rec_dict)
             self.assertEqual(id, rec_dict[key].id)
             self.assertEqual(id, rec_dict.get(key).id)
-        #Check non-existant keys,
+        # Check non-existant keys,
         assert chr(0) not in keys, "Bad example in test"
         try:
             rec = rec_dict[chr(0)]
@@ -351,13 +351,13 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(rec_dict.get(chr(0)), None)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
         if hasattr(dict, "iteritems"):
-            #Python 2.x
+            # Python 2.x
             for key, rec in rec_dict.items():
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
         else:
-            #Python 3
+            # Python 3
             assert not hasattr(rec_dict, "iteritems")
             for key, rec in rec_dict.items():
                 self.assertTrue(key in keys)
@@ -367,7 +367,7 @@ class IndexDictTests(unittest.TestCase):
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
-        #Check the following fail
+        # Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0), chr(1))
@@ -377,7 +377,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
 
     def get_raw_check(self, filename, format, alphabet, comp):
-        #Also checking the key_function here
+        # Also checking the key_function here
         if comp:
             h = gzip.open(filename, "rb")
             raw_file = h.read()
@@ -412,7 +412,7 @@ class IndexDictTests(unittest.TestCase):
             self.assertTrue(raw.strip())
             self.assertTrue(raw in raw_file)
             rec1 = rec_dict[key]
-            #Following isn't very elegant, but it lets me test the
+            # Following isn't very elegant, but it lets me test the
             #__getitem__ SFF code is working.
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
@@ -435,8 +435,8 @@ class IndexDictTests(unittest.TestCase):
             elif format == "uniprot-xml":
                 self.assertTrue(raw.startswith(_as_bytes("<entry ")))
                 self.assertTrue(raw.endswith(_as_bytes("</entry>")))
-                #Currently the __getitem__ method uses this
-                #trick too, but we hope to fix that later
+                # Currently the __getitem__ method uses this
+                # trick too, but we hope to fix that later
                 raw = """<?xml version='1.0' encoding='UTF-8'?>
                 <uniprot xmlns="http://uniprot.org/uniprot"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

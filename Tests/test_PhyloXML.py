@@ -233,8 +233,8 @@ class TreeTests(unittest.TestCase):
 
     def test_BinaryCharacters(self):
         """Instantiation of BinaryCharacters objects."""
-        #Because we short circult interation, must close handle explicitly
-        #to avoid a ResourceWarning
+        # Because we short circult interation, must close handle explicitly
+        # to avoid a ResourceWarning
         handle = open(EX_DOLLO)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -263,7 +263,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
-        #Because we short circult interation, must close handle explicitly
+        # Because we short circult interation, must close handle explicitly
         handle = open(EX_MADE)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -332,7 +332,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks ProteinDomain type.
         """
-        #Because we short circult interation, must close handle explicitly
+        # Because we short circult interation, must close handle explicitly
         handle = open(EX_APAF)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -403,8 +403,8 @@ class TreeTests(unittest.TestCase):
 
     def test_Reference(self):
         """Instantiation of Reference objects."""
-        #Because we short circult interation, must close handle explicitly
-        #to avoid a ResourceWarning
+        # Because we short circult interation, must close handle explicitly
+        # to avoid a ResourceWarning
         handle = open(EX_DOLLO)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()

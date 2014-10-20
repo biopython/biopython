@@ -16,7 +16,7 @@ from Bio._py3k import StringIO
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 
-#TODO - share this with the QualityIO tests...
+# TODO - share this with the QualityIO tests...
 def truncation_expected(format):
     if format in ["fastq-solexa", "fastq-illumina"]:
         return 62
@@ -26,10 +26,10 @@ def truncation_expected(format):
         return None
 
 
-#Top level function as this makes it easier to use for debugging:
+# Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
     records = list(SeqIO.parse(in_filename, in_format, alphabet))
-    #Write it out...
+    # Write it out...
     handle = StringIO()
     qual_truncate = truncation_expected(out_format)
     with warnings.catch_warnings():
@@ -37,22 +37,22 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
             warnings.simplefilter('ignore', UserWarning)
         SeqIO.write(records, handle, out_format)
     handle.seek(0)
-    #Now load it back and check it agrees,
+    # Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle, out_format, alphabet))
     compare_records(records, records2, qual_truncate)
-    #Finally, use the convert function, and check that agrees:
+    # Finally, use the convert function, and check that agrees:
     handle2 = StringIO()
     with warnings.catch_warnings():
         if qual_truncate:
             warnings.simplefilter('ignore', UserWarning)
         SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
-    #We could re-parse this, but it is simpler and stricter:
+    # We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
 
 
 def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     qual_truncate = truncation_expected(out_format)
-    #We want the SAME error message from parse/write as convert!
+    # We want the SAME error message from parse/write as convert!
     err1 = None
     try:
         records = list(SeqIO.parse(in_filename, in_format, alphabet))
@@ -65,7 +65,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         assert False, "Parse or write should have failed!"
     except ValueError as err:
         err1 = err
-    #Now do the conversion...
+    # Now do the conversion...
     try:
         handle2 = StringIO()
         with warnings.catch_warnings():
@@ -79,7 +79,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
                % (err1, err2)
 
 
-#TODO - move this to a shared test module...
+# TODO - move this to a shared test module...
 def compare_record(old, new, truncate=None):
     """Quality aware SeqRecord comparison.
 
@@ -120,8 +120,8 @@ def compare_record(old, new, truncate=None):
             raise ValueError("Mismatch in phred_quality")
     if "phred_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations:
-        #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
-        #Assume "old" is the original, and "new" has been converted.
+        # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
+        # Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
@@ -134,8 +134,8 @@ def compare_record(old, new, truncate=None):
             raise ValueError("Mismatch in phred_quality vs solexa_quality")
     if "solexa_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations:
-        #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
-        #Assume "old" is the original, and "new" has been converted.
+        # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
+        # Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
@@ -194,7 +194,7 @@ for filename, format, alphabet in tests:
                 funct(filename, in_format, out_format, alphabet))
         del funct
 
-#Fail tests:
+# Fail tests:
 tests = [
     ("Quality/error_diff_ids.fastq", "fastq", None),
     ("Quality/error_long_qual.fastq", "fastq", None),
@@ -225,8 +225,8 @@ for filename, format, alphabet in tests:
             continue
         if in_format in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"] \
         and out_format in ["fasta", "tab"] and filename.startswith("Quality/error_qual_"):
-            #TODO? These conversions don't check for bad characters in the quality,
-            #and in order to pass this strict test they should.
+            # TODO? These conversions don't check for bad characters in the quality,
+            # and in order to pass this strict test they should.
             continue
 
         def funct(fn, fmt1, fmt2, alpha):

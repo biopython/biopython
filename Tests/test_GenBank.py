@@ -72,7 +72,7 @@ for parser in all_parsers:
         while True:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonParserWarning)
-                #e.g. BiopythonParserWarning: Premature end of file in sequence data
+                # e.g. BiopythonParserWarning: Premature end of file in sequence data
                 cur_record = next(iterator)
 
             if cur_record is None:
@@ -103,7 +103,7 @@ for parser in all_parsers:
                                   ProteinAlphabet):
                         assert feature.strand is None
                     else:
-                        #Assuming no mixed strand examples...
+                        # Assuming no mixed strand examples...
                         assert feature.strand is not None
                 print("DB cross refs %s" % cur_record.dbxrefs)
             elif isinstance(parser, GenBank.RecordParser):

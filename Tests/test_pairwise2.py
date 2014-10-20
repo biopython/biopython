@@ -412,9 +412,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
-        #Very expensive to open a gap in seq1:
+        # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
-        #Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, nogaps, specificgaps)
         self.assertEqual(len(alignments), 1)

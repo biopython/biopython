@@ -139,10 +139,10 @@ class SeqFeature(object):
         self.location = location
         self.type = type
         if location_operator:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.location_operator = location_operator
         if strand is not None:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.strand = strand
         self.id = id
         if qualifiers is None:
@@ -157,10 +157,10 @@ class SeqFeature(object):
                           BiopythonDeprecationWarning)
         self._sub_features = sub_features
         if ref is not None:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.ref = ref
         if ref_db is not None:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.ref_db = ref_db
 
     def _get_sub_features(self):
@@ -279,7 +279,7 @@ class SeqFeature(object):
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
                                                self.qualifiers[qual_key])
-        #TODO - Remove this from __str__ since deprecated
+        # TODO - Remove this from __str__ since deprecated
         if len(self._sub_features) != 0:
             out += "Sub-Features\n"
             for sub_feature in self._sub_features:
@@ -295,7 +295,7 @@ class SeqFeature(object):
                             location_operator = self.location_operator,
                             id = self.id,
                             qualifiers = dict(self.qualifiers.items()))
-        #This is to avoid the deprecation warning:
+        # This is to avoid the deprecation warning:
         answer._sub_features = [f._shift(offset) for f in self._sub_features]
         return answer
 
@@ -314,7 +314,7 @@ class SeqFeature(object):
                             location_operator = self.location_operator,
                             id = self.id,
                             qualifiers = dict(self.qualifiers.items()))
-        #This is to avoid the deprecation warning:
+        # This is to avoid the deprecation warning:
         answer._sub_features = [f._flip(length) for f in self._sub_features[::-1]]
         return answer
 
@@ -342,7 +342,7 @@ class SeqFeature(object):
         """
         return self.location.extract(parent_sequence)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -357,7 +357,7 @@ class SeqFeature(object):
         """
         return True
 
-    #Python 2:
+    # Python 2:
     __nonzero__= __bool__
 
     def __len__(self):
@@ -514,7 +514,7 @@ class Reference(object):
         return out
 
     def __repr__(self):
-        #TODO - Update this is __init__ later accpets values
+        # TODO - Update this is __init__ later accpets values
         return "%s(title=%s, ...)" % (self.__class__.__name__,
                                       repr(self.title))
 
@@ -639,7 +639,7 @@ class FeatureLocation(object):
         AL391218.9
 
         """
-        #TODO - Check 0 <= start <= end (<= length of reference)
+        # TODO - Check 0 <= start <= end (<= length of reference)
         if isinstance(start, AbstractPosition):
             self._start = start
         elif isinstance(start, int) or isinstance(start, long):
@@ -680,7 +680,7 @@ class FeatureLocation(object):
             answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
         elif self.ref:
             answer = self.ref + answer
-        #Is ref_db without ref meaningful?
+        # Is ref_db without ref meaningful?
         if self.strand is None:
             return answer
         elif self.strand == +1:
@@ -688,7 +688,7 @@ class FeatureLocation(object):
         elif self.strand == -1:
             return answer + "(-)"
         else:
-            #strand = 0, stranded but strand unknown, ? in GFF3
+            # strand = 0, stranded but strand unknown, ? in GFF3
             return answer + "(?)"
 
     def __repr__(self):
@@ -748,7 +748,7 @@ class FeatureLocation(object):
         elif isinstance(other, int):
             return self._shift(other)
         else:
-            #This will allow CompoundLocation's __radd__ to be called:
+            # This will allow CompoundLocation's __radd__ to be called:
             return NotImplemented
 
     def __radd__(self, other):
@@ -839,9 +839,9 @@ class FeatureLocation(object):
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
-        #TODO - What if offset is a fuzzy position?
+        # TODO - What if offset is a fuzzy position?
         if self.ref or self.ref_db:
-            #TODO - Return self?
+            # TODO - Return self?
             raise ValueError("Feature references another sequence.")
         return FeatureLocation(start = self._start._shift(offset),
                                end = self._end._shift(offset),
@@ -850,9 +850,9 @@ class FeatureLocation(object):
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE)."""
         if self.ref or self.ref_db:
-            #TODO - Return self?
+            # TODO - Return self?
             raise ValueError("Feature references another sequence.")
-        #Note this will flip the start and end too!
+        # Note this will flip the start and end too!
         if self.strand == +1:
             flip_strand = -1
         elif self.strand == -1:
@@ -917,10 +917,10 @@ class FeatureLocation(object):
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
         if self.ref or self.ref_db:
-            #TODO - Take a dictionary as an optional argument?
+            # TODO - Take a dictionary as an optional argument?
             raise ValueError("Feature references another sequence.")
         if isinstance(parent_sequence, MutableSeq):
-            #This avoids complications with reverse complements
+            # This avoids complications with reverse complements
             #(the MutableSeq reverse complement acts in situ)
             parent_sequence = parent_sequence.toseq()
         f_seq = parent_sequence[self.nofuzzy_start:self.nofuzzy_end]
@@ -1099,7 +1099,7 @@ class CompoundLocation(object):
             return CompoundLocation(self.parts + [other], self.operator)
         elif isinstance(other, CompoundLocation):
             if self.operator != other.operator:
-                #Handle join+order -> order as a special case?
+                # Handle join+order -> order as a special case?
                 raise ValueError("Mixed operators %s and %s"
                                  % (self.operator, other.operator))
             return CompoundLocation(self.parts + other.parts, self.operator)
@@ -1211,9 +1211,9 @@ class CompoundLocation(object):
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
-        #This copes with mixed strand features & all on reverse:
+        # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
-        #We use addition rather than a join to avoid alphabet issues:
+        # We use addition rather than a join to avoid alphabet issues:
         f_seq = parts[0]
         for part in parts[1:]:
             f_seq += part
@@ -1283,11 +1283,11 @@ class ExactPosition(int, AbstractPosition):
         return 0
 
     def _shift(self, offset):
-        #By default preserve any subclass
+        # By default preserve any subclass
         return self.__class__(int(self) + offset)
 
     def _flip(self, length):
-        #By default perserve any subclass
+        # By default perserve any subclass
         return self.__class__(length - int(self))
 
 
@@ -1587,7 +1587,7 @@ class BeforePosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
-    #Subclasses int so can't use __init__
+    # Subclasses int so can't use __init__
     def __new__(cls, position, extension = 0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
@@ -1657,7 +1657,7 @@ class AfterPosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
-    #Subclasses int so can't use __init__
+    # Subclasses int so can't use __init__
     def __new__(cls, position, extension = 0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."

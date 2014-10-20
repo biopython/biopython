@@ -29,13 +29,13 @@ from Bio import AlignIO
 from Bio.SubsMat import FreqTable
 from Bio.Align import MultipleSeqAlignment
 
-#Very simple tests on an empty alignment
+# Very simple tests on an empty alignment
 alignment = MultipleSeqAlignment([], Alphabet.generic_alphabet)
 assert alignment.get_alignment_length() == 0
 assert len(alignment) == 0
 del alignment
 
-#Basic tests on simple three string alignment
+# Basic tests on simple three string alignment
 alignment = MultipleSeqAlignment([], Alphabet.generic_alphabet)
 letters = "AbcDefGhiJklMnoPqrStuVwxYz"
 alignment.append(SeqRecord(Seq(letters), id="mixed"))
@@ -51,10 +51,10 @@ assert alignment[1].id == "lower"
 assert alignment[2].id == "upper"
 for (col, letter) in enumerate(letters):
     assert alignment[:, col] == letter + letter.lower() + letter.upper()
-#Check row extractions:
+# Check row extractions:
 assert alignment[0].id == "mixed"
 assert alignment[-1].id == "upper"
-#Check sub-alignment extraction by row slicing:
+# Check sub-alignment extraction by row slicing:
 assert isinstance(alignment[::-1], MultipleSeqAlignment)
 assert alignment[::-1][0].id == "upper"
 assert alignment[::-1][2].id == "mixed"

@@ -33,7 +33,7 @@ def _have_bug17666():
         assert not data, "Should be zero length, not %i" % len(data)
         return False
     except TypeError as err:
-        #TypeError: integer argument expected, got 'tuple'
+        # TypeError: integer argument expected, got 'tuple'
         return True
 
 if _have_bug17666():
@@ -62,14 +62,14 @@ class BgzfTests(unittest.TestCase):
             self.assertFalse(h.seekable())
             self.assertFalse(h.isatty())
             self.assertEqual(h.fileno(), h._handle.fileno())
-        #Context manager should call close(),
-        #Gives empty BGZF block as BAM EOF marker
+        # Context manager should call close(),
+        # Gives empty BGZF block as BAM EOF marker
 
         h = gzip.open(output_file)
         new_data = h.read()
         h.close()
 
-        #Check the decompressed files agree
+        # Check the decompressed files agree
         self.assertTrue(new_data, "Empty BGZF file?")
         self.assertEqual(len(data), len(new_data))
         self.assertEqual(data, new_data)
@@ -121,8 +121,8 @@ class BgzfTests(unittest.TestCase):
             else:
                 h = open(old_file, mode)
             old = h.read()
-            #Seems gzip can return bytes even if mode="r",
-            #perhaps a bug in Python 3.2?
+            # Seems gzip can return bytes even if mode="r",
+            # perhaps a bug in Python 3.2?
             if "b" in mode:
                 old = _as_bytes(old)
             else:
@@ -149,8 +149,8 @@ class BgzfTests(unittest.TestCase):
             else:
                 h = open(old_file, mode)
             old = h.read()
-            #Seems gzip can return bytes even if mode="r",
-            #perhaps a bug in Python 3.2?
+            # Seems gzip can return bytes even if mode="r",
+            # perhaps a bug in Python 3.2?
             if "b" in mode:
                 old = _as_bytes(old)
             else:
@@ -173,7 +173,7 @@ class BgzfTests(unittest.TestCase):
                 h.close()
 
                 self.assertEqual(len(old), len(new))
-                #If bytes vs unicode mismatch, give a short error message:
+                # If bytes vs unicode mismatch, give a short error message:
                 self.assertEqual(old[:10], new[:10],
                                  "%r vs %r, mode %r" % (old[:10], new[:10], mode))
                 self.assertEqual(old, new)
@@ -188,7 +188,7 @@ class BgzfTests(unittest.TestCase):
         blocks = list(bgzf.BgzfBlocks(h))
         h.close()
 
-        #Forward, using explicit open/close
+        # Forward, using explicit open/close
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         self.assertTrue(h.seekable())
@@ -205,7 +205,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
-        #Reverse, using with statement
+        # Reverse, using with statement
         new = _empty_bytes_string
         with bgzf.BgzfReader(filename, "rb") as h:
             for start, raw_len, data_start, data_len in blocks[::-1]:
@@ -217,11 +217,11 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
-        #Jump back - non-sequential seeking
+        # Jump back - non-sequential seeking
         if len(blocks) >= 3:
             h = bgzf.BgzfReader(filename, "rb", max_cache = 1)
-            #Seek to a late block in the file,
-            #half way into the third last block
+            # Seek to a late block in the file,
+            # half way into the third last block
             start, raw_len, data_start, data_len = blocks[-3]
             voffset = bgzf.make_virtual_offset(start, data_len // 2)
             h.seek(voffset)
@@ -229,20 +229,20 @@ class BgzfTests(unittest.TestCase):
             data = h.read(1000)
             self.assertTrue(data in old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
-            #Now seek to an early block in the file,
-            #half way into the second block
+            # Now seek to an early block in the file,
+            # half way into the second block
             start, raw_len, data_start, data_len = blocks[1]
             h.seek(bgzf.make_virtual_offset(start, data_len // 2))
             voffset = bgzf.make_virtual_offset(start, data_len // 2)
             h.seek(voffset)
             self.assertEqual(voffset, h.tell())
-            #Now read all rest of this block and start of next block
+            # Now read all rest of this block and start of next block
             data = h.read(data_len + 1000)
             self.assertTrue(data in old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
             h.close()
 
-        #Check seek/tell at block boundaries
+        # Check seek/tell at block boundaries
         v_offsets = []
         for start, raw_len, data_start, data_len in blocks:
             for within_offset in [0, 1, data_len // 2, data_len - 1]:
@@ -325,12 +325,12 @@ class BgzfTests(unittest.TestCase):
         """Reproduce BGZF compression for BAM file"""
         temp_file = self.temp_file
 
-        #Note this example is from an old version of samtools
-        #and all the blocks are full (except the last one)
+        # Note this example is from an old version of samtools
+        # and all the blocks are full (except the last one)
         self.rewrite("SamBam/ex1.bam", temp_file)
 
-        #Now check the blocks agree (using the fact that
-        #this example BAM file has simple block usage)
+        # Now check the blocks agree (using the fact that
+        # this example BAM file has simple block usage)
         self.check_blocks("SamBam/ex1.bam", temp_file)
 
     def test_iter_bam_ex1(self):
@@ -366,22 +366,22 @@ class BgzfTests(unittest.TestCase):
         temp_file = self.temp_file
 
         h = bgzf.open(temp_file, "w")  # Text mode!
-        #When opening new file, offset should be 0
+        # When opening new file, offset should be 0
         self.assertEqual(h.tell(), 0)
 
         h.write("X" * 100000)
         offset = h.tell()
         self.assertNotEqual(offset, 100000)  # Should be a virtual offset!
         
-        #After writing the same data two times, size of the first and the second
-        #write should be equal also in terms of offsets
+        # After writing the same data two times, size of the first and the second
+        # write should be equal also in terms of offsets
         #(This is because the flush ensures two identical blocks written)
         h.flush()
         offset1 = h.tell()
-        #Note 'offset' and 'offset1' effectively the same, but not equal
-        #due to the flush - 'offet' is at the end of the first BGZF block,
-        #while 'offset1' is at the start of the second BGZF block. In terms
-        #of the decompressed data, they point to the same location!
+        # Note 'offset' and 'offset1' effectively the same, but not equal
+        # due to the flush - 'offet' is at the end of the first BGZF block,
+        # while 'offset1' is at the start of the second BGZF block. In terms
+        # of the decompressed data, they point to the same location!
         self.assertNotEqual(offset, offset1)  # New block started
         h.write("Magic" + "Y" * 100000)
         h.flush()
@@ -391,8 +391,8 @@ class BgzfTests(unittest.TestCase):
         offset3 = h.tell()
         self.assertEqual(((offset3 << 16) - (offset2 << 16)),
                         ((offset2 << 16) - (offset1 << 16)))
-
-        #Flushing should change the offset
+        
+        # Flushing should change the offset
         h.flush()
         self.assertNotEqual(offset3, h.tell())
 
@@ -402,14 +402,14 @@ class BgzfTests(unittest.TestCase):
 
         h.seek(offset)  # i.e. End of first BGZF block
         self.assertEqual(offset1, h.tell())  # Note *not* seek offset
-        #Now at start of second BGZF block
+        # Now at start of second BGZF block
         self.assertEqual(h.read(5), "Magic")
 
         h.seek(offset2)
         self.assertEqual(offset2, h.tell())
         self.assertEqual(h.read(5), "Magic")
 
-        #Now go back in the file,
+        # Now go back in the file,
         h.seek(offset1)
         self.assertEqual(offset1, h.tell())
         self.assertEqual(h.read(5), "Magic")

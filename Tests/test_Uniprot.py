@@ -12,7 +12,7 @@ import unittest
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-#Left as None if the import within UniProtIO fails
+# Left as None if the import within UniProtIO fails
 if SeqIO.UniprotIO.ElementTree is None:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError("No ElementTree module was found. "
@@ -256,12 +256,12 @@ class TestUniprot(unittest.TestCase):
                 self.assertEqual(len(old.annotations[key]),
                                  len(new.annotations[key]))
                 for r1, r2 in zip(old.annotations[key], new.annotations[key]):
-                    #Tweak for line breaks in plain text SwissProt
+                    # Tweak for line breaks in plain text SwissProt
                     r1.title = r1.title.replace("- ", "-")
                     r2.title = r2.title.replace("- ", "-")
                     r1.journal = r1.journal.rstrip(".")  # Should parser do this?
                     r1.medline_id = ""  # Missing in UniPort XML? TODO - check
-                    #Lots of extra comments in UniProt XML
+                    # Lots of extra comments in UniProt XML
                     r1.comment = ""
                     r2.comment = ""
                     if not r2.journal:
@@ -270,7 +270,7 @@ class TestUniprot(unittest.TestCase):
             elif old.annotations[key] == new.annotations[key]:
                 pass
             elif key in ["date"]:
-                #TODO - Why is this a list vs str?
+                # TODO - Why is this a list vs str?
                 pass
             elif type(old.annotations[key]) != type(new.annotations[key]):
                 raise TypeError("%s gives %s vs %s" %
@@ -336,11 +336,11 @@ class TestUniprot(unittest.TestCase):
         xml_index = SeqIO.index("SwissProt/multi_ex.xml", "uniprot-xml")
         self.assertEqual(sorted(txt_index), sorted(ids))
         self.assertEqual(sorted(xml_index), sorted(ids))
-        #Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
+        # Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
         for old in txt_list:
             new = txt_index[old.id]
             compare_record(old, new)
-        #Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
+        # Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
         for old in xml_list:
             new = xml_index[old.id]
             compare_record(old, new)

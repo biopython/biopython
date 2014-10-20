@@ -739,7 +739,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 3)
         self.assertEqual(len(record.rounds[0].new_seqs), 14)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2010L_phiblast_002_round0(record)
         self._check_text_2010L_phiblast_002_round1(record)
         self._check_text_2010L_phiblast_002_round2(record)
@@ -1937,7 +1937,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 2)
         self.assertEqual(len(record.rounds[0].new_seqs), 30)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2010L_phiblast_003_round0(record)
         self._check_text_2010L_phiblast_003_round1(record)
         self._check_text_2010L_phiblast_003_hsps(record)
@@ -5715,7 +5715,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 2)
         self.assertEqual(len(record.rounds[0].new_seqs), 30)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2011L_psiblast_002_round0(record)
         self._check_text_2011L_psiblast_002_round1(record)
         self._check_text_2011L_psiblast_002_hsps(record)
@@ -10067,7 +10067,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_sequences, 88201)
         self.assertEqual(record.database_letters, 31957340)
         self.assertEqual(len(record.rounds), 5)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2012L_psiblast_001_round0(record)
         self._check_text_2012L_psiblast_001_round1(record)
         self._check_text_2012L_psiblast_001_round2(record)
@@ -14539,7 +14539,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 3078807967)
         self.assertEqual(len(record.descriptions), 10)  # I used -v 10
         self.assertEqual(len(record.alignments), 1)  # I used -b 1
-        #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
+        # Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14578,7 +14578,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 3078807967)
         self.assertEqual(len(record.descriptions), 10)  # I used -v 10
         self.assertEqual(len(record.alignments), 1)  # I used -b 1
-        #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
+        # Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)

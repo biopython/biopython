@@ -135,14 +135,14 @@ class TestCluster(unittest.TestCase):
                              [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1]], int)
 
-        #TODO - Use a context manager here once we drop Python 2.6
-        #Method should be one letter:
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
         self.assertRaises(ValueError, kcluster, data,
                           **{"nclusters": nclusters, "mask": mask,
                              "weight": weight, "transpose": 0, "npass": 100,
                              "method": "any", "dist": "e"})
 
-        #Distance should be one letter:
+        # Distance should be one letter:
         self.assertRaises(ValueError, kcluster, data,
                           **{"nclusters": nclusters, "mask": mask,
                              "weight": weight, "transpose": 0, "npass": 100,
@@ -188,14 +188,14 @@ class TestCluster(unittest.TestCase):
                             [ 1, 1 ],
                             [ 1, 1 ]], int)
 
-        #TODO - Use a context manager here once we drop Python 2.6
-        #Method should be one letter:
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
         self.assertRaises(ValueError, kcluster, data,
                           **{"nclusters": 3, "mask": mask,
                              "weight": weight, "transpose": 0, "npass": 100,
                              "method": "any", "dist": "e"})
 
-        #Distance should be one letter:
+        # Distance should be one letter:
         self.assertRaises(ValueError, kcluster, data,
                           **{"nclusters": 3, "mask": mask,
                              "weight": weight, "transpose": 0, "npass": 100,
@@ -233,14 +233,14 @@ class TestCluster(unittest.TestCase):
         c2 = [1, 2]
         c3 = [3]
 
-        #TODO - Use a context manager here once we drop Python 2.6
-        #Method should be one letter:
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
         self.assertRaises(ValueError, clusterdistance, data,
                           **{"mask": mask, "weight": weight,
                              "index1": c1, "index2": c2, "transpose": 0,
                              "method": "any", "dist": "e"})
 
-        #Distance should be one letter:
+        # Distance should be one letter:
         self.assertRaises(ValueError, clusterdistance, data,
                           **{"mask": mask, "weight": weight,
                              "index1": c1, "index2": c2, "transpose": 0,
@@ -293,15 +293,15 @@ class TestCluster(unittest.TestCase):
         c2 = [ 4, 5, 6, 7 ]
         c3 = [ 8 ]
 
-        #TODO - Use a context manager here once we drop Python 2.6
-        #Method should be one letter:
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
         self.assertRaises(ValueError, clusterdistance, data,
                           **{"mask": mask, "weight": weight,
                              "index1": c1, "index2": c2,
                              "method": "any", "dist": "e",
                              "transpose":0})
 
-        #Distance should be one letter:
+        # Distance should be one letter:
         self.assertRaises(ValueError, clusterdistance, data,
                           **{"mask": mask, "weight": weight,
                              "index1": c1, "index2": c2,
@@ -338,13 +338,13 @@ class TestCluster(unittest.TestCase):
                              [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1]], int)
 
-        #TODO - Use a context manager here once we drop Python 2.6
-        #Method should be one letter:
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
         self.assertRaises(ValueError, treecluster,
                           **{"data": data1, "mask": mask1, "weight": weight1,
                              "transpose":0, "method": "any", "dist": "e"})
 
-        #Distance should be one letter:
+        # Distance should be one letter:
         self.assertRaises(ValueError, treecluster,
                           **{"data": data1, "mask": mask1, "weight": weight1,
                              "transpose":0, "method": "any", "dist": "euclidean"})
@@ -617,8 +617,8 @@ class TestCluster(unittest.TestCase):
                             [ 1, 1, 1, 1, 1],
                             [ 1, 1, 1, 1, 1]], int)
 
-        #TODO - Use a context manager here once we drop Python 2.6
-        #Distance should be one letter:
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Distance should be one letter:
         self.assertRaises(ValueError, somcluster,
                           **{"data": data, "mask": mask, "weight": weight,
                              "transpose": 0, "nxgrid": 10, "nygrid": 10,
