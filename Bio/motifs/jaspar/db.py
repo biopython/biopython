@@ -289,7 +289,7 @@ class JASPAR5(object):
                 num_sites = sum(
                     [motif.counts[nt][0] for nt in motif.alphabet.letters]
                 )
-                if  num_sites < min_sites:
+                if num_sites < min_sites:
                     continue
 
             record.append(motif)

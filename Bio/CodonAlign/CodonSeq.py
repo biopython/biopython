@@ -414,7 +414,7 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
         if codon == '---': continue
         for n, i in enumerate(codon):
             for j in base_tuple:
-                if  i == j:
+                if i == j:
                     pass
                 elif i in purine and j in purine:
                     codon_chars = [c for c in codon]

@@ -117,7 +117,7 @@ def cmp_sccs(sccs1, sccs2):
         return _cmp(s1[0], s2[0])
 
     s1 = [int(x) for x in s1[1:]]
-    s2 = [int(x) for x in  s2[1:]]
+    s2 = [int(x) for x in s2[1:]]
 
     return _cmp(s1, s2)
 

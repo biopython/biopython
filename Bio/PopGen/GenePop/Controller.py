@@ -364,7 +364,7 @@ class GenePopController(object):
         self._run_genepop([ext], [1, 3], fname, opts)
 
         def hw_prob_loci_func(self):
-            return  _hw_func(self.stream, True, True)
+            return _hw_func(self.stream, True, True)
 
         def hw_prob_pop_func(self):
             return _hw_func(self.stream, False, True)

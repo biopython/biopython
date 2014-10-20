@@ -1320,7 +1320,7 @@ Major Changes since v1.30. For a full list of changes please see the CVS
 IMPORTANT: Biopython now works with Python version >= 2.3
 
 NEW: Bio.Nexus -- thanks to Frank Kauff
-Bio.Nexus is a Nexus file parser. Nexus is  a common format for phylogenetic trees.
+Bio.Nexus is a Nexus file parser. Nexus is a common format for phylogenetic trees.
 
 NEW: CAPS module -- Thanks to Jonathan Taylor
 

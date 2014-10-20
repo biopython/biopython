@@ -164,7 +164,7 @@ def PdbAtomIterator(handle):
             for i, pregap, postgap in gaps:
                 if postgap > pregap:
                     gapsize = postgap - pregap - 1
-                    res_out.extend(restype(x) for x in  residues[prev_idx:i])
+                    res_out.extend(restype(x) for x in residues[prev_idx:i])
                     prev_idx = i
                     res_out.append('X'*gapsize)
                 else:

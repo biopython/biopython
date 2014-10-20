@@ -449,7 +449,7 @@ class Parser(object):
                 ann_key = k
                 append_to_annotations(ann_key, v)
 
-        def  _parse_sequence(element):
+        def _parse_sequence(element):
             for k, v in element.attrib.items():
                 if k in ("length", "mass", "version"):
                     self.ParsedSeqRecord.annotations['sequence_%s' % k] = int(v)
