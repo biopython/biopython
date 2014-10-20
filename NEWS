@@ -26,6 +26,8 @@ Bio.SearchIO QueryResult objects now allow Hit retrieval using its alternative
 IDs (any IDs listed after the first one, for example as used with the NCBI
 BLAST NR database).
 
+We have also done some more work applying PEP8 coding styles to Biopython.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
