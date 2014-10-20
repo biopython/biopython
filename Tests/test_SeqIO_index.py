@@ -204,7 +204,7 @@ if sqlite3:
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
 
-            #Now directly check the filenames inside the SQLite index:
+            # Now directly check the filenames inside the SQLite index:
             filenames, flag = raw_filenames(index_file)
             self.assertEqual(flag, True)
             self.assertEqual(filenames, expt_sff_files)
@@ -213,12 +213,13 @@ if sqlite3:
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
+            # Note we expect relative paths recorded with Unix slashs!
             expt_sff_files = ["Roche/E3MFGYR02_no_manifest.sff",
                               "Roche/greek.sff",
                               "Roche/paired.sff"]
 
             self.check("temp.idx", expt_sff_files, expt_sff_files)
-            #Here index is given as abs
+            # Here index is given as abs
             self.check(os.path.abspath("temp.idx"),
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         os.path.abspath("Roche/greek.sff"),
