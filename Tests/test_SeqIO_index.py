@@ -197,17 +197,18 @@ if sqlite3:
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files],
                              [os.path.abspath(f) for f in d._filenames])
+
+            #Now directly check the filenames inside the SQLite index:
+            filenames, flag = raw_filenames(index_file)
+            self.assertEqual(flag, True)
+            self.assertEqual(filenames, expt_sff_files)
+
             #Load index...
             d = SeqIO.index_db(index_file, sff_files)
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
-
-            #Now directly check the filenames inside the SQLite index:
-            filenames, flag = raw_filenames(index_file)
-            self.assertEqual(flag, True)
-            self.assertEqual(filenames, expt_sff_files)
 
             os.remove(index_file)
 
@@ -254,6 +255,24 @@ if sqlite3:
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
                         "../Roche/paired.sff"],
+                       expt_sff_files)
+
+        def test_some_abs(self):
+            """Check absolute filenames in index."""
+            h, t = tempfile.mkstemp(prefix="index_test_", suffix=".idx")
+            os.close(h)
+            os.remove(t)
+
+            expt_sff_files = [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+                              os.path.abspath("Roche/greek.sff"),
+                              os.path.abspath(os.path.join("Roche", "paired.sff"))]
+            #All absolute paths...
+            self.check(t, expt_sff_files, expt_sff_files)
+            #Now try with mix of abs and relative paths...
+            self.check(t,
+                       [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+                        os.path.join("Roche", "greek.sff"),
+                        os.path.abspath("Roche/paired.sff")],
                        expt_sff_files)
 
 
