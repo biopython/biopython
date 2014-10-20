@@ -12,7 +12,8 @@ from Bio._py3k import range
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
-import math, random
+import math
+import random
 
 
 class Motif(object):
