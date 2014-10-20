@@ -118,7 +118,7 @@ class KGMLPathwayTest(unittest.TestCase):
         with open(p[1].infilename) as f:
             pathway = read(f)
             orthologs = [e for e in pathway.orthologs]
-                # Use Biopython's ColorSpiral to generate colours
+            # Use Biopython's ColorSpiral to generate colours
             cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5, 
                              jitter=0.03)
             colors = cs.get_colors(len(orthologs))

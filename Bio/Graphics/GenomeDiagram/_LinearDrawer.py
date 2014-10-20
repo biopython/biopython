@@ -718,9 +718,9 @@ class LinearDrawer(AbstractDrawer):
         # Get start and end positions for feature/subfeatures
         start_fragment, start_offset = self.canvas_location(locstart)
         end_fragment, end_offset = self.canvas_location(locend)
-            #print "start_fragment, start_offset", start_fragment, start_offset
-            #print "end_fragment, end_offset", end_fragment, end_offset
-            #print "start, end", locstart, locend
+        #print "start_fragment, start_offset", start_fragment, start_offset
+        #print "end_fragment, end_offset", end_fragment, end_offset
+        #print "start, end", locstart, locend
 
         # Note that there is a strange situation where a feature may be in
         # several parts, and one or more of those parts may end up being
