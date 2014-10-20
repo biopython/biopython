@@ -1,4 +1,5 @@
-# Copyright 2006-2010 by Peter Cock and Michiel de Hoon.
+# Copyright 2006-2013 by Peter Cock.
+# Revisions copyright 2008-2009 by Michiel de Hoon.
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its

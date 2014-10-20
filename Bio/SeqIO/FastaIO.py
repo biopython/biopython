@@ -1,4 +1,4 @@
-# Copyright 2006-2009 by Peter Cock.  All rights reserved.
+# Copyright 2006-2014 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -149,24 +149,23 @@ class FastaWriter(SequentialSequenceWriter):
         You can either use::
 
             handle = open(filename, "w")
-            myWriter = FastaWriter(handle)
+            writer = FastaWriter(handle)
             writer.write_file(myRecords)
             handle.close()
 
         Or, follow the sequential file writer system, for example:
 
             handle = open(filename, "w")
-            myWriter = FastaWriter(handle)
+            writer = FastaWriter(handle)
             writer.write_header() # does nothing for Fasta files
             ...
-            Multiple calls to writer.write_record() and/or writer.write_records()
+            Multiple writer.write_record() and/or writer.write_records() calls
             ...
             writer.write_footer() # does nothing for Fasta files
             handle.close()
 
         """
         SequentialSequenceWriter.__init__(self, handle)
-        # self.handle = handle
         self.wrap = None
         if wrap:
             if wrap < 1:
@@ -185,8 +184,6 @@ class FastaWriter(SequentialSequenceWriter):
         else:
             id = self.clean(record.id)
             description = self.clean(record.description)
-
-            # if description[:len(id)]==id:
             if description and description.split(None, 1)[0] == id:
                 # The description includes the id at the start
                 title = description
@@ -245,7 +242,8 @@ if __name__ == "__main__":
         print("--------")
         print("FastaIterator (single sequence)")
         with open(fna_filename, "r") as h:
-            iterator = FastaIterator(h, alphabet=generic_nucleotide, title2ids=genbank_name_function)
+            iterator = FastaIterator(h, alphabet=generic_nucleotide,
+                                     title2ids=genbank_name_function)
         count = 0
         for record in iterator:
             count += 1
@@ -257,7 +255,8 @@ if __name__ == "__main__":
         print("--------")
         print("FastaIterator (multiple sequences)")
         with open(faa_filename, "r") as h:
-            iterator = FastaIterator(h, alphabet=generic_protein, title2ids=genbank_name_function)
+            iterator = FastaIterator(h, alphabet=generic_protein,
+                                     title2ids=genbank_name_function)
         count = 0
         for record in iterator:
             count += 1
