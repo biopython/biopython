@@ -1066,9 +1066,9 @@ class GenBankScanner(InsdcScanner):
                 'Cannot parse the name and length in the LOCUS line:\n' + line
             assert len(name_and_length) != 1, \
                 'Name and length collide in the LOCUS line:\n' + line
-                   #Should be possible to split them based on position, if
-                   #a clear definition of the standard exists THAT AGREES with
-                   #existing files.
+                #Should be possible to split them based on position, if
+                #a clear definition of the standard exists THAT AGREES with
+                #existing files.
             consumer.locus(name_and_length[0])
             consumer.size(name_and_length[1])
             #consumer.residue_type(line[33:41].strip())
@@ -1137,9 +1137,9 @@ class GenBankScanner(InsdcScanner):
                 'Cannot parse the name and length in the LOCUS line:\n' + line
             assert len(name_and_length) != 1, \
                 'Name and length collide in the LOCUS line:\n' + line
-                   #Should be possible to split them based on position, if
-                   #a clear definition of the stand exists THAT AGREES with
-                   #existing files.
+                #Should be possible to split them based on position, if
+                #a clear definition of the stand exists THAT AGREES with
+                #existing files.
             consumer.locus(name_and_length[0])
             consumer.size(name_and_length[1])
 

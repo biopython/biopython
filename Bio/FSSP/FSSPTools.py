@@ -64,7 +64,7 @@ def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
     new_align_dict = copy.deepcopy(align_dict)
 #    for i in align_dict:
 #        new_align_dict[i]  = copy.copy(align_dict[i])
-   # new_align_dict = copy.copy(align_dict)
+#    new_align_dict = copy.copy(align_dict)
     for prot_num in sum_dict:
         attr_value = getattr(sum_dict[prot_num], filter_attribute)
         if attr_value >= low_bound and attr_value <= high_bound:

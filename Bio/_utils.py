@@ -82,8 +82,8 @@ def find_test_dir(start_dir=None):
     while True:
         if os.path.isdir(os.path.join(target, "Bio")) \
         and os.path.isdir(os.path.join(target, "Tests")):
-           #Good, we're in the Biopython root now
-           return os.path.abspath(os.path.join(target, "Tests"))
+            #Good, we're in the Biopython root now
+            return os.path.abspath(os.path.join(target, "Tests"))
         #Recurse up the tree
         #TODO - Test this on Windows
         new, tmp = os.path.split(target)
