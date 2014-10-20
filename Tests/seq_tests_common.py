@@ -129,7 +129,7 @@ def compare_feature(old_f, new_f):
     assert len(old_f._sub_features) == len(new_f._sub_features), \
         "number of sub_features: %s -> %s" % \
         (len(old_f._sub_features), len(new_f._sub_features))
-    
+
     for old_sub, new_sub in zip(old_f._sub_features, new_f._sub_features):
         #These are SeqFeature objects
         assert old_sub.type == new_sub.type, \

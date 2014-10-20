@@ -44,7 +44,7 @@ def _test_parse_factory(source):
 
     test_parse.__doc__ = "Parse the phylogenies in %s." % source
     return test_parse
-    
+
 
 def _test_write_factory(source):
     """Tests for serialization of objects to CDAO format.
@@ -63,7 +63,7 @@ def _test_write_factory(source):
             CDAOIO.write([t1], outfile)
         with open(DUMMY) as infile:
             t2 = next(CDAOIO.Parser(infile).parse())
-        
+
         for prop_name in ('name', 'branch_length', 'confidence'):
             p1 = [getattr(n, prop_name) for n in t1.get_terminals()]
             p2 = [getattr(n, prop_name) for n in t2.get_terminals()]
@@ -86,11 +86,11 @@ for n, ex in enumerate(cdao_files):
     parse_test = _test_parse_factory(ex)
     parse_test.__name__ = 'test_parse_%s' % n
     setattr(ParseTests, parse_test.__name__, parse_test)
-    
+
 
 class WriterTests(unittest.TestCase):
     pass
-        
+
 for n, ex in enumerate(cdao_files):
     write_test = _test_write_factory(ex)
     write_test.__name__ = 'test_write_%s' % n

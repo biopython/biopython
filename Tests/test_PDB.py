@@ -752,7 +752,7 @@ class WriteTest(unittest.TestCase):
         res = Residue.Residue((' ', 1, ' '), 'DUM', '')
         atm = Atom.Atom('CA', [0.1, 0.1, 0.1], 1.0, 1.0, ' ', 'CA', 1, 'C')
         res.add(atm)
-        
+
         # Write full model to temp file
         io.set_structure(res)
         filenumber, filename = tempfile.mkstemp()
@@ -770,7 +770,7 @@ class WriteTest(unittest.TestCase):
 
     def test_pdbio_select(self):
         """Write a selection of the structure using a Select subclass"""
-        
+
         # Selection class to filter all alpha carbons
         class CAonly(Select):
             """
@@ -779,7 +779,7 @@ class WriteTest(unittest.TestCase):
             def accept_atom(self, atom):
                 if atom.name == "CA" and atom.element == "C":
                     return 1
-                
+
         io = PDBIO()
         struct1 = self.structure
         # Write to temp file

@@ -43,7 +43,7 @@ class TestEmblRewrite(unittest.TestCase):
         self.assertEqual(1, SeqIO.write(old, buffer, "embl"))
         buffer.seek(0)
         new = SeqIO.read(buffer, "embl")
-        
+
         self.assertTrue(compare_record(old, new))
 
     def test_annotation1(self):

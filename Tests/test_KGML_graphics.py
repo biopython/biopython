@@ -98,7 +98,7 @@ class KGMLPathwayTest(unittest.TestCase):
                 kgml_map = KGMLCanvas(pathway)
                 kgml_map.import_imagemap = p.show_pathway_image
                 kgml_map.draw(p.output_stem + '_original.pdf')
-        
+
     def test_render_KGML_modify(self):
         """ Rendering of KGML to PDF, with modification.
         """

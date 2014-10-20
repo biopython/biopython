@@ -136,7 +136,7 @@ class Test_build(unittest.TestCase):
         aln2 = MultipleSeqAlignment([pro3, pro4, pro5])
         self.aln2 = aln2
         self.seqlist2 = [seq3, seq4, seq5]
-    
+
     def test_build(self):
         codon_aln1 = CodonAlign.build(self.aln1, self.seqlist1)
         codon_aln2 = CodonAlign.build(self.aln2, self.seqlist2)

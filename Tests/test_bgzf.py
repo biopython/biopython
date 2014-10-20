@@ -368,11 +368,11 @@ class BgzfTests(unittest.TestCase):
         h = bgzf.open(temp_file, "w") #Text mode!
         #When opening new file, offset should be 0
         self.assertEqual(h.tell(), 0)
-        
+
         h.write("X" * 100000)
         offset = h.tell()
         self.assertNotEqual(offset, 100000) #Should be a virtual offset!
-        
+
         #After writing the same data two times, size of the first and the second
         #write should be equal also in terms of offsets
         #(This is because the flush ensures two identical blocks written)
@@ -391,11 +391,11 @@ class BgzfTests(unittest.TestCase):
         offset3 = h.tell()
         self.assertEqual(((offset3 << 16) - (offset2 << 16)),
                         ((offset2 << 16) - (offset1 << 16)))
-        
+
         #Flushing should change the offset
         h.flush()
         self.assertNotEqual(offset3, h.tell())
-        
+
         h.close()
 
         h = bgzf.open(temp_file, "r") #Text mode!
