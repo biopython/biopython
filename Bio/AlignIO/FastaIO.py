@@ -599,7 +599,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
     assert len(alignments) == 4, len(alignments)
     assert len(alignments[0]) == 2
     for a in alignments:
-        print("Alignment %i sequences of length %i" \
+        print("Alignment %i sequences of length %i"
               % (len(a), a.get_alignment_length()))
         for r in a:
             print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))

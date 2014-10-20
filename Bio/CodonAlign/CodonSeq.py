@@ -578,7 +578,7 @@ def _lwl85(seq1, seq2, k, codon_table):
     PQ = [i/j for i, j in zip(PQ, L*2)]
     P = PQ[:3]
     Q = PQ[3:]
-    A = [(1./2)*log(1./(1-2*i-j)) - (1./4)*log(1./(1-2*j)) \
+    A = [(1./2)*log(1./(1-2*i-j)) - (1./4)*log(1./(1-2*j))
             for i, j in zip(P, Q)]
     B = [(1./2)*log(1./(1-2*i)) for i in Q]
     dS = 3*(L[2]*A[1]+L[2]*(A[2]+B[2]))/(L[1]+3*L[2])
@@ -651,7 +651,7 @@ def _diff_codon(codon1, codon2, fold_dict):
                     P4 += 1
                 else:
                     raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
-            if i != j and ((i in purine and j in pyrimidine) \
+            if i != j and ((i in purine and j in pyrimidine)
                     or (i in pyrimidine and j in purine)):
                 if fold_num[n] == '0':
                     Q0 += 1
@@ -746,8 +746,8 @@ def _yn00(seq1, seq2, k, codon_table):
     dSdN_pre = [0, 0]
     for temp in range(20):
         # count synonymous and nonsynonymous differences under kappa, w, t
-        codon_lst = [i for i in \
-                                list(codon_table.forward_table.keys()) + \
+        codon_lst = [i for i in
+                                list(codon_table.forward_table.keys()) +
                                 codon_table.stop_codons if 'U' not in i]
         Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
         P = expm(Q*t)
@@ -807,8 +807,8 @@ def _get_kappa_t(pi, TV, t=False):
     """
     pi['Y'] = pi['T'] + pi['C']
     pi['R'] = pi['A'] + pi['G']
-    A = (2*(pi['T']*pi['C']+pi['A']*pi['G'])+\
-        2*(pi['T']*pi['C']*pi['R']/pi['Y']+pi['A']*pi['G']*pi['Y']/pi['R'])*\
+    A = (2*(pi['T']*pi['C']+pi['A']*pi['G'])+
+        2*(pi['T']*pi['C']*pi['R']/pi['Y']+pi['A']*pi['G']*pi['Y']/pi['R'])*
         (1-TV[1]/(2*pi['Y']*pi['R']))-TV[0])/\
         (2*(pi['T']*pi['C']/pi['Y']+pi['A']*pi['G']/pi['R']))
     B = 1 - TV[1]/(2*pi['Y']*pi['R'])
@@ -820,7 +820,7 @@ def _get_kappa_t(pi, TV, t=False):
                      kappaF84/(pi['T']*pi['C']+pi['A']*pi['G'])
         return kappaHKY85
     else:
-        t = (4*pi['T']*pi['C']*(1+kappaF84/pi['Y'])+\
+        t = (4*pi['T']*pi['C']*(1+kappaF84/pi['Y'])+
              4*pi['A']*pi['G']*(1+kappaF84/pi['R'])+4*pi['Y']*pi['R'])*b
         return t
 
@@ -961,7 +961,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
             TV = [p+q for p,q in zip(TV,count_TV(codon1, codon2, diff_pos[0], codon_table))]
         elif len(diff_pos) == 2:
             codon2_aa = codon_table.forward_table[codon2]
-            tmp_codon = [codon1[:i] + codon2[i] + codon1[i+1:] \
+            tmp_codon = [codon1[:i] + codon2[i] + codon1[i+1:]
                          for i in diff_pos]
             path_prob = []
             for i in tmp_codon:
@@ -1028,8 +1028,8 @@ def _ml(seq1, seq2, cmethod, codon_table):
         #if i != j and ('---' not in (i, j)):
         if '---' not in (i, j):
             codon_cnt[(i,j)] += 1
-    codon_lst = [i for i in \
-            list(codon_table.forward_table.keys()) + codon_table.stop_codons \
+    codon_lst = [i for i in
+            list(codon_table.forward_table.keys()) + codon_table.stop_codons
             if 'U' not in i]
 
     # apply optimization
@@ -1042,7 +1042,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     codon_table=codon_table)
 
     # count sites
-    opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B', \
+    opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B',
                        bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)),
                        tol=1e-5)
     t, k, w = opt_res.x

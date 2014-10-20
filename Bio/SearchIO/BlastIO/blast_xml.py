@@ -391,7 +391,7 @@ class BlastXmlParser(object):
 
             # combine primary ID and defline first before splitting
             full_id_desc = hit_id + ' ' + hit_desc
-            id_descs = [(x.strip(), y.strip()) for x, y in \
+            id_descs = [(x.strip(), y.strip()) for x, y in
                     [a.split(' ', 1) for a in full_id_desc.split(' >')]]
             hit_id, hit_desc = id_descs[0]
 

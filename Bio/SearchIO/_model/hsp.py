@@ -378,7 +378,7 @@ class HSP(_BaseHSP):
 
             if fragment.hit_description != self.hit_description:
                 raise ValueError("Expected HSPFragment with hit "
-                        "description %r, found %r instead." % \
+                        "description %r, found %r instead." %
                         (self.description, fragment.hit_description))
 
             if fragment.query_id != self.query_id:
