@@ -308,5 +308,5 @@ if __name__ == "__main__":
                 assert(p is c)
                 for a in r:
                     p = a.get_parent()
-                    if not p is r:
+                    if p is not r:
                         print("%s %s" % (p, r))

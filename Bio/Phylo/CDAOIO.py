@@ -353,7 +353,7 @@ class Writer(object):
                        (nUri(clade.uri), pUri('cdao:belongs_to_Tree'), tree_id),
                        ]
 
-        if not parent is None:
+        if parent is not None:
             # create edge from the parent node to this node
             self.edge_counter += 1
             edge_uri = 'edge%s' % str(self.edge_counter).zfill(ZEROES)
@@ -368,7 +368,7 @@ class Writer(object):
                            (nUri(parent.uri), pUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
 
-            if hasattr(clade, 'confidence') and not clade.confidence is None:
+            if hasattr(clade, 'confidence') and clade.confidence is not None:
                 confidence = rdflib.Literal(clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
 
                 statements += [(nUri(clade.uri), pUri('cdao:has_Support_Value'), confidence)]
@@ -377,7 +377,7 @@ class Writer(object):
                 statements += [(nUri(clade.uri), pUri('cdao:has_Ancestor'), nUri(ancestor))
                                for ancestor in clade.ancestors]
 
-            if not clade.branch_length is None:
+            if clade.branch_length is not None:
                 # add branch length
                 edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(ZEROES)
 

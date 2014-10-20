@@ -223,7 +223,7 @@ class Parser(object):
             (clade.confidence is None) and
             (clade.clades)):
             clade.confidence = _parse_confidence(clade.name)
-            if not clade.confidence is None:
+            if clade.confidence is not None:
                 clade.name = None
 
         if hasattr(clade, 'parent'):

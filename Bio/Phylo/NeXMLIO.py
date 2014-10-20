@@ -292,14 +292,14 @@ class Writer(object):
             attrib['otu'] = clade.name
         node = ElementTree.SubElement(tree, 'node', **attrib)
 
-        if not parent is None:
+        if parent is not None:
             edge_id = self.new_label('edge')
             attrib={
                     'id': edge_id, 'source': parent.node_id, 'target': node_id,
                     'length': str(clade.branch_length),
                     'typeof': convert_uri('cdao:Edge'),
                     }
-            if hasattr(clade, 'confidence') and not clade.confidence is None:
+            if hasattr(clade, 'confidence') and clade.confidence is not None:
                 attrib.update({
                                'property': convert_uri('cdao:has_Support_Value'),
                                'datatype': 'xsd:float',
