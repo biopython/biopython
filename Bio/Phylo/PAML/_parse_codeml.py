@@ -94,8 +94,8 @@ def parse_nssites(lines, results, multi_models, multi_genes):
     gene_re = re.compile("Gene\s+([0-9]+)\s+.+")
     siteclass_model = results.get("site-class model")
     if not multi_models:
-    # If there's only one model in the results, find out
-    # which one it is and then parse it.
+        # If there's only one model in the results, find out
+        # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
         current_model = {"one-ratio" : 0,
@@ -125,8 +125,8 @@ def parse_nssites(lines, results, multi_models, multi_genes):
             model_results = parse_model(lines, model_results)
             ns_sites[current_model] = model_results
     else:
-    # If there are multiple models in the results, scan through
-    # the file and send each model's text to be parsed individually.
+        # If there are multiple models in the results, scan through
+        # the file and send each model's text to be parsed individually.
         current_model = None
         model_start = None
         for line_num, line in enumerate(lines):
@@ -137,17 +137,17 @@ def parse_nssites(lines, results, multi_models, multi_genes):
             model_res = model_re.match(line)
             if model_res:
                 if current_model is not None:
-                # We've already been tracking a model, so it's time
-                # to send those lines off for parsing before beginning
-                # a new one.
+                    # We've already been tracking a model, so it's time
+                    # to send those lines off for parsing before beginning
+                    # a new one.
                     parse_model(lines[model_start:line_num], model_results)
                     ns_sites[current_model] = model_results
                 model_start = line_num
                 current_model = int(model_res.group(1))
                 model_results = {"description":model_res.group(2)}
         if ns_sites.get(current_model) is None:
-        # When we reach the end of the file, we'll still have one more
-        # model to parse.
+            # When we reach the end of the file, we'll still have one more
+            # model to parse.
             model_results = parse_model(lines[model_start:], model_results)
             ns_sites[current_model] = model_results
     # Only add the ns_sites dict to the results if we really have results.
