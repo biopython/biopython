@@ -139,7 +139,7 @@ class DisorderedResidue(DisorderedEntityWrapper):
             residue.add(atom)
             raise PDBConstructionException(
                 "Blank altlocs in duplicate residue %s (%s, %i, %s)"
-                % (resname, het, resseq, icode) )
+                % (resname, het, resseq, icode))
         residue.add(atom)
 
     def sort(self):

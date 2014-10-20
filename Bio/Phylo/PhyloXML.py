@@ -1159,7 +1159,7 @@ class Sequence(PhyloElement):
                                             'applies_to': prop.applies_to,
                                             'datatype':   prop.datatype,
                                             'unit':       prop.unit,
-                                            'id_ref':     prop.id_ref })
+                                            'id_ref':     prop.id_ref})
                                          for prop in ann.properties],
                         }) for ann in self.annotations],
                 })

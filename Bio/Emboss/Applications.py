@@ -564,7 +564,7 @@ class FNeighborCommandline(_EmbossCommandLine):
                  "is martrix [S]quare pr [u]pper or [l]ower"),
         _Option(["-treetype", "treetype"],
                  "nj or UPGMA tree (n/u)"),
-        _Option(["-outgrno", "outgrno" ],
+        _Option(["-outgrno", "outgrno"],
                  "taxon to use as OG"),
         _Option(["-jumble", "jumble"],
                  "randommise input order (Y/n)"),
