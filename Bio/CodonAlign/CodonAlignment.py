@@ -61,14 +61,14 @@ class CodonAlignment(MultipleSeqAlignment):
         """
         rows = len(self._records)
         lines = ["%s CodonAlignment with %i rows and %i columns (%i codons)"
-                 % (str(self._alphabet), rows, \
+                 % (str(self._alphabet), rows,
                     self.get_alignment_length(), self.get_aln_length())]
 
         if rows <= 60:
-            lines.extend([self._str_line(rec, length=60) \
+            lines.extend([self._str_line(rec, length=60)
                     for rec in self._records])
         else:
-            lines.extend([self._str_line(rec, length=60) \
+            lines.extend([self._str_line(rec, length=60)
                     for rec in self._records[:18]])
             lines.append("...")
             lines.append(self._str_line(self._records[-1], length=60))
@@ -88,16 +88,16 @@ class CodonAlignment(MultipleSeqAlignment):
         if isinstance(row_index, int):
             return self._records[row_index][col_index]
         elif isinstance(col_index, int):
-            return "".join(str(rec[col_index]) for rec in \
+            return "".join(str(rec[col_index]) for rec in
                                                     self._records[row_index])
         else:
             if alphabet is None:
                 from Bio.Alphabet import generic_nucleotide
-                return MultipleSeqAlignment((rec[col_index] for rec in \
+                return MultipleSeqAlignment((rec[col_index] for rec in
                                                     self._records[row_index]),
                                              generic_nucleotide)
             else:
-                return MultipleSeqAlignment((rec[col_index] for rec in \
+                return MultipleSeqAlignment((rec[col_index] for rec in
                                                     self._records[row_index]),
                                              generic_nucleotide)
 
@@ -109,7 +109,7 @@ class CodonAlignment(MultipleSeqAlignment):
         SeqRecord in the CodonAlignment using Seq to store
         sequences
         """
-        alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for \
+        alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
 
@@ -165,7 +165,7 @@ class CodonAlignment(MultipleSeqAlignment):
         It is the user's responsibility to ensure all the requirement
         needed by CodonAlignment is met.
         """
-        rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+        rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id)
                  for i in align._records]
         return cls(rec, alphabet=alphabet)
 
@@ -242,7 +242,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
     else:
         import numpy as np
     base_tuple = ('A', 'T', 'C', 'G')
-    codons = [i for i in list(codon_table.forward_table.keys()) + \
+    codons = [i for i in list(codon_table.forward_table.keys()) +
               codon_table.stop_codons if 'U' not in i]
     # set up codon_dict considering stop codons
     codon_dict = codon_table.forward_table

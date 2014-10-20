@@ -229,7 +229,7 @@ class Hmmer3TextParser(object):
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
-                    line.startswith(' ---   ------ ----- --------') or \
+                    line.startswith(' ---   ------ ----- --------') or
                     line.startswith('   [No individual domains'))
             self.line = read_forward(self.handle)
 

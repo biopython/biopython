@@ -32,7 +32,7 @@ class Motif(object):
         self._log_odds = []
         self.alphabet=alphabet
         self.length=None
-        self.background=dict((n, 1.0/len(self.alphabet.letters)) \
+        self.background=dict((n, 1.0/len(self.alphabet.letters))
                              for n in self.alphabet.letters)
         self.beta=1.0
         self.info=None
@@ -758,10 +758,10 @@ class Motif(object):
         """
         #TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
-            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs" \
+            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
                                  % self.alphabet)
         if not isinstance(seq.alphabet, IUPAC.IUPACUnambiguousDNA):
-            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences" \
+            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
                                  % sequence.alphabet)
 
         seq = str(seq)

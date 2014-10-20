@@ -602,9 +602,9 @@ class Reaction(object):
         outstr = ['Reaction node ID: %s' % self.id,
                   'Reaction KEGG IDs: %s' % self.name,
                   'Type: %s' % self.type,
-                  'Substrates: %s' % \
+                  'Substrates: %s' %
                       ','.join([s.name for s in self.substrates]),
-                  'Products: %s' % \
+                  'Products: %s' %
                       ','.join([s.name for s in self.products]),
                   ]
         return '\n'.join(outstr) + '\n'

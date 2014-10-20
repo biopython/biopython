@@ -1012,7 +1012,7 @@ class CompoundLocation(object):
 
     def __repr__(self):
         """String representation of the location for debugging."""
-        return "%s(%r, %r)" % (self.__class__.__name__, \
+        return "%s(%r, %r)" % (self.__class__.__name__,
                                self.parts, self.operator)
 
     def _get_strand(self):
@@ -1100,7 +1100,7 @@ class CompoundLocation(object):
         elif isinstance(other, CompoundLocation):
             if self.operator != other.operator:
                 #Handle join+order -> order as a special case?
-                raise ValueError("Mixed operators %s and %s" \
+                raise ValueError("Mixed operators %s and %s"
                                  % (self.operator, other.operator))
             return CompoundLocation(self.parts + other.parts, self.operator)
         elif isinstance(other, int):

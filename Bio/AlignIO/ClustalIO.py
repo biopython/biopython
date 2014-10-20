@@ -372,7 +372,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
           "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV"
 
     for alignment in ClustalIterator(StringIO(aln_example2 + aln_example1)):
-        print("Alignment with %i records of length %i" \
+        print("Alignment with %i records of length %i"
               % (len(alignment),
                  alignment.get_alignment_length()))
 
