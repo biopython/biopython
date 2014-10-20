@@ -2073,7 +2073,7 @@ class RestrictionBatch(set):
 
 class Analysis(RestrictionBatch, PrintFormat):
 
-    def __init__(self, restrictionbatch=RestrictionBatch(),sequence=DNA(''),
+    def __init__(self, restrictionbatch=RestrictionBatch(), sequence=DNA(''),
                  linear=True):
         """Analysis([restrictionbatch [, sequence] linear=True]) -> New Analysis class.
 

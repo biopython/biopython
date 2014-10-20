@@ -15,7 +15,7 @@ class ScoreDistribution(object):
     scores with a predefined precision. Provides a number of methods for calculating
     thresholds for motif occurences.
     """
-    def __init__(self,motif,precision=10**3):
+    def __init__(self, motif, precision=10**3):
         self.min_score=min(0.0, motif.min_score())
         self.interval=max(0.0, motif.max_score())-self.min_score
         self.n_points=precision*motif.length
@@ -28,7 +28,7 @@ class ScoreDistribution(object):
         for lo, mo in zip(motif.log_odds(), motif.pwm()):
             self.modify(lo, mo, motif.background)
 
-    def _index_diff(self,x,y=0.0):
+    def _index_diff(self, x, y=0.0):
         return int((x-y+0.5*self.step)//self.step)
 
     def _add(self, i, j):

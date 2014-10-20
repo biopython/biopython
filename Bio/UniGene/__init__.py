@@ -104,7 +104,7 @@ class SequenceLine(object):
                  Trace Archive
     """
 
-    def __init__(self,text=None):
+    def __init__(self, text=None):
         self.acc = ''
         self.nid = ''
         self.lid = ''
@@ -147,7 +147,7 @@ class ProtsimLine(object):
     ALN=         length of aligned region (aa)
     """
 
-    def __init__(self,text=None):
+    def __init__(self, text=None):
         self.org = ''
         self.protgi = ''
         self.protid = ''
@@ -179,7 +179,7 @@ class STSLine(object):
     UNISTS=      identifier in NCBI's UNISTS database
     """
 
-    def __init__(self,text=None):
+    def __init__(self, text=None):
         self.acc = ''
         self.unists = ''
         if text is not None:

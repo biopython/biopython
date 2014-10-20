@@ -48,7 +48,7 @@ class ScoreDistribution(object):
                 self.mo_density=mo_new
                 self.bg_density=bg_new
 
-    def _index_diff(self,x,y=0.0):
+    def _index_diff(self, x, y=0.0):
         return int((x-y+0.5*self.step)//self.step)
 
     def _add(self, i, j):
@@ -87,7 +87,7 @@ class ScoreDistribution(object):
             prob+=self.mo_density[i]
         return self.min_score+i*self.step
 
-    def threshold_balanced(self,rate_proportion=1.0,return_rate=False):
+    def threshold_balanced(self, rate_proportion=1.0, return_rate=False):
         """
         Approximate the log-odds threshold which makes FNR equal to FPR times rate_proportion
         """

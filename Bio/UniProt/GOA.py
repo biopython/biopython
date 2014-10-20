@@ -345,7 +345,7 @@ def gafiterator(handle):
         return _gaf10iterator(handle)
 
 
-def writerec(outrec,handle,fields=GAF20FIELDS):
+def writerec(outrec, handle, fields=GAF20FIELDS):
     """Write a single UniProt-GOA record to an output stream.
 
     Caller should know the  format version. Default: gaf-2.0
@@ -364,7 +364,7 @@ def writerec(outrec,handle,fields=GAF20FIELDS):
     handle.write("%s" % outstr)
 
 
-def writebyproteinrec(outprotrec,handle,fields=GAF20FIELDS):
+def writebyproteinrec(outprotrec, handle, fields=GAF20FIELDS):
     """Write a list of GAF records to an output stream.
 
     Caller should know the  format version. Default: gaf-2.0

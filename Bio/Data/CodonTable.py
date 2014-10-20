@@ -370,7 +370,7 @@ class AmbiguousForwardTable(object):
         #    return a
 
         #Sort by key is 2.x and 3.x compatible
-        possible.sort(key=lambda x:(len(self.ambiguous_protein[x]), x))
+        possible.sort(key=lambda x: (len(self.ambiguous_protein[x]), x))
 
         x = possible[0]
         self._cache[codon] = x

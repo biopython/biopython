@@ -169,7 +169,7 @@ class KGMLCanvas(object):
                 self.drawing.setLineWidth(1)
             p.moveTo(x, y)
             for (x, y) in graphics.coords:
-                p.lineTo(x,y)
+                p.lineTo(x, y)
             self.drawing.drawPath(p)
             self.drawing.setLineWidth(1)        # Return to default
         # KGML defines the (x, y) coordinates as the centre of the circle/
@@ -313,7 +313,7 @@ class KGMLCanvas(object):
         # Dashed lines for maplinks, solid for everything else
         for relation in list(self.pathway.relations):
             if relation.type == 'maplink':
-                self.drawing.setDash(6,3)
+                self.drawing.setDash(6, 3)
             else:
                 self.drawing.setDash()
             for s in relation.subtypes:

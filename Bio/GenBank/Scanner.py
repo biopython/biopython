@@ -611,7 +611,7 @@ class EmblScanner(InsdcScanner):
         elif line[self.HEADER_WIDTH:].count(";") == 3:
             if line.rstrip().endswith(" SQ"):
                 #EMBL-bank patent data
-                self._feed_first_line_patents(consumer,line)
+                self._feed_first_line_patents(consumer, line)
             else:
                 #Looks like the pre 2006 style
                 self._feed_first_line_old(consumer, line)

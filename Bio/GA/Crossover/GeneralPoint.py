@@ -172,13 +172,13 @@ class InterleaveCrossover(GeneralPointCrossover):
 
     Interleaving:  AbCdEfG, aBcDeFg
     """
-    def __init__(self,crossover_prob=0.1):
+    def __init__(self, crossover_prob=0.1):
         GeneralPointCrossover.__init__(self, 0, crossover_prob)
 
     def _generate_locs(self, bound):
         return list(range(-1, bound+1))
 
-    def _crossover( self, x, no, locs ):
+    def _crossover(self, x, no, locs):
         s = no[ x ].genome[ 0:1 ]
         for n in range(1, self._npoints+2):
             mode = ( x+n )%2

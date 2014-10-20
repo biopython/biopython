@@ -433,7 +433,7 @@ class FastaM10Parser(object):
                 hsp_list.append(hsp)
                 # set or reset the state to none
                 state = _STATE_NONE
-                parsed_hsp = {'query':{}, 'hit': {}}
+                parsed_hsp = {'query': {}, 'hit': {}}
             # create and append a new HSP if line starts with '>--'
             elif self.line.startswith('>--'):
                 # set seq attributes of previous hsp
@@ -444,7 +444,7 @@ class FastaM10Parser(object):
                 hsp_list.append(hsp)
                 # set the state ~ none yet
                 state = _STATE_NONE
-                parsed_hsp = {'query':{}, 'hit': {}}
+                parsed_hsp = {'query': {}, 'hit': {}}
             # this is either query or hit data in the HSP, depending on the state
             elif self.line.startswith('>'):
                 if state == _STATE_NONE:

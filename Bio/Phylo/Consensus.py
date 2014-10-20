@@ -520,9 +520,9 @@ def bootstrap(msa, times):
         for j in range(length):
             col = random.randint(0, length - 1)
             if not item:
-                item = msa[:,col:col + 1]
+                item = msa[:, col:col + 1]
             else:
-                item += msa[:,col:col + 1]
+                item += msa[:, col:col + 1]
         yield item
 
 

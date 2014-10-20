@@ -616,7 +616,7 @@ class FSeqBootCommandline(_EmbossCommandLine):
         _Option(["-seed", "seed"],
                  "specify random seed"),
         _Option(["-dotdiff", "dotdiff"],
-                 "Use dot-differencing? [Y/n]"),]
+                 "Use dot-differencing? [Y/n]"), ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
 

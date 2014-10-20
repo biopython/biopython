@@ -71,7 +71,7 @@ def parse(handle, debug=0):
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
     for event, elem in \
-            ElementTree.iterparse(handle, events=('start','end')):
+            ElementTree.iterparse(handle, events=('start', 'end')):
         if event == "end" and elem.tag == "pathway":
             yield KGMLParser(elem).parse()
             elem.clear()
