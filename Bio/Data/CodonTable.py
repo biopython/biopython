@@ -19,15 +19,15 @@ unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
 unambiguous_rna_by_name = {}
 unambiguous_rna_by_id = {}
-generic_by_name = {} # unambiguous DNA or RNA
-generic_by_id = {} # unambiguous DNA or RNA
+generic_by_name = {}  # unambiguous DNA or RNA
+generic_by_id = {}  # unambiguous DNA or RNA
 
 ambiguous_dna_by_name = {}
 ambiguous_dna_by_id = {}
 ambiguous_rna_by_name = {}
 ambiguous_rna_by_id = {}
-ambiguous_generic_by_name = {} # ambiguous DNA or RNA
-ambiguous_generic_by_id = {} # ambiguous DNA or RNA
+ambiguous_generic_by_name = {}  # ambiguous DNA or RNA
+ambiguous_generic_by_id = {}  # ambiguous DNA or RNA
 
 # standard IUPAC unambiguous codons
 standard_dna_table = None

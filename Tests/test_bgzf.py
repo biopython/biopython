@@ -102,11 +102,11 @@ class BgzfTests(unittest.TestCase):
 
     def check_text_with(self, old_file, new_file):
         """Check text mode using context manager (with statement)"""
-        with open(old_file) as h: # text mode!
+        with open(old_file) as h:  # text mode!
             old_line = h.readline()
             old = old_line + h.read()
 
-        with bgzf.BgzfReader(new_file, "r") as h: # Text mode!
+        with bgzf.BgzfReader(new_file, "r") as h:  # Text mode!
             new_line = h.readline()
             new = new_line + h.read(len(old))
 
@@ -365,14 +365,14 @@ class BgzfTests(unittest.TestCase):
         """Check offset works during BGZF writing"""
         temp_file = self.temp_file
 
-        h = bgzf.open(temp_file, "w") #Text mode!
+        h = bgzf.open(temp_file, "w")  # Text mode!
         #When opening new file, offset should be 0
         self.assertEqual(h.tell(), 0)
 
         h.write("X" * 100000)
         offset = h.tell()
-        self.assertNotEqual(offset, 100000) #Should be a virtual offset!
-
+        self.assertNotEqual(offset, 100000)  # Should be a virtual offset!
+        
         #After writing the same data two times, size of the first and the second
         #write should be equal also in terms of offsets
         #(This is because the flush ensures two identical blocks written)
@@ -382,7 +382,7 @@ class BgzfTests(unittest.TestCase):
         #due to the flush - 'offet' is at the end of the first BGZF block,
         #while 'offset1' is at the start of the second BGZF block. In terms
         #of the decompressed data, they point to the same location!
-        self.assertNotEqual(offset, offset1) #New block started
+        self.assertNotEqual(offset, offset1)  # New block started
         h.write("Magic" + "Y" * 100000)
         h.flush()
         offset2 = h.tell()
@@ -398,10 +398,10 @@ class BgzfTests(unittest.TestCase):
 
         h.close()
 
-        h = bgzf.open(temp_file, "r") #Text mode!
+        h = bgzf.open(temp_file, "r")  # Text mode!
 
-        h.seek(offset) #i.e. End of first BGZF block
-        self.assertEqual(offset1, h.tell()) #Note *not* seek offset
+        h.seek(offset)  # i.e. End of first BGZF block
+        self.assertEqual(offset1, h.tell())  # Note *not* seek offset
         #Now at start of second BGZF block
         self.assertEqual(h.read(5), "Magic")
 

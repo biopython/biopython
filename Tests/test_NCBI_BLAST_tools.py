@@ -20,7 +20,7 @@ from Bio.Blast import Applications
 
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
-          "rpsblast+", #For Debian
+          "rpsblast+",  # For Debian
           "rpsblast", "rpstblastn", "psiblast", "blast_formatter",
           "deltablast"]
 exe_names = {}

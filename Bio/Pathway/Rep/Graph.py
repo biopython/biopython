@@ -120,7 +120,7 @@ class Graph(object):
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x != node)
         # remove all refering pairs in label map
-        for label in list(self._label_map.keys()): # we're editing this!
+        for label in list(self._label_map.keys()):  # we're editing this!
             lm = set(x for x in self._label_map[label]
                      if (x[0] != node) and (x[1] != node))
             # remove the entry completely if the label is now unused
@@ -129,7 +129,7 @@ class Graph(object):
             else:
                 del self._label_map[label]
         # remove all refering entries in edge map
-        for edge in list(self._edge_map.keys()): # we're editing this!
+        for edge in list(self._edge_map.keys()):  # we're editing this!
             if edge[0] == node or edge[1] == node:
                 del self._edge_map[edge]
 

@@ -98,7 +98,7 @@ class PatternIOTest(unittest.TestCase):
                          % (read_schemas, schemas))
 
         # --- make sure inappropriate alphabets are reported
-        schemas = ["GTR", "G*C"] # '*' not in the unambigous alphabet
+        schemas = ["GTR", "G*C"]  # '*' not in the unambigous alphabet
         output_handle = open(self.test_file, "w")
         self.pattern_io.write(schemas, output_handle)
         output_handle.close()
@@ -108,7 +108,7 @@ class PatternIOTest(unittest.TestCase):
             read_schemas = self.pattern_io.read(input_handle)
             raise AssertionError("Did not report error on bad alphabet.")
         except ValueError:
-            pass # expected behavior
+            pass  # expected behavior
         except:
             raise AssertionError("Got unexpected error while reading.")
 

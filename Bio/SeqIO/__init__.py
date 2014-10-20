@@ -844,7 +844,7 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     # Map the file format to a sequence iterator:
-    from ._index import _FormatToRandomAccess # Lazy import
+    from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _IndexedSeqFileDict
     try:
         proxy_class = _FormatToRandomAccess[format]

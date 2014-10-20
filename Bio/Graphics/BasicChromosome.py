@@ -112,7 +112,7 @@ class Organism(_ChromosomeComponent):
 
         #Do we need this given we don't draw a legend?
         #If so, should be a public API...
-        self._legend_height = 0 # 2 * inch
+        self._legend_height = 0  # 2 * inch
 
         self.output_format = output_format
 

@@ -52,11 +52,11 @@ print(is_blank_line('\r'))                              # 1
 print(is_blank_line(''))                                # 1
 print(is_blank_line('', allow_spaces=1))                # 1
 print(is_blank_line('', allow_spaces=0))                # 1
-print(is_blank_line(string.whitespace, allow_spaces=1)) # 1
+print(is_blank_line(string.whitespace, allow_spaces=1))  # 1
 print(is_blank_line('hello'))                           # 0
 print(is_blank_line('hello', allow_spaces=1))           # 0
 print(is_blank_line('hello', allow_spaces=0))           # 0
-print(is_blank_line(string.whitespace, allow_spaces=0)) # 0
+print(is_blank_line(string.whitespace, allow_spaces=0))  # 0
 
 
 ### safe_readline
@@ -89,9 +89,9 @@ file"""
 
 h = File.UndoHandle(StringIO(data))
 
-print(safe_peekline(h)) # "This"
+print(safe_peekline(h))  # "This"
 h.readline()
-print(safe_peekline(h)) # "file"
+print(safe_peekline(h))  # "file"
 h.readline()
 try:
     safe_peekline(h)
@@ -100,7 +100,7 @@ except ValueError:
 else:
     print("ERROR, should have failed")
 h.saveline('hello')
-print(safe_peekline(h)) # 'hello'
+print(safe_peekline(h))  # 'hello'
 
 
 ### read_and_call

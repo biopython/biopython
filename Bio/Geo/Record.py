@@ -65,7 +65,7 @@ class Record(object):
             output += out_block(val[40:], '    ')
         #May have to display VERY large tables,
         #so only show the first 20 lines of data
-        MAX_ROWS = 20 + 1 # include header in count
+        MAX_ROWS = 20 + 1  # include header in count
         for row in self.table_rows[0:MAX_ROWS]:
             output += '%s: ' % self.table_rows.index(row)
             for col in row:

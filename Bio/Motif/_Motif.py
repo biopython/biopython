@@ -181,7 +181,7 @@ class Motif(object):
             for instance in self.instances:
                 if str(instance) == str(sequence[pos:pos + self.length]):
                     yield (pos, instance)
-                    break # no other instance will fit (we don't want to return multiple hits)
+                    break  # no other instance will fit (we don't want to return multiple hits)
 
     def score_hit(self,sequence,position,normalized=0,masked=0):
         """
@@ -243,11 +243,11 @@ class Motif(object):
         return 1-max_p, max_o
 
     def dist_pearson_at(self, motif, offset):
-        sxx = 0 # \sum x^2
-        sxy = 0 # \sum x \cdot y
+        sxx = 0  # \sum x^2
+        sxy = 0  # \sum x \cdot y
         sx = 0  # \sum x
         sy = 0  # \sum y
-        syy = 0 # \sum x^2
+        syy = 0  # \sum x^2
         norm=max(self.length, offset+motif.length)
 
         for pos in range(max(self.length, offset+motif.length)):
@@ -328,7 +328,7 @@ class Motif(object):
             if min_d > d:
                 min_d = d
                 min_o = -offset
-        return min_d, min_o #,d_s
+        return min_d, min_o  # ,d_s
 
     def dist_dpq_at(self, other, offset):
         """
@@ -411,7 +411,7 @@ class Motif(object):
         if self.has_instances:
             for i in self.instances:
                 res.add_instance(i.reverse_complement())
-        else: # has counts
+        else:  # has counts
             res.has_counts=True
             res.counts["A"]=self.counts["T"][:]
             res.counts["T"]=self.counts["A"][:]

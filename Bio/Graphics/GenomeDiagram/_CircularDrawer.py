@@ -223,27 +223,27 @@ class CircularDrawer(AbstractDrawer):
         keyed by track number
         """
         bot_track = min(min(self.drawn_tracks), 1)
-        top_track = max(self.drawn_tracks) # The 'highest' track to draw
+        top_track = max(self.drawn_tracks)  # The 'highest' track to draw
 
-        trackunit_sum = 0 # Total number of 'units' taken up by all tracks
-        trackunits = {} # Start and & units for each track keyed by track number
+        trackunit_sum = 0  # Total number of 'units' taken up by all tracks
+        trackunits = {}  # Start and & units for each track keyed by track number
         heightholder = 0  # placeholder variable
-        for track in range(bot_track, top_track+1): # track numbers to 'draw'
+        for track in range(bot_track, top_track+1):  # track numbers to 'draw'
             try:
-                trackheight = self._parent[track].height # Get track height
+                trackheight = self._parent[track].height  # Get track height
             except:
                 trackheight = 1
-            trackunit_sum += trackheight # increment total track unit height
+            trackunit_sum += trackheight  # increment total track unit height
             trackunits[track] = (heightholder, heightholder+trackheight)
-            heightholder += trackheight # move to next height
+            heightholder += trackheight  # move to next height
 
         max_radius = 0.5*min(self.pagewidth, self.pageheight)
         trackunit_height = max_radius * (1 - self.circle_core) / trackunit_sum
         track_core = max_radius * self.circle_core
 
         # Calculate top and bottom radii for each track
-        self.track_radii = {} # The inner, outer and center radii for each track
-        track_crop = trackunit_height*(1-self.track_size)/2. # 'step back' in pixels
+        self.track_radii = {}  # The inner, outer and center radii for each track
+        track_crop = trackunit_height*(1-self.track_size)/2.  # 'step back' in pixels
         for track in trackunits:
             top = trackunits[track][1]*trackunit_height - track_crop + track_core
             btm = trackunits[track][0]*trackunit_height + track_crop + track_core
@@ -311,7 +311,7 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_track(self, track):
         """Returns list of track elements and list of track labels."""
-        track_elements = [] # Holds elements for features and graphs
+        track_elements = []  # Holds elements for features and graphs
         track_labels = []   # Holds labels for features and graphs
 
         # Distribution dictionary for dealing with different set types
@@ -319,7 +319,7 @@ class CircularDrawer(AbstractDrawer):
                        GraphSet: self.draw_graph_set
                        }
 
-        for set in track.get_sets(): # Draw the feature or graph sets
+        for set in track.get_sets():  # Draw the feature or graph sets
             elements, labels = set_methods[set.__class__](set)
             track_elements += elements
             track_labels += labels
@@ -328,7 +328,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_feature_set(self, set):
         """Returns list of feature elements and list of labels for them."""
         #print 'draw feature set'
-        feature_elements = [] # Holds diagram elements belonging to the features
+        feature_elements = []  # Holds diagram elements belonging to the features
         label_elements = []   # Holds diagram elements belonging to feature labels
 
         # Collect all the elements for the feature set
@@ -342,7 +342,7 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_feature(self, feature):
         """Returns list of feature elements and list of labels for them."""
-        feature_elements = [] # Holds drawable elements for a single feature
+        feature_elements = []  # Holds drawable elements for a single feature
         label_elements = []   # Holds labels for a single feature
 
         if feature.hide:    # Don't show feature: return early
@@ -420,44 +420,44 @@ class CircularDrawer(AbstractDrawer):
             if feature.label_position in ('start', "5'", 'left'):
                 # Position the label at the feature's start
                 if strand != -1:
-                    label_angle = startangle + 0.5 * pi # Make text radial
+                    label_angle = startangle + 0.5 * pi  # Make text radial
                     sinval, cosval = startsin, startcos
                 else:
-                    label_angle = endangle + 0.5 * pi # Make text radial
+                    label_angle = endangle + 0.5 * pi  # Make text radial
                     sinval, cosval = endsin, endcos
             elif feature.label_position in ('middle', 'center', 'centre'):
                 # Position the label at the feature's midpoint
-                label_angle = midangle + 0.5 * pi # Make text radial
+                label_angle = midangle + 0.5 * pi  # Make text radial
                 sinval, cosval = midsin, midcos
             elif feature.label_position in ('end', "3'", 'right'):
                 # Position the label at the feature's end
                 if strand != -1:
-                    label_angle = endangle + 0.5 * pi # Make text radial
+                    label_angle = endangle + 0.5 * pi  # Make text radial
                     sinval, cosval = endsin, endcos
                 else:
-                    label_angle = startangle + 0.5 * pi # Make text radial
+                    label_angle = startangle + 0.5 * pi  # Make text radial
                     sinval, cosval = startsin, startcos
             elif startangle < pi:
                 # Default to placing the label the bottom of the feature
                 # as drawn on the page, meaning feature end on left half
-                label_angle = endangle + 0.5 * pi # Make text radial
+                label_angle = endangle + 0.5 * pi  # Make text radial
                 sinval, cosval = endsin, endcos
             else:
                 # Default to placing the label on the bottom of the feature,
                 # which means the feature end when on right hand half
-                label_angle = startangle + 0.5 * pi # Make text radial
+                label_angle = startangle + 0.5 * pi  # Make text radial
                 sinval, cosval = startsin, startcos
             if strand != -1:
                 # Feature label on top
                 radius = top
-                if startangle < pi: # Turn text round
+                if startangle < pi:  # Turn text round
                     label_angle -= pi
                 else:
                     labelgroup.contents[0].textAnchor = 'end'
             else:
                 # Feature label on bottom
                 radius = btm
-                if startangle < pi: # Turn text round and anchor end
+                if startangle < pi:  # Turn text round and anchor end
                     label_angle -= pi
                     labelgroup.contents[0].textAnchor = 'end'
             x_pos = self.xcenter + radius*sinval
@@ -554,7 +554,7 @@ class CircularDrawer(AbstractDrawer):
             o set       GraphSet object
         """
         #print 'draw graph set'
-        elements = [] # Holds graph elements
+        elements = []  # Holds graph elements
 
         # Distribution dictionary for how to draw the graph
         style_methods = {'line': self.draw_line_graph,
@@ -572,7 +572,7 @@ class CircularDrawer(AbstractDrawer):
 
             o graph     GraphData object
         """
-        line_elements = [] # holds drawable elements
+        line_elements = []  # holds drawable elements
 
         # Get graph data
         data_quartiles = graph.quartiles()
@@ -686,12 +686,12 @@ class CircularDrawer(AbstractDrawer):
         # full height of the track, extending from the midpoint between the
         # previous and current data points to the midpoint between the current
         # and next data points
-        heat_elements = [] # holds drawable elements
+        heat_elements = []  # holds drawable elements
 
         # Get graph data
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0], data_quartiles[4]
-        midval = (maxval + minval)/2. # mid is the value at the X-axis
+        midval = (maxval + minval)/2.  # mid is the value at the X-axis
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = (top-btm)
 
@@ -721,8 +721,8 @@ class CircularDrawer(AbstractDrawer):
 
             o track     Track object
         """
-        scale_elements = [] # holds axes and ticks
-        scale_labels = [] # holds labels
+        scale_elements = []  # holds axes and ticks
+        scale_labels = []  # holds labels
 
         if not track.scale:
             # no scale required, exit early
@@ -779,7 +779,7 @@ class CircularDrawer(AbstractDrawer):
                                          fillColor=None))
 
         start, end = self._current_track_start_end()
-        if track.scale_ticks: # Ticks are required on the scale
+        if track.scale_ticks:  # Ticks are required on the scale
             # Draw large ticks
             # I want the ticks to be consistently positioned relative to
             # the start of the sequence (position 0), not relative to the
@@ -799,7 +799,7 @@ class CircularDrawer(AbstractDrawer):
                                              track,
                                              track.scale_largetick_labels)
                 scale_elements.append(tick)
-                if label is not None: # If there's a label, add it
+                if label is not None:  # If there's a label, add it
                     scale_labels.append(label)
             # Draw small ticks
             ticklen = track.scale_smallticks * trackheight
@@ -812,7 +812,7 @@ class CircularDrawer(AbstractDrawer):
                                              track,
                                              track.scale_smalltick_labels)
                 scale_elements.append(tick)
-                if label is not None: # If there's a label, add it
+                if label is not None:  # If there's a label, add it
                     scale_labels.append(label)
 
         # Check to see if the track contains a graph - if it does, get the
@@ -905,7 +905,7 @@ class CircularDrawer(AbstractDrawer):
                     tickstring = str(tickpos)
             else:
                 tickstring = str(tickpos)
-            label = String(0, 0, tickstring, # Make label string
+            label = String(0, 0, tickstring,  # Make label string
                            fontName=track.scale_font,
                            fontSize=track.scale_fontsize,
                            fillColor=track.scale_color)
@@ -941,10 +941,10 @@ class CircularDrawer(AbstractDrawer):
 
             o track     Track object
         """
-        greytrack_bgs = [] # Holds track backgrounds
-        greytrack_labels = [] # Holds track foreground labels
+        greytrack_bgs = []  # Holds track backgrounds
+        greytrack_labels = []  # Holds track foreground labels
 
-        if not track.greytrack: # No greytrack required, return early
+        if not track.greytrack:  # No greytrack required, return early
             return [], []
 
         # Get track location
@@ -1065,7 +1065,7 @@ class CircularDrawer(AbstractDrawer):
             # Calculate trig values for angle and coordinates
             startcos, startsin = cos(startangle), sin(startangle)
             endcos, endsin = cos(endangle), sin(endangle)
-            x0, y0 = self.xcenter, self.ycenter # origin of the circle
+            x0, y0 = self.xcenter, self.ycenter  # origin of the circle
             x1, y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
             x2, y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
             x3, y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
@@ -1080,10 +1080,10 @@ class CircularDrawer(AbstractDrawer):
 
         Represents what would be a straight line on a linear diagram.
         """
-        x0, y0 = self.xcenter, self.ycenter # origin of the circle
+        x0, y0 = self.xcenter, self.ycenter  # origin of the circle
         radius_diff = end_radius - start_radius
         angle_diff = end_angle - start_angle
-        dx = 0.01 # heuristic
+        dx = 0.01  # heuristic
         a = start_angle*pi/180
         if move:
             path.moveTo(x0+start_radius*cos(a), y0+start_radius*sin(a))

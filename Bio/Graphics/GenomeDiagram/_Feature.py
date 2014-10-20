@@ -235,7 +235,7 @@ class Feature(object):
             If the Feature class doesn't have the attribute called for,
             check in self._feature for it
         """
-        return getattr(self._feature, name) # try to get the attribute from the feature
+        return getattr(self._feature, name)  # try to get the attribute from the feature
 
 
 ################################################################################

@@ -37,7 +37,7 @@ from Bio import File
 _re_prop_name = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 assert _re_prop_name.match("t")
 assert _re_prop_name.match("test")
-assert _re_prop_name.match("_test") is None # we don't want private names
+assert _re_prop_name.match("_test") is None  # we don't want private names
 assert _re_prop_name.match("-test") is None
 assert _re_prop_name.match("any-hyphen") is None
 assert _re_prop_name.match("underscore_ok")
@@ -281,7 +281,7 @@ class AbstractCommandline(object):
             if parameter.is_set:
                 #This will include a trailing space:
                 commandline += str(parameter)
-        return commandline.strip() # remove trailing space
+        return commandline.strip()  # remove trailing space
 
     def __repr__(self):
         """Return a representation of the command line object for debugging.
@@ -460,7 +460,7 @@ class AbstractCommandline(object):
             stderr_arg = open(os.devnull, "w")
         elif isinstance(stderr, basestring):
             if stdout == stderr:
-                stderr_arg = stdout_arg # Write both to the same file
+                stderr_arg = stdout_arg  # Write both to the same file
             else:
                 stderr_arg = open(stderr, "w")
         else:

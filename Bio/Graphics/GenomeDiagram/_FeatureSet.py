@@ -116,7 +116,7 @@ class FeatureSet(object):
         """
         id = self.next_id                                  # get id number
         f = Feature(self, id, feature)
-        self.features[id] = f # add feature
+        self.features[id] = f  # add feature
         for key in kwargs:
             if key == "colour" or key == "color":
                 #Deal with "colour" as a special case by also mapping to color.
@@ -154,7 +154,7 @@ class FeatureSet(object):
             # If the feature has the attribute, and the value should change
             if hasattr(feature, attr):
                 if getattr(feature, attr) != value:
-                    setattr(feature, attr, value) # set it to the passed value
+                    setattr(feature, attr, value)  # set it to the passed value
 
         #For backwards compatibility, we support both colour and color.
         #As a quick hack, make "colour" set both "colour" and "color".

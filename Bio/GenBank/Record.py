@@ -237,9 +237,9 @@ class Record(object):
         """Provide the output string for the LOCUS line.
         """
         output = "LOCUS"
-        output += " " * 7 # 6-12 spaces
+        output += " " * 7  # 6-12 spaces
         output += "%-9s" % self.locus
-        output += " " # 22 space
+        output += " "  # 22 space
         output += "%7s" % self.size
         if "PROTEIN" in self.residue_type:
             output += " aa"
@@ -253,15 +253,15 @@ class Record(object):
         # second case: ss-DNA types of records
         elif "-" in self.residue_type:
             output += "%7s" % self.residue_type
-            output += " " * 10 # spaces for circular
+            output += " " * 10  # spaces for circular
         else:
-            output += " " * 3 # spaces for stuff like ss-
+            output += " " * 3  # spaces for stuff like ss-
             output += "%-4s" % self.residue_type
-            output += " " * 10 # spaces for circular
+            output += " " * 10  # spaces for circular
 
         output += " " * 2
         output += "%3s" % self.data_file_division
-        output += " " * 7 # spaces for 56-63
+        output += " " * 7  # spaces for 56-63
         output += "%11s" % self.date
         output += "\n"
         return output

@@ -1025,7 +1025,7 @@ class CompoundLocation(object):
         if len(set(loc.strand for loc in self.parts))==1:
             return self.parts[0].strand
         else:
-            return None # i.e. mixed strands
+            return None  # i.e. mixed strands
 
     def _set_strand(self, value):
         # Should this be allowed/encouraged?

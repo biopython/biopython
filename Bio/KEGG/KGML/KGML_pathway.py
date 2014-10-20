@@ -504,7 +504,7 @@ class Graphics(object):
         return self._fgcolor
     def _setfgcolor(self, value):
         if value == 'none':
-            self._fgcolor = '#000000' # this default defined in KGML spec
+            self._fgcolor = '#000000'  # this default defined in KGML spec
         else:
             self._fgcolor = value
     def _delfgcolor(self):
@@ -516,7 +516,7 @@ class Graphics(object):
         return self._bgcolor
     def _setbgcolor(self, value):
         if value == 'none':
-            self._bgcolor = '#000000' # this default defined in KGML spec
+            self._bgcolor = '#000000'  # this default defined in KGML spec
         else:
             self._bgcolor = value
     def _delbgcolor(self):
@@ -545,7 +545,7 @@ class Graphics(object):
                           ('width', '_width'), ('height', '_height')]:
             if getattr(self, attr) is not None:
                 graphics.attrib[n] = str(getattr(self, attr))
-        if self.type == 'line': # Need to write polycoords
+        if self.type == 'line':  # Need to write polycoords
             graphics.attrib['coords'] = \
                 ','.join([str(e) for e in chain.from_iterable(self.coords)])
         return graphics

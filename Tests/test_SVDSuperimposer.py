@@ -8,7 +8,7 @@ from __future__ import print_function
 try:
     from numpy import *
     from numpy import dot  # missing in old PyPy's micronumpy
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(

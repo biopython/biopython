@@ -269,7 +269,7 @@ class Track(object):
         """
         set.id = self._next_id          # Assign unique id to set
         set.parent = self               # Make set's parent this track
-        self._sets[self._next_id] = set # Add set, keyed by unique id
+        self._sets[self._next_id] = set  # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
 
     def new_set(self, type='feature', **args):
@@ -286,7 +286,7 @@ class Track(object):
             setattr(set, key, args[key])
         set.id = self._next_id          # Assign unique id to set
         set.parent = self               # Make set's parent this track
-        self._sets[self._next_id] = set # Add set, keyed by unique id
+        self._sets[self._next_id] = set  # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
         return set
 

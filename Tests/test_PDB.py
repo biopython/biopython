@@ -22,7 +22,7 @@ try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -228,23 +228,23 @@ class ParseTest(unittest.TestCase):
         # Model 1 contains 3 chains
         self.assertEqual(len(m1), 3)
         # Deconstruct this data structure to check each chain
-        chain_data = [ # chain_id, chain_len, [(residue_id, residue_len), ...]
+        chain_data = [  # chain_id, chain_len, [(residue_id, residue_len), ...]
             ('A', 86, [ ((' ', 0, ' '), 1 ),
                         ((' ', 2, ' '), 11),
-                        ((' ', 3, ' '), 6, 1), # disordered
+                        ((' ', 3, ' '), 6, 1),  # disordered
                         ((' ', 4, ' '), 4 ),
                         ((' ', 5, ' '), 6 ),
                         ((' ', 6, ' '), 9 ),
                         ((' ', 7, ' '), 4 ),
                         ((' ', 8, ' '), 4 ),
                         ((' ', 9, ' '), 4 ),
-                        ((' ', 10, ' '), 6, ['GLY', 'SER']), # point mut
+                        ((' ', 10, ' '), 6, ['GLY', 'SER']),  # point mut
                         ((' ', 11, ' '), 7 ),
                         ((' ', 12, ' '), 6 ),
                         ((' ', 13, ' '), 7 ),
-                        ((' ', 14, ' '), 4, ['ALA', 'GLY']), # point mut
-                        ((' ', 15, ' '), 8, 3), # disordered
-                        ((' ', 16, ' '), 11, ['ARG', 'TRP']), # point mut
+                        ((' ', 14, ' '), 4, ['ALA', 'GLY']),  # point mut
+                        ((' ', 15, ' '), 8, 3),  # disordered
+                        ((' ', 16, ' '), 11, ['ARG', 'TRP']),  # point mut
                         ((' ', 17, ' '), 6 ),
                         ((' ', 18, ' '), 6 ),
                         ((' ', 19, ' '), 6 ),
@@ -256,7 +256,7 @@ class ParseTest(unittest.TestCase):
                         ((' ', 25, ' '), 4 ),
                         ((' ', 26, ' '), 8 ),
                         ((' ', 27, ' '), 6 ),
-                        ((' ', 28, ' '), 9, 5), # disordered
+                        ((' ', 28, ' '), 9, 5),  # disordered
                         ((' ', 29, ' '), 7 ),
                         ((' ', 30, ' '), 12),
                         ((' ', 31, ' '), 6 ),
@@ -273,7 +273,7 @@ class ParseTest(unittest.TestCase):
                         ((' ', 42, ' '), 4 ),
                         ((' ', 43, ' '), 9 ),
                         ((' ', 44, ' '), 11),
-                        ((' ', 45, ' '), 6, 1), # disordered
+                        ((' ', 45, ' '), 6, 1),  # disordered
                         ((' ', 46, ' '), 8 ),
                         ((' ', 47, ' '), 10),
                         ((' ', 48, ' '), 11),
@@ -302,14 +302,14 @@ class ParseTest(unittest.TestCase):
                         ((' ', 71, ' '), 4 ),
                         ((' ', 72, ' '), 4 ),
                         ((' ', 73, ' '), 4 ),
-                        ((' ', 74, ' '), 8, 3), # disordered
+                        ((' ', 74, ' '), 8, 3),  # disordered
                         ((' ', 75, ' '), 8 ),
                         ((' ', 76, ' '), 12),
                         ((' ', 77, ' '), 6 ),
                         ((' ', 78, ' '), 6 ),
-                        ((' ', 79, ' '), 4, 4), # disordered
-                        ((' ', 80, ' '), 4, ['GLY', 'SER']), # point mut
-                        ((' ', 81, ' '), 8, ['ASN', 'LYS']), # point mut
+                        ((' ', 79, ' '), 4, 4),  # disordered
+                        ((' ', 80, ' '), 4, ['GLY', 'SER']),  # point mut
+                        ((' ', 81, ' '), 8, ['ASN', 'LYS']),  # point mut
                         ((' ', 82, ' '), 6 ),
                         ((' ', 83, ' '), 9 ),
                         ((' ', 84, ' '), 12),
@@ -913,9 +913,9 @@ class Atom_Element(unittest.TestCase):
     def test_AtomElement(self):
         """ Atom Element """
         atoms = self.residue.child_list
-        self.assertEqual('N', atoms[0].element) # N
-        self.assertEqual('C', atoms[1].element) # Alpha Carbon
-        self.assertEqual('CA', atoms[8].element) # Calcium
+        self.assertEqual('N', atoms[0].element)  # N
+        self.assertEqual('C', atoms[1].element)  # Alpha Carbon
+        self.assertEqual('CA', atoms[8].element)  # Calcium
 
     def test_ions(self):
         """Element for magnesium is assigned correctly."""

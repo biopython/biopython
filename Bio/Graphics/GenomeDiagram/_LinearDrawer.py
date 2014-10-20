@@ -273,7 +273,7 @@ class LinearDrawer(AbstractDrawer):
 
         # Go through each track in the parent (if it is to be drawn) one by
         # one and collate the data as drawing elements
-        for track_level in self.drawn_tracks: # only use tracks to be drawn
+        for track_level in self.drawn_tracks:  # only use tracks to be drawn
             self.current_track_level = track_level      # establish track level
             track = self._parent[track_level]           # get the track at that level
             gbgs, glabels = self.draw_greytrack(track)  # get greytrack elements
@@ -327,7 +327,7 @@ class LinearDrawer(AbstractDrawer):
         fragy = self.ylim           # Holder for current absolute fragment base
         for fragment in range(self.fragments):
             fragtop = fragy-fragment_crop * self.fragment_height     # top - crop
-            fragbtm = fragy-(1-fragment_crop) * self.fragment_height # bottom + crop
+            fragbtm = fragy-(1-fragment_crop) * self.fragment_height  # bottom + crop
             self.fragment_lines[fragment] = (fragbtm, fragtop)
             fragy -= self.fragment_height                   # next fragment base
 
@@ -353,7 +353,7 @@ class LinearDrawer(AbstractDrawer):
         trackunit_sum = 0           # Total number of 'units' for the tracks
         trackunits = {}             # The start and end units for each track, keyed by track number
         heightholder = 0            # placeholder variable
-        for track in range(bot_track, top_track+1): # for all track numbers to 'draw'
+        for track in range(bot_track, top_track+1):  # for all track numbers to 'draw'
             try:
                 trackheight = self._parent[track].height    # Get track height
             except:
@@ -444,14 +444,14 @@ class LinearDrawer(AbstractDrawer):
                (track.end is None or tickpos <= track.end), \
                "Tick at %i, but showing %r to %r for track" \
                % (tickpos, track.start, track.end)
-        fragment, tickx = self.canvas_location(tickpos) # Tick co-ordinates
+        fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
         assert fragment >=0, \
                "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]   # Center line of the track
         tickx += self.x0                # Tick X co-ord
         ticktop = tctr + ticklen        # Y co-ord of tick top
         tick = Line(tickx, tctr, tickx, ticktop, strokeColor=track.scale_color)
-        if draw_label: # Put tick position on as label
+        if draw_label:  # Put tick position on as label
             if track.scale_format == 'SInt':
                 if tickpos >= 1000000:
                     tickstring = str(tickpos//1000000) + " Mbp"
@@ -613,7 +613,7 @@ class LinearDrawer(AbstractDrawer):
         greytrack_bgs = []      # Holds grey track backgrounds
         greytrack_labels = []   # Holds grey foreground labels
 
-        if not track.greytrack: # No greytrack required, return early
+        if not track.greytrack:  # No greytrack required, return early
             return [], []
 
         # Get track location
@@ -641,7 +641,7 @@ class LinearDrawer(AbstractDrawer):
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required
-                labelstep = (self.pagewidth)/track.greytrack_labels # how far apart should they be?
+                labelstep = (self.pagewidth)/track.greytrack_labels  # how far apart should they be?
                 label = String(0, 0, track.name,    # label contents
                                fontName=track.greytrack_font,
                                fontSize=track.greytrack_fontsize,
@@ -736,7 +736,7 @@ class LinearDrawer(AbstractDrawer):
                 #feature_elements.append(feature_box)
                 #if label is not None:   # There is a label for the feature
                 #    label_elements.append(label)
-            else: # Feature is split over two or more fragments
+            else:  # Feature is split over two or more fragments
                 fragment = start_fragment
                 start = start_offset
                 # The bit that runs up to the end of the first fragment,

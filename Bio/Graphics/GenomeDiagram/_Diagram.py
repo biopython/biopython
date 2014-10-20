@@ -338,12 +338,12 @@ class Diagram(object):
         if track_level not in self.tracks:     # No track at that level
             self.tracks[track_level] = track   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
+            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse it (highest first)
             for val in occupied_levels:
                 # If track value >= that to be added
                 if val >= track.track_level:
-                    self.tracks[val+1] = self.tracks[val] # ...increment by 1
+                    self.tracks[val+1] = self.tracks[val]  # ...increment by 1
             self.tracks[track_level] = track   # And put the new track in
         self.tracks[track_level].track_level = track_level
 
@@ -362,11 +362,11 @@ class Diagram(object):
         if track_level not in self.tracks:        # No track at that level
             self.tracks[track_level] = newtrack   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
+            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse (highest first)...
             for val in occupied_levels:
                 if val >= track_level:        # Track value >= that to be added
-                    self.tracks[val+1] = self.tracks[val] # ..increment by 1
+                    self.tracks[val+1] = self.tracks[val]  # ..increment by 1
             self.tracks[track_level] = newtrack   # And put the new track in
         self.tracks[track_level].track_level = track_level
         return newtrack
@@ -443,7 +443,7 @@ class Diagram(object):
             track features as a tuple
         """
         lows, highs = [], []
-        for track in self.tracks.values(): # Get ranges for each track
+        for track in self.tracks.values():  # Get ranges for each track
             low, high = track.range()
             lows.append(low)
             highs.append(high)

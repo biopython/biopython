@@ -59,7 +59,7 @@ class ColorTranslator(object):
                 }      # Hardwired Artemis color scheme
         self._colorscheme = {}
         if filename is not None:
-            self.read_colorscheme(filename)# Imported color scheme
+            self.read_colorscheme(filename)  # Imported color scheme
         else:
             self._colorscheme = self._artemis_colorscheme
 
@@ -148,7 +148,7 @@ class ColorTranslator(object):
             value = int(value)
         except ValueError:
             if value.count('.'):                           # dot-delimited
-                value = int(artemis_color.split('.', 1)[0]) # Use only first integer
+                value = int(artemis_color.split('.', 1)[0])  # Use only first integer
             else:
                 raise
         if value in self._artemis_colorscheme:

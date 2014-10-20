@@ -92,7 +92,7 @@ class _XMLparser(ContentHandler):
 
         ch -- characters read
         """
-        self._value += ch # You don't ever get the whole string
+        self._value += ch  # You don't ever get the whole string
 
     def endElement(self, name):
         """Found XML end tag
@@ -524,7 +524,7 @@ class BlastParser(_XMLparser):
     def _end_Hsp_midline(self):
         """Formatting middle line as normally seen in BLAST report
         """
-        self._hsp.match = self._value # do NOT strip spaces!
+        self._hsp.match = self._value  # do NOT strip spaces!
         assert len(self._hsp.match)==len(self._hsp.query)
         assert len(self._hsp.match)==len(self._hsp.sbjct)
 
@@ -611,7 +611,7 @@ def parse(handle, debug=0):
     which strictly speaking wasn't valid XML)."""
     from xml.parsers import expat
     BLOCK = 1024
-    MARGIN = 10 # must be at least length of newline + XML start
+    MARGIN = 10  # must be at least length of newline + XML start
     XML_START = "<?xml"
 
     text = handle.read(BLOCK)
@@ -645,7 +645,7 @@ def parse(handle, debug=0):
             text, pending = pending + handle.read(BLOCK), ""
             if not text:
                 #End of the file!
-                expat_parser.Parse("", True) # End of XML record
+                expat_parser.Parse("", True)  # End of XML record
                 break
 
             #Now read a little bit more so we can check for the
@@ -665,7 +665,7 @@ def parse(handle, debug=0):
                 text, pending = (text+pending).split("\n" + XML_START, 1)
                 pending = XML_START + pending
 
-                expat_parser.Parse(text, True) # End of XML record
+                expat_parser.Parse(text, True)  # End of XML record
                 while blast_parser._records:
                     yield blast_parser._records.pop(0)
 

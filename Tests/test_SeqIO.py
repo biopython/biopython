@@ -10,13 +10,13 @@ import os
 import warnings
 
 try:
-    from StringIO import StringIO # Python 2
+    from StringIO import StringIO  # Python 2
     # Can't use cStringIO, quoting the documentation,
     #   "Unlike the StringIO module, this module is not able to accept
     #    Unicode strings that cannot be encoded as plain ASCII strings."
     # Therefore can't use from Bio._py3k import StringIO
 except ImportError:
-    from io import StringIO # Python 3
+    from io import StringIO  # Python 3
 from io import BytesIO
 
 from Bio import BiopythonWarning, BiopythonParserWarning
@@ -155,10 +155,10 @@ test_files = [
     ("genbank", False, 'GenBank/1MRR_A.gp', 1),
 #Following files are currently only used here or in test_SeqIO_index.py:
     ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
-    ("embl",   False, 'EMBL/patents.embl', 4), # more proteins, but no seq
+    ("embl",   False, 'EMBL/patents.embl', 4),  # more proteins, but no seq
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
-    ("embl",   False, 'EMBL/DD231055_edited2.embl', 1), #Partial ID line
+    ("embl",   False, 'EMBL/DD231055_edited2.embl', 1),  # Partial ID line
     ("embl",   False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
     ("embl",   False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
     ("embl",   False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
@@ -207,8 +207,8 @@ test_files = [
 #Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
     ("qual",  False, 'Quality/example.qual',  3),
-    ("fastq", True, 'Quality/example.fastq', 3), #Unix new lines
-    ("fastq", True, 'Quality/example_dos.fastq', 3), #DOS/Windows new lines
+    ("fastq", True, 'Quality/example.fastq', 3),  # Unix new lines
+    ("fastq", True, 'Quality/example_dos.fastq', 3),  # DOS/Windows new lines
     ("fastq", True, 'Quality/tricky.fastq', 4),
     ("fastq", False, 'Quality/sanger_faked.fastq', 1),
     ("fastq", False, 'Quality/sanger_93.fastq', 1),
@@ -573,7 +573,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
             if t_format in no_alpha_formats:
-                assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
+                assert base_alpha == Alphabet.single_letter_alphabet  # Too harsh?
         else:
             base_alpha = None
     if base_alpha is None:

@@ -76,7 +76,7 @@ class KGMLCanvas(object):
         self.fontsize = fontsize
         self.draw_relations = draw_relations
         self.non_reactant_transparency = 0.3
-        self.import_imagemap = import_imagemap # Import the map .png from URL
+        self.import_imagemap = import_imagemap  # Import the map .png from URL
         # percentage of canvas that will be margin in on either side in the
         # X and Y directions
         self.margins = margins
@@ -343,7 +343,7 @@ class KGMLCanvas(object):
         # from the 'from' to the 'to' entity
         if bounds_to[0][0] < centre_from[0] < bounds_to[1][0]:
             #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
-            if centre_to[1] > centre_from[1]: # to above from
+            if centre_to[1] > centre_from[1]:  # to above from
                 p.moveTo(centre_from[0], bounds_from[1][1])
                 p.lineTo(centre_from[0], bounds_to[0][1])
                 # Draw arrow point - TODO
@@ -353,7 +353,7 @@ class KGMLCanvas(object):
                 # Draw arrow point - TODO
         elif bounds_from[0][0] < centre_to[0] < bounds_from[1][0]:
             #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
-            if centre_to[1] > centre_from[1]: # to above from
+            if centre_to[1] > centre_from[1]:  # to above from
                 p.moveTo(centre_to[0], bounds_from[1][1])
                 p.lineTo(centre_to[0], bounds_to[0][1])
                 # Draw arrow point - TODO

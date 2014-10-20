@@ -254,7 +254,7 @@ class CodonSeq(Seq):
             raise ValueError("Gap character not given and not defined in "
                              "alphabet")
         else:
-            alpha = self.alphabet # modify!
+            alpha = self.alphabet  # modify!
         if len(gap) != 1 or not isinstance(gap, str):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return CodonSeq(str(self._data).replace(gap, ""), alpha,
@@ -402,8 +402,8 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
           This can be returned from _get_codon_list method.
         - k - transition/transversion rate ratio.
     """
-    S_site = 0 # synonymous sites
-    N_site = 0 # non-synonymous sites
+    S_site = 0  # synonymous sites
+    N_site = 0  # non-synonymous sites
     purine     = ('A', 'G')
     pyrimidine = ('T', 'C')
     base_tuple = ('A', 'T', 'C', 'G')
@@ -469,7 +469,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError("codon should be three letter string ({0}, {1} "
                            "detected)".format(len(codon1), len(codon2)))
-    SN = [0, 0] # synonymous and nonsynonymous counts
+    SN = [0, 0]  # synonymous and nonsynonymous counts
     if codon1 == '---' or codon2 == '---':
         return SN
     base_tuple = ('A', 'C', 'G', 'T')
@@ -565,7 +565,7 @@ def _lwl85(seq1, seq2, k, codon_table):
                 fold4[0] += 1
     L = [sum(fold0)/2.0, sum(fold2)/2.0, sum(fold4)/2.0]
     # count number of differences in different degenerate classes
-    PQ = [0] * 6 # with P0, P2, P4, Q0, Q2, Q4 in each position
+    PQ = [0] * 6  # with P0, P2, P4, Q0, Q2, Q4 in each position
     for codon1, codon2 in zip(seq1, seq2):
         if (codon1 == "---" or codon2 == "---") or codon1 == codon2:
             continue
@@ -751,7 +751,7 @@ def _yn00(seq1, seq2, k, codon_table):
                                 codon_table.stop_codons if 'U' not in i]
         Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
         P = expm(Q*t)
-        TV = [0, 0, 0, 0] # synonymous/nonsynonymous transition/transvertion
+        TV = [0, 0, 0, 0]  # synonymous/nonsynonymous transition/transvertion
         sites = [0, 0]
         codon_npath = {}
         for i, j in zip(seq1, seq2):
@@ -770,7 +770,7 @@ def _yn00(seq1, seq2, k, codon_table):
         t = dSdN[0]*3*S_sites/(S_sites+N_sites)+dSdN[1]*3*N_sites/(S_sites+N_sites)
         w = dSdN[1]/dSdN[0]
         if all(map(lambda x: x<tolerance, [abs(i-j) for i,j in zip(dSdN, dSdN_pre)])):
-            return dSdN[1], dSdN[0] # dN, dS
+            return dSdN[1], dSdN[0]  # dN, dS
         dSdN_pre = dSdN
 
 
@@ -812,7 +812,7 @@ def _get_kappa_t(pi, TV, t=False):
         (1-TV[1]/(2*pi['Y']*pi['R']))-TV[0])/\
         (2*(pi['T']*pi['C']/pi['Y']+pi['A']*pi['G']/pi['R']))
     B = 1 - TV[1]/(2*pi['Y']*pi['R'])
-    a = -0.5*log(A) # this seems to be an error in YANG's original paper
+    a = -0.5*log(A)  # this seems to be an error in YANG's original paper
     b = -0.5*log(B)
     kappaF84 = a/b-1
     if t is False:
@@ -856,8 +856,8 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
             codon_npath.setdefault((i, j), 0)
             codon_npath[(i, j)] += 1
     S_sites = N_sites = 0
-    freqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0}, # synonymous
-              {'A': 0, 'T': 0, 'C': 0, 'G': 0}] # nonsynonymous
+    freqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},  # synonymous
+              {'A': 0, 'T': 0, 'C': 0, 'G': 0}]  # nonsynonymous
     for codon_pair, npath in codon_npath.items():
         codon = codon_pair[0]
         S = N = 0
@@ -907,7 +907,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError("codon should be three letter string ({0}, {1} "
                            "detected)".format(len(codon1), len(codon2)))
-    TV = [0, 0, 0, 0] # transition and transvertion counts (synonymous and nonsynonymous)
+    TV = [0, 0, 0, 0]  # transition and transvertion counts (synonymous and nonsynonymous)
     site = 0
     if codon1 == '---' or codon2 == '---':
         return TV
@@ -1215,7 +1215,7 @@ def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):
     from scipy.linalg import expm
     Q = _get_Q(pi, k, w, codon_lst, codon_table)
     P = expm(Q*t)
-    l = 0 # likelihood value
+    l = 0  # likelihood value
     for i, c1 in enumerate(codon_lst):
         for j, c2 in enumerate(codon_lst):
             if (c1, c2) in codon_cnt:

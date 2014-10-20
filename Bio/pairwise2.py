@@ -600,8 +600,8 @@ def _recover_alignments(sequenceA, sequenceB, starts,
     # is a recursive procedure, but it's implemented here iteratively
     # with a stack.
     lenA, lenB = len(sequenceA), len(sequenceB)
-    tracebacks = [] # list of (seq1, seq2, score, begin, end)
-    in_process = [] # list of ([same as tracebacks], prev_pos, next_pos)
+    tracebacks = []  # list of (seq1, seq2, score, begin, end)
+    in_process = []  # list of ([same as tracebacks], prev_pos, next_pos)
 
     # sequenceA and sequenceB may be sequences, including strings,
     # lists, or list-like objects.  In order to preserve the type of

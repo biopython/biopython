@@ -103,7 +103,7 @@ def apply_to_window(sequence, window_size, function, step=None):
         fragment = sequence[start:end]
         # Apply function to the sequence fragment
         value = function(fragment)
-        results.append((middle, value)) # Add results to list
+        results.append((middle, value))  # Add results to list
         # Advance to next fragment
         pos += step
 
@@ -116,7 +116,7 @@ def apply_to_window(sequence, window_size, function, step=None):
         fragment = sequence[start:end]
         # Apply function to sequence fragment
         value = function(fragment)
-        results.append((middle, value)) # Add results to list
+        results.append((middle, value))  # Add results to list
 
     # Check on last sequence
     #print(fragment)

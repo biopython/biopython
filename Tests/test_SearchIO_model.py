@@ -768,7 +768,7 @@ class HitCases(unittest.TestCase):
         hit = Hit([hsp111, hsp112, hsp113])
         self.assertEqual('hit1', hit.id)
         self.assertEqual('<unknown description>', hit.description)
-        self.assertEqual('query1', hit.query_id) # set from the HSPs
+        self.assertEqual('query1', hit.query_id)  # set from the HSPs
         self.assertEqual('<unknown description>', hit.query_description)
 
     def test_repr(self):

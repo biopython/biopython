@@ -277,7 +277,7 @@ def _baum_welch_one(N, M, outputs,
     lp_arc = numpy.zeros((N, N, T))
     for t in range(T):
         k = outputs[t]
-        lp_traverse = numpy.zeros((N, N)) # P going over one arc.
+        lp_traverse = numpy.zeros((N, N))  # P going over one arc.
         for i in range(N):
             for j in range(N):
                 # P(getting to this arc)

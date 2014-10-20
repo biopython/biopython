@@ -79,7 +79,7 @@ class CAPSMap(object):
         self._digest()
 
     def _digest_with(self, enzyme):
-        cuts = [] # list of lists, one per sequence
+        cuts = []  # list of lists, one per sequence
         all = []
 
         # go through each sequence

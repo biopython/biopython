@@ -192,9 +192,9 @@ class ClustalIterator(AlignmentIterator):
             while (not line) or line.strip() == "":
                 line = handle.readline()
                 if not line:
-                    break # end of file
+                    break  # end of file
             if not line:
-                break # end of file
+                break  # end of file
 
             if line.split(None, 1)[0] in known_headers:
                 #Found concatenated alignment.

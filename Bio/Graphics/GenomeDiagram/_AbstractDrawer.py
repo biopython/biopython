@@ -450,7 +450,7 @@ class AbstractDrawer(object):
         """
         if isinstance(pagesize, str):     # A string, so translate
             pagesize = page_sizes(pagesize)
-        elif isinstance(pagesize, tuple): # A tuple, so don't translate
+        elif isinstance(pagesize, tuple):  # A tuple, so don't translate
             pagesize = pagesize
         else:
             raise ValueError("Page size %s not recognised" % pagesize)

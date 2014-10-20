@@ -188,7 +188,7 @@ def make_join_feature(f_list, ftype="misc_feature"):
         #All forward, or mixed strand
         c_loc = CompoundLocation([f.location for f in f_list])
     answer = SeqFeature(c_loc, ftype)
-    answer._sub_features = f_list #to avoid deprecation warning
+    answer._sub_features = f_list  # to avoid deprecation warning
     return answer
 
 
@@ -263,7 +263,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         #unit test have mostly defaulted to strand None.
         self.assertEqual(len(feature._sub_features), len(new_f._sub_features))
         for f1, f2 in zip(feature._sub_features, new_f._sub_features):
-            f1.type = "misc_feature" #hack as may not be misc_feature
+            f1.type = "misc_feature"  # hack as may not be misc_feature
             if f1.strand is None:
                 f1.strand = f2.strand  # hack as described above
             self.assertEqual(f1.strand, f2.strand)

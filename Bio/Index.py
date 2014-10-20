@@ -19,9 +19,9 @@ import array
 import shelve
 
 try:
-    import cPickle as pickle # Only available under Python 2
+    import cPickle as pickle  # Only available under Python 2
 except ImportError:
-    import pickle # Python 3
+    import pickle  # Python 3
 
 
 class _ShelveIndex(dict):

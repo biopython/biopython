@@ -9,7 +9,7 @@ import unittest
 
 from Bio import MissingExternalDependencyError
 from Bio import AlignIO
-from Bio.Nexus import Trees # One day we should use planned TreeIO module
+from Bio.Nexus import Trees  # One day we should use planned TreeIO module
 
 from Bio.Emboss.Applications import FDNADistCommandline, FNeighborCommandline
 from Bio.Emboss.Applications import FSeqBootCommandline, FProtDistCommandline

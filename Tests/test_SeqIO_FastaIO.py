@@ -32,8 +32,8 @@ def title_to_ids(title):
     id_info_items = id_info.split("|")
     if len(id_info_items) >=4:
         assert id_info_items[2] in ["gb", "emb", "dbj", "pdb"], title
-        id = id_info_items[3] # the id with version info
-        name = id_info_items[4] # the id without version info
+        id = id_info_items[3]  # the id with version info
+        name = id_info_items[4]  # the id without version info
     else:
         #Fallback:
         id = id_info_items[0]

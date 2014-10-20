@@ -19,7 +19,7 @@ warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
     fixers = refactor.get_fixers_from_package("lib2to3.fixes")
-    fixers.remove("lib2to3.fixes.fix_print") # Already using print function
+    fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
     rt = refactor.RefactoringTool(fixers)
     assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == \
                                  ">>> print(2+2)\n4\n"

@@ -250,8 +250,8 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
         codon_dict[stop] = 'stop'
     # count site
     num = len(codons)
-    G = {} # graph for substitution
-    nonsyn_G = {} # graph for nonsynonymous substitution
+    G = {}  # graph for substitution
+    nonsyn_G = {}  # graph for nonsynonymous substitution
     graph = {}
     graph_nonsyn = {}
     for i, codon in enumerate(codons):
@@ -298,14 +298,14 @@ def _dijkstra(graph, start, end):
     Output:
         List of vertices from the beggining to the end.
     """
-    D = {} # Final distances dict
-    P = {} # Predecessor dict
+    D = {}  # Final distances dict
+    P = {}  # Predecessor dict
     # Fill the dicts with default values
     for node in graph.keys():
-        D[node] = 100 # Vertices are unreachable
-        P[node] = "" # Vertices have no predecessors
-    D[start] = 0 # The start vertex needs no move
-    unseen_nodes = list(graph.keys()) # All nodes are unseen
+        D[node] = 100  # Vertices are unreachable
+        P[node] = ""  # Vertices have no predecessors
+    D[start] = 0  # The start vertex needs no move
+    unseen_nodes = list(graph.keys())  # All nodes are unseen
     while len(unseen_nodes) > 0:
         # Select the node with the lowest value in D (final distance)
         shortest = None
@@ -334,11 +334,11 @@ def _dijkstra(graph, start, end):
     # While we are not arrived at the beginning
     while not (node == start):
         if path.count(node) == 0:
-            path.insert(0, node) # Insert the predecessor of the current node
-            node = P[node] # The current node becomes its predecessor
+            path.insert(0, node)  # Insert the predecessor of the current node
+            node = P[node]  # The current node becomes its predecessor
         else:
             break
-    path.insert(0, start) # Finally, insert the start vertex
+    path.insert(0, start)  # Finally, insert the start vertex
     for i in range(len(path)-1):
         distance += graph[path[i]][path[i+1]]
     return distance
@@ -378,7 +378,7 @@ def _prim(G):
     for n1, n2, c in edges:
         conn[n1].append((c, n1, n2))
         conn[n2].append((c, n2, n1))
-    mst = [] # minimum spanning tree
+    mst = []  # minimum spanning tree
     used = set(nodes[0])
     usable_edges = conn[nodes[0]][:]
     heapify(usable_edges)

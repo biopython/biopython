@@ -42,7 +42,7 @@ LocationParserError   Exception indiciating a problem with the spark based
 from __future__ import print_function
 
 import re
-import sys # for checking if Python 2
+import sys  # for checking if Python 2
 
 # other Biopython stuff
 from Bio import SeqFeature
@@ -1085,7 +1085,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             if len(strands)==1:
                 strand = sub_features[0].strand
             else:
-                strand = None # i.e. mixed strands
+                strand = None  # i.e. mixed strands
             if strand == -1:
                 # Reverse the backwards order used in GenBank files
                 cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
@@ -1227,7 +1227,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 else:
                     seq_alphabet = IUPAC.ambiguous_rna
             elif 'PROTEIN' in self._seq_type.upper() \
-            or self._seq_type == "PRT": # PRT is used in EMBL-bank for patents
+            or self._seq_type == "PRT":  # PRT is used in EMBL-bank for patents
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type

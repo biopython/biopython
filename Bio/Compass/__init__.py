@@ -44,7 +44,7 @@ def read(handle):
         else:
             raise ValueError("Unexpected end of stream.")
     for line in handle:
-        if not line.strip(): # skip empty lines
+        if not line.strip():  # skip empty lines
             continue
         __read_query_alignment(record, line)
         try:

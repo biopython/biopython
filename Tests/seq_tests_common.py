@@ -295,7 +295,7 @@ def compare_record(old, new):
     assert not new_keys, "Unexpected new annotation keys: %s" \
            % ", ".join(new_keys)
     missing_keys = set(old.annotations).difference(new.annotations)
-    missing_keys = missing_keys.difference(['ncbi_taxid', # Can't store chimeras
+    missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
                                             ])
     assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
            % ", ".join(missing_keys)

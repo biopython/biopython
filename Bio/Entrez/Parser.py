@@ -154,7 +154,7 @@ class DataHandler(object):
     import platform
     if platform.system()=='Windows':
         directory = os.path.join(os.getenv("APPDATA"), "biopython")
-    else: # Unix/Linux/Mac
+    else:  # Unix/Linux/Mac
         home = os.path.expanduser('~')
         directory = os.path.join(home, '.config', 'biopython')
         del home
@@ -162,7 +162,7 @@ class DataHandler(object):
     del directory
     del platform
     try:
-        os.makedirs(local_dtd_dir) # use exist_ok=True on Python >= 3.2
+        os.makedirs(local_dtd_dir)  # use exist_ok=True on Python >= 3.2
     except OSError as exception:
         # Check if local_dtd_dir already exists, and that it is a directory.
         # Trying os.makedirs first and then checking for os.path.isdir avoids
@@ -272,7 +272,7 @@ class DataHandler(object):
             records = self.stack[0]
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
-            while len(records) > 1: # Then the top record is finished
+            while len(records) > 1:  # Then the top record is finished
                 record = records.pop(0)
                 yield record
 
@@ -295,10 +295,10 @@ class DataHandler(object):
             object = DictionaryElement()
         elif name in self.structures:
             object = StructureElement(self.structures[name])
-        elif name in self.items: # Only appears in ESummary
-            name = str(attrs["Name"]) # convert from Unicode
+        elif name in self.items:  # Only appears in ESummary
+            name = str(attrs["Name"])  # convert from Unicode
             del attrs["Name"]
-            itemtype = str(attrs["Type"]) # convert from Unicode
+            itemtype = str(attrs["Type"])  # convert from Unicode
             del attrs["Type"]
             if itemtype=="Structure":
                 object = DictionaryElement()

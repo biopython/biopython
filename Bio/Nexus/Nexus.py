@@ -257,7 +257,7 @@ def get_start_end(sequence, skiplist=['-', '?']):
     start = 0
     while start < length and (sequence[start] in skiplist):
         start += 1
-    if start == length and end == -1: # empty sequence
+    if start == length and end == -1:  # empty sequence
         return -1, -1
     else:
         return start, end
@@ -299,7 +299,7 @@ def _compact4nexus(orig_list):
     orig_list = sorted(set(orig_list))
     shortlist = []
     clist = orig_list[:]
-    clist.append(clist[-1] + .5) # dummy value makes it easier
+    clist.append(clist[-1] + .5)  # dummy value makes it easier
     while len(clist) > 1:
         step = 1
         for i, x in enumerate(clist):
@@ -334,7 +334,7 @@ def combine(matrices):
     if not matrices:
         return None
     name = matrices[0][0]
-    combined = copy.deepcopy(matrices[0][1]) # initiate with copy of first matrix
+    combined = copy.deepcopy(matrices[0][1])  # initiate with copy of first matrix
     mixed_datatypes = (len(set(n[1].datatype for n in matrices)) > 1)
     if mixed_datatypes:
         # dealing with mixed matrices is application specific.
@@ -370,7 +370,7 @@ def combine(matrices):
             combined.matrix[t] = Seq(combined.missing*combined.nchar, combined.alphabet) + \
                 Seq(str(m.matrix[t]).replace(m.gap, combined.gap).replace(m.missing, combined.missing), combined.alphabet)
         combined.taxlabels.extend(m_only)    # new taxon list
-        for cn, cs in m.charsets.items(): # adjust character sets for new matrix
+        for cn, cs in m.charsets.items():  # adjust character sets for new matrix
             combined.charsets['%s.%s' % (n, cn)] = [x+combined.nchar for x in cs]
         if m.taxsets:
             if not combined.taxsets:
@@ -386,7 +386,7 @@ def combine(matrices):
                 combined.charlabels = {}
             combined.charlabels.update(dict((combined.nchar + i, label)
                                             for (i, label) in m.charlabels.items()))
-        combined.nchar += m.nchar # update nchar and ntax
+        combined.nchar += m.nchar  # update nchar and ntax
         combined.ntax += len(m_only)
 
     # some prefer partitions, some charsets:
@@ -711,16 +711,16 @@ class Nexus(object):
         if 'datatype' in options:
             self.datatype = options['datatype'].lower()
             if self.datatype == 'dna' or self.datatype == 'nucleotide':
-                self.alphabet = IUPAC.IUPACAmbiguousDNA() # fresh instance!
+                self.alphabet = IUPAC.IUPACAmbiguousDNA()  # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_dna_values.copy()
                 self.unambiguous_letters = IUPACData.unambiguous_dna_letters
             elif self.datatype == 'rna':
-                self.alphabet = IUPAC.IUPACAmbiguousDNA() # fresh instance!
+                self.alphabet = IUPAC.IUPACAmbiguousDNA()  # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_rna_values.copy()
                 self.unambiguous_letters = IUPACData.unambiguous_rna_letters
             elif self.datatype == 'protein':
                 # TODO - Should this not be ExtendedIUPACProtein?
-                self.alphabet = IUPAC.IUPACProtein() # fresh instance
+                self.alphabet = IUPAC.IUPACProtein()  # fresh instance
                 self.ambiguous_values = {'B': 'DN', 'Z': 'EQ', 'X': IUPACData.protein_letters}
                 # that's how PAUP handles it
                 self.unambiguous_letters = IUPACData.protein_letters + '*'  # stop-codon
@@ -813,7 +813,7 @@ class Nexus(object):
         while True:
             # get id and state
             w = opts.next_word()
-            if w is None: # McClade saves and reads charlabel-lists with terminal comma?!
+            if w is None:  # McClade saves and reads charlabel-lists with terminal comma?!
                 break
             identifier = self._resolve(w, set_type=CHARSET)
             state = quotestrip(opts.next_word())
@@ -1117,20 +1117,20 @@ class Nexus(object):
                 # capture all possible exceptions and treat them as formatting
                 # errors, if they are not NexusError
                 while True:
-                    identifier = options_buffer.next_word() # next list element
-                    if not identifier: # end of list?
+                    identifier = options_buffer.next_word()  # next list element
+                    if not identifier:  # end of list?
                         break
                     start = self._resolve(identifier, set_type=set_type)
-                    if options_buffer.peek_nonwhitespace() == '-': # followd by -
+                    if options_buffer.peek_nonwhitespace() == '-':  # followd by -
                         end = start
                         step = 1
                         # get hyphen and end of range
                         hyphen = options_buffer.next_nonwhitespace()
                         end = self._resolve(options_buffer.next_word(), set_type=set_type)
                         if set_type == CHARSET:
-                            if options_buffer.peek_nonwhitespace() == '\\': # followd by \
+                            if options_buffer.peek_nonwhitespace() == '\\':  # followd by \
                                 backslash = options_buffer.next_nonwhitespace()
-                                step = int(options_buffer.next_word()) # get backslash and step
+                                step = int(options_buffer.next_word())  # get backslash and step
                             plain_list.extend(range(start, end+1, step))
                         else:
                             if isinstance(start, list) or isinstance(end, list):
@@ -1453,7 +1453,7 @@ class Nexus(object):
                                        for sn in names if sn in newpartition)))
         # add 'end' and return everything
         setsb.append('end;\n')
-        if len(setsb) == 2: # begin and end only
+        if len(setsb) == 2:  # begin and end only
             return ''
         else:
             return ';\n'.join(setsb)
@@ -1594,7 +1594,7 @@ class Nexus(object):
         """Return a bootstrapped matrix."""
         if not matrix:
             matrix = self.matrix
-        seqobjects = isinstance(matrix[list(matrix.keys())[0]], Seq) # remember if Seq objects
+        seqobjects = isinstance(matrix[list(matrix.keys())[0]], Seq)  # remember if Seq objects
         cm = self.crop_matrix(delete=delete, exclude=exclude)       # crop data out
         if not cm:                                                  # everything deleted?
             return {}

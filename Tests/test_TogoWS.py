@@ -37,7 +37,7 @@ class TogoFields(unittest.TestCase):
         expected = set(['nuccore', 'nucest', 'nucgss',
                         'nucleotide', 'protein', 'gene',
                         'homologene', 'snp',
-                        'mesh', 'pubmed', # 'embl',
+                        'mesh', 'pubmed',  # 'embl',
                         'uniprot', 'uniparc', 'uniref100',
                         'uniref90', 'uniref50', 'ddbj',
                         'dad', 'pdb', 'compound', 'drug',

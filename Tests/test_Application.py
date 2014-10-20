@@ -91,7 +91,7 @@ class TestApp(unittest.TestCase):
         self.assertTrue(os.path.isfile(tmp))
         with open(tmp) as h:
             contents = h.read()
-        self.assertEqual(contents, "Hello World\n") #stdout + stderr
+        self.assertEqual(contents, "Hello World\n")  # stdout + stderr
         os.remove(tmp)
 
     def test_echo_file_both(self):
@@ -108,12 +108,12 @@ class TestApp(unittest.TestCase):
         self.assertTrue(os.path.isfile(tmp), tmp)
         with open(tmp) as h:
             contents = h.read()
-        self.assertEqual(contents, "Hello World\n") #stdout
+        self.assertEqual(contents, "Hello World\n")  # stdout
         os.remove(tmp)
         self.assertTrue(os.path.isfile(tmp2), tmp2)
         with open(tmp2) as h:
             contents = h.read()
-        self.assertEqual(contents, "") #stderr
+        self.assertEqual(contents, "")  # stderr
         os.remove(tmp2)
 
 

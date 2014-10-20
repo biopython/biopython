@@ -37,9 +37,9 @@ import string
 import sys
 
 try:
-    import gdbm # Python 2
+    import gdbm  # Python 2
 except ImportError:
-    from dbm import gnu as gdbm # Python 3
+    from dbm import gnu as gdbm  # Python 3
 
 
 class DB_Index:

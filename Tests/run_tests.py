@@ -45,9 +45,9 @@ from io import BytesIO
 # Biopython is installed, so we can't use this:
 # from Bio._py3k import StringIO
 try:
-    from StringIO import StringIO # Python 2 (byte strings)
+    from StringIO import StringIO  # Python 2 (byte strings)
 except ImportError:
-    from io import StringIO # Python 3 (unicode strings)
+    from io import StringIO  # Python 3 (unicode strings)
 
 
 def is_pypy():

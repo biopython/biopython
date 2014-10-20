@@ -50,8 +50,8 @@ if sys.version_info[0] >= 3:
     basestring = str
     unicode = str
 
-    _bytes_to_string = lambda b: b.decode() # bytes to unicode string
-    _string_to_bytes = lambda s: s.encode() # unicode string to bytes
+    _bytes_to_string = lambda b: b.decode()  # bytes to unicode string
+    _string_to_bytes = lambda s: s.encode()  # unicode string to bytes
 
     def _as_unicode(s):
         """Turn byte string or unicode string into a unicode string."""
@@ -133,7 +133,7 @@ if sys.version_info[0] >= 3:
         return EvilHandleHack(handle)
 
     #This is to avoid the deprecation warning from open(filename, "rU")
-    _universal_read_mode = "r" # text mode does universal new lines
+    _universal_read_mode = "r"  # text mode does universal new lines
 
     #On Python 3, can depend on OrderedDict being present:
     from collections import OrderedDict
@@ -155,8 +155,8 @@ else:
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
-    _bytes_to_string = lambda b: b # bytes to string, i.e. do nothing
-    _string_to_bytes = lambda s: str(s) # str (or unicode) to bytes string
+    _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing
+    _string_to_bytes = lambda s: str(s)  # str (or unicode) to bytes string
 
     def _as_unicode(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""

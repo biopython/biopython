@@ -100,7 +100,7 @@ class TestBuildAndIO(unittest.TestCase):
                     warnings.simplefilter('ignore')
                     caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
             alns.append(caln)
-            nucl.close() # Close the indexed FASTA file
+            nucl.close()  # Close the indexed FASTA file
         self.alns = alns
 
     def test_IO(self):
@@ -187,7 +187,7 @@ class Test_dn_ds(unittest.TestCase):
 
 from run_tests import is_numpy
 try:
-    from math import lgamma # New in Python 2.7
+    from math import lgamma  # New in Python 2.7
 except ImportError:
     lgamma = None
 if is_numpy() and lgamma:
@@ -196,7 +196,7 @@ if is_numpy() and lgamma:
             p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
             pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
             codon_aln = CodonAlign.build(pro_aln, p)
-            p.close() # Close indexed FASTA file
+            p.close()  # Close indexed FASTA file
             self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
 
 

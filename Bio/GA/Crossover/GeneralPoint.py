@@ -56,8 +56,8 @@ class GeneralPointCrossover(object):
         """
         self._crossover_prob = crossover_prob
 
-        self._sym = points % 2 # odd n, gets a symmetry flag
-        self._npoints = (points + self._sym)//2 # (N or N+1)//2
+        self._sym = points % 2  # odd n, gets a symmetry flag
+        self._npoints = (points + self._sym)//2  # (N or N+1)//2
 
     def do_crossover(self, org_1, org_2):
         """Potentially do a crossover between the two organisms.
@@ -115,7 +115,7 @@ class GeneralPointCrossover(object):
                 x = random.randint(1, bound-1)
             results.append(x)
         results.sort()             # sorted
-        return [0]+results+[bound] # [0, +n points+, bound]
+        return [0]+results+[bound]  # [0, +n points+, bound]
 
     def _crossover(self, x, no, locs):
         """Generalized Crossover Function:

@@ -14375,8 +14375,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14388,8 +14388,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
         record = next(records)
@@ -14401,8 +14401,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         self.assertEqual(None, next(records))
@@ -14424,8 +14424,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 1) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 1)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14437,8 +14437,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
         record = next(records)
@@ -14462,8 +14462,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14475,8 +14475,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
         record = next(records)
@@ -14488,8 +14488,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14501,8 +14501,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         self.assertEqual(None, next(records))
@@ -14524,8 +14524,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 1) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 1)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14537,8 +14537,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
@@ -14563,8 +14563,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14576,8 +14576,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
@@ -14590,8 +14590,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14603,8 +14603,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         self.assertEqual(None, next(records))

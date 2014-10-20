@@ -107,8 +107,8 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(sub.name, "TestName")
             self.assertEqual(sub.description, "TestDescr")
             self.assertEqual(sub.letter_annotations, {"fake":"X"*10})
-            self.assertEqual(sub.dbxrefs, []) # May change this...
-            self.assertEqual(sub.annotations, {}) # May change this...
+            self.assertEqual(sub.dbxrefs, [])  # May change this...
+            self.assertEqual(sub.annotations, {})  # May change this...
             self.assertEqual(len(sub.features), 1)
             #By construction, each feature matches the full sliced region:
             self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
@@ -137,7 +137,7 @@ class SeqRecordMethods(unittest.TestCase):
     def test_add_seq(self):
         """Simple addition of Seq or string"""
         for other in [Seq("BIO"), "BIO"] :
-            rec = self.record + other # will use SeqRecord's __add__ method
+            rec = self.record + other  # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), str(self.record.seq)+"BIO")
             self.assertEqual(rec.id, "TestID")
@@ -177,7 +177,7 @@ class SeqRecordMethods(unittest.TestCase):
     def test_add_seq_left(self):
         """Simple left addition of Seq or string"""
         for other in [Seq("BIO"), "BIO"] :
-            rec = other + self.record # will use SeqRecord's __radd__ method
+            rec = other + self.record  # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), "BIO"+str(self.record.seq))
             self.assertEqual(rec.id, "TestID")
@@ -200,8 +200,8 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
-            self.assertEqual(rec.dbxrefs, []) # May change this...
-            self.assertEqual(rec.annotations, {}) # May change this...
+            self.assertEqual(rec.dbxrefs, [])  # May change this...
+            self.assertEqual(rec.annotations, {})  # May change this...
             self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
 
@@ -214,8 +214,8 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
-            self.assertEqual(rec.dbxrefs, []) # May change this...
-            self.assertEqual(rec.annotations, {}) # May change this...
+            self.assertEqual(rec.dbxrefs, [])  # May change this...
+            self.assertEqual(rec.annotations, {})  # May change this...
             self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
 
