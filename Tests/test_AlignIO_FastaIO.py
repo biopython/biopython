@@ -35,7 +35,7 @@ test_files = [
 for (t_format, t_per, t_count, t_filename) in test_files:
     assert t_format == "fasta-m10" and t_per == 2
 
-    print("Testing reading %s format file %s with %i alignments" \
+    print("Testing reading %s format file %s with %i alignments"
           % (t_format, t_filename, t_count))
     assert os.path.isfile(t_filename), t_filename
 
@@ -52,7 +52,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     #Print the alignment
     for i, alignment in enumerate(alignments):
         print("="*78)
-        print("Alignment %i, with %i sequences of length %i" \
+        print("Alignment %i, with %i sequences of length %i"
               % (i,
                  len(alignment),
                  alignment.get_alignment_length()))

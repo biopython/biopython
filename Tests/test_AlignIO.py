@@ -253,7 +253,7 @@ del list_of_records, t_format
 
 #Main tests...
 for (t_format, t_per, t_count, t_filename) in test_files:
-    print("Testing reading %s format file %s with %i alignments" \
+    print("Testing reading %s format file %s with %i alignments"
           % (t_format, t_filename, t_count))
     assert os.path.isfile(t_filename), t_filename
 
@@ -328,7 +328,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     # Show the alignment
     for i, alignment in enumerate(alignments):
         if i < 3 or i+1 == t_count:
-            print(" Alignment %i, with %i sequences of length %i" \
+            print(" Alignment %i, with %i sequences of length %i"
                   % (i,
                      len(alignment),
                      alignment.get_alignment_length()))

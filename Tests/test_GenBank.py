@@ -79,7 +79,7 @@ for parser in all_parsers:
                 break
 
             if isinstance(parser, GenBank.FeatureParser):
-                print("***Record from %s with the FeatureParser" \
+                print("***Record from %s with the FeatureParser"
                       % filename.split(os.path.sep)[-1])
                 print("Seq: %r" % cur_record.seq)
                 print("Id: %s" % cur_record.id)
@@ -90,7 +90,7 @@ for parser in all_parsers:
                 for ann_key in ann_keys:
                     if ann_key != 'references':
                         print("Key: %s" % ann_key)
-                        print("Value: %s" % \
+                        print("Value: %s" %
                               cur_record.annotations[ann_key])
                     else:
                         print("References*")
@@ -107,7 +107,7 @@ for parser in all_parsers:
                         assert feature.strand is not None
                 print("DB cross refs %s" % cur_record.dbxrefs)
             elif isinstance(parser, GenBank.RecordParser):
-                print("***Record from %s with the RecordParser" \
+                print("***Record from %s with the RecordParser"
                       % filename.split(os.path.sep)[-1])
                 print("sequence length: %i" % len(cur_record.sequence))
                 print("locus: %s" % cur_record.locus)

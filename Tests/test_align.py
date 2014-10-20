@@ -111,9 +111,9 @@ second_seq = alignment[1].seq
 print(align_info.pos_specific_score_matrix(second_seq, ['N']))
 
 print('information content')
-print('part of alignment: %0.2f' \
+print('part of alignment: %0.2f'
       % align_info.information_content(5, 50, chars_to_ignore = ['N']))
-print('entire alignment: %0.2f' \
+print('entire alignment: %0.2f'
       % align_info.information_content(chars_to_ignore = ['N']))
 
 print('relative information content')
@@ -125,7 +125,7 @@ e_freq = {'G' : 0.25,
 e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
 
-print('relative information: %0.2f' \
+print('relative information: %0.2f'
       % align_info.information_content(e_freq_table = e_freq_table,
                                        chars_to_ignore = ['N']))
 

@@ -97,14 +97,14 @@ def compare_feature(old_f, new_f):
 
     # We dont store fuzzy locations:
     assert old_f.location.start == new_f.location.start \
-    or (isinstance(old_f.location.start, UnknownPosition) and \
+    or (isinstance(old_f.location.start, UnknownPosition) and
         isinstance(new_f.location.start, UnknownPosition)), \
-               "%s -> %s" % (old_f.location.start, \
+               "%s -> %s" % (old_f.location.start,
                              new_f.location.start)
     assert old_f.location.end == new_f.location.end \
-    or (isinstance(old_f.location.end, UnknownPosition) and \
+    or (isinstance(old_f.location.end, UnknownPosition) and
         isinstance(new_f.location.end, UnknownPosition)), \
-               "%s -> %s" % (old_f.location.end, \
+               "%s -> %s" % (old_f.location.end,
                              new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \

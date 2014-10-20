@@ -107,7 +107,7 @@ class KGMLPathwayTest(unittest.TestCase):
         p = self.data
         with open(p[0].infilename) as f:
             pathway = read(f)
-            mod_rs = [e for e in pathway.orthologs if \
+            mod_rs = [e for e in pathway.orthologs if
                     len(set(e.name.split()).intersection(self.ko_ids))]
             for r in mod_rs:
                 for g in r.graphics:

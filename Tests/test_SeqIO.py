@@ -625,7 +625,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     del good, bad, given_alpha, base_alpha
 
     if t_alignment:
-        print("Testing reading %s format file %s as an alignment" \
+        print("Testing reading %s format file %s as an alignment"
               % (t_format, t_filename))
 
         alignment = MultipleSeqAlignment(SeqIO.parse(

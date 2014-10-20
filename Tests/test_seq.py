@@ -301,7 +301,7 @@ print("DNA Ambiguity mapping: %s" % sorted_dict(ambiguous_dna_values))
 print("DNA Complement mapping: %s" % sorted_dict(ambiguous_dna_complement))
 for ambig_char, values in sorted(ambiguous_dna_values.items()):
     compl_values = complement(values)
-    print("%s={%s} --> {%s}=%s" % \
+    print("%s={%s} --> {%s}=%s" %
         (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char]))
     assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
 
@@ -310,7 +310,7 @@ print("RNA Ambiguity mapping: %s" % sorted_dict(ambiguous_rna_values))
 print("RNA Complement mapping: %s" % sorted_dict(ambiguous_rna_complement))
 for ambig_char, values in sorted(ambiguous_rna_values.items()):
     compl_values = complement(values).replace("T", "U")  # need to help as no alphabet
-    print("%s={%s} --> {%s}=%s" % \
+    print("%s={%s} --> {%s}=%s" %
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char]))
     assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
 
@@ -323,7 +323,7 @@ for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
             Seq.Seq("".join(sorted(ambiguous_rna_values)).replace("X", ""), IUPAC.IUPACAmbiguousRNA()),
             Seq.Seq("".join(sorted(ambiguous_dna_values)).replace("X", ""), IUPAC.IUPACAmbiguousDNA()),
             Seq.Seq("AWGAARCKG")]:  # Note no U or T
-        print("%s -> %s" \
+        print("%s -> %s"
               % (repr(sequence), repr(Seq.reverse_complement(sequence))))
         assert str(sequence) \
            == str(Seq.reverse_complement(Seq.reverse_complement(sequence))), \
@@ -382,11 +382,11 @@ for nucleotide_seq in test_seqs:
     try:
         expected = Seq.transcribe(nucleotide_seq)
         assert str(nucleotide_seq).replace("t", "u").replace("T", "U") == str(expected)
-        print("%s -> %s" \
+        print("%s -> %s"
         % (repr(nucleotide_seq), repr(expected)))
     except ValueError as e:
         expected = None
-        print("%s -> %s" \
+        print("%s -> %s"
         % (repr(nucleotide_seq), str(e)))
     #Now test the Seq object's method
     if isinstance(nucleotide_seq, Seq.Seq):
@@ -416,11 +416,11 @@ for nucleotide_seq in test_seqs:
     try:
         expected = Seq.back_transcribe(nucleotide_seq)
         assert str(nucleotide_seq).replace("u", "t").replace("U", "T") == str(expected)
-        print("%s -> %s" \
+        print("%s -> %s"
         % (repr(nucleotide_seq), repr(expected)))
     except ValueError as e:
         expected = None
-        print("%s -> %s" \
+        print("%s -> %s"
         % (repr(nucleotide_seq), str(e)))
     #Now test the Seq object's method
     if isinstance(nucleotide_seq, Seq.Seq):
@@ -449,11 +449,11 @@ print("==================")
 for nucleotide_seq in test_seqs:
     try:
         expected = Seq.reverse_complement(nucleotide_seq)
-        print("%s\n-> %s" \
+        print("%s\n-> %s"
         % (repr(nucleotide_seq), repr(expected)))
     except ValueError as e:
         expected = None
-        print("%s\n-> %s" \
+        print("%s\n-> %s"
         % (repr(nucleotide_seq), str(e)))
     #Now test the Seq object's method
     #(The MutualSeq object acts in place)
@@ -610,13 +610,13 @@ print("==========================")
 for nucleotide_seq in test_seqs:
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
-            print("%s -> %s" \
+            print("%s -> %s"
             % (repr(nucleotide_seq), repr(nucleotide_seq.complement())))
             assert str(nucleotide_seq.complement()) \
                 == str(Seq.reverse_complement(nucleotide_seq))[::-1], \
                 "Bio.Seq function and method disagree!"
         except ValueError as e:
-            print("%s -> %s" \
+            print("%s -> %s"
             % (repr(nucleotide_seq), str(e)))
 
 print("")
@@ -625,11 +625,11 @@ print("==================================")
 for nucleotide_seq in test_seqs:
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
-            print("%s -> %s" \
+            print("%s -> %s"
             % (repr(nucleotide_seq), repr(nucleotide_seq.reverse_complement())))
             assert str(nucleotide_seq.reverse_complement()) \
                 == str(Seq.reverse_complement(nucleotide_seq)), \
                 "Bio.Seq function and method disagree!"
         except ValueError as e:
-            print("%s -> %s" \
+            print("%s -> %s"
             % (repr(nucleotide_seq), str(e)))

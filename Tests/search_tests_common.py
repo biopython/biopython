@@ -73,13 +73,13 @@ class CheckIndex(unittest.TestCase):
         # compare values by index
         indexed = SearchIO.index(filename, format, **kwargs)
         self.assertEqual(len(parsed), len(indexed),
-                         "Should be %i records in %s, index says %i" \
+                         "Should be %i records in %s, index says %i"
                          % (len(parsed), filename, len(indexed)))
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
             db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
             self.assertEqual(len(parsed), len(db_indexed),
-                             "Should be %i records in %s, index_db says %i" \
+                             "Should be %i records in %s, index_db says %i"
                              % (len(parsed), filename, len(db_indexed)))
 
         for qres in parsed:
