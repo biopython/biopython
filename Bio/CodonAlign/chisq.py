@@ -96,16 +96,16 @@ def _igamc(a, x):
             t = abs((ans - r) / r)
             ans = r
         else:
-            t = 1.0;
+            t = 1.0
         pkm2 = pkm1
         pkm1 = pk
         qkm2 = qkm1
         qkm1 = qk
         if abs(pk) > BIG:
-                pkm2 *= BIGINV;
-                pkm1 *= BIGINV;
-                qkm2 *= BIGINV;
-                qkm1 *= BIGINV;
+                pkm2 *= BIGINV
+                pkm1 *= BIGINV
+                qkm2 *= BIGINV
+                qkm1 *= BIGINV
         if t <= MACHEP:
             return ans * ax
 
