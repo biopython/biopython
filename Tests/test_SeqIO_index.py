@@ -8,7 +8,7 @@
 try:
     import sqlite3
 except ImportError:
-    # Try and run what tests we can on Python 2.4 or Jython
+    # Try to run what tests we can on Python 2.4 or Jython
     # where we don't expect this to be installed.
     sqlite3 = None
 
@@ -86,7 +86,7 @@ if sqlite3:
             filenames_relative_to_index = (filenames_relative_to_index.upper() == "TRUE")
         except TypeError:
             filenames_relative_to_index = None
-        
+
         con.close()
         return filenames, filenames_relative_to_index
 
@@ -238,7 +238,7 @@ if sqlite3:
             os.chdir("Roche")
             expt_sff_files = ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
 
-            #Here everything is relative,
+            # Here everything is relative,
             self.check("temp.idx", expt_sff_files, expt_sff_files)
             self.check(os.path.abspath("temp.idx"),
                        ["E3MFGYR02_no_manifest.sff",
@@ -265,9 +265,9 @@ if sqlite3:
             expt_sff_files = [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
                               os.path.abspath("Roche/greek.sff"),
                               os.path.abspath(os.path.join("Roche", "paired.sff"))]
-            #All absolute paths...
+            # All absolute paths...
             self.check(t, expt_sff_files, expt_sff_files)
-            #Now try with mix of abs and relative paths...
+            # Now try with mix of abs and relative paths...
             self.check(t,
                        [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
                         os.path.join("Roche", "greek.sff"),
@@ -480,10 +480,10 @@ class IndexDictTests(unittest.TestCase):
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore', BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, format, alphabet,
-                                       key_function = lambda x: x.lower())
+                                       key_function=lambda x: x.lower())
         else:
             rec_dict = SeqIO.index(filename, format, alphabet,
-                                   key_function = lambda x: x.lower())
+                                   key_function=lambda x: x.lower())
 
         self.assertEqual(set(id_list), set(rec_dict))
         self.assertEqual(len(id_list), len(rec_dict))
@@ -496,7 +496,7 @@ class IndexDictTests(unittest.TestCase):
             self.assertTrue(raw in raw_file)
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
-            #__getitem__ SFF code is working.
+            # __getitem__ SFF code is working.
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:

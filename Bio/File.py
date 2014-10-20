@@ -16,6 +16,7 @@ Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
 use.
 """
+
 from __future__ import print_function
 
 import codecs
@@ -42,8 +43,8 @@ except ImportError:
     _sqlite = None
     pass
 
-#Seems epydoc does not like \n inside a docstring doctest
-#__docformat__ = "restructuredtext en"
+# Seems epydoc does not like \n inside a docstring doctest
+# __docformat__ = "restructuredtext en"
 
 
 @contextlib.contextmanager
@@ -542,7 +543,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                                              "were relative to the original working directory]. "
                                              "e.g. %r != %r"
                                              % (os.path.abspath(old), os.path.abspath(new)))
-                #Filenames are equal (after imposing abspath)
+                # Filenames are equal (after imposing abspath)
         except _OperationalError as err:
             con.close()
             raise ValueError("Not a Biopython index database? %s" % err)
@@ -575,7 +576,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
         # Don't index the key column until the end (faster)
         # con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
-        # "offset INTEGER);")
+        #             "offset INTEGER);")
         con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("count", -1))
@@ -604,7 +605,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # might as well make this into a relative path:
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
                 assert not f.startswith("../"), f
-            #print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
+            # print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
                 "INSERT INTO file_data (file_number, name) VALUES (?,?);",
                 (i, f))
@@ -619,8 +620,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 batch = list(itertools.islice(offset_iter, 100))
                 if not batch:
                     break
-                # print("Inserting batch of %i offsets, %s ... %s" \
-                # % (len(batch), batch[0][0], batch[-1][0]))
+                # print("Inserting batch of %i offsets, %s ... %s"
+                #       % (len(batch), batch[0][0], batch[-1][0]))
                 con.executemany(
                     "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
                     batch)
