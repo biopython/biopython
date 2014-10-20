@@ -66,7 +66,7 @@ def parse_parameter_list(lines, parameters, num_params):
     """
     for line_num in range(len(lines)):
         line = lines[line_num]
-         # Find all floating point numbers in this line
+        # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
         # Get parameter list. This can be useful for specifying starting

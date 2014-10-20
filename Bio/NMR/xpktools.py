@@ -40,8 +40,10 @@ class XpkEntry(object):
 
     """
     def __init__(self, entry, headline):
-        self.fields = {}  # Holds all fields from input line in a dictionary
-                          # keys are data labels from the .xpk header
+        # Holds all fields from input line in a dictionary
+        # keys are data labels from the .xpk header
+        self.fields = {}
+
         datlist = entry.split()
         headlist = headline.split()
 
