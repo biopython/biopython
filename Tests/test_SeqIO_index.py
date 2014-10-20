@@ -213,7 +213,7 @@ if sqlite3:
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
-
+            #Note we expect relative paths recorded with Unix slashs!
             expt_sff_files = ["Roche/E3MFGYR02_no_manifest.sff",
                               "Roche/greek.sff",
                               "Roche/paired.sff"]

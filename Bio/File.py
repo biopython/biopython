@@ -515,7 +515,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     if os.path.isabs(f):
                         tmp.append(f)
                     else:
-                        tmp.append(os.path.join(relative_path, f))
+                        # Would be stored with Unix / path separator, so convert
+                        # it to the local OS path separator here:
+                        tmp.append(os.path.join(relative_path, f.replace("/", os.path.sep)))
                 self._filenames = tmp
                 del tmp
             if filenames and len(filenames) != len(self._filenames):
@@ -590,11 +592,13 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # Since user gave BOTH filename & index as relative paths,
                 # we will store this relative to the index file even though
                 # if it may now start ../ (meaning up a level)
-                f = os.path.relpath(filename, relative_path)
-            elif (os.path.dirname(os.path.abspath(filename)) + "/").startswith(relative_path + "/"):
+                # Note for cross platfrom use (e.g. shared data drive over SAMBA),
+                # convert any Windows slash into Unix style / for relative paths.
+                f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
+            elif (os.path.dirname(os.path.abspath(filename)) + os.path.sep).startswith(relative_path + os.path.sep):
                 # Since sequence file is in same directory or sub directory,
                 # might as well make this into a relative path:
-                f = os.path.relpath(filename, relative_path)
+                f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
                 assert not f.startswith("../"), f
             #print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
