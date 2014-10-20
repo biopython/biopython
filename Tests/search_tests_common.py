@@ -25,6 +25,7 @@ with warnings.catch_warnings():
    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
    from Bio import SearchIO
 
+
 class CheckRaw(unittest.TestCase):
 
     """Base class for testing index's get_raw method."""
@@ -102,6 +103,7 @@ class CheckIndex(unittest.TestCase):
             #Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_index(filename + ".bgz", format, **kwargs)
+
 
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""

@@ -34,6 +34,7 @@ TEST_ALIGN_FILE7 = [('CodonAlign/drosophilla.fasta', 'CodonAlign/adh.aln'), 'ind
 
 temp_dir = tempfile.mkdtemp()
 
+
 class TestCodonSeq(unittest.TestCase):
     def test_seq(self):
         codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0,3,6,9,12])
@@ -48,6 +49,7 @@ class TestCodonSeq(unittest.TestCase):
         self.assertRaises(AssertionError, CodonAlign.CodonSeq, 'AAA-T')
         self.assertRaises(ValueError, CodonAlign.CodonSeq, 'YVVRRDQQQ')
         self.assertTrue(isinstance(codonseq1.toSeq(), Seq))
+
 
 class TestCodonAlignment(unittest.TestCase):
     def setUp(self):
@@ -65,6 +67,7 @@ class TestCodonAlignment(unittest.TestCase):
         codonAlign = CodonAlign.CodonAlignment(self.seqrec)
         self.assertEqual(codonAlign.get_aln_length(), 6)
         self.assertTrue(isinstance(codonAlign.toMultipleSeqAlignment(), MultipleSeqAlignment))
+
 
 class TestBuildAndIO(unittest.TestCase):
     def setUp(self):
@@ -107,6 +110,7 @@ class TestBuildAndIO(unittest.TestCase):
             aln = i.toMultipleSeqAlignment()
             AlignIO.write(aln, temp_dir + '/aln' + str(n) + '.clw', 'clustal')
 
+
 class Test_build(unittest.TestCase):
     def setUp(self):
         # Test set 1
@@ -136,6 +140,7 @@ class Test_build(unittest.TestCase):
     def test_build(self):
         codon_aln1 = CodonAlign.build(self.aln1, self.seqlist1)
         codon_aln2 = CodonAlign.build(self.aln2, self.seqlist2)
+
 
 class Test_dn_ds(unittest.TestCase):
     def setUp(self):

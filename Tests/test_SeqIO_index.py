@@ -47,6 +47,7 @@ except MissingPythonDependencyError:
 
 CUR_DIR = os.getcwd()
 
+
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
@@ -127,7 +128,6 @@ if sqlite3:
             self.assertRaises(ValueError, SeqIO.index_db,
                               "Roche/triple_sff.idx",
                               ["E3MFGYR02_no_manifest.sff", "greek.sff"])
-
 
     class NewIndexTest(unittest.TestCase):
         """Check paths etc in newly built index."""

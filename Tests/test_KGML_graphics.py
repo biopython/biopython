@@ -39,6 +39,7 @@ except ImportError:
 from Bio.KEGG.KGML.KGML_parser import read
 from Bio.Graphics.KGML_vis import KGMLCanvas
 
+
 class PathwayData(object):
     """ Convenience structure for testing pathway data
     """
@@ -49,6 +50,7 @@ class PathwayData(object):
         self.pathway_image = os.path.join("KEGG", "map%s.png" % name)
         self.show_pathway_image = show_pathway_image
         self.output_stem = "Graphics/map%s" % name
+
 
 class KGMLPathwayTest(unittest.TestCase):
     """ Import the ko01100 metabolic map from a local .xml KGML file, and from
@@ -97,7 +99,6 @@ class KGMLPathwayTest(unittest.TestCase):
                 kgml_map.import_imagemap = p.show_pathway_image
                 kgml_map.draw(p.output_stem + '_original.pdf')
         
-
     def test_render_KGML_modify(self):
         """ Rendering of KGML to PDF, with modification.
         """

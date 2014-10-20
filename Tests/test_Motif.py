@@ -16,6 +16,7 @@ with warnings.catch_warnings():
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
+
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
         self.PFMin = open("Motif/SRF.pfm")

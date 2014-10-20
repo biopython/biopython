@@ -109,7 +109,6 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('NTSELDKKKFAVLLMNR--------------LIFIKFLEDK------GIV---------PRDLLRRTYEDY---KKSNVLI-NYYDAY-L----KPLFYEVLNTPEDER--KENIRT-NPYYKDIPYL---N-G-------GLFRSNNV--PNELSFTIKDNEIIGEVINFLERYKFTLSTSEGsEEVELNP-DILGYVYEKLINILAEKGQKGLGAYYTPDEITSYIAKNT-IEPIVVE----------------RFKEIIK--NWKINDINF----ST',
                          str(hsp.query.seq))
 
-
     def test_hmmpfam_23(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_001.out)"""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_001.out"), self.fmt)

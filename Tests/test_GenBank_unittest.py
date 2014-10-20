@@ -18,7 +18,6 @@ class GenBankTests(unittest.TestCase):
         self.assertRaises(ValueError, parse_invalid_product_line)
 
 
-
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

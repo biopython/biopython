@@ -170,6 +170,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
 
     print("")
     print("Checking distances between tree terminals")
+
     def terminal_neighbor_dists(self):
         """Return a list of distances between adjacent terminals."""
         def generate_pairs(self):

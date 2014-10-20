@@ -1076,6 +1076,7 @@ class DsspTests(unittest.TestCase):
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
 
+
 class NACCESSTests(unittest.TestCase):
     """Tests for NACCESS parsing etc which don't need the binary tool.
 

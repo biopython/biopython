@@ -17,6 +17,7 @@ import tempfile
 # Biopython Bio.KEGG.KGML (?)
 from Bio.KEGG.KGML.KGML_parser import read
 
+
 class PathwayData(object):
     """ Convenience structure for testing pathway data
     """
@@ -27,6 +28,7 @@ class PathwayData(object):
         self.element_counts = element_counts
         self.pathway_image = pathway_image
         self.show_pathway_image = show_pathway_image
+
 
 class KGMLPathwayTest(unittest.TestCase):
     """ Import the ko01100 metabolic map from a local .xml KGML file, and from

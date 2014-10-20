@@ -18,6 +18,7 @@ except ImportError:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingPythonDependencyError(message)
 
+
 class TestTrie(unittest.TestCase):
 
     def test_get_set(self):

@@ -84,6 +84,7 @@ class TestUAN(unittest.TestCase):
         for record in self.records:
             self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
 
+
 class TestConcatenated(unittest.TestCase):
     def test_parse1(self):
         count = 0

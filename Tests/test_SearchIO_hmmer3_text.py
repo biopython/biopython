@@ -1518,7 +1518,6 @@ class HmmscanCases(unittest.TestCase):
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
-
     def test_30_hmmscan_009(self):
         "Test parsing hmmscan 3.0 (text_30_hmmscan_009)"
         hmmer_file = get_file('text_30_hmmscan_009.out')

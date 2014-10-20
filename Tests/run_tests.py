@@ -151,6 +151,7 @@ except ImportError:
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
 
+
 #Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
 def _have_bug17666():
     """Debug function to check if Python's gzip is broken (PRIVATE).

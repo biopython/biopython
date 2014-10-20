@@ -55,7 +55,6 @@ class ProtParamTest(unittest.TestCase):
         mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein), monoisotopic=True)
         self.assertAlmostEqual(mw_1, mw_2)
 
-
     def test_aromaticity(self):
         "Test calculating protein aromaticity"
         # Old test used a number rounded to two digits, so use the same

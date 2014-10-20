@@ -350,7 +350,6 @@ class StringMethodTests(unittest.TestCase):
                                      example1 >= example2,
                                      "Checking %r >= %r" % (example1, example2))
 
-
     def test_str_getitem(self):
         """Check slicing and indexing works like a string."""
         for example1 in self._examples:

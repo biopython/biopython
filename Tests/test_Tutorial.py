@@ -106,6 +106,7 @@ class TutorialDocTestHolder(object):
     """Python doctests extracted from the Biopython Tutorial."""
     pass
 
+
 def check_deps(dependencies):
     missing = []
     for dep in dependencies:

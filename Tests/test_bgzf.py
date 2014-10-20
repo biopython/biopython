@@ -18,6 +18,7 @@ _empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
 
+
 def _have_bug17666():
     """Debug function to check if Python's gzip is broken (PRIVATE).
 

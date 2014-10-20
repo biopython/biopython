@@ -10,6 +10,7 @@ from Bio import SeqIO
 
 from seq_tests_common import compare_record
 
+
 class TestEmbl(unittest.TestCase):
     def test_annotation1(self):
         """Check parsing of annotation from EMBL files (1)."""
@@ -27,6 +28,7 @@ class TestEmbl(unittest.TestCase):
                          ['JP 2005522996-A/12', 'test-data',
                           'lot and lots of keywords for this example',
                           'multi-line keywords'])
+
 
 class TestEmblRewrite(unittest.TestCase):
     def check_rewrite(self, filename):

@@ -66,6 +66,7 @@ def _test_parse_factory(source):
     test_parse.__doc__ = "Parse the phylogenies in %s." % source
     return test_parse
     
+
 def _test_write_factory(source):
     """Tests for serialization of objects to NeXML format.
 

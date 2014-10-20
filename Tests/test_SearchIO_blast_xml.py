@@ -26,6 +26,7 @@ REFERENCE = (u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer,
              u'"Gapped BLAST and PSI-BLAST: a new generation of protein database '
              u'search programs", Nucleic Acids Res. 25:3389-3402.')
 
+
 def get_file(filename):
     """Returns the path of a test file."""
     return os.path.join(TEST_DIR, filename)

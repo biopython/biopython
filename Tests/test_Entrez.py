@@ -2868,6 +2868,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdCheckList"]["Id"][0].attributes["HasNeighbor"], "Y")
         self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"]), 0)
 
+
 class EGQueryTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EGQuery
     '''

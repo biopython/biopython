@@ -41,6 +41,7 @@ global SYSTEM
 
 SYSTEM = platform.system()
 
+
 def temp_db_filename():
     # In memory SQLite does not work with current test structure since the tests
     # expect databases to be retained between individual tests.

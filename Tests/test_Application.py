@@ -14,10 +14,12 @@ import unittest
 
 from Bio.Application import AbstractCommandline, _Argument
 
+
 class EchoApp(AbstractCommandline):
     def __init__(self, cmd="echo", **kwargs):
         self.parameters = [_Argument(["text"], "Text to echo")]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 class TestApp(unittest.TestCase):
     def test_echo(self):

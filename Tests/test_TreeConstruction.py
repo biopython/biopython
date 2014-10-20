@@ -90,6 +90,7 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertRaises(TypeError, dm.__setitem__, ('Alpha', 'Beta'), 'a')
         self.assertRaises(TypeError, dm.__setitem__, 'Alpha', ['a', 'b', 'c'])
 
+
 class DistanceCalculatorTest(unittest.TestCase):
     """Test DistanceCalculator"""
 
@@ -147,6 +148,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         ref_tree = Phylo.read('./TreeConstruction/nj.tre', 'newick')
         self.assertTrue(Consensus._equal_topology(tree, ref_tree))
         #ref_tree.close()
+
 
 class ParsimonyScorerTest(unittest.TestCase):
     """Test ParsimonyScorer"""
@@ -215,6 +217,7 @@ class NNITreeSearcherTest(unittest.TestCase):
         trees = searcher._get_neighbors(tree)
         self.assertEqual(len(trees), 2 * (5 - 3))
         Phylo.write(trees, './TreeConstruction/neighbor_trees.tre', 'newick')
+
 
 class ParsimonyTreeConstructorTest(unittest.TestCase):
     """Test ParsimonyTreeConstructor"""

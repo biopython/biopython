@@ -20,6 +20,7 @@ except ImportError:
 from Bio import SeqIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
+
 class TestPdbSeqres(unittest.TestCase):
     def test_seqres_parse(self):
         """Parse a multi-chain PDB by SEQRES entries.
@@ -79,7 +80,6 @@ class TestPdbAtom(unittest.TestCase):
                      'XXXXXXXXNEIRDRHKDIQQLERSLLELHEMFTDMSTLVASQGEMIDRIE'\
                      'FSVEQSHNYV'
         self.assertEqual(str(chains[1].seq), actual_seq)
-
 
     def test_atom_read(self):
         """Read a single-chain PDB by ATOM entries.

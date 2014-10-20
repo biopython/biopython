@@ -15,6 +15,7 @@ except ImportError:
 
 from Bio.Affy import CelFile
 
+
 class testCelFile(unittest.TestCase):
     """
     Test reading of CEL file

@@ -402,7 +402,6 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   Score=2
 """)
 
-
     def test_gap_here_only_2(self):
         """Force a bad alignment.
 
