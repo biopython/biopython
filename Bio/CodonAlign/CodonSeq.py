@@ -123,12 +123,12 @@ class CodonSeq(Seq):
             else:
                 return self._data[index*3:]
         else:
-        # This slice ensures that codon will always be the unit
-        # in slicing (it won't change to other codon if you are
-        # using reverse slicing such as [::-1]).
-        # The idea of the code below is to first map the slice
-        # to amino acid sequence and then transform it into
-        # codon sequence.
+            # This slice ensures that codon will always be the unit
+            # in slicing (it won't change to other codon if you are
+            # using reverse slicing such as [::-1]).
+            # The idea of the code below is to first map the slice
+            # to amino acid sequence and then transform it into
+            # codon sequence.
             aa_index = range(len(self)//3)
 
             def cslice(p):
