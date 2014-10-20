@@ -129,7 +129,7 @@ def read(handle):
         elif key in Motif.reference_keys:
             reference[key] = value
         elif key in Motif.multiple_value_keys:
-            if not key in annotations:
+            if key not in annotations:
                 annotations[key] = []
             annotations[key].append(value)
         else:

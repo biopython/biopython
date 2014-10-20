@@ -79,7 +79,7 @@ class NeighborSearch(object):
         o radius - float
         o level - char (A, R, C, M, S)
         """
-        if not level in entity_levels:
+        if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
         self.kdt.search(center, radius)
         indices=self.kdt.get_indices()
@@ -102,7 +102,7 @@ class NeighborSearch(object):
         o radius - float
         o level - char (A, R, C, M, S)
         """
-        if not level in entity_levels:
+        if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
         self.kdt.all_search(radius)
         indices=self.kdt.all_get_indices()

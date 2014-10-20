@@ -64,7 +64,7 @@ def __read_database_and_motifs(record, handle):
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
     line = next(handle)
-    if not 'DATABASE' in line:
+    if 'DATABASE' not in line:
         raise ValueError("Line does not contain 'DATABASE':\n%s" % line)
     words = line.strip().split()
     record.database = words[1]
@@ -76,7 +76,7 @@ def __read_database_and_motifs(record, handle):
         if 'MOTIF WIDTH' in line:
             break
     line = next(handle)
-    if not '----' in line:
+    if '----' not in line:
         raise ValueError("Line does not contain '----':\n%s" % line)
     for line in handle:
         if not line.strip():

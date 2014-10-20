@@ -212,7 +212,7 @@ class MarkovModelBuilder(object):
         if num_states_not_set > 0:
             prob = (1.0 - prob_sum) / num_states_not_set
             for state in self._state_alphabet.letters:
-                if not state in self.initial_prob:
+                if state not in self.initial_prob:
                     self.initial_prob[state] = prob
 
     def set_equal_probabilities(self):

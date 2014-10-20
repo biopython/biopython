@@ -925,7 +925,7 @@ class HSPFragment(_BaseHSP):
     ## strand properties ##
     def _prep_strand(self, strand):
         # follow SeqFeature's convention
-        if not strand in (-1, 0, 1, None):
+        if strand not in (-1, 0, 1, None):
             raise ValueError("Strand should be -1, 0, 1, or None; not %r" %
                     strand)
         return strand
@@ -966,7 +966,7 @@ class HSPFragment(_BaseHSP):
 
     ## frame properties ##
     def _prep_frame(self, frame):
-        if not frame in (-3, -2, -1, 0, 1, 2, 3, None):
+        if frame not in (-3, -2, -1, 0, 1, 2, 3, None):
             raise ValueError("Strand should be an integer between -3 and 3, "
                     "or None; not %r" % frame)
         return frame

@@ -431,10 +431,10 @@ def _open(cgi, params={}, post=False):
             del params[key]
     # Tell Entrez that we are using Biopython (or whatever the user has
     # specified explicitly in the parameters or by changing the default)
-    if not "tool" in params:
+    if "tool" not in params:
         params["tool"] = tool
     # Tell Entrez who we are
-    if not "email" in params:
+    if "email" not in params:
         if email is not None:
             params["email"] = email
         else:

@@ -1292,7 +1292,7 @@ class Nexus(object):
             raise NexusError('Unknown taxa: %s'
                              % ', '.join(set(delete).difference(set(self.taxlabels))))
         if interleave_by_partition:
-            if not interleave_by_partition in self.charpartitions:
+            if interleave_by_partition not in self.charpartitions:
                 raise NexusError('Unknown partition: %r' % interleave_by_partition)
             else:
                 partition = self.charpartitions[interleave_by_partition]
@@ -1696,7 +1696,7 @@ class Nexus(object):
             exclude.append(sys.maxsize)
             excount = 0
             for c in labels:
-                if not c in exclude:
+                if c not in exclude:
                     while c > exclude[excount]:
                         excount += 1
                     newcharlabels[c-excount] = self.charlabels[c]

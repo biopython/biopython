@@ -150,7 +150,7 @@ def __read_names(record, line):
     Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
           ------query-----        -------hit-------------
     """
-    if not "Ali1:" in line:
+    if "Ali1:" not in line:
         raise ValueError("Line does not contain 'Ali1:':\n%s" % line)
     m = __regex["names"].search(line)
     record.query = m.group(1)
@@ -175,7 +175,7 @@ def __read_lengths(record, line):
 
 
 def __read_profilewidth(record, line):
-    if not "Nseqs1" in line:
+    if "Nseqs1" not in line:
         raise ValueError("Line does not contain 'Nseqs1':\n%s" % line)
     m = __regex["profilewidth"].search(line)
     record.query_nseqs = int(m.group(1))

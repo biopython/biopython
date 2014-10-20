@@ -352,7 +352,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     seq1 = []
     seq2 = []
     for i, j in zip(seq1_codon_lst, seq2_codon_lst):
-        if (not '-' in i) and (not '-' in j):
+        if ('-' not in i) and ('-' not in j):
             seq1.append(i)
             seq2.append(j)
     dnds_func = {'ML': _ml, 'NG86': _ng86, 'LWL85': _lwl85, 'YN00': _yn00}

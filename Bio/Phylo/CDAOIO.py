@@ -177,7 +177,7 @@ class Parser(object):
 
             s, v, o = str(s), str(v), str(o)
 
-            if not s in self.obj_info: self.obj_info[s] = {}
+            if s not in self.obj_info: self.obj_info[s] = {}
             this = self.obj_info[s]
 
             try:
@@ -219,7 +219,7 @@ class Parser(object):
                 # store this node as a child of its parent, if it has one,
                 # so that the tree can be traversed from parent to children
                 parent = obj['parent']
-                if not parent in self.children:
+                if parent not in self.children:
                     self.children[parent] = []
                 self.children[parent].append(node)
 

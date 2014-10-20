@@ -166,7 +166,7 @@ class Parser(object):
                     src, tar = edge.attrib['source'], edge.attrib['target']
                     srcs.add(src)
                     tars.add(tar)
-                    if not src in node_children:
+                    if src not in node_children:
                         node_children[src] = set()
 
                     node_children[src].add(tar)
