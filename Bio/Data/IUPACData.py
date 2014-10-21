@@ -24,7 +24,7 @@ extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
 #   O = "Pyl";  pyrrolysine
 #   http://www.chem.qmul.ac.uk/iubmb/newsletter/2009.html#item35
 
-protein_letters_1to3  = {
+protein_letters_1to3 = {
     'A': 'Ala', 'C': 'Cys', 'D': 'Asp',
     'E': 'Glu', 'F': 'Phe', 'G': 'Gly', 'H': 'His',
     'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met',
