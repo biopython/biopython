@@ -76,7 +76,7 @@ class Seq(object):
     reverse_complement, transcribe, back_transcribe and translate (which are
     not applicable to sequences with a protein alphabet).
     """
-    def __init__(self, data, alphabet = Alphabet.generic_alphabet):
+    def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         """Create a Seq object.
 
         Arguments:
@@ -963,7 +963,7 @@ class Seq(object):
                                  stop_symbol, to_stop, cds)
         if stop_symbol in protein:
             alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
-                                             stop_symbol = stop_symbol)
+                                             stop_symbol=stop_symbol)
         else:
             alphabet = codon_table.protein_alphabet
         return Seq(protein, alphabet)
@@ -1103,7 +1103,7 @@ class UnknownSeq(Seq):
     >>> known_seq + unk_four
     Seq('ACGT????', Alphabet())
     """
-    def __init__(self, length, alphabet = Alphabet.generic_alphabet, character = None):
+    def __init__(self, length, alphabet=Alphabet.generic_alphabet, character=None):
         """Create a new UnknownSeq object.
 
         If character is omitted, it is determined from the alphabet, "N" for
@@ -1492,7 +1492,7 @@ class MutableSeq(object):
     Note that the MutableSeq object does not support as many string-like
     or biological methods as the Seq object.
     """
-    def __init__(self, data, alphabet = Alphabet.generic_alphabet):
+    def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         if sys.version_info[0] == 3:
             self.array_indicator = "u"
         else:
@@ -1665,7 +1665,7 @@ class MutableSeq(object):
     def insert(self, i, c):
         self.data.insert(i, c)
 
-    def pop(self, i = (-1)):
+    def pop(self, i=(-1)):
         c = self.data[i]
         del self.data[i]
         return c
