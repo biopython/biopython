@@ -53,6 +53,12 @@ if sys.version_info[0] >= 3:
     _bytes_to_string = lambda b: b.decode() # bytes to unicode string
     _string_to_bytes = lambda s: s.encode() # unicode string to bytes
 
+    def _bytes_bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a unicode string."""
+        if isinstance(s, (bytes, bytearray)):
+            return s.decode()
+        return s
+
     def _as_unicode(s):
         """Turn byte string or unicode string into a unicode string."""
         if isinstance(s, str):
@@ -157,6 +163,12 @@ else:
 
     _bytes_to_string = lambda b: b # bytes to string, i.e. do nothing
     _string_to_bytes = lambda s: str(s) # str (or unicode) to bytes string
+
+    def _bytes_bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a string."""
+        if isinstance(s, (bytes, bytearray)):
+            return str(s)
+        return s
 
     def _as_unicode(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""
