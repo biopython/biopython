@@ -148,7 +148,7 @@ class _BitString(str):
     def __rand__(self, other):
         selfint = literal_eval('0b' + self)
         otherint = literal_eval('0b' + other)
-        resultint =  otherint & selfint
+        resultint = otherint & selfint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __ror__(self, other):

@@ -11,7 +11,7 @@ import sys
 # Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 MACHEP = 0.0000001     # the machine roundoff error / tolerance
 BIG = 4.503599627370496e15
-BIGINV =  2.22044604925031308085e-16
+BIGINV = 2.22044604925031308085e-16
 
 
 def chisqprob(x, df):
