@@ -10,7 +10,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from __future__ import print_function
 
-import sys #for checking if Python 2
+import sys # for checking if Python 2
 
 from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
@@ -111,8 +111,8 @@ class SequenceWriter(object):
         Should return the number of records (as an integer).
 
         This method can only be called once."""
-        #Note when implementing this, your writer class should NOT close the
-        #file at the end, but the calling code should.
+        # Note when implementing this, your writer class should NOT close the
+        # file at the end, but the calling code should.
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
@@ -185,14 +185,14 @@ class SequentialSequenceWriter(SequenceWriter):
 
         Returns the number of records written.
         """
-        #Default implementation:
+        # Default implementation:
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
         count = 0
         for record in records:
             self.write_record(record)
             count += 1
-        #Mark as true, even if there where no records
+        # Mark as true, even if there where no records
         self._record_written = True
         return count
 

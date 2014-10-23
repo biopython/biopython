@@ -38,7 +38,7 @@ def SimpleFastaParser(handle):
     ('delta', 'CGCGC')
 
     """
-    #Skip any text before the first record (e.g. blank lines, comments)
+    # Skip any text before the first record (e.g. blank lines, comments)
     while True:
         line = handle.readline()
         if line == "":
@@ -61,9 +61,9 @@ def SimpleFastaParser(handle):
             lines.append(line.rstrip())
             line = handle.readline()
 
-        #Remove trailing whitespace, and any internal spaces
-        #(and any embedded \r which are possible in mangled files
-        #when not opened in universal read lines mode)
+        # Remove trailing whitespace, and any internal spaces
+        # (and any embedded \r which are possible in mangled files
+        # when not opened in universal read lines mode)
         yield title, "".join(lines).replace(" ", "").replace("\r", "")
 
         if not line:
@@ -123,7 +123,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
                 first_word = title.split(None, 1)[0]
             except IndexError:
                 assert not title, repr(title)
-                #Should we use SeqRecord default for no ID?
+                # Should we use SeqRecord default for no ID?
                 first_word = ""
             yield SeqRecord(Seq(sequence, alphabet),
                             id=first_word, name=first_word, description=title)
@@ -166,7 +166,7 @@ class FastaWriter(SequentialSequenceWriter):
 
         """
         SequentialSequenceWriter.__init__(self, handle)
-        #self.handle = handle
+        # self.handle = handle
         self.wrap = None
         if wrap:
             if wrap < 1:
@@ -186,9 +186,9 @@ class FastaWriter(SequentialSequenceWriter):
             id = self.clean(record.id)
             description = self.clean(record.description)
 
-            #if description[:len(id)]==id:
+            # if description[:len(id)]==id:
             if description and description.split(None, 1)[0] == id:
-                #The description includes the id at the start
+                # The description includes the id at the start
                 title = description
             elif description:
                 title = "%s %s" % (id, description)
@@ -216,8 +216,8 @@ if __name__ == "__main__":
     import os
     from Bio.Alphabet import generic_protein, generic_nucleotide
 
-    #Download the files from here:
-    #ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Nanoarchaeum_equitans
+    # Download the files from here:
+    # ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Nanoarchaeum_equitans
     fna_filename = "NC_005213.fna"
     faa_filename = "NC_005213.faa"
 
@@ -228,8 +228,8 @@ if __name__ == "__main__":
         return id, name, descr
 
     def print_record(record):
-        #See also bug 2057
-        #http://bugzilla.open-bio.org/show_bug.cgi?id=2057
+        # See also bug 2057
+        # http://bugzilla.open-bio.org/show_bug.cgi?id=2057
         print("ID:" + record.id)
         print("Name:" + record.name)
         print("Descr:" + record.description)
@@ -269,7 +269,7 @@ if __name__ == "__main__":
     from Bio._py3k import StringIO
     print("--------")
     print("FastaIterator (empty input file)")
-    #Just to make sure no errors happen
+    # Just to make sure no errors happen
     iterator = FastaIterator(StringIO(""))
     count = 0
     for record in iterator:

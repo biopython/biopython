@@ -30,7 +30,7 @@ def _make_position(location_string, offset=0):
     """
     if location_string == "?":
         return SeqFeature.UnknownPosition()
-    #Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
+    # Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
     try:
         return SeqFeature.ExactPosition(max(0, offset + int(location_string)))
     except ValueError:
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     if not os.path.isfile(example_filename):
         print("Missing test file %s" % example_filename)
     else:
-        #Try parsing it!
+        # Try parsing it!
         with open(example_filename) as handle:
             records = SwissIterator(handle)
             for record in records:

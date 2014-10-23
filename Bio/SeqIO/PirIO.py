@@ -120,7 +120,7 @@ def PirIterator(handle):
     Note that use of title2ids matches that of Bio.Fasta.SequenceParser
     but the defaults are slightly different.
     """
-    #Skip any text before the first record (e.g. blank lines, comments)
+    # Skip any text before the first record (e.g. blank lines, comments)
     while True:
         line = handle.readline()
         if line == "":
@@ -147,17 +147,17 @@ def PirIterator(handle):
                 break
             if line[0] == ">":
                 break
-            #Remove trailing whitespace, and any internal spaces
+            # Remove trailing whitespace, and any internal spaces
             lines.append(line.rstrip().replace(" ", ""))
             line = handle.readline()
         seq = "".join(lines)
         if seq[-1] != "*":
-            #Note the * terminator is present on nucleotide sequences too,
-            #it is not a stop codon!
+            # Note the * terminator is present on nucleotide sequences too,
+            # it is not a stop codon!
             raise ValueError(
                 "Sequences in PIR files should include a * terminator!")
 
-        #Return the record and then continue...
+        # Return the record and then continue...
         record = SeqRecord(Seq(seq[:-1], _pir_alphabets[pir_type]),
                            id=identifier, name=identifier,
                            description=description)
