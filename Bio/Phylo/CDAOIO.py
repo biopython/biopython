@@ -308,7 +308,7 @@ class Writer(object):
         if parent: clade.ancestors = parent.ancestors + [parent.uri]
         else: clade.ancestors = []
 
-        nUri = lambda s: rdflib.URIRef(s)#':%s' % s
+        nUri = lambda s: rdflib.URIRef(s)
         pUri = lambda s: rdflib.URIRef(qUri(s))
         tree_id = nUri('')
 

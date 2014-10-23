@@ -239,11 +239,11 @@ def _gaf20iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         yield dict(zip(GAF20FIELDS, inrec))
 
 
@@ -254,11 +254,11 @@ def _gaf10iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         yield dict(zip(GAF10FIELDS, inrec))
 
 
@@ -271,11 +271,11 @@ def _gaf10byproteiniterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         cur_rec = dict(zip(GAF10FIELDS, inrec))
         if cur_rec['DB_Object_ID'] != cur_id and cur_id:
             ret_list = copy.copy(id_rec_list)
@@ -296,11 +296,11 @@ def _gaf20byproteiniterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         cur_rec = dict(zip(GAF20FIELDS, inrec))
         if cur_rec['DB_Object_ID'] != cur_id and cur_id:
             ret_list = copy.copy(id_rec_list)

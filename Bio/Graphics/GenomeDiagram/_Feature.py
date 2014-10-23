@@ -131,7 +131,7 @@ class Feature(object):
 
             o label     Boolean, 1 if the label should be shown
         """
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
 
@@ -145,16 +145,16 @@ class Feature(object):
         self._feature = None            # Bio.SeqFeature object to wrap
         self.hide = 0                   # show by default
         self.sigil = 'BOX'
-        self.arrowhead_length = 0.5 # 50% of the box height
-        self.arrowshaft_height = 0.4 # 40% of the box height
+        self.arrowhead_length = 0.5  # 50% of the box height
+        self.arrowshaft_height = 0.4  # 40% of the box height
         self.name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']
         self.label = label
         self.label_font = 'Helvetica'
         self.label_size = 6
         self.label_color = colors.black
         self.label_angle = 45
-        self.label_position = None #Expect 'start', 'middle', or 'end' (plus aliases)
-        self.label_strand = None #Expect +1 or -1 if overriding this
+        self.label_position = None  # Expect 'start', 'middle', or 'end' (plus aliases)
+        self.label_strand = None  # Expect +1 or -1 if overriding this
 
         if feature is not None:
             self.set_feature(feature)
@@ -177,7 +177,7 @@ class Feature(object):
         """
         self.locations = []
         bounds = []
-        #This will be a list of length one for simple FeatureLocation:
+        # This will be a list of length one for simple FeatureLocation:
         for location in self._feature.location.parts:
             start = location.nofuzzy_start
             end = location.nofuzzy_end
@@ -186,7 +186,7 @@ class Feature(object):
             self.locations.append((start, end))
             bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
-        #TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
+        # TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
         if self._feature.strand is None:
             #This is the SeqFeature default (None), but the drawing code
             #only expects 0, +1 or -1.
@@ -201,7 +201,7 @@ class Feature(object):
             if qualifier in self._feature.qualifiers:
                 self.name = self._feature.qualifiers[qualifier][0]
                 break
-        #Note will be 0 to N for origin wrapping feature on genome of length N
+        # Note will be 0 to N for origin wrapping feature on genome of length N
         self.start, self.end = min(bounds), max(bounds)
 
     def get_feature(self):
@@ -225,7 +225,7 @@ class Feature(object):
 
             Set the color in which the feature will be drawn
         """
-        #TODO - Make this into the set method for a color property?
+        # TODO - Make this into the set method for a color property?
         color = self._colortranslator.translate(color)
         self.color = color
 

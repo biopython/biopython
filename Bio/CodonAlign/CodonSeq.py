@@ -162,7 +162,7 @@ class CodonSeq(Seq):
             tr_seq = self._data
         if rf_table is None:
             rf_table = self.rf_table
-        p = -1 #initiation
+        p = -1  # initiation
         for i in rf_table:
             if isinstance(i, float):
                 amino_acids.append('-')

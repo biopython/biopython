@@ -114,7 +114,7 @@ class Motif(object):
                     #dict[seq[i]]=dict[seq[i]]+1
                     try:
                         dict[seq[i]]+=1
-                    except KeyError: #we need to ignore non-alphabet letters
+                    except KeyError:  # we need to ignore non-alphabet letters
                         pass
             self._pwm.append(FreqTable.FreqTable(dict, FreqTable.COUNT, self.alphabet))
         self._pwm_is_current=1
@@ -234,7 +234,7 @@ class Motif(object):
         for offset in range(-self.length+1, motif.length):
             if offset<0:
                 p = self.dist_pearson_at(motif, -offset)
-            else: #offset>=0
+            else:  # offset>=0
                 p = motif.dist_pearson_at(self, offset)
 
             if max_p<p:
@@ -273,7 +273,7 @@ class Motif(object):
         for offset in range(-self.length+1, other.length):
             if offset<0:
                 p = self.dist_product_at(other, -offset)
-            else: #offset>=0
+            else:  # offset>=0
                 p = other.dist_product_at(self, offset)
             if max_p<p:
                 max_p=p
@@ -315,7 +315,7 @@ class Motif(object):
             if offset<0:
                 d = self.dist_dpq_at(other, -offset)
                 overlap = self.length+offset
-            else: #offset>=0
+            else:  # offset>=0
                 d = other.dist_dpq_at(self, offset)
                 overlap = other.length-offset
             overlap = min(self.length, other.length, overlap)
@@ -470,7 +470,7 @@ class Motif(object):
             #print(ln)
             try:
                 self.counts[i] = [int(x) for x in ln]
-            except ValueError: #not integers
+            except ValueError:  # not integers
                 self.counts[i] = [float(x) for x in ln]
             #print(counts[i])
 
@@ -504,8 +504,8 @@ class Motif(object):
             #print("column %i, %s" % (i, col[i]))
         #iterate over instances
         for i in range(s):
-            inst = "" #start with empty seq
-            for j in range(self.length): #iterate over positions
+            inst = ""  # start with empty seq
+            for j in range(self.length):  # iterate over positions
                 inst += col[j][i]
             #print("%i %s" % (i,inst)
             inst = Seq(inst, self.alphabet)
@@ -539,11 +539,11 @@ class Motif(object):
         The instances and pwm are OK.
         """
         while True:
-            ln = stream.readline()# read the header "$>...."
+            ln = stream.readline()  # read the header "$>...."
             if ln=="" or ln[0]!=">":
                 break
 
-            ln=stream.readline().strip()#read the actual sequence
+            ln=stream.readline().strip()  # read the actual sequence
             i=0
             while ln[i]==ln[i].lower():
                 i+=1
@@ -665,7 +665,7 @@ class Motif(object):
     def _to_transfac(self):
         """Write the representation of a motif in TRANSFAC format
         """
-        res="XX\nTY Motif\n" #header
+        res="XX\nTY Motif\n"  # header
         try:
             res+="ID %s\n"%self.name
         except:
@@ -706,13 +706,13 @@ class Motif(object):
         if letters is None:
             letters = self.alphabet.letters
         res = ""
-        if normalized: #output PWM
+        if normalized:  # output PWM
             self._pwm_is_current=False
             mat=self.pwm(laplace=False)
             for a in letters:
                 res += "\t".join(str(mat[i][a]) for i in range(self.length))
                 res += "\n"
-        else: #output counts
+        else:  # output counts
             if not self.has_counts:
                 self.make_counts_from_instances()
             mat = self.counts
