@@ -16,7 +16,7 @@ o Qualifier - Qualifiers on a Feature.
 import Bio.GenBank
 
 
-def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
+def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
     """Write a line of GenBank info that can wrap over multiple lines.
 
     This takes a line of information which can potentially wrap over
@@ -39,7 +39,7 @@ def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     info_length = Record.GB_LINE_LENGTH - indent
 
     if not information:
-        #GenBank files use "." for missing data
+        # GenBank files use "." for missing data
         return ".\n"
 
     if wrap_space:
@@ -501,7 +501,7 @@ class Record(object):
         if self.contig:
             output += Record.BASE_FORMAT % "CONTIG"
             output += _wrapped_genbank(self.contig,
-                                       Record.GB_BASE_INDENT, split_char = ',')
+                                       Record.GB_BASE_INDENT, split_char=',')
         return output
 
 
@@ -636,7 +636,7 @@ class Feature(object):
     def __str__(self):
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
         output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
-                                   split_char = ',')
+                                   split_char=',')
         for qualifier in self.qualifiers:
             output += " " * Record.GB_FEATURE_INDENT
 

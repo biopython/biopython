@@ -46,7 +46,7 @@ class InsdcScanner(object):
     However, the header and sequence sections of an EMBL file are very
     different in layout to those produced by GenBank/DDBJ."""
 
-    #These constants get redefined with sensible values in the sub classes:
+    # These constants get redefined with sensible values in the sub classes:
     RECORD_START = "XXX"  # "LOCUS       " or "ID   "
     HEADER_WIDTH = 3   # 12 or 5
     FEATURE_START_MARKERS = ["XXX***FEATURES***XXX"]
@@ -94,7 +94,7 @@ class InsdcScanner(object):
                 if self.debug > 1:
                     print("Skipping blank line before record")
             else:
-                #Ignore any header before the first ID/LOCUS line.
+                # Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
                         print("Skipping header line before record:\n" + line)
         self.line = line
@@ -120,7 +120,7 @@ class InsdcScanner(object):
                 if self.debug:
                     print("Found feature table")
                 break
-            #if line[:self.HEADER_WIDTH]==self.FEATURE_START_MARKER[:self.HEADER_WIDTH]:
+            # if line[:self.HEADER_WIDTH]==self.FEATURE_START_MARKER[:self.HEADER_WIDTH]:
             #    if self.debug : print("Found header table (?)")
             #    break
             if line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
@@ -169,8 +169,8 @@ class InsdcScanner(object):
                 line = self.handle.readline()
                 break
             if line[2:self.FEATURE_QUALIFIER_INDENT].strip() == "":
-                #This is an empty feature line between qualifiers. Empty
-                #feature lines within qualifiers are handled below (ignored).
+                # This is an empty feature line between qualifiers. Empty
+                # feature lines within qualifiers are handled below (ignored).
                 line = self.handle.readline()
                 continue
             if len(line) < self.FEATURE_QUALIFIER_INDENT:
@@ -184,12 +184,12 @@ class InsdcScanner(object):
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER:
                     line = self.handle.readline()
             else:
-                #Build up a list of the lines making up this feature:
+                # Build up a list of the lines making up this feature:
                 if line[self.FEATURE_QUALIFIER_INDENT] != " " \
                         and " " in line[self.FEATURE_QUALIFIER_INDENT:]:
-                    #The feature table design enforces a length limit on the feature keys.
-                    #Some third party files (e.g. IGMT's EMBL like files) solve this by
-                    #over indenting the location and qualifiers.
+                    # The feature table design enforces a length limit on the feature keys.
+                    # Some third party files (e.g. IGMT's EMBL like files) solve this by
+                    # over indenting the location and qualifiers.
                     feature_key, line = line[2:].strip().split(None, 1)
                     feature_lines = [line]
                     warnings.warn("Overindented %s feature?" % feature_key,
@@ -200,8 +200,8 @@ class InsdcScanner(object):
                 line = self.handle.readline()
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER \
                         or line.rstrip() == "":  # cope with blank lines in the midst of a feature
-                    #Use strip to remove any harmless trailing white space AND and leading
-                    #white space (e.g. out of spec files with too much indentation)
+                    # Use strip to remove any harmless trailing white space AND and leading
+                    # white space (e.g. out of spec files with too much indentation)
                     feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT:].strip())
                     line = self.handle.readline()
                 features.append(self.parse_feature(feature_key, feature_lines))
@@ -261,14 +261,14 @@ class InsdcScanner(object):
 
         Note that no whitespace is removed.
         """
-        #Skip any blank lines
+        # Skip any blank lines
         iterator = (x for x in lines if x)
         try:
             line = next(iterator)
 
             feature_location = line.strip()
             while feature_location[-1:] == ",":
-                #Multiline location, still more to come!
+                # Multiline location, still more to come!
                 line = next(iterator)
                 feature_location += line.strip()
 
@@ -279,53 +279,53 @@ class InsdcScanner(object):
                 if line_number == 0 and line.startswith(")"):
                     feature_location += line.strip()
                 elif line[0] == "/":
-                    #New qualifier
+                    # New qualifier
                     i = line.find("=")
                     key = line[1:i]  # does not work if i==-1
                     value = line[i + 1:]  # we ignore 'value' if i==-1
                     if i == -1:
-                        #Qualifier with no key, e.g. /pseudo
+                        # Qualifier with no key, e.g. /pseudo
                         key = line[1:]
                         qualifiers.append((key, None))
                     elif not value:
-                        #ApE can output /note=
+                        # ApE can output /note=
                         qualifiers.append((key, ""))
                     elif value == '"':
-                        #One single quote
+                        # One single quote
                         if self.debug:
                             print("Single quote %s:%s" % (key, value))
-                        #DO NOT remove the quote...
+                        # DO NOT remove the quote...
                         qualifiers.append((key, value))
                     elif value[0] == '"':
-                        #Quoted...
+                        # Quoted...
                         value_list = [value]
                         while value_list[-1][-1] != '"':
                             value_list.append(next(iterator))
                         value = '\n'.join(value_list)
-                        #DO NOT remove the quotes...
+                        # DO NOT remove the quotes...
                         qualifiers.append((key, value))
                     else:
-                        #Unquoted
-                        #if debug : print("Unquoted line %s:%s" % (key,value))
+                        # Unquoted
+                        # if debug : print("Unquoted line %s:%s" % (key,value))
                         qualifiers.append((key, value))
                 else:
-                    #Unquoted continuation
+                    # Unquoted continuation
                     assert len(qualifiers) > 0
                     assert key == qualifiers[-1][0]
-                    #if debug : print("Unquoted Cont %s:%s" % (key, line))
+                    # if debug : print("Unquoted Cont %s:%s" % (key, line))
                     if qualifiers[-1][1] is None:
                         raise StopIteration
                     qualifiers[-1] = (key, qualifiers[-1][1] + "\n" + line)
             return (feature_key, feature_location, qualifiers)
         except StopIteration:
-            #Bummer
+            # Bummer
             raise ValueError("Problem with '%s' feature:\n%s"
                              % (feature_key, "\n".join(lines)))
 
     def parse_footer(self):
         """returns a tuple containing a list of any misc strings, and the sequence"""
-        #This is a basic bit of code to scan and discard the sequence,
-        #which was useful when developing the sub classes.
+        # This is a basic bit of code to scan and discard the sequence,
+        # which was useful when developing the sub classes.
         if self.line in self.FEATURE_END_MARKERS:
             while self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
                 self.line = self.handle.readline()
@@ -402,39 +402,39 @@ class InsdcScanner(object):
         true  - Passed a record
         false - Did not find a record
         """
-        #Should work with both EMBL and GenBank files provided the
-        #equivalent Bio.GenBank._FeatureConsumer methods are called...
+        # Should work with both EMBL and GenBank files provided the
+        # equivalent Bio.GenBank._FeatureConsumer methods are called...
         self.set_handle(handle)
         if not self.find_start():
-            #Could not find (another) record
+            # Could not find (another) record
             consumer.data = None
             return False
 
-        #We use the above class methods to parse the file into a simplified format.
-        #The first line, header lines and any misc lines after the features will be
-        #dealt with by GenBank / EMBL specific derived classes.
+        # We use the above class methods to parse the file into a simplified format.
+        # The first line, header lines and any misc lines after the features will be
+        # dealt with by GenBank / EMBL specific derived classes.
 
-        #First line and header:
+        # First line and header:
         self._feed_first_line(consumer, self.line)
         self._feed_header_lines(consumer, self.parse_header())
 
-        #Features (common to both EMBL and GenBank):
+        # Features (common to both EMBL and GenBank):
         if do_features:
             self._feed_feature_table(consumer, self.parse_features(skip=False))
         else:
             self.parse_features(skip=True)  # ignore the data
 
-        #Footer and sequence
+        # Footer and sequence
         misc_lines, sequence_string = self.parse_footer()
         self._feed_misc_lines(consumer, misc_lines)
 
         consumer.sequence(sequence_string)
-        #Calls to consumer.base_number() do nothing anyway
+        # Calls to consumer.base_number() do nothing anyway
         consumer.record_end("//")
 
         assert self.line == "//"
 
-        #And we are done
+        # And we are done
         return True
 
     def parse(self, handle, do_features=True):
@@ -462,7 +462,7 @@ class InsdcScanner(object):
 
         This method is intended for use in Bio.SeqIO
         """
-        #This is a generator function
+        # This is a generator function
         while True:
             record = self.parse(handle, do_features)
             if record is None:
@@ -490,10 +490,10 @@ class InsdcScanner(object):
         """
         self.set_handle(handle)
         while self.find_start():
-            #Got an EMBL or GenBank record...
+            # Got an EMBL or GenBank record...
             self.parse_header()  # ignore header lines!
             feature_tuples = self.parse_features()
-            #self.parse_footer() # ignore footer lines!
+            # self.parse_footer() # ignore footer lines!
             while True:
                 line = self.handle.readline()
                 if not line:
@@ -502,33 +502,33 @@ class InsdcScanner(object):
                     break
             self.line = line.rstrip()
 
-            #Now go though those features...
+            # Now go though those features...
             for key, location_string, qualifiers in feature_tuples:
                 if key == "CDS":
-                    #Create SeqRecord
-                    #================
-                    #SeqRecord objects cannot be created with annotations, they
-                    #must be added afterwards.  So create an empty record and
-                    #then populate it:
+                    # Create SeqRecord
+                    # ================
+                    # SeqRecord objects cannot be created with annotations, they
+                    # must be added afterwards.  So create an empty record and
+                    # then populate it:
                     record = SeqRecord(seq=None)
                     annotations = record.annotations
 
-                    #Should we add a location object to the annotations?
-                    #I *think* that only makes sense for SeqFeatures with their
-                    #sub features...
+                    # Should we add a location object to the annotations?
+                    # I *think* that only makes sense for SeqFeatures with their
+                    # sub features...
                     annotations['raw_location'] = location_string.replace(' ', '')
 
                     for (qualifier_name, qualifier_data) in qualifiers:
                         if qualifier_data is not None \
                                 and qualifier_data[0] == '"' and qualifier_data[-1] == '"':
-                            #Remove quotes
+                            # Remove quotes
                             qualifier_data = qualifier_data[1:-1]
-                        #Append the data to the annotation qualifier...
+                        # Append the data to the annotation qualifier...
                         if qualifier_name == "translation":
                             assert record.seq is None, "Multiple translations!"
                             record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
                         elif qualifier_name == "db_xref":
-                            #its a list, possibly empty.  Its safe to extend
+                            # its a list, possibly empty.  Its safe to extend
                             record.dbxrefs.append(qualifier_data)
                         else:
                             if qualifier_data is not None:
@@ -536,11 +536,11 @@ class InsdcScanner(object):
                             try:
                                 annotations[qualifier_name] += " " + qualifier_data
                             except KeyError:
-                                #Not an addition to existing data, its the first bit
+                                # Not an addition to existing data, its the first bit
                                 annotations[qualifier_name] = qualifier_data
 
-                    #Fill in the ID, Name, Description
-                    #=================================
+                    # Fill in the ID, Name, Description
+                    # =================================
                     try:
                         record.id = annotations[tags2id[0]]
                     except KeyError:
@@ -573,7 +573,7 @@ class EmblScanner(InsdcScanner):
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 
-        #Note that the SQ line can be split into several lines...
+        # Note that the SQ line can be split into several lines...
         misc_lines = []
         while self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
             misc_lines.append(self.line)
@@ -597,7 +597,7 @@ class EmblScanner(InsdcScanner):
                 break
             assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
                 repr(self.line)
-            #Remove tailing number now, remove spaces later
+            # Remove tailing number now, remove spaces later
             seq_lines.append(line.rsplit(None, 1)[0])
             line = self.handle.readline()
         self.line = line
@@ -606,37 +606,37 @@ class EmblScanner(InsdcScanner):
     def _feed_first_line(self, consumer, line):
         assert line[:self.HEADER_WIDTH].rstrip() == "ID"
         if line[self.HEADER_WIDTH:].count(";") == 6:
-            #Looks like the semi colon separated style introduced in 2006
+            # Looks like the semi colon separated style introduced in 2006
             self._feed_first_line_new(consumer, line)
         elif line[self.HEADER_WIDTH:].count(";") == 3:
             if line.rstrip().endswith(" SQ"):
-                #EMBL-bank patent data
+                # EMBL-bank patent data
                 self._feed_first_line_patents(consumer, line)
             else:
-                #Looks like the pre 2006 style
+                # Looks like the pre 2006 style
                 self._feed_first_line_old(consumer, line)
         else:
             raise ValueError('Did not recognise the ID line layout:\n' + line)
 
     def _feed_first_line_patents(self, consumer, line):
-        #Either Non-Redundant Level 1 database records,
-        #ID <accession>; <molecule type>; <non-redundant level 1>; <cluster size L1>
-        #e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
+        # Either Non-Redundant Level 1 database records,
+        # ID <accession>; <molecule type>; <non-redundant level 1>; <cluster size L1>
+        # e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
         #
-        #Or, Non-Redundant Level 2 database records:
-        #ID <L2-accession>; <molecule type>; <non-redundant level 2>; <cluster size L2>
-        #e.g. ID   NRP0000016E; PRT; NR2; 5 SQ
+        # Or, Non-Redundant Level 2 database records:
+        # ID <L2-accession>; <molecule type>; <non-redundant level 2>; <cluster size L2>
+        # e.g. ID   NRP0000016E; PRT; NR2; 5 SQ
         fields = line[self.HEADER_WIDTH:].rstrip()[:-3].split(";")
         assert len(fields) == 4
         consumer.locus(fields[0])
         consumer.residue_type(fields[1])
         consumer.data_file_division(fields[2])
-        #TODO - Record cluster size?
+        # TODO - Record cluster size?
 
     def _feed_first_line_old(self, consumer, line):
-        #Expects an ID line in the style before 2006, e.g.
-        #ID   SC10H5 standard; DNA; PRO; 4870 BP.
-        #ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.
+        # Expects an ID line in the style before 2006, e.g.
+        # ID   SC10H5 standard; DNA; PRO; 4870 BP.
+        # ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.
         assert line[:self.HEADER_WIDTH].rstrip() == "ID"
         fields = [line[self.HEADER_WIDTH:].split(None, 1)[0]]
         fields.extend(line[self.HEADER_WIDTH:].split(None, 1)[1].split(";"))
@@ -657,9 +657,9 @@ class EmblScanner(InsdcScanner):
         self._feed_seq_length(consumer, fields[4])
 
     def _feed_first_line_new(self, consumer, line):
-        #Expects an ID line in the style introduced in 2006, e.g.
-        #ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
-        #ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.
+        # Expects an ID line in the style introduced in 2006, e.g.
+        # ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
+        # ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.
         assert line[:self.HEADER_WIDTH].rstrip() == "ID"
         fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip().split(";")]
         assert len(fields) == 7
@@ -676,22 +676,22 @@ class EmblScanner(InsdcScanner):
 
         consumer.locus(fields[0])
 
-        #Call the accession consumer now, to make sure we record
-        #something as the record.id, in case there is no AC line
+        # Call the accession consumer now, to make sure we record
+        # something as the record.id, in case there is no AC line
         consumer.accession(fields[0])
 
-        #TODO - How to deal with the version field?  At the moment the consumer
-        #will try and use this for the ID which isn't ideal for EMBL files.
+        # TODO - How to deal with the version field?  At the moment the consumer
+        # will try and use this for the ID which isn't ideal for EMBL files.
         version_parts = fields[1].split()
         if len(version_parts) == 2 \
             and version_parts[0] == "SV" \
                 and version_parts[1].isdigit():
             consumer.version_suffix(version_parts[1])
 
-        #Based on how the old GenBank parser worked, merge these two:
+        # Based on how the old GenBank parser worked, merge these two:
         consumer.residue_type(" ".join(fields[2:4]))  # TODO - Store as two fields?
 
-        #consumer.xxx(fields[4]) #TODO - What should we do with the data class?
+        # consumer.xxx(fields[4]) # TODO - What should we do with the data class?
 
         consumer.data_file_division(fields[5])
 
@@ -710,22 +710,22 @@ class EmblScanner(InsdcScanner):
             'AC': 'accession',
             'SV': 'version',  # SV line removed in June 2006, now part of ID line
             'DE': 'definition',
-            #'RN' : 'reference_num',
-            #'RC' : reference comment... TODO
-            #'RP' : 'reference_bases',
-            #'RX' : reference cross reference... DOI or Pubmed
+            # 'RN' : 'reference_num',
+            # 'RC' : reference comment... TODO
+            # 'RP' : 'reference_bases',
+            # 'RX' : reference cross reference... DOI or Pubmed
             'RG': 'consrtm',  # optional consortium
-            #'RA' : 'authors',
-            #'RT' : 'title',
+            # 'RA' : 'authors',
+            # 'RT' : 'title',
             'RL': 'journal',
             'OS': 'organism',
             'OC': 'taxonomy',
-            #'DR' : data reference
+            # 'DR' : data reference
             'CC': 'comment',
-            #'XX' : splitter
+            # 'XX' : splitter
         }
-        #We have to handle the following specially:
-        #RX (depending on reference type...)
+        # We have to handle the following specially:
+        # RX (depending on reference type...)
         for line in lines:
             line_type = line[:EMBL_INDENT].strip()
             data = line[EMBL_INDENT:].strip()
@@ -745,8 +745,8 @@ class EmblScanner(InsdcScanner):
                 parts = [bases.replace("-", " to ").strip() for bases in data.split(",") if bases.strip()]
                 consumer.reference_bases("(bases %s)" % "; ".join(parts))
             elif line_type == 'RT':
-                #Remove the enclosing quotes and trailing semi colon.
-                #Note the title can be split over multiple lines.
+                # Remove the enclosing quotes and trailing semi colon.
+                # Note the title can be split over multiple lines.
                 if data.startswith('"'):
                     data = data[1:]
                 if data.endswith('";'):
@@ -774,7 +774,7 @@ class EmblScanner(InsdcScanner):
                 value = value.strip()
                 if key == "PUBMED":
                     consumer.pubmed_id(value)
-                #TODO - Handle other reference types (here and in BioSQL bindings)
+                # TODO - Handle other reference types (here and in BioSQL bindings)
             elif line_type == 'CC':
                 # Have to pass a list of strings for this one (not just a string)
                 consumer.comment([data])
@@ -787,8 +787,8 @@ class EmblScanner(InsdcScanner):
                 #
                 # TODO - How should we store any secondary identifier?
                 parts = data.rstrip(".").split(";")
-                #Turn it into "database_identifier:primary_identifier" to
-                #mimic the GenBank parser. e.g. "MGI:98599"
+                # Turn it into "database_identifier:primary_identifier" to
+                # mimic the GenBank parser. e.g. "MGI:98599"
                 consumer.dblink("%s:%s" % (parts[0].strip(),
                                            parts[1].strip()))
             elif line_type == 'RA':
@@ -802,14 +802,14 @@ class EmblScanner(InsdcScanner):
             elif line_type == 'KW':
                 consumer.keywords(data.rstrip(";"))
             elif line_type in consumer_dict:
-                #Its a semi-automatic entry!
+                # Its a semi-automatic entry!
                 getattr(consumer, consumer_dict[line_type])(data)
             else:
                 if self.debug:
                     print("Ignoring EMBL header line:\n%s" % line)
 
     def _feed_misc_lines(self, consumer, lines):
-        #TODO - Should we do something with the information on the SQ line(s)?
+        # TODO - Should we do something with the information on the SQ line(s)?
         lines.append("")
         line_iter = iter(lines)
         try:
@@ -822,19 +822,19 @@ class EmblScanner(InsdcScanner):
                         if not line:
                             break
                         elif line.startswith("CO   "):
-                            #Don't need to preseve the whitespace here.
+                            # Don't need to preseve the whitespace here.
                             contig_location += line[5:].strip()
                         else:
                             raise ValueError('Expected CO (contig) continuation line, got:\n' + line)
                     consumer.contig_location(contig_location)
                 if line.startswith("SQ   Sequence "):
-                    #e.g.
-                    #SQ   Sequence 219 BP; 82 A; 48 C; 33 G; 45 T; 11 other;
+                    # e.g.
+                    # SQ   Sequence 219 BP; 82 A; 48 C; 33 G; 45 T; 11 other;
                     #
-                    #Or, EMBL-bank patent, e.g.
-                    #SQ   Sequence 465 AA; 3963407aa91d3a0d622fec679a4524e0; MD5;
+                    # Or, EMBL-bank patent, e.g.
+                    # SQ   Sequence 465 AA; 3963407aa91d3a0d622fec679a4524e0; MD5;
                     self._feed_seq_length(consumer, line[14:].rstrip().rstrip(";").split(";", 1)[0])
-                    #TODO - Record the checksum etc?
+                    # TODO - Record the checksum etc?
             return
         except StopIteration:
             raise ValueError("Problem in misc lines before sequence")
@@ -894,8 +894,8 @@ class _ImgtScanner(EmblScanner):
                 line = self.handle.readline()
                 break
             if line[2:self.FEATURE_QUALIFIER_INDENT].strip() == "":
-                #This is an empty feature line between qualifiers. Empty
-                #feature lines within qualifiers are handled below (ignored).
+                # This is an empty feature line between qualifiers. Empty
+                # feature lines within qualifiers are handled below (ignored).
                 line = self.handle.readline()
                 continue
 
@@ -908,28 +908,28 @@ class _ImgtScanner(EmblScanner):
                 try:
                     feature_key, location_start = line[2:].strip().split()
                 except ValueError:
-                    #e.g. "FT   TRANSMEMBRANE-REGION2163..2240\n"
-                    #Assume indent of 25 as per IMGT spec, with the location
-                    #start in column 26 (one-based).
+                    # e.g. "FT   TRANSMEMBRANE-REGION2163..2240\n"
+                    # Assume indent of 25 as per IMGT spec, with the location
+                    # start in column 26 (one-based).
                     feature_key = line[2:25].strip()
                     location_start = line[25:].strip()
                 feature_lines = [location_start]
                 line = self.handle.readline()
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER \
                         or line.rstrip() == "":  # cope with blank lines in the midst of a feature
-                    #Use strip to remove any harmless trailing white space AND and leading
-                    #white space (copes with 21 or 26 indents and orther variants)
+                    # Use strip to remove any harmless trailing white space AND and leading
+                    # white space (copes with 21 or 26 indents and orther variants)
                     assert line[:2] == "FT"
                     feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT:].strip())
                     line = self.handle.readline()
                 feature_key, location, qualifiers = \
                     self.parse_feature(feature_key, feature_lines)
-                #Try to handle known problems with IMGT locations here:
+                # Try to handle known problems with IMGT locations here:
                 if ">" in location:
-                    #Nasty hack for common IMGT bug, should be >123 not 123>
-                    #in a location string. At least here the meaning is clear,
-                    #and since it is so common I don't want to issue a warning
-                    #warnings.warn("Feature location %s is invalid, "
+                    # Nasty hack for common IMGT bug, should be >123 not 123>
+                    # in a location string. At least here the meaning is clear,
+                    # and since it is so common I don't want to issue a warning
+                    # warnings.warn("Feature location %s is invalid, "
                     #              "moving greater than sign before position"
                     #              % location, BiopythonParserWarning)
                     location = bad_position_re.sub(r'>\1', location)
@@ -967,8 +967,8 @@ class GenBankScanner(InsdcScanner):
         assert self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 
-        #Now just consume the sequence lines until reach the // marker
-        #or a CONTIG line
+        # Now just consume the sequence lines until reach the // marker
+        # or a CONTIG line
         seq_lines = []
         line = self.line
         while True:
@@ -999,7 +999,7 @@ class GenBankScanner(InsdcScanner):
             line = self.handle.readline()
 
         self.line = line
-        #Seq("".join(seq_lines), self.alphabet)
+        # Seq("".join(seq_lines), self.alphabet)
         return (misc_lines, "".join(seq_lines).replace(" ", ""))
 
     def _feed_first_line(self, consumer, line):
@@ -1020,11 +1020,11 @@ class GenBankScanner(InsdcScanner):
         assert line[0:GENBANK_INDENT] == 'LOCUS       ', \
             'LOCUS line does not start correctly:\n' + line
 
-        #Have to break up the locus line, and handle the different bits of it.
-        #There are at least two different versions of the locus line...
+        # Have to break up the locus line, and handle the different bits of it.
+        # There are at least two different versions of the locus line...
         if line[29:33] in [' bp ', ' aa ', ' rc '] and line[55:62] == '       ':
-            #Old... note we insist on the 55:62 being empty to avoid trying
-            #to parse space separated LOCUS lines from Ensembl etc, see below.
+            # Old... note we insist on the 55:62 being empty to avoid trying
+            # to parse space separated LOCUS lines from Ensembl etc, see below.
             #
             #    Positions  Contents
             #    ---------  --------
@@ -1042,7 +1042,7 @@ class GenBankScanner(InsdcScanner):
             #    55:62      space
             #    62:73      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
-            #assert line[29:33] in [' bp ', ' aa ',' rc '] , \
+            # assert line[29:33] in [' bp ', ' aa ',' rc '] , \
             #       'LOCUS line does not contain size units at expected position:\n' + line
             assert line[41:42] == ' ', \
                 'LOCUS line does not contain space at position 42:\n' + line
@@ -1050,7 +1050,7 @@ class GenBankScanner(InsdcScanner):
                 'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
             assert line[51:52] == ' ', \
                 'LOCUS line does not contain space at position 52:\n' + line
-            #assert line[55:62] == '       ', \
+            # assert line[55:62] == '       ', \
             #      'LOCUS line does not contain spaces from position 56 to 62:\n' + line
             if line[62:73].strip():
                 assert line[64:65] == '-', \
@@ -1066,18 +1066,18 @@ class GenBankScanner(InsdcScanner):
                 'Cannot parse the name and length in the LOCUS line:\n' + line
             assert len(name_and_length) != 1, \
                 'Name and length collide in the LOCUS line:\n' + line
-            #Should be possible to split them based on position, if
-            #a clear definition of the standard exists THAT AGREES with
-            #existing files.
+            # Should be possible to split them based on position, if
+            # a clear definition of the standard exists THAT AGREES with
+            # existing files.
             consumer.locus(name_and_length[0])
             consumer.size(name_and_length[1])
-            #consumer.residue_type(line[33:41].strip())
+            # consumer.residue_type(line[33:41].strip())
 
             if line[33:51].strip() == "" and line[29:33] == ' aa ':
-                #Amino acids -> protein (even if there is no residue type given)
-                #We want to use a protein alphabet in this case, rather than a
-                #generic one. Not sure if this is the best way to achieve this,
-                #but it works because the scanner checks for this:
+                # Amino acids -> protein (even if there is no residue type given)
+                # We want to use a protein alphabet in this case, rather than a
+                # generic one. Not sure if this is the best way to achieve this,
+                # but it works because the scanner checks for this:
                 consumer.residue_type("PROTEIN")
             else:
                 consumer.residue_type(line[33:51].strip())
@@ -1087,8 +1087,8 @@ class GenBankScanner(InsdcScanner):
                 consumer.date(line[62:73])
         elif line[40:44] in [' bp ', ' aa ', ' rc '] \
                 and line[54:64].strip() in ['', 'linear', 'circular']:
-            #New... linear/circular/big blank test should avoid EnsEMBL style
-            #LOCUS line being treated like a proper column based LOCUS line.
+            # New... linear/circular/big blank test should avoid EnsEMBL style
+            # LOCUS line being treated like a proper column based LOCUS line.
             #
             #    Positions  Contents
             #    ---------  --------
@@ -1137,17 +1137,17 @@ class GenBankScanner(InsdcScanner):
                 'Cannot parse the name and length in the LOCUS line:\n' + line
             assert len(name_and_length) != 1, \
                 'Name and length collide in the LOCUS line:\n' + line
-            #Should be possible to split them based on position, if
-            #a clear definition of the stand exists THAT AGREES with
-            #existing files.
+            # Should be possible to split them based on position, if
+            # a clear definition of the stand exists THAT AGREES with
+            # existing files.
             consumer.locus(name_and_length[0])
             consumer.size(name_and_length[1])
 
             if line[44:54].strip() == "" and line[40:44] == ' aa ':
-                #Amino acids -> protein (even if there is no residue type given)
-                #We want to use a protein alphabet in this case, rather than a
-                #generic one. Not sure if this is the best way to achieve this,
-                #but it works because the scanner checks for this:
+                # Amino acids -> protein (even if there is no residue type given)
+                # We want to use a protein alphabet in this case, rather than a
+                # generic one. Not sure if this is the best way to achieve this,
+                # but it works because the scanner checks for this:
                 consumer.residue_type(("PROTEIN " + line[54:63]).strip())
             else:
                 consumer.residue_type(line[44:63].strip())
@@ -1156,13 +1156,13 @@ class GenBankScanner(InsdcScanner):
             if line[68:79].strip():
                 consumer.date(line[68:79])
         elif line[GENBANK_INDENT:].strip().count(" ") == 0:
-            #Truncated LOCUS line, as produced by some EMBOSS tools - see bug 1762
+            # Truncated LOCUS line, as produced by some EMBOSS tools - see bug 1762
             #
-            #e.g.
+            # e.g.
             #
             #    "LOCUS       U00096"
             #
-            #rather than:
+            # rather than:
             #
             #    "LOCUS       U00096               4639675 bp    DNA     circular BCT"
             #
@@ -1174,14 +1174,14 @@ class GenBankScanner(InsdcScanner):
             if line[GENBANK_INDENT:].strip() != "":
                 consumer.locus(line[GENBANK_INDENT:].strip())
             else:
-                #Must just have just "LOCUS       ", is this even legitimate?
-                #We should be able to continue parsing... we need real world testcases!
+                # Must just have just "LOCUS       ", is this even legitimate?
+                # We should be able to continue parsing... we need real world testcases!
                 warnings.warn("Minimal LOCUS line found - is this "
                               "correct?\n:%r" % line, BiopythonParserWarning)
         elif len(line.split()) == 8 and line.split()[3] in ("aa", "bp") and \
              line.split()[5] in ('linear', 'circular'):
             # Cope with invalidly spaced GenBank LOCUS lines like
-            #LOCUS       AB070938          6497 bp    DNA     linear   BCT 11-OCT-2001
+            # LOCUS       AB070938          6497 bp    DNA     linear   BCT 11-OCT-2001
             splitline = line.split()
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
@@ -1193,14 +1193,14 @@ class GenBankScanner(InsdcScanner):
                           "Some fields may be wrong." % (line, splitline[1],
                           splitline[2], splitline[4]), BiopythonParserWarning)
         elif len(line.split()) == 7 and line.split()[3] in ["aa", "bp"]:
-            #Cope with EnsEMBL genbank files which use space separation rather
-            #than the expected column based layout. e.g.
-            #LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011
-            #LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011
-            #LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011
-            #LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011
-            #Notice that the 'bp' can occur in the position expected by either
-            #the old or the new fixed column standards (parsed above).
+            # Cope with EnsEMBL genbank files which use space separation rather
+            # than the expected column based layout. e.g.
+            # LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011
+            # LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011
+            # LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011
+            # LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011
+            # Notice that the 'bp' can occur in the position expected by either
+            # the old or the new fixed column standards (parsed above).
             splitline = line.split()
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
@@ -1208,16 +1208,16 @@ class GenBankScanner(InsdcScanner):
             consumer.data_file_division(splitline[5])
             consumer.date(splitline[6])
         elif len(line.split()) >= 4 and line.split()[3] in ["aa", "bp"]:
-            #Cope with EMBOSS seqret output where it seems the locus id can cause
-            #the other fields to overflow.  We just IGNORE the other fields!
+            # Cope with EMBOSS seqret output where it seems the locus id can cause
+            # the other fields to overflow.  We just IGNORE the other fields!
             warnings.warn("Malformed LOCUS line found - is this "
                           "correct?\n:%r" % line, BiopythonParserWarning)
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
         elif len(line.split()) >= 4 and line.split()[-1] in ["aa", "bp"]:
-            #Cope with pseudo-GenBank files like this:
+            # Cope with pseudo-GenBank files like this:
             #   "LOCUS       RNA5 complete       1718 bp"
-            #Treat everything between LOCUS and the size as the identifier.
+            # Treat everything between LOCUS and the size as the identifier.
             warnings.warn("Malformed LOCUS line found - is this "
                           "correct?\n:%r" % line, BiopythonParserWarning)
             consumer.locus(line[5:].rsplit(None, 2)[0].strip())
@@ -1226,10 +1226,10 @@ class GenBankScanner(InsdcScanner):
             raise ValueError('Did not recognise the LOCUS line layout:\n' + line)
 
     def _feed_header_lines(self, consumer, lines):
-        #Following dictionary maps GenBank lines to the associated
-        #consumer methods - the special cases like LOCUS where one
-        #genbank line triggers several consumer calls have to be
-        #handled individually.
+        # Following dictionary maps GenBank lines to the associated
+        # consumer methods - the special cases like LOCUS where one
+        # genbank line triggers several consumer calls have to be
+        # handled individually.
         GENBANK_INDENT = self.HEADER_WIDTH
         GENBANK_SPACER = " " * GENBANK_INDENT
         consumer_dict = {
@@ -1250,12 +1250,12 @@ class GenBankScanner(InsdcScanner):
             'MEDLINE': 'medline_id',
             'PUBMED': 'pubmed_id',
             'REMARK': 'remark'}
-        #We have to handle the following specially:
-        #ORIGIN (locus, size, residue_type, data_file_division and date)
-        #COMMENT (comment)
-        #VERSION (version and gi)
-        #REFERENCE (eference_num and reference_bases)
-        #ORGANISM (organism and taxonomy)
+        # We have to handle the following specially:
+        # ORIGIN (locus, size, residue_type, data_file_division and date)
+        # COMMENT (comment)
+        # VERSION (version and gi)
+        # REFERENCE (eference_num and reference_bases)
+        # ORGANISM (organism and taxonomy)
         lines = [_f for _f in lines if _f]
         lines.append("")  # helps avoid getting StopIteration all the time
         line_iter = iter(lines)
@@ -1268,8 +1268,8 @@ class GenBankScanner(InsdcScanner):
                 data = line[GENBANK_INDENT:].strip()
 
                 if line_type == 'VERSION':
-                    #Need to call consumer.version(), and maybe also consumer.gi() as well.
-                    #e.g.
+                    # Need to call consumer.version(), and maybe also consumer.gi() as well.
+                    # e.g.
                     # VERSION     AC007323.5  GI:6587720
                     while '  ' in data:
                         data = data.replace('  ', ' ')
@@ -1280,37 +1280,37 @@ class GenBankScanner(InsdcScanner):
                             print("Version [" + data.split(' GI:')[0] + "], gi [" + data.split(' GI:')[1] + "]")
                         consumer.version(data.split(' GI:')[0])
                         consumer.gi(data.split(' GI:')[1])
-                    #Read in the next line!
+                    # Read in the next line!
                     line = next(line_iter)
                 elif line_type == 'REFERENCE':
                     if self.debug > 1:
                         print("Found reference [" + data + "]")
-                    #Need to call consumer.reference_num() and consumer.reference_bases()
-                    #e.g.
+                    # Need to call consumer.reference_num() and consumer.reference_bases()
+                    # e.g.
                     # REFERENCE   1  (bases 1 to 86436)
                     #
-                    #Note that this can be multiline, see Bug 1968, e.g.
+                    # Note that this can be multiline, see Bug 1968, e.g.
                     #
                     # REFERENCE   42 (bases 1517 to 1696; 3932 to 4112; 17880 to 17975; 21142 to
                     #             28259)
                     #
-                    #For such cases we will call the consumer once only.
+                    # For such cases we will call the consumer once only.
                     data = data.strip()
 
-                    #Read in the next line, and see if its more of the reference:
+                    # Read in the next line, and see if its more of the reference:
                     while True:
                         line = next(line_iter)
                         if line[:GENBANK_INDENT] == GENBANK_SPACER:
-                            #Add this continuation to the data string
+                            # Add this continuation to the data string
                             data += " " + line[GENBANK_INDENT:]
                             if self.debug > 1:
                                 print("Extended reference text [" + data + "]")
                         else:
-                            #End of the reference, leave this text in the variable "line"
+                            # End of the reference, leave this text in the variable "line"
                             break
 
-                    #We now have all the reference line(s) stored in a string, data,
-                    #which we pass to the consumer
+                    # We now have all the reference line(s) stored in a string, data,
+                    # which we pass to the consumer
                     while '  ' in data:
                         data = data.replace('  ', ' ')
                     if ' ' not in data:
@@ -1323,14 +1323,14 @@ class GenBankScanner(InsdcScanner):
                         consumer.reference_num(data[:data.find(' ')])
                         consumer.reference_bases(data[data.find(' ') + 1:])
                 elif line_type == 'ORGANISM':
-                    #Typically the first line is the organism, and subsequent lines
-                    #are the taxonomy lineage.  However, given longer and longer
-                    #species names (as more and more strains and sub strains get
-                    #sequenced) the oragnism name can now get wrapped onto multiple
-                    #lines.  The NCBI say we have to recognise the lineage line by
-                    #the presence of semi-colon delimited entries.  In the long term,
-                    #they are considering adding a new keyword (e.g. LINEAGE).
-                    #See Bug 2591 for details.
+                    # Typically the first line is the organism, and subsequent lines
+                    # are the taxonomy lineage.  However, given longer and longer
+                    # species names (as more and more strains and sub strains get
+                    # sequenced) the oragnism name can now get wrapped onto multiple
+                    # lines.  The NCBI say we have to recognise the lineage line by
+                    # the presence of semi-colon delimited entries.  In the long term,
+                    # they are considering adding a new keyword (e.g. LINEAGE).
+                    # See Bug 2591 for details.
                     organism_data = data
                     lineage_data = ""
                     while True:
@@ -1341,7 +1341,7 @@ class GenBankScanner(InsdcScanner):
                             else:
                                 organism_data += " " + line[GENBANK_INDENT:].strip()
                         else:
-                            #End of organism and taxonomy
+                            # End of organism and taxonomy
                             break
                     consumer.organism(organism_data)
                     if lineage_data.strip() == "" and self.debug > 1:
@@ -1351,8 +1351,8 @@ class GenBankScanner(InsdcScanner):
                 elif line_type == 'COMMENT':
                     if self.debug > 1:
                         print("Found comment")
-                    #This can be multiline, and should call consumer.comment() once
-                    #with a list where each entry is a line.
+                    # This can be multiline, and should call consumer.comment() once
+                    # with a list where each entry is a line.
                     comment_list = []
                     comment_list.append(data)
                     while True:
@@ -1363,32 +1363,32 @@ class GenBankScanner(InsdcScanner):
                             if self.debug > 2:
                                 print("Comment continuation [" + data + "]")
                         else:
-                            #End of the comment
+                            # End of the comment
                             break
                     consumer.comment(comment_list)
                     del comment_list
                 elif line_type in consumer_dict:
-                    #Its a semi-automatic entry!
-                    #Now, this may be a multi line entry...
+                    # Its a semi-automatic entry!
+                    # Now, this may be a multi line entry...
                     while True:
                         line = next(line_iter)
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             data += ' ' + line[GENBANK_INDENT:]
                         else:
-                            #We now have all the data for this entry:
+                            # We now have all the data for this entry:
                             getattr(consumer, consumer_dict[line_type])(data)
-                            #End of continuation - return to top of loop!
+                            # End of continuation - return to top of loop!
                             break
                 else:
                     if self.debug:
                         print("Ignoring GenBank header line:\n" % line)
-                    #Read in next line
+                    # Read in next line
                     line = next(line_iter)
         except StopIteration:
             raise ValueError("Problem in header")
 
     def _feed_misc_lines(self, consumer, lines):
-        #Deals with a few misc lines between the features and the sequence
+        # Deals with a few misc lines between the features and the sequence
         GENBANK_INDENT = self.HEADER_WIDTH
         GENBANK_SPACER = " " * GENBANK_INDENT
         lines.append("")
@@ -1421,10 +1421,10 @@ class GenBankScanner(InsdcScanner):
                         if not line:
                             break
                         elif line[:GENBANK_INDENT] == GENBANK_SPACER:
-                            #Don't need to preseve the whitespace here.
+                            # Don't need to preseve the whitespace here.
                             contig_location += line[GENBANK_INDENT:].rstrip()
                         elif line.startswith('ORIGIN'):
-                            #Strange, seen this in GenPept files via Entrez gbwithparts
+                            # Strange, seen this in GenPept files via Entrez gbwithparts
                             line = line[6:].strip()
                             if line:
                                 consumer.origin_name(line)
@@ -1519,7 +1519,7 @@ FEATURES             Location/Qualifiers
                      KDDQIITETEVFDEFRSSLNSLIMHLEKLPKVNDDTITFEAVINAIELELGHKLDRNR
                      RVDSLEEKAEIERDSNWVKCQEDENLPDNNGFQPPKIKLTSLVGSDVGPLIIHQFSEK
                      LISGDDKILNGVYSQYEEGESIFGSLF"
-ORIGIN      
+ORIGIN
         1 gatcctccat atacaacggt atctccacct caggtttaga tctcaacaac ggaaccattg
        61 ccgacatgag acagttaggt atcgtcgaga gttacaagct aaaacgagca gtagtcagct
       121 ctgcatctga agccgctgaa gttctactaa gggtggataa catcatccgt gcaagaccaa
