@@ -12,6 +12,7 @@ adam consensus.
 from __future__ import division
 
 import random
+import itertools
 
 from ast import literal_eval
 from Bio.Phylo import BaseTree
@@ -220,14 +221,19 @@ def strict_consensus(trees):
     """Search strict consensus tree from multiple trees.
 
     :Parameters:
-        trees: list
-            list of trees to produce consensus tree.
+        trees: iterable
+            iterable of trees to produce consensus tree.
     """
-    terms = trees[0].get_terminals()
-    bitstr_counts = _count_clades(trees)
+    trees_iter = iter(trees)
+    first_tree = next(trees_iter)
+
+    terms = first_tree.get_terminals()
+    bitstr_counts, tree_count = _count_clades(
+        itertools.chain([first_tree], trees_iter))
+
     # Store bitstrs for strict clades
     strict_bitstrs = [bitstr for bitstr, t in bitstr_counts.items()
-                      if t[0] == len(trees)]
+                      if t[0] == tree_count]
     strict_bitstrs.sort(key=lambda bitstr: bitstr.count('1'), reverse=True)
     # Create root
     root = BaseTree.Clade()
@@ -274,11 +280,16 @@ def majority_consensus(trees, cutoff=0):
     that clade.
 
     :Parameters:
-        trees: list
-            list of trees to produce consensus tree.
+        trees: iterable
+            iterable of trees to produce consensus tree.
     """
-    terms = trees[0].get_terminals()
-    bitstr_counts = _count_clades(trees)
+    tree_iter = iter(trees)
+    first_tree = next(tree_iter)
+
+    terms = first_tree.get_terminals()
+    bitstr_counts, tree_count = _count_clades(
+        itertools.chain([first_tree], tree_iter))
+
     # Sort bitstrs by descending #occurrences, then #tips, then tip order
     bitstrs = sorted(bitstr_counts.keys(),
                      key=lambda bitstr: (bitstr_counts[bitstr][0],
@@ -296,7 +307,7 @@ def majority_consensus(trees, cutoff=0):
     for bitstr in bitstrs[1:]:
         # apply majority rule
         count_in_trees, branch_length_sum = bitstr_counts[bitstr]
-        confidence = 100.0 * count_in_trees / len(trees)
+        confidence = 100.0 * count_in_trees / tree_count
         if confidence < cutoff * 100.0:
             break
         clade_terms = [terms[i] for i in bitstr.index_one()]
@@ -457,11 +468,17 @@ def _sub_clade(clade, term_names):
 def _count_clades(trees):
     """Count distinct clades (different sets of terminal names) in the trees.
 
-    Return a dict of bitstring (representing clade) and a tuple of its count of
-    occurrences and sum of branch length for that clade.
+    Return a tuple first a dict of bitstring (representing clade) and a tuple of its count of
+    occurrences and sum of branch length for that clade, second the number of trees processed.
+
+    :Parameters:
+        trees: iterable
+            An iterable that returns the trees to count
     """
     bitstrs = {}
+    tree_count = 0
     for tree in trees:
+        tree_count += 1
         clade_bitstrs = _tree_to_bitstrs(tree)
         for clade in tree.find_clades(terminal=False):
             bitstr = clade_bitstrs[clade]
@@ -472,22 +489,34 @@ def _count_clades(trees):
                 bitstrs[bitstr] = (count, sum_bl)
             else:
                 bitstrs[bitstr] = (1, clade.branch_length or 0)
-    return bitstrs
+    return bitstrs, tree_count
 
 
-def get_support(target_tree, trees):
+def get_support(target_tree, trees, len_trees=None):
     """Calculate branch support given a target tree and a list of bootstrap
     replicate trees
 
     :Parameters:
         target_tree: Tree
-        trees: list
-            list of trees calculate branch support.
+        trees: iterable
+            iterable of trees used to calculate branch support.
+        len_trees: int
+            optional count of replicates in trees. len_trees must be provided
+            when len(trees) is not a valid operation.
     """
     term_names = sorted(term.name
                         for term in target_tree.find_clades(terminal=True))
     bitstrs = {}
-    size = len(trees)
+
+    size = len_trees
+    if size is None:
+        try:
+            size = len(trees)
+        except TypeError:
+            raise TypeError("Trees does not support len(trees), "
+                "you must provide the number of replicates in trees "
+                "as the optional parameter len_trees.")
+
     for clade in target_tree.find_clades(terminal=False):
         bitstr = _clade_to_bitstr(clade, term_names)
         bitstrs[bitstr] = (clade, 0)
