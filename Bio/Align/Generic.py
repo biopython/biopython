@@ -126,14 +126,14 @@ class Alignment(object):
         This provides a simple way to visually distinguish alignments of
         the same size.
         """
-        #A doctest for __repr__ would be nice, but __class__ comes out differently
-        #if run via the __main__ trick.
+        # A doctest for __repr__ would be nice, but __class__ comes out differently
+        # if run via the __main__ trick.
         return "<%s instance (%i records of length %i, %s) at %x>" % \
                (self.__class__, len(self._records),
                 self.get_alignment_length(), repr(self._alphabet), id(self))
-        #This version is useful for doing eval(repr(alignment)),
-        #but it can be VERY long:
-        #return "%s(%s, %s)" \
+        # This version is useful for doing eval(repr(alignment)),
+        # but it can be VERY long:
+        # return "%s(%s, %s)" \
         #       % (self.__class__, repr(self._records), repr(self._alphabet))
 
     def format(self, format):
@@ -168,8 +168,8 @@ class Alignment(object):
 
         For Python 2.6, 3.0 or later see also the built in format() function.
         """
-        #See also the __format__ added for Python 2.6 / 3.0, PEP 3101
-        #See also the SeqRecord class and its format() method using Bio.SeqIO
+        # See also the __format__ added for Python 2.6 / 3.0, PEP 3101
+        # See also the SeqRecord class and its format() method using Bio.SeqIO
         return self.__format__(format)
 
     def __format__(self, format_spec):
@@ -186,7 +186,7 @@ class Alignment(object):
             AlignIO.write([self], handle, format_spec)
             return handle.getvalue()
         else:
-            #Follow python convention and default to using __str__
+            # Follow python convention and default to using __str__
             return str(self)
 
     def get_all_seqs(self):
@@ -289,8 +289,8 @@ class Alignment(object):
 
         return max_length
 
-    def add_sequence(self, descriptor, sequence, start = None, end = None,
-                     weight = 1.0):
+    def add_sequence(self, descriptor, sequence, start=None, end=None,
+                     weight=1.0):
         """Add a sequence to the alignment.
 
         This doesn't do any kind of alignment, it just adds in the sequence
@@ -314,14 +314,14 @@ class Alignment(object):
         """
         new_seq = Seq(sequence, self._alphabet)
 
-        #We are now effectively using the SeqRecord's .id as
-        #the primary identifier (e.g. in Bio.SeqIO) so we should
-        #populate it with the descriptor.
-        #For backwards compatibility, also store this in the
-        #SeqRecord's description property.
+        # We are now effectively using the SeqRecord's .id as
+        # the primary identifier (e.g. in Bio.SeqIO) so we should
+        # populate it with the descriptor.
+        # For backwards compatibility, also store this in the
+        # SeqRecord's description property.
         new_record = SeqRecord(new_seq,
-                               id = descriptor,
-                               description = descriptor)
+                               id=descriptor,
+                               description=descriptor)
 
         # hack! We really need to work out how to deal with annotations
         # and features in biopython. Right now, I'll just use the
@@ -355,7 +355,7 @@ class Alignment(object):
         >>> align.get_column(3)
         'G-G'
         """
-        #TODO - Support negative indices?
+        # TODO - Support negative indices?
         col_str = ''
         assert col >= 0 and col <= self.get_alignment_length()
         for rec in self._records:
@@ -420,14 +420,14 @@ class Alignment(object):
         a second column based index is under discussion for a future update.
         """
         if isinstance(index, int):
-            #e.g. result = align[x]
-            #Return a SeqRecord
+            # e.g. result = align[x]
+            # Return a SeqRecord
             return self._records[index]
         elif isinstance(index, slice):
-            #e.g. sub_aling = align[i:j:k]
-            #Return a new Alignment using only the specified records.
-            #TODO - See Bug 2554 for changing the __init__ method
-            #to allow us to do this more cleanly.
+            # e.g. sub_aling = align[i:j:k]
+            # Return a new Alignment using only the specified records.
+            # TODO - See Bug 2554 for changing the __init__ method
+            # to allow us to do this more cleanly.
             sub_align = Alignment(self._alphabet)
             sub_align._records = self._records[index]
             return sub_align

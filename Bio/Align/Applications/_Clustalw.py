@@ -38,7 +38,7 @@ class ClustalwCommandline(AbstractCommandline):
 
     Last checked against versions: 1.83 and 2.1
     """
-    #TODO - Should we default to cmd="clustalw2" now?
+    # TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
         self.parameters = \
             [
@@ -51,7 +51,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(["-profile2", "-PROFILE2", "PROFILE2", "profile2"],
                     "Profiles (old alignment).",
                     filename=True),
-            ################## VERBS (do things) #############################
+            # ################# VERBS (do things) #############################
             _Switch(["-options", "-OPTIONS", "OPTIONS", "options"],
                     "List the command line parameters"),
             _Switch(["-help", "-HELP", "HELP", "help"],
@@ -71,12 +71,12 @@ class ClustalwCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int)),
             _Switch(["-convert", "-CONVERT", "CONVERT", "convert"],
                     "Output the input sequences in a different file format."),
-            ##################### PARAMETERS (set things) #########################
+            # #################### PARAMETERS (set things) #########################
             # ***General settings:****
             # Makes no sense in biopython
-            #_Option(["-interactive", "-INTERACTIVE", "INTERACTIVE", "interactive"],
+            # _Option(["-interactive", "-INTERACTIVE", "INTERACTIVE", "interactive"],
             #        [],
-            #        lambda x: 0, #Does not take value
+            #        lambda x: 0, # Does not take value
             #        False,
             #        "read command line, then enter normal interactive menus",
             #        False),
@@ -216,7 +216,7 @@ class ClustalwCommandline(AbstractCommandline):
                                                isinstance(x, float)),
             # Already handled in General Settings section, but appears a second
             # time under Multiple Alignments in the help
-            #_Option(["-type", "-TYPE", "TYPE", "type"],
+            # _Option(["-type", "-TYPE", "TYPE", "type"],
             #        "PROTEIN or DNA",
             #        checker_function=lambda x: x in ["PROTEIN", "DNA",
             #                                         "protein", "dna"]),
@@ -257,10 +257,10 @@ class ClustalwCommandline(AbstractCommandline):
                     "Sequentially add profile2 sequences to profile1 alignment"),
             # These are already handled in the Multiple Alignments section,
             # but appear a second time here in the help.
-            #_Option(["-newtree", "-NEWTREE", "NEWTREE", "newtree"],
+            # _Option(["-newtree", "-NEWTREE", "NEWTREE", "newtree"],
             #        "File for new guide tree",
             #        filename=True),
-            #_Option(["-usetree", "-USETREE", "USETREE", "usetree"],
+            # _Option(["-usetree", "-USETREE", "USETREE", "usetree"],
             #        "File for old guide tree",
             #        checker_function=lambda x: os.path.exists,
             #        filename=True),
