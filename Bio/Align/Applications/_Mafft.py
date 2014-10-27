@@ -331,31 +331,21 @@ class MafftCommandline(AbstractCommandline):
             _Switch(["--amino", "amino"],
                     "Assume the sequences are amino acid (True/False). "
                     "Default: auto"),
-            # ##################### SEEDS #####################################
             # MAFFT has multiple --seed commands where the unaligned input is
             # aligned to the seed alignment. There can be multiple seeds in the
             # form: "mafft --seed align1 --seed align2 [etc] input"
-            # Effectively for n number of seed alignments. Here we're going to
-            # assume 6 extra are enough
+            # Effectively for n number of seed alignments.
+            # TODO - Can we use class _ArgumentList here?
             _Option(["--seed", "seed"],
                     "Seed alignments given in alignment_n (fasta format) "
                     "are aligned with sequences in input.",
                     filename=True,
                     equate=False),
-            # The old solution of also defining extra parameters with
-            # ["--seed", "seed1"] etc worked, but clashes with the recent
-            # code in the base class to look for duplicate parameters and raise
-            # an error.  Perhaps that check should be ignored here, or maybe
-            # we can handle this more elegantly...
-            # TODO - Create an _OptionList parameter which allows a list to be
-            # assigned to the value?
-            # ###################### END SEEDS  ################################
             # The input (must be FASTA format)
             _Argument(["input"],
                       "Input file name",
                       filename=True,
                       is_required=True),
-            # ##################################################################
             # mafft-profile takes a second alignment input as an argument:
             # mafft-profile align1 align2
             _Argument(["input1"],
