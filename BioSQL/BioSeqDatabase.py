@@ -35,14 +35,14 @@ def open_database(driver="MySQLdb", **kwargs):
         >>> from BioSeq import BioSeqDatabase
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
-    the various options are:
-    driver -> The name of the database driver to use for connecting. The
-    driver should implement the python DB API. By default, the MySQLdb
-    driver is used.
-    user -> the username to connect to the database with.
-    password, passwd -> the password to connect with
-    host -> the hostname of the database
-    database or db -> the name of the database
+    Arguments:
+     - driver - The name of the database driver to use for connecting. The
+       driver should implement the python DB API. By default, the MySQLdb
+       driver is used.
+     - user -the username to connect to the database with.
+     - password, passwd - the password to connect with
+     - host - the hostname of the database
+     - database or db - the name of the database
     """
     if driver == "psycopg":
         raise ValueError("Using BioSQL with psycopg (version one) is no "
@@ -71,8 +71,8 @@ def open_database(driver="MySQLdb", **kwargs):
         if "password" in kw:
             kw["passwd"] = kw["password"]
             del kw["password"]
-        #kw["charset"] = "utf8"
-        #kw["use_unicode"] = True
+        # kw["charset"] = "utf8"
+        # kw["use_unicode"] = True
     else:
         # DB-API recommendations
         if "db" in kw:
@@ -126,11 +126,13 @@ def open_database(driver="MySQLdb", **kwargs):
 
 
 class DBServer:
+
     """Represents a BioSQL database continaing namespaces (sub-databases).
 
     This acts like a Python dictionary, giving access to each namespace
     (defined by a row in the biodatabase table) as a BioSeqDatabase object.
     """
+
     def __init__(self, conn, module, module_name=None):
         self.module = module
         if module_name is None:
@@ -139,7 +141,8 @@ class DBServer:
             wrap_cursor = True
         else:
             wrap_cursor = False
-        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor)
+        self.adaptor = Adaptor(
+            conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor)
         self.module_name = module_name
 
     def __repr__(self):
@@ -272,11 +275,12 @@ class DBServer:
         # SQL executed one at a time
         elif self.module_name in ["mysql.connector", "MySQLdb", "sqlite3"]:
             sql_parts = sql.split(";")  # one line per sql command
-            for sql_line in sql_parts[:-1]:  # don't use the last item, it's blank
+            # don't use the last item, it's blank
+            for sql_line in sql_parts[:-1]:
                 self.adaptor.cursor.execute(sql_line)
         else:
             raise ValueError("Module %s not supported by the loader." %
-                    (self.module_name))
+                             (self.module_name))
 
     def commit(self):
         """Commits the current transaction to the database."""
@@ -290,8 +294,11 @@ class DBServer:
         """Close the connection. No further activity possible."""
         return self.adaptor.close()
 
+
 class _CursorWrapper:
+
     """A wraper for mysql.connector resolving bytestring representations."""
+
     def __init__(self, real_cursor):
         self.real_cursor = real_cursor
 
@@ -322,6 +329,7 @@ class _CursorWrapper:
 
 
 class Adaptor:
+
     def __init__(self, conn, dbutils, wrap_cursor=False):
         self.conn = conn
         if wrap_cursor:
@@ -356,8 +364,6 @@ class Adaptor:
         rv = self.cursor.fetchall()
         if not rv:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
-        # Cannot happen (UK)
-##        assert len(rv) == 1, "More than one biodatabase with name %r" % dbname
         return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
@@ -495,12 +501,12 @@ class Adaptor:
 _allowed_lookups = {
     # Lookup name / function name to get id, function to list all ids
     'primary_id': "fetch_seqid_by_identifier",
-    'gi':         "fetch_seqid_by_identifier",
+    'gi': "fetch_seqid_by_identifier",
     'display_id': "fetch_seqid_by_display_id",
-    'name':       "fetch_seqid_by_display_id",
-    'accession':  "fetch_seqid_by_accession",
-    'version':    "fetch_seqid_by_version",
-    }
+    'name': "fetch_seqid_by_display_id",
+    'accession': "fetch_seqid_by_accession",
+    'version': "fetch_seqid_by_version",
+}
 
 
 class BioSeqDatabase:
@@ -509,6 +515,7 @@ class BioSeqDatabase:
     i.e. One row in the biodatabase table, and all all rows in the bioentry
     table associated with it.
     """
+
     def __init__(self, adaptor, name):
         self.adaptor = adaptor
         self.name = name
@@ -606,7 +613,7 @@ class BioSeqDatabase:
         except ValueError:
             return False
         return bool(self.adaptor.execute_and_fetch_col0(sql,
-                                                  (self.dbid, bioentry_id))[0])
+                                                        (self.dbid, bioentry_id))[0])
 
     def __iter__(self):
         """Iterate over ids (which may not be meaningful outside this database)."""
@@ -725,10 +732,11 @@ class BioSeqDatabase:
                 sql = "SELECT bioentry_id FROM bioentry WHERE (identifier " + \
                       "= '%s' AND biodatabase_id = '%s') OR (accession = " + \
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
-                self.adaptor.execute(sql % (gi, self.dbid, accession, version, self.dbid))
+                self.adaptor.execute(
+                    sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
                     raise self.adaptor.conn.IntegrityError("Duplicate record "
-                                     "detected: record has not been inserted")
+                                                           "detected: record has not been inserted")
             # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records

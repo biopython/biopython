@@ -24,7 +24,9 @@ from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
 
-class DBSeq(Seq):  # This implements the biopython Seq interface
+class DBSeq(Seq):
+    """BioSQL equivalent of the Biopython Seq object."""
+
     def __init__(self, primary_id, adaptor, alphabet, start, length):
         """Create a new DBSeq object referring to a BioSQL entry.
 
@@ -40,7 +42,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
     def __len__(self):
         return self._length
 
-    def __getitem__(self, index):                 # Seq API requirement
+    def __getitem__(self, index):  # Seq API requirement
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -60,7 +62,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
             raise ValueError("Unexpected index type")
 
         # Return the (sub)sequence as another DBSeq or Seq object
-        #(see the Seq obect's __getitem__ method)
+        # (see the Seq obect's __getitem__ method)
         if index.start is None:
             i = 0
         else:
@@ -279,7 +281,8 @@ def _retrieve_features(adaptor, primary_id):
             lookup[location_id] = (dbname, v)
 
         feature = SeqFeature.SeqFeature(type=seqfeature_type)
-        feature._seqfeature_id = seqfeature_id  # Store the key as a private property
+        # Store the key as a private property
+        feature._seqfeature_id = seqfeature_id
         feature.qualifiers = qualifiers
         if len(locations) == 0:
             pass
@@ -312,7 +315,7 @@ def _retrieve_features(adaptor, primary_id):
             # Locations are in order, but because of remote locations for
             # sub-features they are not necessarily in numerical order:
             strands = set(sf.strand for sf in sub_features)
-            if len(strands)==1 and -1 in strands:
+            if len(strands) == 1 and -1 in strands:
                 # Evil hack time for backwards compatibility
                 # TODO - Check if BioPerl and (old) Biopython did the same,
                 # we may have an existing incompatibility lurking here...
@@ -320,7 +323,8 @@ def _retrieve_features(adaptor, primary_id):
             else:
                 # All forward, or mixed strands
                 locs = [f.location for f in sub_features]
-            feature.location = SeqFeature.CompoundLocation(locs, seqfeature_type)
+            feature.location = SeqFeature.CompoundLocation(
+                locs, seqfeature_type)
             # TODO - See Bug 2677 - we don't yet record location_operator,
             # so for consistency with older versions of Biopython default
             # to assuming its a join.
@@ -450,11 +454,11 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
     taxonomy = []
     while taxon_id:
         name, rank, parent_taxon_id = adaptor.execute_one(
-        "SELECT taxon_name.name, taxon.node_rank, taxon.parent_taxon_id"
-        " FROM taxon, taxon_name"
-        " WHERE taxon.taxon_id=taxon_name.taxon_id"
-        " AND taxon_name.name_class='scientific name'"
-        " AND taxon.taxon_id = %s", (taxon_id,))
+            "SELECT taxon_name.name, taxon.node_rank, taxon.parent_taxon_id"
+            " FROM taxon, taxon_name"
+            " WHERE taxon.taxon_id=taxon_name.taxon_id"
+            " AND taxon_name.name_class='scientific name'"
+            " AND taxon.taxon_id = %s", (taxon_id,))
         if taxon_id == parent_taxon_id:
             # If the taxon table has been populated by the BioSQL script
             # load_ncbi_taxonomy.pl this is how top parent nodes are stored.
@@ -486,8 +490,7 @@ def _retrieve_comment(adaptor, primary_id):
 
 
 class DBSeqRecord(SeqRecord):
-    """BioSQL equivalent of the biopython SeqRecord object.
-    """
+    """BioSQL equivalent of the Biopython SeqRecord object."""
 
     def __init__(self, adaptor, primary_id):
         self._adaptor = adaptor

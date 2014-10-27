@@ -33,6 +33,7 @@ from Bio._py3k import basestring
 
 class DatabaseLoader:
     """Object used to load SeqRecord objects into a BioSQL database."""
+
     def __init__(self, adaptor, dbid, fetch_NCBI_taxonomy=False):
         """Initialize with connection information for the database.
 
@@ -52,8 +53,7 @@ class DatabaseLoader:
         self.fetch_NCBI_taxonomy = fetch_NCBI_taxonomy
 
     def load_seqrecord(self, record):
-        """Load a Biopython SeqRecord into the database.
-        """
+        """Load a Biopython SeqRecord into the database."""
         bioentry_id = self._load_bioentry_table(record)
         self._load_bioentry_date(record, bioentry_id)
         self._load_biosequence(record, bioentry_id)
@@ -125,7 +125,6 @@ class DatabaseLoader:
 
     def _add_dbxref(self, dbname, accession, version):
         """Insert a dbxref and return its id."""
-
         self.adaptor.execute(
             "INSERT INTO dbxref(dbname, accession, version)"
             " VALUES (%s, %s, %s)", (dbname, accession, version))
@@ -294,7 +293,7 @@ class DatabaseLoader:
             self.adaptor.execute(
                 "INSERT INTO taxon_name(taxon_id, name, name_class)"
                 "VALUES (%s, %s, 'common name')", (
-                taxon_id, common_name))
+                    taxon_id, common_name))
 
         return taxon_id
 
@@ -311,11 +310,11 @@ class DatabaseLoader:
         """
         # Add any special cases here:
         #
-        #known = {}
+        # known = {}
         # try:
-        #    return known[entrez_name]
+        #     return known[entrez_name]
         # except KeyError:
-        #    pass
+        #     pass
 
         # Try automatically by adding spaces before each capital
         def add_space(letter):
@@ -379,17 +378,19 @@ class DatabaseLoader:
 
         if self.fetch_NCBI_taxonomy:
             # Go online to get the parent taxon ID!
-            handle = Entrez.efetch(db="taxonomy", id=ncbi_taxon_id, retmode="XML")
+            handle = Entrez.efetch(
+                db="taxonomy", id=ncbi_taxon_id, retmode="XML")
             taxonomic_record = Entrez.read(handle)
             if len(taxonomic_record) == 1:
                 assert taxonomic_record[0]["TaxId"] == str(ncbi_taxon_id), \
-                       "%s versus %s" % (taxonomic_record[0]["TaxId"],
-                                         ncbi_taxon_id)
+                    "%s versus %s" % (taxonomic_record[0]["TaxId"],
+                                      ncbi_taxon_id)
                 parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
-                                            taxonomic_record[0]["LineageEx"])
+                    taxonomic_record[0]["LineageEx"])
                 rank = taxonomic_record[0]["Rank"]
                 genetic_code = taxonomic_record[0]["GeneticCode"]["GCId"]
-                mito_genetic_code = taxonomic_record[0]["MitoGeneticCode"]["MGCId"]
+                mito_genetic_code = taxonomic_record[
+                    0]["MitoGeneticCode"]["MGCId"]
                 species_names = [("scientific name",
                                   taxonomic_record[0]["ScientificName"])]
                 try:
@@ -400,7 +401,8 @@ class DatabaseLoader:
                             # lists as just a string which is annoying.
                             names = [names]
                         for name in names:
-                            # Want to ignore complex things like ClassCDE entries
+                            # Want to ignore complex things like ClassCDE
+                            # entries
                             if isinstance(name, basestring):
                                 species_names.append((name_class, name))
                 except KeyError:
@@ -471,8 +473,10 @@ class DatabaseLoader:
 
         # We have to record this.
         if len(taxonomic_lineage) > 1:
-            # Use recursion to find out the taxon id (database key) of the parent.
-            parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
+            # Use recursion to find out the taxon id (database key) of the
+            # parent.
+            parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
+                taxonomic_lineage[:-1])
             assert _is_int_or_long(parent_taxon_id), repr(parent_taxon_id)
         else:
             parent_taxon_id = None
@@ -480,17 +484,17 @@ class DatabaseLoader:
         # INSERT new taxon
         rank = taxonomic_lineage[-1].get("Rank", None)
         self.adaptor.execute(
-                "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
-                " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
+            "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
+            " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
         taxon_id = self.adaptor.last_id("taxon")
         assert isinstance(taxon_id, (int, long)), repr(taxon_id)
         # ... and its name in taxon_name
         scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
         if scientific_name:
             self.adaptor.execute(
-                    "INSERT INTO taxon_name(taxon_id, name, name_class)"
-                    " VALUES (%s, %s, 'scientific name')", (taxon_id,
-                                                            scientific_name[:255]))
+                "INSERT INTO taxon_name(taxon_id, name, name_class)"
+                " VALUES (%s, %s, 'scientific name')", (taxon_id,
+                                                        scientific_name[:255]))
         return taxon_id
 
     def _load_bioentry_table(self, record):
@@ -513,8 +517,8 @@ class DatabaseLoader:
             version = 0
 
         if "accessions" in record.annotations \
-        and isinstance(record.annotations["accessions"], list) \
-        and record.annotations["accessions"]:
+                and isinstance(record.annotations["accessions"], list) \
+                and record.annotations["accessions"]:
             # Take the first accession (one if there is more than one)
             accession = record.annotations["accessions"][0]
 
@@ -669,7 +673,7 @@ class DatabaseLoader:
                         # Easy case
                         rank += 1
                         self.adaptor.execute(many_sql,
-                                     (bioentry_id, term_id, str(entry), rank))
+                                             (bioentry_id, term_id, str(entry), rank))
                     else:
                         pass
                         # print "Ignoring annotation '%s' sub-entry of type '%s'" \
@@ -710,7 +714,7 @@ class DatabaseLoader:
             crc = crc64("".join(s))
             refs = self.adaptor.execute_and_fetch_col0(
                 "SELECT reference_id FROM reference"
-                    r" WHERE crc = %s", (crc,))
+                r" WHERE crc = %s", (crc,))
         if not refs:
             if reference.medline_id:
                 dbxref_id = self._add_dbxref("MEDLINE",
@@ -769,7 +773,7 @@ class DatabaseLoader:
         # the record (how?)
         source_cat_id = self._get_ontology_id('SeqFeature Sources')
         source_term_id = self._get_term_id('EMBL/GenBank/SwissProt',
-                                      ontology_id=source_cat_id)
+                                           ontology_id=source_cat_id)
 
         sql = r"INSERT INTO seqfeature (bioentry_id, type_term_id, " \
               r"source_term_id, rank) VALUES (%s, %s, %s, %s)"
@@ -804,7 +808,7 @@ class DatabaseLoader:
                           % feature.location_operator, BiopythonWarning)
         # This will be a list of length one for simple FeatureLocation:
         parts = feature.location.parts
-        if parts and set(loc.strand for loc in parts)==set([-1]):
+        if parts and set(loc.strand for loc in parts) == set([-1]):
             # To mimic prior behaviour of Biopython+BioSQL, reverse order
             parts = parts[::-1]
             # TODO - Check what BioPerl does; see also BioSeq.py code
@@ -837,7 +841,8 @@ class DatabaseLoader:
             # sub_feature remote locations when they are in the same db as the current
             # record do not have a value for ref_db, which the SeqFeature object
             # stores as None. BioSQL schema requires a varchar and is not NULL
-            dbxref_id = self._get_dbxref_id(location.ref_db or "", location.ref)
+            dbxref_id = self._get_dbxref_id(
+                location.ref_db or "", location.ref)
         else:
             dbxref_id = None
 
@@ -881,7 +886,7 @@ class DatabaseLoader:
             # and (if new) term tables.
             if qualifier_key != 'db_xref':
                 qualifier_key_id = self._get_term_id(qualifier_key,
-                                                  ontology_id=tag_ontology_id)
+                                                     ontology_id=tag_ontology_id)
                 # now add all of the values to their table
                 entries = qualifiers[qualifier_key]
                 if not isinstance(entries, list):
@@ -1009,7 +1014,8 @@ class DatabaseLoader:
                 db = db.strip()
                 accession = accession.strip()
             except:
-                raise ValueError("Parsing of dbxrefs list failed: '%s'" % value)
+                raise ValueError(
+                    "Parsing of dbxrefs list failed: '%s'" % value)
             # Get the dbxref_id value for the dbxref data
             dbxref_id = self._get_dbxref_id(db, accession)
             # Insert the bioentry_dbxref  data
@@ -1048,21 +1054,20 @@ class DatabaseRemover:
 
     This probably isn't really useful for normal purposes, since you
     can just do a:
+
         DROP DATABASE db_name
+
     and then recreate the database. But, it's really useful for testing
     purposes.
-
-    YB: now use the cascaded deletions
     """
+
     def __init__(self, adaptor, dbid):
-        """Initialize with a database id and adaptor connection.
-        """
+        """Initialize with a database id and adaptor connection."""
         self.adaptor = adaptor
         self.dbid = dbid
 
     def remove(self):
-        """Remove everything related to the given database id.
-        """
+        """Remove everything related to the given database id."""
         sql = r"DELETE FROM bioentry WHERE biodatabase_id = %s"
         self.adaptor.execute(sql, (self.dbid,))
         sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
