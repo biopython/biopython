@@ -314,7 +314,7 @@ IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
 
 
 #---------------------------------------
-#---------------------------------------
+#---------------------------------------       
 
 
 """
@@ -345,7 +345,7 @@ IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
 # Similarity:    64/124 (51.6%)
 # Gaps:          17/124 (13.7%)
 # Score: 112.0
-#
+# 
 #
 #=======================================
 
@@ -358,7 +358,7 @@ ref_rec           47 VLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALT     96
 gi|94968718|r     48 VVMDCAMPGMSGMDATKQIRTQWPDIAVLMLTMHSEDTWVRLALEAGANG     97
 
 ref_rec           97 HFAK-PFDIDEIRDAV--------    111
-                     :..| ..|:|.|: ||
+                     :..| ..|:|.|: ||        
 gi|94968718|r     98 YILKSAIDLDLIQ-AVRRVANGET    120
 
 
@@ -376,7 +376,7 @@ gi|94968718|r     98 YILKSAIDLDLIQ-AVRRVANGET    120
 # Similarity:    58/119 (48.7%)
 # Gaps:           9/119 ( 7.6%)
 # Score: 154.0
-#
+# 
 #
 #=======================================
 
@@ -389,7 +389,7 @@ ref_rec           51 MKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAK    100
 gi|94968761|r     50 VVMPGRDGLTLLEDLKTAGVQAPVVMMSGQAHIEMAVKATRLGALDFLEK     99
 
 ref_rec          101 PFDIDEIRDAV--------    111
-                     |...|::...|
+                     |...|::...|        
 gi|94968761|r    100 PLSTDKLLLTVENALKLKR    118
 
 
@@ -407,7 +407,7 @@ gi|94968761|r    100 PLSTDKLLLTVENALKLKR    118
 # Similarity:    53/120 (44.2%)
 # Gaps:           9/120 ( 7.5%)
 # Score: 121.0
-#
+# 
 #
 #=======================================
 
@@ -420,7 +420,7 @@ ref_rec           50 DMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFA     99
 gi|94967506|r     51 DVYLGSTTGVEVLRRCRVHRPKLYAVIITGQISLEMAARSIAEGAVDYIQ    100
 
 ref_rec          100 KPFDIDEIRDAV--------    111
-                     ||.|||.:.:..
+                     ||.|||.:.:..        
 gi|94967506|r    101 KPIDIDALLNIAERALEHKE    120
 
 
@@ -438,7 +438,7 @@ gi|94967506|r    101 KPIDIDALLNIAERALEHKE    120
 # Similarity:    64/118 (54.2%)
 # Gaps:           9/118 ( 7.6%)
 # Score: 126.0
-#
+# 
 #
 #=======================================
 
@@ -469,7 +469,7 @@ gi|94970045|r     99 LRKPFRMDALSAKIREVL    116
 # Similarity:    70/125 (56.0%)
 # Gaps:          18/125 (14.4%)
 # Score: 156.5
-#
+# 
 #
 #=======================================
 
@@ -482,7 +482,7 @@ ref_rec           49 LDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHF     98
 gi|94970041|r     51 SDVVLVGMSGRELSERLRIQMPSLKVIYMSGYTDDAIVRH----GVLTES     96
 
 ref_rec           99 A----KPFDIDEIRDAV--------    111
-                     |    |||..|.:...|
+                     |    |||..|.:...|        
 gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
 
 
@@ -516,24 +516,24 @@ gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
 # Similarity:   210/667 (31.5%)
 # Gaps:         408/667 (61.2%)
 # Score: 561.0
-#
+# 
 #
 #=======================================
 
 asis               1 TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAAT     50
-
+                                                                       
 asis               0 --------------------------------------------------      0
 
 asis              51 AGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGA    100
-
+                                                                       
 asis               0 --------------------------------------------------      0
 
 asis             101 CTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTG    150
-
+                                                                       
 asis               0 --------------------------------------------------      0
 
 asis             151 GGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGA    200
-                                 .||||||
+                                 .||||||                               
 asis               1 ------------TTATTAA-------------------------------      7
 
 asis             201 TACTTATTGT------GTAGTAGCTCATTTTCATTATGTTCTTCGAATGG    244
@@ -553,11 +553,11 @@ asis             332 TTAGCCTTTGGTTTTTTTTTATTTTT----TGGGGTTAAGACAAGGTGTC    377
 asis             135 TTA-----------------ATTTTTGGGGGGGGGGGGAGACGGGGTGTT    167
 
 asis             378 GT-TGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATA--------    418
-                     .| |||||||||||             ||  ||.||.||.||
+                     .| |||||||||||             ||  ||.||.||.||        
 asis             168 ATCTGAATTAGTTT-------------TT--GGGAGTCTCTAGACATCTC    202
 
 asis             419 -------------GGATCTACCTTTTATCTTTCTAAT--CTTTT----GT    449
-                                  ||..||.||.|.|||..||||.||  |||||    |
+                                  ||..||.||.|.|||..||||.||  |||||    | 
 asis             203 ATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGG-    251
 
 asis             450 TTTAGT-ATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTT    498
@@ -565,15 +565,15 @@ asis             450 TTTAGT-ATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTT    498
 asis             252 ---AGTAAGAAT-----TTCGATTCAGCAA-CTTTAGTTCACAGTCTTTT    292
 
 asis             499 TTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTT    548
-                     ||||||||..| ||||||||
+                     ||||||||..| ||||||||                              
 asis             293 TTTTTATTAAG-AAAGGTTT------------------------------    311
 
 asis             549 TCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGT    598
-
+                                                                       
 asis             311 --------------------------------------------------    311
 
 asis             599 GAAAGGGGGTTAATAGC    615
-
+                                      
 asis             311 -----------------    311
 
 
