@@ -131,17 +131,17 @@ class PhylipWriter(SequentialAlignmentWriter):
                     handle.write(" " * id_width)
                 # Write five chunks of ten letters per line...
                 for chunk in range(0, 5):
-                    i = block*50 + chunk*10
-                    seq_segment = sequence[i:i+10]
+                    i = block * 50 + chunk * 10
+                    seq_segment = sequence[i:i + 10]
                     # TODO - Force any gaps to be '-' character?  Look at the
                     # alphabet...
                     # TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
-                    if i+10 > length_of_seqs:
+                    if i + 10 > length_of_seqs:
                         break
                 handle.write("\n")
-            block = block+1
-            if block*50 > length_of_seqs:
+            block += 1
+            if block * 50 > length_of_seqs:
                 break
             handle.write("\n")
 
@@ -254,7 +254,7 @@ class PhylipIterator(AlignmentIterator):
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
                 seqs[i].append(s)
                 line = handle.readline()
-                if (not line) and i+1 < number_of_seqs:
+                if (not line) and i + 1 < number_of_seqs:
                     raise ValueError("End of file mid-block")
             if not line:
                 break  # end of file
@@ -439,199 +439,3 @@ class SequentialPhylipIterator(PhylipIterator):
                              id=i, name=i, description=i)
                    for (i, s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
-
-
-if __name__ == "__main__":
-    print("Running short mini-test")
-
-    phylip_text = """     8    286
-V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG
-B_subtilis MKMKKWTVLV VAALLAVLSA CG-------- ----NGNSSS KEDDNVLHVG
-B_subtilis MKKALLALFM VVSIAALAAC GAGNDNQSKD NAKDGDLWAS IKKKGVLTVG
-YA80_HAEIN MKKLLFTTAL LTGAIAFSTF ---------- -SHAGEIADR VEKTKTLLVG
-FLIY_ECOLI MKLAHLGRQA LMGVMAVALV AG---MSVKS FADEG-LLNK VKERGTLLVG
-E_coli_Gln --MKSVLKVS LAALTLAFAV S--------- ---------S HAADKKLVVA
-Deinococcu -MKKSLLSLK LSGLLVPSVL ALS------- -LSACSSPSS TLNQGTLKIA
-HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
-
-           MSGRYFPFTF VKQ--DKLQG FEVDMWDEIG KRNDYKIEYV TANFSGLFGL
-           ATGQSYPFAY KEN--GKLTG FDVEVMEAVA KKIDMKLDWK LLEFSGLMGE
-           TEGTYEPFTY HDKDTDKLTG YDVEVITEVA KRLGLKVDFK ETQWGSMFAG
-           TEGTYAPFTF HDK-SGKLTG FDVEVIRKVA EKLGLKVEFK ETQWDAMYAG
-           LEGTYPPFSF QGD-DGKLTG FEVEFAQQLA KHLGVEASLK PTKWDGMLAS
-           TDTAFVPFEF KQG--DKYVG FDVDLWAAIA KELKLDYELK PMDFSGIIPA
-           MEGTYPPFTS KNE-QGELVG FDVDIAKAVA QKLNLKPEFV LTEWSGILAG
-           TDPTYAPFES KNS-QGELVG FDIDLAKELC KRINTQCTFV ENPLDALIPS
-
-           LETGRIDTIS NQITMTDARK AKYLFADPYV VDG-AQITVR KGNDSIQGVE
-           LQTGKLDTIS NQVAVTDERK ETYNFTKPYA YAG-TQIVVK KDNTDIKSVD
-           LNSKRFDVVA NQVG-KTDRE DKYDFSDKYT TSR-AVVVTK KDNNDIKSEA
-           LNAKRFDVIA NQTNPSPERL KKYSFTTPYN YSG-GVIVTK SSDNSIKSFE
-           LDSKRIDVVI NQVTISDERK KKYDFSTPYT ISGIQALVKK GNEGTIKTAD
-           LQTKNVDLAL AGITITDERK KAIDFSDGYY KSG-LLVMVK ANNNDVKSVK
-           LQANKYDVIV NQVGITPERQ NSIGFSQPYA YSRPEIIVAK NNTFNPQSLA
-           LKAKKIDAIM SSLSITEKRQ QEIAFTDKLY AADSRLVVAK NSDIQP-TVE
-
-           DLAGKTVAVN LGSNFEQLLR DYDKDGKINI KTYDT--GIE HDVALGRADA
-           DLKGKTVAAV LGSNHAKNLE SKDPDKKINI KTYETQEGTL KDVAYGRVDA
-           DVKGKTSAQS LTSNYNKLAT N----AGAKV EGVEGMAQAL QMIQQARVDM
-           DLKGRKSAQS ATSNWGKDAK A----AGAQI LVVDGLAQSL ELIKQGRAEA
-           DLKGKKVGVG LGTNYEEWLR QNV--QGVDV RTYDDDPTKY QDLRVGRIDA
-           DLDGKVVAVK SGTGSVDYAK AN--IKTKDL RQFPNIDNAY MELGTNRADA
-           DLKGKRVGST LGSNYEKQLI DTG---DIKI VTYPGAPEIL ADLVAGRIDA
-           SLKGKRVGVL QGTTQETFGN EHWAPKGIEI VSYQGQDNIY SDLTAGRIDA
-
-           FIMDRLSALE -LIKKT-GLP LQLAGEPFET I-----QNAW PFVDNEKGRK
-           YVNSRTVLIA -QIKKT-GLP LKLAGDPIVY E-----QVAF PFAKDDAHDK
-           TYNDKLAVLN -YLKTSGNKN VKIAFETGEP Q-----STYF TFRKGS--GE
-           TINDKLAVLD -YFKQHPNSG LKIAYDRGDK T-----PTAF AFLQGE--DA
-           ILVDRLAALD -LVKKT-NDT LAVTGEAFSR Q-----ESGV ALRKGN--ED
-           VLHDTPNILY -FIKTAGNGQ FKAVGDSLEA Q-----QYGI AFPKGS--DE
-           AYNDRLVVNY -IINDQ-KLP VRGAGQIGDA A-----PVGI ALKKGN--SA
-           AFQDEVAASE GFLKQPVGKD YKFGGPSVKD EKLFGVGTGM GLRKED--NE
-
-           LQAEVNKALA EMRADGTVEK ISVKWFGADI TK----
-           LRKKVNKALD ELRKDGTLKK LSEKYFNEDI TVEQKH
-           VVDQVNKALK EMKEDGTLSK ISKKWFGEDV SK----
-           LITKFNQVLE ALRQDGTLKQ ISIEWFGYDI TQ----
-           LLKAVNDAIA EMQKDGTLQA LSEKWFGADV TK----
-           LRDKVNGALK TLRENGTYNE IYKKWFGTEP K-----
-           LKDQIDKALT EMRSDGTFEK ISQKWFGQDV GQP---
-           LREALNKAFA EMRADGTYEK LAKKYFDFDV YGG---
-"""
-
-    from Bio._py3k import StringIO
-    handle = StringIO(phylip_text)
-    count = 0
-    for alignment in PhylipIterator(handle):
-        for record in alignment:
-            count = count+1
-            print(record.id)
-            # print str(record.seq)
-    assert count == 8
-
-    expected = """mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
-    fdidlakelc krintqctfv enpldalips lkakkidaim sslsitekrq qeiaftdkly
-    aadsrlvvak nsdiqptves lkgkrvgvlq gttqetfgne hwapkgieiv syqgqdniys
-    dltagridaafqdevaaseg flkqpvgkdy kfggpsvkde klfgvgtgmg lrkednelre
-    alnkafaemradgtyeklak kyfdfdvygg""".replace(" ", "").replace("\n", "").upper()
-    assert str(record.seq).replace("-", "") == expected
-
-    # From here:
-    # http://atgc.lirmm.fr/phyml/usersguide.html
-    phylip_text2 = """5 60
-Tax1        CCATCTCACGGTCGGTACGATACACCTGCTTTTGGCAG
-Tax2        CCATCTCACGGTCAGTAAGATACACCTGCTTTTGGCGG
-Tax3        CCATCTCCCGCTCAGTAAGATACCCCTGCTGTTGGCGG
-Tax4        TCATCTCATGGTCAATAAGATACTCCTGCTTTTGGCGG
-Tax5        CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGG
-
-GAAATGGTCAATATTACAAGGT
-GAAATGGTCAACATTAAAAGAT
-GAAATCGTCAATATTAAAAGGT
-GAAATGGTCAATCTTAAAAGGT
-GAAATGGTCAATATTAAAAGGT"""
-
-    phylip_text3 = """5 60
-Tax1        CCATCTCACGGTCGGTACGATACACCTGCTTTTGGCAGGAAATGGTCAATATTACAAGGT
-Tax2        CCATCTCACGGTCAGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAACATTAAAAGAT
-Tax3        CCATCTCCCGCTCAGTAAGATACCCCTGCTGTTGGCGGGAAATCGTCAATATTAAAAGGT
-Tax4        TCATCTCATGGTCAATAAGATACTCCTGCTTTTGGCGGGAAATGGTCAATCTTAAAAGGT
-Tax5        CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT"""
-
-    handle = StringIO(phylip_text2)
-    list2 = list(PhylipIterator(handle))
-    handle.close()
-    assert len(list2) == 1
-    assert len(list2[0]) == 5
-
-    handle = StringIO(phylip_text3)
-    list3 = list(PhylipIterator(handle))
-    handle.close()
-    assert len(list3) == 1
-    assert len(list3[0]) == 5
-
-    for i in range(0, 5):
-        list2[0][i].id == list3[0][i].id
-        str(list2[0][i].seq) == str(list3[0][i].seq)
-
-    # From here:
-    # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
-    # Note the lack of any white space between names 2 and 3 and their seqs.
-    phylip_text4 = """  5    42
-Turkey    AAGCTNGGGC ATTTCAGGGT
-Salmo gairAAGCCTTGGC AGTGCAGGGT
-H. SapiensACCGGTTGGC CGTTCAGGGT
-Chimp     AAACCCTTGC CGTTACGCTT
-Gorilla   AAACCCTTGC CGGTACGCTT
-
-GAGCCCGGGC AATACAGGGT AT
-GAGCCGTGGC CGGGCACGGT AT
-ACAGGTTGGC CGTTCAGGGT AA
-AAACCGAGGC CGGGACACTC AT
-AAACCATTGC CGGTACGCTT AA"""
-
-    # From here:
-    # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
-    phylip_text5 = """  5    42
-Turkey    AAGCTNGGGC ATTTCAGGGT
-GAGCCCGGGC AATACAGGGT AT
-Salmo gairAAGCCTTGGC AGTGCAGGGT
-GAGCCGTGGC CGGGCACGGT AT
-H. SapiensACCGGTTGGC CGTTCAGGGT
-ACAGGTTGGC CGTTCAGGGT AA
-Chimp     AAACCCTTGC CGTTACGCTT
-AAACCGAGGC CGGGACACTC AT
-Gorilla   AAACCCTTGC CGGTACGCTT
-AAACCATTGC CGGTACGCTT AA"""
-
-    phylip_text5a = """  5    42
-Turkey    AAGCTNGGGC ATTTCAGGGT GAGCCCGGGC AATACAGGGT AT
-Salmo gairAAGCCTTGGC AGTGCAGGGT GAGCCGTGGC CGGGCACGGT AT
-H. SapiensACCGGTTGGC CGTTCAGGGT ACAGGTTGGC CGTTCAGGGT AA
-Chimp     AAACCCTTGC CGTTACGCTT AAACCGAGGC CGGGACACTC AT
-Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
-
-    handle = StringIO(phylip_text4)
-    list4 = list(PhylipIterator(handle))
-    handle.close()
-    assert len(list4) == 1
-    assert len(list4[0]) == 5
-
-    handle = StringIO(phylip_text5)
-    try:
-        list5 = list(PhylipIterator(handle))
-        assert len(list5) == 1
-        assert len(list5[0]) == 5
-        print("That should have failed...")
-    except ValueError:
-        print("Evil multiline non-interlaced example failed as expected")
-    handle.close()
-
-    handle = StringIO(phylip_text5a)
-    list5 = list(PhylipIterator(handle))
-    handle.close()
-    assert len(list5) == 1
-    assert len(list4[0]) == 5
-
-    print("Concatenation")
-    handle = StringIO(phylip_text4 + "\n" + phylip_text4)
-    assert len(list(PhylipIterator(handle))) == 2
-
-    handle = StringIO(phylip_text3 + "\n" + phylip_text4 + "\n\n\n" + phylip_text)
-    assert len(list(PhylipIterator(handle))) == 3
-
-    print("OK")
-
-    print("Checking write/read")
-    handle = StringIO()
-    PhylipWriter(handle).write_file(list5)
-    handle.seek(0)
-    list6 = list(PhylipIterator(handle))
-    assert len(list5) == len(list6)
-    for a1, a2 in zip(list5, list6):
-        assert len(a1) == len(a2)
-        for r1, r2 in zip(a1, a2):
-            assert r1.id == r2.id
-            assert str(r1.seq) == str(r2.seq)
-    print("Done")
