@@ -25,10 +25,10 @@ class ClustalWriter(SequentialAlignmentWriter):
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:
-            #This doubles as a check for an alignment object
+            # This doubles as a check for an alignment object
             raise ValueError("Non-empty sequences are required")
 
-        #Old versions of the parser in Bio.Clustalw used a ._version property,
+        # Old versions of the parser in Bio.Clustalw used a ._version property,
         try:
             version = str(alignment._version)
         except AttributeError:
@@ -36,10 +36,10 @@ class ClustalWriter(SequentialAlignmentWriter):
         if not version:
             version = '1.81'
         if version.startswith("2."):
-            #e.g. 2.0.x
+            # e.g. 2.0.x
             output = "CLUSTAL %s multiple sequence alignment\n\n\n" % version
         else:
-            #e.g. 1.81 or 1.83
+            # e.g. 1.81 or 1.83
             output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
 
         cur_char = 0
@@ -61,9 +61,9 @@ class ClustalWriter(SequentialAlignmentWriter):
             # when we output, we do a nice 80 column output, although this
             # may result in truncation of the ids.
             for record in alignment:
-                #Make sure we don't get any spaces in the record
-                #identifier when output in the file by replacing
-                #them with underscores:
+                # Make sure we don't get any spaces in the record
+                # identifier when output in the file by replacing
+                # them with underscores:
                 line = record.id[0:30].replace(" ", "_").ljust(36)
                 line += str(record.seq[cur_char:(cur_char + show_num)])
                 output += line + "\n"
@@ -87,8 +87,8 @@ class ClustalIterator(AlignmentIterator):
     def __next__(self):
         handle = self.handle
         try:
-            #Header we saved from when we were parsing
-            #the previous alignment.
+            # Header we saved from when we were parsing
+            # the previous alignment.
             line = self._header
             del self._header
         except AttributeError:
@@ -96,7 +96,7 @@ class ClustalIterator(AlignmentIterator):
         if not line:
             raise StopIteration
 
-        #Whitelisted headers we know about
+        # Whitelisted headers we know about
         known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS']
         if line.strip().split()[0] not in known_headers:
             raise ValueError("%s is not a known CLUSTAL header: %s" %
@@ -112,34 +112,34 @@ class ClustalIterator(AlignmentIterator):
                 version = word
                 break
 
-        #There should be two blank lines after the header line
+        # There should be two blank lines after the header line
         line = handle.readline()
         while line.strip() == "":
             line = handle.readline()
 
-        #If the alignment contains entries with the same sequence
-        #identifier (not a good idea - but seems possible), then this
-        #dictionary based parser will merge their sequences.  Fix this?
+        # If the alignment contains entries with the same sequence
+        # identifier (not a good idea - but seems possible), then this
+        # dictionary based parser will merge their sequences.  Fix this?
         ids = []
         seqs = []
         consensus = ""
         seq_cols = None  # Used to extract the consensus
 
-        #Use the first block to get the sequence identifiers
+        # Use the first block to get the sequence identifiers
         while True:
             if line[0] != " " and line.strip() != "":
-                #Sequences identifier...
+                # Sequences identifier...
                 fields = line.rstrip().split()
 
-                #We expect there to be two fields, there can be an optional
-                #"sequence number" field containing the letter count.
+                # We expect there to be two fields, there can be an optional
+                # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
                     raise ValueError("Could not parse line:\n%s" % line)
 
                 ids.append(fields[0])
                 seqs.append(fields[1])
 
-                #Record the sequence position to get the consensus
+                # Record the sequence position to get the consensus
                 if seq_cols is None:
                     start = len(fields[0]) + line[len(fields[0]):].find(fields[1])
                     end = start + len(fields[1])
@@ -148,7 +148,7 @@ class ClustalIterator(AlignmentIterator):
                 assert fields[1] == line[seq_cols]
 
                 if len(fields) == 3:
-                    #This MAY be an old style file with a letter count...
+                    # This MAY be an old style file with a letter count...
                     try:
                         letters = int(fields[2])
                     except ValueError:
@@ -156,19 +156,19 @@ class ClustalIterator(AlignmentIterator):
                     if len(fields[1].replace("-", "")) != letters:
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
             elif line[0] == " ":
-                #Sequence consensus line...
+                # Sequence consensus line...
                 assert len(ids) == len(seqs)
                 assert len(ids) > 0
                 assert seq_cols is not None
                 consensus = line[seq_cols]
                 assert not line[:seq_cols.start].strip()
                 assert not line[seq_cols.stop:].strip()
-                #Check for blank line (or end of file)
+                # Check for blank line (or end of file)
                 line = handle.readline()
                 assert line.strip() == ""
                 break
             else:
-                #No consensus
+                # No consensus
                 break
             line = handle.readline()
             if not line:
@@ -177,18 +177,18 @@ class ClustalIterator(AlignmentIterator):
         assert line.strip() == ""
         assert seq_cols is not None
 
-        #Confirm all same length
+        # Confirm all same length
         for s in seqs:
             assert len(s) == len(seqs[0])
         if consensus:
             assert len(consensus) == len(seqs[0])
 
-        #Loop over any remaining blocks...
+        # Loop over any remaining blocks...
         done = False
         while not done:
-            #There should be a blank line between each block.
-            #Also want to ignore any consensus line from the
-            #previous block.
+            # There should be a blank line between each block.
+            # Also want to ignore any consensus line from the
+            # previous block.
             while (not line) or line.strip() == "":
                 line = handle.readline()
                 if not line:
@@ -197,7 +197,7 @@ class ClustalIterator(AlignmentIterator):
                 break  # end of file
 
             if line.split(None, 1)[0] in known_headers:
-                #Found concatenated alignment.
+                # Found concatenated alignment.
                 done = True
                 self._header = line
                 break
@@ -206,8 +206,8 @@ class ClustalIterator(AlignmentIterator):
                 assert line[0] != " ", "Unexpected line:\n%s" % repr(line)
                 fields = line.rstrip().split()
 
-                #We expect there to be two fields, there can be an optional
-                #"sequence number" field containing the letter count.
+                # We expect there to be two fields, there can be an optional
+                # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
                     raise ValueError("Could not parse line:\n%s" % repr(line))
 
@@ -222,12 +222,12 @@ class ClustalIterator(AlignmentIterator):
                     seq_cols = slice(start, end)
                     del start, end
 
-                #Append the sequence
+                # Append the sequence
                 seqs[i] += fields[1]
                 assert len(seqs[i]) == len(seqs[0])
 
                 if len(fields) == 3:
-                    #This MAY be an old style file with a letter count...
+                    # This MAY be an old style file with a letter count...
                     try:
                         letters = int(fields[2])
                     except ValueError:
@@ -235,9 +235,9 @@ class ClustalIterator(AlignmentIterator):
                     if len(seqs[i].replace("-", "")) != letters:
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
 
-                #Read in the next line
+                # Read in the next line
                 line = handle.readline()
-            #There should now be a consensus line
+            # There should now be a consensus line
             if consensus:
                 assert line[0] == " "
                 assert seq_cols is not None
@@ -245,7 +245,7 @@ class ClustalIterator(AlignmentIterator):
                 assert len(consensus) == len(seqs[0])
                 assert not line[:seq_cols.start].strip()
                 assert not line[seq_cols.stop:].strip()
-                #Read in the next line
+                # Read in the next line
                 line = handle.readline()
 
         assert len(ids) == len(seqs)
@@ -260,8 +260,8 @@ class ClustalIterator(AlignmentIterator):
         records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i)
                    for (i, s) in zip(ids, seqs))
         alignment = MultipleSeqAlignment(records, self.alphabet)
-        #TODO - Handle alignment annotation better, for now
-        #mimic the old parser in Bio.Clustalw
+        # TODO - Handle alignment annotation better, for now
+        # mimic the old parser in Bio.Clustalw
         if version:
             alignment._version = version
         if consensus:
@@ -275,8 +275,8 @@ class ClustalIterator(AlignmentIterator):
 if __name__ == "__main__":
     print("Running a quick self-test")
 
-    #This is a truncated version of the example in Tests/cw02.aln
-    #Notice the inclusion of sequence numbers (right hand side)
+    # This is a truncated version of the example in Tests/cw02.aln
+    # Notice the inclusion of sequence numbers (right hand side)
     aln_example1 = \
 """CLUSTAL W (1.81) multiple sequence alignment
 
@@ -302,9 +302,9 @@ gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
                                     *. .:: : .
 """
 
-    #This example is a truncated version of the dataset used here:
-    #http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
-    #with the last record repeated twice (deliberate toture test)
+    # This example is a truncated version of the dataset used here:
+    # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
+    # with the last record repeated twice (deliberate toture test)
     aln_example2 = \
 """CLUSTAL X (1.83) multiple sequence alignment
 

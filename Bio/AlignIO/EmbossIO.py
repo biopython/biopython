@@ -56,7 +56,7 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle.write("#\n")
         handle.write("#=======================================\n")
         handle.write("\n")
-        #...
+        # ...
         assert False
 
 
@@ -72,8 +72,8 @@ class EmbossIterator(AlignmentIterator):
         handle = self.handle
 
         try:
-            #Header we saved from when we were parsing
-            #the previous alignment.
+            # Header we saved from when we were parsing
+            # the previous alignment.
             line = self._header
             del self._header
         except AttributeError:
@@ -92,9 +92,9 @@ class EmbossIterator(AlignmentIterator):
         seqs = []
 
         while line[0] == "#":
-            #Read in the rest of this alignment header,
-            #try and discover the number of records expected
-            #and their length
+            # Read in the rest of this alignment header,
+            # try and discover the number of records expected
+            # and their length
             parts = line[1:].split(":", 1)
             key = parts[0].lower().strip()
             if key == "aligned_sequences":
@@ -110,7 +110,7 @@ class EmbossIterator(AlignmentIterator):
             if key == "length":
                 length_of_seqs = int(parts[1].strip())
 
-            #And read in another line...
+            # And read in another line...
             line = handle.readline()
 
         if number_of_seqs is None:
@@ -127,19 +127,19 @@ class EmbossIterator(AlignmentIterator):
         seq_starts = []
         index = 0
 
-        #Parse the seqs
+        # Parse the seqs
         while line:
             if len(line) > 21:
                 id_start = line[:21].strip().split(None, 1)
                 seq_end = line[21:].strip().split(None, 1)
                 if len(id_start) == 2 and len(seq_end) == 2:
-                    #identifier, seq start position, seq, seq end position
-                    #(an aligned seq is broken up into multiple lines)
+                    # identifier, seq start position, seq, seq end position
+                    # (an aligned seq is broken up into multiple lines)
                     id, start = id_start
                     seq, end = seq_end
                     if start == end:
-                        #Special case, either a single letter is present,
-                        #or no letters at all.
+                        # Special case, either a single letter is present,
+                        # or no letters at all.
                         if seq.replace("-", "") == "":
                             start = int(start)
                             end = int(end)
@@ -151,17 +151,17 @@ class EmbossIterator(AlignmentIterator):
                         start = int(start) - 1  # python counting
                         end = int(end)
 
-                    #The identifier is truncated...
+                    # The identifier is truncated...
                     assert 0 <= index and index < number_of_seqs, \
                            "Expected index %i in range [0,%i)" \
                            % (index, number_of_seqs)
                     assert id == ids[index] or id == ids[index][:len(id)]
 
                     if len(seq_starts) == index:
-                        #Record the start
+                        # Record the start
                         seq_starts.append(start)
 
-                    #Check the start...
+                    # Check the start...
                     if start == end:
                         assert seq.replace("-", "") == "", line
                     else:
@@ -172,7 +172,7 @@ class EmbossIterator(AlignmentIterator):
 
                     seqs[index] += seq
 
-                    #Check the end ...
+                    # Check the end ...
                     assert end == seq_starts[index] + len(seqs[index].replace("-", "")), \
                         "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s" \
                             % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
@@ -182,11 +182,11 @@ class EmbossIterator(AlignmentIterator):
                     if index >= number_of_seqs:
                         index = 0
                 else:
-                    #just a start value, this is just alignment annotation (?)
-                    #print "Skipping: " + line.rstrip()
+                    # just a start value, this is just alignment annotation (?)
+                    # print "Skipping: " + line.rstrip()
                     pass
             elif line.strip() == "":
-                #Just a spacer?
+                # Just a spacer?
                 pass
             else:
                 print(line)
@@ -195,7 +195,7 @@ class EmbossIterator(AlignmentIterator):
             line = handle.readline()
             if line.rstrip() == "#---------------------------------------" \
             or line.rstrip() == "#=======================================":
-                #End of alignment
+                # End of alignment
                 self._header = line
                 break
 
@@ -209,10 +209,10 @@ class EmbossIterator(AlignmentIterator):
         records = []
         for id, seq in zip(ids, seqs):
             if len(seq) != length_of_seqs:
-                #EMBOSS 2.9.0 is known to use spaces instead of minus signs
-                #for leading gaps, and thus fails to parse.  This old version
-                #is still used as of Dec 2008 behind the EBI SOAP webservice:
-                #http://www.ebi.ac.uk/Tools/webservices/wsdl/WSEmboss.wsdl
+                # EMBOSS 2.9.0 is known to use spaces instead of minus signs
+                # for leading gaps, and thus fails to parse.  This old version
+                # is still used as of Dec 2008 behind the EBI SOAP webservice:
+                # http://www.ebi.ac.uk/Tools/webservices/wsdl/WSEmboss.wsdl
                 raise ValueError("Error parsing alignment - sequences of "
                                  "different length? You could be using an "
                                  "old version of EMBOSS.")
@@ -224,7 +224,7 @@ class EmbossIterator(AlignmentIterator):
 if __name__ == "__main__":
     print("Running a quick self-test")
 
-    #http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
+    # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
     simple_example = \
 """########################################
 # Program:  alignret
@@ -275,7 +275,7 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 
 """
 
-    #http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
+    # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
     pair_example = \
 """########################################
 # Program:  water
