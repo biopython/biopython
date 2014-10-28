@@ -94,8 +94,8 @@ class PhylipWriter(SequentialAlignmentWriter):
             species names. Their inclusion can cause trouble.
             """
             name = record.id.strip()
-            #Either remove the banned characters, or map them to something
-            #else like an underscore "_" or pipe "|" character...
+            # Either remove the banned characters, or map them to something
+            # else like an underscore "_" or pipe "|" character...
             for char in "[](),":
                 name = name.replace(char, "")
             for char in ":;":
@@ -123,19 +123,19 @@ class PhylipWriter(SequentialAlignmentWriter):
         while True:
             for name, sequence in zip(names, seqs):
                 if block == 0:
-                    #Write name (truncated/padded to id_width characters)
-                    #Now truncate and right pad to expected length.
+                    # Write name (truncated/padded to id_width characters)
+                    # Now truncate and right pad to expected length.
                     handle.write(name[:id_width].ljust(id_width))
                 else:
-                    #write indent
+                    # write indent
                     handle.write(" " * id_width)
-                #Write five chunks of ten letters per line...
+                # Write five chunks of ten letters per line...
                 for chunk in range(0, 5):
                     i = block*50 + chunk*10
                     seq_segment = sequence[i:i+10]
-                    #TODO - Force any gaps to be '-' character?  Look at the
-                    #alphabet...
-                    #TODO - How to cope with '?' or '.' in the sequence?
+                    # TODO - Force any gaps to be '-' character?  Look at the
+                    # alphabet...
+                    # TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
                     if i+10 > length_of_seqs:
                         break
@@ -192,8 +192,8 @@ class PhylipIterator(AlignmentIterator):
         handle = self.handle
 
         try:
-            #Header we saved from when we were parsing
-            #the previous alignment.
+            # Header we saved from when we were parsing
+            # the previous alignment.
             line = self._header
             del self._header
         except AttributeError:
@@ -231,10 +231,10 @@ class PhylipIterator(AlignmentIterator):
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append([s])
 
-        #Look for further blocks
+        # Look for further blocks
         line = ""
         while True:
-            #Skip any blank lines between blocks...
+            # Skip any blank lines between blocks...
             while "" == line.strip():
                 line = handle.readline()
                 if not line:
@@ -243,11 +243,11 @@ class PhylipIterator(AlignmentIterator):
                 break  # end of file
 
             if self._is_header(line):
-                #Looks like the start of a concatenated alignment
+                # Looks like the start of a concatenated alignment
                 self._header = line
                 break
 
-            #print "New block..."
+            # print "New block..."
             for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
@@ -332,8 +332,8 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         names = []
         for record in alignment:
             name = record.id.strip()
-            #Either remove the banned characters, or map them to something
-            #else like an underscore "_" or pipe "|" character...
+            # Either remove the banned characters, or map them to something
+            # else like an underscore "_" or pipe "|" character...
             for char in "[](),":
                 name = name.replace(char, "")
             for char in ":;":
@@ -377,8 +377,8 @@ class SequentialPhylipIterator(PhylipIterator):
         handle = self.handle
 
         try:
-            #Header we saved from when we were parsing
-            #the previous alignment.
+            # Header we saved from when we were parsing
+            # the previous alignment.
             line = self._header
             del self._header
         except AttributeError:
@@ -507,7 +507,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
         for record in alignment:
             count = count+1
             print(record.id)
-            #print str(record.seq)
+            # print str(record.seq)
     assert count == 8
 
     expected = """mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
@@ -517,8 +517,8 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
     alnkafaemradgtyeklak kyfdfdvygg""".replace(" ", "").replace("\n", "").upper()
     assert str(record.seq).replace("-", "") == expected
 
-    #From here:
-    #http://atgc.lirmm.fr/phyml/usersguide.html
+    # From here:
+    # http://atgc.lirmm.fr/phyml/usersguide.html
     phylip_text2 = """5 60
 Tax1        CCATCTCACGGTCGGTACGATACACCTGCTTTTGGCAG
 Tax2        CCATCTCACGGTCAGTAAGATACACCTGCTTTTGGCGG
@@ -555,9 +555,9 @@ Tax5        CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT"""
         list2[0][i].id == list3[0][i].id
         str(list2[0][i].seq) == str(list3[0][i].seq)
 
-    #From here:
-    #http://evolution.genetics.washington.edu/phylip/doc/sequence.html
-    #Note the lack of any white space between names 2 and 3 and their seqs.
+    # From here:
+    # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
+    # Note the lack of any white space between names 2 and 3 and their seqs.
     phylip_text4 = """  5    42
 Turkey    AAGCTNGGGC ATTTCAGGGT
 Salmo gairAAGCCTTGGC AGTGCAGGGT
@@ -571,8 +571,8 @@ ACAGGTTGGC CGTTCAGGGT AA
 AAACCGAGGC CGGGACACTC AT
 AAACCATTGC CGGTACGCTT AA"""
 
-    #From here:
-    #http://evolution.genetics.washington.edu/phylip/doc/sequence.html
+    # From here:
+    # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
     phylip_text5 = """  5    42
 Turkey    AAGCTNGGGC ATTTCAGGGT
 GAGCCCGGGC AATACAGGGT AT

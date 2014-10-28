@@ -125,7 +125,7 @@ from Bio._py3k import basestring
 
 __docformat__ = "epytext en"  # not just plaintext
 
-#TODO
+# TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
 #
@@ -151,8 +151,8 @@ from . import PhylipIO
 from . import EmbossIO
 from . import FastaIO
 
-#Convention for format names is "mainname-subtype" in lower case.
-#Please use the same names as BioPerl and EMBOSS where possible.
+# Convention for format names is "mainname-subtype" in lower case.
+# Please use the same names as BioPerl and EMBOSS where possible.
 
 _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
                      "clustal": ClustalIO.ClustalIterator,
@@ -193,7 +193,7 @@ def write(alignments, handle, format):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -202,17 +202,17 @@ def write(alignments, handle, format):
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(alignments, Alignment):
-        #This raised an exception in older versions of Biopython
+        # This raised an exception in older versions of Biopython
         alignments = [alignments]
 
     with as_handle(handle, 'w') as fp:
-        #Map the file format to a writer class
+        # Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
             count = writer_class(fp).write_file(alignments)
         elif format in SeqIO._FormatToWriter:
-            #Exploit the existing SeqIO parser to do the dirty work!
-            #TODO - Can we make one call to SeqIO.write() and count the alignments?
+            # Exploit the existing SeqIO parser to do the dirty work!
+            # TODO - Can we make one call to SeqIO.write() and count the alignments?
             count = 0
             for alignment in alignments:
                 if not isinstance(alignment, Alignment):
@@ -233,7 +233,7 @@ def write(alignments, handle, format):
     return count
 
 
-#This is a generator function!
+# This is a generator function!
 def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     """Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
 
@@ -253,7 +253,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     assert format in SeqIO._FormatToIterator
 
     if seq_count:
-        #Use the count to split the records into batches.
+        # Use the count to split the records into batches.
         seq_record_iterator = SeqIO.parse(handle, format, alphabet)
 
         records = []
@@ -265,8 +265,8 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         if len(records) > 0:
             raise ValueError("Check seq_count argument, not enough sequences?")
     else:
-        #Must assume that there is a single alignment using all
-        #the SeqRecord objects:
+        # Must assume that there is a single alignment using all
+        # the SeqRecord objects:
         records = list(SeqIO.parse(handle, format, alphabet))
         if records:
             yield MultipleSeqAlignment(records, alphabet)
@@ -275,7 +275,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
 
 def _force_alphabet(alignment_iterator, alphabet):
     """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
-    #Assume the alphabet argument has been pre-validated
+    # Assume the alphabet argument has been pre-validated
     given_base_class = _get_base_alphabet(alphabet).__class__
     for align in alignment_iterator:
         if not isinstance(_get_base_alphabet(align._alphabet),
@@ -330,7 +330,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -344,29 +344,29 @@ def parse(handle, format, seq_count=None, alphabet=None):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
 
     with as_handle(handle, 'rU') as fp:
-        #Map the file format to a sequence iterator:
+        # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
             if alphabet is None:
                 i = iterator_generator(fp, seq_count)
             else:
                 try:
-                    #Initially assume the optional alphabet argument is supported
+                    # Initially assume the optional alphabet argument is supported
                     i = iterator_generator(fp, seq_count, alphabet=alphabet)
                 except TypeError:
-                    #It isn't supported.
+                    # It isn't supported.
                     i = _force_alphabet(iterator_generator(fp, seq_count),
                                         alphabet)
 
         elif format in SeqIO._FormatToIterator:
-            #Exploit the existing SeqIO parser to the dirty work!
+            # Exploit the existing SeqIO parser to the dirty work!
             i = _SeqIO_to_alignment_iterator(fp, format,
                                                 alphabet=alphabet,
                                                 seq_count=seq_count)
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-        #This imposes some overhead... wait until we drop Python 2.4 to fix it
+        # This imposes some overhead... wait until we drop Python 2.4 to fix it
         for a in i:
             yield a
 
@@ -449,14 +449,14 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     overwrite any existing file without warning. This may happen if even the
     conversion is aborted (e.g. an invalid out_format name is given).
     """
-    #TODO - Add optimised versions of important conversions
-    #For now just off load the work to SeqIO parse/write
+    # TODO - Add optimised versions of important conversions
+    # For now just off load the work to SeqIO parse/write
     with as_handle(in_file, 'rU') as in_handle:
-        #Don't open the output file until we've checked the input is OK:
+        # Don't open the output file until we've checked the input is OK:
         alignments = parse(in_handle, in_format, None, alphabet)
 
-        #This will check the arguments and issue error messages,
-        #after we have opened the file which is a shame.
+        # This will check the arguments and issue error messages,
+        # after we have opened the file which is a shame.
         with as_handle(out_file, 'w') as out_handle:
             count = write(alignments, out_handle, out_format)
 
