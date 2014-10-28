@@ -4,8 +4,6 @@
 # as part of this package.
 """Tests for Bio.AlignIO.ClustalIO"""
 
-from __future__ import print_function
-
 import unittest
 
 from Bio._py3k import StringIO

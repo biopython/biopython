@@ -5,8 +5,6 @@
 # as part of this package.
 """Tests for Bio.AlignIO.EmbossIO"""
 
-from __future__ import print_function
-
 import unittest
 
 from Bio._py3k import StringIO
@@ -386,7 +384,7 @@ class TestEmbossIO(unittest.TestCase):
 
     def test_pair_plus_simple(self):
         alignments = list(EmbossIterator(StringIO(pair_example + simple_example)))
-        self.assertEqual(len(alignments),  2)
+        self.assertEqual(len(alignments), 2)
         self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(len(alignments[1]), 4)
         self.assertEqual([r.id for r in alignments[0]], ["IXI_234", "IXI_235"])
