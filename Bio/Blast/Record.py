@@ -222,7 +222,7 @@ class MultipleAlignment(object):
 
         Thanks to James Casbon for the code.
         """
-        #TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
+        # TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
         seq_parts = []
         seq_names = []
         parse_number = 0
@@ -351,7 +351,7 @@ class Parameters(object):
         self.blast_cutoff = (None, None)
 
 
-#TODO - Add a friendly __str__ method to BLAST results
+# TODO - Add a friendly __str__ method to BLAST results
 class Blast(Header, DatabaseReport, Parameters):
     """Saves the results from a blast search.
 

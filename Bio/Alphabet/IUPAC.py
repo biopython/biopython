@@ -10,7 +10,7 @@
 from Bio import Alphabet
 from Bio.Data import IUPACData
 
-##################### Protein
+# #################### Protein
 
 # From the IUPAC definition at:
 #   http://www.chem.qmw.ac.uk/iupac/AminoAcid/A2021.html#AA21
@@ -46,7 +46,7 @@ class IUPACProtein(ExtendedIUPACProtein):
 
 protein = IUPACProtein()
 
-##################### DNA
+# #################### DNA
 
 
 # The next two are the IUPAC definitions, from:
@@ -80,7 +80,7 @@ class ExtendedIUPACDNA(Alphabet.DNAAlphabet):
 
 extended_dna = ExtendedIUPACDNA()
 
-##################### RNA
+# #################### RNA
 
 
 class IUPACAmbiguousRNA(Alphabet.RNAAlphabet):
@@ -97,7 +97,7 @@ class IUPACUnambiguousRNA(IUPACAmbiguousRNA):
 unambiguous_rna = IUPACUnambiguousRNA()
 
 # are there extended forms?
-#class ExtendedIUPACRNA(Alphabet.RNAAlphabet):
+# class ExtendedIUPACRNA(Alphabet.RNAAlphabet):
 #    letters = extended_rna_letters
 #    #   B == 5-bromouridine
 #    #   D == 5,6-dihydrouridine
