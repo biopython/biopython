@@ -48,7 +48,8 @@ class ConsensusTest(unittest.TestCase):
         self.trees = list(Phylo.parse('./TreeConstruction/trees.tre', 'newick'))
 
     def test_count_clades(self):
-        bitstr_counts = Consensus._count_clades(self.trees)
+        bitstr_counts, len_trees = Consensus._count_clades(self.trees)
+        self.assertEqual(len_trees, len(self.trees))
         self.assertEqual(len(bitstr_counts), 6)
         self.assertEqual(bitstr_counts[_BitString('11111')][0], 3)
         self.assertEqual(bitstr_counts[_BitString('11000')][0], 2)
