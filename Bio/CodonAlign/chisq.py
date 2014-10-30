@@ -137,7 +137,7 @@ def _igam(a, x):
 
 # --- Speed ---
 
-#try:
+# try:
 #    from scipy.stats import chisqprob
-#except ImportError:
+# except ImportError:
 #    pass

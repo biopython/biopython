@@ -20,7 +20,7 @@ try:
     from itertools import izip
 except ImportError:
     izip = zip
-#from itertools import izip
+# from itertools import izip
 
 from Bio.SeqRecord import SeqRecord
 
@@ -121,7 +121,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                 nucl_seqs = SeqIO.to_dict(nucl_seqs)
             elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
                 nucl_seqs = dict((i.id, i) for i in nucl_seqs)
-                #nucl_seqs = {i.id: i for i in nucl_seqs}
+                # nucl_seqs = {i.id: i for i in nucl_seqs}
             elif nucl_seqs.__class__.__name__ in \
                     ("_IndexedSeqFileDict", "dict"):
                 pass
@@ -273,7 +273,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
     else:
         # Might caused by mismatches or frameshift, using anchors to
         # have a try
-        #anchor_len = 10 # adjust this value to test performance
+        # anchor_len = 10 # adjust this value to test performance
         pro_seq = str(pro.seq).replace(gap_char, "")
         anchors = [pro_seq[i:(i+anchor_len)] for i in
                    range(0, len(pro_seq), anchor_len)]
@@ -292,7 +292,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
             this_anchor_len = len(anchor)
             qcodon = ""
             fncodon = ""
-            ## dirty code to deal with the last anchor ##
+            # dirty code to deal with the last anchor
             # as the last anchor is combined in the steps
             # above, we need to get the true last anchor to
             # pro_re
@@ -349,7 +349,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                     if anchor_pos[0][0] >= sh_nuc_len:
                         sh_nuc = nucl_seq[anchor_pos[0][0]-sh_nuc_len:anchor_pos[0][0]]
                     else:
-                        #this is unlikely to produce the correct output
+                        # this is unlikely to produce the correct output
                         sh_nuc = nucl_seq[:anchor_pos[0][0]]
                     qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc,
                                                                 shift_val,
@@ -400,7 +400,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                     if len(nucl_seq)-anchor_pos[-1][0] >= sh_nuc_len:
                         sh_nuc = nucl_seq[anchor_pos[-1][0]:anchor_pos[-1][0]+sh_nuc_len]
                     else:
-                        #this is unlikely to produce the correct output
+                        # this is unlikely to produce the correct output
                         sh_nuc = nucl_seq[anchor_pos[-1][0]:]
                     qcodon, shift_id_pos = _get_shift_anchor_re(sh_anc, sh_nuc,
                                                                 shift_val,
@@ -444,7 +444,7 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
     import re
     shift_id = [chr(i) for i in range(97, 107)]
     if 0 < shift_val < 3*anchor_len-2:
-    #if shift_val in (1, 2):
+        # if shift_val in (1, 2):
         for j in range(len(sh_anc)):
             qcodon = "^"
             for k, aa in enumerate(sh_anc):
@@ -514,7 +514,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
         scodonre = '(?P<' + reid + '>'
         scodonre += '[' + scodon[0][0] + ']' + \
                     '[' + scodon[0][1] + ']' + \
-                    '[' + intersect    + ']' + \
+                    '[' + intersect + ']' + \
                     '[' + scodon[1][1] + ']' + \
                     '[' + scodon[1][2] + ']'
     elif shift_val == 2:
@@ -522,8 +522,8 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
         intersect2 = ''.join(set(scodon[0][2]) & set(scodon[1][1]))
         scodonre = '(?P<' + reid + '>'
         scodonre += '[' + scodon[0][0] + ']' + \
-                    '[' + intersect1   + ']' + \
-                    '[' + intersect2   + ']' + \
+                    '[' + intersect1 + ']' + \
+                    '[' + intersect2 + ']' + \
                     '[' + scodon[1][2] + ']'
     scodonre += ')'
     return scodonre
@@ -748,7 +748,7 @@ def _align_shift_recs(recs):
     return recs
 
 
-#def toCodonAlignment(align, alphabet=default_codon_alphabet):
+# def toCodonAlignment(align, alphabet=default_codon_alphabet):
 #    """Function to convert a MultipleSeqAlignment to CodonAlignment.
 #    It is the user's responsibility to ensure all the requirement
 #    needed by CodonAlignment is met.

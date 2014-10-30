@@ -54,7 +54,7 @@ unambiguous_rna_letters = "GAUC"
 extended_dna_letters = "GATCBDSW"
 
 # are there extended forms?
-#extended_rna_letters = "GAUCBDSW"
+# extended_rna_letters = "GAUCBDSW"
 
 ambiguous_dna_values = {
     "A": "A",
@@ -179,7 +179,7 @@ def _make_ambiguous_ranges(mydict, weight_table):
     range_d = {}
     avg_d = {}
     for letter, values in mydict.items():
-        #Following line is a quick hack to skip undefined weights for U and O
+        # Following line is a quick hack to skip undefined weights for U and O
         if len(values) == 1 and values[0] not in weight_table:
             continue
 
@@ -274,9 +274,9 @@ extended_protein_values = {
     "V": "V",
     "W": "W",
     "X": "ACDEFGHIKLMNPQRSTVWY",
-    #TODO - Include U and O in the possible values of X?
-    #This could alter the extended_protein_weight_ranges ...
-    #by MP: Won't do this, because they are so rare.
+    # TODO - Include U and O in the possible values of X?
+    # This could alter the extended_protein_weight_ranges ...
+    # by MP: Won't do this, because they are so rare.
     "Y": "Y",
     "Z": "QE",
 }

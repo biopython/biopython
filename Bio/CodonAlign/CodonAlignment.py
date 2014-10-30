@@ -325,7 +325,8 @@ def _dijkstra(graph, start, end):
                 D[child_node] = D[node] + child_value
                 # To go to child_node, you have to go through node
                 P[child_node] = node
-        if node == end: break
+        if node == end:
+            break
     # Set a clean path
     path = []
     # We begin from the end
@@ -403,7 +404,8 @@ def _get_subgraph(codons, G):
     for i in codons:
         subgraph[i] = {}
         for j in codons:
-            if i != j: subgraph[i][j] = G[i][j]
+            if i != j:
+                subgraph[i][j] = G[i][j]
     return subgraph
 
 
@@ -418,7 +420,7 @@ def _G_test(site_counts):
     # TODO:
     #   Apply continuity correction for Chi-square test.
     from math import log
-    #from scipy.stats import chi2
+    # from scipy.stats import chi2
     G = 0
     tot = sum(site_counts)
     tot_syn = site_counts[0] + site_counts[2]
@@ -430,7 +432,7 @@ def _G_test(site_counts):
     for obs, ex in zip(site_counts, exp):
         G += obs*log(obs/ex)
     G *= 2
-    #return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
+    # return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
     return chisqprob(G, 1)
 
 
