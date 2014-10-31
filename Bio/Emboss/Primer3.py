@@ -108,7 +108,7 @@ def parse(handle):
                 record.comments += line
         elif not line.strip():
             pass
-        elif line[5:19]=="PRODUCT SIZE: ":
+        elif line[5:19] == "PRODUCT SIZE: ":
             primer = Primers()
             primer.size = int(line[19:])
             record.primers.append(primer)
