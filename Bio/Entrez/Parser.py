@@ -40,7 +40,7 @@ import warnings
 from xml.parsers import expat
 from io import BytesIO
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
 from Bio._py3k import unicode
@@ -196,8 +196,8 @@ class DataHandler(object):
         if handle.__class__.__name__ == 'EvilHandleHack':
             handle = handle._handle
         if hasattr(handle, "closed") and handle.closed:
-            #Should avoid a possible Segmentation Fault, see:
-            #http://bugs.python.org/issue4877
+            # Should avoid a possible Segmentation Fault, see:
+            # http://bugs.python.org/issue4877
             raise IOError("Can't parse a closed handle")
         try:
             self.parser.ParseFile(handle)
@@ -227,7 +227,7 @@ class DataHandler(object):
     def parse(self, handle):
         BLOCK = 1024
         while True:
-            #Read in another block of the file...
+            # Read in another block of the file...
             text = handle.read(BLOCK)
             if not text:
                 # We have reached the end of the XML file
@@ -490,8 +490,8 @@ class DataHandler(object):
         we try to download it. If new DTDs become available from NCBI,
         putting them in Bio/Entrez/DTDs will allow the parser to see them."""
         urlinfo = _urlparse(systemId)
-        #Following attribute requires Python 2.5+
-        #if urlinfo.scheme=='http':
+        # Following attribute requires Python 2.5+
+        # if urlinfo.scheme=='http':
         if urlinfo[0]=='http':
             # Then this is an absolute path to the DTD.
             url = systemId

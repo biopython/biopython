@@ -74,7 +74,7 @@ import time
 import warnings
 import os.path
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import HTTPError as _HTTPError
@@ -451,13 +451,13 @@ a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
-    #print cgi + "?" + options
+    # print cgi + "?" + options
     try:
         if post:
-            #HTTP POST
+            # HTTP POST
             handle = _urlopen(cgi, data=_as_bytes(options))
         else:
-            #HTTP GET
+            # HTTP GET
             cgi += "?" + options
             handle = _urlopen(cgi)
     except _HTTPError as exception:
