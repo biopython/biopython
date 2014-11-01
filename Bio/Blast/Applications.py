@@ -375,9 +375,10 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
         self.parameters = [
             # General search options:
             _Option(["-task", "task"],
-                    "Task to execute (string, blastp (default) or blastp-short).",
+                    "Task to execute (string, blastp (default), blastp-fast or blastp-short).",
                     checker_function=lambda value: value in ["blastp",
-                                                              "blastp-short"],
+                                                             "blastp-fast",
+                                                             "blastp-short"],
                     equate=False),
             _Option(["-matrix", "matrix"],
                     "Scoring matrix name (default BLOSUM62)."),
@@ -553,6 +554,11 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
     def __init__(self, cmd="blastx", **kwargs):
         self.parameters = [
             # Input query options:
+            _Option(["-task", "task"],
+                    "Task to execute (string, blastx (default) or blastx-fast).",
+                    checker_function=lambda value: value in ["blastx",
+                                                             "blastx-fast"],
+                    equate=False),
             _Option(["-strand", "strand"],
                     """Query strand(s) to search against database/subject.
 
@@ -631,6 +637,11 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
     def __init__(self, cmd="tblastn", **kwargs):
         self.parameters = [
             # General search options:
+            _Option(["-task", "task"],
+                    "Task to execute (string, tblastn (default) or tblastn-fast).",
+                    checker_function=lambda value: value in ["tblastn",
+                                                             "tblastn-fast"],
+                    equate=False),
             _Option(["-db_gencode", "db_gencode"],
                     "Genetic code to use to translate query (integer, default 1).",
                     equate=False),
