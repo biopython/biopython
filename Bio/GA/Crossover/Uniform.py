@@ -29,7 +29,7 @@ class UniformCrossover(object):
     defined frequency. The location of the crossover is chosen randomly
     if the crossover meets the probability to occur.
     """
-    def __init__(self, crossover_prob = .1, uniform_prob = 0.7):
+    def __init__(self, crossover_prob=.1, uniform_prob=0.7):
         """Initialize to do uniform crossover at the specified probability and frequency.
         """
         self._crossover_prob = crossover_prob

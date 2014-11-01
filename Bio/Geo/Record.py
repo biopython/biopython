@@ -46,7 +46,7 @@ class Record(object):
             if isinstance(contents, list):
                 for item in contents:
                     try:
-                        output += '%s: %s\n' % ( key, item[:40])
+                        output += '%s: %s\n' % (key, item[:40])
                         output += out_block(item[40:])
                     except:
                         pass
@@ -63,8 +63,8 @@ class Record(object):
             val = self.col_defs[key]
             output += '    %s: %s\n' % (key, val[:40])
             output += out_block(val[40:], '    ')
-        #May have to display VERY large tables,
-        #so only show the first 20 lines of data
+        # May have to display VERY large tables,
+        # so only show the first 20 lines of data
         MAX_ROWS = 20 + 1  # include header in count
         for row in self.table_rows[0:MAX_ROWS]:
             output += '%s: ' % self.table_rows.index(row)
@@ -82,7 +82,7 @@ class Record(object):
         return output
 
 
-def out_block(text, prefix = ''):
+def out_block(text, prefix=''):
     output = ''
     for j in range(0, len(text), 80):
         output += '%s%s\n' % (prefix, text[j:j+80])

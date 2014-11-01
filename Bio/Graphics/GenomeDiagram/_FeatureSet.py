@@ -30,7 +30,7 @@
     http://www.biopython.org
 """
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # IMPORTS
 
 # ReportLab
@@ -45,10 +45,10 @@ from ._Feature import Feature
 # Builtins
 import re
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # CLASSES
 
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # FeatureSet
 
 
@@ -119,11 +119,11 @@ class FeatureSet(object):
         self.features[id] = f  # add feature
         for key in kwargs:
             if key == "colour" or key == "color":
-                #Deal with "colour" as a special case by also mapping to color.
-                #If Feature.py used a python property we wouldn't need to call
-                #set_color explicitly.  However, this is important to make sure
-                #every color gets mapped to a colors object - for example color
-                #numbers, or strings (may not matter for PDF, but does for PNG).
+                # Deal with "colour" as a special case by also mapping to color.
+                # If Feature.py used a python property we wouldn't need to call
+                # set_color explicitly.  However, this is important to make sure
+                # every color gets mapped to a colors object - for example color
+                # numbers, or strings (may not matter for PDF, but does for PNG).
                 self.features[id].set_color(kwargs[key])
                 continue
             setattr(self.features[id], key, kwargs[key])
@@ -156,9 +156,9 @@ class FeatureSet(object):
                 if getattr(feature, attr) != value:
                     setattr(feature, attr, value)  # set it to the passed value
 
-        #For backwards compatibility, we support both colour and color.
-        #As a quick hack, make "colour" set both "colour" and "color".
-        #if attr=="colour":
+        # For backwards compatibility, we support both colour and color.
+        # As a quick hack, make "colour" set both "colour" and "color".
+        # if attr=="colour":
         #    self.set_all_feature("color",value)
 
     def get_features(self, attribute=None, value=None, comparator=None):
@@ -283,11 +283,11 @@ if __name__ == '__main__':
         if feature.type == 'CDS':
             gdfs.add_feature(feature)
 
-    #print len(gdfs)
-    #print gdfs.get_ids()
-    #gdfs.del_feature(560)
-    #print gdfs.get_ids()
-    #print gdfs.get_features()
-    #for feature in gdfs.get_features():
+    # print len(gdfs)
+    # print gdfs.get_ids()
+    # gdfs.del_feature(560)
+    # print gdfs.get_ids()
+    # print gdfs.get_features()
+    # for feature in gdfs.get_features():
     #    print feature.id, feature.start, feature.end
-    #print gdfs[500]
+    # print gdfs[500]

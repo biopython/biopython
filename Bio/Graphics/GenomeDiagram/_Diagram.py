@@ -25,14 +25,14 @@
     objects - namely SeqRecord ojbects containing SeqFeature objects.
 """
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # IMPORTS
 
 # ReportLab
 try:
     from reportlab.graphics import renderPM
 except ImportError:
-    #This is an optional part of ReportLab, so may not be installed.
+    # This is an optional part of ReportLab, so may not be installed.
     renderPM=None
 
 # GenomeDiagram
@@ -42,10 +42,10 @@ from ._Track import Track
 
 from Bio.Graphics import _write
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # CLASSES
 
-#------------------------------------------------------------
+# -----------------------------------------------------------
 # Diagram
 
 
@@ -311,13 +311,13 @@ class Diagram(object):
 
             Return the completed drawing as a bytes string in a prescribed format
         """
-        #The ReportLab drawToString method, which this function used to call,
-        #just used a cStringIO or StringIO handle with the drawToFile method.
-        #In order to put all our complicated file format specific code in one
-        #place we just used a StringIO handle here, later a BytesIO handle
-        #for Python 3 compatibility.
+        # The ReportLab drawToString method, which this function used to call,
+        # just used a cStringIO or StringIO handle with the drawToFile method.
+        # In order to put all our complicated file format specific code in one
+        # place we just used a StringIO handle here, later a BytesIO handle
+        # for Python 3 compatibility.
         #
-        #TODO - Rename this method to include keyword bytes?
+        # TODO - Rename this method to include keyword bytes?
         from io import BytesIO
         handle = BytesIO()
         self.write(handle, output, dpi)

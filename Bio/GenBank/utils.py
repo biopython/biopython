@@ -29,7 +29,7 @@ class FeatureValueCleaner(object):
     """
     keys_to_process = ["translation"]
 
-    def __init__(self, to_process = keys_to_process):
+    def __init__(self, to_process=keys_to_process):
         """Initialize with the keys we should deal with.
         """
         self._to_process = to_process

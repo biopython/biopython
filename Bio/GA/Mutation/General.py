@@ -18,7 +18,7 @@ class SafeFitnessMutation(object):
     This doesn't actually do any mutation work, but just checks that
     newly create organisms do not have lower fitnesses.
     """
-    def __init__(self, actual_mutation, accept_less = 0.0):
+    def __init__(self, actual_mutation, accept_less=0.0):
         """Initialize to do safe mutations
 
         Arguments:

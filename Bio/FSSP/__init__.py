@@ -102,7 +102,7 @@ class FSSPSumRec(object):
         self.nr = int(in_rec[0][:-1])
         self.pdb1 = in_rec[1][:4]
         if len(in_rec[1]) == 4:
-            self.chain1='0'
+            self.chain1 = '0'
         elif len(in_rec[1]) == 5:
             self.chain1=in_rec[1][4]
         else:

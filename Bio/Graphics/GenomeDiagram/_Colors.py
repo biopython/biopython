@@ -77,7 +77,7 @@ class ColorTranslator(object):
             Returns a colors.Color object, determined semi-intelligently
             depending on the input values
         """
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
 
@@ -88,7 +88,7 @@ class ColorTranslator(object):
         elif isinstance(color, colors.Color):
             return color
         elif isinstance(color, basestring):
-            #Assume its a named reportlab color like "red".
+            # Assume its a named reportlab color like "red".
             color = colors.toColor(color)
         elif isinstance(color, tuple) and isinstance(color[0], float):
             color = self.float1_color(color)
