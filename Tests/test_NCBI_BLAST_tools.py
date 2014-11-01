@@ -25,7 +25,7 @@ wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
           "deltablast"]
 exe_names = {}
 
-if sys.platform=="win32":
+if sys.platform == "win32":
     # The Windows 32 bit BLAST 2.2.22+ installer does add itself to the path,
     # and by default installs to C:\Program Files\NCBI\BLAST-2.2.22+\bin
     # To keep things simple, assume BLAST+ is on the path on Windows.
@@ -40,8 +40,8 @@ for folder in likely_dirs:
     if not os.path.isdir(folder):
         continue
     for name in wanted:
-        if sys.platform=="win32":
-            exe_name = os.path.join(folder, name+".exe")
+        if sys.platform == "win32":
+            exe_name = os.path.join(folder, name + ".exe")
         else:
             exe_name = os.path.join(folder, name)
         if not os.path.isfile(exe_name):
@@ -53,9 +53,9 @@ for folder in likely_dirs:
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         output, error = child.communicate()
-        if child.returncode==0 and "ERROR: Invalid argument: -h" not in output:
+        if child.returncode == 0 and "ERROR: Invalid argument: -h" not in output:
             # Special case, blast_formatter from BLAST 2.2.23+ (i.e. BLAST+)
             # has mandatory argument -rid, but no -archive. We don't support it.
             if name == "blast_formatter" and " -archive " not in output:
@@ -95,13 +95,13 @@ class Pairwise(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
         self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
                          % (return_code, cline))
         self.assertEqual(10, stdoutdata.count("Query= "))
-        if stdoutdata.count("***** No hits found *****")==7:
+        if stdoutdata.count("***** No hits found *****") == 7:
             # This happens with BLAST 2.2.26+ which is potentially a bug
             pass
         else:
@@ -125,7 +125,7 @@ class Pairwise(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
         self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
@@ -148,7 +148,7 @@ class Pairwise(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
         self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
@@ -171,7 +171,7 @@ class CheckCompleteArgList(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         stdoutdata, stderrdata = child.communicate()
         self.assertEqual(stderrdata, "",
                          "%s\n%s" % (str(cline), stderrdata))
@@ -180,14 +180,14 @@ class CheckCompleteArgList(unittest.TestCase):
             index = stdoutdata.find("[")
             if index == -1:
                 break
-            stdoutdata = stdoutdata[index+1:]
+            stdoutdata = stdoutdata[index + 1:]
             index = stdoutdata.find("]")
             assert index != -1
             name = stdoutdata[:index]
             if " " in name:
                 name = name.split(None, 1)[0]
             names_in_tool.add(name)
-            stdoutdata = stdoutdata[index+1:]
+            stdoutdata = stdoutdata[index + 1:]
 
         extra = names.difference(names_in_tool)
         missing = names_in_tool.difference(names)
@@ -211,12 +211,12 @@ class CheckCompleteArgList(unittest.TestCase):
             extra.remove("-off_diagonal_range")
         if exe_name == "tblastx":
             # These appear to have been removed in BLAST 2.2.23+
-            #(which seems a bit odd - TODO - check with NCBI?)
+            # (which seems a bit odd - TODO - check with NCBI?)
             extra = extra.difference(["-gapextend", "-gapopen",
                                       "-xdrop_gap", "-xdrop_gap_final"])
         if exe_name in ["rpsblast", "rpstblastn"]:
             # These appear to have been removed in BLAST 2.2.24+
-            #(which seems a bit odd - TODO - check with NCBI?)
+            # (which seems a bit odd - TODO - check with NCBI?)
             extra = extra.difference(["-num_threads"])
         if exe_name in ["tblastn", "tblastx"]:
             # These appear to have been removed in BLAST 2.2.24+
@@ -229,7 +229,7 @@ class CheckCompleteArgList(unittest.TestCase):
         and exe_name in ["blastn", "blastp", "blastx", "tblastx", "tblastn"]:
             # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-db_hard_mask")
-        if "-msa_master_idx" in extra and exe_name=="psiblast":
+        if "-msa_master_idx" in extra and exe_name == "psiblast":
             # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-msa_master_idx")
         if exe_name == "rpsblast":
@@ -240,9 +240,9 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             # New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
-        if "-ignore_msa_master" in extra and exe_name=="psiblast":
+        if "-ignore_msa_master" in extra and exe_name == "psiblast":
             # New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
-            extra.remove("-ignore_msa_master")                                        
+            extra.remove("-ignore_msa_master")
         if exe_name == "blastx":
             # New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-comp_based_stats",
@@ -330,5 +330,5 @@ class CheckCompleteArgList(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
