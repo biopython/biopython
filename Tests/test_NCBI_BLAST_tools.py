@@ -265,7 +265,7 @@ class CheckCompleteArgList(unittest.TestCase):
             extra = extra.difference(["-entrez_query", "-max_hsps", "-sum_statistics"])
         if exe_name in ["blastx", "tblastn"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
-            extra.remove("-task")
+            extra = extra.difference(["-task"])
         if exe_name == "psiblast":
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-line_length", "-qcov_hsp_perc", "-sum_stats"])
