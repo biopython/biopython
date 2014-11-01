@@ -777,6 +777,15 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="psiblast", **kwargs):
         self.parameters = [
+            # Formatting options
+            _Option(["-line_length", "line_length"],
+                    """Line length for formatting alignments (integer, at least 1, default 60).
+
+                    Not applicable for outfmt > 4.
+
+                    Added in BLAST+ 2.2.30.
+                    """,
+                    equate=False),
             # General search options:
             _Option(["-matrix", "matrix"],
                     "Scoring matrix name (default BLOSUM62).",
@@ -801,6 +810,21 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
+                    equate=False),
+            # Restrict search or results
+            _Option(["-qcov_hsp_perc", "qcov_hsp_perc"],
+                     """Percent query coverage per hsp (float, 0..100).
+
+                     Added in BLAST+ 2.2.30.
+                     """,
+                     equate=False),
+            # Statistical options
+            # Is -sum_stats a BLAST+ bug, why not use -sum_statistics switch?
+            _Option(["-sum_stats", "sum_stats"],
+                    """Use sum statistics (boolean).
+
+                    Added in BLAST+ 2.2.30.
+                    """,
                     equate=False),
             # Extension options:
             _Option(["-gap_trigger", "gap_trigger"],
