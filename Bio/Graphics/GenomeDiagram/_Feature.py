@@ -181,15 +181,15 @@ class Feature(object):
         for location in self._feature.location.parts:
             start = location.nofuzzy_start
             end = location.nofuzzy_end
-            #if start > end and self.strand == -1:
+            # if start > end and self.strand == -1:
             #    start, end = end, start
             self.locations.append((start, end))
             bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
         # TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
         if self._feature.strand is None:
-            #This is the SeqFeature default (None), but the drawing code
-            #only expects 0, +1 or -1.
+            # This is the SeqFeature default (None), but the drawing code
+            # only expects 0, +1 or -1.
             self.strand = 0
         else:
             self.strand = int(self._feature.strand)                 # Feature strand

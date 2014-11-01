@@ -51,7 +51,7 @@ class GeneralPointCrossover(object):
                * replace _crossover with a more efficient
                  technique for your point-count
     """
-    def __init__(self, points, crossover_prob = .1):
+    def __init__(self, points, crossover_prob=.1):
         """Initialize to do crossovers at the specified probability.
         """
         self._crossover_prob = crossover_prob

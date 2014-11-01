@@ -46,7 +46,7 @@ def get_temp_imagefilename(url):
     """
     img = _urlopen(url).read()
     im = Image.open(BtyesIO(img))
-    #im.transpose(Image.FLIP_TOP_BOTTOM)
+    # im.transpose(Image.FLIP_TOP_BOTTOM)
     f = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
     fname = f.name
     f.close()
@@ -130,7 +130,7 @@ class KGMLCanvas(object):
         if self.show_genes:
             self.__add_genes()
         # TODO: complete draw_relations code
-        #if self.draw_relations:
+        # if self.draw_relations:
         #    self.__add_relations()
         # Write the pathway map to PDF
         self.drawing.save()
@@ -338,11 +338,11 @@ class KGMLCanvas(object):
         centre_to = (0.5 * (bounds_to[0][0] + bounds_to[1][0]),
                      0.5 * (bounds_to[0][1] + bounds_to[1][1]))
         p = self.drawing.beginPath()
-        #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
+        # print(True, g_from.name, g_to.name, bounds_to, bounds_from)
         # If the 'from' and 'to' graphics are vertically-aligned, draw a line
         # from the 'from' to the 'to' entity
         if bounds_to[0][0] < centre_from[0] < bounds_to[1][0]:
-            #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
+            # print(True, g_from.name, g_to.name, bounds_to, bounds_from)
             if centre_to[1] > centre_from[1]:  # to above from
                 p.moveTo(centre_from[0], bounds_from[1][1])
                 p.lineTo(centre_from[0], bounds_to[0][1])
@@ -352,7 +352,7 @@ class KGMLCanvas(object):
                 p.lineTo(centre_from[0], bounds_to[1][1])
                 # Draw arrow point - TODO
         elif bounds_from[0][0] < centre_to[0] < bounds_from[1][0]:
-            #print(True, g_from.name, g_to.name, bounds_to, bounds_from)
+            # print(True, g_from.name, g_to.name, bounds_to, bounds_from)
             if centre_to[1] > centre_from[1]:  # to above from
                 p.moveTo(centre_to[0], bounds_from[1][1])
                 p.lineTo(centre_to[0], bounds_to[0][1])
@@ -362,10 +362,10 @@ class KGMLCanvas(object):
                 p.lineTo(centre_to[0], bounds_to[1][1])
                 # Draw arrow point - TODO
         self.drawing.drawPath(p)    # Draw arrow shaft
-        #print(g_from)
-        #print(bounds_from)
-        #print(g_to)
-        #print(bounds_to)
+        # print(g_from)
+        # print(bounds_from)
+        # print(g_to)
+        # print(bounds_to)
 
 
 if __name__ == '__main__':

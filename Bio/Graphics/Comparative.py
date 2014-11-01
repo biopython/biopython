@@ -40,7 +40,7 @@ class ComparativeScatterPlot(object):
 
     display_info = [[(1, 2), (3, 4), (5, 6)]]
     """
-    def __init__(self, output_format = 'pdf'):
+    def __init__(self, output_format='pdf'):
         # customizable attributes
         self.number_of_columns = 1
         self.page_size = letter

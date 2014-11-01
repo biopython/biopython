@@ -113,7 +113,7 @@ class GraphSet(object):
             Add a GraphData object to the diagram (will be stored
             internally
         """
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
         if altcolour is not None:

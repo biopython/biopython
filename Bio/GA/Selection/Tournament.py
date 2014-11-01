@@ -20,7 +20,7 @@ from .Abstract import AbstractSelection
 class TournamentSelection(AbstractSelection):
     """Implement tournament style selection.
     """
-    def __init__(self, mutator, crossover, repairer, num_competitors = 2):
+    def __init__(self, mutator, crossover, repairer, num_competitors=2):
         """Initialize the tournament selector.
 
         Arguments:
@@ -64,7 +64,7 @@ class TournamentSelection(AbstractSelection):
 
                 # sort the competitors by fitness, this will put them
                 # from lowest to highest
-                competitors.sort(key = lambda org: org.fitness)
+                competitors.sort(key=lambda org: org.fitness)
 
                 # get the best organism
                 new_orgs.append(competitors[-1])
