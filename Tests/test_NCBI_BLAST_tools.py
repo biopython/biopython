@@ -260,13 +260,16 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name in ["rpstblastn", "rpsblast"]:
             # Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
             extra = extra.difference(["-gilist", "-negative_gilist"])
+            # Removed in BLAST 2.2.30 so will look like extra args on new BLAST
+            extra = extra.difference(["-word_size"])
         if exe_name == "deltablast":
             # New in BLAST+ 2.2.29 so will look like extra args on BLAST+ 2.2.28
             extra = extra.difference(["-entrez_query", "-max_hsps", "-sum_statistics"])
         if exe_name in ["blastx", "tblastn"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-task"])
-        if exe_name == "psiblast":
+        if exe_name in ["blastn", "blastp", "blastx", "deltablast", "psiblast",
+                        "rpstblastn", "rpsblast", "tblastn", "tblastx"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-line_length", "-qcov_hsp_perc", "-sum_stats"])
 

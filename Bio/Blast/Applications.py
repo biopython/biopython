@@ -74,6 +74,14 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                     Integer argument (at least zero). Default is 200.
                     See also num_alignments.""",
                     equate=False),
+            _Option(["-line_length", "line_length"],
+                    """Line length for formatting alignments (integer, at least 1, default 60).
+
+                    Not applicable for outfmt > 4.
+
+                    Added in BLAST+ 2.2.30.
+                    """,
+                    equate=False),
             _Switch(["-html", "html"],
                     "Produce HTML output? See also the outfmt option."),
             # Miscellaneous options
@@ -160,6 +168,12 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-entrez_query", "entrez_query"],
                     "Restrict search with the given Entrez query (requires remote).",
                     equate=False),
+            _Option(["-qcov_hsp_perc", "qcov_hsp_perc"],
+                    """Percent query coverage per hsp (float, 0 to 100).
+
+                    Added in BLAST+ 2.2.30.
+                    """,
+                    equate=False),
             _Option(["-max_target_seqs", "max_target_seqs"],
                     "Maximum number of aligned sequences to keep (integer, at least one).",
                     equate=False),
@@ -178,6 +192,13 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     equate=False),
             _Switch(["-sum_statistics", "sum_statistics"],
                     "Use sum statistics."),
+            # Is -sum_stats a BLAST+ bug, why not use -sum_statistics switch?
+            _Option(["-sum_stats", "sum_stats"],
+                    """Use sum statistics (boolean).
+
+                    Added in BLAST+ 2.2.30.
+                    """,
+                    equate=False),
             # Extension options
             _Option(["-xdrop_ungap", "xdrop_ungap"],
                     "X-dropoff value (in bits) for ungapped extensions (float).",
@@ -777,15 +798,6 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="psiblast", **kwargs):
         self.parameters = [
-            # Formatting options
-            _Option(["-line_length", "line_length"],
-                    """Line length for formatting alignments (integer, at least 1, default 60).
-
-                    Not applicable for outfmt > 4.
-
-                    Added in BLAST+ 2.2.30.
-                    """,
-                    equate=False),
             # General search options:
             _Option(["-matrix", "matrix"],
                     "Scoring matrix name (default BLOSUM62).",
@@ -810,21 +822,6 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
-                    equate=False),
-            # Restrict search or results
-            _Option(["-qcov_hsp_perc", "qcov_hsp_perc"],
-                     """Percent query coverage per hsp (float, 0..100).
-
-                     Added in BLAST+ 2.2.30.
-                     """,
-                     equate=False),
-            # Statistical options
-            # Is -sum_stats a BLAST+ bug, why not use -sum_statistics switch?
-            _Option(["-sum_stats", "sum_stats"],
-                    """Use sum statistics (boolean).
-
-                    Added in BLAST+ 2.2.30.
-                    """,
                     equate=False),
             # Extension options:
             _Option(["-gap_trigger", "gap_trigger"],
