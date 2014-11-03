@@ -204,7 +204,7 @@ def replace_entry(line, fieldn, newentry):
     the original field entry and the new field entry are of
     different lengths.
     """
-    #This method depends on xpktools._find_start_entry
+    # This method depends on xpktools._find_start_entry
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
@@ -275,7 +275,7 @@ def data_table(fn_list, datalabel, keyatom):
        List of table rows indexed by `keyatom`.
 
     """
-    #TODO - Clarify this docstring, add an example?
+    # TODO - Clarify this docstring, add an example?
     outlist = []
 
     [dict_list, label_line_list] = _read_dicts(fn_list, keyatom)

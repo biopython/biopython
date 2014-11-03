@@ -40,7 +40,7 @@ class Chain(object):
         """Return a list of all node ids."""
         return list(self.chain.keys())
 
-    def add(self,node,prev=None):
+    def add(self, node, prev=None):
         """Attaches node to another."""
         if prev is not None and prev not in self.chain:
             raise ChainException('Unknown predecessor: '+str(prev))
@@ -121,7 +121,7 @@ class Chain(object):
 class Node(object):
     """A single node."""
 
-    def __init__(self,data=None):
+    def __init__(self, data=None):
         """Represents a node with one predecessor and multiple successors."""
         self.id=None
         self.data=data
