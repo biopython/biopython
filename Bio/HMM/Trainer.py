@@ -173,7 +173,7 @@ class BaumWelchTrainer(AbstractTrainer):
         AbstractTrainer.__init__(self, markov_model)
 
     def train(self, training_seqs, stopping_criteria,
-              dp_method = ScaledDPAlgorithms):
+              dp_method=ScaledDPAlgorithms):
         """Estimate the parameters using training sequences.
 
         The algorithm for this is taken from Durbin et al. p64, so this

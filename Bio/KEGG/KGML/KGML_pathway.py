@@ -146,10 +146,12 @@ class Pathway(object):
     # Assert correct formatting of the pathway name, and other attributes
     def _getname(self):
         return self._name
+
     def _setname(self, value):
         assert value.startswith('path:'), \
             "Pathway name should begin with 'path:', got %s" % value
         self._name = value
+
     def _delname(self):
         del self._name
     name = property(_getname, _setname, _delname,
@@ -157,8 +159,10 @@ class Pathway(object):
 
     def _getnumber(self):
         return self._number
+
     def _setnumber(self, value):
         self._number = int(value)
+
     def _delnumber(self):
         del self._number
     number = property(_getnumber, _setnumber, _delnumber,
@@ -306,8 +310,10 @@ class Entry(object):
     # Names may be given as a space-separated list of KEGG identifiers
     def _getname(self):
         return ' '.join(self._names)
+
     def _setname(self, value):
         self._names = value.split()
+
     def _delname(self):
         self._names = []
     name = property(_getname, _setname, _delname,
@@ -316,8 +322,10 @@ class Entry(object):
     # Reactions may be given as a space-separated list of KEGG identifiers
     def _getreaction(self):
         return ' '.join(self._reactions)
+
     def _setreaction(self, value):
         self._reactions = value.split()
+
     def _delreaction(self):
         self._reactions = []
     reaction = property(_getreaction, _setreaction, _delreaction,
@@ -326,8 +334,10 @@ class Entry(object):
     # We make sure that the node ID is an integer
     def _getid(self):
         return self._id
+
     def _setid(self, value):
         self._id = int(value)
+
     def _delid(self):
         del self._id
     id = property(_getid, _setid, _delid,
@@ -398,8 +408,10 @@ class Component(object):
     # We make sure that the node ID is an integer
     def _getid(self):
         return self._id
+
     def _setid(self, value):
         self._id = int(value)
+
     def _delid(self):
         del self._id
 
@@ -454,8 +466,10 @@ class Graphics(object):
     # We make sure that the XY coordinates, width and height are numbers
     def _getx(self):
         return self._x
+
     def _setx(self, value):
         self._x = float(value)
+
     def _delx(self):
         del self._x
     x = property(_getx, _setx, _delx,
@@ -463,8 +477,10 @@ class Graphics(object):
 
     def _gety(self):
         return self._y
+
     def _sety(self, value):
         self._y = float(value)
+
     def _dely(self):
         del self._y
     y = property(_gety, _sety, _dely,
@@ -472,8 +488,10 @@ class Graphics(object):
 
     def _getwidth(self):
         return self._width
+
     def _setwidth(self, value):
         self._width = float(value)
+
     def _delwidth(self):
         del self._width
     width = property(_getwidth, _setwidth, _delwidth,
@@ -481,8 +499,10 @@ class Graphics(object):
 
     def _getheight(self):
         return self._height
+
     def _setheight(self, value):
         self._height = float(value)
+
     def _delheight(self):
         del self._height
     height = property(_getheight, _setheight, _delheight,
@@ -491,9 +511,11 @@ class Graphics(object):
     # We make sure that the polyline co-ordinates are integers, too
     def _getcoords(self):
         return self._coords
+
     def _setcoords(self, value):
         clist = [int(e) for e in value.split(',')]
         self._coords = [tuple(clist[i:i+2]) for i in range(0, len(clist), 2)]
+
     def _delcoords(self):
         del self._coords
     coords = property(_getcoords, _setcoords, _delcoords,
@@ -502,11 +524,13 @@ class Graphics(object):
     # Set default colors
     def _getfgcolor(self):
         return self._fgcolor
+
     def _setfgcolor(self, value):
         if value == 'none':
             self._fgcolor = '#000000'  # this default defined in KGML spec
         else:
             self._fgcolor = value
+
     def _delfgcolor(self):
         del self._fgcolor
     fgcolor = property(_getfgcolor, _setfgcolor, _delfgcolor,
@@ -514,11 +538,13 @@ class Graphics(object):
 
     def _getbgcolor(self):
         return self._bgcolor
+
     def _setbgcolor(self, value):
         if value == 'none':
             self._bgcolor = '#000000'  # this default defined in KGML spec
         else:
             self._bgcolor = value
+
     def _delbgcolor(self):
         del self._bgcolor
     bgcolor = property(_getbgcolor, _setbgcolor, _delbgcolor,
@@ -629,8 +655,10 @@ class Reaction(object):
     # Pathway
     def _getid(self):
         return self._id
+
     def _setid(self, value):
         self._id = int(value)
+
     def _delid(self):
         del self._id
     id = property(_getid, _setid, _delid,
@@ -639,8 +667,10 @@ class Reaction(object):
     # Names may show up as a space-separated list of several KEGG identifiers
     def _getnames(self):
         return ' '.join(self._names)
+
     def _setnames(self, value):
         self._names.extend(value.split())
+
     def _delnames(self):
         del self.names
     name = property(_getnames, _setnames, _delnames,
@@ -730,8 +760,10 @@ class Relation(object):
         if self._pathway is not None:
             return self._pathway.entries[self._entry1]
         return self._entry1
+
     def _setentry1(self, value):
         self._entry1 = int(value)
+
     def _delentry1(self):
         del self._entry1
     entry1 = property(_getentry1, _setentry1, _delentry1,
@@ -741,8 +773,10 @@ class Relation(object):
         if self._pathway is not None:
             return self._pathway.entries[self._entry2]
         return self._entry2
+
     def _setentry2(self, value):
         self._entry2 = int(value)
+
     def _delentry2(self):
         del self._entry2
     entry2 = property(_getentry2, _setentry2, _delentry2,
