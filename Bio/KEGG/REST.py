@@ -15,10 +15,11 @@ Nucleic Acids Res. 28, 29-34 (2000).
 API Docs: http://www.kegg.jp/kegg/docs/keggapi.html
 """
 
+from Bio._py3k import urlopen as _urlopen
+
 
 def _q(op, arg1, arg2=None, arg3=None):
 
-  import urllib2
   URL = "http://rest.kegg.jp/%s"
 
   if arg2 and arg3:
@@ -28,10 +29,7 @@ def _q(op, arg1, arg2=None, arg3=None):
   else:
     args = "%s/%s" % (op, arg1)
 
-  req = urllib2.Request(URL % (args))
-  resp = urllib2.urlopen(req)
-
-  return resp
+  return _urlopen(URL % (args))
 
 
 # http://www.kegg.jp/kegg/rest/keggapi.html
