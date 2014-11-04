@@ -94,9 +94,9 @@ def get_surface(pdb_file, PDB_TO_XYZR="pdb_to_xyzr", MSMS="msms"):
     surface=_read_vertex_array(surface_file)
     # clean up tmp files
     # ...this is dangerous
-    #os.system("rm "+xyz_tmp)
-    #os.system("rm "+surface_tmp+".vert")
-    #os.system("rm "+surface_tmp+".face")
+    # os.system("rm "+xyz_tmp)
+    # os.system("rm "+surface_tmp+".vert")
+    # os.system("rm "+surface_tmp+".face")
     return surface
 
 

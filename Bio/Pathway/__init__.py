@@ -68,8 +68,8 @@ class Reaction(object):
 
     """
 
-    def __init__(self, reactants = {}, catalysts = [],
-                 reversible = 0, data = None):
+    def __init__(self, reactants={}, catalysts=[],
+                 reversible=0, data=None):
         """Initializes a new Reaction object."""
         # enforce invariants on reactants:
         self.reactants = reactants.copy()
@@ -158,7 +158,7 @@ class System(object):
     None
     """
 
-    def __init__(self, reactions = []):
+    def __init__(self, reactions=[]):
         """Initializes a new System object."""
         self.__reactions = set(reactions)
 
@@ -185,7 +185,7 @@ class System(object):
 
         Note the order is arbitrary!
         """
-        #TODO - Define __lt__ so that Reactions can be sorted on Python?
+        # TODO - Define __lt__ so that Reactions can be sorted on Python?
         return list(self.__reactions)
 
     def species(self):
@@ -260,7 +260,7 @@ class Network(object):
     None
     """
 
-    def __init__(self, species = []):
+    def __init__(self, species=[]):
         """Initializes a new Network object."""
         self.__graph = MultiGraph(species)
 

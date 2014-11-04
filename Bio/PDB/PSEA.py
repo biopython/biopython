@@ -82,7 +82,7 @@ def annotate(m, ss_seq):
         raise ValueError("Length mismatch %i %i" % (L, len(ss_seq)))
     for i in range(0, L):
         residues[i].xtra["SS_PSEA"]=ss_seq[i]
-    #os.system("rm "+fname)
+    # os.system("rm "+fname)
 
 
 class PSEA(object):
