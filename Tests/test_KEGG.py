@@ -13,8 +13,8 @@ import os
 from Bio.KEGG import Enzyme
 from Bio.KEGG import Compound
 from Bio.KEGG import Map
+from Bio.KEGG import REST
 from Bio.Pathway import System
-from Bio import KEGG
 
 test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
 test_KEGG_Compound_files = ["compound.sample", "compound.irregular"]
@@ -68,159 +68,160 @@ def t_KEGG_Map(testfiles):
         print("\n")
         fh.close()
 
+
 def t_KEGG_Query():
     """Tests Bio.KEGG API Wrapper"""
-    print "Testing Bio.KEGG.query\n\n"
+    print("Testing Bio.KEGG.query\n\n")
 
     # info tests
-    resp = KEGG.info("kegg")
+    resp = REST.kegg_info("kegg")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.info("pathway")
+    resp = REST.kegg_info("pathway")
     resp.read()
-    print resp.url
+    print(resp.url)
 
     # list tests
-    resp = KEGG.list_("pathway")
+    resp = REST.kegg_list("pathway")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("pathway", "hsa")
+    resp = REST.kegg_list("pathway", "hsa")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("organism")
+    resp = REST.kegg_list("organism")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("hsa")
+    resp = REST.kegg_list("hsa")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("T01001")
+    resp = REST.kegg_list("T01001")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("hsa:10458+ece:Z5100")
+    resp = REST.kegg_list("hsa:10458+ece:Z5100")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_(["hsa:10458", "ece:Z5100"])
+    resp = REST.kegg_list(["hsa:10458", "ece:Z5100"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("cpd:C01290+gl:G00092")
+    resp = REST.kegg_list("cpd:C01290+gl:G00092")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_(["cpd:C01290", "gl:G00092"])
+    resp = REST.kegg_list(["cpd:C01290", "gl:G00092"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_("C01290+G00092")
+    resp = REST.kegg_list("C01290+G00092")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.list_(["C01290", "G00092"])
+    resp = REST.kegg_list(["C01290", "G00092"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
     # find tests
-    resp = KEGG.find("genes", "shiga+toxin")
+    resp = REST.kegg_find("genes", "shiga+toxin")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.find("genes", ["shiga", "toxin"])
+    resp = REST.kegg_find("genes", ["shiga", "toxin"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.find("compound", "C7H10O5", "formula")
+    resp = REST.kegg_find("compound", "C7H10O5", "formula")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.find("compound", "O5C7", "formula")
+    resp = REST.kegg_find("compound", "O5C7", "formula")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.find("compound", "174.05", "exact_mass")
+    resp = REST.kegg_find("compound", "174.05", "exact_mass")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.find("compound", "300-310", "mol_weight")
+    resp = REST.kegg_find("compound", "300-310", "mol_weight")
     resp.read()
-    print resp.url
+    print(resp.url)
 
     # get tests
-    resp = KEGG.get("cpd:C01290+gl:G00092")
+    resp = REST.kegg_get("cpd:C01290+gl:G00092")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get(["cpd:C01290", "gl:G00092"])
+    resp = REST.kegg_get(["cpd:C01290", "gl:G00092"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get("C01290+G00092")
+    resp = REST.kegg_get("C01290+G00092")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get(["C01290", "G00092"])
+    resp = REST.kegg_get(["C01290", "G00092"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get("hsa:10458+ece:Z5100")
+    resp = REST.kegg_get("hsa:10458+ece:Z5100")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get(["hsa:10458", "ece:Z5100"])
+    resp = REST.kegg_get(["hsa:10458", "ece:Z5100"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get("hsa:10458+ece:Z5100", "aaseq")
+    resp = REST.kegg_get("hsa:10458+ece:Z5100", "aaseq")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get(["hsa:10458", "ece:Z5100"], "aaseq")
+    resp = REST.kegg_get(["hsa:10458", "ece:Z5100"], "aaseq")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.get("hsa05130", "image")
+    resp = REST.kegg_get("hsa05130", "image")
     resp.read()
-    print resp.url
+    print(resp.url)
 
     # conv tests
-    resp = KEGG.conv("eco", "ncbi-geneid")
+    resp = REST.kegg_conv("eco", "ncbi-geneid")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.conv("ncbi-geneid", "eco")
+    resp = REST.kegg_conv("ncbi-geneid", "eco")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.conv("ncbi-gi", "hsa:10458+ece:Z5100")
+    resp = REST.kegg_conv("ncbi-gi", "hsa:10458+ece:Z5100")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.conv("ncbi-gi", ["hsa:10458", "ece:Z5100"])
+    resp = REST.kegg_conv("ncbi-gi", ["hsa:10458", "ece:Z5100"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
     # link tests
-    resp = KEGG.link("pathway", "hsa")
+    resp = REST.kegg_link("pathway", "hsa")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.link("hsa", "pathway")
+    resp = REST.kegg_link("hsa", "pathway")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.link("pathway", "hsa:10458+ece:Z5100")
+    resp = REST.kegg_link("pathway", "hsa:10458+ece:Z5100")
     resp.read()
-    print resp.url
+    print(resp.url)
 
-    resp = KEGG.link("pathway", ["hsa:10458", "ece:Z5100"])
+    resp = REST.kegg_link("pathway", ["hsa:10458", "ece:Z5100"])
     resp.read()
-    print resp.url
+    print(resp.url)
 
 
 t_KEGG_Enzyme(test_KEGG_Enzyme_files)
