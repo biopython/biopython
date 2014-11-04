@@ -11,7 +11,7 @@ from functools import reduce
 class Graph(object):
     """A directed graph abstraction with labeled edges."""
 
-    def __init__(self, nodes = []):
+    def __init__(self, nodes=[]):
         """Initializes a new Graph object."""
         self._adjacency_list = {}    # maps parent -> set of child objects
         for n in nodes:
@@ -55,7 +55,7 @@ class Graph(object):
         if node not in self._adjacency_list:
             self._adjacency_list[node] = set()
 
-    def add_edge(self, source, to, label = None):
+    def add_edge(self, source, to, label=None):
         """Adds an edge to this graph."""
         if source not in self._adjacency_list:
             raise ValueError("Unknown <from> node: " + str(source))

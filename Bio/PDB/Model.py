@@ -16,7 +16,7 @@ class Model(Entity):
     normally contain many different models.
     """
 
-    def __init__(self, id, serial_num = None):
+    def __init__(self, id, serial_num=None):
         """
         Arguments:
         o id - int

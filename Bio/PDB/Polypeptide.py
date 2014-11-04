@@ -177,7 +177,7 @@ def is_aa(residue, standard=False):
     >>> is_aa('FME', standard=True)
     False
     """
-    #TODO - What about special cases like XXX, can they appear in PDB files?
+    # TODO - What about special cases like XXX, can they appear in PDB files?
     if not isinstance(residue, basestring):
         residue=residue.get_resname()
     residue=residue.upper()
@@ -318,9 +318,9 @@ class _PPBuilder:
         if is_aa(residue, standard=standard_aa_only):
             return True
         elif not standard_aa_only and "CA" in residue.child_dict:
-            #It has an alpha carbon...
-            #We probably need to update the hard coded list of
-            #non-standard residues, see function is_aa for details.
+            # It has an alpha carbon...
+            # We probably need to update the hard coded list of
+            # non-standard residues, see function is_aa for details.
             warnings.warn("Assuming residue %s is an unknown modified "
                           "amino acid" % residue.get_resname())
             return True
@@ -358,7 +358,7 @@ class _PPBuilder:
                 while not accept(prev_res, aa_only):
                     prev_res = next(chain_it)
             except StopIteration:
-                #No interesting residues at all in this chain
+                # No interesting residues at all in this chain
                 continue
             pp=None
             for next_res in chain_it:
@@ -371,8 +371,8 @@ class _PPBuilder:
                         pp_list.append(pp)
                     pp.append(next_res)
                 else:
-                    #Either too far apart, or one of the residues is unwanted.
-                    #End the current peptide
+                    # Either too far apart, or one of the residues is unwanted.
+                    # End the current peptide
                     pp=None
                 prev_res=next_res
         return pp_list
