@@ -11,7 +11,7 @@ try:
     float("nan")
     _nan_float = float
 except ValueError:
-    #Happens prior to Python 2.6 depending on C library, e.g. breaks on WinXP
+    # Happens prior to Python 2.6 depending on C library, e.g. breaks on WinXP
     def _nan_float(text):
         try:
             return float(text)
@@ -144,7 +144,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
                     ns_sites[current_model] = model_results
                 model_start = line_num
                 current_model = int(model_res.group(1))
-                model_results = {"description":model_res.group(2)}
+                model_results = {"description": model_res.group(2)}
         if ns_sites.get(current_model) is None:
             # When we reach the end of the file, we'll still have one more
             # model to parse.
@@ -255,8 +255,8 @@ def parse_model(lines, results):
             gene_num = int(re.match("gene # (\d+)", line).group(1))
             if parameters.get("genes") is None:
                 parameters["genes"] = {}
-            parameters["genes"][gene_num] = {"kappa":line_floats[0],
-                                            "omega":line_floats[1]}
+            parameters["genes"][gene_num] = {"kappa": line_floats[0],
+                                            "omega": line_floats[1]}
         # Find dN values.
         # Example match: "tree length for dN:       0.2990"
         elif "tree length for dN" in line and len(line_floats) > 0:
@@ -316,14 +316,14 @@ def parse_model(lines, results):
             branch = branch_res.group(1)
             if parameters.get("branches") is None:
                 parameters["branches"] = {}
-            #Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
+            # Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
             line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
             parameters["branches"][branch]= {
                 "t": _nan_float(params[0].strip()),
                 "N": _nan_float(params[1].strip()),
                 "S": _nan_float(params[2].strip()),
-                "omega":_nan_float(params[3].strip()),
+                "omega": _nan_float(params[3].strip()),
                 "dN": _nan_float(params[4].strip()),
                 "dS": _nan_float(params[5].strip()),
                 "N*dN": _nan_float(params[6].strip()),
@@ -332,7 +332,7 @@ def parse_model(lines, results):
         # lines.
         # Example matches:
         # "  p0=  0.99043  p=  0.36657 q=  1.04445
-        #"  (p1=  0.00957) w=  3.25530"
+        # "  (p1=  0.00957) w=  3.25530"
         elif len(model_params) > 0:
             float_model_params = []
             for param in model_params:

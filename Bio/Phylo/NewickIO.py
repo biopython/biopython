@@ -23,15 +23,15 @@ class NewickError(Exception):
 
 
 tokens = [
-    (r"\(",                         'open parens'),
-    (r"\)",                         'close parens'),
-    (r"[^\s\(\)\[\]\'\:\;\,]+",     'unquoted node label'),
+    (r"\(", 'open parens'),
+    (r"\)", 'close parens'),
+    (r"[^\s\(\)\[\]\'\:\;\,]+", 'unquoted node label'),
     (r"\:[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
-    (r"\,",                         'comma'),
-    (r"\[(\\.|[^\]])*\]",           'comment'),
-    (r"\'(\\.|[^\'])*\'",           'quoted node label'),
-    (r"\;",                         'semicolon'),
-    (r"\n",                         'newline'),
+    (r"\,", 'comma'),
+    (r"\[(\\.|[^\]])*\]", 'comment'),
+    (r"\'(\\.|[^\'])*\'", 'quoted node label'),
+    (r"\;", 'semicolon'),
+    (r"\n", 'newline'),
 ]
 tokenizer = re.compile('(%s)' % '|'.join(token[0] for token in tokens))
 token_dict = dict((name, re.compile(token)) for (token, name) in tokens)

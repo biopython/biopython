@@ -408,7 +408,7 @@ def _part(clades):
                         to_add.add(bs & bitstr ^ bitstr)
                         to_add.add(bs & bitstr ^ bs)
                         to_remove.add(bs)
-                #bitstrs = bitstrs | to_add
+                # bitstrs = bitstrs | to_add
                 bitstrs ^= to_remove
                 if to_add:
                     for ta in sorted(to_add, key=lambda bs: bs.count('1')):

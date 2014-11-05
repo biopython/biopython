@@ -7,9 +7,9 @@ import re
 
 
 def parse_ng86(lines, results):
-    """ Parse the Nei & Gojobori (1986) section of the resuls.
+    """ Parse the Nei & Gojobori (1986) section of the results.
     Nei_Gojobori results are organized in a lower
-    triangular mattrix, with the sequence names labeling
+    triangular matrix, with the sequence names labeling
     the rows and statistics in the format:
     w (dN dS) per column
     Example row (2 columns):
@@ -29,8 +29,8 @@ def parse_ng86(lines, results):
                 NG86["omega"] = line_floats[i]
                 NG86["dN"] = line_floats[i+1]
                 NG86["dS"] = line_floats[i+2]
-                results[seq_name][sequences[i//3]] = {"NG86":NG86}
-                results[sequences[i//3]][seq_name] = {"NG86":NG86}
+                results[seq_name][sequences[i//3]] = {"NG86": NG86}
+                results[sequences[i//3]][seq_name] = {"NG86": NG86}
     return (results, sequences)
 
 
