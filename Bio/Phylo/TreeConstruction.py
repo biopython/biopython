@@ -364,16 +364,16 @@ class DistanceCalculator(object):
     dna_alphabet = ['A', 'T', 'C', 'G']
 
     # BLAST nucleic acid scoring matrix
-    blastn = [[5],
-              [-4, 5],
-              [-4, -4, 5],
-              [-4, -4, -4, 5]]
+    blastn = [[ 5],
+              [-4,  5],
+              [-4, -4,  5],
+              [-4, -4, -4,  5]]
 
     # transition/transversion scoring matrix
-    trans = [[6],
-             [-5, 6],
-             [-5, -1, 6],
-             [-1, -5, -5, 6]]
+    trans = [[ 6],
+             [-5,  6],
+             [-5, -1,  6],
+             [-1, -5, -5,  6]]
 
     protein_alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L',
                         'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y',
