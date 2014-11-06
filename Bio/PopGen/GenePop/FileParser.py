@@ -111,9 +111,9 @@ class FileRecord(object):
         """
         self._handle = open(self.fname)
         self.comment_line = self._handle.readline().rstrip()
-        #We can now have one loci per line or all loci in a single line
-        #separated by either space or comma+space...
-        #We will remove all commas on loci... that should not be a problem
+        # We can now have one loci per line or all loci in a single line
+        # separated by either space or comma+space...
+        # We will remove all commas on loci... that should not be a problem
         sample_loci_line = self._handle.readline().rstrip().replace(',', '')
         all_loci = sample_loci_line.split(' ')
         self.loci_list.extend(all_loci)
@@ -124,7 +124,7 @@ class FileRecord(object):
             self.loci_list.append(line)
         else:
             raise ValueError('No population data found, file probably not GenePop related')
-        #self._after_pop = True
+        # self._after_pop = True
         self.current_pop = 0
         self.current_ind = 0
 
@@ -321,7 +321,7 @@ class FileRecord(object):
             if self.loci_list[i] == name:
                 self.remove_locus_by_position(i, fname)
                 return
-        #If here than locus not existent... Maybe raise exception?
+        # If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
 
     def remove_loci_by_name(self, names, fname):
@@ -335,5 +335,5 @@ class FileRecord(object):
             if self.loci_list[i] in names:
                 positions.append(i)
         self.remove_loci_by_position(positions, fname)
-        #If here than locus not existent... Maybe raise exception?
+        # If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?

@@ -17,11 +17,11 @@ import subprocess
 import sys
 from random import randint
 from time import strftime, clock
-#from logging import debug
+# from logging import debug
 
 
 def my_float(f):
-    #Because of Jython, mostly
+    # Because of Jython, mostly
     if f == "-nan":
         f = "nan"
     return float(f)
@@ -144,10 +144,10 @@ class FDistController(object):
         Important Note: This can take quite a while to run!
         """
         if fst >= 0.9:
-            #Lets not joke
+            # Lets not joke
             fst = 0.899
         if fst <= 0.0:
-            #0  will make fdist run forever
+            # 0  will make fdist run forever
             fst = 0.001
         if is_dominant:
             config_name = "Dfdist_params"
@@ -213,8 +213,8 @@ class FDistController(object):
             if real_fst > fst:
                 max_run_fst = current_run_fst
                 if current_run_fst < min_run_fst + limit:
-                    #we can do no better
-                    #debug('Lower limit is ' + str(min_run_fst))
+                    # we can do no better
+                    # debug('Lower limit is ' + str(min_run_fst))
                     return self.run_fdist(npops, nsamples, current_run_fst,
                                           sample_size, mut, num_sims,
                                           data_dir)

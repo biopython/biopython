@@ -15,14 +15,14 @@ from Bio.PopGen.SimCoal import builtin_tpl_dir
 def exec_template(template):
     executed_template = template
     match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
-    #while len(match.groups())>0:
+    # while len(match.groups())>0:
     while match:
         exec_result = str(eval(match.groups()[0]))
         executed_template = executed_template.replace(
                '!!!' + match.groups()[0] + '!!!',
                exec_result, 1)
         match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
-        #match = patt.matcher(String(executed_template))
+        # match = patt.matcher(String(executed_template))
     return executed_template
 
 
@@ -30,15 +30,15 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
     if (para_list == []):
         template = in_string
         f_name = out_file_prefix
-        #f_name += '_' + str(total_size)
+        # f_name += '_' + str(total_size)
         for tup in curr_values:
             name, val = tup
             f_name += '_' + str(val)
-            #reg = re.compile('\?' + name, re.MULTILINE)
-            #template = re.sub(reg, str(val), template)
+            # reg = re.compile('\?' + name, re.MULTILINE)
+            # template = re.sub(reg, str(val), template)
             template = template.replace('?'+name, str(val))
         with open(f_name + '.par', 'w') as f:
-            #executed_template = template
+            # executed_template = template
             executed_template = exec_template(template)
             clean_template = executed_template.replace('\r\n', '\n').replace('\n\n', '\n')
             f.write(clean_template)
@@ -68,7 +68,7 @@ def get_xy_from_matrix(x_max, y_max, pos):
 
 
 def get_step_2d(x_max, y_max, x, y, mig):
-    my_x,    my_y    = get_xy_from_matrix(x_max, y_max, y)
+    my_x, my_y = get_xy_from_matrix(x_max, y_max, y)
     other_x, other_y = get_xy_from_matrix(x_max, y_max, x)
 
     if (my_x-other_x)**2 + (my_y-other_y)**2 == 1:
@@ -125,27 +125,27 @@ def process_text(in_string, out_file_prefix, para_list, curr_values,
     return process_para(text, out_file_prefix, para_list, [])
 
 
-#def prepare_dir():
+# def prepare_dir():
 #    try:
-#        mkdir(sep.join([Config.dataDir, 'SimCoal'])) #Should exist, but...
+#        mkdir(sep.join([Config.dataDir, 'SimCoal'])) # Should exist, but...
 #    except OSError:
-#        pass #Its ok if already exists
+#        pass # Its ok if already exists
 #    try:
 #        mkdir(sep.join([Config.dataDir, 'SimCoal', 'runs']))
 #    except OSError:
-#        pass #Its ok if already exists
+#        pass # Its ok if already exists
 
 
-#sep is because of jython
+# sep is because of jython
 def generate_model(par_stream, out_prefix, params,
-                   specific_processor = no_processor, out_dir = '.'):
-    #prepare_dir()
+                   specific_processor=no_processor, out_dir='.'):
+    # prepare_dir()
     text = par_stream.read()
     out_file_prefix = sep.join([out_dir, out_prefix])
     return process_text(text, out_file_prefix, params, [], specific_processor)
 
 
-def get_demography_template(stream, model, tp_dir = None):
+def get_demography_template(stream, model, tp_dir=None):
     '''
         Gets a demograpy template.
 
@@ -157,10 +157,10 @@ def get_demography_template(stream, model, tp_dir = None):
                  use an internal template
     '''
     if tp_dir is None:
-        #Internal Template
+        # Internal Template
         filename = sep.join([builtin_tpl_dir, model + '.par'])
     else:
-        #External template
+        # External template
         filename = sep.join([tp_dir, model + '.par'])
     with open(filename, 'r') as f:
         l = f.readline()
@@ -208,7 +208,7 @@ def get_chr_template(stream, chrs):
                 _gen_loci(stream, loci)
 
 
-def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=None):
+def generate_simcoal_from_template(model, chrs, params, out_dir='.', tp_dir=None):
     '''
        Writes a complete SimCoal2 template file.
 
@@ -221,7 +221,7 @@ def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=No
     with open(out_dir + sep + 'tmp.par', 'w') as stream:
         get_demography_template(stream, model, tp_dir)
         get_chr_template(stream, chrs)
-    #with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
-        #print par_stream.read()
+    # with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
+        # print par_stream.read()
     with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
-        generate_model(par_stream, model, params, out_dir = out_dir)
+        generate_model(par_stream, model, params, out_dir=out_dir)

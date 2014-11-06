@@ -82,7 +82,7 @@ class SimCoalCache(object):
         tf.close()
 
 
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #  cache = Cache('/home/work/werk/consolidator/sc_cache',
 #      '/home/work/software/simcoal')
 #  cache.run_simcoal('.', 'island_snp-50_0.0025_10_0.083_100_60.par', 102)

@@ -26,14 +26,14 @@ class SimCoalController(object):
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name  # remove this?
         dir_contents = os.listdir(self.simcoal_dir)
-        #We expect the tool to be installed as simcoal2(.exe)
-        #without any trailing version number.
+        # We expect the tool to be installed as simcoal2(.exe)
+        # without any trailing version number.
         self.bin_name = "simcoal2"
         if self.bin_name not in dir_contents:
-            #Try case insensitive,
+            # Try case insensitive,
             dir_contents = [x.lower() for x in dir_contents]
         if self.bin_name not in dir_contents:
-            #Try with .exe
+            # Try with .exe
             self.bin_name += '.exe'
         if self.bin_name not in dir_contents:
             raise IOError("SimCoal not available")
@@ -47,15 +47,15 @@ class SimCoalController(object):
         if par_dir is None:
             par_dir = os.sep.join([".", 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
-        #TODO - Make sure we change drive on Windows as well?
+        # TODO - Make sure we change drive on Windows as well?
         os.chdir(par_dir)
         exe = os.path.join(self.simcoal_dir, self.bin_name)
         if " " in exe:
             exe = '"' + exe + '"'
         cmd = exe + ' ' + par_file + ' ' + str(num_sims) + ' ' + ploydi
-        #TODO - Better way to spot if on Jython on Windows?
+        # TODO - Better way to spot if on Jython on Windows?
         if sys.platform == "win32" or self.bin_name.endswith(".exe"):
-            #There is no /dev/nul on Windows
+            # There is no /dev/nul on Windows
             cmd += ' > nul 2>nul'
         else:
             cmd += ' >/dev/null 2>&1'

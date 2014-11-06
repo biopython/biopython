@@ -52,9 +52,9 @@ def read(handle):
     """
     record = Record()
     record.comment_line = str(next(handle)).rstrip()
-    #We can now have one loci per line or all loci in a single line
-    #separated by either space or comma+space...
-    #We will remove all commas on loci... that should not be a problem
+    # We can now have one loci per line or all loci in a single line
+    # separated by either space or comma+space...
+    # We will remove all commas on loci... that should not be a problem
     sample_loci_line = str(next(handle)).rstrip().replace(',', '')
     all_loci = sample_loci_line.split(' ')
     record.loci_list.extend(all_loci)
@@ -213,5 +213,5 @@ class Record(object):
             if self.loci_list[i] == name:
                 self.remove_locus_by_position(i)
                 return
-        #If here than locus not existent... Maybe raise exception?
+        # If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?

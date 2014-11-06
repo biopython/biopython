@@ -121,7 +121,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
             stream.readline()
             stream.readline()
             table = _read_table(stream, [str, _gp_float, _gp_float, _gp_float, _gp_float, _gp_int, str])
-            #loci might mean pop if hook="Locus "
+            # loci might mean pop if hook="Locus "
             loci = {}
             for entry in table:
                 if len(entry) < 3:
@@ -133,7 +133,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
                     loci[locus] = p, se, fis_wc, fis_rh, steps
             return loci
         l = stream.readline()
-    #self.done = True
+    # self.done = True
     raise StopIteration
 
 
@@ -173,7 +173,7 @@ class _FileIterator:
         try:
             os.remove(self.fname)
         except OSError:
-            #Jython seems to call the iterator twice
+            # Jython seems to call the iterator twice
             pass
 
 
@@ -312,7 +312,7 @@ class GenePopController(object):
             p, se, switches = tuple(_gp_float(x) for x in [y for y in l.split(" ") if y != ""])
         return pop_p, loc_p, (p, se, switches)
 
-    #1.1
+    # 1.1
     def test_pop_hz_deficiency(self, fname, enum_test=True,
                                dememorization=10000, batches=20,
                                iterations=5000):
@@ -326,7 +326,7 @@ class GenePopController(object):
         return self._test_pop_hz_both(fname, 1, ".D", enum_test,
                                       dememorization, batches, iterations)
 
-    #1.2
+    # 1.2
     def test_pop_hz_excess(self, fname, enum_test=True,
                            dememorization=10000, batches=20,
                            iterations=5000):
@@ -340,7 +340,7 @@ class GenePopController(object):
         return self._test_pop_hz_both(fname, 2, ".E", enum_test,
                                       dememorization, batches, iterations)
 
-    #1.3 P file
+    # 1.3 P file
     def test_pop_hz_prob(self, fname, ext, enum_test=False,
                          dememorization=10000, batches=20,
                          iterations=5000):
@@ -373,7 +373,7 @@ class GenePopController(object):
 
         return _FileIterator(hw_prob_loci_func, fname + ".P"), _FileIterator(hw_prob_pop_func, fname + ".P2")
 
-    #1.4
+    # 1.4
     def test_global_hz_deficiency(self, fname, enum_test=True,
                                   dememorization=10000, batches=20,
                                   iterations=5000):
@@ -393,7 +393,7 @@ class GenePopController(object):
         return self._test_global_hz_both(fname, 4, ".DG", enum_test,
                                          dememorization, batches, iterations)
 
-    #1.5
+    # 1.5
     def test_global_hz_excess(self, fname, enum_test=True,
                               dememorization=10000, batches=20,
                               iterations=5000):
@@ -413,7 +413,7 @@ class GenePopController(object):
         return self._test_global_hz_both(fname, 5, ".EG", enum_test,
                                          dememorization, batches, iterations)
 
-    #2.1
+    # 2.1
     def test_ld(self, fname, dememorization=10000,
                 batches=20, iterations=5000):
         opts = self._get_opts(dememorization, batches, iterations)
@@ -464,31 +464,31 @@ class GenePopController(object):
         return (_FileIterator(ld_pop_func, fname + ".DIS", f1),
                 _FileIterator(ld_func, fname + ".DI2", f2))
 
-    #2.2
+    # 2.2
     def create_contingency_tables(self, fname):
         raise NotImplementedError
 
-    #3.1 PR/GE files
+    # 3.1 PR/GE files
     def test_genic_diff_all(self, fname, dememorization=10000,
                             batches=20, iterations=5000):
         raise NotImplementedError
 
-    #3.2 PR2/GE2 files
+    # 3.2 PR2/GE2 files
     def test_genic_diff_pair(self, fname, dememorization=10000,
                              batches=20, iterations=5000):
         raise NotImplementedError
 
-    #3.3 G files
+    # 3.3 G files
     def test_genotypic_diff_all(self, fname, dememorization=10000,
                                 batches=20, iterations=5000):
         raise NotImplementedError
 
-    #3.4 2G2 files
+    # 3.4 2G2 files
     def test_genotypic_diff_pair(self, fname, dememorization=10000,
                                  batches=20, iterations=5000):
         raise NotImplementedError
 
-    #4
+    # 4
     def estimate_nm(self, fname):
         self._run_genepop(["PRI"], [4], fname)
         with open(fname + ".PRI") as f:
@@ -515,7 +515,7 @@ class GenePopController(object):
         os.remove(fname + ".PRI")
         return mean_sample_size, mean_priv_alleles, mig10, mig25, mig50, mig_corrected
 
-    #5.1
+    # 5.1
     def calc_allele_genotype_freqs(self, fname):
         """Calculates allele and genotype frequencies per locus and per sample.
 
@@ -547,19 +547,19 @@ class GenePopController(object):
         Will create a file called fname.INF
         """
         self._run_genepop(["INF"], [5, 1], fname)
-        #First pass, general information
-        #num_loci = None
-        #num_pops = None
-        #with open(fname + ".INF") as f:
-            #l = f.readline()
-            #while (num_loci is None or num_pops is None) and l != '':
-               #m = re.search("Number of populations detected : ([0-9+])", l)
-               #if m is not None:
-                   #num_pops = _gp_int(m.group(1))
-               #m = re.search("Number of loci detected        : ([0-9+])", l)
-               #if m is not None:
-                   #num_loci = _gp_int(m.group(1))
-               #l = f.readline()
+        # First pass, general information
+        # num_loci = None
+        # num_pops = None
+        # with open(fname + ".INF") as f:
+        #     l = f.readline()
+        #     while (num_loci is None or num_pops is None) and l != '':
+        #         m = re.search("Number of populations detected : ([0-9+])", l)
+        #         if m is not None:
+        #             num_pops = _gp_int(m.group(1))
+        #          m = re.search("Number of loci detected        : ([0-9+])", l)
+        #          if m is not None:
+        #              num_loci = _gp_int(m.group(1))
+        #          l = f.readline()
 
         def pop_parser(self):
             if hasattr(self, "old_line"):
@@ -581,7 +581,7 @@ class GenePopController(object):
                     if hasattr(self, "curr_pop"):
                         if self.first_locus == locus:
                             old_pop = self.curr_pop
-                            #self.curr_pop = pop
+                            # self.curr_pop = pop
                             self.old_line = l
                             del self.first_locus
                             del self.curr_pop
@@ -694,15 +694,15 @@ class GenePopController(object):
 
         return _FileIterator(fis_func, fname + ext), avg_fis, avg_Qintra
 
-    #5.2
+    # 5.2
     def calc_diversities_fis_with_identity(self, fname):
         return self._calc_diversities_fis(fname, ".DIV")
 
-    #5.3
+    # 5.3
     def calc_diversities_fis_with_size(self, fname):
         raise NotImplementedError
 
-    #6.1 Less genotype frequencies
+    # 6.1 Less genotype frequencies
     def calc_fst_all(self, fname):
         """Executes GenePop and gets Fst/Fis/Fit (all populations)
 
@@ -777,7 +777,7 @@ class GenePopController(object):
             raise StopIteration
         return (allFis, allFst, allFit), _FileIterator(proc, fname + ".FST")
 
-    #6.2
+    # 6.2
     def calc_fst_pair(self, fname):
         self._run_genepop([".ST2", ".MIG"], [6, 2], fname)
         with open(fname + ".ST2") as f:
@@ -804,11 +804,11 @@ class GenePopController(object):
         os.remove(fname + ".MIG")
         return _FileIterator(loci_func, fname + ".ST2"), avg_fst
 
-    #6.3
+    # 6.3
     def calc_rho_all(self, fname):
         raise NotImplementedError
 
-    #6.4
+    # 6.4
     def calc_rho_pair(self, fname):
         raise NotImplementedError
 
@@ -845,7 +845,7 @@ class GenePopController(object):
         os.remove(fname + ".ISO")
         return estimate, distance, (a, b), (bb, bblow, bbhigh)
 
-    #6.5
+    # 6.5
     def calc_ibd_diplo(self, fname, stat="a", scale="Log", min_dist=0.00001):
         """Calculates isolation by distance statistics for diploid data.
 
@@ -855,7 +855,7 @@ class GenePopController(object):
         """
         return self._calc_ibd(fname, 5, stat, scale, min_dist)
 
-    #6.6
+    # 6.6
     def calc_ibd_haplo(self, fname, stat="a", scale="Log", min_dist=0.00001):
         """Calculates isolation by distance statistics for haploid data.
 

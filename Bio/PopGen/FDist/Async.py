@@ -90,7 +90,7 @@ class SplitFDist(object):
         self.report_fun = report_fun
         self.split_size = split_size
 
-    #There might be races when reporting...
+    # There might be races when reporting...
     def monitor(self):
         """Monitors and reports (using report_fun) execution.
 
@@ -137,7 +137,7 @@ class SplitFDist(object):
         """
         self.async.access_ds.release()
 
-    #You can only run a fdist case at a time
+    # You can only run a fdist case at a time
     def run_fdist(self, npops, nsamples, fst, sample_size,
                   mut=0, num_sims=20000, data_dir='.',
                   is_dominant=False, theta=0.06, beta=(0.25, 0.25),

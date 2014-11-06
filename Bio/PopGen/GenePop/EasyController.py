@@ -15,7 +15,7 @@ from Bio.PopGen import GenePop
 
 
 class EasyController(object):
-    def __init__(self, fname, genepop_dir = None):
+    def __init__(self, fname, genepop_dir=None):
         """Initializes the controller.
 
         genepop_dir is the directory where GenePop is.
@@ -32,7 +32,7 @@ class EasyController(object):
             rec = GenePop.read(f)
         return rec.pop_list, rec.loci_list
 
-    def test_hw_pop(self, pop_pos, test_type = "probability"):
+    def test_hw_pop(self, pop_pos, test_type="probability"):
         if test_type=="deficiency":
             hw_res = self._controller.test_pop_hz_deficiency(self._fname)
         elif test_type=="excess":
@@ -43,8 +43,8 @@ class EasyController(object):
             next(hw_res)
         return next(hw_res)
 
-    def test_hw_global(self, test_type = "deficiency", enum_test = True,
-                       dememorization = 10000, batches = 20, iterations = 5000):
+    def test_hw_global(self, test_type="deficiency", enum_test=True,
+                       dememorization=10000, batches=20, iterations=5000):
         if test_type=="deficiency":
             pop_res, loc_res, all = self._controller.test_global_hz_deficiency(self._fname,
                 enum_test, dememorization, batches, iterations)
@@ -53,8 +53,8 @@ class EasyController(object):
                 enum_test, dememorization, batches, iterations)
         return list(pop_res), list(loc_res), all
 
-    def test_ld_all_pair(self, locus1, locus2, dememorization = 10000,
-                         batches = 20, iterations = 5000):
+    def test_ld_all_pair(self, locus1, locus2, dememorization=10000,
+                         batches=20, iterations=5000):
         all_ld = self._controller.test_ld(self._fname, dememorization, batches, iterations)[1]
         for ld_case in all_ld:
             (l1, l2), result = ld_case
@@ -170,7 +170,7 @@ class EasyController(object):
                 self.__fst_pair_locus[locus_info[0]] = locus_info[1]
         return self.__fst_pair_locus[locus]
 
-    def calc_ibd(self, is_diplo = True, stat="a", scale="Log", min_dist=0.00001):
+    def calc_ibd(self, is_diplo=True, stat="a", scale="Log", min_dist=0.00001):
         if is_diplo:
             return self._controller.calc_ibd_diplo(self._fname, stat, scale, min_dist)
         else:
