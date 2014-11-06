@@ -11,7 +11,7 @@ import subprocess
 try:
     from os.path import relpath as _relpath
 except ImportError:
-    #New in Python 2.6
+    # New in Python 2.6
     def _relpath(path, start=None):
         """Return a relative version of a path.
 
@@ -47,8 +47,8 @@ message"""
 
 class Paml(object):
 
-    def __init__(self, alignment = None, working_dir = None,
-                out_file = None):
+    def __init__(self, alignment=None, working_dir=None,
+                out_file=None):
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:

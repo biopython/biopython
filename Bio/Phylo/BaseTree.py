@@ -1018,7 +1018,7 @@ class Clade(TreeElement, TreeMixin):
         """Number of clades directy under the root."""
         return len(self.clades)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -1027,7 +1027,7 @@ class Clade(TreeElement, TreeMixin):
         Clade instances to always be considered True.
         """
         return True
-    #Python 2:
+    # Python 2:
     __nonzero__ = __bool__
 
     def __str__(self):

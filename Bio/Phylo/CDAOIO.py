@@ -41,8 +41,8 @@ except ImportError:
     raise CDAOError('Support for CDAO tree format requires RDFlib.')
 
 RDF_NAMESPACES = {
-                  'owl':  'http://www.w3.org/2002/07/owl#',
-                  'rdf':  'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                  'owl': 'http://www.w3.org/2002/07/owl#',
+                  'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
                   'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
                   }
 RDF_NAMESPACES.update(cdao_namespaces)
@@ -177,7 +177,8 @@ class Parser(object):
 
             s, v, o = str(s), str(v), str(o)
 
-            if s not in self.obj_info: self.obj_info[s] = {}
+            if s not in self.obj_info:
+                self.obj_info[s] = {}
             this = self.obj_info[s]
 
             try:
@@ -258,11 +259,13 @@ class Writer(object):
         self.rooted = rooted
         self.record_complete_ancestry = record_complete_ancestry
 
-        if tree_uri and not tree_uri.endswith('/'): tree_uri += '/'
+        if tree_uri and not tree_uri.endswith('/'):
+            tree_uri += '/'
 
         trees = self.trees
 
-        if tree_uri: handle.write('@base <%s>\n' % tree_uri)
+        if tree_uri:
+            handle.write('@base <%s>\n' % tree_uri)
         for k, v in self.prefixes.items():
             handle.write('@prefix %s: <%s> .\n' % (k, v))
 
@@ -287,10 +290,13 @@ class Writer(object):
                 for prefix, uri in self.prefixes.items():
                     if node_uri.startswith(uri):
                         node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
-                        if node_uri == 'rdf:type': node_uri = 'a'
+                        if node_uri == 'rdf:type':
+                            node_uri = 'a'
                         changed = True
-                if changed or ':' in node_uri: stmt_strings.append(node_uri)
-                else: stmt_strings.append('<%s>' % node_uri)
+                if changed or ':' in node_uri:
+                    stmt_strings.append(node_uri)
+                else:
+                    stmt_strings.append('<%s>' % node_uri)
 
             elif isinstance(part, rdflib.Literal):
                 stmt_strings.append(part.n3())
@@ -305,8 +311,10 @@ class Writer(object):
 
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
-        if parent: clade.ancestors = parent.ancestors + [parent.uri]
-        else: clade.ancestors = []
+        if parent:
+            clade.ancestors = parent.ancestors + [parent.uri]
+        else:
+            clade.ancestors = []
 
         nUri = lambda s: rdflib.URIRef(s)
         pUri = lambda s: rdflib.URIRef(qUri(s))
@@ -314,7 +322,7 @@ class Writer(object):
 
         statements = []
 
-        if not root is False:
+        if root is not False:
             # create a cdao:RootedTree with reference to the tree root
             tree_type = pUri('cdao:RootedTree') if self.rooted else pUri('cdao:UnrootedTree')
 
@@ -323,8 +331,10 @@ class Writer(object):
                            (tree_id, pUri('cdao:has_Root'), nUri(clade.uri)),
                            ]
 
-            try: tree_attributes = root.attributes
-            except AttributeError: tree_attributes = []
+            try:
+                tree_attributes = root.attributes
+            except AttributeError:
+                tree_attributes = []
 
             for predicate, obj in tree_attributes:
                 statements.append((tree_id, predicate, obj))
@@ -340,8 +350,10 @@ class Writer(object):
                            (nUri(tu_uri), pUri('rdfs:label'), rdflib.Literal(format_label(clade.name))),
                            ]
 
-            try: tu_attributes = clade.tu_attributes
-            except AttributeError: tu_attributes = []
+            try:
+                tu_attributes = clade.tu_attributes
+            except AttributeError:
+                tu_attributes = []
 
             for predicate, obj in tu_attributes:
                 yield (nUri(tu_uri), predicate, obj)
@@ -388,8 +400,10 @@ class Writer(object):
                                (nUri(edge_ann_uri), pUri('cdao:has_Value'), branch_length),
                                ]
 
-            try: edge_attributes = clade.edge_attributes
-            except AttributeError: edge_attributes = []
+            try:
+                edge_attributes = clade.edge_attributes
+            except AttributeError:
+                edge_attributes = []
 
             for predicate, obj in edge_attributes:
                 yield (nUri(edge_uri), predicate, obj)
@@ -397,8 +411,10 @@ class Writer(object):
         for stmt in statements:
             yield stmt
 
-        try: clade_attributes = clade.attributes
-        except AttributeError: clade_attributes = []
+        try:
+            clade_attributes = clade.attributes
+        except AttributeError:
+            clade_attributes = []
 
         for predicate, obj in clade_attributes:
             yield (nUri(clade.uri), predicate, obj)

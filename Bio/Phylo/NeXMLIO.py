@@ -20,7 +20,7 @@ import sys
 from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
 
-#For speed try to use cElementTree rather than ElementTree
+# For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
         # Workaround for bug in python 3.0 and 3.1,
@@ -242,11 +242,11 @@ class Writer(object):
         otus = ElementTree.SubElement(root_node, 'otus', **{'id': 'tax', 'label': 'RootTaxaBlock'})
 
         # create trees
-        trees = ElementTree.SubElement(root_node, 'trees', **{'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
+        trees = ElementTree.SubElement(root_node, 'trees', **{'id': 'Trees', 'label': 'TreesBlockFromXML', 'otus': 'tax'})
         count = 0
         tus = set()
         for tree in self.trees:
-            this_tree = ElementTree.SubElement(trees, 'tree', **{'id':self.new_label('tree')})
+            this_tree = ElementTree.SubElement(trees, 'tree', **{'id': self.new_label('tree')})
 
             first_clade = tree.clade
             tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
@@ -255,11 +255,11 @@ class Writer(object):
 
         # create OTUs
         for tu in tus:
-            otu = ElementTree.SubElement(otus, 'otu', **{'id':tu})
+            otu = ElementTree.SubElement(otus, 'otu', **{'id': tu})
 
         # write XML document to file handle
-        #xml_doc = ElementTree.ElementTree(root_node)
-        #xml_doc.write(handle,
+        # xml_doc = ElementTree.ElementTree(root_node)
+        # xml_doc.write(handle,
         #              xml_declaration=True, encoding='utf-8',
         #              method='xml')
 
@@ -283,7 +283,7 @@ class Writer(object):
 
         node_id = self.new_label('node')
         clade.node_id = node_id
-        attrib={'id':node_id, 'label':node_id}
+        attrib={'id': node_id, 'label': node_id}
         root = rooted and parent is None
         if root:
             attrib['root'] = 'true'

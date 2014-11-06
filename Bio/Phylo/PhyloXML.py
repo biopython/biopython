@@ -772,7 +772,7 @@ class Events(PhyloElement):
         return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
-        #TODO - Better way to do this?
+        # TODO - Better way to do this?
         return len(self.values())
 
     def __getitem__(self, key):
@@ -1011,8 +1011,8 @@ class Sequence(PhyloElement):
         other : list of Other objects
             non-phyloXML elements
     """
-    alphabets = {'dna':     Alphabet.generic_dna,
-                 'rna':     Alphabet.generic_rna,
+    alphabets = {'dna': Alphabet.generic_dna,
+                 'rna': Alphabet.generic_rna,
                  'protein': Alphabet.generic_protein}
     re_symbol = re.compile(r'\S{1,10}')
 
@@ -1096,25 +1096,25 @@ class Sequence(PhyloElement):
         The seqrecord.annotations dictionary is packed like so::
 
             { # Sequence attributes with no SeqRecord equivalent:
-              'id_ref':     self.id_ref,
-              'id_source':  self.id_source,
-              'location':   self.location,
-              'uri':        { 'value': self.uri.value,
+              'id_ref': self.id_ref,
+              'id_source': self.id_source,
+              'location': self.location,
+              'uri': { 'value': self.uri.value,
                               'desc': self.uri.desc,
                               'type': self.uri.type },
               # Sequence.annotations attribute (list of Annotations)
-              'annotations': [{ 'ref':      ann.ref,
-                                'source':   ann.source,
-                                'evidence': ann.evidence,
-                                'type':     ann.type,
-                                'confidence': [ ann.confidence.value,
-                                                ann.confidence.type ],
-                                'properties': [{ 'value': prop.value,
-                                                 'ref': prop.ref,
-                                                 'applies_to': prop.applies_to,
-                                                 'datatype':   prop.datatype,
-                                                 'unit':       prop.unit,
-                                                 'id_ref':     prop.id_ref }
+              'annotations': [{'ref': ann.ref,
+                               'source': ann.source,
+                               'evidence': ann.evidence,
+                               'type': ann.type,
+                               'confidence': [ann.confidence.value,
+                                              ann.confidence.type],
+                               'properties': [{'value': prop.value,
+                                                'ref': prop.ref,
+                                                'applies_to': prop.applies_to,
+                                                'datatype': prop.datatype,
+                                                'unit': prop.unit,
+                                                'id_ref': prop.id_ref}
                                                for prop in ann.properties],
                               } for ann in self.annotations],
             }
@@ -1126,8 +1126,8 @@ class Sequence(PhyloElement):
 
         seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),
                            **clean_dict({
-                               'id':    str(self.accession),
-                               'name':  self.symbol,
+                               'id': str(self.accession),
+                               'name': self.symbol,
                                'description': self.name,
                                # 'dbxrefs': None,
                                }))
@@ -1136,30 +1136,30 @@ class Sequence(PhyloElement):
                                for dom in self.domain_architecture.domains]
         # Sequence attributes with no SeqRecord equivalent
         seqrec.annotations = clean_dict({
-                'id_ref':       self.id_ref,
-                'id_source':    self.id_source,
-                'location':     self.location,
-                'uri':          self.uri and clean_dict({
+                'id_ref': self.id_ref,
+                'id_source': self.id_source,
+                'location': self.location,
+                'uri': self.uri and clean_dict({
                                     'value': self.uri.value,
                                     'desc': self.uri.desc,
                                     'type': self.uri.type,
                                     }),
-                'annotations':  self.annotations and [
+                'annotations': self.annotations and [
                     clean_dict({
-                        'ref':          ann.ref,
-                        'source':       ann.source,
-                        'evidence':     ann.evidence,
-                        'type':         ann.type,
-                        'confidence':   ann.confidence and [
+                        'ref': ann.ref,
+                        'source': ann.source,
+                        'evidence': ann.evidence,
+                        'type': ann.type,
+                        'confidence': ann.confidence and [
                                             ann.confidence.value,
                                             ann.confidence.type],
-                        'properties':   [clean_dict({
-                                            'value':      prop.value,
-                                            'ref':        prop.ref,
+                        'properties': [clean_dict({
+                                            'value': prop.value,
+                                            'ref': prop.ref,
                                             'applies_to': prop.applies_to,
-                                            'datatype':   prop.datatype,
-                                            'unit':       prop.unit,
-                                            'id_ref':     prop.id_ref})
+                                            'datatype': prop.datatype,
+                                            'unit': prop.unit,
+                                            'id_ref': prop.id_ref})
                                          for prop in ann.properties],
                         }) for ann in self.annotations],
                 })

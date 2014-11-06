@@ -584,7 +584,7 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
-            #assign branch length
+            # assign branch length
             if clade1.is_terminal():
                 clade1.branch_length = min_dist * 1.0 / 2
             else:
@@ -658,7 +658,7 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
-            #assign branch length
+            # assign branch length
             clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i]
                                     - node_dist[min_j]) / 2.0
             clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
@@ -702,7 +702,7 @@ class DistanceTreeConstructor(TreeConstructor):
             height = height + max([self._height_of(c) for c in clade.clades])
         return height
 
-##################### Tree Scoring and Searching Classes #####################
+# #################### Tree Scoring and Searching Classes #####################
 
 
 class Scorer(object):
@@ -792,7 +792,7 @@ class NNITreeSearcher(TreeSearcher):
                 root_childs.append(right)
                 if not left.is_terminal() and not right.is_terminal():
                     # make changes around the left_left clade
-                    #left_left = left.clades[0]
+                    # left_left = left.clades[0]
                     left_right = left.clades[1]
                     right_left = right.clades[0]
                     right_right = right.clades[1]
@@ -868,7 +868,7 @@ class NNITreeSearcher(TreeSearcher):
                     clade.clades.insert(0, left)
         return neighbors
 
-######################### Parsimony Classes ##########################
+# ######################## Parsimony Classes ##########################
 
 
 class ParsimonyScorer(Scorer):
@@ -902,7 +902,7 @@ class ParsimonyScorer(Scorer):
         alignment.sort()
         if not all([t.name == a.id for t, a in zip(terms, alignment)]):
             raise ValueError("Taxon names of the input tree should be the same with the alignment.")
-        #term_align = dict(zip(terms, alignment))
+        # term_align = dict(zip(terms, alignment))
         score = 0
         for i in range(len(alignment[0])):
             # parsimony score for column_i
@@ -913,9 +913,9 @@ class ParsimonyScorer(Scorer):
             if column_i == len(column_i) * column_i[0]:
                 continue
 
-            #### start calculating score_i using the tree and column_i
+            # start calculating score_i using the tree and column_i
 
-            ## Fitch algorithm without the penalty matrix
+            # Fitch algorithm without the penalty matrix
             if not self.matrix:
                 # init by mapping terminal clades and states in column_i
                 clade_states = dict(zip(terms, [set([c]) for c in column_i]))
@@ -928,7 +928,7 @@ class ParsimonyScorer(Scorer):
                         state = left_state | right_state
                         score_i = score_i + 1
                     clade_states[clade] = state
-            ## Sankoff algorithm with the penalty matrix
+            # Sankoff algorithm with the penalty matrix
             else:
                 inf = float('inf')
                 # init score arrays for terminal clades

@@ -22,10 +22,10 @@ from Bio.Phylo import (
                        )
 
 supported_formats = {
-        'newick':   NewickIO,
-        'nexus':    NexusIO,
+        'newick': NewickIO,
+        'nexus': NexusIO,
         'phyloxml': PhyloXMLIO,
-        'nexml':    NeXMLIO,
+        'nexml': NeXMLIO,
         }
 
 try:
