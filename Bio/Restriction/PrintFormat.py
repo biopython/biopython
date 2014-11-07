@@ -58,12 +58,12 @@ class PrintFormat(object):
     """PrintFormat allow the printing of results of restriction analysis."""
 
     ConsoleWidth = RanaConf.ConsoleWidth
-    NameWidth    = RanaConf.NameWidth
-    MaxSize      = RanaConf.MaxSize
-    Cmodulo      = ConsoleWidth%NameWidth
-    PrefWidth    = ConsoleWidth - Cmodulo
-    Indent       = RanaConf.Indent
-    linesize     = PrefWidth - NameWidth
+    NameWidth = RanaConf.NameWidth
+    MaxSize = RanaConf.MaxSize
+    Cmodulo = ConsoleWidth%NameWidth
+    PrefWidth = ConsoleWidth - Cmodulo
+    Indent = RanaConf.Indent
+    linesize = PrefWidth - NameWidth
 
     def __init__(self):
         """PrintFormat() -> new PrintFormat Instance"""
@@ -120,7 +120,7 @@ class PrintFormat(object):
         You can as well create a new method and point make_format to it."""
         return self._make_list(cut, title, nc, s1)
 
-###### _make_* methods to be used with the virtual method make_format
+# ##### _make_* methods to be used with the virtual method make_format
 
     def _make_list(self, ls, title, nc, s1):
         """PF._make_number(ls,title, nc,s1) -> string.
@@ -230,7 +230,7 @@ class PrintFormat(object):
             return title
         return self.__next_section(ls, title)
 
-    def _make_number_only(self, ls, title, nc = [], s1 =''):
+    def _make_number_only(self, ls, title, nc=[], s1=''):
         """PF._make_number_only(ls, title) -> string.
 
         return a string of form:
@@ -266,7 +266,7 @@ class PrintFormat(object):
         title += "\n\nenzymes which cut %i times :\n\n"%cur_len
         return self.__next_section(new_sect, title)
 
-    def _make_map_only(self, ls, title, nc = [], s1 = ''):
+    def _make_map_only(self, ls, title, nc=[], s1=''):
         """PF._make_map_only(ls, title) -> string.
 
         return a string of form:
@@ -373,7 +373,7 @@ class PrintFormat(object):
         map = Join((map, mapunit))
         return map
 
-###### private method to do lists:
+# ##### private method to do lists:
 
     def __next_section(self, ls, into):
         """FP.__next_section(ls, into) -> string.
