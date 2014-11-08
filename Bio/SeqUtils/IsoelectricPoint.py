@@ -44,7 +44,7 @@ class IsoelectricPoint(object):
         charged['Cterm'] = 1.0
         return charged
 
-    #This function calculates the total charge of the protein at a given pH.
+    # This function calculates the total charge of the protein at a given pH.
     def _chargeR(self, pH, pos_pKs, neg_pKs):
         PositiveCharge = 0.0
         for aa, pK in pos_pKs.items():

@@ -293,7 +293,7 @@ def _create_hsp(hid, qid, psl):
     # protein flag
     is_protein = _is_protein(psl)
     # strand
-    #if query is protein, strand is 0
+    # if query is protein, strand is 0
     if is_protein:
         qstrand = 0
     else:
