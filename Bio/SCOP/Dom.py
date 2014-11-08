@@ -40,12 +40,12 @@ class Record(object):
         Records consist of 4 tab deliminated fields;
         sid, pdbid, residues, hierarchy
         """
-        #For example ::
+        # For example ::
         #
-        #d1sctg_ 1sct    g:      1.001.001.001.001.001
-        #d1scth_ 1sct    h:      1.001.001.001.001.001
-        #d1flp__ 1flp    -       1.001.001.001.001.002
-        #d1moh__ 1moh    -       1.001.001.001.001.002
+        # d1sctg_ 1sct    g:      1.001.001.001.001.001
+        # d1scth_ 1sct    h:      1.001.001.001.001.001
+        # d1flp__ 1flp    -       1.001.001.001.001.002
+        # d1moh__ 1moh    -       1.001.001.001.001.002
 
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols

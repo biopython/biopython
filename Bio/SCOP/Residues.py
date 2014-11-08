@@ -43,7 +43,7 @@ class Residues(object):
     def _parse(self, str):
         str = str.strip()
 
-        #Is there a pdbid at the front? e.g. 1bba A:1-100
+        # Is there a pdbid at the front? e.g. 1bba A:1-100
         m = _pdbid_re.match(str)
         if m is not None:
             self.pdbid = m.group(1)

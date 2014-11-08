@@ -61,32 +61,32 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 
 
-nodeCodeDict = { 'cl':'class', 'cf':'fold', 'sf':'superfamily',
-                 'fa':'family', 'dm':'protein', 'sp':'species', 'px':'domain'}
+nodeCodeDict = {'cl': 'class', 'cf': 'fold', 'sf': 'superfamily',
+                'fa': 'family', 'dm': 'protein', 'sp': 'species', 'px': 'domain'}
 
 
-_nodetype_to_code= { 'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
-                     'family': 'fa', 'protein': 'dm', 'species': 'sp', 'domain': 'px'}
+_nodetype_to_code= {'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
+                    'family': 'fa', 'protein': 'dm', 'species': 'sp', 'domain': 'px'}
 
-nodeCodeOrder = [ 'ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px']
+nodeCodeOrder = ['ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px']
 
 astralBibIds = [10, 20, 25, 30, 35, 40, 50, 70, 90, 95, 100]
 
 astralEvs = [10, 5, 1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 1e-4, 1e-5, 1e-10, 1e-15,
              1e-20, 1e-25, 1e-50]
 
-astralEv_to_file = { 10: 'e+1', 5: 'e+0,7', 1: 'e+0', 0.5: 'e-0,3', 0.1: 'e-1',
-                     0.05: 'e-1,3', 0.01: 'e-2', 0.005: 'e-2,3', 0.001: 'e-3',
-                     1e-4: 'e-4', 1e-5: 'e-5', 1e-10: 'e-10', 1e-15: 'e-15',
-                     1e-20: 'e-20', 1e-25: 'e-25', 1e-50: 'e-50'}
+astralEv_to_file = {10: 'e+1', 5: 'e+0,7', 1: 'e+0', 0.5: 'e-0,3', 0.1: 'e-1',
+                    0.05: 'e-1,3', 0.01: 'e-2', 0.005: 'e-2,3', 0.001: 'e-3',
+                    1e-4: 'e-4', 1e-5: 'e-5', 1e-10: 'e-10', 1e-15: 'e-15',
+                    1e-20: 'e-20', 1e-25: 'e-25', 1e-50: 'e-50'}
 
-astralEv_to_sql = { 10: 'e1', 5: 'e0_7', 1: 'e0', 0.5: 'e_0_3', 0.1: 'e_1',
-                     0.05: 'e_1_3', 0.01: 'e_2', 0.005: 'e_2_3', 0.001: 'e_3',
-                     1e-4: 'e_4', 1e-5: 'e_5', 1e-10: 'e_10', 1e-15: 'e_15',
-                     1e-20: 'e_20', 1e-25: 'e_25', 1e-50: 'e_50'}
+astralEv_to_sql = {10: 'e1', 5: 'e0_7', 1: 'e0', 0.5: 'e_0_3', 0.1: 'e_1',
+                   0.05: 'e_1_3', 0.01: 'e_2', 0.005: 'e_2_3', 0.001: 'e_3',
+                   1e-4: 'e_4', 1e-5: 'e_5', 1e-10: 'e_10', 1e-15: 'e_15',
+                   1e-20: 'e_20', 1e-25: 'e_25', 1e-50: 'e_50'}
 
 try:
-    #See if the cmp function exists (will on Python 2)
+    # See if the cmp function exists (will on Python 2)
     _cmp = cmp
 except NameError:
     def _cmp(a, b):
@@ -156,7 +156,7 @@ def parse_domain(str):
 
 def _open_scop_file(scop_dir_path, version, filetype):
     filename = "dir.%s.scop.txt_%s" % (filetype, version)
-    handle = open(os.path.join( scop_dir_path, filename))
+    handle = open(os.path.join(scop_dir_path, filename))
     return handle
 
 
@@ -205,9 +205,9 @@ class Scop(object):
                     if cla_handle or des_handle or hie_handle:
                         raise RuntimeError("Cannot specify SCOP directory and specific files")
 
-                    cla_handle = _open_scop_file( dir_path, version, 'cla')
-                    des_handle = _open_scop_file( dir_path, version, 'des')
-                    hie_handle = _open_scop_file( dir_path, version, 'hie')
+                    cla_handle = _open_scop_file(dir_path, version, 'cla')
+                    des_handle = _open_scop_file(dir_path, version, 'des')
+                    hie_handle = _open_scop_file(dir_path, version, 'hie')
 
                 root = Node()
                 domains = []
@@ -349,7 +349,7 @@ class Scop(object):
         if data is not None:
             n = None
 
-            #determine if Node or Domain
+            # determine if Node or Domain
             if data[1] != "px":
                 n = Node(scop=self)
 
@@ -441,8 +441,8 @@ class Scop(object):
             for d in data:
                 if int(d[0]) not in self._sunidDict:
                     n = Domain(scop=self)
-                    #[n.sunid, n.sid, n.pdbid, n.residues, n.sccs, n.type,
-                    #n.description,n.parent] = data
+                    # [n.sunid, n.sid, n.pdbid, n.residues, n.sccs, n.type,
+                    # n.description,n.parent] = data
                     [n.sunid, n.sid, pdbid, n.residues, n.sccs, n.type, n.description,
                      n.parent] = d[0:8]
                     n.residues = Residues.Residues(n.residues)
@@ -572,7 +572,7 @@ class Node(object):
         else:
             return self.scop.getNodeBySunid(self.parent)
 
-    def getDescendents( self, node_type):
+    def getDescendents(self, node_type):
         """ Return a list of all decendent nodes of the given type. Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'
         """
@@ -593,7 +593,7 @@ class Node(object):
 
         return nodes
 
-    def getAscendent( self, node_type):
+    def getAscendent(self, node_type):
         """ Return the ancenstor node of the given type, or None.Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'"""
         if node_type in _nodetype_to_code:
@@ -622,7 +622,7 @@ class Domain(Node):
     residues -- A Residue object. It defines the collection
                   of PDB atoms that make up this domain.
     """
-    def __init__(self,scop=None):
+    def __init__(self, scop=None):
         Node.__init__(self, scop=scop)
         self.sid = ''
         self.residues = None
@@ -664,7 +664,7 @@ class Domain(Node):
 
         # Order does not matter in the hierarchy field. For more info, see
         # http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
-        #rec.hierarchy.reverse()
+        # rec.hierarchy.reverse()
 
         return rec
 
@@ -674,7 +674,7 @@ class Astral(object):
     as well as clusterings by percent id or evalue.
     """
 
-    def __init__( self, dir_path=None, version=None, scop=None,
+    def __init__(self, dir_path=None, version=None, scop=None,
                   astral_file=None, db_handle=None):
         """
         Initialise the astral database.
@@ -710,12 +710,12 @@ class Astral(object):
                 raise RuntimeError("must provide dir_path and version")
 
             self.version = version
-            self.path = os.path.join( dir_path, "scopseq-%s" % version)
+            self.path = os.path.join(dir_path, "scopseq-%s" % version)
             astral_file = "astral-scopdom-seqres-all-%s.fa" % self.version
             astral_file = os.path.join(self.path, astral_file)
 
         if astral_file:
-            #Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY
+            # Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY
             self.fasta_dict = SeqIO.to_dict(SeqIO.parse(astral_file, "fasta"))
 
         self.astral_file = astral_file
@@ -756,7 +756,7 @@ class Astral(object):
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
 
-    def getAstralDomainsFromFile(self,filename=None,file_handle=None):
+    def getAstralDomainsFromFile(self, filename=None, file_handle=None):
         """Get the scop domains from a file containing a list of sids"""
         if file_handle is None and filename is None:
             raise RuntimeError("You must provide a filename or handle")

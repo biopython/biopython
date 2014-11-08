@@ -112,7 +112,7 @@ class SeqMapIndex(dict):
 
             sm = self[id]
 
-            #Cut out fragment of interest
+            # Cut out fragment of interest
             start = 0
             end = len(sm.res)
             if frag[1]:
@@ -172,7 +172,7 @@ class SeqMap(object):
 
         self.version = line[6:10]
 
-        #Raf format versions 0.01 and 0.02 are identical for practical purposes
+        # Raf format versions 0.01 and 0.02 are identical for practical purposes
         if(self.version != "0.01" and self.version != "0.02"):
             raise ValueError("Incompatible RAF version: " + self.version)
 
@@ -251,9 +251,9 @@ class SeqMap(object):
 
         out_handle -- All output is written to this file like object.
         """
-        #This code should be refactored when (if?) biopython gets a PDB parser
+        # This code should be refactored when (if?) biopython gets a PDB parser
 
-        #The set of residues that I have to find records for.
+        # The set of residues that I have to find records for.
         resSet = {}
         for r in self.res:
             if r.atom == 'X':  # Unknown residue type
@@ -280,9 +280,9 @@ class SeqMap(object):
                             resFound[key] = res
 
         if len(resSet) != len(resFound):
-            #for k in resFound:
+            # for k in resFound:
             #    del resSet[k]
-            #print(resSet)
+            # print(resSet)
 
             raise RuntimeError('I could not find at least one ATOM or HETATM'
                    +' record for each and every residue in this sequence map.')

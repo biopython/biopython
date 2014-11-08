@@ -38,11 +38,11 @@ class Record(object):
         Records consist of 3 tab deliminated fields; node's sunid,
         parent's sunid, and a list of children's sunids.
         """
-        #For example ::
+        # For example ::
         #
-        #0       -       46456,48724,51349,53931,56572,56835,56992,57942
-        #21953   49268   -
-        #49267   49266   49268,49269
+        # 0       -       46456,48724,51349,53931,56572,56835,56992,57942
+        # 21953   49268   -
+        # 49267   49266   49268,49269
         line = line.rstrip()        # no trailing whitespace
         columns = line.split('\t')   # separate the tab-delineated cols
         if len(columns) != 3:
