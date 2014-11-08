@@ -16,9 +16,9 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
-from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alphabet
-from Bio.CodonAlign.CodonSeq import _get_codon_list, CodonSeq, cal_dn_ds
-from Bio.CodonAlign.chisq import chisqprob
+from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
+from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
+from Bio.codonalign.chisq import chisqprob
 
 
 class CodonAlignment(MultipleSeqAlignment):

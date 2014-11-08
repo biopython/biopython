@@ -12,7 +12,7 @@ __docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 from Bio import BiopythonExperimentalWarning
 
 import warnings
-warnings.warn('Bio.CodonAlign is an experimental module which may undergo '
+warnings.warn('Bio.codonalign is an experimental module which may undergo '
               'significant changes prior to its future official release.',
               BiopythonExperimentalWarning)
 
@@ -24,11 +24,11 @@ except ImportError:
 
 from Bio.SeqRecord import SeqRecord
 
-from Bio.CodonAlign.CodonSeq import CodonSeq
-from Bio.CodonAlign.CodonAlignment import CodonAlignment, mktest
-from Bio.CodonAlign.CodonAlphabet import CodonAlphabet
-from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alphabet
-from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet as _get_codon_alphabet
+from Bio.codonalign.codonseq import CodonSeq
+from Bio.codonalign.codonalignment import CodonAlignment, mktest
+from Bio.codonalign.codonalphabet import CodonAlphabet
+from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
+from Bio.codonalign.codonalphabet import get_codon_alphabet as _get_codon_alphabet
 
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',

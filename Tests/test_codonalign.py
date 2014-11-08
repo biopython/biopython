@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the CodonAlign modules.
+"""Unit tests for the Bio.codonalign modules.
 """
 import sys
 import warnings
@@ -16,7 +16,7 @@ from Bio import BiopythonExperimentalWarning
 import warnings
 with warnings.catch_warnings():
    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio import CodonAlign, SeqIO, AlignIO
+   from Bio import codonalign, SeqIO, AlignIO
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -24,20 +24,20 @@ from Bio.Alphabet import IUPAC
 from Bio.Align import MultipleSeqAlignment
 
 
-TEST_ALIGN_FILE1 = [('CodonAlign/nucl1.fa', 'CodonAlign/pro1.aln'), 'parse']
-TEST_ALIGN_FILE2 = [('CodonAlign/nucl2.fa', 'CodonAlign/pro2.aln'), 'parse']
-TEST_ALIGN_FILE3 = [('CodonAlign/nucl3.fa', 'CodonAlign/pro3.aln'), 'index']
-TEST_ALIGN_FILE4 = [('CodonAlign/nucl4.fa', 'CodonAlign/pro4.aln'), 'index']
-TEST_ALIGN_FILE5 = [('CodonAlign/nucl5.fa', 'CodonAlign/pro5.aln'), 'parse']
-TEST_ALIGN_FILE6 = [('CodonAlign/egfr_nucl.fa', 'CodonAlign/egfr_pro.aln', 'CodonAlign/egfr_id'), 'id']
-TEST_ALIGN_FILE7 = [('CodonAlign/drosophilla.fasta', 'CodonAlign/adh.aln'), 'index']
+TEST_ALIGN_FILE1 = [('codonalign/nucl1.fa', 'codonalign/pro1.aln'), 'parse']
+TEST_ALIGN_FILE2 = [('codonalign/nucl2.fa', 'codonalign/pro2.aln'), 'parse']
+TEST_ALIGN_FILE3 = [('codonalign/nucl3.fa', 'codonalign/pro3.aln'), 'index']
+TEST_ALIGN_FILE4 = [('codonalign/nucl4.fa', 'codonalign/pro4.aln'), 'index']
+TEST_ALIGN_FILE5 = [('codonalign/nucl5.fa', 'codonalign/pro5.aln'), 'parse']
+TEST_ALIGN_FILE6 = [('codonalign/egfr_nucl.fa', 'codonalign/egfr_pro.aln', 'codonalign/egfr_id'), 'id']
+TEST_ALIGN_FILE7 = [('codonalign/drosophilla.fasta', 'codonalign/adh.aln'), 'index']
 
 temp_dir = tempfile.mkdtemp()
 
 
 class TestCodonSeq(unittest.TestCase):
     def test_seq(self):
-        codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0,3,6,9,12])
+        codonseq1 = codonalign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0,3,6,9,12])
         self.assertEqual(len(codonseq1), 18)
         self.assertEqual(codonseq1.get_codon_num(), 5)
         self.assertEqual(str(codonseq1.get_codon(0)), 'AAA')
@@ -45,18 +45,18 @@ class TestCodonSeq(unittest.TestCase):
         self.assertEqual(str(codonseq1.get_codon(slice(1,3))), 'TTT---')
         self.assertEqual(str(codonseq1.get_codon(slice(None,None,-1))), 'CCCGGATTT---TTTAAA')
 
-        self.assertRaises(ValueError, CodonAlign.CodonSeq, 'AAA-TT')
-        self.assertRaises(AssertionError, CodonAlign.CodonSeq, 'AAA-T')
-        self.assertRaises(ValueError, CodonAlign.CodonSeq, 'YVVRRDQQQ')
+        self.assertRaises(ValueError, codonalign.CodonSeq, 'AAA-TT')
+        self.assertRaises(AssertionError, codonalign.CodonSeq, 'AAA-T')
+        self.assertRaises(ValueError, codonalign.CodonSeq, 'YVVRRDQQQ')
         self.assertTrue(isinstance(codonseq1.toSeq(), Seq))
 
 
 class TestCodonAlignment(unittest.TestCase):
     def setUp(self):
-        codonseq1 = CodonAlign.CodonSeq('AAATTT---TTTGGACCC', CodonAlign.default_codon_alphabet)
-        codonseq2 = CodonAlign.CodonSeq('AAGTTT---TTTGGGCCC', CodonAlign.default_codon_alphabet)
-        codonseq3 = CodonAlign.CodonSeq('AAGTAT---TTTGGACCC', CodonAlign.default_codon_alphabet)
-        codonseq4 = CodonAlign.CodonSeq('AACTTT---TTTGGACGC', CodonAlign.default_codon_alphabet)
+        codonseq1 = codonalign.CodonSeq('AAATTT---TTTGGACCC', codonalign.default_codon_alphabet)
+        codonseq2 = codonalign.CodonSeq('AAGTTT---TTTGGGCCC', codonalign.default_codon_alphabet)
+        codonseq3 = codonalign.CodonSeq('AAGTAT---TTTGGACCC', codonalign.default_codon_alphabet)
+        codonseq4 = codonalign.CodonSeq('AACTTT---TTTGGACGC', codonalign.default_codon_alphabet)
 
         self.seqrec = [SeqRecord(codonseq1, id="alpha"), 
                        SeqRecord(codonseq2, id="beta" ),
@@ -64,7 +64,7 @@ class TestCodonAlignment(unittest.TestCase):
                        SeqRecord(codonseq4, id="delta")]
 
     def test_align(self):
-        codonAlign = CodonAlign.CodonAlignment(self.seqrec)
+        codonAlign = codonalign.CodonAlignment(self.seqrec)
         self.assertEqual(codonAlign.get_aln_length(), 6)
         self.assertTrue(isinstance(codonAlign.toMultipleSeqAlignment(), MultipleSeqAlignment))
 
@@ -84,13 +84,13 @@ class TestBuildAndIO(unittest.TestCase):
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
-                    caln = CodonAlign.build(prot, nucl, alphabet=CodonAlign.default_codon_alphabet)
+                    caln = codonalign.build(prot, nucl, alphabet=codonalign.default_codon_alphabet)
             elif i[1] == 'index':
                 nucl = SeqIO.index(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
-                    caln = CodonAlign.build(prot, nucl, alphabet=CodonAlign.default_codon_alphabet, max_score=20)
+                    caln = codonalign.build(prot, nucl, alphabet=codonalign.default_codon_alphabet, max_score=20)
             elif i[1] == 'id':
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
@@ -98,7 +98,7 @@ class TestBuildAndIO(unittest.TestCase):
                     id = dict((i.split()[0], i.split()[1]) for i in handle)
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
-                    caln = CodonAlign.build(prot, nucl, corr_dict=id, alphabet=CodonAlign.default_codon_alphabet)
+                    caln = codonalign.build(prot, nucl, corr_dict=id, alphabet=codonalign.default_codon_alphabet)
             alns.append(caln)
             nucl.close()  # Close the indexed FASTA file
         self.alns = alns
@@ -138,8 +138,8 @@ class Test_build(unittest.TestCase):
         self.seqlist2 = [seq3, seq4, seq5]
 
     def test_build(self):
-        codon_aln1 = CodonAlign.build(self.aln1, self.seqlist1)
-        codon_aln2 = CodonAlign.build(self.aln2, self.seqlist2)
+        codon_aln1 = codonalign.build(self.aln1, self.seqlist1)
+        codon_aln2 = codonalign.build(self.aln2, self.seqlist2)
 
 
 class Test_dn_ds(unittest.TestCase):
@@ -148,11 +148,11 @@ class Test_dn_ds(unittest.TestCase):
         prot = AlignIO.read(TEST_ALIGN_FILE6[0][1], 'clustal', alphabet=IUPAC.protein)
         with open(TEST_ALIGN_FILE6[0][2]) as handle:
             id_corr = dict((i.split()[0], i.split()[1]) for i in handle)
-        aln = CodonAlign.build(prot, nucl, corr_dict=id_corr, alphabet=CodonAlign.default_codon_alphabet)
+        aln = codonalign.build(prot, nucl, corr_dict=id_corr, alphabet=codonalign.default_codon_alphabet)
         self.aln = aln
 
     def test_dn_ds(self):
-        from Bio.CodonAlign.CodonSeq import cal_dn_ds
+        from Bio.codonalign.codonseq import cal_dn_ds
         codon_seq1 = self.aln[0]
         codon_seq2 = self.aln[1]
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method='NG86')
@@ -195,9 +195,9 @@ if is_numpy() and lgamma:
         def test_mk(self):
             p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
             pro_aln = AlignIO.read(TEST_ALIGN_FILE7[0][1], 'clustal', alphabet=IUPAC.protein)
-            codon_aln = CodonAlign.build(pro_aln, p)
+            codon_aln = codonalign.build(pro_aln, p)
             p.close()  # Close indexed FASTA file
-            self.assertAlmostEqual(round(CodonAlign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
+            self.assertAlmostEqual(round(codonalign.mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]]), 4), 0.0021, places=4)
 
 
 if __name__ == "__main__":

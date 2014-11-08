@@ -3,7 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Code for dealing with Codon Seq.
+"""Code for dealing with coding sequence.
 
 CodonSeq class is interited from Seq class. This is the core class to
 deal with sequences in CodonAlignment in biopython.
@@ -19,7 +19,7 @@ from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
 from Bio.Alphabet import generic_dna, _ungap
 from Bio.Data.CodonTable import generic_by_id
 
-from Bio.CodonAlign.CodonAlphabet import default_codon_alphabet, default_codon_table
+from Bio.codonalign.codonalphabet import default_codon_alphabet, default_codon_table
 
 __docformat__ = "restructuredtext en"
 
