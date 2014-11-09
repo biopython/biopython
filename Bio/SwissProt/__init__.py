@@ -138,20 +138,20 @@ def _read(handle):
     record = None
     unread = ""
     for line in handle:
-        #This is for Python 3 to cope with a binary handle (byte strings),
-        #or a text handle (unicode strings):
+        # This is for Python 3 to cope with a binary handle (byte strings),
+        # or a text handle (unicode strings):
         line = _as_string(line)
         key, value = line[:2], line[5:].rstrip()
         if unread:
             value = unread + " " + value
             unread = ""
         if key == '**':
-            #See Bug 2353, some files from the EBI have extra lines
-            #starting "**" (two asterisks/stars).  They appear
-            #to be unofficial automated annotations. e.g.
-            #**
-            #**   #################    INTERNAL SECTION    ##################
-            #**HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
+            # See Bug 2353, some files from the EBI have extra lines
+            # starting "**" (two asterisks/stars).  They appear
+            # to be unofficial automated annotations. e.g.
+            # **
+            # **   #################    INTERNAL SECTION    ##################
+            # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         elif key == 'ID':
             record = Record()
@@ -218,7 +218,7 @@ def _read(handle):
         elif key == 'DR':
             _read_dr(record, value)
         elif key == 'PE':
-            #TODO - Record this information?
+            # TODO - Record this information?
             pass
         elif key == 'KW':
             cols = value.rstrip(";.").split('; ')
@@ -253,11 +253,11 @@ def _read(handle):
 
 def _read_id(record, line):
     cols = line[5:].split()
-    #Prior to release 51, included with MoleculeType:
-    #ID   EntryName DataClass; MoleculeType; SequenceLength AA.
+    # Prior to release 51, included with MoleculeType:
+    # ID   EntryName DataClass; MoleculeType; SequenceLength AA.
     #
-    #Newer files lack the MoleculeType:
-    #ID   EntryName DataClass; SequenceLength AA.
+    # Newer files lack the MoleculeType:
+    # ID   EntryName DataClass; SequenceLength AA.
     if len(cols) == 5:
         record.entry_name = cols[0]
         record.data_class = cols[1].rstrip(";")
@@ -351,7 +351,7 @@ def _read_dt(record, line):
         # DT   15-OCT-2001, sequence version 3.
         # DT   01-APR-2004, entry version 14.
         #
-        #This is a new style DT line...
+        # This is a new style DT line...
 
         # The date should be in string cols[1]
         # Get the version number if there is one.
@@ -505,7 +505,7 @@ def _read_ft(record, line):
         to_res = int(line[16:22])
     except ValueError:
         to_res = line[16:22].lstrip()
-    #if there is a feature_id (FTId), store it away
+    # if there is a feature_id (FTId), store it away
     if line[29:35] == r"/FTId=":
         ft_id = line[35:70].rstrip()[:-1]
         description = ""
@@ -552,7 +552,7 @@ if __name__ == "__main__":
     if not os.path.isfile(example_filename):
         print("Missing test file %s" % example_filename)
     else:
-        #Try parsing it!
+        # Try parsing it!
 
         with open(example_filename) as handle:
             records = parse(handle)

@@ -581,7 +581,7 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
     return rel_ent
 
 
-## Gives the linear correlation coefficient between two matrices
+# Gives the linear correlation coefficient between two matrices
 def two_mat_correlation(mat_1, mat_2):
     try:
         import numpy

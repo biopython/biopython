@@ -13,12 +13,12 @@ from Bio._py3k import range
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-#Hack for Python 2.5, isnan and isinf were new in Python 2.6
+# Hack for Python 2.5, isnan and isinf were new in Python 2.6
 try:
     from math import isnan as _isnan
 except ImportError:
     def _isnan(value):
-        #This is tricky due to cross platform float differences
+        # This is tricky due to cross platform float differences
         if str(value).lower() == "nan":
             return True
         return value != value
@@ -26,11 +26,11 @@ try:
     from math import isinf as _isinf
 except ImportError:
     def _isinf(value):
-        #This is tricky due to cross platform float differences
+        # This is tricky due to cross platform float differences
         if str(value).lower().endswith("inf"):
             return True
         return False
-#Hack for Python 2.5 on Windows:
+# Hack for Python 2.5 on Windows:
 try:
     _nan = float("nan")
 except ValueError:
@@ -224,7 +224,7 @@ class GenericPositionMatrix(dict):
                 key = "ACGT"
             nucleotide = degenerate_nucleotide[key]
             sequence += nucleotide
-        return Seq(sequence, alphabet = IUPAC.ambiguous_dna)
+        return Seq(sequence, alphabet=IUPAC.ambiguous_dna)
 
     @property
     def gc_content(self):
@@ -320,7 +320,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = math.log(p/b, 2)
                     else:
-                        #TODO - Ensure this has unittest coverage!
+                        # TODO - Ensure this has unittest coverage!
                         try:
                             logodds = float("-inf")
                         except ValueError:
@@ -350,7 +350,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
           number is returned
         - otherwise, the result is a one-dimensional list or numpy array
         """
-        #TODO - Code itself tolerates ambiguous bases (as NaN).
+        # TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
             raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
                                  % self.alphabet)
@@ -358,8 +358,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
                                  % sequence.alphabet)
 
-        #TODO - Force uppercase here and optimise switch statement in C
-        #by assuming upper case?
+        # TODO - Force uppercase here and optimise switch statement in C
+        # by assuming upper case?
         sequence = str(sequence)
         m = self.length
         n = len(sequence)
@@ -370,7 +370,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             import _pwm
         except ImportError:
             # use the slower Python code otherwise
-            #The C code handles mixed case so Python version must too:
+            # The C code handles mixed case so Python version must too:
             sequence = sequence.upper()
             for i in range(n-m+1):
                 score = 0.0
@@ -511,8 +511,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def dist_pearson_at(self, other, offset):
         letters = self._letters
-        sx  = 0.0   # \sum x
-        sy  = 0.0   # \sum y
+        sx = 0.0   # \sum x
+        sy = 0.0   # \sum y
         sxx = 0.0  # \sum x^2
         sxy = 0.0  # \sum x \cdot y
         syy = 0.0  # \sum y^2

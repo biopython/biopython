@@ -320,7 +320,7 @@ class Motif(object):
     def pssm(self):
         return self.pwm.log_odds(self._background)
 
-    def __str__(self,masked=False):
+    def __str__(self, masked=False):
         """ string representation of a motif.
         """
         text = ""
@@ -386,7 +386,7 @@ Nucleic Acids Research 15(4): 1353-1361. (1987).
 The same rules are used by TRANSFAC."""
         return self.counts.degenerate_consensus
 
-    def weblogo(self,fname,format="PNG",version="2.8.2", **kwds):
+    def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
         """
         uses the Berkeley weblogo service to download and save a weblogo of
         itself
@@ -483,7 +483,7 @@ The same rules are used by TRANSFAC."""
         data = urlencode(values)
         req = Request(url, data)
         response = urlopen(req)
-        with open(fname,"w") as f:
+        with open(fname, "w") as f:
             im = response.read()
             f.write(im)
 

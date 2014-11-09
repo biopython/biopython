@@ -15,7 +15,7 @@ from __future__ import print_function
 
 import re
 
-#Importing with leading underscore as not intended to be exposed
+# Importing with leading underscore as not intended to be exposed
 from Bio._py3k import getoutput as _getoutput
 from Bio._py3k import zip
 from Bio._py3k import map
