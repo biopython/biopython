@@ -78,7 +78,7 @@ class _RestrictedDict(dict):
         # The check hasattr(self, "_length") is to cope with pickle protocol 2
         # I couldn't seem to avoid this with __getstate__ and __setstate__
         if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
-        or (hasattr(self, "_length") and len(value) != self._length):
+                or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
                             "strings) of length %i." % self._length)
         dict.__setitem__(self, key, value)
@@ -149,10 +149,11 @@ class SeqRecord(object):
     MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
 
     """
-    def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
-                 description = "<unknown description>", dbxrefs = None,
-                 features = None, annotations = None,
-                 letter_annotations = None):
+
+    def __init__(self, seq, id="<unknown id>", name="<unknown name>",
+                 description="<unknown description>", dbxrefs=None,
+                 features=None, annotations=None,
+                 letter_annotations=None):
         """Create a SeqRecord.
 
         Arguments:
@@ -215,7 +216,7 @@ class SeqRecord(object):
             else:
                 try:
                     self._per_letter_annotations = \
-                                              _RestrictedDict(length=len(seq))
+                        _RestrictedDict(length=len(seq))
                 except:
                     raise TypeError("seq argument should be a Seq object or similar")
         else:
@@ -240,7 +241,7 @@ class SeqRecord(object):
         try:
             self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
         except AttributeError:
-            #e.g. seq is None
+            # e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
         self._per_letter_annotations.update(value)
     letter_annotations = property(
@@ -302,7 +303,7 @@ class SeqRecord(object):
         try:
             self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
         except AttributeError:
-            #e.g. seq is None
+            # e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
 
     seq = property(fget=lambda self: self._seq,
@@ -436,29 +437,29 @@ class SeqRecord(object):
 
             # Don't copy the annotation dict and dbxefs list,
             # they may not apply to a subsequence.
-            #answer.annotations = dict(self.annotations.items())
-            #answer.dbxrefs = self.dbxrefs[:]
+            # answer.annotations = dict(self.annotations.items())
+            # answer.dbxrefs = self.dbxrefs[:]
             # TODO - Review this in light of adding SeqRecord objects?
 
             # TODO - Cope with strides by generating ambiguous locations?
             start, stop, step = index.indices(parent_length)
             if step == 1:
                 # Select relevant features, add them with shifted locations
-                #assert str(self.seq)[index] == str(self.seq)[start:stop]
+                # assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features:
                     if f.ref or f.ref_db:
                         # TODO - Implement this (with lots of tests)?
                         import warnings
                         warnings.warn("When slicing SeqRecord objects, any "
-                              "SeqFeature referencing other sequences (e.g. "
-                              "from segmented GenBank records) are ignored.")
+                                      "SeqFeature referencing other sequences (e.g. "
+                                      "from segmented GenBank records) are ignored.")
                         continue
                     if start <= f.location.nofuzzy_start \
-                    and f.location.nofuzzy_end <= stop:
+                            and f.location.nofuzzy_end <= stop:
                         answer.features.append(f._shift(-start))
 
             # Slice all the values to match the sliced sequence
-            #(this should also work with strides, even negative strides):
+            # (this should also work with strides, even negative strides):
             for key, value in self.letter_annotations.items():
                 answer._per_letter_annotations[key] = value[index]
 
@@ -634,9 +635,9 @@ class SeqRecord(object):
         would lead to a very long string).
         """
         return self.__class__.__name__ \
-         + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
-         % tuple(map(repr, (self.seq, self.id, self.name,
-                            self.description, self.dbxrefs)))
+            + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
+            % tuple(map(repr, (self.seq, self.id, self.name,
+                               self.description, self.dbxrefs)))
 
     def format(self, format):
         r"""Returns the record as a string in the specified file format.
@@ -728,7 +729,7 @@ class SeqRecord(object):
         return True
 
     # Python 2:
-    __nonzero__= __bool__
+    __nonzero__ = __bool__
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -804,15 +805,15 @@ class SeqRecord(object):
             # Assume it is a string or a Seq.
             # Note can't transfer any per-letter-annotations
             return SeqRecord(self.seq + other,
-                             id = self.id, name = self.name,
-                             description = self.description,
-                             features = self.features[:],
-                             annotations = self.annotations.copy(),
-                             dbxrefs = self.dbxrefs[:])
+                             id=self.id, name=self.name,
+                             description=self.description,
+                             features=self.features[:],
+                             annotations=self.annotations.copy(),
+                             dbxrefs=self.dbxrefs[:])
         # Adding two SeqRecord objects... must merge annotation.
         answer = SeqRecord(self.seq + other.seq,
-                           features = self.features[:],
-                           dbxrefs = self.dbxrefs[:])
+                           features=self.features[:],
+                           dbxrefs=self.dbxrefs[:])
         # Will take all the features and all the db cross refs,
         l = len(self)
         for f in other.features:
@@ -864,11 +865,11 @@ class SeqRecord(object):
         # Note can't transfer any per-letter-annotations
         offset = len(other)
         return SeqRecord(other + self.seq,
-                         id = self.id, name = self.name,
-                         description = self.description,
-                         features = [f._shift(offset) for f in self.features],
-                         annotations = self.annotations.copy(),
-                         dbxrefs = self.dbxrefs[:])
+                         id=self.id, name=self.name,
+                         description=self.description,
+                         features=[f._shift(offset) for f in self.features],
+                         annotations=self.annotations.copy(),
+                         dbxrefs=self.dbxrefs[:])
 
     def upper(self):
         """Returns a copy of the record with an upper case sequence.
@@ -898,11 +899,11 @@ class SeqRecord(object):
         <BLANKLINE>
         """
         return SeqRecord(self.seq.upper(),
-                         id = self.id, name = self.name,
-                         description = self.description,
-                         dbxrefs = self.dbxrefs[:],
-                         features = self.features[:],
-                         annotations = self.annotations.copy(),
+                         id=self.id, name=self.name,
+                         description=self.description,
+                         dbxrefs=self.dbxrefs[:],
+                         features=self.features[:],
+                         annotations=self.annotations.copy(),
                          letter_annotations=self.letter_annotations.copy())
 
     def lower(self):
@@ -938,11 +939,11 @@ class SeqRecord(object):
         True
         """
         return SeqRecord(self.seq.lower(),
-                         id = self.id, name = self.name,
-                         description = self.description,
-                         dbxrefs = self.dbxrefs[:],
-                         features = self.features[:],
-                         annotations = self.annotations.copy(),
+                         id=self.id, name=self.name,
+                         description=self.description,
+                         dbxrefs=self.dbxrefs[:],
+                         features=self.features[:],
+                         annotations=self.annotations.copy(),
                          letter_annotations=self.letter_annotations.copy())
 
     def reverse_complement(self, id=False, name=False, description=False,
