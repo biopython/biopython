@@ -29,8 +29,6 @@ if sys.version_info[0] >= 3:
 
 
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
-if not os.path.isfile(tutorial) and sys.version_info[0] >= 3:
-    tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../../../Doc/Tutorial.tex")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
@@ -163,7 +161,7 @@ class TutorialTestCase(unittest.TestCase):
                 name = test.name
                 assert name.startswith("TutorialDocTestHolder.doctest_")
                 failures.append(name[30:])
-                #raise ValueError("Tutorial doctest %s failed" % test.name[30:])
+                # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
             raise ValueError("%i Tutorial doctests failed: %s" %
                              (len(failures), ", ".join(failures)))
