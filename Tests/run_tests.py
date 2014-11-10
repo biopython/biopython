@@ -53,7 +53,7 @@ except ImportError:
 def is_pypy():
     import platform
     try:
-        if platform.python_implementation()=='PyPy':
+        if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
         # New in Python 2.6, not in Jython yet either
@@ -75,61 +75,61 @@ def is_numpy():
 # If you develop docstring tests for other modules, please add
 # those modules here. Please sort names alphabetically.
 DOCTEST_MODULES = [
-                   "Bio.Align",
-                   "Bio.Align.Generic",
-                   "Bio.Align.Applications._Clustalw",
-                   "Bio.Align.Applications._ClustalOmega",
-                   "Bio.Align.Applications._MSAProbs",
-                   "Bio.Align.Applications._Mafft",
-                   "Bio.Align.Applications._Muscle",
-                   "Bio.Align.Applications._Probcons",
-                   "Bio.Align.Applications._Prank",
-                   "Bio.Align.Applications._TCoffee",
-                   "Bio.AlignIO",
-                   "Bio.AlignIO.StockholmIO",
-                   "Bio.Alphabet",
-                   "Bio.Application",
-                   "Bio.bgzf",
-                   "Bio.codonalign",
-                   "Bio.Blast.Applications",
-                   "Bio.Emboss.Applications",
-                   "Bio.GenBank",
-                   "Bio.KEGG.Compound",
-                   "Bio.KEGG.Enzyme",
-                   "Bio.NMR.xpktools",
-                   "Bio.Motif",
-                   "Bio.motifs",
-                   "Bio.motifs.applications._alignace",
-                   "Bio.motifs.applications._xxmotif",
-                   "Bio.pairwise2",
-                   "Bio.Phylo.Applications._Raxml",
-                   "Bio.SearchIO",
-                   "Bio.SearchIO._model",
-                   "Bio.SearchIO._model.query",
-                   "Bio.SearchIO._model.hit",
-                   "Bio.SearchIO._model.hsp",
-                   "Bio.SearchIO.BlastIO",
-                   "Bio.SearchIO.HmmerIO",
-                   "Bio.SearchIO.FastaIO",
-                   "Bio.SearchIO.BlatIO",
-                   "Bio.SearchIO.ExonerateIO",
-                   "Bio.Seq",
-                   "Bio.SeqIO",
-                   "Bio.SeqIO.FastaIO",
-                   "Bio.SeqIO.AceIO",
-                   "Bio.SeqIO.PhdIO",
-                   "Bio.SeqIO.QualityIO",
-                   "Bio.SeqIO.SffIO",
-                   "Bio.SeqFeature",
-                   "Bio.SeqRecord",
-                   "Bio.SeqUtils",
-                   "Bio.SeqUtils.MeltingTemp",
-                   "Bio.Sequencing.Applications._Novoalign",
-                   "Bio.Sequencing.Applications._bwa",
-                   "Bio.Sequencing.Applications._samtools",
-                   "Bio.Wise",
-                   "Bio.Wise.psw",
-                  ]
+    "Bio.Align",
+    "Bio.Align.Generic",
+    "Bio.Align.Applications._Clustalw",
+    "Bio.Align.Applications._ClustalOmega",
+    "Bio.Align.Applications._MSAProbs",
+    "Bio.Align.Applications._Mafft",
+    "Bio.Align.Applications._Muscle",
+    "Bio.Align.Applications._Probcons",
+    "Bio.Align.Applications._Prank",
+    "Bio.Align.Applications._TCoffee",
+    "Bio.AlignIO",
+    "Bio.AlignIO.StockholmIO",
+    "Bio.Alphabet",
+    "Bio.Application",
+    "Bio.bgzf",
+    "Bio.codonalign",
+    "Bio.Blast.Applications",
+    "Bio.Emboss.Applications",
+    "Bio.GenBank",
+    "Bio.KEGG.Compound",
+    "Bio.KEGG.Enzyme",
+    "Bio.NMR.xpktools",
+    "Bio.Motif",
+    "Bio.motifs",
+    "Bio.motifs.applications._alignace",
+    "Bio.motifs.applications._xxmotif",
+    "Bio.pairwise2",
+    "Bio.Phylo.Applications._Raxml",
+    "Bio.SearchIO",
+    "Bio.SearchIO._model",
+    "Bio.SearchIO._model.query",
+    "Bio.SearchIO._model.hit",
+    "Bio.SearchIO._model.hsp",
+    "Bio.SearchIO.BlastIO",
+    "Bio.SearchIO.HmmerIO",
+    "Bio.SearchIO.FastaIO",
+    "Bio.SearchIO.BlatIO",
+    "Bio.SearchIO.ExonerateIO",
+    "Bio.Seq",
+    "Bio.SeqIO",
+    "Bio.SeqIO.FastaIO",
+    "Bio.SeqIO.AceIO",
+    "Bio.SeqIO.PhdIO",
+    "Bio.SeqIO.QualityIO",
+    "Bio.SeqIO.SffIO",
+    "Bio.SeqFeature",
+    "Bio.SeqRecord",
+    "Bio.SeqUtils",
+    "Bio.SeqUtils.MeltingTemp",
+    "Bio.Sequencing.Applications._Novoalign",
+    "Bio.Sequencing.Applications._bwa",
+    "Bio.Sequencing.Applications._samtools",
+    "Bio.Wise",
+    "Bio.Wise.psw",
+]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
@@ -207,12 +207,12 @@ def main(argv):
     # non-English OS (we may want 'command not found' in English).
     # HOWEVER, we do not want to change the default encoding which is
     # rather important on Python 3 with unicode.
-    #lang = os.environ['LANG']
+    # lang = os.environ['LANG']
 
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
-            "doctest", "help", "offline"])
+                                                "doctest", "help", "offline"])
     except getopt.error as msg:
         print(msg)
         print(__doc__)
@@ -266,8 +266,7 @@ def main(argv):
 
 
 class ComparisonTestCase(unittest.TestCase):
-    """Run a print-and-compare test and compare its output against expected output.
-    """
+    """Run a print-and-compare test and check it against expected output."""
 
     def __init__(self, name, output=None):
         """Initialize with the test to run.
@@ -298,7 +297,8 @@ class ComparisonTestCase(unittest.TestCase):
             else:
                 expected = open(outputfile, "rU")
         except IOError:
-            self.fail("Warning: Can't open %s for test %s" % (outputfile, self.name))
+            self.fail("Warning: Can't open %s for test %s" %
+                      (outputfile, self.name))
 
         self.output.seek(0)
         # first check that we are dealing with the right output
@@ -308,7 +308,7 @@ class ComparisonTestCase(unittest.TestCase):
         if expected_test != self.name:
             expected.close()
             raise ValueError("\nOutput:   %s\nExpected: %s"
-                  % (self.name, expected_test))
+                             % (self.name, expected_test))
 
         # now loop through the output and compare it to the expected file
         while True:
@@ -335,7 +335,7 @@ class ComparisonTestCase(unittest.TestCase):
             elif expected_line != output_line:
                 expected.close()
                 raise ValueError("\nOutput  : %s\nExpected: %s"
-                      % (repr(output_line), repr(expected_line)))
+                                 % (repr(output_line), repr(expected_line)))
         expected.close()
 
     def generate_output(self):
@@ -386,7 +386,7 @@ class TestRunner(unittest.TextTestRunner):
             self.tests.extend(DOCTEST_MODULES)
         stream = StringIO()
         unittest.TextTestRunner.__init__(self, stream,
-                verbosity=verbosity)
+                                         verbosity=verbosity)
 
     def runTest(self, name):
         from Bio import MissingExternalDependencyError
@@ -395,7 +395,7 @@ class TestRunner(unittest.TextTestRunner):
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
         global system_lang
-        os.environ['LANG']=system_lang
+        os.environ['LANG'] = system_lang
         # Note the current directory:
         cur_dir = os.path.abspath(".")
         try:
@@ -405,7 +405,7 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("%s ... " % name)
                 # It's either a unittest or a print-and-compare test
                 suite = unittest.TestLoader().loadTestsFromName(name)
-                if suite.countTestCases()==0:
+                if suite.countTestCases() == 0:
                     # This is a print-and-compare test instead of a
                     # unittest-type test.
                     test = ComparisonTestCase(name, output)
@@ -415,14 +415,15 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("%s docstring test ... " % name)
                 # Can't use fromlist=name.split(".") until python 2.5+
                 module = __import__(name, None, None, name.split("."))
-                suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)
+                suite = doctest.DocTestSuite(module,
+                                             optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
             if cur_dir != os.path.abspath("."):
                 sys.stderr.write("FAIL\n")
-                result.stream.write(result.separator1+"\n")
+                result.stream.write(result.separator1 + "\n")
                 result.stream.write("ERROR: %s\n" % name)
-                result.stream.write(result.separator2+"\n")
+                result.stream.write(result.separator2 + "\n")
                 result.stream.write("Current directory changed\n")
                 result.stream.write("Was: %s\n" % cur_dir)
                 result.stream.write("Now: %s\n" % os.path.abspath("."))
@@ -443,9 +444,9 @@ class TestRunner(unittest.TextTestRunner):
         except Exception as msg:
             # This happened during the import
             sys.stderr.write("ERROR\n")
-            result.stream.write(result.separator1+"\n")
+            result.stream.write(result.separator1 + "\n")
             result.stream.write("ERROR: %s\n" % name)
-            result.stream.write(result.separator2+"\n")
+            result.stream.write(result.separator2 + "\n")
             result.stream.write(traceback.format_exc())
             return False
         except KeyboardInterrupt as err:
@@ -456,9 +457,9 @@ class TestRunner(unittest.TextTestRunner):
             # This happens in Jython with java.lang.ClassFormatError:
             # Invalid method Code length ...
             sys.stderr.write("ERROR\n")
-            result.stream.write(result.separator1+"\n")
+            result.stream.write(result.separator1 + "\n")
             result.stream.write("ERROR: %s\n" % name)
-            result.stream.write(result.separator2+"\n")
+            result.stream.write(result.separator2 + "\n")
             result.stream.write(traceback.format_exc())
             return False
         finally:
@@ -480,7 +481,7 @@ class TestRunner(unittest.TextTestRunner):
         sys.stderr.write(self.stream.getvalue())
         sys.stderr.write('-' * 70 + "\n")
         sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
-                            (total, total != 1 and "s" or "", timeTaken))
+                         (total, total != 1 and "s" or "", timeTaken))
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)
