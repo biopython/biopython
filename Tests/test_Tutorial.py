@@ -32,6 +32,10 @@ tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
+files = [tutorial]
+for latex in os.listdir("../Doc/Tutorial/"):
+    if latex.startswith("chapter_") and latex.endswith(".tex"):
+        files.append(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial", latex))
 
 tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
 original_path = os.path.abspath(".")
@@ -62,10 +66,12 @@ def extract_doctests(latex_filename):
 
     This is a generator, yielding one tuple per doctest.
     """
+    base_name = os.path.splitext(os.path.basename(latex_filename))[0]
     handle = open(latex_filename, _universal_read_mode)
     line_number = 0
     in_test = False
     lines = []
+    name = None
     while True:
         line = handle.readline()
         line_number += 1
@@ -88,7 +94,7 @@ def extract_doctests(latex_filename):
                 deps = deps[1:]
             else:
                 folder = ""
-            name = "test_from_line_%05i" % line_number
+            name = "test_%s_line_%05i" % (base_name, line_number)
             x = _extract(handle)
             lines.extend(x)
             line_number += len(x) + 2
@@ -119,32 +125,34 @@ def check_deps(dependencies):
 
 # Create dummy methods on the object purely to hold doctests
 missing_deps = set()
-for name, example, folder, deps in extract_doctests(tutorial):
-    missing = check_deps(deps)
-    if missing:
-        missing_deps.update(missing)
-        continue
+for latex in files:
+    # print("Extracting doctests from %s" % latex)
+    for name, example, folder, deps in extract_doctests(latex):
+        missing = check_deps(deps)
+        if missing:
+            missing_deps.update(missing)
+            continue
 
-    if sys.version_info[0] >= 3:
-        example = ">>> from __future__ import print_function\n" + example
-        example = rt.refactor_docstring(example, name)
+        if sys.version_info[0] >= 3:
+            example = ">>> from __future__ import print_function\n" + example
+            example = rt.refactor_docstring(example, name)
 
-    def funct(n, d, f):
-        global tutorial_base
-        method = lambda x: None
-        if f:
-            p = os.path.join(tutorial_base, f)
-            method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
-                           % (n, p, d)
-        else:
-            method.__doc__ = "%s\n\n%s\n" % (n, d)
-        method._folder = f
-        return method
+        def funct(n, d, f):
+            global tutorial_base
+            method = lambda x: None
+            if f:
+                p = os.path.join(tutorial_base, f)
+                method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
+                    % (n, p, d)
+            else:
+                method.__doc__ = "%s\n\n%s\n" % (n, d)
+            method._folder = f
+            return method
 
-    setattr(TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ", "_"),
-            funct(name, example, folder))
-    del funct
+        setattr(TutorialDocTestHolder,
+                "doctest_%s" % name.replace(" ", "_"),
+                funct(name, example, folder))
+        del funct
 
 
 # This is a TestCase class so it is found by run_tests.py
