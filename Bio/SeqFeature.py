@@ -275,7 +275,7 @@ class SeqFeature(object):
         out += "location: %s\n" % self.location
         if self.id and self.id != "<unknown id>":
             out += "id: %s\n" % self.id
-        out += "qualifiers: \n"
+        out += "qualifiers:\n"
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
                                                self.qualifiers[qual_key])
