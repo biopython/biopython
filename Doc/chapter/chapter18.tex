@@ -15,7 +15,7 @@ information that can be used for a variety of evolutionary analysis.
 
 This chapter has been divided into four parts to explain the codon
 alignment support in Biopython. First, a general introduction about the
-basic classes in \verb|Bio.CodonAlign| will be given. Then, a typical
+basic classes in \verb|Bio.codonalign| will be given. Then, a typical
 procedure of how to obtain a codon alignment within Biopython is
 discussed. Next, some simple applications of codon alignment, such as
 dN/dS ratio estimation and neutrality test and so forth will be covered.
@@ -24,7 +24,7 @@ analysis that cannot be done within Biopython.
 
 \section{CodonSeq Class}
 
-\verb|Bio.CodonAlign.CodonSeq| class is the base class in Codon
+\verb|Bio.codonalign.CodonSeq| class is the base class in Codon
 Alignment. It is similar to \verb|Bio.Seq| but with some extra
 attributes. To obtain a \verb|CodonSeq| object, you just need
 to give a \verb|str| object of nucleotide sequence whose length is a
@@ -33,7 +33,7 @@ argument). For example:
 
 %doctest
 \begin{verbatim}
->>> from Bio.CodonAlign import CodonSeq
+>>> from Bio.codonalign import CodonSeq
 >>> codon_seq = CodonSeq("AAATTTCCCGGG")
 >>> codon_seq
 CodonSeq('AAATTTCCCGGG', CodonAlphabet(Standard))
@@ -45,24 +45,24 @@ An error will raise up if the input sequence is not a multiple of 3.
 >>> codon_seq = CodonSeq("AAATTTCCCGG")
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "/biopython/Bio/CodonAlign/CodonSeq.py", line 81, in __init__
+  File "/biopython/Bio/codonalign/CodonSeq.py", line 81, in __init__
     assert len(self) % 3 == 0, "Sequence length is not a triple number"
 AssertionError: Sequence length is not a triple number
 \end{verbatim}
 
-By default, \verb|Bio.CodonAlign.default_codon_alphabet| will be
+By default, \verb|Bio.codonalign.default_codon_alphabet| will be
 assigned to \verb|CodonSeq| object if you don't specify any Alphabet.
 This \verb|default_codon_alphabet| is gapped universal genetic code,
 which will work in most cases. However, if you are analyzing data from
 mitochondria, for instance, and are in need of assigning an special
-codon alphabet by yourself, \verb|Bio.CodonAlign.CodonAlphabet| also
+codon alphabet by yourself, \verb|Bio.codonalign.CodonAlphabet| also
 provides you an easy solution. All you need is to pick up a
 \verb|CodonTable| object that is correct for your data. For example:
 
 %doctest
 \begin{verbatim}
->>> from Bio.CodonAlign import CodonSeq
->>> from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet
+>>> from Bio.codonalign import CodonSeq
+>>> from Bio.codonalign.codonalphabet import get_codon_alphabet
 >>> from Bio.Data.CodonTable import generic_by_id    # vertebrate mitochondria alphabet
 >>> codon_alphabet = get_codon_alphabet(generic_by_id[2], gap_char="-")
 >>> codon_seq1 = CodonSeq("AAA---CCCGGG", alphabet=codon_alphabet)
@@ -147,9 +147,9 @@ CodonSeq('AAAAAA', CodonAlphabet(Standard))
 >>> codon_seq.from_seq(seq)
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "/biopython/Bio/CodonAlign/CodonSeq.py", line 264, in from_seq
+  File "/biopython/Bio/codonalign/CodonSeq.py", line 264, in from_seq
     return cls(seq._data, alphabet=alphabet)
-  File "/biopython/Bio/CodonAlign/CodonSeq.py", line 80, in __init__
+  File "/biopython/Bio/codonalign/CodonSeq.py", line 80, in __init__
     assert len(self) % 3 == 0, "Sequence length is not a triple number"
 AssertionError: Sequence length is not a triple number
 >>> codon_seq.from_seq(seq, rf_table=(0, 2))
@@ -167,7 +167,7 @@ will always be a \verb|MultipleSeqAlignment| object.
 
 %doctest
 \begin{verbatim}
->>> from Bio.CodonAlign import default_codon_alphabet, CodonSeq, CodonAlignment
+>>> from Bio.codonalign import default_codon_alphabet, CodonSeq, CodonAlignment
 >>> from Bio.Alphabet import generic_dna
 >>> from Bio.SeqRecord import SeqRecord
 >>> from Bio.Alphabet import IUPAC, Gapped
@@ -234,20 +234,20 @@ them more in \ref{subsec:app}.
 \section{Build a Codon Alignment}
 
 Building a codon alignment is the first step of many evolutionary
-anaysis. But how to do that? \verb|Bio.CodonAlign| provides you an
+anaysis. But how to do that? \verb|Bio.codonalign| provides you an
 easy funciton --- \verb|build()| to achieve all. The data you need to
 prepare in advance is a protein alignment and a set of DNA sequences
 that can be translated into the protein sequences in the alignment.
 
-\verb|CodonAlign.build()| method requires two mandatory arguments. The
+\verb|codonalign.build()| method requires two mandatory arguments. The
 first one should be a protein \verb|MultipleSeqAlignment| object and
 the second one is a list of nucleotide \verb|SeqRecord| object. By
-default, \verb|CodonAlign.build()| assumes the order of the alignment
+default, \verb|codonalign.build()| assumes the order of the alignment
 and nucleotide sequences are in the same. For example:
 
 %doctest
 \begin{verbatim}
->>> from Bio import CodonAlign
+>>> from Bio import codonalign
 >>> from Bio.Alphabet import IUPAC
 >>> from Bio.Align import MultipleSeqAlignment
 >>> from Bio.SeqRecord import SeqRecord
@@ -259,7 +259,7 @@ and nucleotide sequences are in the same. For example:
 >>> prot2 = SeqRecord(nucl2.seq.translate(), id='prot2')
 >>> prot3 = SeqRecord(nucl3.seq.translate(), id='prot3')
 >>> aln = MultipleSeqAlignment([prot1, prot2, prot3])
->>> codon_aln = CodonAlign.build(aln, [nucl1, nucl2, nucl3])
+>>> codon_aln = codonalign.build(aln, [nucl1, nucl2, nucl3])
 >>> print(codon_aln)
 CodonAlphabet(Standard) CodonAlignment with 3 rows and 12 columns (4 codons)
 AAATTTCCCGGG nucl1
@@ -267,13 +267,13 @@ AAATTACCCGCG nucl2
 ATATTACCCGGG nucl3
 \end{verbatim}
 
-In the above example, \verb|CodonAlign.build()| will try to match
+In the above example, \verb|codonalign.build()| will try to match
 \texttt{nucl1} with \texttt{prot1}, \texttt{nucl2} with \texttt{prot2}
 and \texttt{nucl3} with \texttt{prot3}, i.e., assuming the order of
 records in \texttt{aln} and \texttt{{[}nucl1, nucl2, nucl3{]}} is the
 same.
 
-\verb|CodonAlign.build()| method is also able to handle key match. In
+\verb|codonalign.build()| method is also able to handle key match. In
 this case, records with same id are paired. For example:
 
 %cont-doctest
@@ -286,7 +286,7 @@ this case, records with same id are paired. For example:
 >>> prot3 = SeqRecord(nucl3.seq.translate(), id='prot3')
 >>> aln = MultipleSeqAlignment([prot1, prot2, prot3])
 >>> nucl = {'prot1': nucl1, 'prot2': nucl2, 'prot3': nucl3}
->>> codon_aln = CodonAlign.build(aln, nucl)
+>>> codon_aln = codonalign.build(aln, nucl)
 >>> print(codon_aln)
 CodonAlphabet(Standard) CodonAlignment with 3 rows and 12 columns (4 codons)
 AAATTTCCCGGG nucl1
@@ -299,7 +299,7 @@ This option is handleful if you read nucleotide sequences using
 generated automatically.
 
 Sometimes, you are neither not able to ensure the same order or the same
-id. \verb|CodonAlign.build()| method provides you an manual approach to
+id. \verb|codonalign.build()| method provides you an manual approach to
 tell the program nucleotide sequence and protein sequence correspondance
 by generating a \texttt{corr\_dict}. \texttt{corr\_dict} should be a
 dictionary that uses protein record id as key and nucleotide record id
@@ -315,7 +315,7 @@ as item. Let's look at an example:
 >>> prot3 = SeqRecord(nucl3.seq.translate(), id='prot3')
 >>> aln = MultipleSeqAlignment([prot1, prot2, prot3])
 >>> corr_dict = {'prot1': 'nucl1', 'prot2': 'nucl2', 'prot3': 'nucl3'}
->>> codon_aln = CodonAlign.build(aln, [nucl3, nucl1, nucl2], corr_dict=corr_dict)
+>>> codon_aln = codonalign.build(aln, [nucl3, nucl1, nucl2], corr_dict=corr_dict)
 >>> print(codon_aln)
 CodonAlphabet(Standard) CodonAlignment with 3 rows and 12 columns (4 codons)
 AAATTTCCCGGG nucl1
@@ -323,21 +323,21 @@ AAATTACCCGCG nucl2
 ATATTACCCGGG nucl3
 \end{verbatim}
 
-We can see, even though the second argument of \verb|CodonAlign.build()|
+We can see, even though the second argument of \verb|codonalign.build()|
 is not in the same order with \texttt{aln} in the above example, the
 \texttt{corr\_dict} tells the program to pair protein records and
 nucleotide records. And we are still able to obtain the correct
 \verb|CodonAlignment| object.
 
-The underlying algorithm of \verb|CodonAlign.build()| method is very
+The underlying algorithm of \verb|codonalign.build()| method is very
 similar to \texttt{pal2nal} (a very famous perl script to build codon
-alignment). \verb|CodonAlign.build()| will first translate protein
+alignment). \verb|codonalign.build()| will first translate protein
 sequences into a long degenerate regular expression and tries to find a
 match in its corresponding nucleotide sequence. When translation fails,
 it divide protein sequence into several small anchors and tries to match
 each anchor to the nucleotide sequence to figure out where the mismatch
 and frameshift events lie. Other options available for
-\verb|CodonAlign.build()| includes \texttt{anchor\_len} (default 10) and
+\verb|codonalign.build()| includes \texttt{anchor\_len} (default 10) and
 \texttt{max\_score} (maximum tolerance of unexpected events, default
 10). You may want to refer the Biopython build-in help to get more
 information about these options.
@@ -360,8 +360,8 @@ your current python working directory):
 >>> nucl = SeqIO.parse('egfr_nucl.fa', 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
 >>> prot = AlignIO.read('egfr_pro.aln', 'clustal', alphabet=IUPAC.protein)
 >>> id_corr = {i.split()[0]: i.split()[1] for i in open('egfr_id').readlines()}
->>> aln = CodonAlign.build(prot, nucl, corr_dict=id_corr, alphabet=CodonAlign.default_codon_alphabet)
-/biopython/Bio/CodonAlign/__init__.py:568: UserWarning: gi|47522840|ref|NP_999172.1|(L 449) does not correspond to gi|47522839|ref|NM_214007.1|(ATG)
+>>> aln = codonalign.build(prot, nucl, corr_dict=id_corr, alphabet=codonalign.default_codon_alphabet)
+/biopython/Bio/codonalign/__init__.py:568: UserWarning: gi|47522840|ref|NP_999172.1|(L 449) does not correspond to gi|47522839|ref|NM_214007.1|(ATG)
   % (pro.id, aa, aa_num, nucl.id, this_codon))
 >>> print(aln)
 CodonAlphabet(Standard) CodonAlignment with 6 rows and 4446 columns (1482 codons)
@@ -381,7 +381,7 @@ found. And this is shown as a UserWarning.
 
 The most important application of codon alignment is to estimate
 nonsynonymous substitutions per site (dN) and synonymous substitutions
-per site (dS). \verb|CodonAlign| currently support three counting
+per site (dS). \verb|codonalign| currently support three counting
 based methods (NG86, LWL85, YN00) and maximum likelihood method to
 estimate dN and dS. The function to conduct dN, dS estimation is called
 \verb|cal_dn_ds()|. When you obtained a codon alignment, it is quite
@@ -389,7 +389,7 @@ easy to calculate dN and dS. For example (assuming you have EGFR codon
 alignmnet in the python working space):
 
 \begin{verbatim}
->>> from Bio.CodonAlign.CodonSeq import cal_dn_ds
+>>> from Bio.codonalign.CodonSeq import cal_dn_ds
 >>> print(aln)
 CodonAlphabet(Standard) CodonAlignment with 6 rows and 4446 columns (1482 codons)
 ATGATGATTATCAGCATGTGGATGAGCATATCGCGAGGATTGTGGGACAGCAGCTCC...GTG gi|24657088|ref|NM_057410.3|
@@ -446,7 +446,7 @@ Tree(rooted=True)
             Clade(branch_length=0.0104539152529, name='gi|24657088|ref|NM_057410.3|')
 \end{verbatim}
 
-Another application of codon alignment that \verb|CodonAlign| supports
+Another application of codon alignment that \verb|codonalign| supports
 is Mcdonald-Kreitman test. This test compares the within species
 synonymous substitutions and nonsynonymous substitutions and between
 species synonymous substitutions and nonsynonymous substitutions to see
@@ -459,12 +459,11 @@ D. yakuba. The data is available from
 \href{http://zruanweb.com/adh.zip}{here}. A function called
 \verb|mktest()| will be used for the test.
 
-%doctest examples lib:numpy
 \begin{verbatim}
 >>> from Bio import SeqIO, AlignIO
 >>> from Bio.Alphabet import IUPAC
->>> from Bio.CodonAlign import build
->>> from Bio.CodonAlign.CodonAlignment import mktest
+>>> from Bio.codonalign import build
+>>> from Bio.codonalign.codonalignment import mktest
 
 >>> pro_aln = AlignIO.read('adh.aln', 'clustal', alphabet=IUPAC.protein)
 >>> p = SeqIO.index('drosophilla.fasta', 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
@@ -514,7 +513,7 @@ negative selection according to MK test.
 \section{Future Development}
 
 Because of the limited time frame for Google Summer of Code project,
-some of the functions in \verb|CodonAlign| is not tested
+some of the functions in \verb|codonalign| is not tested
 comprehensively. In the following days, I will continue perfect the code
 and several new features will be added. I am always welcome to hear your
 suggestions and feature request. You are also highly encouraged to
