@@ -377,7 +377,7 @@ def _read_dt(record, line):
 
 
 def _read_ox(record, line):
-    # The OX line is in the format:
+    # The OX line used to be in the simple format:
     # OX   DESCRIPTION=ID[, ID]...;
     # If there are too many id's to fit onto a line, then the ID's
     # continue directly onto the next line, e.g.
@@ -387,6 +387,11 @@ def _read_ox(record, line):
     # To parse this, I need to check to see whether I'm at the
     # first line.  If I am, grab the description and make sure
     # it's an NCBI ID.  Then, grab all the id's.
+    #
+    # As of the 2014-10-01 release, there may be an evidence code, e.g.
+    # OX   NCBI_TaxID=418404 {ECO:0000313|EMBL:AEX14553.1};
+    # In the short term, we will ignore any evidence codes:
+    line = line.split('{')[0]
     if record.taxonomy_id:
         ids = line[5:].rstrip().rstrip(";")
     else:
@@ -406,6 +411,12 @@ def _read_oh(record, line):
 
 
 def _read_rn(reference, rn):
+    # This used to be a very simple line with a reference number, e.g.
+    # RN   [1]
+    # As of the 2014-10-01 release, there may be an evidence code, e.g.
+    # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
+    # We will for now ignore this
+    rn = rn.split()[0]
     assert rn[0] == '[' and rn[-1] == ']', "Missing brackets %s" % rn
     reference.number = int(rn[1:-1])
 
