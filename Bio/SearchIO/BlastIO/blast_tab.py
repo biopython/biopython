@@ -579,7 +579,7 @@ class BlastTabIndexer(SearchIndexer):
             # get end offset here since we only know a qresult ends after
             # encountering the next one
             end_offset = handle.tell()
-            #line = handle.readline()
+            # line = handle.readline()
             line = handle.readline()
 
             if qresult_key is None:

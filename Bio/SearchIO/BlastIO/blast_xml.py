@@ -15,7 +15,7 @@ from xml.sax.saxutils import XMLGenerator, escape
 from Bio import BiopythonParserWarning
 
 
-#For speed try to use cElementTree rather than ElementTree
+# For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
         # Workaround for bug in python 3.0 and 3.1,
@@ -52,7 +52,7 @@ _ELEM_QRESULT_OPT = {
 }
 # element - hit attribute name mapping
 _ELEM_HIT = {
-    #'Hit_def': ('description', str),   # not set by this dict
+    # 'Hit_def': ('description', str),   # not set by this dict
     'Hit_accession': ('accession', str),
     'Hit_len': ('seq_len', int),
 }
@@ -568,7 +568,7 @@ class BlastXmlIndexer(SearchIndexer):
                 block = _empty_bytes_string.join(block)
             assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
             assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
-            #Now we have a full <Iteration>...</Iteration> block, find the ID
+            # Now we have a full <Iteration>...</Iteration> block, find the ID
             regx = re.search(re_desc, block)
             try:
                 qstart_desc = regx.group(2)

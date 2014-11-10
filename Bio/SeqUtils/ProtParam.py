@@ -16,7 +16,7 @@ print(X.isoelectric_point())
 print(X.secondary_structure_fraction())
 print(X.protein_scale(ProtParamData.kd, 9, 0.4))
 """
-#TODO - Turn that into a working doctest
+# TODO - Turn that into a working doctest
 
 from __future__ import print_function
 
@@ -273,7 +273,7 @@ class ProteinAnalysis(object):
         aa_percentages = self.get_amino_acids_percent()
 
         helix = sum(aa_percentages[r] for r in 'VIYFWL')
-        turn  = sum(aa_percentages[r] for r in 'NPGS')
+        turn = sum(aa_percentages[r] for r in 'NPGS')
         sheet = sum(aa_percentages[r] for r in 'EMAL')
 
         return helix, turn, sheet

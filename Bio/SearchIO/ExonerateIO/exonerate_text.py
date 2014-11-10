@@ -373,7 +373,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 pass
 
         # use vulgar coordinates if vulgar line is present and return
-        #if vulgar_comp is not None:
+        # if vulgar_comp is not None:
         #    hsp = parse_vulgar_comp(hsp, vulgar_comp)
 
         #    return {'qresult': qresult, 'hit': hit, 'hsp': hsp}

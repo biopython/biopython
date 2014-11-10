@@ -40,13 +40,13 @@ go away.
 import sys
 
 if sys.version_info[0] >= 3:
-    #Code for Python 3
+    # Code for Python 3
     from builtins import open, zip, map, filter, range, input
 
     import codecs
 
-    #Lots of our Python 2 code uses isinstance(x, basestring)
-    #which after 2to3 becomes isinstance(x, str)
+    # Lots of our Python 2 code uses isinstance(x, basestring)
+    # which after 2to3 becomes isinstance(x, str)
     basestring = str
     unicode = str
 
@@ -57,8 +57,8 @@ if sys.version_info[0] >= 3:
         """Turn byte string or unicode string into a unicode string."""
         if isinstance(s, str):
             return s
-        #Assume it is a bytes string
-        #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        # Assume it is a bytes string
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_decode(s)[0]
 
     def _as_bytes(s):
@@ -68,8 +68,8 @@ if sys.version_info[0] >= 3:
         """
         if isinstance(s, bytes):
             return s
-        #Assume it is a unicode string
-        #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        # Assume it is a unicode string
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_encode(s)[0]
 
     _as_string = _as_unicode
@@ -132,25 +132,25 @@ if sys.version_info[0] >= 3:
 
         return EvilHandleHack(handle)
 
-    #This is to avoid the deprecation warning from open(filename, "rU")
+    # This is to avoid the deprecation warning from open(filename, "rU")
     _universal_read_mode = "r"  # text mode does universal new lines
 
-    #On Python 3, can depend on OrderedDict being present:
+    # On Python 3, can depend on OrderedDict being present:
     from collections import OrderedDict
 
-    #On Python 3, this will be a unicode StringIO
+    # On Python 3, this will be a unicode StringIO
     from io import StringIO
 
-    #On Python 3 urllib, urllib2, and urlparse were merged:
+    # On Python 3 urllib, urllib2, and urlparse were merged:
     from urllib.request import urlopen, Request, urlretrieve, urlparse
     from urllib.parse import urlencode, quote
     from urllib.error import HTTPError
 
 else:
-    #Python 2 code
+    # Python 2 code
     from __builtin__ import open, basestring, unicode
 
-    #Import Python3 like iterator functions:
+    # Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
@@ -160,7 +160,7 @@ else:
 
     def _as_unicode(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""
-        #Will be changed by 2to3 to "isinstance(s, str)" but doesn't matter:
+        # Will be changed by 2to3 to "isinstance(s, str)" but doesn't matter:
         if isinstance(s, unicode):
             return s
         return s.decode()
@@ -184,14 +184,14 @@ else:
     _universal_read_mode = "rU"
 
     try:
-        #Present on Python 2.7
+        # Present on Python 2.7
         from collections import OrderedDict
     except ImportError:
         try:
-            #Raymond Hettinger's backport available on PyPI
+            # Raymond Hettinger's backport available on PyPI
             from ordereddict import OrderedDict
         except ImportError:
-            #Use our bundled copy instead
+            # Use our bundled copy instead
             from ._ordereddict import OrderedDict
 
     # On Python 2 this will be a (bytes) string based handle.
@@ -202,15 +202,15 @@ else:
     except ImportError:
         from StringIO import StringIO
 
-    #Under urllib.request on Python 3:
+    # Under urllib.request on Python 3:
     from urllib2 import urlopen, Request
     from urllib import urlretrieve
     from urlparse import urlparse
 
-    #Under urllib.parse on Python 3:
+    # Under urllib.parse on Python 3:
     from urllib import urlencode, quote
 
-    #Under urllib.error on Python 3:
+    # Under urllib.error on Python 3:
     from urllib2 import HTTPError
 
 

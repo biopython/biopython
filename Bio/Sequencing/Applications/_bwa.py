@@ -252,7 +252,7 @@ class BwaSampeCommandline(AbstractCommandline):
     You would typically run the command line using sampe_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
     """
-    #TODO - Should the read group have a raw tab in it, or \t?
+    # TODO - Should the read group have a raw tab in it, or \t?
     def __init__(self, cmd="bwa", **kwargs):
         self.program_name = cmd
         self.parameters = \

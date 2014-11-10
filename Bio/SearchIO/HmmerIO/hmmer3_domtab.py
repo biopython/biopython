@@ -231,7 +231,7 @@ class Hmmer3DomtabHmmhitWriter(object):
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1157
         if first_qresult:
-            #qnamew = max(20, len(first_qresult.id))
+            # qnamew = max(20, len(first_qresult.id))
             qnamew = 20
             tnamew = max(20, len(first_qresult[0].id))
             try:

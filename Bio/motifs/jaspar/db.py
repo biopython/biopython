@@ -244,18 +244,18 @@ class JASPAR5(object):
 
         # Fetch the internal IDs of the motifs using the criteria provided
         int_ids = self._fetch_internal_id_list(
-            collection = collection,
-            tf_name = tf_name,
-            tf_class = tf_class,
-            tf_family = tf_family,
-            matrix_id = matrix_id,
-            tax_group = tax_group,
-            species = species,
-            pazar_id = pazar_id,
-            data_type = data_type,
-            medline = medline,
-            all = all,
-            all_versions = all_versions
+            collection=collection,
+            tf_name=tf_name,
+            tf_class=tf_class,
+            tf_family=tf_family,
+            matrix_id=matrix_id,
+            tax_group=tax_group,
+            species=species,
+            pazar_id=pazar_id,
+            data_type=data_type,
+            medline=medline,
+            all=all,
+            all_versions=all_versions
         )
 
         record = jaspar.Record()
@@ -336,10 +336,10 @@ class JASPAR5(object):
 
         row = cur.fetchone()
 
-        base_id     = row[0]
-        version     = row[1]
-        collection  = row[2]
-        name        = row[3]
+        base_id = row[0]
+        version = row[1]
+        collection = row[2]
+        name = row[3]
 
         matrix_id = "".join([base_id, '.', str(version)])
 
@@ -348,7 +348,7 @@ class JASPAR5(object):
 
         # Create new JASPAR motif
         motif = jaspar.Motif(
-            matrix_id, name, collection = collection, counts = counts
+            matrix_id, name, collection=collection, counts=counts
         )
 
         # fetch species
@@ -377,7 +377,7 @@ class JASPAR5(object):
         rows = cur.fetchall()
         for row in rows:
             attr = row[0]
-            val  = row[1]
+            val = row[1]
             if attr == 'class':
                 motif.tf_class = val
             elif attr == 'family':
@@ -693,7 +693,7 @@ class JASPAR5(object):
         if where_clauses:
             sql = "".join([sql, " where ", " and ".join(where_clauses)])
 
-        #print "sql = %s" % sql
+        # print "sql = %s" % sql
 
         cur.execute(sql)
         rows = cur.fetchall()

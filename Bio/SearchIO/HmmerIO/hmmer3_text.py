@@ -322,9 +322,9 @@ class Hmmer3TextParser(object):
             # hsp inside the qresult as we're not creating a copy
             frag = hsp_list[dom_counter][0]
             # XXX: should we validate again here? regex is expensive..
-            #regx = re.search(_HRE_VALIDATE, self.line)
-            #assert hsp.bitscore == float(regx.group(1))
-            #assert hsp.evalue_cond == float(regx.group(2))
+            # regx = re.search(_HRE_VALIDATE, self.line)
+            # assert hsp.bitscore == float(regx.group(1))
+            # assert hsp.evalue_cond == float(regx.group(2))
             hmmseq = ''
             aliseq = ''
             annot = {}

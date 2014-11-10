@@ -294,11 +294,11 @@ class QueryResult(_BaseSearchObject):
     def __len__(self):
         return len(self._items)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         return bool(self._items)
 
-    #Python 2:
+    # Python 2:
     __nonzero__= __bool__
 
     def __repr__(self):
@@ -445,7 +445,7 @@ class QueryResult(_BaseSearchObject):
                 raise KeyError('%r'.format(key))
         return
 
-    ## properties ##
+    # properties #
     id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
     description = optionalcascade('_description', 'query_description',
             """QueryResult description""")
@@ -460,7 +460,7 @@ class QueryResult(_BaseSearchObject):
         """HSPFragment objects contained in the QueryResult."""
         return [frag for frag in chain(*self.hsps)]
 
-    ## public methods ##
+    # public methods #
     def absorb(self, hit):
         """Adds a Hit object to the end of QueryResult. If the QueryResult
         already has a Hit with the same ID, append the new Hit's HSPs into

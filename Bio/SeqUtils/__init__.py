@@ -250,8 +250,8 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     # to preserve its initial state (may be imported in other modules)
     threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
                      list(custom_map.items()))
-    #We use a default of 'Xaa' for undefined letters
-    #Note this will map '-' to 'Xaa' which may be undesirable!
+    # We use a default of 'Xaa' for undefined letters
+    # Note this will map '-' to 'Xaa' which may be undesirable!
     return ''.join(threecode.get(aa, undef_code) for aa in seq)
 
 

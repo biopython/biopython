@@ -391,10 +391,10 @@ def parse(handle):
                         record.reads[-1].rt = []
                     for line in handle:
                         line = line.strip()
-                        #if line=="COMMENT{":
+                        # if line=="COMMENT{":
                         if line.startswith("COMMENT{"):
                             if line[8:].strip():
-                                #MIRA 3.0.5 would miss the new line out :(
+                                # MIRA 3.0.5 would miss the new line out :(
                                 record.reads[-1].rt[-1].comment.append(line[8:])
                             for line in handle:
                                 line = line.strip()

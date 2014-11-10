@@ -294,11 +294,11 @@ class HSP(_BaseHSP):
     def __len__(self):
         return len(self._items)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         return bool(self._items)
 
-    #Python 2:
+    # Python 2:
     __nonzero__= __bool__
 
     def __str__(self):
@@ -400,7 +400,7 @@ class HSP(_BaseHSP):
     aln_span = property(fget=_aln_span_get,
             doc="""Total number of columns in all HSPFragment objects.""")
 
-    ## coordinate properties ##
+    # coordinate properties #
     def _get_coords(self, seq_type, coord_type):
         assert seq_type in ('hit', 'query')
         assert coord_type in ('start', 'end')
@@ -435,7 +435,7 @@ class HSP(_BaseHSP):
     query_end = property(fget=_query_end_get,
             doc="""Largest coordinate value of all hit fragments""")
 
-    ## coordinate-dependent properties ##
+    # coordinate-dependent properties #
     def _hit_span_get(self):
         try:
             return self.hit_end - self.hit_start
@@ -515,7 +515,7 @@ class HSP(_BaseHSP):
     query_inter_spans = property(fget=_query_inter_spans_get,
         doc="""Lengths of regions between query fragments""")
 
-    ## shortcuts for fragments' properties ##
+    # shortcuts for fragments' properties #
 
     # bool check if there's more than one fragments
     is_fragmented = property(lambda self: len(self) > 1,
@@ -792,7 +792,7 @@ class HSPFragment(_BaseHSP):
 
         return '\n'.join(lines)
 
-    ## sequence properties ##
+    # sequence properties #
     def _set_seq(self, seq, seq_type):
         """Checks the given sequence for attribute setting
 
@@ -903,7 +903,7 @@ class HSPFragment(_BaseHSP):
     aln_span = property(fget=_aln_span_get, fset=_aln_span_set,
             doc="""The number of alignment columns covered by the fragment""")
 
-    ## id, description, and features properties ##
+    # id, description, and features properties #
     hit_description = fragcascade('description', 'hit',
             doc="""Hit sequence description""")
 
@@ -922,7 +922,7 @@ class HSPFragment(_BaseHSP):
     query_features = fragcascade('features', 'query',
             doc="""Query sequence features""")
 
-    ## strand properties ##
+    # strand properties #
     def _prep_strand(self, strand):
         # follow SeqFeature's convention
         if strand not in (-1, 0, 1, None):
@@ -964,7 +964,7 @@ class HSPFragment(_BaseHSP):
     query_strand = property(fget=_query_strand_get, fset=_query_strand_set,
             doc="""Query sequence strand, defaults to None""")
 
-    ## frame properties ##
+    # frame properties #
     def _prep_frame(self, frame):
         if frame not in (-3, -2, -1, 0, 1, 2, 3, None):
             raise ValueError("Strand should be an integer between -3 and 3, "
@@ -989,7 +989,7 @@ class HSPFragment(_BaseHSP):
     query_frame = property(fget=_query_frame_get, fset=_query_frame_set,
             doc="""Query sequence reading frame, defaults to None""")
 
-    ## coordinate properties ##
+    # coordinate properties #
     def _prep_coord(self, coord, opp_coord_name, op):
         # coord must either be None or int
         if coord is None:
@@ -1044,7 +1044,7 @@ class HSPFragment(_BaseHSP):
     query_end = property(fget=_query_end_get, fset=_query_end_set,
             doc="""Query sequence end coordinate, defaults to None""")
 
-    ## coordinate-dependent properties ##
+    # coordinate-dependent properties #
     def _hit_span_get(self):
         try:
             return self.hit_end - self.hit_start

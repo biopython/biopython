@@ -210,7 +210,7 @@ class Hmmer2TextParser(object):
                 hsp.hit_endtype = seq_compl
 
             if id_ not in unordered_hits:
-                placeholder = [ p for p in hit_placeholders if p.id_ == id_][0]
+                placeholder = [p for p in hit_placeholders if p.id_ == id_][0]
                 hit = placeholder.createHit([hsp])
                 unordered_hits[id_] = hit
             else:

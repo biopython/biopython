@@ -38,9 +38,10 @@ class Motif(motifs.Motif):
         self.collection = collection
         self.tf_class = tf_class
         self.tf_family = tf_family
-        self.species = species      # May have multiple so species is a list.
-                                    # The species are actually specified as
-                                    # taxonomy IDs.
+        # May have multiple so species is a list.
+        # The species are actually specified as
+        # taxonomy IDs.
+        self.species = species
         self.tax_group = tax_group
         self.acc = acc              # May have multiple so acc is a list.
         self.data_type = data_type
@@ -204,7 +205,7 @@ def _read_pfm(handle):
     letters = "ACGT"
     for letter, line in zip(letters, handle):
         words = line.split()
-        #if there is a letter in the beginning, ignore it
+        # if there is a letter in the beginning, ignore it
         if words[0] == letter:
             words = words[1:]
         counts[letter] = [float(x) for x in words]
