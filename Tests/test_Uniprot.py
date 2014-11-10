@@ -278,7 +278,7 @@ class TestUniprot(unittest.TestCase):
             elif key in ["organism"]:
                 if old.annotations[key] == new.annotations[key]:
                     pass
-                elif old.annotations[key].startswith(new.annotations[key]+" "):
+                elif old.annotations[key].startswith(new.annotations[key] + " "):
                     pass
                 else:
                     raise ValueError(key)
@@ -308,6 +308,12 @@ class TestUniprot(unittest.TestCase):
         """Compare SwissProt text and uniprot XML versions of Q13639."""
         old = SeqIO.read("SwissProt/Q13639.txt", "swiss")
         new = SeqIO.read("SwissProt/Q13639.xml", "uniprot-xml")
+        self.compare_txt_xml(old, new)
+
+    def test_H2CNN8(self):
+        """Compare SwissProt text and uniprot XML versions of H2CNN8."""
+        old = SeqIO.read("SwissProt/H2CNN8.txt", "swiss")
+        new = SeqIO.read("SwissProt/H2CNN8.xml", "uniprot-xml")
         self.compare_txt_xml(old, new)
 
     def test_multi_ex(self):
@@ -348,5 +354,5 @@ class TestUniprot(unittest.TestCase):
         xml_index.close()
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

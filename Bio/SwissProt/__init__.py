@@ -221,8 +221,7 @@ def _read(handle):
             # TODO - Record this information?
             pass
         elif key == 'KW':
-            cols = value.rstrip(";.").split('; ')
-            record.keywords.extend(cols)
+            _read_kw(record, value)
         elif key == 'FT':
             _read_ft(record, line)
         elif key == 'SQ':
@@ -433,7 +432,7 @@ def _read_rc(reference, value):
         # The token is everything before the first '=' character.
         i = col.find("=")
         if i >= 0:
-            token, text = col[:i], col[i+1:]
+            token, text = col[:i], col[i + 1:]
             comment = token.lstrip(), text
             reference.comments.append(comment)
         else:
@@ -503,6 +502,24 @@ def _read_cc(record, line):
 def _read_dr(record, value):
     cols = value.rstrip(".").split('; ')
     record.cross_references.append(tuple(cols))
+
+
+def _read_kw(record, value):
+    # Old style - semi-colon separated, multi-line. e.g. Q13639.txt
+    # KW   Alternative splicing; Cell membrane; Complete proteome;
+    # KW   Disulfide bond; Endosome; G-protein coupled receptor; Glycoprotein;
+    # KW   Lipoprotein; Membrane; Palmitate; Polymorphism; Receptor; Transducer;
+    # KW   Transmembrane.
+    #
+    # New style as of 2014-10-01 release with evidence codes, e.g. H2CNN8.txt
+    # KW   Monooxygenase {ECO:0000313|EMBL:AEX14553.1};
+    # KW   Oxidoreductase {ECO:0000313|EMBL:AEX14553.1}.
+    # For now to match the XML parser, drop the evidence codes.
+    for value in value.rstrip(";.").split('; '):
+        if value.endswith("}"):
+            # Discard the evidence code
+            value = value.rsplit("{", 1)[0]
+        record.keywords.append(value.strip())
 
 
 def _read_ft(record, line):
