@@ -28,6 +28,10 @@ BLAST NR database).
 
 We have also done some more work applying PEP8 coding styles to Biopython.
 
+The new experimental module Bio.CodonAlign has been renamed Bio.codonalign
+(and similar lower case PEP8 style module names have been used for the
+sub-modules within this).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -46,6 +50,7 @@ Peter Cock
 Seth Sims (first contribution)
 Tiago Antao
 Wibowo 'Bow' Arindrarto
+Zheng Ruan
 
 ===================================================================
 

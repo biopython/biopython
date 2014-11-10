@@ -22,6 +22,11 @@ Python 3.0, 3.1, 3.2
 Never officially supported, these trigger a warning in Release 1.62
 recommending Python 3.3 or later if you wish to use Python 3.
 
+Bio.CodonAlign
+==============
+This new experimental module included in Biopython 1.64 was renamed to
+Bio.codonalign in Biopython 1.65 to follow PEP8 module naming rules.
+
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 ========================================================
 Deprecated as of Release 1.64. You should now use str(Bio.Seq.Seq) or
