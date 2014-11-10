@@ -21,7 +21,7 @@ import optparse
 try:
     from urllib import FancyURLopener
 except ImportError:
-    #Python 3
+    # Python 3
     from urllib.request import FancyURLopener
 
 from Bio.Restriction.RanaConfig import *
@@ -37,7 +37,7 @@ class RebaseUpdate(FancyURLopener):
 
         e_mail is the password for the anonymous ftp connection to Rebase.
         ftpproxy is the proxy to use if any."""
-        proxy = {'ftp' : ftpproxy or ftp_proxy}
+        proxy = {'ftp': ftpproxy or ftp_proxy}
         global Rebase_password
         Rebase_password = e_mail or Rebase_password
         if not Rebase_password:
@@ -49,7 +49,7 @@ class RebaseUpdate(FancyURLopener):
     def prompt_user_passwd(self, host, realm):
         return (Rebase_name, Rebase_password)
 
-    def openRebase(self, name = ftp_Rebase):
+    def openRebase(self, name=ftp_Rebase):
         print('\n Please wait, trying to connect to Rebase\n')
         try:
             self.open(name)
@@ -61,7 +61,7 @@ class RebaseUpdate(FancyURLopener):
         for file in self.update(*files):
             print('copying %s' % file)
             fn = os.path.basename(file)
-            #filename = os.path.join(Rebase, fn)
+            # filename = os.path.join(Rebase, fn)
             filename = os.path.join(os.getcwd(), fn)
             print('to %s' % filename)
             self.retrieve(file, filename)
@@ -125,16 +125,16 @@ if __name__ == '__main__':
     add = parser.add_option
 
     add('-m', '--e-mail',
-        action  = "store",
-        dest    = 'rebase_password',
-        default = '',
-        help    = "set the e-mail address to be used as password for the"
+        action="store",
+        dest='rebase_password',
+        default='',
+        help="set the e-mail address to be used as password for the"
         "anonymous ftp connection to Rebase.")
     add('-p', '--proxy',
-        action  = "store",
-        dest    = 'ftp_proxy',
-        default = '',
-        help    = "set the proxy to be used by the ftp connection.")
+        action="store",
+        dest='ftp_proxy',
+        default='',
+        help="set the proxy to be used by the ftp connection.")
 
     (option, args) = parser.parse_args()
 

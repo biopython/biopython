@@ -556,7 +556,7 @@ class BgzfReader(object):
             self._within_block_offset = 0
             return
         elif start_offset in self._buffers:
-            #Already in cache
+            # Already in cache
             self._buffer, self._block_raw_length = self._buffers[start_offset]
             self._within_block_offset = 0
             self._block_start_offset = start_offset
@@ -602,12 +602,12 @@ class BgzfReader(object):
     def seek(self, virtual_offset):
         """Seek to a 64-bit unsigned BGZF virtual offset."""
         # Do this inline to avoid a function call,
-        #start_offset, within_block = split_virtual_offset(virtual_offset)
+        # start_offset, within_block = split_virtual_offset(virtual_offset)
         start_offset = virtual_offset >> 16
         within_block = virtual_offset ^ (start_offset << 16)
         if start_offset != self._block_start_offset:
             # Don't need to load the block if already there
-            #(this avoids a function call since _load_block would do nothing)
+            # (this avoids a function call since _load_block would do nothing)
             self._load_block(start_offset)
             assert start_offset == self._block_start_offset
         if within_block > len(self._buffer) \
@@ -631,7 +631,7 @@ class BgzfReader(object):
                 return b""
         elif self._within_block_offset + size <= len(self._buffer):
             # This may leave us right at the end of a block
-            #(lazy loading, don't load the next block unless we have too)
+            # (lazy loading, don't load the next block unless we have too)
             data = self._buffer[self._within_block_offset:self._within_block_offset + size]
             self._within_block_offset += size
             assert data  # Must be at least 1 byte
@@ -674,7 +674,7 @@ class BgzfReader(object):
             # Found new line, not at end of block (easy case, no IO)
             data = self._buffer[self._within_block_offset:i + 1]
             self._within_block_offset = i + 1
-            #assert data.endswith(self._newline)
+            # assert data.endswith(self._newline)
             return data
 
     def __next__(self):
@@ -733,7 +733,7 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
-        #print("Saving %i bytes" % len(block))
+        # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
         # Giving a negative window bits means no gzip/zlib headers, -15 used in samtools
@@ -771,11 +771,11 @@ class BgzfWriter(object):
         # block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
-            #print("Cached %r" % data)
+            # print("Cached %r" % data)
             self._buffer += data
             return
         else:
-            #print("Got %r, writing out some data..." % data)
+            # print("Got %r, writing out some data..." % data)
             self._buffer += data
             while len(self._buffer) >= 65536:
                 self._write_block(self._buffer[:65536])

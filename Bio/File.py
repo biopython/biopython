@@ -435,7 +435,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         # TODO? - Don't keep filename list in memory (just in DB)?
         # Should save a chunk of memory if dealing with 1000s of files.
         # Furthermore could compare a generator to the DB on reloading
-        #(no need to turn it into a list)
+        # (no need to turn it into a list)
 
         if not _sqlite:
             # Hack for Jython (of if Python is compiled without it)
@@ -526,7 +526,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         # Create the index
         con = _sqlite.connect(index_filename)
         self._con = con
-        #print("Creating index")
+        # print("Creating index")
         # Sqlite PRAGMA settings for speed
         con.execute("PRAGMA synchronous=OFF")
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
@@ -571,7 +571,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             else:
                 random_access_proxy._handle.close()
         self._length = count
-        #print("About to index %i entries" % count)
+        # print("About to index %i entries" % count)
         try:
             con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                         "key_index ON offset_data(key);")
@@ -584,7 +584,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
                     (count, "count"))
         con.commit()
-        #print("Index created")
+        # print("Index created")
 
     def __repr__(self):
         return self._repr

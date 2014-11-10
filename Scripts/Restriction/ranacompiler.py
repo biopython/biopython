@@ -340,11 +340,11 @@ class TypeCompiler(object):
                 dct['substrat'] = 'DNA'
                 dct['dna'] = None
                 if t == NoCut:
-                    dct.update({'fst5':None,'fst3':None,
-                                'scd5':None,'scd3':None,
-                                'ovhg':None,'ovhgseq':None})
+                    dct.update({'fst5': None, 'fst3': None,
+                                'scd5': None, 'scd3': None,
+                                'ovhg': None, 'ovhgseq': None})
                 elif t == OneCut:
-                    dct.update({'scd5':None, 'scd3':None})
+                    dct.update({'scd5': None, 'scd3': None})
 
             class klass(type):
                 def __new__(cls):
@@ -476,17 +476,17 @@ class DictionaryBuilder(object):
         #
         #   the dictionaries are done. Build the file
         #
-        #update = config.updatefolder
+        # update = config.updatefolder
 
         update = os.getcwd()
         with open(os.path.join(update, 'Restriction_Dictionary.py'), 'w') as results:
             print('Writing the dictionary containing the new Restriction classes...')
             results.write(start)
             results.write('rest_dict = {}\n')
-            for name in sorted(classdict) :
+            for name in sorted(classdict):
                 results.write("def _temp():\n")
                 results.write("    return {\n")
-                for key, value in classdict[name].items() :
+                for key, value in classdict[name].items():
                     results.write("        %s: %s,\n" % (repr(key), repr(value)))
                 results.write("    }\n")
                 results.write("rest_dict[%s] = _temp()\n" % repr(name))
@@ -494,10 +494,10 @@ class DictionaryBuilder(object):
             print('OK.\n')
             print('Writing the dictionary containing the suppliers data...')
             results.write('suppliers = {}\n')
-            for name in sorted(suppliersdict) :
+            for name in sorted(suppliersdict):
                 results.write("def _temp():\n")
                 results.write("    return (\n")
-                for value in suppliersdict[name] :
+                for value in suppliersdict[name]:
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
                 results.write("suppliers[%s] = _temp()\n" % repr(name))
@@ -505,17 +505,17 @@ class DictionaryBuilder(object):
             print('OK.\n')
             print('Writing the dictionary containing the Restriction types...')
             results.write('typedict = {}\n')
-            for name in sorted(typedict) :
+            for name in sorted(typedict):
                 results.write("def _temp():\n")
                 results.write("    return (\n")
-                for value in typedict[name] :
+                for value in typedict[name]:
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
                 results.write("typedict[%s] = _temp()\n" % repr(name))
                 results.write("\n")
-            #I had wanted to do "del _temp" at each stage (just for clarity), but
-            #that pushed the code size just over the Jython JVM limit. We include
-            #one the final "del _temp" to clean up the namespace.
+            # I had wanted to do "del _temp" at each stage (just for clarity), but
+            # that pushed the code size just over the Jython JVM limit. We include
+            # one the final "del _temp" to clean up the namespace.
             results.write("del _temp\n")
             results.write("\n")
             print('OK.\n')
@@ -541,7 +541,7 @@ class DictionaryBuilder(object):
         #
         old = os.path.join(os.path.split(rd.__file__)[0],
                            'Restriction_Dictionary.py')
-        #update_folder = config.updatefolder
+        # update_folder = config.updatefolder
         update_folder = os.getcwd()
         shutil.copyfile(old, os.path.join(update_folder,
                                           'Restriction_Dictionary.old'))
@@ -577,7 +577,7 @@ class DictionaryBuilder(object):
 
         build the new dictionary but do not install the dictionary."""
         print('\n ' +'*'*78 + '\n')
-        #update = config.updatefolder
+        # update = config.updatefolder
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
         except ImportError:
@@ -617,7 +617,7 @@ class DictionaryBuilder(object):
         #
         emboss_now = ['.'.join((x, LocalTime())) for x in embossnames]
         update_needed = False
-        #dircontent = os.listdir(config.Rebase) #    local database content
+        # dircontent = os.listdir(config.Rebase) #    local database content
         dircontent = os.listdir(os.getcwd())
         base = os.getcwd() # added for biopython current directory
         for name in emboss_now:
@@ -889,7 +889,7 @@ class DictionaryBuilder(object):
         #   exact frequency of the site. (ie freq(N) == 1, ...)
         #
         f = [4/len(dna_alphabet[l]) for l in site.upper()]
-        freq = reduce(lambda x, y : x*y, f)
+        freq = reduce(lambda x, y: x*y, f)
         line.append(freq)
         #
         #   append regex and ovhg1, they have not been appended before not to
@@ -911,7 +911,7 @@ class DictionaryBuilder(object):
         #   emboss_r.txt, separation between blocks is //
         #
         take = itertools.takewhile
-        block = [l for l in take(lambda l :not l.startswith('//'), file[index:])]
+        block = [l for l in take(lambda l: not l.startswith('//'), file[index:])]
         index += len(block)+1
         return block, index
 
@@ -967,8 +967,8 @@ class DictionaryBuilder(object):
                         print('Unfortunately, %s is commercially available.\n'%n)
 
                     continue
-                #Hyphens and dots can't be used as a Python name, nor as a
-                #group name in a regular expression. e.g. 'CviKI-1', 'R2.BceSIV'
+                # Hyphens and dots can't be used as a Python name, nor as a
+                # group name in a regular expression. e.g. 'CviKI-1', 'R2.BceSIV'
                 name = name.replace("-", "_").replace(".", "_")
                 if name in enzymedict:
                     #
@@ -1008,23 +1008,23 @@ def standalone():
     add = parser.add_option
 
     add('-i', '--install',
-        action  = "store_true",
-        dest    = 'i',
-        default = False,
-        help    = "compile and install the newly created file. "
+        action="store_true",
+        dest='i',
+        default=False,
+        help="compile and install the newly created file. "
         "default behaviour (without switch): "
         "Compile the enzymes and store them in the Updates folder")
     add('-m', '--e-mail',
-        action  = "store",
-        dest    = 'rebase_password',
-        default = '',
-        help    = "set the e-mail address to be used as password for the"
+        action="store",
+        dest='rebase_password',
+        default='',
+        help="set the e-mail address to be used as password for the"
         "anonymous ftp connection to Rebase.")
     add('-p', '--proxy',
-        action  = "store",
-        dest    = 'ftp_proxy',
-        default = '',
-        help    = "set the proxy to be used by the ftp connection.")
+        action="store",
+        dest='ftp_proxy',
+        default='',
+        help="set the proxy to be used by the ftp connection.")
     options, args = parser.parse_args()
     return options, args
 

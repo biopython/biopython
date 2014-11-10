@@ -95,7 +95,7 @@ def test_blast_output(outfile):
     scanner_class = parser_class()._scanner.__class__
     consumer_class = parser_class()._consumer.__class__
 
-    #parser_class()._scanner.feed(
+    # parser_class()._scanner.feed(
     #    open(outfile), ParserSupport.TaggingConsumer())
     print("I'm going to run the data through the parser to see what happens...")
     parser = parser_class()
@@ -246,8 +246,8 @@ if __name__ == '__main__':
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:
         OUTPUT = 1
-        #sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
-        #sys.exit(-1)
+        # sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
+        # sys.exit(-1)
     if PROTEIN or NUCLEOTIDE:
         sys.stderr.write("-p and -n not implemented yet\n")
         sys.exit(-1)

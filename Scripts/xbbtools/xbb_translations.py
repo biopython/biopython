@@ -29,7 +29,7 @@ class xbb_translations:
         return translate(seq, table=translation_table)
 
     def complement(self, seq):
-        #TODO - use Seq methods instead of this hack:?
+        # TODO - use Seq methods instead of this hack:?
         return reverse_complement(seq)[::-1]
 
     def reverse(self, seq):
@@ -43,10 +43,10 @@ class xbb_translations:
             frame = 1
         if frame != 1:
             raise NotImplementedError
-            #TODO - Support the frame argument
-            #The old code didn't, but I can guess from
-            #the code the expected 1,2,3 for the forward
-            #strands and -1,-2,-3 for the reverse.
+            # TODO - Support the frame argument
+            # The old code didn't, but I can guess from
+            # the code the expected 1,2,3 for the forward
+            # strands and -1,-2,-3 for the reverse.
         return translate(seq, table=translation_table)
 
     def header_nice(self, txt, seq):
@@ -116,14 +116,14 @@ class xbb_translations:
         return res
 
 if __name__ == '__main__':
-    #s = 'GCCCTTTCTTATTAGTGCTACCGCTAATAGGTAAATATGAAAAACCTTTG'
+    # s = 'GCCCTTTCTTATTAGTGCTACCGCTAATAGGTAAATATGAAAAACCTTTG'
     s = 'ATTCCGGTTGATCCTGCCGGACCCGACCGCTATCGGGGTAGGGATAAGCCATGGGAGTCTTACACTCCCGGGTAAGGGAGTGTGGCGGACGGCTGAGTAACACGTGGCTAACCTACCCTCGGGACGGGGATAACCCCGGGAAACTGGGGATAATCCCCGATAGGGAAGGAGTCCTGGAATGGTTCCTTCCCTAAAGGGCTATAGGCTATTTCCCGTTTGTAGCCGCCCGAGGATGGGGCTACGGCCCATCAGGCTGTCGGTGGGGTAAAGGCCCACCGAACCTATAACGGGTAGGGGCCGTGGAAGCGGGAGCCTCCAGTTGGGCACTGAGACAAGGGCCCAGGCCCTACGGGGCGCACCAGGCGCGAAACGTCCCCAATGCGCGAAAGCGTGAGGGCGCTACCCCGAGTGCCTCCGCAAGGAGGCTTTTCCCCGCTCTAAAAAGGCGGGGGAATAAGCGGGGGGCAAGTCTGGTGTCAGCCGCCGCGGTAATACCAGCTCCGCGAGTGGTCGGGGTGATTACTGGGCCTAAAGCGCCTGTAGCCGGCCCACCAAGTCGCCCCTTAAAGTCCCCGGCTCAACCGGGGAACTGGGGGCGATACTGGTGGGCTAGGGGGCGGGAGAGGCGGGGGGTACTCCCGGAGTAGGGGCGAAATCCTTAGATACCGGGAGGACCACCAGTGGCGGAAGCGCCCCGCTA'
 
     test = xbb_translations()
 #    for i in range(0, 4):
 #        print(test.frame1(s[i:]))
-    #print(s)
-    #print(test.complement(s))
+    # print(s)
+    # print(test.complement(s))
     print('============================================================')
     print(test.gcframe(s))
 
