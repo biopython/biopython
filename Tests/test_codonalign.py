@@ -12,16 +12,16 @@ import platform
 import unittest
 
 from Bio import BiopythonExperimentalWarning
-
-import warnings
-with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio import codonalign, SeqIO, AlignIO
-
+from Bio import SeqIO
+from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio.Align import MultipleSeqAlignment
+
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio import codonalign
 
 
 TEST_ALIGN_FILE1 = [('codonalign/nucl1.fa', 'codonalign/pro1.aln'), 'parse']
@@ -37,13 +37,13 @@ temp_dir = tempfile.mkdtemp()
 
 class TestCodonSeq(unittest.TestCase):
     def test_seq(self):
-        codonseq1 = codonalign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0,3,6,9,12])
+        codonseq1 = codonalign.CodonSeq('AAATTT---TTTGGACCC', rf_table=[0, 3, 6, 9, 12])
         self.assertEqual(len(codonseq1), 18)
         self.assertEqual(codonseq1.get_codon_num(), 5)
         self.assertEqual(str(codonseq1.get_codon(0)), 'AAA')
         self.assertEqual(str(codonseq1.get_codon(-1)), 'CCC')
-        self.assertEqual(str(codonseq1.get_codon(slice(1,3))), 'TTT---')
-        self.assertEqual(str(codonseq1.get_codon(slice(None,None,-1))), 'CCCGGATTT---TTTAAA')
+        self.assertEqual(str(codonseq1.get_codon(slice(1, 3))), 'TTT---')
+        self.assertEqual(str(codonseq1.get_codon(slice(None, None, -1))), 'CCCGGATTT---TTTAAA')
 
         self.assertRaises(ValueError, codonalign.CodonSeq, 'AAA-TT')
         self.assertRaises(AssertionError, codonalign.CodonSeq, 'AAA-T')
@@ -58,8 +58,8 @@ class TestCodonAlignment(unittest.TestCase):
         codonseq3 = codonalign.CodonSeq('AAGTAT---TTTGGACCC', codonalign.default_codon_alphabet)
         codonseq4 = codonalign.CodonSeq('AACTTT---TTTGGACGC', codonalign.default_codon_alphabet)
 
-        self.seqrec = [SeqRecord(codonseq1, id="alpha"), 
-                       SeqRecord(codonseq2, id="beta" ),
+        self.seqrec = [SeqRecord(codonseq1, id="alpha"),
+                       SeqRecord(codonseq2, id="beta"),
                        SeqRecord(codonseq3, id="gamma"),
                        SeqRecord(codonseq4, id="delta")]
 
@@ -118,17 +118,17 @@ class Test_build(unittest.TestCase):
                 alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
         seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
                 alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-        pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
-        pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
+        pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein), id='pro1')
+        pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein), id='pro2')
         aln1 = MultipleSeqAlignment([pro1, pro2])
         self.aln1 = aln1
         self.seqlist1 = [seq1, seq2]
         # Test set 2
-        #                      M  K  K  H  E L(F)L  C  Q  G  T  S  N  K  L  T  Q(L)L  G  T  F  E  D  H  F  L  S  L  Q  R  M  F  N  N  C  E  V  V  
+        #                      M  K  K  H  E L(F)L  C  Q  G  T  S  N  K  L  T  Q(L)L  G  T  F  E  D  H  F  L  S  L  Q  R  M  F  N  N  C  E  V  V
         seq3 = SeqRecord(Seq('ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-        #seq4 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAA TGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+        # seq4 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAA TGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
         seq4 = SeqRecord(Seq('ATGAAAAAGCACGAGTTCTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAATGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-        #seq5 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCC  TTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro3')
+        # seq5 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCC  TTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro3')
         seq5 = SeqRecord(Seq('ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro3')
         pro3 = SeqRecord(Seq('MKKHELLCQGTSNKLTQLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL', alphabet=IUPAC.protein), id='pro1')
         pro4 = SeqRecord(Seq('MKKHEFLCQGTSNKLTQLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL', alphabet=IUPAC.protein), id='pro2')
