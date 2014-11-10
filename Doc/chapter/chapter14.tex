@@ -1,0 +1,2035 @@
+\chapter{Sequence motif analysis using Bio.motifs}
+
+This chapter gives an overview of the functionality of the
+\verb|Bio.motifs| package included in Biopython. It is intended
+for people who are involved in the analysis of sequence motifs, so I'll
+assume that you are familiar with basic notions of motif analysis. In
+case something is unclear, please look at Section~\ref{sec:links}
+for some relevant links.
+
+Most of this chapter describes the new \verb|Bio.motifs| package included
+in Biopython 1.61 onwards, which is replacing the older \verb|Bio.Motif| package
+introduced with Biopython 1.50, which was in turn based on two older former
+Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
+most of their functionality with a unified motif object implementation.
+
+Speaking of other libraries, if you are reading this you might be
+interested in \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
+designed to deal with sequence motifs. It supports more \emph{de-novo}
+motif finders, but it is not a part of Biopython and has some restrictions
+on commercial use.
+
+\section{Motif objects}
+\label{sec:object}
+
+Since we are interested in motif analysis, we need to take a look at
+\verb|Motif| objects in the first place. For that we need to import 
+the Bio.motifs library:
+%doctest ../Tests/Motif
+\begin{verbatim}
+>>> from Bio import motifs
+\end{verbatim}
+and we can start creating our first motif objects. We can either create
+a \verb+Motif+ object from a list of instances of the motif, or we can
+obtain a \verb+Motif+ object by parsing a file from a motif database
+or motif finding software.
+
+\subsection{Creating a motif from instances}
+
+Suppose we have these instances of a DNA motif:
+%cont-doctest
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> instances = [Seq("TACAA"),
+...              Seq("TACGC"),
+...              Seq("TACAC"),
+...              Seq("TACCC"),
+...              Seq("AACCC"),
+...              Seq("AATGC"),
+...              Seq("AATGC"),
+...             ]
+\end{verbatim}
+then we can create a Motif object as follows:
+%cont-doctest
+\begin{verbatim}
+>>> m = motifs.create(instances)
+\end{verbatim}
+The instances are saved in an attribute \verb+m.instances+, which is essentially a Python list with some added functionality, as described below.
+Printing out the Motif object shows the instances from which it was constructed:
+%cont-doctest
+\begin{verbatim}
+>>> print(m)
+TACAA
+TACGC
+TACAC
+TACCC
+AACCC
+AATGC
+AATGC
+<BLANKLINE>
+\end{verbatim}
+The length of the motif defined as the sequence length, which should be the same for all instances:
+%cont-doctest
+\begin{verbatim}
+>>> len(m)
+5
+\end{verbatim}
+The Motif object has an attribute \verb+.counts+ containing the counts of each
+nucleotide at each position. Printing this counts matrix shows it in an easily readable format:
+%cont-doctest
+\begin{verbatim}
+>>> print(m.counts)
+        0      1      2      3      4
+A:   3.00   7.00   0.00   2.00   1.00
+C:   0.00   0.00   5.00   2.00   6.00
+G:   0.00   0.00   0.00   3.00   0.00
+T:   4.00   0.00   2.00   0.00   0.00
+<BLANKLINE>
+\end{verbatim}
+
+You can access these counts as a dictionary:
+%cont-doctest
+\begin{verbatim}
+>>> m.counts['A']
+[3, 7, 0, 2, 1]
+\end{verbatim}
+but you can also think of it as a 2D array with the nucleotide as the first
+dimension and the position as the second dimension:
+%cont-doctest
+\begin{verbatim}
+>>> m.counts['T', 0]
+4
+>>> m.counts['T', 2]
+2
+>>> m.counts['T', 3]
+0
+\end{verbatim}
+You can also directly access columns of the counts matrix
+%Don't doctest this as dictionary order is platform dependent:
+\begin{verbatim}
+>>> m.counts[:, 3]
+{'A': 2, 'C': 2, 'T': 0, 'G': 3}
+\end{verbatim}
+Instead of the nucleotide itself, you can also use the index of the nucleotide
+in the sorted letters in the alphabet of the motif:
+%cont-doctest
+\begin{verbatim}
+>>> m.alphabet
+IUPACUnambiguousDNA()
+>>> m.alphabet.letters
+'GATC'
+>>> sorted(m.alphabet.letters)
+['A', 'C', 'G', 'T']
+>>> m.counts['A',:]
+(3, 7, 0, 2, 1)
+>>> m.counts[0,:]
+(3, 7, 0, 2, 1)
+\end{verbatim}
+The motif has an associated consensus sequence, defined as the sequence of
+letters along the positions of the motif for which the largest value in the 
+corresponding columns of the \verb+.counts+ matrix is obtained:
+%cont-doctest
+\begin{verbatim}
+>>> m.consensus
+Seq('TACGC', IUPACUnambiguousDNA())
+\end{verbatim}
+as well as an anticonsensus sequence, corresponding to the smallest values in
+the columns of the \verb+.counts+ matrix:
+%cont-doctest
+\begin{verbatim}
+>>> m.anticonsensus
+Seq('GGGTG', IUPACUnambiguousDNA())
+\end{verbatim}
+You can also ask for a degenerate consensus sequence, in which ambiguous
+nucleotides are used for positions where there are multiple nucleotides with
+high counts:
+%cont-doctest
+\begin{verbatim}
+>>> m.degenerate_consensus
+Seq('WACVC', IUPACAmbiguousDNA())
+\end{verbatim}
+Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
+and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
+constructed following the rules specified by Cavener \cite{cavener1987}.
+
+We can also get the reverse complement of a motif:
+%cont-doctest
+\begin{verbatim}
+>>> r = m.reverse_complement()
+>>> r.consensus
+Seq('GCGTA', IUPACUnambiguousDNA())
+>>> r.degenerate_consensus
+Seq('GBGTW', IUPACAmbiguousDNA())
+>>> print(r)
+TTGTA
+GCGTA
+GTGTA
+GGGTA
+GGGTT
+GCATT
+GCATT
+<BLANKLINE>
+\end{verbatim}
+
+The reverse complement and the degenerate consensus sequence are
+only defined for DNA motifs.
+
+\subsection{Creating a sequence logo}
+If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+\begin{verbatim}
+>>> m.weblogo("mymotif.png")
+\end{verbatim}
+We should get our logo saved as a PNG in the specified file.
+
+\section{Reading motifs}
+\label{sec:io}
+
+Creating motifs from instances by hand is a bit boring, so it's
+useful to have some I/O functions for reading and writing
+motifs. There are not any really well established standards for storing
+motifs, but there are a couple of formats that are more used than
+others.
+
+\subsection{JASPAR}
+One of the most popular motif databases is \href{http://jaspar.genereg.net}{JASPAR}. In addition to the motif sequence information, the JASPAR database stores a lot of meta-information for each motif. The module \verb+Bio.motifs+ contains a specialized class \verb+jaspar.Motif+ in which this meta-information is represented as attributes:
+\begin{itemize}
+    \item \verb+matrix_id+ - the unique JASPAR motif ID, e.g. 'MA0004.1'
+    \item \verb+name+ - the name of the TF, e.g. 'Arnt'
+    \item \verb+collection+ - the JASPAR collection to which the motif belongs, e.g. 'CORE'
+    \item \verb+tf_class+ - the structual class of this TF, e.g. 'Zipper-Type'
+    \item \verb+tf_family+ - the family to which this TF belongs, e.g. 'Helix-Loop-Helix'
+    \item \verb+species+ - the species to which this TF belongs, may have multiple values, these are specified as taxonomy IDs, e.g. 10090
+    \item \verb+tax_group+ - the taxonomic supergroup to which this motif belongs, e.g. 'vertebrates'
+    \item \verb+acc+ - the accesion number of the TF protein, e.g. 'P53762'
+    \item \verb+data_type+ - the type of data used to construct this motif, e.g. 'SELEX'
+    \item \verb+medline+ - the Pubmed ID of literature supporting this motif, may be multiple values, e.g. 7592839 
+    \item \verb+pazar_id+ - external reference to the TF in the \href{http://pazar.info}{PAZAR} database, e.g. 'TF0000003'
+    \item \verb+comment+ - free form text containing notes about the construction of the motif
+\end{itemize}
+
+The \verb+jaspar.Motif+ class inherits from the generic \verb+Motif+ class and therefore provides all the facilities of any of the motif formats --- reading motifs, writing motifs, scanning sequences for motif instances etc.
+
+JASPAR stores motifs in several different ways including three different flat file formats and as an SQL database. All of these formats facilitate the construction of a counts matrix. However, the amount of meta information described above that is available varies with the format.
+
+\subsubsection*{The JASPAR \texttt{sites} format}
+
+The first of the three flat file formats contains a list of instances. As an example, these are the beginning and ending lines of the JASPAR \verb+Arnt.sites+ file showing known binding sites of the mouse helix-loop-helix transcription factor Arnt.
+\begin{verbatim}
+>MA0004 ARNT 1
+CACGTGatgtcctc
+>MA0004 ARNT 2
+CACGTGggaggtac
+>MA0004 ARNT 3
+CACGTGccgcgcgc
+...
+>MA0004 ARNT 18
+AACGTGacagccctcc
+>MA0004 ARNT 19
+AACGTGcacatcgtcc
+>MA0004 ARNT 20
+aggaatCGCGTGc
+\end{verbatim}
+The parts of the sequence in capital letters are the motif instances that were found to align to each other.
+
+We can create a \verb+Motif+ object from these instances as follows:
+%cont-doctest
+\begin{verbatim}
+>>> from Bio import motifs
+>>> arnt = motifs.read(open("Arnt.sites"), "sites")
+\end{verbatim}
+The instances from which this motif was created is stored in the \verb+.instances+ property:
+%cont-doctest
+\begin{verbatim}
+>>> print(arnt.instances[:3])
+[Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
+>>> for instance in arnt.instances:
+...     print(instance)
+...
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+AACGTG
+AACGTG
+AACGTG
+AACGTG
+CGCGTG
+\end{verbatim}
+The counts matrix of this motif is automatically calculated from the instances:
+%cont-doctest
+\begin{verbatim}
+>>> print(arnt.counts)
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+<BLANKLINE>
+\end{verbatim}
+This format does not store any meta information.
+
+\subsubsection*{The JASPAR \texttt{pfm} format}
+
+JASPAR also makes motifs available directly as a count matrix,
+without the instances from which it was created. This \verb+pfm+ format only
+stores the counts matrix for a single motif.
+For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix for the human SRF transcription factor:
+\begin{verbatim}
+ 2 9 0 1 32 3 46 1 43 15 2 2
+ 1 33 45 45 1 1 0 0 0 1 0 1
+39 2 1 0 0 0 0 0 0 0 44 43
+ 4 2 0 0 13 42 0 45 3 30 0 0
+\end{verbatim}
+We can create a motif for this count matrix as follows:
+%cont-doctest
+\begin{verbatim}
+>>> srf = motifs.read(open("SRF.pfm"), "pfm")
+>>> print(srf.counts)
+        0      1      2      3      4      5      6      7      8      9     10     11
+A:   2.00   9.00   0.00   1.00  32.00   3.00  46.00   1.00  43.00  15.00   2.00   2.00
+C:   1.00  33.00  45.00  45.00   1.00   1.00   0.00   0.00   0.00   1.00   0.00   1.00
+G:  39.00   2.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00  44.00  43.00
+T:   4.00   2.00   0.00   0.00  13.00  42.00   0.00  45.00   3.00  30.00   0.00   0.00
+<BLANKLINE>
+\end{verbatim}
+As this motif was created from the counts matrix directly, it has no instances associated with it:
+%cont-doctest
+\begin{verbatim}
+>>> print(srf.instances)
+None
+\end{verbatim}
+We can now ask for the consensus sequence of these two motifs:
+%cont-doctest
+\begin{verbatim}
+>>> print(arnt.counts.consensus)
+CACGTG
+>>> print(srf.counts.consensus)
+GCCCATATATGG
+\end{verbatim}
+
+As with the instances file, not meta information is stored in this format.
+
+\subsubsection*{The JASPAR format \texttt{jaspar}}
+
+The \verb+jaspar+ file format allows multiple motifs to be specified in a single file. In this format each of the motif records consist of a header line followed by four lines defining the counts matrix. The header line begins with a \verb+>+ character (similar to the Fasta file format) and is followed by the unique JASPAR matrix ID and the TF name. The following example shows a \verb+jaspar+ formatted file containing the three motifs Arnt, RUNX1 and MEF2A:
+\begin{verbatim}
+>MA0004.1 Arnt
+A  [ 4 19  0  0  0  0 ]
+C  [16  0 20  0  0  0 ]
+G  [ 0  1  0 20  0 20 ]
+T  [ 0  0  0  0 20  0 ]
+>MA0002.1 RUNX1
+A  [10 12  4  1  2  2  0  0  0  8 13 ]
+C  [ 2  2  7  1  0  8  0  0  1  2  2 ]
+G  [ 3  1  1  0 23  0 26 26  0  0  4 ]
+T  [11 11 14 24  1 16  0  0 25 16  7 ]
+>MA0052.1 MEF2A
+A  [ 1  0 57  2  9  6 37  2 56  6 ]
+C  [50  0  1  1  0  0  0  0  0  0 ]
+G  [ 0  0  0  0  0  0  0  0  2 50 ]
+T  [ 7 58  0 55 49 52 21 56  0  2 ]
+\end{verbatim}
+The motifs are read as follows:
+\begin{verbatim}
+>>> fh = open("jaspar_motifs.txt")
+>>> for m in motifs.parse(fh, "jaspar"))
+...     print(m)
+TF name	 Arnt
+Matrix ID	MA0004.1
+Matrix:
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+
+TF name	 RUNX1
+Matrix ID	MA0002.1
+Matrix:
+        0      1      2      3      4      5      6      7      8      9     10
+A:  10.00  12.00   4.00   1.00   2.00   2.00   0.00   0.00   0.00   8.00  13.00
+C:   2.00   2.00   7.00   1.00   0.00   8.00   0.00   0.00   1.00   2.00   2.00
+G:   3.00   1.00   1.00   0.00  23.00   0.00  26.00  26.00   0.00   0.00   4.00
+T:  11.00  11.00  14.00  24.00   1.00  16.00   0.00   0.00  25.00  16.00   7.00
+
+
+
+TF name	 MEF2A
+Matrix ID	MA0052.1
+Matrix:
+        0      1      2      3      4      5      6      7      8      9
+A:   1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00
+C:  50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00
+G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00
+T:   7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00
+\end{verbatim}
+
+Note that printing a JASPAR motif yields both the counts data and the available meta-information.
+
+\subsubsection*{Accessing the JASPAR database}
+
+In addition to parsing these flat file formats, we can also retrieve motifs from a JASPAR SQL database. Unlike the flat file formats, a JASPAR database allows storing of all possible meta information defined in the JASPAR \verb+Motif+ class. It is beyond the scope of this document to describe how to set up a JASPAR database (please see the main \href{http://jaspar.genereg.net}{JASPAR} website). Motifs are read from a JASPAR database using the \verb+Bio.motifs.jaspar.db+ module.  First connect to the JASPAR database using the JASPAR5 class which models the the latest JASPAR schema:
+\begin{verbatim}
+>>> from Bio.motifs.jaspar.db import JASPAR5
+>>> 
+>>> JASPAR_DB_HOST = <hostname>
+>>> JASPAR_DB_NAME = <db_name>
+>>> JASPAR_DB_USER = <user>
+>>> JASPAR_DB_PASS = <passord>
+>>> 
+>>> jdb = JASPAR5(
+...     host=JASPAR_DB_HOST,
+...     name=JASPAR_DB_NAME,
+...     user=JASPAR_DB_USER,
+...     password=JASPAR_DB_PASS
+... )
+\end{verbatim}
+
+Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number seperated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
+\begin{verbatim}
+>>> arnt = jdb.fetch_motif_by_id("MA0004")
+\end{verbatim}
+Printing the motif reveals that the JASPAR SQL database stores much more meeta-information than the flat files:
+\begin{verbatim}
+>>> print(arnt)
+TF name	Arnt
+Matrix ID	MA0004.1
+Collection	CORE
+TF class	Zipper-Type
+TF family	Helix-Loop-Helix
+Species	10090
+Taxonomic group	vertebrates
+Accession	['P53762']
+Data type used	SELEX
+Medline	7592839
+PAZAR ID	TF0000003
+Comments	-
+Matrix:
+	0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+\end{verbatim}
+
+We can also fetch motifs by name. The name must be an exact match (partial matches or database wildcards are not currently supported). Note that as the name is not guaranteed to be unique, the \verb+fetch_motifs_by_name+ method actually returns a list.
+\begin{verbatim}
+>>> motifs = jdb.fetch_motifs_by_name("Arnt")
+>>> print(motifs[0])
+TF name	Arnt
+Matrix ID	MA0004.1
+Collection	CORE
+TF class	Zipper-Type
+TF family	Helix-Loop-Helix
+Species	10090
+Taxonomic group	vertebrates
+Accession	['P53762']
+Data type used	SELEX
+Medline	7592839
+PAZAR ID	TF0000003
+Comments	-
+Matrix:
+	0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+
+
+\end{verbatim}
+
+The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
+\begin{verbatim}
+>>> motifs = jdb.fetch_motifs(
+...     collection = 'CORE',
+...     tax_group = ['vertebrates', 'insects'],
+...     tf_class = 'Winged Helix-Turn-Helix',
+...     tf_family = ['Forkhead', 'Ets'],
+...     min_ic = 12
+... )
+>>> for motif in motifs:
+...     pass # do something with the motif
+\end{verbatim}
+
+\subsubsection*{Compatibility with Perl TFBS modules}
+
+An important thing to note is that the JASPAR \verb+Motif+ class was designed to be compatible with the popular \href{http://tfbs.genereg.net/}{Perl TFBS modules}. Therefore some specifics about the choice of defaults for background and pseudocounts as well as how information content is computed and sequences searched for instances is based on this compatibility criteria. These choices are noted in the specific subsections below.
+
+\begin{itemize}
+\item{\bf Choice of background:} \\
+The Perl \verb+TFBS+ modules appear to allow a choice of custom background probabilities (although the documentation states that uniform background is assumed). However the default is to use a uniform background. Therefore it is recommended that you use a uniform background for computing the position-specific scoring matrix (PSSM). This is the default when using the Biopython \verb+motifs+ module.
+\item{\bf Choice of pseudocounts:} \\
+By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * \textrm{bg}[\textrm{nucleotide}]$, where $N$ represents the total number of sequences used to construct the matrix. To apply this same pseudocount formula, set the motif \verb+pseudocounts+ attribute using the \verb+jaspar.calculate\_pseudcounts()+ funtion:
+\begin{verbatim}
+>>> motif.pseudocounts = motifs.jaspar.calculate_pseudocounts(motif)
+\end{verbatim}
+Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the pssm computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
+\item{\bf Computation of matrix information content:} \\
+The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behaviour is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
+\item{\bf Searching for instances:} \\
+Searching for instances with the Perl \verb+TFBS+ motifs was usually performed using a relative score threshold, i.e. a score in the range 0 to 1. In order to compute the absolute PSSM score corresponding to a relative score one can use the equation:
+\begin{verbatim}
+>>> abs_score =  (pssm.max - pssm.min) * rel_score + pssm.min
+\end{verbatim}
+To convert the absolute score of an instance back to a relative score, one can use the equation:
+\begin{verbatim}
+>>> rel_score = (abs_score - pssm.min) / (pssm.max - pssm.min)
+\end{verbatim}
+For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
+%TODO - Check missing ... lines, make into a doctest?
+\begin{verbatim}
+>>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA", unambiguous_dna)
+>>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt) 
+>>> pssm = arnt.pssm()
+>>> max_score = pssm.max()
+>>> min_score = pssm.min()
+>>> abs_score_threshold = (max_score - min_score) * 0.8 + min_score
+>>> for position, score in pssm.search(test_seq,
+                                       threshold=abs_score_threshold):
+...     rel_score = (score - min_score) / (max_score - min_score)
+...     print("Position %d: score = %5.3f, rel. score = %5.3f" % (
+            position, score, rel_score))
+... 
+Position 2: score = 5.362, rel. score = 0.801
+Position 8: score = 6.112, rel. score = 0.831
+Position -20: score = 7.103, rel. score = 0.870
+Position 17: score = 10.351, rel. score = 1.000
+Position -11: score = 10.351, rel. score = 1.000
+\end{verbatim}
+\end{itemize}
+
+\subsection{MEME}
+
+MEME \cite{bailey1994} is a tool for discovering motifs in a group of related
+DNA or protein sequences. It takes as input a group of DNA or protein sequences 
+and outputs as many motifs as requested. Therefore, in contrast to JASPAR
+files, MEME output files typically contain multiple motifs. This is an example.
+
+At the top of an output file generated by MEME shows some background information
+about the MEME and the version of MEME used:
+\begin{verbatim}
+********************************************************************************
+MEME - Motif discovery tool
+********************************************************************************
+MEME version 3.0 (Release date: 2004/08/18 09:07:01)
+...
+\end{verbatim}
+Further down, the input set of training sequences is recapitulated:
+\begin{verbatim}
+********************************************************************************
+TRAINING SET
+********************************************************************************
+DATAFILE= INO_up800.s
+ALPHABET= ACGT
+Sequence name            Weight Length  Sequence name            Weight Length
+-------------            ------ ------  -------------            ------ ------
+CHO1                     1.0000    800  CHO2                     1.0000    800
+FAS1                     1.0000    800  FAS2                     1.0000    800
+ACC1                     1.0000    800  INO1                     1.0000    800
+OPI3                     1.0000    800
+********************************************************************************
+\end{verbatim}
+and the exact command line that was used:
+\begin{verbatim}
+********************************************************************************
+COMMAND LINE SUMMARY
+********************************************************************************
+This information can also be useful in the event you wish to report a
+problem with the MEME software.
+
+command: meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s
+...
+\end{verbatim}
+Next is detailed information on each motif that was found:
+\begin{verbatim}
+********************************************************************************
+MOTIF  1        width =   12   sites =   7   llr = 95   E-value = 2.0e-001
+********************************************************************************
+--------------------------------------------------------------------------------
+        Motif 1 Description
+--------------------------------------------------------------------------------
+Simplified        A  :::9:a::::3:
+pos.-specific     C  ::a:9:11691a
+probability       G  ::::1::94:4:
+matrix            T  aa:1::9::11:
+\end{verbatim}
+To parse this file (stored as \verb+meme.dna.oops.txt+), use
+%cont-doctest
+\begin{verbatim}
+>>> handle = open("meme.dna.oops.txt")
+>>> record = motifs.parse(handle, "meme")
+>>> handle.close()
+\end{verbatim}
+The \verb+motifs.parse+ command reads the complete file directly, so you can
+close the file after calling \verb+motifs.parse+.
+The header information is stored in attributes:
+%cont-doctest
+\begin{verbatim}
+>>> record.version
+'3.0'
+>>> record.datafile
+'INO_up800.s'
+>>> record.command
+'meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s'
+>>> record.alphabet
+IUPACUnambiguousDNA()
+>>> record.sequences
+['CHO1', 'CHO2', 'FAS1', 'FAS2', 'ACC1', 'INO1', 'OPI3']
+\end{verbatim}
+The record is an object of the \verb+Bio.motifs.meme.Record+ class.
+The class inherits from list, and you can think of \verb+record+ as a list of Motif objects:
+%cont-doctest
+\begin{verbatim}
+>>> len(record)
+2
+>>> motif = record[0]
+>>> print(motif.consensus)
+TTCACATGCCGC
+>>> print(motif.degenerate_consensus)
+TTCACATGSCNC
+\end{verbatim}
+In addition to these generic motif attributes, each motif also stores its
+specific information as calculated by MEME. For example,
+%cont-doctest
+\begin{verbatim}
+>>> motif.num_occurrences
+7
+>>> motif.length
+12
+>>> evalue = motif.evalue
+>>> print("%3.1g" % evalue)
+0.2
+>>> motif.name
+'Motif 1'
+\end{verbatim}
+In addition to using an index into the record, as we did above,
+you can also find it by its name:
+%cont-doctest
+\begin{verbatim}
+>>> motif = record['Motif 1']
+\end{verbatim}
+Each motif has an attribute \verb+.instances+ with the sequence instances
+in which the motif was found, providing some information on each instance:
+%cont-doctest
+\begin{verbatim}
+>>> len(motif.instances)
+7
+>>> motif.instances[0]
+Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
+>>> motif.instances[0].motif_name
+'Motif 1'
+>>> motif.instances[0].sequence_name
+'INO1'
+>>> motif.instances[0].start
+620
+>>> motif.instances[0].strand
+'-'
+>>> motif.instances[0].length
+12
+>>> pvalue = motif.instances[0].pvalue
+>>> print("%5.3g" % pvalue)
+1.85e-08
+\end{verbatim}
+
+\subsubsection*{MAST}
+
+\subsection{TRANSFAC}
+
+TRANSFAC is a manually curated database of transcription factors, together
+with their genomic binding sites and DNA binding profiles \cite{matys2003}.
+While the file format used in the TRANSFAC database is nowadays also used
+by others, we will refer to it as the TRANSFAC file format.
+
+A minimal file in the TRANSFAC format looks as follows:
+\begin{verbatim}
+ID  motif1
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+04      0      5      0      0      C
+05      5      0      0      0      A
+06      0      0      4      1      G
+07      0      1      4      0      G
+08      0      0      0      5      T
+09      0      0      5      0      G
+10      0      1      2      2      K
+11      0      2      0      3      Y
+12      1      0      3      1      G
+//
+\end{verbatim}
+This file shows the frequency matrix of motif \verb+motif1+ of 12 nucleotides.
+In general, one file in the TRANSFAC format can contain multiple motifs. For
+example, this is the contents of the example TRANSFAC file \verb+transfac.dat+:
+\begin{verbatim}
+VV  EXAMPLE January 15, 2013
+XX
+//
+ID  motif1
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+...
+11      0      2      0      3      Y
+12      1      0      3      1      G
+//
+ID  motif2
+P0      A      C      G      T
+01      2      1      2      0      R
+02      1      2      2      0      S
+...
+09      0      0      0      5      T
+10      0      2      0      3      Y
+//
+\end{verbatim}
+To parse a TRANSFAC file, use
+%cont-doctest
+\begin{verbatim}
+>>> handle = open("transfac.dat")
+>>> record = motifs.parse(handle, "TRANSFAC")
+>>> handle.close()
+\end{verbatim}
+The overall version number, if available, is stored as \verb+record.version+:
+%cont-doctest
+\begin{verbatim}
+>>> record.version
+'EXAMPLE January 15, 2013'
+\end{verbatim}
+
+Each motif in \verb+record+ is in instance of the \verb+Bio.motifs.transfac.Motif+
+class, which inherits both from the \verb+Bio.motifs.Motif+ class and
+from a Python dictionary. The dictionary uses the two-letter keys to
+store any additional information about the motif:
+%cont-doctest
+\begin{verbatim}
+>>> motif = record[0]
+>>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
+Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
+>>> motif['ID'] # Using motif as a dictionary
+'motif1'
+\end{verbatim}
+
+TRANSFAC files are typically much more elaborate than this example, containing
+lots of additional information about the motif. Table \ref{table:transfaccodes}
+lists the two-letter field codes that are commonly found in TRANSFAC files:
+\begin{table}[h]
+\label{table:transfaccodes}
+\begin{center}
+\caption{Fields commonly found in TRANSFAC files}
+\begin{tabular}{|l|l||}
+\verb+AC+ & Accession number \\
+\verb+AS+ & Accession numbers, secondary \\
+\verb+BA+ & Statistical basis \\
+\verb+BF+ & Binding factors \\
+\verb+BS+ & Factor binding sites underlying the matrix \\
+\verb+CC+ & Comments \\
+\verb+CO+ & Copyright notice \\
+\verb+DE+ & Short factor description \\
+\verb+DR+ & External databases \\
+\verb+DT+ & Date created/updated \\
+\verb+HC+ & Subfamilies \\
+\verb+HP+ & Superfamilies \\
+\verb+ID+ & Identifier \\
+\verb+NA+ & Name of the binding factor \\
+\verb+OC+ & Taxonomic classification \\
+\verb+OS+ & Species/Taxon \\
+\verb+OV+ & Older version \\
+\verb+PV+ & Preferred version \\
+\verb+TY+ & Type \\
+\verb+XX+ & Empty line; these are not stored in the Record. \\
+\end{tabular}
+\end{center}
+\end{table}
+
+Each motif also has an attribute \verb+.references+ containing the
+references associated with the motif, using these two-letter keys:
+
+\begin{table}[h]
+\begin{center}
+\caption{Fields used to store references in TRANSFAC files}
+\begin{tabular}{|l|l||}
+\verb+RN+ & Reference number \\
+\verb+RA+ & Reference authors \\
+\verb+RL+ & Reference data \\
+\verb+RT+ & Reference title \\
+\verb+RX+ & PubMed ID \\
+\end{tabular}
+\end{center}
+\end{table}
+
+Printing the motifs writes them out in their native TRANSFAC format:
+%cont-doctest
+\begin{verbatim}
+>>> print(record)
+VV  EXAMPLE January 15, 2013
+XX
+//
+ID  motif1
+XX
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+04      0      5      0      0      C
+05      5      0      0      0      A
+06      0      0      4      1      G
+07      0      1      4      0      G
+08      0      0      0      5      T
+09      0      0      5      0      G
+10      0      1      2      2      K
+11      0      2      0      3      Y
+12      1      0      3      1      G
+XX
+//
+ID  motif2
+XX
+P0      A      C      G      T
+01      2      1      2      0      R
+02      1      2      2      0      S
+03      0      5      0      0      C
+04      3      0      1      1      A
+05      0      0      4      1      G
+06      5      0      0      0      A
+07      0      1      4      0      G
+08      0      0      5      0      G
+09      0      0      0      5      T
+10      0      2      0      3      Y
+XX
+//
+<BLANKLINE>
+\end{verbatim}
+You can export the motifs in the TRANSFAC format by capturing this output
+in a string and saving it in a file:
+\begin{verbatim}
+>>> text = str(record)
+>>> handle = open("mytransfacfile.dat", 'w')
+>>> handle.write(text)
+>>> handle.close()
+\end{verbatim}
+
+\section{Writing motifs}
+
+Speaking of exporting, let's look at export functions in general.
+We can use the \verb+format+ method to write the motif in the simple JASPAR \verb+pfm+ format:
+%the tabs in the output confuse doctest; don't test
+\begin{verbatim}
+>>> print(arnt.format("pfm"))
+  4.00  19.00   0.00   0.00   0.00   0.00
+ 16.00   0.00  20.00   0.00   0.00   0.00
+  0.00   1.00   0.00  20.00   0.00  20.00
+  0.00   0.00   0.00   0.00  20.00   0.00
+\end{verbatim}
+Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
+\begin{verbatim}
+>>> print(arnt.format("jaspar"))
+>MA0004.1  Arnt
+A [  4.00  19.00   0.00   0.00   0.00   0.00]
+C [ 16.00   0.00  20.00   0.00   0.00   0.00]
+G [  0.00   1.00   0.00  20.00   0.00  20.00]
+T [  0.00   0.00   0.00   0.00  20.00   0.00]
+\end{verbatim}
+
+To write the motif in a TRANSFAC-like matrix format, use
+%cont-doctest
+\begin{verbatim}
+>>> print(m.format("transfac"))
+P0      A      C      G      T
+01      3      0      0      4      W
+02      7      0      0      0      A
+03      0      5      0      2      C
+04      2      2      3      0      V
+05      1      6      0      0      C
+XX
+//
+<BLANKLINE>
+\end{verbatim}
+
+To write out multiple motifs, you can use \verb+motifs.write+.
+This function can be used regardless of whether the motifs originated from a TRANSFAC file. For example,
+%cont-doctest
+\begin{verbatim}
+>>> two_motifs = [arnt, srf]
+>>> print(motifs.write(two_motifs, 'transfac'))
+P0      A      C      G      T
+01      4     16      0      0      C
+02     19      0      1      0      A
+03      0     20      0      0      C
+04      0      0     20      0      G
+05      0      0      0     20      T
+06      0      0     20      0      G
+XX
+//
+P0      A      C      G      T
+01      2      1     39      4      G
+02      9     33      2      2      C
+03      0     45      1      0      C
+04      1     45      0      0      C
+05     32      1      0     13      A
+06      3      1      0     42      T
+07     46      0      0      0      A
+08      1      0      0     45      T
+09     43      0      0      3      A
+10     15      1      0     30      T
+11      2      0     44      0      G
+12      2      1     43      0      G
+XX
+//
+<BLANKLINE>
+\end{verbatim}
+
+Or, to write multiple motifs in the \verb+jaspar+ format:
+\begin{verbatim}
+>>> two_motifs = [arnt, mef2a]
+>>> print(motifs.write(two_motifs, "jaspar"))
+>MA0004.1  Arnt
+A [  4.00  19.00   0.00   0.00   0.00   0.00]
+C [ 16.00   0.00  20.00   0.00   0.00   0.00]
+G [  0.00   1.00   0.00  20.00   0.00  20.00]
+T [  0.00   0.00   0.00   0.00  20.00   0.00]
+>MA0052.1  MEF2A
+A [  1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00]
+C [ 50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00]
+G [  0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00]
+T [  7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00]
+\end{verbatim}
+
+\section{Position-Weight Matrices}
+
+The \verb+.counts+ attribute of a Motif object shows how often each
+nucleotide appeared at each position along the alignment. We can
+normalize this matrix by dividing by the number of instances in the
+alignment, resulting in the probability of each nucleotide at each
+position along the alignment. We refer to these probabilities as
+the position-weight matrix. However, beware that in the literature
+this term may also be used to refer to the position-specific scoring
+matrix, which we discuss below.
+
+Usually, pseudocounts are added to each position before normalizing.
+This avoids overfitting of the position-weight matrix to the limited
+number of motif instances in the alignment, and can also prevent
+probabilities from becoming zero. To add a fixed pseudocount to all
+nucleotides at all positions, specify a number for the
+\verb+pseudocounts+ argument:
+%cont-doctest
+\begin{verbatim}
+>>> pwm = m.counts.normalize(pseudocounts=0.5)
+>>> print(pwm)
+        0      1      2      3      4
+A:   0.39   0.83   0.06   0.28   0.17
+C:   0.06   0.06   0.61   0.28   0.72
+G:   0.06   0.06   0.06   0.39   0.06
+T:   0.50   0.06   0.28   0.06   0.06
+<BLANKLINE>
+\end{verbatim}
+Alternatively, \verb+pseudocounts+ can be a dictionary specifying the
+pseudocounts for each nucleotide. For example, as the GC content of
+the human genome is about 40\%, you may want to choose the
+pseudocounts accordingly:
+%cont-doctest
+\begin{verbatim}
+>>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
+>>> print(pwm)
+        0      1      2      3      4
+A:   0.40   0.84   0.07   0.29   0.18
+C:   0.04   0.04   0.60   0.27   0.71
+G:   0.04   0.04   0.04   0.38   0.04
+T:   0.51   0.07   0.29   0.07   0.07
+<BLANKLINE>
+\end{verbatim}
+The position-weight matrix has its own methods to calculate the
+consensus, anticonsensus, and degenerate consensus sequences:
+%cont-doctest
+\begin{verbatim}
+>>> pwm.consensus
+Seq('TACGC', IUPACUnambiguousDNA())
+>>> pwm.anticonsensus
+Seq('GGGTG', IUPACUnambiguousDNA())
+>>> pwm.degenerate_consensus
+Seq('WACNC', IUPACAmbiguousDNA())
+\end{verbatim}
+Note that due to the pseudocounts, the degenerate consensus sequence
+calculated from the position-weight matrix is slightly different
+from the degenerate consensus sequence calculated from the instances
+in the motif:
+%cont-doctest
+\begin{verbatim}
+>>> m.degenerate_consensus
+Seq('WACVC', IUPACAmbiguousDNA())
+\end{verbatim}
+The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+:
+%cont-doctest
+\begin{verbatim}
+>>> rpwm = pwm.reverse_complement()
+>>> print(rpwm)
+        0      1      2      3      4
+A:   0.07   0.07   0.29   0.07   0.51
+C:   0.04   0.38   0.04   0.04   0.04
+G:   0.71   0.27   0.60   0.04   0.04
+T:   0.18   0.29   0.07   0.84   0.40
+<BLANKLINE>
+\end{verbatim}
+
+\section{Position-Specific Scoring Matrices}
+
+Using the background distribution and PWM with pseudo-counts added,
+it's easy to compute the log-odds ratios, telling us what are the log
+odds of a particular symbol to be coming from a motif against the
+background. We can use the \verb|.log_odds()| method on the position-weight
+matrix:
+%cont-doctest
+\begin{verbatim}
+>>> pssm = pwm.log_odds()
+>>> print(pssm)
+        0      1      2      3      4
+A:   0.68   1.76  -1.91   0.21  -0.49
+C:  -2.49  -2.49   1.26   0.09   1.51
+G:  -2.49  -2.49  -2.49   0.60  -2.49
+T:   1.03  -1.91   0.21  -1.91  -1.91
+<BLANKLINE>
+\end{verbatim}
+Here we can see positive values for symbols more frequent in the motif
+than in the background and negative for symbols more frequent in the
+background. $0.0$ means that it's equally likely to see a symbol in the
+background and in the motif.
+
+This assumes that A, C, G, and T are equally likely in the background. To
+calculate the position-specific scoring matrix against a background with
+unequal probabilities for A, C, G, T, use the \verb+background+ argument.
+For example, against a background with a 40\% GC content, use
+%cont-doctest
+\begin{verbatim}
+>>> background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+>>> pssm = pwm.log_odds(background)
+>>> print(pssm)
+        0      1      2      3      4
+A:   0.42   1.49  -2.17  -0.05  -0.75
+C:  -2.17  -2.17   1.58   0.42   1.83
+G:  -2.17  -2.17  -2.17   0.92  -2.17
+T:   0.77  -2.17  -0.05  -2.17  -2.17
+<BLANKLINE>
+\end{verbatim}
+
+The maximum and minimum score obtainable from the PSSM are stored in the
+\verb+.max+ and \verb+.min+ properties:
+%cont-doctest
+\begin{verbatim}
+>>> print("%4.2f" % pssm.max)
+6.59
+>>> print("%4.2f" % pssm.min)
+-10.85
+\end{verbatim}
+
+The mean and standard deviation of the PSSM scores with respect to a specific
+background are calculated by the \verb+.mean+ and \verb+.std+ methods.
+%cont-doctest
+\begin{verbatim}
+>>> mean = pssm.mean(background)
+>>> std = pssm.std(background)
+>>> print("mean = %0.2f, standard deviation = %0.2f" % (mean, std))
+mean = 3.21, standard deviation = 2.59
+\end{verbatim}
+A uniform background is used if \verb+background+ is not specified.
+The mean is particularly important, as its value is equal to the 
+Kullback-Leibler divergence or relative entropy, and is a measure for the
+information content of the motif compared to the background. As in Biopython
+the base-2 logarithm is used in the calculation of the log-odds scores, the
+information content has units of bits.
+
+The \verb+.reverse_complement+, \verb+.consensus+, \verb+.anticonsensus+, and
+\verb+.degenerate_consensus+ methods can be applied directly to PSSM objects.
+
+\section{Searching for instances}
+\label{sec:search}
+
+The most frequent use for a motif is to find its instances in some
+sequence. For the sake of this section, we will use an artificial sequence like this:
+
+%cont-doctest
+\begin{verbatim}
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
+>>> len(test_seq)
+26
+\end{verbatim}
+
+\subsection{Searching for exact matches}
+
+The simplest way to find instances, is to look for exact matches of
+the true instances of the motif:
+%cont-doctest
+\begin{verbatim}
+>>> for pos, seq in m.instances.search(test_seq):
+...     print("%i %s" % (pos, seq))
+... 
+0 TACAC
+10 TACAA
+13 AACCC
+\end{verbatim}
+We can do the same with the reverse complement (to find instances on the complementary strand):
+%cont-doctest
+\begin{verbatim}
+>>> for pos, seq in r.instances.search(test_seq):
+...     print("%i %s" % (pos, seq))
+... 
+6 GCATT
+20 GCATT
+\end{verbatim}
+
+\subsection{Searching for matches using the PSSM score}
+
+It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
+%cont-doctest
+\begin{verbatim}
+>>> for position, score in pssm.search(test_seq, threshold=3.0):
+...     print("Position %d: score = %5.3f" % (position, score))
+... 
+Position 0: score = 5.622
+Position -20: score = 4.601
+Position 10: score = 3.037
+Position 13: score = 5.738
+Position -6: score = 4.601
+\end{verbatim}
+The negative positions refer to instances of the motif found on the
+reverse strand of the test sequence, and follow the Python convention
+on negative indices. Therefore, the instance of the motif at \verb|pos|
+is located at \verb|test_seq[pos:pos+len(m)]| both for positive and for
+negative values of \verb|pos|.
+
+You may notice the threshold parameter, here set arbitrarily to
+$3.0$. This is in $log_2$, so we are now looking only for words, which
+are eight times more likely to occur under the motif model than in the
+background. The default threshold is $0.0$, which selects everything
+that looks more like the motif than the background.
+
+You can also calculate the scores at all positions along the sequence:
+%Don't use a doc test for this as the spacing can differ
+\begin{verbatim}
+>>> pssm.calculate(test_seq)
+array([  5.62230396,  -5.6796999 ,  -3.43177247,   0.93827754,
+        -6.84962511,  -2.04066086, -10.84962463,  -3.65614533,
+        -0.03370807,  -3.91102552,   3.03734159,  -2.14918518,
+        -0.6016975 ,   5.7381525 ,  -0.50977498,  -3.56422281,
+        -8.73414803,  -0.09919716,  -0.6016975 ,  -2.39429784,
+       -10.84962463,  -3.65614533], dtype=float32)
+\end{verbatim}
+In general, this is the fastest way to calculate PSSM scores.
+The scores returned by \verb+pssm.calculate+ are for the forward strand
+only. To obtain the scores on the reverse strand, you can take the reverse
+complement of the PSSM:
+\begin{verbatim}
+>>> rpssm = pssm.reverse_complement()
+>>> rpssm.calculate(test_seq)
+array([ -9.43458748,  -3.06172252,  -7.18665981,  -7.76216221,
+        -2.04066086,  -4.26466274,   4.60124254,  -4.2480607 ,
+        -8.73414803,  -2.26503372,  -6.49598789,  -5.64668512,
+        -8.73414803, -10.84962463,  -4.82356262,  -4.82356262,
+        -5.64668512,  -8.73414803,  -4.15613794,  -5.6796999 ,
+         4.60124254,  -4.2480607 ], dtype=float32)
+\end{verbatim}
+
+\subsection{Selecting a score threshold}
+
+If you want to use a less arbitrary way of selecting thresholds, you
+can explore the distribution of PSSM scores. Since the space for a score
+distribution grows exponentially with motif length, we are using an
+approximation with a given precision to keep computation cost manageable:
+%cont-doctest
+\begin{verbatim}
+>>> distribution = pssm.distribution(background=background, precision=10**4)
+\end{verbatim}
+The \verb+distribution+ object can be used to determine a number of different thresholds.
+We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
+%cont-doctest
+\begin{verbatim}
+>>> threshold = distribution.threshold_fpr(0.01)
+>>> print("%5.3f" % threshold)
+4.009
+\end{verbatim}
+or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
+%cont-doctest
+\begin{verbatim}
+>>> threshold = distribution.threshold_fnr(0.1)
+>>> print("%5.3f" % threshold)
+-0.510
+\end{verbatim}
+or a threshold (approximately) satisfying some relation between the false-positive rate and the false-negative rate ($\frac{\textrm{fnr}}{\textrm{fpr}}\simeq t$):
+%cont-doctest
+\begin{verbatim}
+>>> threshold = distribution.threshold_balanced(1000)
+>>> print("%5.3f" % threshold)
+6.241
+\end{verbatim}
+or a threshold satisfying (roughly) the equality between the
+false-positive rate and the $-log$ of the information content (as used
+in patser software by Hertz and Stormo):
+%cont-doctest
+\begin{verbatim}
+>>> threshold = distribution.threshold_patser()
+>>> print("%5.3f" % threshold)
+0.346
+\end{verbatim}
+
+For example, in case of our motif, you can get the threshold giving
+you exactly the same results (for this sequence) as searching for
+instances with balanced threshold with rate of $1000$.
+%cont-doctest
+\begin{verbatim}
+>>> threshold = distribution.threshold_fpr(0.01)
+>>> print("%5.3f" % threshold)
+4.009
+>>> for position, score in pssm.search(test_seq, threshold=threshold):
+...     print("Position %d: score = %5.3f" % (position, score))
+... 
+Position 0: score = 5.622
+Position -20: score = 4.601
+Position 13: score = 5.738
+Position -6: score = 4.601
+\end{verbatim}
+
+\section{Each motif object has an associated Position-Specific Scoring Matrix}
+
+To facilitate searching for potential TFBSs using PSSMs, both the position-weight matrix and the position-specific scoring matrix are associated with each motif. Using the Arnt motif as an example:
+%TODO - Start a new doctest here?
+%cont-doctest
+\begin{verbatim}
+>>> from Bio import motifs
+>>> handle = open("Arnt.sites")
+>>> motif = motifs.read(handle, 'sites')
+>>> print(motif.counts)
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+<BLANKLINE>
+>>> print(motif.pwm)
+        0      1      2      3      4      5
+A:   0.20   0.95   0.00   0.00   0.00   0.00
+C:   0.80   0.00   1.00   0.00   0.00   0.00
+G:   0.00   0.05   0.00   1.00   0.00   1.00
+T:   0.00   0.00   0.00   0.00   1.00   0.00
+<BLANKLINE>
+\end{verbatim}
+%Can't use next bit in doctest, Windows Python 2.5 and 2.6 put -1.$ not -inf
+\begin{verbatim}
+>>> print(motif.pssm)
+        0      1      2      3      4      5
+A:  -0.32   1.93   -inf   -inf   -inf   -inf
+C:   1.68   -inf   2.00   -inf   -inf   -inf
+G:   -inf  -2.32   -inf   2.00   -inf   2.00
+T:   -inf   -inf   -inf   -inf   2.00   -inf
+<BLANKLINE>
+\end{verbatim}
+The negative infinities appear here because the corresponding entry in the frequency matrix is 0, and we are using zero pseudocounts by default:
+%cont-doctest
+\begin{verbatim}
+>>> for letter in "ACGT":
+...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
+... 
+A: 0.00
+C: 0.00
+G: 0.00
+T: 0.00
+\end{verbatim}
+If you change the \verb+.pseudocounts+ attribute, the position-frequency matrix and the position-specific scoring matrix are recalculated automatically:
+%cont-doctest
+\begin{verbatim}
+>>> motif.pseudocounts = 3.0
+>>> for letter in "ACGT":
+...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
+... 
+A: 3.00
+C: 3.00
+G: 3.00
+T: 3.00
+\end{verbatim}
+%Can't use this in doctest, Windows Python 2.5 and 2.6 give G/1 as 0.13 not 0.12
+%TODO - Check why...
+\begin{verbatim}
+>>> print(motif.pwm)
+        0      1      2      3      4      5
+A:   0.22   0.69   0.09   0.09   0.09   0.09
+C:   0.59   0.09   0.72   0.09   0.09   0.09
+G:   0.09   0.12   0.09   0.72   0.09   0.72
+T:   0.09   0.09   0.09   0.09   0.72   0.09
+<BLANKLINE>
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
+>>> print(motif.pssm)
+        0      1      2      3      4      5
+A:  -0.19   1.46  -1.42  -1.42  -1.42  -1.42
+C:   1.25  -1.42   1.52  -1.42  -1.42  -1.42
+G:  -1.42  -1.00  -1.42   1.52  -1.42   1.52
+T:  -1.42  -1.42  -1.42  -1.42   1.52  -1.42
+<BLANKLINE>
+\end{verbatim}
+You can also set the \verb+.pseudocounts+ to a dictionary over the four nucleotides if you want to use different pseudocounts for them. Setting \verb+motif.pseudocounts+ to \verb+None+ resets it to its default value of zero.
+
+The position-specific scoring matrix depends on the background distribution, which is uniform by default:
+%cont-doctest
+\begin{verbatim}
+>>> for letter in "ACGT":
+...     print("%s: %4.2f" % (letter, motif.background[letter]))
+... 
+A: 0.25
+C: 0.25
+G: 0.25
+T: 0.25
+\end{verbatim}
+Again, if you modify the background distribution, the position-specific scoring matrix is recalculated:
+%cont-doctest
+\begin{verbatim}
+>>> motif.background = {'A': 0.2, 'C': 0.3, 'G': 0.3, 'T': 0.2}
+>>> print(motif.pssm)
+        0      1      2      3      4      5
+A:   0.13   1.78  -1.09  -1.09  -1.09  -1.09
+C:   0.98  -1.68   1.26  -1.68  -1.68  -1.68
+G:  -1.68  -1.26  -1.68   1.26  -1.68   1.26
+T:  -1.09  -1.09  -1.09  -1.09   1.85  -1.09
+<BLANKLINE>
+\end{verbatim}
+Setting \verb+motif.background+ to \verb+None+ resets it to a uniform distribution:
+%cont-doctest
+\begin{verbatim}
+>>> motif.background = None
+>>> for letter in "ACGT":
+...     print("%s: %4.2f" % (letter, motif.background[letter]))
+... 
+A: 0.25
+C: 0.25
+G: 0.25
+T: 0.25
+\end{verbatim}
+If you set \verb+motif.background+ equal to a single value, it will be interpreted as the GC content:
+%cont-doctest
+\begin{verbatim}
+>>> motif.background = 0.8
+>>> for letter in "ACGT":
+...     print("%s: %4.2f" % (letter, motif.background[letter]))
+... 
+A: 0.10
+C: 0.40
+G: 0.40
+T: 0.10
+\end{verbatim}
+Note that you can now calculate the mean of the PSSM scores over the background against which it was computed:
+%cont-doctest
+\begin{verbatim}
+>>> print("%f" % motif.pssm.mean(motif.background))
+4.703928
+\end{verbatim}
+as well as its standard deviation:
+%cont-doctest
+\begin{verbatim}
+>>> print("%f" % motif.pssm.std(motif.background))
+3.290900
+\end{verbatim}
+and its distribution:
+%cont-doctest
+\begin{verbatim}
+>>> distribution = motif.pssm.distribution(background=motif.background)
+>>> threshold = distribution.threshold_fpr(0.01)
+>>> print("%f" % threshold)
+3.854375
+\end{verbatim}
+
+Note that the position-weight matrix and the position-specific scoring matrix are recalculated each time you call \verb+motif.pwm+ or \verb+motif.pssm+, respectively. If speed is an issue and you want to use the PWM or PSSM repeatedly, you can save them as a variable, as in
+\begin{verbatim}
+>>> pssm = motif.pssm
+\end{verbatim}
+
+\section{Comparing motifs}
+\label{sec:comp}
+Once we have more than one motif, we might want to compare them.
+
+Before we start comparing motifs, I should point out that motif
+boundaries are usually quite arbitrary. This means we often need
+to compare motifs of different lengths, so comparison needs to involve
+some kind of alignment.  This means we have to take into account two things:
+\begin{itemize}
+\item alignment of motifs
+\item some function to compare aligned motifs
+\end{itemize}
+To align the motifs, we use ungapped alignment of PSSMs and substitute zeros
+for any missing columns at the beginning and end of the matrices. This means
+that effectively we are using the background distribution for columns missing
+from the PSSM.
+The distance function then returns the minimal distance between motifs, as
+well as the corresponding offset in their alignment.
+
+To give an exmaple, let us first load another motif,
+which is similar to our test motif \verb|m|:
+%TODO - Start a new doctest here?
+%cont-doctest
+\begin{verbatim}
+>>> m_reb1 = motifs.read(open("REB1.pfm"), "pfm")
+>>> m_reb1.consensus
+Seq('GTTACCCGG', IUPACUnambiguousDNA())
+>>> print(m_reb1.counts)
+        0      1      2      3      4      5      6      7      8
+A:  30.00   0.00   0.00 100.00   0.00   0.00   0.00   0.00  15.00
+C:  10.00   0.00   0.00   0.00 100.00 100.00 100.00   0.00  15.00
+G:  50.00   0.00   0.00   0.00   0.00   0.00   0.00  60.00  55.00
+T:  10.00 100.00 100.00   0.00   0.00   0.00   0.00  40.00  15.00
+<BLANKLINE>
+\end{verbatim}
+
+To make the motifs comparable, we choose the same values for the pseudocounts and the background distribution as our motif \verb|m|:
+%cont-doctest
+\begin{verbatim}
+>>> m_reb1.pseudocounts = {'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6}
+>>> m_reb1.background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+>>> pssm_reb1 = m_reb1.pssm
+>>> print(pssm_reb1)
+        0      1      2      3      4      5      6      7      8
+A:   0.00  -5.67  -5.67   1.72  -5.67  -5.67  -5.67  -5.67  -0.97
+C:  -0.97  -5.67  -5.67  -5.67   2.30   2.30   2.30  -5.67  -0.41
+G:   1.30  -5.67  -5.67  -5.67  -5.67  -5.67  -5.67   1.57   1.44
+T:  -1.53   1.72   1.72  -5.67  -5.67  -5.67  -5.67   0.41  -0.97
+<BLANKLINE>
+\end{verbatim}
+We'll compare these motifs using the Pearson correlation.
+Since we want it to resemble a distance measure, we actually take
+$1-r$, where $r$ is the Pearson correlation coefficient (PCC):
+%cont-doctest
+\begin{verbatim}
+>>> distance, offset = pssm.dist_pearson(pssm_reb1)
+>>> print("distance = %5.3g" % distance)
+distance = 0.239
+>>> print(offset)
+-2
+\end{verbatim}
+This means that the best PCC between motif \verb|m| and  \verb|m_reb1| is obtained with the following alignment:
+\begin{verbatim}
+m:      bbTACGCbb
+m_reb1: GTTACCCGG
+\end{verbatim}
+where \verb|b| stands for background distribution. The PCC itself is
+roughly $1-0.239=0.761$.
+
+\section{\emph{De novo} motif finding}
+\label{sec:find}
+
+Currently, Biopython has only limited support for \emph{de novo} motif
+finding. Namely, we support running and parsing of AlignAce and
+MEME. Since the number of motif finding tools is growing rapidly, 
+contributions of new parsers are welcome. 
+
+\subsection{MEME}
+\label{sec:meme}
+
+Let's assume, you have run MEME on sequences of your choice with your
+favorite parameters and saved the output in the file
+\verb|meme.out|. You can retrieve the motifs reported by MEME by
+running the following piece of code:
+
+%doctest ../Tests/Motif
+\begin{verbatim}
+>>> from Bio import motifs
+>>> motifsM = motifs.parse(open("meme.out"), "meme")
+\end{verbatim}
+\begin{verbatim}
+>>> motifsM
+[<Bio.motifs.meme.Motif object at 0xc356b0>]
+\end{verbatim}
+
+Besides the most wanted list of motifs, the result object contains more useful information, accessible through properties with self-explanatory names:
+\begin{itemize}
+\item \verb|.alphabet|
+\item \verb|.datafile|
+\item \verb|.sequence_names|
+\item \verb|.version|
+\item \verb|.command|
+\end{itemize}
+
+The motifs returned by the MEME Parser can be treated exactly like regular
+Motif objects (with instances), they also provide some extra
+functionality, by adding additional information about the instances. 
+
+%cont-doctest
+\begin{verbatim}
+>>> motifsM[0].consensus
+Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+>>> motifsM[0].instances[0].sequence_name
+'SEQ10;'
+>>> motifsM[0].instances[0].start
+3
+>>> motifsM[0].instances[0].strand
+'+'
+\end{verbatim}
+\begin{verbatim}
+>>> motifsM[0].instances[0].pvalue
+8.71e-07
+\end{verbatim}
+
+
+\subsection{AlignAce}
+\label{sec:alignace}
+
+We can do very similar things with the AlignACE program. Assume, you have
+your output in the file \verb|alignace.out|. You can parse your output
+with the following code:
+
+%cont-doctest
+\begin{verbatim}
+>>> from Bio import motifs
+>>> motifsA = motifs.parse(open("alignace.out"), "alignace")
+\end{verbatim}
+
+Again, your motifs behave as they should:
+%cont-doctest
+\begin{verbatim}
+>>> motifsA[0].consensus
+Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+In fact you can even see, that AlignAce found a very similar motif as
+MEME. It is just a longer version of a reverse complement of the MEME
+motif:
+%cont-doctest
+\begin{verbatim}
+>>> motifsM[0].reverse_complement().consensus
+Seq('TACGATTGAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+If you have AlignAce installed on the same machine, you can also run
+it directly from Biopython. A short example of how this can be done is
+shown below (other parameters can be specified as keyword parameters):
+
+\begin{verbatim}
+>>> command="/opt/bin/AlignACE"
+>>> input_file="test.fa"
+>>> from Bio.motifs.applications import AlignAceCommandline
+>>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
+>>> stdout, stderr= cmd()
+\end{verbatim}
+
+Since AlignAce prints all of its output to standard output, you can get
+to your motifs by parsing the first part of the result:
+\begin{verbatim}
+>>> motifs = motifs.parse(stdout, "alignace")
+\end{verbatim}
+
+
+
+\section{Useful links }
+\label{sec:links}
+
+
+\begin{itemize}
+\item \href{http://en.wikipedia.org/wiki/Sequence_motif}{Sequence motif} in wikipedia
+\item \href{http://en.wikipedia.org/wiki/Position_weight_matrix}{PWM} in wikipedia
+\item \href{http://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
+\item \href{http://bio.cs.washington.edu/assessment/}{Comparison of different motif finding programs} 
+\end{itemize}
+
+\section{Obsolete Bio.Motif module}
+
+The rest of this chapter above describes the \verb|Bio.motifs| package included
+in Biopython 1.61 onwards, which is replacing the older \verb|Bio.Motif| package
+introduced with Biopython 1.50, which was in turn based on two older former
+Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|.
+
+To allow for a smooth transition, the older \verb|Bio.Motif| package will be
+maintained in parallel with its replacement \verb|Bio.motifs| at least two more
+releases, and at least one year.
+
+\subsection{Motif objects}
+
+%TODO - turn these into doctests...
+Since we are interested in motif analysis, we need to take a look at
+\verb|Motif| objects in the first place. For that we need to import 
+the Motif library:
+%doctest
+\begin{verbatim}
+>>> from Bio import Motif
+\end{verbatim}
+and we can start creating our first motif objects. Let's create a DNA motif:
+%cont-doctest
+\begin{verbatim}
+>>> from Bio.Alphabet import IUPAC
+>>> m = Motif.Motif(alphabet=IUPAC.unambiguous_dna)
+\end{verbatim}
+This is for now just an empty container, so let's add some sequences to our newly created motif:
+%cont-doctest
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+>>> m.add_instance(Seq("TATTA", m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+>>> m.add_instance(Seq("TATAA", m.alphabet))
+\end{verbatim}
+Now we have a full \verb|Motif| instance, so we can try to get some
+basic information about it. Let's start with length and consensus
+sequence:
+%cont-doctest
+\begin{verbatim}
+>>> len(m)
+5
+>>> m.consensus()
+Seq('TATAA', IUPACUnambiguousDNA())
+\end{verbatim}
+In case of DNA motifs, we can also get a reverse complement of a motif:
+%>>> m.reverse_complement()
+%<Bio.Motif.Motif.Motif object at 0xb39890>
+%cont-doctest
+\begin{verbatim}
+>>> m.reverse_complement().consensus()
+Seq('TTATA', IUPACUnambiguousDNA())
+>>> for i in m.reverse_complement().instances:
+...     print(i)
+TTATA
+TAATA
+TTATA
+TTATA
+\end{verbatim}
+
+We can also calculate the information content of a motif with a simple call:
+%cont-doctest
+\begin{verbatim}
+>>> print("%0.2f" % m.ic())
+5.27
+\end{verbatim}
+This gives us a number of bits of information provided by the motif,
+which tells us how much differs from background.
+
+The most common representation of a motif is a PWM (Position Weight
+Matrix). It summarizes the probabilities of finding any symbol (in
+this case nucleotide) in any position of a motif. It can be computed by calling the \verb|.pwm()| method:
+\begin{verbatim}
+>>> m.pwm()
+[{'A': 0.05, 'C': 0.05, 'T': 0.85, 'G': 0.05}, 
+ {'A': 0.85, 'C': 0.05, 'T': 0.05, 'G': 0.05}, 
+ {'A': 0.05, 'C': 0.05, 'T': 0.85, 'G': 0.05}, 
+ {'A': 0.65, 'C': 0.05, 'T': 0.25, 'G': 0.05}, 
+ {'A': 0.85, 'C': 0.05, 'T': 0.05, 'G': 0.05}]
+\end{verbatim}
+The probabilities in the motif's PWM are based on the counts in the
+instances, but we can see, that even though there were no Gs and no Cs
+in the instances, we still have non-zero probabilities assigned to
+them. These come from pseudo-counts which are, roughly speaking, a
+commonly used way to acknowledge the incompleteness of our knowledge
+and avoid technical problems with calculating logarithms of $0$.
+
+We can control the way that pseudo-counts are added with two
+properties of Motif objects \verb|.background| is the probability
+distribution over all symbols in the alphabet that we assume represents background, non-motif sequences (usually based on the GC content of the respective
+genome). It is by default set to a uniform distribution upon creation of a motif:
+\begin{verbatim}
+>>> m.background  
+{'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
+\end{verbatim}
+The other parameter is \verb|.beta|, which states the amount of
+pseudo-counts we should add to the PWM. By default it is set to $1.0$,
+%cont-doctest
+\begin{verbatim}
+>>> m.beta
+1.0
+\end{verbatim}
+so that the total input of pseudo-counts is equal to that of one instance. 
+
+Using the background distribution and pwm with pseudo-counts added,
+it's easy to compute the log-odds ratios, telling us what are the log
+odds of a particular symbol to be coming from a motif against the
+background. We can use the \verb|.log_odds()| method:
+
+\begin{verbatim}
+ >>> m.log_odds() 
+[{'A': -2.3219280948873622, 
+  'C': -2.3219280948873622, 
+  'T': 1.7655347463629771, 
+  'G': -2.3219280948873622}, 
+ {'A': 1.7655347463629771, 
+  'C': -2.3219280948873622, 
+  'T': -2.3219280948873622, 
+  'G': -2.3219280948873622}, 
+ {'A': -2.3219280948873622, 
+  'C': -2.3219280948873622, 
+  'T': 1.7655347463629771, 
+  'G': -2.3219280948873622}, 
+ {'A': 1.3785116232537298, 
+  'C': -2.3219280948873622, 
+  'T': 0.0, 
+  'G': -2.3219280948873622}, 
+ {'A': 1.7655347463629771, 
+  'C': -2.3219280948873622, 
+  'T': -2.3219280948873622, 
+  'G': -2.3219280948873622}
+]
+\end{verbatim}
+Here we can see positive values for symbols more frequent in the motif
+than in the background and negative for symbols more frequent in the
+background. $0.0$ means that it's equally likely to see a symbol in
+background and in the motif (e.g. `T' in the second-last position).
+
+\subsubsection{Reading and writing}
+
+Creating motifs from instances by hand is a bit boring, so it's
+useful to have some I/O functions for reading and writing
+motifs. There are no really well established standards for storing
+motifs, but there's a couple of formats which are more used than
+others. The most important distinction is whether the motif
+representation is based on instances or on some version of PWM matrix.
+On of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
+ stores motifs in both formats, so
+let's look at how we can import JASPAR motifs from instances:
+%doctest ../Tests/Motif
+\begin{verbatim}
+>>> from Bio import Motif
+>>> arnt = Motif.read(open("Arnt.sites"), "jaspar-sites")
+\end{verbatim}
+and from a count matrix:
+%cont-doctest
+\begin{verbatim}
+>>> srf = Motif.read(open("SRF.pfm"), "jaspar-pfm")
+\end{verbatim}
+
+The \verb|arnt| and \verb|srf| motifs can both do the same things for
+us, but they use different internal representations of the motif. We
+can tell that by inspecting the \verb|has_counts| and
+\verb|has_instances| properties:
+%cont-doctest
+\begin{verbatim}
+>>> arnt.has_instances
+True
+>>> srf.has_instances
+False
+>>> srf.has_counts
+True
+\end{verbatim}
+%TODO - sort order and formatting for doctest?
+\begin{verbatim}
+>>> srf.counts
+{'A': [2, 9, 0, 1, 32, 3, 46, 1, 43, 15, 2, 2],
+ 'C': [1, 33, 45, 45, 1, 1, 0, 0, 0, 1, 0, 1],
+ 'G': [39, 2, 1, 0, 0, 0, 0, 0, 0, 0, 44, 43],
+ 'T': [4, 2, 0, 0, 13, 42, 0, 45, 3, 30, 0, 0]}
+\end{verbatim}
+
+There are conversion functions, which can help us convert between
+different representations:
+\begin{verbatim}
+>>> arnt.make_counts_from_instances()
+{'A': [8, 38, 0, 0, 0, 0],
+ 'C': [32, 0, 40, 0, 0, 0],
+ 'G': [0, 2, 0, 40, 0, 40],
+ 'T': [0, 0, 0, 0, 40, 0]}
+
+>>> srf.make_instances_from_counts()
+[Seq('GGGAAAAAAAGG', IUPACUnambiguousDNA()),
+ Seq('GGCCAAATAAGG', IUPACUnambiguousDNA()),
+ Seq('GACCAAATAAGG', IUPACUnambiguousDNA()),
+....
+\end{verbatim}
+The important thing to remember here is that the method
+\verb|make_instances_from_counts()| creates fake instances, because
+usually there are very many possible sets of instances which give rise
+to the same pwm, and if we have only the count matrix, we cannot
+reconstruct the original one. This does not make any difference if we
+are using the PWM as the representation of the motif, but one should
+be careful with exporting instances from count-based motifs.
+
+Speaking of exporting, let's look at export functions. We can export to fasta:
+\begin{verbatim}
+>>> print(m.format("fasta"))
+>instance0
+TATAA
+>instance1
+TATTA
+>instance2
+TATAA
+>instance3
+TATAA
+\end{verbatim}
+or to TRANSFAC-like matrix format (used by some motif processing software)
+\begin{verbatim}
+>>> print(m.format("transfac"))
+XX
+TY Motif
+ID 
+BF undef
+P0 G A T C
+01 0 0 4 0
+02 0 4 0 0
+03 0 0 4 0
+04 0 3 1 0
+05 0 4 0 0
+XX
+\end{verbatim}
+
+Finally, if we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+\begin{verbatim}
+>>> arnt.weblogo("Arnt.png")
+\end{verbatim}
+We should get our logo saved as a png in the specified file.
+
+\subsection{Searching for instances}
+
+The most frequent use for a motif is to find its instances in some
+sequence. For the sake of this section, we will use an artificial sequence like this:
+
+\begin{verbatim}
+test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
+\end{verbatim}
+
+The simplest way to find instances, is to look for exact matches of
+the true instances of the motif:
+\begin{verbatim}
+>>> for pos, seq in m.search_instances(test_seq):
+...     print("%i %s" % (pos, seq))
+... 
+10 TATAA
+15 TATAA
+21 TATAA
+\end{verbatim}
+We can do the same with the reverse complement (to find instances on the complementary strand):
+\begin{verbatim}
+>>> for pos, seq in m.reverse_complement().search_instances(test_seq):
+...     print("%i %s" % (pos, seq))
+... 
+12 TAATA
+20 TTATA
+\end{verbatim}
+
+It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
+\begin{verbatim}
+>>> for pos, score in m.search_pwm(test_seq, threshold=5.0):
+...     print(pos, score)
+... 
+10 8.44065060871
+-12 7.06213898545
+15 8.44065060871
+-20 8.44065060871
+21 8.44065060871
+\end{verbatim}
+You may notice the threshold parameter, here set arbitrarily to
+$5.0$. This is in $log_2$, so we are now looking only for words, which
+are 32 times more likely to occur under the motif model than in the
+background. The default threshold is $0.0$, which selects everything
+that looks more like the motif than the background.
+
+If you want to use a less arbitrary way of selecting thresholds, you
+can explore the \verb|Motif.score_distribution| class implementing an
+distribution of scores for a given motif. Since the space for a score
+distribution grows exponentially with motif length, we are using an
+approximation with a given precision to keep computation cost manageable:
+\begin{verbatim}
+>>> sd = Motif.score_distribution(m, precision=10**4)
+\end{verbatim}
+The sd object can be used to determine a number of different thresholds.
+
+We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
+\begin{verbatim}
+>>> sd.threshold_fpr(0.01)
+4.3535838726139886
+\end{verbatim}
+
+or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
+\begin{verbatim}
+>>> sd.threshold_fnr(0.1)
+0.26651713652234044
+\end{verbatim}
+
+or a threshold (approximately) satisfying some relation between fpr
+and fnr $\frac{fnr}{fpr}\simeq t$:
+\begin{verbatim}
+>>> sd.threshold_balanced(1000)
+8.4406506087056368
+\end{verbatim}
+
+or a threshold satisfying (roughly) the equality between the
+false-positive rate and the $-log$ of the information content (as used
+in patser software by Hertz and Stormo).
+
+For example, in case of our motif, you can get the threshold giving
+you exactly the same results (for this sequence) as searching for
+instances with balanced threshold with rate of $1000$.
+\begin{verbatim}
+>>> for pos, score in m.search_pwm(test_seq, threshold=sd.threshold_balanced(1000)):
+...     print(pos, score)
+... 
+10 8.44065060871
+15 8.44065060871
+-20 8.44065060871
+21 8.44065060871
+\end{verbatim}
+
+\subsection{Comparing motifs}
+Once we have more than one motif, we might want to compare them. For
+that, we have currently three different methods of \verb|Bio.Motif|
+objects.
+
+Before we start comparing motifs, I should point out that motif
+boundaries are usually quite arbitrary. This means, that we often need
+to compare motifs of different lengths, so comparison needs to involve
+some kind of alignment.  This means, that we have to take into account two things:
+\begin{itemize}
+\item alignment of motifs
+\item some function to compare aligned motifs
+\end{itemize}
+In \verb|Bio.Motif| we have 3 different functions for motif
+comparison, which are based on the same idea behind motif alignment,
+but use different functions to compare aligned motifs. Briefly
+speaking, we are using ungapped alignment of PWMs and substitute the
+missing columns at the beginning and end of the matrices with
+background distribution. All three comparison functions are written in
+such a way, that they can be interpreted as distance measures, however
+only one (\verb|dist_dpq|) satisfies the triangle inequality. All of
+them return the minimal distance and the corresponding offset between
+motifs.
+
+To show how these functions work, let us first load another motif,
+which is similar to our test motif \verb|m|:
+\begin{verbatim}
+>>> ubx=Motif.read(open("Ubx.pfm"), "jaspar-pfm")
+<Bio.Motif.Motif.Motif object at 0xc29b90>
+>>> ubx.consensus()
+Seq('TAAT', IUPACUnambiguousDNA())
+\end{verbatim}
+
+The first function we'll use to compare these motifs is based on
+Pearson correlation. Since we want it to resemble a distance
+measure, we actually take $1-r$, where $r$ is the Pearson correlation
+coefficient (PCC):
+\begin{verbatim}
+>>> m.dist_pearson(ubx)
+(0.41740393308237722, 2)
+\end{verbatim}
+This means, that the best PCC between motif \verb|m| and  \verb|Ubx| is obtained with the following alignment:
+\begin{verbatim}
+bbTAAT
+TATAAb
+\end{verbatim}
+where \verb|b| stands for background distribution. The PCC itself is
+roughly $1-0.42=0.58$. If we try the reverse complement of the Ubx motif:
+
+\begin{verbatim}
+>>> m.dist_pearson(ubx.reverse_complement())
+(0.25784180151584823, 1)
+\end{verbatim}
+We can see that the PCC is better (almost $0.75$), and the alignment is also different:
+\begin{verbatim}
+bATTA
+TATAA
+\end{verbatim}
+
+There are two other functions: \verb|dist_dpq|, which is a true metric (satisfying traingle inequality) based on the Kullback-Leibler divergence 
+\begin{verbatim}
+>>> m.dist_dpq(ubx.reverse_complement())
+(0.49292358382899853, 1)
+\end{verbatim}
+
+and the \verb|dist_product| method, which is based on the product of
+probabilities which can be interpreted as the probability of
+independently generating the same instance by both motifs.
+
+\begin{verbatim}
+>>> m.dist_product(ubx.reverse_complement())
+(0.16224587301064275, 1)
+\end{verbatim}
+
+\subsection{\emph{De novo} motif finding}
+
+Currently, Biopython has only limited support for \emph{de novo} motif
+finding. Namely, we support running and parsing of AlignAce and
+MEME. Since the number of motif finding tools is growing rapidly, 
+contributions of new parsers are welcome. 
+
+\subsubsection{MEME}
+
+Let's assume, you have run MEME on sequences of your choice with your
+favorite parameters and saved the output in the file
+\verb|meme.out|. You can retrieve the motifs reported by MEME by
+running the following piece of code:
+
+\begin{verbatim}
+>>> motifsM = list(Motif.parse(open("meme.out"), "MEME"))
+>>> motifsM
+[<Bio.Motif.MEMEMotif.MEMEMotif object at 0xc356b0>]
+\end{verbatim}
+
+Besides the most wanted list of motifs, the result object contains more useful information, accessible through properties with self-explanatory names:
+\begin{itemize}
+\item \verb|.alphabet|
+\item \verb|.datafile|
+\item \verb|.sequence_names|
+\item \verb|.version|
+\item \verb|.command|
+\end{itemize}
+
+The motifs returned by MEMEParser can be treated exactly like regular
+Motif objects (with instances), they also provide some extra
+functionality, by adding additional information about the instances. 
+
+\begin{verbatim}
+>>> motifsM[0].consensus()
+Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+
+>>> motifsM[0].instances[0].pvalue
+8.71e-07
+>>> motifsM[0].instances[0].sequence_name
+'SEQ10;'
+>>> motifsM[0].instances[0].start
+3
+>>> motifsM[0].instances[0].strand
+'+'
+\end{verbatim}
+
+
+\subsubsection{AlignAce}
+
+We can do very similar things with AlignACE program. Assume, you have
+your output in the file \verb|alignace.out|. You can parse your output
+with the following code:
+
+\begin{verbatim}
+>>> motifsA=list(Motif.parse(open("alignace.out"), "AlignAce"))
+\end{verbatim}
+
+Again, your motifs behave as they should:
+\begin{verbatim}
+>>> motifsA[0].consensus()
+Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+In fact you can even see, that AlignAce found a very similar motif as
+MEME, it is just a longer version of a reverse complement of MEME
+motif:
+\begin{verbatim}
+>>> motifsM[0].reverse_complement().consensus()
+Seq('TACGATTGAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+If you have AlignAce installed on the same machine, you can also run
+it directly from Biopython. Short example of how this can be done is
+shown below (other parameters can be specified as keyword parameters):
+
+\begin{verbatim}
+>>> command="/opt/bin/AlignACE"
+>>> input_file="test.fa"
+>>> from Bio.Motif.Applications import AlignAceCommandline
+>>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
+>>> stdout, stderr= cmd()
+\end{verbatim}
+
+Since AlignAce prints all its output to standard output, you can get
+to your motifs by parsing the first part of the result:
+\begin{verbatim}
+motifs=list(Motif.parse(stdout,"AlignAce"))
+\end{verbatim}

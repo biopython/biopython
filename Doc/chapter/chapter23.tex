@@ -1,0 +1,190 @@
+\chapter{Appendix: Useful stuff about Python}
+\label{sec:appendix}
+
+If you haven't spent a lot of time programming in Python, many
+questions and problems that come up in using Biopython are often
+related to Python itself. This section tries to present some ideas and
+code that come up often (at least for us!) while using the Biopython
+libraries. If you have any suggestions for useful pointers that could
+go here, please contribute!
+
+\section{What the heck is a handle?}
+\label{sec:appendix-handles}
+
+Handles are mentioned quite frequently throughout this documentation,
+and are also fairly confusing (at least to me!). Basically, you can
+think of a handle as being a ``wrapper'' around text information.
+
+Handles provide (at least) two benefits over plain text information:
+
+\begin{enumerate}
+  \item They provide a standard way to deal with information stored in
+  different ways. The text information can be in a file, or in a
+  string stored in memory, or the output from a command line program,
+  or at some remote website, but the handle provides a common way of
+  dealing with information in all of these formats.
+
+  \item They allow text information to be read incrementally, instead
+  of all at once. This is really important when you are dealing with
+  huge text files which would use up all of your memory if you had to
+  load them all.
+\end{enumerate}
+
+Handles can deal with text information that is being read (e.~g.~reading
+from a file) or written (e.~g.~writing information to a file). In the
+case of a ``read'' handle, commonly used functions are \verb|read()|,
+which reads the entire text information from the handle, and
+\verb|readline()|, which reads information one line at a time. For
+``write'' handles, the function \verb|write()| is regularly used.
+
+The most common usage for handles is reading information from a file,
+which is done using the built-in Python function \verb|open|. Here, we open a
+handle to the file \href{examples/m\_cold.fasta}{m\_cold.fasta}
+(also available online
+\href{http://biopython.org/DIST/docs/tutorial/examples/m\_cold.fasta}{here}):
+
+\begin{verbatim}
+>>> handle = open("m_cold.fasta", "r")
+>>> handle.readline()
+">gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum ...\n"
+\end{verbatim}
+
+Handles are regularly used in Biopython for passing information to parsers.
+For example, since Biopython 1.54 the main functions in \verb|Bio.SeqIO|
+and \verb|Bio.AlignIO| have allowed you to use a filename instead of a
+handle:
+
+\begin{verbatim}
+from Bio import SeqIO
+for record in SeqIO.parse("m_cold.fasta", "fasta"):
+    print(record.id, len(record))
+\end{verbatim}
+
+On older versions of Biopython you had to use a handle, e.g.
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("m_cold.fasta", "r")
+for record in SeqIO.parse(handle, "fasta"):
+    print(record.id, len(record))
+handle.close()
+\end{verbatim}
+
+This pattern is still useful - for example suppose you have a gzip
+compressed FASTA file you want to parse:
+
+\begin{verbatim}
+import gzip
+from Bio import SeqIO
+handle = gzip.open("m_cold.fasta.gz")
+for record in SeqIO.parse(handle, "fasta"):
+    print(record.id, len(record))
+handle.close()
+\end{verbatim}
+
+See Section~\ref{sec:SeqIO_compressed} for more examples like this,
+including reading bzip2 compressed files.
+
+\subsection{Creating a handle from a string}
+
+One useful thing is to be able to turn information contained in a
+string into a handle. The following example shows how to do this using
+\verb|cStringIO| from the Python standard library:
+
+%doctest
+\begin{verbatim}
+>>> my_info = 'A string\n with multiple lines.'
+>>> print(my_info)
+A string
+ with multiple lines.
+>>> from StringIO import StringIO
+>>> my_info_handle = StringIO(my_info)
+>>> first_line = my_info_handle.readline()
+>>> print(first_line)
+A string
+<BLANKLINE>
+>>> second_line = my_info_handle.readline()
+>>> print(second_line)
+ with multiple lines.
+\end{verbatim}
+
+\begin{thebibliography}{99}
+\bibitem{cock2009}
+Peter J. A. Cock, Tiago Antao, Jeffrey T. Chang, Brad A. Chapman, Cymon J. Cox, Andrew Dalke, Iddo Friedberg, Thomas Hamelryck, Frank Kauff, Bartek Wilczynski, Michiel J. L. de Hoon: ``Biopython: freely available Python tools for computational molecular biology and bioinformatics''. {\it Bioinformatics} {\bf 25} (11), 1422--1423 (2009). \href{http://dx.doi.org/10.1093/bioinformatics/btp163}{doi:10.1093/bioinformatics/btp163},
+\bibitem{pritchard2006}
+Leighton Pritchard, Jennifer A. White, Paul R.J. Birch, Ian K. Toth: ``GenomeDiagram: a python package for the visualization of large-scale genomic data''.  {\it Bioinformatics} {\bf 22} (5): 616--617 (2006).
+\href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
+\bibitem{toth2006}
+Ian K. Toth, Leighton Pritchard, Paul R. J. Birch: ``Comparative genomics reveals what makes an enterobacterial plant pathogen''. {\it Annual Review of Phytopathology} {\bf 44}: 305--336 (2006).
+\href{http://dx.doi.org/10.1146/annurev.phyto.44.070505.143444}{doi:10.1146/annurev.phyto.44.070505.143444},
+\bibitem{vanderauwera2009}
+G\'eraldine A. van der Auwera, Jaroslaw E. Kr\'ol, Haruo Suzuki, Brian Foster, Rob van Houdt, Celeste J. Brown, Max Mergeay, Eva M. Top: ``Plasmids captured in C. metallidurans CH34: defining the PromA family of broad-host-range plasmids''.
+\textit{Antonie van Leeuwenhoek} {\bf 96} (2): 193--204 (2009).
+\href{http://dx.doi.org/10.1007/s10482-009-9316-9}{doi:10.1007/s10482-009-9316-9}
+\bibitem{proux2002}
+Caroline Proux, Douwe van Sinderen, Juan Suarez, Pilar Garcia, Victor Ladero, Gerald F. Fitzgerald, Frank Desiere, Harald Br\"ussow:
+``The dilemma of phage taxonomy illustrated by comparative genomics of Sfi21-Like Siphoviridae in lactic acid bacteria''.  \textit{Journal of Bacteriology} {\bf 184} (21): 6026--6036 (2002).
+\href{http://dx.doi.org/10.1128/JB.184.21.6026-6036.2002}{http://dx.doi.org/10.1128/JB.184.21.6026-6036.2002}
+\bibitem{jupe2012}
+Florian Jupe, Leighton Pritchard, Graham J. Etherington, Katrin MacKenzie, Peter JA Cock, Frank Wright, Sanjeev Kumar Sharma1, Dan Bolser, Glenn J Bryan, Jonathan DG Jones, Ingo Hein: ``Identification and localisation of the NB-LRR gene family within the potato genome''. \textit{BMC Genomics} {\bf 13}: 75 (2012).
+\href{http://dx.doi.org/10.1186/1471-2164-13-75}{http://dx.doi.org/10.1186/1471-2164-13-75}
+\bibitem{cock2010}
+Peter J. A. Cock, Christopher J. Fields, Naohisa Goto, Michael L. Heuer, Peter M. Rice: ``The Sanger FASTQ file format for sequences with quality scores, and the Solexa/Illumina FASTQ variants''.  \textit{Nucleic Acids Research} {\bf 38} (6): 1767--1771 (2010). \href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137}
+\bibitem{brown1999}
+Patrick O. Brown, David Botstein: ``Exploring the new world of the genome with DNA microarrays''. \textit{Nature Genetics} {\bf 21} (Supplement 1), 33--37 (1999). \href{http://dx.doi.org/10.1038/4462}{doi:10.1038/4462}
+\bibitem{talevich2012}
+Eric Talevich, Brandon M. Invergo, Peter J.A. Cock, Brad A. Chapman: ``Bio.Phylo: A unified toolkit for processing, analyzing and visualizing phylogenetic trees in Biopython''.  \textit{BMC Bioinformatics} {\bf 13}: 209 (2012).  \href{http://dx.doi.org/10.1186/1471-2105-13-209}{doi:10.1186/1471-2105-13-209}
+\bibitem{cornish1985}
+Athel Cornish-Bowden: ``Nomenclature for incompletely specified bases in nucleic acid sequences: Recommendations 1984.'' \textit{Nucleic Acids Research} {\bf 13} (9): 3021--3030 (1985). \href{http://dx.doi.org/10.1093/nar/13.9.3021}{doi:10.1093/nar/13.9.3021}
+\bibitem{cavener1987}
+Douglas R. Cavener: ``Comparison of the consensus sequence flanking translational start sites in Drosophila and vertebrates.'' \textit{Nucleic Acids Research} {\bf 15} (4): 1353--1361 (1987). \href{http://dx.doi.org/10.1093/nar/15.4.1353}{doi:10.1093/nar/15.4.1353}
+\bibitem{bailey1994}
+Timothy L. Bailey and Charles Elkan: ``Fitting a mixture model by expectation maximization to discover motifs in biopolymers'', \textit{Proceedings of the Second International Conference on Intelligent Systems for Molecular Biology} 28--36. AAAI Press, Menlo Park, California (1994).
+\bibitem{chapman2000}
+Brad Chapman and Jeff Chang: ``Biopython: Python tools for computational biology''. \textit{ACM SIGBIO Newsletter} {\bf 20} (2): 15--19 (August 2000).
+\bibitem{dehoon2004}
+Michiel J. L. de Hoon, Seiya Imoto, John Nolan, Satoru Miyano: ``Open source clustering software''. \textit{Bioinformatics} {\bf 20} (9): 1453--1454 (2004). \href{http://dx.doi.org/10.1093/bioinformatics/bth078}{doi:10.1093/bioinformatics/bth078}
+\bibitem{eisen1998}
+Michiel B. Eisen, Paul T. Spellman, Patrick O. Brown, David Botstein: ``Cluster analysis and display of genome-wide expression patterns''. \textit{Proceedings of the National Academy of Science USA} {\bf 95} (25): 14863--14868 (1998). \href{http://dx.doi.org/10.1073/pnas.96.19.10943-c}{doi:10.1073/pnas.96.19.10943-c}
+\bibitem{golub1971}
+Gene H. Golub, Christian Reinsch: ``Singular value decomposition and least squares solutions''. In \textit{Handbook for Automatic Computation}, {\bf 2}, (Linear Algebra) (J. H. Wilkinson and C. Reinsch, eds), 134--151. New York: Springer-Verlag (1971).
+\bibitem{golub1989}
+Gene H. Golub, Charles F. Van Loan: \textit{Matrix computations}, 2nd edition (1989).
+\bibitem{hamelryck2003a}
+Thomas Hamelryck and  Bernard Manderick: 11PDB parser and structure class
+implemented in Python''. \textit{Bioinformatics}, \textbf{19} (17): 2308--2310 (2003) \href{http://dx.doi.org/10.1093/bioinformatics/btg299}{doi: 10.1093/bioinformatics/btg299}. 
+\bibitem{hamelryck2003b}
+Thomas Hamelryck: ``Efficient identification of side-chain patterns using a multidimensional index tree''. \textit{Proteins} {\bf 51} (1): 96--108 (2003). \href{http://dx.doi.org/10.1002/prot.10338}{doi:10.1002/prot.10338}
+\bibitem{hamelryck2005}
+Thomas Hamelryck: ``An amino acid has two sides; A new 2D measure provides a different view of solvent exposure''. \textit{Proteins} {\bf 59} (1): 29--48 (2005). \href{http://dx.doi.org/10.1002/prot.20379}{doi:10.1002/prot.20379}.
+\bibitem{hartigan1975}
+John A. Hartiga. \textit{Clustering algorithms}. New York: Wiley (1975).
+\bibitem{jain1988}
+Anil L. Jain, Richard C. Dubes: \textit{Algorithms for clustering data}. Englewood Cliffs, N.J.: Prentice Hall (1988).
+\bibitem{kachitvichyanukul1988}
+Voratas Kachitvichyanukul, Bruce W. Schmeiser: Binomial Random Variate Generation. \textit{Communications of the ACM} {\bf 31} (2): 216--222 (1988). \href{http://dx.doi.org/10.1145/42372.42381}{doi:10.1145/42372.42381}
+\bibitem{kohonen1997}
+Teuvo Kohonen: ``Self-organizing maps'', 2nd Edition. Berlin; New York: Springer-Verlag (1997).
+\bibitem{lecuyer1988}
+Pierre L'Ecuyer: ``Efficient and Portable Combined Random Number Generators.''
+\textit{Communications of the ACM} {\bf 31} (6): 742--749,774 (1988). \href{http://dx.doi.org/10.1145/62959.62969}{doi:10.1145/62959.62969}
+\bibitem{majumdar2005}
+Indraneel Majumdar, S. Sri Krishna, Nick V. Grishin: ``PALSSE: A program to delineate linear secondary structural elements from protein structures.'' \textit{BMC Bioinformatics}, {\bf 6}: 202 (2005). \href{http://dx.doi.org/10.1186/1471-2105-6-202}{doi:10.1186/1471-2105-6-202}.
+\bibitem{matys2003}
+V. Matys, E. Fricke, R. Geffers, E. G\"ossling, M. Haubrock, R. Hehl, K. Hornischer, D. Karas, A.E. Kel, O.V. Kel-Margoulis, D.U. Kloos, S. Land, B. Lewicki-Potapov, H. Michael, R. M\"unch, I. Reuter, S. Rotert, H. Saxel, M. Scheer, S. Thiele, E. Wingender E: ``TRANSFAC: transcriptional regulation, from patterns to profiles.'' Nucleic Acids Research {\bf 31} (1): 374--378 (2003). \href{http://dx.doi.org/10.1093/nar/gkg108}{doi:10.1093/nar/gkg108}
+\bibitem{sibson1973}
+Robin Sibson: ``SLINK: An optimally efficient algorithm for the single-link cluster method''. \textit{The Computer Journal} {\bf 16} (1): 30--34 (1973). \href{http://dx.doi.org/10.1093/comjnl/16.1.30}{doi:10.1093/comjnl/16.1.30}
+\bibitem{snedecor1989}
+George W. Snedecor, William G. Cochran: \textit{Statistical methods}. Ames, Iowa: Iowa State University Press (1989).
+\bibitem{tamayo1999}
+Pablo Tamayo, Donna Slonim, Jill Mesirov, Qing Zhu, Sutisak Kitareewan, Ethan Dmitrovsky, Eric S. Lander, Todd R. Golub: ``Interpreting patterns of gene expression with self-organizing maps: Methods and application to hematopoietic differentiation''. \textit{Proceedings of the National Academy of Science USA} {\bf 96} (6): 2907--2912 (1999). \href{http://dx.doi.org/10.1073/pnas.96.6.2907}{doi:10.1073/pnas.96.6.2907}
+\bibitem{tryon1970}
+Robert C. Tryon, Daniel E. Bailey: \textit{Cluster analysis}. New York: McGraw-Hill (1970).
+\bibitem{tukey1977}
+John W. Tukey: ``Exploratory data analysis''. Reading, Mass.: Addison-Wesley Pub. Co. (1977).
+\bibitem{yeung2001}
+Ka Yee Yeung, Walter L. Ruzzo: ``Principal Component Analysis for clustering gene expression data''. \textit{Bioinformatics} {\bf 17} (9): 763--774 (2001). \href{http://dx.doi.org/10.1093/bioinformatics/17.9.763}{doi:10.1093/bioinformatics/17.9.763}
+\bibitem{saldanha2004}
+Alok Saldanha: ``Java Treeview---extensible visualization of microarray data''. \textit{Bioinformatics} {\bf 20} (17): 3246--3248 (2004). 
+\href{http://dx.doi.org/10.1093/bioinformatics/bth349}{http://dx.doi.org/10.1093/bioinformatics/bth349}
+\end{thebibliography}

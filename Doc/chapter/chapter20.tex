@@ -1,0 +1,442 @@
+\chapter{The Biopython testing framework}
+\label{sec:regr_test}
+
+Biopython has a regression testing framework (the file
+\verb|run_tests.py|) based on
+\href{http://docs.python.org/library/unittest.html}{unittest},
+the standard unit testing framework for Python.  Providing comprehensive
+tests for modules is one of the most important aspects of making sure that
+the Biopython code is as bug-free as possible before going out.
+It also tends to be one of the most undervalued aspects of contributing.
+This chapter is designed to make running the Biopython tests and
+writing good test code as easy as possible.
+Ideally, every module that goes into Biopython
+should have a test (and should also have documentation!).
+All our developers, and anyone installing Biopython from source,
+are strongly encouraged to run the unit tests.
+
+\section{Running the tests}
+
+When you download the Biopython source code, or check it out from
+our source code repository, you should find a subdirectory call
+\verb|Tests|.  This contains the key script \verb|run_tests.py|,
+lots of individual scripts named \verb|test_XXX.py|, a subdirectory
+called \verb|output| and lots of other subdirectories which
+contain input files for the test suite.
+
+As part of building and installing Biopython you will typically
+run the full test suite at the command line from the Biopython
+source top level directory using the following:
+\begin{verbatim}
+python setup.py test
+\end{verbatim}
+This is actually equivalent to going to the \verb|Tests|
+subdirectory and running:
+\begin{verbatim}
+python run_tests.py
+\end{verbatim}
+
+You'll often want to run just some of the tests, and this is done
+like this:
+\begin{verbatim}
+python run_tests.py test_SeqIO.py test_AlignIO.py
+\end{verbatim}
+When giving the list of tests, the \verb|.py| extension is optional,
+so you can also just type:
+\begin{verbatim}
+python run_tests.py test_SeqIO test_AlignIO
+\end{verbatim}
+To run the docstring tests (see section \ref{section:doctest}), you can use
+\begin{verbatim}
+python run_tests.py doctest
+\end{verbatim}
+By default, \verb|run_tests.py| runs all tests, including the docstring tests.
+
+If an individual test is failing, you can also try running it
+directly, which may give you more information.
+
+Importantly, note that the individual unit tests come in two types:
+\begin{itemize}
+\item Simple print-and-compare scripts.  These unit tests are
+      essentially short example Python programs, which print out
+      various output text.  For a test file named \verb|test_XXX.py|
+      there will be a matching text file called \verb|test_XXX| under
+      the \verb|output| subdirectory which contains the expected
+      output.  All that the test framework does to is run the script,
+      and check the output agrees.
+\item Standard \verb|unittest|- based tests.  These will \verb|import unittest|
+      and then define \verb|unittest.TestCase| classes, each with one
+      or more sub-tests as methods starting with \verb|test_| which
+      check some specific aspect of the code.
+      These tests should not print any output directly.
+\end{itemize}
+Currently, about half of the Biopython tests are \verb|unittest|-style tests, and half are print-and-compare tests.
+
+Running a simple print-and-compare test directly will usually give lots
+of output on screen, but does not check the output matches the expected
+output.  If the test is failing with an exception error, it should be
+very easy to locate where exactly the script is failing.
+For an example of a print-and-compare test, try:
+\begin{verbatim}
+python test_SeqIO.py
+\end{verbatim}
+
+The \verb|unittest|-based tests instead show you exactly which sub-section(s) of
+the test are failing. For example,
+\begin{verbatim}
+python test_Cluster.py
+\end{verbatim}
+
+\section{Writing tests}
+
+Let's say you want to write some tests for a module called \verb|Biospam|.
+This can be a module you wrote, or an existing module that doesn't have
+any tests yet.  In the examples below, we assume that
+\verb|Biospam| is a module that does simple math.
+
+Each Biopython test can have three important files and directories involved with it:
+
+\begin{enumerate}
+  \item \verb|test_Biospam.py| -- The actual test code for your module.
+  \item \verb|Biospam| [optional]-- A directory where any necessary input files
+    will be located. Any output files that will be generated should also
+    be written here (and preferably cleaned up after the tests are
+    done) to prevent clogging up the main Tests directory.
+  \item \verb|output/Biospam| -- [for print-and-compare tests only] This
+    file contains the expected output from running \verb|test_Biospam.py|.
+    This file is not needed for \verb|unittest|-style tests, since there
+    the validation is done in the test script \verb|test_Biospam.py| itself.
+\end{enumerate}
+
+It's up to you to decide whether you want to write a print-and-compare test script or a \verb|unittest|-style test script. The important thing is that you cannot mix these two styles in a single test script. Particularly, don't use \verb|unittest| features in a print-and-compare test.
+
+Any script with a \verb|test_| prefix in the \verb|Tests| directory will be found and run by \verb|run_tests.py|. Below, we show an example test script \verb|test_Biospam.py| both for a print-and-compare test and for a \verb|unittest|-based test. If you put this script in the Biopython \verb|Tests| directory, then \verb|run_tests.py| will find it and execute the tests contained in it:
+\begin{verbatim}
+$ python run_tests.py     
+test_Ace ... ok
+test_AlignIO ... ok
+test_BioSQL ... ok
+test_BioSQL_SeqIO ... ok
+test_Biospam ... ok
+test_CAPS ... ok
+test_Clustalw ... ok
+\end{verbatim}
+\ldots
+\begin{verbatim}
+----------------------------------------------------------------------
+Ran 107 tests in 86.127 seconds
+\end{verbatim}
+
+\subsection{Writing a print-and-compare test}
+
+A print-and-compare style test should be much simpler for beginners
+or novices to write - essentially it is just an example script using
+your new module.
+
+Here is what you should do to make a print-and-compare test for the
+\verb|Biospam| module.
+
+\begin{enumerate}
+  \item Write a script called \verb|test_Biospam.py|
+
+  \begin{itemize}
+
+    \item This script should live in the Tests directory
+      
+     \item The script should test all of the important functionality
+     of the module (the more you test the better your test is, of course!).
+    
+     \item Try to avoid anything which might be platform specific,
+     such as printing floating point numbers without using an explicit
+     formatting string to avoid having too many decimal places
+     (different platforms can give very slightly different values).
+
+  \end{itemize}
+      
+  \item If the script requires files to do the testing, these should go in
+       the directory Tests/Biospam (if you just need something generic, like
+       a FASTA sequence file, or a GenBank record, try and use an existing
+       sample input file instead).
+      
+  \item Write out the test output and verify the output to be correct.
+
+       There are two ways to do this:
+
+  \begin{enumerate}
+    \item The long way:
+
+    \begin{itemize}
+      
+     \item Run the script and write its output to a file. On UNIX (including
+       Linux and Mac OS X) machines, you would do something like:
+       \verb|python test_Biospam.py > test_Biospam| which would write the
+       output to the file \verb|test_Biospam|.
+      
+     \item Manually look at the file \verb|test_Biospam| to make sure the output is correct. When you are sure it is all right and there are no bugs, you need to quickly edit the \verb|test_Biospam| file so that the first line is: `\verb|test_Biospam|' (no quotes).
+
+     \item copy the \verb|test_Biospam| file to the directory Tests/output
+    
+   \end{itemize}
+
+   \item The quick way:
+
+   \begin{itemize}
+      \item Run \verb|python run_tests.py -g test_Biospam.py|. The
+            regression testing framework is nifty enough that it'll put
+            the output in the right place in just the way it likes it.  
+      
+       \item Go to the output (which should be in \verb|Tests/output/test_Biospam|) and double check the output to make sure it is all correct.
+
+   \end{itemize}
+
+ \end{enumerate}
+      
+ \item Now change to the Tests directory and run the regression tests
+       with \verb|python run_tests.py|. This will run all of the tests, and
+       you should see your test run (and pass!).
+      
+  \item That's it! Now you've got a nice test for your module ready to check in,
+  or submit to Biopython.  Congratulations!
+\end{enumerate}
+
+As an example, the \verb|test_Biospam.py| test script to test the
+\verb|addition| and \verb|multiplication| functions in the \verb|Biospam|
+module  could look as follows:
+
+\begin{verbatim}
+from __future__ import print_function
+from Bio import Biospam
+
+print("2 + 3 =", Biospam.addition(2, 3))
+print("9 - 1 =", Biospam.addition(9, -1))
+print("2 * 3 =", Biospam.multiplication(2, 3))
+print("9 * (- 1) =", Biospam.multiplication(9, -1))
+\end{verbatim}
+
+We generate the corresponding output with \verb|python run_tests.py -g test_Biospam.py|, and check the output file \verb|output/test_Biospam|:
+
+\begin{verbatim}
+test_Biospam
+2 + 3 = 5
+9 - 1 = 8
+2 * 3 = 6
+9 * (- 1) = -9
+\end{verbatim}
+
+Often, the difficulty with larger print-and-compare tests is to keep track which line in the output corresponds to which command in the test script. For this purpose, it is important to print out some markers to help you match lines in the input script with the generated output.
+
+\subsection{Writing a unittest-based test}
+
+We want all the modules in Biopython to have unit tests, and a simple
+print-and-compare test is better than no test at all.  However, although
+there is a steeper learning curve, using the \verb|unittest| framework
+gives a more structured result, and if there is a test failure this can
+clearly pinpoint which part of the test is going wrong.  The sub-tests can
+also be run individually which is helpful for testing or debugging.
+
+The \verb|unittest|-framework has been included with Python since version
+2.1, and is documented in the Python Library Reference (which I know you
+are keeping under your pillow, as recommended).  There is also
+\href{http://docs.python.org/library/unittest.html}{online documentaion
+for unittest}.
+If you are familiar with the \verb|unittest| system (or something similar
+like the nose test framework), you shouldn't have any trouble.  You may
+find looking at the existing example within Biopython helpful too.
+
+Here's a minimal \verb|unittest|-style test script for \verb|Biospam|,
+which you can copy and paste to get started:
+
+\begin{verbatim}
+import unittest
+from Bio import Biospam
+
+class BiospamTestAddition(unittest.TestCase):
+
+    def test_addition1(self):
+        result = Biospam.addition(2, 3)
+        self.assertEqual(result, 5)
+
+    def test_addition2(self):
+        result = Biospam.addition(9, -1)
+        self.assertEqual(result, 8)
+
+class BiospamTestDivision(unittest.TestCase):
+
+    def test_division1(self):
+        result = Biospam.division(3.0, 2.0)
+        self.assertAlmostEqual(result, 1.5)
+
+    def test_division2(self):
+        result = Biospam.division(10.0, -2.0)
+        self.assertAlmostEqual(result, -5.0)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+\end{verbatim}
+
+In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
+
+These are the key points of \verb|unittest|-based tests:
+
+\begin{itemize}
+  \item Test cases are stored in classes that derive from
+    \verb|unittest.TestCase| and cover one basic aspect of your code
+    
+  \item You can use methods \verb|setUp| and \verb|tearDown| for any repeated
+    code which should be run before and after each test method.  For example,
+    the \verb|setUp| method might be used to create an instance of the object
+    you are testing, or open a file handle.  The \verb|tearDown| should do any
+    ``tidying up'', for example closing the file handle.
+
+  \item The tests are prefixed with \verb|test_| and each test should cover
+    one specific part of what you are trying to test. You can have as
+    many tests as you want in a class.
+
+  \item At the end of the test script, you can use
+\begin{verbatim}
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+\end{verbatim}
+        to execute the tests when the script is run by itself (rather than
+        imported from \verb|run_tests.py|).
+        If you run this script, then you'll see something like the following:
+
+\begin{verbatim}
+$ python test_BiospamMyModule.py
+test_addition1 (__main__.TestAddition) ... ok
+test_addition2 (__main__.TestAddition) ... ok
+test_division1 (__main__.TestDivision) ... ok
+test_division2 (__main__.TestDivision) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.059s
+
+OK
+\end{verbatim}
+
+  \item To indicate more clearly what each test is doing, you can add
+        docstrings to each test.  These are shown when running the tests,
+        which can be useful information if a test is failing.
+
+\begin{verbatim}
+import unittest
+from Bio import Biospam
+
+class BiospamTestAddition(unittest.TestCase):
+
+    def test_addition1(self):
+        """An addition test"""
+        result = Biospam.addition(2, 3)
+        self.assertEqual(result, 5)
+
+    def test_addition2(self):
+        """A second addition test"""
+        result = Biospam.addition(9, -1)
+        self.assertEqual(result, 8)
+
+class BiospamTestDivision(unittest.TestCase):
+
+    def test_division1(self):
+        """Now let's check division"""
+        result = Biospam.division(3.0, 2.0)
+        self.assertAlmostEqual(result, 1.5)
+
+    def test_division2(self):
+        """A second division test"""
+        result = Biospam.division(10.0, -2.0)
+        self.assertAlmostEqual(result, -5.0)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+\end{verbatim}
+
+        Running the script will now show you:
+
+\begin{verbatim}
+$ python test_BiospamMyModule.py
+An addition test ... ok
+A second addition test ... ok
+Now let's check division ... ok
+A second division test ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+\end{verbatim}
+\end{itemize}
+
+If your module contains docstring tests (see section \ref{section:doctest}),
+you may want to include those in the tests to be run. You can do so as
+follows by modifying the code under \verb|if __name__ == "__main__":|
+to look like this:
+
+\begin{verbatim}
+if __name__ == "__main__":
+    unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
+    doctest_suite = doctest.DocTestSuite(Biospam)
+    suite = unittest.TestSuite((unittest_suite, doctest_suite))
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(suite)
+\end{verbatim}
+
+This is only relevant if you want to run the docstring tests when you
+execute \verb|python test_Biospam.py|; with
+\verb|python run_tests.py|, the docstring tests are run automatically
+(assuming they are included in the list of docstring tests in
+\verb|run_tests.py|, see the section below).
+
+\section{Writing doctests}
+\label{section:doctest}
+
+Python modules, classes and functions support built in documentation using
+docstrings.  The \href{http://docs.python.org/library/doctest.html}{doctest
+framework} (included with Python) allows the developer to embed working
+examples in the docstrings, and have these examples automatically tested.
+
+Currently only a small part of Biopython includes doctests. The
+\verb|run_tests.py| script takes care of running the doctests.
+For this purpose, at the top of the \verb|run_tests.py| script is a
+manually compiled list of modules to test, which
+allows us to skip modules with optional external dependencies which may
+not be installed (e.g. the Reportlab and NumPy libraries).  So, if you've
+added some doctests to the docstrings in a Biopython module, in order to
+have them included in the Biopython test suite, you must update
+\verb|run_tests.py| to include your module. Currently, the relevant part
+of \verb|run_tests.py| looks as follows:
+
+\begin{verbatim}
+# This is the list of modules containing docstring tests.
+# If you develop docstring tests for other modules, please add
+# those modules here.
+DOCTEST_MODULES = ["Bio.Seq",
+                   "Bio.SeqRecord",
+                   "Bio.SeqIO",
+                   "...",
+                  ]
+#Silently ignore any doctests for modules requiring numpy!
+try:
+    import numpy
+    DOCTEST_MODULES.extend(["Bio.Statistics.lowess"])
+except ImportError:
+    pass
+\end{verbatim}
+
+Note that we regard doctests primarily as documentation, so you should
+stick to typical usage. Generally complicated examples dealing with error
+conditions and the like would be best left to a dedicated unit test.
+
+Note that if you want to write doctests involving file parsing, defining
+the file location complicates matters.  Ideally use relative paths assuming
+the code will be run from the \verb|Tests| directory, see the
+\verb|Bio.SeqIO| doctests for an example of this.
+
+To run the docstring tests only, use
+\begin{verbatim}
+$ python run_tests.py doctest
+\end{verbatim}

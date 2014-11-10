@@ -1,0 +1,504 @@
+\chapter{Swiss-Prot and ExPASy}
+\label{chapter:swiss_prot}
+
+\section{Parsing Swiss-Prot files}
+
+Swiss-Prot (\url{http://www.expasy.org/sprot}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.  We do not (yet) support the UniProtKB XML file format.
+
+\subsection{Parsing Swiss-Prot records}
+
+In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the sequence of a Swiss-Prot record as a \verb|SeqRecord| object. Alternatively, you can store the Swiss-Prot record in a \verb|Bio.SwissProt.Record| object, which in fact stores the complete information contained in the Swiss-Prot record. In this Section, we describe how to extract \verb|Bio.SwissProt.Record| objects from a Swiss-Prot file.
+
+To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. There are several ways to do so, depending on where and how the Swiss-Prot record is stored:
+\begin{itemize}
+\item Open a Swiss-Prot file locally: \newline
+\verb|>>> handle = open("myswissprotfile.dat")|
+\item Open a gzipped Swiss-Prot file:
+\begin{verbatim}
+>>> import gzip
+>>> handle = gzip.open("myswissprotfile.dat.gz")
+\end{verbatim}
+\item Open a Swiss-Prot file over the internet:
+\begin{verbatim}
+>>> import urllib
+>>> handle = urllib.urlopen("http://www.somelocation.org/data/someswissprotfile.dat")
+\end{verbatim}
+\item Open a Swiss-Prot file over the internet from the ExPASy database
+(see section \ref{subsec:expasy_swissprot}):
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
+\end{verbatim}
+\end{itemize}
+The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format.
+
+We can use \verb+Bio.SeqIO+ as described in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt} to get file format agnostic \verb|SeqRecord| objects.  Alternatively, we can use \verb+Bio.SwissProt+ get \verb|Bio.SwissProt.Record| objects, which are a much closer match to the underlying file format.
+
+To read one Swiss-Prot record from the handle, we use the function \verb|read()|:
+\begin{verbatim}
+>>> from Bio import SwissProt
+>>> record = SwissProt.read(handle)
+\end{verbatim}
+This function should be used if the handle points to exactly one Swiss-Prot record. It raises a \verb|ValueError| if no Swiss-Prot record was found, and also if more than one record was found.
+
+We can now print out some information about this record:
+%TODO - Check the single quotes when printing record.description here:
+\begin{verbatim}
+>>> print(record.description)
+'RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;'
+>>> for ref in record.references:
+...     print("authors:", ref.authors)
+...     print("title:", ref.title)
+... 
+authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
+title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
+Bromheadia finlaysoniana.";
+>>> print(record.organism_classification)
+['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', ..., 'Bromheadia']
+\end{verbatim}
+
+To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file.
+
+For example, let's parse the full Swiss-Prot database and collect all the descriptions.
+You can download this from the \href{ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz}{ExPAYs FTP site} as a single gzipped-file \verb|uniprot_sprot.dat.gz| (about 300MB).  This is a compressed file containing a single file, \verb|uniprot_sprot.dat| (over 1.5GB).
+
+As described at the start of this section, you can use the Python library \verb|gzip| to open and uncompress a \texttt{.gz} file, like this:
+
+\begin{verbatim}
+>>> import gzip
+>>> handle = gzip.open("uniprot_sprot.dat.gz")
+\end{verbatim}
+
+However, uncompressing a large file takes time, and each time you open the file for reading in this way, it has to be decompressed on the fly.  So, if you can spare the disk space you'll save time in the long run if you first decompress the file to disk, to get the \verb|uniprot_sprot.dat| file inside.  Then you can open the file for reading as usual:
+
+\begin{verbatim}
+>>> handle = open("uniprot_sprot.dat")
+\end{verbatim}
+
+As of June 2009, the full Swiss-Prot database downloaded from ExPASy contained 468851 Swiss-Prot records.  One concise way to build up a list of the record descriptions is with a list comprehension: 
+\begin{verbatim}
+>>> from Bio import SwissProt
+>>> handle = open("uniprot_sprot.dat")
+>>> descriptions = [record.description for record in SwissProt.parse(handle)]
+>>> len(descriptions)
+468851
+>>> descriptions[:5]
+['RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-2L;']
+
+\end{verbatim}
+
+Or, using a for loop over the record iterator:
+\begin{verbatim}
+>>> from Bio import SwissProt
+>>> descriptions = []
+>>> handle = open("uniprot_sprot.dat")
+>>> for record in SwissProt.parse(handle):
+...     descriptions.append(record.description)
+...
+>>> len(descriptions)
+468851
+\end{verbatim}
+
+Because this is such a large input file, either way takes about eleven minutes on my new desktop computer (using the uncompressed \verb|uniprot_sprot.dat| file as input).
+
+It is equally easy to extract any kind of information you'd like from Swiss-Prot records. To see the members of a Swiss-Prot record, use
+\begin{verbatim}
+>>> dir(record)
+['__doc__', '__init__', '__module__', 'accessions', 'annotation_update',
+'comments', 'created', 'cross_references', 'data_class', 'description',
+'entry_name', 'features', 'gene_name', 'host_organism', 'keywords',
+'molecule_type', 'organelle', 'organism', 'organism_classification',
+'references', 'seqinfo', 'sequence', 'sequence_length',
+'sequence_update', 'taxonomy_id']
+\end{verbatim}
+
+\subsection{Parsing the Swiss-Prot keyword and category list}
+
+Swiss-Prot also distributes a file \verb+keywlist.txt+, which lists the keywords and categories used in Swiss-Prot. The file contains entries in the following form:
+
+\begin{verbatim}
+ID   2Fe-2S.
+AC   KW-0001
+DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
+DE   atoms complexed to 2 inorganic sulfides and 4 sulfur atoms of
+DE   cysteines from the protein.
+SY   Fe2S2; [2Fe-2S] cluster; [Fe2S2] cluster; Fe2/S2 (inorganic) cluster;
+SY   Di-mu-sulfido-diiron; 2 iron, 2 sulfur cluster binding.
+GO   GO:0051537; 2 iron, 2 sulfur cluster binding
+HI   Ligand: Iron; Iron-sulfur; 2Fe-2S.
+HI   Ligand: Metal-binding; 2Fe-2S.
+CA   Ligand.
+//
+ID   3D-structure.
+AC   KW-0002
+DE   Protein, or part of a protein, whose three-dimensional structure has
+DE   been resolved experimentally (for example by X-ray crystallography or
+DE   NMR spectroscopy) and whose coordinates are available in the PDB
+DE   database. Can also be used for theoretical models.
+HI   Technical term: 3D-structure.
+CA   Technical term.
+//
+ID   3Fe-4S.
+...
+\end{verbatim}
+
+The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a Python dictionary.
+
+\begin{verbatim}
+>>> from Bio.SwissProt import KeyWList
+>>> handle = open("keywlist.txt")
+>>> records = KeyWList.parse(handle)
+>>> for record in records:
+...     print(record['ID'])
+...     print(record['DE'])
+\end{verbatim}
+
+This prints
+\begin{verbatim}
+2Fe-2S.
+Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron atoms
+complexed to 2 inorganic sulfides and 4 sulfur atoms of cysteines from the
+protein.
+...
+\end{verbatim}
+
+\section{Parsing Prosite records}
+
+Prosite is a database containing protein domains, protein families, functional sites, as well as the patterns and profiles to recognize them. Prosite was developed in parallel with Swiss-Prot. In Biopython, a Prosite record is represented by the \verb|Bio.ExPASy.Prosite.Record| class, whose members correspond to the different fields in a Prosite record.
+
+In general, a Prosite file can contain more than one Prosite records. For example, the full set of Prosite records, which can be downloaded as a single file (\verb|prosite.dat|) from the \href{ftp://ftp.expasy.org/databases/prosite/prosite.dat}{ExPASy FTP site}, contains 2073 records (version 20.24 released on 4 December 2007). To parse such a file, we again make use of an iterator:
+
+\begin{verbatim}
+>>> from Bio.ExPASy import Prosite
+>>> handle = open("myprositefile.dat")
+>>> records = Prosite.parse(handle)
+\end{verbatim}
+
+We can now take the records one at a time and print out some information. For example, using the file containing the complete Prosite database, we'd find
+\begin{verbatim}
+>>> from Bio.ExPASy import Prosite
+>>> handle = open("prosite.dat")
+>>> records = Prosite.parse(handle)
+>>> record = next(records)
+>>> record.accession
+'PS00001'
+>>> record.name
+'ASN_GLYCOSYLATION'
+>>> record.pdoc
+'PDOC00001'
+>>> record = next(records)
+>>> record.accession
+'PS00004'
+>>> record.name
+'CAMP_PHOSPHO_SITE'
+>>> record.pdoc
+'PDOC00004'
+>>> record = next(records)
+>>> record.accession
+'PS00005'
+>>> record.name
+'PKC_PHOSPHO_SITE'
+>>> record.pdoc
+'PDOC00005'
+\end{verbatim}
+and so on. If you're interested in how many Prosite records there are, you could use
+\begin{verbatim}
+>>> from Bio.ExPASy import Prosite
+>>> handle = open("prosite.dat")
+>>> records = Prosite.parse(handle)
+>>> n = 0
+>>> for record in records: n+=1
+...
+>>> n
+2073
+\end{verbatim}
+
+To read exactly one Prosite from the handle, you can use the \verb|read| function:
+\begin{verbatim}
+>>> from Bio.ExPASy import Prosite
+>>> handle = open("mysingleprositerecord.dat")
+>>> record = Prosite.read(handle)
+\end{verbatim}
+This function raises a ValueError if no Prosite record is found, and also if more than one Prosite record is found.
+
+\section{Parsing Prosite documentation records}
+
+In the Prosite example above, the \verb|record.pdoc| accession numbers \verb|'PDOC00001'|, \verb|'PDOC00004'|, \verb|'PDOC00005'| and so on refer to Prosite documentation. The Prosite documentation records are available from ExPASy as individual files, and as one file (\verb|prosite.doc|) containing all Prosite documentation records.
+
+We use the parser in \verb|Bio.ExPASy.Prodoc| to parse Prosite documentation records. For example, to create a list of all accession numbers of Prosite documentation record, you can use
+
+\begin{verbatim}
+>>> from Bio.ExPASy import Prodoc
+>>> handle = open("prosite.doc")
+>>> records = Prodoc.parse(handle)
+>>> accessions = [record.accession for record in records]
+\end{verbatim}
+
+Again a \verb|read()| function is provided to read exactly one Prosite documentation record from the handle.
+
+\section{Parsing Enzyme records}
+
+ExPASy's Enzyme database is a repository of information on enzyme nomenclature. A typical Enzyme record looks as follows:
+
+\begin{verbatim}
+ID   3.1.1.34
+DE   Lipoprotein lipase.
+AN   Clearing factor lipase.
+AN   Diacylglycerol lipase.
+AN   Diglyceride lipase.
+CA   Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.
+CC   -!- Hydrolyzes triacylglycerols in chylomicrons and very low-density
+CC       lipoproteins (VLDL).
+CC   -!- Also hydrolyzes diacylglycerol.
+PR   PROSITE; PDOC00110;
+DR   P11151, LIPL_BOVIN ;  P11153, LIPL_CAVPO ;  P11602, LIPL_CHICK ;
+DR   P55031, LIPL_FELCA ;  P06858, LIPL_HUMAN ;  P11152, LIPL_MOUSE ;
+DR   O46647, LIPL_MUSVI ;  P49060, LIPL_PAPAN ;  P49923, LIPL_PIG   ;
+DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
+//
+\end{verbatim}
+
+In this example, the first line shows the EC (Enzyme Commission) number of lipoprotein lipase (second line). Alternative names of lipoprotein lipase are "clearing factor lipase", "diacylglycerol lipase", and "diglyceride lipase" (lines 3 through 5). The line starting with "CA" shows the catalytic activity of this enzyme. Comment lines start with "CC". The "PR" line shows references to the Prosite Documentation records, and the "DR" lines show references to Swiss-Prot records. Not of these entries are necessarily present in an Enzyme record.
+
+In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
+
+%doctest ../Tests/Enzymes
+\begin{verbatim}
+>>> from Bio.ExPASy import Enzyme
+>>> handle = open("lipoprotein.txt")
+>>> record = Enzyme.read(handle)
+>>> record["ID"]
+'3.1.1.34'
+>>> record["DE"]
+'Lipoprotein lipase.'
+>>> record["AN"]
+['Clearing factor lipase.', 'Diacylglycerol lipase.', 'Diglyceride lipase.']
+>>> record["CA"]
+'Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.'
+>>> record["PR"]
+['PDOC00110']
+\end{verbatim}
+%TODO - line wrapping?
+\begin{verbatim}
+>>> record["CC"]
+['Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins
+(VLDL).', 'Also hydrolyzes diacylglycerol.']
+>>> record["DR"]
+[['P11151', 'LIPL_BOVIN'], ['P11153', 'LIPL_CAVPO'], ['P11602', 'LIPL_CHICK'],
+['P55031', 'LIPL_FELCA'], ['P06858', 'LIPL_HUMAN'], ['P11152', 'LIPL_MOUSE'],
+['O46647', 'LIPL_MUSVI'], ['P49060', 'LIPL_PAPAN'], ['P49923', 'LIPL_PIG'],
+['Q06000', 'LIPL_RAT'], ['Q29524', 'LIPL_SHEEP']]
+\end{verbatim}
+The \verb+read+ function raises a ValueError if no Enzyme record is found, and also if more than one Enzyme record is found.
+
+The full set of Enzyme records can be downloaded as a single file (\verb|enzyme.dat|) from the \href{ftp://ftp.expasy.org/databases/enzyme/enzyme.dat}{ExPASy FTP site}, containing 4877 records (release of 3 March 2009). To parse such a file containing multiple Enzyme records, use the \verb+parse+ function in \verb+Bio.ExPASy.Enzyme+ to obtain an iterator:
+
+\begin{verbatim}
+>>> from Bio.ExPASy import Enzyme
+>>> handle = open("enzyme.dat")
+>>> records = Enzyme.parse(handle)
+\end{verbatim}
+
+We can now iterate over the records one at a time. For example, we can make a list of all EC numbers for which an Enzyme record is available:
+\begin{verbatim}
+>>> ecnumbers = [record["ID"] for record in records]
+\end{verbatim}
+
+\section{Accessing the ExPASy server}
+
+Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Six kinds of queries are available from ExPASy:
+\begin{description}
+\item[get\_prodoc\_entry]To download a Prosite documentation record in HTML format
+\item[get\_prosite\_entry]To download a Prosite record in HTML format
+\item[get\_prosite\_raw]To download a Prosite or Prosite documentation record in raw format
+\item[get\_sprot\_raw]To download a Swiss-Prot record in raw format
+\item[sprot\_search\_ful]To search for a Swiss-Prot record
+\item[sprot\_search\_de]To search for a Swiss-Prot record
+\end{description}
+To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
+
+\subsection{Retrieving a Swiss-Prot record}
+\label{subsec:expasy_swissprot}
+
+Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants. 
+
+If you do a search on Swiss-Prot, you can find three orchid proteins for Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let's write a script which grabs these, and parses out some interesting information.
+
+First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.ExPASy|. This function is very nice since you can feed it an id and get back a handle to a raw text record (no html to mess with!). We can the use \verb|Bio.SwissProt.read| to pull out the Swiss-Prot record, or \verb|Bio.SeqIO.read| to get a SeqRecord. The following code accomplishes what I just wrote:
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> from Bio import SwissProt
+
+>>> accessions = ["O23729", "O23730", "O23731"]
+>>> records = []
+
+>>> for accession in accessions:
+...     handle = ExPASy.get_sprot_raw(accession)
+...     record = SwissProt.read(handle)
+...     records.append(record)
+\end{verbatim}
+
+If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exist, then \verb|SwissProt.read(handle)| will raise a \verb|ValueError|. You can catch \verb|ValueException| exceptions to detect invalid accession numbers:
+
+\begin{verbatim}
+>>> for accession in accessions:
+...     handle = ExPASy.get_sprot_raw(accession)
+...     try:
+...         record = SwissProt.read(handle)
+...     except ValueException:
+...         print("WARNING: Accession %s not found" % accession)
+...     records.append(record)
+\end{verbatim}
+
+\subsection{Searching Swiss-Prot}
+
+Now, you may remark that I knew the records' accession numbers
+beforehand. Indeed, \verb|get_sprot_raw()| needs either the entry name
+or an accession number. When you don't have them handy, you can use
+one of the \verb|sprot_search_de()| or \verb|sprot_search_ful()|
+functions.
+
+\verb|sprot_search_de()| searches in the ID, DE, GN, OS and OG lines;
+\verb|sprot_search_ful()| searches in (nearly) all the fields. They
+are detailed on
+\url{http://www.expasy.org/cgi-bin/sprot-search-de} and
+\url{http://www.expasy.org/cgi-bin/sprot-search-ful}
+respectively. Note that they don't search in TrEMBL by default
+(argument \verb|trembl|). Note also that they return html pages;
+however, accession numbers are quite easily extractable:
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> import re
+
+>>> handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
+>>> # or:
+>>> # handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
+>>> html_results = handle.read()
+>>> if "Number of sequences found" in html_results:
+...     ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
+... else:
+...     ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
+\end{verbatim}
+
+\subsection{Retrieving Prosite and Prosite documentation records}
+
+Prosite and Prosite documentation records can be retrieved either in HTML format, or in raw format. To parse Prosite and Prosite documentation records with Biopython, you should retrieve the records in raw format. For other purposes, however, you may be interested in these records in HTML format.
+
+To retrieve a Prosite or Prosite documentation record in raw format, use \verb|get_prosite_raw()|. For example, to download a Prosite record and print it out in raw text format, use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_prosite_raw('PS00001')
+>>> text = handle.read()
+>>> print(text)
+\end{verbatim}
+
+To retrieve a Prosite record and parse it into a \verb|Bio.Prosite.Record| object, use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> from Bio import Prosite
+>>> handle = ExPASy.get_prosite_raw('PS00001')
+>>> record = Prosite.read(handle)
+\end{verbatim}
+
+The same function can be used to retrieve a Prosite documentation record and parse it into a \verb|Bio.ExPASy.Prodoc.Record| object:
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> from Bio.ExPASy import Prodoc
+>>> handle = ExPASy.get_prosite_raw('PDOC00001')
+>>> record = Prodoc.read(handle)
+\end{verbatim}
+
+For non-existing accession numbers, \verb|ExPASy.get_prosite_raw| returns a handle to an emptry string. When faced with an empty string, \verb|Prosite.read| and \verb|Prodoc.read| will raise a ValueError. You can catch these exceptions to detect invalid accession numbers.
+
+The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used to download Prosite and Prosite documentation records in HTML format. To create a web page showing one Prosite record, you can use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_prosite_entry('PS00001')
+>>> html = handle.read()
+>>> output = open("myprositerecord.html", "w")
+>>> output.write(html)
+>>> output.close()
+\end{verbatim}
+
+and similarly for a Prosite documentation record:
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_prodoc_entry('PDOC00001')
+>>> html = handle.read()
+>>> output = open("myprodocrecord.html", "w")
+>>> output.write(html)
+>>> output.close()
+\end{verbatim}
+
+For these functions, an invalid accession number returns an error message in HTML format.
+
+\section{Scanning the Prosite database}
+
+\href{http://www.expasy.org/tools/scanprosite/}{ScanProsite} allows you to scan protein sequences online against the Prosite database by providing a UniProt or PDB sequence identifier or the sequence itself. For more information about ScanProsite, please see the \href{http://www.expasy.org/tools/scanprosite/scanprosite-doc.html}{ScanProsite documentation} as well as the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite}.
+
+You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
+
+\begin{verbatim}
+MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
+CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
+\end{verbatim}
+
+you can use the following code:
+
+\begin{verbatim}
+>>> sequence = "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
+CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
+>>> from Bio.ExPASy import ScanProsite
+>>> handle = ScanProsite.scan(seq=sequence)
+\end{verbatim}
+
+By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a Python object:
+
+\begin{verbatim}
+>>> result = ScanProsite.read(handle)
+>>> type(result)
+<class 'Bio.ExPASy.ScanProsite.Record'>
+\end{verbatim}
+
+A \verb+Bio.ExPASy.ScanProsite.Record+ object is derived from a list, with each element in the list storing one ScanProsite hit. This object also stores the number of hits, as well as the number of search sequences, as returned by ScanProsite. This ScanProsite search resulted in six hits:
+
+\begin{verbatim}
+>>> result.n_seq
+1
+>>> result.n_match
+6
+>>> len(result)
+6
+>>> result[0]
+{'signature_ac': u'PS50948', 'level': u'0', 'stop': 98, 'sequence_ac': u'USERSEQ1', 'start': 16, 'score': u'8.873'}
+>>> result[1]
+{'start': 37, 'stop': 39, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
+>>> result[2]
+{'start': 45, 'stop': 48, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00006'}
+>>> result[3]
+{'start': 60, 'stop': 62, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
+>>> result[4]
+{'start': 80, 'stop': 83, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00004'}
+>>> result[5]
+{'start': 106, 'stop': 111, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00008'}
+\end{verbatim}
+
+Other ScanProsite parameters can be passed as keyword arguments; see the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite} for more information. As an example, passing \verb+lowscore=1+ to include matches with low level scores lets use find one additional hit:
+
+\begin{verbatim}
+>>> handle = ScanProsite.scan(seq=sequence, lowscore=1)
+>>> result = ScanProsite.read(handle)
+>>> result.n_match
+7
+\end{verbatim}

@@ -1,0 +1,262 @@
+\chapter{Introduction}
+\label{chapter:introduction}
+
+\section{What is Biopython?}
+
+The Biopython Project is an international association of developers of freely available Python (\url{http://www.python.org}) tools for computational molecular biology. Python is an object oriented, interpreted, flexible language that is becoming increasingly popular for scientific computing. Python is easy to learn, has a very clear syntax and can easily be extended with modules written in C, C++ or FORTRAN.
+
+The Biopython web site (\url{http://www.biopython.org}) provides
+an online resource for modules, scripts, and web links for developers
+of Python-based software for bioinformatics use and research. Basically,
+the goal of Biopython is to make it as easy as possible to use Python
+for bioinformatics by creating high-quality, reusable modules and
+classes. Biopython features include parsers for various Bioinformatics
+file formats (BLAST, Clustalw, FASTA, Genbank,...), access to online
+services (NCBI, Expasy,...), interfaces to common and not-so-common
+programs (Clustalw, DSSP, MSMS...), a standard sequence class, various
+clustering modules, a KD tree data structure etc. and even documentation. 
+
+Basically, we just like to program in Python and want to make it as easy as possible to use Python for bioinformatics by creating high-quality, reusable modules and scripts.
+
+\section{What can I find in the Biopython package}
+
+The main Biopython releases have lots of functionality, including:
+
+\begin{itemize}
+  \item The ability to parse bioinformatics files into Python utilizable data structures, including support for the following formats:
+
+  \begin{itemize}
+    \item Blast output -- both from standalone and WWW Blast
+    \item Clustalw
+    \item FASTA
+    \item GenBank
+    \item PubMed and Medline
+    \item ExPASy files, like Enzyme and Prosite
+    \item SCOP, including `dom' and `lin' files
+    \item UniGene
+    \item SwissProt
+  \end{itemize}
+
+  \item Files in the supported formats can be iterated over record by record or indexed and accessed via a Dictionary interface.
+
+  \item Code to deal with popular on-line bioinformatics destinations such as:
+
+  \begin{itemize}
+    \item NCBI -- Blast, Entrez and PubMed services
+    \item ExPASy -- Swiss-Prot and Prosite entries, as well as Prosite searches
+  \end{itemize}
+
+  \item Interfaces to common bioinformatics programs such as:
+
+  \begin{itemize}
+    \item Standalone Blast from NCBI
+    \item Clustalw alignment program
+    \item EMBOSS command line tools
+  \end{itemize}
+
+  \item A standard sequence class that deals with sequences, ids on sequences, and sequence features.
+
+  \item Tools for performing common operations on sequences, such as translation, transcription and weight calculations.
+
+  \item Code to perform classification of data using k Nearest Neighbors, Naive Bayes or Support Vector Machines.
+
+  \item Code for dealing with alignments, including a standard way to create and deal with substitution matrices.
+
+  \item Code making it easy to split up parallelizable tasks into separate processes.
+
+  \item GUI-based programs to do basic sequence manipulations, translations, BLASTing, etc.
+
+  \item Extensive documentation and help with using the modules, including this file, on-line wiki documentation, the web site, and the mailing list.
+
+  \item Integration with BioSQL, a sequence database schema also supported by the BioPerl and BioJava projects.
+
+\end{itemize}
+
+We hope this gives you plenty of reasons to download and start using Biopython!
+
+\section{Installing Biopython}
+
+All of the installation information for Biopython was separated from
+this document to make it easier to keep updated.
+
+The short version is go to our downloads page (\url{http://biopython.org/wiki/Download}),
+download and install the listed dependencies, then download and install Biopython.
+Biopython runs on many platforms (Windows, Mac, and on the various flavors of Linux and Unix).
+For Windows we provide pre-compiled click-and-run installers, while for Unix and other
+operating systems you must install from source as described in the included README file.
+This is usually as simple as the standard commands:
+
+\begin{verbatim}
+python setup.py build
+python setup.py test
+sudo python setup.py install
+\end{verbatim}
+
+\noindent (You can in fact skip the build and test, and go straight to the install --
+but its better to make sure everything seems to be working.)
+
+The longer version of our installation instructions covers
+installation of Python, Biopython dependencies and Biopython itself.
+It is available in PDF
+(\url{http://biopython.org/DIST/docs/install/Installation.pdf})
+and HTML formats
+(\url{http://biopython.org/DIST/docs/install/Installation.html}).
+
+\section{Frequently Asked Questions (FAQ)}
+
+\begin{enumerate}
+
+  \item \emph{How do I cite Biopython in a scientific publication?} \\
+  Please cite our application note \cite[Cock \textit{et al.}, 2009]{cock2009}
+  as the main Biopython reference.
+  In addition, please cite any publications from the following list if appropriate, in particular as a reference for specific modules within Biopython (more information can be found on our website):
+  \begin{itemize}
+    \item For the official project announcement: \cite[Chapman and Chang, 2000]{chapman2000};
+    \item For \verb+Bio.PDB+: \cite[Hamelryck and Manderick, 2003]{hamelryck2003a};
+    \item For \verb+Bio.Cluster+: \cite[De Hoon \textit{et al.}, 2004]{dehoon2004};
+    \item For \verb+Bio.Graphics.GenomeDiagram+: \cite[Pritchard \textit{et al.}, 2006]{pritchard2006};
+    \item For \verb+Bio.Phylo+ and \verb+Bio.Phylo.PAML+: \cite[Talevich \textit{et al.}, 2012]{talevich2012};
+    \item For the FASTQ file format as supported in Biopython, BioPerl, BioRuby, BioJava, and EMBOSS: \cite[Cock \textit{et al.}, 2010]{cock2010}.
+  \end{itemize}
+
+  \item \emph{How should I capitalize ``Biopython''?  Is ``BioPython'' OK?} \\
+  The correct capitalization is ``Biopython'', not ``BioPython'' (even though
+  that would have matched BioPerl, BioJava and BioRuby).
+
+  \item \emph{What is going wrong with my print commands?} \\
+  This tutorial now uses the Python 3 style print \emph{function}.
+  As of Biopython 1.62, we support both Python 2 and Python 3.
+  The most obvious language difference is the print \emph{statement}
+  in Python 2 became a print \emph{function} in Python 3.
+
+  For example, this will only work under Python 2:
+
+\begin{verbatim}
+>>> print "Hello World!"
+Hello World!
+\end{verbatim}
+
+  If you try that on Python 3 you'll get a \verb|SyntaxError|.
+  Under Python 3 you must write:
+
+%doctest
+\begin{verbatim}
+>>> print("Hello World!")
+Hello World!
+\end{verbatim}
+
+  Surprisingly that will also work on Python 2 -- but only for simple
+  examples printing one thing. In general you need to add this magic
+  line to the start of your Python scripts to use the print function
+  under Python 2.6 and 2.7:
+
+\begin{verbatim}
+from __future__ import print_function
+\end{verbatim}
+
+  If you forget to add this magic import, under Python 2 you'll see
+  extra brackets produced by trying to use the print function when
+  Python 2 is interpretting it as a print statement and a tuple.
+
+  \item \emph{How do I find out what version of Biopython I have installed?} \\
+  Use this:
+  \begin{verbatim}
+  >>> import Bio
+  >>> print(Bio.__version__)
+  ...
+  \end{verbatim}
+  If the ``\verb|import Bio|'' line fails, Biopython is not installed.
+  If the second line fails, your version is very out of date.
+  If the version string ends with a plus, you don't have an official
+  release, but a snapshot of the in development code. 
+
+  \item \emph{Where is the latest version of this document?}\\
+  If you download a Biopython source code archive, it will include the
+  relevant version in both HTML and PDF formats.  The latest published
+  version of this document (updated at each release) is online:
+  \begin{itemize}
+  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
+  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
+  \end{itemize}
+  If you are using the very latest unreleased code from our repository
+  you can find copies of the in-progress tutorial here:
+  \begin{itemize}
+  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.html}
+  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.pdf}
+  \end{itemize}
+  
+  \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
+  You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
+  If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
+ 
+  \item \emph{Why doesn't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
+  You need Biopython 1.51 or later.
+
+  \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
+  Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
+  
+  \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
+  You need Biopython 1.54 or later, or just use handles explicitly (see Section~\ref{sec:appendix-handles}).
+  It is especially important to remember to close output handles explicitly after writing your data.
+
+  \item \emph{Why won't the } \verb|Bio.SeqIO.write()| \emph{and} \verb|Bio.AlignIO.write()| \emph{functions accept a single record or alignment? They insist on a list or iterator!} \\
+  You need Biopython 1.54 or later, or just wrap the item with \verb|[...]| to create a list of one element.
+
+  \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
+  You need Biopython 1.45 or later.
+  
+  \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
+  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is/was an ongoing struggle.
+  If you aren't using the latest version of Biopython, you could try upgrading.
+  However, we (and the NCBI) recommend you use the XML output instead, which is designed to be read by a computer program.
+
+  \item \emph{Why doesn't} \verb|Bio.Entrez.parse()| \emph{work? The module imports fine but there is no parse function!} \\
+  You need Biopython 1.52 or later.
+
+  \item \emph{Why has my script using} \verb|Bio.Entrez.efetch()| \emph{stopped working?} \\
+  This could be due to NCBI changes in February 2012 introducing EFetch 2.0.
+  First, they changed the default return modes - you probably want to add \verb|retmode="text"| to
+  your call.
+  Second, they are now stricter about how to provide a list of IDs -- Biopython 1.59 onwards
+  turns a list into a comma separated string automatically.
+
+  \item \emph{Why doesn't} \verb|Bio.Blast.NCBIWWW.qblast()| \emph{give the same results as the NCBI BLAST website?} \\
+  You need to specify the same options -- the NCBI often adjust the default settings on the website,
+  and they do not match the QBLAST defaults anymore. Check things like the gap penalties and expectation threshold.
+
+  \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
+  You need Biopython 1.50 or later.  Or, use \texttt{next(Bio.Blast.NCBIXML.parse(...))} instead.
+  
+  \item \emph{Why doesn't my} \verb|SeqRecord| \emph{object have a} \verb|letter_annotations| \emph{attribute?} \\
+  Per-letter-annotation support was added in Biopython 1.50.
+  
+ \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
+  You need Biopython 1.50 or later.
+
+ \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
+  You need Biopython 1.53 or later.
+
+  \item \emph{Why doesn't} \verb|Bio.SeqIO.convert()| \emph{or} \verb|Bio.AlignIO.convert()| \emph{work? The modules import fine but there is no convert function!} \\
+  You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
+  functions as described in this tutorial (see Sections~\ref{sec:SeqIO-conversion} and~\ref{sec:converting-alignments}).
+
+  \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
+  You need Biopython 1.52 or later.
+  
+  \item \emph{Why doesn't} \verb|Bio.SeqIO.index_db()| \emph{work? The module imports fine but there is no \texttt{index\_db} function!} \\
+  You need Biopython 1.57 or later (and a Python with SQLite3 support).
+  
+  \item \emph{Where is the} \verb|MultipleSeqAlignment| \emph{object? The} \verb|Bio.Align| \emph{module imports fine but this class isn't there!} \\
+  You need Biopython 1.54 or later. Alternatively, the older \verb|Bio.Align.Generic.Alignment| class supports some of its functionality, but using this is now discouraged.
+
+  \item \emph{Why can't I run command line tools directly from the application wrappers?} \\
+  You need Biopython 1.55 or later. Alternatively, use the Python \verb|subprocess| module directly.
+  
+  \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
+  One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
+
+ \item \emph{Why does the code from CVS seem out of date?} \\
+  In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
+\end{enumerate}
+
+\noindent For more general questions, the Python FAQ pages \url{http://www.python.org/doc/faq/} may be useful.
