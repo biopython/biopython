@@ -64,71 +64,71 @@ test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 # - integer: number of sequences
 
 test_files = [
-    ("sff",    False, 'Roche/E3MFGYR02_random_10_reads.sff', 10),
-# Following examples are also used in test_Clustalw.py
-    ("clustal", True,  'Clustalw/cw02.aln', 2),
-    ("clustal", True,  'Clustalw/opuntia.aln', 7),
-    ("clustal", True,  'Clustalw/hedgehog.aln', 5),
-    ("clustal", True,  'Clustalw/odd_consensus.aln', 2),
-# Following nucleic examples are also used in test_SeqIO_FastaIO.py
-    ("fasta",  False, 'Fasta/lupine.nu', 1),
-    ("fasta",  False, 'Fasta/elderberry.nu', 1),
-    ("fasta",  False, 'Fasta/phlox.nu', 1),
-    ("fasta",  False, 'Fasta/centaurea.nu', 1),
-    ("fasta",  False, 'Fasta/wisteria.nu', 1),
-    ("fasta",  False, 'Fasta/sweetpea.nu', 1),
-    ("fasta",  False, 'Fasta/lavender.nu', 1),
-# Following protein examples are also used in test_SeqIO_FastaIO.py
-    ("fasta",  False, 'Fasta/aster.pro', 1),
-    ("fasta",  False, 'Fasta/loveliesbleeding.pro', 1),
-    ("fasta",  False, 'Fasta/rose.pro', 1),
-    ("fasta",  False, 'Fasta/rosemary.pro', 1),
-# Following examples are also used in test_BioSQL_SeqIO.py
-    ("fasta",  False, 'Fasta/f001', 1),  # Protein
-    ("fasta",  False, 'Fasta/f002', 3),  # DNA
+    ("sff", False, 'Roche/E3MFGYR02_random_10_reads.sff', 10),
+    # Following examples are also used in test_Clustalw.py
+    ("clustal", True, 'Clustalw/cw02.aln', 2),
+    ("clustal", True, 'Clustalw/opuntia.aln', 7),
+    ("clustal", True, 'Clustalw/hedgehog.aln', 5),
+    ("clustal", True, 'Clustalw/odd_consensus.aln', 2),
+    # Following nucleic examples are also used in test_SeqIO_FastaIO.py
+    ("fasta", False, 'Fasta/lupine.nu', 1),
+    ("fasta", False, 'Fasta/elderberry.nu', 1),
+    ("fasta", False, 'Fasta/phlox.nu', 1),
+    ("fasta", False, 'Fasta/centaurea.nu', 1),
+    ("fasta", False, 'Fasta/wisteria.nu', 1),
+    ("fasta", False, 'Fasta/sweetpea.nu', 1),
+    ("fasta", False, 'Fasta/lavender.nu', 1),
+    # Following protein examples are also used in test_SeqIO_FastaIO.py
+    ("fasta", False, 'Fasta/aster.pro', 1),
+    ("fasta", False, 'Fasta/loveliesbleeding.pro', 1),
+    ("fasta", False, 'Fasta/rose.pro', 1),
+    ("fasta", False, 'Fasta/rosemary.pro', 1),
+    # Following examples are also used in test_BioSQL_SeqIO.py
+    ("fasta", False, 'Fasta/f001', 1),  # Protein
+    ("fasta", False, 'Fasta/f002', 3),  # DNA
     # ("fasta", False, 'Fasta/f003', 2),  # Protein with comments
-    ("fasta",  False, 'Fasta/fa01', 2),  # Protein with gaps
-# Following are also used in test_SeqIO_features.py, see also NC_005816.gb
-    ("fasta",  False, 'GenBank/NC_005816.fna', 1),
-    ("fasta",  False, 'GenBank/NC_005816.ffn', 10),
-    ("fasta",  False, 'GenBank/NC_005816.faa', 10),
-    ("fasta",  False, 'GenBank/NC_000932.faa', 85),
-    ("tab",  False, 'GenBank/NC_005816.tsv', 10),  # FASTA -> Tabbed
-# Following examples are also used in test_GFF.py
-    ("fasta",  False, 'GFF/NC_001802.fna', 1),  # upper case
-    ("fasta",  False, 'GFF/NC_001802lc.fna', 1),  # lower case
-    ("fasta",  True,  'GFF/multi.fna', 3),  # Trivial nucleotide alignment
-# Following example is also used in test_registry.py
-    ("fasta",  False, 'Registry/seqs.fasta', 2),  # contains blank line
-# Following example is also used in test_Nexus.py
-    ("nexus",  True,  'Nexus/test_Nexus_input.nex', 9),
-# Following examples are also used in test_SwissProt.py
-    ("swiss",  False, 'SwissProt/sp001', 1),
-    ("swiss",  False, 'SwissProt/sp002', 1),
-    ("swiss",  False, 'SwissProt/sp003', 1),
-    ("swiss",  False, 'SwissProt/sp004', 1),
-    ("swiss",  False, 'SwissProt/sp005', 1),
-    ("swiss",  False, 'SwissProt/sp006', 1),
-    ("swiss",  False, 'SwissProt/sp007', 1),
-    ("swiss",  False, 'SwissProt/sp008', 1),
-    ("swiss",  False, 'SwissProt/sp009', 1),
-    ("swiss",  False, 'SwissProt/sp010', 1),
-    ("swiss",  False, 'SwissProt/sp011', 1),
-    ("swiss",  False, 'SwissProt/sp012', 1),
-    ("swiss",  False, 'SwissProt/sp013', 1),
-    ("swiss",  False, 'SwissProt/sp014', 1),
-    ("swiss",  False, 'SwissProt/sp015', 1),
-    ("swiss",  False, 'SwissProt/sp016', 1),
-# Following example is also used in test_registry.py
-    ("swiss",  False, 'Registry/EDD_RAT.dat', 1),
-# Following examples are also used in test_Uniprot.py
+    ("fasta", False, 'Fasta/fa01', 2),  # Protein with gaps
+    # Following are also used in test_SeqIO_features.py, see also NC_005816.gb
+    ("fasta", False, 'GenBank/NC_005816.fna', 1),
+    ("fasta", False, 'GenBank/NC_005816.ffn', 10),
+    ("fasta", False, 'GenBank/NC_005816.faa', 10),
+    ("fasta", False, 'GenBank/NC_000932.faa', 85),
+    ("tab", False, 'GenBank/NC_005816.tsv', 10),  # FASTA -> Tabbed
+    # Following examples are also used in test_GFF.py
+    ("fasta", False, 'GFF/NC_001802.fna', 1),  # upper case
+    ("fasta", False, 'GFF/NC_001802lc.fna', 1),  # lower case
+    ("fasta", True, 'GFF/multi.fna', 3),  # Trivial nucleotide alignment
+    # Following example is also used in test_registry.py
+    ("fasta", False, 'Registry/seqs.fasta', 2),  # contains blank line
+    # Following example is also used in test_Nexus.py
+    ("nexus", True, 'Nexus/test_Nexus_input.nex', 9),
+    # Following examples are also used in test_SwissProt.py
+    ("swiss", False, 'SwissProt/sp001', 1),
+    ("swiss", False, 'SwissProt/sp002', 1),
+    ("swiss", False, 'SwissProt/sp003', 1),
+    ("swiss", False, 'SwissProt/sp004', 1),
+    ("swiss", False, 'SwissProt/sp005', 1),
+    ("swiss", False, 'SwissProt/sp006', 1),
+    ("swiss", False, 'SwissProt/sp007', 1),
+    ("swiss", False, 'SwissProt/sp008', 1),
+    ("swiss", False, 'SwissProt/sp009', 1),
+    ("swiss", False, 'SwissProt/sp010', 1),
+    ("swiss", False, 'SwissProt/sp011', 1),
+    ("swiss", False, 'SwissProt/sp012', 1),
+    ("swiss", False, 'SwissProt/sp013', 1),
+    ("swiss", False, 'SwissProt/sp014', 1),
+    ("swiss", False, 'SwissProt/sp015', 1),
+    ("swiss", False, 'SwissProt/sp016', 1),
+    # Following example is also used in test_registry.py
+    ("swiss", False, 'Registry/EDD_RAT.dat', 1),
+    # Following examples are also used in test_Uniprot.py
     ("uniprot-xml", False, 'SwissProt/uni001', 1),
     ("uniprot-xml", False, 'SwissProt/uni002', 3),
     ("uniprot-xml", False, 'SwissProt/Q13639.xml', 1),
     ("swiss", False, 'SwissProt/Q13639.txt', 1),
     ("uniprot-xml", False, 'SwissProt/H2CNN8.xml', 1),
     ("swiss", False, "SwissProt/H2CNN8.txt", 1),
-# Following examples are also used in test_GenBank.py
+    # Following examples are also used in test_GenBank.py
     ("genbank", False, 'GenBank/noref.gb', 1),
     ("genbank", False, 'GenBank/cor6_6.gb', 6),
     ("genbank", False, 'GenBank/iro.gb', 1),
@@ -144,71 +144,78 @@ test_files = [
     ("genbank", False, 'GenBank/dbsource_wrap.gb', 1),
     ("genbank", False, 'GenBank/NC_005816.gb', 1),  # See also AE017046.embl
     ("genbank", False, 'GenBank/NC_000932.gb', 1),
-    ("genbank", False, 'GenBank/pBAD30.gb', 1),  # Odd LOCUS line from Vector NTI
-# The next example is a truncated copy of gbvrl1.seq from
-# ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
-# This includes an NCBI header, and the first three records:
+    # Odd LOCUS line from Vector NTI
+    ("genbank", False, 'GenBank/pBAD30.gb', 1),
+    # The next example is a truncated copy of gbvrl1.seq from
+    # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
+    # This includes an NCBI header, and the first three records:
     ("genbank", False, 'GenBank/gbvrl1_start.seq', 3),
-# Following files are also used in test_GFF.py
+    # Following files are also used in test_GFF.py
     ("genbank", False, 'GFF/NC_001422.gbk', 1),
-# Generated with Entrez.efetch("protein", id="16130152", rettype="gbwithparts")
+    # Generated with Entrez.efetch("protein", id="16130152",
+    # rettype="gbwithparts")
     ("genbank", False, 'GenBank/NP_416719.gbwithparts', 1),
-# GenPept file with nasty bond locations,
+    # GenPept file with nasty bond locations,
     ("genbank", False, 'GenBank/1MRR_A.gp', 1),
-# Following files are currently only used here or in test_SeqIO_index.py:
-    ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
-    ("embl",   False, 'EMBL/patents.embl', 4),  # more proteins, but no seq
-    ("embl",   False, 'EMBL/TRBG361.embl', 1),
-    ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
-    ("embl",   False, 'EMBL/DD231055_edited2.embl', 1),  # Partial ID line
-    ("embl",   False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
-    ("embl",   False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
-    ("embl",   False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
-    ("embl",   False, 'EMBL/AE017046.embl', 1),  # See also NC_005816.gb
-    ("embl",   False, 'EMBL/Human_contigs.embl', 2),  # contigs, no sequences
-    ("embl",   False, 'EMBL/location_wrap.embl', 1),  # wrapped locations and unspecified type
-    ("embl",   False, 'EMBL/A04195.imgt', 1),  # features over indented for EMBL
-    ("imgt",   False, 'EMBL/A04195.imgt', 1),  # features over indented for EMBL
-    ("stockholm", True,  'Stockholm/simple.sth', 2),
-    ("stockholm", True,  'Stockholm/funny.sth', 6),
-# Following PHYLIP files are currently only used here and in test_AlignIO.py,
-# and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
-    ("phylip", True,  'Phylip/reference_dna.phy', 6),
-    ("phylip", True,  'Phylip/reference_dna2.phy', 6),
-    ("phylip", True,  'Phylip/hennigian.phy', 10),
-    ("phylip", True,  'Phylip/horses.phy', 10),
-    ("phylip", True,  'Phylip/random.phy', 10),
-    ("phylip", True,  'Phylip/interlaced.phy', 3),
-    ("phylip", True,  'Phylip/interlaced2.phy', 4),
-# Following are EMBOSS simple or pairs format alignments
-    ("emboss", True,  'Emboss/alignret.txt', 4),
+    # Following files are currently only used here or in test_SeqIO_index.py:
+    ("embl", False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
+    ("embl", False, 'EMBL/patents.embl', 4),  # more proteins, but no seq
+    ("embl", False, 'EMBL/TRBG361.embl', 1),
+    ("embl", False, 'EMBL/DD231055_edited.embl', 1),
+    ("embl", False, 'EMBL/DD231055_edited2.embl', 1),  # Partial ID line
+    ("embl", False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
+    ("embl", False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
+    ("embl", False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
+    ("embl", False, 'EMBL/AE017046.embl', 1),  # See also NC_005816.gb
+    ("embl", False, 'EMBL/Human_contigs.embl', 2),  # contigs, no sequences
+    # wrapped locations and unspecified type
+    ("embl", False, 'EMBL/location_wrap.embl', 1),
+    # features over indented for EMBL
+    ("embl", False, 'EMBL/A04195.imgt', 1),
+    # features over indented for EMBL
+    ("imgt", False, 'EMBL/A04195.imgt', 1),
+    ("stockholm", True, 'Stockholm/simple.sth', 2),
+    ("stockholm", True, 'Stockholm/funny.sth', 6),
+    # Following PHYLIP files are currently only used here and in test_AlignIO.py,
+    # and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
+    ("phylip", True, 'Phylip/reference_dna.phy', 6),
+    ("phylip", True, 'Phylip/reference_dna2.phy', 6),
+    ("phylip", True, 'Phylip/hennigian.phy', 10),
+    ("phylip", True, 'Phylip/horses.phy', 10),
+    ("phylip", True, 'Phylip/random.phy', 10),
+    ("phylip", True, 'Phylip/interlaced.phy', 3),
+    ("phylip", True, 'Phylip/interlaced2.phy', 4),
+    # Following are EMBOSS simple or pairs format alignments
+    ("emboss", True, 'Emboss/alignret.txt', 4),
     ("emboss", False, 'Emboss/needle.txt', 10),
-    ("emboss", True,  'Emboss/water.txt', 2),
-# Following PHD (PHRAP) sequencing files are also used in test_Phd.py
+    ("emboss", True, 'Emboss/water.txt', 2),
+    # Following PHD (PHRAP) sequencing files are also used in test_Phd.py
     ("phd", False, 'Phd/phd1', 3),
     ("phd", False, 'Phd/phd2', 1),
     ("phd", False, 'Phd/phd_solexa', 2),
     ("phd", False, 'Phd/phd_454', 1),
-# Following ACE assembly files are also used in test_Ace.py
+    # Following ACE assembly files are also used in test_Ace.py
     ("ace", False, 'Ace/contig1.ace', 2),
     ("ace", False, 'Ace/consed_sample.ace', 1),
     ("ace", False, 'Ace/seq.cap.ace', 1),
-# Following IntelliGenetics / MASE files are also used in test_intelligenetics.py
-    ("ig",  False, 'IntelliGenetics/TAT_mase_nuc.txt', 17),
-    ("ig",  True,  'IntelliGenetics/VIF_mase-pro.txt', 16),
+    # Following IntelliGenetics / MASE files are also used in
+    # test_intelligenetics.py
+    ("ig", False, 'IntelliGenetics/TAT_mase_nuc.txt', 17),
+    ("ig", True, 'IntelliGenetics/VIF_mase-pro.txt', 16),
     # This next file is a MASE alignment but sequence O_ANT70 is shorter than
     # the others (so as an alignment will fail).  Perhaps MASE doesn't
     # write trailing gaps?
-    ("ig",  False,  'IntelliGenetics/vpu_nucaligned.txt', 9),
-# Following NBRD-PIR files are used in test_nbrf.py
+    ("ig", False, 'IntelliGenetics/vpu_nucaligned.txt', 9),
+    # Following NBRD-PIR files are used in test_nbrf.py
     ("pir", False, 'NBRF/B_nuc.pir', 444),
     ("pir", False, 'NBRF/Cw_prot.pir', 111),
     ("pir", False, 'NBRF/DMA_nuc.pir', 4),
     ("pir", False, 'NBRF/DMB_prot.pir', 6),
-    ("pir", True,  'NBRF/clustalw.pir', 2),
-# Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
+    ("pir", True, 'NBRF/clustalw.pir', 2),
+    # Following quality files are also used in the Bio.SeqIO.QualityIO
+    # doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
-    ("qual",  False, 'Quality/example.qual',  3),
+    ("qual", False, 'Quality/example.qual', 3),
     ("fastq", True, 'Quality/example.fastq', 3),  # Unix new lines
     ("fastq", True, 'Quality/example_dos.fastq', 3),  # DOS/Windows new lines
     ("fastq", True, 'Quality/tricky.fastq', 4),
@@ -217,19 +224,20 @@ test_files = [
     ("fastq-illumina", False, 'Quality/illumina_faked.fastq', 1),
     ("fastq-solexa", False, 'Quality/solexa_faked.fastq', 1),
     ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
-# Following examples are also used in test_SeqXML.py
+    # Following examples are also used in test_SeqXML.py
     ("seqxml", False, 'SeqXML/dna_example.xml', 4),
     ("seqxml", False, 'SeqXML/rna_example.xml', 5),
     ("seqxml", False, 'SeqXML/protein_example.xml', 5),
-# Following examples are also used in test_SeqIO_AbiIO.py
+    # Following examples are also used in test_SeqIO_AbiIO.py
     ("abi", False, 'Abi/310.ab1', 1),
     ("abi", False, 'Abi/3100.ab1', 1),
     ("abi", False, 'Abi/3730.ab1', 1),
-    ]
+]
 
 
 class ForwardOnlyHandle(object):
     """Mimic a network handle without seek and tell methods etc."""
+
     def __init__(self, handle):
         self._handle = handle
 
@@ -264,7 +272,7 @@ def compare_record(record_one, record_two):
     if len(record_one) != len(record_two):
         return False
     if isinstance(record_one.seq, UnknownSeq) \
-    and isinstance(record_two.seq, UnknownSeq):
+            and isinstance(record_two.seq, UnknownSeq):
         # Jython didn't like us comparing the string of very long UnknownSeq
         # object (out of heap memory error)
         if record_one.seq._character != record_two.seq._character:
@@ -273,7 +281,7 @@ def compare_record(record_one, record_two):
         return False
     # TODO - check features and annotation (see code for BioSQL tests)
     for key in set(record_one.letter_annotations).intersection(
-                   record_two.letter_annotations):
+            record_two.letter_annotations):
         if record_one.letter_annotations[key] != \
            record_two.letter_annotations[key]:
             return False
@@ -285,7 +293,8 @@ def record_summary(record, indent=" "):
     if record.id == record.name:
         answer = "%sID and Name='%s',\n%sSeq='" % (indent, record.id, indent)
     else:
-        answer = "%sID = '%s', Name='%s',\n%sSeq='" % (indent, record.id, record.name, indent)
+        answer = "%sID = '%s', Name='%s',\n%sSeq='" % (
+            indent, record.id, record.name, indent)
     if record.seq is None:
         answer += "None"
     else:
@@ -322,15 +331,15 @@ def alignment_summary(alignment, index=" "):
 
 
 def check_simple_write_read(records, indent=" "):
-    #print(indent+"Checking we can write and then read back these records")
+    # print(indent+"Checking we can write and then read back these records")
     for format in test_write_read_alignment_formats:
         if format not in possible_unknown_seq_formats \
-        and isinstance(records[0].seq, UnknownSeq) \
-        and len(records[0].seq) > 100:
+                and isinstance(records[0].seq, UnknownSeq) \
+                and len(records[0].seq) > 100:
             # Skipping for speed.  Some of the unknown sequences are
             # rather long, and it seems a bit pointless to record them.
             continue
-        print(indent+"Checking can write/read as '%s' format" % format)
+        print(indent + "Checking can write/read as '%s' format" % format)
 
         # Going to write to a handle...
         if format in SeqIO._BinaryFormats:
@@ -342,27 +351,28 @@ def check_simple_write_read(records, indent=" "):
             with warnings.catch_warnings():
                 # e.g. data loss
                 warnings.simplefilter("ignore", BiopythonWarning)
-                c = SeqIO.write(sequences=records, handle=handle, format=format)
+                c = SeqIO.write(
+                    sequences=records, handle=handle, format=format)
             assert c == len(records)
         except (TypeError, ValueError) as e:
             # This is often expected to happen, for example when we try and
             # write sequences of different lengths to an alignment file.
             if "len()" in str(e):
                 # Python 2.4.3,
-                #>>> len(None)
-                #...
+                # >>> len(None)
+                # ...
                 # TypeError: len() of unsized object
                 #
                 # Python 2.5.2,
-                #>>> len(None)
-                #...
+                # >>> len(None)
+                # ...
                 # TypeError: object of type 'NoneType' has no len()
                 print("Failed: Probably len() of None")
             else:
-                print(indent+"Failed: %s" % str(e))
+                print(indent + "Failed: %s" % str(e))
             if records[0].seq.alphabet.letters is not None:
                 assert format != t_format, \
-                       "Should be able to re-write in the original format!"
+                    "Should be able to re-write in the original format!"
             # Carry on to the next format:
             continue
 
@@ -377,7 +387,7 @@ def check_simple_write_read(records, indent=" "):
             # run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
             raise ValueError("%s\n\n%s\n\n%s"
-                              % (str(e), repr(handle.read()), repr(records)))
+                             % (str(e), repr(handle.read()), repr(records)))
 
         assert len(records2) == t_count
         for r1, r2 in zip(records, records2):
@@ -389,7 +399,7 @@ def check_simple_write_read(records, indent=" "):
             if format in ["gb", "genbank", "embl", "imgt"]:
                 # The GenBank/EMBL parsers will convert to upper case.
                 if isinstance(r1.seq, UnknownSeq) \
-                and isinstance(r2.seq, UnknownSeq):
+                        and isinstance(r2.seq, UnknownSeq):
                     # Jython didn't like us comparing the string of very long
                     # UnknownSeq object (out of heap memory error)
                     assert r1.seq._character.upper() == r2.seq._character
@@ -404,23 +414,23 @@ def check_simple_write_read(records, indent=" "):
             # valid character sets and the identifier lengths!
             if format in ["phylip", "phylip-sequential"]:
                 assert r1.id.replace("[", "").replace("]", "")[:10] == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="phylip-relaxed":
+                    "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format == "phylip-relaxed":
                 assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
-                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="clustal":
+                    "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format == "clustal":
                 assert r1.id.replace(" ", "_")[:30] == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="stockholm":
+                    "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format == "stockholm":
                 assert r1.id.replace(" ", "_") == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="fasta":
+                    "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format == "fasta":
                 assert r1.id.split()[0] == r2.id
             else:
                 assert r1.id == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
+                    "'%s' vs '%s'" % (r1.id, r2.id)
 
-        if len(records)>1:
+        if len(records) > 1:
             # Try writing just one record (passing a SeqRecord, not a list)
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO()
@@ -450,7 +460,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     with warnings.catch_warnings():
-        # e.g. BiopythonParserWarning: Dropping bond qualifier in feature location
+        # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
+        # location
         warnings.simplefilter("ignore", BiopythonParserWarning)
 
         # Try as an iterator using handle
@@ -522,7 +533,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         assert isinstance(record, SeqRecord)
         if t_format in possible_unknown_seq_formats:
             assert isinstance(record.seq, Seq) or \
-                   isinstance(record.seq, UnknownSeq)
+                isinstance(record.seq, UnknownSeq)
         else:
             assert isinstance(record.seq, Seq)
         assert isinstance(record.id, basestring)
@@ -537,12 +548,12 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
                 assert acc and acc == acc.strip(), \
                     "Bad accession in annotations: %s" % repr(acc)
             assert len(set(accs)) == len(accs), \
-                   "Repeated accession in annotations: %s" % repr(accs)
+                "Repeated accession in annotations: %s" % repr(accs)
         for ref in record.dbxrefs:
             assert ref and ref == ref.strip(), \
                 "Bad cross reference in dbxrefs: %s" % repr(ref)
         assert len(record.dbxrefs) == len(record.dbxrefs), \
-               "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
+            "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
 
         # Check the lists obtained by the different methods agree
         assert compare_record(record, records2[i])
@@ -575,13 +586,14 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
             if t_format in no_alpha_formats:
-                assert base_alpha == Alphabet.single_letter_alphabet  # Too harsh?
+                # Too harsh?
+                assert base_alpha == Alphabet.single_letter_alphabet
         else:
             base_alpha = None
     if base_alpha is None:
         good = []
-        bad =[]
-        given_alpha=None
+        bad = []
+        given_alpha = None
     elif isinstance(base_alpha, Alphabet.ProteinAlphabet):
         good = protein_alphas
         bad = dna_alphas + rna_alphas + nucleotide_alphas
@@ -596,7 +608,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         bad = protein_alphas
     else:
         assert t_format in no_alpha_formats, "Got %s from %s file" \
-               % (repr(base_alpha), t_format)
+            % (repr(base_alpha), t_format)
         good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
         bad = []
     for given_alpha in good:
@@ -619,7 +631,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             print(next(SeqIO.parse(h, t_format, given_alpha)))
             h.close()
             assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
-                   % (repr(given_alpha), t_filename)
+                % (repr(given_alpha), t_filename)
         except ValueError:
             # Good - should fail
             pass
@@ -631,7 +643,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
               % (t_format, t_filename))
 
         alignment = MultipleSeqAlignment(SeqIO.parse(
-                    handle=t_filename, format=t_format))
+            handle=t_filename, format=t_format))
         assert len(alignment) == t_count
 
         alignment_len = alignment.get_alignment_length()
