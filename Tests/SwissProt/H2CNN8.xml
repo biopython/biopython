@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry dataset="TrEMBL" created="2012-03-21" modified="2014-10-29" version="13">
+<accession>H2CNN8</accession>
+<name>H2CNN8_9ARCH</name>
+<protein>
+<submittedName>
+<fullName evidence="2">Ammonia monooxygenase subunit A</fullName>
+</submittedName>
+</protein>
+<gene>
+<name type="primary" evidence="2">amoA</name>
+</gene>
+<organism evidence="2">
+<name type="scientific">uncultured ammonia-oxidizing archaeon</name>
+<dbReference type="NCBI Taxonomy" id="418404"/>
+<lineage>
+<taxon>Archaea</taxon>
+<taxon>environmental samples</taxon>
+</lineage>
+</organism>
+<reference key="1" evidence="2">
+<citation type="journal article" date="2012" name="Biol. Fertil. Soils" volume="48" first="827" last="837">
+<title>Responses of bacterial and archaeal ammonia oxidisers of an acidic luvisols soil to different nitrogen fertilization rates after 9 years.</title>
+<authorList>
+<person name="Xu Y.G."/>
+<person name="Yu W.T."/>
+<person name="Ma Q."/>
+<person name="Zhou H."/>
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE</scope>
+<source>
+<strain evidence="2">DGGE gel band AOASY-10</strain>
+<strain evidence="3">DGGE gel band AOASY-11</strain>
+<strain evidence="1">DGGE gel band AOASY-9</strain>
+</source>
+</reference>
+<dbReference type="EMBL" id="JN040443">
+<property type="protein sequence ID" value="AEX14552.1"/>
+<property type="molecule type" value="Genomic_DNA"/>
+</dbReference>
+<dbReference type="EMBL" id="JN040444">
+<property type="protein sequence ID" value="AEX14553.1"/>
+<property type="molecule type" value="Genomic_DNA"/>
+</dbReference>
+<dbReference type="EMBL" id="JN040445">
+<property type="protein sequence ID" value="AEX14554.1"/>
+<property type="molecule type" value="Genomic_DNA"/>
+</dbReference>
+<dbReference type="GO" id="GO:0004497">
+<property type="term" value="F:monooxygenase activity"/>
+<property type="evidence" value="IEA:UniProtKB-KW"/>
+</dbReference>
+<dbReference type="Gene3D" id="1.20.1450.10">
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR024656">
+<property type="entry name" value="AmoA_arc"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR003393">
+<property type="entry name" value="NH3_CH4_mOase_A"/>
+</dbReference>
+<dbReference type="Pfam" id="PF12942">
+<property type="entry name" value="Archaeal_AmoA"/>
+<property type="match status" value="1"/>
+</dbReference>
+<proteinExistence type="predicted"/>
+<keyword id="KW-0503" evidence="2">Monooxygenase</keyword>
+<keyword id="KW-0560" evidence="2">Oxidoreductase</keyword>
+<feature type="non-terminal residue" evidence="2">
+<location>
+<position position="1"/>
+</location>
+</feature>
+<feature type="non-terminal residue" evidence="2">
+<location>
+<position position="196"/>
+</location>
+</feature>
+<evidence key="1" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="AEX14552.1"/>
+</source>
+</evidence>
+<evidence key="2" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="AEX14553.1"/>
+</source>
+</evidence>
+<evidence key="3" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="AEX14554.1"/>
+</source>
+</evidence>
+<sequence length="196" mass="21641" checksum="1E4E6A76ECF7AAA4" modified="2012-03-21" version="1" fragment="single">
+FIVVVAVNSTLLTINAGDYIFYTDWAWTSFVVFSISQSTMLVVGAIYYMLFTGVPGTATY
+YATIMTIYTWVAKGAWFALGYPYDFIVTPVWIPSAMLLDLTYWATRRNKHAAIIIGGTLV
+GLSLPIFNMINLLLVRDPLEVAFKYPRPTLPPYMTPIEPQVGKFYNSPVALGSGAGAVLS
+VPIAALGAKLNTWTYR
+</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+</copyright>
+</uniprot>
