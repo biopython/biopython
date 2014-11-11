@@ -475,25 +475,20 @@ class DistanceCalculator(object):
 
     def convert_distance_matrix(self, dm):
         """
-        output distance matrix to a phylip input distance matrix
-        to use with phylip programs
+        Output distance matrix object to a string that is the input distance matrix
+        to use with phylip programs, i.e. neighbor 
 
         :Parameters:
             dm : distance matrix to convert
-            output : output name of phylip distance matrix
-                File name of distance matrix
         """
-        if not isinstance(output, str):
-            raise TypeError("Output must be a string path")
-
         if not isinstance(dm, _DistanceMatrix):
             raise TypeError("{0} is not a distance matrix object".format(dm))
 
-        lines = str(len(dm.names)) + "\n"
+        phylip_lines = str(len(dm.names)) + "\n"
         for names, entries in zip(dm.names, dm.matrix):
-            lines += "{0} {1}\n".format(str(names.strip()),
+            phylip_lines += "{0} {1}\n".format(str(names.strip()),
                                                    " ".join([str(entry).strip() for entry in entries]))
-        return lines
+        return phylip_lines
 
     def _build_protein_matrix(self, subsmat):
         """Convert matrix from SubsMat format to _Matrix object"""
