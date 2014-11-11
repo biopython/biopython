@@ -45,7 +45,7 @@ class QueryResult(_BaseSearchObject):
                  mir_1
          Target: refseq_rna
            Hits: ----  -----  ----------------------------------------------------------
-                    #  # HSP  ID + description                                          
+                    #  # HSP  ID + description
                  ----  -----  ----------------------------------------------------------
                     0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
                     1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
@@ -91,7 +91,7 @@ class QueryResult(_BaseSearchObject):
                  mir_1
          Target: refseq_rna
            Hits: ----  -----  ----------------------------------------------------------
-                    #  # HSP  ID + description                                          
+                    #  # HSP  ID + description
                  ----  -----  ----------------------------------------------------------
                     0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
                     1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
@@ -148,7 +148,7 @@ class QueryResult(_BaseSearchObject):
                  mir_1
          Target: refseq_rna
            Hits: ----  -----  ----------------------------------------------------------
-                    #  # HSP  ID + description                                          
+                    #  # HSP  ID + description
                  ----  -----  ----------------------------------------------------------
                     0      1  NR_030195.1  Homo sapiens microRNA 520b (MIR520B), micr...
                     1      1  NR_035856.1  Pan troglodytes microRNA mir-520b (MIR520B...
@@ -326,23 +326,20 @@ class QueryResult(_BaseSearchObject):
             lines.append('   Hits: 0')
         else:
             lines.append('   Hits: %s  %s  %s' % ('-'*4, '-'*5, '-'*58))
-            pattern = '%13s  %5s  %56s'
-            lines.append(pattern % ('#', '# HSP',
-                'ID + description'.ljust(58)))
+            pattern = '%13s  %5s  %s'
+            lines.append(pattern % ('#', '# HSP', 'ID + description'))
             lines.append(pattern % ('-'*4, '-'*5, '-'*58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
                     hid_line = '%s  %s' % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + '...'
-                    lines.append(pattern % (idx, str(len(hit)),
-                        hid_line.ljust(58)))
+                    lines.append(pattern % (idx, str(len(hit)), hid_line))
                 elif idx > len(self.hits) - 4:
                     hid_line = '%s  %s' % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + '...'
-                    lines.append(pattern % (idx, str(len(hit)),
-                        hid_line.ljust(58)))
+                    lines.append(pattern % (idx, str(len(hit)), hid_line))
                 elif idx == 30:
                     lines.append('%14s' % '~~~')
 
@@ -532,7 +529,7 @@ class QueryResult(_BaseSearchObject):
                      mir_1
              Target: refseq_rna
                Hits: ----  -----  ----------------------------------------------------------
-                        #  # HSP  ID + description                                          
+                        #  # HSP  ID + description
                      ----  -----  ----------------------------------------------------------
                         0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
                         1      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
@@ -571,7 +568,7 @@ class QueryResult(_BaseSearchObject):
                      mir_1
              Target: refseq_rna
                Hits: ----  -----  ----------------------------------------------------------
-                        #  # HSP  ID + description                                          
+                        #  # HSP  ID + description
                      ----  -----  ----------------------------------------------------------
                         0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
                         1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
@@ -590,7 +587,7 @@ class QueryResult(_BaseSearchObject):
                      mir_1
              Target: refseq_rna
                Hits: ----  -----  ----------------------------------------------------------
-                        #  # HSP  ID + description                                          
+                        #  # HSP  ID + description
                      ----  -----  ----------------------------------------------------------
                         0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
                         1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
