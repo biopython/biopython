@@ -10,9 +10,11 @@ from os import path
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
+
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO import parse, read
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO import parse, read
 
 
 class HmmpfamTests(unittest.TestCase):

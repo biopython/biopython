@@ -39,7 +39,7 @@ class ParserTest(unittest.TestCase):
         self.num_markers = [
             [2, 3, 4, 2]
         ]
-        #format is locus, pop, position, value
+        # format is locus, pop, position, value
         self.test_pos = [
             [
                 (0, 0, 0, 5),

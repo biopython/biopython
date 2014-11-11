@@ -52,7 +52,7 @@ class DomTests(unittest.TestCase):
         rec = Dom.Record(recLine)
         self.assertEqual(rec.sid, 'd7hbib_')
         self.assertEqual(rec.residues.pdbid, '7hbi')
-        self.assertEqual(rec.residues.fragments, (('b', '', ''),) )
+        self.assertEqual(rec.residues.fragments, (('b', '', ''),))
         self.assertEqual(rec.hierarchy, '1.001.001.001.001.001')
 
 

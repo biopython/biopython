@@ -11,9 +11,11 @@ import unittest
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
+
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO import parse, read
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO import parse, read
 
 # test case files are in the Blast directory
 TEST_DIR = 'Exonerate'

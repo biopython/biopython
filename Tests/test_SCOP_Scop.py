@@ -112,7 +112,7 @@ class ScopTests(unittest.TestCase):
 
         # Raw Astral header
         s5=">e1cph.1a g.1.1.1 (A:) Insulin {Cow (Bos taurus)}"
-        self.assertEqual(s4,  str(parse_domain(s5)))
+        self.assertEqual(s4, str(parse_domain(s5)))
 
         self.assertRaises(ValueError, parse_domain, "Totally wrong")
 

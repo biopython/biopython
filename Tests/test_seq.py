@@ -340,11 +340,11 @@ test_seqs = [s, t, u,
              # Seq.Seq("AWGAARCKG"),  # Note no U or T
              # Seq.Seq("".join(ambiguous_rna_values)),
              # Seq.Seq("".join(ambiguous_dna_values)),
-             #Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
-             #Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
-             #Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
-             #Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
-             #Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
+             # Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
+             # Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
+             # Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
+             # Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
+             # Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
              Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
              Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
              Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
@@ -456,7 +456,7 @@ for nucleotide_seq in test_seqs:
         print("%s\n-> %s"
         % (repr(nucleotide_seq), str(e)))
     # Now test the Seq object's method
-    #(The MutualSeq object acts in place)
+    # (The MutualSeq object acts in place)
     if isinstance(nucleotide_seq, Seq.Seq):
         try:
             assert repr(expected) == repr(nucleotide_seq.reverse_complement())
