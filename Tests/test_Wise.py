@@ -62,5 +62,5 @@ if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_Wise")
     doctest_suite = doctest.DocTestSuite(Wise)
     suite = unittest.TestSuite((unittest_suite, doctest_suite))
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
     runner.run(suite)

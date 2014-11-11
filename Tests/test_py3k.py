@@ -20,5 +20,5 @@ class ODTest(unittest.TestCase):
         self.assertEqual(list(d), [5, 1, 3])
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

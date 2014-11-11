@@ -55,5 +55,5 @@ class AppTest(unittest.TestCase):
         assert( len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

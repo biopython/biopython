@@ -1098,5 +1098,5 @@ PubMed=16059970; DOI=10.1002/psc.699""")
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

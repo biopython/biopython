@@ -659,5 +659,5 @@ class SignatureCoderTest(unittest.TestCase):
                              % (predicted, seq_string, expected))
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

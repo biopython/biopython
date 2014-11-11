@@ -123,5 +123,5 @@ class AppTest(unittest.TestCase):
 
 if __name__ == "__main__":
     print("Running fdist tests, which might take some time, please wait")
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
