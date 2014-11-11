@@ -473,7 +473,7 @@ class DistanceCalculator(object):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
 
-    def convert_distance_matrix(self, dm, output):
+    def convert_distance_matrix(self, dm):
         """
         output distance matrix to a phylip input distance matrix
         to use with phylip programs
@@ -489,11 +489,11 @@ class DistanceCalculator(object):
         if not isinstance(dm, _DistanceMatrix):
             raise TypeError("{0} is not a distance matrix object".format(dm))
 
-        with open(output, 'w') as dist_file:
-            dist_file.write(str(len(dm.names)) + "\n")
-            for names, entries in zip(dm.names, dm.matrix):
-                dist_file.write("{0} {1}\n".format(str(names.strip()),
-                                                   " ".join([str(entry).strip() for entry in entries])))
+        lines = str(len(dm.names)) + "\n"
+        for names, entries in zip(dm.names, dm.matrix):
+            lines += "{0} {1}\n".format(str(names.strip()),
+                                                   " ".join([str(entry).strip() for entry in entries]))
+        return lines
 
     def _build_protein_matrix(self, subsmat):
         """Convert matrix from SubsMat format to _Matrix object"""
