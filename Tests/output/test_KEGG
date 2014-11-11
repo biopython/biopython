@@ -761,3 +761,44 @@ Oripavine <=> Morphinone
 Thebaine <=> Neopinone
 Thebaine <=> Oripavine
 Tyramine <=> Dopamine
+
+
+Testing Bio.KEGG.query
+
+
+http://rest.kegg.jp/info/kegg
+http://rest.kegg.jp/info/pathway
+http://rest.kegg.jp/list/pathway
+http://rest.kegg.jp/list/pathway/hsa
+http://rest.kegg.jp/list/organism
+http://rest.kegg.jp/list/hsa
+http://rest.kegg.jp/list/T01001
+http://rest.kegg.jp/list/hsa:10458+ece:Z5100
+http://rest.kegg.jp/list/hsa:10458+ece:Z5100
+http://rest.kegg.jp/list/cpd:C01290+gl:G00092
+http://rest.kegg.jp/list/cpd:C01290+gl:G00092
+http://rest.kegg.jp/list/C01290+G00092
+http://rest.kegg.jp/list/C01290+G00092
+http://rest.kegg.jp/find/genes/shiga+toxin
+http://rest.kegg.jp/find/genes/shiga+toxin
+http://rest.kegg.jp/find/compound/C7H10O5/formula
+http://rest.kegg.jp/find/compound/O5C7/formula
+http://rest.kegg.jp/find/compound/174.05/exact_mass
+http://rest.kegg.jp/find/compound/300-310/mol_weight
+http://rest.kegg.jp/get/cpd:C01290+gl:G00092
+http://rest.kegg.jp/get/cpd:C01290+gl:G00092
+http://rest.kegg.jp/get/C01290+G00092
+http://rest.kegg.jp/get/C01290+G00092
+http://rest.kegg.jp/get/hsa:10458+ece:Z5100
+http://rest.kegg.jp/get/hsa:10458+ece:Z5100
+http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq
+http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq
+http://rest.kegg.jp/get/hsa05130/image
+http://rest.kegg.jp/conv/eco/ncbi-geneid
+http://rest.kegg.jp/conv/ncbi-geneid/eco
+http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100
+http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100
+http://rest.kegg.jp/link/pathway/hsa
+http://rest.kegg.jp/link/hsa/pathway
+http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100
+http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100

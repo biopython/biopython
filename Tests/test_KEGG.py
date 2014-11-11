@@ -12,6 +12,7 @@ import os
 from Bio.KEGG import Enzyme
 from Bio.KEGG import Compound
 from Bio.KEGG import Map
+from Bio.KEGG import REST
 from Bio.Pathway import System
 
 # TODO - use unittest instead of print-and-compare testing
@@ -65,9 +66,166 @@ def t_KEGG_Map(testfiles):
         rxs.sort(key=lambda x: str(x))
         for x in rxs:
             print(str(x))
+        print("\n")
         fh.close()
+
+
+def t_KEGG_Query():
+    """Tests Bio.KEGG API Wrapper"""
+    print("Testing Bio.KEGG.query\n\n")
+
+    # info tests
+    resp = REST.kegg_info("kegg")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_info("pathway")
+    resp.read()
+    print(resp.url)
+
+    # list tests
+    resp = REST.kegg_list("pathway")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("pathway", "hsa")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("organism")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("hsa")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("T01001")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("hsa:10458+ece:Z5100")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list(["hsa:10458", "ece:Z5100"])
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("cpd:C01290+gl:G00092")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list(["cpd:C01290", "gl:G00092"])
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list("C01290+G00092")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_list(["C01290", "G00092"])
+    resp.read()
+    print(resp.url)
+
+    # find tests
+    resp = REST.kegg_find("genes", "shiga+toxin")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_find("genes", ["shiga", "toxin"])
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_find("compound", "C7H10O5", "formula")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_find("compound", "O5C7", "formula")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_find("compound", "174.05", "exact_mass")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_find("compound", "300-310", "mol_weight")
+    resp.read()
+    print(resp.url)
+
+    # get tests
+    resp = REST.kegg_get("cpd:C01290+gl:G00092")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get(["cpd:C01290", "gl:G00092"])
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get("C01290+G00092")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get(["C01290", "G00092"])
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get("hsa:10458+ece:Z5100")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get(["hsa:10458", "ece:Z5100"])
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get("hsa:10458+ece:Z5100", "aaseq")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get(["hsa:10458", "ece:Z5100"], "aaseq")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_get("hsa05130", "image")
+    resp.read()
+    print(resp.url)
+
+    # conv tests
+    resp = REST.kegg_conv("eco", "ncbi-geneid")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_conv("ncbi-geneid", "eco")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_conv("ncbi-gi", "hsa:10458+ece:Z5100")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_conv("ncbi-gi", ["hsa:10458", "ece:Z5100"])
+    resp.read()
+    print(resp.url)
+
+    # link tests
+    resp = REST.kegg_link("pathway", "hsa")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_link("hsa", "pathway")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_link("pathway", "hsa:10458+ece:Z5100")
+    resp.read()
+    print(resp.url)
+
+    resp = REST.kegg_link("pathway", ["hsa:10458", "ece:Z5100"])
+    resp.read()
+    print(resp.url)
 
 
 t_KEGG_Enzyme(test_KEGG_Enzyme_files)
 t_KEGG_Compound(test_KEGG_Compound_files)
 t_KEGG_Map(test_KEGG_Map_files)
+t_KEGG_Query()
