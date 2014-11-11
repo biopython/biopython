@@ -20,24 +20,6 @@ files rather than handles, for which the wrappers in Bio.Blast.Applications are
 preferred. Furthermore, the NCBI themselves regard these command line tools as
 "legacy", and encourage using the new BLAST+ tools instead. Biopython has
 wrappers for these under Bio.Blast.Applications (see the tutorial).
-
-Classes:
-LowQualityBlastError     Except that indicates low quality query sequences.
-BlastParser              Parses output from blast.
-BlastErrorParser         Parses output and tries to diagnose possible errors.
-PSIBlastParser           Parses output from psi-blast.
-Iterator                 Iterates over a file of blast results.
-
-_Scanner                 Scans output from standalone BLAST.
-_BlastConsumer           Consumes output from blast.
-_PSIBlastConsumer        Consumes output from psi-blast.
-_HeaderConsumer          Consumes header information.
-_DescriptionConsumer     Consumes description information.
-_AlignmentConsumer       Consumes alignment information.
-_HSPConsumer             Consumes hsp information.
-_DatabaseReportConsumer  Consumes database report information.
-_ParametersConsumer      Consumes parameters information.
-
 """
 
 from __future__ import print_function
@@ -56,6 +38,8 @@ from Bio.ParserSupport import *
 from Bio.Blast import Record
 from Bio.Application import _escape_filename
 
+__docformat__ = "restructuredtext en"
+
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
@@ -72,14 +56,14 @@ class LowQualityBlastError(Exception):
 class ShortQueryBlastError(Exception):
     """Error caused by running a short query sequence through BLAST.
 
-    If the query sequence is too short, BLAST outputs warnings and errors:
-    Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch failed.
-    [blastall] ERROR:  [000.000]  AT1G08320: Blast: 
-    [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least wordsize
-    done
+    If the query sequence is too short, BLAST outputs warnings and errors::
+
+        Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch failed.
+        [blastall] ERROR:  [000.000]  AT1G08320: Blast:
+        [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least wordsize
+        done
 
     This exception is raised when that condition is detected.
-
     """
     pass
 
@@ -90,7 +74,7 @@ class _Scanner(object):
     Tested with blastall and blastpgp v2.0.10, v2.0.11
 
     Methods:
-    feed     Feed data into the scanner.
+     - feed     Feed data into the scanner.
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -98,7 +82,6 @@ class _Scanner(object):
         Feed in a BLAST report for scanning.  handle is a file-like
         object that contains the BLAST report.  consumer is a Consumer
         object that will receive events as the report is scanned.
-
         """
         if isinstance(handle, File.UndoHandle):
             uhandle = handle
@@ -259,20 +242,20 @@ class _Scanner(object):
     def _scan_descriptions(self, uhandle, consumer):
         # Searching..................................................done
         # Results from round 2
-        # 
-        # 
+        #
+        #
         #                                                                    Sc
         # Sequences producing significant alignments:                        (b
         # Sequences used in model and found again:
-        # 
-        # d1tde_2 3.4.1.4.4 (119-244) Thioredoxin reductase [Escherichia ...   
-        # d1tcob_ 1.31.1.5.16 Calcineurin regulatory subunit (B-chain) [B...   
-        # d1symb_ 1.31.1.2.2 Calcyclin (S100) [RAT (RATTUS NORVEGICUS)]        
-        # 
+        #
+        # d1tde_2 3.4.1.4.4 (119-244) Thioredoxin reductase [Escherichia ...
+        # d1tcob_ 1.31.1.5.16 Calcineurin regulatory subunit (B-chain) [B...
+        # d1symb_ 1.31.1.2.2 Calcyclin (S100) [RAT (RATTUS NORVEGICUS)]
+        #
         # Sequences not found previously or not previously below threshold:
-        # 
-        # d1osa__ 1.31.1.5.11 Calmodulin [Paramecium tetraurelia]              
-        # d1aoza3 2.5.1.3.3 (339-552) Ascorbate oxidase [zucchini (Cucurb...   
+        #
+        # d1osa__ 1.31.1.5.11 Calmodulin [Paramecium tetraurelia]
+        # d1aoza3 2.5.1.3.3 (339-552) Ascorbate oxidase [zucchini (Cucurb...
         #
 
         # If PSI-BLAST, may also have:
@@ -492,9 +475,9 @@ class _Scanner(object):
         # Query: 11 GRGVSACA-------TCDGFFYRNQKVAVIGGGNTAVEEALYLSNIASEVHLIHRRDGF
         #           GRGVS+         TC    Y  + + V GGG+ + EE   L     +   I R+
         # Sbjct: 12 GRGVSSVVRRCIHKPTCKE--YAVKIIDVTGGGSFSAEEVQELREATLKEVDILRKVSG
-        # 
+        #
         # Query: 64 AEKILIKR 71
-        #              I +K 
+        #              I +K
         # Sbjct: 70 PNIIQLKD 77
         #
 
@@ -555,24 +538,24 @@ class _Scanner(object):
         #     Posted date:  Nov 1, 1999  4:25 PM
         #   Number of letters in database: 223,339
         #   Number of sequences in database:  1323
-        #   
+        #
         # Lambda     K      H
-        #    0.322    0.133    0.369 
+        #    0.322    0.133    0.369
         #
         # Gapped
         # Lambda     K      H
-        #    0.270   0.0470    0.230 
+        #    0.270   0.0470    0.230
         #
         ##########################################
         # Or, more recently Blast 2.2.15 gives less blank lines
         ##########################################
-        #   Database: All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding 
+        #   Database: All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding
         # environmental samples
         #     Posted date:  Dec 12, 2006  5:51 PM
         #   Number of letters in database: 667,088,753
         #   Number of sequences in database:  2,094,974
         # Lambda     K      H
-        #    0.319    0.136    0.395 
+        #    0.319    0.136    0.395
         # Gapped
         # Lambda     K      H
         #    0.267   0.0410    0.140
@@ -890,7 +873,7 @@ class _HeaderConsumer(object):
         else:
             sequences, letters = _re_search(
                 r"([0-9,]+) sequences; ([0-9,-]+) total letters", line,
-                "I could not find the sequences and letters in line\n%s" %line)
+                "I could not find the sequences and letters in line\n%s" % line)
             self._header.database_sequences = _safe_int(sequences)
             self._header.database_letters = _safe_int(letters)
 
@@ -997,7 +980,7 @@ class _AlignmentConsumer(object):
     def length(self, line):
         # e.g. "Length = 81" or more recently, "Length=428"
         parts = line.replace(" ", "").split("=")
-        assert len(parts)==2, "Unrecognised format length line"
+        assert len(parts) == 2, "Unrecognised format length line"
         self._alignment.length = parts[1]
         self._alignment.length = _safe_int(self._alignment.length)
 
@@ -1015,7 +998,7 @@ class _AlignmentConsumer(object):
                 raise ValueError("I do not understand the line\n%s" % line)
             self._start_index = line.index(start, len(name))
             self._seq_index = line.index(seq,
-                                         self._start_index+len(start))
+                                         self._start_index + len(start))
             # subtract 1 for the space
             self._name_length = self._start_index - 1
             self._start_length = self._seq_index - self._start_index - 1
@@ -1031,17 +1014,17 @@ class _AlignmentConsumer(object):
         # Extract the information from the line
         name = line[:self._name_length]
         name = name.rstrip()
-        start = line[self._start_index:self._start_index+self._start_length]
+        start = line[self._start_index:self._start_index + self._start_length]
         start = start.rstrip()
         if start:
             start = _safe_int(start)
-        end = line[self._seq_index+self._seq_length:].rstrip()
+        end = line[self._seq_index + self._seq_length:].rstrip()
         if end:
             end = _safe_int(end)
-        seq = line[self._seq_index:self._seq_index+self._seq_length].rstrip()
+        seq = line[self._seq_index:self._seq_index + self._seq_length].rstrip()
         # right pad the sequence with spaces if necessary
         if len(seq) < self._seq_length:
-            seq = seq + ' '*(self._seq_length-len(seq))
+            seq += ' ' * (self._seq_length - len(seq))
 
         # I need to make sure the sequence is aligned correctly with the query.
         # First, I will find the length of the query.  Then, if necessary,
@@ -1235,7 +1218,7 @@ class _HSPConsumer(object):
         seq = line[self._query_start_index:].rstrip()
         if len(seq) < self._query_len:
             # Make sure the alignment is the same length as the query
-            seq = seq + ' ' * (self._query_len-len(seq))
+            seq += ' ' * (self._query_len - len(seq))
         elif len(seq) < self._query_len:
             raise ValueError("Match is longer than the query in line\n%s"
                              % line)

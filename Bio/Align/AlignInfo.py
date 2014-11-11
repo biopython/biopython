@@ -37,7 +37,8 @@ class SummaryInfo(object):
     """
     def __init__(self, alignment):
         """Initialize with the alignment to calculate information on.
-           ic_vector attribute. A dictionary. Keys: column numbers. Values:
+
+        ic_vector attribute. A dictionary. Keys: column numbers. Values:
         """
         self.alignment = alignment
         self.ic_vector = {}
@@ -103,8 +104,8 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
-                                         >= threshold):
+            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
+                                            >= threshold):
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
@@ -123,7 +124,7 @@ class SummaryInfo(object):
             - Let the user define that with only one gap, the result
               character in consensus is gap.
             - Let the user select gap character, now
-              it takes the same is input.
+              it takes the same as input.
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
@@ -160,8 +161,8 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
-                                         >= threshold):
+            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
+                                            >= threshold):
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
@@ -222,21 +223,23 @@ class SummaryInfo(object):
         of substitutions of different residues for each other in the
         aligned object.
 
-        Will then return a dictionary with this information:
-        {('A', 'C') : 10, ('C', 'A') : 12, ('G', 'C') : 15 ....}
+        Will then return a dictionary with this information::
+
+            {('A', 'C') : 10, ('C', 'A') : 12, ('G', 'C') : 15 ....}
 
         This also treats weighted sequences. The following example shows how
         we calculate the replacement dictionary. Given the following
-        multiple sequence alignments:
+        multiple sequence alignment::
 
-        GTATC  0.5
-        AT--C  0.8
-        CTGTC  1.0
+            GTATC  0.5
+            AT--C  0.8
+            CTGTC  1.0
 
-        For the first column we have:
-        ('A', 'G') : 0.5 * 0.8 = 0.4
-        ('C', 'G') : 0.5 * 1.0 = 0.5
-        ('A', 'C') : 0.8 * 1.0 = 0.8
+        For the first column we have::
+
+            ('A', 'G') : 0.5 * 0.8 = 0.4
+            ('C', 'G') : 0.5 * 1.0 = 0.5
+            ('A', 'C') : 0.8 * 1.0 = 0.8
 
         We then continue this for all of the columns in the alignment, summing
         the information for each substitution in each column, until we end
@@ -336,7 +339,7 @@ class SummaryInfo(object):
         Returns:
             - The base dictionary created
             - A list of alphabet items to skip when filling the dictionary.
-              (Right now the only thing I can imagine in this list is gap 
+              (Right now the only thing I can imagine in this list is gap
               characters, but maybe X's or something else might be useful later.
               This will also include any characters that are specified to be
               skipped.)
@@ -616,7 +619,7 @@ class PSSM(object):
     and also make it easy to print out the information in a nice table.
 
     Let's say you had an alignment like this::
-    
+
         GTATC
         AT--C
         CTGTC
@@ -630,9 +633,9 @@ class PSSM(object):
         T 0 0 2 0
         C 0 0 0 3
 
-    You can access a single element of the PSSM using the following:
+    You can access a single element of the PSSM using the following::
 
-    your_pssm[sequence_number][residue_count_name]
+        your_pssm[sequence_number][residue_count_name]
 
     For instance, to get the 'T' residue for the second element in the
     above alignment you would need to do:
@@ -702,7 +705,7 @@ if __name__ == "__main__":
     alignment = AlignIO.read(open(filename), format)
     for record in alignment:
         print(record.seq)
-    print("="*alignment.get_alignment_length())
+    print("=" * alignment.get_alignment_length())
 
     summary = SummaryInfo(alignment)
     consensus = summary.dumb_consensus(ambiguous="N")
@@ -726,7 +729,7 @@ if __name__ == "__main__":
     a.add_sequence("ID002", "MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*")
     a.add_sequence("ID003", "MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*")
     print(a)
-    print("="*a.get_alignment_length())
+    print("=" * a.get_alignment_length())
 
     s = SummaryInfo(a)
     c = s.dumb_consensus(ambiguous="X")

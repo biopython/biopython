@@ -12,18 +12,15 @@ alignments with assessment of statistical significance. J Mol Biol. 2003 Feb
 7;326(1):317-36.
 
 Tested with COMPASS 1.24.
-
-Functions:
- - read - Reads a COMPASS file containing one COMPASS record
- - parse - Iterates over records in a COMPASS file.
-
-Classes:
- - Record - One result of a COMPASS file
 """
+
 import re
+
+__docformat__ = "restructuredtext en"
 
 
 def read(handle):
+    """Reads a COMPASS file containing one COMPASS record."""
     record = None
     try:
         line = next(handle)
@@ -57,6 +54,7 @@ def read(handle):
 
 
 def parse(handle):
+    """Iterates over records in a COMPASS file."""
     record = None
     try:
         line = next(handle)
@@ -102,24 +100,24 @@ class Record(object):
     """
 
     def __init__(self):
-        self.query=''
-        self.hit=''
-        self.gap_threshold=0
-        self.query_length=0
-        self.query_filtered_length=0
-        self.query_nseqs=0
-        self.query_neffseqs=0
-        self.hit_length=0
-        self.hit_filtered_length=0
-        self.hit_nseqs=0
-        self.hit_neffseqs=0
-        self.sw_score=0
-        self.evalue=-1
-        self.query_start=-1
-        self.hit_start=-1
-        self.query_aln=''
-        self.hit_aln=''
-        self.positives=''
+        self.query = ''
+        self.hit = ''
+        self.gap_threshold = 0
+        self.query_length = 0
+        self.query_filtered_length = 0
+        self.query_nseqs = 0
+        self.query_neffseqs = 0
+        self.hit_length = 0
+        self.hit_filtered_length = 0
+        self.hit_nseqs = 0
+        self.hit_neffseqs = 0
+        self.sw_score = 0
+        self.evalue = -1
+        self.query_start = -1
+        self.hit_start = -1
+        self.query_aln = ''
+        self.hit_aln = ''
+        self.positives = ''
 
     def query_coverage(self):
         """Return the length of the query covered in the alignment."""
@@ -147,7 +145,7 @@ __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
 def __read_names(record, line):
     # Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
     #       ------query-----        -------hit-------------
-    if not "Ali1:" in line:
+    if "Ali1:" not in line:
         raise ValueError("Line does not contain 'Ali1:':\n%s" % line)
     m = __regex["names"].search(line)
     record.query = m.group(1)

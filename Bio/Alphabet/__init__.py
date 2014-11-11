@@ -12,6 +12,7 @@ This is used by sequences which contain a finite number of similar words.
 
 __docformat__ = "restructuredtext en"
 
+
 class Alphabet(object):
     """Generic alphabet base class.
 
@@ -22,7 +23,6 @@ class Alphabet(object):
                Usually it is a string when letters are single characters.
         - size    - size of the alphabet's letters (e.g. 1 when letters are
                single characters).
-
     """
 
     size = None     # default to no fixed size for words
@@ -62,7 +62,7 @@ class Alphabet(object):
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
-        if not self.letters or self.letters==self.letters.upper():
+        if not self.letters or self.letters == self.letters.upper():
             # Easy case, no letters or already upper case!
             return self
         else:
@@ -71,7 +71,7 @@ class Alphabet(object):
 
     def _lower(self):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
-        if not self.letters or self.letters==self.letters.lower():
+        if not self.letters or self.letters == self.letters.lower():
             # Easy case, no letters or already lower case!
             return self
         else:

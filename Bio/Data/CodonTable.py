@@ -15,6 +15,8 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
+__docformat__ = "restructuredtext en"
+
 unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
 unambiguous_rna_by_name = {}
@@ -43,6 +45,7 @@ class TranslationError(Exception):
 
 
 class CodonTable(object):
+    """A codon-table, or genetic code."""
     nucleotide_alphabet = Alphabet.generic_nucleotide
     protein_alphabet = Alphabet.generic_protein
 
@@ -64,7 +67,7 @@ class CodonTable(object):
         self.stop_codons = stop_codons
 
     def __str__(self):
-        """Returns a simple text representation of the codon table
+        """Returns a simple text representation of the codon table.
 
         e.g.
 
@@ -98,7 +101,7 @@ class CodonTable(object):
             for c3 in letters:
                 line = c1 + " |"
                 for c2 in letters:
-                    codon = c1+c2+c3
+                    codon = c1 + c2 + c3
                     line += " %s" % codon
                     if codon in self.stop_codons:
                         line += " Stop|"
@@ -114,13 +117,17 @@ class CodonTable(object):
                         else:
                             line += " %s   |" % amino
                 line += " " + c3
-                answer += "\n"+ line
+                answer += "\n" + line
             answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
         return answer
 
 
 def make_back_table(table, default_stop_codon):
-    #  ONLY RETURNS A SINGLE CODON
+    """Back a back-table (naive single codon mapping).
+
+    ONLY RETURNS A SINGLE CODON, chosen from the possible alternatives
+    based on their sort order.
+    """
     # Do the sort so changes in the hash implementation won't affect
     # the result when one amino acid is coded by more than one codon.
     back_table = {}
@@ -193,10 +200,10 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
             for y2 in x2:
                 for y3 in x3:
                     try:
-                        possible[forward_table[y1+y2+y3]] = 1
+                        possible[forward_table[y1 + y2 + y3]] = 1
                     except KeyError:
                         # If tripping over a stop codon
-                        stops.append(y1+y2+y3)
+                        stops.append(y1 + y2 + y3)
         if stops:
             if possible:
                 raise TranslationError("ambiguous codon '%s' codes " % codon
@@ -241,7 +248,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     for c1 in c1_list:
         for c2 in c2_list:
             for c3 in c3_list:
-                codon = c1+c2+c3
+                codon = c1 + c2 + c3
                 if codon not in candidates and codon not in codons:
                     candidates.append(codon)
     answer = codons[:]  # copy
@@ -249,13 +256,13 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     for ambig_codon in candidates:
         wanted = True
         # e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
-        for codon in [c1+c2+c3
+        for codon in [c1 + c2 + c3
                       for c1 in ambiguous_nucleotide_values[ambig_codon[0]]
                       for c2 in ambiguous_nucleotide_values[ambig_codon[1]]
                       for c3 in ambiguous_nucleotide_values[ambig_codon[2]]]:
             if codon not in codons:
                 # This ambiguous codon can code for a non-stop, exclude it!
-                wanted=False
+                wanted = False
                 # print "Rejecting %s" % ambig_codon
                 continue
         if wanted:
