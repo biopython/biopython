@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests the basic functionality of the KEGG parsers.
-"""
+"""Tests the basic functionality of the KEGG parsers."""
 
 from __future__ import print_function
 
@@ -15,9 +14,11 @@ from Bio.KEGG import Compound
 from Bio.KEGG import Map
 from Bio.Pathway import System
 
-test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
+# TODO - use unittest instead of print-and-compare testing
+
+test_KEGG_Enzyme_files = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
 test_KEGG_Compound_files = ["compound.sample", "compound.irregular"]
-test_KEGG_Map_files      = ["map00950.rea"]
+test_KEGG_Map_files = ["map00950.rea"]
 
 
 def t_KEGG_Enzyme(testfiles):
@@ -61,7 +62,7 @@ def t_KEGG_Map(testfiles):
         # sort: key instead of compare function (for py3 support)
         #  The function str_cmp above can be removed if the
         #  solution below proves resilient
-        rxs.sort(key=lambda x:str(x))
+        rxs.sort(key=lambda x: str(x))
         for x in rxs:
             print(str(x))
         fh.close()
