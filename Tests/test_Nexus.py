@@ -122,7 +122,7 @@ class NexusTest1(unittest.TestCase):
              "three": [16, 17, 18, 19, 20, 21, 22, 23],
              "two":   [8, 9, 10, 11, 12, 13, 14, 15],
             })
-        self.assertEqual(list(n.taxpartitions.keys()), ['taxpart'])
+        self.assertEqual(list(n.taxpartitions), ['taxpart'])
         self.assertEqual(n.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
@@ -196,7 +196,7 @@ class NexusTest1(unittest.TestCase):
                                                         'c': [1]})
         self.assertEqual(nf1.charpartitions['part'], {'one': [0, 1, 2, 3]})
 
-        self.assertEqual(list(nf1.taxpartitions.keys()), ['taxpart'])
+        self.assertEqual(list(nf1.taxpartitions), ['taxpart'])
         self.assertEqual(nf1.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
@@ -292,7 +292,7 @@ class NexusTest1(unittest.TestCase):
              "three": [12, 13, 14, 15, 16, 17],
              "two":   [6, 7, 8, 9, 10, 11],
             })
-        self.assertEqual(list(nf2.taxpartitions.keys()), ['taxpart'])
+        self.assertEqual(list(nf2.taxpartitions), ['taxpart'])
         self.assertEqual(nf2.taxpartitions['taxpart'],
             {"badnames":  ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',

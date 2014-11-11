@@ -22,20 +22,20 @@ matplotlib.use('ps')
 try:
     from matplotlib import pyplot
 except ImportError:
-    #Can fail here with font problems
+    # Can fail here with font problems
     raise MissingExternalDependencyError(
             "Install matplotlib installation if you want to use Bio.Phylo._utils.")
 
 try:
     import networkx
 except ImportError:
-    #We'll skip any tests requiring this below...
+    # We'll skip any tests requiring this below...
     networkx = None
 
 try:
     import pygraphviz
 except ImportError:
-    #We'll skip any tests requiring this below...
+    # We'll skip any tests requiring this below...
     pygraphviz = None
 
 

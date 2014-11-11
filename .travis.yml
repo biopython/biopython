@@ -9,20 +9,30 @@ python:
   - "2.6"
   - "2.7"
   - "3.3"
+  - "3.4"
   - "pypy"
 
 before_install:
-  - "export PY3=no"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PY3=yes; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PY3=yes; fi"
+  - "export PY3=yes"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
+#Misc command line tools we can call
   - "sudo apt-get install clustalw clustalo"
-  - "sudo apt-get install t-coffee muscle mafft probcons wise emboss"
+  - "sudo apt-get install muscle mafft probcons wise emboss"
+  - "sudo apt-get install --no-install-recommends t-coffee"
   - "sudo apt-get install samtools bwa"
+#Misc python modules we can use as soft dependencies
+  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy' ]]; then pip install reportlab; fi"
+  - "pip install rdflib"
+#Hack for issue #370, current mysql-connection fails under TravisCI
+#Not hosted on PyPI so this need allow external switch:
+#  - "pip install --allow-all-external mysql-connector-python"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
   - "if [[ $PG == 'yes' ]]; then pip install psycopg2 --use-mirrors; fi"
-#Installing mysql-python does not work under Python 3.2
+#Installing mysql-python does not work under Python 3
   - "export MSQL=$PG"
   - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors; fi"

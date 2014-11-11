@@ -105,14 +105,14 @@ def load(handle):
     line = _readline_and_check_start(handle, "TRANSITION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
-        mm.p_transition[i,:] = [float(v) for v in line.split()[1:]]
+        mm.p_transition[i, :] = [float(v) for v in line.split()[1:]]
 
     # Load the emission.
     mm.p_emission = numpy.zeros((N, M))
     line = _readline_and_check_start(handle, "EMISSION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
-        mm.p_emission[i,:] = [float(v) for v in line.split()[1:]]
+        mm.p_emission[i, :] = [float(v) for v in line.split()[1:]]
 
     return mm
 
@@ -277,7 +277,7 @@ def _baum_welch_one(N, M, outputs,
     lp_arc = numpy.zeros((N, N, T))
     for t in range(T):
         k = outputs[t]
-        lp_traverse = numpy.zeros((N, N)) # P going over one arc.
+        lp_traverse = numpy.zeros((N, N))  # P going over one arc.
         for i in range(N):
             for j in range(N):
                 # P(getting to this arc)
@@ -290,18 +290,18 @@ def _baum_welch_one(N, M, outputs,
                      bmat[j][t+1]
                 lp_traverse[i][j] = lp
         # Normalize the probability for this time step.
-        lp_arc[:,:, t] = lp_traverse - _logsum(lp_traverse)
+        lp_arc[:, :, t] = lp_traverse - _logsum(lp_traverse)
 
     # Sum of all the transitions out of state i at time t.
     lp_arcout_t = numpy.zeros((N, T))
     for t in range(T):
         for i in range(N):
-            lp_arcout_t[i][t] = _logsum(lp_arc[i,:, t])
+            lp_arcout_t[i][t] = _logsum(lp_arc[i, :, t])
 
     # Sum of all the transitions out of state i.
     lp_arcout = numpy.zeros(N)
     for i in range(N):
-        lp_arcout[i] = _logsum(lp_arcout_t[i,:])
+        lp_arcout[i] = _logsum(lp_arcout_t[i, :])
 
     # UPDATE P_INITIAL.
     lp_initial = lp_arcout_t[:, 0]
@@ -314,7 +314,7 @@ def _baum_welch_one(N, M, outputs,
     # transitions out of i.
     for i in range(N):
         for j in range(N):
-            lp_transition[i][j] = _logsum(lp_arc[i, j,:]) - lp_arcout[i]
+            lp_transition[i][j] = _logsum(lp_arc[i, j, :]) - lp_arcout[i]
         if lpseudo_transition is not None:
             lp_transition[i] = _logvecadd(lp_transition[i], lpseudo_transition)
             lp_transition[i] = lp_transition[i] - _logsum(lp_transition[i])
@@ -332,7 +332,7 @@ def _baum_welch_one(N, M, outputs,
         if lpseudo_emission is not None:
             ksum = _logvecadd(ksum, lpseudo_emission[i])
             ksum = ksum - _logsum(ksum)  # Renormalize
-        lp_emission[i,:] = ksum
+        lp_emission[i, :] = ksum
 
     # Calculate the log likelihood of the output based on the forward
     # matrix.  Since the parameters of the HMM has changed, the log
@@ -461,7 +461,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
             i, j = states[n], states[n+1]
             p_transition[i, j] += 1
     for i in range(len(p_transition)):
-        p_transition[i,:] = p_transition[i,:] / sum(p_transition[i,:])
+        p_transition[i, :] = p_transition[i, :] / sum(p_transition[i, :])
 
     # p_emission is the probability of an output given a state.
     # C(s,o)|C(s) where o is an output and s is a state.
@@ -473,7 +473,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
         for o, s in zip(outputs, states):
             p_emission[s, o] += 1
     for i in range(len(p_emission)):
-        p_emission[i,:] = p_emission[i,:] / sum(p_emission[i,:])
+        p_emission[i, :] = p_emission[i, :] / sum(p_emission[i, :])
 
     return p_initial, p_transition, p_emission
 
@@ -557,7 +557,7 @@ def _normalize(matrix):
     elif len(matrix.shape) == 2:
         # Normalize by rows.
         for i in range(len(matrix)):
-            matrix[i,:] = matrix[i,:] / sum(matrix[i,:])
+            matrix[i, :] = matrix[i, :] / sum(matrix[i, :])
     else:
         raise ValueError("I cannot handle matrixes of that shape")
     return matrix

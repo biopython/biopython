@@ -44,8 +44,8 @@ class SummaryInfo(object):
         self.alignment = alignment
         self.ic_vector = {}
 
-    def dumb_consensus(self, threshold = .7, ambiguous = "X",
-                       consensus_alpha = None, require_multiple = 0):
+    def dumb_consensus(self, threshold=.7, ambiguous="X",
+                       consensus_alpha=None, require_multiple=0):
         """Output a fast consensus sequence of the alignment.
 
         This doesn't do anything fancy at all. It will just go through the
@@ -117,8 +117,8 @@ class SummaryInfo(object):
 
         return Seq(consensus, consensus_alpha)
 
-    def gap_consensus(self, threshold = .7, ambiguous = "X",
-                       consensus_alpha = None, require_multiple = 0):
+    def gap_consensus(self, threshold=.7, ambiguous="X",
+                       consensus_alpha=None, require_multiple=0):
         """Same as dumb_consensus(), but allows gap on the output.
 
         Things to do: Let the user define that with only one gap, the result
@@ -168,7 +168,7 @@ class SummaryInfo(object):
 
         # we need to guess a consensus alphabet if one isn't specified
         if consensus_alpha is None:
-            #TODO - Should we make this into a Gapped alphabet?
+            # TODO - Should we make this into a Gapped alphabet?
             consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
@@ -180,22 +180,22 @@ class SummaryInfo(object):
         returns as appropriate type which seems to make sense with the
         sequences we've got.
         """
-        #Start with the (un-gapped version of) the alignment alphabet
+        # Start with the (un-gapped version of) the alignment alphabet
         a = Alphabet._get_base_alphabet(self.alignment._alphabet)
 
-        #Now check its compatible with all the rest of the sequences
+        # Now check its compatible with all the rest of the sequences
         for record in self.alignment:
-            #Get the (un-gapped version of) the sequence's alphabet
+            # Get the (un-gapped version of) the sequence's alphabet
             alt = Alphabet._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__):
                 raise ValueError("Alignment contains a sequence with \
                                 an incompatible alphabet.")
 
-        #Check the ambiguous character we are going to use in the consensus
-        #is in the alphabet's list of valid letters (if defined).
+        # Check the ambiguous character we are going to use in the consensus
+        # is in the alphabet's list of valid letters (if defined).
         if hasattr(a, "letters") and a.letters is not None \
         and ambiguous not in a.letters:
-            #We'll need to pick a more generic alphabet...
+            # We'll need to pick a more generic alphabet...
             if isinstance(a, IUPAC.IUPACUnambiguousDNA):
                 if ambiguous in IUPAC.IUPACUnambiguousDNA().letters:
                     a = IUPAC.IUPACUnambiguousDNA()
@@ -215,7 +215,7 @@ class SummaryInfo(object):
                 a = Alphabet.single_letter_alphabet
         return a
 
-    def replacement_dictionary(self, skip_chars = []):
+    def replacement_dictionary(self, skip_chars=[]):
         """Generate a replacement dictionary to plug into a substitution matrix
 
         This should look at an alignment, and be able to generate the number
@@ -313,19 +313,19 @@ class SummaryInfo(object):
         if all_letters is None \
         or (isinstance(self.alignment._alphabet, Alphabet.Gapped)
         and all_letters == self.alignment._alphabet.gap_char):
-            #We are dealing with a generic alphabet class where the
-            #letters are not defined!  We must build a list of the
-            #letters used...
+            # We are dealing with a generic alphabet class where the
+            # letters are not defined!  We must build a list of the
+            # letters used...
             set_letters = set()
             for record in self.alignment:
-                #Note the built in set does not have a union_update
-                #which was provided by the sets module's Set
+                # Note the built in set does not have a union_update
+                # which was provided by the sets module's Set
                 set_letters = set_letters.union(record.seq)
             list_letters = sorted(set_letters)
             all_letters = "".join(list_letters)
         return all_letters
 
-    def _get_base_replacements(self, skip_items = []):
+    def _get_base_replacements(self, skip_items=[]):
         """Get a zeroed dictionary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
@@ -357,8 +357,8 @@ class SummaryInfo(object):
 
         return base_dictionary, skip_items
 
-    def pos_specific_score_matrix(self, axis_seq = None,
-                                  chars_to_ignore = []):
+    def pos_specific_score_matrix(self, axis_seq=None,
+                                  chars_to_ignore=[]):
         """Create a position specific score matrix object for the alignment.
 
         This creates a position specific score matrix (pssm) which is an
@@ -432,10 +432,10 @@ class SummaryInfo(object):
 
         return base_info
 
-    def information_content(self, start = 0,
-                            end = None,
-                            e_freq_table = None, log_base = 2,
-                            chars_to_ignore = []):
+    def information_content(self, start=0,
+                            end=None,
+                            e_freq_table=None, log_base=2,
+                            chars_to_ignore=[]):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
@@ -471,7 +471,7 @@ class SummaryInfo(object):
         # determine random expected frequencies, if necessary
         random_expected = None
         if not e_freq_table:
-            #TODO - What about ambiguous alphabets?
+            # TODO - What about ambiguous alphabets?
             base_alpha = Alphabet._get_base_alphabet(self.alignment._alphabet)
             if isinstance(base_alpha, Alphabet.ProteinAlphabet):
                 random_expected = Protein20Random
@@ -545,7 +545,7 @@ class SummaryInfo(object):
             # This column must be entirely ignored characters
             for letter in freq_info:
                 assert freq_info[letter] == 0
-                #TODO - Map this to NA or NaN?
+                # TODO - Map this to NA or NaN?
         else:
             # now convert the counts into frequencies
             for letter in freq_info:
@@ -567,8 +567,8 @@ class SummaryInfo(object):
         try:
             gap_char = self.alignment._alphabet.gap_char
         except AttributeError:
-            #The alphabet doesn't declare a gap - there could be none
-            #in the sequence... or just a vague alphabet.
+            # The alphabet doesn't declare a gap - there could be none
+            # in the sequence... or just a vague alphabet.
             gap_char = "-"  # Safe?
 
         if e_freq_table:
@@ -579,8 +579,8 @@ class SummaryInfo(object):
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
                                      "do not match observed %s"
-                                     % (list(e_freq_table.keys()),
-                                        list(obs_freq.keys()) - [gap_char]))
+                                     % (list(e_freq_table),
+                                        list(obs_freq) - [gap_char]))
 
         total_info = 0.0
 
@@ -603,7 +603,8 @@ class SummaryInfo(object):
         return total_info
 
     def get_column(self, col):
-        return self.alignment.get_column(col)
+        # TODO - Deprecate this and implement slicing?
+        return self.alignment[:, col]
 
 
 class PSSM(object):
@@ -673,7 +674,7 @@ class PSSM(object):
         return self.pssm[pos][0]
 
 
-def print_info_content(summary_info,fout=None,rep_record=0):
+def print_info_content(summary_info, fout=None, rep_record=0):
     """ Three column output: position, aa in representative sequence,
         ic_vector value"""
     fout = fout or sys.stdout
@@ -691,13 +692,13 @@ if __name__ == "__main__":
 
     filename = "../../Tests/GFF/multi.fna"
     format = "fasta"
-    expected = FreqTable.FreqTable({"A":0.25,"G":0.25,"T":0.25,"C":0.25},
+    expected = FreqTable.FreqTable({"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25},
                                    FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
 
     alignment = AlignIO.read(open(filename), format)
     for record in alignment:
-        print(str(record.seq))
+        print(record.seq)
     print("="*alignment.get_alignment_length())
 
     summary = SummaryInfo(alignment)
@@ -709,8 +710,8 @@ if __name__ == "__main__":
     print(summary.pos_specific_score_matrix(chars_to_ignore=['-'],
                                             axis_seq=consensus))
     print("")
-    #Have a generic alphabet, without a declared gap char, so must tell
-    #provide the frequencies and chars to ignore explicitly.
+    # Have a generic alphabet, without a declared gap char, so must tell
+    # provide the frequencies and chars to ignore explicitly.
     print(summary.information_content(e_freq_table=expected,
                                       chars_to_ignore=['-']))
     print("")

@@ -103,14 +103,14 @@ class ScopTests(unittest.TestCase):
         s2="d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
         self.assertEqual(s2, str(parse_domain(s2)))
 
-        #Genetic domains (See Astral release notes)
+        # Genetic domains (See Astral release notes)
         s3="g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s3, str(parse_domain(s3)))
 
         s4="e1cph.1a g.1.1.1 (1cph A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s4, str(parse_domain(s4)))
 
-        #Raw Astral header
+        # Raw Astral header
         s5=">e1cph.1a g.1.1.1 (A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s4,  str(parse_domain(s5)))
 
@@ -131,7 +131,7 @@ class ScopTests(unittest.TestCase):
         fold = domain.getAscendent('cf')
         self.assertEqual(fold.sunid, 46457)
 
-        #get the superfamily
+        # get the superfamily
         sf = domain.getAscendent('superfamily')
         self.assertEqual(sf.sunid, 46458)
 

@@ -40,9 +40,9 @@ def _write(drawing, output_file, format, dpi=72):
     try:
         from reportlab.graphics import renderPM
     except ImportError:
-        #This is an optional part of ReportLab, so may not be installed.
-        #We'll raise a missing dependency error if rendering to a
-        #bitmap format is attempted.
+        # This is an optional part of ReportLab, so may not be installed.
+        # We'll raise a missing dependency error if rendering to a
+        # bitmap format is attempted.
         renderPM=None
 
     formatdict = {'PS': renderPS, 'EPS': renderPS,
@@ -58,22 +58,22 @@ def _write(drawing, output_file, format, dpi=72):
                   'TIF': renderPM
                  }
     try:
-        #If output is not a string, then .upper() will trigger
-        #an attribute error...
-        drawmethod = formatdict[format.upper()] # select drawing method
+        # If output is not a string, then .upper() will trigger
+        # an attribute error...
+        drawmethod = formatdict[format.upper()]  # select drawing method
     except (KeyError, AttributeError):
         raise ValueError("Output format should be one of %s"
                          % ", ".join(formatdict))
 
     if drawmethod is None:
-        #i.e. We wanted renderPM but it isn't installed
-        #See the import at the top of the function.
+        # i.e. We wanted renderPM but it isn't installed
+        # See the import at the top of the function.
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError(
             "Please install ReportLab's renderPM module")
 
     if drawmethod == renderPM:
-        #This has a different API to the other render objects
+        # This has a different API to the other render objects
         return drawmethod.drawToFile(drawing, output_file,
                                      format, dpi=dpi)
     else:

@@ -32,7 +32,7 @@ import sys
 try:
     from types import InstanceType
 except ImportError:
-    #Python 3, see http://bugs.python.org/issue8206
+    # Python 3, see http://bugs.python.org/issue8206
     InstanceType = object
 from types import MethodType
 
@@ -141,8 +141,8 @@ if xml_support:
 
         Note that Martel is now DEPRECATED.
         """
-        def __init__(self, consumer, interest_tags, callback_finalizer = None,
-                     exempt_tags = []):
+        def __init__(self, consumer, interest_tags, callback_finalizer=None,
+                     exempt_tags=[]):
             """Initialize to begin catching and firing off events.
 
             Arguments:

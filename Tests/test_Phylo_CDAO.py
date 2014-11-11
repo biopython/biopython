@@ -44,7 +44,8 @@ def _test_parse_factory(source):
 
     test_parse.__doc__ = "Parse the phylogenies in %s." % source
     return test_parse
-    
+
+
 def _test_write_factory(source):
     """Tests for serialization of objects to CDAO format.
 
@@ -55,22 +56,24 @@ def _test_write_factory(source):
 
     def test_write(self):
         """Parse, rewrite and retest an example file."""
-        infile = open(filename, 'rb')
-        t1 = next(CDAOIO.Parser(infile).parse())
-        infile.close()
-        outfile = open(DUMMY, 'w+b')
-        CDAOIO.write([t1], outfile)
-        outfile.close()
-        
-        t2 = next(CDAOIO.Parser(open(DUMMY, 'rb')).parse())
-        
-        def assert_property(prop_name):
-            p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals()])
-            p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals()])
-            self.assertEqual(p1, p2)
-        
+        with open(filename) as infile:
+            t1 = next(CDAOIO.Parser(infile).parse())
+
+        with open(DUMMY, 'w') as outfile:
+            CDAOIO.write([t1], outfile)
+        with open(DUMMY) as infile:
+            t2 = next(CDAOIO.Parser(infile).parse())
+
         for prop_name in ('name', 'branch_length', 'confidence'):
-            assert_property(prop_name)
+            p1 = [getattr(n, prop_name) for n in t1.get_terminals()]
+            p2 = [getattr(n, prop_name) for n in t2.get_terminals()]
+            if p1 == p2:
+                pass
+            else:
+                # Can't sort lists with None on Python 3 ...
+                self.assertFalse(None in p1, "Bad input values for %s: %r" % (prop_name, p1))
+                self.assertFalse(None in p2, "Bad output values for %s: %r" % (prop_name, p2))
+                self.assertEqual(sorted(p1), sorted(p2))
 
     test_write.__doc__ = "Write and re-parse the phylogenies in %s." % source
     return test_write
@@ -83,11 +86,11 @@ for n, ex in enumerate(cdao_files):
     parse_test = _test_parse_factory(ex)
     parse_test.__name__ = 'test_parse_%s' % n
     setattr(ParseTests, parse_test.__name__, parse_test)
-    
+
 
 class WriterTests(unittest.TestCase):
     pass
-        
+
 for n, ex in enumerate(cdao_files):
     write_test = _test_write_factory(ex)
     write_test.__name__ = 'test_write_%s' % n

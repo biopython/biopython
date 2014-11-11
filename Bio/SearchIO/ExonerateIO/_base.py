@@ -38,7 +38,7 @@ def _adjust_aa_seq(fraglist):
     hsp_hstart = fraglist[0].hit_start
     hsp_qstart = fraglist[0].query_start
     for frag in fraglist:
-        assert frag.query_strand == 0
+        assert frag.query_strand == 0 or frag.hit_strand == 0
         # fragment should have a length that is a multiple of 3
         assert len(frag) % 3 == 0
         # hit step may be -1 as we're aligning to DNA
@@ -61,10 +61,11 @@ def _adjust_aa_seq(fraglist):
         frag.hit = hseq1
         frag.query = qseq1
 
-        # set coordinates
-        # no need to set the hit coordinates since the hit sequence
-        # is not a protein sequence
-        frag.query_start, frag.query_end = qstart, qend
+        # set coordinates for the protein sequence
+        if frag.query_strand == 0:
+            frag.query_start, frag.query_end = qstart, qend
+        elif frag.hit_strand == 0:
+            frag.hit_start, frag.hit_end = hstart, hend
 
         # update alignment annotation
         # by turning them into list of triplets
@@ -82,9 +83,9 @@ def _split_fragment(frag):
     # given an HSPFragment object with frameshift(s), this method splits it
     # into fragments without frameshifts by sequentially chopping it off
     # starting from the beginning
-    homol = frag.aln_annotation['homology']
+    simil = frag.aln_annotation['similarity']
     # we should have at least 1 frame shift for splitting
-    assert homol.count('#') > 0
+    assert simil.count('#') > 0
 
     split_frags = []
     qstep = 1 if frag.query_strand >= 0 else -1
@@ -93,17 +94,17 @@ def _split_fragment(frag):
     hpos = min(frag.hit_range) if qstep >= 0 else max(frag.hit_range)
     abs_pos = 0
     # split according to hit, then query
-    while homol:
+    while simil:
 
         try:
-            shifts = re.search(_RE_SHIFTS, homol).group(1)
-            s_start = homol.find(shifts)
+            shifts = re.search(_RE_SHIFTS, simil).group(1)
+            s_start = simil.find(shifts)
             s_stop = s_start + len(shifts)
             split = frag[abs_pos:abs_pos+s_start]
-        except AttributeError: # no '#' in homol, i.e. last frag
+        except AttributeError: # no '#' in simil, i.e. last frag
             shifts = ''
             s_start = 0
-            s_stop = len(homol)
+            s_stop = len(simil)
             split = frag[abs_pos:]
 
         # coordinates for the split strand
@@ -134,8 +135,8 @@ def _split_fragment(frag):
         # set frame
         _set_frame(split)
         split_frags.append(split)
-        # set homology string and absolute position for the next loop
-        homol = homol[s_stop:]
+        # set similarity string and absolute position for the next loop
+        simil = simil[s_stop:]
         abs_pos += s_stop
 
     return split_frags
@@ -168,8 +169,8 @@ def _create_hsp(hid, qid, hspd):
         frag.query_strand = hspd['query_strand']
         frag.hit_strand = hspd['hit_strand']
         # and append the hsp object to the list
-        if frag.aln_annotation.get('homology') is not None:
-            if '#' in frag.aln_annotation['homology']:
+        if frag.aln_annotation.get('similarity') is not None:
+            if '#' in frag.aln_annotation['similarity']:
                 frags.extend(_split_fragment(frag))
                 continue
         # try to set frame if there are translation in the alignment
@@ -296,6 +297,8 @@ class _BaseExonerateParser(object):
         if hit['description'].endswith(':[revcomp]'):
             hsp['hit_strand'] = '-'
             hit['description'] = hit['description'].replace(':[revcomp]', '')
+        elif '2protein' in qresult['model']:
+            hsp['hit_strand'] = '.'
         else:
             hsp['hit_strand'] = '+'
 

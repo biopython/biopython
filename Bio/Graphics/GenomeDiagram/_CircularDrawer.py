@@ -223,27 +223,27 @@ class CircularDrawer(AbstractDrawer):
         keyed by track number
         """
         bot_track = min(min(self.drawn_tracks), 1)
-        top_track = max(self.drawn_tracks) # The 'highest' track to draw
+        top_track = max(self.drawn_tracks)  # The 'highest' track to draw
 
-        trackunit_sum = 0 # Total number of 'units' taken up by all tracks
-        trackunits = {} # Start and & units for each track keyed by track number
+        trackunit_sum = 0  # Total number of 'units' taken up by all tracks
+        trackunits = {}  # Start and & units for each track keyed by track number
         heightholder = 0  # placeholder variable
-        for track in range(bot_track, top_track+1): # track numbers to 'draw'
+        for track in range(bot_track, top_track+1):  # track numbers to 'draw'
             try:
-                trackheight = self._parent[track].height # Get track height
+                trackheight = self._parent[track].height  # Get track height
             except:
                 trackheight = 1
-            trackunit_sum += trackheight # increment total track unit height
+            trackunit_sum += trackheight  # increment total track unit height
             trackunits[track] = (heightholder, heightholder+trackheight)
-            heightholder += trackheight # move to next height
+            heightholder += trackheight  # move to next height
 
         max_radius = 0.5*min(self.pagewidth, self.pageheight)
         trackunit_height = max_radius * (1 - self.circle_core) / trackunit_sum
         track_core = max_radius * self.circle_core
 
         # Calculate top and bottom radii for each track
-        self.track_radii = {} # The inner, outer and center radii for each track
-        track_crop = trackunit_height*(1-self.track_size)/2. # 'step back' in pixels
+        self.track_radii = {}  # The inner, outer and center radii for each track
+        track_crop = trackunit_height*(1-self.track_size)/2.  # 'step back' in pixels
         for track in trackunits:
             top = trackunits[track][1]*trackunit_height - track_crop + track_core
             btm = trackunits[track][0]*trackunit_height + track_crop + track_core
@@ -311,7 +311,7 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_track(self, track):
         """Returns list of track elements and list of track labels."""
-        track_elements = [] # Holds elements for features and graphs
+        track_elements = []  # Holds elements for features and graphs
         track_labels = []   # Holds labels for features and graphs
 
         # Distribution dictionary for dealing with different set types
@@ -319,7 +319,7 @@ class CircularDrawer(AbstractDrawer):
                        GraphSet: self.draw_graph_set
                        }
 
-        for set in track.get_sets(): # Draw the feature or graph sets
+        for set in track.get_sets():  # Draw the feature or graph sets
             elements, labels = set_methods[set.__class__](set)
             track_elements += elements
             track_labels += labels
@@ -327,8 +327,8 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_feature_set(self, set):
         """Returns list of feature elements and list of labels for them."""
-        #print 'draw feature set'
-        feature_elements = [] # Holds diagram elements belonging to the features
+        # print 'draw feature set'
+        feature_elements = []  # Holds diagram elements belonging to the features
         label_elements = []   # Holds diagram elements belonging to feature labels
 
         # Collect all the elements for the feature set
@@ -342,7 +342,7 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_feature(self, feature):
         """Returns list of feature elements and list of labels for them."""
-        feature_elements = [] # Holds drawable elements for a single feature
+        feature_elements = []  # Holds drawable elements for a single feature
         label_elements = []   # Holds labels for a single feature
 
         if feature.hide:    # Don't show feature: return early
@@ -396,9 +396,9 @@ class CircularDrawer(AbstractDrawer):
         kwargs['head_length_ratio'] = feature.arrowhead_length
         kwargs['shaft_height_ratio'] = feature.arrowshaft_height
 
-        #Support for clickable links... needs ReportLab 2.4 or later
-        #which added support for links in SVG output.
-        if hasattr(feature, "url") :
+        # Support for clickable links... needs ReportLab 2.4 or later
+        # which added support for links in SVG output.
+        if hasattr(feature, "url"):
             kwargs["hrefURL"] = feature.url
             kwargs["hrefTitle"] = feature.name
 
@@ -406,8 +406,8 @@ class CircularDrawer(AbstractDrawer):
                        color=feature.color, border=feature.border, **kwargs)
 
         if feature.label:   # Feature needs a label
-            #The spaces are a hack to force a little space between the label
-            #and the edge of the feature
+            # The spaces are a hack to force a little space between the label
+            # and the edge of the feature
             label = String(0, 0, " %s " % feature.name.strip(),
                            fontName=feature.label_font,
                            fontSize=feature.label_size,
@@ -420,44 +420,44 @@ class CircularDrawer(AbstractDrawer):
             if feature.label_position in ('start', "5'", 'left'):
                 # Position the label at the feature's start
                 if strand != -1:
-                    label_angle = startangle + 0.5 * pi # Make text radial
+                    label_angle = startangle + 0.5 * pi  # Make text radial
                     sinval, cosval = startsin, startcos
                 else:
-                    label_angle = endangle + 0.5 * pi # Make text radial
+                    label_angle = endangle + 0.5 * pi  # Make text radial
                     sinval, cosval = endsin, endcos
             elif feature.label_position in ('middle', 'center', 'centre'):
                 # Position the label at the feature's midpoint
-                label_angle = midangle + 0.5 * pi # Make text radial
+                label_angle = midangle + 0.5 * pi  # Make text radial
                 sinval, cosval = midsin, midcos
             elif feature.label_position in ('end', "3'", 'right'):
                 # Position the label at the feature's end
                 if strand != -1:
-                    label_angle = endangle + 0.5 * pi # Make text radial
+                    label_angle = endangle + 0.5 * pi  # Make text radial
                     sinval, cosval = endsin, endcos
                 else:
-                    label_angle = startangle + 0.5 * pi # Make text radial
+                    label_angle = startangle + 0.5 * pi  # Make text radial
                     sinval, cosval = startsin, startcos
             elif startangle < pi:
                 # Default to placing the label the bottom of the feature
                 # as drawn on the page, meaning feature end on left half
-                label_angle = endangle + 0.5 * pi # Make text radial
+                label_angle = endangle + 0.5 * pi  # Make text radial
                 sinval, cosval = endsin, endcos
             else:
                 # Default to placing the label on the bottom of the feature,
                 # which means the feature end when on right hand half
-                label_angle = startangle + 0.5 * pi # Make text radial
+                label_angle = startangle + 0.5 * pi  # Make text radial
                 sinval, cosval = startsin, startcos
             if strand != -1:
                 # Feature label on top
                 radius = top
-                if startangle < pi: # Turn text round
+                if startangle < pi:  # Turn text round
                     label_angle -= pi
                 else:
                     labelgroup.contents[0].textAnchor = 'end'
             else:
                 # Feature label on bottom
                 radius = btm
-                if startangle < pi: # Turn text round and anchor end
+                if startangle < pi:  # Turn text round and anchor end
                     label_angle -= pi
                     labelgroup.contents[0].textAnchor = 'end'
             x_pos = self.xcenter + radius*sinval
@@ -469,9 +469,9 @@ class CircularDrawer(AbstractDrawer):
         else:
             # No label required
             labelgroup = None
-        #if locstart > locend:
+        # if locstart > locend:
         #    print locstart, locend, feature.strand, sigil, feature.name
-        #print locstart, locend, feature.name
+        # print locstart, locend, feature.name
         return sigil, labelgroup
 
     def draw_cross_link(self, cross_link):
@@ -553,8 +553,8 @@ class CircularDrawer(AbstractDrawer):
 
             o set       GraphSet object
         """
-        #print 'draw graph set'
-        elements = [] # Holds graph elements
+        # print 'draw graph set'
+        elements = []  # Holds graph elements
 
         # Distribution dictionary for how to draw the graph
         style_methods = {'line': self.draw_line_graph,
@@ -572,7 +572,7 @@ class CircularDrawer(AbstractDrawer):
 
             o graph     GraphData object
         """
-        line_elements = [] # holds drawable elements
+        line_elements = []  # holds drawable elements
 
         # Get graph data
         data_quartiles = graph.quartiles()
@@ -613,8 +613,8 @@ class CircularDrawer(AbstractDrawer):
             x = self.xcenter+posheight*possin   # next xy coords
             y = self.ycenter+posheight*poscos
             line_elements.append(Line(lastx, lasty, x, y,
-                                      strokeColor = graph.poscolor,
-                                      strokeWidth = graph.linewidth))
+                                      strokeColor=graph.poscolor,
+                                      strokeWidth=graph.linewidth))
             lastx, lasty, = x, y
         return line_elements
 
@@ -686,12 +686,12 @@ class CircularDrawer(AbstractDrawer):
         # full height of the track, extending from the midpoint between the
         # previous and current data points to the midpoint between the current
         # and next data points
-        heat_elements = [] # holds drawable elements
+        heat_elements = []  # holds drawable elements
 
         # Get graph data
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0], data_quartiles[4]
-        midval = (maxval + minval)/2. # mid is the value at the X-axis
+        midval = (maxval + minval)/2.  # mid is the value at the X-axis
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = (top-btm)
 
@@ -721,8 +721,8 @@ class CircularDrawer(AbstractDrawer):
 
             o track     Track object
         """
-        scale_elements = [] # holds axes and ticks
-        scale_labels = [] # holds labels
+        scale_elements = []  # holds axes and ticks
+        scale_labels = []  # holds labels
 
         if not track.scale:
             # no scale required, exit early
@@ -779,7 +779,7 @@ class CircularDrawer(AbstractDrawer):
                                          fillColor=None))
 
         start, end = self._current_track_start_end()
-        if track.scale_ticks: # Ticks are required on the scale
+        if track.scale_ticks:  # Ticks are required on the scale
             # Draw large ticks
             # I want the ticks to be consistently positioned relative to
             # the start of the sequence (position 0), not relative to the
@@ -799,7 +799,7 @@ class CircularDrawer(AbstractDrawer):
                                              track,
                                              track.scale_largetick_labels)
                 scale_elements.append(tick)
-                if label is not None: # If there's a label, add it
+                if label is not None:  # If there's a label, add it
                     scale_labels.append(label)
             # Draw small ticks
             ticklen = track.scale_smallticks * trackheight
@@ -812,7 +812,7 @@ class CircularDrawer(AbstractDrawer):
                                              track,
                                              track.scale_smalltick_labels)
                 scale_elements.append(tick)
-                if label is not None: # If there's a label, add it
+                if label is not None:  # If there's a label, add it
                     scale_labels.append(label)
 
         # Check to see if the track contains a graph - if it does, get the
@@ -891,7 +891,7 @@ class CircularDrawer(AbstractDrawer):
         # Calculate height of text label so it can be offset on lower half
         # of diagram
         # LP: not used, as not all fonts have ascent_descent data in reportlab.pdfbase._fontdata
-        #label_offset = _fontdata.ascent_descent[track.scale_font][0]*\
+        # label_offset = _fontdata.ascent_descent[track.scale_font][0]*\
         #               track.scale_fontsize/1000.
         tick = Line(x0, y0, x1, y1, strokeColor=track.scale_color)
         if draw_label:
@@ -905,7 +905,7 @@ class CircularDrawer(AbstractDrawer):
                     tickstring = str(tickpos)
             else:
                 tickstring = str(tickpos)
-            label = String(0, 0, tickstring, # Make label string
+            label = String(0, 0, tickstring,  # Make label string
                            fontName=track.scale_font,
                            fontSize=track.scale_fontsize,
                            fillColor=track.scale_color)
@@ -913,7 +913,7 @@ class CircularDrawer(AbstractDrawer):
                 label.textAnchor = 'end'
             # LP: This label_offset depends on ascent_descent data, which is not available for all
             # fonts, so has been deprecated.
-            #if 0.5*pi < tickangle < 1.5*pi:
+            # if 0.5*pi < tickangle < 1.5*pi:
             #    y1 -= label_offset
             labelgroup = Group(label)
             labelgroup.transform = (1, 0, 0, 1, x1, y1)
@@ -941,10 +941,10 @@ class CircularDrawer(AbstractDrawer):
 
             o track     Track object
         """
-        greytrack_bgs = [] # Holds track backgrounds
-        greytrack_labels = [] # Holds track foreground labels
+        greytrack_bgs = []  # Holds track backgrounds
+        greytrack_labels = []  # Holds track foreground labels
 
-        if not track.greytrack: # No greytrack required, return early
+        if not track.greytrack:  # No greytrack required, return early
             return [], []
 
         # Get track location
@@ -968,7 +968,7 @@ class CircularDrawer(AbstractDrawer):
         else:
             # Make a full circle (using a VERY thick linewidth)
             greytrack_bgs.append(Circle(self.xcenter, self.ycenter, ctr,
-                                 strokeColor = colors.Color(0.96, 0.96, 0.96),
+                                 strokeColor=colors.Color(0.96, 0.96, 0.96),
                                  fillColor=None, strokeWidth=top-btm))
 
         if track.greytrack_labels:
@@ -1065,7 +1065,7 @@ class CircularDrawer(AbstractDrawer):
             # Calculate trig values for angle and coordinates
             startcos, startsin = cos(startangle), sin(startangle)
             endcos, endsin = cos(endangle), sin(endangle)
-            x0, y0 = self.xcenter, self.ycenter # origin of the circle
+            x0, y0 = self.xcenter, self.ycenter  # origin of the circle
             x1, y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
             x2, y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
             x3, y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
@@ -1080,10 +1080,10 @@ class CircularDrawer(AbstractDrawer):
 
         Represents what would be a straight line on a linear diagram.
         """
-        x0, y0 = self.xcenter, self.ycenter # origin of the circle
+        x0, y0 = self.xcenter, self.ycenter  # origin of the circle
         radius_diff = end_radius - start_radius
         angle_diff = end_angle - start_angle
-        dx = 0.01 # heuristic
+        dx = 0.01  # heuristic
         a = start_angle*pi/180
         if move:
             path.moveTo(x0+start_radius*cos(a), y0+start_radius*sin(a))
@@ -1094,7 +1094,7 @@ class CircularDrawer(AbstractDrawer):
             while x < 1:
                 r = start_radius + x*radius_diff
                 a = (start_angle + x * (angle_diff)) * pi / 180  # to radians for sin/cos
-                #print x0+r*cos(a), y0+r*sin(a)
+                # print x0+r*cos(a), y0+r*sin(a)
                 path.lineTo(x0+r*cos(a), y0+r*sin(a))
                 x += dx
         a = end_angle*pi/180
@@ -1116,13 +1116,13 @@ class CircularDrawer(AbstractDrawer):
             # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
-                        #default is mitre/miter which can stick out too much:
+                        # default is mitre/miter which can stick out too much:
                         strokeLineJoin=1,  # 1=round
                         strokewidth=0)
-            #Note reportlab counts angles anti-clockwise from the horizontal
-            #(as in mathematics, e.g. complex numbers and polar coordinates)
-            #but we use clockwise from the vertical.  Also reportlab uses
-            #degrees, but we use radians.
+            # Note reportlab counts angles anti-clockwise from the horizontal
+            # (as in mathematics, e.g. complex numbers and polar coordinates)
+            # but we use clockwise from the vertical.  Also reportlab uses
+            # degrees, but we use radians.
             i_start = 90 - (inner_startangle * 180 / pi)
             i_end = 90 - (inner_endangle * 180 / pi)
             o_start = 90 - (outer_startangle * 180 / pi)
@@ -1130,12 +1130,12 @@ class CircularDrawer(AbstractDrawer):
             p.addArc(x0, y0, inner_radius, i_end, i_start,
                      moveTo=True, reverse=True)
             if flip:
-                #Flipped, join end to start,
+                # Flipped, join end to start,
                 self._draw_arc_line(p, inner_radius, outer_radius, i_end, o_start)
                 p.addArc(x0, y0, outer_radius, o_end, o_start, reverse=True)
                 self._draw_arc_line(p, outer_radius, inner_radius, o_end, i_start)
             else:
-                #Not flipped, join start to start, end to end
+                # Not flipped, join start to start, end to end
                 self._draw_arc_line(p, inner_radius, outer_radius, i_end, o_end)
                 p.addArc(x0, y0, outer_radius, o_end, o_start,
                          reverse=False)
@@ -1143,7 +1143,7 @@ class CircularDrawer(AbstractDrawer):
             p.closePath()
             return p
         else:
-            #Cheat and just use a four sided polygon.
+            # Cheat and just use a four sided polygon.
             # Calculate trig values for angle and coordinates
             inner_startcos, inner_startsin = cos(inner_startangle), sin(inner_startangle)
             inner_endcos, inner_endsin = cos(inner_endangle), sin(inner_endangle)
@@ -1154,7 +1154,7 @@ class CircularDrawer(AbstractDrawer):
             x3, y3 = (x0+outer_radius*outer_endsin, y0+outer_radius*outer_endcos)
             x4, y4 = (x0+outer_radius*outer_startsin, y0+outer_radius*outer_startcos)
             return draw_polygon([(x1, y1), (x2, y2), (x3, y3), (x4, y4)], color, border,
-                                #default is mitre/miter which can stick out too much:
+                                # default is mitre/miter which can stick out too much:
                                 strokeLineJoin=1,  # 1=round
                                 )
 
@@ -1198,21 +1198,21 @@ class CircularDrawer(AbstractDrawer):
                     strokeLineJoin=1,  # 1=round
                     strokewidth=0,
                     **kwargs)
-        #Inner curved edge
+        # Inner curved edge
         p.addArc(self.xcenter, self.ycenter, inner_radius,
                  90 - ((endangle-cornerangle_delta) * 180 / pi),
                  90 - ((startangle+cornerangle_delta) * 180 / pi),
                  moveTo=True)
-        #Corner edge - straight lines assumes small angle!
-        #TODO - Use self._draw_arc_line(p, ...) here if we expose corner setting
+        # Corner edge - straight lines assumes small angle!
+        # TODO - Use self._draw_arc_line(p, ...) here if we expose corner setting
         p.lineTo(x0+shaft_inner_radius*startsin, y0+shaft_inner_radius*startcos)
         p.lineTo(x0+shaft_outer_radius*startsin, y0+shaft_outer_radius*startcos)
-        #Outer curved edge
+        # Outer curved edge
         p.addArc(self.xcenter, self.ycenter, outer_radius,
                  90 - ((endangle-cornerangle_delta) * 180 / pi),
                  90 - ((startangle+cornerangle_delta) * 180 / pi),
                  reverse=True)
-        #Corner edges
+        # Corner edges
         p.lineTo(x0+shaft_outer_radius*endsin, y0+shaft_outer_radius*endcos)
         p.lineTo(x0+shaft_inner_radius*endsin, y0+shaft_inner_radius*endcos)
         p.closePath()
@@ -1253,17 +1253,17 @@ class CircularDrawer(AbstractDrawer):
                   shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
                   colour=None, **kwargs):
         """Draw an arrow along an arc."""
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
-        #if orientation == 'right':
+        # if orientation == 'right':
         #    startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        #elif orientation == 'left':
+        # elif orientation == 'left':
         #    startangle, endangle = max(startangle, endangle), min(startangle, endangle)
-        #else:
+        # else:
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         if orientation != "left" and orientation != "right":
             raise ValueError("Invalid orientation %s, should be 'left' or 'right'"
@@ -1296,8 +1296,8 @@ class CircularDrawer(AbstractDrawer):
         endcos, endsin = cos(endangle), sin(endangle)
         x0, y0 = self.xcenter, self.ycenter      # origin of the circle
         if 0.5 >= abs(angle) and abs(headangle_delta) >= abs(angle):
-            #If the angle is small, and the arrow is all head,
-            #cheat and just use a triangle.
+            # If the angle is small, and the arrow is all head,
+            # cheat and just use a triangle.
             if orientation=="right":
                 x1, y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
                 x2, y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
@@ -1306,7 +1306,7 @@ class CircularDrawer(AbstractDrawer):
                 x1, y1 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
                 x2, y2 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
                 x3, y3 = (x0+middle_radius*startsin, y0+middle_radius*startcos)
-            #return draw_polygon([(x1,y1),(x2,y2),(x3,y3)], color, border,
+            # return draw_polygon([(x1,y1),(x2,y2),(x3,y3)], color, border,
             #                    stroke_line_join=1)
             return Polygon([x1, y1, x2, y2, x3, y3],
                            strokeColor=border or color,
@@ -1316,14 +1316,14 @@ class CircularDrawer(AbstractDrawer):
         elif orientation=="right":
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
-                        #default is mitre/miter which can stick out too much:
+                        # default is mitre/miter which can stick out too much:
                         strokeLineJoin=1,  # 1=round
                         strokewidth=0,
                         **kwargs)
-            #Note reportlab counts angles anti-clockwise from the horizontal
-            #(as in mathematics, e.g. complex numbers and polar coordinates)
-            #but we use clockwise from the vertical.  Also reportlab uses
-            #degrees, but we use radians.
+            # Note reportlab counts angles anti-clockwise from the horizontal
+            # (as in mathematics, e.g. complex numbers and polar coordinates)
+            # but we use clockwise from the vertical.  Also reportlab uses
+            # degrees, but we use radians.
             p.addArc(self.xcenter, self.ycenter, shaft_inner_radius,
                      90 - (headangle * 180 / pi), 90 - (startangle * 180 / pi),
                      moveTo=True)
@@ -1346,22 +1346,22 @@ class CircularDrawer(AbstractDrawer):
         else:
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
-                        #default is mitre/miter which can stick out too much:
+                        # default is mitre/miter which can stick out too much:
                         strokeLineJoin=1,  # 1=round
                         strokewidth=0,
                         **kwargs)
-            #Note reportlab counts angles anti-clockwise from the horizontal
-            #(as in mathematics, e.g. complex numbers and polar coordinates)
-            #but we use clockwise from the vertical.  Also reportlab uses
-            #degrees, but we use radians.
+            # Note reportlab counts angles anti-clockwise from the horizontal
+            # (as in mathematics, e.g. complex numbers and polar coordinates)
+            # but we use clockwise from the vertical.  Also reportlab uses
+            # degrees, but we use radians.
             p.addArc(self.xcenter, self.ycenter, shaft_inner_radius,
                      90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
                      moveTo=True, reverse=True)
             p.addArc(self.xcenter, self.ycenter, shaft_outer_radius,
                      90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
                      reverse=False)
-            #Note - two staight lines is only a good approximation for small
-            #head angle, in general will need to curved lines here:
+            # Note - two staight lines is only a good approximation for small
+            # head angle, in general will need to curved lines here:
             if abs(angle) < 0.5:
                 p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
                 p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
@@ -1398,7 +1398,7 @@ class CircularDrawer(AbstractDrawer):
             outer_radius = top
             teeth = 4
 
-        #TODO, expose these settings?
+        # TODO, expose these settings?
         tail_length_ratio = 1.0
         head_length_ratio = 1.0
 
@@ -1412,8 +1412,8 @@ class CircularDrawer(AbstractDrawer):
         if head_length_ratio and tail_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle*0.5), startangle)
             tailangle = min(startangle + min(height*tail_length_ratio/(center*teeth), angle*0.5), endangle)
-            #With very small features, can due to floating point calculations
-            #violate the assertion below that start <= tail <= head <= end
+            # With very small features, can due to floating point calculations
+            # violate the assertion below that start <= tail <= head <= end
             tailangle = min(tailangle, headangle)
         elif head_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle), startangle)
@@ -1433,21 +1433,21 @@ class CircularDrawer(AbstractDrawer):
 
         p = ArcPath(strokeColor=strokecolor,
                     fillColor=color,
-                    #default is mitre/miter which can stick out too much:
+                    # default is mitre/miter which can stick out too much:
                     strokeLineJoin=1,  # 1=round
                     strokewidth=0,
                     **kwargs)
-        #Note reportlab counts angles anti-clockwise from the horizontal
-        #(as in mathematics, e.g. complex numbers and polar coordinates)
-        #but we use clockwise from the vertical.  Also reportlab uses
-        #degrees, but we use radians.
+        # Note reportlab counts angles anti-clockwise from the horizontal
+        # (as in mathematics, e.g. complex numbers and polar coordinates)
+        # but we use clockwise from the vertical.  Also reportlab uses
+        # degrees, but we use radians.
         p.addArc(self.xcenter, self.ycenter, inner_radius,
                  90 - (headangle * 180 / pi), 90 - (tailangle * 180 / pi),
                  moveTo=True)
         for i in range(0, teeth):
             p.addArc(self.xcenter, self.ycenter, inner_radius+i*height/teeth,
                      90 - (tailangle * 180 / pi), 90 - (startangle * 180 / pi))
-            #Curved line needed when drawing long jaggies
+            # Curved line needed when drawing long jaggies
             self._draw_arc_line(p,
                                 inner_radius+i*height/teeth,
                                 inner_radius+(i+1)*height/teeth,
@@ -1460,7 +1460,7 @@ class CircularDrawer(AbstractDrawer):
             p.addArc(self.xcenter, self.ycenter, outer_radius-i*height/teeth,
                      90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
                      reverse=True)
-            #Curved line needed when drawing long jaggies
+            # Curved line needed when drawing long jaggies
             self._draw_arc_line(p,
                                 outer_radius-i*height/teeth,
                                 outer_radius-(i+1)*height/teeth,

@@ -212,9 +212,9 @@ def __read(handle):
                     raise ValueError("Unknown qual %s in comment line\n%s"
                                      % (repr(qual), line))
         elif keyword=='CC':
-            #Expect CC lines like this:
-            #CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
-            #Can (normally) split on ";" and then on "="
+            # Expect CC lines like this:
+            # CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
+            # Can (normally) split on ";" and then on "="
             cols = value.split(";")
             for col in cols:
                 if not col or col[:17] == 'Automatic scaling':
@@ -223,9 +223,9 @@ def __read(handle):
                     # Throw it away.  (Should I keep it?)
                     continue
                 if col.count("=") == 0:
-                    #Missing qualifier!  Can we recover gracefully?
-                    #For example, from Bug 2403, in PS50293 have:
-                    #CC /AUTHOR=K_Hofmann; N_Hulo
+                    # Missing qualifier!  Can we recover gracefully?
+                    # For example, from Bug 2403, in PS50293 have:
+                    # CC /AUTHOR=K_Hofmann; N_Hulo
                     continue
                 qual, data = [word.lstrip() for word in col.split("=")]
                 if qual == '/TAXO-RANGE':

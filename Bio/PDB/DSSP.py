@@ -99,8 +99,8 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         accessibility.
     @rtype: {}
     """
-    #Using universal newlines is important on Python 3, this
-    #gives unicode handles rather than bytes handles.
+    # Using universal newlines is important on Python 3, this
+    # gives unicode handles rather than bytes handles.
     p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
@@ -118,6 +118,7 @@ def make_dssp_dict(filename):
     """
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
+
 
 def _make_dssp_dict(handle):
     """
@@ -187,7 +188,7 @@ class DSSP(AbstractResiduePropertyMap):
         >>> model = structure[0]
         >>> dssp = DSSP(model, "1MOT.pdb")
         >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-        >>> a_key = list(dssp.keys())[2]
+        >>> a_key = list(dssp)[2]
         >>> # residue object, secondary structure, solvent accessibility,
         >>> # relative accessiblity, phi, psi
         >>> dssp[a_key]
@@ -331,7 +332,7 @@ if __name__ == "__main__":
     for r in d:
         print(r)
     print("Handled %i residues" % len(d))
-    print(d.keys())
+    print(sorted(d))
     if ('A', 1) in d:
         print(d[('A', 1)])
         print(s[0]['A'][1].xtra)

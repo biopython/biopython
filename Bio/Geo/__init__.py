@@ -29,7 +29,7 @@ def parse(handle):
     for line in handle:
         line = line.strip('\n').strip('\r')
         if not line:
-            continue # Ignore empty lines
+            continue  # Ignore empty lines
         c = line[0]
         if c=='^':
             if record:

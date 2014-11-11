@@ -16,6 +16,8 @@ from ._base import _BaseHmmerTextIndexer
 
 __all__ = ['Hmmer2TextParser', 'Hmmer2TextIndexer']
 
+__docformat__ = "restructuredtext en"
+
 _HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')
 
 
@@ -155,7 +157,6 @@ class Hmmer2TextParser(object):
             bitscore = float(fields.pop())
             description = ' '.join(fields).strip()
 
-
             hit = _HitPlaceholder()
             hit.id_ = id_
             hit.evalue = evalue
@@ -209,7 +210,7 @@ class Hmmer2TextParser(object):
                 hsp.hit_endtype = seq_compl
 
             if id_ not in unordered_hits:
-                placeholder = [ p for p in hit_placeholders if p.id_ == id_][0]
+                placeholder = [p for p in hit_placeholders if p.id_ == id_][0]
                 hit = placeholder.createHit([hsp])
                 unordered_hits[id_] = hit
             else:
@@ -286,8 +287,8 @@ class Hmmer2TextParser(object):
 
             self.push_back(self.line)
 
-            # add homology sequence to annotation
-            frag.aln_annotation['homology'] = consensus
+            # add similarity sequence to annotation
+            frag.aln_annotation['similarity'] = consensus
 
             # if there's structure information, add it to the fragment
             if structureseq:

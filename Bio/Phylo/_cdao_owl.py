@@ -10,6 +10,7 @@ cdao_namespaces = {
                    'obo': 'http://purl.obolibrary.org/obo/',
                    }
 
+
 def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False):
     '''Converts prefixed URIs to full URIs. Optionally, converts CDAO
     named identifiers to OBO numeric identifiers.'''
@@ -60,7 +61,7 @@ cdao_owl = '''<?xml version="1.0"?>
     
 
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Annotation properties
@@ -84,7 +85,7 @@ cdao_owl = '''<?xml version="1.0"?>
     
 
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Object Properties
@@ -985,7 +986,7 @@ cdao_owl = '''<?xml version="1.0"?>
     
 
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -1081,7 +1082,7 @@ cdao_owl = '''<?xml version="1.0"?>
     
 
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Classes
@@ -2745,7 +2746,7 @@ cdao_owl = '''<?xml version="1.0"?>
     
 
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Individuals
@@ -2836,7 +2837,7 @@ cdao_owl = '''<?xml version="1.0"?>
     
 
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // General axioms

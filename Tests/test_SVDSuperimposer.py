@@ -2,13 +2,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#TODO - Don't use "from XXX import *"
+# TODO - Don't use "from XXX import *"
 from __future__ import print_function
 
 try:
     from numpy import *
     from numpy import dot  # missing in old PyPy's micronumpy
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(

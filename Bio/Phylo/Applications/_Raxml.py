@@ -362,8 +362,7 @@ class RaxmlCommandline(AbstractCommandline):
                     "Note that '-N' has been added as an alternative since "
                     "'-#' sometimes caused problems with certain MPI job "
                     "submission systems, since '-#' is often used to start "
-                    "comments. "
-                    ,
+                    "comments. ",
                     equate=False,
                     ),
                 ]
@@ -371,4 +370,3 @@ class RaxmlCommandline(AbstractCommandline):
         # ENH: enforce -s, -n and -m
         if not self.parsimony_seed:
             self.parsimony_seed = 10000
-

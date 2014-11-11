@@ -34,7 +34,7 @@ class DistributionPage(object):
     This organizes Distributions, and will display them nicely
     on a single page.
     """
-    def __init__(self, output_format = 'pdf'):
+    def __init__(self, output_format='pdf'):
         self.distributions = []
 
         # customizable attributes
@@ -139,7 +139,7 @@ class DistributionPage(object):
 class BarChartDistribution(object):
     """Display the distribution of values as a bunch of bars.
     """
-    def __init__(self, display_info = []):
+    def __init__(self, display_info=[]):
         """Initialize a Bar Chart display of distribution info.
 
         Class attributes:

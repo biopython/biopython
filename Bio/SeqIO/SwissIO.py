@@ -1,4 +1,5 @@
-# Copyright 2006-2010 by Peter Cock and Michiel de Hoon.
+# Copyright 2006-2013 by Peter Cock.
+# Revisions copyright 2008-2009 by Michiel de Hoon.
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -30,7 +31,7 @@ def _make_position(location_string, offset=0):
     """
     if location_string == "?":
         return SeqFeature.UnknownPosition()
-    #Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
+    # Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
     try:
         return SeqFeature.ExactPosition(max(0, offset + int(location_string)))
     except ValueError:
@@ -94,7 +95,7 @@ def SwissIterator(handle):
                 continue
             database, accession = cross_reference[:2]
             dbxref = "%s:%s" % (database, accession)
-            if not dbxref in record.dbxrefs:
+            if dbxref not in record.dbxrefs:
                 record.dbxrefs.append(dbxref)
         annotations = record.annotations
         annotations['accessions'] = swiss_record.accessions
@@ -150,7 +151,7 @@ if __name__ == "__main__":
     if not os.path.isfile(example_filename):
         print("Missing test file %s" % example_filename)
     else:
-        #Try parsing it!
+        # Try parsing it!
         with open(example_filename) as handle:
             records = SwissIterator(handle)
             for record in records:

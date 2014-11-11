@@ -16,8 +16,8 @@ from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 
 
-#List of formats including alignment only file formats we can read AND write.
-#We don't care about the order
+# List of formats including alignment only file formats we can read AND write.
+# We don't care about the order
 test_write_read_alignment_formats = sorted(SeqIO._FormatToWriter)
 for format in sorted(AlignIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
@@ -78,7 +78,7 @@ class WriterTests(unittest.TestCase):
 
         This has some general expected exceptions hard coded!
         """
-        #TODO - Check the exception messages?
+        # TODO - Check the exception messages?
         lengths = len(set(len(r) for r in records))
         if not records and format in ["stockholm", "phylip", "phylip-relaxed",
                                       "phylip-sequential", "nexus", "clustal",
@@ -107,14 +107,14 @@ class WriterTests(unittest.TestCase):
             handle = StringIO()
         count = SeqIO.write(records, handle, format)
         self.assertEqual(count, len(records))
-        #Now read them back...
+        # Now read them back...
         handle.seek(0)
         new_records = list(SeqIO.parse(handle, format))
         self.assertEqual(len(new_records), len(records))
         for record, new_record in zip(records, new_records):
-            #Using compare_record(record, new_record) is too strict
+            # Using compare_record(record, new_record) is too strict
             if format == "nexus":
-                #The nexus parser will dis-ambiguate repeated record ids.
+                # The nexus parser will dis-ambiguate repeated record ids.
                 self.assertTrue(record.id == new_record.id or
                                 new_record.id.startswith(record.id+".copy"))
             else:
@@ -138,19 +138,19 @@ class WriterTests(unittest.TestCase):
 
 for (records, descr, errs) in test_records:
     for format in test_write_read_alignment_formats:
-        #Assume no errors expected...
+        # Assume no errors expected...
         def funct(records, format, descr):
-            f = lambda x : x.check(records, format)
+            f = lambda x: x.check(records, format)
             f.__doc__ = "%s for %s" % (format, descr)
             return f
         setattr(WriterTests,
                 "test_%s_%s" % (format, descr.replace(" ", "_")),
                 funct(records, format, descr))
-        #Replace the method with an error specific one?
+        # Replace the method with an error specific one?
         for err_formats, err_type, err_msg in errs:
             if format in err_formats:
                 def funct_e(records, format, descr, err_type, err_msg):
-                    f = lambda x : x.check_write_fails(records, format,
+                    f = lambda x: x.check_write_fails(records, format,
                                                        err_type, err_msg)
                     f.__doc__ = "%s for %s" % (format, descr)
                     return f

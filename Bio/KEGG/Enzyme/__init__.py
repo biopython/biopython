@@ -28,10 +28,8 @@ rxn_wrap = [0, "",
 name_wrap = [0, "",
              (" ", "$", 1, 1),
              ("-", "$", 1, 1)]
-id_wrap = lambda indent : [indent, "",
-                           (" ", "", 1, 0)]
-struct_wrap = lambda indent : [indent, "",
-                               ("  ", "", 1, 1)]
+id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
+struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 
 
 class Record(object):
@@ -60,22 +58,22 @@ class Record(object):
 
         Create a new Record.
         """
-        self.entry      = ""
-        self.name       = []
-        self.classname  = []
-        self.sysname    = []
-        self.reaction   = []
-        self.substrate  = []
-        self.product    = []
-        self.inhibitor  = []
-        self.cofactor   = []
-        self.effector   = []
-        self.comment    = []
-        self.pathway    = []
-        self.genes      = []
-        self.disease    = []
+        self.entry = ""
+        self.name = []
+        self.classname = []
+        self.sysname = []
+        self.reaction = []
+        self.substrate = []
+        self.product = []
+        self.inhibitor = []
+        self.cofactor = []
+        self.effector = []
+        self.comment = []
+        self.pathway = []
+        self.genes = []
+        self.disease = []
         self.structures = []
-        self.dblinks    = []
+        self.dblinks = []
 
     def __str__(self):
         """__str__(self)
@@ -106,7 +104,7 @@ class Record(object):
 
     def _name(self):
         return _write_kegg("NAME",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.name])
 
     def _classname(self):
@@ -115,42 +113,42 @@ class Record(object):
 
     def _sysname(self):
         return _write_kegg("SYSNAME",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.sysname])
 
     def _reaction(self):
         return _write_kegg("REACTION",
-                           [_wrap_kegg(l, wrap_rule = rxn_wrap)
+                           [_wrap_kegg(l, wrap_rule=rxn_wrap)
                             for l in self.reaction])
 
     def _substrate(self):
         return _write_kegg("SUBSTRATE",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.substrate])
 
     def _product(self):
         return _write_kegg("PRODUCT",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.product])
 
     def _inhibitor(self):
         return _write_kegg("INHIBITOR",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.inhibitor])
 
     def _cofactor(self):
         return _write_kegg("COFACTOR",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.cofactor])
 
     def _effector(self):
         return _write_kegg("EFFECTOR",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.effector])
 
     def _comment(self):
         return _write_kegg("COMMENT",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(0))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(0))
                             for l in self.comment])
 
     def _pathway(self):
@@ -158,7 +156,7 @@ class Record(object):
         for entry in self.pathway:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
         return _write_kegg("PATHWAY",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(16))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(16))
                             for l in s])
 
     def _genes(self):
@@ -166,7 +164,7 @@ class Record(object):
         for entry in self.genes:
             s.append(entry[0] + ": " + " ".join(entry[1]))
         return _write_kegg("GENES",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(5))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(5))
                             for l in s])
 
     def _disease(self):
@@ -174,7 +172,7 @@ class Record(object):
         for entry in self.disease:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
         return _write_kegg("DISEASE",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(13))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(13))
                             for l in s])
 
     def _structures(self):
@@ -182,7 +180,7 @@ class Record(object):
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
         return _write_kegg("STRUCTURES",
-                           [_wrap_kegg(l, wrap_rule = struct_wrap(5))
+                           [_wrap_kegg(l, wrap_rule=struct_wrap(5))
                             for l in s])
 
     def _dblinks(self):
@@ -206,7 +204,7 @@ def parse(handle):
     >>> with open("KEGG/enzyme.sample") as handle:
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
-    ... 
+    ...
     1.1.1.1 Alcohol dehydrogenase
     1.1.1.62 Estradiol 17beta-dehydrogenase
     1.1.1.68 Transferred to EC 1.7.99.5
@@ -313,4 +311,3 @@ def parse(handle):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

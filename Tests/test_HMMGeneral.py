@@ -377,8 +377,8 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
     def test_calculate_s_value(self):
         """Testing the calculation of s values.
         """
-        previous_vars = {('1', 0) : .5,
-                         ('2', 0) : .7}
+        previous_vars = {('1', 0): .5,
+                         ('2', 0): .7}
         s_value = self.dp._calculate_s_value(1, previous_vars)
 
         # print(s_value)
@@ -394,12 +394,12 @@ class AbstractTrainerTest(unittest.TestCase):
         """Test the maximum likelihood estimator for simple cases.
         """
         # set up a simple dictionary
-        counts = {('A', 'A') : 10,
-                  ('A', 'B') : 20,
-                  ('A', 'C') : 15,
-                  ('B', 'B') : 5,
-                  ('C', 'A') : 15,
-                  ('C', 'C') : 10}
+        counts = {('A', 'A'): 10,
+                  ('A', 'B'): 20,
+                  ('A', 'C'): 15,
+                  ('B', 'B'): 5,
+                  ('C', 'A'): 15,
+                  ('C', 'C'): 10}
 
         results = self.test_trainer.ml_estimator(counts)
 

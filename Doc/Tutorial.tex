@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 16 February 2014 (Biopython 1.63+)}
+\date{Last Update -- 1 November 2014 (Biopython 1.64+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -251,7 +251,7 @@ from __future__ import print_function
 
   If you forget to add this magic import, under Python 2 you'll see
   extra brackets produced by trying to use the print function when
-  Python 2 is interpretting it as a print statement and a tuple.
+  Python 2 is interpreting it as a print statement and a tuple.
 
   \item \emph{How do I find out what version of Biopython I have installed?} \\
   Use this:
@@ -261,7 +261,8 @@ from __future__ import print_function
   ...
   \end{verbatim}
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
-  If the second line fails, your version is very out of date.
+  Note that those are double underscores before and after version.
+  If the second line fails, your version is \emph{very} out of date.
   If the version string ends with a plus, you don't have an official
   release, but a snapshot of the in development code. 
 
@@ -298,7 +299,7 @@ from __future__ import print_function
   You need Biopython 1.54 or later, or just wrap the item with \verb|[...]| to create a list of one element.
 
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
-  You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
+  You need Biopython 1.45 or later.
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
   The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is/was an ongoing struggle.
@@ -352,6 +353,10 @@ from __future__ import print_function
 
  \item \emph{Why does the code from CVS seem out of date?} \\
   In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
+
+  \item \emph{Why doesn't} \verb|Bio.Fasta| \emph{work?} \\
+  We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{http://biopython.org/SRC/biopython/DEPRECATED}{DEPRECATED} file.
+
 \end{enumerate}
 
 \noindent For more general questions, the Python FAQ pages \url{http://www.python.org/doc/faq/} may be useful.
@@ -744,13 +749,9 @@ Section~\ref{sec:SeqRecord-format} describes a neat way to get a FASTA formatted
 string from a \verb|SeqRecord| object, while the more general topic of reading and
 writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}.
 
-\emph{NOTE:} If you are using Biopython 1.44 or older, using \verb|str(my_seq)|
-will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
-(which is still available in the current Biopython releases for backwards compatibility):
-
 %cont-doctest
 \begin{verbatim}
->>> my_seq.tostring()
+>>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
 \end{verbatim}
 
@@ -2098,7 +2099,7 @@ entries $11$ and $12$ in the \texttt{features} list:
 >>> print(record.features[20])
 type: gene
 location: [4342:4780](+)
-qualifiers: 
+qualifiers:
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
@@ -2109,7 +2110,7 @@ qualifiers:
 >>> print(record.features[21])
 type: CDS
 location: [4342:4780](+)
-qualifiers: 
+qualifiers:
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
     Key: gene, Value: ['pim']
@@ -2151,7 +2152,7 @@ Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP
 >>> print(sub_record.features[0])
 type: gene
 location: [42:480](+)
-qualifiers: 
+qualifiers:
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
@@ -2161,7 +2162,7 @@ qualifiers:
 >>> print(sub_record.features[20])
 type: CDS
 location: [42:480](+)
-qualifiers: 
+qualifiers:
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
     Key: gene, Value: ['pim']
@@ -3108,6 +3109,7 @@ As an example, let's use the same GenBank file as before:
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+>>> orchid_dict.close()
 \end{verbatim}
 
 \noindent Note that \verb|Bio.SeqIO.index()| won't take a handle,
@@ -3284,6 +3286,7 @@ uncompressed GenBank file:
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
 >>> len(orchid_dict)
 94
+>>> orchid_dict.close()
 \end{verbatim}
 
 You could compress this (while keeping the original file) at the command
@@ -3302,6 +3305,7 @@ You can use the compressed file in exactly the same way:
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk.bgz", "genbank")
 >>> len(orchid_dict)
 94
+>>> orchid_dict.close()
 \end{verbatim}
 
 \noindent
@@ -3313,6 +3317,7 @@ or:
 >>> orchid_dict = SeqIO.index_db("ls_orchid.gbk.bgz.idx", "ls_orchid.gbk.bgz", "genbank")
 >>> len(orchid_dict)
 94
+>>> orchid_dict.close()
 \end{verbatim}
 
 The \verb|SeqIO| indexing automatically detects the BGZF compression. Note
@@ -4431,8 +4436,8 @@ object into an array of letters -- and you can do this with NumPy:
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
->>> align_array.shape
-(7, 52)
+>>> print("Array shape %i by %i" % align_array.shape)
+Array shape 7 by 52
 \end{verbatim}
 
 If you will be working heavily with the columns, you can tell NumPy to store
@@ -4587,6 +4592,7 @@ in the file \verb|opuntia.aln|.
 You should be able to work out how to read in the alignment using
 \verb|Bio.AlignIO| by now:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("opuntia.aln", "clustal")
@@ -4605,6 +4611,8 @@ In case you are interested (and this is an aside from the main thrust of this
 chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
 Newick tree file, and \verb|Bio.Phylo| can parse these:
 
+
+%doctest examples
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("opuntia.dnd", "newick")
@@ -4622,7 +4630,7 @@ _|_________________ gi|6273287|gb|AF191661.1|AF191661
  |    __ gi|6273285|gb|AF191659.1|AF191659
  |___|
      | gi|6273284|gb|AF191658.1|AF191658
-
+<BLANKLINE>
 \end{verbatim}
 
 \noindent Chapter \ref{sec:Phylo} covers Biopython's support for phylogenetic trees in more
@@ -5798,7 +5806,7 @@ Program: blastn (2.2.27+)
          mystery_seq
  Target: refseq_rna
    Hits: ----  -----  ----------------------------------------------------------
-            #  # HSP  ID + description                                          
+            #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
             0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
             1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
@@ -5863,9 +5871,9 @@ Program: blat (<unknown version>)
          <unknown description>
  Target: <unknown target>
    Hits: ----  -----  ----------------------------------------------------------
-            #  # HSP  ID + description                                          
+            #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
-            0     17  chr19  <unknown description>                              
+            0     17  chr19  <unknown description>
 \end{verbatim}
 
 You'll immediately notice that there are some differences. Some of these are
@@ -5967,7 +5975,7 @@ Program: blastn (2.2.27+)
          mystery_seq
  Target: refseq_rna
    Hits: ----  -----  ----------------------------------------------------------
-            #  # HSP  ID + description                                          
+            #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
             0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
             1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
@@ -6767,6 +6775,7 @@ format name:
 ['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|']
 >>> idx['gi|16080617|ref|NP_391444.1|']
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
+>>> idx.close()
 \end{verbatim}
 
 Or also with the format-specific keyword argument:
@@ -6778,6 +6787,7 @@ Or also with the format-specific keyword argument:
 ['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|', 'random_s00']
 >>> idx['gi|16080617|ref|NP_391444.1|']
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
+>>> idx.close()
 \end{verbatim}
 
 Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
@@ -6790,6 +6800,7 @@ Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
 ['GI|11464971:4-101', 'GI|16080617|REF|NP_391444.1|']
 >>> idx['GI|16080617|REF|NP_391444.1|']
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
+>>> idx.close()
 \end{verbatim}
 
 \verb|Bio.SearchIO.index_db| works like as \verb|index|, only it writes the
@@ -7575,8 +7586,9 @@ We first open the file and then parse it:
 %doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
->>> input = open("pubmed_result1.txt")
->>> record = Medline.read(input)
+>>> with open("pubmed_result1.txt") as handle:
+...    record = Medline.read(handle)
+...
 \end{verbatim}
 The \verb+record+ now contains the Medline record as a Python dictionary:
 %cont-doctest
@@ -7605,10 +7617,10 @@ To parse a file containing multiple Medline records, you can use the \verb+parse
 %doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
->>> input = open("pubmed_result2.txt")
->>> records = Medline.parse(input)
->>> for record in records:
-...     print(record["TI"])
+>>> with open("pubmed_result2.txt") as handle:
+...     for record in Medline.parse(handle):
+...         print(record["TI"])
+...
 A high level interface to SCOP and ASTRAL implemented in python.
 GenomeDiagram: a python package for the visualization of large-scale genomic data.
 Open source clustering software.
@@ -8525,8 +8537,9 @@ In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Rec
 %doctest ../Tests/Enzymes
 \begin{verbatim}
 >>> from Bio.ExPASy import Enzyme
->>> handle = open("lipoprotein.txt")
->>> record = Enzyme.read(handle)
+>>> with open("lipoprotein.txt") as handle:
+...     record = Enzyme.read(handle)
+...
 >>> record["ID"]
 '3.1.1.34'
 >>> record["DE"]
@@ -10077,14 +10090,15 @@ demographic parameters of real populations or disease gene mapping.
 
 The strategy followed in the Biopython implementation of the coalescent was not
 to create a new, built-in, simulator from scratch but to use an existing one,
-SIMCOAL2 (\url{http://cmpg.unibe.ch/software/simcoal2/}). SIMCOAL2 allows for,
+Fastsimcoal2 (\url{http://cmpg.unibe.ch/software/fastsimcoal2/}). Fastsimcoal2 allows for,
 among others, population structure, multiple demographic events, simulation
 of multiple types of loci (SNPs, sequences, STRs/microsatellites and RFLPs)
 with recombination, diploidy multiple chromosomes or ascertainment bias. Notably
-SIMCOAL2 doesn't support any selection model. We recommend reading SIMCOAL2's
+Fastsimcoal2 doesn't support any selection model. We recommend reading
+Fastsimcoal2's
 documentation, available in the link above.
 
-The input for SIMCOAL2 is a file specifying the desired demography and genome,
+The input for Fastsimcoal2 is a file specifying the desired demography and genome,
 the output is a set of files (typically around 1000) with the simulated genomes
 of a sample of individuals per subpopulation. This set of files can be used
 in many ways, like to compute confidence intervals where which certain
@@ -10092,7 +10106,7 @@ statistics (e.g., $F_{st}$ or Tajima D) are expected to lie. Real population
 genetics datasets statistics can then be compared to those confidence intervals.
 
 Biopython coalescent code allows to create demographic scenarios and genomes and
-to run SIMCOAL2.
+to run Fastsimcoal2.
 
 \subsection{Creating scenarios}
 
@@ -10158,8 +10172,9 @@ generate_simcoal_from_template('simple',
 \end{verbatim}
 
 Executing this code snippet will generate a file on the current directory called
-simple\_100\_300.par this file can be given as input to SIMCOAL2 to simulate the
-demography (below we will see how Biopython can take care of calling SIMCOAL2).
+simple\_100\_300.par this file can be given as input to Fastsimcoal2 to simulate the
+demography (below we will see how Biopython can take care of calling
+Fastsimcoal2).
 
 This code consists of a single function call, let's discuss it parameter by parameter.
 
@@ -10202,10 +10217,10 @@ version of this document.
 
 \subsubsection{Chromosome structure}
 
-We strongly recommend reading SIMCOAL2 documentation to understand the full potential
+We strongly recommend reading Fastsimcoal2 documentation to understand the full potential
 available in modeling chromosome structures. In this subsection we only discuss how
 to implement chromosome structures using the Biopython interface, not the underlying
-SIMCOAL2 capabilities.
+Fastsimcoal2 capabilities.
 
 We will start by implementing a single chromosome, with 24 SNPs with
 a recombination rate immediately on the right of each locus of 0.0005 and a
@@ -10263,27 +10278,28 @@ is a single microsatellite which has no loci following, this
 recombination rate here is irrelevant), with a mutation rate
 of 0.001, geometric parameter of 0.0 and a range constraint
 of 0.0 (for information about this parameters please consult
-the SIMCOAL2 documentation, you can use them to simulate
+the Fastsimcoal2 documentation, you can use them to simulate
 various mutation models, including the typical  -- for microsatellites --
 stepwise mutation model among others).
 
 
-\subsection{Running SIMCOAL2}
+\subsection{Running Fastsimcoal2}
 
-We now discuss how to run SIMCOAL2 from inside Biopython. It is required
-that the binary for SIMCOAL2 is called simcoal2 (or simcoal2.exe on Windows
+We now discuss how to run Fastsimcoal2 from inside Biopython. It is required
+that the binary for Fastsimcoal2 is called fastsimcoal21 (or fastsimcoal21.exe on Windows
 based platforms), please note that the typical name when downloading the
-program is in the format simcoal2\_x\_y. As such, when installing SIMCOAL2
+program is in the format fastsimcoal2\_x\_y. As such, when installing
+Fastsimcoal2
 you will need to rename of the downloaded executable so that Biopython can
 find it.
 
-It is possible to run SIMCOAL2 on files that were not generated using the method
+It is possible to run Fastsimcoal2 on files that were not generated using the method
 above (e.g., writing a parameter file by hand), but we will show an
 example by creating a model using the framework presented above.
 
 \begin{verbatim}
 from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
-from Bio.PopGen.SimCoal.Controller import SimCoalController
+from Bio.PopGen.SimCoal.Controller import FastSimCoalController
 
 
 generate_simcoal_from_template('simple',
@@ -10302,8 +10318,8 @@ generate_simcoal_from_template('simple',
     [('sample_size', [30]),
     ('pop_size', [100])])
 
-ctrl = SimCoalController('.')
-ctrl.run_simcoal('simple_100_30.par', 50)
+ctrl = FastSimCoalController()
+ctrl.run_fastsimcoal('simple_100_30.par', 50)
 \end{verbatim}
 
 The lines of interest are the last two (plus the new import).
@@ -10317,11 +10333,12 @@ simulation parameter file created. We then specify
 that we want to run 50 independent simulations, by default Biopython
 requests a simulation of diploid data, but a third parameter can
 be added to simulate haploid data (adding as a parameter the
-string '0'). SIMCOAL2 will now run (please
+string '0'). Fastsimcoal2 will now run (please
 note that this can take quite a lot of time) and will create a directory
 with the simulation results. The results can now be analysed (typically
 studying the data with Arlequin3). In the future Biopython might support
-reading the Arlequin3 format and thus allowing for the analysis of SIMCOAL2
+reading the Arlequin3 format and thus allowing for the analysis of
+Fastsimcoal2
 data inside Biopython.
 
 
@@ -10550,12 +10567,12 @@ To get acquainted with the module, let's start with a tree that we've already co
 inspect it a few different ways.  Then we'll colorize the branches, to use a special phyloXML
 feature, and finally save it.
 
-In a terminal, create a simple Newick file using your favorite text editor:
+Create a simple Newick file named \texttt{simple.dnd} using your favorite text editor,
+or use \href{http://biopython.org/SRC/biopython/Doc/examples/simple.dnd}{\texttt{simple.dnd}}
+provided with the Biopython source code:
 
 \begin{verbatim}
-% cat > simple.dnd <<EOF
-> (((A,B),(C,D)),(E,F,G));
-> EOF
+(((A,B),(C,D)),(E,F,G));
 \end{verbatim}
 
 This tree has no branch lengths, only a topology and labelled terminals. (If you have a real
@@ -10573,6 +10590,7 @@ this demo.
 
 Now, within Python, read the tree file, giving the file name and the name of the format.
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("simple.dnd", "newick")
@@ -10580,22 +10598,22 @@ Now, within Python, read the tree file, giving the file name and the name of the
 
 Printing the tree object as a string gives us a look at the entire object hierarchy.
 
+%cont-doctest
 \begin{verbatim}
 >>> print(tree)
-
-Tree(weight=1.0, rooted=False, name="")
-    Clade(branch_length=1.0)
-        Clade(branch_length=1.0)
-            Clade(branch_length=1.0)
-                Clade(branch_length=1.0, name="A")
-                Clade(branch_length=1.0, name="B")
-            Clade(branch_length=1.0)
-                Clade(branch_length=1.0, name="C")
-                Clade(branch_length=1.0, name="D")
-        Clade(branch_length=1.0)
-            Clade(branch_length=1.0, name="E")
-            Clade(branch_length=1.0, name="F")
-            Clade(branch_length=1.0, name="G")
+Tree(rooted=False, weight=1.0)
+    Clade()
+        Clade()
+            Clade()
+                Clade(name='A')
+                Clade(name='B')
+            Clade()
+                Clade(name='C')
+                Clade(name='D')
+        Clade()
+            Clade(name='E')
+            Clade(name='F')
+            Clade(name='G')
 \end{verbatim}
 
 The \texttt{Tree} object contains global information about the tree, such as whether it's
@@ -10606,7 +10624,10 @@ The function \verb|draw_ascii| creates a simple ASCII-art (plain text) dendrogra
 convenient visualization for interactive exploration, in case better graphical tools aren't
 available.
 
+%doctest examples
 \begin{verbatim}
+>>> from Bio import Phylo
+>>> tree = Phylo.read("simple.dnd", "newick")
 >>> Phylo.draw_ascii(tree)
                                                     ________________________ A
                            ________________________|
@@ -10621,7 +10642,7 @@ _|                                                 |________________________ D
  |________________________|________________________ F
                           |
                           |________________________ G
-
+<BLANKLINE>
 \end{verbatim}
 
 If you have \textbf{matplotlib} or \textbf{pylab} installed, you can create a graphic
@@ -10801,20 +10822,21 @@ To handle multiple (or an unknown number of) trees, use the \verb|parse| functio
 through each of the trees in the given file: 
 
 \begin{verbatim}
->>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
+>>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
 ...     print(tree)
 \end{verbatim}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
 
+%cont-doctest
 \begin{verbatim}
->>> trees = list(Phylo.parse("phyloxml_examples.xml", "phyloxml"))
+>>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
 >>> tree1 = trees[0]
 >>> others = trees[1:]
->>> Phylo.write(tree1, "tree1.xml", "phyloxml")
+>>> Phylo.write(tree1, "tree1.nwk", "newick")
 1
->>> Phylo.write(others, "other_trees.xml", "phyloxml")
+>>> Phylo.write(others, "other_trees.nwk", "newick")
 12
 \end{verbatim}
 
@@ -10823,7 +10845,7 @@ Convert files between any of the supported formats with the \verb|convert| funct
 \begin{verbatim}
 >>> Phylo.convert("tree1.dnd", "newick", "tree1.xml", "nexml")
 1
->>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", 'nexus")
+>>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", "nexus")
 12
 \end{verbatim}
 
@@ -10843,17 +10865,17 @@ with SeqIO and AlignIO:
 
 The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
 
-%TODO - make this into a doctest?
+%doctest ../Tests
 \begin{verbatim}
->>> tree = Phylo.read("Tests/PhyloXML/example.xml", "phyloxml")
+>>> from Bio import Phylo
+>>> tree = Phylo.read("PhyloXML/example.xml", "phyloxml")
 >>> print(tree)
-Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
-attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
+Phylogeny(description='phyloXML allows to use either a "branch_length" attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...', rooted=True)
     Clade()
-        Clade(branch_length='0.06')
-            Clade(branch_length='0.102', name='A')
-            Clade(branch_length='0.23', name='B')
-        Clade(branch_length='0.4', name='C')
+        Clade(branch_length=0.06)
+            Clade(branch_length=0.102, name='A')
+            Clade(branch_length=0.23, name='B')
+        Clade(branch_length=0.4, name='C')
 \end{verbatim}
 
 This is essentially an outline of the object hierarchy Biopython uses to represent a tree. But
@@ -10943,7 +10965,7 @@ Fig.~\ref{fig:phylo-rooted}):
 \begin{verbatim}
 >>> tree = Phylo.read("simple.dnd", "newick")
 >>> tree.rooted = True
->>> Phylo.draw_graphiz(tree)
+>>> Phylo.draw_graphviz(tree)
 \end{verbatim}
 
 \begin{htmlonly}
@@ -11686,7 +11708,9 @@ We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> arnt = motifs.read(open("Arnt.sites"), "sites")
+>>> with open("Arnt.sites") as handle:
+...     arnt = motifs.read(handle, "sites")
+...
 \end{verbatim}
 The instances from which this motif was created is stored in the \verb+.instances+ property:
 %cont-doctest
@@ -11745,7 +11769,9 @@ For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix
 We can create a motif for this count matrix as follows:
 %cont-doctest
 \begin{verbatim}
->>> srf = motifs.read(open("SRF.pfm"), "pfm")
+>>> with open("SRF.pfm") as handle:
+...     srf = motifs.read(handle, "pfm")
+...
 >>> print(srf.counts)
         0      1      2      3      4      5      6      7      8      9     10     11
 A:   2.00   9.00   0.00   1.00  32.00   3.00  46.00   1.00  43.00  15.00   2.00   2.00
@@ -12659,8 +12685,9 @@ To facilitate searching for potential TFBSs using PSSMs, both the position-weigh
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> handle = open("Arnt.sites")
->>> motif = motifs.read(handle, 'sites')
+>>> with open("Arnt.sites") as handle:
+...     motif = motifs.read(handle, 'sites')
+...
 >>> print(motif.counts)
         0      1      2      3      4      5
 A:   4.00  19.00   0.00   0.00   0.00   0.00
@@ -12829,7 +12856,9 @@ which is similar to our test motif \verb|m|:
 %TODO - Start a new doctest here?
 %cont-doctest
 \begin{verbatim}
->>> m_reb1 = motifs.read(open("REB1.pfm"), "pfm")
+>>> with open("REB1.pfm") as handle:
+...    m_reb1 = motifs.read(handle, "pfm")
+...
 >>> m_reb1.consensus
 Seq('GTTACCCGG', IUPACUnambiguousDNA())
 >>> print(m_reb1.counts)
@@ -12893,7 +12922,9 @@ running the following piece of code:
 %doctest ../Tests/Motif
 \begin{verbatim}
 >>> from Bio import motifs
->>> motifsM = motifs.parse(open("meme.out"), "meme")
+>>> with open("meme.out") as handle:
+...     motifsM = motifs.parse(handle, "meme")
+...
 \end{verbatim}
 \begin{verbatim}
 >>> motifsM
@@ -12940,7 +12971,9 @@ with the following code:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import motifs
->>> motifsA = motifs.parse(open("alignace.out"), "alignace")
+>>> with open("alignace.out") as handle:
+...     motifsA = motifs.parse(handle, "alignace")
+...
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -12989,501 +13022,6 @@ to your motifs by parsing the first part of the result:
 \item \href{http://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
 \item \href{http://bio.cs.washington.edu/assessment/}{Comparison of different motif finding programs} 
 \end{itemize}
-
-\section{Obsolete Bio.Motif module}
-
-The rest of this chapter above describes the \verb|Bio.motifs| package included
-in Biopython 1.61 onwards, which is replacing the older \verb|Bio.Motif| package
-introduced with Biopython 1.50, which was in turn based on two older former
-Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|.
-
-To allow for a smooth transition, the older \verb|Bio.Motif| package will be
-maintained in parallel with its replacement \verb|Bio.motifs| at least two more
-releases, and at least one year.
-
-\subsection{Motif objects}
-
-%TODO - turn these into doctests...
-Since we are interested in motif analysis, we need to take a look at
-\verb|Motif| objects in the first place. For that we need to import 
-the Motif library:
-%doctest
-\begin{verbatim}
->>> from Bio import Motif
-\end{verbatim}
-and we can start creating our first motif objects. Let's create a DNA motif:
-%cont-doctest
-\begin{verbatim}
->>> from Bio.Alphabet import IUPAC
->>> m = Motif.Motif(alphabet=IUPAC.unambiguous_dna)
-\end{verbatim}
-This is for now just an empty container, so let's add some sequences to our newly created motif:
-%cont-doctest
-\begin{verbatim}
->>> from Bio.Seq import Seq
->>> m.add_instance(Seq("TATAA", m.alphabet))
->>> m.add_instance(Seq("TATTA", m.alphabet))
->>> m.add_instance(Seq("TATAA", m.alphabet))
->>> m.add_instance(Seq("TATAA", m.alphabet))
-\end{verbatim}
-Now we have a full \verb|Motif| instance, so we can try to get some
-basic information about it. Let's start with length and consensus
-sequence:
-%cont-doctest
-\begin{verbatim}
->>> len(m)
-5
->>> m.consensus()
-Seq('TATAA', IUPACUnambiguousDNA())
-\end{verbatim}
-In case of DNA motifs, we can also get a reverse complement of a motif:
-%>>> m.reverse_complement()
-%<Bio.Motif.Motif.Motif object at 0xb39890>
-%cont-doctest
-\begin{verbatim}
->>> m.reverse_complement().consensus()
-Seq('TTATA', IUPACUnambiguousDNA())
->>> for i in m.reverse_complement().instances:
-...     print(i)
-TTATA
-TAATA
-TTATA
-TTATA
-\end{verbatim}
-
-We can also calculate the information content of a motif with a simple call:
-%cont-doctest
-\begin{verbatim}
->>> print("%0.2f" % m.ic())
-5.27
-\end{verbatim}
-This gives us a number of bits of information provided by the motif,
-which tells us how much differs from background.
-
-The most common representation of a motif is a PWM (Position Weight
-Matrix). It summarizes the probabilities of finding any symbol (in
-this case nucleotide) in any position of a motif. It can be computed by calling the \verb|.pwm()| method:
-\begin{verbatim}
->>> m.pwm()
-[{'A': 0.05, 'C': 0.05, 'T': 0.85, 'G': 0.05}, 
- {'A': 0.85, 'C': 0.05, 'T': 0.05, 'G': 0.05}, 
- {'A': 0.05, 'C': 0.05, 'T': 0.85, 'G': 0.05}, 
- {'A': 0.65, 'C': 0.05, 'T': 0.25, 'G': 0.05}, 
- {'A': 0.85, 'C': 0.05, 'T': 0.05, 'G': 0.05}]
-\end{verbatim}
-The probabilities in the motif's PWM are based on the counts in the
-instances, but we can see, that even though there were no Gs and no Cs
-in the instances, we still have non-zero probabilities assigned to
-them. These come from pseudo-counts which are, roughly speaking, a
-commonly used way to acknowledge the incompleteness of our knowledge
-and avoid technical problems with calculating logarithms of $0$.
-
-We can control the way that pseudo-counts are added with two
-properties of Motif objects \verb|.background| is the probability
-distribution over all symbols in the alphabet that we assume represents background, non-motif sequences (usually based on the GC content of the respective
-genome). It is by default set to a uniform distribution upon creation of a motif:
-\begin{verbatim}
->>> m.background  
-{'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
-\end{verbatim}
-The other parameter is \verb|.beta|, which states the amount of
-pseudo-counts we should add to the PWM. By default it is set to $1.0$,
-%cont-doctest
-\begin{verbatim}
->>> m.beta
-1.0
-\end{verbatim}
-so that the total input of pseudo-counts is equal to that of one instance. 
-
-Using the background distribution and pwm with pseudo-counts added,
-it's easy to compute the log-odds ratios, telling us what are the log
-odds of a particular symbol to be coming from a motif against the
-background. We can use the \verb|.log_odds()| method:
-
-\begin{verbatim}
- >>> m.log_odds() 
-[{'A': -2.3219280948873622, 
-  'C': -2.3219280948873622, 
-  'T': 1.7655347463629771, 
-  'G': -2.3219280948873622}, 
- {'A': 1.7655347463629771, 
-  'C': -2.3219280948873622, 
-  'T': -2.3219280948873622, 
-  'G': -2.3219280948873622}, 
- {'A': -2.3219280948873622, 
-  'C': -2.3219280948873622, 
-  'T': 1.7655347463629771, 
-  'G': -2.3219280948873622}, 
- {'A': 1.3785116232537298, 
-  'C': -2.3219280948873622, 
-  'T': 0.0, 
-  'G': -2.3219280948873622}, 
- {'A': 1.7655347463629771, 
-  'C': -2.3219280948873622, 
-  'T': -2.3219280948873622, 
-  'G': -2.3219280948873622}
-]
-\end{verbatim}
-Here we can see positive values for symbols more frequent in the motif
-than in the background and negative for symbols more frequent in the
-background. $0.0$ means that it's equally likely to see a symbol in
-background and in the motif (e.g. `T' in the second-last position).
-
-\subsubsection{Reading and writing}
-
-Creating motifs from instances by hand is a bit boring, so it's
-useful to have some I/O functions for reading and writing
-motifs. There are no really well established standards for storing
-motifs, but there's a couple of formats which are more used than
-others. The most important distinction is whether the motif
-representation is based on instances or on some version of PWM matrix.
-On of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
- stores motifs in both formats, so
-let's look at how we can import JASPAR motifs from instances:
-%doctest ../Tests/Motif
-\begin{verbatim}
->>> from Bio import Motif
->>> arnt = Motif.read(open("Arnt.sites"), "jaspar-sites")
-\end{verbatim}
-and from a count matrix:
-%cont-doctest
-\begin{verbatim}
->>> srf = Motif.read(open("SRF.pfm"), "jaspar-pfm")
-\end{verbatim}
-
-The \verb|arnt| and \verb|srf| motifs can both do the same things for
-us, but they use different internal representations of the motif. We
-can tell that by inspecting the \verb|has_counts| and
-\verb|has_instances| properties:
-%cont-doctest
-\begin{verbatim}
->>> arnt.has_instances
-True
->>> srf.has_instances
-False
->>> srf.has_counts
-True
-\end{verbatim}
-%TODO - sort order and formatting for doctest?
-\begin{verbatim}
->>> srf.counts
-{'A': [2, 9, 0, 1, 32, 3, 46, 1, 43, 15, 2, 2],
- 'C': [1, 33, 45, 45, 1, 1, 0, 0, 0, 1, 0, 1],
- 'G': [39, 2, 1, 0, 0, 0, 0, 0, 0, 0, 44, 43],
- 'T': [4, 2, 0, 0, 13, 42, 0, 45, 3, 30, 0, 0]}
-\end{verbatim}
-
-There are conversion functions, which can help us convert between
-different representations:
-\begin{verbatim}
->>> arnt.make_counts_from_instances()
-{'A': [8, 38, 0, 0, 0, 0],
- 'C': [32, 0, 40, 0, 0, 0],
- 'G': [0, 2, 0, 40, 0, 40],
- 'T': [0, 0, 0, 0, 40, 0]}
-
->>> srf.make_instances_from_counts()
-[Seq('GGGAAAAAAAGG', IUPACUnambiguousDNA()),
- Seq('GGCCAAATAAGG', IUPACUnambiguousDNA()),
- Seq('GACCAAATAAGG', IUPACUnambiguousDNA()),
-....
-\end{verbatim}
-The important thing to remember here is that the method
-\verb|make_instances_from_counts()| creates fake instances, because
-usually there are very many possible sets of instances which give rise
-to the same pwm, and if we have only the count matrix, we cannot
-reconstruct the original one. This does not make any difference if we
-are using the PWM as the representation of the motif, but one should
-be careful with exporting instances from count-based motifs.
-
-Speaking of exporting, let's look at export functions. We can export to fasta:
-\begin{verbatim}
->>> print(m.format("fasta"))
->instance0
-TATAA
->instance1
-TATTA
->instance2
-TATAA
->instance3
-TATAA
-\end{verbatim}
-or to TRANSFAC-like matrix format (used by some motif processing software)
-\begin{verbatim}
->>> print(m.format("transfac"))
-XX
-TY Motif
-ID 
-BF undef
-P0 G A T C
-01 0 0 4 0
-02 0 4 0 0
-03 0 0 4 0
-04 0 3 1 0
-05 0 4 0 0
-XX
-\end{verbatim}
-
-Finally, if we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
-\begin{verbatim}
->>> arnt.weblogo("Arnt.png")
-\end{verbatim}
-We should get our logo saved as a png in the specified file.
-
-\subsection{Searching for instances}
-
-The most frequent use for a motif is to find its instances in some
-sequence. For the sake of this section, we will use an artificial sequence like this:
-
-\begin{verbatim}
-test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
-\end{verbatim}
-
-The simplest way to find instances, is to look for exact matches of
-the true instances of the motif:
-\begin{verbatim}
->>> for pos, seq in m.search_instances(test_seq):
-...     print(pos, seq.tostring())
-... 
-10 TATAA
-15 TATAA
-21 TATAA
-\end{verbatim}
-We can do the same with the reverse complement (to find instances on the complementary strand):
-\begin{verbatim}
->>> for pos, seq in m.reverse_complement().search_instances(test_seq):
-...     print(pos, seq.tostring())
-... 
-12 TAATA
-20 TTATA
-\end{verbatim}
-
-It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
-\begin{verbatim}
->>> for pos, score in m.search_pwm(test_seq, threshold=5.0):
-...     print(pos, score)
-... 
-10 8.44065060871
--12 7.06213898545
-15 8.44065060871
--20 8.44065060871
-21 8.44065060871
-\end{verbatim}
-You may notice the threshold parameter, here set arbitrarily to
-$5.0$. This is in $log_2$, so we are now looking only for words, which
-are 32 times more likely to occur under the motif model than in the
-background. The default threshold is $0.0$, which selects everything
-that looks more like the motif than the background.
-
-If you want to use a less arbitrary way of selecting thresholds, you
-can explore the \verb|Motif.score_distribution| class implementing an
-distribution of scores for a given motif. Since the space for a score
-distribution grows exponentially with motif length, we are using an
-approximation with a given precision to keep computation cost manageable:
-\begin{verbatim}
->>> sd = Motif.score_distribution(m, precision=10**4)
-\end{verbatim}
-The sd object can be used to determine a number of different thresholds.
-
-We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
-\begin{verbatim}
->>> sd.threshold_fpr(0.01)
-4.3535838726139886
-\end{verbatim}
-
-or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
-\begin{verbatim}
->>> sd.threshold_fnr(0.1)
-0.26651713652234044
-\end{verbatim}
-
-or a threshold (approximately) satisfying some relation between fpr
-and fnr $\frac{fnr}{fpr}\simeq t$:
-\begin{verbatim}
->>> sd.threshold_balanced(1000)
-8.4406506087056368
-\end{verbatim}
-
-or a threshold satisfying (roughly) the equality between the
-false-positive rate and the $-log$ of the information content (as used
-in patser software by Hertz and Stormo).
-
-For example, in case of our motif, you can get the threshold giving
-you exactly the same results (for this sequence) as searching for
-instances with balanced threshold with rate of $1000$.
-\begin{verbatim}
->>> for pos, score in m.search_pwm(test_seq, threshold=sd.threshold_balanced(1000)):
-...     print(pos, score)
-... 
-10 8.44065060871
-15 8.44065060871
--20 8.44065060871
-21 8.44065060871
-\end{verbatim}
-
-\subsection{Comparing motifs}
-Once we have more than one motif, we might want to compare them. For
-that, we have currently three different methods of \verb|Bio.Motif|
-objects.
-
-Before we start comparing motifs, I should point out that motif
-boundaries are usually quite arbitrary. This means, that we often need
-to compare motifs of different lengths, so comparison needs to involve
-some kind of alignment.  This means, that we have to take into account two things:
-\begin{itemize}
-\item alignment of motifs
-\item some function to compare aligned motifs
-\end{itemize}
-In \verb|Bio.Motif| we have 3 different functions for motif
-comparison, which are based on the same idea behind motif alignment,
-but use different functions to compare aligned motifs. Briefly
-speaking, we are using ungapped alignment of PWMs and substitute the
-missing columns at the beginning and end of the matrices with
-background distribution. All three comparison functions are written in
-such a way, that they can be interpreted as distance measures, however
-only one (\verb|dist_dpq|) satisfies the triangle inequality. All of
-them return the minimal distance and the corresponding offset between
-motifs.
-
-To show how these functions work, let us first load another motif,
-which is similar to our test motif \verb|m|:
-\begin{verbatim}
->>> ubx=Motif.read(open("Ubx.pfm"), "jaspar-pfm")
-<Bio.Motif.Motif.Motif object at 0xc29b90>
->>> ubx.consensus()
-Seq('TAAT', IUPACUnambiguousDNA())
-\end{verbatim}
-
-The first function we'll use to compare these motifs is based on
-Pearson correlation. Since we want it to resemble a distance
-measure, we actually take $1-r$, where $r$ is the Pearson correlation
-coefficient (PCC):
-\begin{verbatim}
->>> m.dist_pearson(ubx)
-(0.41740393308237722, 2)
-\end{verbatim}
-This means, that the best PCC between motif \verb|m| and  \verb|Ubx| is obtained with the following alignment:
-\begin{verbatim}
-bbTAAT
-TATAAb
-\end{verbatim}
-where \verb|b| stands for background distribution. The PCC itself is
-roughly $1-0.42=0.58$. If we try the reverse complement of the Ubx motif:
-
-\begin{verbatim}
->>> m.dist_pearson(ubx.reverse_complement())
-(0.25784180151584823, 1)
-\end{verbatim}
-We can see that the PCC is better (almost $0.75$), and the alignment is also different:
-\begin{verbatim}
-bATTA
-TATAA
-\end{verbatim}
-
-There are two other functions: \verb|dist_dpq|, which is a true metric (satisfying traingle inequality) based on the Kullback-Leibler divergence 
-\begin{verbatim}
->>> m.dist_dpq(ubx.reverse_complement())
-(0.49292358382899853, 1)
-\end{verbatim}
-
-and the \verb|dist_product| method, which is based on the product of
-probabilities which can be interpreted as the probability of
-independently generating the same instance by both motifs.
-
-\begin{verbatim}
->>> m.dist_product(ubx.reverse_complement())
-(0.16224587301064275, 1)
-\end{verbatim}
-
-\subsection{\emph{De novo} motif finding}
-
-Currently, Biopython has only limited support for \emph{de novo} motif
-finding. Namely, we support running and parsing of AlignAce and
-MEME. Since the number of motif finding tools is growing rapidly, 
-contributions of new parsers are welcome. 
-
-\subsubsection{MEME}
-
-Let's assume, you have run MEME on sequences of your choice with your
-favorite parameters and saved the output in the file
-\verb|meme.out|. You can retrieve the motifs reported by MEME by
-running the following piece of code:
-
-\begin{verbatim}
->>> motifsM = list(Motif.parse(open("meme.out"), "MEME"))
->>> motifsM
-[<Bio.Motif.MEMEMotif.MEMEMotif object at 0xc356b0>]
-\end{verbatim}
-
-Besides the most wanted list of motifs, the result object contains more useful information, accessible through properties with self-explanatory names:
-\begin{itemize}
-\item \verb|.alphabet|
-\item \verb|.datafile|
-\item \verb|.sequence_names|
-\item \verb|.version|
-\item \verb|.command|
-\end{itemize}
-
-The motifs returned by MEMEParser can be treated exactly like regular
-Motif objects (with instances), they also provide some extra
-functionality, by adding additional information about the instances. 
-
-\begin{verbatim}
->>> motifsM[0].consensus()
-Seq('CTCAATCGTA', IUPACUnambiguousDNA())
-
->>> motifsM[0].instances[0].pvalue
-8.71e-07
->>> motifsM[0].instances[0].sequence_name
-'SEQ10;'
->>> motifsM[0].instances[0].start
-3
->>> motifsM[0].instances[0].strand
-'+'
-\end{verbatim}
-
-
-\subsubsection{AlignAce}
-
-We can do very similar things with AlignACE program. Assume, you have
-your output in the file \verb|alignace.out|. You can parse your output
-with the following code:
-
-\begin{verbatim}
->>> motifsA=list(Motif.parse(open("alignace.out"), "AlignAce"))
-\end{verbatim}
-
-Again, your motifs behave as they should:
-\begin{verbatim}
->>> motifsA[0].consensus()
-Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-In fact you can even see, that AlignAce found a very similar motif as
-MEME, it is just a longer version of a reverse complement of MEME
-motif:
-\begin{verbatim}
->>> motifsM[0].reverse_complement().consensus()
-Seq('TACGATTGAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-If you have AlignAce installed on the same machine, you can also run
-it directly from Biopython. Short example of how this can be done is
-shown below (other parameters can be specified as keyword parameters):
-
-\begin{verbatim}
->>> command="/opt/bin/AlignACE"
->>> input_file="test.fa"
->>> from Bio.Motif.Applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
->>> stdout, stderr= cmd()
-\end{verbatim}
-
-Since AlignAce prints all its output to standard output, you can get
-to your motifs by parsing the first part of the result:
-\begin{verbatim}
-motifs=list(Motif.parse(stdout,"AlignAce"))
-\end{verbatim}
 
 
 \chapter{Cluster analysis}
@@ -17627,6 +17165,36 @@ the test are failing. For example,
 \begin{verbatim}
 python test_Cluster.py
 \end{verbatim}
+
+\subsection{Running the tests using Tox}
+
+Like most Python projects, you can also use
+\href{http://tox.readthedocs.org/en/latest/}{Tox} to run the tests on multiple
+Python versions, provided they are already installed in your system.
+
+We do not provide the configuration \texttt{tox.ini} file in our code base because
+of difficulties pinning down user-specific settings (e.g. executable names of the
+Python versions). You may also only be interested in testing Biopython only against
+a subset of the Python versions that we support.
+
+If you are interested in using Tox, you may start with the example \texttt{tox.ini}
+shown below:
+
+\begin{verbatim}
+[tox]
+envlist = py26, py27, pypy, py33, py34, jython
+
+[testenv]
+changedir = Tests
+commands = {envpython} run_tests.py --offline
+deps =
+    numpy
+\end{verbatim}
+
+Using the template above, executing \texttt{tox} will test your Biopython code against
+Python2.6, Python2.7, PyPy, Python3.3, Python3.4, and Jython. It assumes that those
+Pythons' executables are named accordingly: python2.6 for Python2.6, and so on.
+
 
 \section{Writing tests}
 

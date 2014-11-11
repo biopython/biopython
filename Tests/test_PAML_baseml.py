@@ -172,7 +172,7 @@ class ModTest(unittest.TestCase):
                         "fix_blength": None,
                         "method": 0}
         self.bml.read_ctl_file(self.ctl_file)
-        #Compare the dictionary keys:
+        # Compare the dictionary keys:
         self.assertEqual(sorted(self.bml._options), sorted(target_options))
         for key in target_options:
             self.assertEqual(self.bml._options[key], target_options[key],

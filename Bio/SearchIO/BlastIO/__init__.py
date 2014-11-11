@@ -57,7 +57,7 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | reference               | BlastOutput_reference       |
 |                +-------------------------+-----------------------------+
-|                | version                 | BlastOutput_version*        |
+|                | version                 | BlastOutput_version[1]      |
 |                +-------------------------+-----------------------------+
 |                | description             | Iteration_query-def         |
 |                +-------------------------+-----------------------------+
@@ -145,7 +145,6 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | query                   | Hsp_qseq                    |
 +----------------+-------------------------+-----------------------------+
-* may be modified
 
 You may notice that in BLAST XML files, sometimes BLAST replaces your true
 sequence ID with its own generated ID. For example, the query IDs become
@@ -268,7 +267,7 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | bitscore_raw      | score        |
 +-------------+-------------------+--------------+
-| HSPFragment | frames            | frames*      |
+| HSPFragment | frames            | frames[2]    |
 | (also via   +-------------------+--------------+
 | HSP)        | aln_span          | length       |
 |             +-------------------+--------------+
@@ -288,8 +287,6 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | hit_start         | sstart       |
 +-------------+-------------------+--------------+
-* When 'frames' is present, both `query_frame` and `hit_frame` will be present
-  as well. It is recommended that you use these instead of 'frames' directly.
 
 If the parsed file is commented, the following attributes may be available as
 well:
@@ -368,7 +365,7 @@ The blast-text parser provides the following object attributes:
 |                 | pos_num                 | number of positive matches in    |
 |                 |                         | alignment                        |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | aln_annotation          | alignment homology string        |
+| HSPFragment     | aln_annotation          | alignment similarity string      |
 | (also via       +-------------------------+----------------------------------+
 | HSP)            | aln_span                | length of alignment fragment     |
 |                 +-------------------------+----------------------------------+
@@ -393,11 +390,20 @@ The blast-text parser provides the following object attributes:
 |                 | query_strand            | query sequence strand            |
 +-----------------+-------------------------+----------------------------------+
 
+
+.. [1] may be modified
+
+.. [2] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
+   present as well. It is recommended that you use these instead of 'frames' directly.
+
 """
 
 from .blast_tab import BlastTabParser, BlastTabIndexer, BlastTabWriter
 from .blast_xml import BlastXmlParser, BlastXmlIndexer, BlastXmlWriter
 from .blast_text import BlastTextParser
+
+__docformat__ = "restructuredtext en"
+
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

@@ -37,7 +37,7 @@ class Record(object):
         self.nodetype = ''
         self.sccs = ''
         self.name = ''
-        self.description =''
+        self.description = ''
         if line:
             self._process(line)
 
@@ -47,13 +47,13 @@ class Record(object):
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.
         """
-        #For example ::
+        # For example ::
         #
-        #21953   px      b.1.2.1 d1dan.1 1dan T:,U:91-106
-        #48724   cl      b       -       All beta proteins
-        #48725   cf      b.1     -       Immunoglobulin-like beta-sandwich
-        #49265   sf      b.1.2   -       Fibronectin type III
-        #49266   fa      b.1.2.1 -       Fibronectin type III
+        # 21953   px      b.1.2.1 d1dan.1 1dan T:,U:91-106
+        # 48724   cl      b       -       All beta proteins
+        # 48725   cf      b.1     -       Immunoglobulin-like beta-sandwich
+        # 49265   sf      b.1.2   -       Fibronectin type III
+        # 49266   fa      b.1.2.1 -       Fibronectin type III
 
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols

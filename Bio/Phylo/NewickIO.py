@@ -75,6 +75,7 @@ def _parse_confidence(text):
 def _format_comment(text):
     return '[%s]' % (text.replace('[', '\\[').replace(']', '\\]'))
 
+
 def _get_comment(clade):
     if hasattr(clade, 'comment') and clade.comment:
         return _format_comment(str(clade.comment))
@@ -102,7 +103,17 @@ class Parser(object):
         self.comments_are_confidence = comments_are_confidence
         self.rooted = rooted
         buf = ''
+        unicodeChecked = False
+        unicodeLines = ("\xef", "\xff", "\xfe", "\x00")
         for line in self.handle:
+            if not unicodeChecked:
+                # check for unicode byte order marks on first line only,
+                # these lead to parsing errors (on Python 2)
+                if line.startswith(unicodeLines):
+                    raise NewickError("The file or stream you attempted to parse includes "
+                                      "unicode byte order marks.  You must convert it to "
+                                      "ASCII before it can be parsed.")
+                unicodeChecked = True
             buf += line.rstrip()
             if buf.endswith(';'):
                 yield self._parse_tree(buf)
@@ -207,11 +218,12 @@ class Parser(object):
     def process_clade(self, clade):
         """Final processing of a parsed clade. Removes the node's parent and
         returns it."""
-        if (clade.name and not (self.values_are_confidence or
-                                self.comments_are_confidence)
-            and clade.confidence is None):
+        if ((clade.name) and not
+            (self.values_are_confidence or self.comments_are_confidence) and
+            (clade.confidence is None) and
+            (clade.clades)):
             clade.confidence = _parse_confidence(clade.name)
-            if not clade.confidence is None:
+            if clade.confidence is not None:
                 clade.name = None
 
         if hasattr(clade, 'parent'):

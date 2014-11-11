@@ -339,8 +339,8 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             score_only)
     score_matrix, trace_matrix = x
 
-    #print("SCORE %s" % print_matrix(score_matrix))
-    #print("TRACEBACK %s" % print_matrix(trace_matrix))
+    # print("SCORE %s" % print_matrix(score_matrix))
+    # print("TRACEBACK %s" % print_matrix(trace_matrix))
 
     # Look for the proper starting point.  Get a list of all possible
     # starting points.
@@ -600,8 +600,8 @@ def _recover_alignments(sequenceA, sequenceB, starts,
     # is a recursive procedure, but it's implemented here iteratively
     # with a stack.
     lenA, lenB = len(sequenceA), len(sequenceB)
-    tracebacks = [] # list of (seq1, seq2, score, begin, end)
-    in_process = [] # list of ([same as tracebacks], prev_pos, next_pos)
+    tracebacks = []  # list of (seq1, seq2, score, begin, end)
+    in_process = []  # list of ([same as tracebacks], prev_pos, next_pos)
 
     # sequenceA and sequenceB may be sequences, including strings,
     # lists, or list-like objects.  In order to preserve the type of
@@ -856,7 +856,7 @@ def print_matrix(matrix):
             matrixT[j].append(len(str(matrix[i][j])))
     ndigits = [max(x) for x in matrixT]
     for i in range(len(matrix)):
-        #Using string formatting trick to add leading spaces,
+        # Using string formatting trick to add leading spaces,
         print(" ".join("%*s " % (ndigits[j], matrix[i][j])
                        for j in range(len(matrix[i]))))
 
@@ -878,7 +878,7 @@ def format_alignment(align1, align2, score, begin, end):
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
 try:
-    from cpairwise2 import rint, _make_score_matrix_fast
+    from .cpairwise2 import rint, _make_score_matrix_fast
 except ImportError:
     pass
 

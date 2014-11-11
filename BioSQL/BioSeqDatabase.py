@@ -1,7 +1,7 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2014 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
-# Revisions 2013 copyright by Tiago Antao.  All rights reserved.
+# Revisions 2013-2014 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -14,7 +14,9 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 import os
+import sys
 
+from Bio._py3k import _universal_read_mode
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -33,14 +35,14 @@ def open_database(driver="MySQLdb", **kwargs):
         >>> from BioSeq import BioSeqDatabase
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
-    the various options are:
-    driver -> The name of the database driver to use for connecting. The
-    driver should implement the python DB API. By default, the MySQLdb
-    driver is used.
-    user -> the username to connect to the database with.
-    password, passwd -> the password to connect with
-    host -> the hostname of the database
-    database or db -> the name of the database
+    Arguments:
+     - driver - The name of the database driver to use for connecting. The
+       driver should implement the python DB API. By default, the MySQLdb
+       driver is used.
+     - user -the username to connect to the database with.
+     - password, passwd - the password to connect with
+     - host - the hostname of the database
+     - database or db - the name of the database
     """
     if driver == "psycopg":
         raise ValueError("Using BioSQL with psycopg (version one) is no "
@@ -57,18 +59,20 @@ def open_database(driver="MySQLdb", **kwargs):
             url_pref = "jdbc:postgresql://" + kwargs["host"] + "/"
 
     else:
-        module = __import__(driver)
-    connect = getattr(module, "connect")
+        module = __import__(driver, fromlist=["connect"])
+    connect = module.connect
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver == "MySQLdb" and os.name != "java":
+    if driver in ["MySQLdb", "mysql.connector"] and os.name != "java":
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
         if "password" in kw:
             kw["passwd"] = kw["password"]
             del kw["password"]
+        # kw["charset"] = "utf8"
+        # kw["use_unicode"] = True
     else:
         # DB-API recommendations
         if "db" in kw:
@@ -91,19 +95,7 @@ def open_database(driver="MySQLdb", **kwargs):
     elif driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
-        try:
-            conn = connect(**kw)
-        except module.InterfaceError:
-            # Ok, so let's try building a DSN
-            # (older releases of psycopg need this)
-            if "database" in kw:
-                kw["dbname"] = kw["database"]
-                del kw["database"]
-            elif "db" in kw:
-                kw["dbname"] = kw["db"]
-                del kw["db"]
-            dsn = ' '.join('='.join(i) for i in kw.items())
-            conn = connect(dsn)
+        conn = connect(**kw)
 
     if os.name == "java":
         server = DBServer(conn, module, driver)
@@ -134,16 +126,23 @@ def open_database(driver="MySQLdb", **kwargs):
 
 
 class DBServer:
+
     """Represents a BioSQL database continaing namespaces (sub-databases).
 
     This acts like a Python dictionary, giving access to each namespace
     (defined by a row in the biodatabase table) as a BioSeqDatabase object.
     """
+
     def __init__(self, conn, module, module_name=None):
         self.module = module
         if module_name is None:
             module_name = module.__name__
-        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name))
+        if module_name == "mysql.connector" and sys.version_info[0] == 3:
+            wrap_cursor = True
+        else:
+            wrap_cursor = False
+        self.adaptor = Adaptor(
+            conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor)
         self.module_name = module_name
 
     def __repr__(self):
@@ -164,11 +163,11 @@ class DBServer:
 
     def __iter__(self):
         """Iterate over namespaces (sub-databases) in the database."""
-        #TODO - Iterate over the cursor, much more efficient
+        # TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_biodatabase_names())
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems etc
+        # Python 2, use iteritems etc
         def keys(self):
             """List of namespaces (sub-databases) in the database."""
             return self.adaptor.list_biodatabase_names()
@@ -195,7 +194,7 @@ class DBServer:
             for key in self:
                 yield key, self[key]
     else:
-        #Python 3, items etc are all iterators
+        # Python 3, items etc are all iterators
         def keys(self):
             """Iterate over namespaces (sub-databases) in the database."""
             return iter(self)
@@ -214,7 +213,9 @@ class DBServer:
         """Remove a namespace and all its entries."""
         if name not in self:
             raise KeyError(name)
-        self.remove_database(name)
+        db_id = self.adaptor.fetch_dbid_by_dbname(name)
+        remover = Loader.DatabaseRemover(self.adaptor, db_id)
+        remover.remove()
 
     def remove_database(self, db_name):
         """Remove a namespace and all its entries (OBSOLETE).
@@ -231,9 +232,7 @@ class DBServer:
         warnings.warn("This method is deprecated.  In keeping with the "
                       "dictionary interface, you can now use 'del "
                       "server[name]' instead", BiopythonDeprecationWarning)
-        db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
-        remover = Loader.DatabaseRemover(self.adaptor, db_id)
-        remover.remove()
+        self.__delitem__(db_name)
 
     def new_database(self, db_name, authority=None, description=None):
         """Add a new database to the server and return it.
@@ -256,16 +255,15 @@ class DBServer:
         # the default and removing the simple-minded approach.
 
         # read the file with all comment lines removed
-        sql_handle = open(sql_file, "rU")
-        sql = r""
-        for line in sql_handle:
-            if line.startswith("--"):  # don't include comment lines
-                pass
-            elif line.startswith("#"):  # ditto for MySQL comments
-                pass
-            elif line.strip():  # only include non-blank lines
-                sql += line.strip()
-                sql += ' '
+        sql = ""
+        with open(sql_file, _universal_read_mode) as sql_handle:
+            for line in sql_handle:
+                if line.startswith("--"):  # don't include comment lines
+                    pass
+                elif line.startswith("#"):  # ditto for MySQL comments
+                    pass
+                elif line.strip():  # only include non-blank lines
+                    sql += line.strip() + " "
 
         # two ways to load the SQL
         # 1. PostgreSQL can load it all at once and actually needs to
@@ -275,13 +273,14 @@ class DBServer:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
-        elif self.module_name in ["MySQLdb", "sqlite3"]:
+        elif self.module_name in ["mysql.connector", "MySQLdb", "sqlite3"]:
             sql_parts = sql.split(";")  # one line per sql command
-            for sql_line in sql_parts[:-1]:  # don't use the last item, it's blank
+            # don't use the last item, it's blank
+            for sql_line in sql_parts[:-1]:
                 self.adaptor.cursor.execute(sql_line)
         else:
             raise ValueError("Module %s not supported by the loader." %
-                    (self.module_name))
+                             (self.module_name))
 
     def commit(self):
         """Commits the current transaction to the database."""
@@ -296,10 +295,47 @@ class DBServer:
         return self.adaptor.close()
 
 
+class _CursorWrapper:
+
+    """A wraper for mysql.connector resolving bytestring representations."""
+
+    def __init__(self, real_cursor):
+        self.real_cursor = real_cursor
+
+    def execute(self, operation, params=None, multi=False):
+        self.real_cursor.execute(operation, params, multi)
+
+    def _convert_tuple(self, tuple_):
+        tuple_list = list(tuple_)
+        for i, elem in enumerate(tuple_list):
+            if type(elem) is bytes:
+                tuple_list[i] = elem.decode("utf-8")
+        return tuple(tuple_list)
+
+    def _convert_list(self, lst):
+        ret_lst = []
+        for tuple_ in lst:
+            new_tuple = self._convert_tuple(tuple_)
+            ret_lst.append(new_tuple)
+        return ret_lst
+
+    def fetchall(self):
+        rv = self.real_cursor.fetchall()
+        return self._convert_list(rv)
+
+    def fetchone(self):
+        tuple_ = self.real_cursor.fetchone()
+        return self._convert_tuple(tuple_)
+
+
 class Adaptor:
-    def __init__(self, conn, dbutils):
+
+    def __init__(self, conn, dbutils, wrap_cursor=False):
         self.conn = conn
-        self.cursor = conn.cursor()
+        if wrap_cursor:
+            self.cursor = _CursorWrapper(conn.cursor())
+        else:
+            self.cursor = conn.cursor()
         self.dbutils = dbutils
 
     def last_id(self, table):
@@ -328,8 +364,6 @@ class Adaptor:
         rv = self.cursor.fetchall()
         if not rv:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
-        # Cannot happen (UK)
-##        assert len(rv) == 1, "More than one biodatabase with name %r" % dbname
         return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
@@ -444,7 +478,7 @@ class Adaptor:
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
         # does it need dbutils?
-        #return self.execute_one(
+        # return self.execute_one(
         #    """select SUBSTRING(seq FROM %s FOR %s)
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
@@ -467,12 +501,12 @@ class Adaptor:
 _allowed_lookups = {
     # Lookup name / function name to get id, function to list all ids
     'primary_id': "fetch_seqid_by_identifier",
-    'gi':         "fetch_seqid_by_identifier",
+    'gi': "fetch_seqid_by_identifier",
     'display_id': "fetch_seqid_by_display_id",
-    'name':       "fetch_seqid_by_display_id",
-    'accession':  "fetch_seqid_by_accession",
-    'version':    "fetch_seqid_by_version",
-    }
+    'name': "fetch_seqid_by_display_id",
+    'accession': "fetch_seqid_by_accession",
+    'version': "fetch_seqid_by_version",
+}
 
 
 class BioSeqDatabase:
@@ -481,6 +515,7 @@ class BioSeqDatabase:
     i.e. One row in the biodatabase table, and all all rows in the bioentry
     table associated with it.
     """
+
     def __init__(self, adaptor, name):
         self.adaptor = adaptor
         self.name = name
@@ -556,7 +591,7 @@ class BioSeqDatabase:
         """Remove an entry and all its annotation."""
         if key not in self:
             raise KeyError(key)
-        #Assuming this will automatically cascade to the other tables...
+        # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
         self.adaptor.execute(sql, (self.dbid, key))
@@ -571,22 +606,22 @@ class BioSeqDatabase:
         """Check if a primary (internal) id is this namespace (sub database)."""
         sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
-        #The bioentry_id field is an integer in the schema.
-        #PostgreSQL will throw an error if we use a non integer in the query.
+        # The bioentry_id field is an integer in the schema.
+        # PostgreSQL will throw an error if we use a non integer in the query.
         try:
             bioentry_id = int(value)
         except ValueError:
             return False
         return bool(self.adaptor.execute_and_fetch_col0(sql,
-                                                  (self.dbid, bioentry_id))[0])
+                                                        (self.dbid, bioentry_id))[0])
 
     def __iter__(self):
         """Iterate over ids (which may not be meaningful outside this database)."""
-        #TODO - Iterate over the cursor, much more efficient
+        # TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_bioentry_ids(self.dbid))
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems etc
+        # Python 2, use iteritems etc
         def keys(self):
             """List of ids which may not be meaningful outside this database."""
             return self.adaptor.list_bioentry_ids(self.dbid)
@@ -613,7 +648,7 @@ class BioSeqDatabase:
             for key in self:
                 yield key, self[key]
     else:
-        #Python 3, items etc are all iterators
+        # Python 3, items etc are all iterators
         def keys(self):
             """Iterate over ids (which may not be meaningful outside this database)."""
             return iter(self)
@@ -679,10 +714,10 @@ class BioSeqDatabase:
         global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
             num_records += 1
-            #Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
-            #the RULES are present check for a duplicate record before loading
+            # Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
+            # the RULES are present check for a duplicate record before loading
             if _POSTGRES_RULES_PRESENT:
-                #Recreate what the Loader's _load_bioentry_table will do:
+                # Recreate what the Loader's _load_bioentry_table will do:
                 if cur_record.id.count(".") == 1:
                     accession, version = cur_record.id.split('.')
                     try:
@@ -697,10 +732,11 @@ class BioSeqDatabase:
                 sql = "SELECT bioentry_id FROM bioentry WHERE (identifier " + \
                       "= '%s' AND biodatabase_id = '%s') OR (accession = " + \
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
-                self.adaptor.execute(sql % (gi, self.dbid, accession, version, self.dbid))
+                self.adaptor.execute(
+                    sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
                     raise self.adaptor.conn.IntegrityError("Duplicate record "
-                                     "detected: record has not been inserted")
-            #End of hack
+                                                           "detected: record has not been inserted")
+            # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records

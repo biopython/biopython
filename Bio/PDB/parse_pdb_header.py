@@ -133,16 +133,16 @@ def parse_pdb_header(infile):
 
 def _parse_pdb_header_list(header):
     # database fields
-    dict={'name':"",
-        'head':'',
-        'deposition_date' : "1909-01-08",
-        'release_date' : "1909-01-08",
-        'structure_method' : "unknown",
-        'resolution' : 0.0,
-        'structure_reference' : "unknown",
-        'journal_reference' : "unknown",
-        'author' : "",
-        'compound':{'1':{'misc':''}},'source':{'1':{'misc':''}}}
+    dict={'name': "",
+        'head': '',
+        'deposition_date': "1909-01-08",
+        'release_date': "1909-01-08",
+        'structure_method': "unknown",
+        'resolution': 0.0,
+        'structure_reference': "unknown",
+        'journal_reference': "unknown",
+        'author': "",
+        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
 
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
@@ -153,9 +153,9 @@ def _parse_pdb_header_list(header):
 
     for hh in header:
         h=re.sub("[\s\n\r]*\Z", "", hh) # chop linebreaks off
-        #key=re.sub("\s.+\s*","",h)
+        # key=re.sub("\s.+\s*","",h)
         key = h[:6].strip()
-        #tail=re.sub("\A\w+\s+\d*\s*","",h)
+        # tail=re.sub("\A\w+\s+\d*\s*","",h)
         tail = h[10:].strip()
         # print("%s:%s" % (key, tail)
 
@@ -184,7 +184,7 @@ def _parse_pdb_header_list(header):
                 ckey=tok[0]
                 cval=re.sub("\A\s*", "", tok[1])
                 if ckey=='mol_id':
-                    dict['compound'][cval]={'misc':''}
+                    dict['compound'][cval]={'misc': ''}
                     comp_molid=cval
                     last_comp_key="misc"
                 else:
@@ -200,7 +200,7 @@ def _parse_pdb_header_list(header):
                 ckey=tok[0]
                 cval=re.sub("\A\s*", "", tok[1])
                 if ckey=='mol_id':
-                    dict['source'][cval]={'misc':''}
+                    dict['source'][cval]={'misc': ''}
                     comp_molid=cval
                     last_src_key="misc"
                 else:
@@ -247,7 +247,7 @@ def _parse_pdb_header_list(header):
                 try:
                     dict['resolution']=float(r)
                 except:
-                    #print('nonstandard resolution %r' % r)
+                    # print('nonstandard resolution %r' % r)
                     dict['resolution']=None
         else:
             # print(key)

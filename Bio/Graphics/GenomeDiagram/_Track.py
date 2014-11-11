@@ -138,7 +138,7 @@ class Track(object):
     def __init__(self, name=None, height=1, hide=0, greytrack=0,
                  greytrack_labels=5, greytrack_fontsize=8,
                  greytrack_font='Helvetica', greytrack_font_rotation=0,
-                 greytrack_font_color = colors.Color(0.6, 0.6, 0.6),
+                 greytrack_font_color=colors.Color(0.6, 0.6, 0.6),
                  scale=1, scale_format=None, scale_color=colors.black,
                  scale_font='Helvetica', scale_fontsize=6,
                  scale_fontangle=45, scale_largeticks=0.5, scale_ticks=1,
@@ -146,7 +146,7 @@ class Track(object):
                  scale_smalltick_interval=1e4, scale_largetick_labels=1,
                  scale_smalltick_labels=0, axis_labels=1,
                  start=None, end=None,
-                 greytrack_font_colour = None, scale_colour=None):
+                 greytrack_font_colour=None, scale_colour=None):
         """ __init__(self, name=None, ...)
 
             o height    Int describing the relative height to other tracks in the
@@ -217,7 +217,7 @@ class Track(object):
             o axis_labels       Boolean describing whether the value labels should
                                 be placed on the Y axes
         """
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if greytrack_font_colour is not None:
             greytrack_font_color = greytrack_font_colour
         if scale_colour is not None:
@@ -269,7 +269,7 @@ class Track(object):
         """
         set.id = self._next_id          # Assign unique id to set
         set.parent = self               # Make set's parent this track
-        self._sets[self._next_id] = set # Add set, keyed by unique id
+        self._sets[self._next_id] = set  # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
 
     def new_set(self, type='feature', **args):
@@ -286,7 +286,7 @@ class Track(object):
             setattr(set, key, args[key])
         set.id = self._next_id          # Assign unique id to set
         set.parent = self               # Make set's parent this track
-        self._sets[self._next_id] = set # Add set, keyed by unique id
+        self._sets[self._next_id] = set  # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
         return set
 

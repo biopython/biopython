@@ -1,6 +1,7 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
 
 """
+(DEPRECATED)
 This module allows to cache Simcoal2 results, and return on the fly
 in case the calculation was done. Async version
 
@@ -9,7 +10,6 @@ This version will run Sincoal2 (if necessary) Asynchrously.
 """
 
 import os
-
 from . import Cache
 
 

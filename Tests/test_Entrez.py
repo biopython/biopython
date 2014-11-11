@@ -19,27 +19,6 @@ if os.name == 'java':
                                   "Jython, see http://bugs.jython.org/issue1447")
 
 
-try:
-    from xml.parsers.expat import model
-    del model
-except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError("Not supported on PyPy 1.6, see "
-                                         "https://bugs.pypy.org/issue914")
-
-
-from xml.parsers import expat
-p = expat.ParserCreate(namespace_separator=" ")
-try:
-    p.StartElementHandler is None
-except AttributeError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError("Not supported on PyPy 1.7, see "
-                                         "https://bugs.pypy.org/issue933")
-del p
-del expat
-
-
 from Bio import Entrez
 
 
@@ -2888,6 +2867,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(len(record[0]["IdCheckList"]["Id"][0].attributes), 1)
         self.assertEqual(record[0]["IdCheckList"]["Id"][0].attributes["HasNeighbor"], "Y")
         self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"]), 0)
+
 
 class EGQueryTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EGQuery

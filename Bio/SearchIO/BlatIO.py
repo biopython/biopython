@@ -6,7 +6,7 @@
 """Bio.SearchIO parser for BLAT output formats.
 
 This module adds support for parsing BLAT outputs. BLAT (BLAST-Like Alignment
-Tool) is a sequence homology search program initially built for annotating
+Tool) is a sequence similarity search program initially built for annotating
 the human genome.
 
 Bio.SearchIO.BlastIO was tested using standalone BLAT version 34, psLayout
@@ -14,11 +14,11 @@ version 3. It should be able to parse psLayout version 4 without problems.
 
 More information on BLAT is available from these sites:
 
-  - Publication: http://genome.cshlp.org/content/12/4/656
-  - User guide: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
-  - Source download: http://www.soe.ucsc.edu/~kent/src
-  - Executable download: http://hgdownload.cse.ucsc.edu/admin/exe/
-  - Blat score calculation: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
+    - Publication: http://genome.cshlp.org/content/12/4/656
+    - User guide: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
+    - Source download: http://www.soe.ucsc.edu/~kent/src
+    - Executable download: http://hgdownload.cse.ucsc.edu/admin/exe/
+    - Blat score calculation: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
 
 
 Supported Formats
@@ -137,7 +137,7 @@ BlatIO provides the following attribute-column mapping:
 |                | query_start_all         | qStarts, start coordinate of each |
 |                |                         | query fragment                    |
 |                +-------------------------+-----------------------------------+
-|                | `len`*                  | block count, the number of blocks |
+|                | len [1]                 | block count, the number of blocks |
 |                |                         | in the alignment                  |
 +----------------+-------------------------+-----------------------------------+
 | HSPFragment    | hit                     | hit sequence, if present          |
@@ -148,8 +148,6 @@ BlatIO provides the following attribute-column mapping:
 |                +-------------------------+-----------------------------------+
 |                | query_strand            | strand, query sequence strand     |
 +----------------+-------------------------+-----------------------------------+
-* You can obtain the number of blocks / fragments in the HSP by invoking `len`
-  on the HSP
 
 In addition to the column mappings above, BlatIO also provides the following
 object attributes:
@@ -176,6 +174,10 @@ object attributes:
 Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
+
+.. [1] You can obtain the number of blocks / fragments in the HSP by invoking
+   ``len`` on the HSP
+
 """
 import re
 from math import log
@@ -190,6 +192,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']
 
+__docformat__ = "restructuredtext en"
+
 
 # precompile regex patterns
 _PTR_ROW_CHECK = r'^\d+\s+\d+\s+\d+\s+\d+'
@@ -200,9 +204,11 @@ _RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
 def _list_from_csv(csv_string, caster=None):
     """Transforms the given comma-separated string into a list.
 
-    Arguments:
-    csv_string -- Comma-separated string to transform.
-    caster -- Cast function to use on each list item.
+    :param csv_string: comma-separated input string
+    :type csv_string: string
+    :param caster: function used to cast each item in the input string
+                   to its intended type
+    :type caster: callable, accepts string, returns object
 
     """
     if caster is None:
@@ -214,12 +220,14 @@ def _list_from_csv(csv_string, caster=None):
 def _reorient_starts(starts, blksizes, seqlen, strand):
     """Reorients block starts into the opposite strand's coordinates.
 
-    Arguments:
-    starts -- List of integers, start coordinates.
-    start -- Integer, 'Q start' or 'T start' column
-    blksizes -- List of integers, block sizes.
-    seqlen -- Integer of total sequence length.
-    strand -- Integer denoting sequence strand.
+    :param starts: start coordinates
+    :type starts: list [int]
+    :param blksizes: block sizes
+    :type blksizes: list [int]
+    :param seqlen: sequence length
+    :type seqlen: int
+    :param strand: sequence strand
+    :type strand: int, choice of -1, 0, or 1
 
     """
     assert len(starts) == len(blksizes), \
@@ -285,7 +293,7 @@ def _create_hsp(hid, qid, psl):
     # protein flag
     is_protein = _is_protein(psl)
     # strand
-    #if query is protein, strand is 0
+    # if query is protein, strand is 0
     if is_protein:
         qstrand = 0
     else:

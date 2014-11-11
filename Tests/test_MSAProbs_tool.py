@@ -16,12 +16,12 @@ from Bio._py3k import getoutput
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 msaprobs_exe = None
 if sys.platform == "win32":
-    #TODO
+    # TODO
     raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
 else:
     output = getoutput("msaprobs -version")
@@ -72,7 +72,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
-                            "non-zero exit status" in str(err))
+                            "Non-zero return code " in str(err), str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 

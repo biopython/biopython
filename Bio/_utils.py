@@ -27,7 +27,7 @@ def iterlen(items):
 
     """
     try:
-        #e.g. Under Python 2, the xrange iterator defines __len__
+        # e.g. Under Python 2, the xrange iterator defines __len__
         return len(items)
     except TypeError:
         for i, x in enumerate(items):
@@ -82,13 +82,13 @@ def find_test_dir(start_dir=None):
     while True:
         if os.path.isdir(os.path.join(target, "Bio")) \
         and os.path.isdir(os.path.join(target, "Tests")):
-           #Good, we're in the Biopython root now
-           return os.path.abspath(os.path.join(target, "Tests"))
-        #Recurse up the tree
-        #TODO - Test this on Windows
+            # Good, we're in the Biopython root now
+            return os.path.abspath(os.path.join(target, "Tests"))
+        # Recurse up the tree
+        # TODO - Test this on Windows
         new, tmp = os.path.split(target)
         if target == new:
-            #Reached root
+            # Reached root
             break
         target = new
     raise ValueError("Not within Biopython source tree: %r" % os.path.abspath(start_dir))

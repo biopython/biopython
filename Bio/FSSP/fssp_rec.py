@@ -15,7 +15,7 @@ class fff_rec:
             return self.data[index]
         elif (isinstance(index, tuple) or isinstance(index, list)) \
         and len(index) == 2:
-            #Not sure if this is needed anymore:
+            # Not sure if this is needed anymore:
             return self.data[index[0]:index[1]]
         else:
             return self.data[index]

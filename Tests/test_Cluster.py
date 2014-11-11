@@ -4,6 +4,17 @@
 
 import unittest
 
+# We require NumPy as a build dependency and runtime dependency,
+# so check this first:
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.Cluster")
+
+# Given NumPy is installed, if we can't import Cluster this is
+# most likely due to Biopython being installed without NumPy
 try:
     from Bio import Cluster
 except ImportError:
@@ -11,13 +22,6 @@ except ImportError:
     raise MissingPythonDependencyError("If you want to use Bio.Cluster, "
                                        "install NumPy first and then "
                                        "reinstall Biopython")
-
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Cluster")
 
 
 class TestCluster(unittest.TestCase):
@@ -105,13 +109,13 @@ class TestCluster(unittest.TestCase):
         except:
             self.fail("treecluster failed to accept matrix data2")
 
-        self.assertRaises(TypeError, lambda : treecluster(data3))
-        self.assertRaises(TypeError, lambda : treecluster(data4))
-        self.assertRaises(TypeError, lambda : treecluster(data5))
-        self.assertRaises(TypeError, lambda : treecluster(data6))
-        self.assertRaises(TypeError, lambda : treecluster(data7))
-        self.assertRaises(TypeError, lambda : treecluster(data8))
-        self.assertRaises(TypeError, lambda : treecluster(data9))
+        self.assertRaises(TypeError, lambda: treecluster(data3))
+        self.assertRaises(TypeError, lambda: treecluster(data4))
+        self.assertRaises(TypeError, lambda: treecluster(data5))
+        self.assertRaises(TypeError, lambda: treecluster(data6))
+        self.assertRaises(TypeError, lambda: treecluster(data7))
+        self.assertRaises(TypeError, lambda: treecluster(data8))
+        self.assertRaises(TypeError, lambda: treecluster(data9))
 
     def test_kcluster(self):
         if TestCluster.module=='Bio.Cluster':
@@ -130,6 +134,19 @@ class TestCluster(unittest.TestCase):
                              [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1]], int)
+
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
+        self.assertRaises(ValueError, kcluster, data,
+                          **{"nclusters": nclusters, "mask": mask,
+                             "weight": weight, "transpose": 0, "npass": 100,
+                             "method": "any", "dist": "e"})
+
+        # Distance should be one letter:
+        self.assertRaises(ValueError, kcluster, data,
+                          **{"nclusters": nclusters, "mask": mask,
+                             "weight": weight, "transpose": 0, "npass": 100,
+                             "method": "a", "dist": "euclidean"})
 
         clusterid, error, nfound = kcluster(data, nclusters=nclusters,
                                             mask=mask, weight=weight,
@@ -171,6 +188,19 @@ class TestCluster(unittest.TestCase):
                             [ 1, 1 ],
                             [ 1, 1 ]], int)
 
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
+        self.assertRaises(ValueError, kcluster, data,
+                          **{"nclusters": 3, "mask": mask,
+                             "weight": weight, "transpose": 0, "npass": 100,
+                             "method": "any", "dist": "e"})
+
+        # Distance should be one letter:
+        self.assertRaises(ValueError, kcluster, data,
+                          **{"nclusters": 3, "mask": mask,
+                             "weight": weight, "transpose": 0, "npass": 100,
+                             "method": "a", "dist": "euclidean"})
+
         clusterid, error, nfound = kcluster(data, nclusters=3, mask=mask,
                                             weight=weight, transpose=0,
                                             npass=100, method='a', dist='e')
@@ -202,6 +232,19 @@ class TestCluster(unittest.TestCase):
         c1 = [0]
         c2 = [1, 2]
         c3 = [3]
+
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
+        self.assertRaises(ValueError, clusterdistance, data,
+                          **{"mask": mask, "weight": weight,
+                             "index1": c1, "index2": c2, "transpose": 0,
+                             "method": "any", "dist": "e"})
+
+        # Distance should be one letter:
+        self.assertRaises(ValueError, clusterdistance, data,
+                          **{"mask": mask, "weight": weight,
+                             "index1": c1, "index2": c2, "transpose": 0,
+                             "method": "a", "dist": "euclidean"})
 
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c2, dist='e',
@@ -250,6 +293,21 @@ class TestCluster(unittest.TestCase):
         c2 = [ 4, 5, 6, 7 ]
         c3 = [ 8 ]
 
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
+        self.assertRaises(ValueError, clusterdistance, data,
+                          **{"mask": mask, "weight": weight,
+                             "index1": c1, "index2": c2,
+                             "method": "any", "dist": "e",
+                             "transpose":0})
+
+        # Distance should be one letter:
+        self.assertRaises(ValueError, clusterdistance, data,
+                          **{"mask": mask, "weight": weight,
+                             "index1": c1, "index2": c2,
+                             "method": "a", "dist": "euclidena",
+                             "transpose":0})
+
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c2, dist='e',
                                    method='a', transpose=0)
@@ -279,6 +337,17 @@ class TestCluster(unittest.TestCase):
                              [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1],
                              [ 1, 1, 1, 1, 1]], int)
+
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Method should be one letter:
+        self.assertRaises(ValueError, treecluster,
+                          **{"data": data1, "mask": mask1, "weight": weight1,
+                             "transpose":0, "method": "any", "dist": "e"})
+
+        # Distance should be one letter:
+        self.assertRaises(ValueError, treecluster,
+                          **{"data": data1, "mask": mask1, "weight": weight1,
+                             "transpose":0, "method": "any", "dist": "euclidean"})
 
         # test first data set
         # Pairwise average-linkage clustering"
@@ -547,6 +616,13 @@ class TestCluster(unittest.TestCase):
                             [ 1, 1, 1, 1, 1],
                             [ 1, 1, 1, 1, 1],
                             [ 1, 1, 1, 1, 1]], int)
+
+        # TODO - Use a context manager here once we drop Python 2.6
+        # Distance should be one letter:
+        self.assertRaises(ValueError, somcluster,
+                          **{"data": data, "mask": mask, "weight": weight,
+                             "transpose": 0, "nxgrid": 10, "nygrid": 10,
+                             "inittau": 0.02, "niter": 100, "dist": "euclidean"})
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight,
                                          transpose=0, nxgrid=10, nygrid=10,

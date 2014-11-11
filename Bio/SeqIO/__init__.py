@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-#Nice link:
+# Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
 r"""Sequence input/output as SeqRecord objects.
@@ -98,6 +98,7 @@ providing dictionary like access to any record. For example,
     3
     >>> print(len(record_dict["gi|1348917|gb|G26685|G26685"]))
     413
+    >>> record_dict.close()
 
 Many but not all of the supported input file formats can be indexed like
 this. For example "fasta", "fastq", "qual" and even the binary format "sff"
@@ -132,6 +133,7 @@ keep the output 100% identical to the input). For example,
     TAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGGAATTGNTTTG
     CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
     <BLANKLINE>
+    >>> record_dict.close()
 
 Here the original file and what Biopython would output differ in the line
 wrapping. Also note that under Python 3, the get_raw method will return a
@@ -154,6 +156,7 @@ example FASTQ file uses Unix style endings (b"\n" only),
     False
     >>> len(raw)
     78
+    >>> fastq_dict.close()
 
 Here is the same file but using DOS/Windows new lines (b"\r\n" instead),
 
@@ -170,6 +173,7 @@ Here is the same file but using DOS/Windows new lines (b"\r\n" instead),
     True
     >>> len(raw)
     82
+    >>> fastq_dict.close()
 
 Because this uses two bytes for each new line, the file is longer than
 the Unix equivalent with only one byte.
@@ -301,7 +305,7 @@ from Bio._py3k import basestring
 
 __docformat__ = "epytext en"  # not just plaintext
 
-#TODO
+# TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
 #
@@ -367,14 +371,14 @@ from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 
 
-#Convention for format names is "mainname-subtype" in lower case.
-#Please use the same names as BioPerl or EMBOSS where possible.
+# Convention for format names is "mainname-subtype" in lower case.
+# Please use the same names as BioPerl or EMBOSS where possible.
 #
-#Note that this simple system copes with defining
-#multiple possible iterators for a given format/extension
-#with the -subtype suffix
+# Note that this simple system copes with defining
+# multiple possible iterators for a given format/extension
+# with the -subtype suffix
 #
-#Most alignment file formats will be handled via Bio.AlignIO
+# Most alignment file formats will be handled via Bio.AlignIO
 
 _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "gb": InsdcIO.GenBankIterator,
@@ -397,7 +401,7 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "fastq-illumina": QualityIO.FastqIlluminaIterator,
                      "qual": QualityIO.QualPhredIterator,
                      "sff": SffIO.SffIterator,
-                     #Not sure about this in the long run:
+                     # Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
                      "seqxml": SeqXmlIO.SeqXmlIterator,
@@ -439,7 +443,7 @@ def write(sequences, handle, format):
     """
     from Bio import AlignIO
 
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -448,7 +452,7 @@ def write(sequences, handle, format):
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(sequences, SeqRecord):
-        #This raised an exception in order version of Biopython
+        # This raised an exception in order version of Biopython
         sequences = [sequences]
 
     if format in _BinaryFormats:
@@ -457,13 +461,13 @@ def write(sequences, handle, format):
         mode = 'w'
 
     with as_handle(handle, mode) as fp:
-        #Map the file format to a writer class
+        # Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
             count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
-            #Try and turn all the records into a single alignment,
-            #and write that using Bio.AlignIO
+            # Try and turn all the records into a single alignment,
+            # and write that using Bio.AlignIO
             alignment = MultipleSeqAlignment(sequences)
             alignment_count = AlignIO.write([alignment], fp, format)
             assert alignment_count == 1, \
@@ -538,18 +542,18 @@ def parse(handle, format, alphabet=None):
     Use the Bio.SeqIO.read(...) function when you expect a single record
     only.
     """
-    #NOTE - The above docstring has some raw \n characters needed
-    #for the StringIO example, hense the whole docstring is in raw
-    #string mode (see the leading r before the opening quote).
+    # NOTE - The above docstring has some raw \n characters needed
+    # for the StringIO example, hense the whole docstring is in raw
+    # string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
-    #Hack for SFF, will need to make this more general in future
+    # Hack for SFF, will need to make this more general in future
     if format in _BinaryFormats:
         mode = 'rb'
     else:
         mode = 'rU'
 
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -561,7 +565,7 @@ def parse(handle, format, alphabet=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     with as_handle(handle, mode) as fp:
-        #Map the file format to a sequence iterator:
+        # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
             if alphabet is None:
@@ -572,20 +576,20 @@ def parse(handle, format, alphabet=None):
                 except TypeError:
                     i = _force_alphabet(iterator_generator(fp), alphabet)
         elif format in AlignIO._FormatToIterator:
-            #Use Bio.AlignIO to read in the alignments
+            # Use Bio.AlignIO to read in the alignments
             i = (r for alignment in AlignIO.parse(fp, format,
                                                   alphabet=alphabet)
                  for r in alignment)
         else:
             raise ValueError("Unknown format '%s'" % format)
-        #This imposes some overhead... wait until we drop Python 2.4 to fix it
+        # This imposes some overhead... wait until we drop Python 2.4 to fix it
         for r in i:
             yield r
 
 
 def _force_alphabet(record_iterator, alphabet):
     """Iterate over records, over-riding the alphabet (PRIVATE)."""
-    #Assume the alphabet argument has been pre-validated
+    # Assume the alphabet argument has been pre-validated
     given_base_class = _get_base_alphabet(alphabet).__class__
     for record in record_iterator:
         if isinstance(_get_base_alphabet(record.seq.alphabet),
@@ -747,6 +751,7 @@ def index(filename, format, alphabet=None, key_function=None):
     True
     >>> print(records.get("Missing", None))
     None
+    >>> records.close()
 
     If the file is BGZF compressed, this is detected automatically. Ordinary
     GZIP files are not supported:
@@ -757,6 +762,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> print(records["EAS54_6_R1_2_1_540_792"].seq)
     TTGGCAGGCCAAGGCCGATGGATCA
+    >>> records.close()
 
     Note that this pseudo dictionary will not support all the methods of a
     true Python dictionary, for example values() is not defined since this
@@ -776,7 +782,7 @@ def index(filename, format, alphabet=None, key_function=None):
     dictionary, e.g.
 
     >>> from Bio import SeqIO
-    >>> records = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fastq"), "fastq"))
+    >>> records = SeqIO.to_dict(SeqIO.parse("Quality/example.fastq", "fastq"))
     >>> len(records)
     3
     >>> sorted(records)
@@ -810,6 +816,7 @@ def index(filename, format, alphabet=None, key_function=None):
     False
     >>> print(records.get("Missing", None))
     None
+    >>> records.close()
 
     Another common use case would be indexing an NCBI style FASTA file,
     where you might want to extract the GI number from the FASTA identifer
@@ -823,7 +830,7 @@ def index(filename, format, alphabet=None, key_function=None):
 
     See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
     """
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(filename, basestring):
         raise TypeError("Need a filename (not a handle)")
     if not isinstance(format, basestring):
@@ -836,8 +843,8 @@ def index(filename, format, alphabet=None, key_function=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:
-    from ._index import _FormatToRandomAccess # Lazy import
+    # Map the file format to a sequence iterator:
+    from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _IndexedSeqFileDict
     try:
         proxy_class = _FormatToRandomAccess[format]
@@ -888,6 +895,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     'gi|7525076|ref|NP_051101.1| Ycf2 [Arabidopsis thaliana]'
     >>> records["45478717"].description
     'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'
+    >>> records.close()
 
     In this example the two files contain 85 and 10 records respectively.
 
@@ -897,12 +905,12 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
     glob which is useful for building lists of files.
     """
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(index_filename, basestring):
         raise TypeError("Need a string for the index filename")
     if isinstance(filenames, basestring):
-        #Make the API a little more friendly, and more similar
-        #to Bio.SeqIO.index(...) for indexing just one file.
+        # Make the API a little more friendly, and more similar
+        # to Bio.SeqIO.index(...) for indexing just one file.
         filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
         raise TypeError(
@@ -915,7 +923,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:
+    # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
@@ -966,20 +974,20 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    #Hack for SFF, will need to make this more general in future
+    # Hack for SFF, will need to make this more general in future
     if in_format in _BinaryFormats:
         in_mode = 'rb'
     else:
         in_mode = 'rU'
 
-    #Don't open the output file until we've checked the input is OK?
+    # Don't open the output file until we've checked the input is OK?
     if out_format in ["sff", "sff_trim"]:
         out_mode = 'wb'
     else:
         out_mode = 'w'
 
-    #This will check the arguments and issue error messages,
-    #after we have opened the file which is a shame.
+    # This will check the arguments and issue error messages,
+    # after we have opened the file which is a shame.
     from ._convert import _handle_convert  # Lazy import
     with as_handle(in_file, in_mode) as in_handle:
         with as_handle(out_file, out_mode) as out_handle:
@@ -989,6 +997,9 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-if __name__ == "__main__":
-    from Bio._utils import run_doctest
-    run_doctest()
+# This helpful trick for testing no longer works with the
+# local imports :(
+#
+# if __name__ == "__main__":
+#    from Bio._utils import run_doctest
+#    run_doctest()

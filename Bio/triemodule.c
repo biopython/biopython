@@ -66,9 +66,6 @@ trie_subscript(trieobject *mp, PyObject *py_key)
 {
     const char *key;
     PyObject *py_value;
-#ifdef IS_PY3K
-    PyObject* bytes;
-#endif
 
     /* Make sure key is a string. */
 #ifdef IS_PY3K
@@ -80,19 +77,12 @@ trie_subscript(trieobject *mp, PyObject *py_key)
 	return NULL;
     }
 #ifdef IS_PY3K
-    bytes = PyUnicode_AsASCIIString(py_key);
-    if(!bytes) {
-	PyErr_SetString(PyExc_TypeError, "key must be an ASCII string");
-	return NULL;
-    }
-    key = PyBytes_AsString(bytes);
+    /* TODO - Review next line for buffer usage */
+    key = PyBytes_AS_STRING(PyUnicode_AsASCIIString(py_key));
 #else
     key = PyString_AS_STRING(py_key);
 #endif
     py_value = Trie_get(mp->trie, key);
-#ifdef IS_PY3K
-    Py_DECREF(bytes);
-#endif
     if(py_value == NULL)
 	PyErr_SetString(PyExc_KeyError, key);
     else
@@ -606,8 +596,13 @@ _write_to_handle(const void *towrite, const int length, void *handle)
     if(!length)
 	return 1;
 
-    if(!(py_retval = PyObject_CallMethod(py_handle, "write", "s#",
+#ifdef IS_PY3K
+    if(!(py_retval = PyObject_CallMethod(py_handle, "write", "y#",
 					 towrite, length)))
+#else
+      if(!(py_retval = PyObject_CallMethod(py_handle, "write", "s#",
+					   towrite, length)))
+#endif
 	goto _write_to_handle_cleanup;
     success = 1;
 
@@ -687,9 +682,6 @@ _read_from_handle(void *wasread, const int length, void *handle)
 {
     PyObject *py_handle = (PyObject *)handle;
     PyObject *py_retval = NULL;
-#ifdef IS_PY3K
-    PyObject* bytes = NULL;
-#endif
     int success = 0;
     char* buffer;
 
@@ -700,29 +692,21 @@ _read_from_handle(void *wasread, const int length, void *handle)
 
     py_retval = PyObject_CallMethod(py_handle, "read", "i", length);
 #ifdef IS_PY3K
-    if(!PyUnicode_Check(py_retval)) {
+    if(!PyBytes_Check(py_retval)) {
 #else
     if(!PyString_Check(py_retval)) {
 #endif
-        PyErr_SetString(PyExc_TypeError, "expected a string");
+        PyErr_SetString(PyExc_TypeError, "expected a bytes string");
         goto error;
     }
 #ifdef IS_PY3K
-    bytes = PyUnicode_AsASCIIString(py_retval);
-    if(!bytes) {
-	PyErr_SetString(PyExc_TypeError, "expected an ASCII string");
-	goto error;
-    }
-    buffer = PyBytes_AsString(bytes);
+    buffer = PyBytes_AS_STRING(py_retval);
 #else
     buffer = PyString_AS_STRING(py_retval);
 #endif
     memcpy(wasread, buffer, length);
     success = 1;
 error:
-#ifdef IS_PY3K
-    Py_XDECREF(bytes);
-#endif
     Py_XDECREF(py_retval);
     return success;
 }

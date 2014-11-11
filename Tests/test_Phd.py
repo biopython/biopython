@@ -18,7 +18,7 @@ class PhdTestOne(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd1 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.name, "34_222_(80-A03-19).b.ab1")
@@ -42,13 +42,13 @@ class PhdTestOne(unittest.TestCase):
                          "ctccgtcgga\n"
                          "+\n"
                          "IIJSVe\\\\XV\n")
-        #Contig 2
+        # Contig 2
         record = next(records)
         self.assertEqual(record.id, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.name, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [14, 17, 22, 10, 10, 10, 15, 8, 8, 9])
-        #Contig 3
+        # Contig 3
         record = next(records)
         self.assertEqual(record.id, '425_7_(71-A03-19).b.ab1')
         self.assertEqual(record.name, '425_7_(71-A03-19).b.ab1')
@@ -228,7 +228,7 @@ class PhdTestTwo(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "ML4924R")
         self.assertEqual(record.name, "ML4924R")
@@ -259,7 +259,7 @@ class PhdTest454(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd_454 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.name, "EBE03TV04IHLTF.77-243")
@@ -299,7 +299,7 @@ class PhdTestSolexa(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_537_446")
@@ -330,7 +330,7 @@ class PhdTestSolexa(unittest.TestCase):
                          "gccaatcaggtttctctgcaagcccctttagcagctgagc\n"
                          "+\n"
                          "^^^^^^^^^^^^^^^^^^^^\\W^^^^^^\\VHVGOOOJJKO\n")
-        #Contig 2
+        # Contig 2
         record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_602_99")

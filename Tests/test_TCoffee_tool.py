@@ -10,7 +10,7 @@ import unittest
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
 from Bio.Align.Applications import TCoffeeCommandline
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 t_coffee_exe = None
@@ -72,7 +72,7 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), t_coffee_exe + " -output pir_aln "
                     "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet")
         stdout, stderr = cmdline()
-        #Can get warnings in stderr output
+        # Can get warnings in stderr output
         self.assertTrue("error" not in stderr.lower(), stderr)
         align = AlignIO.read(self.outfile3, "pir")
         records = list(SeqIO.parse(self.infile1, "fasta"))

@@ -113,7 +113,7 @@ class GraphData(object):
 
         """
 
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
         if altcolour is not None:
@@ -181,9 +181,9 @@ class GraphData(object):
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
         """
-        positions = sorted(self.data) # i.e. dict keys
+        positions = sorted(self.data)  # i.e. dict keys
         # Return first and last positions in graph
-        #print len(self.data)
+        # print len(self.data)
         return (positions[0], positions[-1])
 
     def mean(self):
@@ -232,8 +232,8 @@ class GraphData(object):
         if isinstance(index, int):
             return self.data[index]
         elif isinstance(index, slice):
-            #TODO - Why does it treat the end points both as inclusive?
-            #This doesn't match Python norms does it?
+            # TODO - Why does it treat the end points both as inclusive?
+            # This doesn't match Python norms does it?
             low = index.start
             high = index.stop
             if index.step is not None and index.step != 1:

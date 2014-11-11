@@ -42,7 +42,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     """
     cmdline = cmdline[:]
 
-    ### XXX: force_type ignored
+    # XXX: force_type ignored
 
     if kbyte is None:
         try:

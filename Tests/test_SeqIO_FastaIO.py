@@ -32,10 +32,10 @@ def title_to_ids(title):
     id_info_items = id_info.split("|")
     if len(id_info_items) >=4:
         assert id_info_items[2] in ["gb", "emb", "dbj", "pdb"], title
-        id = id_info_items[3] # the id with version info
-        name = id_info_items[4] # the id without version info
+        id = id_info_items[3]  # the id with version info
+        name = id_info_items[4]  # the id without version info
     else:
-        #Fallback:
+        # Fallback:
         id = id_info_items[0]
         name = id_info_items[0]
 
@@ -75,7 +75,7 @@ class TitleFunctions(unittest.TestCase):
     def simple_check(self, filename, alphabet):
         """Basic test for parsing single record FASTA files."""
         title, seq = read_title_and_seq(filename)  # crude parser
-        #First check using Bio.SeqIO.FastaIO directly with title function,
+        # First check using Bio.SeqIO.FastaIO directly with title function,
         record = read_single_with_titles(filename, alphabet)
         idn, name, descr = title_to_ids(title)
         self.assertEqual(record.id, idn)
@@ -83,14 +83,14 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual(record.description, descr)
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.seq.alphabet, alphabet)
-        #Now check using Bio.SeqIO (default settings)
+        # Now check using Bio.SeqIO (default settings)
         record = SeqIO.read(filename, "fasta", alphabet)
         self.assertEqual(record.id, title.split()[0])
         self.assertEqual(record.name, title.split()[0])
         self.assertEqual(record.description, title)
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.seq.alphabet, alphabet)
-        #Uncomment this for testing the methods are calling the right files:
+        # Uncomment this for testing the methods are calling the right files:
         #print("{%s done}" % filename)
 
     def multi_check(self, filename, alphabet):
@@ -106,7 +106,7 @@ class TitleFunctions(unittest.TestCase):
             self.assertEqual(new.description, descr)
             self.assertEqual(str(new.seq), str(old.seq))
             self.assertEqual(new.seq.alphabet, old.seq.alphabet)
-        #Uncomment this for testing the methods are calling the right files:
+        # Uncomment this for testing the methods are calling the right files:
         #print("{%s done}" % filename)
 
     def test_no_name(self):
@@ -136,7 +136,7 @@ for filename in single_nucleic_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x : x.simple_check(fn, generic_nucleotide)
+        f = lambda x: x.simple_check(fn, generic_nucleotide)
         f.__doc__ = "Checking nucleotide file %s" % fn
         return f
 
@@ -147,7 +147,7 @@ for filename in multi_dna_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x : x.multi_check(fn, generic_dna)
+        f = lambda x: x.multi_check(fn, generic_dna)
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
 
@@ -158,7 +158,7 @@ for filename in single_amino_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x : x.simple_check(fn, generic_nucleotide)
+        f = lambda x: x.simple_check(fn, generic_nucleotide)
         f.__doc__ = "Checking protein file %s" % fn
         return f
 
@@ -169,7 +169,7 @@ for filename in multi_amino_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x : x.multi_check(fn, generic_dna)
+        f = lambda x: x.multi_check(fn, generic_dna)
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
 

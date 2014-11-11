@@ -51,18 +51,18 @@ class GeneralPointCrossover(object):
                * replace _crossover with a more efficient
                  technique for your point-count
     """
-    def __init__(self, points, crossover_prob = .1):
+    def __init__(self, points, crossover_prob=.1):
         """Initialize to do crossovers at the specified probability.
         """
         self._crossover_prob = crossover_prob
 
-        self._sym = points % 2 # odd n, gets a symmetry flag
-        self._npoints = (points + self._sym)//2 # (N or N+1)//2
+        self._sym = points % 2  # odd n, gets a symmetry flag
+        self._npoints = (points + self._sym)//2  # (N or N+1)//2
 
     def do_crossover(self, org_1, org_2):
         """Potentially do a crossover between the two organisms.
         """
-        new_org = ( org_1.copy(), org_2.copy() )
+        new_org = (org_1.copy(), org_2.copy())
 
         # determine if we have a crossover
         crossover_chance = random.random()
@@ -78,7 +78,7 @@ class GeneralPointCrossover(object):
 
             y_locs = []
             # generate list for the shortest of the genomes
-            x_locs = self._generate_locs( mbound )
+            x_locs = self._generate_locs(mbound)
 
             if (self._sym != 0):
                 y_locs = x_locs
@@ -86,10 +86,10 @@ class GeneralPointCrossover(object):
                 # figure out which list we've generated
                 # for, and generate the other
                 if (mbound == bound[0]):
-                    y_locs = self._generate_locs( bound[1] )
+                    y_locs = self._generate_locs(bound[1])
                 else:
                     y_locs = x_locs
-                    xlocs = self._generate_locs( bound[0] )
+                    xlocs = self._generate_locs(bound[0])
 
             # copy new genome strings over
             tmp = self._crossover(0, new_org, (x_locs, y_locs))
@@ -113,11 +113,11 @@ class GeneralPointCrossover(object):
             x = random.randint(1, bound-1)
             while (x in results):  # uniqueness
                 x = random.randint(1, bound-1)
-            results.append( x )
+            results.append(x)
         results.sort()             # sorted
-        return [0]+results+[bound] # [0, +n points+, bound]
+        return [0]+results+[bound]  # [0, +n points+, bound]
 
-    def _crossover( self, x, no, locs ):
+    def _crossover(self, x, no, locs):
         """Generalized Crossover Function:
 
            arguments:
@@ -131,13 +131,13 @@ class GeneralPointCrossover(object):
 
             return type: sequence (to replace no[x])
         """
-        s = no[ x ].genome[ :locs[ x ][1] ]
+        s = no[x].genome[:locs[x][1]]
         for n in range(1, self._npoints):
             # flipflop between genome_0 and genome_1
             mode = (x+n)%2
             # _generate_locs gives us [0, +n points+, bound]
             #  so we can iterate: { 0:loc(1) ... loc(n):bound }
-            t = no[ mode ].genome[ locs[mode][n]:locs[mode][n+1] ]
+            t = no[mode].genome[locs[mode][n]:locs[mode][n+1]]
             if (s):
                 s = s + t
             else:
@@ -158,13 +158,13 @@ class TwoCrossover(GeneralPointCrossover):
         """
         return [0, random.randint(1, bound-1), bound]
 
-    def _crossover( self, x, no, locs ):
+    def _crossover(self, x, no, locs):
         """Replacement crossover
 
            see GeneralPoint._crossover documentation for details
         """
         y = (x+1)%2
-        return no[x].genome[ : locs[x][1] ] + no[y].genome[ locs[y][1] : ]
+        return no[x].genome[:locs[x][1]] + no[y].genome[locs[y][1]:]
 
 
 class InterleaveCrossover(GeneralPointCrossover):
@@ -172,15 +172,15 @@ class InterleaveCrossover(GeneralPointCrossover):
 
     Interleaving:  AbCdEfG, aBcDeFg
     """
-    def __init__(self,crossover_prob=0.1):
+    def __init__(self, crossover_prob=0.1):
         GeneralPointCrossover.__init__(self, 0, crossover_prob)
 
     def _generate_locs(self, bound):
         return list(range(-1, bound+1))
 
-    def _crossover( self, x, no, locs ):
-        s = no[ x ].genome[ 0:1 ]
+    def _crossover(self, x, no, locs):
+        s = no[x].genome[0:1]
         for n in range(1, self._npoints+2):
-            mode = ( x+n )%2
-            s += no[ mode ].genome[ n:n+1 ]
+            mode = (x+n)%2
+            s += no[mode].genome[n:n+1]
         return s+no[mode].genome[self._npoints+3:]

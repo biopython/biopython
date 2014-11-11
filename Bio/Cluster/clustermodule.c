@@ -27,31 +27,79 @@
 /* -- Helper routines ------------------------------------------------------- */
 /* ========================================================================== */
 
+#if PY_MAJOR_VERSION < 3
+static char
+extract_single_character(PyObject* object, const char variable[],
+                         const char allowed[])
+{   char c = '\0';
+    const char* data;
+    Py_ssize_t n;
+    if (PyString_Check(object))
+    {   n = PyString_GET_SIZE(object);
+        if (n==1) {
+            data = PyString_AS_STRING(object);
+            c = data[0];
+        }
+    }
+    else if (PyUnicode_Check(object))
+    {   n = PyUnicode_GET_SIZE(object);
+        if (n==1) {
+            Py_UNICODE* u = PyUnicode_AS_UNICODE(object);
+            Py_UNICODE ch = u[0];
+            if (ch < 128) c = ch;
+        }
+    }
+    else
+    {   PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
+        return 0;
+    }
+    if (!c)
+    {   PyErr_Format(PyExc_ValueError,
+                     "%s should be a single character", variable);
+        return 0;
+    }
+    else if (!strchr(allowed, c))
+    {   PyErr_Format(PyExc_ValueError,
+                     "unknown %s function specified (should be one of '%s')",
+                     variable, allowed);
+        return 0;
+    }
+    return c;
+}
+#else
+static char
+extract_single_character(PyObject* object, const char variable[],
+                         const char allowed[])
+{   Py_UCS4 ch;
+    Py_ssize_t n;
+    if (!PyUnicode_Check(object))
+    {   PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
+        return 0;
+    }
+    if (PyUnicode_READY(object)==-1) return 0;
+    n = PyUnicode_GET_LENGTH(object);
+    if (n!=1)
+    {   PyErr_Format(PyExc_ValueError,
+                     "%s should be a single character", variable);
+        return 0;
+    }
+    ch = PyUnicode_READ_CHAR(object, 0);
+    if (ch < 128)
+    {   const char c = ch;
+        if (strchr(allowed, c)) return c;
+    }
+    PyErr_Format(PyExc_ValueError,
+                 "unknown %s function specified (should be one of '%s')",
+                 variable, allowed);
+    return 0;
+}
+#endif
+
 static int
 distance_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_distances[] = "ebcauxsk";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "distance should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "distance should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_distances, c))
-  { PyErr_Format(PyExc_ValueError, "unknown distance function specified (should be one of '%s')", known_distances);
-    return 0;
-  }
+  c = extract_single_character(object, "dist", "ebcauxsk");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
@@ -59,28 +107,8 @@ distance_converter(PyObject* object, void* pointer)
 static int
 method_treecluster_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_methods[] = "csma";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "method should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_methods, c))
-  { PyErr_Format(PyExc_ValueError, "unknown method function specified (should be one of '%s')", known_methods);
-    return 0;
-  }
+  c = extract_single_character(object, "method", "csma");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
@@ -88,28 +116,8 @@ method_treecluster_converter(PyObject* object, void* pointer)
 static int
 method_kcluster_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_methods[] = "am";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "method should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_methods, c))
-  { PyErr_Format(PyExc_ValueError, "unknown method function specified (should be one of '%s')", known_methods);
-    return 0;
-  }
+  c = extract_single_character(object, "method", "am");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
@@ -117,31 +125,12 @@ method_kcluster_converter(PyObject* object, void* pointer)
 static int
 method_clusterdistance_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_methods[] = "amsxv";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "method should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_methods, c))
-  { PyErr_Format(PyExc_ValueError, "unknown method function specified (should be one of '%s')", known_methods);
-    return 0;
-  }
+  c = extract_single_character(object, "method", "amsxv");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
+
 /* -- data ------------------------------------------------------------------ */
 
 static double**

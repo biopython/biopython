@@ -7,8 +7,8 @@ import os.path
 from ._paml import Paml
 from . import _parse_yn00
 
-#TODO - Restore use of with statement for closing handles automatically
-#after dropping Python 2.4
+# TODO - Restore use of with statement for closing handles automatically
+# after dropping Python 2.4
 
 
 class Yn00Error(EnvironmentError):
@@ -19,8 +19,8 @@ message"""
 class Yn00(Paml):
     """This class implements an interface to yn00, part of the PAML package."""
 
-    def __init__(self, alignment = None, working_dir = None,
-                out_file = None):
+    def __init__(self, alignment=None, working_dir=None,
+                out_file=None):
         """Initialize the Yn00 instance.
 
         The user may optionally pass in strings specifying the locations
@@ -96,8 +96,8 @@ class Yn00(Paml):
             else:
                 self._options[option] = None
 
-    def run(self, ctl_file = None, verbose = False, command = "yn00",
-                parse = True):
+    def run(self, ctl_file=None, verbose=False, command="yn00",
+                parse=True):
         Paml.run(self, ctl_file, verbose, command)
         if parse:
             results = read(self.out_file)

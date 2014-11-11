@@ -456,7 +456,7 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("idxstats"),
-            _Argument(["input",  "in_bam", "input_bam"],
+            _Argument(["input", "in_bam", "input_bam"],
                       "BAM file to be indexed")
         ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

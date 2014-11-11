@@ -184,7 +184,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
-def draw_ascii(tree, file=sys.stdout, column_width=80):
+def draw_ascii(tree, file=None, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
     The printed result looks like::
@@ -202,10 +202,14 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
 
     :Parameters:
         file : file-like object
-            File handle opened for writing the output drawing.
+            File handle opened for writing the output drawing. (Default:
+            standard output)
         column_width : int
             Total number of text columns used by the drawing.
     """
+    if file is None:
+        file = sys.stdout
+
     taxa = tree.get_terminals()
     # Some constants for the drawing calculations
     max_label_width = max(len(str(taxon)) for taxon in taxa)
@@ -222,7 +226,7 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
         cols_per_branch_unit = ((drawing_width - fudge_margin)
                                 / float(max(depths.values())))
-        return dict((clade, int(round(blen*cols_per_branch_unit + 0.5)))
+        return dict((clade, int(blen*cols_per_branch_unit + 1.0))
                     for clade, blen in depths.items())
 
     def get_row_positions(tree):
@@ -415,14 +419,14 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         Graphical formatting of the lines representing clades in the plot can be
         customized by altering this function.
         """
-        if (use_linecollection==False and orientation=='horizontal'):
+        if (use_linecollection is False and orientation=='horizontal'):
             axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
-        elif (use_linecollection==True and orientation=='horizontal'):
+        elif (use_linecollection is True and orientation=='horizontal'):
             horizontal_linecollections.append(mpcollections.LineCollection(
             [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw),)
-        elif (use_linecollection==False and orientation=='vertical'):
+        elif (use_linecollection is False and orientation=='vertical'):
             axes.vlines(x_here, y_bot, y_top, color=color)
-        elif (use_linecollection==True and orientation=='vertical'):
+        elif (use_linecollection is True and orientation=='vertical'):
             vertical_linecollections.append(mpcollections.LineCollection(
             [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw),)
 

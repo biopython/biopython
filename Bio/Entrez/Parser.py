@@ -38,8 +38,9 @@ be used directly.
 import os
 import warnings
 from xml.parsers import expat
+from io import BytesIO
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
 from Bio._py3k import unicode
@@ -153,7 +154,7 @@ class DataHandler(object):
     import platform
     if platform.system()=='Windows':
         directory = os.path.join(os.getenv("APPDATA"), "biopython")
-    else: # Unix/Linux/Mac
+    else:  # Unix/Linux/Mac
         home = os.path.expanduser('~')
         directory = os.path.join(home, '.config', 'biopython')
         del home
@@ -161,7 +162,7 @@ class DataHandler(object):
     del directory
     del platform
     try:
-        os.makedirs(local_dtd_dir) # use exist_ok=True on Python >= 3.2
+        os.makedirs(local_dtd_dir)  # use exist_ok=True on Python >= 3.2
     except OSError as exception:
         # Check if local_dtd_dir already exists, and that it is a directory.
         # Trying os.makedirs first and then checking for os.path.isdir avoids
@@ -195,8 +196,8 @@ class DataHandler(object):
         if handle.__class__.__name__ == 'EvilHandleHack':
             handle = handle._handle
         if hasattr(handle, "closed") and handle.closed:
-            #Should avoid a possible Segmentation Fault, see:
-            #http://bugs.python.org/issue4877
+            # Should avoid a possible Segmentation Fault, see:
+            # http://bugs.python.org/issue4877
             raise IOError("Can't parse a closed handle")
         try:
             self.parser.ParseFile(handle)
@@ -226,7 +227,7 @@ class DataHandler(object):
     def parse(self, handle):
         BLOCK = 1024
         while True:
-            #Read in another block of the file...
+            # Read in another block of the file...
             text = handle.read(BLOCK)
             if not text:
                 # We have reached the end of the XML file
@@ -271,7 +272,7 @@ class DataHandler(object):
             records = self.stack[0]
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
-            while len(records) > 1: # Then the top record is finished
+            while len(records) > 1:  # Then the top record is finished
                 record = records.pop(0)
                 yield record
 
@@ -294,10 +295,10 @@ class DataHandler(object):
             object = DictionaryElement()
         elif name in self.structures:
             object = StructureElement(self.structures[name])
-        elif name in self.items: # Only appears in ESummary
-            name = str(attrs["Name"]) # convert from Unicode
+        elif name in self.items:  # Only appears in ESummary
+            name = str(attrs["Name"])  # convert from Unicode
             del attrs["Name"]
-            itemtype = str(attrs["Type"]) # convert from Unicode
+            itemtype = str(attrs["Type"])  # convert from Unicode
             del attrs["Type"]
             if itemtype=="Structure":
                 object = DictionaryElement()
@@ -489,8 +490,8 @@ class DataHandler(object):
         we try to download it. If new DTDs become available from NCBI,
         putting them in Bio/Entrez/DTDs will allow the parser to see them."""
         urlinfo = _urlparse(systemId)
-        #Following attribute requires Python 2.5+
-        #if urlinfo.scheme=='http':
+        # Following attribute requires Python 2.5+
+        # if urlinfo.scheme=='http':
         if urlinfo[0]=='http':
             # Then this is an absolute path to the DTD.
             url = systemId
@@ -514,15 +515,14 @@ class DataHandler(object):
         if not handle:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
-            from Bio._py3k import StringIO
             try:
                 handle = _urlopen(url)
             except IOError:
-                raise RuntimeException("Failed to access %s at %s" % (filename, url))
+                raise RuntimeError("Failed to access %s at %s" % (filename, url))
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
-            handle = StringIO(text)
+            handle = BytesIO(text)
 
         parser = self.parser.ExternalEntityParserCreate(context)
         parser.ElementDeclHandler = self.elementDecl

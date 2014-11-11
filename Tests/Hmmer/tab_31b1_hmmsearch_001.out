@@ -1,0 +1,17 @@
+#                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+sp|Q9WUT3|KS6A2_MOUSE -          Pkinase              PF00069.17  8.5e-147  492.3   0.0   1.2e-72  249.3   0.0   2.1   2   0   0   2   2   2   2 Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1
+sp|Q63531|KS6A1_RAT   -          Pkinase              PF00069.17  2.7e-146  490.7   0.0   8.8e-73  249.7   0.0   2.1   2   0   0   2   2   2   2 Ribosomal protein S6 kinase alpha-1 OS=Rattus norvegicus GN=Rps6ka1 PE=1 SV=1
+sp|Q15418|KS6A1_HUMAN -          Pkinase              PF00069.17  2.2e-145  487.7   0.0   4.7e-72  247.4   0.0   2.1   2   0   0   2   2   2   2 Ribosomal protein S6 kinase alpha-1 OS=Homo sapiens GN=RPS6KA1 PE=1 SV=2
+sp|P18652|KS6AA_CHICK -          Pkinase              PF00069.17  2.6e-145  487.5   0.0   7.6e-72  246.7   0.0   2.1   2   0   0   2   2   2   2 Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1
+#
+# Program:         hmmsearch
+# Version:         3.1b1 (May 2013)
+# Pipeline mode:   SEARCH
+# Query file:      prot_multi.hmm
+# Target file:     /home/bow/db/hmmer/protdb/uniprot_sprot.fasta
+# Option settings: hmmsearch -o hmmsearch/text_31b1_hmmsearch_001.out --tblout hmmsearch/tab_31b1_hmmsearch_001.out --domtblout hmmsearch/domtab_31b1_hmmsearch_001.out --pfamtblout hmmsearch/pfamtab_31b1_hmmsearch_001.out -T 485 --cpu 2 prot_multi.hmm /home/bow/db/hmmer/protdb/uniprot_sprot.fasta 
+# Current dir:     /home/bow/devel/sandbox/biopy_cases
+# Date:            Mon May 26 19:15:42 2014
+# [ok]

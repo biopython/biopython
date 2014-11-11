@@ -390,7 +390,7 @@ class QueensMutation:
 num_queens = 5
 
 
-#Class defined for use via run_tests.py
+# Class defined for use via run_tests.py
 class QueensTest(unittest.TestCase):
     def test_queens(self):
         """Place five queens with a GA"""
@@ -398,7 +398,7 @@ class QueensTest(unittest.TestCase):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        #Run with defaults, for use as a unit test
+        # Run with defaults, for use as a unit test
         main(num_queens)
     elif len(sys.argv) == 2:
         num_queens = int(sys.argv[1])

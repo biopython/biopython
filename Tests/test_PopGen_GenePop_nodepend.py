@@ -121,7 +121,7 @@ class FileParserTest(unittest.TestCase):
 
 class UtilsTest(unittest.TestCase):
     def setUp(self):
-        #All files have to have at least 3 loci and 2 pops
+        # All files have to have at least 3 loci and 2 pops
         files = ["c2line.gen"]
         self.handles = []
         for filename in files:

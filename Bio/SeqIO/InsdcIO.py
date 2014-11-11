@@ -58,7 +58,7 @@ def GenBankIterator(handle):
 
     Note that for genomes or chromosomes, there is typically only
     one record."""
-    #This calls a generator function:
+    # This calls a generator function:
     return GenBankScanner(debug=0).parse_records(handle)
 
 
@@ -70,7 +70,7 @@ def EmblIterator(handle):
 
     Note that for genomes or chromosomes, there is typically only
     one record."""
-    #This calls a generator function:
+    # This calls a generator function:
     return EmblScanner(debug=0).parse_records(handle)
 
 
@@ -82,7 +82,7 @@ def ImgtIterator(handle):
 
     Note that for genomes or chromosomes, there is typically only
     one record."""
-    #This calls a generator function:
+    # This calls a generator function:
     return _ImgtScanner(debug=0).parse_records(handle)
 
 
@@ -93,7 +93,7 @@ def GenBankCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
     many CDS features.  These are returned as with the stated amino acid
     translation sequence (if given).
     """
-    #This calls a generator function:
+    # This calls a generator function:
     return GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
 
 
@@ -104,7 +104,7 @@ def EmblCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
     many CDS features.  These are returned as with the stated amino acid
     translation sequence (if given).
     """
-    #This calls a generator function:
+    # This calls a generator function:
     return EmblScanner(debug=0).parse_cds_features(handle, alphabet)
 
 
@@ -144,12 +144,12 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
     if isinstance(location.start, SeqFeature.ExactPosition) \
         and isinstance(location.end, SeqFeature.ExactPosition) \
             and location.start.position == location.end.position:
-        #Special case, for 12:12 return 12^13
-        #(a zero length slice, meaning the point between two letters)
+        # Special case, for 12:12 return 12^13
+        # (a zero length slice, meaning the point between two letters)
         if location.end.position == rec_length:
-            #Very special case, for a between position at the end of a
-            #sequence (used on some circular genomes, Bug 3098) we have
-            #N:N so return N^1
+            # Very special case, for a between position at the end of a
+            # sequence (used on some circular genomes, Bug 3098) we have
+            # N:N so return N^1
             return "%s%i^1" % (ref, rec_length)
         else:
             return "%s%i^%i" % (ref, location.end.position,
@@ -157,32 +157,32 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
     if isinstance(location.start, SeqFeature.ExactPosition) \
         and isinstance(location.end, SeqFeature.ExactPosition) \
             and location.start.position + 1 == location.end.position:
-        #Special case, for 11:12 return 12 rather than 12..12
-        #(a length one slice, meaning a single letter)
+        # Special case, for 11:12 return 12 rather than 12..12
+        # (a length one slice, meaning a single letter)
         return "%s%i" % (ref, location.end.position)
     elif isinstance(location.start, SeqFeature.UnknownPosition) \
             or isinstance(location.end, SeqFeature.UnknownPosition):
-        #Special case for features from SwissProt/UniProt files
+        # Special case for features from SwissProt/UniProt files
         if isinstance(location.start, SeqFeature.UnknownPosition) \
                 and isinstance(location.end, SeqFeature.UnknownPosition):
-            #import warnings
-            #warnings.warn("Feature with unknown location")
-            #return "?"
+            # import warnings
+            # warnings.warn("Feature with unknown location")
+            # return "?"
             raise ValueError("Feature with unknown location")
         elif isinstance(location.start, SeqFeature.UnknownPosition):
-            #Treat the unknown start position as a BeforePosition
+            # Treat the unknown start position as a BeforePosition
             return "%s<%i..%s" \
                 % (ref,
                    location.nofuzzy_end,
                    _insdc_feature_position_string(location.end))
         else:
-            #Treat the unknown end position as an AfterPosition
+            # Treat the unknown end position as an AfterPosition
             return "%s%s..>%i" \
                 % (ref,
                    _insdc_feature_position_string(location.start),
                    location.nofuzzy_start)
     else:
-        #Typical case, e.g. 12..15 gets mapped to 11:15
+        # Typical case, e.g. 12..15 gets mapped to 11:15
         return ref \
             + _insdc_feature_position_string(location.start, +1) \
             + ".." + \
@@ -202,22 +202,23 @@ def _insdc_location_string(location, rec_length):
     """
     try:
         parts = location.parts
-        #CompoundFeatureLocation
+        # CompoundFeatureLocation
         if location.strand == -1:
-            #Special case, put complement outside the join/order/... and reverse order
+            # Special case, put complement outside the join/order/... and reverse order
             return "complement(%s(%s))" % (location.operator,
-                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length) \
+                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length)
                             for p in parts[::-1]))
         else:
             return "%s(%s)" % (location.operator,
                    ",".join(_insdc_location_string(p, rec_length) for p in parts))
     except AttributeError:
-        #Simple FeatureLocation
+        # Simple FeatureLocation
         loc = _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
         if location.strand == -1:
             return "complement(%s)" % loc
         else:
             return loc
+
 
 def _insdc_feature_location_string(feature, rec_length):
     """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE, OBSOLETE).
@@ -240,10 +241,10 @@ def _insdc_feature_location_string(feature, rec_length):
     no strand (either 0 or None) while the child features should have either
     strand +1 or -1 as appropriate, and be listed in the order given here.
     """
-    #Using private variable to avoid deprecation warning
+    # Using private variable to avoid deprecation warning
     if not feature._sub_features:
-        #Non-recursive.
-        #assert feature.location_operator == "", \
+        # Non-recursive.
+        # assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
         #       % (repr(feature), feature.location_operator)
         location = _insdc_location_string_ignoring_strand_and_subfeatures(
@@ -261,10 +262,10 @@ def _insdc_feature_location_string(feature, rec_length):
                % (feature.location_operator,
                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f.location, rec_length)
                            for f in feature._sub_features))
-    #if feature.strand == +1:
+    # if feature.strand == +1:
     #    for f in feature.sub_features:
     #        assert f.strand == +1
-    #This covers typical forward strand features, and also an evil mixed strand:
+    # This covers typical forward strand features, and also an evil mixed strand:
     assert feature.location_operator != ""
     return "%s(%s)" % (feature.location_operator,
                        ",".join(_insdc_feature_location_string(f, rec_length)
@@ -286,10 +287,10 @@ class _InsdcWriter(SequentialSequenceWriter):
         if not value:
             self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
             return
-        #Quick hack with no line wrapping, may be useful for testing:
-        #self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
+        # Quick hack with no line wrapping, may be useful for testing:
+        # self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
-            #Try to mimic unwritten rules about when quotes can be left out:
+            # Try to mimic unwritten rules about when quotes can be left out:
             if _is_int_or_long(value) or key in self.FTQUAL_NO_QUOTE:
                 quote = False
             else:
@@ -305,13 +306,13 @@ class _InsdcWriter(SequentialSequenceWriter):
             if len(line) <= self.MAX_WIDTH:
                 self.handle.write(line + "\n")
                 return
-            #Insert line break...
+            # Insert line break...
             for index in range(min(len(line) - 1, self.MAX_WIDTH),
                                self.QUALIFIER_INDENT + 1, -1):
                 if line[index] == " ":
                     break
             if line[index] != " ":
-                #No nice place to break...
+                # No nice place to break...
                 index = self.MAX_WIDTH
             assert index <= self.MAX_WIDTH
             self.handle.write(line[:index] + "\n")
@@ -319,13 +320,13 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     def _wrap_location(self, location):
         """Split a feature location into lines (break at commas)."""
-        #TODO - Rewrite this not to recurse!
+        # TODO - Rewrite this not to recurse!
         length = self.MAX_WIDTH - self.QUALIFIER_INDENT
         if len(location) <= length:
             return location
         index = location[:length].rfind(",")
         if index == -1:
-            #No good place to split (!)
+            # No good place to split (!)
             import warnings
             warnings.warn("Couldn't split location:\n%s" % location)
             return location
@@ -341,16 +342,16 @@ class _InsdcWriter(SequentialSequenceWriter):
         line = (self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT] \
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
-        #Now the qualifiers...
+        # Now the qualifiers...
         for key, values in feature.qualifiers.items():
             if isinstance(values, list) or isinstance(values, tuple):
                 for value in values:
                     self._write_feature_qualifier(key, value)
             elif values:
-                #String, int, etc
+                # String, int, etc
                 self._write_feature_qualifier(key, values)
             else:
-                #e.g. a /pseudo entry
+                # e.g. a /pseudo entry
                 self._write_feature_qualifier(key)
 
     def _get_annotation_str(self, record, key, default=".", just_first=False):
@@ -376,7 +377,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
         """
-        #TODO - Do the line spliting while preserving white space?
+        # TODO - Do the line spliting while preserving white space?
         text = text.strip()
         if len(text) <= max_len:
             return [text]
@@ -386,23 +387,23 @@ class _InsdcWriter(SequentialSequenceWriter):
         while words and len(text) + 1 + len(words[0]) <= max_len:
             text += " " + words.pop(0)
             text = text.strip()
-        #assert len(text) <= max_len
+        # assert len(text) <= max_len
         answer = [text]
         while words:
             text = words.pop(0)
             while words and len(text) + 1 + len(words[0]) <= max_len:
                 text += " " + words.pop(0)
                 text = text.strip()
-            #assert len(text) <= max_len
+            # assert len(text) <= max_len
             answer.append(text)
         assert not words
         return answer
 
     def _split_contig(self, record, max_len):
         """Returns a list of strings, splits on commas."""
-        #TODO - Merge this with _write_multi_line method?
-        #It would need the addition of the comma splitting logic...
-        #are there any other cases where that would be sensible?
+        # TODO - Merge this with _write_multi_line method?
+        # It would need the addition of the comma splitting logic...
+        # are there any other cases where that would be sensible?
         contig = record.annotations.get("contig", "")
         if isinstance(contig, list) or isinstance(contig, tuple):
             contig = "".join(contig)
@@ -410,7 +411,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         answer = []
         while contig:
             if len(contig) > max_len:
-                #Split lines at the commas
+                # Split lines at the commas
                 pos = contig[:max_len - 1].rfind(",")
                 if pos == -1:
                     raise ValueError("Could not break up CONTIG")
@@ -438,7 +439,7 @@ class GenBankWriter(_InsdcWriter):
 
     def _write_multi_line(self, tag, text):
         """Used in the 'header' of each GenBank record."""
-        #TODO - Do the line spliting while preserving white space?
+        # TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
         self._write_single_line(tag, lines[0])
@@ -446,8 +447,8 @@ class GenBankWriter(_InsdcWriter):
             self._write_single_line("", line)
 
     def _write_multi_entries(self, tag, text_list):
-        #used for DBLINK and any similar later line types.
-        #If the list of strings is empty, nothing is written.
+        # used for DBLINK and any similar later line types.
+        # If the list of strings is empty, nothing is written.
         for i, text in enumerate(text_list):
             if i == 0:
                 self._write_single_line(tag, text)
@@ -460,17 +461,17 @@ class GenBankWriter(_InsdcWriter):
             date = record.annotations["date"]
         except KeyError:
             return default
-        #Cope with a list of one string:
+        # Cope with a list of one string:
         if isinstance(date, list) and len(date) == 1:
             date = date[0]
-        #TODO - allow a Python date object
+        # TODO - allow a Python date object
         if not isinstance(date, basestring) or len(date) != 11 \
             or date[2] != "-" or date[6] != "-" \
             or not date[:2].isdigit() or not date[7:].isdigit() \
             or int(date[:2]) > 31 \
             or date[3:6] not in ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
                                  "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]:
-            #TODO - Check is a valid date (e.g. not 31 Feb)
+            # TODO - Check is a valid date (e.g. not 31 Feb)
             return default
         return date
 
@@ -482,7 +483,7 @@ class GenBankWriter(_InsdcWriter):
         if division in ["PRI", "ROD", "MAM", "VRT", "INV", "PLN", "BCT",
                         "VRL", "PHG", "SYN", "UNA", "EST", "PAT", "STS",
                         "GSS", "HTG", "HTC", "ENV", "CON"]:
-            #Good, already GenBank style
+            # Good, already GenBank style
             #    PRI - primate sequences
             #    ROD - rodent sequences
             #    MAM - other mammalian sequences
@@ -503,10 +504,10 @@ class GenBankWriter(_InsdcWriter):
             #    ENV - Environmental sampling sequences
             #    CON - Constructed sequences
             #
-            #(plus UNK for unknown)
+            # (plus UNK for unknown)
             pass
         else:
-            #See if this is in EMBL style:
+            # See if this is in EMBL style:
             #    Division                 Code
             #    -----------------        ----
             #    Bacteriophage            PHG - common
@@ -525,7 +526,7 @@ class GenBankWriter(_InsdcWriter):
             #    Unclassified             UNC - map to UNK
             #    Viral                    VRL - common
             #
-            #(plus XXX for submiting which we can map to UNK)
+            # (plus XXX for submiting which we can map to UNK)
             embl_to_gbk = {"FUN": "PLN",
                            "HUM": "PRI",
                            "MUS": "ROD",
@@ -553,11 +554,11 @@ class GenBankWriter(_InsdcWriter):
             raise ValueError("Locus identifier %r is too long" % str(locus))
 
         if len(record) > 99999999999:
-            #Currently GenBank only officially support up to 350000, but
-            #the length field can take eleven digits
+            # Currently GenBank only officially support up to 350000, but
+            # the length field can take eleven digits
             raise ValueError("Sequence too long!")
 
-        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
         if not isinstance(a, Alphabet.Alphabet):
             raise TypeError("Invalid alphabet")
@@ -566,12 +567,12 @@ class GenBankWriter(_InsdcWriter):
         elif isinstance(a, Alphabet.NucleotideAlphabet):
             units = "bp"
         else:
-            #Must be something like NucleotideAlphabet or
-            #just the generic Alphabet (default for fasta files)
+            # Must be something like NucleotideAlphabet or
+            # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a Nucleotide or Protein alphabet")
 
-        #Get the molecule type
-        #TODO - record this explicitly in the parser?
+        # Get the molecule type
+        # TODO - record this explicitly in the parser?
         if isinstance(a, Alphabet.ProteinAlphabet):
             mol_type = ""
         elif isinstance(a, Alphabet.DNAAlphabet):
@@ -579,16 +580,16 @@ class GenBankWriter(_InsdcWriter):
         elif isinstance(a, Alphabet.RNAAlphabet):
             mol_type = "RNA"
         else:
-            #Must be something like NucleotideAlphabet or
-            #just the generic Alphabet (default for fasta files)
+            # Must be something like NucleotideAlphabet or
+            # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
         division = self._get_data_division(record)
 
         assert len(units) == 2
         assert len(division) == 3
-        #TODO - date
-        #TODO - mol_type
+        # TODO - date
+        # TODO - mol_type
         line = "LOCUS       %s %s %s    %s           %s %s\n" \
             % (locus.ljust(16),
                str(len(record)).rjust(11),
@@ -604,7 +605,7 @@ class GenBankWriter(_InsdcWriter):
         assert line[29:40].lstrip() == str(len(record)), \
             'LOCUS line does not contain the length at the expected position:\n' + line
 
-        #Tests copied from Bio.GenBank.Scanner
+        # Tests copied from Bio.GenBank.Scanner
         assert line[40:44] in [' bp ', ' aa '], \
             'LOCUS line does not contain size units at expected position:\n' + \
             line
@@ -636,7 +637,7 @@ class GenBankWriter(_InsdcWriter):
                 continue
             number += 1
             data = str(number)
-            #TODO - support more complex record reference locations?
+            # TODO - support more complex record reference locations?
             if ref.location and len(ref.location) == 1:
                 a = Alphabet._get_base_alphabet(record.seq.alphabet)
                 if isinstance(a, Alphabet.ProteinAlphabet):
@@ -648,36 +649,36 @@ class GenBankWriter(_InsdcWriter):
                                              ref.location[0].nofuzzy_end)
             self._write_single_line("REFERENCE", data)
             if ref.authors:
-                #We store the AUTHORS data as a single string
+                # We store the AUTHORS data as a single string
                 self._write_multi_line("  AUTHORS", ref.authors)
             if ref.consrtm:
-                #We store the consortium as a single string
+                # We store the consortium as a single string
                 self._write_multi_line("  CONSRTM", ref.consrtm)
             if ref.title:
-                #We store the title as a single string
+                # We store the title as a single string
                 self._write_multi_line("  TITLE", ref.title)
             if ref.journal:
-                #We store this as a single string - holds the journal name,
-                #volume, year, and page numbers of the citation
+                # We store this as a single string - holds the journal name,
+                # volume, year, and page numbers of the citation
                 self._write_multi_line("  JOURNAL", ref.journal)
             if ref.medline_id:
-                #This line type is obsolete and was removed from the GenBank
-                #flatfile format in April 2005. Should we write it?
-                #Note this has a two space indent:
+                # This line type is obsolete and was removed from the GenBank
+                # flatfile format in April 2005. Should we write it?
+                # Note this has a two space indent:
                 self._write_multi_line("  MEDLINE", ref.medline_id)
             if ref.pubmed_id:
-                #Note this has a THREE space indent:
+                # Note this has a THREE space indent:
                 self._write_multi_line("   PUBMED", ref.pubmed_id)
             if ref.comment:
                 self._write_multi_line("  REMARK", ref.comment)
 
     def _write_comment(self, record):
-        #This is a bit complicated due to the range of possible
-        #ways people might have done their annotation...
-        #Currently the parser uses a single string with newlines.
-        #A list of lines is also reasonable.
-        #A single (long) string is perhaps the most natural of all.
-        #This means we may need to deal with line wrapping.
+        # This is a bit complicated due to the range of possible
+        # ways people might have done their annotation...
+        # Currently the parser uses a single string with newlines.
+        # A list of lines is also reasonable.
+        # A single (long) string is perhaps the most natural of all.
+        # This means we may need to deal with line wrapping.
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
             lines = comment.split("\n")
@@ -697,21 +698,21 @@ class GenBankWriter(_InsdcWriter):
             self._write_single_line("", text)
 
     def _write_sequence(self, record):
-        #Loosely based on code from Howard Salis
-        #TODO - Force lower case?
+        # Loosely based on code from Howard Salis
+        # TODO - Force lower case?
         LETTERS_PER_LINE = 60
         SEQUENCE_INDENT = 9
 
         if isinstance(record.seq, UnknownSeq):
-            #We have already recorded the length, and there is no need
-            #to record a long sequence of NNNNNNN...NNN or whatever.
+            # We have already recorded the length, and there is no need
+            # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
                 self._write_contig(record)
             else:
                 self.handle.write("ORIGIN\n")
             return
 
-        #Catches sequence being None:
+        # Catches sequence being None:
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
@@ -752,26 +753,26 @@ class GenBankWriter(_InsdcWriter):
         else:
             self._write_single_line("VERSION", "%s" % (acc_with_version))
 
-        #The NCBI only expect two types of link so far,
-        #e.g. "Project:28471" and "Trace Assembly Archive:123456"
-        #TODO - Filter the dbxrefs list to just these?
+        # The NCBI only expect two types of link so far,
+        # e.g. "Project:28471" and "Trace Assembly Archive:123456"
+        # TODO - Filter the dbxrefs list to just these?
         self._write_multi_entries("DBLINK", record.dbxrefs)
 
         try:
-            #List of strings
-            #Keywords should be given separated with semi colons,
+            # List of strings
+            # Keywords should be given separated with semi colons,
             keywords = "; ".join(record.annotations["keywords"])
-            #with a trailing period:
+            # with a trailing period:
             if not keywords.endswith("."):
                 keywords += "."
         except KeyError:
-            #If no keywords, there should be just a period:
+            # If no keywords, there should be just a period:
             keywords = "."
         self._write_multi_line("KEYWORDS", keywords)
 
         if "segment" in record.annotations:
-            #Deal with SEGMENT line found only in segmented records,
-            #e.g. AH000819
+            # Deal with SEGMENT line found only in segmented records,
+            # e.g. AH000819
             segment = record.annotations["segment"]
             if isinstance(segment, list):
                 assert len(segment) == 1, segment
@@ -780,16 +781,16 @@ class GenBankWriter(_InsdcWriter):
 
         self._write_multi_line("SOURCE",
                                self._get_annotation_str(record, "source"))
-        #The ORGANISM line MUST be a single line, as any continuation is the taxonomy
+        # The ORGANISM line MUST be a single line, as any continuation is the taxonomy
         org = self._get_annotation_str(record, "organism")
         if len(org) > self.MAX_WIDTH - self.HEADER_WIDTH:
             org = org[:self.MAX_WIDTH - self.HEADER_WIDTH - 4] + "..."
         self._write_single_line("  ORGANISM", org)
         try:
-            #List of strings
-            #Taxonomy should be given separated with semi colons,
+            # List of strings
+            # Taxonomy should be given separated with semi colons,
             taxonomy = "; ".join(record.annotations["taxonomy"])
-            #with a trailing period:
+            # with a trailing period:
             if not taxonomy.endswith("."):
                 taxonomy += "."
         except KeyError:
@@ -831,23 +832,23 @@ class EmblWriter(_InsdcWriter):
         handle = self.handle  # save looking up this multiple times
 
         if isinstance(record.seq, UnknownSeq):
-            #We have already recorded the length, and there is no need
-            #to record a long sequence of NNNNNNN...NNN or whatever.
+            # We have already recorded the length, and there is no need
+            # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
                 self._write_contig(record)
             else:
-                #TODO - Can the sequence just be left out as in GenBank files?
+                # TODO - Can the sequence just be left out as in GenBank files?
                 handle.write("SQ   \n")
             return
 
-        #Catches sequence being None
+        # Catches sequence being None
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
 
-        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(a, Alphabet.DNAAlphabet):
-            #TODO - What if we have RNA?
+            # TODO - What if we have RNA?
             a_count = data.count('A') + data.count('a')
             c_count = data.count('C') + data.count('c')
             g_count = data.count('G') + data.count('g')
@@ -868,7 +869,7 @@ class EmblWriter(_InsdcWriter):
                              * LETTERS_PER_LINE).rjust(POSITION_PADDING))
             handle.write("\n")
         if seq_len % LETTERS_PER_LINE:
-            #Final (partial) line
+            # Final (partial) line
             line_number = (seq_len // LETTERS_PER_LINE)
             handle.write("    ")  # Just four, not five
             for block in range(BLOCKS_PER_LINE):
@@ -910,13 +911,13 @@ class EmblWriter(_InsdcWriter):
             raise ValueError("Cannot have semi-colon in EMBL accession, %s"
                              % repr(str(accession)))
         if " " in accession:
-            #This is out of practicallity... might it be allowed?
+            # This is out of practicallity... might it be allowed?
             raise ValueError("Cannot have spaces in EMBL accession, %s"
                              % repr(str(accession)))
 
-        #Get the molecule type
-        #TODO - record this explicitly in the parser?
-        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        # Get the molecule type
+        # TODO - record this explicitly in the parser?
+        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
         if not isinstance(a, Alphabet.Alphabet):
             raise TypeError("Invalid alphabet")
@@ -930,22 +931,22 @@ class EmblWriter(_InsdcWriter):
             mol_type = "PROTEIN"
             units = "AA"
         else:
-            #Must be something like NucleotideAlphabet
+            # Must be something like NucleotideAlphabet
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
-        #Get the taxonomy division
+        # Get the taxonomy division
         division = self._get_data_division(record)
 
-        #TODO - Full ID line
+        # TODO - Full ID line
         handle = self.handle
-        #ID   <1>; SV <2>; <3>; <4>; <5>; <6>; <7> BP.
-        #1. Primary accession number
-        #2. Sequence version number
-        #3. Topology: 'circular' or 'linear'
-        #4. Molecule type
-        #5. Data class
-        #6. Taxonomic division
-        #7. Sequence length
+        # ID   <1>; SV <2>; <3>; <4>; <5>; <6>; <7> BP.
+        # 1. Primary accession number
+        # 2. Sequence version number
+        # 3. Topology: 'circular' or 'linear'
+        # 4. Molecule type
+        # 5. Data class
+        # 6. Taxonomic division
+        # 7. Sequence length
         self._write_single_line("ID", "%s; %s; ; %s; ; %s; %i %s."
                                 % (accession, version, mol_type,
                                    division, len(record), units))
@@ -961,7 +962,7 @@ class EmblWriter(_InsdcWriter):
         if division in ["PHG", "ENV", "FUN", "HUM", "INV", "MAM", "VRT",
                         "MUS", "PLN", "PRO", "ROD", "SYN", "TGN", "UNC",
                         "VRL", "XXX"]:
-            #Good, already EMBL style
+            # Good, already EMBL style
             #    Division                 Code
             #    -----------------        ----
             #    Bacteriophage            PHG
@@ -980,14 +981,14 @@ class EmblWriter(_InsdcWriter):
             #    Unclassified             UNC (i.e. unknown)
             #    Viral                    VRL
             #
-            #(plus XXX used for submiting data to EMBL)
+            # (plus XXX used for submiting data to EMBL)
             pass
         else:
-            #See if this is in GenBank style & can be converted.
-            #Generally a problem as the GenBank groups are wider
-            #than those of EMBL. Note that GenBank use "BCT" for
-            #both bacteria and acherea thus this maps to EMBL's
-            #"PRO" nicely.
+            # See if this is in GenBank style & can be converted.
+            # Generally a problem as the GenBank groups are wider
+            # than those of EMBL. Note that GenBank use "BCT" for
+            # both bacteria and acherea thus this maps to EMBL's
+            # "PRO" nicely.
             gbk_to_embl = {"BCT": "PRO",
                            "UNK": "UNC",
                            }
@@ -999,52 +1000,52 @@ class EmblWriter(_InsdcWriter):
         return division
 
     def _write_keywords(self, record):
-        #Put the keywords right after DE line.
-        #Each 'keyword' can have multiple words and spaces, but we
-        #must not split any 'keyword' between lines.
-        #TODO - Combine short keywords onto one line
+        # Put the keywords right after DE line.
+        # Each 'keyword' can have multiple words and spaces, but we
+        # must not split any 'keyword' between lines.
+        # TODO - Combine short keywords onto one line
         for keyword in record.annotations["keywords"]:
             self._write_single_line("KW", keyword)
         self.handle.write("XX\n")
 
     def _write_references(self, record):
-        #The order should be RN, RC, RP, RX, RG, RA, RT, RL
+        # The order should be RN, RC, RP, RX, RG, RA, RT, RL
         number = 0
         for ref in record.annotations["references"]:
             if not isinstance(ref, SeqFeature.Reference):
                 continue
             number += 1
             self._write_single_line("RN", "[%i]" % number)
-            #TODO - support for RC line (needed in parser too)
-            #TODO - support more complex record reference locations?
+            # TODO - support for RC line (needed in parser too)
+            # TODO - support more complex record reference locations?
             if ref.location and len(ref.location) == 1:
                 self._write_single_line(
                     "RP", "%i-%i" % (ref.location[0].nofuzzy_start + 1,
                                      ref.location[0].nofuzzy_end))
-            #TODO - record any DOI or AGRICOLA identifier in the reference object?
+            # TODO - record any DOI or AGRICOLA identifier in the reference object?
             if ref.pubmed_id:
                 self._write_single_line("RX", "PUBMED; %s." % ref.pubmed_id)
             if ref.consrtm:
                 self._write_single_line("RG", "%s" % ref.consrtm)
             if ref.authors:
-                #We store the AUTHORS data as a single string
+                # We store the AUTHORS data as a single string
                 self._write_multi_line("RA", ref.authors + ";")
             if ref.title:
-                #We store the title as a single string
+                # We store the title as a single string
                 self._write_multi_line("RT", '"%s";' % ref.title)
             if ref.journal:
-                #We store this as a single string - holds the journal name,
-                #volume, year, and page numbers of the citation
+                # We store this as a single string - holds the journal name,
+                # volume, year, and page numbers of the citation
                 self._write_multi_line("RL", ref.journal)
             self.handle.write("XX\n")
 
     def _write_comment(self, record):
-        #This is a bit complicated due to the range of possible
-        #ways people might have done their annotation...
-        #Currently the parser uses a single string with newlines.
-        #A list of lines is also reasonable.
-        #A single (long) string is perhaps the most natural of all.
-        #This means we may need to deal with line wrapping.
+        # This is a bit complicated due to the range of possible
+        # ways people might have done their annotation...
+        # Currently the parser uses a single string with newlines.
+        # A list of lines is also reasonable.
+        # A single (long) string is perhaps the most natural of all.
+        # This means we may need to deal with line wrapping.
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
             lines = comment.split("\n")
@@ -1052,7 +1053,7 @@ class EmblWriter(_InsdcWriter):
             lines = comment
         else:
             raise ValueError("Could not understand comment annotation")
-        #TODO - Merge this with the GenBank comment code?
+        # TODO - Merge this with the GenBank comment code?
         if not lines:
             return
         for line in lines:
@@ -1065,14 +1066,14 @@ class EmblWriter(_InsdcWriter):
         handle = self.handle
         self._write_the_first_lines(record)
 
-        #PR line (0 or 1 lines only), project identifier
+        # PR line (0 or 1 lines only), project identifier
         for xref in record.dbxrefs:
             if xref.startswith("Project:"):
                 self._write_single_line("PR", xref + ";")
                 handle.write("XX\n")
                 break
 
-        #TODO - DT lines (date)
+        # TODO - DT lines (date)
 
         descr = record.description
         if descr == "<unknown description>":
@@ -1083,11 +1084,11 @@ class EmblWriter(_InsdcWriter):
         if "keywords" in record.annotations:
             self._write_keywords(record)
 
-        #Should this be "source" or "organism"?
+        # Should this be "source" or "organism"?
         self._write_multi_line(
             "OS", self._get_annotation_str(record, "organism"))
         try:
-            #List of strings
+            # List of strings
             taxonomy = "; ".join(record.annotations["taxonomy"]) + "."
         except KeyError:
             taxonomy = "."
@@ -1135,12 +1136,12 @@ if __name__ == "__main__":
                     "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
         if old.features and new.features:
             return compare_features(old.features, new.features)
-        #Just insist on at least one word in common:
+        # Just insist on at least one word in common:
         if (old.description or new.description) \
                 and not set(old.description.split()).intersection(new.description.split()):
             raise ValueError("%s versus %s"
                              % (repr(old.description), repr(new.description)))
-        #TODO - check annotation
+        # TODO - check annotation
         if "contig" in old.annotations:
             assert old.annotations["contig"] == \
                 new.annotations["contig"]
@@ -1179,12 +1180,12 @@ if __name__ == "__main__":
             for a, b in zip(old.sub_features, new.sub_features):
                 if not compare_feature(a, b):
                     return False
-        #This only checks key shared qualifiers
-        #Would a white list be easier?
-        #for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
+        # This only checks key shared qualifiers
+        # Would a white list be easier?
+        # for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
         for key in set(old.qualifiers).intersection(new.qualifiers):
             if key in ["db_xref", "protein_id", "product", "note"]:
-                #EMBL and GenBank files are use different references/notes/etc
+                # EMBL and GenBank files are use different references/notes/etc
                 continue
             if old.qualifiers[key] != new.qualifiers[key]:
                 raise ValueError("Qualifier mis-match for %s:\n%s\n%s"
@@ -1197,7 +1198,7 @@ if __name__ == "__main__":
             raise ValueError(
                 "%i vs %i features" % (len(old_list), len(new_list)))
         for old, new in zip(old_list, new_list):
-            #This assumes they are in the same order
+            # This assumes they are in the same order
             if not compare_feature(old, new, ignore_sub_features):
                 return False
         return True

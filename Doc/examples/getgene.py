@@ -37,9 +37,9 @@ import string
 import sys
 
 try:
-    import gdbm # Python 2
+    import gdbm  # Python 2
 except ImportError:
-    from dbm import gnu as gdbm # Python 3
+    from dbm import gnu as gdbm  # Python 3
 
 
 class DB_Index:
@@ -308,5 +308,5 @@ if __name__ == '__main__':
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)
     for id in ids:
-        #print(db_index.Get(id))
+        # print(db_index.Get(id))
         print(func(id))

@@ -43,8 +43,10 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import motifs
-    >>> for m in motifs.parse(open("Motif/alignace.out"), "AlignAce"):
-    ...     print(m.consensus)
+    >>> with open("Motif/alignace.out") as handle:
+    ...     for m in motifs.parse(handle, "AlignAce"):
+    ...         print(m.consensus)
+    ...
     TCTACGATTGAG
     CTGCAGCTAGCTACGAGTGAG
     GTGCTCTAAGCATAGTAGGCG
@@ -95,14 +97,16 @@ def read(handle, format):
     reading a JASPAR-style pfm file:
 
     >>> from Bio import motifs
-    >>> m = motifs.read(open("motifs/SRF.pfm"), "pfm")
+    >>> with open("motifs/SRF.pfm") as handle:
+    ...     m = motifs.read(handle, "pfm")
     >>> m.consensus
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import motifs
-    >>> m = motifs.read(open("motifs/meme.out"), "meme")
+    >>> with open("motifs/meme.out") as handle:
+    ...     m = motifs.read(handle, "meme")
     >>> m.consensus
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
@@ -110,7 +114,8 @@ def read(handle, format):
     an exception is raised:
 
     >>> from Bio import motifs
-    >>> motif = motifs.read(open("motifs/alignace.out"), "AlignAce")
+    >>> with open("motifs/alignace.out") as handle:
+    ...     motif = motifs.read(handle, "AlignAce")
     Traceback (most recent call last):
         ...
     ValueError: More than one motif found in handle
@@ -120,7 +125,8 @@ def read(handle, format):
     shown in the example above).  Instead use:
 
     >>> from Bio import motifs
-    >>> record = motifs.parse(open("motifs/alignace.out"), "alignace")
+    >>> with open("motifs/alignace.out") as handle:
+    ...     record = motifs.parse(handle, "alignace")
     >>> motif = record[0]
     >>> motif.consensus
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
@@ -196,6 +202,7 @@ class Instances(list):
                 if str(instance) == str(sequence[pos:pos+self.length]):
                     yield(pos, instance)
                     break # no other instance will fit (we don't want to return multiple hits)
+
     def reverse_complement(self):
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
@@ -313,7 +320,7 @@ class Motif(object):
     def pssm(self):
         return self.pwm.log_odds(self._background)
 
-    def __str__(self,masked=False):
+    def __str__(self, masked=False):
         """ string representation of a motif.
         """
         text = ""
@@ -379,7 +386,7 @@ Nucleic Acids Research 15(4): 1353-1361. (1987).
 The same rules are used by TRANSFAC."""
         return self.counts.degenerate_consensus
 
-    def weblogo(self,fname,format="PNG",version="2.8.2", **kwds):
+    def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
         """
         uses the Berkeley weblogo service to download and save a weblogo of
         itself
@@ -476,7 +483,7 @@ The same rules are used by TRANSFAC."""
         data = urlencode(values)
         req = Request(url, data)
         response = urlopen(req)
-        with open(fname,"w") as f:
+        with open(fname, "w") as f:
             im = response.read()
             f.write(im)
 
@@ -521,3 +528,6 @@ def write(motifs, format):
         raise ValueError("Unknown format type %s" % format)
 
 
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

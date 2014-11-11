@@ -195,7 +195,7 @@ def train(training_set, results, priors=None, typecode=None):
             values = class_observations[:, j]
 
             # Add pseudocounts here.  This needs to be parameterized.
-            #values = list(values) + range(len(nb.classes))  # XXX add 1
+            # values = list(values) + range(len(nb.classes))  # XXX add 1
 
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = _contents(values)
@@ -204,7 +204,7 @@ def train(training_set, results, priors=None, typecode=None):
 if __name__ == "__main__":
     # Car data from example 'Naive Bayes Classifier example' by Eric Meisner November 22, 2003
     # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
-    xcar=[
+    xcar = [
         ['Red',    'Sports', 'Domestic'],
         ['Red',    'Sports', 'Domestic'],
         ['Red',    'Sports', 'Domestic'],
@@ -217,7 +217,7 @@ if __name__ == "__main__":
         ['Red',    'Sports', 'Imported']
     ]
 
-    ycar=[
+    ycar = [
         'Yes',
         'No',
         'Yes',

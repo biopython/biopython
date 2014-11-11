@@ -17,12 +17,12 @@ from Bio.Application import ApplicationError
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 clustalo_exe = None
 if sys.platform=="win32":
-    #TODO
+    # TODO
     raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
 else:
     from Bio._py3k import getoutput
@@ -66,14 +66,14 @@ class ClustalOmegaTestCase(unittest.TestCase):
                error.startswith("WARNING: Sequence type is DNA.") or
                error.startswith("WARNING: DNA alignment is still experimental."))
 
-        #Check the output...
+        # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertEqual(len(set(input_records.keys())), len(set(output_records.keys())))
         for record in align:
             self.assertEqual(str(record.seq), str(output_records[record.id].seq))
 
-        #TODO - Try and parse this with Bio.Nexus?
+        # TODO - Try and parse this with Bio.Nexus?
         if cline.guidetree_out:
             self.assertTrue(os.path.isfile(cline.guidetree_out))
 
@@ -96,7 +96,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
-                            "non-zero exit status" in str(err))
+                            "Non-zero return code" in str(err), str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -121,8 +121,8 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            #Ideally we'd catch the return code and raise the specific
-            #error for "invalid format".
+            # Ideally we'd catch the return code and raise the specific
+            # error for "invalid format".
             self.assertTrue("Can't determine format of sequence file" in str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
@@ -186,11 +186,11 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
 
     def test_large_fasta_file(self):
         """Test a large fasta input file."""
-        #Create a large input file by converting another example file
+        # Create a large input file by converting another example file
         #(See Bug 2804, this will produce so much output on stdout that
-        #subprocess could suffer a deadlock and hang).  Using all the
-        #records should show the deadlock but is very slow - just thirty
-        #seems to lockup on Mac OS X, even 20 on Linux (without the fix).
+        # subprocess could suffer a deadlock and hang).  Using all the
+        # records should show the deadlock but is very slow - just thirty
+        # seems to lockup on Mac OS X, even 20 on Linux (without the fix).
         input_file = "temp_cw_prot.fasta"
         handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]

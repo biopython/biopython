@@ -58,35 +58,35 @@ contains the most information, having the complete query and hit sequences of
 the alignment.
 
 Here are some examples of the C4 output alignment that ExonerateIO can handle
-(coordinates not written in scale):
+(coordinates not written in scale)::
 
-1. simple ungapped alignments
+    1. simple ungapped alignments
 
-       1 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAAT :      56
-           ||||||||||||||||||||||||||||||||
- 1319275 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAAT : 1319220
+           1 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAAT :      56
+               ||||||||||||||||||||||||||||||||
+     1319275 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAAT : 1319220
 
-2. alignments with frameshifts:
+    2. alignments with frameshifts:
 
-     129 : -TGCCGTTACCAT----GACGAAAGTATTAAT : 160
-           -CysArgTyrHis----AspGluSerIleAsn
-           #||||||||||||####|||||||||||||||
-           #CysArgTyrHis####AspGluSerIleAsn
- 1234593 : GTGCCGTTACCATCGGTGACGAAAGTATTAAT : 1234630
+         129 : -TGCCGTTACCAT----GACGAAAGTATTAAT : 160
+               -CysArgTyrHis----AspGluSerIleAsn
+               #||||||||||||####|||||||||||||||
+               #CysArgTyrHis####AspGluSerIleAsn
+     1234593 : GTGCCGTTACCATCGGTGACGAAAGTATTAAT : 1234630
 
-3. alignments with introns and split codons:
+    3. alignments with introns and split codons:
 
-    382 :    {A}                             {CC}AAA                 :    358
-          AAA{T}  >>>> Target Intron 3 >>>>  {hr}LysATGAGCGATGAAAATA
-          || { }++         55423 bp        ++{  } !  |||  ||||||||||
-          AAC{L}gt.........................ag{eu}AspTTGAATGATGAAAATA
-  42322 :    {C}                             {TG}GAT                 :  97769
+        382 :    {A}                             {CC}AAA                 :    358
+              AAA{T}  >>>> Target Intron 3 >>>>  {hr}LysATGAGCGATGAAAATA
+              || { }++         55423 bp        ++{  } !  |||  ||||||||||
+              AAC{L}gt.........................ag{eu}AspTTGAATGATGAAAATA
+      42322 :    {C}                             {TG}GAT                 :  97769
 
-4. alignments with NER blocks
+    4. alignments with NER blocks
 
-    111 : CAGAAAA--<   31  >--CTGCCCAGAAT--<   10  >--AACGAGCGTTCCG- :    184
-          | |||||--< NER 1 >--| ||||| | |--< NER 2 >--|||  | ||||||-
- 297911 : CTGAAAA--<   29  >--CCGCCCAAAGT--<   13  >--AACTGGAGTTCCG- : 297993
+        111 : CAGAAAA--<   31  >--CTGCCCAGAAT--<   10  >--AACGAGCGTTCCG- :    184
+              | |||||--< NER 1 >--| ||||| | |--< NER 2 >--|||  | ||||||-
+     297911 : CTGAAAA--<   29  >--CCGCCCAAAGT--<   13  >--AACTGGAGTTCCG- : 297993
 
 ExonerateIO utilizes the HSPFragment model quite extensively to deal with non-
 ungapped alignments. For any single HSPFragment, if ExonerateIO sees an intron,
@@ -99,14 +99,14 @@ such as in the protein2dna model, ExonerateIO will transform the protein
 sequence into using one letter codes. This is because the SeqRecord objects that
 store the sequences are designed for single-letter sequences only. If Exonerate
 also outputs the underlying nucleotide sequence, it will be saved into an
-`aln_annotation` entry as a list of triplets.
+``aln_annotation`` entry as a list of triplets.
 
 If the protein sequence is not part of the actual alignment, such as in the
 est2genome or genome2genome models, ExonerateIO will keep the three letter codes
-and store them as `aln_annotation` entries. In these cases, the hit and
+and store them as ``aln_annotation`` entries. In these cases, the hit and
 query sequences may be used directly as SeqRecord objects as they are one-letter
 nucleotide codes. The three-letter protein sequences are then stored as entries
-in the `aln_annotation` dictionary.
+in the ``aln_annotation`` dictionary.
 
 
 For 'exonerate-text', ExonerateIO provides the following object attributes:
@@ -134,7 +134,7 @@ For 'exonerate-text', ExonerateIO provides the following object attributes:
 |                 | query_split_codons      | list of split codon coordinates  |
 |                 |                         | in the query sequence            |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | aln_annotation          | alignment homology string, hit   |
+| HSPFragment     | aln_annotation          | alignment similarity string, hit |
 |                 |                         | sequence annotation, and/or      |
 |                 |                         | query sequence annotation        |
 |                 +-------------------------+----------------------------------+
@@ -161,7 +161,7 @@ For 'exonerate-text', ExonerateIO provides the following object attributes:
 
 Note that you can also use the default HSP or HSPFragment properties. For
 example, to check the intron coordinates of your result you can use the
-`query_inter_ranges` or `hit_inter_ranges` properties:
+``query_inter_ranges`` or ``hit_inter_ranges`` properties:
 
     >>> from Bio import SearchIO
     >>> fname = 'Exonerate/exn_22_m_genome2genome.exn'
@@ -183,12 +183,12 @@ bigger than the end coordinate. ExonerateIO preserves the fragment ordering as a
 whole, but uses its own standard to store an individual fragment's start and end
 coordinates.
 
-You may also notice that the third tuple in `query_inter_ranges` is (198, 198),
+You may also notice that the third tuple in ``query_inter_ranges`` is (198, 198),
 two exact same numbers. This means that the query sequence does not have any
 gaps at that position. The gap is only present in the hit sequence, where we see
 that the third tuple contains (208677, 386123), a gap of about 177k bases.
 
-Another example is to use the `hit_frame_all` and `query_frame_all` to see if
+Another example is to use the ``hit_frame_all`` and ``query_frame_all`` to see if
 there are any frameshifts in your alignment:
 
     >>> from Bio import SearchIO

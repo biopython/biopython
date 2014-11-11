@@ -145,7 +145,7 @@ def __read(handle):
         elif key=="//":
             if record:
                 return record
-            else: # This was the copyright notice
+            else:  # This was the copyright notice
                 continue
     if record:
         raise ValueError("Unexpected end of stream")

@@ -239,8 +239,8 @@ Alternatively, if you have enough RAM to hold all the records in memory at once,
 then a simple dictionary approach would work:
 
     >>> from Bio import SeqIO
-    >>> reads = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fasta"), "fasta"))
-    >>> for rec in SeqIO.parse(open("Quality/example.qual"), "qual"):
+    >>> reads = SeqIO.to_dict(SeqIO.parse("Quality/example.fasta", "fasta"))
+    >>> for rec in SeqIO.parse("Quality/example.qual", "qual"):
     ...     reads[rec.id].letter_annotations["phred_quality"]=rec.letter_annotations["phred_quality"]
 
 You can then access any record by its key, and get both the sequence and the
@@ -458,15 +458,15 @@ def solexa_quality_from_phred(phred_quality):
     None
     """
     if phred_quality is None:
-        #Assume None is used as some kind of NULL or NA value; return None
-        #e.g. Bio.SeqIO gives Ace contig gaps a quality of None.
+        # Assume None is used as some kind of NULL or NA value; return None
+        # e.g. Bio.SeqIO gives Ace contig gaps a quality of None.
         return None
     elif phred_quality > 0:
-        #Solexa uses a minimum value of -5, which after rounding matches a
-        #random nucleotide base call.
+        # Solexa uses a minimum value of -5, which after rounding matches a
+        # random nucleotide base call.
         return max(-5.0, 10 * log(10 ** (phred_quality / 10.0) - 1, 10))
     elif phred_quality == 0:
-        #Special case, map to -5 as discussed in the docstring
+        # Special case, map to -5 as discussed in the docstring
         return -5.0
     else:
         raise ValueError("PHRED qualities must be positive (or zero), not %s"
@@ -512,7 +512,7 @@ def phred_quality_from_solexa(solexa_quality):
     None
     """
     if solexa_quality is None:
-        #Assume None is used as some kind of NULL or NA value; return None
+        # Assume None is used as some kind of NULL or NA value; return None
         return None
     if solexa_quality < -5:
         warnings.warn("Solexa quality less than -5 passed, %s"
@@ -538,10 +538,10 @@ def _get_phred_quality(record):
                          "letter_annotations of SeqRecord (id=%s)."
                          % record.id)
 
-#Only map 0 to 93, we need to give a warning on truncating at 93
+# Only map 0 to 93, we need to give a warning on truncating at 93
 _phred_to_sanger_quality_str = dict((qp, chr(min(126, qp + SANGER_SCORE_OFFSET)))
                                     for qp in range(0, 93 + 1))
-#Only map -5 to 93, we need to give a warning on truncating at 93
+# Only map -5 to 93, we need to give a warning on truncating at 93
 _solexa_to_sanger_quality_str = dict(
     (qs, chr(min(126, int(round(phred_quality_from_solexa(qs))) +
      SANGER_SCORE_OFFSET)))
@@ -607,61 +607,61 @@ def _get_sanger_quality_str(record):
     file (using ASCII 126, the tilde). This function will issue a warning
     in this situation.
     """
-    #TODO - This functions works and is fast, but it is also ugly
-    #and there is considerable repetition of code for the other
-    #two FASTQ variants.
+    # TODO - This functions works and is fast, but it is also ugly
+    # and there is considerable repetition of code for the other
+    # two FASTQ variants.
     try:
-        #These take priority (in case both Solexa and PHRED scores found)
+        # These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["phred_quality"]
     except KeyError:
-        #Fall back on solexa scores...
+        # Fall back on solexa scores...
         pass
     else:
-        #Try and use the precomputed mapping:
+        # Try and use the precomputed mapping:
         try:
             return "".join(_phred_to_sanger_quality_str[qp]
                            for qp in qualities)
         except KeyError:
-            #Could be a float, or a None in the list, or a high value.
+            # Could be a float, or a None in the list, or a high value.
             pass
         if None in qualities:
             raise TypeError("A quality value of None was found")
         if max(qualities) >= 93.5:
             warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ",
                           BiopythonWarning)
-        #This will apply the truncation at 93, giving max ASCII 126
+        # This will apply the truncation at 93, giving max ASCII 126
         return "".join(chr(min(126, int(round(qp)) + SANGER_SCORE_OFFSET))
                        for qp in qualities)
-    #Fall back on the Solexa scores...
+    # Fall back on the Solexa scores...
     try:
         qualities = record.letter_annotations["solexa_quality"]
     except KeyError:
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)."
                          % record.id)
-    #Try and use the precomputed mapping:
+    # Try and use the precomputed mapping:
     try:
         return "".join(_solexa_to_sanger_quality_str[qs]
                        for qs in qualities)
     except KeyError:
-        #Either no PHRED scores, or something odd like a float or None
+        # Either no PHRED scores, or something odd like a float or None
         pass
     if None in qualities:
         raise TypeError("A quality value of None was found")
-    #Must do this the slow way, first converting the PHRED scores into
-    #Solexa scores:
+    # Must do this the slow way, first converting the PHRED scores into
+    # Solexa scores:
     if max(qualities) >= 93.5:
         warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ",
                       BiopythonWarning)
-    #This will apply the truncation at 93, giving max ASCII 126
+    # This will apply the truncation at 93, giving max ASCII 126
     return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SANGER_SCORE_OFFSET))
                    for qs in qualities)
 
-#Only map 0 to 62, we need to give a warning on truncating at 62
+# Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
 _phred_to_illumina_quality_str = dict((qp, chr(qp + SOLEXA_SCORE_OFFSET))
                                       for qp in range(0, 62 + 1))
-#Only map -5 to 62, we need to give a warning on truncating at 62
+# Only map -5 to 62, we need to give a warning on truncating at 62
 _solexa_to_illumina_quality_str = dict(
     (qs, chr(int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
     for qs in range(-5, 62 + 1))
@@ -675,61 +675,61 @@ def _get_illumina_quality_str(record):
     file (using ASCII 126, the tilde). This function will issue a warning
     in this situation.
     """
-    #TODO - This functions works and is fast, but it is also ugly
-    #and there is considerable repetition of code for the other
-    #two FASTQ variants.
+    # TODO - This functions works and is fast, but it is also ugly
+    # and there is considerable repetition of code for the other
+    # two FASTQ variants.
     try:
-        #These take priority (in case both Solexa and PHRED scores found)
+        # These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["phred_quality"]
     except KeyError:
-        #Fall back on solexa scores...
+        # Fall back on solexa scores...
         pass
     else:
-        #Try and use the precomputed mapping:
+        # Try and use the precomputed mapping:
         try:
             return "".join(_phred_to_illumina_quality_str[qp]
                            for qp in qualities)
         except KeyError:
-            #Could be a float, or a None in the list, or a high value.
+            # Could be a float, or a None in the list, or a high value.
             pass
         if None in qualities:
             raise TypeError("A quality value of None was found")
         if max(qualities) >= 62.5:
             warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ",
                           BiopythonWarning)
-        #This will apply the truncation at 62, giving max ASCII 126
+        # This will apply the truncation at 62, giving max ASCII 126
         return "".join(chr(min(126, int(round(qp)) + SOLEXA_SCORE_OFFSET))
                        for qp in qualities)
-    #Fall back on the Solexa scores...
+    # Fall back on the Solexa scores...
     try:
         qualities = record.letter_annotations["solexa_quality"]
     except KeyError:
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)."
                          % record.id)
-    #Try and use the precomputed mapping:
+    # Try and use the precomputed mapping:
     try:
         return "".join(_solexa_to_illumina_quality_str[qs]
                        for qs in qualities)
     except KeyError:
-        #Either no PHRED scores, or something odd like a float or None
+        # Either no PHRED scores, or something odd like a float or None
         pass
     if None in qualities:
         raise TypeError("A quality value of None was found")
-    #Must do this the slow way, first converting the PHRED scores into
-    #Solexa scores:
+    # Must do this the slow way, first converting the PHRED scores into
+    # Solexa scores:
     if max(qualities) >= 62.5:
         warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ",
                       BiopythonWarning)
-    #This will apply the truncation at 62, giving max ASCII 126
+    # This will apply the truncation at 62, giving max ASCII 126
     return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
                    for qs in qualities)
 
-#Only map 0 to 62, we need to give a warning on truncating at 62
+# Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
 _solexa_to_solexa_quality_str = dict((qs, chr(min(126, qs + SOLEXA_SCORE_OFFSET)))
                                      for qs in range(-5, 62 + 1))
-#Only map -5 to 62, we need to give a warning on truncating at 62
+# Only map -5 to 62, we need to give a warning on truncating at 62
 _phred_to_solexa_quality_str = dict(
     (qp, chr(min(126, int(round(solexa_quality_from_phred(qp))) +
      SOLEXA_SCORE_OFFSET)))
@@ -744,50 +744,50 @@ def _get_solexa_quality_str(record):
     file (using ASCII 126, the tilde). This function will issue a warning
     in this situation.
     """
-    #TODO - This functions works and is fast, but it is also ugly
-    #and there is considerable repetition of code for the other
-    #two FASTQ variants.
+    # TODO - This functions works and is fast, but it is also ugly
+    # and there is considerable repetition of code for the other
+    # two FASTQ variants.
     try:
-        #These take priority (in case both Solexa and PHRED scores found)
+        # These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["solexa_quality"]
     except KeyError:
-        #Fall back on PHRED scores...
+        # Fall back on PHRED scores...
         pass
     else:
-        #Try and use the precomputed mapping:
+        # Try and use the precomputed mapping:
         try:
             return "".join(_solexa_to_solexa_quality_str[qs]
                            for qs in qualities)
         except KeyError:
-            #Could be a float, or a None in the list, or a high value.
+            # Could be a float, or a None in the list, or a high value.
             pass
         if None in qualities:
             raise TypeError("A quality value of None was found")
         if max(qualities) >= 62.5:
             warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ",
                           BiopythonWarning)
-        #This will apply the truncation at 62, giving max ASCII 126
+        # This will apply the truncation at 62, giving max ASCII 126
         return "".join(chr(min(126, int(round(qs)) + SOLEXA_SCORE_OFFSET))
                        for qs in qualities)
-    #Fall back on the PHRED scores...
+    # Fall back on the PHRED scores...
     try:
         qualities = record.letter_annotations["phred_quality"]
     except KeyError:
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)."
                          % record.id)
-    #Try and use the precomputed mapping:
+    # Try and use the precomputed mapping:
     try:
         return "".join(_phred_to_solexa_quality_str[qp]
                        for qp in qualities)
     except KeyError:
-        #Either no PHRED scores, or something odd like a float or None
-        #or too big to be in the cache
+        # Either no PHRED scores, or something odd like a float or None
+        # or too big to be in the cache
         pass
     if None in qualities:
         raise TypeError("A quality value of None was found")
-    #Must do this the slow way, first converting the PHRED scores into
-    #Solexa scores:
+    # Must do this the slow way, first converting the PHRED scores into
+    # Solexa scores:
     if max(qualities) >= 62.5:
         warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ",
                       BiopythonWarning)
@@ -795,7 +795,7 @@ def _get_solexa_quality_str(record):
                    for qp in qualities)
 
 
-#TODO - Default to nucleotide or even DNA?
+# TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle):
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).
 
@@ -870,7 +870,7 @@ def FastqGeneralIterator(handle):
     ...     for (title, sequence, quality) in FastqGeneralIterator(handle):
     ...         print(title)
     ...         print("%s %s" % (sequence, quality))
-    ... 
+    ...
     071113_EAS56_0053:1:1:998:236
     TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA IIIIIIIIIIIIIIIIIIIIIIIIIIIIICII+III
     071113_EAS56_0053:1:1:182:712
@@ -887,11 +887,11 @@ def FastqGeneralIterator(handle):
     is that (provided there are no line breaks in the quality sequence) it
     would prevent the above problem with the "@" character.
     """
-    #We need to call handle.readline() at least four times per record,
-    #so we'll save a property look up each time:
+    # We need to call handle.readline() at least four times per record,
+    # so we'll save a property look up each time:
     handle_readline = handle.readline
 
-    #Skip any text before the first record (e.g. blank lines, comments?)
+    # Skip any text before the first record (e.g. blank lines, comments?)
     while True:
         line = handle_readline()
         if not line:
@@ -906,45 +906,45 @@ def FastqGeneralIterator(handle):
             raise ValueError(
                 "Records in Fastq files should start with '@' character")
         title_line = line[1:].rstrip()
-        #Will now be at least one line of quality data - in most FASTQ files
-        #just one line! We therefore use string concatenation (if needed)
-        #rather using than the "".join(...) trick just in case it is multiline:
+        # Will now be at least one line of quality data - in most FASTQ files
+        # just one line! We therefore use string concatenation (if needed)
+        # rather using than the "".join(...) trick just in case it is multiline:
         seq_string = handle_readline().rstrip()
-        #There may now be more sequence lines, or the "+" quality marker line:
+        # There may now be more sequence lines, or the "+" quality marker line:
         while True:
             line = handle_readline()
             if not line:
                 raise ValueError("End of file without quality information.")
             if line[0] == "+":
-                #The title here is optional, but if present must match!
+                # The title here is optional, but if present must match!
                 second_title = line[1:].rstrip()
                 if second_title and second_title != title_line:
                     raise ValueError("Sequence and quality captions differ.")
                 break
             seq_string += line.rstrip()  # removes trailing newlines
-        #This is going to slow things down a little, but assuming
-        #this isn't allowed we should try and catch it here:
+        # This is going to slow things down a little, but assuming
+        # this isn't allowed we should try and catch it here:
         if " " in seq_string or "\t" in seq_string:
             raise ValueError("Whitespace is not allowed in the sequence.")
         seq_len = len(seq_string)
 
-        #Will now be at least one line of quality data...
+        # Will now be at least one line of quality data...
         quality_string = handle_readline().rstrip()
-        #There may now be more quality data, or another sequence, or EOF
+        # There may now be more quality data, or another sequence, or EOF
         while True:
             line = handle_readline()
             if not line:
                 break  # end of file
             if line[0] == "@":
-                #This COULD be the start of a new sequence. However, it MAY just
-                #be a line of quality data which starts with a "@" character.  We
-                #should be able to check this by looking at the sequence length
-                #and the amount of quality data found so far.
+                # This COULD be the start of a new sequence. However, it MAY just
+                # be a line of quality data which starts with a "@" character.  We
+                # should be able to check this by looking at the sequence length
+                # and the amount of quality data found so far.
                 if len(quality_string) >= seq_len:
-                    #We expect it to be equal if this is the start of a new record.
-                    #If the quality data is longer, we'll raise an error below.
+                    # We expect it to be equal if this is the start of a new record.
+                    # If the quality data is longer, we'll raise an error below.
                     break
-                #Continue - its just some (more) quality data.
+                # Continue - its just some (more) quality data.
             quality_string += line.rstrip()
 
         if seq_len != len(quality_string):
@@ -952,7 +952,7 @@ def FastqGeneralIterator(handle):
                              " for %s (%i and %i)."
                              % (title_line, seq_len, len(quality_string)))
 
-        #Return the record and then continue...
+        # Return the record and then continue...
         yield (title_line, seq_string, quality_string)
     raise StopIteration
 
@@ -1022,11 +1022,11 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     """
     assert SANGER_SCORE_OFFSET == ord("!")
-    #Originally, I used a list expression for each record:
+    # Originally, I used a list expression for each record:
     #
     # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
     #
-    #Precomputing is faster, perhaps partly by avoiding the subtractions.
+    # Precomputing is faster, perhaps partly by avoiding the subtractions.
     q_mapping = dict()
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
@@ -1042,11 +1042,11 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         qualities = [q_mapping[letter] for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 93):
             raise ValueError("Invalid character in quality string")
-        #For speed, will now use a dirty trick to speed up assigning the
-        #qualities. We do this to bypass the length check imposed by the
-        #per-letter-annotations restricted dict (as this has already been
-        #checked by FastqGeneralIterator). This is equivalent to:
-        #record.letter_annotations["phred_quality"] = qualities
+        # For speed, will now use a dirty trick to speed up assigning the
+        # qualities. We do this to bypass the length check imposed by the
+        # per-letter-annotations restricted dict (as this has already been
+        # checked by FastqGeneralIterator). This is equivalent to:
+        # record.letter_annotations["phred_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations,
                          "phred_quality", qualities)
         yield record
@@ -1199,11 +1199,11 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
         qualities = [q_mapping[letter] for letter in quality_string]
-        #DO NOT convert these into PHRED qualities automatically!
+        # DO NOT convert these into PHRED qualities automatically!
         if qualities and (min(qualities) < -5 or max(qualities) > 62):
             raise ValueError("Invalid character in quality string")
-        #Dirty trick to speed up this line:
-        #record.letter_annotations["solexa_quality"] = qualities
+        # Dirty trick to speed up this line:
+        # record.letter_annotations["solexa_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations,
                          "solexa_quality", qualities)
         yield record
@@ -1218,7 +1218,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
     encoding PHRED integer qualities using ASCII values with an offset of 64.
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/illumina_faked.fastq"), "fastq-illumina")
+    >>> record = SeqIO.read("Quality/illumina_faked.fastq", "fastq-illumina")
     >>> print("%s %s" % (record.id, record.seq))
     Test ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     >>> max(record.letter_annotations["phred_quality"])
@@ -1231,7 +1231,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
     quality reads. If you have an old Solexa/Illumina file with negative
     Solexa scores, and try and read this as an Illumina 1.3+ file it will fail:
 
-    >>> record2 = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-illumina")
+    >>> record2 = SeqIO.read("Quality/solexa_faked.fastq", "fastq-illumina")
     Traceback (most recent call last):
        ...
     ValueError: Invalid character in quality string
@@ -1253,8 +1253,8 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
         qualities = [q_mapping[letter] for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 62):
             raise ValueError("Invalid character in quality string")
-        #Dirty trick to speed up this line:
-        #record.letter_annotations["phred_quality"] = qualities
+        # Dirty trick to speed up this line:
+        # record.letter_annotations["phred_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations,
                          "phred_quality", qualities)
         yield record
@@ -1327,7 +1327,7 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     scores but will replace them with the lowest possible PHRED score of zero.
     This will trigger a warning, previously it raised a ValueError exception.
     """
-    #Skip any text before the first record (e.g. blank lines, comments)
+    # Skip any text before the first record (e.g. blank lines, comments)
     while True:
         line = handle.readline()
         if line == "":
@@ -1362,11 +1362,11 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
                           % min(qualities), BiopythonParserWarning)
             qualities = [max(0, q) for q in qualities]
 
-        #Return the record and then continue...
+        # Return the record and then continue...
         record = SeqRecord(UnknownSeq(len(qualities), alphabet),
                            id=id, name=name, description=descr)
-        #Dirty trick to speed up this line:
-        #record.letter_annotations["phred_quality"] = qualities
+        # Dirty trick to speed up this line:
+        # record.letter_annotations["phred_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations,
                          "phred_quality", qualities)
         yield record
@@ -1386,7 +1386,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     Sanger style FASTQ file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
+    >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
     >>> with open("Quality/temp.fastq", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "fastq")
     3
@@ -1402,7 +1402,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     PHRED qualities:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
+    >>> record_iterator = SeqIO.parse("Quality/solexa_example.fastq", "fastq-solexa")
     >>> with open("Quality/temp.fastq", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "fastq")
     5
@@ -1427,7 +1427,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
-        #TODO - Is an empty sequence allowed in FASTQ format?
+        # TODO - Is an empty sequence allowed in FASTQ format?
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         seq_str = str(record.seq)
@@ -1436,12 +1436,12 @@ class FastqPhredWriter(SequentialSequenceWriter):
             raise ValueError("Record %s has sequence length %i but %i quality scores"
                              % (record.id, len(seq_str), len(qualities_str)))
 
-        #FASTQ files can include a description, just like FASTA files
-        #(at least, this is what the NCBI Short Read Archive does)
+        # FASTQ files can include a description, just like FASTA files
+        # (at least, this is what the NCBI Short Read Archive does)
         id = self.clean(record.id)
         description = self.clean(record.description)
         if description and description.split(None, 1)[0] == id:
-            #The description includes the id at the start
+            # The description includes the id at the start
             title = description
         elif description:
             title = "%s %s" % (id, description)
@@ -1459,7 +1459,7 @@ class QualPhredWriter(SequentialSequenceWriter):
     reads in a FASTQ file and saves the quality scores into a QUAL file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
+    >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
     >>> with open("Quality/temp.qual", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "qual")
     3
@@ -1492,7 +1492,7 @@ class QualPhredWriter(SequentialSequenceWriter):
         Bio.SeqIO.FastaIO writer class.
         """
         SequentialSequenceWriter.__init__(self, handle)
-        #self.handle = handle
+        # self.handle = handle
         self.wrap = None
         if wrap:
             if wrap < 1:
@@ -1515,7 +1515,7 @@ class QualPhredWriter(SequentialSequenceWriter):
             id = self.clean(record.id)
             description = self.clean(record.description)
             if description and description.split(None, 1)[0] == id:
-                #The description includes the id at the start
+                # The description includes the id at the start
                 title = description
             elif description:
                 title = "%s %s" % (id, description)
@@ -1525,8 +1525,8 @@ class QualPhredWriter(SequentialSequenceWriter):
 
         qualities = _get_phred_quality(record)
         try:
-            #This rounds to the nearest integer.
-            #TODO - can we record a float in a qual file?
+            # This rounds to the nearest integer.
+            # TODO - can we record a float in a qual file?
             qualities_strs = [("%i" % round(q, 0)) for q in qualities]
         except TypeError as e:
             if None in qualities:
@@ -1535,20 +1535,20 @@ class QualPhredWriter(SequentialSequenceWriter):
                 raise e
 
         if wrap > 5:
-            #Fast wrapping
+            # Fast wrapping
             data = " ".join(qualities_strs)
             while True:
                 if len(data) <= wrap:
                     self.handle.write(data + "\n")
                     break
                 else:
-                    #By construction there must be spaces in the first X chars
-                    #(unless we have X digit or higher quality scores!)
+                    # By construction there must be spaces in the first X chars
+                    # (unless we have X digit or higher quality scores!)
                     i = data.rfind(" ", 0, wrap)
                     handle.write(data[:i] + "\n")
                     data = data[i + 1:]
         elif wrap:
-            #Safe wrapping
+            # Safe wrapping
             while qualities_strs:
                 line = qualities_strs.pop(0)
                 while qualities_strs \
@@ -1556,7 +1556,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                     line += " " + qualities_strs.pop(0)
                 handle.write(line + "\n")
         else:
-            #No wrapping
+            # No wrapping
             data = " ".join(qualities_strs)
             handle.write(data + "\n")
 
@@ -1578,7 +1578,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     reads in a FASTQ file and re-saves it as another FASTQ file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
+    >>> record_iterator = SeqIO.parse("Quality/solexa_example.fastq", "fastq-solexa")
     >>> with open("Quality/temp.fastq", "w") as out_handle:
     ...     SeqIO.write(record_iterator, out_handle, "fastq-solexa")
     5
@@ -1592,7 +1592,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     This code is also called if you use the .format("fastq-solexa") method of
     a SeqRecord. For example,
 
-    >>> record = SeqIO.read(open("Quality/sanger_faked.fastq"), "fastq-sanger")
+    >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
     >>> print(record.format("fastq-solexa"))
     @Test PHRED qualities from 40 to 0 inclusive
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
@@ -1615,7 +1615,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         assert not self._footer_written
         self._record_written = True
 
-        #TODO - Is an empty sequence allowed in FASTQ format?
+        # TODO - Is an empty sequence allowed in FASTQ format?
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         seq_str = str(record.seq)
@@ -1624,12 +1624,12 @@ class FastqSolexaWriter(SequentialSequenceWriter):
             raise ValueError("Record %s has sequence length %i but %i quality scores"
                              % (record.id, len(seq_str), len(qualities_str)))
 
-        #FASTQ files can include a description, just like FASTA files
-        #(at least, this is what the NCBI Short Read Archive does)
+        # FASTQ files can include a description, just like FASTA files
+        # (at least, this is what the NCBI Short Read Archive does)
         id = self.clean(record.id)
         description = self.clean(record.description)
         if description and description.split(None, 1)[0] == id:
-            #The description includes the id at the start
+            # The description includes the id at the start
             title = description
         elif description:
             title = "%s %s" % (id, description)
@@ -1653,7 +1653,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     method of a SeqRecord. For example,
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/sanger_faked.fastq"), "fastq-sanger")
+    >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
     >>> print(record.format("fastq-illumina"))
     @Test PHRED qualities from 40 to 0 inclusive
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
@@ -1671,7 +1671,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         assert not self._footer_written
         self._record_written = True
 
-        #TODO - Is an empty sequence allowed in FASTQ format?
+        # TODO - Is an empty sequence allowed in FASTQ format?
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         seq_str = str(record.seq)
@@ -1680,12 +1680,12 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
             raise ValueError("Record %s has sequence length %i but %i quality scores"
                              % (record.id, len(seq_str), len(qualities_str)))
 
-        #FASTQ files can include a description, just like FASTA files
-        #(at least, this is what the NCBI Short Read Archive does)
+        # FASTQ files can include a description, just like FASTA files
+        # (at least, this is what the NCBI Short Read Archive does)
         id = self.clean(record.id)
         description = self.clean(record.description)
         if description and description.split(None, 1)[0] == id:
-            #The description includes the id at the start
+            # The description includes the id at the start
             title = description
         elif description:
             title = "%s %s" % (id, description)
@@ -1726,10 +1726,11 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     can't be used to read the two files together - but this function can!
     For example,
 
-    >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
-    ...                                    open("Quality/example.qual", "rU"))
-    >>> for record in rec_iter:
-    ...     print("%s %s" % (record.id, record.seq))
+    >>> with open("Quality/example.fasta", "rU") as f:
+    ...     with open("Quality/example.qual", "rU") as q:
+    ...         for record in PairedFastaQualIterator(f, q):
+    ...             print("%s %s" % (record.id, record.seq))
+    ...
     EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
     EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
@@ -1746,10 +1747,10 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     this function to convert paired FASTA and QUAL files into FASTQ files:
 
     >>> from Bio import SeqIO
-    >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
-    ...                                    open("Quality/example.qual", "rU"))
-    >>> with open("Quality/temp.fastq", "w") as out_handle:
-    ...     SeqIO.write(rec_iter, out_handle, "fastq")
+    >>> with open("Quality/example.fasta", "rU") as f:
+    ...     with open("Quality/example.qual", "rU") as q:
+    ...         SeqIO.write(PairedFastaQualIterator(f, q), "Quality/temp.fastq", "fastq")
+    ...
     3
 
     And don't forget to clean up the temp file if you don't need it anymore:
@@ -1763,8 +1764,8 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     qual_iter = QualPhredIterator(qual_handle, alphabet=alphabet,
                                   title2ids=title2ids)
 
-    #Using (Python 3 style) zip wouldn't load everything into memory,
-    #but also would not catch any extra records found in only one file.
+    # Using (Python 3 style) zip wouldn't load everything into memory,
+    # but also would not catch any extra records found in only one file.
     while True:
         try:
             f_rec = next(fasta_iter)
@@ -1775,7 +1776,7 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
         except StopIteration:
             q_rec = None
         if f_rec is None and q_rec is None:
-            #End of both files
+            # End of both files
             break
         if f_rec is None:
             raise ValueError("FASTA file has more entries than the QUAL file.")
@@ -1787,15 +1788,13 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
         if len(f_rec) != len(q_rec.letter_annotations["phred_quality"]):
             raise ValueError("Sequence length and number of quality scores disagree for %s"
                              % f_rec.id)
-        #Merge the data....
+        # Merge the data....
         f_rec.letter_annotations[
             "phred_quality"] = q_rec.letter_annotations["phred_quality"]
         yield f_rec
-    #Done
+    # Done
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)
-
-

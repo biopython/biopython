@@ -90,7 +90,7 @@ def parse(handle):
     while True:
         line = handle.readline()
         if line.strip():
-            break # Starting a record
+            break  # Starting a record
 
     # Read each record
     record = None
@@ -108,7 +108,7 @@ def parse(handle):
                 record.comments += line
         elif not line.strip():
             pass
-        elif line[5:19]=="PRODUCT SIZE: ":
+        elif line[5:19] == "PRODUCT SIZE: ":
             primer = Primers()
             primer.size = int(line[19:])
             record.primers.append(primer)
@@ -143,7 +143,7 @@ def parse(handle):
             primer.internal_gc = float(words[5])
             try:
                 primer.internal_seq = words[6]
-            except IndexError: # eprimer3 reports oligo without sequence
+            except IndexError:  # eprimer3 reports oligo without sequence
                 primer.internal_seq = ''
         try:
             line = next(handle)

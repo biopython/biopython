@@ -186,7 +186,7 @@ class ModTest(unittest.TestCase):
                         "rho": None,
                         "fix_rho": None}
         self.cml.read_ctl_file(self.ctl_file)
-        #Compare the dictionary keys:
+        # Compare the dictionary keys:
         self.assertEqual(sorted(self.cml._options), sorted(target_options))
         for key in target_options:
             self.assertEqual(self.cml._options[key], target_options[key],

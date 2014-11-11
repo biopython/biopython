@@ -63,10 +63,10 @@ m=Motif.Motif(alphabet=IUPAC.unambiguous_dna)
 This is for now just an empty container, so let's add some sequences to our newly created motif:
 \begin{verbatim}
 from Bio.Seq import Seq
-m.add_instance(Seq("TATAA",m.alphabet))
-m.add_instance(Seq("TATTA",m.alphabet))
-m.add_instance(Seq("TATAA",m.alphabet))
-m.add_instance(Seq("TATAA",m.alphabet))
+m.add_instance(Seq("TATAA", m.alphabet))
+m.add_instance(Seq("TATTA", m.alphabet))
+m.add_instance(Seq("TATAA", m.alphabet))
+m.add_instance(Seq("TATAA", m.alphabet))
 \end{verbatim}
 Now we have a full \verb|Motif| instance, so we can try to get some
 basic information about it. Let's start with length and consensus
@@ -139,7 +139,7 @@ odds of a particular symbol to be coming from a motif against the
 background. We can use the \verb|.log_odds()| method:
 
 \begin{verbatim}
- >>> m.log_odds() 
+>>> m.log_odds()
 [{'A': -2.3219280948873622, 
   'C': -2.3219280948873622, 
   'T': 1.7655347463629771, 
@@ -180,11 +180,11 @@ On of the most popular motif databases JASPAR
 (\url{http://jaspar.genereg.net}) stores motifs in both formats, so
 let's look at how we can import JASPAR motifs from instances:
 \begin{verbatim}
-arnt=Motif.read(open("Arnt.sites"),"jaspar-sites")
+arnt = Motif.read(open("Arnt.sites"), "jaspar-sites")
 \end{verbatim}
 and from a count matrix:
 \begin{verbatim}
-srf=Motif.read(open("SRF.pfm"),"jaspar-pfm")
+srf = Motif.read(open("SRF.pfm"), "jaspar-pfm")
 \end{verbatim}
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
@@ -230,7 +230,7 @@ be careful with exporting instances from count-based motifs.
 
 Speaking of exporting, let's look at export functions. We can export to fasta:
 \begin{verbatim}
->>> print m.format("fasta")
+>>> print(m.format("fasta"))
 > instance 0
 TATAA
 > instance 1
@@ -242,7 +242,7 @@ TATAA
 \end{verbatim}
 or to TRANSFAC-like matrix format (used by some motif processing software)
 \begin{verbatim}
->>> print m.format("transfac")
+>>> print(m.format("transfac"))
 XX
 TY Motif
 ID 
@@ -275,8 +275,8 @@ test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 \begin{verbatim}
->>> for pos,seq in m.search_instances(test_seq):
-...     print pos,seq.tostring()
+>>> for pos, seq in m.search_instances(test_seq):
+...     print("%i %s" % (pos, seq))
 ... 
 10 TATAA
 15 TATAA
@@ -284,8 +284,8 @@ the true instances of the motif:
 \end{verbatim}
 We can do the same with the reverse complement (to find instances on the complementary strand):
 \begin{verbatim}
->>> for pos,seq in m.reverse_complement().search_instances(test_seq):
-...     print pos,seq.tostring()
+>>> for pos, seq in m.reverse_complement().search_instances(test_seq):
+...     print("%i %s" % (pos, seq))
 ... 
 12 TAATA
 20 TTATA
@@ -293,8 +293,8 @@ We can do the same with the reverse complement (to find instances on the complem
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 \begin{verbatim}
->>> for position, score in m.search(test_seq,threshold=5.0):
-...     print position, score
+>>> for pos, score in m.search(test_seq,threshold=5.0):
+...     print("%i %f" % (pos, score))
 ... 
 10 8.44065060871
 -12 7.06213898545
@@ -345,9 +345,9 @@ For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 \begin{verbatim}
->>> threshold=sd.threshold_balanced(1000)
->>> for position, score in m.search(test_seq, threshold=threshold):
-...     print position, score
+>>> threshold = sd.threshold_balanced(1000)
+>>> for pos, score in m.search(test_seq, threshold=threshold):
+...     print("%s %s" % (pos, score))
 ... 
 10 8.44065060871
 15 8.44065060871
@@ -383,7 +383,7 @@ motifs.
 To show how these functions work, let us first load another motif,
 which is similar to our test motif \verb|m|:
 \begin{verbatim}
->>> ubx=Motif.read(open("Ubx.pfm"),"jaspar-pfm")
+>>> ubx=Motif.read(open("Ubx.pfm"), "jaspar-pfm")
 <Bio.Motif.Motif.Motif object at 0xc29b90>
 >>> ubx.consensus
 Seq('TAAT', IUPACUnambiguousDNA())
@@ -448,7 +448,7 @@ favorite parameters and saved the output in the file
 running the following piece of code:
 
 \begin{verbatim}
->>> motifsM = list(Motif.parse(open("meme.out"),"MEME"))
+>>> motifsM = list(Motif.parse(open("meme.out"), "MEME"))
 >>> motifsM
 [<Bio.Motif.MEMEMotif.MEMEMotif object at 0xc356b0>]
 \end{verbatim}
@@ -489,7 +489,7 @@ your output in the file \verb|alignace.out|. You can parse your output
 with the following code:
 
 \begin{verbatim}
->>> motifsA=list(Motif.parse(open("alignace.out"),"AlignAce"))
+>>> motifsA = list(Motif.parse(open("alignace.out"), "AlignAce"))
 \end{verbatim}
 
 Again, your motifs behave as they should:
@@ -511,9 +511,9 @@ it directly from Biopython. Short example of how this can be done is
 shown below (other parameters can be specified as keyword parameters):
 
 \begin{verbatim}
->>> command="/opt/bin/AlignACE"
->>> input_file="test.fa"
->>> result=Motif.AlignAce(input_file,cmd=command,gcback=0.6,numcols=10)
+>>> command = "/opt/bin/AlignACE"
+>>> input_file = "test.fa"
+>>> result = Motif.AlignAce(input_file, cmd=command, gcback=0.6, numcols=10)
 >>> result
 (<Bio.Application.ApplicationResult instance at 0xf49d78>,
  <Bio.File.UndoHandle instance at 0xf49d00>,
@@ -523,7 +523,7 @@ shown below (other parameters can be specified as keyword parameters):
 Since AlignAce prints all its output to standard output, you can get
 to your motifs by parsing the second member of the result:
 \begin{verbatim}
-motifs=list(Motif.parse(result[1],"AlignAce"))
+motifs = list(Motif.parse(result[1], "AlignAce"))
 \end{verbatim}
 
 

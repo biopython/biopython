@@ -19,8 +19,8 @@ message"""
 class Codeml(Paml):
     """This class implements an interface to CODEML, part of the PAML package."""
 
-    def __init__(self, alignment = None, tree = None, working_dir = None,
-                out_file = None):
+    def __init__(self, alignment=None, tree=None, working_dir=None,
+                out_file=None):
         """Initialize the codeml instance.
 
         The user may optionally pass in strings specifying the locations
@@ -169,8 +169,8 @@ class Codeml(Paml):
         if self.tree is not None:
             self._rel_tree = _relpath(self.tree, self.working_dir)
 
-    def run(self, ctl_file = None, verbose = False, command = "codeml",
-                parse = True):
+    def run(self, ctl_file=None, verbose=False, command="codeml",
+                parse=True):
         """Run codeml using the current configuration and then parse the results.
 
         Return a process signal so the user can determine if

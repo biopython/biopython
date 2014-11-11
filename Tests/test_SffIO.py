@@ -84,6 +84,7 @@ class TestUAN(unittest.TestCase):
         for record in self.records:
             self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
 
+
 class TestConcatenated(unittest.TestCase):
     def test_parse1(self):
         count = 0
@@ -98,7 +99,7 @@ class TestConcatenated(unittest.TestCase):
             caught = True
         self.assertTrue(caught, "Didn't spot concatenation")
         self.assertEqual(count, 24)
-    
+
     def test_index1(self):
         try:
             d = SeqIO.index("Roche/invalid_greek_E3MFGYR02.sff", "sff")

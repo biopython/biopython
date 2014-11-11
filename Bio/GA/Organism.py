@@ -102,7 +102,7 @@ class Organism(object):
     if you are not careful to recalculate it after changes with
     recalculate_fitness()
     """
-    def __init__(self, genome, fitness_calculator, start_fitness = None):
+    def __init__(self, genome, fitness_calculator, start_fitness=None):
         """Initialize an organism
 
         Arguments:

@@ -62,7 +62,7 @@ class StructureBuilder(object):
         """
         self.structure=Structure(structure_id)
 
-    def init_model(self, model_id, serial_num = None):
+    def init_model(self, model_id, serial_num=None):
         """Initiate a new Model object with given id.
 
         Arguments:

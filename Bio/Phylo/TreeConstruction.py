@@ -743,9 +743,7 @@ class DistanceTreeConstructor(TreeConstructor):
             height = height + max([self._height_of(c) for c in clade.clades])
         return height
 
-# Tree Scoring and Searching Classes #####################
-
-
+# #################### Tree Scoring and Searching Classes #####################
 class Scorer(object):
 
     """Base class for all tree scoring methods"""
@@ -912,9 +910,7 @@ class NNITreeSearcher(TreeSearcher):
                     clade.clades.insert(0, left)
         return neighbors
 
-# Parsimony Classes ##########################
-
-
+# ######################## Parsimony Classes ##########################
 class ParsimonyScorer(Scorer):
 
     """Parsimony scorer with a scoring matrix.

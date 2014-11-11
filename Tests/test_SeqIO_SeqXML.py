@@ -52,7 +52,7 @@ class TestDetailedRead(unittest.TestCase):
         """Read special XML characters in description."""
         self.assertEqual(self.records["dna"][2].description, u'some special characters in the description\n<tag> "quoted string"')
 
-    #TODO - Fix this failure under Windows with Python 3.1 and 3.2
+    # TODO - Fix this failure under Windows with Python 3.1 and 3.2
     if not (sys.platform=="win32" and sys.version_info[0] >= 3):
         def test_unicode_characters_desc(self):
             """Test special unicode characters in the description."""
@@ -164,7 +164,7 @@ class TestReadAndWrite(unittest.TestCase):
             # Jython uses a different order
             pass
         elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"/>' in output:
-            #This would be fine too, but don't get this (do we?)
+            # This would be fine too, but don't get this (do we?)
             pass
         else:
             raise ValueError("Mising expected <species> tag: %r" % output)

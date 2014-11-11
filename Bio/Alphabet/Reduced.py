@@ -163,22 +163,22 @@ class HPModel(Alphabet.ProteinAlphabet):
     size = 2
 hp_model = HPModel()
 
-pc_5_table = {"I": "A", # Aliphatic
+pc_5_table = {"I": "A",  # Aliphatic
          "V": "A",
          "L": "A",
-         "F": "R", # Aromatic
+         "F": "R",  # Aromatic
          "Y": "R",
          "W": "R",
          "H": "R",
-         "K": "C", # Charged
+         "K": "C",  # Charged
          "R": "C",
          "D": "C",
          "E": "C",
-         "G": "T", # Tiny
+         "G": "T",  # Tiny
          "A": "T",
          "C": "T",
          "S": "T",
-         "T": "D", # Diverse
+         "T": "D",  # Diverse
          "M": "D",
          "Q": "D",
          "N": "D",

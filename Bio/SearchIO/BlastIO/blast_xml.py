@@ -15,7 +15,7 @@ from xml.sax.saxutils import XMLGenerator, escape
 from Bio import BiopythonParserWarning
 
 
-#For speed try to use cElementTree rather than ElementTree
+# For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
         # Workaround for bug in python 3.0 and 3.1,
@@ -37,6 +37,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
 
+__docformat__ = "restructuredtext en"
+
 
 # element - optional qresult attribute name mapping
 _ELEM_QRESULT_OPT = {
@@ -50,7 +52,7 @@ _ELEM_QRESULT_OPT = {
 }
 # element - hit attribute name mapping
 _ELEM_HIT = {
-    #'Hit_def': ('description', str),   # not set by this dict
+    # 'Hit_def': ('description', str),   # not set by this dict
     'Hit_accession': ('accession', str),
     'Hit_len': ('seq_len', int),
 }
@@ -349,9 +351,10 @@ class BlastXmlParser(object):
     def _parse_hit(self, root_hit_elem, query_id):
         """Generator that transforms Iteration_hits XML elements into Hit objects.
 
-        Arguments:
-        root_hit_elem -- Element object of the Iteration_hits tag.
-        query_id -- String of QueryResult ID of this Hit
+        :param root_hit_elem: root element of the Iteration_hits tag.
+        :type root_hit_elem: XML element tag
+        :param query_id: QueryResult ID of this Hit
+        :type query_id: string
 
         """
         # Hit level processing
@@ -386,12 +389,20 @@ class BlastXmlParser(object):
             else:
                 blast_hit_id = ''
 
+            # combine primary ID and defline first before splitting
+            full_id_desc = hit_id + ' ' + hit_desc
+            id_descs = [(x.strip(), y.strip()) for x, y in
+                    [a.split(' ', 1) for a in full_id_desc.split(' >')]]
+            hit_id, hit_desc = id_descs[0]
+
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
                         query_id, hit_id)]
 
             hit = Hit(hsps)
             hit.description = hit_desc
+            hit._id_alt = [x[0] for x in id_descs[1:]]
+            hit._description_alt = [x[1] for x in id_descs[1:]]
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id
 
@@ -411,10 +422,12 @@ class BlastXmlParser(object):
     def _parse_hsp(self, root_hsp_frag_elem, query_id, hit_id):
         """Iterator that transforms Hit_hsps XML elements into HSP objects.
 
-        Arguments:
-        root_hsp_frag_elem -- Element object of the Hit_hsps tag.
-        query_id -- Query ID string.
-        hit_id -- Hit ID string.
+        :param root_hsp_frag_elem: the ``Hit_hsps`` tag
+        :type root_hsp_frag_elem: XML element tag
+        :param query_id: query ID
+        :type query_id: string
+        :param hit_id: hit ID
+        :type hit_id: string
 
         """
         # Hit_hsps DTD:
@@ -462,8 +475,8 @@ class BlastXmlParser(object):
                         value = caster(value)
                     setattr(frag, val_info[0], value)
 
-            # set the homology characters into aln_annotation dict
-            frag.aln_annotation['homology'] = \
+            # set the similarity characters into aln_annotation dict
+            frag.aln_annotation['similarity'] = \
                     hsp_frag_elem.findtext('Hsp_midline')
 
             # process coordinates
@@ -555,7 +568,7 @@ class BlastXmlIndexer(SearchIndexer):
                 block = _empty_bytes_string.join(block)
             assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
             assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
-            #Now we have a full <Iteration>...</Iteration> block, find the ID
+            # Now we have a full <Iteration>...</Iteration> block, find the ID
             regx = re.search(re_desc, block)
             try:
                 qstart_desc = regx.group(2)
@@ -624,10 +637,12 @@ class _BlastXmlGenerator(XMLGenerator):
     def startElement(self, name, attrs={}, children=False):
         """Starts an XML element.
 
-        Arguments:
-        name -- String of element name.
-        attrs -- Dictionary of element attributes.
-        children -- Boolean, whether the element has children or not.
+        :param name: element name
+        :type name: string
+        :param attrs: element attributes
+        :type attrs: dictionary {string: object}
+        :param children: whether the element has children or not
+        :type children: bool
 
         """
         self.ignorableWhitespace(self._indent * self._level)
@@ -641,9 +656,10 @@ class _BlastXmlGenerator(XMLGenerator):
     def startParent(self, name, attrs={}):
         """Starts an XML element which has children.
 
-        Arguments:
-        name -- String of element name.
-        attrs -- Dictionary of element attributes.
+        :param name: element name
+        :type name: string
+        :param attrs: element attributes
+        :type attrs: dictionary {string: object}
 
         """
         self.startElement(name, attrs, children=True)
@@ -714,11 +730,14 @@ class BlastXmlWriter(object):
     def _write_elem_block(self, block_name, map_name, obj, opt_dict={}):
         """Writes sibling XML elements.
 
-        Arguments:
-        block_name -- String of common element name prefix.
-        map_name -- Dictionary name to for mapping element and attribute names.
-        obj -- Object whose attribute values will be used.
-        opt_dict -- Dictionary for custom element-attribute mapping.
+        :param block_name: common element name prefix
+        :type block_name: string
+        :param map_name: name of mapping between element and attribute names
+        :type map_name: string
+        :param obj: object whose attribute value will be used
+        :type obj: object
+        :param opt_dict: custom element-attribute mapping
+        :type opt_dict: dictionary {string: string}
 
         """
         for elem, attr in _WRITE_MAPS[map_name]:
@@ -872,7 +891,7 @@ class BlastXmlWriter(object):
         elif elem in ('Hsp_hseq', 'Hsp_qseq'):
             content = str(getattr(hsp, attr).seq)
         elif elem == 'Hsp_midline':
-            content = hsp.aln_annotation['homology']
+            content = hsp.aln_annotation['similarity']
         elif elem in ('Hsp_evalue', 'Hsp_bit-score'):
             # adapted from src/algo/blast/format/blastxml_format.cpp#L138-140
             content = '%.*g' % (6, getattr(hsp, attr))

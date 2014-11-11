@@ -9,14 +9,14 @@ import unittest
 
 from Bio import MissingExternalDependencyError
 from Bio import AlignIO
-from Bio.Nexus import Trees # One day we should use planned TreeIO module
+from Bio.Nexus import Trees  # One day we should use planned TreeIO module
 
 from Bio.Emboss.Applications import FDNADistCommandline, FNeighborCommandline
 from Bio.Emboss.Applications import FSeqBootCommandline, FProtDistCommandline
 from Bio.Emboss.Applications import FProtParsCommandline, FConsenseCommandline
 from Bio.Emboss.Applications import FTreeDistCommandline, FDNAParsCommandline
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist', 'fprotpars', 'fconsense',
@@ -24,8 +24,8 @@ exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist', 'fprotpars', 'fconsense',
 exes = dict()  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
-    #Windows default installation path is C:\mEMBOSS which contains the exes.
-    #EMBOSS also sets an environment variable which we will check for.
+    # Windows default installation path is C:\mEMBOSS which contains the exes.
+    # EMBOSS also sets an environment variable which we will check for.
     path = os.environ["EMBOSS_ROOT"]
     if os.path.isdir(path):
         for name in exes_wanted:
@@ -35,7 +35,7 @@ if "EMBOSS_ROOT" in os.environ:
 if sys.platform!="win32":
     from Bio._py3k import getoutput
     for name in exes_wanted:
-        #This will "just work" if installed on the path as normal on Unix
+        # This will "just work" if installed on the path as normal on Unix
         output = getoutput("%s -help" % name)
         if "not found" not in output and "not recognized" not in output:
             exes[name] = name
@@ -104,7 +104,7 @@ class DistanceTests(unittest.TestCase):
                                          outfile = "test_file",
                                          auto = True)
         stdout, strerr = cline()
-        #biopython can't grok distance matrices, so we'll just check it exists
+        # biopython can't grok distance matrices, so we'll just check it exists
         self.assertTrue(os.path.isfile("test_file"))
 
     def tree_from_distances(self, filename):
@@ -128,7 +128,7 @@ class DistanceTests(unittest.TestCase):
         write_AlignIO_dna()
         self.distances_from_alignment("Phylip/opuntia.phy")
 
-    #def test_distances_from_bootstrapped_phylip_DNA(self):
+    # def test_distances_from_bootstrapped_phylip_DNA(self):
     #    """Calculate a set of distance matrices from phylip alignments"""
     #    self.distances_from_alignment("Phylip/bs_horses.phy")
 
@@ -142,17 +142,17 @@ class DistanceTests(unittest.TestCase):
         write_AlignIO_protein()
         self.distances_from_alignment("Phylip/hedgehog.phy", DNA=False)
 
-    #def test_distances_from_bootstrapped_phylip_protein(self):
+    # def test_distances_from_bootstrapped_phylip_protein(self):
     #    """Calculate distance matrices from a bootstrapped protein alignment"""
     #    self.distances_from_alignment("Clustalw/bs_interlaced.phy", DNA=False)
 
     # fneighbor tests
-    #def test_tree_from_distances(self):
+    # def test_tree_from_distances(self):
     #    """Estimate tree from distance matrix and parse it."""
     #    self.tree_from_distances("Phylip/horses.fdnadist")
 
     # This one won't work because of a bug in EMBOSS 6.0.1
-    #def test_tree_from_bootstrapped_distances(self):
+    # def test_tree_from_bootstrapped_distances(self):
     #    """Estimate tree from bootstrapped distance matrix and parse it"""
     #    self.tree_from_distances("Phylip/bs_horses.fdnadist")
 
@@ -184,7 +184,7 @@ class ParsimonyTests(unittest.TestCase):
             self.assertEqual(sorted(a_taxa), sorted(t_taxa))
 
     # fdnapars tests
-    #def test_parsimony_tree_from_phylip_DNA(self):
+    # def test_parsimony_tree_from_phylip_DNA(self):
     #    """Make a parsimony tree from a phylip DNA alignment"""
     #    self.parsimony_tree("Phylip/horses.phy", "phylip")
 
@@ -193,12 +193,12 @@ class ParsimonyTests(unittest.TestCase):
         write_AlignIO_dna()
         self.parsimony_tree("Phylip/opuntia.phy", "phylip")
 
-    #def test_parsimony_bootstrapped_phylip_DNA(self):
+    # def test_parsimony_bootstrapped_phylip_DNA(self):
     #    """Make a parsimony tree from a bootstrapped phylip DNA alignment"""
     #    self.parsimony_tree("Phylip/bs_horses.phy", "phylip")
 
     # fprotpars tests
-    #def test_parsimony_tree_from_phylip_protein(self):
+    # def test_parsimony_tree_from_phylip_protein(self):
     #    """Make a parsimony tree from a phylip DNA alignment"""
     #    self.parsimony_tree("Phylip/interlaced.phy", "phylip", DNA=False)
 
@@ -207,7 +207,7 @@ class ParsimonyTests(unittest.TestCase):
         write_AlignIO_protein()
         self.parsimony_tree("Phylip/interlaced.phy", "phylip", DNA=False)
 
-    #def test_parsimony_tree_bootstrapped_phylip_protein(self):
+    # def test_parsimony_tree_bootstrapped_phylip_protein(self):
     #    """Make a parsimony tree from a phylip DNA alignment"""
     #    self.parsimony_tree("Phylip/bs_interlaced.phy", "phylip", DNA=False)
 
@@ -274,7 +274,7 @@ class TreeComparisonTests(unittest.TestCase):
                                      outtreefile = "test_file",
                                      auto = True, filter = True)
         stdout, stderr = cline()
-        #Split the next and get_taxa into two steps to help 2to3 work
+        # Split the next and get_taxa into two steps to help 2to3 work
         tree1 = next(parse_trees("test_file"))
         taxa1 = tree1.get_taxa()
         for tree in parse_trees("Phylip/horses.tree"):

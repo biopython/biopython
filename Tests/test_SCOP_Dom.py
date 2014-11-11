@@ -35,7 +35,7 @@ class DomTests(unittest.TestCase):
         try:
             for line in f:
                 record = Dom.Record(line)
-                #End of line is platform dependent. Strip it off
+                # End of line is platform dependent. Strip it off
                 self.assertEqual(str(record).rstrip(), line.rstrip())
         finally:
             f.close()

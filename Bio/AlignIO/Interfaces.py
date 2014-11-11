@@ -10,7 +10,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from __future__ import print_function
 
-import sys # for checking if Python 2
+import sys  # for checking if Python 2
 
 from Bio.Alphabet import single_letter_alphabet
 
@@ -22,9 +22,9 @@ class AlignmentIterator(object):
     objects.  You may wish to redefine the __init__
     method as well.
     """
-    #TODO - Should the default be Gapped(single_letter_alphabet) instead?
+    # TODO - Should the default be Gapped(single_letter_alphabet) instead?
     def __init__(self, handle, seq_count=None,
-                 alphabet = single_letter_alphabet):
+                 alphabet=single_letter_alphabet):
         """Create an AlignmentIterator object.
 
         handle   - input file

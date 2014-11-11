@@ -16,7 +16,7 @@ print(X.isoelectric_point())
 print(X.secondary_structure_fraction())
 print(X.protein_scale(ProtParamData.kd, 9, 0.4))
 """
-#TODO - Turn that into a working doctest
+# TODO - Turn that into a working doctest
 
 from __future__ import print_function
 
@@ -26,6 +26,7 @@ from . import IsoelectricPoint  # Local
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
+from Bio.SeqUtils import molecular_weight
 
 
 class ProteinAnalysis(object):
@@ -96,24 +97,7 @@ class ProteinAnalysis(object):
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence"""
-        # make local dictionary for speed
-        if self.monoisotopic:
-            water = 18.01
-            iupac_weights = IUPACData.monoisotopic_protein_weights
-        else:
-            iupac_weights = IUPACData.protein_weights
-            water = 18.02
-
-        aa_weights = {}
-        for i in iupac_weights:
-            # remove a molecule of water from the amino acid weight
-            aa_weights[i] = iupac_weights[i] - water
-
-        total_weight = water  # add just one water molecule for the whole sequence
-        for aa in self.sequence:
-            total_weight += aa_weights[aa]
-
-        return total_weight
+        return molecular_weight(self.sequence, monoisotopic=self.monoisotopic)
 
     def aromaticity(self):
         """Calculate the aromaticity according to Lobry, 1994.
@@ -289,7 +273,7 @@ class ProteinAnalysis(object):
         aa_percentages = self.get_amino_acids_percent()
 
         helix = sum(aa_percentages[r] for r in 'VIYFWL')
-        turn  = sum(aa_percentages[r] for r in 'NPGS')
+        turn = sum(aa_percentages[r] for r in 'NPGS')
         sheet = sum(aa_percentages[r] for r in 'EMAL')
 
         return helix, turn, sheet

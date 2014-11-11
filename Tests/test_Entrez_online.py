@@ -32,7 +32,7 @@ if os.name == 'java':
                                   "Jython, see http://bugs.jython.org/issue1447")
 
 
-#This lets us set the email address to be sent to NCBI Entrez:
+# This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
 

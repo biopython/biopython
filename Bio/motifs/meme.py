@@ -76,8 +76,8 @@ class Motif(motifs.Motif):
 class Instance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof.
     """
-    def __init__(self,*args,**kwds):
-        Seq.Seq.__init__(self,*args,**kwds)
+    def __init__(self, *args, **kwds):
+        Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.start = 0
         self.pvalue = 1.0
@@ -323,4 +323,3 @@ def __skip_unused_lines(handle):
         raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
     if not line.startswith('***'):
         raise ValueError("Line does not start with '***':\n%s" % line)
-

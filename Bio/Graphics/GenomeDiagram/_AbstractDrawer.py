@@ -100,7 +100,7 @@ def _stroke_and_fill_colors(color, border):
             raise ValueError("Invalid border color %r" % border)
         strokecolor = border
     else:
-        #e.g. False
+        # e.g. False
         strokecolor = None
 
     return strokecolor, color
@@ -126,7 +126,7 @@ def draw_box(point1, point2,
     x1, y1 = point1
     x2, y2 = point2
 
-    #Let the UK spelling (colour) override the USA spelling (color)
+    # Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
         color = colour
         del colour
@@ -186,7 +186,7 @@ def draw_polygon(list_of_points,
         Returns a closed path object, beginning at (x1,y1) going round
         the four points in order, and filling with the passed colour.
     """
-    #Let the UK spelling (colour) override the USA spelling (color)
+    # Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
         color = colour
         del colour
@@ -222,7 +222,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     if head_length_ratio < 0:
         raise ValueError("Arrow head length ratio should be positive")
 
-    #Let the UK spelling (colour) override the USA spelling (color)
+    # Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
         color = colour
         del colour
@@ -264,9 +264,9 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                     x1+headbase, y1+shaftbase,
                     x1, y1+shaftbase],
                    strokeColor=strokecolor,
-                   #strokeWidth=max(1, int(boxheight/40.)),
+                   # strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
-                   #default is mitre/miter which can stick out too much:
+                   # default is mitre/miter which can stick out too much:
                    strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
@@ -298,7 +298,7 @@ def intermediate_points(start, end, graph_data):
         Returns a list of (start, end, value) tuples describing the passed
         graph data as 'bins' between position midpoints.
     """
-    #print start, end, len(graph_data)
+    # print start, end, len(graph_data)
     newdata = []    # data in form (X0, X1, val)
     # add first block
     newdata.append((start, graph_data[0][0]+(graph_data[1][0]-graph_data[0][0])/2.,
@@ -308,13 +308,13 @@ def intermediate_points(start, end, graph_data):
         lastxval, lastyval = graph_data[index-1]
         xval, yval = graph_data[index]
         nextxval, nextyval = graph_data[index+1]
-        newdata.append( (lastxval+(xval-lastxval)/2.,
-                         xval+(nextxval-xval)/2., yval) )
+        newdata.append((lastxval+(xval-lastxval)/2.,
+                        xval+(nextxval-xval)/2., yval))
     # add last block
-    newdata.append( (xval+(nextxval-xval)/2.,
-                         end, graph_data[-1][1]) )
-    #print newdata[-1]
-    #print newdata
+    newdata.append((xval+(nextxval-xval)/2.,
+                         end, graph_data[-1][1]))
+    # print newdata[-1]
+    # print newdata
     return newdata
 
 ################################################################################
@@ -450,7 +450,7 @@ class AbstractDrawer(object):
         """
         if isinstance(pagesize, str):     # A string, so translate
             pagesize = page_sizes(pagesize)
-        elif isinstance(pagesize, tuple): # A tuple, so don't translate
+        elif isinstance(pagesize, tuple):  # A tuple, so don't translate
             pagesize = pagesize
         else:
             raise ValueError("Page size %s not recognised" % pagesize)

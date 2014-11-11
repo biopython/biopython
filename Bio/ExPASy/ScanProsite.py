@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 
@@ -72,7 +72,7 @@ class Parser(ExpatParser):
         ExpatParser.__init__(self)
         self.firsttime = True
 
-    def feed(self, data, isFinal = 0):
+    def feed(self, data, isFinal=0):
         # Error messages returned by the ScanProsite server are formatted as
         # as plain text instead of an XML document. To catch such error
         # messages, we override the feed method of the Expat parser.

@@ -55,7 +55,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     # Dimensionality of the data is the dimensionality of the
     # observations plus a constant dimension.
     N, ndims = len(xs), len(xs[0]) + 1
-    if N==0 or ndims==1:
+    if N == 0 or ndims == 1:
         raise ValueError("No observations or observation of 0 dimension.")
 
     # Make an X array, with a constant first dimension.
@@ -99,9 +99,9 @@ def train(xs, ys, update_fn=None, typecode=None):
         W = numpy.identity(N) * p
         Xtyp = numpy.dot(Xt, y-p)         # Calculate the first derivative.
         XtWX = numpy.dot(numpy.dot(Xt, W), X)   # Calculate the second derivative.
-        #u, s, vt = singular_value_decomposition(XtWX)
-        #print("U %s" % u)
-        #print("S %s" % s)
+        # u, s, vt = singular_value_decomposition(XtWX)
+        # print("U %s" % u)
+        # print("S %s" % s)
         delta = numpy.linalg.solve(XtWX, Xtyp)
         if numpy.fabs(stepsize-1.0) > 0.001:
             delta = delta * stepsize

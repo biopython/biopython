@@ -48,7 +48,8 @@ class ConsensusTest(unittest.TestCase):
         self.trees = list(Phylo.parse('./TreeConstruction/trees.tre', 'newick'))
 
     def test_count_clades(self):
-        bitstr_counts = Consensus._count_clades(self.trees)
+        bitstr_counts, len_trees = Consensus._count_clades(self.trees)
+        self.assertEqual(len_trees, len(self.trees))
         self.assertEqual(len(bitstr_counts), 6)
         self.assertEqual(bitstr_counts[_BitString('11111')][0], 3)
         self.assertEqual(bitstr_counts[_BitString('11000')][0], 2)
@@ -74,7 +75,7 @@ class ConsensusTest(unittest.TestCase):
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
-        #tree_file.close()
+        # tree_file.close()
 
     def test_majority_consensus(self):
         ref_trees = Phylo.parse('./TreeConstruction/majority_ref.tre', 'newick')
@@ -103,7 +104,7 @@ class ConsensusTest(unittest.TestCase):
         #tree_file = StringIO()
         #Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
-        #tree_file.close()
+        # tree_file.close()
 
     def test_get_support(self):
         support_tree = Consensus.get_support(self.trees[0], self.trees)
@@ -136,7 +137,7 @@ class BootstrapTest(unittest.TestCase):
 
     def test_bootstrap_consensus(self):
         calculator = DistanceCalculator('blosum62')
-        constructor = DistanceTreeConstructor(calculator , 'nj')
+        constructor = DistanceTreeConstructor(calculator, 'nj')
         tree = Consensus.bootstrap_consensus(self.msa, 100, constructor, Consensus.majority_consensus)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
         Phylo.write(tree, './TreeConstruction/bootstrap_consensus.tre', 'newick')

@@ -10,9 +10,10 @@ from Bio._py3k import basestring
 def get_processor(format, mapping):
     """Returns the object to process the given format according to the mapping.
 
-    Arguments:
-    format -- Lower case string denoting one of the supported formats.
-    mapping -- Dictionary of format and object name mapping.
+    :param format: format name
+    :type format: string, lower case
+    :param mapping: mapping of format name and its processor object
+    :type mapping: dictionary {string: object}
 
     """
     # map file format to iterator name
@@ -63,10 +64,10 @@ def allitems(attr=None, doc=''):
 def fullcascade(attr, doc=''):
     """Returns a getter property with a cascading setter.
 
-    This is similar to `optionalcascade`, but for SearchIO containers that have
+    This is similar to ``optionalcascade``, but for SearchIO containers that have
     at least one item (HSP). The getter always retrieves the attribute
     value from the first item. If the items have more than one attribute values,
-    an error will be raised. The setter behaves like `partialcascade`, except
+    an error will be raised. The setter behaves like ``partialcascade``, except
     that it only sets attributes to items in the object, not the object itself.
 
     """
@@ -83,7 +84,7 @@ def fullcascade(attr, doc=''):
 def optionalcascade(cont_attr, item_attr, doc=''):
     """Returns a getter property with a cascading setter.
 
-    This is used for the `id` and `description` properties of the container
+    This is used for the ``id`` and ``description`` properties of the container
     objects with zero or more items. These items have their own private
     attributes that stores query and/or hit ID and description. When the
     container has zero items, attribute values are always retrieved from the
@@ -112,8 +113,8 @@ def optionalcascade(cont_attr, item_attr, doc=''):
 def fragcascade(attr, seq_type, doc=''):
     """Returns a getter property with cascading setter, for HSPFragment objects.
 
-    Similar to `partialcascade`, but for HSPFragment objects and acts on `query`
-    or `hit` properties of the object if they are not None.
+    Similar to ``partialcascade``, but for HSPFragment objects and acts on ``query``
+    or ``hit`` properties of the object if they are not None.
 
     """
     assert seq_type in ('hit', 'query')

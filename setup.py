@@ -37,20 +37,66 @@ from distutils.extension import Extension
 _CHECKED = None
 
 
+def osx_clang_fix():
+    """Add clang switch to ignore unused arguments to avoid OS X compile error.
+
+    This is a hack to cope with Apple shipping a version of Python compiled
+    with the -mno-fused-madd argument which clang from XCode 5.1 does not
+    support::
+
+        $ cc -v
+        Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
+        Target: x86_64-apple-darwin13.2.0
+        Thread model: posix
+
+        $ which python-config
+        /Library/Frameworks/Python.framework/Versions/Current/bin/python-config
+
+        $ python-config --cflags
+        -I/Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
+        -I/Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
+        -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk
+        -fno-strict-aliasing -Wno-long-double -no-cpp-precomp -mno-fused-madd
+        -fno-common -dynamic -DNDEBUG -g -O3
+
+    We can avoid the clang compilation error with -Qunused-arguments which is
+    (currently) harmless if gcc is being used instead (e.g. compiling Biopython
+    against a locally compiled Python rather than the Apple provided Python).
+    """
+    # see http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011240.html
+    if sys.platform != "darwin":
+        return
+    # see also Bio/_py3k/__init__.py (which we can't use in setup.py)
+    if sys.version_info[0] >= 3:
+        from subprocess import getoutput
+    else:
+        from commands import getoutput
+    cc = getoutput("cc -v")
+    if "gcc" in cc or "clang" not in cc:
+        return
+    for flag in ["CFLAGS", "CPPFLAGS"]:
+        if flag not in os.environ:
+            os.environ[flag] = "-Qunused-arguments"
+        elif "-Qunused-arguments" not in os.environ[flag]:
+            os.environ[flag] += " -Qunused-arguments"
+
+osx_clang_fix()
+
+
 def is_pypy():
     import platform
     try:
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        #New in Python 2.6, not in Jython yet either
+        # New in Python 2.6, not in Jython yet either
         pass
     return False
 
 
 def is_ironpython():
     return sys.platform == "cli"
-    #TODO - Use platform as in Pypy test?
+    # TODO - Use platform as in Pypy test?
 
 
 def get_yes_or_no(question, default):
@@ -263,6 +309,7 @@ PACKAGES = [
     'Bio.Application',
     'Bio.Blast',
     'Bio.CAPS',
+    'Bio.codonalign',
     'Bio.Compass',
     'Bio.Crystal',
     'Bio.Data',
@@ -284,6 +331,7 @@ PACKAGES = [
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
     'Bio.KEGG.Map',
+    'Bio.KEGG.KGML',
     'Bio.Medline',
     'Bio.Motif',
     'Bio.Motif.Parsers',
@@ -327,7 +375,7 @@ PACKAGES = [
     'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
-    #Other top level packages,
+    # Other top level packages,
     'BioSQL',
     ]
 
@@ -359,7 +407,7 @@ else:
               ),
     ]
 
-#Add extensions that requires NumPy to build
+# Add extensions that requires NumPy to build
 if is_Numpy_installed():
     import numpy
     numpy_include_dir = numpy.get_include()
@@ -387,18 +435,18 @@ if is_Numpy_installed():
                   ))
 
 
-#We now define the Biopython version number in Bio/__init__.py
-#Here we can't use "import Bio" then "Bio.__version__" as that would
-#tell us the version of Biopython already installed (if any).
+# We now define the Biopython version number in Bio/__init__.py
+# Here we can't use "import Bio" then "Bio.__version__" as that would
+# tell us the version of Biopython already installed (if any).
 __version__ = "Undefined"
 for line in open('Bio/__init__.py'):
     if (line.startswith('__version__')):
         exec(line.strip())
 
-#Simple trick to use the 2to3 converted source under Python 3,
-#change the current directory before/after running setup.
-#Note as a side effect there will be a build folder underneath
-#the python3_source folder.
+# Simple trick to use the 2to3 converted source under Python 3,
+# change the current directory before/after running setup.
+# Note as a side effect there will be a build folder underneath
+# the python3_source folder.
 old_path = os.getcwd()
 try:
     src_path = python3_source
@@ -410,7 +458,7 @@ sys.path.insert(0, src_path)
 setup_args = {
     "name": 'biopython',
     "version": __version__,
-    "author": 'The Biopython Consortium',
+    "author": 'The Biopython Contributors',
     "author_email": 'biopython@biopython.org',
     "url": 'http://www.biopython.org/',
     "description": 'Freely available tools for computational molecular biology.',

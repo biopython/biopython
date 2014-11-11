@@ -31,7 +31,7 @@ assert str(dna)=='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTC
 s = ""
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
-assert  str(protein)==""
+assert str(protein)==""
 
 s = "TAA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)

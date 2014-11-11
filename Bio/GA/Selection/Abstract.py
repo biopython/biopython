@@ -16,7 +16,7 @@ class AbstractSelection(object):
 
     This class should not be used directly, but rather should be subclassed.
     """
-    def __init__(self, mutator, crossover, repairer = None):
+    def __init__(self, mutator, crossover, repairer=None):
         """Initialize a selector.
 
         Arguments:

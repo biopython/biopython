@@ -16,7 +16,7 @@ o Qualifier - Qualifiers on a Feature.
 import Bio.GenBank
 
 
-def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
+def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
     """Write a line of GenBank info that can wrap over multiple lines.
 
     This takes a line of information which can potentially wrap over
@@ -39,7 +39,7 @@ def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     info_length = Record.GB_LINE_LENGTH - indent
 
     if not information:
-        #GenBank files use "." for missing data
+        # GenBank files use "." for missing data
         return ".\n"
 
     if wrap_space:
@@ -237,9 +237,9 @@ class Record(object):
         """Provide the output string for the LOCUS line.
         """
         output = "LOCUS"
-        output += " " * 7 # 6-12 spaces
+        output += " " * 7  # 6-12 spaces
         output += "%-9s" % self.locus
-        output += " " # 22 space
+        output += " "  # 22 space
         output += "%7s" % self.size
         if "PROTEIN" in self.residue_type:
             output += " aa"
@@ -253,15 +253,15 @@ class Record(object):
         # second case: ss-DNA types of records
         elif "-" in self.residue_type:
             output += "%7s" % self.residue_type
-            output += " " * 10 # spaces for circular
+            output += " " * 10  # spaces for circular
         else:
-            output += " " * 3 # spaces for stuff like ss-
+            output += " " * 3  # spaces for stuff like ss-
             output += "%-4s" % self.residue_type
-            output += " " * 10 # spaces for circular
+            output += " " * 10  # spaces for circular
 
         output += " " * 2
         output += "%3s" % self.data_file_division
-        output += " " * 7 # spaces for 56-63
+        output += " " * 7  # spaces for 56-63
         output += "%11s" % self.date
         output += "\n"
         return output
@@ -501,7 +501,7 @@ class Record(object):
         if self.contig:
             output += Record.BASE_FORMAT % "CONTIG"
             output += _wrapped_genbank(self.contig,
-                                       Record.GB_BASE_INDENT, split_char = ',')
+                                       Record.GB_BASE_INDENT, split_char=',')
         return output
 
 
@@ -636,7 +636,7 @@ class Feature(object):
     def __str__(self):
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
         output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
-                                   split_char = ',')
+                                   split_char=',')
         for qualifier in self.qualifiers:
             output += " " * Record.GB_FEATURE_INDENT
 

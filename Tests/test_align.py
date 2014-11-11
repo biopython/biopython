@@ -29,13 +29,13 @@ from Bio import AlignIO
 from Bio.SubsMat import FreqTable
 from Bio.Align import MultipleSeqAlignment
 
-#Very simple tests on an empty alignment
+# Very simple tests on an empty alignment
 alignment = MultipleSeqAlignment([], Alphabet.generic_alphabet)
 assert alignment.get_alignment_length() == 0
 assert len(alignment) == 0
 del alignment
 
-#Basic tests on simple three string alignment
+# Basic tests on simple three string alignment
 alignment = MultipleSeqAlignment([], Alphabet.generic_alphabet)
 letters = "AbcDefGhiJklMnoPqrStuVwxYz"
 alignment.append(SeqRecord(Seq(letters), id="mixed"))
@@ -51,10 +51,10 @@ assert alignment[1].id == "lower"
 assert alignment[2].id == "upper"
 for (col, letter) in enumerate(letters):
     assert alignment[:, col] == letter + letter.lower() + letter.upper()
-#Check row extractions:
+# Check row extractions:
 assert alignment[0].id == "mixed"
 assert alignment[-1].id == "upper"
-#Check sub-alignment extraction by row slicing:
+# Check sub-alignment extraction by row slicing:
 assert isinstance(alignment[::-1], MultipleSeqAlignment)
 assert alignment[::-1][0].id == "upper"
 assert alignment[::-1][2].id == "mixed"
@@ -111,21 +111,21 @@ second_seq = alignment[1].seq
 print(align_info.pos_specific_score_matrix(second_seq, ['N']))
 
 print('information content')
-print('part of alignment: %0.2f' \
+print('part of alignment: %0.2f'
       % align_info.information_content(5, 50, chars_to_ignore = ['N']))
-print('entire alignment: %0.2f' \
+print('entire alignment: %0.2f'
       % align_info.information_content(chars_to_ignore = ['N']))
 
 print('relative information content')
-e_freq = {'G' : 0.25,
-          'C' : 0.25,
-          'A' : 0.25,
-          'T' : 0.25}
+e_freq = {'G': 0.25,
+          'C': 0.25,
+          'A': 0.25,
+          'T': 0.25}
 
 e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
 
-print('relative information: %0.2f' \
+print('relative information: %0.2f'
       % align_info.information_content(e_freq_table = e_freq_table,
                                        chars_to_ignore = ['N']))
 

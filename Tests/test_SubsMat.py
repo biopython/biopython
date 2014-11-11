@@ -11,7 +11,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.SubsMat.")
 
 try:
-    import cPickle as pickle # Only available on Python 3
+    import cPickle as pickle  # Only available on Python 2
 except ImportError:
     import pickle
 
@@ -33,7 +33,7 @@ for i in ftab_prot.alphabet.letters:
     f.write("%s %f\n" % (i, abs(ftab_prot[i] - ctab_prot[i])))
 
 pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
-#Don't want to use text mode on Python 3,
+# Don't want to use text mode on Python 3,
 with open(pickle_file, 'rb') as handle:
     acc_rep_mat = pickle.load(handle)
 acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
@@ -81,7 +81,7 @@ try:
     f.write("BLOSUM30 & BLOSUM90 %.2f\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
     f.write("BLOSUM90 & BLOSUM30 %.2f\n" % SubsMat.two_mat_correlation(blosum90, blosum30))
 except ImportError:
-    #Need numpy for the two_mat_correlation, but rather than splitting this
-    #test into two, and have one raise MissingExternalDependencyError cheat:
+    # Need numpy for the two_mat_correlation, but rather than splitting this
+    # test into two, and have one raise MissingExternalDependencyError cheat:
     f.write("BLOSUM30 & BLOSUM90 0.88\n")
     f.write("BLOSUM90 & BLOSUM30 0.88\n")

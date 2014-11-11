@@ -23,9 +23,6 @@ from Bio.GenBank import utils
 
 from Bio.Alphabet import _get_base_alphabet, ProteinAlphabet
 
-#TODO - Test we get the warnings we expect on the bad input files
-warnings.simplefilter('ignore', BiopythonParserWarning)
-
 gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
@@ -73,13 +70,16 @@ for parser in all_parsers:
         iterator = GenBank.Iterator(handle, parser)
 
         while True:
-            cur_record = next(iterator)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # e.g. BiopythonParserWarning: Premature end of file in sequence data
+                cur_record = next(iterator)
 
             if cur_record is None:
                 break
 
             if isinstance(parser, GenBank.FeatureParser):
-                print("***Record from %s with the FeatureParser" \
+                print("***Record from %s with the FeatureParser"
                       % filename.split(os.path.sep)[-1])
                 print("Seq: %r" % cur_record.seq)
                 print("Id: %s" % cur_record.id)
@@ -90,7 +90,7 @@ for parser in all_parsers:
                 for ann_key in ann_keys:
                     if ann_key != 'references':
                         print("Key: %s" % ann_key)
-                        print("Value: %s" % \
+                        print("Value: %s" %
                               cur_record.annotations[ann_key])
                     else:
                         print("References*")
@@ -103,11 +103,11 @@ for parser in all_parsers:
                                   ProteinAlphabet):
                         assert feature.strand is None
                     else:
-                        #Assuming no mixed strand examples...
+                        # Assuming no mixed strand examples...
                         assert feature.strand is not None
                 print("DB cross refs %s" % cur_record.dbxrefs)
             elif isinstance(parser, GenBank.RecordParser):
-                print("***Record from %s with the RecordParser" \
+                print("***Record from %s with the RecordParser"
                       % filename.split(os.path.sep)[-1])
                 print("sequence length: %i" % len(cur_record.sequence))
                 print("locus: %s" % cur_record.locus)

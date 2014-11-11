@@ -1634,7 +1634,7 @@ class MotifTestPWM(unittest.TestCase):
         counts = self.m.counts
         pwm = counts.normalize(pseudocounts=0.25)
         pssm = pwm.log_odds()
-        #Note we're breaking Seq/Alphabet expectations here:
+        # Note we're breaking Seq/Alphabet expectations here:
         result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT", self.m.alphabet))
         self.assertEqual(6, len(result))
         self.assertAlmostEqual(result[0], -29.18363571, places=5)

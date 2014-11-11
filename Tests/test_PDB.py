@@ -22,12 +22,13 @@ try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
+from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
@@ -51,6 +52,8 @@ class A_ExceptionTest(unittest.TestCase):
 
         NB: The try/finally block is adapted from the warnings.catch_warnings
         context manager in the Python 2.6 standard library.
+
+        TODO: Now we require Python 2.6, switch to using warnings.catch_warnings
         """
         warnings.simplefilter('always', PDBConstructionWarning)
         try:
@@ -89,13 +92,12 @@ class A_ExceptionTest(unittest.TestCase):
 
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        try:
-            parser = PDBParser(PERMISSIVE=False)
+        parser = PDBParser(PERMISSIVE=False)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", PDBConstructionWarning)
             self.assertRaises(PDBConstructionException,
-                   parser.get_structure, "example", "PDB/a_structure.pdb")
-        finally:
-            warnings.filters.pop()
+                              parser.get_structure, "example", "PDB/a_structure.pdb")
+            self.assertEqual(len(w), 4, w)
 
     def test_3_bad_xyz(self):
         """Check error: Parse an entry with bad x,y,z value."""
@@ -109,7 +111,10 @@ class A_ExceptionTest(unittest.TestCase):
     def test_4_occupancy(self):
         """Parse file with missing occupancy"""
         permissive = PDBParser(PERMISSIVE=True)
-        structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", PDBConstructionWarning)
+            structure = permissive.get_structure("test", "PDB/occupancy.pdb")
+            self.assertEqual(len(w), 3, w)
         atoms = structure[0]['A'][(' ', 152, ' ')]
         # Blank occupancy behavior set in Bio/PDB/PDBParser
         self.assertEqual(atoms['N'].get_occupancy(), None)
@@ -165,10 +170,10 @@ class HeaderTests(unittest.TestCase):
 
 class ParseTest(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        p = PDBParser(PERMISSIVE=1)
-        self.structure = p.get_structure("example", "PDB/a_structure.pdb")
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            p = PDBParser(PERMISSIVE=1)
+            self.structure = p.get_structure("example", "PDB/a_structure.pdb")
 
     def test_c_n(self):
         """Extract polypeptides using C-N."""
@@ -223,23 +228,23 @@ class ParseTest(unittest.TestCase):
         # Model 1 contains 3 chains
         self.assertEqual(len(m1), 3)
         # Deconstruct this data structure to check each chain
-        chain_data = [ # chain_id, chain_len, [(residue_id, residue_len), ...]
+        chain_data = [  # chain_id, chain_len, [(residue_id, residue_len), ...]
             ('A', 86, [ ((' ', 0, ' '), 1 ),
                         ((' ', 2, ' '), 11),
-                        ((' ', 3, ' '), 6, 1), # disordered
+                        ((' ', 3, ' '), 6, 1),  # disordered
                         ((' ', 4, ' '), 4 ),
                         ((' ', 5, ' '), 6 ),
                         ((' ', 6, ' '), 9 ),
                         ((' ', 7, ' '), 4 ),
                         ((' ', 8, ' '), 4 ),
                         ((' ', 9, ' '), 4 ),
-                        ((' ', 10, ' '), 6, ['GLY', 'SER']), # point mut
+                        ((' ', 10, ' '), 6, ['GLY', 'SER']),  # point mut
                         ((' ', 11, ' '), 7 ),
                         ((' ', 12, ' '), 6 ),
                         ((' ', 13, ' '), 7 ),
-                        ((' ', 14, ' '), 4, ['ALA', 'GLY']), # point mut
-                        ((' ', 15, ' '), 8, 3), # disordered
-                        ((' ', 16, ' '), 11, ['ARG', 'TRP']), # point mut
+                        ((' ', 14, ' '), 4, ['ALA', 'GLY']),  # point mut
+                        ((' ', 15, ' '), 8, 3),  # disordered
+                        ((' ', 16, ' '), 11, ['ARG', 'TRP']),  # point mut
                         ((' ', 17, ' '), 6 ),
                         ((' ', 18, ' '), 6 ),
                         ((' ', 19, ' '), 6 ),
@@ -251,7 +256,7 @@ class ParseTest(unittest.TestCase):
                         ((' ', 25, ' '), 4 ),
                         ((' ', 26, ' '), 8 ),
                         ((' ', 27, ' '), 6 ),
-                        ((' ', 28, ' '), 9, 5), # disordered
+                        ((' ', 28, ' '), 9, 5),  # disordered
                         ((' ', 29, ' '), 7 ),
                         ((' ', 30, ' '), 12),
                         ((' ', 31, ' '), 6 ),
@@ -268,7 +273,7 @@ class ParseTest(unittest.TestCase):
                         ((' ', 42, ' '), 4 ),
                         ((' ', 43, ' '), 9 ),
                         ((' ', 44, ' '), 11),
-                        ((' ', 45, ' '), 6, 1), # disordered
+                        ((' ', 45, ' '), 6, 1),  # disordered
                         ((' ', 46, ' '), 8 ),
                         ((' ', 47, ' '), 10),
                         ((' ', 48, ' '), 11),
@@ -297,14 +302,14 @@ class ParseTest(unittest.TestCase):
                         ((' ', 71, ' '), 4 ),
                         ((' ', 72, ' '), 4 ),
                         ((' ', 73, ' '), 4 ),
-                        ((' ', 74, ' '), 8, 3), # disordered
+                        ((' ', 74, ' '), 8, 3),  # disordered
                         ((' ', 75, ' '), 8 ),
                         ((' ', 76, ' '), 12),
                         ((' ', 77, ' '), 6 ),
                         ((' ', 78, ' '), 6 ),
-                        ((' ', 79, ' '), 4, 4), # disordered
-                        ((' ', 80, ' '), 4, ['GLY', 'SER']), # point mut
-                        ((' ', 81, ' '), 8, ['ASN', 'LYS']), # point mut
+                        ((' ', 79, ' '), 4, 4),  # disordered
+                        ((' ', 80, ' '), 4, ['GLY', 'SER']),  # point mut
+                        ((' ', 81, ' '), 8, ['ASN', 'LYS']),  # point mut
                         ((' ', 82, ' '), 6 ),
                         ((' ', 83, ' '), 9 ),
                         ((' ', 84, ' '), 12),
@@ -421,7 +426,7 @@ class ParseTest(unittest.TestCase):
         structure = self.structure
         self.assertEqual(len(structure), 2)
 
-        #First model
+        # First model
         model = structure[0]
         self.assertEqual(model.id, 0)
         self.assertEqual(model.level, "M")
@@ -435,7 +440,7 @@ class ParseTest(unittest.TestCase):
                          "N CA CB CG CD OE C O CA  ")
         self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
                          "N C C C C O C O CA")
-        #Second model
+        # Second model
         model = structure[1]
         self.assertEqual(model.id, 1)
         self.assertEqual(model.level, "M")
@@ -537,7 +542,7 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             #==========================================================
-            #First try allowing non-standard amino acids,
+            # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
             self.assertEqual(len(polypeptides), 1)
             pp = polypeptides[0]
@@ -548,16 +553,16 @@ class ParseReal(unittest.TestCase):
             s = pp.get_sequence()
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
-            #Here non-standard MSE are shown as M
+            # Here non-standard MSE are shown as M
             self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                              "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
             #==========================================================
-            #Now try strict version with only standard amino acids
-            #Should ignore MSE 151 at start, and then break the chain
-            #at MSE 185, and MSE 214,215
+            # Now try strict version with only standard amino acids
+            # Should ignore MSE 151 at start, and then break the chain
+            # at MSE 185, and MSE 214,215
             polypeptides = ppbuild.build_peptides(structure[0], True)
             self.assertEqual(len(polypeptides), 3)
-            #First fragment
+            # First fragment
             pp = polypeptides[0]
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
@@ -565,7 +570,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
-            #Second fragment
+            # Second fragment
             pp = polypeptides[1]
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
@@ -573,7 +578,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
-            #Third fragment
+            # Third fragment
             pp = polypeptides[2]
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
@@ -701,10 +706,10 @@ class ParseReal(unittest.TestCase):
 
 class WriteTest(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        self.parser = PDBParser(PERMISSIVE=1)
-        self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.parser = PDBParser(PERMISSIVE=1)
+            self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
 
     def test_pdbio_write_structure(self):
         """Write a full structure using PDBIO"""
@@ -747,7 +752,7 @@ class WriteTest(unittest.TestCase):
         res = Residue.Residue((' ', 1, ' '), 'DUM', '')
         atm = Atom.Atom('CA', [0.1, 0.1, 0.1], 1.0, 1.0, ' ', 'CA', 1, 'C')
         res.add(atm)
-        
+
         # Write full model to temp file
         io.set_structure(res)
         filenumber, filename = tempfile.mkstemp()
@@ -765,7 +770,7 @@ class WriteTest(unittest.TestCase):
 
     def test_pdbio_select(self):
         """Write a selection of the structure using a Select subclass"""
-        
+
         # Selection class to filter all alpha carbons
         class CAonly(Select):
             """
@@ -774,7 +779,7 @@ class WriteTest(unittest.TestCase):
             def accept_atom(self, atom):
                 if atom.name == "CA" and atom.element == "C":
                     return 1
-                
+
         io = PDBIO()
         struct1 = self.structure
         # Write to temp file
@@ -791,34 +796,36 @@ class WriteTest(unittest.TestCase):
 
     def test_pdbio_missing_occupancy(self):
         """Write PDB file with missing occupancy"""
-
-        from Bio import BiopythonWarning
-        warnings.simplefilter('ignore', BiopythonWarning)
-
         io = PDBIO()
-        structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure = self.parser.get_structure("test", "PDB/occupancy.pdb")
         io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
-            io.save(filename)
-            struct2 = self.parser.get_structure("test", filename)
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter("always", BiopythonWarning)
+                io.save(filename)
+                self.assertEqual(len(w), 1, w)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("test", filename)
             atoms = struct2[0]['A'][(' ', 152, ' ')]
             self.assertEqual(atoms['N'].get_occupancy(), None)
         finally:
             os.remove(filename)
-            warnings.filters.pop()
 
 
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
-        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         self.model=structure[1]
-        #Look at first chain only
+        # Look at first chain only
         a_residues=list(self.model["A"].child_list)
         self.assertEqual(86, len(a_residues))
         self.assertEqual(a_residues[0].get_resname(), "CYS")
@@ -897,18 +904,18 @@ class Atom_Element(unittest.TestCase):
     """induces Atom Element from Atom Name"""
 
     def setUp(self):
-        warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
-        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        warnings.filters.pop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
 
     def test_AtomElement(self):
         """ Atom Element """
         atoms = self.residue.child_list
-        self.assertEqual('N', atoms[0].element) # N
-        self.assertEqual('C', atoms[1].element) # Alpha Carbon
-        self.assertEqual('CA', atoms[8].element) # Calcium
+        self.assertEqual('N', atoms[0].element)  # N
+        self.assertEqual('C', atoms[1].element)  # Alpha Carbon
+        self.assertEqual('CA', atoms[8].element)  # Calcium
 
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
@@ -941,7 +948,9 @@ class Atom_Element(unittest.TestCase):
 
         for element, atom_names in pdb_elements.items():
             for fullname in atom_names:
-                e = quick_assign(fullname)
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", PDBConstructionWarning)
+                    e = quick_assign(fullname)
                 #warnings.warn("%s %s" % (fullname, e))
                 self.assertEqual(e, element)
 
@@ -967,14 +976,12 @@ class IterationTests(unittest.TestCase):
         self.assertEqual(len(atoms), 756)
 
 
-#class RenumberTests(unittest.TestCase):
+# class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
 #
 #    def setUp(self):
-#        warnings.simplefilter('ignore', PDBConstructionWarning)
 #        pdb_filename = "PDB/1A8O.pdb"
 #        self.structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-#        warnings.filters.pop()
 #
 #    def test_renumber_residues(self):
 #        """Residues in a structure are renumbered."""
@@ -1068,6 +1075,7 @@ class DsspTests(unittest.TestCase):
         # New DSSP prints a line containing only whitespace and "."
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
+
 
 class NACCESSTests(unittest.TestCase):
     """Tests for NACCESS parsing etc which don't need the binary tool.

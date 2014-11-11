@@ -136,7 +136,7 @@ class PhymlCommandline(AbstractCommandline):
                     fA, fC, fG and fT are floating-point numbers that correspond
                     to the frequencies of A, C, G and T, respectively.
                 """,
-                filename=True, # ensure ".25 .25 .25 .25" stays quoted
+                filename=True,  # ensure ".25 .25 .25 .25" stays quoted
                 equate=False,
                 ),
 

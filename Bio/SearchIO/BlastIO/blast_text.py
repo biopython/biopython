@@ -22,6 +22,8 @@ with warnings.catch_warnings():
 
 __all__ = ['BlastTextParser']
 
+__docformat__ = "restructuredtext en"
+
 
 class BlastTextParser(object):
 
@@ -112,7 +114,7 @@ class BlastTextParser(object):
                             hseq += hchar
                             midline += mchar
                     frag.query, frag.hit = qseq, hseq
-                    frag.aln_annotation['homology'] = midline
+                    frag.aln_annotation['similarity'] = midline
 
                     # create HSP object with the fragment
                     hsp = HSP([frag])

@@ -62,8 +62,8 @@ class TCoffeeCommandline(AbstractCommandline):
                    filename=True,
                    is_required=True,
                    equate=False),
-           #Indicates the name of the alignment output by t_coffee. If the
-           #default is used, the alignment is named <your sequences>.aln
+           # Indicates the name of the alignment output by t_coffee. If the
+           # default is used, the alignment is named <your sequences>.aln
            _Option(["-outfile", "outfile"],
                    "Specify the output file. Default: <your sequences>.aln",
                    filename=True,

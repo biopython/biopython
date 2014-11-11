@@ -55,7 +55,7 @@ class QueryRow(list):
         except TypeError:
             raise StopIteration
 
-        object.__setattr__(self, "_names", [x[0] for x in cursor.description]) # FIXME: legacy
+        object.__setattr__(self, "_names", [x[0] for x in cursor.description])  # FIXME: legacy
         object.__setattr__(self, "_names_hash", {})
 
         for i, name in enumerate(self._names):

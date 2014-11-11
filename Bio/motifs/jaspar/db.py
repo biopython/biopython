@@ -10,12 +10,12 @@ Example, substitute the your database credentials as
 appropriate:
 
     >>> from Bio.motifs.jaspar.db import JASPAR5
-    >>> 
+    >>>
     >>> JASPAR_DB_HOST = "hostname.example.org"
     >>> JASPAR_DB_NAME = "JASPAR_2013"
     >>> JASPAR_DB_USER = "guest"
     >>> JASPAR_DB_PASS = "guest"
-    >>> 
+    >>>
     >>> DFLT_COLLECTION = 'CORE'
     >>> jdb = JASPAR5(
     ...     host=JASPAR_DB_HOST,
@@ -23,8 +23,8 @@ appropriate:
     ...     user=JASPAR_DB_USER,
     ...     password=JASPAR_DB_PASS
     ... )
-    >>> 
-    >>> 
+    >>>
+    >>>
     >>> ets1 = jdb.fetch_motif_by_id('MA0098')
     >>> print(ets1)
     TF name ETS1
@@ -47,7 +47,7 @@ appropriate:
     T:  16.00  23.00  39.00   0.00   1.00  15.00
 
 
-    >>> 
+    >>>
     >>> motifs = jdb.fetch_motifs(
     ...     collection = 'CORE',
     ...     tax_group = ['vertebrates', 'insects'],
@@ -55,7 +55,7 @@ appropriate:
     ...     tf_family = ['Forkhead', 'Ets'],
     ...     min_ic = 12
     ... )
-    >>> 
+    >>>
     >>> for motif in motifs:
     ...     pass # do something with the motif
 
@@ -78,6 +78,7 @@ from Bio.motifs import jaspar, matrix
 from warnings import warn
 
 JASPAR_DFLT_COLLECTION = 'CORE'
+
 
 class JASPAR5(object):
     """
@@ -112,7 +113,7 @@ class JASPAR5(object):
     def __str__(self):
         """
         Return a string represention of the JASPAR5 DB connection.
-        
+
         """
 
         text = "%s\@%s:%s" % (self.user, self.host, self.name)
@@ -138,9 +139,9 @@ class JASPAR5(object):
         log-odds matrices.
 
         """
-         
+
         # separate stable ID and version number
-        (base_id, version) = jaspar.split_jaspar_id(id) 
+        (base_id, version) = jaspar.split_jaspar_id(id)
         if not version:
             # if ID contains no version portion, fetch latest version by default
             version = self._fetch_latest_version(base_id)
@@ -156,12 +157,12 @@ class JASPAR5(object):
     def fetch_motifs_by_name(self, name):
         """
         Fetch a list of JASPAR motifs from a JASPAR DB by the given TF name(s).
-        
+
         Arguments:
         name - a single name or list of names
         Returns:
         A list of Bio.motifs.Motif.japar objects
-         
+
         Notes:
         Names are not guaranteed to be unique. There may be more than one
         motif with the same name. Therefore even if name specifies a single
@@ -223,7 +224,7 @@ class JASPAR5(object):
                       ('ChIP-seq', 'PBM', 'SELEX' etc.) are returned. NOTE -
                       must match exactly as stored in the database.
         pazar_id    - Only motifs with the given PAZAR TF ID are returned.
-        medline     - Only motifs with the given medline (PubmMed IDs) are 
+        medline     - Only motifs with the given medline (PubmMed IDs) are
                       returned.
         min_ic      - Only motifs whose profile matrices have at least this
                       information content (specificty) are returned.
@@ -243,18 +244,18 @@ class JASPAR5(object):
 
         # Fetch the internal IDs of the motifs using the criteria provided
         int_ids = self._fetch_internal_id_list(
-            collection = collection,
-            tf_name = tf_name,
-            tf_class = tf_class,
-            tf_family = tf_family,
-            matrix_id = matrix_id,
-            tax_group = tax_group,
-            species = species,
-            pazar_id = pazar_id,
-            data_type = data_type,
-            medline = medline,
-            all = all,
-            all_versions = all_versions
+            collection=collection,
+            tf_name=tf_name,
+            tf_class=tf_class,
+            tf_family=tf_family,
+            matrix_id=matrix_id,
+            tax_group=tax_group,
+            species=species,
+            pazar_id=pazar_id,
+            data_type=data_type,
+            medline=medline,
+            all=all,
+            all_versions=all_versions
         )
 
         record = jaspar.Record()
@@ -288,7 +289,7 @@ class JASPAR5(object):
                 num_sites = sum(
                     [motif.counts[nt][0] for nt in motif.alphabet.letters]
                 )
-                if  num_sites < min_sites:
+                if num_sites < min_sites:
                     continue
 
             record.append(motif)
@@ -326,7 +327,6 @@ class JASPAR5(object):
 
         return int_id
 
-
     def _fetch_motif_by_internal_id(self, int_id):
         # fetch basic motif information
         sql = "select BASE_ID, VERSION, COLLECTION, NAME from MATRIX where id = %d" % int_id
@@ -336,10 +336,10 @@ class JASPAR5(object):
 
         row = cur.fetchone()
 
-        base_id     = row[0]
-        version     = row[1]
-        collection  = row[2]
-        name        = row[3]
+        base_id = row[0]
+        version = row[1]
+        collection = row[2]
+        name = row[3]
 
         matrix_id = "".join([base_id, '.', str(version)])
 
@@ -348,7 +348,7 @@ class JASPAR5(object):
 
         # Create new JASPAR motif
         motif = jaspar.Motif(
-            matrix_id, name, collection = collection, counts = counts
+            matrix_id, name, collection=collection, counts=counts
         )
 
         # fetch species
@@ -377,7 +377,7 @@ class JASPAR5(object):
         rows = cur.fetchall()
         for row in rows:
             attr = row[0]
-            val  = row[1]
+            val = row[1]
             if attr == 'class':
                 motif.tf_class = val
             elif attr == 'family':
@@ -471,12 +471,12 @@ class JASPAR5(object):
         if all:
             cur.execute("select ID from MATRIX")
             rows = cur.fetchall()
-            
+
             for row in rows:
                 int_ids.append(row[0])
 
             return int_ids
-                
+
         """
         Special case 2: fetch specific motifs by their JASPAR IDs. This
         has higher priority than any other except the above 'all' case.
@@ -491,7 +491,7 @@ class JASPAR5(object):
             if all_versions:
                 for id in matrix_id:
                     # ignore vesion here, this is a stupidity filter
-                    (base_id, version) = jaspar.split_jaspar_id(id) 
+                    (base_id, version) = jaspar.split_jaspar_id(id)
                     cur.execute(
                         "select ID from MATRIX where BASE_ID = %s", base_id
                     )
@@ -502,7 +502,7 @@ class JASPAR5(object):
             else:
                 # only the lastest version, or the requested version
                 for id in matrix_id:
-                    (base_id, version) = jaspar.split_jaspar_id(id) 
+                    (base_id, version) = jaspar.split_jaspar_id(id)
 
                     if not version:
                         version = self._fetch_latest_version(base_id)
@@ -692,8 +692,8 @@ class JASPAR5(object):
 
         if where_clauses:
             sql = "".join([sql, " where ", " and ".join(where_clauses)])
-        
-        #print "sql = %s" % sql
+
+        # print "sql = %s" % sql
 
         cur.execute(sql)
         rows = cur.fetchall()
@@ -731,4 +731,3 @@ class JASPAR5(object):
             return True
 
         return False
-

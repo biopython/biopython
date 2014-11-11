@@ -73,25 +73,21 @@ class PDBParser(object):
         o id - string, the id that will be used for the structure
         o file - name of the PDB file OR an open filehandle
         """
+        with warnings.catch_warnings():
+            if self.QUIET:
+                warnings.filterwarnings("ignore", category=PDBConstructionWarning)
 
-        if self.QUIET:
-            warning_list = warnings.filters[:]
-            warnings.filterwarnings("ignore", category=PDBConstructionWarning)
+            self.header = None
+            self.trailer = None
+            # Make a StructureBuilder instance (pass id of structure as parameter)
+            self.structure_builder.init_structure(id)
 
-        self.header = None
-        self.trailer = None
-        # Make a StructureBuilder instance (pass id of structure as parameter)
-        self.structure_builder.init_structure(id)
+            with as_handle(file) as handle:
+                self._parse(handle.readlines())
 
-        with as_handle(file) as handle:
-            self._parse(handle.readlines())
-
-        self.structure_builder.set_header(self.header)
-        # Return the Structure instance
-        structure = self.structure_builder.get_structure()
-
-        if self.QUIET:
-            warnings.filters = warning_list
+            self.structure_builder.set_header(self.header)
+            # Return the Structure instance
+            structure = self.structure_builder.get_structure()
 
         return structure
 
@@ -312,5 +308,5 @@ if __name__ == "__main__":
                 assert(p is c)
                 for a in r:
                     p = a.get_parent()
-                    if not p is r:
+                    if p is not r:
                         print("%s %s" % (p, r))

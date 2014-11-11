@@ -96,13 +96,13 @@ def qblast(program, database, sequence,
         ('PERC_IDENT', perc_ident),
         ('PHI_PATTERN', phi_pattern),
         ('PROGRAM', program),
-        #('PSSM',pssm), - It is possible to use PSI-BLAST via this API?
+        # ('PSSM',pssm), - It is possible to use PSI-BLAST via this API?
         ('QUERY', sequence),
         ('QUERY_FILE', query_file),
         ('QUERY_BELIEVE_DEFLINE', query_believe_defline),
         ('QUERY_FROM', query_from),
         ('QUERY_TO', query_to),
-        #('RESULTS_FILE',...), - Can we use this parameter?
+        # ('RESULTS_FILE',...), - Can we use this parameter?
         ('SEARCHSP_EFF', searchsp_eff),
         ('SERVICE', service),
         ('THRESHOLD', threshold),
@@ -119,7 +119,7 @@ def qblast(program, database, sequence,
     # threads.
     request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                        message,
-                       {"User-Agent":"BiopythonClient"})
+                       {"User-Agent": "BiopythonClient"})
     handle = _urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
@@ -163,7 +163,7 @@ def qblast(program, database, sequence,
 
         request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                            message,
-                           {"User-Agent":"BiopythonClient"})
+                           {"User-Agent": "BiopythonClient"})
         handle = _urlopen(request)
         results = _as_string(handle.read())
 
@@ -205,43 +205,43 @@ def _parse_qblast_ref_page(handle):
         rtoe = s[i+len("RTOE ="):j].strip()
 
     if not rid and not rtoe:
-        #Can we reliably extract the error message from the HTML page?
-        #e.g.  "Message ID#24 Error: Failed to read the Blast query:
+        # Can we reliably extract the error message from the HTML page?
+        # e.g.  "Message ID#24 Error: Failed to read the Blast query:
         #       Nucleotide FASTA provided for protein sequence"
-        #or    "Message ID#32 Error: Query contains no data: Query
+        # or    "Message ID#32 Error: Query contains no data: Query
         #       contains no sequence data"
         #
-        #This used to occur inside a <div class="error msInf"> entry:
+        # This used to occur inside a <div class="error msInf"> entry:
         i = s.find('<div class="error msInf">')
         if i != -1:
             msg = s[i+len('<div class="error msInf">'):].strip()
             msg = msg.split("</div>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
-        #In spring 2010 the markup was like this:
+        # In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
             msg = s[i+len('<p class="error">'):].strip()
             msg = msg.split("</p>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
-        #Generic search based on the way the error messages start:
+        # Generic search based on the way the error messages start:
         i = s.find('Message ID#')
         if i != -1:
-            #Break the message at the first HTML tag
+            # Break the message at the first HTML tag
             msg = s[i:].split("<", 1)[0].split("\n", 1)[0].strip()
             raise ValueError("Error message from NCBI: %s" % msg)
-        #We didn't recognise the error layout :(
-        #print s
+        # We didn't recognise the error layout :(
+        # print s
         raise ValueError("No RID and no RTOE found in the 'please wait' page, "
                          "there was probably an error in your request but we "
                          "could not extract a helpful error message.")
     elif not rid:
-        #Can this happen?
+        # Can this happen?
         raise ValueError("No RID found in the 'please wait' page."
                          " (although RTOE = %s)" % repr(rtoe))
     elif not rtoe:
-        #Can this happen?
+        # Can this happen?
         raise ValueError("No RTOE found in the 'please wait' page."
                          " (although RID = %s)" % repr(rid))
 

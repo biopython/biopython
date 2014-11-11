@@ -10,11 +10,12 @@ use this module.  It provides base classes to try and simplify things.
 
 from __future__ import print_function
 
-import sys #for checking if Python 2
+import sys  # for checking if Python 2
 
 from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
+
 
 class SequenceIterator(object):
     """Base class for building SeqRecord iterators.
@@ -72,60 +73,6 @@ class SequenceIterator(object):
         return iter(self.__next__, None)
 
 
-class InterlacedSequenceIterator(SequenceIterator):
-    """Base class for any iterator of a non-sequential file type (DEPRECATED).
-
-    This object was not intended for direct use, and is now deprecated.
-    """
-
-    def __init__(self):
-        """Create the object.
-
-        This method should be replaced by any derived class to do something useful."""
-        #We assume that your implementation of __init__ will ensure self._n=0
-        self.move_start()
-        raise NotImplementedError("This object method should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
-    def __len__(self):
-        """Return the number of records.
-
-        This method should be replaced by any derived class to do something useful."""
-        raise NotImplementedError("This object method should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
-    def __getitem__(self, i):
-        """Return the requested record.
-
-        This method should be replaced by any derived class to do something
-        useful.
-
-        It should NOT touch the value of self._n"""
-        raise NotImplementedError("This object method should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
-    def move_start(self):
-        self._n = 0
-
-    def __next__(self):
-        next_record = self._n
-        if next_record < len(self):
-            self._n = next_record + 1
-            return self[next_record]
-        else:
-            #StopIteration
-            return None
-
-    def __iter__(self):
-        return iter(self.__next__, None)
-
-
 class SequenceWriter(object):
     """This class should be subclassed.
 
@@ -164,8 +111,8 @@ class SequenceWriter(object):
         Should return the number of records (as an integer).
 
         This method can only be called once."""
-        #Note when implementing this, your writer class should NOT close the
-        #file at the end, but the calling code should.
+        # Note when implementing this, your writer class should NOT close the
+        # file at the end, but the calling code should.
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
@@ -238,14 +185,14 @@ class SequentialSequenceWriter(SequenceWriter):
 
         Returns the number of records written.
         """
-        #Default implementation:
+        # Default implementation:
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
         count = 0
         for record in records:
             self.write_record(record)
             count += 1
-        #Mark as true, even if there where no records
+        # Mark as true, even if there where no records
         self._record_written = True
         return count
 

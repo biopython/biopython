@@ -58,7 +58,7 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
             title, seq = line.split("\t")  # will fail if more than one tab!
         except:
             if line.strip() == "":
-                #It's a blank line, ignore it
+                # It's a blank line, ignore it
                 continue
             raise ValueError("Each line should have one tab separating the" +
                              " title and sequence, this line has %i tabs: %s"
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     print("Running quick self test")
     from Bio._py3k import StringIO
 
-    #This example has a trailing blank line which should be ignored
+    # This example has a trailing blank line which should be ignored
     handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")
     records = list(TabIterator(handle))
     assert len(records) == 2
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         records = list(TabIterator(handle))
         assert False, "Should have reject this invalid example!"
     except ValueError:
-        #Good!
+        # Good!
         pass
 
     print("Done")

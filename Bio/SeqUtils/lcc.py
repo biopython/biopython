@@ -22,10 +22,10 @@ def lcc_mult(seq, wsize):
     l2 = math.log(2)
     tamseq = len(seq)
     try:
-        #Assume its a string
+        # Assume its a string
         upper = seq.upper()
     except AttributeError:
-        #Should be a Seq object then
+        # Should be a Seq object then
         upper = str(seq).upper()
     compone = [0]
     lccsal = [0]
@@ -133,10 +133,10 @@ def lcc_simp(seq):
     """
     wsize = len(seq)
     try:
-        #Assume its a string
+        # Assume its a string
         upper = seq.upper()
     except AttributeError:
-        #Should be a Seq object then
+        # Should be a Seq object then
         upper = str(seq).upper()
     l2 = math.log(2)
     if 'A' not in seq:

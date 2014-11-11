@@ -26,10 +26,10 @@ class Alphabet(object):
 
     size = None     # default to no fixed size for words
     letters = None  # default to no fixed alphabet
-                    # In general, a list-like object. However,
-                    # assuming letters are single characters, use a
-                    # string. This is expected for use with Seq like
-                    # objects.
+    # In general, a list-like object. However,
+    # assuming letters are single characters, use a
+    # string. This is expected for use with Seq like
+    # objects.
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -45,7 +45,7 @@ class Alphabet(object):
 
     def _case_less(self):
         """Return a case-less variant of the current alphabet (PRIVATE)."""
-        #TODO - remove this method by dealing with things in subclasses?
+        # TODO - remove this method by dealing with things in subclasses?
         if isinstance(self, ProteinAlphabet):
             return generic_protein
         elif isinstance(self, DNAAlphabet):
@@ -62,19 +62,19 @@ class Alphabet(object):
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
         if not self.letters or self.letters==self.letters.upper():
-            #Easy case, no letters or already upper case!
+            # Easy case, no letters or already upper case!
             return self
         else:
-            #TODO - Raise NotImplementedError and handle via subclass?
+            # TODO - Raise NotImplementedError and handle via subclass?
             return self._case_less()
 
     def _lower(self):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
         if not self.letters or self.letters==self.letters.lower():
-            #Easy case, no letters or already lower case!
+            # Easy case, no letters or already lower case!
             return self
         else:
-            #TODO - Raise NotImplementedError and handle via subclass?
+            # TODO - Raise NotImplementedError and handle via subclass?
             return self._case_less()
 
 generic_alphabet = Alphabet()
@@ -87,7 +87,7 @@ class SingleLetterAlphabet(Alphabet):
 
 single_letter_alphabet = SingleLetterAlphabet()
 
-########### Protein
+# ########## Protein
 
 
 class ProteinAlphabet(SingleLetterAlphabet):
@@ -96,7 +96,7 @@ class ProteinAlphabet(SingleLetterAlphabet):
 
 generic_protein = ProteinAlphabet()
 
-########### DNA
+# ########## DNA
 
 
 class NucleotideAlphabet(SingleLetterAlphabet):
@@ -113,7 +113,7 @@ class DNAAlphabet(NucleotideAlphabet):
 generic_dna = DNAAlphabet()
 
 
-########### RNA
+# ########## RNA
 
 
 class RNAAlphabet(NucleotideAlphabet):
@@ -122,7 +122,7 @@ class RNAAlphabet(NucleotideAlphabet):
 
 generic_rna = RNAAlphabet()
 
-########### Other per-sequence encodings
+# ########## Other per-sequence encodings
 
 
 class SecondaryStructure(SingleLetterAlphabet):
@@ -142,7 +142,7 @@ class ThreeLetterProtein(Alphabet):
         "Sec", "Val", "Trp", "Xaa", "Tyr", "Glx",
         ]
 
-###### Non per-sequence modifications
+# ##### Non per-sequence modifications
 
 # (These are Decorator classes)
 
@@ -182,7 +182,7 @@ class AlphabetEncoder(object):
 
 
 class Gapped(AlphabetEncoder):
-    def __init__(self, alphabet, gap_char = "-"):
+    def __init__(self, alphabet, gap_char="-"):
         AlphabetEncoder.__init__(self, alphabet, gap_char)
         self.gap_char = gap_char
 
@@ -206,15 +206,9 @@ class Gapped(AlphabetEncoder):
 
 
 class HasStopCodon(AlphabetEncoder):
-    def __init__(self, alphabet, stop_symbol = "*"):
+    def __init__(self, alphabet, stop_symbol="*"):
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
         self.stop_symbol = stop_symbol
-
-    def __cmp__(self, other):
-        x = cmp(self.alphabet, other.alphabet)
-        if x == 0:
-            return cmp(self.stop_symbol, other.stop_symbol)
-        return x
 
     def contains(self, other):
         """Does this alphabet 'contain' the other (OBSOLETE?).
@@ -247,7 +241,7 @@ def _get_base_alphabet(alphabet):
 
 def _ungap(alphabet):
     """Returns the alphabet without any gap encoder (PRIVATE)."""
-    #TODO - Handle via method of the objects?
+    # TODO - Handle via method of the objects?
     if not hasattr(alphabet, "gap_char"):
         return alphabet
     elif isinstance(alphabet, Gapped):
@@ -280,17 +274,17 @@ def _consensus_base_alphabet(alphabets):
             common = a
         elif isinstance(a, NucleotideAlphabet) \
         and isinstance(common, NucleotideAlphabet):
-            #e.g. Give a mix of RNA and DNA alphabets
+            # e.g. Give a mix of RNA and DNA alphabets
             common = generic_nucleotide
         elif isinstance(a, SingleLetterAlphabet) \
         and isinstance(common, SingleLetterAlphabet):
-            #This is a pretty big mis-match!
+            # This is a pretty big mis-match!
             common = single_letter_alphabet
         else:
-            #We have a major mis-match... take the easy way out!
+            # We have a major mis-match... take the easy way out!
             return generic_alphabet
     if common is None:
-        #Given NO alphabets!
+        # Given NO alphabets!
         return generic_alphabet
     return common
 
@@ -337,7 +331,7 @@ def _consensus_alphabet(alphabets):
     stop = None
     new_letters = ""
     for alpha in alphabets:
-        #Gaps...
+        # Gaps...
         if not hasattr(alpha, "gap_char"):
             pass
         elif gap is None:
@@ -346,7 +340,7 @@ def _consensus_alphabet(alphabets):
             pass
         else:
             raise ValueError("More than one gap character present")
-        #Stops...
+        # Stops...
         if not hasattr(alpha, "stop_symbol"):
             pass
         elif stop is None:
@@ -355,7 +349,7 @@ def _consensus_alphabet(alphabets):
             pass
         else:
             raise ValueError("More than one stop symbol present")
-        #New letters...
+        # New letters...
         if hasattr(alpha, "new_letters"):
             for letter in alpha.new_letters:
                 if letter not in new_letters \

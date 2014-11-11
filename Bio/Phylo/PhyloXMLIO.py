@@ -25,7 +25,7 @@ from Bio._py3k import unicode
 
 from Bio.Phylo import PhyloXML as PX
 
-#For speed try to use cElementTree rather than ElementTree
+# For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
         # Workaround for bug in python 3.0 and 3.1,
@@ -39,7 +39,7 @@ except ImportError:
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
 NAMESPACES = {
-        'phy':  'http://www.phyloxml.org',
+        'phy': 'http://www.phyloxml.org',
         }
 
 try:
@@ -335,8 +335,8 @@ class Parser(object):
                                                    ['rooted', 'rerootable']))
         list_types = {
                 # XML tag, plural attribute
-                'confidence':   'confidences',
-                'property':     'properties',
+                'confidence': 'confidences',
+                'property': 'properties',
                 'clade_relation': 'clade_relations',
                 'sequence_relation': 'sequence_relations',
                 }
@@ -372,10 +372,10 @@ class Parser(object):
 
     _clade_complex_types = ['color', 'events', 'binary_characters', 'date']
     _clade_list_types = {
-            'confidence':   'confidences',
+            'confidence': 'confidences',
             'distribution': 'distributions',
-            'reference':    'references',
-            'property':     'properties',
+            'reference': 'references',
+            'property': 'properties',
             }
     _clade_tracked_tags = set(_clade_complex_types).union(_clade_list_types.keys()).union(
                                              ['branch_length', 'name', 'node_id', 'width'])
@@ -694,47 +694,47 @@ class Writer(object):
 
     phylogeny = _handle_complex('phylogeny',
             ('rooted', 'rerootable', 'branch_length_unit', 'type'),
-            ( 'name',
-              'id',
-              'description',
-              'date',
-              ('confidence',        'confidences'),
-              'clade',
-              ('clade_relation',    'clade_relations'),
-              ('sequence_relation', 'sequence_relations'),
-              ('property',          'properties'),
-              ('other',             'other'),
-              ))
+            ('name',
+             'id',
+             'description',
+             'date',
+             ('confidence', 'confidences'),
+             'clade',
+             ('clade_relation', 'clade_relations'),
+             ('sequence_relation', 'sequence_relations'),
+             ('property', 'properties'),
+             ('other', 'other'),
+             ))
 
     clade = _handle_complex('clade', ('id_source',),
-            ( 'name',
-              'branch_length',
-              ('confidence',    'confidences'),
-              'width',
-              'color',
-              'node_id',
-              ('taxonomy',      'taxonomies'),
-              ('sequence',      'sequences'),
-              'events',
-              'binary_characters',
-              ('distribution',  'distributions'),
-              'date',
-              ('reference',     'references'),
-              ('property',      'properties'),
-              ('clade',         'clades'),
-              ('other',         'other'),
-              ))
+            ('name',
+             'branch_length',
+             ('confidence', 'confidences'),
+             'width',
+             'color',
+             'node_id',
+             ('taxonomy', 'taxonomies'),
+             ('sequence', 'sequences'),
+             'events',
+             'binary_characters',
+             ('distribution', 'distributions'),
+             'date',
+             ('reference', 'references'),
+             ('property', 'properties'),
+             ('clade', 'clades'),
+             ('other', 'other'),
+             ))
 
     accession = _handle_complex('accession', ('source',),
             (), has_text=True)
 
     annotation = _handle_complex('annotation',
             ('ref', 'source', 'evidence', 'type'),
-            ( 'desc',
-              'confidence',
-              ('property',   'properties'),
-              'uri',
-              ))
+            ('desc',
+             'confidence',
+             ('property', 'properties'),
+             'uri',
+             ))
 
     def binary_characters(self, obj):
         """Serialize a binary_characters node and its subnodes."""
@@ -762,10 +762,10 @@ class Writer(object):
             ('desc', 'value', 'minimum', 'maximum'))
 
     distribution = _handle_complex('distribution', (),
-            ( 'desc',
-              ('point',     'points'),
-              ('polygon',   'polygons'),
-              ))
+            ('desc',
+             ('point', 'points'),
+             ('polygon', 'polygons'),
+             ))
 
     def domain(self, obj):
         """Serialize a domain node."""
@@ -783,12 +783,12 @@ class Writer(object):
             (('domain', 'domains'),))
 
     events = _handle_complex('events', (),
-            ( 'type',
-              'duplications',
-              'speciations',
-              'losses',
-              'confidence',
-              ))
+            ('type',
+             'duplications',
+             'speciations',
+             'losses',
+             'confidence',
+             ))
 
     id = _handle_complex('id', ('provider',), (), has_text=True)
 
@@ -810,16 +810,16 @@ class Writer(object):
 
     sequence = _handle_complex('sequence',
             ('type', 'id_ref', 'id_source'),
-            ( 'symbol',
-              'accession',
-              'name',
-              'location',
-              'mol_seq',
-              'uri',
-              ('annotation', 'annotations'),
-              'domain_architecture',
-              ('other',      'other'),
-              ))
+            ('symbol',
+             'accession',
+             'name',
+             'location',
+             'mol_seq',
+             'uri',
+             ('annotation', 'annotations'),
+             'domain_architecture',
+             ('other', 'other'),
+             ))
 
     sequence_relation = _handle_complex('sequence_relation',
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
@@ -827,16 +827,16 @@ class Writer(object):
 
     taxonomy = _handle_complex('taxonomy',
             ('id_source',),
-            ( 'id',
-              'code',
-              'scientific_name',
-              'authority',
-              ('common_name',   'common_names'),
-              ('synonym',       'synonyms'),
-              'rank',
-              'uri',
-              ('other',         'other'),
-              ))
+            ('id',
+             'code',
+             'scientific_name',
+             'authority',
+             ('common_name', 'common_names'),
+             ('synonym', 'synonyms'),
+             'rank',
+             'uri',
+             ('other', 'other'),
+             ))
 
     uri = _handle_complex('uri', ('desc', 'type'), (), has_text=True)
 
