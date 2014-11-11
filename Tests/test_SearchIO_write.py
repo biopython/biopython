@@ -11,9 +11,11 @@ import unittest
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
+
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio import SearchIO
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio import SearchIO
 
 from search_tests_common import compare_search_obj
 

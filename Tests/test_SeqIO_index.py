@@ -397,10 +397,10 @@ class IndexDictTests(unittest.TestCase):
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore', BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, format, alphabet,
-                                       key_function = lambda x: x.lower())
+                                       key_function=lambda x: x.lower())
         else:
             rec_dict = SeqIO.index(filename, format, alphabet,
-                                   key_function = lambda x: x.lower())
+                                   key_function=lambda x: x.lower())
 
         self.assertEqual(set(id_list), set(rec_dict))
         self.assertEqual(len(id_list), len(rec_dict))
@@ -413,7 +413,7 @@ class IndexDictTests(unittest.TestCase):
             self.assertTrue(raw in raw_file)
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
-            #__getitem__ SFF code is working.
+            # __getitem__ SFF code is working.
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:

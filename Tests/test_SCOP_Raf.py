@@ -57,7 +57,7 @@ class RafTests(unittest.TestCase):
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
-        r = r[ r.index("124"): r.index("135")+1]
+        r = r[r.index("124"): r.index("135")+1]
         self.assertEqual(len(r.res), 12)
 
     def testSeqMapIndex(self):

@@ -20,9 +20,9 @@ class test_lowess(unittest.TestCase):
         y = x**2
         # Precalculated smooth output
         ys = array([-2.96219015, 1.72680044, 6.58686813,
-                    11.62986671, 28.18598762, 86.85271581, 116.83893423 ])
+                    11.62986671, 28.18598762, 86.85271581, 116.83893423])
         # Smooth output calculated by the lowess function
-        output = lowess(x, y, f=2./3., iter = 3)
+        output = lowess(x, y, f=2./3., iter=3)
         for precomputed, calculated in zip(ys, output):
             self.assertAlmostEqual(precomputed, calculated, places=4)
 

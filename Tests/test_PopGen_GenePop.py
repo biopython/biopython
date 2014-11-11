@@ -36,7 +36,7 @@ class AppTest(unittest.TestCase):
         """
         ctrl = GenePopController()
         pop_iter, locus_iter = ctrl.calc_allele_genotype_freqs("PopGen" + os.sep + "big.gen")
-        #print("%s %s" % (pop, loci))
+        # print("%s %s" % (pop, loci))
         # for popc in pop_iter:
         #    pop_name, loci_content = popc
         #    print(pop_name)

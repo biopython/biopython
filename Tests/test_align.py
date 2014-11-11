@@ -78,7 +78,7 @@ for test_file in test_files:
     print(alignment.format("clustal"))
 
 alignment = AlignIO.read(os.path.join(test_dir, test_names[0]), "clustal",
-                         alphabet = Alphabet.Gapped(IUPAC.unambiguous_dna))
+                         alphabet=Alphabet.Gapped(IUPAC.unambiguous_dna))
 
 # test the base alignment stuff
 print('all_seqs...')
@@ -104,7 +104,7 @@ print('with a supplied consensus sequence...')
 print(align_info.pos_specific_score_matrix(consensus, ['N']))
 
 print('defaulting to a consensus sequence...')
-print(align_info.pos_specific_score_matrix(chars_to_ignore = ['N']))
+print(align_info.pos_specific_score_matrix(chars_to_ignore=['N']))
 
 print('with a selected sequence...')
 second_seq = alignment[1].seq
@@ -112,9 +112,9 @@ print(align_info.pos_specific_score_matrix(second_seq, ['N']))
 
 print('information content')
 print('part of alignment: %0.2f'
-      % align_info.information_content(5, 50, chars_to_ignore = ['N']))
+      % align_info.information_content(5, 50, chars_to_ignore=['N']))
 print('entire alignment: %0.2f'
-      % align_info.information_content(chars_to_ignore = ['N']))
+      % align_info.information_content(chars_to_ignore=['N']))
 
 print('relative information content')
 e_freq = {'G': 0.25,
@@ -126,8 +126,8 @@ e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
 
 print('relative information: %0.2f'
-      % align_info.information_content(e_freq_table = e_freq_table,
-                                       chars_to_ignore = ['N']))
+      % align_info.information_content(e_freq_table=e_freq_table,
+                                       chars_to_ignore=['N']))
 
 print('Column 1: %s' % align_info.get_column(1))
 print('IC for column 1: %0.2f' % align_info.ic_vector[1])
@@ -140,7 +140,7 @@ print("testing reading and writing fasta format...")
 to_parse = os.path.join(os.curdir, 'Quality', 'example.fasta')
 
 alignment = AlignIO.read(to_parse, "fasta",
-                         alphabet = Alphabet.Gapped(IUPAC.ambiguous_dna))
+                         alphabet=Alphabet.Gapped(IUPAC.ambiguous_dna))
 
 # test the base alignment stuff
 print('all_seqs...')

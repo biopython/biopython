@@ -25,7 +25,7 @@ from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
 # This is just the standard table with less stop codons
-#(replaced with coding for O as an artifical example)
+# (replaced with coding for O as an artifical example)
 special_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
@@ -299,7 +299,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_comparison(self):
         if sys.version_info[0] >= 3:
-            # TODO - replace __cmp__ with specific methods for Python 3                                           
+            # TODO - replace __cmp__ with specific methods for Python 3
             return
         for example1 in self._examples:
             for example2 in self._examples:
