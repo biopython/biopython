@@ -195,7 +195,7 @@ def kegg_get(dbentries, option=None):
 
 
 def kegg_conv(target_db, source_db, option=None):
-    """KEGG conv – convert KEGG identifiers to/from outside identifiers
+    """KEGG conv - convert KEGG identifiers to/from outside identifiers
 
     target_db - Target database
     source_db_or_dbentries - source database or database entries
