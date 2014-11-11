@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This file provides a wrapper to the KEGG REST API.
+"""A wrapper for the online KEGG REST API.
 
 References:
 
@@ -19,17 +18,14 @@ from Bio._py3k import urlopen as _urlopen
 
 
 def _q(op, arg1, arg2=None, arg3=None):
-
-  URL = "http://rest.kegg.jp/%s"
-
-  if arg2 and arg3:
-    args = "%s/%s/%s/%s" % (op, arg1, arg2, arg3)
-  elif arg2:
-    args = "%s/%s/%s" % (op, arg1, arg2)
-  else:
-    args = "%s/%s" % (op, arg1)
-
-  return _urlopen(URL % (args))
+    URL = "http://rest.kegg.jp/%s"
+    if arg2 and arg3:
+        args = "%s/%s/%s/%s" % (op, arg1, arg2, arg3)
+    elif arg2:
+        args = "%s/%s/%s" % (op, arg1, arg2)
+    else:
+        args = "%s/%s" % (op, arg1)
+    return _urlopen(URL % (args))
 
 
 # http://www.kegg.jp/kegg/rest/keggapi.html
@@ -118,7 +114,7 @@ def kegg_get(dbentries, option=None):
     # <org> = KEGG organism code or T number
     #
     # <option> = aaseq | ntseq | mol | kcf | image
-    if option in ["aaseq" , "ntseq", "mol", "kcf", "image", "kgml"]:
+    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml"]:
         resp = _q("get", dbentries, option)
     elif option:
         raise Exception("Invalid option arg for kegg get request.")
@@ -157,7 +153,7 @@ def kegg_conv(target_db, source_db, option=None):
     # <database> = drug | compound | glycan | pubchem | chebi
     #
     # <option> = turtle | n-triple
-    if option and not option in ["turtle", "n-triple"]:
+    if option and option not in ["turtle", "n-triple"]:
         raise Exception("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
@@ -200,7 +196,7 @@ def kegg_link(target_db, source_db, option=None):
     #
     # <option> = turtle | n-triple
 
-    if option and not option in ["turtle", "n-triple"]:
+    if option and option not in ["turtle", "n-triple"]:
         raise Exception("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
