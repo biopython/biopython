@@ -83,7 +83,7 @@ class KGMLPathwayTest(unittest.TestCase):
             with open(p.infilename, 'rU') as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
-                self.assertEqual((len(pathway.entries), 
+                self.assertEqual((len(pathway.entries),
                                   len(pathway.orthologs),
                                   len(pathway.compounds),
                                   len(pathway.maps)),
@@ -95,7 +95,7 @@ class KGMLPathwayTest(unittest.TestCase):
             with open(p.outfilename, 'rU') as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
-                self.assertEqual((len(pathway.entries), 
+                self.assertEqual((len(pathway.entries),
                                   len(pathway.orthologs),
                                   len(pathway.compounds),
                                   len(pathway.maps)),
@@ -104,4 +104,4 @@ class KGMLPathwayTest(unittest.TestCase):
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner = runner)
+    unittest.main(testRunner=runner)

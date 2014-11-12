@@ -541,7 +541,7 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1A8O.pdb")
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
-            #==========================================================
+            # ==========================================================
             # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
             self.assertEqual(len(polypeptides), 1)
@@ -556,7 +556,7 @@ class ParseReal(unittest.TestCase):
             # Here non-standard MSE are shown as M
             self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                              "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
-            #==========================================================
+            # ==========================================================
             # Now try strict version with only standard amino acids
             # Should ignore MSE 151 at start, and then break the chain
             # at MSE 185, and MSE 214,215
@@ -832,7 +832,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(a_residues[1].get_resname(), "ARG")
         self.assertEqual(a_residues[2].get_resname(), "CYS")
         self.assertEqual(a_residues[3].get_resname(), "GLY")
-        #...
+        # ...
         self.assertEqual(a_residues[-3].get_resname(), "TYR")
         self.assertEqual(a_residues[-2].get_resname(), "ARG")
         self.assertEqual(a_residues[-1].get_resname(), "CYS")
@@ -853,7 +853,7 @@ class Exposure(unittest.TestCase):
         self.assertAlmostEqual(1.3383737, residues[3].xtra["EXP_CB_PCB_ANGLE"])
         self.assertEqual(13, residues[3].xtra["EXP_HSE_A_D"])
         self.assertEqual(16, residues[3].xtra["EXP_HSE_A_U"])
-        #...
+        # ...
         self.assertEqual(3, len(residues[-2].xtra))
         self.assertAlmostEqual(0.77124014456278489, residues[-2].xtra["EXP_CB_PCB_ANGLE"])
         self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_D"])
@@ -874,7 +874,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(2, len(residues[3].xtra))
         self.assertEqual(7, residues[3].xtra["EXP_HSE_B_D"])
         self.assertEqual(22, residues[3].xtra["EXP_HSE_B_U"])
-        #...
+        # ...
         self.assertEqual(2, len(residues[-2].xtra))
         self.assertEqual(14, residues[-2].xtra["EXP_HSE_B_D"])
         self.assertEqual(34, residues[-2].xtra["EXP_HSE_B_U"])
@@ -893,7 +893,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(28, residues[2].xtra["EXP_CN"])
         self.assertEqual(1, len(residues[3].xtra))
         self.assertEqual(29, residues[3].xtra["EXP_CN"])
-        #...
+        # ...
         self.assertEqual(1, len(residues[-2].xtra))
         self.assertEqual(48, residues[-2].xtra["EXP_CN"])
         self.assertEqual(1, len(residues[-1].xtra))
@@ -951,7 +951,7 @@ class Atom_Element(unittest.TestCase):
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", PDBConstructionWarning)
                     e = quick_assign(fullname)
-                #warnings.warn("%s %s" % (fullname, e))
+                # warnings.warn("%s %s" % (fullname, e))
                 self.assertEqual(e, element)
 
 

@@ -28,7 +28,7 @@ from Bio.Graphics.Distribution import LineDistribution
 from Bio.Graphics.Distribution import DistributionPage
 
 
-def random_distribution(min = -5.0, max = 5.0, total_items = 50):
+def random_distribution(min=-5.0, max=5.0, total_items=50):
     """Create a series of random distribution information.
     """
     num_items = random.randrange(5, total_items)

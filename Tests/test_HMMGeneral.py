@@ -82,7 +82,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
         test_assertion("Probabilities", self.mm_builder.transition_prob,
                        expected_prob)
 
-        test_assertion("Pseudo counts",  self.mm_builder.transition_pseudo,
+        test_assertion("Pseudo counts", self.mm_builder.transition_pseudo,
                        expected_pseudo)
 
     def test_set_initial_probabilities(self):

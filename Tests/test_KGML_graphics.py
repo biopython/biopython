@@ -5,7 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Tests for general functionality of the KGML parser, pathway and 
+""" Tests for general functionality of the KGML parser, pathway and
     visualisation modules
 """
 
@@ -43,7 +43,7 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 class PathwayData(object):
     """ Convenience structure for testing pathway data
     """
-    def __init__(self, name, element_counts,show_pathway_image=False):
+    def __init__(self, name, element_counts, show_pathway_image=False):
         self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
         self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
         self.element_counts = element_counts
@@ -68,8 +68,8 @@ class KGMLPathwayTest(unittest.TestCase):
             PathwayData("01100", (3628, 1726, 1746, 149)),
             PathwayData("03070", (81, 72, 8, 1), True),
             ]
-        # A list of KO IDs that we're going to use to modify pathway 
-        # appearance. These are KO IDs for reactions that take part in ko00020, 
+        # A list of KO IDs that we're going to use to modify pathway
+        # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
         self.ko_ids = \
             set(['ko:K00239','ko:K00240','ko:K00241','ko:K00242','ko:K00244',
@@ -89,7 +89,7 @@ class KGMLPathwayTest(unittest.TestCase):
     def test_render_KGML_basic(self):
         """ Basic rendering of KGML: write to PDF without modification.
         """
-        # We test rendering of both the original KEGG KGML using only local 
+        # We test rendering of both the original KEGG KGML using only local
         # files.
         for p in self.data:
             with open(p.infilename, 'rU') as f:
@@ -120,7 +120,7 @@ class KGMLPathwayTest(unittest.TestCase):
             pathway = read(f)
             orthologs = [e for e in pathway.orthologs]
             # Use Biopython's ColorSpiral to generate colours
-            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5, 
+            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
                              jitter=0.03)
             colors = cs.get_colors(len(orthologs))
             for o, c in zip(orthologs, colors):
@@ -134,4 +134,4 @@ class KGMLPathwayTest(unittest.TestCase):
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner = runner)
+    unittest.main(testRunner=runner)

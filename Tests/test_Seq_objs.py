@@ -63,8 +63,8 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
     'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
     'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
-    start_codons = [ 'ATG'],
-    stop_codons = ['TAA' ])
+    start_codons=['ATG'],
+    stop_codons=['TAA'])
 
 
 class StringMethodTests(unittest.TestCase):

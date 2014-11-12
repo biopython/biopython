@@ -55,7 +55,7 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.Codeml, alignment = list())
+            codeml.Codeml, alignment=list())
         self.cml.alignment = list()
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
@@ -64,7 +64,7 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentExists(self):
         self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-            alignment = "nonexistent")
+            alignment="nonexistent")
         self.cml.alignment = "nonexistent"
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
@@ -72,7 +72,7 @@ class ModTest(unittest.TestCase):
 
     def testTreeFileValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.Codeml, tree = list())
+            codeml.Codeml, tree=list())
         self.cml.alignment = self.align_file
         self.cml.tree = list()
         self.cml.out_file = self.out_file
@@ -81,7 +81,7 @@ class ModTest(unittest.TestCase):
 
     def testTreeExists(self):
         self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-            tree = "nonexistent")
+            tree="nonexistent")
         self.cml.alignment = self.align_file
         self.cml.tree = "nonexistent"
         self.cml.out_file = self.out_file
@@ -138,14 +138,14 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.run, ctl_file = list())
+            self.cml.run, ctl_file=list())
 
     def testCtlFileExistsOnRun(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((EnvironmentError, IOError),
-            self.cml.run, ctl_file = "nonexistent")
+            self.cml.run, ctl_file="nonexistent")
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
@@ -195,7 +195,7 @@ class ModTest(unittest.TestCase):
 
     def testCtlFileExistsOnRead(self):
         self.assertRaises((EnvironmentError, IOError),
-            self.cml.read_ctl_file, ctl_file = "nonexistent")
+            self.cml.read_ctl_file, ctl_file="nonexistent")
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
