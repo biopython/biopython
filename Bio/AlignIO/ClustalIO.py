@@ -16,6 +16,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+__docformat__ = "restructuredtext en"
+
 
 class ClustalWriter(SequentialAlignmentWriter):
     """Clustalw alignment writer."""

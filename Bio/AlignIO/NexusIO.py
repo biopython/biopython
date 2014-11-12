@@ -21,6 +21,8 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentWriter
 from Bio import Alphabet
 
+__docformat__ = "restructuredtext en"
+
 # You can get a couple of example files here:
 # http://www.molecularevolution.org/resources/fileformats/
 
