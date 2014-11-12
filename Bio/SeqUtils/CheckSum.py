@@ -15,6 +15,8 @@ from __future__ import print_function
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 
+__docformat__ = "restructuredtext en"
+
 
 def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)."""
@@ -70,9 +72,12 @@ def gcg(seq):
     Given a nucleotide or amino-acid secuence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
     seq type = str.
+
     Based on BioPerl GCG_checksum. Adapted by Sebastian Bassi
     with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
-    All sequences are converted to uppercase """
+
+    All sequences are converted to uppercase.
+    """
     try:
         # Assume its a Seq object
         seq = str(seq)
@@ -94,9 +99,11 @@ def seguid(seq):
     Given a nucleotide or amino-acid secuence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
+
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
-    DOI: 10.1002/pmic.200600032 """
+    DOI: 10.1002/pmic.200600032
+    """
     import hashlib
     import base64
     m = hashlib.sha1()
