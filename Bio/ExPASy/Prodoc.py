@@ -3,10 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the prosite.doc file from
-Prosite.
-http://www.expasy.ch/prosite/
+"""Code to work with the prosite.doc file from Prosite.
+
+See http://www.expasy.ch/prosite/
 
 Tested with:
 Release 15.0, July 1998
@@ -16,16 +15,19 @@ Release 20.43, 10 February 2009
 
 
 Functions:
-read               Read a Prodoc file containing exactly one Prodoc entry.
-parse              Iterates over entries in a Prodoc file.
+ - read               Read a Prodoc file containing exactly one Prodoc entry.
+ - parse              Iterates over entries in a Prodoc file.
 
 Classes:
-Record             Holds Prodoc data.
-Reference          Holds data from a Prodoc reference.
+ - Record             Holds Prodoc data.
+ - Reference          Holds data from a Prodoc reference.
 """
+
+__docformat__ = "restructuredtext en"
 
 
 def read(handle):
+    """Read in a record from a file with exactly one Prodoc record."""
     record = __read(handle)
     # We should have reached the end of the record by now
     line = handle.readline()
@@ -35,6 +37,7 @@ def read(handle):
 
 
 def parse(handle):
+    """Iterate over the records in a Prodoc file."""
     while True:
         record = __read(handle)
         if not record:
@@ -63,9 +66,9 @@ class Reference(object):
     """Holds information from a Prodoc citation.
 
     Members:
-    number     Number of the reference. (string)
-    authors    Names of the authors.
-    citation   Describes the citation.
+     - number     Number of the reference. (string)
+     - authors    Names of the authors.
+     - citation   Describes the citation.
 
     """
     def __init__(self):
@@ -107,7 +110,7 @@ def __read_reference_line(record, line):
         return False
     reference = record.references[-1]
     if line.startswith('     '):
-        if reference.authors[-1]==',':
+        if reference.authors[-1] == ',':
             reference.authors += line[4:].rstrip()
         else:
             reference.citation += line[5:]

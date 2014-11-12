@@ -3,37 +3,37 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parser for XML results returned by NCBI's Entrez Utilities. This
-parser is used by the read() function in Bio.Entrez, and is not intended
-be used directly.
+"""Parser for XML results returned by NCBI's Entrez Utilities.
+
+This parser is used by the read() function in Bio.Entrez, and is not
+intended be used directly.
+
+The question is how to represent an XML file as Python objects. Some
+XML files returned by NCBI look like lists, others look like dictionaries,
+and others look like a mix of lists and dictionaries.
+
+My approach is to classify each possible element in the XML as a plain
+string, an integer, a list, a dictionary, or a structure. The latter is a
+dictionary where the same key can occur multiple times; in Python, it is
+represented as a dictionary where that key occurs once, pointing to a list
+of values found in the XML file.
+
+The parser then goes through the XML and creates the appropriate Python
+object for each element. The different levels encountered in the XML are
+preserved on the Python side. So a subelement of a subelement of an element
+is a value in a dictionary that is stored in a list which is a value in
+some other dictionary (or a value in a list which itself belongs to a list
+which is a value in a dictionary, and so on). Attributes encountered in
+the XML are stored as a dictionary in a member .attributes of each element,
+and the tag name is saved in a member .tag.
+
+To decide which kind of Python object corresponds to each element in the
+XML, the parser analyzes the DTD referred at the top of (almost) every
+XML file returned by the Entrez Utilities. This is preferred over a hand-
+written solution, since the number of DTDs is rather large and their
+contents may change over time. About half the code in this parser deals
+wih parsing the DTD, and the other half with the XML itself.
 """
-
-# The question is how to represent an XML file as Python objects. Some
-# XML files returned by NCBI look like lists, others look like dictionaries,
-# and others look like a mix of lists and dictionaries.
-#
-# My approach is to classify each possible element in the XML as a plain
-# string, an integer, a list, a dictionary, or a structure. The latter is a
-# dictionary where the same key can occur multiple times; in Python, it is
-# represented as a dictionary where that key occurs once, pointing to a list
-# of values found in the XML file.
-#
-# The parser then goes through the XML and creates the appropriate Python
-# object for each element. The different levels encountered in the XML are
-# preserved on the Python side. So a subelement of a subelement of an element
-# is a value in a dictionary that is stored in a list which is a value in
-# some other dictionary (or a value in a list which itself belongs to a list
-# which is a value in a dictionary, and so on). Attributes encountered in
-# the XML are stored as a dictionary in a member .attributes of each element,
-# and the tag name is saved in a member .tag.
-#
-# To decide which kind of Python object corresponds to each element in the
-# XML, the parser analyzes the DTD referred at the top of (almost) every
-# XML file returned by the Entrez Utilities. This is preferred over a hand-
-# written solution, since the number of DTDs is rather large and their
-# contents may change over time. About half the code in this parser deals
-# wih parsing the DTD, and the other half with the XML itself.
-
 
 import os
 import warnings
@@ -44,6 +44,8 @@ from io import BytesIO
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
 from Bio._py3k import unicode
+
+__docformat__ = "restructuredtext en"
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
@@ -152,7 +154,7 @@ class ValidationError(ValueError):
 class DataHandler(object):
 
     import platform
-    if platform.system()=='Windows':
+    if platform.system() == 'Windows':
         directory = os.path.join(os.getenv("APPDATA"), "biopython")
     else:  # Unix/Linux/Mac
         home = os.path.expanduser('~')
@@ -300,11 +302,11 @@ class DataHandler(object):
             del attrs["Name"]
             itemtype = str(attrs["Type"])  # convert from Unicode
             del attrs["Type"]
-            if itemtype=="Structure":
+            if itemtype == "Structure":
                 object = DictionaryElement()
             elif name in ("ArticleIds", "History"):
                 object = StructureElement(["pubmed", "medline"])
-            elif itemtype=="List":
+            elif itemtype == "List":
                 object = ListElement()
             else:
                 object = StringElement()
@@ -320,11 +322,11 @@ class DataHandler(object):
             else:
                 # this will not be stored in the record
                 object = ""
-        if object!="":
+        if object != "":
             object.tag = name
             if attrs:
                 object.attributes = dict(attrs)
-            if len(self.stack)!=0:
+            if len(self.stack) != 0:
                 current = self.stack[-1]
                 try:
                     current.append(object)
@@ -335,7 +337,7 @@ class DataHandler(object):
     def endElementHandler(self, name):
         value = self.content
         if name in self.errors:
-            if value=="":
+            if value == "":
                 return
             else:
                 raise RuntimeError(value)
@@ -351,7 +353,7 @@ class DataHandler(object):
             self.object = self.stack.pop()
             if self.object.itemtype in ("List", "Structure"):
                 return
-            elif self.object.itemtype=="Integer" and value:
+            elif self.object.itemtype == "Integer" and value:
                 value = IntegerElement(value)
             else:
                 # Convert Unicode strings to plain strings if possible
@@ -368,7 +370,7 @@ class DataHandler(object):
             value.attributes = dict(self.attributes)
             del self.attributes
         current = self.stack[-1]
-        if current!="":
+        if current != "":
             try:
                 current.append(value)
             except AttributeError:
@@ -383,18 +385,18 @@ class DataHandler(object):
         encountered in a DTD. The purpose of this function is to determine
         whether this element should be regarded as a string, integer, list
         dictionary, structure, or error."""
-        if name.upper()=="ERROR":
+        if name.upper() == "ERROR":
             self.errors.append(name)
             return
-        if name=='Item' and model==(expat.model.XML_CTYPE_MIXED,
-                                    expat.model.XML_CQUANT_REP,
-                                    None, ((expat.model.XML_CTYPE_NAME,
-                                            expat.model.XML_CQUANT_NONE,
-                                            'Item',
-                                            ()
-                                           ),
-                                          )
-                                   ):
+        if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
+                                        expat.model.XML_CQUANT_REP,
+                                        None, ((expat.model.XML_CTYPE_NAME,
+                                                expat.model.XML_CQUANT_NONE,
+                                                'Item',
+                                                ()
+                                                ),
+                                               )
+                                        ):
             # Special case. As far as I can tell, this only occurs in the
             # eSummary DTD.
             self.items.append(name)
@@ -404,7 +406,7 @@ class DataHandler(object):
                             expat.model.XML_CTYPE_CHOICE)
           and model[1] in (expat.model.XML_CQUANT_NONE,
                            expat.model.XML_CQUANT_OPT)
-          and len(model[3])==1):
+          and len(model[3]) == 1):
             model = model[3][0]
         # PCDATA declarations correspond to strings
         if model[0] in (expat.model.XML_CTYPE_MIXED,
@@ -441,7 +443,7 @@ class DataHandler(object):
                 else:
                     for child in children:
                         count(child)
-            elif name.upper()!="ERROR":
+            elif name.upper() != "ERROR":
                 if quantifier in (expat.model.XML_CQUANT_NONE,
                                   expat.model.XML_CQUANT_OPT):
                     single.append(name)
@@ -449,9 +451,9 @@ class DataHandler(object):
                                     expat.model.XML_CQUANT_REP):
                     multiple.append(name)
         count(model)
-        if len(single)==0 and len(multiple)==1:
+        if len(single) == 0 and len(multiple) == 1:
             self.lists.append(name)
-        elif len(multiple)==0:
+        elif len(multiple) == 0:
             self.dictionaries.append(name)
         else:
             self.structures.update({name: multiple})
@@ -492,10 +494,10 @@ class DataHandler(object):
         urlinfo = _urlparse(systemId)
         # Following attribute requires Python 2.5+
         # if urlinfo.scheme=='http':
-        if urlinfo[0]=='http':
+        if urlinfo[0] == 'http':
             # Then this is an absolute path to the DTD.
             url = systemId
-        elif urlinfo[0]=='':
+        elif urlinfo[0] == '':
             # Then this is a relative path to the DTD.
             # Look at the parent URL to find the full path.
             try:
