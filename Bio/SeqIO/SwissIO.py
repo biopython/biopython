@@ -23,6 +23,8 @@ from Bio import Alphabet
 from Bio import SeqFeature
 from Bio import SwissProt
 
+__docformat__ = "restructuredtext en"
+
 
 def _make_position(location_string, offset=0):
     """Turn a Swiss location position into a SeqFeature position object (PRIVATE).

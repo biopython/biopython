@@ -42,6 +42,8 @@ from Bio import SeqFeature
 from Bio._py3k import _is_int_or_long
 from Bio._py3k import basestring
 
+__docformat__ = "restructuredtext en"
+
 # NOTE
 # ====
 # The "brains" for parsing GenBank, EMBL and IMGT files (and any

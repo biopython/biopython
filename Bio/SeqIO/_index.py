@@ -34,6 +34,8 @@ from Bio import Alphabet
 from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
+__docformat__ = "restructuredtext en"
+
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
     def __init__(self, filename, format, alphabet):

@@ -23,6 +23,8 @@ from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import StringIO
 
+__docformat__ = "restructuredtext en"
+
 
 # For speed try to use cElementTree rather than ElementTree
 try:

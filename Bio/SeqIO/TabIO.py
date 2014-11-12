@@ -10,18 +10,18 @@ You are expected to use this module via the Bio.SeqIO functions.
 The "tab" format is an ad-hoc plain text file format where each sequence is
 on one (long) line.  Each line contains the identifier/description, followed
 by a tab, followed by the sequence.  For example, consider the following
-short FASTA format file:
+short FASTA format file::
 
->ID123456 possible binding site?
-CATCNAGATGACACTACGACTACGACTCAGACTAC
->ID123457 random sequence
-ACACTACGACTACGACTCAGACTACAAN
+    >ID123456 possible binding site?
+    CATCNAGATGACACTACGACTACGACTCAGACTAC
+    >ID123457 random sequence
+    ACACTACGACTACGACTCAGACTACAAN
 
 Apart from the descriptions, this can be represented in the simple two column
-tab separated format as follows:
+tab separated format as follows::
 
-ID123456(tab)CATCNAGATGACACTACGACTACGACTCAGACTAC
-ID123457(tab)ACACTACGACTACGACTCAGACTACAAN
+    ID123456(tab)CATCNAGATGACACTACGACTACGACTCAGACTAC
+    ID123457(tab)ACACTACGACTACGACTCAGACTACAAN
 
 When reading this file, "ID123456" or "ID123457" will be taken as the record's
 .id and .name property.  There is no other information to record.
@@ -38,6 +38,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
+__docformat__ = "restructuredtext en"
+
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
     """Iterates over tab separated lines (as SeqRecord objects).
@@ -45,8 +47,9 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     Each line of the file should contain one tab only, dividing the line
     into an identifier and the full sequence.
 
-    handle - input file
-    alphabet - optional alphabet
+    Arguments:
+     - handle - input file
+     - alphabet - optional alphabet
 
     The first field is taken as the record's .id and .name (regardless of
     any spaces within the text) and the second field is the sequence.
