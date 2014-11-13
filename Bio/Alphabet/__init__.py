@@ -143,6 +143,12 @@ class ThreeLetterProtein(Alphabet):
         "Sec", "Val", "Trp", "Xaa", "Tyr", "Glx",
         ]
 
+    def _upper(self):
+        raise NotImplementedError("We don't have an uppercase three letter protein alphabet.")
+
+    def _lower(self):
+        raise NotImplementedError("We don't have a lowercase three letter protein alphabet.")
+
 # ##### Non per-sequence modifications
 
 # (These are Decorator classes)
