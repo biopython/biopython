@@ -102,7 +102,7 @@ try:
         assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
     print("Failed (good)")
-    #assert str(err) == "No records found in handle", str(err)
+    # assert str(err) == "No records found in handle", str(err)
 
 print("")
 print("Invalid sequence")
