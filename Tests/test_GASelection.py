@@ -109,7 +109,7 @@ class DiversitySelectionTest(unittest.TestCase):
         new_pop = [org]
 
         new_org = self.selector._get_new_organism(new_pop, old_pop)
-        #assert new_org != org, "Got organism already in the new population."
+        # assert new_org != org, "Got organism already in the new population."
         # TODO - Why was the above commented out?
 
     def test_selection(self):

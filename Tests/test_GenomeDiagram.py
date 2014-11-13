@@ -47,7 +47,7 @@ from Bio import SeqUtils
 # Bio.Graphics.GenomeDiagram
 from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
 from Bio.Graphics.GenomeDiagram import CrossLink
-#from Bio.Graphics.GenomeDiagram.Utilities import *
+# from Bio.Graphics.GenomeDiagram.Utilities import *
 
 # Currently private, but we test them here:
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
@@ -138,7 +138,7 @@ def calc_gc_content(sequence):
 
     if gc == 0:
         return 0
-    #print(gc*100.0/(d['A'] +d['T'] + gc))
+    # print(gc*100.0/(d['A'] +d['T'] + gc))
     return gc*1./(d['A'] +d['T'] + gc)
 
 
@@ -251,8 +251,8 @@ class GraphTest(unittest.TestCase):
                                             ["red", "green", "blue"]):
             data = list(zip(range(points), data_values))
             gds_data.new_graph(data, "", style="line",
-                               color = color, altcolor = color,
-                               center = 0)
+                               color=color, altcolor=color,
+                               center=0)
 
         gdd.draw(format='linear',
                  tracklines=False,
@@ -410,7 +410,7 @@ class SigilsTest(unittest.TestCase):
     def test_all_sigils(self):
         """All sigils."""
         for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
-            self.add_track_with_sigils(track_caption = '  sigil="%s"' % glyph,
+            self.add_track_with_sigils(track_caption='  sigil="%s"' % glyph,
                                        sigil=glyph)
         self.finish("GD_sigils")
 
@@ -614,7 +614,7 @@ class DiagramTest(unittest.TestCase):
                                      name="CDS Features",
                                      scale_largetick_interval=1000,
                                      scale_smalltick_interval=100,
-                                     scale_format = "SInt",
+                                     scale_format="SInt",
                                      greytrack_labels=False,
                                      height=0.5)
         # We'll just use one feature set for these features,
@@ -647,11 +647,11 @@ class DiagramTest(unittest.TestCase):
             # Checking it can cope with the old UK spelling colour.
             # Also show the labels perpendicular to the track.
             gds_features.add_feature(feature, colour=color,
-                                     url = url,
+                                     url=url,
                                      sigil="ARROW",
-                                     label_position = None,
-                                     label_size = 8,
-                                     label_angle = 90,
+                                     label_position=None,
+                                     label_size=8,
+                                     label_angle=90,
                                      label=True)
 
         # And draw it...
@@ -662,7 +662,7 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, 'PDF')
 
         # Also check the write_to_string (bytes string) method matches,
-        #(Note the possible confusion over new lines on Windows)
+        # (Note the possible confusion over new lines on Windows)
         assert open(output_filename, "rb").read().replace(b"\r\n", b"\n") \
                == gdd.write_to_string('PDF').replace(b"\r\n", b"\n")
 
@@ -697,11 +697,11 @@ class DiagramTest(unittest.TestCase):
                 else:
                     color = "lightblue"
                 gds_features.add_feature(feature, color=color,
-                                            #label_position = "middle",
-                                            #label_position = "end",
-                                            label_position = "start",
-                                            label_size = 11,
-                                            #label_angle = 90,
+                                            # label_position="middle",
+                                            # label_position="end",
+                                            label_position="start",
+                                            label_size=11,
+                                            # label_angle=90,
                                             sigil="ARROW",
                                             label=True)
 
@@ -726,14 +726,14 @@ class DiagramTest(unittest.TestCase):
                 except KeyError:
                     url = None
 
-                gds_features.add_feature(feature, color = color,
-                                         url = url,
-                                         #label_position = "middle",
-                                         label_size = 10,
-                                         label_color = color,
-                                         #label_angle = 90,
-                                         name = name,
-                                         label = True)
+                gds_features.add_feature(feature, color=color,
+                                         url=url,
+                                         # label_position="middle",
+                                         label_size=10,
+                                         label_color=color,
+                                         # label_angle=90,
+                                         name=name,
+                                         label=True)
                 index += len(site)
             del index
 
@@ -774,7 +774,7 @@ class DiagramTest(unittest.TestCase):
                      scale_smalltick_interval=1e3,
                      greytrack_labels=10,
                      greytrack_font_color="red",
-                     scale_format = "SInt")
+                     scale_format="SInt")
         gdt2 = Track('gene features', greytrack=1,
                    scale_largetick_interval=1e4)
 
@@ -874,7 +874,7 @@ class DiagramTest(unittest.TestCase):
             if feature.type == 'repeat_region':
                 gdfs4.add_feature(feature, color=colors.purple)
 
-        #gdd.cross_track_links = gdd.cross_track_links[:1]
+        # gdd.cross_track_links = gdd.cross_track_links[:1]
 
         gdfs1.set_all_features('label', 1)
         gdfs2.set_all_features('label', 1)
@@ -884,7 +884,7 @@ class DiagramTest(unittest.TestCase):
         gdfs3.set_all_features('hide', 0)
         gdfs4.set_all_features('hide', 0)
 
-        #gdfs1.set_all_features('color', colors.red)
+        # gdfs1.set_all_features('color', colors.red)
         gdfs2.set_all_features('color', colors.blue)
 
         gdt1.add_set(gdfsA)  # Before CDS so under them!
