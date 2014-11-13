@@ -1,0 +1,75 @@
+
+PMID- 23039619
+OWN - NLM
+STAT- MEDLINE
+DA  - 20121008
+DCOM- 20121205
+IS  - 0094-2405 (Print)
+IS  - 0094-2405 (Linking)
+VI  - 39
+IP  - 10
+DP  - 2012 Oct
+TI  - Effects of different parameters in the fast scanning method for HIFU treatment.
+PG  - 5795-813
+LID - 10.1118/1.4748329 [doi]
+AB  - PURPOSE: High-intensity focused ultrasound is a promising method for the
+      noninvasive treatment of benign and malignant tumors. This study analyzes the
+      effects of scanning path, applied power, and geometric characteristics of the
+      transducer on ablation using fast scanning method, a new scanning method that
+      uses high-intensity focused ultrasound at different blood perfusion levels.
+      METHODS: Two transducers, six scanning paths, and three focal patterns were used 
+      to examine the ablation results of the fast scanning method using power densities
+      from 1.35 x 10(7) Wm(3) to 4.5 x 10(7) Wm(3) and blood perfusion rates from 2 x
+      10(-3) mlmls to 16 x 10(-3) mlmls. The Pennes equation was solved using the
+      finite-difference time-domain method to simulate the heating procedure. RESULTS: 
+      Based on the results of the fast-scanning method, the different scanning paths
+      exhibited small effect on the total treatment time supported by both simulation
+      and least-square fit. Similar-sized lesions can result from the five different
+      repeated paths, whereas a random path may lead to relative large fluctuations in 
+      ablation volume because of asymmetry of the lesions. Higher power levels increase
+      the lesion volume and decrease the treatment time required for ablating a target 
+      area using the fast scanning method, whereas increased blood perfusion has the
+      opposite effect on ablation volume and treatment time. A symmetric lesion can be 
+      produced through fast scanning method using a 65-element and a 90-element
+      transducer. However, lesion production using the same operation scheme differs
+      between the two transducers. CONCLUSIONS: Unlike traditional scanning methods,
+      fast scanning method produces a planned lesion regardless of scanning path, as
+      long as the path consists of repeated subsequences. This attribute makes fast
+      scanning method an easy-operation scheme that produces relatively large symmetric
+      lesions in homogeneous tissues. Applied power is the most important factor;
+      however, high blood perfusion levels can limit or even hinder the full ablation
+      of the target area. Therefore, tissue perfusion and transducer type should be
+      given special attention to ensure the success and safety of ablation treatment.
+FAU - Qiao, Shan
+AU  - Qiao S
+AD  - School of Biomedical Engineering, Shanghai Jiao Tong University, Shanghai,
+      People's Republic of China.
+FAU - Shen, Guofeng
+AU  - Shen G
+FAU - Bai, Jingfeng
+AU  - Bai J
+FAU - Chen, Yazhu
+AU  - Chen Y
+LA  - eng
+PT  - Journal Article
+PT  - Research Support, Non-U.S. Gov't
+PL  - United States
+TA  - Med Phys
+JT  - Medical physics
+JID - 0425746
+SB  - IM
+MH  - Blood Circulation
+MH  - High-Intensity Focused Ultrasound Ablation/adverse
+      effects/instrumentation/*methods
+MH  - Humans
+MH  - Models, Biological
+MH  - Sonication
+MH  - Temperature
+MH  - Time Factors
+MH  - Transducers
+EDAT- 2012/10/09 06:00
+MHDA- 2012/12/10 06:00
+CRDT- 2012/10/09 06:00
+AID - 10.1118/1.4748329 [doi]
+PST - ppublish
+SO  - Med Phys. 2012 Oct;39(10):5795-813. doi: 10.1118/1.4748329.
