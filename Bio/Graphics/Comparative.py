@@ -22,15 +22,16 @@ from reportlab.graphics.charts.markers import *
 
 from Bio.Graphics import _write
 
+__docformat__ = "restructuredtext en"
+
 
 class ComparativeScatterPlot(object):
     """Display a scatter-type plot comparing two different kinds of info.
 
     Attributes;
-
      - display_info - a 2D list of the information we'll be outputting. Each
-    top level list is a different data type, and each data point is a two-tuple
-    of the coordinates of a point.
+       top level list is a different data type, and each data point is a
+       two-tuple of the coordinates of a point.
 
     So if you had two distributions of points, it should look like::
 
