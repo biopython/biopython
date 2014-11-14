@@ -28,6 +28,8 @@ BLAST NR database).
 
 We have also done some more work applying PEP8 coding styles to Biopython.
 
+Bio.SeqUtils.MeltingTemp has been rewritten with new functionality.
+
 The new experimental module Bio.CodonAlign has been renamed Bio.codonalign
 (and similar lower case PEP8 style module names have been used for the
 sub-modules within this).
@@ -52,6 +54,7 @@ Kai Blin
 Kevin Wu (first contribution)
 Leighton Pritchard
 Leszek Pryszcz (first contribution)
+Markus Piotrowski
 Matt Shirley (first contribution)
 Mike Cariaso (first contribution)
 Peter Cock
