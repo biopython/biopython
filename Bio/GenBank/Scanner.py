@@ -35,8 +35,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
 from Bio import BiopythonParserWarning
 
-#TODO: Resolve epydoc RST warnings from \n in some docstrings
-#__docformat__ = "restructuredtext en"
+__docformat__ = "restructuredtext en"
+
 
 class InsdcScanner(object):
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
@@ -211,7 +211,7 @@ class InsdcScanner(object):
         return features
 
     def parse_feature(self, feature_key, lines):
-        """Expects a feature as a list of strings, returns a tuple (key, location, qualifiers)
+        r"""Expects a feature as a list of strings, returns a tuple (key, location, qualifiers)
 
         For example given this GenBank feature::
 
@@ -647,7 +647,7 @@ class EmblScanner(InsdcScanner):
         fields = [entry.strip() for entry in fields]
         """
         The tokens represent:
-        
+
            0. Primary accession number
            (space sep)
            1. ??? (e.g. standard)

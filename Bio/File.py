@@ -43,13 +43,13 @@ except ImportError:
     _sqlite = None
     pass
 
-# Seems epydoc does not like \n inside a docstring doctest
-# __docformat__ = "restructuredtext en"
+__docformat__ = "restructuredtext en"
 
 
 @contextlib.contextmanager
 def as_handle(handleish, mode='r', **kwargs):
-    """
+    r"""Context manager to ensure we are using a handle.
+
     Context manager for arguments that can be passed to
     SeqIO and AlignIO read, write, and parse methods: either file objects or strings.
 
