@@ -596,7 +596,7 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
 def Tm_Wallace(seq, check=True, strict=True):
     """ Calculate and return the Tm using the 'Wallace rule'.
 
-    Tm = 4°C*(G+C) + 2°C*(A+T)
+    Tm = 4 degC * (G + C) + 2 degC * (A+T)
 
     The Wallace rule (Thein & Wallace 1986, in Human genetic diseases: a
     practical approach, 33-50) is often used as rule of thumb for approximate
