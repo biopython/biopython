@@ -12,11 +12,11 @@ temperature of oligonucleotides:
 
 1. Tm_Wallace: 'Rule of thumb'
 2. Tm_GC: Empirical formulas based on GC content. Salt and mismatch corrections
-          can be included.
+   can be included.
 3. Tm_NN: Calculation based on nearest neighbor thermodynamics. Several tables
-          for DNA/DNA, DNA/RNA and RNA/RNA hybridizations are included.
-          Correction for mismatches, dangling ends, salt concentration and
-          other additives are available.
+   for DNA/DNA, DNA/RNA and RNA/RNA hybridizations are included.
+   Correction for mismatches, dangling ends, salt concentration and other
+   additives are available.
 
 Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
 however, recommended to use Tm_NN instead, since Tm_staluc may be depreceated
@@ -24,15 +24,15 @@ in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
 with default parameters gives (essentially) the same results.
 
 General parameters for most Tm methods:
-seq    -- A Biopython sequence object or a string.
-check  -- Checks if the sequence is valid for the given method (default=True).
-          In general, whitespaces and non-base characters are removed and
-          characters are converted to uppercase. RNA will be backtranscribed.
-strict -- Do not allow base characters or neighbor duplex keys (e.g. 'AT/NA').
-          that could not or not unambigiously be evaluated for the respective
-          method (default=True). Note that W (= A or T) and S (= C or G) are
-          not ambiguous for Tm_Wallace and Tm_GC. If 'False', average values
-          (if applicable) will be used.
+ - seq -- A Biopython sequence object or a string.
+ - check -- Checks if the sequence is valid for the given method (default=True).
+   In general, whitespaces and non-base characters are removed and
+   characters are converted to uppercase. RNA will be backtranscribed.
+ - strict - Do not allow base characters or neighbor duplex keys (e.g. 'AT/NA').
+   that could not or not unambigiously be evaluated for the respective
+   method (default=True). Note that W (= A or T) and S (= C or G) are
+   not ambiguous for Tm_Wallace and Tm_GC. If 'False', average values
+   (if applicable) will be used.
 
 This module is not able to detect self-complementary and it will not use
 alignment tools to align an oligonucleotide sequence to its target sequence.
@@ -41,17 +41,18 @@ about bulbs and loops). These parameters have to be handed over to the
 respective method.
 
 Other public methods of this module:
-make_table     : To create a table with thermodynamic data.
-salt_correction: To adjust Tm to a given salt concentration by different
-                 formulas. This method is called from Tm_GC and Tm_NN but may
-                 also be accessed 'manually'. It returns a correction term, not
-                 a corrected Tm!
-chem_correction: To adjust Tm regarding the chemical additives DMSO and
-                 formaldehyde. The method returns a corrected Tm. Chemical
-                 correction is not an integral part of the Tm methods and must
-                 be called additionally.
+ - make_table     : To create a table with thermodynamic data.
+ - salt_correction: To adjust Tm to a given salt concentration by different
+   formulas. This method is called from Tm_GC and Tm_NN but may
+   also be accessed 'manually'. It returns a correction term, not
+   a corrected Tm!
+ - chem_correction: To adjust Tm regarding the chemical additives DMSO and
+   formaldehyde. The method returns a corrected Tm. Chemical
+   correction is not an integral part of the Tm methods and must
+   be called additionally.
 
 Examples:
+
     >>> from Bio.SeqUtils import MeltingTemp as mt
     >>> from Bio.Seq import Seq
     >>> mystring = 'CGTTCCAAAGATGTGGGCATGAGCTTAC'
@@ -71,12 +72,14 @@ errors have been fixed in this version.
 
 New Tm_NN can do slightly more:
 Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
+
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1))  # Breslauer '86
     72.19
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN2))  # Sugimoto '96
     65.47
 
 Several types of salc correction (for Tm_NN and Tm_GC):
+
     >>> for saltcorr in range(1,8):
     ...     print('Type: %d,' % saltcorr, end=' ')
     ...     print('Tm: %0.2f' % mt.Tm_NN(myseq, saltcorr=saltcorr))
@@ -91,6 +94,7 @@ Several types of salc correction (for Tm_NN and Tm_GC):
 
 Correction for other monovalent cations (K+, Tris), Mg2+ and dNTPs according
 to von Ahsen et al. (2001) or Owczarzy et al. (2008) (for Tm_NN and Tm_GC):
+
     >>> print('%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10))
     60.79
     >>> print('%0.2f' % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5))
@@ -101,10 +105,13 @@ to von Ahsen et al. (2001) or Owczarzy et al. (2008) (for Tm_NN and Tm_GC):
     ...                          saltcorr=7))
     66.04
 
-Dangling ends and mismatches, e.g.:
-Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC         CGTTCCaAAGATGTGGGCATGAGCTTAC
-           ::::::X:::::::::::::::::::::   or    ::::::X:::::::::::::::::::::
-Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
+Dangling ends and mismatches, e.g.::
+
+    Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC         CGTTCCaAAGATGTGGGCATGAGCTTAC
+               ::::::X:::::::::::::::::::::   or    ::::::X:::::::::::::::::::::
+    Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
+
+Here:
 
     >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC'))
     60.32
@@ -118,6 +125,7 @@ Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
 Make your own tables, or update/extend existing tables. E.g., add values for
 locked nucleotides. Here, 'locked A' (and its complement) should be represented
 by '1':
+
     >>> mytable = mt.make_table(oldtable=mt.DNA_NN3,
     ...                         values={'A1/T1':(-6.608, -17.235),
     ...                         '1A/1T':(-6.893, -15.923)})
@@ -138,6 +146,7 @@ import warnings
 from Bio import SeqUtils, Seq
 from Bio import BiopythonWarning, BiopythonDeprecationWarning
 
+__docformat__ = "restructuredtext en"
 
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation
@@ -275,7 +284,7 @@ DNA_IMM1 = {
     'CA/GI': (-7.0, -20.0), 'GA/CI': (-7.6, -20.2),
     'AI/TT': (0.49, -0.7), 'TI/AT': (-6.5, -22.0), 'AT/TI': (-5.6, -18.7),
     'TT/AI': (-0.8, -4.3), 'CI/GT': (-1.0, -2.4), 'GI/CT': (-3.5, -10.6),
-    'CT/GI': (0.1,  -1.0), 'GT/CI': (-4.3, -12.1),
+    'CT/GI': (0.1, -1.0), 'GT/CI': (-4.3, -12.1),
     'AI/TG': (-4.9, -15.8), 'TI/AG': (-1.9, -8.5), 'AG/TI': (0.1, -1.8),
     'TG/AI': (1.0, 1.0), 'CI/GG': (7.1, 21.3), 'GI/CG': (-1.1, -3.2),
     'CG/GI': (5.8, 16.9), 'GG/CI': (-7.6, -22.0),
@@ -422,44 +431,39 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     Depending on the Tm calculation, the term will correct Tm or entropy. To
     calculate corrected Tm values, different operations need to be applied:
-    For methods 1-4: Tm(new) = Tm(old) + corr
-        method    5: deltaH(new) = deltaH(old) + corr
-        methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)
+
+     - methods 1-4: Tm(new) = Tm(old) + corr
+     - method 5: deltaH(new) = deltaH(old) + corr
+     - methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)
 
     Parameters:
-    Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To have
-        a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
-        dNTPS is non-zero, a 'sodium-equivalent' concentration is calculated
-        according to von Ahsen et al. (2001, Clin Chem 47: 1956-1961):
-        [Na_eq] = [Na+] + [K+] + [Tris]/2 + 120*([Mg2+] - [dNTPs])^0.5
+     - Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To have
+       a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
+       dNTPS is non-zero, a 'sodium-equivalent' concentration is calculated
+       according to von Ahsen et al. (2001, Clin Chem 47: 1956-1961):
+       [Na_eq] = [Na+] + [K+] + [Tris]/2 + 120*([Mg2+] - [dNTPs])^0.5
+       If [dNTPs] >= [Mg2+]: [Na_eq] = [Na+] + [K+] + [Tris]/2
+     - method: Which method to be applied. Methods 1-4 correct Tm, method 5
+       corrects deltaS, methods 6 and 7 correct 1/Tm. The methods are:
 
-        If [dNTPs] >= [Mg2+]: [Na_eq] = [Na+] + [K+] + [Tris]/2
-    method: Which method to be applied. Methods 1-4 correct Tm, method 5
-        corrects deltaS, methods 6 and 7 correct 1/Tm.
-
-        Method 1: 16.6 x log[Na+]
-        (Schildkraut & Lifson (1965), Biopolymers 3: 195–208)
-
-        Method 2: 16.6 x log([Na+]/(1.0 + 0.7*[Na+]))
-        (Wetmur (1991), Crit Rev Biochem Mol Biol 126: 227–259)
-
-        Method 3: 12.5 x log(Na+]
-        (SantaLucia et al. (1996), Biochemistry 35: 3555-3562
-
-        Method 4: 11.7 x log[Na+]
-        (SantaLucia (1998), Proc Natl Acad Sci USA 95: 1460-1465
-
-        Method 5: Correction for deltaS: 0.368 x (N-1) x ln[Na+]
-        (SantaLucia (1998), Proc Natl Acad Sci USA 95: 1460-1465)
-
-        Method 6: (4.29(%GC)-3.95)x1e-5 x ln[Na+] + 9.40e-6 x ln[Na+]^2
-        (Owczarzy et al. (2004), Biochemistry 43: 3537-3554)
-
-        Method 7: Complex formula with decision tree and 7 empirical constants.
-                  Mg2+ is corrected for dNTPs binding (if present)
-        (Owczarzy et al. (2008), Biochemistry 47: 5336-5353)
+       1. 16.6 x log[Na+]
+          (Schildkraut & Lifson (1965), Biopolymers 3: 195–208)
+       2. 16.6 x log([Na+]/(1.0 + 0.7*[Na+]))
+          (Wetmur (1991), Crit Rev Biochem Mol Biol 126: 227–259)
+       3. 12.5 x log(Na+]
+          (SantaLucia et al. (1996), Biochemistry 35: 3555-3562
+       4. 11.7 x log[Na+]
+          (SantaLucia (1998), Proc Natl Acad Sci USA 95: 1460-1465
+       5. Correction for deltaS: 0.368 x (N-1) x ln[Na+]
+          (SantaLucia (1998), Proc Natl Acad Sci USA 95: 1460-1465)
+       6. (4.29(%GC)-3.95)x1e-5 x ln[Na+] + 9.40e-6 x ln[Na+]^2
+          (Owczarzy et al. (2004), Biochemistry 43: 3537-3554)
+       7. Complex formula with decision tree and 7 empirical constants.
+          Mg2+ is corrected for dNTPs binding (if present)
+          (Owczarzy et al. (2008), Biochemistry 47: 5336-5353)
 
     Examples:
+
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
         -21.60
@@ -480,15 +484,15 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     corr = 0
     if not method:
         return corr
-    Mon = Na + K + Tris/2.0  # Note: all these values are millimolar
-    mg = Mg*1e-3             # Lowercase ions (mg, mon, dntps) are molar
+    Mon = Na + K + Tris / 2.0  # Note: all these values are millimolar
+    mg = Mg * 1e-3             # Lowercase ions (mg, mon, dntps) are molar
     # Na equivalent according to von Ahsen et al. (2001):
     if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7:
         if dNTPs < Mg:
             # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
             # [Mg2+], free Mg2+ is considered not to be relevant.
-            Mon += 120*math.sqrt(Mg-dNTPs)
-    mon = Mon*1e-3
+            Mon += 120 * math.sqrt(Mg - dNTPs)
+    mon = Mon * 1e-3
     # Note: math.log = ln(), math.log10 = log()
     if method in range(1, 7) and not mon:
         raise ValueError('Total ion concentration of zero is not allowed in ' +
@@ -496,40 +500,40 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     if method == 1:
         corr = 16.6 * math.log10(mon)
     if method == 2:
-        corr = 16.6 * math.log10((mon)/(1.0 + 0.7*(mon)))
+        corr = 16.6 * math.log10((mon) / (1.0 + 0.7 * (mon)))
     if method == 3:
         corr = 12.5 * math.log10(mon)
     if method == 4:
         corr = 11.7 * math.log10(mon)
     if method == 5:
-        corr = 0.368 * (len(seq)-1) * math.log(mon)
+        corr = 0.368 * (len(seq) - 1) * math.log(mon)
     if method == 6:
-        corr = (4.29*SeqUtils.GC(seq)/100 - 3.95) * 1e-5*math.log(mon) + \
-               9.40e-6*math.log(mon)**2
+        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon) + \
+            9.40e-6 * math.log(mon) ** 2
     if method == 7:
         a, b, c, d = 3.92, -0.911, 6.26, 1.42
         e, f, g = -48.2, 52.5, 8.31
         if dNTPs > 0:
-            dntps = dNTPs*1e-3
+            dntps = dNTPs * 1e-3
             ka = 3e4  # Dissociation constant for Mg:dNTP
             # Free Mg2+ calculation:
-            mg = (-(ka*dntps - ka*mg + 1.0) +
-                  math.sqrt((ka*dntps - ka*mg + 1.0)**2 + 4.0*ka*mg))/(2.0*ka)
+            mg = (-(ka * dntps - ka * mg + 1.0) +
+                  math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 + 4.0 * ka * mg)) / (2.0 * ka)
         if Mon > 0:
-            R = math.sqrt(mg)/mon
+            R = math.sqrt(mg) / mon
             if R < 0.22:
-                corr = (4.29*SeqUtils.GC(seq)/100 - 3.95) * \
-                       1e-5*math.log(mon) + 9.40e-6*math.log(mon)**2
+                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * \
+                    1e-5 * math.log(mon) + 9.40e-6 * math.log(mon) ** 2
                 return corr
             elif R < 6.0:
-                a = 3.92*(0.843 - 0.352*math.sqrt(mon) * math.log(mon))
-                d = 1.42*(1.279 - 4.03e-3*math.log(mon) -
-                          8.03e-3*math.log(mon)**2)
-                g = 8.31*(0.486 - 0.258*math.log(mon) +
-                          5.25e-3*math.log(mon)**3)
-        corr = (a + b*math.log(mg) + (SeqUtils.GC(seq)/100) *
-                (c + d*math.log(mg)) + (1/(2.0*(len(seq)-1))) *
-                (e + f*math.log(mg) + g*math.log(mg)**2))*1e-5
+                a = 3.92 * (0.843 - 0.352 * math.sqrt(mon) * math.log(mon))
+                d = 1.42 * (1.279 - 4.03e-3 * math.log(mon) -
+                            8.03e-3 * math.log(mon) ** 2)
+                g = 8.31 * (0.486 - 0.258 * math.log(mon) +
+                            5.25e-3 * math.log(mon) ** 3)
+        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100) *
+                (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1))) *
+                (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
     if method > 7:
         raise ValueError('Allowed values for parameter \'method\' are 1-7.')
     return corr
@@ -542,21 +546,25 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
     Please note that these corrections are +/- rough approximations.
 
     Arguments:
-    Tm: Melting temperature.
-    DMSO: Percent DMSO.
-    fmd: Formamide concentration in %(fmdmethod=1) or in molar (fmdmethod=2).
-    DMSOfactor: How much should Tm decreases per percent DMSO. Default=0.65
-        (von Ahsen et al. 2001). Other published values are 0.5, 0.6 and 0.675.
-    fmdfactor: How much should Tm decrease per percent formamide. Default=0.65.
-        Several papers report factors between 0.6 and 0.72.
-    fmdmethod: 1: Tm = Tm - factor(%formamide) (Default)
-               2: Tm = Tm + (0.453(f(GC)) - 2.88) x [formamide]
-                       f(GC) is fraction of GC.
-        Note (again) that in fmdmethod=1 formamide concentration is given in %,
-        while in fmdmethod=2 it is given in molar.
-    GC: GC content in percent.
+     - Tm: Melting temperature.
+     - DMSO: Percent DMSO.
+     - fmd: Formamide concentration in %(fmdmethod=1) or in molar (fmdmethod=2).
+     - DMSOfactor: How much should Tm decreases per percent DMSO. Default=0.65
+       (von Ahsen et al. 2001). Other published values are 0.5, 0.6 and 0.675.
+     - fmdfactor: How much should Tm decrease per percent formamide. Default=0.65.
+       Several papers report factors between 0.6 and 0.72.
+     - fmdmethod:
+
+         1. Tm = Tm - factor(%formamide) (Default)
+         2. Tm = Tm + (0.453(f(GC)) - 2.88) x [formamide]
+
+       Here f(GC) is fraction of GC.
+       Note (again) that in fmdmethod=1 formamide concentration is given in %,
+       while in fmdmethod=2 it is given in molar.
+     - GC: GC content in percent.
 
     Examples:
+
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> mt.chem_correction(70)
         70
@@ -579,7 +587,7 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
         if fmdmethod == 2:
             if GC is None or GC < 0:
                 raise ValueError('\'GC\' is missing or negative')
-            Tm += (0.453*(GC/100.0) - 2.88) * fmd   # Note: fmd is molar
+            Tm += (0.453 * (GC / 100.0) - 2.88) * fmd   # Note: fmd is molar
         if fmdmethod not in (1, 2):
             raise ValueError('\'fmdmethod\' must be 1 or 2')
     return Tm
@@ -610,13 +618,13 @@ def Tm_Wallace(seq, check=True, strict=True):
     if check:
         seq = _check(seq, 'Tm_Wallace')
 
-    Tm = 2*(sum(map(seq.count, ('A', 'T', 'W')))) + \
-         4*(sum(map(seq.count, ('C', 'G', 'S'))))
+    Tm = 2 * (sum(map(seq.count, ('A', 'T', 'W')))) + \
+        4 * (sum(map(seq.count, ('C', 'G', 'S'))))
 
     # Intermediate values for ambiguous positions:
-    tmp = 3*(sum(map(seq.count, ('K', 'M', 'N', 'R', 'Y')))) + \
-          10/3.0 * (sum(map(seq.count, ('B', 'V')))) + \
-          8/3.0 * (sum(map(seq.count, ('D', 'H'))))
+    tmp = 3 * (sum(map(seq.count, ('K', 'M', 'N', 'R', 'Y')))) + \
+        10 / 3.0 * (sum(map(seq.count, ('B', 'V')))) + \
+        8 / 3.0 * (sum(map(seq.count, ('D', 'H'))))
     if strict and tmp:
         raise ValueError('ambiguous bases B, D, H, K, M, N, R, V, Y not ' +
                          'allowed when strict=True')
@@ -641,63 +649,54 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
     69.20
 
     Arguments:
-    valueset: A few often cited variants are included:
-        1: Tm = 69.3 + 0.41(%GC) - 650/N
-        (Marmur & Doty 1962, J Mol Biol 5: 109–118; Chester & Marshak 1993),
-        Anal Biochem 209: 284-290)
+     - valueset: A few often cited variants are included:
 
-        2: Tm = 81.5 + 0.41(%GC) - 675/N - %mismatch
-        'QuikChange' formula. Recommended (by the manufacturer) for the design
-        of primers for QuikChange mutagenesis.
+        1. Tm = 69.3 + 0.41(%GC) - 650/N
+           (Marmur & Doty 1962, J Mol Biol 5: 109–118; Chester & Marshak 1993),
+           Anal Biochem 209: 284-290)
+        2. Tm = 81.5 + 0.41(%GC) - 675/N - %mismatch
+           'QuikChange' formula. Recommended (by the manufacturer) for the design
+           of primers for QuikChange mutagenesis.
+        3. Tm = 81.5 + 0.41(%GC) - 675/N + 16.6 x log[Na+]
+           (Marmur & Doty 1962, J Mol Biol 5: 109–118; Schildkraut & Lifson 1965,
+           Biopolymers 3: 195–208)
+        4. Tm = 81.5 + 0.41(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). This is the
+           standard formula in approximative mode of MELTING 4.3.
+        5. Tm = 78 + 0.7(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). For RNA.
+        6. Tm = 67 + 0.8(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). For RNA/DNA
+           hybrids.
+        7. Tm = 81.5 + 0.41(%GC) - 600/N + 16.6 x log[Na+]
+           Used by Primer3Plus to calculate the product Tm. Default set.
+        8. Tm = 77.1 + 0.41(%GC) - 528/N + 11.7 x log[Na+]
+           (von Ahsen et al. 2001, Clin Chem 47: 1956-1961). Recommended 'as a
+           tradeoff between accuracy and ease of use'.
 
-        3: Tm = 81.5 + 0.41(%GC) - 675/N + 16.6 x log[Na+]
-        (Marmur & Doty 1962, J Mol Biol 5: 109–118; Schildkraut & Lifson 1965,
-        Biopolymers 3: 195–208)
-
-        4: Tm = 81.5 + 0.41(%GC) - 500/N +
-                16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
-        (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). This is the
-        standard formula in approximative mode of MELTING 4.3.
-
-        5: Tm = 78 + 0.7(%GC) - 500/N +
-                16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
-        (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). For RNA.
-
-        6: Tm = 67 + 0.8(%GC) - 500/N +
-                16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
-        (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). For RNA/DNA
-        hybrids.
-
-        7: Tm = 81.5 + 0.41(%GC) - 600/N + 16.6 x log[Na+]
-        Used by Primer3Plus to calculate the product Tm. Default set.
-
-        8: Tm = 77.1 + 0.41(%GC) - 528/N + 11.7 x log[Na+]
-        (von Ahsen et al. 2001, Clin Chem 47: 1956-1961). Recommended 'as a
-        tradeoff between accuracy and ease of use'.
-
-    userset: Tuple of four values for A, B, C, and D. Usersets override
-        valuesets.
-    Na, K, Tris, Mg, dNTPs: Concentration of the respective ions [mM]. If any
-        of K, Tris, Mg and dNTPS is non-zero, a 'sodium-equivalent'
-        concentration is calculated and used for salt correction (von Ahsen et
-        al., 2001).
-    saltcorr: Type of salt correction (see method salt_correction). Default=5.
-        0 or None means no salt correction.
-    mismatch: If 'True' (default) every 'X' in the sequence is counted as
-        mismatch.
+     - userset: Tuple of four values for A, B, C, and D. Usersets override
+       valuesets.
+     - Na, K, Tris, Mg, dNTPs: Concentration of the respective ions [mM]. If any
+       of K, Tris, Mg and dNTPS is non-zero, a 'sodium-equivalent'
+       concentration is calculated and used for salt correction (von Ahsen et
+       al., 2001).
+     - saltcorr: Type of salt correction (see method salt_correction). Default=5.
+       0 or None means no salt correction.
+     - mismatch: If 'True' (default) every 'X' in the sequence is counted as
+       mismatch.
 
     """
     if saltcorr == 5:
-            raise ValueError('salt-correction method 5 not applicable' +
-                             'to Tm_GC')
+        raise ValueError('salt-correction method 5 not applicable' +
+                         'to Tm_GC')
     seq = str(seq)
     if check:
         seq = _check(seq, 'Tm_GC')
     pGC = SeqUtils.GC(seq)
     # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
-    tmp = sum(map(seq.count, ('K', 'M', 'N', 'R', 'Y'))) * 50.0/len(seq) + \
-          sum(map(seq.count, ('B', 'V'))) * 66.67/len(seq) + \
-          sum(map(seq.count, ('D', 'H'))) * 33.33/len(seq)
+    tmp = sum(map(seq.count, ('K', 'M', 'N', 'R', 'Y'))) * 50.0 / len(seq) + \
+        sum(map(seq.count, ('B', 'V'))) * 66.67 / len(seq) + \
+        sum(map(seq.count, ('D', 'H'))) * 33.33 / len(seq)
     if strict and tmp:
         raise ValueError('ambiguous bases B, D, H, K, M, N, R, V, Y not ' +
                          'allowed when strict=True')
@@ -733,12 +732,12 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
     if valueset > 8:
         raise ValueError('allowed values for parameter \'valueset\' are 0-8.')
 
-    Tm = A + B*pGC - C/(len(seq)*1.0)
+    Tm = A + B * pGC - C / (len(seq) * 1.0)
     if saltcorr:
         Tm += salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs,
                               seq=seq, method=saltcorr)
     if mismatch:
-        Tm -= D * (seq.count('X')*100.0/len(seq))
+        Tm -= D * (seq.count('X') * 100.0 / len(seq))
     return Tm
 
 
@@ -748,61 +747,67 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
           dNTPs=0, saltcorr=5):
     """Return the Tm using nearest neighbor thermodynamics.
 
-    Argument:
-    seq: The primer/probe sequence as string or Biopython sequence object. For
-        RNA/DNA hybridizations seq must be the RNA sequence.
-    c_seq: Complementary sequence. The sequence of the template/target in
-        3'->5' direction. c_seq is necessary for mismatch correction and
-        dangling-ends correction. Both corrections will automatically be
-        applied if mismatches or dangling ends are present. Default=None.
-    shift: Shift of the primer/probe sequence on the template/target sequence,
-        e.g.:
+    Arguments:
+     - seq: The primer/probe sequence as string or Biopython sequence object. For
+       RNA/DNA hybridizations seq must be the RNA sequence.
+     - c_seq: Complementary sequence. The sequence of the template/target in
+       3'->5' direction. c_seq is necessary for mismatch correction and
+       dangling-ends correction. Both corrections will automatically be
+       applied if mismatches or dangling ends are present. Default=None.
+     - shift: Shift of the primer/probe sequence on the template/target sequence,
+       e.g.::
+
                            shift=0       shift=1        shift= -1
         Primer (seq):      5' ATGC...    5'  ATGC...    5' ATGC...
         Template (c_seq):  3' TACG...    3' CTACG...    3'  ACG...
 
-        The shift parameter is necessary to align seq and c_seq if they have
-        different lengths or if they should have dangling ends. Default=0
-    table: Thermodynamic NN values, eight tables are implemented:
-        For DNA/DNA hybridizations:
-        DNA_NN1: values from Breslauer et al. (1986)
-        DNA_NN2: values from Sugimoto et al. (1996)
-        DNA_NN3: values from Allawi & SantaLucia (1997) (default)
-        DNA_NN4: values from SantaLucia & Hicks (2004)
+       The shift parameter is necessary to align seq and c_seq if they have
+       different lengths or if they should have dangling ends. Default=0
+     - table: Thermodynamic NN values, eight tables are implemented:
+       For DNA/DNA hybridizations:
 
-        For RNA/RNA hybridizations:
-        RNA_NN1: values from Freier et al. (1986)
-        RNA_NN2: values from Xia et al. (1998)
-        RNA_NN3: valuse from Chen et al. (2012)
+        - DNA_NN1: values from Breslauer et al. (1986)
+        - DNA_NN2: values from Sugimoto et al. (1996)
+        - DNA_NN3: values from Allawi & SantaLucia (1997) (default)
+        - DNA_NN4: values from SantaLucia & Hicks (2004)
 
-        For RNA/DNA hybridizations:
-        R_DNA_NN1: values from Sugimoto et al. (1995)
+       For RNA/RNA hybridizations:
 
-        Use the module's maketable method to make a new table or to update one
-        one of the implemented tables.
-    tmm_table: Thermodynamic values for terminal mismatches. Default: DNA_TMM1
-        (SantaLucia & Peyret, 2001)
-    imm_table: Thermodynamic values for internal mismatches, may include
-        insosine mismatches. Default: DNA_IMM1 (Allawi & SantaLucia, 1997-1998;
-        Peyret et al., 1999; Watkins & SantaLucia, 2005)
-    de_table: Thermodynamic values for dangling ends:
-        DNA_DE1: for DNA. Values from Bommarito et al. (2000). Default
-        RNA_DE1: for RNA. Values from Turner & Mathews (2010)
-    dnac1: Concentration of the higher concentrated strand [nM]. Typically this
-        will be the primer (for PCR) or the probe. Default=25.
-    dnac2: Concentration of the lower concentrated strand [nM]. In PCR this is
-        the template strand which concentration is typically very low and may
-        be ignored (dnac2=0). In oligo/oligo hybridization experiments, dnac1
-        equals dnac1. Default=25.
-        MELTING and Primer3Plus use k = [Oligo(Total)]/4 by default. To mimic
-        this behaviour, you have to divide [Oligo(Total)] by 2 and assign this
-        concentration to dnac1 and dnac2. E.g., Total oligo concentration of
-        50 nM in Primer3Plus means dnac1=25, dnac2=25.
-    selfcomp: Is the sequence self-complementary? Default=False. If 'True' the
-        primer is thought binding to itself, thus dnac2 is not considered.
-    Na, K, Tris, Mg, dNTPs: See method 'Tm_GC' for details. Defaults: Na=50,
-        K=0, Tris=0, Mg=0, dNTPs=0.
-    saltcorr: See method 'Tm_GC'. Default=5. 0 means no salt correction.
+        - RNA_NN1: values from Freier et al. (1986)
+        - RNA_NN2: values from Xia et al. (1998)
+        - RNA_NN3: valuse from Chen et al. (2012)
+
+       For RNA/DNA hybridizations:
+
+        - R_DNA_NN1: values from Sugimoto et al. (1995)
+
+       Use the module's maketable method to make a new table or to update one
+       one of the implemented tables.
+     - tmm_table: Thermodynamic values for terminal mismatches. Default: DNA_TMM1
+       (SantaLucia & Peyret, 2001)
+     - imm_table: Thermodynamic values for internal mismatches, may include
+       insosine mismatches. Default: DNA_IMM1 (Allawi & SantaLucia, 1997-1998;
+       Peyret et al., 1999; Watkins & SantaLucia, 2005)
+     - de_table: Thermodynamic values for dangling ends:
+
+        - DNA_DE1: for DNA. Values from Bommarito et al. (2000). Default
+        - RNA_DE1: for RNA. Values from Turner & Mathews (2010)
+
+     - dnac1: Concentration of the higher concentrated strand [nM]. Typically this
+       will be the primer (for PCR) or the probe. Default=25.
+     - dnac2: Concentration of the lower concentrated strand [nM]. In PCR this is
+       the template strand which concentration is typically very low and may
+       be ignored (dnac2=0). In oligo/oligo hybridization experiments, dnac1
+       equals dnac1. Default=25.
+       MELTING and Primer3Plus use k = [Oligo(Total)]/4 by default. To mimic
+       this behaviour, you have to divide [Oligo(Total)] by 2 and assign this
+       concentration to dnac1 and dnac2. E.g., Total oligo concentration of
+       50 nM in Primer3Plus means dnac1=25, dnac2=25.
+     - selfcomp: Is the sequence self-complementary? Default=False. If 'True' the
+       primer is thought binding to itself, thus dnac2 is not considered.
+     - Na, K, Tris, Mg, dNTPs: See method 'Tm_GC' for details. Defaults: Na=50,
+       K=0, Tris=0, Mg=0, dNTPs=0.
+     - saltcorr: See method 'Tm_GC'. Default=5. 0 means no salt correction.
 
     """
     seq = str(seq)
@@ -825,13 +830,13 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     if shift or len(seq) != len(c_seq):
         # Align both sequences using the shift parameter
         if shift > 0:
-            tmpseq = '.'*shift + seq
+            tmpseq = '.' * shift + seq
         if shift < 0:
-            tmp_cseq = '.'*abs(shift) + c_seq
+            tmp_cseq = '.' * abs(shift) + c_seq
         if len(tmp_cseq) > len(tmpseq):
-            tmpseq += (len(tmp_cseq)-len(tmpseq))*'.'
+            tmpseq += (len(tmp_cseq) - len(tmpseq)) * '.'
         if len(tmp_cseq) < len(tmpseq):
-            tmp_cseq += (len(tmpseq)-len(tmp_cseq))*'.'
+            tmp_cseq += (len(tmpseq) - len(tmp_cseq)) * '.'
         # Remove 'over-dangling' ends
         while tmpseq.startswith('..') or tmp_cseq.startswith('..'):
             tmpseq = tmpseq[1:]
@@ -885,11 +890,11 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
 
     # Type: Penalty if 5' end is T
     if seq.startswith('T'):
-            deltaH += nn_table['init_5T/A'][dH]
-            deltaS += nn_table['init_5T/A'][dS]
+        deltaH += nn_table['init_5T/A'][dH]
+        deltaS += nn_table['init_5T/A'][dS]
     if seq.endswith('A'):
-            deltaH += nn_table['init_5T/A'][dH]
-            deltaS += nn_table['init_5T/A'][dS]
+        deltaH += nn_table['init_5T/A'][dH]
+        deltaS += nn_table['init_5T/A'][dS]
 
     # Type: Different values for G/C or A/T terminal basepairs
     ends = seq[0] + seq[-1]
@@ -901,9 +906,9 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     deltaS += nn_table['init_G/C'][dS] * GC
 
     # Finally, the 'zipping'
-    for basenumber in range(len(tmpseq)-1):
-        neighbors = tmpseq[basenumber:basenumber+2] + '/' + \
-                    tmp_cseq[basenumber:basenumber+2]
+    for basenumber in range(len(tmpseq) - 1):
+        neighbors = tmpseq[basenumber:basenumber + 2] + '/' + \
+            tmp_cseq[basenumber:basenumber + 2]
         if neighbors in imm_table:
             deltaH += imm_table[neighbors][dH]
             deltaS += imm_table[neighbors][dS]
@@ -925,9 +930,9 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
                               '\'. Calculation will be wrong',
                               BiopythonWarning)
 
-    k = (dnac1 - (dnac2/2.0))*1e-9
+    k = (dnac1 - (dnac2 / 2.0)) * 1e-9
     if selfcomp:
-        k = dnac1*1e-9
+        k = dnac1 * 1e-9
         deltaH += nn_table['sym'][dH]
         deltaS += nn_table['sym'][dS]
     R = 1.987  # universal gas constant in Cal/degrees C*Mol
@@ -936,12 +941,12 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
                                method=saltcorr, seq=seq)
     if saltcorr == 5:
         deltaS += corr
-    Tm = (1000*deltaH)/(deltaS + (R*(math.log(k)))) - 273.15
+    Tm = (1000 * deltaH) / (deltaS + (R * (math.log(k)))) - 273.15
     if saltcorr in (1, 2, 3, 4):
         Tm += corr
     if saltcorr in (6, 7):
         # Tm = 1/(1/Tm + corr)
-        Tm = (1/(1/(Tm+273.15) + corr)-273.15)
+        Tm = (1 / (1 / (Tm + 273.15) + corr) - 273.15)
 
     return Tm
 
@@ -986,9 +991,9 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     warnings.warn('Tm_staluc may be depreciated in the future. Use Tm_NN ' +
                   'instead.', BiopythonDeprecationWarning)
     if not rna:
-        return Tm_NN(s, dnac1=dnac/2.0, dnac2=dnac/2.0, Na=saltc)
+        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc)
     elif rna == 1:
-        return Tm_NN(s, dnac1=dnac/2.0, dnac2=dnac/2.0, Na=saltc,
+        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc,
                      nn_table=RNA_NN2)
     else:
         raise ValueError("rna=%r not supported" % rna)
