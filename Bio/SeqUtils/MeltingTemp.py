@@ -447,9 +447,9 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
        corrects deltaS, methods 6 and 7 correct 1/Tm. The methods are:
 
        1. 16.6 x log[Na+]
-          (Schildkraut & Lifson (1965), Biopolymers 3: 195–208)
+          (Schildkraut & Lifson (1965), Biopolymers 3: 195-208)
        2. 16.6 x log([Na+]/(1.0 + 0.7*[Na+]))
-          (Wetmur (1991), Crit Rev Biochem Mol Biol 126: 227–259)
+          (Wetmur (1991), Crit Rev Biochem Mol Biol 126: 227-259)
        3. 12.5 x log(Na+]
           (SantaLucia et al. (1996), Biochemistry 35: 3555-3562
        4. 11.7 x log[Na+]
@@ -652,21 +652,21 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
      - valueset: A few often cited variants are included:
 
         1. Tm = 69.3 + 0.41(%GC) - 650/N
-           (Marmur & Doty 1962, J Mol Biol 5: 109–118; Chester & Marshak 1993),
+           (Marmur & Doty 1962, J Mol Biol 5: 109-118; Chester & Marshak 1993),
            Anal Biochem 209: 284-290)
         2. Tm = 81.5 + 0.41(%GC) - 675/N - %mismatch
            'QuikChange' formula. Recommended (by the manufacturer) for the design
            of primers for QuikChange mutagenesis.
         3. Tm = 81.5 + 0.41(%GC) - 675/N + 16.6 x log[Na+]
-           (Marmur & Doty 1962, J Mol Biol 5: 109–118; Schildkraut & Lifson 1965,
-           Biopolymers 3: 195–208)
+           (Marmur & Doty 1962, J Mol Biol 5: 109-118; Schildkraut & Lifson 1965,
+           Biopolymers 3: 195-208)
         4. Tm = 81.5 + 0.41(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
-           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). This is the
+           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). This is the
            standard formula in approximative mode of MELTING 4.3.
         5. Tm = 78 + 0.7(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
-           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). For RNA.
+           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA.
         6. Tm = 67 + 0.8(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
-           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227–259). For RNA/DNA
+           (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA/DNA
            hybrids.
         7. Tm = 81.5 + 0.41(%GC) - 600/N + 16.6 x log[Na+]
            Used by Primer3Plus to calculate the product Tm. Default set.
