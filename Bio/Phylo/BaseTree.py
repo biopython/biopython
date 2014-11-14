@@ -127,7 +127,7 @@ def _attribute_matcher(kwargs):
             target = getattr(node, key)
             if isinstance(pattern, basestring):
                 return (isinstance(target, basestring) and
-                        re.match(pattern+'$', target))
+                        re.match(pattern + '$', target))
             if isinstance(pattern, bool):
                 return (pattern == bool(target))
             if isinstance(pattern, int):
@@ -186,7 +186,7 @@ def _combine_matchers(target, kwargs, require_spec):
         if not kwargs:
             if require_spec:
                 raise ValueError("you must specify a target object or keyword "
-                                "arguments.")
+                                 "arguments.")
             return lambda x: True
         return _attribute_matcher(kwargs)
     match_obj = _object_matcher(target)
@@ -209,13 +209,14 @@ def _combine_args(first, *rest):
     # of cases where either style is more convenient, so let's support both
     # (for backward compatibility and consistency between methods).
     if hasattr(first, '__iter__') and not (isinstance(first, TreeElement) or
-            isinstance(first, type) or isinstance(first, basestring) or
-            isinstance(first, dict)):
+                                           isinstance(first, type) or
+                                           isinstance(first, basestring) or
+                                           isinstance(first, dict)):
         # `terminals` is an iterable of targets
         if rest:
             raise ValueError("Arguments must be either a single list of "
-                    "targets, or separately specified targets "
-                    "(e.g. foo(t1, t2, t3)), but not both.")
+                             "targets, or separately specified targets "
+                             "(e.g. foo(t1, t2, t3)), but not both.")
         return first
     # `terminals` is a single target -- wrap in a container
     return itertools.chain([first], rest)
@@ -231,14 +232,15 @@ class TreeElement(object):
         def pair_as_kwarg_string(key, val):
             if isinstance(val, basestring):
                 return "%s='%s'" % (key, _utils.trim_str(unicode(val), 60,
-                    u'...'))
+                                                         u'...'))
             return "%s=%s" % (key, val)
         return u'%s(%s)' % (self.__class__.__name__,
                             ', '.join(pair_as_kwarg_string(key, val)
-                                  for key, val in sorted(self.__dict__.items())
-                                  if val is not None and
-                                  type(val) in (str, int, float, bool, unicode)
-                                  ))
+                                      for key, val in sorted(self.__dict__.items())
+                                      if val is not None and
+                                      type(val) in (
+                                          str, int, float, bool, unicode)
+                                      ))
 
     __str__ = __repr__
 
@@ -287,7 +289,7 @@ class TreeMixin(object):
             return None
 
     def find_elements(self, target=None, terminal=None, order='preorder',
-            **kwargs):
+                      **kwargs):
         """Find all tree elements matching the given attributes.
 
         The arbitrary keyword arguments indicate the attribute name of the
@@ -335,7 +337,7 @@ class TreeMixin(object):
         return self._filter_search(is_matching_elem, order, True)
 
     def find_clades(self, target=None, terminal=None, order='preorder',
-            **kwargs):
+                    **kwargs):
         """Find each clade containing a matching element.
 
         That is, find each element as with find_elements(), but return the
@@ -676,7 +678,7 @@ class TreeMixin(object):
         clade_cls = type(self.root)
         base_name = self.root.name or 'n'
         for i in range(n):
-            clade = clade_cls(name=base_name+str(i),
+            clade = clade_cls(name=base_name + str(i),
                               branch_length=branch_length)
             self.root.clades.append(clade)
 
@@ -699,6 +701,7 @@ class Tree(TreeElement, TreeMixin):
         name : str
             The name of the tree, in essence a label.
     """
+
     def __init__(self, root=None, rooted=True, id=None, name=None):
         self.root = root or Clade()
         self.rooted = rooted
@@ -725,7 +728,7 @@ class Tree(TreeElement, TreeMixin):
         :returns: a tree of the same type as this class.
         """
         if isinstance(taxa, int):
-            taxa = ['taxon%s' % (i+1) for i in range(taxa)]
+            taxa = ['taxon%s' % (i + 1) for i in range(taxa)]
         elif hasattr(taxa, '__iter__'):
             taxa = list(taxa)
         else:
@@ -741,7 +744,7 @@ class Tree(TreeElement, TreeMixin):
                 # Add some noise to the branch lengths
                 for nt in newterms:
                     nt.branch_length = max(0,
-                            random.gauss(branch_length, branch_stdev))
+                                           random.gauss(branch_length, branch_stdev))
             terminals.remove(newsplit)
             terminals.extend(newterms)
         # Distribute taxon labels randomly
@@ -802,14 +805,14 @@ class Tree(TreeElement, TreeMixin):
         outgroup_branch_length = kwargs.get('outgroup_branch_length')
         if outgroup_branch_length is not None:
             assert 0 <= outgroup_branch_length <= prev_blen, \
-                    "outgroup_branch_length must be between 0 and the " \
-                    "original length of the branch leading to the outgroup."
+                "outgroup_branch_length must be between 0 and the " \
+                "original length of the branch leading to the outgroup."
 
         if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup
             outgroup.branch_length = outgroup_branch_length or 0.0
             new_root = self.root.__class__(
-                    branch_length=self.root.branch_length, clades=[outgroup])
+                branch_length=self.root.branch_length, clades=[outgroup])
             # The first branch reversal (see the upcoming loop) is modified
             if len(outgroup_path) == 1:
                 # No nodes between the original root and outgroup to rearrange.
@@ -821,7 +824,7 @@ class Tree(TreeElement, TreeMixin):
                 # First iteration of reversing the path to the outgroup
                 parent.clades.pop(parent.clades.index(outgroup))
                 (prev_blen, parent.branch_length) = (parent.branch_length,
-                        prev_blen - outgroup.branch_length)
+                                                     prev_blen - outgroup.branch_length)
                 new_root.clades.insert(0, parent)
                 new_parent = parent
         else:
@@ -949,7 +952,7 @@ class Tree(TreeElement, TreeMixin):
 
             This closes over textlines and modifies it in-place.
             """
-            textlines.append(TAB*indent + repr(obj))
+            textlines.append(TAB * indent + repr(obj))
             indent += 1
             for attr in obj.__dict__:
                 child = getattr(obj, attr)
@@ -981,8 +984,9 @@ class Clade(TreeElement, TreeMixin):
         width : number
             The display width of the branch and descendents.
     """
+
     def __init__(self, branch_length=None, name=None, clades=None,
-            confidence=None, color=None, width=None):
+                 confidence=None, color=None, width=None):
         self.branch_length = branch_length
         self.name = name
         self.clades = clades or []
@@ -1071,43 +1075,43 @@ class BranchColor(object):
     """
 
     color_names = {
-            'red':      (255,   0,   0),
-            'r':        (255,   0,   0),
-            'yellow':   (255, 255,   0),
-            'y':        (255, 255,   0),
-            'green':    (  0, 128,   0),
-            'g':        (  0, 128,   0),
-            'cyan':     (  0, 255, 255),
-            'c':        (  0, 255, 255),
-            'blue':     (  0,   0, 255),
-            'b':        (  0,   0, 255),
-            'magenta':  (255,   0, 255),
-            'm':        (255,   0, 255),
-            'black':    (  0,   0,   0),
-            'k':        (  0,   0,   0),
-            'white':    (255, 255, 255),
-            'w':        (255, 255, 255),
-            # Names standardized in HTML/CSS spec
-            # http://w3schools.com/html/html_colornames.asp
-            'maroon':   (128,   0,   0),
-            'olive':    (128, 128,   0),
-            'lime':     (  0, 255,   0),
-            'aqua':     (  0, 255, 255),
-            'teal':     (  0, 128, 128),
-            'navy':     (  0,   0, 128),
-            'fuchsia':  (255,   0, 255),
-            'purple':   (128,   0, 128),
-            'silver':   (192, 192, 192),
-            'gray':     (128, 128, 128),
-            # More definitions from matplotlib/gcolor2
-            'grey':     (128, 128, 128),
-            'pink':     (255, 192, 203),
-            'salmon':   (250, 128, 114),
-            'orange':   (255, 165,   0),
-            'gold':     (255, 215,   0),
-            'tan':      (210, 180, 140),
-            'brown':    (165,  42,  42),
-            }
+        'red':     (255,   0,   0),
+        'r':       (255,   0,   0),
+        'yellow':  (255, 255,   0),
+        'y':       (255, 255,   0),
+        'green':   (  0, 128,   0),
+        'g':       (  0, 128,   0),
+        'cyan':    (  0, 255, 255),
+        'c':       (  0, 255, 255),
+        'blue':    (  0,   0, 255),
+        'b':       (  0,   0, 255),
+        'magenta': (255,   0, 255),
+        'm':       (255,   0, 255),
+        'black':   (  0,   0,   0),
+        'k':       (  0,   0,   0),
+        'white':   (255, 255, 255),
+        'w':       (255, 255, 255),
+        # Names standardized in HTML/CSS spec
+        # http://w3schools.com/html/html_colornames.asp
+        'maroon':  (128,   0,   0),
+        'olive':   (128, 128,   0),
+        'lime':    (  0, 255,   0),
+        'aqua':    (  0, 255, 255),
+        'teal':    (  0, 128, 128),
+        'navy':    (  0,   0, 128),
+        'fuchsia': (255,   0, 255),
+        'purple':  (128,   0, 128),
+        'silver':  (192, 192, 192),
+        'gray':    (128, 128, 128),
+        # More definitions from matplotlib/gcolor2
+        'grey':    (128, 128, 128),
+        'pink':    (255, 192, 203),
+        'salmon':  (250, 128, 114),
+        'orange':  (255, 165,   0),
+        'gold':    (255, 215,   0),
+        'tan':     (210, 180, 140),
+        'brown':   (165,  42,  42),
+        }
 
     def __init__(self, red, green, blue):
         for color in (red, green, blue):
@@ -1131,7 +1135,7 @@ class BranchColor(object):
                 ), "need a 24-bit hexadecimal string, e.g. #000000"
 
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
-        return cls(*[int('0x'+cc, base=16) for cc in RGB])
+        return cls(*[int('0x' + cc, base=16) for cc in RGB])
 
     @classmethod
     def from_name(cls, colorname):
