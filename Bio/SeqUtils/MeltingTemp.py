@@ -144,7 +144,7 @@ import math
 import warnings
 
 from Bio import SeqUtils, Seq
-from Bio import BiopythonWarning, BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 
 __docformat__ = "restructuredtext en"
 
@@ -954,7 +954,7 @@ __docformat__ = "restructuredtext en"
 
 
 def Tm_staluc(s, dnac=50, saltc=50, rna=0):
-    """Returns DNA/DNA tm using nearest neighbor thermodynamics.
+    """Returns DNA/DNA tm using nearest neighbor thermodynamics (OBSOLETE).
 
     This method may be depreceated in the future. Use Tm_NN instead. Tm_NN
     with default values gives the same result as Tm_staluc.
@@ -989,7 +989,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     # now superseded by Tm_NN.
 
     warnings.warn('Tm_staluc may be depreciated in the future. Use Tm_NN ' +
-                  'instead.', BiopythonDeprecationWarning)
+                  'instead.', PendingDeprecationWarning)
     if not rna:
         return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc)
     elif rna == 1:
