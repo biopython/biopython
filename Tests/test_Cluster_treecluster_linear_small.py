@@ -33,7 +33,7 @@ def test_treecluster_0():
   EXP_CLUSTERS = [
     "A B",
     "C D",
-    "A B C D",
+    "A B  C D",
     "G H I K L", # To PASS: COMMENT THIS LINE OUT to make test PASS for issue biopython#424
     "M N",
     "O P Q"]
