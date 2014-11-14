@@ -39,6 +39,8 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
      - dim: dimension of coords
      - bucket_size: nr of points per tree node
      - radius: radius of search (typically 0.05 or so)
+
+    Returns true if the test passes.
     """
     # KD tree search
     kdt = _CKDTree.KDTree(dim, bucket_size)
@@ -58,9 +60,11 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     else:
         l2 = len(r)
     if l1 == l2:
-        print("Passed.")
+        # print("Passed.")
+        return True
     else:
         print("Not passed: %i != %i." % (l1, l2))
+        return False
 
 
 def _test(nr_points, dim, bucket_size, radius):
@@ -73,6 +77,8 @@ def _test(nr_points, dim, bucket_size, radius):
      - dim: dimension of coords
      - bucket_size: nr of points per tree node
      - radius: radius of search (typically 0.05 or so)
+
+    Returns true if the test passes.
     """
     # kd tree search
     kdt = _CKDTree.KDTree(dim, bucket_size)
@@ -92,9 +98,11 @@ def _test(nr_points, dim, bucket_size, radius):
         if _dist(p, center) <= radius:
             l2 = l2 + 1
     if l1 == l2:
-        print("Passed.")
+        # print("Passed.")
+        return True
     else:
         print("Not passed: %i != %i." % (l1, l2))
+        return False
 
 
 class KDTree(object):
