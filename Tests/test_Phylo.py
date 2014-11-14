@@ -19,7 +19,7 @@ EX_NEWICK = 'Nexus/int_node_labels.nwk'
 EX_NEWICK2 = 'Nexus/test.new'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
 EX_NEXUS2 = 'Nexus/bats.nex'
-EX_NEWICK_BOM= 'Nexus/ByteOrderMarkFile.nwk'
+EX_NEWICK_BOM = 'Nexus/ByteOrderMarkFile.nwk'
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
@@ -129,9 +129,9 @@ class TreeTests(unittest.TestCase):
         for N in (2, 5, 20):
             tree = Phylo.BaseTree.Tree.randomized(N)
             self.assertEqual(tree.count_terminals(), N)
-            self.assertEqual(tree.total_branch_length(), (N-1)*2)
+            self.assertEqual(tree.total_branch_length(), (N - 1) * 2)
             tree = Phylo.BaseTree.Tree.randomized(N, branch_length=2.0)
-            self.assertEqual(tree.total_branch_length(), (N-1)*4)
+            self.assertEqual(tree.total_branch_length(), (N - 1) * 4)
         tree = Phylo.BaseTree.Tree.randomized(5, branch_stdev=.5)
         self.assertEqual(tree.count_terminals(), 5)
 
@@ -263,8 +263,8 @@ class MixinTests(unittest.TestCase):
         for tree, total, extern, intern in zip(
                 self.phylogenies,
                 (6, 6, 7, 18, 21, 27, 7, 9, 9, 19, 15, 9, 6),
-                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
-                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  3,  3, 3),
+                (3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3),
+                (3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
                 ):
             self.assertEqual(len(list(tree.find_elements())), total)
             self.assertEqual(len(list(tree.find_elements(terminal=True))),
