@@ -743,7 +743,7 @@ class NNITreeSearcher(TreeSearcher):
     """Tree searching with Nearest Neighbor Interchanges (NNI) algorithm.
 
     :Parameters:
-        scorer: ParsimonyScorer
+        scorer : ParsimonyScorer
             parsimony scorer to calculate the parsimony score of
             different trees during NNI algorithm.
     """
@@ -760,7 +760,7 @@ class NNITreeSearcher(TreeSearcher):
         :Parameters:
            starting_tree : Tree
                starting tree of NNI method.
-           alignment: MultipleSeqAlignment
+           alignment : MultipleSeqAlignment
                multiple sequence alignment used to calculate parsimony
                score of different NNI trees.
         """
@@ -894,7 +894,7 @@ class ParsimonyScorer(Scorer):
     See ParsimonyTreeConstructor for usage.
 
     :Parameters:
-        matrix: _Matrix
+        matrix : _Matrix
             scoring matrix used in parsimony score calculation.
     """
 
@@ -989,9 +989,9 @@ class ParsimonyTreeConstructor(TreeConstructor):
     """Parsimony tree constructor.
 
     :Parameters:
-        searcher: TreeSearcher
+        searcher : TreeSearcher
             tree searcher to search the best parsimony tree.
-        starting_tree: Tree
+        starting_tree : Tree
             starting tree provided to the searcher.
 
     Example
@@ -1044,7 +1044,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
         """Build the tree.
 
         :Parameters:
-            alignment: MultipleSeqAlignment
+            alignment : MultipleSeqAlignment
                 multiple sequence alignment to calculate parsimony tree.
         """
         # if starting_tree is none,

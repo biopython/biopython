@@ -227,7 +227,7 @@ def strict_consensus(trees):
     """Search strict consensus tree from multiple trees.
 
     :Parameters:
-        trees: iterable
+        trees : iterable
             iterable of trees to produce consensus tree.
     """
     trees_iter = iter(trees)
@@ -286,7 +286,7 @@ def majority_consensus(trees, cutoff=0):
     that clade.
 
     :Parameters:
-        trees: iterable
+        trees : iterable
             iterable of trees to produce consensus tree.
     """
     tree_iter = iter(trees)
@@ -379,7 +379,7 @@ def adam_consensus(trees):
     """Search Adam Consensus tree from multiple trees
 
     :Parameters:
-        trees: list
+        trees : list
             list of trees to produce consensus tree.
     """
     clades = [tree.root for tree in trees]
@@ -477,7 +477,7 @@ def _count_clades(trees):
     occurrences and sum of branch length for that clade, second the number of trees processed.
 
     :Parameters:
-        trees: iterable
+        trees : iterable
             An iterable that returns the trees to count
     """
     bitstrs = {}
@@ -501,10 +501,10 @@ def get_support(target_tree, trees, len_trees=None):
     """Calculate branch support for a target tree given bootstrap replicate trees.
 
     :Parameters:
-        target_tree: Tree
-        trees: iterable
+        target_tree : Tree
+        trees : iterable
             iterable of trees used to calculate branch support.
-        len_trees: int
+        len_trees : int
             optional count of replicates in trees. len_trees must be provided
             when len(trees) is not a valid operation.
     """
@@ -538,9 +538,9 @@ def bootstrap(msa, times):
     """Generate bootstrap replicates from a multiple sequence alignment object
 
     :Parameters:
-        msa: MultipleSeqAlignment
+        msa : MultipleSeqAlignment
             multiple sequence alignment to generate replicates.
-        times: int
+        times : int
             number of bootstrap times.
     """
 
@@ -562,11 +562,11 @@ def bootstrap_trees(msa, times, tree_constructor):
     """Generate bootstrap replicate trees from a multiple sequence alignment.
 
     :Parameters:
-        msa: MultipleSeqAlignment
+        msa : MultipleSeqAlignment
             multiple sequence alignment to generate replicates.
-        times: int
+        times : int
             number of bootstrap times.
-        tree_constructor: TreeConstructor
+        tree_constructor : TreeConstructor
             tree constructor to be used to build trees.
     """
 
@@ -580,13 +580,13 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
     """Consensus tree of a series of bootstrap trees for a multiple sequence alignment
 
     :Parameters:
-        msa: MultipleSeqAlignment
+        msa : MultipleSeqAlignment
             Multiple sequence alignment to generate replicates.
-        times: int
+        times : int
             Number of bootstrap times.
-        tree_constructor: TreeConstructor
+        tree_constructor : TreeConstructor
             Tree constructor to be used to build trees.
-        consensus: function
+        consensus : function
             Consensus method in this module: `strict_consensus`,
             `majority_consensus`, `adam_consensus`.
     """
