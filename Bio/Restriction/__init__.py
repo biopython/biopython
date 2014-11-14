@@ -7,13 +7,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-"""
-Usage:
-======
+"""Restriction Digest Enzymes.
+
+Example:
 
     >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.
-    >>> from Bio.Seq import Seq     # Use your prefer method here.
+    >>> from Bio.Seq import Seq     # Use your prefered method here.
     >>> pbr = fts(pBR322)           #
     >>> seq = Seq(str(pbr))         #
     >>>
@@ -25,13 +25,10 @@ Usage:
     AatII      :  4289.
     Acc16I     :  263, 1359, 1457, 3589.
     ...
-        More enzymes here.
+    More enzymes here.
     ...
     >>> b = a.without_site()
-    >>> a.print_that(b, '', '\n Enzymes which do not cut pBR322.\n\n')
-
-    Enzymes which do not cut pBR322.
-
+    >>> a.print_that(b)  # Enzymes which do not cut pBR322
     AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
     AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI
     Asp718I   AspA2I    AsuII     AvaIII    AvrII     AxyI      BaeI      BbrPI
@@ -55,10 +52,11 @@ Usage:
     Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
     Zsp2I
 
-    >>>
-    """
+"""
 
 from Bio.Restriction.Restriction import *
+
+__docformat__ = "restructuredtext en"
 
 #
 #   OK can't put the following code in Bio.Restriction.__init__ unless

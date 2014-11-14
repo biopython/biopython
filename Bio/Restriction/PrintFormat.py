@@ -7,9 +7,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-"""Print the results of restriction enzyme analysis.
+r"""Print the results of restriction enzyme analysis.
 
-PrintFormat prints the results from restriction analysis in 3  different
+PrintFormat prints the results from restriction analysis in 3 different
 format: list, column or map.
 
 The easiest way to use it is:
@@ -35,7 +35,6 @@ The easiest way to use it is:
     ...
     Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
     Zsp2I
-
     >>> new.sequence = pBR322.seq
     >>> new.print_as("map")
     >>> new.print_that(dct)
@@ -52,6 +51,8 @@ import re
 from Bio._py3k import range
 
 from Bio.Restriction import RanaConfig as RanaConf
+
+__docformat__ = "restructuredtext en"
 
 
 class PrintFormat(object):
@@ -91,14 +92,13 @@ class PrintFormat(object):
     def print_that(self, dct, title='', s1=''):
         """PF.print_that(dct, [title[, s1]]) -> Print dct nicely formatted.
 
-        dct is a dictionary as returned by a RestrictionBatch.search()
-
-        title is the title of the map.
-        It must be a formatted string, i.e. you must include the line break.
-
-        s1 is the title separating the list of enzymes that have sites from
-        those without sites.
-        s1 must be a formatted string as well.
+        Arguments:
+         - dct is a dictionary as returned by a RestrictionBatch.search()
+         - title is the title of the map.
+           It must be a formatted string, i.e. you must include the line break.
+         - s1 is the title separating the list of enzymes that have sites from
+           those without sites.
+         - s1 must be a formatted string as well.
 
         The format of print_that is a list."""
         if not dct:
@@ -117,7 +117,8 @@ class PrintFormat(object):
 
         Virtual method.
         Here to be pointed to one of the _make_* methods.
-        You can as well create a new method and point make_format to it."""
+        You can as well create a new method and point make_format to it.
+        """
         return self._make_list(cut, title, nc, s1)
 
 # _make_* methods to be used with the virtual method make_format
@@ -125,23 +126,25 @@ class PrintFormat(object):
     def _make_list(self, ls, title, nc, s1):
         """PF._make_number(ls,title, nc,s1) -> string.
 
-        return a string of form:
+        return a string of form::
 
-        title.
+            title.
 
-        enzyme1     :   position1, position2.
-        enzyme2     :   position1, position2, position3.
+            enzyme1     :   position1, position2.
+            enzyme2     :   position1, position2, position3.
 
-        ls is a list of cutting enzymes.
-        title is the title.
-        nc is a list of non cutting enzymes.
-        s1 is the sentence before the non cutting enzymes."""
+        Arguments:
+         - ls is a list of cutting enzymes.
+         - title is the title.
+         - nc is a list of non cutting enzymes.
+         - s1 is the sentence before the non cutting enzymes.
+        """
         return self._make_list_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_map(self, ls, title, nc, s1):
         """PF._make_number(ls,title, nc,s1) -> string.
 
-        return a string of form:
+        return a string of form::
 
             | title.
             |
@@ -151,30 +154,36 @@ class PrintFormat(object):
             | |||||||||||||||||||||
             | TTTTTTTTTTTTTTTTTTTTT...
 
-        ls is a list of cutting enzymes.
-        title is the title.
-        nc is a list of non cutting enzymes.
-        s1 is the sentence before the non cutting enzymes."""
+        Arguments:
+         - ls is a list of cutting enzymes.
+         - title is the title.
+         - nc is a list of non cutting enzymes.
+         - s1 is the sentence before the non cutting enzymes.
+        """
         return self._make_map_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_number(self, ls, title, nc, s1):
         """PF._make_number(ls,title, nc,s1) -> string.
 
-        title.
+        Returns a string in the form::
 
-        enzyme which cut 1 time:
+            title.
 
-        enzyme1     :   position1.
+            enzyme which cut 1 time:
 
-        enzyme which cut 2 times:
+            enzyme1     :   position1.
 
-        enzyme2     :   position1, position2.
-        ...
+            enzyme which cut 2 times:
 
-        ls is a list of cutting enzymes.
-        title is the title.
-        nc is a list of non cutting enzymes.
-        s1 is the sentence before the non cutting enzymes."""
+            enzyme2     :   position1, position2.
+            ...
+
+        Arguments:
+         - ls is a list of cutting enzymes.
+         - title is the title.
+         - nc is a list of non cutting enzymes.
+         - s1 is the sentence before the non cutting enzymes.
+        """
         return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_nocut(self, ls, title, nc, s1):
@@ -185,9 +194,11 @@ class PrintFormat(object):
         ls is a list of cutting enzymes -> will not be used.
         Here for compatibility with make_format.
 
-        title is the title.
-        nc is a list of non cutting enzymes.
-        s1 is the sentence before the non cutting enzymes."""
+        Arguments:
+         - title is the title.
+         - nc is a list of non cutting enzymes.
+         - s1 is the sentence before the non cutting enzymes.
+        """
         return title + self._make_nocut_only(nc, s1)
 
     def _make_nocut_only(self, nc, s1, ls=[], title=''):
@@ -195,8 +206,9 @@ class PrintFormat(object):
 
         return a formatted string of the non cutting enzymes.
 
-        nc is a list of non cutting enzymes.
-        s1 is the sentence before the non cutting enzymes.
+        Arguments:
+         - nc is a list of non cutting enzymes.
+         - s1 is the sentence before the non cutting enzymes.
         """
         if not nc:
             return s1
@@ -215,17 +227,19 @@ class PrintFormat(object):
     def _make_list_only(self, ls, title, nc=[], s1=''):
         """PF._make_list_only(ls, title) -> string.
 
-        return a string of form:
+        return a string of form::
 
-        title.
+            title.
 
-        enzyme1     :   position1, position2.
-        enzyme2     :   position1, position2, position3.
-        ...
+            enzyme1     :   position1, position2.
+            enzyme2     :   position1, position2, position3.
+            ...
 
-        ls is a list of results.
-        title is a string.
-        Non cutting enzymes are not included."""
+        Arguments:
+         - ls is a list of results.
+         - title is a string.
+         - Non cutting enzymes are not included.
+        """
         if not ls:
             return title
         return self.__next_section(ls, title)
@@ -233,22 +247,24 @@ class PrintFormat(object):
     def _make_number_only(self, ls, title, nc=[], s1=''):
         """PF._make_number_only(ls, title) -> string.
 
-        return a string of form:
+        return a string of form::
 
-        title.
+            title.
 
-        enzyme which cut 1 time:
+            enzyme which cut 1 time:
 
-        enzyme1     :   position1.
+            enzyme1     :   position1.
 
-        enzyme which cut 2 times:
+            enzyme which cut 2 times:
 
-        enzyme2     :   position1, position2.
-        ...
+            enzyme2     :   position1, position2.
+            ...
 
-        ls is a list of results.
-        title is a string.
-        Non cutting enzymes are not included."""
+        Arguments:
+         - ls is a list of results.
+         - title is a string.
+         - Non cutting enzymes are not included.
+        """
         if not ls:
             return title
         ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
@@ -269,7 +285,7 @@ class PrintFormat(object):
     def _make_map_only(self, ls, title, nc=[], s1=''):
         """PF._make_map_only(ls, title) -> string.
 
-        return a string of form:
+        return a string of form::
 
             | title.
             |
@@ -279,9 +295,10 @@ class PrintFormat(object):
             | |||||||||||||||||||||
             | TTTTTTTTTTTTTTTTTTTTT...
 
-        ls is a list of results.
-        title is a string.
-        Non cutting enzymes are not included.
+        Arguments:
+         - ls is a list of results.
+         - title is a string.
+         - Non cutting enzymes are not included.
         """
         if not ls:
             return title
@@ -378,17 +395,19 @@ class PrintFormat(object):
     def __next_section(self, ls, into):
         """FP.__next_section(ls, into) -> string.
 
-        ls is a list of tuple (string, [int, int]).
-        into is a string to which the formatted ls will be added.
+        Arguments:
+         - ls is a list of tuple (string, [int, int]).
+         - into is a string to which the formatted ls will be added.
 
         Format ls as a string of lines:
-        The form is:
+        The form is::
 
-        enzyme1     :   position1.
-        enzyme2     :   position2, position3.
+            enzyme1     :   position1.
+            enzyme2     :   position2, position3.
 
         then add the formatted ls to tot
-        return tot."""
+        return tot.
+        """
         ls.sort()
         indentation = '\n' + (self.NameWidth + self.Indent) * ' '
         linesize = self.linesize - self.MaxSize
