@@ -377,8 +377,8 @@ def make_table(oldtable=None, values=None):
     >>> newtable = make_table(oldtable=DNA_NN2, values={'init': (0, 0),
     ...                       'init_A/T': (2.3, 4.1),
     ...                       'init_G/C': (0.1, -2.8)})
-    >>> newtable['init_A/T']
-    (2.3, 4.1)
+    >>> print("%0.1f, %0.1f" % newtable['init_A/T'])
+    2.3, 4.1
 
     """
     if oldtable is None:
