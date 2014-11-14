@@ -67,7 +67,7 @@ test_files = [
     ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
     ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
-    ("pir", 2, 1,  'NBRF/clustalw.pir'),
+    ("pir", 2, 1, 'NBRF/clustalw.pir'),
     ]
 
 
@@ -103,7 +103,7 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
 
 
 def check_simple_write_read(alignments, indent=" "):
-    #print(indent+"Checking we can write and then read back these alignments")
+    # print(indent+"Checking we can write and then read back these alignments")
     for format in test_write_read_align_with_seq_count:
         records_per_alignment = len(alignments[0])
         for a in alignments:
@@ -210,7 +210,7 @@ def check_phylip_reject_duplicate():
     handle = StringIO()
     sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
                  SeqRecord(Seq('AAAA'), id='longsequencename2'),
-                 SeqRecord(Seq('AAAA'), id='other_sequence'),]
+                 SeqRecord(Seq('AAAA'), id='other_sequence'), ]
     alignment = MultipleSeqAlignment(sequences)
     try:
         # This should raise a ValueError
@@ -339,7 +339,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     # Check AlignInfo.SummaryInfo likes the alignment
     summary = AlignInfo.SummaryInfo(alignment)
     dumb_consensus = summary.dumb_consensus()
-    #gap_consensus = summary.gap_consensus()
+    # gap_consensus = summary.gap_consensus()
     if t_format != "nexus":
         # Hack for bug 2535
         pssm = summary.pos_specific_score_matrix()
@@ -352,7 +352,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             pass
 
     if t_count==1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
-        #print(" Trying to read a triple concatenation of the input file")
+        # print(" Trying to read a triple concatenation of the input file")
         with open(t_filename, "r") as handle:
             data = handle.read()
         handle = StringIO()
