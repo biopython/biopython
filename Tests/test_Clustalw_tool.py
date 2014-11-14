@@ -116,7 +116,7 @@ class ClustalWTestCase(unittest.TestCase):
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         # The length of the alignment will depend on the version of clustalw
-        #(clustalw 2.1 and clustalw 1.83 are certainly different).
+        # (clustalw 2.1 and clustalw 1.83 are certainly different).
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
@@ -236,7 +236,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         """Test a large input file."""
 
         # Create a large input file by converting another example file
-        #(See Bug 2804, this will produce so much output on stdout that
+        # (See Bug 2804, this will produce so much output on stdout that
         # subprocess could suffer a deadlock and hang).  Using all the
         # records should show the deadlock but is very slow - just thirty
         # seems to lockup on Mac OS X, even 20 on Linux (without the fix).

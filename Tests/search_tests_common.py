@@ -22,8 +22,8 @@ from Bio import BiopythonExperimentalWarning
 
 import warnings
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio import SearchIO
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio import SearchIO
 
 
 class CheckRaw(unittest.TestCase):
