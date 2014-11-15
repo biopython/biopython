@@ -52,7 +52,8 @@ class TestClusterSmall(unittest.TestCase):
           "A B",
           "C D",
           "A B  C D",
-          "G H I K L", # To PASS: COMMENT THIS LINE OUT to make test PASS for issue biopython#424
+        # Issue biopython#424: To (mock) "PASS": COMMENT OUT FOLLOWING LINE OUT
+          "G H I K L", 
           "M N",
           "O P Q"]
       
@@ -85,16 +86,16 @@ class ClustersStrInput:
   def prt_arrays(self, PRT=sys.stdout):
     L = len(self.names)
     PRT.write('\n  VARIABLES:\n')
-    PRT.write('    index :   {}  \n'.format('  '.join('{:>2}'.format(E) for E in range(L))))
-    PRT.write('    names = [ {} ]\n'.format(', '.join('{:>2}'.format(E) for E in self.names)))
-    PRT.write('    locs  = [ {} ]\n'.format(', '.join('{:>2}'.format(E) for E in self.locs)))
+    PRT.write('    index :   {0}  \n'.format('  '.join('{:>2}'.format(E) for E in range(L))))
+    PRT.write('    names = [ {0} ]\n'.format(', '.join('{:>2}'.format(E) for E in self.names)))
+    PRT.write('    locs  = [ {0} ]\n'.format(', '.join('{:>2}'.format(E) for E in self.locs)))
 
   def prt_ascii_art(self, PRT=sys.stdout, title="ASCII Art"):
     L = len(self.clu_str)
-    PRT.write('\n  {}:\n'.format(title))
-    PRT.write('    Index 10s: {}\n'.format(''.join('{}'.format(I/10) if I%10==0 else ' ' for I in range(L))))
-    PRT.write('    Index  1s: {}\n'.format(''.join('{}'.format(I%10) for I in range(L))))
-    PRT.write('    Array    : {}\n'.format(self.clu_str))
+    PRT.write('\n  {0}:\n'.format(title))
+    PRT.write('    Index 10s: {0}\n'.format(''.join('{}'.format(I/10) if I%10==0 else ' ' for I in range(L))))
+    PRT.write('    Index  1s: {0}\n'.format(''.join('{}'.format(I%10) for I in range(L))))
+    PRT.write('    Array    : {0}\n'.format(self.clu_str))
 
   def __str__(self):
     SOUT = StringIO()
@@ -152,7 +153,8 @@ class ClusterTree:
   def prt_node(self, I, node, names, PRT):
     L = self.get_node_str(node.left,  names)
     R = self.get_node_str(node.right, names)
-    PRT.write('    tree[{:2}] = {:6} ({:>4}, {:>5}): {:>6}\n'.format(I, -I-1, L, R, node.distance))
+    PRT.write('    tree[{0:2}] = {1:6} ({2:>4}, {3:>5}): {4:>6}\n'.format(
+      I, -I-1, L, R, node.distance))
 
   def get_node_str(self, LR, names):
     return LR if LR  < 0 or names is None else names[LR]
@@ -195,9 +197,9 @@ class ClusterTree:
            14 ----      -1 (   B,     A):    2.0
 
     """
-    PRT.write('\n  {}:\n'.format(title))
+    PRT.write('\n  {0}:\n'.format(title))
     for I, E in enumerate(self.hier_list):
-      PRT.write('    {:2} {:{}} {:6} ({:>4}, {:>5}): {:>6}\n'.format(
+      PRT.write('    {0:2} {1:{}} {2:6} ({3:>4}, {4:>5}): {5:>6}\n'.format(
         I, '-'*E[0], self.max_level, E[2], E[3], E[5], E[7]))
 
   def get_hier_list(self, names):
@@ -264,11 +266,11 @@ class ClusterTestHelper:
     cnt = 1
     cnt_stop  = 1
     PRT.write('\n  dist_matrix = [\n')
-    PRT.write('   # {}\n  '.format(names[0]))
+    PRT.write('   # {0}\n  '.format(names[0]))
     for R in self.DM.dist_matrix:
-      PRT.write('  {:4.1f}, '.format(R))
+      PRT.write('  {0:4.1f}, '.format(R))
       if cnt == cnt_stop:
-        PRT.write(' # {}\n  '.format(names[cnt_stop]))
+        PRT.write(' # {0}\n  '.format(names[cnt_stop]))
         cnt = 0
         cnt_stop += 1
       cnt += 1
@@ -324,7 +326,7 @@ class ClusterTestHelper:
         loc_max = max(cur_level_locs)
         for i in range(loc_min, loc_max+1):
           Str[i] = '#'
-      PRT.write('      Level {:2} {}\n'.format(level, ''.join(Str)))
+      PRT.write('      Level {0:2} {1}\n'.format(level, ''.join(Str)))
       
 
   def get_cluster_list(self):
@@ -378,12 +380,12 @@ class ClusterTestHelper:
         sys.stdout.write(str(self))
         sys.stdout.write('\n  LIST OF CLUSTERS RETURNED BY Bio.Cluster.treecluster:\n')
         for C in act_clus:
-          sys.stdout.write('    ACTUAL CLUSTER: {}\n'.format(' '.join(C)))
+          sys.stdout.write('    ACTUAL CLUSTER: {0}\n'.format(' '.join(C)))
         sys.stdout.write('\n')
-        raise Exception("EXPECTED CLUSTER({}) NOT FOUND IN ANY ACTUAL CLUSTERS RETURNED BY Bio.Cluster.treecluster".format(clu_str))
+        raise Exception("EXPECTED CLUSTER({0}) NOT FOUND IN ANY ACTUAL CLUSTERS RETURNED BY Bio.Cluster.treecluster".format(clu_str))
       else:
-        sys.stdout.write('  Sub-test Passed.  Cluster found({})\n'.format(clu_str))
-    sys.stdout.write('  TEST PASSED.\n'.format(clu_str))
+        sys.stdout.write('  Sub-test Passed.  Cluster found({0})\n'.format(clu_str))
+    sys.stdout.write('  TEST PASSED.\n')
     
 if __name__ == '__main__':
   #run_all_tests()
