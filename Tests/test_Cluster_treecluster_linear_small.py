@@ -12,11 +12,25 @@
 import unittest
 
 import sys
-import cStringIO
 import copy
-import numpy as np
 import collections as cx
 from operator import itemgetter
+
+try:
+    from StringIO import StringIO # Python 2
+    # Can't use StringIO, quoting the documentation,
+    #   "Unlike the StringIO module, this module is not able to accept
+    #    Unicode strings that cannot be encoded as plain ASCII strings."
+    # Therefore can't use from Bio._py3k import StringIO
+except ImportError:
+    from io import StringIO # Python 3
+
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+        "Install NumPy if you want to use Bio.KDTree.")
 
 try:
     from Bio import Cluster
@@ -83,7 +97,7 @@ class ClustersStrInput:
     PRT.write('    Array    : {}\n'.format(self.clu_str))
 
   def __str__(self):
-    SOUT = cStringIO.StringIO()
+    SOUT = StringIO()
     self.prt_ascii_art(SOUT)
     self.prt_arrays(SOUT)
     Str = SOUT.getvalue()
@@ -129,7 +143,7 @@ class ClusterTree:
       self.prt_node(I, E, names, PRT)
 
   def str_node(self, I, node, names):
-    SOUT = cStringIO.StringIO()
+    SOUT = StringIO()
     self.prt_node(I, node, names, SOUT)
     Str = SOUT.getvalue()
     SOUT.close()
@@ -208,7 +222,7 @@ class ClusterTree:
       self._get_hier_list(hier_list, names, node.right, level+1)
 
   def __str__(self):
-    SOUT = cStringIO.StringIO()
+    SOUT = StringIO()
     self.prt(SOUT)
     self.prt_hier(SOUT)
     Str = SOUT.getvalue()
@@ -323,7 +337,7 @@ class ClusterTestHelper:
     return cluster_list
       
   def __str__(self):
-    SOUT = cStringIO.StringIO()
+    SOUT = StringIO()
     SOUT.write('\nHUMAN INPUT:\n')
     SOUT.write(str(self.IN))
     SOUT.write('\nINPUT TO Bio.Cluster.treecluster:\n')
@@ -366,7 +380,7 @@ class ClusterTestHelper:
         for C in act_clus:
           sys.stdout.write('    ACTUAL CLUSTER: {}\n'.format(' '.join(C)))
         sys.stdout.write('\n')
-        raise Exception("CLUSTER({}) NOT FOUND IN RETURNED VALUE FROM Bio.Cluster.treecluster".format(clu_str))
+        raise Exception("EXPECTED CLUSTER({}) NOT FOUND IN ANY ACTUAL CLUSTERS RETURNED BY Bio.Cluster.treecluster".format(clu_str))
       else:
         sys.stdout.write('  Sub-test Passed.  Cluster found({})\n'.format(clu_str))
     sys.stdout.write('  TEST PASSED.\n'.format(clu_str))
