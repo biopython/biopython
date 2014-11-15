@@ -9,6 +9,8 @@
 # 
 #   https://github.com/biopython/biopython/issues/424#issuecomment-62823368
 
+import unittest
+
 import sys
 import cStringIO
 import copy
@@ -16,30 +18,32 @@ import numpy as np
 import collections as cx
 from operator import itemgetter
 
-from Bio import Cluster
-
+try:
+    from Bio import Cluster
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError("If you want to use Bio.Cluster, "
+                                        "install NumPy first and then "
+                                        "reinstall Biopython")
 
 #############################################################################
 # User-Created Tests: Edit this area to add more tests
 #############################################################################
-def run_all_tests():
-  test_treecluster_0()
+class TestClusterSmall(unittest.TestCase):
 
-
-
-def test_treecluster_0():
-  """This is a user-created test which fails for issue biopython#424."""
-  INPUT = (" A B  C D     E     G H I K L     M N      O P Q    R")
-  EXP_CLUSTERS = [
-    "A B",
-    "C D",
-    "A B  C D",
-    "G H I K L", # To PASS: COMMENT THIS LINE OUT to make test PASS for issue biopython#424
-    "M N",
-    "O P Q"]
-
-  A = ClusterTestHelper( INPUT ) # Run Hierarchical Tree Clustering
-  A.chk_cluster( EXP_CLUSTERS )  # Check results
+    def test_treecluster_0(self):
+        """This is a user-created test which fails for issue biopython#424."""
+        INPUT = (" A B  C D     E     G H I K L     M N      O P Q    R")
+        EXP_CLUSTERS = [
+          "A B",
+          "C D",
+          "A B  C D",
+          "G H I K L", # To PASS: COMMENT THIS LINE OUT to make test PASS for issue biopython#424
+          "M N",
+          "O P Q"]
+      
+        A = ClusterTestHelper( INPUT ) # Run Hierarchical Tree Clustering
+        A.chk_cluster( EXP_CLUSTERS )  # Check results
 
 
 
@@ -368,6 +372,8 @@ class ClusterTestHelper:
     sys.stdout.write('  TEST PASSED.\n'.format(clu_str))
     
 if __name__ == '__main__':
-  run_all_tests()
+  #run_all_tests()
+  runner = unittest.TextTestRunner(verbosity = 2)
+  unittest.main(testRunner=runner)
 
 
