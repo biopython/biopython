@@ -199,7 +199,7 @@ class ClusterTree:
     """
     PRT.write('\n  {0}:\n'.format(title))
     for I, E in enumerate(self.hier_list):
-      PRT.write('    {0:2} {1:{}} {2:6} ({3:>4}, {4:>5}): {5:>6}\n'.format(
+      PRT.write('    {0:2} {1:{2}} {3:6} ({4:>4}, {5:>5}): {6:>6}\n'.format(
         I, '-'*E[0], self.max_level, E[2], E[3], E[5], E[7]))
 
   def get_hier_list(self, names):
