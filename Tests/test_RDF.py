@@ -15,7 +15,7 @@ else:
 
 from Bio.SeqFeature import FeatureLocation, ExactPosition, WithinPosition, \
                            BetweenPosition, BeforePosition, AfterPosition, \
-                           OneOfPosition
+                           OneOfPosition, CompoundLocation
 
 class RDFizationMethodTests(unittest.TestCase):
 
@@ -44,6 +44,35 @@ class RDFizationMethodTests(unittest.TestCase):
     <http://biohackathon.org/resource/faldo#position> 10 .
 <http://unit-test/Location5-10:-1/5> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
     <http://biohackathon.org/resource/faldo#position> 6 .""")
+
+    def test_compound_location(self):
+        """Check RDFization of CompoundLocation object."""
+        rdf = CompoundLocation([FeatureLocation(10, 40, strand=+1),
+                                FeatureLocation(50, 59, strand=+1)])._rdfize('http://unit-test/')
+        self.assertEqual(rdf,
+                         """<http://unit-test/Location10-40:1/10> a <http://biohackathon.org/resource/faldo#ForwardStrandPosition> .
+<http://unit-test/Location10-40:1/40> a <http://biohackathon.org/resource/faldo#ForwardStrandPosition> .
+<http://unit-test/Location10-40:1> a <http://biohackathon.org/resource/faldo#Region> ;
+    <http://biohackathon.org/resource/faldo#begin> <http://unit-test/Location10-40:1/10> ;
+    <http://biohackathon.org/resource/faldo#end> <http://unit-test/Location10-40:1/40> .
+
+<http://unit-test/Location10-40:1/10> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+    <http://biohackathon.org/resource/faldo#position> 11 .
+<http://unit-test/Location10-40:1/40> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+    <http://biohackathon.org/resource/faldo#position> 40 .
+<http://unit-test/Location50-59:1/50> a <http://biohackathon.org/resource/faldo#ForwardStrandPosition> .
+<http://unit-test/Location50-59:1/59> a <http://biohackathon.org/resource/faldo#ForwardStrandPosition> .
+<http://unit-test/Location50-59:1> a <http://biohackathon.org/resource/faldo#Region> ;
+    <http://biohackathon.org/resource/faldo#begin> <http://unit-test/Location50-59:1/50> ;
+    <http://biohackathon.org/resource/faldo#end> <http://unit-test/Location50-59:1/59> .
+
+<http://unit-test/Location50-59:1/50> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+    <http://biohackathon.org/resource/faldo#position> 51 .
+<http://unit-test/Location50-59:1/59> a <http://biohackathon.org/resource/faldo#ExactPosition> ;
+    <http://biohackathon.org/resource/faldo#position> 59 .
+<http://unit-test/CompoundLocation10-40:1,50-59:1> a <ListOfRegions> .
+<http://unit-test/Location10-40:1> <http://www.w3.org/2000/01/rdf-schema#member> <http://unit-test/CompoundLocation10-40:1,50-59:1> .
+<http://unit-test/Location50-59:1> <http://www.w3.org/2000/01/rdf-schema#member> <http://unit-test/CompoundLocation10-40:1,50-59:1> .""")
 
     def test_exact_position(self):
         """Check RDFization of a ExactPosition object."""

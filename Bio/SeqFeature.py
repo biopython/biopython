@@ -665,24 +665,29 @@ class FeatureLocation(object):
     strand = property(fget = _get_strand, fset = _set_strand,
                       doc = "Strand of the location (+1, -1, 0 or None).")
 
+    def _rdf_location_uri(self, prefix):
+        """ Returns the URI that will constitute the subject in the
+        Turtle representation of this object.
+        """
+        strand = self.strand
+        if strand == None:
+            strand = 0
+
+        return prefix + \
+               'Location' + \
+               str(self._start) + \
+               '-' + \
+               str(self._end) + \
+               ':' + \
+               str(strand)
+
     def _rdfize(self, prefix):
         """Returns a RDF Turtle representation of the location using FALDO.
 
         The given prefix (a string) will be prepended to URIs that describe
         the location as well as its positions.
         """
-        strand = self.strand
-        if strand == None:
-            strand = 0
-
-        location_uri = prefix + \
-                       'Location' + \
-                       str(self._start) + \
-                       '-' + \
-                       str(self._end) + \
-                       ':' + \
-                       str(strand)
-
+        location_uri = self._rdf_location_uri(prefix)
         faldo_begin = self._start._rdfize(location_uri + '/',
                                           offset = 1, 
                                           identifier = str(self._start))
@@ -1276,6 +1281,57 @@ class CompoundLocation(object):
         for part in parts[1:]:
             f_seq += part
         return f_seq
+
+    def _rdfize(self, prefix):
+        """Returns a RDF Turtle representation of the compound locations
+        using FALDO.
+
+        The given prefix (a string) will be prepended to URIs that describe
+        the compound list/bag, the locations as well as their positions.
+        """
+        if len(self.parts) == 0:
+            return "";
+
+        if self.operator == "join":
+            compound_type = 'ListOfRegions' # locations ordered
+        else:
+            compound_type = 'BagOfRegions' # order unknown
+
+        # Locations of the embedded FeatureLocation objects:
+        compound_uri = prefix + \
+                       'CompoundLocation'
+        locations = ''
+        location_uris = []
+        for part in self.parts:
+            locations += "%s\n"%(part._rdfize(prefix))
+            compound_uri += "%s-%s:%s,"%(part.start,
+                                         part.end,
+                                         part.strand)
+            location_uris += [ part._rdf_location_uri(prefix) ]
+
+        # Finalize compound URI:
+        if len(self.parts) > 0:
+            compound_uri = compound_uri[:-1]
+        else:
+            compound_uri += 'Empty'
+
+        # Connect compound URIs and locations:
+        link = ''
+        for part in self.parts:
+            link += "<%s> <%s> <%s> .\n"%(
+                                 part._rdf_location_uri(prefix),
+                                 'http://www.w3.org/2000/01/rdf-schema#member',
+                                 compound_uri)
+        if len(self.parts) > 0:
+            link = link[:-1]
+
+        return """%s<%s> a <%s> .
+%s"""%(
+            locations,
+            compound_uri,
+            compound_type,
+            link,
+        )
 
 
 class AbstractPosition(object):
