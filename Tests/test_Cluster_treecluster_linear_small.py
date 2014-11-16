@@ -95,9 +95,9 @@ class ClustersStrInput:
         names = [', '.join('{0:>2}'.format(E) for E in self.names)]
         locas = [', '.join('{0:>2}'.format(E) for E in self.locs)]
         prt.write('\n  VARIABLES:\n')
-        prt.write('    index :   {0}  \n'.format(index))
-        prt.write('    names = [ {0} ]\n'.format(names))
-        prt.write('    locs  = [ {0} ]\n'.format(locas))
+        prt.write('    index :   {0}\n'.format(index))
+        prt.write('    names =   {0}\n'.format(names))
+        prt.write('    locs  =   {0}\n'.format(locas))
 
     def prt_ascii_art(self, prt=sys.stdout, title="ASCII Art"):
         """Prints the User-Input in a human-readable way."""
