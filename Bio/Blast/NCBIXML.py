@@ -563,7 +563,7 @@ class BlastParser(_XMLparser):
         assert len(self._hsp.match) == len(self._hsp.query)
         assert len(self._hsp.match) == len(self._hsp.sbjct)
 
-    # statistics
+    # Statistics
     def _end_Statistics_db_num(self):
         """number of sequences in the database (PRIVATE)."""
         self._blast.num_sequences_in_database = int(self._value)
