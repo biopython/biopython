@@ -86,15 +86,15 @@ class ClustersStrInput:
   def prt_arrays(self, PRT=sys.stdout):
     L = len(self.names)
     PRT.write('\n  VARIABLES:\n')
-    PRT.write('    index :   {0}  \n'.format('  '.join('{:>2}'.format(E) for E in range(L))))
-    PRT.write('    names = [ {0} ]\n'.format(', '.join('{:>2}'.format(E) for E in self.names)))
-    PRT.write('    locs  = [ {0} ]\n'.format(', '.join('{:>2}'.format(E) for E in self.locs)))
+    PRT.write('    index :   {0}  \n'.format('  '.join('{0:>2}'.format(E) for E in range(L))))
+    PRT.write('    names = [ {0} ]\n'.format(', '.join('{0:>2}'.format(E) for E in self.names)))
+    PRT.write('    locs  = [ {0} ]\n'.format(', '.join('{0:>2}'.format(E) for E in self.locs)))
 
   def prt_ascii_art(self, PRT=sys.stdout, title="ASCII Art"):
     L = len(self.clu_str)
     PRT.write('\n  {0}:\n'.format(title))
-    PRT.write('    Index 10s: {0}\n'.format(''.join('{}'.format(I/10) if I%10==0 else ' ' for I in range(L))))
-    PRT.write('    Index  1s: {0}\n'.format(''.join('{}'.format(I%10) for I in range(L))))
+    PRT.write('    Index 10s: {0}\n'.format(''.join('{0}'.format(I/10) if I%10==0 else ' ' for I in range(L))))
+    PRT.write('    Index  1s: {0}\n'.format(''.join('{0}'.format(I%10) for I in range(L))))
     PRT.write('    Array    : {0}\n'.format(self.clu_str))
 
   def __str__(self):
