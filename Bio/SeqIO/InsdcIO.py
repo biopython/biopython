@@ -337,12 +337,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             return location
         index = location[:length].rfind(",")
         if index == -1:
-<<<<<<< HEAD
-            # No good place to split (!)
-            import warnings
-=======
             #No good place to split (!)
->>>>>>> Cleanup of _lazy.py, InsdcIO.py, and FastaIO.py
             warnings.warn("Couldn't split location:\n%s" % location)
             return location
         return location[:index + 1] + "\n" + \
@@ -445,7 +440,6 @@ class GenBankWriter(_InsdcWriter):
         """Used in the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
-            import warnings
             from Bio import BiopythonWarning
             warnings.warn("Annotation %r too long for %r line" % (text, tag),
                           BiopythonWarning)
@@ -899,7 +893,6 @@ class EmblWriter(_InsdcWriter):
         assert len(tag) == 2
         line = tag + "   " + text
         if len(text) > self.MAX_WIDTH:
-            import warnings
             warnings.warn("Line %r too long" % line)
         self.handle.write(line + "\n")
 
@@ -1132,148 +1125,6 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\n"
 
-<<<<<<< HEAD
-if __name__ == "__main__":
-    print("Quick self test")
-    import os
-    from Bio._py3k import StringIO
-
-    def compare_record(old, new):
-        if old.id != new.id and old.name != new.name:
-            raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
-                             % (old.id, old.name, new.id, new.name))
-        if len(old.seq) != len(new.seq):
-            raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-        if str(old.seq).upper() != str(new.seq).upper():
-            if len(old.seq) < 200:
-                raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
-            else:
-                raise ValueError(
-                    "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
-        if old.features and new.features:
-            return compare_features(old.features, new.features)
-        # Just insist on at least one word in common:
-        if (old.description or new.description) \
-                and not set(old.description.split()).intersection(new.description.split()):
-            raise ValueError("%s versus %s"
-                             % (repr(old.description), repr(new.description)))
-        # TODO - check annotation
-        if "contig" in old.annotations:
-            assert old.annotations["contig"] == \
-                new.annotations["contig"]
-        return True
-
-    def compare_records(old_list, new_list):
-        """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
-        if len(old_list) != len(new_list):
-            raise ValueError(
-                "%i vs %i records" % (len(old_list), len(new_list)))
-        for old, new in zip(old_list, new_list):
-            if not compare_record(old, new):
-                return False
-        return True
-
-    def compare_feature(old, new, ignore_sub_features=False):
-        """Check two SeqFeatures agree."""
-        if old.type != new.type:
-            raise ValueError("Type %s versus %s" % (old.type, new.type))
-        if old.location.nofuzzy_start != new.location.nofuzzy_start \
-                or old.location.nofuzzy_end != new.location.nofuzzy_end:
-            raise ValueError("%s versus %s:\n%s\nvs:\n%s"
-                             % (old.location, new.location, str(old), str(new)))
-        if old.strand != new.strand:
-            raise ValueError(
-                "Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
-        if old.location.start != new.location.start:
-            raise ValueError("Start %s versus %s:\n%s\nvs:\n%s"
-                             % (old.location.start, new.location.start, str(old), str(new)))
-        if old.location.end != new.location.end:
-            raise ValueError("End %s versus %s:\n%s\nvs:\n%s"
-                             % (old.location.end, new.location.end, str(old), str(new)))
-        if not ignore_sub_features:
-            if len(old.sub_features) != len(new.sub_features):
-                raise ValueError("Different sub features")
-            for a, b in zip(old.sub_features, new.sub_features):
-                if not compare_feature(a, b):
-                    return False
-        # This only checks key shared qualifiers
-        # Would a white list be easier?
-        # for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
-        for key in set(old.qualifiers).intersection(new.qualifiers):
-            if key in ["db_xref", "protein_id", "product", "note"]:
-                # EMBL and GenBank files are use different references/notes/etc
-                continue
-            if old.qualifiers[key] != new.qualifiers[key]:
-                raise ValueError("Qualifier mis-match for %s:\n%s\n%s"
-                                 % (key, old.qualifiers[key], new.qualifiers[key]))
-        return True
-
-    def compare_features(old_list, new_list, ignore_sub_features=False):
-        """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
-        if len(old_list) != len(new_list):
-            raise ValueError(
-                "%i vs %i features" % (len(old_list), len(new_list)))
-        for old, new in zip(old_list, new_list):
-            # This assumes they are in the same order
-            if not compare_feature(old, new, ignore_sub_features):
-                return False
-        return True
-
-    def check_genbank_writer(records):
-        handle = StringIO()
-        GenBankWriter(handle).write_file(records)
-        handle.seek(0)
-
-        records2 = list(GenBankIterator(handle))
-        assert compare_records(records, records2)
-
-    def check_embl_writer(records):
-        handle = StringIO()
-        try:
-            EmblWriter(handle).write_file(records)
-        except ValueError as err:
-            print(err)
-            return
-        handle.seek(0)
-
-        records2 = list(EmblIterator(handle))
-        assert compare_records(records, records2)
-
-    for filename in os.listdir("../../Tests/GenBank"):
-        if not filename.endswith(".gbk") and not filename.endswith(".gb"):
-            continue
-        print(filename)
-
-        with open("../../Tests/GenBank/%s" % filename) as handle:
-            records = list(GenBankIterator(handle))
-
-        check_genbank_writer(records)
-        check_embl_writer(records)
-
-    for filename in os.listdir("../../Tests/EMBL"):
-        if not filename.endswith(".embl"):
-            continue
-        print(filename)
-
-        with open("../../Tests/EMBL/%s" % filename) as handle:
-            records = list(EmblIterator(handle))
-
-        check_genbank_writer(records)
-        check_embl_writer(records)
-
-    from Bio import SeqIO
-    for filename in os.listdir("../../Tests/SwissProt"):
-        if not filename.startswith("sp"):
-            continue
-        print(filename)
-
-        with open("../../Tests/SwissProt/%s" % filename) as handle:
-            records = list(SeqIO.parse(handle, "swiss"))
-
-        check_genbank_writer(records)
-
-=======
->>>>>>> Cleanup of _lazy.py, InsdcIO.py, and FastaIO.py
 class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
     """Implements SeqIO._lazy.SeqRecordProxyBase for Genbank format."""
 
