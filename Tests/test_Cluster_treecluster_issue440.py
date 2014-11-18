@@ -63,7 +63,7 @@ class TestClusterSmall(unittest.TestCase):
     def test_treecluster_i440_m(self):
         """Uncomment to see failure for issue biopython#424.
 
-        ISSUE: Is it expected that cluster "G H I K L" is broken into
+        QUESTION: Is it expected that cluster "G H I K L" is broken into
                "G H" and "I K L"?:
 
         ACTUAL CLUSTERS (method=m), 2nd FORMAT:
@@ -75,7 +75,6 @@ class TestClusterSmall(unittest.TestCase):
             Level  3  <------>     <-------> <----------->       <-------->
             Level  4  <->  <->           <-> <--->     <->       <--->
             Level  5                         <->                   <->
-         
         """
         #   'm' FAIL pairwise maximum- (or complete-) linkage clustering
         # Uncomment to see failure for issue biopython#424.
@@ -85,7 +84,7 @@ class TestClusterSmall(unittest.TestCase):
     def test_treecluster_i440_s(self):
         """Uncomment to see failure for issue biopython#424.
 
-        ISSUE: Is it expected that there are nested clusters? For example:
+        QUESTION: Is it expected that there are nested clusters? For example:
 
         1. Cluster "O    Q" is a child cluster of "O P Q".
            Would it bemore expected that "O P" or "P Q" would be a child
@@ -124,7 +123,6 @@ class TestClusterSmall(unittest.TestCase):
             Level  4  <--------------------<----->------->       <--->
             Level  5  <------>             <----->     <->
             Level  6  <->  <->             <----->
-
         """
         #   's' FAIL pairwise single-linkage clustering
         # Uncomment to see failure for issue biopython#424.
@@ -132,7 +130,19 @@ class TestClusterSmall(unittest.TestCase):
         pass
 
     def test_treecluster_i440_a(self):
-        """This is a user-created test issue biopython#424."""
+        """This is a user-created test issue biopython#424 which PASSes.
+
+        HIERARCHY DIAGRAM:
+          Index 10s: 0         1         2         3         4         5
+          Index  1s: 012345678901234567890123456789012345678901234567890123
+          Array    :  A B  C D     E     G H I K L     M N       O P Q    R
+            Level  1  <--------------------------------------------------->
+            Level  2  <------------>     <-------------------------------->
+            Level  3  <------>           <--------------->       <-------->
+            Level  4  <->  <->           <------->     <->       <--->
+            Level  5                     <-> <--->                 <->
+            Level  6                         <->
+        """
         #   method: 'a' pairwise average-linkage clustering
         self.doit(TestClusterSmall.i440_in, TestClusterSmall.i440_exp, 'a')
         pass
