@@ -1,4 +1,7 @@
-# Copyright 2006-2014 by Peter Cock.  All rights reserved.
+# Copyright 2006-2014 by Peter Cock.
+# Revisions copyright 2014 by Evan Parker.
+# All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -17,6 +20,8 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio._py3k import _bytes_to_string, _string_to_bytes
+from Bio.SeqIO import _lazy
 
 __docformat__ = "restructuredtext en"
 
@@ -131,6 +136,188 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
             yield SeqRecord(Seq(sequence, alphabet),
                             id=first_word, name=first_word, description=title)
 
+
+def FastaLazyIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+    """Returns FastaLazyRecords in the order that they are stored."""
+    record_offset = _lazy._get_first_record_start_offset(handle, 'fasta')
+    while record_offset is not None:
+        result = FastaSeqRecProxy(handle, startoffset=record_offset, \
+                               alphabet=alphabet, title2ids = title2ids)
+        yield result
+        record_offset = result.next_record_offset()
+
+class FastaSeqRecProxy(_lazy.SeqRecordProxyBase):
+    """Implements SeqIO._lazy.SeqRecordProxyBase for Fasta."""
+
+    _format = "fasta"
+
+    def __init__(self, handle, startoffset=None,\
+                 indexdb = None, indexkey=None, alphabet=None, \
+                 title2ids = None):
+        """Fix alphabet on init, and allow title2ids to be used"""
+        if alphabet is None:
+            alphabet = single_letter_alphabet
+
+        #The title2ids function can be passed to the Fasta proxy
+        self._title2ids = title2ids
+        _lazy.SeqRecordProxyBase.__init__( \
+                self, handle, startoffset, indexdb, indexkey, alphabet)
+
+    def _load_non_lazy_values(self):
+        """(private) set static seqrecord values.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        handle = self._handle
+        start_offset = self._index.record["recordoffsetstart"]
+        handle.seek(start_offset)
+        titleline = _bytes_to_string(handle.readline())
+        title = titleline[1:].rstrip()
+        #Set attibutes of the SeqRecord proxy
+        if self._title2ids:
+            id, name, descr = self._title2ids(title)
+            self.id = id
+            self.name = name
+            self.description = descr
+        else:
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                first_word = ""
+            #this ignores the index["id"] since title2id may be present
+            self.id = first_word
+            self.name = first_word
+            self.description = title
+            self.dbxrefs = []
+
+    def _make_record_index(self, new_index):
+        """(private) make the index needed for lazy loading.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        handle = self._handle
+        start_offset = new_index["recordoffsetstart"]
+        handle.seek(start_offset)
+
+        #set the "id"
+        titleline = _bytes_to_string(handle.readline())
+        title = titleline[1:].rstrip()
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            assert not title, repr(title)
+            first_word = ""
+        new_index["id"] = first_word
+        #set sequence start
+        firstlineoffset = handle.tell()
+        new_index["sequencestart"] = firstlineoffset
+        firstseqline = _bytes_to_string(handle.readline())
+
+        #find the record end and next record start
+        newrecordstart = ">"
+        emptyline = ""
+        line = _string_to_bytes(firstseqline)
+        padding = 0
+        while True:
+            if not line:
+                position = handle.tell()
+                length = position - padding - len(line) - start_offset
+                next_record = None
+                break
+            strline = _bytes_to_string(line)
+            if strline[0] == newrecordstart:
+                position = handle.tell()
+                length = position - padding - len(line) - start_offset
+                next_record = position - len(line)
+                break
+            elif strline.rstrip() == emptyline:
+                padding += len(line)
+            line = handle.readline()
+        new_index["recordoffsetlength"] = length
+        new_index["nextrecordoffset"] = next_record
+        unpadded_end = start_offset + length
+
+        #Find the width of the average line
+        linewidth = len(firstseqline)
+        strippedline = firstseqline.strip()
+        sequencewidth = len(strippedline)
+        if " " in strippedline:
+            raise ValueError("Check file format at '%s'"%(strippedline))
+        new_index["sequencelinewidth"] = linewidth
+        new_index["sequenceletterwidth"] = sequencewidth
+
+        #Find the last line and save the _len property
+        seqlen = int((unpadded_end - firstlineoffset)/linewidth)*sequencewidth
+        seq_last_ln_mod = (unpadded_end - firstlineoffset)%linewidth
+        seq_last_ln = unpadded_end - seq_last_ln_mod
+        handle.seek(seq_last_ln)
+        possiblelastline = handle.readline()
+        if seq_last_ln_mod > 0:
+            seqlen += len(possiblelastline.strip())
+        new_index["seqlen"] = seqlen
+        return new_index
+
+    def _read_features(self):
+        """(private) No features for Fasta files.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        self._features = []
+
+    def _read_seq(self):
+        """(private) Implements fasta sequence getter for base class.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+
+        #localize some instance attributes used throughout this
+        begin = self._index_begin
+        end = self._index_end
+        lengthtoget = end - begin
+        handle = self._handle
+        sequencewidth = self._index.record["sequenceletterwidth"]
+
+        #find first line to read
+        seqstart = self._index.record["sequencestart"]
+        linewidth = self._index.record["sequencelinewidth"]
+        first_line_to_read = int(begin/sequencewidth)
+        handle.seek(seqstart + first_line_to_read*linewidth)
+
+        #pull characters from first line and return early if possible
+        letters_firstline = begin%sequencewidth
+        firstline = handle.readline().strip()
+        firstline = firstline[letters_firstline:]
+        if len(firstline) >= lengthtoget:
+            self._seq = Seq(_bytes_to_string(firstline[0:lengthtoget]),
+                            self._alphabet)
+            return
+
+        #extract the rest of the lines
+        readchars = len(firstline)
+        linelist = [firstline]
+        for next_line in handle:
+            if readchars >= lengthtoget:
+                break
+            next_line = next_line.strip()
+            if b" " in next_line:
+                raise ValueError \
+                    ("No spaces permitted: see line '%s'"%(next_line))
+            else:
+                linelist.append(next_line)
+                readchars += sequencewidth
+
+        #fix the last line and assign the _seq attribute
+        last_line_index = end%sequencewidth
+        if last_line_index:
+            linelist[-1] = linelist[-1][0:last_line_index]
+        sequence = b"".join(linelist)
+        if len(sequence) != len(self):
+            raise ValueError("File not formatted correctly")
+        self._seq = Seq(_bytes_to_string(sequence), self._alphabet)
+
+    def _make_feature_index(self, new_list):
+        return new_list
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""

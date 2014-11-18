@@ -1,13 +1,23 @@
 # Copyright 2013 by Kai Blin.
+# Revisions copyright 2014 by Evan Parker.
+# All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 import unittest
-from os import path
+import warnings
+import re
+from os import path, getcwd
+from collections import namedtuple
 
 from Bio import SeqIO
-
+from Bio import BiopythonParserWarning
+from Bio.GenBank import _FeatureConsumer
+from Bio.GenBank.utils import FeatureValueCleaner
+from Bio.GenBank.Scanner import GenBankScanner
+from Bio._py3k import StringIO, _as_string
 
 class GenBankTests(unittest.TestCase):
     def test_invalid_product_line_raises_value_error(self):
@@ -17,6 +27,184 @@ class GenBankTests(unittest.TestCase):
                              'genbank')
         self.assertRaises(ValueError, parse_invalid_product_line)
 
+#define a named tuple to make tests more explicit
+File = namedtuple('File', ['path', 'name'])
+
+#set base directory
+gb_file_dir = path.join(getcwd(), 'GenBank')
+
+#well behaved files
+test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
+              'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
+              'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
+              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb',
+              'empty_feature_qualifier.gb']
+test_files = [File(path.join(gb_file_dir, f), f) for f in test_files]
+
+#files that induce warnings
+warn_files = ['no_end_marker.gb', 'wrong_sequence_indent.gb',
+              'invalid_locus_line_spacing.gb', 'invalid_misc_feature.gb',
+              '1MRR_A.gp']
+warn_files = [File(path.join(gb_file_dir, f), f) for f in warn_files]
+
+
+class GenBankTestsManyFiles(unittest.TestCase):
+
+    def generic_parse_one(self,filetuple):
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            ft = next(SeqIO.parse(filetuple.path, 'genbank'))
+            # Verify some things
+            assert len(w) == 0
+
+    def generic_parse_seq_id(self,filetuple):
+        rec = next(SeqIO.parse(filetuple.path, 'genbank'))
+        seq = rec.seq
+        id = rec.id
+
+    def warn_inducing_parse(self,filetuple):
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            ft = next(SeqIO.parse(filetuple.path, 'genbank'))
+            # Verify some things
+
+#set up tests that expect no warnings
+for filetuple in test_files:
+    name = filetuple.name.split(".")[0]
+
+    def funct(fn):
+        f = lambda x : x.generic_parse_one(fn)
+        f.__doc__ = "Checking nucleotide file %s" % fn.name
+        return f
+
+    def funct2(fn):
+        f = lambda x : x.generic_parse_seq_id(fn)
+        f.__doc__ = "Checking nucleotide file %s" % fn.name
+        return f
+
+    setattr(GenBankTestsManyFiles, "test_nuc_%s"%name, funct(filetuple))
+    setattr(GenBankTestsManyFiles, "test_nuc_seq_and_id%s"%name, \
+            funct2(filetuple))
+    del funct
+
+#set up tests that expect a warning
+for filetuple in warn_files:
+    name = filetuple.name.split(".")[0]
+
+    def funct(fn):
+        f = lambda x : x.warn_inducing_parse(fn)
+        f.__doc__ = "Checking nucleotide file %s" % fn.name
+        return f
+
+    setattr(GenBankTestsManyFiles, "test_warnings_from_%s"%name, \
+            funct(filetuple))
+    del funct
+
+class ConsumerBehaviorTest(unittest.TestCase):
+    """Test genbank consumer behavior
+
+    This TestCase implements the sequence of operations to
+    parse a GenBank record. This was initially written to help
+    learn the GenBank parser process, but it should be useful
+    to debug future modifications of the GenBank parser suite.
+    """
+    recordfile = "brca_FJ940752.gb"
+
+    def setUp(self):
+        self.handle = open(path.join('GenBank', self.recordfile), 'r')
+        self.scanner = GenBankScanner(debug=0)
+        self.consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+
+    def tearDown(self):
+        self.handle.close()
+
+    def test_handle_assignment(self):
+        self.scanner.set_handle(self.handle)
+        self.assertEqual(self.scanner.line, "")
+
+    def test_complete_(self):
+        scanner = self.scanner
+        consumer = self.consumer
+        # step 0: manually setting the handle
+        # same as >>> scanner.set_handle(self.handle)
+        scanner.handle = self.handle
+        scanner.line = ""
+        # step 1: find_start
+        scanner.find_start()
+        self.assertEqual(scanner.line[0:20], "LOCUS       FJ940752")
+        self.assertTrue(bool(re.match(r"^LOCUS(\s)*",scanner.line)))
+        # step 2: feed_first_line (expect no advancement)
+        scanner._feed_first_line(self.consumer, line=scanner.line)
+        self.assertEqual(scanner.line[0:20], "LOCUS       FJ940752")
+        self.assertTrue(bool(re.match(r"^LOCUS(\s)*",scanner.line)))
+        # step 3: feed all header data
+        scanner._feed_header_lines(consumer, scanner.parse_header())
+        self.assertEqual(scanner.line[0:40], "FEATURES             "
+                         "Location/Qualifiers")
+        self.assertTrue(bool(re.match(r"^FEATURES(\s)*Location/Qualifiers",
+                        scanner.line)))
+        # step 4: feed the features
+        featuretuple = scanner.parse_features(skip=False)
+        testline = scanner.line
+        scanner._feed_feature_table(consumer, featuretuple)
+        self.assertEqual(testline[0:6], "ORIGIN")
+        self.assertTrue(bool(re.match(r"^ORIGIN",testline)))
+        # step 5: feed the footer
+        misc_lines, sequence_string = scanner.parse_footer()
+        self.assertEqual("//", scanner.line)
+        self.assertTrue(bool(re.match(r"^//",scanner.line)))
+        # step 6: finish the consumer
+        scanner._feed_misc_lines(consumer, misc_lines)
+        consumer.sequence(sequence_string)
+
+class PartialSequenceAndPartialResultTest(unittest.TestCase):
+    """Test that parsing a record lacking features and sequence
+
+    Lazy loading uses the genbank parser suite by passing it the
+    header information lacking both the features and the sequence.
+    This test verifies that this behavior produces the expected
+    results and does not raise errors. Changes causing this test
+    to fail will also break lazy loading.
+    """
+
+    recordfile = "brca_FJ940752.gb"
+
+    def setUp(self):
+        self.handle = open(path.join('GenBank', self.recordfile), 'rb')
+        self.scanner = GenBankScanner(debug=0)
+        self.consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+
+    def tearDown(self):
+        self.handle.close()
+
+    def test_get_start_by_cut(self):
+        # Get FEATURES header line position
+        position = 0
+        while True:
+            line = self.handle.readline()
+            print(repr(line))
+            if re.match(r"^FEATURES(\s)*Location/Qu",_as_string(line)):
+                position = self.handle.tell()
+                break
+            if not line:
+                raise ValueError("record has bad header")
+        self.handle.seek(0)
+        headertext = self.handle.read(position-0)
+        top = StringIO(_as_string(headertext))
+        # Use StringIO handle with scanner
+        scanner = self.scanner
+        consumer = self.consumer
+        scanner.set_handle(top)
+        scanner.find_start()
+        scanner._feed_first_line(self.consumer, line=scanner.line)
+        scanner._feed_header_lines(consumer, scanner.parse_header())
+        self.assertEqual(consumer.data.id, "FJ940752")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

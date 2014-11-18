@@ -109,7 +109,6 @@ def _open_for_random_access(filename):
         handle.seek(0)
     return handle
 
-
 class UndoHandle(object):
     """A Python handle that adds functionality for saving lines.
 

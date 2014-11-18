@@ -506,12 +506,6 @@ class _BaseGenBankConsumer(object):
     def __init__(self):
         pass
 
-    def _unhandled(self, data):
-        pass
-
-    def __getattr__(self, attr):
-        return self._unhandled
-
     def _split_keywords(self, keyword_string):
         """Split a string of keywords into a nice clean list.
         """
@@ -1249,7 +1243,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
-        if not sequence and self.__expected_size:
+        if not sequence and self._expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
         else:
             self.data.seq = Seq(sequence, seq_alphabet)

@@ -1,4 +1,6 @@
-# Copyright 2007-2011 by Peter Cock.  All rights reserved.
+# Copyright 2007-2011 by Peter Cock.
+# Revisions copyright 2014 by Evan Parker.
+# All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -32,15 +34,22 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 """
 
 from __future__ import print_function
+import warnings
+import re
+from copy import copy
 
-from Bio.Seq import UnknownSeq
+from Bio import SeqFeature, BiopythonParserWarning
+from Bio.Seq import UnknownSeq, Seq
+from Bio.SeqIO import _lazy
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
+from Bio.GenBank import _FeatureConsumer
+from Bio.GenBank.utils import FeatureValueCleaner
 from Bio import Alphabet
 from .Interfaces import SequentialSequenceWriter
-from Bio import SeqFeature
+from Bio._py3k import _is_int_or_long, _bytes_to_string
+from Bio._py3k import _binary_to_string_handle
+from Bio._py3k import basestring, StringIO
 
-from Bio._py3k import _is_int_or_long
-from Bio._py3k import basestring
 
 __docformat__ = "restructuredtext en"
 
@@ -328,8 +337,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             return location
         index = location[:length].rfind(",")
         if index == -1:
-            # No good place to split (!)
-            import warnings
+            #No good place to split (!)
             warnings.warn("Couldn't split location:\n%s" % location)
             return location
         return location[:index + 1] + "\n" + \
@@ -432,7 +440,6 @@ class GenBankWriter(_InsdcWriter):
         """Used in the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
-            import warnings
             from Bio import BiopythonWarning
             warnings.warn("Annotation %r too long for %r line" % (text, tag),
                           BiopythonWarning)
@@ -886,7 +893,6 @@ class EmblWriter(_InsdcWriter):
         assert len(tag) == 2
         line = tag + "   " + text
         if len(text) > self.MAX_WIDTH:
-            import warnings
             warnings.warn("Line %r too long" % line)
         self.handle.write(line + "\n")
 
@@ -1119,10 +1125,456 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\n"
 
+class GenbankSeqRecProxy(_lazy.SeqRecordProxyBase):
+    """Implements SeqIO._lazy.SeqRecordProxyBase for Genbank format."""
+
+    def __init__(self, *args, **kwargs):
+        scanner = GenBankScanner(debug=0)
+        consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+        self._parse_aparatus = (scanner,consumer)
+        super(GenbankSeqRecProxy, self).__init__(*args, **kwargs)
+
+    _format = "genbank"
+
+    _format_components = {"record_start":"LOCUS       ",
+        "ft_start":["FEATURES             Location/Qual","FEATURES"],
+        "ft_start_re":r"(FEATURES)(\s)*(Location)",
+        "header_width":12,
+        "ft_end_markers":[],
+        "ft_qualifier_indent":21,
+        "ft_qualifer_spacer":" "*21,
+        "sequence_headers":["CONTIG", "ORIGIN", "BASE COUNT", "WGS"],
+        "main_seq_header":"ORIGIN",
+        "seq_line_letters_begin":10,
+        "seq_line_letters_end":None,
+        "version_line":"VERSION",
+        "accession_line":"ACCESSION"}
+
+    def _parse_first_line(self, new_index, firstline):
+        """(private) parse GenBank LOCUS line."""
+        seqlen = [char for char in firstline.split()[2] if char.isdigit()]
+        new_index["seqlen"] = int("".join(seqlen))
+        return ""
+
+    def _parse_seq_header_line(self, new_index, line):
+        """ (private) parse GenBank ORIGIN line."""
+        pass
+
+    def _make_record_index(self, new_index):
+        """(private) implements record index maker.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        handle = self._handle
+        fmt_components = self._format_components
+        start_offset = new_index["recordoffsetstart"]
+        handle.seek(start_offset)
+
+        record_start = fmt_components["record_start"]
+        sequence_headers = fmt_components["sequence_headers"]
+        ft_start_re = fmt_components["ft_start_re"]
+        main_seq_header = fmt_components["main_seq_header"]
+        accession_line = fmt_components["accession_line"]
+        version_line = fmt_components["version_line"]
+
+        #Make index for header group of data, also set id
+        id_is_set = False
+        firstline = _bytes_to_string(handle.readline())
+        assert firstline.startswith(record_start)
+        version = self._parse_first_line(new_index, firstline)
+
+        featuresre = re.compile(ft_start_re)
+        while True:
+            old_position = handle.tell()
+            line = _bytes_to_string(handle.readline())
+            new_position = handle.tell()
+            if featuresre.match(line):
+                new_index["featuresoffsetstart"] = old_position
+                new_index["header_end"] = new_position
+                new_index["has_features"] = 1
+                break
+            if any(map(line.startswith, sequence_headers)):
+                #featuresoffsetstart will be ignored later
+                new_index["featuresoffsetstart"] = 0
+                new_index["header_end"] = new_position
+                new_index["has_features"] = 0
+                handle.seek(-1*len(line), 1)
+                break
+            if not id_is_set:
+                if line.startswith(accession_line):
+                    id = line.split(";")[0]
+                    id = id.split()[1]
+                    new_index["id"] = id.strip() + version
+                if line.startswith(version_line):
+                    id_is_set = True
+                    id = line.split()[1]
+                    new_index["id"] = id.strip()
+
+        # id must be assigned at this point
+        assert "id" in new_index
+
+        # this segment indexes the sequence
+        while True:
+            oldposition = handle.tell()
+            line = _bytes_to_string(handle.readline())
+            newposition = handle.tell()
+            if line.startswith(main_seq_header):
+                self._parse_seq_header_line(new_index, line)
+                new_index["sequencestart"] = newposition
+                new_index["featuresoffsetend"] = newposition
+                oldposition = newposition
+                line = _bytes_to_string(handle.readline())
+                if line.startswith("//"):
+                    new_index["unknownseq"] = 1
+                    new_index["sequencelinewidth"] = 1
+                    new_index["sequenceletterwidth"] = 1
+                else:
+                    new_index["unknownseq"] = 0
+                    newposition = handle.tell()
+                    new_index["sequencelinewidth"] = newposition - oldposition
+                    lettrbegin = fmt_components["seq_line_letters_begin"]
+                    lettrend = fmt_components["seq_line_letters_end"]
+                    seqletters = line[lettrbegin:lettrend].rstrip()
+                    real_letters_len = sum(1 for i in seqletters if i != " ")
+                    new_index["sequenceletterwidth"] = real_letters_len
+                    # fastforward through sequence lines without using tell
+                    while True:
+                        if line[0:2] == "//":
+                            break
+                        if not line:
+                            raise ValueError("Record ends early or lacks //")
+                        if featuresre.match(line):
+                            raise ValueError( \
+                                "Multiple records are unseparated")
+                        line = _bytes_to_string(handle.readline())
+
+            #denote record end and the start of the following record
+            if line.startswith("//"):
+                record_end = handle.tell()
+                new_index["recordoffsetlength"] = record_end - start_offset
+                nextline = _bytes_to_string(handle.readline())
+                while nextline:
+                    if nextline.strip() == "":
+                        nextline = _bytes_to_string(handle.readline())
+                        record_end = handle.tell()
+                    else:
+                        record_end = handle.tell()
+                        break
+                if not nextline:
+                    new_index["nextrecordoffset"] = None
+                else:
+                    new_index["nextrecordoffset"] = record_end - len(nextline)
+
+                break
+        #set the index
+        return new_index
+
+    def _load_non_lazy_values(self):
+        """(private) Set static seqrecord values.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        handle = self._handle
+        _index = self._index
+        start_offset = _index.record["recordoffsetstart"]
+        header_end = _index.record["featuresoffsetend"]
+        handle.seek(start_offset)
+        header_lines = handle.read(header_end - start_offset)
+        header_lines = StringIO(_bytes_to_string(header_lines))
+
+        #set up scanner
+        scanner, consumer = self._parse_aparatus
+        #parse record header
+        scanner.set_handle(header_lines)
+        scanner.find_start()
+        scanner._feed_first_line(consumer, line=scanner.line)
+        scanner._feed_header_lines(consumer, scanner.parse_header())
+
+        #copy consumer and check final ID assignment
+        contemp = copy(consumer)
+        contemp.start_feature_table() #feeds references
+        contemp.record_end("//")
+
+        self.id = contemp.data.id
+        self.name = contemp.data.name
+        self.description = contemp.data.description
+        self.annotations = contemp.data.annotations
+        self.dbxrefs = contemp.data.dbxrefs
+        self._alphabet = contemp.data.seq.alphabet
+
+        del(contemp)
+
+    def _read_seq(self):
+        """(private) Implements sequence getter for base class.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        #localize some instance attributes used throughout this
+        begin = self._index_begin
+        end = self._index_end
+        lengthtoget = end - begin
+        handle = self._handle
+        sequencewidth = self._index.record["sequenceletterwidth"]
+        lettersbegin = self._format_components["seq_line_letters_begin"]
+        lettersend= self._format_components["seq_line_letters_end"]
+
+        #return unknown sequence if possible
+        if self._index.record["unknownseq"] == 1:
+            self._seq = UnknownSeq(len(self), self._alphabet)
+            return None
+
+        #find first line to read
+        seqstart = self._index.record["sequencestart"]
+        linewidth = self._index.record["sequencelinewidth"]
+        first_line_to_read = int(begin/sequencewidth)
+        handle.seek(seqstart + first_line_to_read*linewidth)
+
+        #pull characters from first line and return early if possible
+        letters_firstline = begin%sequencewidth
+        firstline = _bytes_to_string(handle.readline().rstrip())
+        firstline = firstline[lettersbegin:lettersend]
+        firstline = "".join(let for let in firstline if let != " ")
+        firstline = firstline[letters_firstline:]
+        if len(firstline) >= lengthtoget:
+            firstline = firstline.upper()
+            self._seq = Seq(firstline[0:lengthtoget], self._alphabet)
+            return
+
+        #extract the rest of the lines
+        readchars = len(firstline)
+        linelist = [firstline]
+        for next_line in handle:
+            if readchars >= lengthtoget:
+                break
+            next_line = next_line[lettersbegin:lettersend].rstrip()
+            next_line = _bytes_to_string(next_line.replace(b' ', b''))
+            linelist.append(next_line)
+            readchars += sequencewidth
+
+        #fix the last line and assign the _seq attribute
+        last_line_index = end%sequencewidth
+        if last_line_index:
+            linelist[-1] = linelist[-1][0:last_line_index]
+        sequence = "".join(linelist)
+        if len(sequence) != len(self):
+            raise ValueError("File not formatted correctly")
+        sequence = sequence.upper()
+        self._seq = Seq(sequence, self._alphabet)
+
+    def _make_feature_index(self, new_list):
+        """(private) Implements feature index maker.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        #use handle hack: this is a wrapper that operates on a
+        # binary file returning string values. Only readline, read,
+        # seek, __iter__, close, tell, and seek are implemented in
+        # the wrapper for python 3.x, In py2 this simply returns
+        # the passed handle.
+        handle = _binary_to_string_handle(self._handle)
+
+        #line values:
+        _format_components = self._format_components
+        #RECORD_START = _format_components["record_start"]
+        HEADER_WIDTH = _format_components["header_width"]
+        FEATURE_START_MARKERS = _format_components["ft_start"]
+        FEATURE_END_MARKERS = _format_components["ft_end_markers"]
+        FEATURE_QUALIFIER_INDENT = _format_components["ft_qualifier_indent"]
+        FEATURE_QUALIFIER_SPACER = _format_components["ft_qualifer_spacer"]
+        SEQUENCE_HEADERS = _format_components["sequence_headers"]
+
+        #to make the feature index, pull the features portion of the file
+        ft_begin = self._index.record["featuresoffsetstart"]
+        handle.seek(ft_begin)
+        line_begin_offset = handle.tell()
+        line = handle.readline()
+
+        #fetch the captive parsers
+        scanner, consumer = self._parse_aparatus
+
+        #begin parsing by returning when no features are present
+        if not any(map(line.startswith, FEATURE_START_MARKERS)):
+            self._feature_index = new_list
+            return new_list
+
+        line_begin_offset = handle.tell()
+        line = handle.readline()
+
+        while True:
+            #cases that end iteration early
+            if not line:
+                raise ValueError("Premature end of file during ft indexing")
+            if line[:HEADER_WIDTH].strip() in SEQUENCE_HEADERS:
+                #found start of sequence, no more features can be indexed
+                break
+            line = line.rstrip()
+            if line == "//":
+                raise ValueError("Premature end of feature table; '//' found")
+            if line in FEATURE_END_MARKERS:
+                #found feature end maker, indexing over
+                line_begin_offset = handle.tell()
+                line = handle.readline()
+                break
+
+            #cases that continue iteration without building an index
+            if line[2:FEATURE_QUALIFIER_INDENT].strip() == "":
+                #This is an empty feature line between qualifiers. Empty
+                #feature lines within qualifiers are handled below (ignored).
+                line_begin_offset = handle.tell()
+                line = handle.readline()
+                continue
+            if len(line) < FEATURE_QUALIFIER_INDENT:
+                warnings.warn("line too short to contain a feature: %r" % line,
+                              BiopythonParserWarning)
+                line_begin_offset = handle.tell()
+                line = handle.readline()
+                continue
+
+            #Build up a list of the lines making up this feature:
+            if line[FEATURE_QUALIFIER_INDENT] != " " \
+                    and " " in line[FEATURE_QUALIFIER_INDENT:]:
+                #The feature table design enforces a length limit on the feature keys.
+                #Some third party files (e.g. IGMT's EMBL like files) solve this by
+                #over indenting the location and qualifiers.
+                feature_begin_offset = line_begin_offset
+                feature_end_offset = handle.tell()
+                feature_key, line = line[2:].strip().split(None, 1)
+                feature_lines = [line]
+                warnings.warn("Overindented %s feature?" % feature_key,
+                              BiopythonParserWarning)
+            else:
+                feature_begin_offset = line_begin_offset
+                feature_end_offset = handle.tell()
+                feature_key = line[2:FEATURE_QUALIFIER_INDENT].strip()
+                feature_lines = [line[FEATURE_QUALIFIER_INDENT:]]
+            line_begin_offset = handle.tell()
+            feature_end_offset = line_begin_offset
+            line = handle.readline()
+            while line[:FEATURE_QUALIFIER_INDENT] == FEATURE_QUALIFIER_SPACER \
+                    or line.rstrip() == "":  # cope with blank lines in the midst of a feature
+                #Use strip to remove any harmless trailing white space AND and leading
+                #white space (e.g. out of spec files with too much indentation)
+                feature_lines.append(line[FEATURE_QUALIFIER_INDENT:].strip())
+                line_begin_offset = handle.tell()
+                feature_end_offset = line_begin_offset
+                line = handle.readline()
+
+            tempfeature = [scanner.parse_feature(feature_key, feature_lines)]
+            tempfeature = scanner._feed_feature_table(consumer, tempfeature)
+            tempfeature = consumer.data.features.pop()
+            feature_begin_position = tempfeature.location.nofuzzy_start
+            feature_end_position = tempfeature.location.nofuzzy_end
+            if isinstance(tempfeature.type, str):
+                qualifier = tempfeature.type
+            else:
+                qualifier = ""
+            index_tuple = (feature_begin_position, feature_end_position,
+                           feature_begin_offset, feature_end_offset,
+                           qualifier)
+            new_list.insert(index_tuple)
+        return new_list
+
+    def _read_features(self):
+        """(private) implements feature getter.
+
+        See docs in SeqIO._lazy.SeqRecordProxyBase for details.
+        """
+        #set some constants:
+        QUALIFIER_INDENT = 21
+
+        #localize some instance attributes used throughout this
+        begin = self._index_begin
+        end = self._index_end
+        handle = _binary_to_string_handle(self._handle)
+        scanner, consumer = self._parse_aparatus
+
+        #index format (begin_pos, end_pos, begin_offset, end_offset, qualify)
+        feature_index_list = self._index.get_features(begin, end)
+        feature_index_list = feature_index_list[begin:end]
+        #make the feature list
+        prefeature_list = []
+        #use the scanner's parse_feature method to make a list of pre-features
+        for feature_index in feature_index_list:
+            current_position, end_offset = feature_index[2:4]
+            handle.seek(current_position)
+            line = handle.readline()
+            feature_key = line[2:QUALIFIER_INDENT].strip()
+            feature_lines = [line[QUALIFIER_INDENT:].rstrip()]
+            current_position = handle.tell()
+            lines = handle.read(end_offset - current_position)
+            lines = lines.split("\n")
+            for line in lines:
+                feature_lines.append(line[QUALIFIER_INDENT:].strip())
+            prefeature_list.append(scanner.parse_feature(feature_key,
+                                                         feature_lines))
+        #feed the prefeatures to the consumer
+        scanner._feed_feature_table(consumer, prefeature_list)
+        featurelist = consumer.data.features
+        #reset consumer in case it is used later
+        consumer.data.features = []
+        #all features are parsed from the original context, adjust the
+        # feature positions when necessary
+        if begin != 0:
+            featurelist = [f._shift(-begin) for f in featurelist]
+        self._features = featurelist
+
+class EmblSeqRecProxy(GenbankSeqRecProxy):
+    """Implements SeqIO._lazy.SeqRecordProxyBase for EMBL format."""
+    _format = "embl"
+
+    _format_components = {"record_start":"ID   ",
+        "ft_start": ["FH   Key             Location/Qualifiers", "FH"],
+        "ft_start_re":r"(FH)(\s)*(Key)(\s)*(Location)",
+        "header_width":5,
+        "ft_end_markers":["XX"], # XX can also mark the end of many things!
+        "ft_qualifier_indent":21,
+        "ft_qualifer_spacer": "FT" + " "*19,
+        "sequence_headers":["SQ", "CO"],
+        "main_seq_header":"SQ   ",
+        "seq_line_letters_begin":5,
+        "seq_line_letters_end":70,
+        "version_line":"SV   ",
+        "accession_line":"AC   "}
+
+    def __init__(self, *args, **kwargs):
+        scanner = EmblScanner(debug=0)
+        consumer = _FeatureConsumer(use_fuzziness=1,
+                            feature_cleaner=FeatureValueCleaner())
+        self._parse_aparatus = (scanner,consumer)
+        # This is not a typo, this is required to access parent clas init
+        super(GenbankSeqRecProxy, self).__init__(*args, **kwargs)
+
+    def _parse_first_line(self, new_index, firstline):
+        """(private) parse EMBL id line for self.id."""
+        seqversion = None
+        accession = None
+        for part in firstline.split(";"):
+            part = part.strip()
+            if part.startswith("SV ") and len(part.split()) > 1:
+                seqversion = "." + part.split()[1]
+            elif part.startswith("ID") and len(part.split()) > 1:
+                accession = part.split()[1]
+        # validate headerline
+        if accession is None:
+            raise ValueError("Record does not contain valid ID")
+        if seqversion is not None:
+            accession += seqversion
+        else:
+            seqversion = ""
+        # add values to index
+        new_index["id"] = accession
+        return seqversion
+
+    def _parse_seq_header_line(self, new_index, line):
+        """(private) parse EMBL SQ line for length."""
+        line = line[self._format_components["header_width"]:]
+        seqlength = int(line.split()[1])
+        new_index["seqlen"] = seqlength
+
 if __name__ == "__main__":
     print("Quick self test")
     import os
-    from Bio._py3k import StringIO
 
     def compare_record(old, new):
         if old.id != new.id and old.name != new.name:
@@ -1138,12 +1590,12 @@ if __name__ == "__main__":
                     "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
         if old.features and new.features:
             return compare_features(old.features, new.features)
-        # Just insist on at least one word in common:
+        #Just insist on at least one word in common:
         if (old.description or new.description) \
                 and not set(old.description.split()).intersection(new.description.split()):
             raise ValueError("%s versus %s"
                              % (repr(old.description), repr(new.description)))
-        # TODO - check annotation
+        #TODO - check annotation
         if "contig" in old.annotations:
             assert old.annotations["contig"] == \
                 new.annotations["contig"]
@@ -1182,12 +1634,12 @@ if __name__ == "__main__":
             for a, b in zip(old.sub_features, new.sub_features):
                 if not compare_feature(a, b):
                     return False
-        # This only checks key shared qualifiers
-        # Would a white list be easier?
-        # for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
+        #This only checks key shared qualifiers
+        #Would a white list be easier?
+        #for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
         for key in set(old.qualifiers).intersection(new.qualifiers):
             if key in ["db_xref", "protein_id", "product", "note"]:
-                # EMBL and GenBank files are use different references/notes/etc
+                #EMBL and GenBank files are use different references/notes/etc
                 continue
             if old.qualifiers[key] != new.qualifiers[key]:
                 raise ValueError("Qualifier mis-match for %s:\n%s\n%s"
@@ -1200,7 +1652,7 @@ if __name__ == "__main__":
             raise ValueError(
                 "%i vs %i features" % (len(old_list), len(new_list)))
         for old, new in zip(old_list, new_list):
-            # This assumes they are in the same order
+            #This assumes they are in the same order
             if not compare_feature(old, new, ignore_sub_features):
                 return False
         return True
