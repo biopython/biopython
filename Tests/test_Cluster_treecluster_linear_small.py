@@ -50,20 +50,30 @@ class TestClusterSmall(unittest.TestCase):
 
     def test_treecluster_0(self):
         """This is a user-created test which fails for issue biopython#424."""
-        usr_input = (" A B  C D     E     G H I K L     M N      O P Q    R")
+        usr_input = (" A B  C D     E     G H I K L     M N       O P Q    R")
         expected_clusters = [
             "A B",
             "C D",
             "A B  C D",
-            # To (mock) "PASS": COMMENT OUT FOLLOWING LINE OUT
+            # To (mock) "PASS" method='m': COMMENT OUT FOLLOWING LINE OUT
             "G H I K L",
             "M N",
             "O P Q"]
 
         # Run Hierarchical Tree Clustering
-        test_obj = ClusterTestHelper(usr_input)
-        # Check results
+        #   'm' FAIL pairwise maximum- (or complete-) linkage clustering
+        #   's' FAIL pairwise single-linkage clustering
+        #   'a' ???? pairwise average-linkage clustering
+        #self.doit(usr_input, expected_clusters, 'a')
+        self.doit(usr_input, expected_clusters, 'm')
+        self.doit(usr_input, expected_clusters, 's')
+
+
+    def doit(self, usr_input, expected_clusters, method):
+        test_obj = ClusterTestHelper(usr_input, method)
         test_obj.chk_cluster(expected_clusters)
+        test_obj.tree_test_obj.prt_hier()
+        test_obj.prt_ascii_art_levels()
 
 
 #############################################################################
@@ -121,11 +131,32 @@ class ClustersStrInput:
 class ClusterTree:
     """Used to create, store and print Biopython Cluster treecluster results."""
 
-    def __init__(self, dist_matrix, names):
-        self.tree = Cluster.treecluster(distancematrix=dist_matrix)
+    def __init__(self, dist_matrix, method, names):
+        #       meth  P/F
+        # default 'm' FAIL pairwise maximum- (or complete-) linkage clustering
+        #         's' NO!  pairwise single-linkage clustering
+        #         'a' No   pairwise average-linkage clustering
+        self.tree = Cluster.treecluster(distancematrix=dist_matrix, 
+            dist='e', # Euclidean distance is the Bio.Cluster.treecluster default 
+            method=method)
         # Reformat tree for easier printing in various formats
-        self.max_level = None # get_hier_list will set this value
-        self.hier_list = self.get_hier_list(names)
+        # The following 3 values are set by set_hier_list():
+        self.max_level = None
+        self.hier_list = []
+        self.actual_clusters = [] # Clusters found by treecluster
+        self.set_hier_info(names)
+
+    def set_hier_info(self, names):
+        """Get the hierarchy."""
+        # Assume top-level node is the last node in the treecluster list
+        self._set_hier_list(names, -1*len(self.tree), level=1)
+        self.max_level = max(elem[0] for elem in self.hier_list)
+        # I        0   1      2    3  4       5  6        7     8
+        # elem Level, idx, NodeID, L, L.left, R, R.right, D, num_leafs
+        for elem in self.hier_list:
+            clu_set = frozenset(self.get_all_locs_or_names(names, elem[4], elem[6]))
+            self.actual_clusters.append(clu_set)
+            elem.append(len(clu_set))
 
     def prt(self, prt=sys.stdout):
         """Print Tree without printing node names."""
@@ -191,21 +222,17 @@ class ClusterTree:
         """
         prt.write('\n  {0}:\n'.format(title))
         max_lev = self.max_level
+        hier = '{0:{1}}'.format("Hier", max_lev)
+        prt.write('     i {0} NodeID n.left n.right n.dist leaf-values\n'.format(hier))
+        prt.write('   --- {0} ------ ------ ------- ------ -----------\n'.format('-'*max_lev))
         for idx, elem in enumerate(self.hier_list):
             hier_dashes = '-'*elem[0]
             hier = '{0:{1}}'.format(hier_dashes, max_lev)
-            pat = '    {0:2} {1} {2:6} ({3:>4}, {4:>5}): {5:>6}\n'
-            prt.write(pat.format(idx, hier, elem[2], elem[3], elem[5], elem[7]))
+            vals = ' '.join(sorted(self.actual_clusters[idx]))
+            pat = '    {0:2} {1} {2:6} ({3:>4}, {4:>5}): {5:>6.2f} {6}\n'
+            prt.write(pat.format(idx, hier, elem[2], elem[3], elem[5], elem[7], vals))
 
-    def get_hier_list(self, names):
-        """Get the hierarchy."""
-        hier_list = []
-        # Assume top-level node is the last node in the treecluster list
-        self._get_hier_list(hier_list, names, -1*len(self.tree), level=1)
-        self.max_level = max(elem[0] for elem in hier_list)
-        return hier_list
-
-    def _get_hier_list(self, hier_list, names, node_num, level):
+    def _set_hier_list(self, names, node_num, level):
         """Recursively called get_hierarchy."""
         # If this is not a leaf node
         if node_num < 0:
@@ -214,11 +241,12 @@ class ClusterTree:
             # Print the intermediate node
             left = self.get_node_str(node.left, names)
             right = self.get_node_str(node.right, names)
+            # Level, idx, NodeID, L, L.left, R, R.right, D
             elems = [level, idx, node_num, left,
                      node.left, right, node.right, node.distance]
-            hier_list.append(elems)
-            self._get_hier_list(hier_list, names, node.left, level+1)
-            self._get_hier_list(hier_list, names, node.right, level+1)
+            self.hier_list.append(elems)
+            self._set_hier_list(names, node.left, level+1)
+            self._set_hier_list(names, node.right, level+1)
 
     def __str__(self):
         sout = StringIO()
@@ -250,19 +278,23 @@ class ClusterTree:
 class ClusterTestHelper:
     """Class used to take items in a string and generate clusters."""
 
-    def __init__(self, elem_str):
+    def __init__(self, elem_str, method='m'):
+        self.method = method
         self.usr_input_obj = ClustersStrInput(elem_str)
         self.dist_matrix_orig = self._mk_dist_matrix()
-        warn = "**WARNING: Bio.Cluster.treecluster \
-                CHANGES THE DISTANCE MATRIX, SO MAKE A COPY\n"
-        sys.stdout.write(warn)
+        warn = "**WARNING: Bio.Cluster.treecluster " \
+               "CHANGES THE DISTANCE MATRIX, SO MAKE A COPY\n"
+        #sys.stdout.write(warn) # This is expected behavior
         self.dist_matrix = copy.deepcopy(self.dist_matrix_orig)
         #print self.dist_matrix_orig.dist_matrix
         #print self.dist_matrix
         self.tree_test_obj = ClusterTree(
-            self.dist_matrix, self.usr_input_obj.names)
+            self.dist_matrix, method, self.usr_input_obj.names)
         #print self.dist_matrix
         #print self.dist_matrix_orig.dist_matrix
+        self.level_pts = cx.defaultdict(list)
+        self.set_cluster_pts()
+        self.chk_cluster_overlap()
 
     def prt_dist_matrix(self, names, prt=sys.stdout):
         """Prints the distance matrix in a human-readable format."""
@@ -315,24 +347,47 @@ class ClusterTestHelper:
 
         """
         # Sort hierarchy list by Hierarchy Level where 1 is the Top-Level
-        level = cx.defaultdict(list)
-        for elem in sorted(self.tree_test_obj.hier_list, key=itemgetter(0)):
-            level[elem[0]].append((elem[1:]))
-        num_locs = max(self.usr_input_obj.locs) + 1
-        locs = self.usr_input_obj.locs
         self.usr_input_obj.prt_ascii_art(prt, title)
-        for level, elem in sorted(level.items(), key=itemgetter(0)):
+        num_locs = max(self.usr_input_obj.locs) + 1
+        for level, clu_pts in sorted(self.level_pts.items()):
             ret_str = [' ']*num_locs
-            for pts in elem:
-                cur_level_locs = \
-                    self.tree_test_obj.get_all_locs_or_names(
-                        locs, pts[3], pts[5])
-                loc_min = min(cur_level_locs)
-                loc_max = max(cur_level_locs)
-                for i in range(loc_min, loc_max+1):
-                    ret_str[i] = '#'
+            for pts in clu_pts:
+                clu_min = pts[0]
+                clu_max = pts[1]
+                ret_str[clu_min] = '<'
+                ret_str[clu_max] = '>'
+                for i in range(clu_min+1, clu_max):
+                    if ret_str[i] == ' ':
+                        ret_str[i] = '-'
             prt.write('      Level {0:2} {1}\n'.format(level, ''.join(ret_str)))
 
+    def set_cluster_pts(self):
+        """Creates lists of cluster endpoints for each level of hierarchy."""
+        locs = self.usr_input_obj.locs
+        for elem in self.tree_test_obj.hier_list:
+            cur_level_locs = \
+                self.tree_test_obj.get_all_locs_or_names(
+                    locs, elem[4], elem[6])
+            loc_min = min(cur_level_locs)
+            loc_max = max(cur_level_locs)
+            self.level_pts[elem[0]].append((loc_min, loc_max))
+
+    def chk_cluster_overlap(self):
+        """Checks that clusters on a single level do not overlap."""
+        # Check for overlaps on each hierarchical level.
+        overlap_levels = set()
+        for level, ranges in sorted(self.level_pts.items()):
+            ctr = cx.Counter()
+            for start, stop in ranges:
+                    for val in range(start, stop+1):
+                        ctr[val] += 1
+            if ctr.most_common()[0][1] > 1:
+                overlap_levels.add(level)
+        if overlap_levels:
+            raise Exception('\n'.join([
+                str(self),
+                "CLUSTERS OVERLAP ON HIERARCHICAL LEVEL({0})".format(
+                    ', '.join(map(str,overlap_levels)))]))
 
     def get_cluster_list(self):
         """Get a list of clusters to be used for self-checking tests."""
@@ -345,7 +400,7 @@ class ClusterTestHelper:
                     names, elem[4], elem[6])))
         return cluster_list
 
-    def __str__(self):
+    def __str__(self, title="HIERARCHY DIAGRAM"):
         sout = StringIO()
         sout.write('\nHUMAN INPUT:\n')
         sout.write(str(self.usr_input_obj))
@@ -353,8 +408,9 @@ class ClusterTestHelper:
         self.prt_dist_matrix(self.usr_input_obj.names, sout)
         sout.write('\nOUTPUT FROM Bio.Cluster.treecluster:\n')
         self.tree_test_obj.prt_w_names(self.usr_input_obj.names, sout)
-        self.tree_test_obj.prt_hier(sout, "HIERARCHY DIAGRAM, 1st FORMAT")
-        self.prt_ascii_art_levels(sout, "HIERARCHY DIAGRAM, 2nd FORMAT")
+        msg = "{0} (method={1})".format(title, self.method)
+        self.tree_test_obj.prt_hier(sout, "{0}, 1st FORMAT".format(msg))
+        self.prt_ascii_art_levels(sout, "{0}, 2nd FORMAT".format(msg))
         ret_str = sout.getvalue()
         sout.close()
         return ret_str
@@ -387,7 +443,7 @@ class ClusterTestHelper:
            then throw an Exception.
         """
         # Get the list of actual clusters generated by Bio.Cluster.treecluster
-        actual_clusters = self.get_cluster_list()
+        actual_clusters = self.tree_test_obj.actual_clusters
         node_ids = [elem[2] for elem in self.tree_test_obj.hier_list]
         # Loop through the list of expected clusters
         for clu_str in exp_cluster_list:
@@ -399,22 +455,15 @@ class ClusterTestHelper:
                     test_pass = True
                     break
             if test_pass is False:
-                pat = \
-                    '  Bio.Cluster.treecluster NodeID({0:>3}) CLUSTER HAS: {1}'
-                act_str = [
-                    pat.format(num, ' '.join(clu))
-                    for num, clu in zip(node_ids, actual_clusters)]
-
                 err_msg = ''.join([
-                    str(self),
-                    '\nACTUAL CLUSTERS RETURNED BY ',
-                    'Bio.Cluster.treecluster:\n',
-                    '\n'.join(act_str),
+                    self.__str__("ACTUAL CLUSTERS"),
                     "\n**FAILURE: ",
                     "EXPECTED CLUSTER({0}) NOT FOUND".format(clu_str),
                     " IN ANY ACTUAL CLUSTERS RETURNED BY ",
                     "Bio.Cluster.treecluster\n"])
                 raise Exception(err_msg)
+                self.tree_test_obj.prt_hier(sout, "ACTUAL CLUSTERS, 1st FORMAT")
+                self.prt_ascii_art_levels(sout, "ACTUAL CLUSTERS, 2nd FORMAT")
             else:
                 msg = '  Sub-test Passed.  Cluster found({0})\n'.format(clu_str)
                 sys.stdout.write(msg)
