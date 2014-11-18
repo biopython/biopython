@@ -46,27 +46,96 @@ except ImportError:
 # User-Created Tests: Edit this area to add more tests
 #############################################################################
 class TestClusterSmall(unittest.TestCase):
-    """Unit tests for testing the clustering of small sets of data."""
+    """Unit tests; hierarchical clustering of small sets of data."""
 
-    def test_treecluster_0(self):
-        """This is a user-created test which fails for issue biopython#424."""
-        usr_input = (" A B  C D     E     G H I K L     M N       O P Q    R")
-        expected_clusters = [
-            "A B",
-            "C D",
-            "A B  C D",
-            # To (mock) "PASS" method='m': COMMENT OUT FOLLOWING LINE OUT
-            "G H I K L",
-            "M N",
-            "O P Q"]
+    # Test input (Fails for Issue #440; method=('m', 's')
+    i440_in = (" A B  C D     E     G H I K L     M N       O P Q    R")
+    # Some expected clusters for input data, i440_in:
+    i440_exp = [
+        "A B",
+        "C D",
+        "A B  C D",
+        # To (mock) "PASS" method='m': COMMENT OUT FOLLOWING LINE OUT
+        "G H I K L",
+        "M N",
+        "O P Q"]
 
-        # Run Hierarchical Tree Clustering
+    def test_treecluster_i440_m(self):
+        """Uncomment to see failure for issue biopython#424.
+
+        ISSUE: Is it expected that cluster "G H I K L" is broken into
+               "G H" and "I K L"?:
+
+        ACTUAL CLUSTERS (method=m), 2nd FORMAT:
+          Index 10s: 0         1         2         3         4         5
+          Index  1s: 012345678901234567890123456789012345678901234567890123
+          Array    :  A B  C D     E     G H I K L     M N       O P Q    R
+            Level  1  <--------------------------------------------------->
+            Level  2  <--------------------> <---------------------------->
+            Level  3  <------>     <-------> <----------->       <-------->
+            Level  4  <->  <->           <-> <--->     <->       <--->
+            Level  5                         <->                   <->
+         
+        """
         #   'm' FAIL pairwise maximum- (or complete-) linkage clustering
+        # Uncomment to see failure for issue biopython#424.
+        #self.doit(TestClusterSmall.i440_in, TestClusterSmall.i440_exp, 'm')
+        pass
+
+    def test_treecluster_i440_s(self):
+        """Uncomment to see failure for issue biopython#424.
+
+        ISSUE: Is it expected that there are nested clusters? For example:
+
+        1. Cluster "O    Q" is a child cluster of "O P Q".
+           Would it bemore expected that "O P" or "P Q" would be a child
+           cluster of "O P Q"?
+
+        2. Is it expected that cluster "G H I K L" and cluster "A B C D E M N"
+           are both on the same hierarchical level(3), when "G H I K L"
+           is between "A B C D E" and "M N"?:
+
+        HIERARCHY DIAGRAM (method=s), 1st FORMAT:
+           i Hier   NodeID n.left n.right n.dist leaf-values
+         --- ------ ------ ------ ------- ------ -----------
+           0 -         -15 ( -14,   -11):   8.00 A B C D E G H I K L M N O P Q R
+           1 --        -14 (  -9,   -13):   6.00 A B C D E G H I K L M N
+           2 ---        -9 (   G,    -4):   2.00 G H I K L
+           3 ----       -4 (   K,    -3):   2.00 H I K L
+           4 -----      -3 (   I,    -2):   2.00 H I L
+           5 ------     -2 (   H,     L):   2.00 H L
+           6 ---       -13 (   E,   -12):   6.00 A B C D E M N
+           7 ----      -12 ( -10,    -5):   6.00 A B C D M N
+           8 -----     -10 (  -1,    -8):   3.00 A B C D
+           9 ------     -1 (   A,     B):   2.00 A B
+          10 ------     -8 (   C,     D):   2.00 C D
+          11 -----      -5 (   M,     N):   2.00 M N
+          12 --        -11 (  -7,     R):   5.00 O P Q R
+          13 ---        -7 (   P,    -6):   2.00 O P Q
+          14 ----       -6 (   O,     Q):   2.00 O Q
+      
+        HIERARCHY DIAGRAM (method=s), 2nd FORMAT:
+          Index 10s: 0         1         2         3         4         5
+          Index  1s: 012345678901234567890123456789012345678901234567890123
+          Array    :  A B  C D     E     G H I K L     M N       O P Q    R
+            Level  1  <--------------------------------------------------->
+            Level  2  <---------------------------------->       <-------->
+            Level  3  <------------------<------->------->       <--->
+            Level  4  <--------------------<----->------->       <--->
+            Level  5  <------>             <----->     <->
+            Level  6  <->  <->             <----->
+
+        """
         #   's' FAIL pairwise single-linkage clustering
-        #   'a' ???? pairwise average-linkage clustering
-        #self.doit(usr_input, expected_clusters, 'a')
-        self.doit(usr_input, expected_clusters, 'm')
-        self.doit(usr_input, expected_clusters, 's')
+        # Uncomment to see failure for issue biopython#424.
+        #self.doit(TestClusterSmall.i440_in, TestClusterSmall.i440_exp, 's')
+        pass
+
+    def test_treecluster_i440_a(self):
+        """This is a user-created test issue biopython#424."""
+        #   method: 'a' pairwise average-linkage clustering
+        self.doit(TestClusterSmall.i440_in, TestClusterSmall.i440_exp, 'a')
+        pass
 
 
     def doit(self, usr_input, expected_clusters, method):
