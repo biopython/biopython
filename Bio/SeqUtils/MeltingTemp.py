@@ -395,7 +395,7 @@ def make_table(oldtable=None, values=None):
 
 
 def _check(seq, method):
-    """ Return a sequence which fullfils the requirements of the given method.
+    """Return a sequence which fullfils the requirements of the given method (PRIVATE).
 
     All Tm methods in this package require the sequence in uppercase format.
     Most methods make use of the length of the sequence (directly or
@@ -426,7 +426,7 @@ def _check(seq, method):
 
 
 def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
-    """ Calculate a term to correct Tm for salt ions.
+    """Calculate a term to correct Tm for salt ions.
 
     Depending on the Tm calculation, the term will correct Tm or entropy. To
     calculate corrected Tm values, different operations need to be applied:
@@ -540,7 +540,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
 def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
                     fmdmethod=1, GC=None):
-    """ Correct a given Tm for DMSO and formamide.
+    """Correct a given Tm for DMSO and formamide.
 
     Please note that these corrections are +/- rough approximations.
 
@@ -593,7 +593,7 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
 
 
 def Tm_Wallace(seq, check=True, strict=True):
-    """ Calculate and return the Tm using the 'Wallace rule'.
+    """Calculate and return the Tm using the 'Wallace rule'.
 
     Tm = 4 degC * (G + C) + 2 degC * (A+T)
 
@@ -601,9 +601,10 @@ def Tm_Wallace(seq, check=True, strict=True):
     practical approach, 33-50) is often used as rule of thumb for approximate
     Tm calculations for primers of 14 to 20 nt length.
 
-    None-DNA characters (e.g., E, F, J, !, 1, etc) are ignored by this method.
+    Non-DNA characters (e.g., E, F, J, !, 1, etc) are ignored by this method.
 
     Examples:
+
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> mt.Tm_Wallace('ACGTTGCAATGCCGTA')
         48.0
