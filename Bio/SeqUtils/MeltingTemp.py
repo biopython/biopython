@@ -80,9 +80,8 @@ Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
 
 Several types of salc correction (for Tm_NN and Tm_GC):
 
-    >>> for saltcorr in range(1,8):
-    ...     print('Type: %d,' % saltcorr, end=' ')
-    ...     print('Tm: %0.2f' % mt.Tm_NN(myseq, saltcorr=saltcorr))
+    >>> for i in range(1, 8):
+    ...     print("Type: %d, Tm: %0.2f" % (i, Tm_NN(myseq, saltcorr=i)))
     ...
     Type: 1, Tm: 54.27
     Type: 2, Tm: 54.02
