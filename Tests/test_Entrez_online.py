@@ -62,7 +62,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertTrue(URL_TOOL in handle.url)
         self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751&" in handle.url)
+        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
         recs = list(Entrez.parse(handle))
         handle.close()
         self.assertEqual(3, len(recs))
@@ -72,12 +72,12 @@ class EntrezOnlineCase(unittest.TestCase):
     def test_webenv_search(self):
         """Test Entrez.search from link webenv history"""
         handle = Entrez.elink(db='nucleotide', dbfrom='protein',
-                id='22347800,48526535', webenv=None, query_key=None,
-                cmd='neighbor_history')
+                              id='22347800,48526535', webenv=None, query_key=None,
+                              cmd='neighbor_history')
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi?"), handle.url)
         self.assertTrue(URL_TOOL in handle.url)
         self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=22347800%2C48526535&" in handle.url)
+        self.assertTrue("id=22347800%2C48526535" in handle.url, handle.url)
         recs = Entrez.read(handle)
         handle.close()
         record = recs.pop()
@@ -102,7 +102,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertTrue(URL_TOOL in handle.url)
         self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=186972394&" in handle.url)
+        self.assertTrue("id=186972394" in handle.url)
         record = SeqIO.read(handle, 'genbank')
         handle.close()
         self.assertTrue(isinstance(record, SeqRecord))
@@ -116,7 +116,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertTrue(URL_TOOL in handle.url)
         self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=19304878&" in handle.url)
+        self.assertTrue("id=19304878" in handle.url)
         record = Medline.read(handle)
         handle.close()
         self.assertTrue(isinstance(record, dict))
