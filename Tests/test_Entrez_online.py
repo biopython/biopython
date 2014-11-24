@@ -123,6 +123,27 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
+    def test_elink(self):
+        # Commas: Link from protein to gene
+        handle = Entrez.elink(db="gene", dbfrom="protein",
+                              id="15718680,157427902,119703751")
+        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
+        handle.close()
+
+        # Multiple ID entries: Find one-to-one links from protein to gene
+        handle = Entrez.elink(db="gene", dbfrom="protein",
+                              id=["15718680", "157427902", "119703751"])
+        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=15718680" in handle.url, handle.url)
+        self.assertTrue("id=157427902" in handle.url, handle.url)
+        self.assertTrue("id=119703751" in handle.url, handle.url)
+        handle.close()
+
     def test_epost(self):
         handle = Entrez.epost("nuccore", id="186972394,160418")
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
