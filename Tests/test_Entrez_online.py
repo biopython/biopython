@@ -40,8 +40,9 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_read_from_url(self):
         """Test Entrez.read from URL"""
-        einfo = Entrez.einfo()
-        rec = Entrez.read(einfo)
+        handle = Entrez.einfo()
+        rec = Entrez.read(handle)
+        handle.close()
         self.assertTrue(isinstance(rec, dict))
         self.assertTrue('DbList' in rec)
         # arbitrary number, just to make sure that DbList has contents
@@ -49,10 +50,10 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL"""
-        efetch = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
-                retmode='xml')
-        recs = Entrez.parse(efetch)
-        recs = list(recs)
+        handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
+                               retmode='xml')
+        recs = list(Entrez.parse(handle))
+        handle.close()
         self.assertEqual(3, len(recs))
         # arbitrary number, just to make sure the parser works
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
@@ -68,26 +69,30 @@ class EntrezOnlineCase(unittest.TestCase):
 
         webenv = record['WebEnv']
         query_key = record['LinkSetDbHistory'][0]['QueryKey']
-        esearch = Entrez.esearch(db='nucleotide', term=None, retstart=0,
-            retmax=10, webenv=webenv, query_key=query_key, usehistory='y')
-        search_record = Entrez.read(esearch)
-        esearch.close()
+        handle = Entrez.esearch(db='nucleotide', term=None,
+                                retstart=0, retmax=10,
+                                webenv=webenv, query_key=query_key,
+                                usehistory='y')
+        search_record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(2, len(search_record['IdList']))
 
     def test_seqio_from_url(self):
         """Test Entrez into SeqIO.read from URL"""
-        efetch = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
-                retmode='text')
-        record = SeqIO.read(efetch, 'genbank')
+        handle = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
+                               retmode='text')
+        record = SeqIO.read(handle, 'genbank')
+        handle.close()
         self.assertTrue(isinstance(record, SeqRecord))
         self.assertEqual('EU490707.1', record.id)
         self.assertEqual(1302, len(record))
 
     def test_medline_from_url(self):
         """Test Entrez into Medline.read from URL"""
-        efetch = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
-                retmode="text")
-        record = Medline.read(efetch)
+        handle = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
+                               retmode="text")
+        record = Medline.read(handle)
+        handle.close()
         self.assertTrue(isinstance(record, dict))
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
