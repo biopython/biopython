@@ -116,6 +116,11 @@ if sys.version_info[0] >= 3:
         class EvilHandleHack(object):
             def __init__(self, handle):
                 self._handle = handle
+                try:
+                    # If wrapping an online handle, this this is nice to have:
+                    self.url = handle.url
+                except AttributeError:
+                    pass
 
             def read(self, length=None):
                 return _as_string(self._handle.read(length))
