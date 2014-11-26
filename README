@@ -83,7 +83,7 @@ be installed after Biopython.
   installing Biopython. The older Numeric library is no longer supported in
   Biopython.
 
-- ReportLab, see http://www.reportlab.com/software/opensource/ (optional)
+- ReportLab, see http://www.reportlab.com/opensource/ (optional)
   This package is only used in Bio.Graphics, so if you do not need this
   functionality, you will not need to install this package.  You can install
   it later if needed.
