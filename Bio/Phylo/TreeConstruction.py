@@ -257,10 +257,10 @@ class _Matrix(object):
         """Insert distances given the name and value.
 
         :Parameters:
-        name : str
-            name of a row/col to be inserted
-        value : list
-            a row/col of values to be inserted
+            name : str
+                name of a row/col to be inserted
+            value : list
+                a row/col of values to be inserted
         """
         if isinstance(name, str):
             # insert at the given index or at the end
