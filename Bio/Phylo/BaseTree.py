@@ -767,8 +767,8 @@ class Tree(TreeElement, TreeMixin):
         from Bio.Phylo.PhyloXML import Phylogeny
         return Phylogeny.from_tree(self, **kwargs)
 
-    # XXX Compatibility: In Python 2.6+, **kwargs can be replaced with the named
-    # keyword argument outgroup_branch_length=None
+    # XXX Py3 Compatibility: In Python 3.0+, **kwargs can be replaced with the
+    # named keyword argument outgroup_branch_length=None
     def root_with_outgroup(self, outgroup_targets, *more_targets, **kwargs):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
