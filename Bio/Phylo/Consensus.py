@@ -35,7 +35,7 @@ class _BitString(str):
     ``name`` attribute) are the same.
 
     For example, let's say two trees are provided as below to search
-    their strict consensus tree:
+    their strict consensus tree::
 
         tree1: (((A, B), C),(D, E))
         tree2: ((A, (B, C)),(D, E))
@@ -502,6 +502,7 @@ def get_support(target_tree, trees, len_trees=None):
 
     :Parameters:
         target_tree : Tree
+            tree to calculate branch support for.
         trees : iterable
             iterable of trees used to calculate branch support.
         len_trees : int
