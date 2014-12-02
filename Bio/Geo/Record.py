@@ -55,8 +55,8 @@ class Record(object):
                 output += out_block(contents[40:])
             else:
                 print(contents)
-                output += '%s: %s\n' % (key, val[:40])
-                output += out_block(val[40:])
+                output += '%s: %s\n' % (key, contents[:40])
+                output += out_block(contents[40:])
         col_keys = sorted(self.col_defs)
         output += 'Column Header Definitions\n'
         for key in col_keys:
@@ -85,6 +85,6 @@ class Record(object):
 def out_block(text, prefix=''):
     output = ''
     for j in range(0, len(text), 80):
-        output += '%s%s\n' % (prefix, text[j:j+80])
+        output += '%s%s\n' % (prefix, text[j:j + 80])
     output += '\n'
     return output
