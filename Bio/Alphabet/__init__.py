@@ -10,6 +10,8 @@
 This is used by sequences which contain a finite number of similar words.
 """
 
+__docformat__ = "restructuredtext en"
+
 
 class Alphabet(object):
     """Generic alphabet base class.
@@ -17,11 +19,10 @@ class Alphabet(object):
     This class is used as a base class for other types of alphabets.
 
     Attributes:
-    letters -- list-like object containing the letters of the alphabet.
+        - letters - list-like object containing the letters of the alphabet.
                Usually it is a string when letters are single characters.
-    size    -- size of the alphabet's letters (e.g. 1 when letters are
+        - size    - size of the alphabet's letters (e.g. 1 when letters are
                single characters).
-
     """
 
     size = None     # default to no fixed size for words
@@ -61,7 +62,7 @@ class Alphabet(object):
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
-        if not self.letters or self.letters==self.letters.upper():
+        if not self.letters or self.letters == self.letters.upper():
             # Easy case, no letters or already upper case!
             return self
         else:
@@ -70,7 +71,7 @@ class Alphabet(object):
 
     def _lower(self):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
-        if not self.letters or self.letters==self.letters.lower():
+        if not self.letters or self.letters == self.letters.lower():
             # Easy case, no letters or already lower case!
             return self
         else:
@@ -141,6 +142,12 @@ class ThreeLetterProtein(Alphabet):
         "Lys", "Leu", "Met", "Asn", "Pro", "Gln", "Arg", "Ser", "Thr",
         "Sec", "Val", "Trp", "Xaa", "Tyr", "Glx",
         ]
+
+    def _upper(self):
+        raise NotImplementedError("We don't have an uppercase three letter protein alphabet.")
+
+    def _lower(self):
+        raise NotImplementedError("We don't have a lowercase three letter protein alphabet.")
 
 # ##### Non per-sequence modifications
 

@@ -17,6 +17,8 @@ function. If you ran eprimer3 with multiple targets, use the parse
 function to iterate over the retsults.
 """
 
+__docformat__ = "restructuredtext en"
+
 # --- primer3
 
 
@@ -25,9 +27,10 @@ class Record(object):
 
     Members:
 
-    primers  - list of Primer objects describing primer pairs for
-               this target sequence.
-    comments - the comment line(s) for the record
+        - primers  - list of Primer objects describing primer pairs for
+          this target sequence.
+        - comments - the comment line(s) for the record
+
     """
     def __init__(self):
         self.comments = ""
@@ -39,26 +42,27 @@ class Primers(object):
 
     Members:
 
-    size - length of product, note you can use len(primer) as an
-           alternative to primer.size
+        - size - length of product, note you can use len(primer) as an
+          alternative to primer.size
 
-    forward_seq
-    forward_start
-    forward_length
-    forward_tm
-    forward_gc
+        - forward_seq
+        - forward_start
+        - forward_length
+        - forward_tm
+        - forward_gc
 
-    reverse_seq
-    reverse_start
-    reverse_length
-    reverse_tm
-    reverse_gc
+        - reverse_seq
+        - reverse_start
+        - reverse_length
+        - reverse_tm
+        - reverse_gc
 
-    internal_seq
-    internal_start
-    internal_length
-    internal_tm
-    internal_gc
+        - internal_seq
+        - internal_start
+        - internal_length
+        - internal_tm
+        - internal_gc
+    
     """
     def __init__(self):
         self.size = 0

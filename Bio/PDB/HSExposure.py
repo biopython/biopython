@@ -15,6 +15,7 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
 from Bio.PDB.Vector import rotaxis
 
+__docformat__ = "restructuredtext en"
 
 class _AbstractHSExposure(AbstractPropertyMap):
     """
@@ -44,7 +45,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
         @type hse_down_key: string
 
         @param angle_key: key used to store the angle between CA-CB and CA-pCB in
-            the entity.xtra attribute
+        the entity.xtra attribute
         @type angle_key: string
         """
         assert(offset>=0)

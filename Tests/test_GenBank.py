@@ -55,8 +55,8 @@ for file in test_files:
 # files_to_parse += [os.path.join(os.getcwd(), 'GenBank', 'biojava_test.gb')]
 
 # test the parsers
-feature_parser = GenBank.FeatureParser(debug_level = 0)
-record_parser = GenBank.RecordParser(debug_level = 0)
+feature_parser = GenBank.FeatureParser(debug_level=0)
+record_parser = GenBank.RecordParser(debug_level=0)
 
 all_parsers = [feature_parser, record_parser]
 print("Testing parsers...")
@@ -156,7 +156,7 @@ def do_comparison(good_record, test_record):
 
 
 def t_write_format():
-    record_parser = GenBank.RecordParser(debug_level = 0)
+    record_parser = GenBank.RecordParser(debug_level=0)
 
     for file in write_format_files:
         print("Testing GenBank writing for %s..." % os.path.basename(file))
@@ -187,8 +187,7 @@ t_write_format()
 def t_cleaning_features():
     """Test the ability to clean up feature values.
     """
-    parser = GenBank.FeatureParser(feature_cleaner =
-                                   utils.FeatureValueCleaner())
+    parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
     handle = open(os.path.join("GenBank", "arab1.gb"))
     iterator = GenBank.Iterator(handle, parser)
 

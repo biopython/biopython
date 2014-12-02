@@ -7,7 +7,7 @@
 """Code for dealing with Codon Alignment.
 """
 from __future__ import print_function
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio import BiopythonExperimentalWarning
 
@@ -38,14 +38,14 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     corresponding nucleotide sequences
 
     Arguments:
-     - pro_align  - a protein MultipleSeqAlignment object
-     - nucl_align - an object returned by SeqIO.parse or SeqIO.index
-                    or a colloction of SeqRecord.
-     - alphabet   - alphabet for the returned codon alignment
-     - corr_dict  - a dict that maps protein id to nucleotide id
-     - complete_protein - whether the sequence begins with a start
-                          codon
-     - frameshift - whether to appply frameshift detection
+        - pro_align  - a protein MultipleSeqAlignment object
+        - nucl_align - an object returned by SeqIO.parse or SeqIO.index
+          or a colloction of SeqRecord.
+        - alphabet   - alphabet for the returned codon alignment
+        - corr_dict  - a dict that maps protein id to nucleotide id
+        - complete_protein - whether the sequence begins with a start
+          codon
+        - frameshift - whether to appply frameshift detection
 
     Return a CodonAlignment object
 
@@ -433,10 +433,10 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
     Arguments:
         - sh_anc    - shifted anchor sequence
         - sh_nuc    - potentially corresponding nucleotide sequence
-                      of sh_anc
+          of sh_anc
         - shift_val - 1 or 2 indicates forward frame shift, whereas
-                      3*anchor_len-1 or 3*anchor_len-2 indicates
-                      backward shift
+          3*anchor_len-1 or 3*anchor_len-2 indicates
+          backward shift
         - aa2re     - aa to codon re dict
         - anchor_len - length of the anchor
         - shift_id_pos - specify current shift name we are at
@@ -539,9 +539,9 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
     for the match.
 
     mode
-     - 0: direct match
-     - 1: mismatch (no indels)
-     - 2: frameshift
+        - 0: direct match
+        - 1: mismatch (no indels)
+        - 2: frameshift
 
     """
     import re
@@ -674,8 +674,8 @@ def _align_shift_recs(recs):
     frameshift detected by _check_corr.
 
     Argument:
-    - recs     - a list of SeqRecords containing a CodonSeq dictated
-                 by a rf_table (with frameshift in some of them).
+        - recs - a list of SeqRecords containing a CodonSeq dictated
+          by a rf_table (with frameshift in some of them).
     """
     def find_next_int(k, lst):
         idx = lst.index(k)

@@ -35,6 +35,8 @@ except:
     raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                        "Bio.DocSQL.")
 
+__docformat__ = "restructuredtext en"
+
 connection = None
 
 

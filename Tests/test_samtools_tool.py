@@ -156,7 +156,7 @@ class SamtoolsTestCase(unittest.TestCase):
             # print("exists")
             stderr_calmd_expected = ""
         else:
-            #print("doesnt exist")
+            # print("doesnt exist")
             stderr_calmd_expected = "[fai_load] build FASTA index.\n"
         stdout, stderr = cmdline()
         self.assertEqual(stderr, stderr_calmd_expected)

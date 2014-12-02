@@ -1,8 +1,15 @@
 # Copyright Yair Benita Y.Benita@pharm.uu.nl
 # Biopython (http://biopython.org) license applies
 
-# sharp Ecoli index for codon adaption index.
-# from Sharp & Li, Nucleic Acids Res. 1987
+"""Codon adaption indxes, including Sharp and Li (1987) E. coli index.
+
+Currently this module only defines a single codon adaption index from
+Sharp & Li, Nucleic Acids Res. 1987.
+"""
+
+__docformat__ = "restructuredtext en"
+
+
 SharpEcoliIndex = {
 'GCA': 0.586, 'GCC': 0.122, 'GCG': 0.424, 'GCT': 1, 'AGA': 0.004, 'AGG': 0.002, 'CGA': 0.004,
 'CGC': 0.356, 'CGG': 0.004, 'CGT': 1, 'AAC': 1, 'AAT': 0.051, 'GAC': 1, 'GAT': 0.434, 'TGC': 1,

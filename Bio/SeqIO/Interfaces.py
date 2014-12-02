@@ -16,6 +16,8 @@ from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
+__docformat__ = "restructuredtext en"
+
 
 class SequenceIterator(object):
     """Base class for building SeqRecord iterators.
@@ -27,14 +29,15 @@ class SequenceIterator(object):
     def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
-        handle - input file
-        alphabet - optional, e.g. Bio.Alphabet.generic_protein
+            - handle - input file
+            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
-        - there should be a single non-optional argument,
-          the handle.
-        - you do not have to require an alphabet.
-        - you can add additional optional arguments."""
+
+            - there should be a single non-optional argument,
+              the handle.
+            - you do not have to require an alphabet.
+            - you can add additional optional arguments."""
         self.handle = handle
         self.alphabet = alphabet
         #####################################################
@@ -62,13 +65,13 @@ class SequenceIterator(object):
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
 
-        Example usage for Fasta files:
+        Example usage for Fasta files::
 
-        with open("example.fasta","r") as myFile:
-            myFastaReader = FastaIterator(myFile)
-            for record in myFastaReader:
-                print(record.id)
-                print(record.seq)
+            with open("example.fasta","r") as myFile:
+                myFastaReader = FastaIterator(myFile)
+                for record in myFastaReader:
+                    print(record.id)
+                    print(record.seq)
         """
         return iter(self.__next__, None)
 

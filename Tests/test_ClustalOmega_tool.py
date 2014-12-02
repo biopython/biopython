@@ -187,7 +187,7 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
     def test_large_fasta_file(self):
         """Test a large fasta input file."""
         # Create a large input file by converting another example file
-        #(See Bug 2804, this will produce so much output on stdout that
+        # (See Bug 2804, this will produce so much output on stdout that
         # subprocess could suffer a deadlock and hang).  Using all the
         # records should show the deadlock but is very slow - just thirty
         # seems to lockup on Mac OS X, even 20 on Linux (without the fix).
@@ -225,5 +225,5 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

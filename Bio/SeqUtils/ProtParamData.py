@@ -1,4 +1,7 @@
-# This module contains indices to be used with ProtParam
+"""This module contains indices to be used with ProtParam."""
+
+__docformat__ = "restructuredtext en"
+
 
 # Kyte & Doolittle index of hydrophobicity
 kd = {'A': 1.8, 'R':-4.5, 'N':-3.5, 'D':-3.5, 'C': 2.5,
@@ -8,11 +11,11 @@ kd = {'A': 1.8, 'R':-4.5, 'N':-3.5, 'D':-3.5, 'C': 2.5,
 
 # Flexibility
 # Normalized flexibility parameters (B-values), average (Vihinen et al., 1994)
-Flex= {'A': 0.984, 'C': 0.906, 'E': 1.094, 'D': 1.068,
-       'G': 1.031, 'F': 0.915, 'I': 0.927, 'H': 0.950,
-       'K': 1.102, 'M': 0.952, 'L': 0.935, 'N': 1.048,
-       'Q': 1.037, 'P': 1.049, 'S': 1.046, 'R': 1.008,
-       'T': 0.997, 'W': 0.904, 'V': 0.931, 'Y': 0.929}
+Flex = {'A': 0.984, 'C': 0.906, 'E': 1.094, 'D': 1.068,
+        'G': 1.031, 'F': 0.915, 'I': 0.927, 'H': 0.950,
+        'K': 1.102, 'M': 0.952, 'L': 0.935, 'N': 1.048,
+        'Q': 1.037, 'P': 1.049, 'S': 1.046, 'R': 1.008,
+        'T': 0.997, 'W': 0.904, 'V': 0.931, 'Y': 0.929}
 
 # Hydrophilicity
 # 1 Hopp & Wood

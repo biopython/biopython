@@ -9,16 +9,16 @@
 
 Wrappers for the new NCBI BLAST+ tools (written in C++):
 
-- NcbiblastpCommandline - Protein-Protein BLAST
-- NcbiblastnCommandline - Nucleotide-Nucleotide BLAST
-- NcbiblastxCommandline - Translated Query-Protein Subject BLAST
-- NcbitblastnCommandline - Protein Query-Translated Subject BLAST
-- NcbitblastxCommandline - Translated Query-Protein Subject BLAST
-- NcbipsiblastCommandline - Position-Specific Initiated BLAST
-- NcbirpsblastCommandline - Reverse Position Specific BLAST
-- NcbirpstblastnCommandline - Translated Reverse Position Specific BLAST
-- NcbideltablastCommandline - Protein-Protein domain enhanced lookup time accelerated blast
-- NcbiblastformatterCommandline - Convert ASN.1 to other BLAST output formats
+ - NcbiblastpCommandline - Protein-Protein BLAST
+ - NcbiblastnCommandline - Nucleotide-Nucleotide BLAST
+ - NcbiblastxCommandline - Translated Query-Protein Subject BLAST
+ - NcbitblastnCommandline - Protein Query-Translated Subject BLAST
+ - NcbitblastxCommandline - Translated Query-Protein Subject BLAST
+ - NcbipsiblastCommandline - Position-Specific Initiated BLAST
+ - NcbirpsblastCommandline - Reverse Position Specific BLAST
+ - NcbirpstblastnCommandline - Translated Reverse Position Specific BLAST
+ - NcbideltablastCommandline - Protein-Protein domain enhanced lookup time accelerated blast
+ - NcbiblastformatterCommandline - Convert ASN.1 to other BLAST output formats
 
 For further details, see:
 
@@ -29,6 +29,8 @@ doi:10.1186/1471-2105-10-421
 from __future__ import print_function
 
 from Bio.Application import _Option, AbstractCommandline, _Switch
+
+__docformat__ = "restructuredtext en"
 
 
 class _NcbibaseblastCommandline(AbstractCommandline):
@@ -141,9 +143,9 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             # Formatting options:
             # - see baseclass
             # Query filtering options
-            # TODO -soft_masking <Boolean>, is this a switch or an option?
-            # _Switch(["-soft_masking", "soft_masking"],
-            #        "Apply filtering locations as soft masks?"),
+            _Option(["-soft_masking", "soft_masking"],
+                    "Apply filtering locations as soft masks (Boolean, Default = true)",
+                    equate=False),
             _Switch(["-lcase_masking", "lcase_masking"],
                     "Use lower case filtering in query and subject sequence(s)?"),
             # Restrict search or results
@@ -484,10 +486,9 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
             _Option(["-reward", "reward"],
                     "Reward for a nucleotide match (integer, at least zero).",
                     equate=False),
-            # TODO - Does this need an argument or is it a switch?
-            # _Option(["-use_index", "use_index"],
-            #        "Use MegaBLAST database index (boolean).",
-            #        equate=False),
+            _Option(["-use_index", "use_index"],
+                    "Use MegaBLAST database index (Boolean, Default = False)",
+                    equate=False),
             _Option(["-index_name", "index_name"],
                     "MegaBLAST database index name.",
                     equate=False),
@@ -918,6 +919,10 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
     subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpsblast", **kwargs):
+        # TODO - remove the -word_size argument as per BLAST+ 2.2.30
+        # (BLAST team say it should never have been included, since
+        # the word size is set when building the domain database.)
+        # This likely means reviewing the class hierarchy again.
         self.parameters = [
             # Query filtering options:
             _Option(["-seg", "seg"],
@@ -993,6 +998,10 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
     subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpstblastn", **kwargs):
+        # TODO - remove the -word_size argument as per BLAST+ 2.2.30
+        # (BLAST team say it should never have been included, since
+        # the word size is set when building the domain database.)
+        # This likely means reviewing the class hierarchy again.
         self.parameters = [
             # Input query options:
             _Option(["-strand", "strand"],

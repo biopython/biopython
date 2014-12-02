@@ -70,5 +70,5 @@ for filename, in_format, alphabet in tests:
     del funct
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -91,7 +91,7 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.seq.alphabet, alphabet)
         # Uncomment this for testing the methods are calling the right files:
-        #print("{%s done}" % filename)
+        # print("{%s done}" % filename)
 
     def multi_check(self, filename, alphabet):
         """Basic test for parsing multi-record FASTA files."""
@@ -107,7 +107,7 @@ class TitleFunctions(unittest.TestCase):
             self.assertEqual(str(new.seq), str(old.seq))
             self.assertEqual(new.seq.alphabet, old.seq.alphabet)
         # Uncomment this for testing the methods are calling the right files:
-        #print("{%s done}" % filename)
+        # print("{%s done}" % filename)
 
     def test_no_name(self):
         """Test FASTA record with no identifier."""
@@ -177,5 +177,5 @@ for filename in multi_amino_files:
     del funct
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

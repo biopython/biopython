@@ -11,6 +11,7 @@ from functools import reduce
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir
 
+__docformat__ = "restructuredtext en"
 
 def exec_template(template):
     executed_template = template
@@ -151,10 +152,10 @@ def get_demography_template(stream, model, tp_dir=None):
 
         Most probably this model needs to be sent to GenCases.
 
-        stream - Writable stream.
-        param  - Template file.
-        tp_dir - Directory where to find the template, if None
-                 use an internal template
+            - stream - Writable stream.
+            - param  - Template file.
+            - tp_dir - Directory where to find the template, if None
+              use an internal template
     '''
     if tp_dir is None:
         # Internal Template
@@ -186,11 +187,13 @@ def get_chr_template(stream, chrs):
         chr    - Chromosome list.
 
         Current loci list:
-          [(chr_repeats,[(marker, (params))])]
-          chr_repeats --> Number of chromosome repeats
-          marker  --> 'SNP', 'DNA', 'RFLP', 'MICROSAT'
-          params  --> Simcoal2 parameters for markers (list of floats
-            or ints - if to be processed by generate_model)
+
+          - [(chr_repeats,[(marker, (params))])]
+
+              - chr_repeats --> Number of chromosome repeats
+              - marker  --> 'SNP', 'DNA', 'RFLP', 'MICROSAT'
+              - params  --> Simcoal2 parameters for markers (list of floats
+                or ints - if to be processed by generate_model)
     '''
     num_chrs = reduce(lambda x, y: x + y[0], chrs, 0)
     stream.write('//Number of independent (unlinked) chromosomes, and "chromosome structure" flag:  0 for identical structure across chromosomes, and  1 for different structures on different chromosomes.\n')
@@ -215,8 +218,8 @@ def generate_simcoal_from_template(model, chrs, params, out_dir='.', tp_dir=None
        This joins together get_demography_template and get_chr_template,
        which are feed into generate_model
        Please check the three functions for parameters (model from
-         get_demography_template, chrs from get_chr_template and
-         params from generate_model).
+       get_demography_template, chrs from get_chr_template and
+       params from generate_model).
     '''
     with open(out_dir + sep + 'tmp.par', 'w') as stream:
         get_demography_template(stream, model, tp_dir)

@@ -422,8 +422,8 @@ class SchemaFinderTest(unittest.TestCase):
         self.num_schemas = 2
         schema_ga = Schema.GeneticAlgorithmFinder()
         schema_ga.min_generations = 1
-        self.finder = Schema.SchemaFinder(num_schemas = self.num_schemas,
-                                          schema_finder = schema_ga)
+        self.finder = Schema.SchemaFinder(num_schemas=self.num_schemas,
+                                          schema_finder=schema_ga)
 
     def test_find(self):
         """Find schemas from sequence inputs.
@@ -659,5 +659,5 @@ class SignatureCoderTest(unittest.TestCase):
                              % (predicted, seq_string, expected))
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -122,5 +122,5 @@ class AppTest(unittest.TestCase):
         self.assertTrue(fs[0]<0)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

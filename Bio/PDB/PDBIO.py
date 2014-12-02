@@ -10,11 +10,14 @@ from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder # To allow saving of chains, residues, etc..
 from Bio.Data.IUPACData import atom_weights # Allowed Elements
 
+__docformat__ = "restructuredtext en"
+
 _ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 
 
 class Select(object):
-    """
+    """Select everything fo PDB output (for use as a bas class).
+
     Default selection (everything) during writing - can be used as base class
     to implement selective output. This selects which entities will be written out.
     """
@@ -23,36 +26,27 @@ class Select(object):
         return "<Select all>"
 
     def accept_model(self, model):
-        """
-        Overload this to reject models for output.
-        """
+        """Overload this to reject models for output."""
         return 1
 
     def accept_chain(self, chain):
-        """
-        Overload this to reject chains for output.
-        """
+        """Overload this to reject chains for output."""
         return 1
 
     def accept_residue(self, residue):
-        """
-        Overload this to reject residues for output.
-        """
+        """Overload this to reject residues for output."""
         return 1
 
     def accept_atom(self, atom):
-        """
-        Overload this to reject atoms for output.
-        """
+        """Overload this to reject atoms for output."""
         return 1
 
 
 class PDBIO(object):
-    """
-    Write a Structure object (or a subset of a Structure object) as a PDB file.
-
+    """Write a Structure object (or a subset of a Structure object) as a PDB file.
 
     Example:
+
         >>> p=PDBParser()
         >>> s=p.get_structure("1fat", "1fat.pdb")
         >>> io=PDBIO()
@@ -60,7 +54,8 @@ class PDBIO(object):
         >>> io.save("out.pdb")
     """
     def __init__(self, use_model_flag=0):
-        """
+        """Creat the PDBIO object.
+
         @param use_model_flag: if 1, force use of the MODEL record in output.
         @type use_model_flag: int
         """
@@ -152,16 +147,20 @@ class PDBIO(object):
         @type file: string or filehandle
 
         @param select: selects which entities will be written.
-        @type select:
-            select hould have the following methods:
-                - accept_model(model)
-                - accept_chain(chain)
-                - accept_residue(residue)
-                - accept_atom(atom)
-            These methods should return 1 if the entity
-            is to be written out, 0 otherwise.
+        @type select: object
 
-            Typically select is a subclass of L{Select}.
+        Typically select is a subclass of L{Select}, it should
+        have the following methods:
+
+         - accept_model(model)
+         - accept_chain(chain)
+         - accept_residue(residue)
+         - accept_atom(atom)
+                
+        These methods should return 1 if the entity is to be
+        written out, 0 otherwise.
+
+        Typically select is a subclass of L{Select}.
         """
         get_atom_line=self._get_atom_line
         if isinstance(file, basestring):

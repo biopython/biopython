@@ -189,7 +189,7 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725", field="authors")"""
         handle = TogoWS.entry("pubmed", "16381885,19850725", field="authors")
         # Little hack to remove blank lines...
-        #names = handle.read().replace("\n\n", "\n").strip().split("\n")
+        # names = handle.read().replace("\n\n", "\n").strip().split("\n")
         names = handle.read().strip().split("\n")
         handle.close()
         self.assertEqual(2, len(names))
@@ -212,13 +212,13 @@ class TogoEntry(unittest.TestCase):
     def test_ddbj_genbank_length(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
         handle = TogoWS.entry("ddbj", "X52960", field="length")
-        data = handle.read().strip()  #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "248")
 
     def test_ddbj_genbank(self):
         """Bio.TogoWS.entry("ddbj", "X52960")"""
-        handle = TogoWS.entry("ddbj", "X52960")  #Returns "genbank" format
+        handle = TogoWS.entry("ddbj", "X52960")  # Returns "genbank" format
         record = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
@@ -509,5 +509,5 @@ class TogoConvert(unittest.TestCase):
 #        self.assertEqual(str(old.seq), str(new.seq))
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -39,7 +39,7 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
-            #==========================================================
+            # ==========================================================
             # Check that serial_num (model column) is stored properly
             self.assertEqual(structure[0].serial_num, 1)
             # First try allowing non-standard amino acids,
@@ -56,7 +56,7 @@ class ParseReal(unittest.TestCase):
             # Here non-standard MSE are shown as M
             self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                              "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
-            #==========================================================
+            # ==========================================================
             # Now try strict version with only standard amino acids
             # Should ignore MSE 151 at start, and then break the chain
             # at MSE 185, and MSE 214,215
@@ -93,7 +93,7 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1LCD.cif")
         self.assertEqual(len(structure), 3)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
-                #==========================================================
+                # ==========================================================
                 # Check that serial_num (model column) is stored properly
                 self.assertEqual(structure[0].serial_num, 1)
                 self.assertEqual(structure[1].serial_num, 2)
@@ -112,7 +112,7 @@ class ParseReal(unittest.TestCase):
                 # Here non-standard MSE are shown as M
                 self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
                                  str(s))
-                #==========================================================
+                # ==========================================================
                 # Now try strict version with only standard amino acids
                 polypeptides = ppbuild.build_peptides(structure[0], True)
                 self.assertEqual(len(polypeptides), 1)

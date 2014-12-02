@@ -19,9 +19,9 @@ from Bio.Application import _escape_filename
 from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
-#from Bio.Data.IUPACData import ambiguous_dna_letters
+# from Bio.Data.IUPACData import ambiguous_dna_letters
 
-#################################################################
+# ###############################################################
 
 # Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
@@ -117,11 +117,11 @@ def emboss_convert(filename, old_format, new_format):
     # Setup, this assumes for all the format names used
     # Biopython and EMBOSS names are consistent!
     cline = SeqretCommandline(exes["seqret"],
-                              sequence = filename,
-                              sformat = old_format,
-                              osformat = new_format,
-                              auto = True,  # no prompting
-                              stdout = True)
+                              sequence=filename,
+                              sformat=old_format,
+                              osformat=new_format,
+                              auto=True,  # no prompting
+                              stdout=True)
     # Run the tool,
     child = subprocess.Popen(str(cline),
                              stdin=subprocess.PIPE,
@@ -140,10 +140,10 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     # Setup, this assumes for all the format names used
     # Biopython and EMBOSS names are consistent!
     cline = SeqretCommandline(exes["seqret"],
-                              sformat = old_format,
-                              osformat = new_format,
-                              auto = True,  # no prompting
-                              filter = True)
+                              sformat=old_format,
+                              osformat=new_format,
+                              auto=True,  # no prompting
+                              filter=True)
     # Run the tool,
     child = subprocess.Popen(str(cline),
                              stdin=subprocess.PIPE,
@@ -167,10 +167,10 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     # Setup, this assumes for all the format names used
     # Biopython and EMBOSS names are consistent!
     cline = SeqretCommandline(exes["seqret"],
-                              sformat = old_format,
-                              osformat = new_format,
-                              auto = True,  # no prompting
-                              filter = True)
+                              sformat=old_format,
+                              osformat=new_format,
+                              auto=True,  # no prompting
+                              filter=True)
     # Run the tool,
     child = subprocess.Popen(str(cline),
                              stdin=subprocess.PIPE,
@@ -688,7 +688,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
     def test_needle_piped2(self):
         """needle with asis trick, and nucleotide FASTA file, output piped to stdout."""
         # TODO - Support needle in Bio.Emboss.Applications
-        #(ideally with the -auto and -filter arguments)
+        # (ideally with the -auto and -filter arguments)
         # Setup,
         query = "ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAA"
         cline = exes["needle"]
@@ -776,7 +776,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
 def emboss_translate(sequence, table=None, frame=None):
     """Call transeq, returns protein sequence as string."""
     # TODO - Support transeq in Bio.Emboss.Applications?
-    #(doesn't seem worthwhile as Biopython can do translations)
+    # (doesn't seem worthwhile as Biopython can do translations)
 
     if not sequence:
         raise ValueError(sequence)
@@ -865,15 +865,15 @@ class TranslationTests(unittest.TestCase):
                     Seq("TANTARTAYTAMTAKTAHTABTADTAV", generic_dna),
                     # Problem cases,
                     #
-                    #Seq("TAW", generic_dna),
+                    # Seq("TAW", generic_dna),
                     # W = A or T, but EMBOSS does TAW -> X
                     # TAA -> Y, TAT ->Y, so in Biopython TAW -> Y
                     #
-                    #Seq("TAS", generic_dna),
+                    # Seq("TAS", generic_dna),
                     # S = C or G, but EMBOSS does TAS -> Y
                     # TAG -> *, TAC ->Y, so in Biopython TAS -> X (Y or *)
                     #
-                    #Seq("AAS", generic_dna),
+                    # Seq("AAS", generic_dna),
                     # On table 9, EMBOSS gives N, we give X.
                     # S = C or G, so according to my reading of
                     # table 9 on the NCBI page, AAC=N, AAG=K
@@ -937,6 +937,6 @@ def clean_up():
                 pass
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
     clean_up()

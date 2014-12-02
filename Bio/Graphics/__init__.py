@@ -17,6 +17,7 @@ except ImportError:
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.com/software/opensource/")
 
+__docformat__ = "restructuredtext en"
 
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
@@ -26,13 +27,13 @@ def _write(drawing, output_file, format, dpi=72):
 
     Writes the provided drawing out to a file in a prescribed format.
 
-    drawing - suitable ReportLab drawing object.
-    output_file - a handle to write to, or a filename to write to.
-    format - String indicating output format, one of PS, PDF, SVG,
-             or provided the ReportLab renderPM module is installed,
-             one of the bitmap formats JPG, BMP, GIF, PNG, TIFF or TIFF.
-             The format can be given in any case.
-    dpi - Resolution (dots per inch) for bitmap formats.
+      - drawing - suitable ReportLab drawing object.
+      - output_file - a handle to write to, or a filename to write to.
+      - format - String indicating output format, one of PS, PDF, SVG,
+        or provided the ReportLab renderPM module is installed,
+        one of the bitmap formats JPG, BMP, GIF, PNG, TIFF or TIFF.
+        The format can be given in any case.
+      - dpi - Resolution (dots per inch) for bitmap formats.
 
     No return value.
     """

@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 import os
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -19,6 +19,7 @@ class ClustalwCommandline(AbstractCommandline):
     http://www.clustal.org/
 
     Example:
+    --------
 
     >>> from Bio.Align.Applications import ClustalwCommandline
     >>> in_file = "unaligned.fasta"
@@ -30,6 +31,7 @@ class ClustalwCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
+    ---------
 
     Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
     McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,

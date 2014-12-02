@@ -14,22 +14,25 @@ for the GenBank parser output...
 
 What's here:
 
-Base class to hold a Feature.
+Base class to hold a Feature
 ----------------------------
-classes:
-o SeqFeature
 
-Hold information about a Reference.
+classes:
+
+    - SeqFeature
+
+Hold information about a Reference
 ----------------------------------
 
 This is an attempt to create a General class to hold Reference type
 information.
 
 classes:
-o Reference
 
-Specify locations of a feature on a Sequence.
----------------------------------------------
+    - Reference
+
+Specify locations of a feature on a Sequence
+--------------------------------------------
 
 This aims to handle, in Ewan's words, 'the dreaded fuzziness issue' in
 much the same way as Biocorba. This has the advantages of allowing us
@@ -37,53 +40,56 @@ to handle fuzzy stuff in case anyone needs it, and also be compatible
 with Biocorba.
 
 classes:
-o FeatureLocation - Specify the start and end location of a feature.
-o CompoundLocation - Collection of FeatureLocation objects (for joins etc).
 
-o ExactPosition - Specify the position as being exact.
-o WithinPosition - Specify a position occuring within some range.
-o BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
-o BeforePosition - Specify the position as being found before some base.
-o AfterPosition - Specify the position as being found after some base.
-o OneOfPosition - Specify a position where the location can be multiple positions.
-o UnknownPosition - Represents missing information like '?' in UniProt.
+    - FeatureLocation - Specify the start and end location of a feature.
+    - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
+
+    - ExactPosition - Specify the position as being exact.
+    - WithinPosition - Specify a position occuring within some range.
+    - BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
+    - BeforePosition - Specify the position as being found before some base.
+    - AfterPosition - Specify the position as being found after some base.
+    - OneOfPosition - Specify a position where the location can be multiple positions.
+    - UnknownPosition - Represents missing information like '?' in UniProt.
 """
 
 from __future__ import print_function
 
 from Bio.Seq import MutableSeq, reverse_complement
 
+__docformat__ = "restructuredtext en"
 
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
-    o location - the location of the feature on the sequence (FeatureLocation)
-    o type - the specified type of the feature (ie. CDS, exon, repeat...)
-    o location_operator - a string specifying how this SeqFeature may
-    be related to others. For example, in the example GenBank feature
-    shown below, the location_operator would be "join". This is a proxy
-    for feature.location.operator and only applies to compound locations.
-    o strand - A value specifying on which strand (of a DNA sequence, for
-    instance) the feature deals with. 1 indicates the plus strand, -1
-    indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
-    while the default of None indicates that strand doesn't apply (dot in GFF3,
-    e.g. features on proteins). Note this is a shortcut for accessing the
-    strand property of the feature's location.
-    o id - A string identifier for the feature.
-    o ref - A reference to another sequence. This could be an accession
-    number for some different sequence. Note this is a shortcut for the
-    reference property of the feature's location.
-    o ref_db - A different database for the reference accession number.
-    Note this is a shortcut for the reference property of the location
-    o qualifiers - A dictionary of qualifiers on the feature. These are
-    analogous to the qualifiers from a GenBank feature table. The keys of
-    the dictionary are qualifier names, the values are the qualifier
-    values.
-    o sub_features - Obsolete list of additional SeqFeatures which was
-    used for holding compound locations (e.g. joins in GenBank/EMBL).
-    This is now superceded by a CompoundFeatureLocation as the location,
-    and should not be used (DEPRECATED).
+
+        - location - the location of the feature on the sequence (FeatureLocation)
+        - type - the specified type of the feature (ie. CDS, exon, repeat...)
+        - location_operator - a string specifying how this SeqFeature may
+          be related to others. For example, in the example GenBank feature
+          shown below, the location_operator would be "join". This is a proxy
+          for feature.location.operator and only applies to compound locations.
+        - strand - A value specifying on which strand (of a DNA sequence, for
+          instance) the feature deals with. 1 indicates the plus strand, -1
+          indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
+          while the default of None indicates that strand doesn't apply (dot in GFF3,
+          e.g. features on proteins). Note this is a shortcut for accessing the
+          strand property of the feature's location.
+        - id - A string identifier for the feature.
+        - ref - A reference to another sequence. This could be an accession
+          number for some different sequence. Note this is a shortcut for the
+          reference property of the feature's location.
+        - ref_db - A different database for the reference accession number.
+          Note this is a shortcut for the reference property of the location
+        - qualifiers - A dictionary of qualifiers on the feature. These are
+          analogous to the qualifiers from a GenBank feature table. The keys of
+          the dictionary are qualifier names, the values are the qualifier
+          values.
+        - sub_features - Obsolete list of additional SeqFeatures which was
+          used for holding compound locations (e.g. joins in GenBank/EMBL).
+          This is now superceded by a CompoundFeatureLocation as the location,
+          and should not be used (DEPRECATED).
     """
 
     def __init__(self, location=None, type='', location_operator='',
@@ -595,7 +601,7 @@ class FeatureLocation(object):
         """Specify the start, end, strand etc of a sequence feature.
 
         start and end arguments specify the values where the feature begins
-        and ends. These can either by any of the *Position objects that
+        and ends. These can either by any of the ``*Position`` objects that
         inherit from AbstractPosition, or can just be integers specifying the
         position. In the case of integers, the values are assumed to be
         exact and are converted in ExactPosition arguments. This is meant

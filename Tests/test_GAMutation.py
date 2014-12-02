@@ -74,7 +74,7 @@ class ConversionTest(unittest.TestCase, MutationHelper):
     def test_always_mutate(self):
         """Test ability to cause mutations.
         """
-        mutator = ConversionMutation(mutation_rate = 1.0)
+        mutator = ConversionMutation(mutation_rate=1.0)
 
         # when we mutate randomly by chance, we expect to get 2/3
         # visible mutations (there are three letters in the alphabet and
@@ -89,7 +89,7 @@ class ConversionTest(unittest.TestCase, MutationHelper):
     def test_never_mutate(self):
         """Make sure we do not mutate at unexpected times.
         """
-        mutator = ConversionMutation(mutation_rate = 0.0)
+        mutator = ConversionMutation(mutation_rate=0.0)
         self._never_mutate(mutator)
 
 
@@ -103,7 +103,7 @@ class SinglePositionTest(unittest.TestCase, MutationHelper):
     def test_always_mutate(self):
         """Test ability to cause mutations.
         """
-        mutator = SinglePositionMutation(mutation_rate = 1.0)
+        mutator = SinglePositionMutation(mutation_rate=1.0)
 
         # when we mutate randomly by chance, we expect to get 2/3
         # visible mutations (there are three letters in the alphabet and
@@ -115,7 +115,7 @@ class SinglePositionTest(unittest.TestCase, MutationHelper):
     def test_never_mutate(self):
         """Make sure we do not mutate at unexpected times.
         """
-        mutator = SinglePositionMutation(mutation_rate = 0.0)
+        mutator = SinglePositionMutation(mutation_rate=0.0)
         self._never_mutate(mutator)
 
 
@@ -196,5 +196,5 @@ class SafeFitnessTest(unittest.TestCase):
                 "Did not get new organism under higher fitness conditions."
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

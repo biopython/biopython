@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
@@ -18,6 +18,7 @@ class ProbconsCommandline(AbstractCommandline):
     http://probcons.stanford.edu/
 
     Example:
+    --------
 
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format, and otherwise default settings, use:
@@ -48,6 +49,7 @@ class ProbconsCommandline(AbstractCommandline):
         align = AlignIO.read(StringIO(stdout), "clustalw")
 
     Citations:
+    ----------
 
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
     PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.

@@ -30,6 +30,7 @@ from Bio._py3k import _is_int_or_long
 from Bio._py3k import range
 from Bio._py3k import basestring
 
+__docformat__ = "restructuredtext en"
 
 class DatabaseLoader:
     """Object used to load SeqRecord objects into a BioSQL database."""
@@ -38,15 +39,15 @@ class DatabaseLoader:
         """Initialize with connection information for the database.
 
         Creating a DatabaseLoader object is normally handled via the
-        BioSeqDatabase DBServer object, for example:
+        BioSeqDatabase DBServer object, for example::
 
-        from BioSQL import BioSeqDatabase
-        server = BioSeqDatabase.open_database(driver="MySQLdb", user="gbrowse",
-                         passwd = "biosql", host = "localhost", db="test_biosql")
-        try:
-            db = server["test"]
-        except KeyError:
-            db = server.new_database("test", description="For testing GBrowse")
+            from BioSQL import BioSeqDatabase
+            server = BioSeqDatabase.open_database(driver="MySQLdb", user="gbrowse",
+                             passwd = "biosql", host = "localhost", db="test_biosql")
+            try:
+                db = server["test"]
+            except KeyError:
+                db = server.new_database("test", description="For testing GBrowse")
         """
         self.adaptor = adaptor
         self.dbid = dbid
@@ -792,7 +793,8 @@ class DatabaseLoader:
         with seq_start = 1, seq_end = 2, location_rank = 1.
 
         For split locations, ie (1..2, 3..4, 5..6) we would have three
-        row tables with:
+        row tables with::
+
             start = 1, end = 2, rank = 1
             start = 3, end = 4, rank = 2
             start = 5, end = 6, rank = 3
@@ -1053,7 +1055,7 @@ class DatabaseRemover:
     """Complement the Loader functionality by fully removing a database.
 
     This probably isn't really useful for normal purposes, since you
-    can just do a:
+    can just do a::
 
         DROP DATABASE db_name
 

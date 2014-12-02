@@ -47,7 +47,7 @@ if len(exes) < len(exes_wanted):
           "Install the Emboss package 'PhylipNew' if you want to use the "+
           "Bio.Emboss.Applications wrappers for phylogenetic tools.")
 
- ###########################################################################
+# #########################################################################
 
 
 # A few top level functions that are called repeatedly in the test cases
@@ -88,21 +88,21 @@ class DistanceTests(unittest.TestCase):
                  'Merychippu', 'Mesohippus', 'Nannipus', 'Neohippari',
                  'Parahippus', 'Pliohippus']
 
-    def distances_from_alignment(self, filename, DNA = True):
+    def distances_from_alignment(self, filename, DNA=True):
         """check we can make distance matrix from a given alignment"""
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
             cline = FDNADistCommandline(exes["fdnadist"],
-                                         method = 'j',
-                                         sequence= filename,
-                                         outfile = "test_file",
-                                         auto = True)
+                                         method='j',
+                                         sequence=filename,
+                                         outfile="test_file",
+                                         auto=True)
         else:
             cline = FProtDistCommandline(exes["fprotdist"],
-                                         method = 'j',
-                                         sequence= filename,
-                                         outfile = "test_file",
-                                         auto = True)
+                                         method='j',
+                                         sequence=filename,
+                                         outfile="test_file",
+                                         auto=True)
         stdout, strerr = cline()
         # biopython can't grok distance matrices, so we'll just check it exists
         self.assertTrue(os.path.isfile("test_file"))
@@ -111,9 +111,9 @@ class DistanceTests(unittest.TestCase):
         """Check we can estimate a tree from a distance matrix"""
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         cline = FNeighborCommandline(exes["fneighbor"],
-                                     datafile = filename,
-                                     outtreefile = "test_file",
-                                     auto= True, filter = True)
+                                     datafile=filename,
+                                     outtreefile="test_file",
+                                     auto=True, filter=True)
         stdout, stderr = cline()
         for tree in parse_trees("test_file"):
             tree_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
@@ -168,14 +168,14 @@ class ParsimonyTests(unittest.TestCase):
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
             cline = FDNAParsCommandline(exes["fdnapars"],
-                                        sequence = filename,
-                                        outtreefile = "test_file",
-                                        auto= True, stdout=True)
+                                        sequence=filename,
+                                        outtreefile="test_file",
+                                        auto=True, stdout=True)
         else:
             cline = FProtParsCommandline(exes["fprotpars"],
-                                         sequence = filename,
-                                         outtreefile = "test_file",
-                                         auto= True, stdout=True)
+                                         sequence=filename,
+                                         outtreefile="test_file",
+                                         auto=True, stdout=True)
         stdout, stderr = cline()
         a_taxa = [s.name.replace(" ", "_") for s in
                   next(AlignIO.parse(open(filename, "r"), format))]
@@ -226,14 +226,14 @@ class BootstrapTests(unittest.TestCase):
         """
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         cline = FSeqBootCommandline(exes["fseqboot"],
-                                    sequence = filename,
-                                    outfile = "test_file",
-                                    seqtype = align_type,
-                                    reps = 2,
-                                    auto = True, filter = True)
+                                    sequence=filename,
+                                    outfile="test_file",
+                                    seqtype=align_type,
+                                    reps=2,
+                                    auto=True, filter=True)
         stdout, stderr = cline()
         # the resultant file should have 2 alignments...
-        bs = list(AlignIO.parse(open("test_file", "r" ), format))
+        bs = list(AlignIO.parse(open("test_file", "r"), format))
         self.assertEqual(len(bs), 2)
         # ..and each name in the original alignment...
         a_names = [s.name.replace(" ", "_") for s in
@@ -270,9 +270,9 @@ class TreeComparisonTests(unittest.TestCase):
     def test_fconsense(self):
         """Calculate a consensus tree with fconsense"""
         cline = FConsenseCommandline(exes["fconsense"],
-                                     intreefile = "Phylip/horses.tree",
-                                     outtreefile = "test_file",
-                                     auto = True, filter = True)
+                                     intreefile="Phylip/horses.tree",
+                                     outtreefile="test_file",
+                                     auto=True, filter=True)
         stdout, stderr = cline()
         # Split the next and get_taxa into two steps to help 2to3 work
         tree1 = next(parse_trees("test_file"))
@@ -284,13 +284,13 @@ class TreeComparisonTests(unittest.TestCase):
     def test_ftreedist(self):
         """Calculate the distance between trees with ftreedist"""
         cline = FTreeDistCommandline(exes["ftreedist"],
-                                     intreefile = "Phylip/horses.tree",
-                                     outfile = "test_file",
-                                     auto = True, filter = True)
+                                     intreefile="Phylip/horses.tree",
+                                     outfile="test_file",
+                                     auto=True, filter=True)
         stdout, stderr = cline()
         self.assertTrue(os.path.isfile("test_file"))
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
     clean_up()

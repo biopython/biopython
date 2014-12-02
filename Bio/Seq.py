@@ -1,19 +1,23 @@
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005 by M de Hoon.
-# Copyright 2007-2010 by Peter Cock.
+# Copyright 2007-2014 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Provides objects to represent biological sequences with alphabets.
 
-See also U{http://biopython.org/wiki/Seq} and the chapter in our tutorial:
- - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
- - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
+See also the Seq_ wiki and the chapter in our tutorial:
+    - `HTML Tutorial`_
+    - `PDF Tutorial`_
+
+.. _Seq: http://biopython.org/wiki/Seq
+.. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
+.. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 """
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 import string  # for maketrans only
 import array
@@ -23,6 +27,7 @@ import warnings
 from Bio._py3k import range
 from Bio._py3k import basestring
 
+from Bio import BiopythonWarning
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
@@ -33,8 +38,8 @@ def _maketrans(complement_mapping):
     """Makes a python string translation table (PRIVATE).
 
     Arguments:
-     - complement_mapping - a dictionary such as ambiguous_dna_complement
-       and ambiguous_rna_complement from Data.IUPACData.
+        - complement_mapping - a dictionary such as ambiguous_dna_complement
+          and ambiguous_rna_complement from Data.IUPACData.
 
     Returns a translation table (a string of length 256) for use with the
     python string's translate method to use in a (reverse) complement.
@@ -80,8 +85,8 @@ class Seq(object):
         """Create a Seq object.
 
         Arguments:
-         - seq      - Sequence, required (string)
-         - alphabet - Optional argument, an Alphabet object from Bio.Alphabet
+            - seq - Sequence, required (string)
+            - alphabet - Optional argument, an Alphabet object from Bio.Alphabet
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -99,7 +104,6 @@ class Seq(object):
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         >>> my_seq.alphabet
         IUPACProtein()
-
         """
         # Enforce string storage
         if not isinstance(data, basestring):
@@ -135,31 +139,33 @@ class Seq(object):
     def __hash__(self):
         """Hash for comparison.
 
-        See the __cmp__ documentation - we plan to change this!
+        See the __cmp__ documentation - this has changed from past
+        versions of Biopython!
         """
-        warnings.warn("In future comparing Seq objects will use string "
-                      "comparison (not object comparison). Please use "
-                      "hash(id(my_seq)) or my_dict[id(my_seq)] if you "
-                      "want the current behaviour, or for string hashing "
-                      "use hash(str(my_seq)) or my_dict[str(my_seq)] to "
-                      "to make your code explicit and to avoid this "
-                      "warning.", FutureWarning)
-        return id(self)  # Currently use object identity for equality testing
+        # TODO - remove this warning in a future release
+        warnings.warn("Biopython Seq objects now use string comparison. "
+                      "Older versions of Biopython used object comparison. "
+                      "During this transition, please use hash(id(my_seq)) "
+                      "or my_dict[id(my_seq)] if you want the old behaviour, "
+                      "or use hash(str(my_seq)) or my_dict[str(my_seq)] for "
+                      "the new string hashing behaviour.", BiopythonWarning)
+        return hash(str(self))
 
-    def __cmp__(self, other):
+    def __eq__(self, other):
         """Compare the sequence to another sequence or a string (README).
 
         Historically comparing Seq objects has done Python object comparison.
         After considerable discussion (keeping in mind constraints of the
-        Python language, hashes and dictionary support) a future release of
-        Biopython will change this to use simple string comparison. The plan is
-        that comparing incompatible alphabets (e.g. DNA to RNA) will trigger a
+        Python language, hashes and dictionary support), Biopython now uses
+        simple string comparison (with a warning about the change).
+
+        Note that incompatible alphabets (e.g. DNA to RNA) will trigger a
         warning.
 
-        This version of Biopython still does Python object comparison, but with
-        a warning about this future change. During this transition period,
-        please just do explicit comparisons:
+        During this transition period, please just do explicit comparisons:
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
         >>> seq1 = Seq("ACGT")
         >>> seq2 = Seq("ACGT")
         >>> id(seq1) == id(seq2)
@@ -167,17 +173,51 @@ class Seq(object):
         >>> str(seq1) == str(seq2)
         True
 
-        Note - This method indirectly supports ==, < , etc.
+        The new behaviour is to use string-like equality:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> seq1 == seq2
+        True
+        >>> seq1 == "ACGT"
+        True
+        >>> seq1 == Seq("ACGT", generic_dna)
+        True
+
         """
         if hasattr(other, "alphabet"):
-            # other should be a Seq or a MutableSeq
-            warnings.warn("In future comparing Seq objects will use string "
-                          "comparison (not object comparison). Incompatible "
-                          "alphabets will trigger a warning (not an exception). "
-                          "In the interim please use id(seq1)==id(seq2) or "
-                          "str(seq1)==str(seq2) to make your code explicit "
-                          "and to avoid this warning.", FutureWarning)
-        return cmp(id(self), id(other))
+            #other could be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets %s and %s"
+                              % (repr(self.alphabet), repr(other.alphabet)),
+                              BiopythonWarning)
+        return str(self) == str(other)
+
+    def __ne__(self, other):
+        """Not equal, see __eq__ documentation."""
+        # Seem to require this method under Python 2 but not needed on Python 3?
+        return not (self == other)
+
+    def __lt__(self, other):
+        """Less than, see __eq__ documentation."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets %s and %s"
+                              % (repr(self.alphabet), repr(other.alphabet)),
+                              BiopythonWarning)
+        return str(self) < str(other)
+
+    def __le__(self, other):
+        """Less than or equal, see __eq__ documentation."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets %s and %s"
+                              % (repr(self.alphabet), repr(other.alphabet)),
+                              BiopythonWarning)
+        return str(self) <= str(other)
 
     def __len__(self):
         """Returns the length of the sequence, use len(my_seq)."""
@@ -280,7 +320,7 @@ class Seq(object):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s"
+                raise TypeError("Incompatible alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -334,7 +374,7 @@ class Seq(object):
 
         # Other should be a Seq or a MutableSeq
         if not Alphabet._check_type_compatible([self.alphabet, other_alpha]):
-            raise TypeError("Incompatable alphabets %s and %s"
+            raise TypeError("Incompatible alphabets %s and %s"
                             % (repr(self.alphabet), repr(other_alpha)))
         # Return as a string
         return str(other_sequence)
@@ -351,9 +391,9 @@ class Seq(object):
         notation.
 
         Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
+            - sub - a string or another Seq object to look for
+            - start - optional integer, slice start
+            - end - optional integer, slice end
 
         e.g.
 
@@ -404,11 +444,11 @@ class Seq(object):
         >>> Seq("AAA", generic_rna) in my_dna
         Traceback (most recent call last):
            ...
-        TypeError: Incompatable alphabets DNAAlphabet() and RNAAlphabet()
+        TypeError: Incompatible alphabets DNAAlphabet() and RNAAlphabet()
         >>> Seq("AAA", generic_protein) in my_dna
         Traceback (most recent call last):
            ...
-        TypeError: Incompatable alphabets DNAAlphabet() and ProteinAlphabet()
+        TypeError: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
         """
         # If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(char)
@@ -423,9 +463,9 @@ class Seq(object):
         argument sub in the (sub)sequence given by [start:end].
 
         Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
+            - sub - a string or another Seq object to look for
+            - start - optional integer, slice start
+            - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -449,9 +489,9 @@ class Seq(object):
         substring argument sub in the (sub)sequence given by [start:end].
 
         Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
+            - sub - a string or another Seq object to look for
+            - start - optional integer, slice start
+            - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -848,25 +888,25 @@ class Seq(object):
         sequence raises an exception.
 
         Arguments:
-         - table - Which codon table to use?  This can be either a name
-                   (string), an NCBI identifier (integer), or a CodonTable
-                   object (useful for non-standard genetic codes).  This
-                   defaults to the "Standard" table.
-         - stop_symbol - Single character string, what to use for terminators.
-                         This defaults to the asterisk, "*".
-         - to_stop - Boolean, defaults to False meaning do a full translation
-                     continuing on past any stop codons (translated as the
-                     specified stop_symbol).  If True, translation is
-                     terminated at the first in frame stop codon (and the
-                     stop_symbol is not appended to the returned protein
-                     sequence).
-         - cds - Boolean, indicates this is a complete CDS.  If True,
-                 this checks the sequence starts with a valid alternative start
-                 codon (which will be translated as methionine, M), that the
-                 sequence length is a multiple of three, and that there is a
-                 single in frame stop codon at the end (this will be excluded
-                 from the protein sequence, regardless of the to_stop option).
-                 If these tests fail, an exception is raised.
+            - table - Which codon table to use?  This can be either a name
+              (string), an NCBI identifier (integer), or a CodonTable
+              object (useful for non-standard genetic codes).  This
+              defaults to the "Standard" table.
+            - stop_symbol - Single character string, what to use for terminators.
+              This defaults to the asterisk, "*".
+            - to_stop - Boolean, defaults to False meaning do a full translation
+              continuing on past any stop codons (translated as the
+              specified stop_symbol).  If True, translation is
+              terminated at the first in frame stop codon (and the
+              stop_symbol is not appended to the returned protein
+              sequence).
+            - cds - Boolean, indicates this is a complete CDS.  If True,
+              this checks the sequence starts with a valid alternative start
+              codon (which will be translated as methionine, M), that the
+              sequence length is a multiple of three, and that there is a
+              single in frame stop codon at the end (this will be excluded
+              from the protein sequence, regardless of the to_stop option).
+              If these tests fail, an exception is raised.
 
         e.g. Using the standard table:
 
@@ -1239,9 +1279,9 @@ class UnknownSeq(Seq):
         notation.
 
         Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
+            - sub - a string or another Seq object to look for
+            - start - optional integer, slice start
+            - end - optional integer, slice end
 
         >>> "NNNN".count("N")
         4
@@ -1528,7 +1568,7 @@ class MutableSeq(object):
         # See test_GAQueens.py for an historic usage of a non-string alphabet!
         return "".join(self.data)
 
-    def __cmp__(self, other):
+    def __eq__(self, other):
         """Compare the sequence to another sequence or a string (README).
 
         Currently if compared to another sequence the alphabets must be
@@ -1550,30 +1590,54 @@ class MutableSeq(object):
         >>> str(seq1) == str(seq2)
         True
 
-        This method indirectly supports ==, < , etc.
+        Biopython now does:
+
+        >>> seq1 == seq2
+        True
+        >>> seq1 == Seq("ACGT")
+        True
+        >>> seq1 == "ACGT"
+        True
+
         """
         if hasattr(other, "alphabet"):
-            # other should be a Seq or a MutableSeq
-            warnings.warn("In future comparing incompatible alphabets will "
-                          "only trigger a warning (not an exception). In "
-                          "the interim please use id(seq1)==id(seq2) or "
-                          "str(seq1)==str(seq2) to make your code explicit "
-                          "and to avoid this warning.", FutureWarning)
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s"
-                                % (repr(self.alphabet), repr(other.alphabet)))
-            # They should be the same sequence type (or one of them is generic)
+                warnings.warn("Incompatible alphabets %s and %s"
+                              % (repr(self.alphabet), repr(other.alphabet)),
+                              BiopythonWarning)
             if isinstance(other, MutableSeq):
-                # See test_GAQueens.py for an historic usage of a non-string
-                # alphabet!  Comparing the arrays supports this.
-                return cmp(self.data, other.data)
-            else:
-                return cmp(str(self), str(other))
-        elif isinstance(other, basestring):
-            return cmp(str(self), other)
-        else:
-            raise TypeError
+                return self.data == other.data
+        return str(self) == str(other)
+
+    def __ne__(self, other):
+        """Not equal, see __eq__ documentation."""
+        # Seem to require this method under Python 2 but not needed on Python 3?
+        return not (self == other)
+
+    def __lt__(self, other):
+        """Less than, see __eq__ documentation."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets %s and %s"
+                              % (repr(self.alphabet), repr(other.alphabet)),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data < other.data
+        return str(self) < str(other)
+
+    def __le__(self, other):
+        """Less than or equal, see __eq__ documentation."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets %s and %s"
+                              % (repr(self.alphabet), repr(other.alphabet)),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data <= other.data
+        return str(self) <= str(other)
 
     def __len__(self):
         return len(self.data)
@@ -1622,7 +1686,7 @@ class MutableSeq(object):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s"
+                raise TypeError("Incompatible alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -1643,7 +1707,7 @@ class MutableSeq(object):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s"
+                raise TypeError("Incompatible alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -1689,9 +1753,9 @@ class MutableSeq(object):
         notation.
 
         Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
+            - sub - a string or another Seq object to look for
+            - start - optional integer, slice start
+            - end - optional integer, slice end
 
         e.g.
 
@@ -1888,21 +1952,21 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     """Helper function to translate a nucleotide string (PRIVATE).
 
     Arguments:
-     - sequence    - a string
-     - table       - a CodonTable object (NOT a table name or id number)
-     - stop_symbol - a single character string, what to use for terminators.
-     - to_stop     - boolean, should translation terminate at the first
-                     in frame stop codon?  If there is no in-frame stop codon
-                     then translation continues to the end.
-     - pos_stop    - a single character string for a possible stop codon
-                     (e.g. TAN or NNN)
-     - cds - Boolean, indicates this is a complete CDS.  If True, this
-             checks the sequence starts with a valid alternative start
-             codon (which will be translated as methionine, M), that the
-             sequence length is a multiple of three, and that there is a
-             single in frame stop codon at the end (this will be excluded
-             from the protein sequence, regardless of the to_stop option).
-             If these tests fail, an exception is raised.
+        - sequence - a string
+        - table - a CodonTable object (NOT a table name or id number)
+        - stop_symbol - a single character string, what to use for terminators.
+        - to_stop - boolean, should translation terminate at the first
+          in frame stop codon?  If there is no in-frame stop codon
+          then translation continues to the end.
+        - pos_stop - a single character string for a possible stop codon
+          (e.g. TAN or NNN)
+        - cds - Boolean, indicates this is a complete CDS.  If True, this
+          checks the sequence starts with a valid alternative start
+          codon (which will be translated as methionine, M), that the
+          sequence length is a multiple of three, and that there is a
+          single in frame stop codon at the end (this will be excluded
+          from the protein sequence, regardless of the to_stop option).
+          If these tests fail, an exception is raised.
 
     Returns a string.
 
@@ -1928,7 +1992,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     and will trigger a warning (likely to become an exception in a
     future release).
 
-    If cds=True, the start and stop codons are checked, and the start
+    If **cds=True**, the start and stop codons are checked, and the start
     codon will be translated at methionine. The sequence must be an
     while number of codons.
 
@@ -2004,25 +2068,25 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     MutableSeq, returns a Seq object with a protein alphabet.
 
     Arguments:
-     - table - Which codon table to use?  This can be either a name (string),
-               an NCBI identifier (integer), or a CodonTable object (useful
-               for non-standard genetic codes).  Defaults to the "Standard"
-               table.
-     - stop_symbol - Single character string, what to use for any
-                     terminators, defaults to the asterisk, "*".
-     - to_stop - Boolean, defaults to False meaning do a full
-                 translation continuing on past any stop codons
-                 (translated as the specified stop_symbol).  If
-                 True, translation is terminated at the first in
-                 frame stop codon (and the stop_symbol is not
-                 appended to the returned protein sequence).
-     - cds - Boolean, indicates this is a complete CDS.  If True, this
-                 checks the sequence starts with a valid alternative start
-                 codon (which will be translated as methionine, M), that the
-                 sequence length is a multiple of three, and that there is a
-                 single in frame stop codon at the end (this will be excluded
-                 from the protein sequence, regardless of the to_stop option).
-                 If these tests fail, an exception is raised.
+        - table - Which codon table to use?  This can be either a name (string),
+          an NCBI identifier (integer), or a CodonTable object (useful
+          for non-standard genetic codes).  Defaults to the "Standard"
+          table.
+        - stop_symbol - Single character string, what to use for any
+          terminators, defaults to the asterisk, "*".
+        - to_stop - Boolean, defaults to False meaning do a full
+          translation continuing on past any stop codons
+          (translated as the specified stop_symbol).  If
+          True, translation is terminated at the first in
+          frame stop codon (and the stop_symbol is not
+          appended to the returned protein sequence).
+        - cds - Boolean, indicates this is a complete CDS.  If True, this
+          checks the sequence starts with a valid alternative start
+          codon (which will be translated as methionine, M), that the
+          sequence length is a multiple of three, and that there is a
+          single in frame stop codon at the end (this will be excluded
+          from the protein sequence, regardless of the to_stop option).
+          If these tests fail, an exception is raised.
 
     A simple string example using the default (standard) genetic code:
 

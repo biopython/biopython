@@ -198,7 +198,7 @@ class BgzfTests(unittest.TestCase):
             h.seek(bgzf.make_virtual_offset(start, 0))
             data = h.read(data_len)
             self.assertEqual(len(data), data_len)
-            #self.assertEqual(start + raw_len, h._handle.tell())
+            # self.assertEqual(start + raw_len, h._handle.tell())
             self.assertEqual(len(new), data_start)
             new += data
         h.close()
@@ -212,14 +212,14 @@ class BgzfTests(unittest.TestCase):
                 h.seek(bgzf.make_virtual_offset(start, 0))
                 data = h.read(data_len)
                 self.assertEqual(len(data), data_len)
-                #self.assertEqual(start + raw_len, h._handle.tell())
+                # self.assertEqual(start + raw_len, h._handle.tell())
                 new = data + new
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
         # Jump back - non-sequential seeking
         if len(blocks) >= 3:
-            h = bgzf.BgzfReader(filename, "rb", max_cache = 1)
+            h = bgzf.BgzfReader(filename, "rb", max_cache=1)
             # Seek to a late block in the file,
             # half way into the third last block
             start, raw_len, data_start, data_len = blocks[-3]
@@ -252,7 +252,7 @@ class BgzfTests(unittest.TestCase):
                 real_offset = data_start + within_offset
                 v_offsets.append((voffset, real_offset))
         shuffle(v_offsets)
-        h = bgzf.BgzfReader(filename, "rb", max_cache = 1)
+        h = bgzf.BgzfReader(filename, "rb", max_cache=1)
         for voffset, real_offset in v_offsets:
             h.seek(0)
             self.assertTrue(voffset >= 0 and real_offset >= 0)
@@ -372,10 +372,10 @@ class BgzfTests(unittest.TestCase):
         h.write("X" * 100000)
         offset = h.tell()
         self.assertNotEqual(offset, 100000)  # Should be a virtual offset!
-        
+
         # After writing the same data two times, size of the first and the second
         # write should be equal also in terms of offsets
-        #(This is because the flush ensures two identical blocks written)
+        # (This is because the flush ensures two identical blocks written)
         h.flush()
         offset1 = h.tell()
         # Note 'offset' and 'offset1' effectively the same, but not equal
@@ -391,7 +391,7 @@ class BgzfTests(unittest.TestCase):
         offset3 = h.tell()
         self.assertEqual(((offset3 << 16) - (offset2 << 16)),
                         ((offset2 << 16) - (offset1 << 16)))
-        
+
         # Flushing should change the offset
         h.flush()
         self.assertNotEqual(offset3, h.tell())
@@ -418,5 +418,5 @@ class BgzfTests(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

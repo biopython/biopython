@@ -1,10 +1,12 @@
 """Python implementation of chisqprob, to avoid SciPy dependency.
 
-Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.c
+Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
 """
 
 import math
 import sys
+
+__docformat__ = "restructuredtext en"
 
 # Cephes Math Library Release 2.0:  April, 1987
 # Copyright 1985, 1987 by Stephen L. Moshier
@@ -15,8 +17,7 @@ BIGINV = 2.22044604925031308085e-16
 
 
 def chisqprob(x, df):
-    """
-    Probability value (1-tail) for the Chi^2 probability distribution.
+    """Probability value (1-tail) for the Chi^2 probability distribution.
 
     Broadcasting rules apply.
 
@@ -40,8 +41,8 @@ def chisqprob(x, df):
     if df <= 0:
         raise ValueError("Domain error.")
     if x < 1.0 or x < df:
-        return 1.0 - _igam(0.5*df, 0.5*x)
-    return _igamc(0.5*df, 0.5*x)
+        return 1.0 - _igam(0.5 * df, 0.5 * x)
+    return _igamc(0.5 * df, 0.5 * x)
 
 
 def _igamc(a, x):
@@ -92,7 +93,7 @@ def _igamc(a, x):
         pk = pkm1 * z - pkm2 * yc
         qk = qkm1 * z - qkm2 * yc
         if qk != 0:
-            r = pk/qk
+            r = pk / qk
             t = abs((ans - r) / r)
             ans = r
         else:
@@ -111,14 +112,17 @@ def _igamc(a, x):
 
 
 def _igam(a, x):
-    """Left tail of incomplete Gamma function:
+    """Left tail of incomplete Gamma function.
 
-            inf.      k
-     a  -x   -       x
-    x  e     >   ----------
-             -     -
-            k=0   | (a+k+1)
+    Computes this formula::
+
+                 inf.      k
+          a  -x   -       x
+         x  e     >   ----------
+                  -     -
+                k=0   | (a+k+1)
     """
+
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))
 
@@ -129,7 +133,7 @@ def _igam(a, x):
 
     while True:
         r += 1.0
-        c *= x/r
+        c *= x / r
         ans += c
         if c / ans <= MACHEP:
             return ans * ax / a

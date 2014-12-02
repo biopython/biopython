@@ -145,13 +145,13 @@ class ReactionTestCase(unittest.TestCase):
 
     def setUp(self):
         self.r_empty = Reaction()
-        self.r_prod = Reaction({"a":1})
-        self.r_dest = Reaction({"a":-1})
-        self.r_1 = Reaction({"a":-1, "b":1})
-        self.r_1i = Reaction({"a":-1, "b":1, "c":0})
-        self.r_2 = Reaction({"b":-1, "c":1})
-        self.r_3 = Reaction({"a":-1, "d":2})
-        self.r_4 = Reaction({"c":-1, "d":-1, "a":1, "e":2})
+        self.r_prod = Reaction({"a": 1})
+        self.r_dest = Reaction({"a": -1})
+        self.r_1 = Reaction({"a": -1, "b": 1})
+        self.r_1i = Reaction({"a": -1, "b": 1, "c": 0})
+        self.r_2 = Reaction({"b": -1, "c": 1})
+        self.r_3 = Reaction({"a": -1, "d": 2})
+        self.r_4 = Reaction({"c": -1, "d": -1, "a": 1, "e": 2})
 
     def testEq(self):
         self.assertEqual(self.r_1, self.r_1i)  # , "not equal to similar")
@@ -161,12 +161,12 @@ class ReactionTestCase(unittest.TestCase):
         self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
         self.assertEqual(self.r_prod.reverse(), self.r_dest,
                           "reversed reaction not equal to similar")
-        self.assertEqual(self.r_4.reverse(), Reaction({"c":1, "d":1, "a":-1, "e":-2}),
+        self.assertEqual(self.r_4.reverse(), Reaction({"c": 1, "d": 1, "a": -1, "e": -2}),
                          "reversed reaction not equal to similar")
         self.assertEqual(self.r_3.reverse().reverse(), self.r_3,
                           "double reversal not identity")
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

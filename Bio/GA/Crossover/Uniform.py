@@ -6,14 +6,14 @@
 """Perform uniform crossovers between the genomes of two organisms.
 
 
-genome 1 --       A B C D E F G
-                  .   . .   .
-genome 2 --       a b c d e f g
-
-After crossover:
-
-new genome 1 --  a B c d E f G
-new genome 2 --  A b C D e F g
+    | genome 1 --       A B C D E F G
+    |                   .   . .   .
+    | genome 2 --       a b c d e f g
+    |
+    | After crossover:
+    |
+    | new genome 1 --  a B c d E f G
+    | new genome 2 --  A b C D e F g
 
 Uniform Crossover is a standard crossover technique for
 rapid mutation-behavior.
@@ -21,6 +21,7 @@ rapid mutation-behavior.
 # standard modules
 import random
 
+__docformat__ = "restructuredtext en"
 
 class UniformCrossover(object):
     """Perform single point crossover between genomes at some defined rates.

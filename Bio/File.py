@@ -10,12 +10,13 @@
 
 Classes:
 
-UndoHandle     File object decorator with support for undo-like operations.
+    - UndoHandle     File object decorator with support for undo-like operations.
 
 Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
 use.
 """
+
 from __future__ import print_function
 
 import codecs
@@ -42,10 +43,13 @@ except ImportError:
     _sqlite = None
     pass
 
+__docformat__ = "restructuredtext en"
+
 
 @contextlib.contextmanager
 def as_handle(handleish, mode='r', **kwargs):
-    """
+    r"""Context manager to ensure we are using a handle.
+
     Context manager for arguments that can be passed to
     SeqIO and AlignIO read, write, and parse methods: either file objects or strings.
 
@@ -54,9 +58,9 @@ def as_handle(handleish, mode='r', **kwargs):
 
     All other inputs are returned, and are *not* closed
 
-    - handleish  - Either a string or file handle
-    - mode       - Mode to open handleish (used only if handleish is a string)
-    - kwargs     - Further arguments to pass to open(...)
+        - handleish  - Either a string or file handle
+        - mode       - Mode to open handleish (used only if handleish is a string)
+        - kwargs     - Further arguments to pass to open(...)
 
     Example:
 
@@ -112,8 +116,9 @@ class UndoHandle(object):
     Saves lines in a LIFO fashion.
 
     Added methods:
-    saveline    Save a line to be returned next time.
-    peekline    Peek at the next line without consuming it.
+
+        - saveline    Save a line to be returned next time.
+        - peekline    Peek at the next line without consuming it.
 
     """
     def __init__(self, handle):
@@ -455,6 +460,10 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._max_open = max_open
         self._proxies = {}
 
+        # Note if using SQLite :memory: trick index filename, this will
+        # give $PWD as the relative path (which is fine).
+        self._relative_path = os.path.abspath(os.path.dirname(index_filename))
+
         if os.path.isfile(index_filename):
             self._load_index()
         else:
@@ -463,6 +472,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def _load_index(self):
         """Called from __init__ to re-use an existing index (PRIVATE)."""
         index_filename = self._index_filename
+        relative_path = self._relative_path
         filenames = self._filenames
         format = self._format
         proxy_factory = self._proxy_factory
@@ -491,16 +501,49 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.close()
                 raise ValueError("Index file says format %s, not %s"
                                  % (self._format, format))
+            try:
+                filenames_relative_to_index, = con.execute(
+                    "SELECT value FROM meta_data WHERE key=?;",
+                    ("filenames_relative_to_index",)).fetchone()
+                filenames_relative_to_index = (filenames_relative_to_index.upper() == "TRUE")
+            except TypeError:
+                # Original behaviour, assume if meta_data missing
+                filenames_relative_to_index = False
             self._filenames = [row[0] for row in
                                con.execute("SELECT name FROM file_data "
                                            "ORDER BY file_number;").fetchall()]
+            if filenames_relative_to_index:
+                # Not implicitly relative to $PWD, explicitly relative to index file
+                relative_path = os.path.abspath(os.path.dirname(index_filename))
+                tmp = []
+                for f in self._filenames:
+                    if os.path.isabs(f):
+                        tmp.append(f)
+                    else:
+                        # Would be stored with Unix / path separator, so convert
+                        # it to the local OS path separator here:
+                        tmp.append(os.path.join(relative_path, f.replace("/", os.path.sep)))
+                self._filenames = tmp
+                del tmp
             if filenames and len(filenames) != len(self._filenames):
                 con.close()
                 raise ValueError("Index file says %i files, not %i"
                                  % (len(self._filenames), len(filenames)))
             if filenames and filenames != self._filenames:
-                con.close()
-                raise ValueError("Index file has different filenames")
+                for old, new in zip(self._filenames, filenames):
+                    # Want exact match (after making relative to the index above)
+                    if os.path.abspath(old) != os.path.abspath(new):
+                        con.close()
+                        if filenames_relative_to_index:
+                            raise ValueError("Index file has different filenames, e.g. %r != %r"
+                                             % (os.path.abspath(old), os.path.abspath(new)))
+                        else:
+                            raise ValueError("Index file has different filenames "
+                                             "[This is an old index where any relative paths "
+                                             "were relative to the original working directory]. "
+                                             "e.g. %r != %r"
+                                             % (os.path.abspath(old), os.path.abspath(new)))
+                # Filenames are equal (after imposing abspath)
         except _OperationalError as err:
             con.close()
             raise ValueError("Not a Biopython index database? %s" % err)
@@ -512,6 +555,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def _build_index(self):
         """Called from __init__ to create a new index (PRIVATE)."""
         index_filename = self._index_filename
+        relative_path = self._relative_path
         filenames = self._filenames
         format = self._format
         key_function = self._key_function
@@ -532,12 +576,14 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         con.execute("PRAGMA locking_mode=EXCLUSIVE")
         # Don't index the key column until the end (faster)
         # con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
-        # "offset INTEGER);")
+        #             "offset INTEGER);")
         con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("count", -1))
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
                     ("format", format))
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ("filenames_relative_to_index", "True"))
         # TODO - Record the alphabet?
         # TODO - Record the file size and modified date?
         con.execute(
@@ -545,9 +591,24 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
         count = 0
         for i, filename in enumerate(filenames):
+            # Default to storing as an absolute path,
+            f = os.path.abspath(filename)
+            if not os.path.isabs(filename) and not os.path.isabs(index_filename):
+                # Since user gave BOTH filename & index as relative paths,
+                # we will store this relative to the index file even though
+                # if it may now start ../ (meaning up a level)
+                # Note for cross platfrom use (e.g. shared data drive over SAMBA),
+                # convert any Windows slash into Unix style / for relative paths.
+                f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
+            elif (os.path.dirname(os.path.abspath(filename)) + os.path.sep).startswith(relative_path + os.path.sep):
+                # Since sequence file is in same directory or sub directory,
+                # might as well make this into a relative path:
+                f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
+                assert not f.startswith("../"), f
+            # print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
                 "INSERT INTO file_data (file_number, name) VALUES (?,?);",
-                (i, filename))
+                (i, f))
             random_access_proxy = proxy_factory(format, filename)
             if key_function:
                 offset_iter = ((key_function(k), i, o, l)
@@ -559,8 +620,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 batch = list(itertools.islice(offset_iter, 100))
                 if not batch:
                     break
-                # print("Inserting batch of %i offsets, %s ... %s" \
-                # % (len(batch), batch[0][0], batch[-1][0]))
+                # print("Inserting batch of %i offsets, %s ... %s"
+                #       % (len(batch), batch[0][0], batch[-1][0]))
                 con.executemany(
                     "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
                     batch)
@@ -655,7 +716,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         Note that on Python 3 a bytes string is returned, not a typical
         unicode string.
 
-        NOTE - This functionality is not supported for every file format.
+        **NOTE** - This functionality is not supported for every file format.
         """
         # Pass the offset to the proxy
         row = self._con.execute(

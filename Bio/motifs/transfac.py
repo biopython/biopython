@@ -9,6 +9,7 @@
 from Bio import motifs
 from Bio.Alphabet import IUPAC
 
+__docformat__ = "restructuredtext en"
 
 class Motif(motifs.Motif, dict):
     """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
@@ -21,7 +22,8 @@ pairs in the dictionary, where the key is the two-letter fields as found
 in the TRANSFAC file. References are an exception: These are stored in
 the .references attribute.
 
-These fields are commonly found in TRANSFAC files:
+These fields are commonly found in TRANSFAC files::
+
     AC:    Accession number
     AS:    Accession numbers, secondary
     BA:    Statistical basis
@@ -48,7 +50,8 @@ These fields are commonly found in TRANSFAC files:
     XX:    Empty line; these are not stored in the Record.
 
 References are stored in an .references attribute, which is a list of
-dictionaries with the following keys:
+dictionaries with the following keys::
+
     RN:    Reference number
     RA:    Reference authors
     RL:    Reference data

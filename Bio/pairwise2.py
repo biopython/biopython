@@ -26,19 +26,21 @@ character code indicating the parameters it takes.  The first
 character indicates the parameters for matches (and mismatches), and
 the second indicates the parameters for gap penalties.
 
-The match parameters are
-CODE  DESCRIPTION
-x     No parameters.  Identical characters have score of 1, otherwise 0.
-m     A match score is the score of identical chars, otherwise mismatch score.
-d     A dictionary returns the score of any pair of characters.
-c     A callback function returns scores.
+The match parameters are::
 
-The gap penalty parameters are
-CODE  DESCRIPTION
-x     No gap penalties.
-s     Same open and extend gap penalties for both sequences.
-d     The sequences have different open and extend gap penalties.
-c     A callback function returns the gap penalties.
+    CODE  DESCRIPTION
+    x     No parameters.  Identical characters have score of 1, otherwise 0.
+    m     A match score is the score of identical chars, otherwise mismatch score.
+    d     A dictionary returns the score of any pair of characters.
+    c     A callback function returns scores.
+
+The gap penalty parameters are::
+
+    CODE  DESCRIPTION
+    x     No gap penalties.
+    s     Same open and extend gap penalties for both sequences.
+    d     The sequences have different open and extend gap penalties.
+    c     A callback function returns the gap penalties.
 
 All the different alignment functions are contained in an object
 "align".  For example:
@@ -48,7 +50,7 @@ All the different alignment functions are contained in an object
 
 will return a list of the alignments between the two strings.  The
 parameters of the alignment function depends on the function called.
-Some examples:
+Some examples::
 
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
@@ -112,7 +114,7 @@ Some examples:
     <BLANKLINE>
 
 The alignment function can also use known matrices already included in
-Biopython ( Bio.SubsMat -> MatrixInfo ).
+Biopython ( Bio.SubsMat -> MatrixInfo )::
 
     >>> from Bio.SubsMat import MatrixInfo as matlist
     >>> matrix = matlist.blosum62
@@ -152,6 +154,8 @@ type help(pairwise2.align.localds) at the Python prompt.
 #   Only recover one alignment.
 
 from __future__ import print_function
+
+__docformat__ = "restructuredtext en"
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 

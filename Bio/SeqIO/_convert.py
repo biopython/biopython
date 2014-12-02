@@ -8,16 +8,16 @@ You are not expected to access this module, or any of its code, directly. This
 is all handled internally by the Bio.SeqIO.convert(...) function which is the
 public interface for this.
 
-The idea here is rather while doing this will work:
+The idea here is that while doing this will work::
 
-from Bio import SeqIO
-records = SeqIO.parse(in_handle, in_format)
-count = SeqIO.write(records, out_handle, out_format)
+    from Bio import SeqIO
+    records = SeqIO.parse(in_handle, in_format)
+    count = SeqIO.write(records, out_handle, out_format)
 
-it is shorter to write:
+it is shorter to write::
 
-from Bio import SeqIO
-count = SeqIO.convert(in_handle, in_format, out_handle, out_format)
+    from Bio import SeqIO
+    count = SeqIO.convert(in_handle, in_format, out_handle, out_format)
 
 Also, the convert function can take a number of special case optimisations. This
 means that using Bio.SeqIO.convert() may be faster, as well as more convenient.
@@ -26,6 +26,8 @@ All these file format specific optimisations are handled by this (private) modul
 
 from Bio import SeqIO
 # NOTE - Lots of lazy imports further on...
+
+__docformat__ = "restructuredtext en"
 
 
 def _genbank_convert_fasta(in_handle, out_handle, alphabet=None):

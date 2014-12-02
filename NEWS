@@ -12,8 +12,12 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.65
 
+The Biopython sequence objects now use string comparison, rather than Python's
+object comparison. This has been planned for a long time with warning messages
+in place (under Python 2, the warnings were sadly missing under Python 3).
+
 The Bio.KEGG and Bio.Graphics modules have been expanded with support for
-parsing, representing and drawing KGML pathways.
+the online KEGG REST API, and parsing, representing and drawing KGML pathways.
 
 The Pterobranchia Mitochondrial genetic code has been added to Bio.Data (and
 the translation functionality), which is the new NCBI genetic code table 24.
@@ -28,27 +32,41 @@ BLAST NR database).
 
 We have also done some more work applying PEP8 coding styles to Biopython.
 
+Bio.SeqUtils.MeltingTemp has been rewritten with new functionality.
+
 The new experimental module Bio.CodonAlign has been renamed Bio.codonalign
 (and similar lower case PEP8 style module names have been used for the
 sub-modules within this).
+
+Bio.SeqIO.index_db(...) and Bio.SearchIO.index_db(...) now store any relative
+filenames relative to the index file, rather than (as before) relative to the
+current directory at the time the index was built. This makes the indexes
+less fragile, so that they can be used from other working directories. NOTE:
+This change is backward compatible (old index files work as before), however
+relative paths in new indexes will not work on older versions of Biopython!
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Alan Du (first contribution)
+Carlos Pena (first contribution)
 Colin Lappala (first contribution)
 Christian Brueffer
 David Bulger (first contribution)
 Eric Talevich
 Evan Parker (first contribution)
 Kai Blin
+Kevin Wu (first contribution)
 Leighton Pritchard
 Leszek Pryszcz (first contribution)
+Markus Piotrowski
 Matt Shirley (first contribution)
 Mike Cariaso (first contribution)
 Peter Cock
 Seth Sims (first contribution)
 Tiago Antao
+Travis Wrightsman (first contribution)
+Vincent Davis
 Wibowo 'Bow' Arindrarto
 Zheng Ruan
 

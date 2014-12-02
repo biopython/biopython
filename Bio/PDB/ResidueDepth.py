@@ -17,26 +17,24 @@ Residue Depth:
     >>> rd = ResidueDepth(model, pdb_file)
     >>> print(rd[(chain_id, res_id)])
 
-Direct MSMS interface:
+Direct MSMS interface, typical use:
 
-    Typical use:
+    >>> surface = get_surface("1FAT.pdb")
 
-        >>> surface = get_surface("1FAT.pdb")
+The surface is a Numeric array with all the surface vertices.
 
-    Surface is a Numeric array with all the surface
-    vertices.
+Distance to surface:
 
-    Distance to surface:
+    >>> dist = min_dist(coord, surface)
 
-        >>> dist = min_dist(coord, surface)
+where coord is the coord of an atom within the volume bound by
+the surface (ie. atom depth).
 
-    where coord is the coord of an atom within the volume
-    bound by the surface (ie. atom depth).
+To calculate the residue depth (average atom depth of the atoms
+in a residue):
 
-    To calculate the residue depth (average atom depth
-    of the atoms in a residue):
+    >>> rd = residue_depth(residue, surface)
 
-        >>> rd = residue_depth(residue, surface)
 """
 
 from __future__ import print_function

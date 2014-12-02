@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -18,6 +18,7 @@ class MuscleCommandline(AbstractCommandline):
     http://www.drive5.com/muscle/
 
     Example:
+    --------
 
     >>> from Bio.Align.Applications import MuscleCommandline
     >>> muscle_exe = r"C:\Program Files\Aligments\muscle3.8.31_i86win32.exe"
@@ -31,6 +32,7 @@ class MuscleCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citations:
+    ----------
 
     Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high
     accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.

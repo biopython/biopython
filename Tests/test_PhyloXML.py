@@ -398,7 +398,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(prop.datatype, "xsd:integer")
             self.assertEqual(prop.ref, "NOAA:depth")
             self.assertEqual(prop.applies_to, "node")
-            self.assertEqual(prop.unit, "METRIC:m" )
+            self.assertEqual(prop.unit, "METRIC:m")
             self.assertEqual(prop.value, value)
 
     def test_Reference(self):
@@ -677,7 +677,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(tree.clade[0, 1], tree.clade.clades[0].clades[1])
         self.assertEqual(tree.clade[1], tree.clade.clades[1])
         self.assertEqual(len(tree.clade[:]), len(tree.clade.clades))
-        self.assertEqual(len(tree.clade[0,:]),
+        self.assertEqual(len(tree.clade[0, :]),
                          len(tree.clade.clades[0].clades))
 
     def test_phyloxml_getitem(self):

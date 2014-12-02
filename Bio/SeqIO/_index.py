@@ -31,8 +31,9 @@ from Bio._py3k import _bytes_to_string, _as_bytes
 
 from Bio import SeqIO
 from Bio import Alphabet
-from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
+
+__docformat__ = "restructuredtext en"
 
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):

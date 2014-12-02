@@ -9,34 +9,30 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-""" AbstractDrawer module (considered to be a private module, the API may change!)
+"""AbstractDrawer module (considered to be a private module, the API may change!)
 
-    Provides:
+Provides:
 
-    o AbstractDrawer -    Superclass for methods common to *Drawer objects
+ - AbstractDrawer -    Superclass for methods common to the Drawer objects
 
-    o page_sizes -          Method that returns a ReportLab pagesize when passed
-                            a valid ISO size
+ - page_sizes -          Method that returns a ReportLab pagesize when passed
+   a valid ISO size
 
-    o draw_box -            Method that returns a closed path object when passed
-                            the proper co-ordinates.  For HORIZONTAL boxes only.
+ - draw_box -            Method that returns a closed path object when passed
+   the proper co-ordinates.  For HORIZONTAL boxes only.
 
-    o angle2trig -          Method that returns a tuple of values that are the
-                            vector for rotating a point through a passed angle,
-                            about an origin
+ - angle2trig -          Method that returns a tuple of values that are the
+   vector for rotating a point through a passed angle,
+   about an origin
 
-    o intermediate_points - Method that returns a list of values intermediate
-                            between the points in a passed dataset
+ - intermediate_points - Method that returns a list of values intermediate
+   between the points in a passed dataset
 
-    For drawing capabilities, this module uses reportlab to draw and write
-    the diagram:
+For drawing capabilities, this module uses reportlab to draw and write
+the diagram: http://www.reportlab.com
 
-    http://www.reportlab.com
-
-    For dealing with biological information, the package expects BioPython
-    objects:
-
-    http://www.biopython.org
+For dealing with biological information, the package expects Biopython objects
+like SeqFeatures.
 """
 
 # ReportLab imports
@@ -50,17 +46,18 @@ from reportlab.graphics.shapes import *
 
 from math import pi
 
+__docformat__ = "restructuredtext en"
 
 ################################################################################
 # METHODS
 ################################################################################
 # Utility method to translate strings to ISO page sizes
 def page_sizes(size):
-    """ page_sizes(size)
+    """Convert size string into a Reportlab pagesize.
 
-        o size        A string representing a standard page size
+    Arguments:
 
-        Returns a ReportLab pagesize when passed a valid size string
+     - size - A string representing a standard page size, eg 'A4' or 'LETTER'
     """
     sizes = {'A0': pagesizes.A0,    # ReportLab pagesizes, keyed by ISO string
              'A1': pagesizes.A1,
@@ -109,19 +106,18 @@ def _stroke_and_fill_colors(color, border):
 def draw_box(point1, point2,
              color=colors.lightgreen, border=None, colour=None,
              **kwargs):
-    """ draw_box(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4),
-              color=colors.lightgreen)
+    """Draw a box.
 
-        o point1, point2 Co-ordinates for opposite corners of the box
-                         (x,y tuples)
+    Arguments:
 
-        o color /colour       The color for the box
-                              (colour takes priority over color)
+     - point1, point2 - coordinates for opposite corners of the box
+       (x,y tuples)
+     - color /colour - The color for the box
+       (colour takes priority over color)
+     - border - Border color for the box
 
-        o border              Border color for the box
-
-        Returns a closed path object, beginning at (x1,y1) going round
-        the four points in order, and filling with the passed color.
+    Returns a closed path object, beginning at (x1,y1) going round
+    the four points in order, and filling with the passed color.
     """
     x1, y1 = point1
     x2, y2 = point2
@@ -176,15 +172,15 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
 def draw_polygon(list_of_points,
                  color=colors.lightgreen, border=None, colour=None,
                  **kwargs):
-    """ draw_polygon(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4)
-              colour=colors.lightgreen)
+    """Draw polygon.
 
-        o list_of_point = list of (x,y) tuples for the corner coordinates
+    Arguments:
 
-        o colour              The colour for the box
+     - list_of_point - list of (x,y) tuples for the corner coordinates
+     - color / colour - The color for the box
 
-        Returns a closed path object, beginning at (x1,y1) going round
-        the four points in order, and filling with the passed colour.
+    Returns a closed path object, beginning at (x1,y1) going round
+    the four points in order, and filling with the passed colour.
     """
     # Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
@@ -208,11 +204,13 @@ def draw_polygon(list_of_points,
 def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
                colour=None, **kwargs):
-    """ Returns a closed path object representing an arrow enclosed by the
-        box with corners at {point1=(x1,y1), point2=(x2,y2)}, a shaft height
-        given by shaft_height_ratio (relative to box height), a head length
-        given by head_length_ratio (also relative to box height), and
-        an orientation that may be 'left' or 'right'.
+    """Draw an arrow.
+
+    Returns a closed path object representing an arrow enclosed by the
+    box with corners at {point1=(x1,y1), point2=(x2,y2)}, a shaft height
+    given by shaft_height_ratio (relative to box height), a head length
+    given by head_length_ratio (also relative to box height), and
+    an orientation that may be 'left' or 'right'.
     """
     x1, y1 = point1
     x2, y2 = point2
@@ -273,13 +271,15 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
 
 
 def angle2trig(theta):
-    """ angle2trig(angle)
+    """Convert anngle to a reportlab ready tuple.
 
-        o theta     Angle in degrees, counter clockwise from horizontal
+    Arguments:
 
-        Returns a representation of the passed angle in a format suitable
-        for ReportLab rotations (i.e. cos(theta), sin(theta), -sin(theta),
-        cos(theta) tuple)
+     - theta -  Angle in degrees, counter clockwise from horizontal
+
+    Returns a representation of the passed angle in a format suitable
+    for ReportLab rotations (i.e. cos(theta), sin(theta), -sin(theta),
+    cos(theta) tuple)
     """
     c = cos(theta * pi / 180)
     s = sin(theta * pi / 180)
@@ -287,16 +287,10 @@ def angle2trig(theta):
 
 
 def intermediate_points(start, end, graph_data):
-    """ intermediate_points(start, end, graph_data)
+    """Generate intermediate points describing provided graph data..
 
-        o graph_data
-
-        o start
-
-        o end
-
-        Returns a list of (start, end, value) tuples describing the passed
-        graph data as 'bins' between position midpoints.
+    Returns a list of (start, end, value) tuples describing the passed
+    graph data as 'bins' between position midpoints.
     """
     # print start, end, len(graph_data)
     newdata = []    # data in form (X0, X1, val)
@@ -323,107 +317,107 @@ def intermediate_points(start, end, graph_data):
 
 
 class AbstractDrawer(object):
-    """ AbstractDrawer
+    """AbstractDrawer
 
         Provides:
 
         Methods:
 
-        o __init__(self, parent, pagesize='A3', orientation='landscape',
-                 x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0) Called on instantiation
+            - __init__(self, parent, pagesize='A3', orientation='landscape',
+              x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
+              start=None, end=None, tracklines=0) Called on instantiation
 
-        o set_page_size(self, pagesize, orientation)    Set the page size to the
-                                                    passed size and orientation
+            - set_page_size(self, pagesize, orientation)    Set the page size to the
+              passed size and orientation
 
-        o set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
-                                                    page
+            - set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
+              page
 
-        o set_bounds(self, start, end)  Set the bounds for the elements to be
-                                        drawn
+            - set_bounds(self, start, end)  Set the bounds for the elements to be
+              drawn
 
-        o is_in_bounds(self, value)     Returns a boolean for whether the position
-                                        is actually to be drawn
+            - is_in_bounds(self, value)     Returns a boolean for whether the position
+              is actually to be drawn
 
-        o __len__(self)     Returns the length of sequence that will be drawn
+            - __len__(self)     Returns the length of sequence that will be drawn
 
         Attributes:
 
-        o tracklines    Boolean for whether to draw lines dilineating tracks
+            - tracklines    Boolean for whether to draw lines dilineating tracks
 
-        o pagesize      Tuple describing the size of the page in pixels
+            - pagesize      Tuple describing the size of the page in pixels
 
-        o x0            Float X co-ord for leftmost point of drawable area
+            - x0            Float X co-ord for leftmost point of drawable area
 
-        o xlim          Float X co-ord for rightmost point of drawable area
+            - xlim          Float X co-ord for rightmost point of drawable area
 
-        o y0            Float Y co-ord for lowest point of drawable area
+            - y0            Float Y co-ord for lowest point of drawable area
 
-        o ylim          Float Y co-ord for topmost point of drawable area
+            - ylim          Float Y co-ord for topmost point of drawable area
 
-        o pagewidth     Float pixel width of drawable area
+            - pagewidth     Float pixel width of drawable area
 
-        o pageheight    Float pixel height of drawable area
+            - pageheight    Float pixel height of drawable area
 
-        o xcenter       Float X co-ord of center of drawable area
+            - xcenter       Float X co-ord of center of drawable area
 
-        o ycenter       Float Y co-ord of center of drawable area
+            - ycenter       Float Y co-ord of center of drawable area
 
-        o start         Int, base to start drawing from
+            - start         Int, base to start drawing from
 
-        o end           Int, base to stop drawing at
+            - end           Int, base to stop drawing at
 
-        o length        Size of sequence to be drawn
+            - length        Size of sequence to be drawn
 
-        o cross_track_links List of tuples each with four entries (track A,
-                            feature A, track B, feature B) to be linked.
+            - cross_track_links List of tuples each with four entries (track A,
+              feature A, track B, feature B) to be linked.
     """
     def __init__(self, parent, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, cross_track_links=None):
-        """ __init__(self, parent, pagesize='A3', orientation='landscape',
-                 x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0)
+        """Create the object.
 
-            o parent    Diagram object containing the data that the drawer
-                        draws
+        Arguments:
 
-            o pagesize  String describing the ISO size of the image, or a tuple
-                        of pixels
+                - parent    Diagram object containing the data that the drawer
+                  draws
 
-            o orientation   String describing the required orientation of the
-                            final drawing ('landscape' or 'portrait')
+                - pagesize  String describing the ISO size of the image, or a tuple
+                  of pixels
 
-            o x         Float (0->1) describing the relative size of the X
-                        margins to the page
+                - orientation   String describing the required orientation of the
+                  final drawing ('landscape' or 'portrait')
 
-            o y         Float (0->1) describing the relative size of the Y
-                        margins to the page
+                - x         Float (0->1) describing the relative size of the X
+                  margins to the page
 
-            o xl        Float (0->1) describing the relative size of the left X
-                        margin to the page (overrides x)
+                - y         Float (0->1) describing the relative size of the Y
+                  margins to the page
 
-            o xl        Float (0->1) describing the relative size of the left X
-                        margin to the page (overrides x)
+                - xl        Float (0->1) describing the relative size of the left X
+                  margin to the page (overrides x)
 
-            o xr        Float (0->1) describing the relative size of the right X
-                        margin to the page (overrides x)
+                - xl        Float (0->1) describing the relative size of the left X
+                  margin to the page (overrides x)
 
-            o yt        Float (0->1) describing the relative size of the top Y
-                        margin to the page (overrides y)
+                - xr        Float (0->1) describing the relative size of the right X
+                  margin to the page (overrides x)
 
-            o yb        Float (0->1) describing the relative size of the lower Y
-                        margin to the page (overrides y)
+                - yt        Float (0->1) describing the relative size of the top Y
+                  margin to the page (overrides y)
 
-            o start     Int, the position to begin drawing the diagram at
+                - yb        Float (0->1) describing the relative size of the lower Y
+                  margin to the page (overrides y)
 
-            o end       Int, the position to stop drawing the diagram at
+                - start     Int, the position to begin drawing the diagram at
 
-            o tracklines    Boolean flag to show (or not) lines delineating tracks
-                            on the diagram
+                - end       Int, the position to stop drawing the diagram at
 
-            o cross_track_links List of tuples each with four entries (track A,
-                                feature A, track B, feature B) to be linked.
+                - tracklines    Boolean flag to show (or not) lines delineating tracks
+                  on the diagram
+
+                - cross_track_links List of tuples each with four entries (track A,
+                  feature A, track B, feature B) to be linked.
         """
         self._parent = parent   # The calling Diagram object
 
@@ -438,15 +432,15 @@ class AbstractDrawer(object):
             self.cross_track_links = cross_track_links
 
     def set_page_size(self, pagesize, orientation):
-        """ set_page_size(self, pagesize, orientation)
+        """Set page size of the drawing..
 
-            o pagesize      Size of the output image, a tuple of pixels (width,
-                            height, or a string in the reportlab.lib.pagesizes
-                            set of ISO sizes.
+        Arguments:
 
-            o orientation   String: 'landscape' or 'portrait'
+         - pagesize      Size of the output image, a tuple of pixels (width,
+           height, or a string in the reportlab.lib.pagesizes
+           set of ISO sizes.
 
-            Set the size of the drawing
+         - orientation   String: 'landscape' or 'portrait'
         """
         if isinstance(pagesize, str):     # A string, so translate
             pagesize = page_sizes(pagesize)
@@ -465,23 +459,20 @@ class AbstractDrawer(object):
             self.pagesize = (shortside, longside)
 
     def set_margins(self, x, y, xl, xr, yt, yb):
-        """ set_margins(self, x, y, xl, xr, yt, yb)
+        """Set page margins.
 
-            o x         Float(0->1), Absolute X margin as % of page
+        Arguments:
 
-            o y         Float(0->1), Absolute Y margin as % of page
+                - x         Float(0->1), Absolute X margin as % of page
+                - y         Float(0->1), Absolute Y margin as % of page
+                - xl        Float(0->1), Left X margin as % of page
+                - xr        Float(0->1), Right X margin as % of page
+                - yt        Float(0->1), Top Y margin as % of page
+                - yb        Float(0->1), Bottom Y margin as % of page
 
-            o xl        Float(0->1), Left X margin as % of page
-
-            o xr        Float(0->1), Right X margin as % of page
-
-            o yt        Float(0->1), Top Y margin as % of page
-
-            o yb        Float(0->1), Bottom Y margin as % of page
-
-            Set the page margins as proportions of the page 0->1, and also
-            set the page limits x0, y0 and xlim, ylim, and page center
-            xorigin, yorigin, as well as overall page width and height
+        Set the page margins as proportions of the page 0->1, and also
+        set the page limits x0, y0 and xlim, ylim, and page center
+        xorigin, yorigin, as well as overall page width and height
         """
         # Set left, right, top and bottom margins
         xmargin_l = xl or x
@@ -497,13 +488,12 @@ class AbstractDrawer(object):
         self.xcenter, self.ycenter = self.x0+self.pagewidth/2., self.y0+self.pageheight/2.
 
     def set_bounds(self, start, end):
-        """ set_bounds(self, start, end)
+        """Set start and end points for the drawing as a whole.
 
-            o start     The first base (or feature mark) to draw from
+        Arguments:
 
-            o end       The last base (or feature mark) to draw to
-
-            Sets start and end points for the drawing as a whole
+         - start - The first base (or feature mark) to draw from
+         - end - The last base (or feature mark) to draw to
         """
         low, high = self._parent.range()  # Extent of tracks
 
@@ -519,21 +509,18 @@ class AbstractDrawer(object):
         self.length = self.end - self.start + 1
 
     def is_in_bounds(self, value):
-        """ is_in_bounds(self, value)
+        """Check if given value is withing the region selected for drawing,
 
-            o value   A base position
+        Arguments:
 
-            Returns 1 if the value is within the region selected for drawing
+         - value - A base position
         """
         if value >= self.start and value <= self.end:
             return 1
         return 0
 
     def __len__(self):
-        """ __len__(self)
-
-            Returns the length of the region to be drawn
-        """
+        """Returns the length of the region to be drawn."""
         return self.length
 
     def _current_track_start_end(self):

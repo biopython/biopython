@@ -170,5 +170,5 @@ class OrganismTest(unittest.TestCase):
         new_org = Organism.Organism(genome, fitness_calc, 50)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

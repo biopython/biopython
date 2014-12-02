@@ -20,8 +20,8 @@ from Bio import BiopythonExperimentalWarning
 
 import warnings
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet, generic_dna
@@ -1545,5 +1545,5 @@ class HSPFragmentCases(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

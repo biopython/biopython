@@ -36,6 +36,7 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 from Bio.SCOP.Residues import Residues
 
+__docformat__ = "restructuredtext en"
 
 def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.
@@ -55,7 +56,7 @@ class SeqMapIndex(dict):
     access of RAF records without having to load the entire file into memory.
 
     The index key is a concatenation of the  PDB ID and chain ID. e.g
-    "2drcA", "155c_". RAF uses an underscore to indicate blank
+    "2drcA", ``"155c_"``. RAF uses an underscore to indicate blank
     chain IDs.
     """
 

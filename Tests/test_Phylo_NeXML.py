@@ -15,18 +15,18 @@ from Bio.Phylo import NeXML, NeXMLIO
 
 # Example NeXML files
 nexml_files = (
-               'characters.xml', 
-               'edgelabels.xml', 
-               'meta_taxa.xml', 
-               'meta_types.xml', 
-               'nexml.xml', 
-               'phenoscape.xml', 
-               'sets.xml', 
-               'taxa.xml', 
-               'timetree.xml', 
-               'tolweb.xml', 
-               'treebase-record.xml', 
-               'trees-uris.xml', 
+               'characters.xml',
+               'edgelabels.xml',
+               'meta_taxa.xml',
+               'meta_types.xml',
+               'nexml.xml',
+               'phenoscape.xml',
+               'sets.xml',
+               'taxa.xml',
+               'timetree.xml',
+               'tolweb.xml',
+               'treebase-record.xml',
+               'trees-uris.xml',
                'trees.xml',
                )
 tree_counts = {

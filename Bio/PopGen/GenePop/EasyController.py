@@ -13,6 +13,7 @@ This interface is less efficient than the standard GenePopControler
 from .Controller import GenePopController
 from Bio.PopGen import GenePop
 
+__docformat__ = "restructuredtext en"
 
 class EasyController(object):
     def __init__(self, fname, genepop_dir=None):
@@ -92,9 +93,10 @@ class EasyController(object):
            Below CW means Cockerham and Weir and RH means Robertson and Hill.
 
            Returns a pair:
-           dictionary [allele] = (repetition count, frequency, Fis CW )
-               with information for each allele
-           a triple with total number of alleles, Fis CW, Fis RH
+
+                - dictionary [allele] = (repetition count, frequency, Fis CW )
+                  with information for each allele
+                - a triple with total number of alleles, Fis CW, Fis RH
 
 
         """

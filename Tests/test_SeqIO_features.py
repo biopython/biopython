@@ -22,7 +22,7 @@ from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, \
-                           OneOfPosition,  WithinPosition
+                           OneOfPosition, WithinPosition
 
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
@@ -1010,7 +1010,7 @@ class NC_000932(unittest.TestCase):
 
     # These tests only need the GenBank file and the FAA file:
     def test_CDS(self):
-        #"""Checking GenBank CDS translations vs FASTA faa file."""
+        """Checking GenBank CDS translations vs FASTA faa file."""
         gb_record = SeqIO.read(self.gb_filename, "genbank")
         gb_cds = list(SeqIO.parse(self.gb_filename, "genbank-cds"))
         fasta = list(SeqIO.parse(self.faa_filename, "fasta"))
@@ -1027,7 +1027,7 @@ class NC_000932(unittest.TestCase):
                 pro = nuc.translate(table=self.table, cds=True)
             except TranslationError as e:
                 print(e)
-                print("%r, %r, %r" % ( r.id, nuc, self.table))
+                print("%r, %r, %r" % (r.id, nuc, self.table))
                 print(f)
                 raise
             if pro[-1] == "*":
@@ -1058,7 +1058,7 @@ class NC_005816(NC_000932):
         return compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Translations(self):
-        #"""Checking translation of FASTA features (faa vs ffn)."""
+        """Checking translation of FASTA features (faa vs ffn)."""
         faa_records = list(SeqIO.parse(self.faa_filename, "fasta"))
         ffn_records = list(SeqIO.parse(self.ffn_filename, "fasta"))
         self.assertEqual(len(faa_records), len(ffn_records))
@@ -1076,7 +1076,7 @@ class NC_005816(NC_000932):
                                     faa.format("fasta")))
 
     def test_Genome(self):
-        #"""Checking GenBank sequence vs FASTA fna file."""
+        """Checking GenBank sequence vs FASTA fna file."""
         gb_record = SeqIO.read(self.gb_filename, "genbank")
         fa_record = SeqIO.read(self.fna_filename, "fasta")
         compare_record(gb_record, fa_record)
@@ -1092,7 +1092,7 @@ class NC_005816(NC_000932):
         compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Features(self):
-        #"""Checking GenBank features sequences vs FASTA ffn file."""
+        """Checking GenBank features sequences vs FASTA ffn file."""
         gb_record = SeqIO.read(self.gb_filename, "genbank")
         features = [f for f in gb_record.features if f.type=="CDS"]
         fa_records = list(SeqIO.parse(self.ffn_filename, "fasta"))
@@ -1204,5 +1204,5 @@ class TestWriteRead(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

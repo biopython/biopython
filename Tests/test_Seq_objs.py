@@ -25,7 +25,7 @@ from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
 # This is just the standard table with less stop codons
-#(replaced with coding for O as an artifical example)
+# (replaced with coding for O as an artifical example)
 special_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
@@ -63,8 +63,8 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
     'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
     'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
-    start_codons = [ 'ATG'],
-    stop_codons = ['TAA' ])
+    start_codons=['ATG'],
+    stop_codons=['TAA'])
 
 
 class StringMethodTests(unittest.TestCase):
@@ -290,63 +290,35 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             with warnings.catch_warnings():
-                # Silence change in behaviour warning
-                warnings.simplefilter('ignore', FutureWarning)
-                self.assertEqual(hash(id(example1)), hash(example1),
+                #Silence change in behaviour warning
+                warnings.simplefilter('ignore', BiopythonWarning)
+                self.assertEqual(hash(str(example1)), hash(example1),
                                  "Hash mismatch, %r for %r vs %r for %r"
-                                 % (hash(id(example1)), id(example1),
+                                 % (hash(str(example1)), id(example1),
                                     hash(example1), example1))
 
     def test_str_comparison(self):
-        if sys.version_info[0] >= 3:
-            # TODO - replace __cmp__ with specific methods for Python 3                                           
-            return
         for example1 in self._examples:
             for example2 in self._examples:
-                # Currently Seq vs MutableSeq use different rules,
-                #
-                # >>> MutableSeq('ACGTGGGGT') == Seq('ACGTGGGGT')
-                # True
-                # >>> MutableSeq('ACGTGGGGT') == MutableSeq('ACGTGGGGT')
-                # True
-                # >>> Seq('ACGTGGGGT') == MutableSeq('ACGTGGGGT')
-                # False
-                # >>> Seq('ACGTGGGGT') == Seq('ACGTGGGGT')
-                # False
-                #
-                # i.e. This is a mess but we will make both use string equality
-                if isinstance(example1, MutableSeq):
-                    rule = str
-                    if not _check_type_compatible([example1.alphabet, example2.alphabet]):
-                        # Would raise TypeError...
-                        continue
-                else:
-                    rule = id
                 with warnings.catch_warnings():
-                    # Silence change in behaviour warning
-                    warnings.simplefilter('ignore', FutureWarning)
-                    # Equality
-                    self.assertEqual(rule(example1) == rule(example2),
+                    #Silence alphabet warning
+                    warnings.simplefilter('ignore', BiopythonWarning)
+                    self.assertEqual(str(example1) == str(example2),
                                      example1 == example2,
                                      "Checking %r == %r" % (example1, example2))
-                    # Not equal
-                    self.assertEqual(rule(example1) != rule(example2),
+                    self.assertEqual(str(example1) != str(example2),
                                      example1 != example2,
                                      "Checking %r != %r" % (example1, example2))
-                    # Less than
-                    self.assertEqual(rule(example1) < rule(example2),
+                    self.assertEqual(str(example1) < str(example2),
                                      example1 < example2,
                                      "Checking %r < %r" % (example1, example2))
-                    # Less than or equal
-                    self.assertEqual(rule(example1) <= rule(example2),
+                    self.assertEqual(str(example1) <= str(example2),
                                      example1 <= example2,
                                      "Checking %r <= %r" % (example1, example2))
-                    # Greater than
-                    self.assertEqual(rule(example1) > rule(example2),
+                    self.assertEqual(str(example1) > str(example2),
                                      example1 > example2,
                                      "Checking %r > %r" % (example1, example2))
-                    # Greater than or equal
-                    self.assertEqual(rule(example1) >= rule(example2),
+                    self.assertEqual(str(example1) >= str(example2),
                                      example1 >= example2,
                                      "Checking %r >= %r" % (example1, example2))
 
@@ -604,5 +576,5 @@ class StringMethodTests(unittest.TestCase):
     # TODO - Addition...
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -35,5 +35,5 @@ create_database()
 
 if __name__ == "__main__":
     # Run the test cases
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

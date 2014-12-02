@@ -49,10 +49,9 @@ class DistributionPage(object):
 
         Arguments:
 
-        o output_file - The name of the file to output the information to,
-                        or a handle to write to.
-
-        o title - A title to display on the graphic.
+         - output_file - The name of the file to output the information to,
+           or a handle to write to.
+         - title - A title to display on the graphic.
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -77,8 +76,7 @@ class DistributionPage(object):
         return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
-        """Add the title of the figure to the drawing.
-        """
+        """Add the title of the figure to the drawing (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
         title_string.fontName = 'Helvetica-Bold'
         title_string.fontSize = self.title_size
@@ -92,18 +90,13 @@ class DistributionPage(object):
 
         Arguments:
 
-        o cur_drawing - The drawing we are working with.
-
-        o start_x_pos - The x position on the page to start drawing at.
-
-        o x_pos_change - The change in x position between each figure.
-
-        o start_y_pos - The y position on the page to start drawing at.
-
-        o y_pos_change - The change in y position between each figure.
-
-        o num_y_drawings - The number of drawings we'll have in the y
-        (up/down) direction.
+         - cur_drawing - The drawing we are working with.
+         - start_x_pos - The x position on the page to start drawing at.
+         - x_pos_change - The change in x position between each figure.
+         - start_y_pos - The y position on the page to start drawing at.
+         - y_pos_change - The change in y position between each figure.
+         - num_y_drawings - The number of drawings we'll have in the y
+           (up/down) direction.
         """
         for y_drawing in range(int(num_y_drawings)):
             # if we are on the last y position, we may not be able
@@ -137,16 +130,16 @@ class DistributionPage(object):
 
 
 class BarChartDistribution(object):
-    """Display the distribution of values as a bunch of bars.
-    """
+    """Display the distribution of values as a bunch of bars."""
+
     def __init__(self, display_info=[]):
         """Initialize a Bar Chart display of distribution info.
 
         Class attributes:
 
-        o display_info - the information to be displayed in the distribution.
-        This should be ordered as a list of lists, where each internal list
-        is a data set to display in the bar chart.
+         - display_info - the information to be displayed in the distribution.
+           This should be ordered as a list of lists, where each internal list
+           is a data set to display in the bar chart.
         """
         self.display_info = display_info
 
@@ -158,8 +151,7 @@ class BarChartDistribution(object):
         self.padding_percent = 0.15
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):
-        """Draw a bar chart with the info in the specified range.
-        """
+        """Draw a bar chart with the info in the specified range."""
         bar_chart = VerticalBarChart()
         if self.chart_title:
             self._draw_title(cur_drawing, self.chart_title,
@@ -201,8 +193,7 @@ class BarChartDistribution(object):
         cur_drawing.add(bar_chart)
 
     def _draw_title(self, cur_drawing, title, start_x, start_y, end_x, end_y):
-        """Add the title of the figure to the drawing.
-        """
+        """Add the title of the figure to the drawing (PRIVATE)."""
         x_center = start_x + (end_x - start_x) / 2
         y_pos = end_y + (self.padding_percent * (start_y - end_y)) / 2
         title_string = String(x_center, y_pos, title)
@@ -213,7 +204,7 @@ class BarChartDistribution(object):
         cur_drawing.add(title_string)
 
     def _determine_position(self, start_x, start_y, end_x, end_y):
-        """Calculate the position of the chart with blank space.
+        """Calculate the position of the chart with blank space (PRIVATE).
 
         This uses some padding around the chart, and takes into account
         whether the chart has a title. It returns 4 values, which are,

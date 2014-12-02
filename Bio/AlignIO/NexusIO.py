@@ -21,6 +21,8 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentWriter
 from Bio import Alphabet
 
+__docformat__ = "restructuredtext en"
+
 # You can get a couple of example files here:
 # http://www.molecularevolution.org/resources/fileformats/
 
@@ -71,8 +73,10 @@ class NexusWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects.
-                     This should hold ONE and only one alignment.
+        Arguments:
+
+         - alignments - A list or iterator returning MultipleSeqAlignment objects.
+           This should hold ONE and only one alignment.
         """
         align_iter = iter(alignments)  # Could have been a list
         try:

@@ -191,12 +191,6 @@ class CheckCompleteArgList(unittest.TestCase):
 
         extra = names.difference(names_in_tool)
         missing = names_in_tool.difference(names)
-        if "-soft_masking" in missing:
-            # Known issue, need to establish how this option works
-            missing.remove("-soft_masking")
-        if "-use_index" in missing:
-            # Known issue, need to establish how this option works
-            missing.remove("-use_index")
         if "-verbose" in missing:
             # Known issue, seems to be present in some builds (Bug 3043)
             missing.remove("-verbose")
@@ -261,6 +255,7 @@ class CheckCompleteArgList(unittest.TestCase):
             # Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
             extra = extra.difference(["-gilist", "-negative_gilist"])
             # Removed in BLAST 2.2.30 so will look like extra args on new BLAST
+            # Apparently -word_size should never have been added to these tools.
             extra = extra.difference(["-word_size"])
         if exe_name == "deltablast":
             # New in BLAST+ 2.2.29 so will look like extra args on BLAST+ 2.2.28

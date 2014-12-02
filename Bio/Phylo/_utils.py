@@ -27,7 +27,7 @@ def to_networkx(tree):
     except ImportError:
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError(
-                "Install NetworkX if you want to use to_networkx.")
+            "Install NetworkX if you want to use to_networkx.")
 
     # NB (1/2010): the networkx API stabilized at v.1.0
     # 1.0+: edges accept arbitrary data as kwargs, weights are floats
@@ -75,7 +75,7 @@ def to_networkx(tree):
 
 
 def draw_graphviz(tree, label_func=str, prog='twopi', args='',
-        node_color='#c0deff', **kwargs):
+                  node_color='#c0deff', **kwargs):
     """Display a tree or clade as a graph, using the graphviz engine.
 
     Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
@@ -133,27 +133,27 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     except ImportError:
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError(
-                "Install NetworkX if you want to use to_networkx.")
+            "Install NetworkX if you want to use to_networkx.")
 
     G = to_networkx(tree)
     try:
         # NetworkX version 1.8 or later (2013-01-20)
         Gi = networkx.convert_node_labels_to_integers(G,
-                                label_attribute='label')
+                                                      label_attribute='label')
         int_labels = {}
         for integer, nodeattrs in Gi.node.items():
             int_labels[nodeattrs['label']] = integer
     except TypeError:
         # Older NetworkX versions (before 1.8)
         Gi = networkx.convert_node_labels_to_integers(G,
-                                discard_old_labels=False)
+                                                      discard_old_labels=False)
         int_labels = Gi.node_labels
 
     try:
         posi = networkx.graphviz_layout(Gi, prog, args=args)
     except ImportError:
         raise MissingPythonDependencyError(
-                "Install PyGraphviz or pydot if you want to use draw_graphviz.")
+            "Install PyGraphviz or pydot if you want to use draw_graphviz.")
 
     def get_label_mapping(G, selection):
         """Apply the user-specified node relabeling."""
@@ -226,11 +226,11 @@ def draw_ascii(tree, file=None, column_width=80):
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
         cols_per_branch_unit = ((drawing_width - fudge_margin)
                                 / float(max(depths.values())))
-        return dict((clade, int(blen*cols_per_branch_unit + 1.0))
+        return dict((clade, int(blen * cols_per_branch_unit + 1.0))
                     for clade, blen in depths.items())
 
     def get_row_positions(tree):
-        positions = dict((taxon, 2*idx) for idx, taxon in enumerate(taxa))
+        positions = dict((taxon, 2 * idx) for idx, taxon in enumerate(taxa))
 
         def calc_row(clade):
             for subclade in clade:
@@ -245,7 +245,7 @@ def draw_ascii(tree, file=None, column_width=80):
     col_positions = get_col_positions(tree)
     row_positions = get_row_positions(tree)
     char_matrix = [[' ' for x in range(drawing_width)]
-                    for y in range(drawing_height)]
+                   for y in range(drawing_height)]
 
     def draw_clade(clade, startcol):
         thiscol = col_positions[clade]
@@ -257,14 +257,14 @@ def draw_ascii(tree, file=None, column_width=80):
             # Draw a vertical line
             toprow = row_positions[clade.clades[0]]
             botrow = row_positions[clade.clades[-1]]
-            for row in range(toprow+1, botrow+1):
+            for row in range(toprow + 1, botrow + 1):
                 char_matrix[row][thiscol] = '|'
             # NB: Short terminal branches need something to stop rstrip()
             if (col_positions[clade.clades[0]] - thiscol) < 2:
                 char_matrix[toprow][thiscol] = ','
             # Draw descendents
             for child in clade:
-                draw_clade(child, thiscol+1)
+                draw_clade(child, thiscol + 1)
 
     draw_clade(tree.root, 0)
     # Print the complete drawing
@@ -272,14 +272,14 @@ def draw_ascii(tree, file=None, column_width=80):
         line = ''.join(row).rstrip()
         # Add labels for terminal taxa in the right margin
         if idx % 2 == 0:
-            line += ' ' + str(taxa[idx//2])
+            line += ' ' + str(taxa[idx // 2])
         file.write(line + '\n')
     file.write('\n')
 
 
 def draw(tree, label_func=str, do_show=True, show_confidence=True,
-        # For power users
-        axes=None, branch_labels=None, *args, **kwargs):
+         # For power users
+         axes=None, branch_labels=None, *args, **kwargs):
     """Plot the given tree using matplotlib (or pylab).
 
     The graphic is a rooted tree, drawn with roughly the same algorithm as
@@ -331,7 +331,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         except ImportError:
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError(
-                    "Install matplotlib or pylab if you want to use draw.")
+                "Install matplotlib or pylab if you want to use draw.")
 
     import matplotlib.collections as mpcollections
 
@@ -362,7 +362,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             return branch_labels.get(clade)
     else:
         assert callable(branch_labels), \
-                "branch_labels must be either a dict or a callable (function)"
+            "branch_labels must be either a dict or a callable (function)"
         format_branch_label = branch_labels
 
     # Layout
@@ -387,7 +387,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         maxheight = tree.count_terminals()
         # Rows are defined by the tips
         heights = dict((tip, maxheight - i)
-                for i, tip in enumerate(reversed(tree.get_terminals())))
+                       for i, tip in enumerate(reversed(tree.get_terminals())))
 
         # Internal nodes: place at midpoint of children
         def calc_row(clade):
@@ -396,7 +396,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
                     calc_row(subclade)
             # Closure over heights
             heights[clade] = (heights[clade.clades[0]] +
-                                heights[clade.clades[-1]]) / 2.0
+                              heights[clade.clades[-1]]) / 2.0
 
         if tree.root.clades:
             calc_row(tree.root)
@@ -419,16 +419,16 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         Graphical formatting of the lines representing clades in the plot can be
         customized by altering this function.
         """
-        if (use_linecollection is False and orientation=='horizontal'):
+        if (use_linecollection is False and orientation == 'horizontal'):
             axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
-        elif (use_linecollection is True and orientation=='horizontal'):
+        elif (use_linecollection is True and orientation == 'horizontal'):
             horizontal_linecollections.append(mpcollections.LineCollection(
-            [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw),)
-        elif (use_linecollection is False and orientation=='vertical'):
+                [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw),)
+        elif (use_linecollection is False and orientation == 'vertical'):
             axes.vlines(x_here, y_bot, y_top, color=color)
-        elif (use_linecollection is True and orientation=='vertical'):
+        elif (use_linecollection is True and orientation == 'vertical'):
             vertical_linecollections.append(mpcollections.LineCollection(
-            [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw),)
+                [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw),)
 
     def draw_clade(clade, x_start, color, lw):
         """Recursively draw a tree, down from the given clade."""
@@ -441,23 +441,24 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             lw = clade.width * plt.rcParams['lines.linewidth']
         # Draw a horizontal line from start to here
         draw_clade_lines(use_linecollection=True, orientation='horizontal',
-            y_here=y_here, x_start=x_start, x_here=x_here, color=color, lw=lw)
+                         y_here=y_here, x_start=x_start, x_here=x_here, color=color, lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
-            axes.text(x_here, y_here, ' %s' % label, verticalalignment='center')
+            axes.text(x_here, y_here, ' %s' %
+                      label, verticalalignment='center')
         # Add label above the branch (optional)
         conf_label = format_branch_label(clade)
         if conf_label:
-            axes.text(0.5*(x_start + x_here), y_here, conf_label,
-                    fontsize='small', horizontalalignment='center')
+            axes.text(0.5 * (x_start + x_here), y_here, conf_label,
+                      fontsize='small', horizontalalignment='center')
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
             # Only apply widths to horizontal lines, like Archaeopteryx
             draw_clade_lines(use_linecollection=True, orientation='vertical',
-                x_here=x_here, y_bot=y_bot, y_top=y_top, color=color, lw=lw)
+                             x_here=x_here, y_bot=y_bot, y_top=y_top, color=color, lw=lw)
             # Draw descendents
             for child in clade:
                 draw_clade(child, x_here, color, lw)
@@ -491,9 +492,9 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             [i for i in value]
         except TypeError:
             raise ValueError('Keyword argument "%s=%s" is not in the format '
-                'pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),'
-                ' or pyplot_option_name=(dict) '
-                % (key, value))
+                             'pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),'
+                             ' or pyplot_option_name=(dict) '
+                             % (key, value))
         if isinstance(value, dict):
             getattr(plt, str(key))(**dict(value))
         elif not (isinstance(value[0], tuple)):

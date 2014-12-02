@@ -23,6 +23,8 @@ from Bio import Alphabet
 from Bio import SeqFeature
 from Bio import SwissProt
 
+__docformat__ = "restructuredtext en"
+
 
 def _make_position(location_string, offset=0):
     """Turn a Swiss location position into a SeqFeature position object (PRIVATE).
@@ -71,9 +73,9 @@ def SwissIterator(handle):
     a single SeqRecord with associated annotation and features.
 
     This parser is for the flat file "swiss" format as used by:
-     * Swiss-Prot aka SwissProt
-     * TrEMBL
-     * UniProtKB aka UniProt Knowledgebase
+     - Swiss-Prot aka SwissProt
+     - TrEMBL
+     - UniProtKB aka UniProt Knowledgebase
 
     For consistency with BioPerl and EMBOSS we call this the "swiss"
     format. See also the SeqIO support for "uniprot-xml" format.

@@ -458,21 +458,21 @@ class TestWriteRead(unittest.TestCase):
     def test_generated(self):
         """Write and read back odd SeqRecord objects"""
         record1 = SeqRecord(Seq("ACGT"*500, generic_dna),  id="Test", description="Long "*500,
-                           letter_annotations={"phred_quality":[40, 30, 20, 10]*500})
+                           letter_annotations={"phred_quality": [40, 30, 20, 10]*500})
         record2 = SeqRecord(MutableSeq("NGGC"*1000),  id="Mut", description="very "*1000+"long",
-                           letter_annotations={"phred_quality":[0, 5, 5, 10]*1000})
+                           letter_annotations={"phred_quality": [0, 5, 5, 10]*1000})
         record3 = SeqRecord(UnknownSeq(2000, character="N"),  id="Unk", description="l"+("o"*1000)+"ng",
-                           letter_annotations={"phred_quality":[0, 1]*1000})
+                           letter_annotations={"phred_quality": [0, 1]*1000})
         record4 = SeqRecord(Seq("ACGT"*500),  id="no_descr", description="", name="",
-                           letter_annotations={"phred_quality":[40, 50, 60, 62]*500})
+                           letter_annotations={"phred_quality": [40, 50, 60, 62]*500})
         record5 = SeqRecord(Seq("", generic_dna),  id="empty_p", description="(could have been trimmed lots)",
-                           letter_annotations={"phred_quality":[]})
+                           letter_annotations={"phred_quality": []})
         record6 = SeqRecord(Seq(""),  id="empty_s", description="(could have been trimmed lots)",
-                           letter_annotations={"solexa_quality":[]})
+                           letter_annotations={"solexa_quality": []})
         record7 = SeqRecord(Seq("ACNN"*500),  id="Test_Sol", description="Long "*500,
-                           letter_annotations={"solexa_quality":[40, 30, 0, -5]*500})
+                           letter_annotations={"solexa_quality": [40, 30, 0, -5]*500})
         record8 = SeqRecord(Seq("ACGT"),  id="HighQual", description="With very large qualities that even Sanger FASTQ can't hold!",
-                           letter_annotations={"solexa_quality":[0, 10, 100, 1000]})
+                           letter_annotations={"solexa_quality": [0, 10, 100, 1000]})
         # TODO - Record with no identifier?
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"]:
@@ -766,5 +766,5 @@ class TestSFF(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

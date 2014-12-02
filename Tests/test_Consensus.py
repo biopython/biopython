@@ -5,7 +5,7 @@
 
 """Unit tests for the Bio.Phylo.Consensus module."""
 import unittest
-#from Bio._py3k import StringIO
+# from Bio._py3k import StringIO
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
@@ -62,18 +62,18 @@ class ConsensusTest(unittest.TestCase):
         ref_trees = list(Phylo.parse('./TreeConstruction/strict_refs.tre', 'newick'))
         # three trees
         consensus_tree = Consensus.strict_consensus(self.trees)
-        #tree_file = StringIO()
-        #Phylo.write(consensus_tree, tree_file, 'newick')
+        # tree_file = StringIO()
+        # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
         # tree 1 and tree 2
         consensus_tree = Consensus.strict_consensus(self.trees[:2])
-        #tree_file = StringIO()
-        #Phylo.write(consensus_tree, tree_file, 'newick')
+        # tree_file = StringIO()
+        # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[1]))
         # tree 1 and tree 3
         consensus_tree = Consensus.strict_consensus(self.trees[::2])
-        #tree_file = StringIO()
-        #Phylo.write(consensus_tree, tree_file, 'newick')
+        # tree_file = StringIO()
+        # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
         # tree_file.close()
 
@@ -90,19 +90,19 @@ class ConsensusTest(unittest.TestCase):
         ref_trees = list(Phylo.parse('./TreeConstruction/adam_refs.tre', 'newick'))
         # three trees
         consensus_tree = Consensus.adam_consensus(self.trees)
-        #tree_file = '/home/yeyanbo/adam.tres'
-        #tree_file = StringIO()
-        #Phylo.write(consensus_tree, tree_file, 'newick')
+        # tree_file = '/home/yeyanbo/adam.tres'
+        # tree_file = StringIO()
+        # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
         # tree 1 and tree 2
         consensus_tree = Consensus.adam_consensus(self.trees[:2])
-        #tree_file = StringIO()
-        #Phylo.write(consensus_tree, tree_file, 'newick')
+        # tree_file = StringIO()
+        # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[1]))
         # tree 1 and tree 3
         consensus_tree = Consensus.adam_consensus(self.trees[::2])
-        #tree_file = StringIO()
-        #Phylo.write(consensus_tree, tree_file, 'newick')
+        # tree_file = StringIO()
+        # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
         # tree_file.close()
 

@@ -3,30 +3,32 @@
 
 """Simple protein analysis.
 
-Example,
+Example::
 
-X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
-print(X.count_amino_acids())
-print(X.get_amino_acids_percent())
-print(X.molecular_weight())
-print(X.aromaticity())
-print(X.instability_index())
-print(X.flexibility())
-print(X.isoelectric_point())
-print(X.secondary_structure_fraction())
-print(X.protein_scale(ProtParamData.kd, 9, 0.4))
+    X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
+    print(X.count_amino_acids())
+    print(X.get_amino_acids_percent())
+    print(X.molecular_weight())
+    print(X.aromaticity())
+    print(X.instability_index())
+    print(X.flexibility())
+    print(X.isoelectric_point())
+    print(X.secondary_structure_fraction())
+    print(X.protein_scale(ProtParamData.kd, 9, 0.4))
+
 """
-# TODO - Turn that into a working doctest
 
 from __future__ import print_function
 
 import sys
-from . import ProtParamData  # Local
-from . import IsoelectricPoint  # Local
+from Bio.SeqUtils import ProtParamData  # Local
+from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
+
+__docformat__ = "restructuredtext en"
 
 
 class ProteinAnalysis(object):
@@ -126,7 +128,7 @@ class ProteinAnalysis(object):
         score = 0.0
 
         for i in range(self.length - 1):
-            this, next = self.sequence[i:i+2]
+            this, next = self.sequence[i:i + 2]
             dipeptide_value = index[this][next]
             score += dipeptide_value
 
@@ -144,7 +146,7 @@ class ProteinAnalysis(object):
         scores = []
 
         for i in range(self.length - window_size):
-            subsequence = self.sequence[i:i+window_size]
+            subsequence = self.sequence[i:i + window_size]
             score = 0.0
 
             for j in range(window_size // 2):
@@ -223,7 +225,7 @@ class ProteinAnalysis(object):
         sum_of_weights = sum(weights) * 2 + 1
 
         for i in range(self.length - window + 1):
-            subsequence = self.sequence[i:i+window]
+            subsequence = self.sequence[i:i + window]
             score = 0.0
 
             for j in range(window // 2):

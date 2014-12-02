@@ -10,6 +10,7 @@
 
 See: http://www.nexml.org
 """
+
 __docformat__ = "restructuredtext en"
 
 from Bio._py3k import StringIO
@@ -32,11 +33,11 @@ except ImportError:
     from xml.etree import ElementTree as ElementTree
 
 NAMESPACES = {
-                  'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                  'xml': 'http://www.w3.org/XML/1998/namespace',
-                  'nex': 'http://www.nexml.org/2009',
-                  'xsd': 'http://www.w3.org/2001/XMLSchema#',
-                  }
+    'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+    'xml': 'http://www.w3.org/XML/1998/namespace',
+    'nex': 'http://www.nexml.org/2009',
+    'xsd': 'http://www.w3.org/2001/XMLSchema#',
+}
 NAMESPACES.update(cdao_namespaces)
 DEFAULT_NAMESPACE = NAMESPACES['nex']
 VERSION = '0.9'
@@ -59,17 +60,17 @@ for prefix, uri in NAMESPACES.items():
 
 
 def qUri(s):
-    '''Given a prefixed URI, return the full URI.'''
+    """Given a prefixed URI, return the full URI."""
     return resolve_uri(s, namespaces=NAMESPACES, xml_style=True)
 
 
 def cdao_to_obo(s):
-    '''Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI.'''
+    """Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI."""
     return 'obo:%s' % cdao_elements[s[len('cdao:'):]]
 
 
 def matches(s):
-    '''Check for matches in both CDAO and OBO namespaces.'''
+    """Check for matches in both CDAO and OBO namespaces."""
     if s.startswith('cdao:'):
         return (s, cdao_to_obo(s))
     else:
@@ -194,15 +195,19 @@ class Parser(object):
 
     @classmethod
     def _make_tree(cls, node, node_dict, children):
-        '''Return a NeXML.Clade, and calls itself recursively for each child,
+        """Traverse the tree creating a nested clade structure.
+
+        Return a NeXML.Clade, and calls itself recursively for each child,
         traversing the  entire tree and creating a nested structure of NeXML.Clade
-        objects.'''
+        objects.
+        """
 
         this_node = node_dict[node]
         clade = NeXML.Clade(**this_node)
 
         if node in children:
-            clade.clades = [cls._make_tree(child, node_dict, children) for child in children[node]]
+            clade.clades = [cls._make_tree(child, node_dict, children)
+                            for child in children[node]]
 
         return clade
 
@@ -239,14 +244,17 @@ class Writer(object):
         for prefix, uri in NAMESPACES.items():
             root_node.set('xmlns:%s' % prefix, uri)
 
-        otus = ElementTree.SubElement(root_node, 'otus', **{'id': 'tax', 'label': 'RootTaxaBlock'})
+        otus = ElementTree.SubElement(root_node, 'otus',
+                                      **{'id': 'tax', 'label': 'RootTaxaBlock'})
 
         # create trees
-        trees = ElementTree.SubElement(root_node, 'trees', **{'id': 'Trees', 'label': 'TreesBlockFromXML', 'otus': 'tax'})
+        trees = ElementTree.SubElement(root_node, 'trees',
+                                       **{'id': 'Trees', 'label': 'TreesBlockFromXML', 'otus': 'tax'})
         count = 0
         tus = set()
         for tree in self.trees:
-            this_tree = ElementTree.SubElement(trees, 'tree', **{'id': self.new_label('tree')})
+            this_tree = ElementTree.SubElement(trees, 'tree',
+                                               **{'id': self.new_label('tree')})
 
             first_clade = tree.clade
             tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
@@ -275,15 +283,17 @@ class Writer(object):
         return count
 
     def _write_tree(self, clade, tree, parent=None, rooted=False):
-        '''Recursively process tree, adding nodes and edges to Tree object.
-        Returns a set of all OTUs encountered.'''
+        """Recursively process tree, adding nodes and edges to Tree object.
+
+        Returns a set of all OTUs encountered.
+        """
         tus = set()
 
         convert_uri = cdao_to_obo if self.cdao_to_obo else (lambda s: s)
 
         node_id = self.new_label('node')
         clade.node_id = node_id
-        attrib={'id': node_id, 'label': node_id}
+        attrib = {'id': node_id, 'label': node_id}
         root = rooted and parent is None
         if root:
             attrib['root'] = 'true'
@@ -294,17 +304,17 @@ class Writer(object):
 
         if parent is not None:
             edge_id = self.new_label('edge')
-            attrib={
-                    'id': edge_id, 'source': parent.node_id, 'target': node_id,
-                    'length': str(clade.branch_length),
-                    'typeof': convert_uri('cdao:Edge'),
-                    }
+            attrib = {
+                'id': edge_id, 'source': parent.node_id, 'target': node_id,
+                'length': str(clade.branch_length),
+                'typeof': convert_uri('cdao:Edge'),
+            }
             if hasattr(clade, 'confidence') and clade.confidence is not None:
                 attrib.update({
-                               'property': convert_uri('cdao:has_Support_Value'),
-                               'datatype': 'xsd:float',
-                               'content': '%1.2f' % clade.confidence,
-                               })
+                    'property': convert_uri('cdao:has_Support_Value'),
+                    'datatype': 'xsd:float',
+                    'content': '%1.2f' % clade.confidence,
+                })
             node = ElementTree.SubElement(tree, 'edge', **attrib)
 
         if not clade.is_terminal():

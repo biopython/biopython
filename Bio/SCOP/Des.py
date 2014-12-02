@@ -18,18 +18,15 @@ The latest DES file can be found
 class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
-    sunid       -- SCOP unique identifiers
+    Attributes:
 
-    nodetype    -- One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
-                   'fa' (family), 'dm' (protein), 'sp' (species),
-                   'px' (domain). Additional node types may be added.
-
-    sccs        -- SCOP concise classification strings. e.g. b.1.2.1
-
-    name        -- The SCOP ID (sid) for domains (e.g. d1anu1),
-                   currently empty for other node types
-
-    description --  e.g. "All beta proteins","Fibronectin type III",
+     - sunid - SCOP unique identifiers
+     - nodetype - One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
+       'fa' (family), 'dm' (protein), 'sp' (species), 'px' (domain).
+       Additional node types may be added.
+     - sccs - SCOP concise classification strings. e.g. b.1.2.1
+     - name - The SCOP ID (sid) for domains (e.g. d1anu1), currently empty for other node types
+     - description - e.g. "All beta proteins","Fibronectin type III",
 
     """
     def __init__(self, line=None):
@@ -79,11 +76,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DES file, returning a Des record for each line
-    in the file.
+    """Iterates over a DES file as a Des record for each line
 
     Arguments:
-        handle -- file-like object
+
+     - handle - file-like object
     """
     for line in handle:
         if line.startswith('#'):

@@ -17,11 +17,15 @@ import itertools
 from ast import literal_eval
 from Bio.Phylo import BaseTree
 
+__docformat__ = "restructuredtext en"
+
 
 class _BitString(str):
-    """Assistant class of binary string data used for storing and
-     counting compatible clades in consensus tree searching. It includes
-     some binary manipulation(&|^~) methods.
+    """Helper class for binary string data (PRIVATE).
+
+    Assistant class of binary string data used for storing and
+    counting compatible clades in consensus tree searching. It includes
+    some binary manipulation(&|^~) methods.
 
     _BitString is a sub-class of ``str`` object that only accepts two
     characters('0' and '1'), with additional functions for binary-like
@@ -31,7 +35,7 @@ class _BitString(str):
     ``name`` attribute) are the same.
 
     For example, let's say two trees are provided as below to search
-    their strict consensus tree:
+    their strict consensus tree::
 
         tree1: (((A, B), C),(D, E))
         tree2: ((A, (B, C)),(D, E))
@@ -47,7 +51,7 @@ class _BitString(str):
 
     So, with the ``_count_clades`` function in this module, finally we
     can get the clade counts and their _BitString representation as follows
-    (the root and terminals are omitted):
+    (the root and terminals are omitted)::
 
         clade   _BitString   count
         ABC     '11100'     2
@@ -56,7 +60,7 @@ class _BitString(str):
         BC      '01100'     1
 
     To get the _BitString representation of a clade, we can use the following
-    code snippet:
+    code snippet::
 
         # suppose we are provided with a tree list, the first thing to do is
         # to get all the terminal names in the first tree
@@ -70,7 +74,7 @@ class _BitString(str):
         # or, equivalently:
         bitstr = _BitString.from_bool(boolvals)
 
-    To convert back:
+    To convert back::
 
         # get all the terminal clades of the first tree
         terms = [term for term in trees[0].get_terminals()]
@@ -118,15 +122,16 @@ class _BitString(str):
     False
     >>> bitstr2.iscompatible(bitstr4)
     True
-     """
+    """
 
     def __new__(cls, strdata):
         """init from a binary string data"""
         if (isinstance(strdata, str) and
-            len(strdata) == strdata.count('0') + strdata.count('1')):
+                len(strdata) == strdata.count('0') + strdata.count('1')):
             return str.__new__(cls, strdata)
         else:
-            raise TypeError("The input should be a binary string composed of '0' and '1'")
+            raise TypeError(
+                "The input should be a binary string composed of '0' and '1'")
 
     def __and__(self, other):
         selfint = literal_eval('0b' + self)
@@ -192,6 +197,7 @@ class _BitString(str):
 
     def independent(self, other):
         """Check if current bitstr1 is independent of another one bitstr2.
+
         That is to say the bitstr1.index_one() and bitstr2.index_one() have
         no intersection.
 
@@ -221,7 +227,7 @@ def strict_consensus(trees):
     """Search strict consensus tree from multiple trees.
 
     :Parameters:
-        trees: iterable
+        trees : iterable
             iterable of trees to produce consensus tree.
     """
     trees_iter = iter(trees)
@@ -280,7 +286,7 @@ def majority_consensus(trees, cutoff=0):
     that clade.
 
     :Parameters:
-        trees: iterable
+        trees : iterable
             iterable of trees to produce consensus tree.
     """
     tree_iter = iter(trees)
@@ -322,7 +328,7 @@ def majority_consensus(trees, cutoff=0):
         # record it's possible parent and child clades.
         compatible = True
         parent_bitstr = None
-        child_bitstrs = [] # multiple independent childs
+        child_bitstrs = []  # multiple independent childs
         for bs in bsckeys:
             if not bs.iscompatible(bitstr):
                 compatible = False
@@ -334,7 +340,7 @@ def majority_consensus(trees, cutoff=0):
             # assign the closest descendant as its child
             # the largest and independent clades
             if (bitstr.contains(bs) and bs != bitstr and
-                all(c.independent(bs) for c in child_bitstrs)):
+                    all(c.independent(bs) for c in child_bitstrs)):
                 child_bitstrs.append(bs)
         if not compatible:
             continue
@@ -364,7 +370,7 @@ def majority_consensus(trees, cutoff=0):
         # put new clade
         bitstr_clades[bitstr] = clade
         if ((len(bitstr_clades) == len(terms) - 1) or
-            (len(bitstr_clades) == len(terms) - 2 and len(root.clades) == 3)):
+                (len(bitstr_clades) == len(terms) - 2 and len(root.clades) == 3)):
             break
     return BaseTree.Tree(root=root)
 
@@ -373,7 +379,7 @@ def adam_consensus(trees):
     """Search Adam Consensus tree from multiple trees
 
     :Parameters:
-        trees: list
+        trees : list
             list of trees to produce consensus tree.
     """
     clades = [tree.root for tree in trees]
@@ -440,8 +446,7 @@ def _part(clades):
 
 
 def _sub_clade(clade, term_names):
-    """extract a compatible subclade that only contains the given terminal names
-    """
+    """extract a compatible subclade that only contains the given terminal names"""
     term_clades = [clade.find_any(name) for name in term_names]
     sub_clade = clade.common_ancestor(term_clades)
     if len(term_names) != sub_clade.count_terminals():
@@ -472,7 +477,7 @@ def _count_clades(trees):
     occurrences and sum of branch length for that clade, second the number of trees processed.
 
     :Parameters:
-        trees: iterable
+        trees : iterable
             An iterable that returns the trees to count
     """
     bitstrs = {}
@@ -493,14 +498,14 @@ def _count_clades(trees):
 
 
 def get_support(target_tree, trees, len_trees=None):
-    """Calculate branch support given a target tree and a list of bootstrap
-    replicate trees
+    """Calculate branch support for a target tree given bootstrap replicate trees.
 
     :Parameters:
-        target_tree: Tree
-        trees: iterable
+        target_tree : Tree
+            tree to calculate branch support for.
+        trees : iterable
             iterable of trees used to calculate branch support.
-        len_trees: int
+        len_trees : int
             optional count of replicates in trees. len_trees must be provided
             when len(trees) is not a valid operation.
     """
@@ -514,8 +519,8 @@ def get_support(target_tree, trees, len_trees=None):
             size = len(trees)
         except TypeError:
             raise TypeError("Trees does not support len(trees), "
-                "you must provide the number of replicates in trees "
-                "as the optional parameter len_trees.")
+                            "you must provide the number of replicates in trees "
+                            "as the optional parameter len_trees.")
 
     for clade in target_tree.find_clades(terminal=False):
         bitstr = _clade_to_bitstr(clade, term_names)
@@ -531,13 +536,12 @@ def get_support(target_tree, trees, len_trees=None):
 
 
 def bootstrap(msa, times):
-    """yield a series of bootstrap replicates from a multiple sequence
-    alignment object
+    """Generate bootstrap replicates from a multiple sequence alignment object
 
     :Parameters:
-        msa: MultipleSeqAlignment
+        msa : MultipleSeqAlignment
             multiple sequence alignment to generate replicates.
-        times: int
+        times : int
             number of bootstrap times.
     """
 
@@ -556,15 +560,14 @@ def bootstrap(msa, times):
 
 
 def bootstrap_trees(msa, times, tree_constructor):
-    """Yield a series of bootstrap replicate trees from a multiple sequence
-    alignment.
+    """Generate bootstrap replicate trees from a multiple sequence alignment.
 
     :Parameters:
-        msa: MultipleSeqAlignment
+        msa : MultipleSeqAlignment
             multiple sequence alignment to generate replicates.
-        times: int
+        times : int
             number of bootstrap times.
-        tree_constructor: TreeConstructor
+        tree_constructor : TreeConstructor
             tree constructor to be used to build trees.
     """
 
@@ -575,17 +578,16 @@ def bootstrap_trees(msa, times, tree_constructor):
 
 
 def bootstrap_consensus(msa, times, tree_constructor, consensus):
-    """get the consensus tree of a series of bootstrap trees for
-    a multiple sequence alignment
+    """Consensus tree of a series of bootstrap trees for a multiple sequence alignment
 
     :Parameters:
-        msa: MultipleSeqAlignment
+        msa : MultipleSeqAlignment
             Multiple sequence alignment to generate replicates.
-        times: int
+        times : int
             Number of bootstrap times.
-        tree_constructor: TreeConstructor
+        tree_constructor : TreeConstructor
             Tree constructor to be used to build trees.
-        consensus: function
+        consensus : function
             Consensus method in this module: `strict_consensus`,
             `majority_consensus`, `adam_consensus`.
     """
@@ -595,8 +597,7 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
 
 
 def _clade_to_bitstr(clade, tree_term_names):
-    """Create a BitString representing a clade, given ordered tree taxon names.
-    """
+    """Create a BitString representing a clade, given ordered tree taxon names."""
     clade_term_names = set(term.name for term in
                            clade.find_clades(terminal=True))
     return _BitString.from_bool((name in clade_term_names)
@@ -614,7 +615,9 @@ def _tree_to_bitstrs(tree):
 
 
 def _bitstring_topology(tree):
-    """Create a dict of all clades' BitStrings to the corresponding branch
+    """Generates a branch length dict for a tree, keyed by BitStrings.
+
+    Create a dict of all clades' BitStrings to the corresponding branch
     lengths (rounded to 5 decimal places)."""
     bitstrs = {}
     for clade, bitstr in _tree_to_bitstrs(tree).items():
@@ -623,8 +626,10 @@ def _bitstring_topology(tree):
 
 
 def _equal_topology(tree1, tree2):
-    """True if two trees are equal in terms of topology and branch lengths
-    (to 5 decimal places)."""
+    """Are two trees are equal in terms of topology and branch lengths.
+
+    (Branch lengths checked to 5 decimal places.)
+    """
     term_names1 = set(term.name for term in tree1.find_clades(terminal=True))
     term_names2 = set(term.name for term in tree2.find_clades(terminal=True))
     return ((term_names1 == term_names2) and

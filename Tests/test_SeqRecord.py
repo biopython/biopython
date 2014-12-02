@@ -67,16 +67,16 @@ class SeqRecordMethods(unittest.TestCase):
 
     def setUp(self):
         f0 = SeqFeature(FeatureLocation(0, 26), type="source",
-                        qualifiers={"mol_type":["fake protein"]})
+                        qualifiers={"mol_type": ["fake protein"]})
         f1 = SeqFeature(FeatureLocation(0, ExactPosition(10)))
         f2 = SeqFeature(FeatureLocation(WithinPosition(12, left=12, right=15), BeforePosition(22)))
         f3 = SeqFeature(FeatureLocation(AfterPosition(16),
                                         OneOfPosition(26, [ExactPosition(25), AfterPosition(26)])))
         self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
                                 id="TestID", name="TestName", description="TestDescr",
-                                dbxrefs=["TestXRef"], annotations={"k":"v"},
-                                letter_annotations = {"fake":"X"*26},
-                                features = [f0, f1, f2, f3])
+                                dbxrefs=["TestXRef"], annotations={"k": "v"},
+                                letter_annotations={"fake": "X"*26},
+                                features=[f0, f1, f2, f3])
 
     def test_slice_variantes(self):
         """Simple slices using different start/end values"""
@@ -106,7 +106,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(sub.id, "TestID")
             self.assertEqual(sub.name, "TestName")
             self.assertEqual(sub.description, "TestDescr")
-            self.assertEqual(sub.letter_annotations, {"fake":"X"*10})
+            self.assertEqual(sub.letter_annotations, {"fake": "X"*10})
             self.assertEqual(sub.dbxrefs, [])  # May change this...
             self.assertEqual(sub.annotations, {})  # May change this...
             self.assertEqual(len(sub.features), 1)
@@ -130,8 +130,8 @@ class SeqRecordMethods(unittest.TestCase):
         self.assertEqual(rec.name, "TestName")
         self.assertEqual(rec.description, "TestDescr")
         self.assertEqual(rec.dbxrefs, ["TestXRef"])
-        self.assertEqual(rec.annotations, {"k":"v"})
-        self.assertEqual(rec.letter_annotations, {"fake":"X"*52})
+        self.assertEqual(rec.annotations, {"k": "v"})
+        self.assertEqual(rec.letter_annotations, {"fake": "X"*52})
         self.assertEqual(len(rec.features), 2*len(self.record.features))
 
     def test_add_seq(self):
@@ -144,7 +144,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
             self.assertEqual(rec.dbxrefs, ["TestXRef"])
-            self.assertEqual(rec.annotations, {"k":"v"})
+            self.assertEqual(rec.annotations, {"k": "v"})
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
@@ -184,7 +184,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
             self.assertEqual(rec.dbxrefs, ["TestXRef"])
-            self.assertEqual(rec.annotations, {"k":"v"})
+            self.assertEqual(rec.annotations, {"k": "v"})
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
@@ -202,7 +202,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.description, "TestDescr")
             self.assertEqual(rec.dbxrefs, [])  # May change this...
             self.assertEqual(rec.annotations, {})  # May change this...
-            self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
+            self.assertEqual(rec.letter_annotations, {"fake": "X"*26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
 
     def test_slice_add_shift(self):
@@ -216,9 +216,9 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.description, "TestDescr")
             self.assertEqual(rec.dbxrefs, [])  # May change this...
             self.assertEqual(rec.annotations, {})  # May change this...
-            self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
+            self.assertEqual(rec.letter_annotations, {"fake": "X"*26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

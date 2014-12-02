@@ -147,8 +147,7 @@ class GenericPositionMatrix(dict):
 
     @property
     def consensus(self):
-        """Returns the consensus sequence.
-        """
+        """Returns the consensus sequence."""
         sequence = ""
         for i in range(self.length):
             try:
@@ -228,9 +227,7 @@ class GenericPositionMatrix(dict):
 
     @property
     def gc_content(self):
-        """
-Compute the fraction GC content.
-"""
+        """Compute the fraction GC content."""
         alphabet = self.alphabet
         gc_total = 0.0
         total = 0.0
@@ -254,17 +251,17 @@ Compute the fraction GC content.
 class FrequencyPositionMatrix(GenericPositionMatrix):
 
     def normalize(self, pseudocounts=None):
-        """
-        create and return a position-weight matrix by normalizing the counts matrix.
+        """Create and return a position-weight matrix by normalizing the counts matrix.
 
         If pseudocounts is None (default), no pseudocounts are added
         to the counts.
+
         If pseudocounts is a number, it is added to the counts before
         calculating the position-weight matrix.
+
         Alternatively, the pseudocounts can be a dictionary with a key
         for each letter in the alphabet associated with the motif.
         """
-
         counts = {}
         if pseudocounts is None:
             for letter in self.alphabet.letters:
@@ -294,8 +291,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
             self[letter] = tuple(self[letter])
 
     def log_odds(self, background=None):
-        """
-        returns the Position-Specific Scoring Matrix.
+        """Returns the Position-Specific Scoring Matrix.
 
         The Position-Specific Scoring Matrix (PSSM) contains the log-odds
         scores computed from the probability matrix and the background
@@ -341,14 +337,15 @@ class PositionWeightMatrix(GenericPositionMatrix):
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def calculate(self, sequence):
-        """
-        returns the PWM score for a given sequence for all positions.
+        """Returns the PWM score for a given sequence for all positions.
 
-        - the sequence can only be a DNA sequence
-        - the search is performed only on one strand
-        - if the sequence and the motif have the same length, a single
-          number is returned
-        - otherwise, the result is a one-dimensional list or numpy array
+        Notes:
+
+         - the sequence can only be a DNA sequence
+         - the search is performed only on one strand
+         - if the sequence and the motif have the same length, a single
+           number is returned
+         - otherwise, the result is a one-dimensional list or numpy array
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
@@ -393,8 +390,10 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             return scores
 
     def search(self, sequence, threshold=0.0, both=True):
-        """
-        a generator function, returning found hits in a given sequence with the pwm score higher than the threshold
+        """Find hits with PWM score above given threshold.
+
+        A generator function, returning found hits in the given sequence
+        with the pwm score higher than the threshold.
         """
         sequence = sequence.upper()
         n = len(sequence)
@@ -490,8 +489,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return math.sqrt(variance)
 
     def dist_pearson(self, other):
-        """
-        return the similarity score based on pearson correlation for the given motif against self.
+        """Return the similarity score based on pearson correlation for the given motif against self.
 
         We use the Pearson's correlation of the respective probabilities.
         """

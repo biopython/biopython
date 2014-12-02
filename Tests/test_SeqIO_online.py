@@ -86,5 +86,5 @@ for database, formats, entry, length, checksum in [
 del database, formats, entry, length, checksum
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

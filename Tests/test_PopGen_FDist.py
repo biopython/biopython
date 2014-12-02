@@ -75,7 +75,7 @@ class AppTest(unittest.TestCase):
     def test_datacal(self):
         """Test datacal execution.
         """
-        fst, samp_size = self.ctrl.run_datacal(data_dir = self.dirname)
+        fst, samp_size = self.ctrl.run_datacal(data_dir=self.dirname)
         self.assertTrue(fst - 0.44 < 0.01)
         self.assertEqual(samp_size, 11)
 
@@ -84,9 +84,9 @@ class AppTest(unittest.TestCase):
         """
         # The number of simulations in real life should be at least 10000,
         # see the fdist2 documentation.
-        fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
-                sample_size = 20, mut = 0, num_sims = 100,
-                data_dir = self.dirname)
+        fst = self.ctrl.run_fdist(npops=15, nsamples=10, fst=0.1,
+                sample_size=20, mut=0, num_sims=100,
+                data_dir=self.dirname)
         self.assertTrue(abs(fst - 0.1) < 0.03,
                         "Stochastic result, expected %f close to 0.1" % fst)
 
@@ -95,27 +95,27 @@ class AppTest(unittest.TestCase):
         """
         # The number of simulations in real life should be at least 10000,
         # see the fdist2 documentation.
-        fst = self.ctrl.run_fdist_force_fst(npops = 15, nsamples = 10,
-                fst = 0.1,
-                sample_size = 20, mut = 0, num_sims = 100,
-                data_dir = self.dirname)
+        fst = self.ctrl.run_fdist_force_fst(npops=15, nsamples=10,
+                fst=0.1,
+                sample_size=20, mut=0, num_sims=100,
+                data_dir=self.dirname)
         self.assertTrue(abs(fst - 0.09) < 0.05,
                         "Stochastic result, expected %f close to 0.09" % fst)
 
     def test_cplot(self):
         """Test cplot execution.
         """
-        cpl_interval =self.ctrl.run_cplot(data_dir = self.dirname)
+        cpl_interval = self.ctrl.run_cplot(data_dir=self.dirname)
         self.assertEqual(len(cpl_interval), 8)
 
     def test_pv(self):
         """Test pv execution.
         """
-        pv_data = self.ctrl.run_pv(data_dir = self.dirname)
+        pv_data = self.ctrl.run_pv(data_dir=self.dirname)
         self.assertEqual(len(pv_data), 4)
 
 
 if __name__ == "__main__":
     print("Running fdist tests, which might take some time, please wait")
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -6,30 +6,30 @@
 
 We used to have lines like this under Python 2 in order to use
 iterator based zip, map and filter (in Python 3 these functions
-are all iterator based):
+are all iterator based)::
 
     from future_builtins import zip
 
-There is no similar option for range yet, other than:
+There is no similar option for range yet, other than::
 
     range = xrange
     input = raw_input
 
-or:
+or::
 
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
 Under Python 3 these imports need to be removed. Also, deliberate
-importing of built in functions like open changes from Python 2:
+importing of built in functions like open changes from Python 2::
 
     from __builtin__ import open
 
-to this under Python 3:
+to this under Python 3::
 
     from builtins import open
 
-Instead, we can do this under either Python 2 or 3:
+Instead, we can do this under either Python 2 or 3::
 
     from Bio._py3k import open
     from Bio._py3k import zip
@@ -52,6 +52,12 @@ if sys.version_info[0] >= 3:
 
     _bytes_to_string = lambda b: b.decode()  # bytes to unicode string
     _string_to_bytes = lambda s: s.encode()  # unicode string to bytes
+
+    def _bytes_bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a unicode string."""
+        if isinstance(s, (bytes, bytearray)):
+            return s.decode()
+        return s
 
     def _as_unicode(s):
         """Turn byte string or unicode string into a unicode string."""
@@ -110,6 +116,11 @@ if sys.version_info[0] >= 3:
         class EvilHandleHack(object):
             def __init__(self, handle):
                 self._handle = handle
+                try:
+                    # If wrapping an online handle, this this is nice to have:
+                    self.url = handle.url
+                except AttributeError:
+                    pass
 
             def read(self, length=None):
                 return _as_string(self._handle.read(length))
@@ -157,6 +168,12 @@ else:
 
     _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing
     _string_to_bytes = lambda s: str(s)  # str (or unicode) to bytes string
+
+    def _bytes_bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a string."""
+        if isinstance(s, (bytes, bytearray)):
+            return str(s)
+        return s
 
     def _as_unicode(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""

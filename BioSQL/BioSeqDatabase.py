@@ -17,6 +17,7 @@ import os
 import sys
 
 from Bio._py3k import _universal_read_mode
+from Bio._py3k import _bytes_bytearray_to_str as bytearray_to_str
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -141,8 +142,10 @@ class DBServer:
             wrap_cursor = True
         else:
             wrap_cursor = False
-        self.adaptor = Adaptor(
-            conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor)
+        # Get module specific Adaptor or the base (general) Adaptor
+        Adapt = _interface_specific_adaptors.get(module_name, Adaptor)
+        self.adaptor = Adapt(conn, DBUtils.get_dbutils(module_name),
+                             wrap_cursor=wrap_cursor)
         self.module_name = module_name
 
     def __repr__(self):
@@ -328,7 +331,13 @@ class _CursorWrapper:
         return self._convert_tuple(tuple_)
 
 
-class Adaptor:
+class Adaptor(object):
+    """High level wrapper for a database connection and cursor
+
+    Most database calls in BioSQL are done indirectly though this adaptor
+    class. This provides helper methods for fetching data and executing
+    sql.
+    """
 
     def __init__(self, conn, dbutils, wrap_cursor=False):
         self.conn = conn
@@ -462,6 +471,7 @@ class Adaptor:
         return self.execute_and_fetch_col0(sql, args)
 
     def execute_one(self, sql, args=None):
+        """Execute sql that returns 1 record, and return the record"""
         self.execute(sql, args or ())
         rv = self.cursor.fetchall()
         assert len(rv) == 1, "Expected 1 response, got %d" % len(rv)
@@ -497,6 +507,35 @@ class Adaptor:
     def execute_and_fetchall(self, sql, args=None):
         self.execute(sql, args or ())
         return self.cursor.fetchall()
+
+
+class MysqlConnectorAdaptor(Adaptor):
+    """A BioSQL Adaptor class with fixes for the MySQL interface
+
+    BioSQL was failing due to returns of bytearray objects from
+    the mysql-connector-python database connector. This adaptor
+    class scrubs returns of bytearrays and of byte strings converting
+    them to string objects instead. This adaptor class was made in
+    response to backwards incompatible changes added to
+    mysql-connector-python in release 2.0.0 of the package.
+    """
+    def execute_one(self, sql, args=None):
+        out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
+        return tuple(bytearray_to_str(v) for v in out)
+
+    def execute_and_fetch_col0(self, sql, args=None):
+        out = super(MysqlConnectorAdaptor, self).execute_and_fetch_col0(sql, args)
+        return [bytearray_to_str(column) for column in out]
+
+    def execute_and_fetchall(self, sql, args=None):
+        out = super(MysqlConnectorAdaptor, self).execute_and_fetchall(sql, args)
+        return [tuple(bytearray_to_str(v) for v in o) for o in out]
+
+
+_interface_specific_adaptors = {
+    # If SQL interfaces require a specific adaptor, use this to map the adaptor
+    "mysql.connector":  MysqlConnectorAdaptor
+    }
 
 _allowed_lookups = {
     # Lookup name / function name to get id, function to list all ids

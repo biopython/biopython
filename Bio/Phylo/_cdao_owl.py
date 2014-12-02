@@ -6,23 +6,25 @@
 import xml.etree.ElementTree as ET
 
 cdao_namespaces = {
-                   'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
-                   'obo': 'http://purl.obolibrary.org/obo/',
-                   }
+    'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
+    'obo': 'http://purl.obolibrary.org/obo/',
+}
 
 
 def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False):
-    '''Converts prefixed URIs to full URIs. Optionally, converts CDAO
-    named identifiers to OBO numeric identifiers.'''
+    """Converts prefixed URIs to full URIs.
+
+    Optionally, converts CDAO named identifiers to OBO numeric identifiers.
+    """
 
     if cdao_to_obo and s.startswith('cdao:'):
         return resolve_uri('obo:%s' % cdao_elements[s[5:]], namespaces, cdao_to_obo)
 
     for prefix in namespaces:
         if xml_style:
-            s = s.replace(prefix+':', '{%s}' % namespaces[prefix])
+            s = s.replace(prefix + ':', '{%s}' % namespaces[prefix])
         else:
-            s = s.replace(prefix+':', namespaces[prefix])
+            s = s.replace(prefix + ':', namespaces[prefix])
 
     return s
 
@@ -2874,6 +2876,8 @@ cdao_elements = {}
 root = ET.fromstring(cdao_owl)
 for node_type in 'ObjectProperty', 'Class', 'DatatypeProperty':
     for element in root.findall('{http://www.w3.org/2002/07/owl#}%s' % node_type):
-        obo = element.attrib['{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about'].split('/')[-1]
-        cdao = element.find('{http://www.w3.org/2000/01/rdf-schema#}label').text
+        obo = element.attrib[
+            '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about'].split('/')[-1]
+        cdao = element.find(
+            '{http://www.w3.org/2000/01/rdf-schema#}label').text
         cdao_elements[cdao] = obo

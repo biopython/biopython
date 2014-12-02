@@ -16,6 +16,8 @@ from __future__ import print_function
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+__docformat__ = "restructuredtext en"
+
 
 class _EmbossMinimalCommandLine(AbstractCommandline):
     """Base Commandline object for EMBOSS wrappers (PRIVATE).

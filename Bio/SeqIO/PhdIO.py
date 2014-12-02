@@ -59,6 +59,8 @@ from Bio.Sequencing import Phd
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio.SeqIO import QualityIO
 
+__docformat__ = "restructuredtext en"
+
 
 def PhdIterator(handle):
     """Returns SeqRecord objects from a PHD file.

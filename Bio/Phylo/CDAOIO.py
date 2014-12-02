@@ -36,15 +36,16 @@ try:
     import rdflib
     rdfver = rdflib.__version__
     if rdfver[0] in ["1", "2"] or (rdfver in ["3.0.0", "3.1.0", "3.2.0"]):
-        raise CDAOError('Support for CDAO tree format requires RDFlib v3.2.1 or later.')
+        raise CDAOError(
+            'Support for CDAO tree format requires RDFlib v3.2.1 or later.')
 except ImportError:
     raise CDAOError('Support for CDAO tree format requires RDFlib.')
 
 RDF_NAMESPACES = {
-                  'owl': 'http://www.w3.org/2002/07/owl#',
-                  'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-                  'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-                  }
+    'owl': 'http://www.w3.org/2002/07/owl#',
+    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+}
 RDF_NAMESPACES.update(cdao_namespaces)
 # pad node ids with zeroes until they're at least this length
 ZEROES = 8
@@ -81,8 +82,8 @@ def write(trees, handle, plain=False, **kwargs):
 # Input
 
 class Parser(object):
-    """Parse a CDAO tree given a file handle.
-    """
+    """Parse a CDAO tree given a file handle."""
+
     def __init__(self, handle=None):
         self.handle = handle
         self.graph = None
@@ -102,7 +103,7 @@ class Parser(object):
 
     def parse_handle_to_graph(self, rooted=False,
                               parse_format='turtle', context=None, **kwargs):
-        '''Parse self.handle into RDF model self.model.'''
+        """Parse self.handle into RDF model self.model."""
 
         if self.graph is None:
             self.graph = rdflib.Graph()
@@ -116,14 +117,14 @@ class Parser(object):
         if 'base_uri' in kwargs:
             base_uri = kwargs['base_uri']
         else:
-            base_uri = "file://"+os.path.abspath(self.handle.name)
+            base_uri = "file://" + os.path.abspath(self.handle.name)
 
         graph.parse(file=self.handle, publicID=base_uri, format=parse_format)
 
         return self.parse_graph(graph, context=context)
 
     def parse_graph(self, graph=None, context=None):
-        '''Generator that yields CDAO.Tree instances from an RDF model.'''
+        """Generator that yields CDAO.Tree instances from an RDF model."""
 
         if graph is None:
             graph = self.graph
@@ -137,7 +138,7 @@ class Parser(object):
             yield CDAO.Tree(root=clade, rooted=self.rooted)
 
     def new_clade(self, node):
-        '''Returns a CDAO.Clade object for a given named node.'''
+        """Returns a CDAO.Clade object for a given named node."""
 
         result = self.node_info[node]
 
@@ -154,7 +155,7 @@ class Parser(object):
         return clade
 
     def get_node_info(self, graph, context=None):
-        '''Creates a dictionary containing information about all nodes in the tree.'''
+        """Creates a dictionary containing information about all nodes in the tree."""
 
         self.node_info = {}
         self.obj_info = {}
@@ -163,14 +164,14 @@ class Parser(object):
         self.tree_roots = set()
 
         assignments = {
-                       qUri('cdao:has_Parent'): 'parent',
-                       qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
-                       qUri('cdao:has_Annotation'): 'annotation',
-                       qUri('cdao:has_Value'): 'value',
-                       qUri('cdao:represents_TU'): 'tu',
-                       qUri('rdfs:label'): 'label',
-                       qUri('cdao:has_Support_Value'): 'confidence',
-                       }
+            qUri('cdao:has_Parent'): 'parent',
+            qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
+            qUri('cdao:has_Annotation'): 'annotation',
+            qUri('cdao:has_Value'): 'value',
+            qUri('cdao:represents_TU'): 'tu',
+            qUri('rdfs:label'): 'label',
+            qUri('cdao:has_Support_Value'): 'confidence',
+        }
 
         for s, v, o in graph:
             # process each RDF triple in the graph sequentially
@@ -182,7 +183,8 @@ class Parser(object):
             this = self.obj_info[s]
 
             try:
-                # if the predicate is one we care about, store information for later
+                # if the predicate is one we care about, store information for
+                # later
                 this[assignments[v]] = o
             except KeyError:
                 pass
@@ -196,7 +198,8 @@ class Parser(object):
                 self.tree_roots.add(o)
 
         for node in self.nodes:
-            # for each node, look up all information needed to create a CDAO.Clade
+            # for each node, look up all information needed to create a
+            # CDAO.Clade
             self.node_info[node] = {}
             node_info = self.node_info[node]
 
@@ -225,14 +228,18 @@ class Parser(object):
                 self.children[parent].append(node)
 
     def parse_children(self, node):
-        '''Return a CDAO.Clade, and calls itself recursively for each child,
-        traversing the  entire tree and creating a nested structure of CDAO.Clade
-        objects.'''
+        """Traverse the tree to create a nested clade structure.
+
+        Return a CDAO.Clade, and calls itself recursively for each child,
+        traversing the entire tree and creating a nested structure of CDAO.Clade
+        objects.
+        """
 
         clade = self.new_clade(node)
 
         children = self.children[node] if node in self.children else []
-        clade.clades = [self.parse_children(child_node) for child_node in children]
+        clade.clades = [
+            self.parse_children(child_node) for child_node in children]
 
         return clade
 
@@ -289,7 +296,7 @@ class Writer(object):
                 changed = False
                 for prefix, uri in self.prefixes.items():
                     if node_uri.startswith(uri):
-                        node_uri = node_uri.replace(uri, '%s:'%prefix, 1)
+                        node_uri = node_uri.replace(uri, '%s:' % prefix, 1)
                         if node_uri == 'rdf:type':
                             node_uri = 'a'
                         changed = True
@@ -307,7 +314,7 @@ class Writer(object):
         handle.write('%s .\n' % ' '.join(stmt_strings))
 
     def process_clade(self, clade, parent=None, root=False):
-        '''recursively generate triples describing a tree of clades'''
+        """recursively generate triples describing a tree of clades"""
 
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
@@ -324,12 +331,13 @@ class Writer(object):
 
         if root is not False:
             # create a cdao:RootedTree with reference to the tree root
-            tree_type = pUri('cdao:RootedTree') if self.rooted else pUri('cdao:UnrootedTree')
+            tree_type = pUri('cdao:RootedTree') if self.rooted else pUri(
+                'cdao:UnrootedTree')
 
             statements += [
-                           (tree_id, pUri('rdf:type'), tree_type),
-                           (tree_id, pUri('cdao:has_Root'), nUri(clade.uri)),
-                           ]
+                (tree_id, pUri('rdf:type'), tree_type),
+                (tree_id, pUri('cdao:has_Root'), nUri(clade.uri)),
+            ]
 
             try:
                 tree_attributes = root.attributes
@@ -345,10 +353,12 @@ class Writer(object):
             tu_uri = 'tu%s' % str(self.tu_counter).zfill(ZEROES)
 
             statements += [
-                           (nUri(tu_uri), pUri('rdf:type'), pUri('cdao:TU')),
-                           (nUri(clade.uri), pUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), pUri('rdfs:label'), rdflib.Literal(format_label(clade.name))),
-                           ]
+                (nUri(tu_uri), pUri('rdf:type'), pUri('cdao:TU')),
+                (nUri(clade.uri), pUri(
+                    'cdao:represents_TU'), nUri(tu_uri)),
+                (nUri(tu_uri), pUri('rdfs:label'),
+                 rdflib.Literal(format_label(clade.name))),
+            ]
 
             try:
                 tu_attributes = clade.tu_attributes
@@ -359,11 +369,13 @@ class Writer(object):
                 yield (nUri(tu_uri), predicate, obj)
 
         # create this node
-        node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
+        node_type = 'cdao:TerminalNode' if clade.is_terminal(
+        ) else 'cdao:AncestralNode'
         statements += [
-                       (nUri(clade.uri), pUri('rdf:type'), pUri(node_type)),
-                       (nUri(clade.uri), pUri('cdao:belongs_to_Tree'), tree_id),
-                       ]
+            (nUri(clade.uri), pUri('rdf:type'), pUri(node_type)),
+            (nUri(clade.uri), pUri(
+                'cdao:belongs_to_Tree'), tree_id),
+        ]
 
         if parent is not None:
             # create edge from the parent node to this node
@@ -371,19 +383,27 @@ class Writer(object):
             edge_uri = 'edge%s' % str(self.edge_counter).zfill(ZEROES)
 
             statements += [
-                           (nUri(edge_uri), pUri('rdf:type'), pUri('cdao:DirectedEdge')),
-                           (nUri(edge_uri), pUri('cdao:belongs_to_Tree'), tree_id),
-                           (nUri(edge_uri), pUri('cdao:has_Parent_Node'), nUri(parent.uri)),
-                           (nUri(edge_uri), pUri('cdao:has_Child_Node'), nUri(clade.uri)),
-                           (nUri(clade.uri), pUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
-                           (nUri(clade.uri), pUri('cdao:has_Parent'), nUri(parent.uri)),
-                           (nUri(parent.uri), pUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
-                           ]
+                (nUri(edge_uri), pUri('rdf:type'), pUri('cdao:DirectedEdge')),
+                (nUri(edge_uri), pUri(
+                    'cdao:belongs_to_Tree'), tree_id),
+                (nUri(edge_uri), pUri('cdao:has_Parent_Node'),
+                 nUri(parent.uri)),
+                (nUri(edge_uri), pUri('cdao:has_Child_Node'),
+                 nUri(clade.uri)),
+                (nUri(clade.uri), pUri(
+                    'cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
+                (nUri(clade.uri), pUri('cdao:has_Parent'),
+                 nUri(parent.uri)),
+                (nUri(parent.uri), pUri(
+                    'cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
+            ]
 
             if hasattr(clade, 'confidence') and clade.confidence is not None:
-                confidence = rdflib.Literal(clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
+                confidence = rdflib.Literal(
+                    clade.confidence, datatype='http://www.w3.org/2001/XMLSchema#decimal')
 
-                statements += [(nUri(clade.uri), pUri('cdao:has_Support_Value'), confidence)]
+                statements += [(nUri(clade.uri),
+                                pUri('cdao:has_Support_Value'), confidence)]
 
             if self.record_complete_ancestry and len(clade.ancestors) > 0:
                 statements += [(nUri(clade.uri), pUri('cdao:has_Ancestor'), nUri(ancestor))
@@ -391,14 +411,19 @@ class Writer(object):
 
             if clade.branch_length is not None:
                 # add branch length
-                edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(ZEROES)
+                edge_ann_uri = 'edge_annotation%s' % str(
+                    self.edge_counter).zfill(ZEROES)
 
-                branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#decimal'))
+                branch_length = rdflib.Literal(clade.branch_length, datatype=rdflib.URIRef(
+                    'http://www.w3.org/2001/XMLSchema#decimal'))
                 statements += [
-                               (nUri(edge_ann_uri), pUri('rdf:type'), pUri('cdao:EdgeLength')),
-                               (nUri(edge_uri), pUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
-                               (nUri(edge_ann_uri), pUri('cdao:has_Value'), branch_length),
-                               ]
+                    (nUri(edge_ann_uri), pUri('rdf:type'),
+                     pUri('cdao:EdgeLength')),
+                    (nUri(edge_uri), pUri('cdao:has_Annotation'),
+                     nUri(edge_ann_uri)),
+                    (nUri(edge_ann_uri),
+                     pUri('cdao:has_Value'), branch_length),
+                ]
 
             try:
                 edge_attributes = clade.edge_attributes

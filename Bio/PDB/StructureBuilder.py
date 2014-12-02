@@ -20,6 +20,7 @@ from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
+__docformat__ = "restructuredtext en"
 
 class StructureBuilder(object):
     """
@@ -100,11 +101,12 @@ class StructureBuilder(object):
         Initiate a new Residue object.
 
         Arguments:
-        o resname - string, e.g. "ASN"
-        o field - hetero flag, "W" for waters, "H" for
-            hetero residues, otherwise blank.
-        o resseq - int, sequence identifier
-        o icode - string, insertion code
+        
+            - resname - string, e.g. "ASN"
+            - field - hetero flag, "W" for waters, "H" for
+              hetero residues, otherwise blank.
+            - resseq - int, sequence identifier
+            - icode - string, insertion code
         """
         if field!=" ":
             if field=="H":

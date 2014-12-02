@@ -2,6 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import unittest
+
 try:
     import numpy
 except ImportError:
@@ -18,11 +20,23 @@ except ImportError:
 
 from Bio.KDTree.KDTree import _neighbor_test, _test
 
-nr_points=5000
-dim=3
-bucket_size=5
-radius=0.01
+nr_points = 5000
+dim = 3
+bucket_size = 5
+radius = 0.01
 
-for i in range(0, 10):
-    _neighbor_test(nr_points, dim, bucket_size, radius)
-    _test(nr_points, dim, bucket_size, radius)
+
+class KDTreeTest(unittest.TestCase):
+
+    def test_KDTree_neighbour(self):
+        for i in range(0, 10):
+            self.assertTrue(_neighbor_test(nr_points, dim, bucket_size, radius))
+
+    def test_KDTree(self):
+        for i in range(0, 10):
+            self.assertTrue(_test(nr_points, dim, bucket_size, radius))
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)

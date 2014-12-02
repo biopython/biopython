@@ -35,13 +35,21 @@ if os.name == 'java':
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
+URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+URL_TOOL = "tool=biopython"
+URL_EMAIL = "email=biopython-dev%40biopython.org"
+
 
 class EntrezOnlineCase(unittest.TestCase):
 
     def test_read_from_url(self):
         """Test Entrez.read from URL"""
-        einfo = Entrez.einfo()
-        rec = Entrez.read(einfo)
+        handle = Entrez.einfo()
+        self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        rec = Entrez.read(handle)
+        handle.close()
         self.assertTrue(isinstance(rec, dict))
         self.assertTrue('DbList' in rec)
         # arbitrary number, just to make sure that DbList has contents
@@ -49,56 +57,102 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL"""
-        efetch = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
-                retmode='xml')
-        recs = Entrez.parse(efetch)
-        recs = list(recs)
+        handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
+                               retmode='xml')
+        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
+        recs = list(Entrez.parse(handle))
+        handle.close()
         self.assertEqual(3, len(recs))
         # arbitrary number, just to make sure the parser works
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
 
     def test_webenv_search(self):
         """Test Entrez.search from link webenv history"""
-        elink = Entrez.elink(db='nucleotide', dbfrom='protein',
-                id='22347800,48526535', webenv=None, query_key=None,
-                cmd='neighbor_history')
-        recs = Entrez.read(elink)
-        elink.close()
+        handle = Entrez.elink(db='nucleotide', dbfrom='protein',
+                              id='22347800,48526535', webenv=None, query_key=None,
+                              cmd='neighbor_history')
+        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi?"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=22347800%2C48526535" in handle.url, handle.url)
+        recs = Entrez.read(handle)
+        handle.close()
         record = recs.pop()
 
         webenv = record['WebEnv']
         query_key = record['LinkSetDbHistory'][0]['QueryKey']
-        esearch = Entrez.esearch(db='nucleotide', term=None, retstart=0,
-            retmax=10, webenv=webenv, query_key=query_key, usehistory='y')
-        search_record = Entrez.read(esearch)
-        esearch.close()
+        handle = Entrez.esearch(db='nucleotide', term=None,
+                                retstart=0, retmax=10,
+                                webenv=webenv, query_key=query_key,
+                                usehistory='y')
+        self.assertTrue(handle.url.startswith(URL_HEAD + "esearch.fcgi?"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        search_record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(2, len(search_record['IdList']))
 
     def test_seqio_from_url(self):
         """Test Entrez into SeqIO.read from URL"""
-        efetch = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
-                retmode='text')
-        record = SeqIO.read(efetch, 'genbank')
+        handle = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
+                               retmode='text')
+        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=186972394" in handle.url)
+        record = SeqIO.read(handle, 'genbank')
+        handle.close()
         self.assertTrue(isinstance(record, SeqRecord))
         self.assertEqual('EU490707.1', record.id)
         self.assertEqual(1302, len(record))
 
     def test_medline_from_url(self):
         """Test Entrez into Medline.read from URL"""
-        efetch = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
-                retmode="text")
-        record = Medline.read(efetch)
+        handle = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
+                               retmode="text")
+        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=19304878" in handle.url)
+        record = Medline.read(handle)
+        handle.close()
         self.assertTrue(isinstance(record, dict))
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
+    def test_elink(self):
+        # Commas: Link from protein to gene
+        handle = Entrez.elink(db="gene", dbfrom="protein",
+                              id="15718680,157427902,119703751")
+        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
+        handle.close()
+
+        # Multiple ID entries: Find one-to-one links from protein to gene
+        handle = Entrez.elink(db="gene", dbfrom="protein",
+                              id=["15718680", "157427902", "119703751"])
+        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
+        self.assertTrue(URL_TOOL in handle.url)
+        self.assertTrue(URL_EMAIL in handle.url)
+        self.assertTrue("id=15718680" in handle.url, handle.url)
+        self.assertTrue("id=157427902" in handle.url, handle.url)
+        self.assertTrue("id=119703751" in handle.url, handle.url)
+        handle.close()
+
     def test_epost(self):
         handle = Entrez.epost("nuccore", id="186972394,160418")
+        self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
         handle = Entrez.epost("nuccore", id=["160418", "160351"])
+        self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

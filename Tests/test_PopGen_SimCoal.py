@@ -49,11 +49,11 @@ class AppTest(unittest.TestCase):
         """Test simcoal execution.
         """
         ctrl = SimCoalController(simcoal_dir)
-        ctrl.run_simcoal('simple.par', 50, par_dir = 'PopGen')
+        ctrl.run_simcoal('simple.par', 50, par_dir='PopGen')
         assert os.path.isdir(os.path.join('PopGen', 'simple')), \
                "Output directory not created!"
-        assert( len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
+        assert(len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

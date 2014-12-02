@@ -14,19 +14,19 @@ __docformat__ = "restructuredtext en"
 
 from Bio import File
 from Bio.Phylo import (
-                       BaseTree,
-                       NewickIO,
-                       NexusIO,
-                       PhyloXMLIO,
-                       NeXMLIO,
-                       )
+    BaseTree,
+    NewickIO,
+    NexusIO,
+    PhyloXMLIO,
+    NeXMLIO,
+)
 
 supported_formats = {
-        'newick': NewickIO,
-        'nexus': NexusIO,
-        'phyloxml': PhyloXMLIO,
-        'nexml': NeXMLIO,
-        }
+    'newick': NewickIO,
+    'nexus': NexusIO,
+    'phyloxml': PhyloXMLIO,
+    'nexml': NeXMLIO,
+}
 
 try:
     from Bio.Phylo import CDAOIO
@@ -71,7 +71,7 @@ def read(file, format, **kwargs):
         return tree
     else:
         raise ValueError(
-                "There are multiple trees in this file; use parse() instead.")
+            "There are multiple trees in this file; use parse() instead.")
 
 
 def write(trees, file, format, **kwargs):

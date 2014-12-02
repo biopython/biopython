@@ -13,7 +13,7 @@ Classes:
 Record    Contains the information from a cel file
 """
 
-#We use print in the doctests
+# We use print in the doctests
 from __future__ import print_function
 
 try:
@@ -22,6 +22,8 @@ except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Affy.CelFile")
+
+__docformat__ = "restructuredtext en"
 
 
 class Record(object):
@@ -174,7 +176,7 @@ def read(handle):
                 record.outliers[x, y] = int(1)
         elif section == "MODIFIED":
             if "NumberCells" in line:
-                record.nmodified= int(line.split("=", 1)[1])
+                record.nmodified = int(line.split("=", 1)[1])
             elif "CellHeader" in line:
                 pass
             else:
