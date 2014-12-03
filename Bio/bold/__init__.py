@@ -11,6 +11,9 @@ http://www.boldsystems.org/index.php/Resources
 
 """
 import logging
+import warnings
+
+from Bio import BiopythonExperimentalWarning
 
 from .api import call_id
 from .api import call_taxon_search
@@ -20,5 +23,11 @@ from .api import call_sequence_data
 from .api import call_full_data
 from .api import call_trace_files
 
+
+warnings.warn('Bio.bold is an experimental submodule which may undergo '
+        'significant changes prior to its future official release.',
+        BiopythonExperimentalWarning)
+
+__docformat__ = "restructuredtext en"
 
 logging.basicConfig(format='[bold module]:%(levelname)s:%(message)s', level=logging.DEBUG)
