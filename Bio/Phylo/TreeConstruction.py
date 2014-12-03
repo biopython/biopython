@@ -432,7 +432,6 @@ class DistanceCalculator(object):
             max_score2 = 0
             skip_letters = ['-', '*']
             for i in range(0, len(seq1)):
-
                 l1 = seq1[i]
                 l2 = seq2[i]
                 if l1 in skip_letters or l2 in skip_letters:
@@ -448,7 +447,7 @@ class DistanceCalculator(object):
                 score += self.scoring_matrix[l1, l2]
 
             max_score = max_score1 > max_score2 and max_score1 or max_score2
-        else:
+        else: #identity
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
                 l2 = seq2[i]
@@ -458,7 +457,15 @@ class DistanceCalculator(object):
 
         return 1 - (score * 1.0 / max_score)
 
-    def get_distance(self, msa):
+    
+    def _pairwise_multi(self,msa_combos):
+        """Calculate pairwise distance for multiple sequence tuples, used for MP"""
+        for pairwise in msa_combos:
+            seq1 = pairwise[0]
+            seq2 = pairwise[1]
+            self.dm[seq1.id,seq2.id] = self._pairwise(seq1,seq1)
+
+    def get_distance(self, msa, multi=False):
         """Return a _DistanceMatrix for MSA object, additionally,
         output distance matrix to a phylip input distance matrix
         to use with phylip programs
@@ -466,6 +473,7 @@ class DistanceCalculator(object):
         :Parameters:
             msa : MultipleSeqAlignment
                 DNA or Protein multiple sequence alignment.
+            multi - MultiProcess DistanceMatrix calculation, Defaults to False
         """
 
         if not isinstance(msa, MultipleSeqAlignment):
@@ -473,13 +481,32 @@ class DistanceCalculator(object):
 
         verbose_name = ""
         names = [s.id for s in msa]
-        dm = _DistanceMatrix(names)
-        for seq1, seq2 in itertools.combinations(msa, 2):
-            if self.verbose and (seq1.id != verbose_name):
-                print("Getting Distance From {0}".format(seq1.id))
-                verbose_name = seq1.id
-            dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
-        return dm
+        
+        '''Create DistanceMatrix Object filled with all possible names'''
+        self.dm = _DistanceMatrix(names)
+
+        for seq1,seq2 in itertools.combinations(msa,2):
+            '''If multi is selected, store combinations in memory to give to multiple processors'''
+            if multi:
+                multiprocess_list.append((seq1,seq2))
+            else:
+              if self.verbose:
+                print("Getting distance from {0} and {1}".format(seq1.id,seq2.id)
+              self.dm[seq1.id, seq2.id] = self._pairwise(seq1,seq2)
+
+        if multi:
+            multiprocess_list = []
+            jobs = []
+            from multiprocessing import Process, cpu_count
+            multiprocess_list = self.slice_list(multiprocess_list,cpu_count())
+            for seq_list in multiprocess_list:
+                p = Process(target=self._pairwise_multi,args=(seq_list,))
+                p.start()
+                jobs.append(p)
+            for job in jobs:
+                job.join()
+
+        return self.dm
 
     def convert_distance_matrix(self, dm):
         """
@@ -506,6 +533,22 @@ class DistanceCalculator(object):
             protein_matrix[aa1, aa2] = v
         return protein_matrix
 
+
+    def slice_list(self, input, size):
+        '''Slice list into equal sizes to spread accross processors'''
+        input_size = len(input)
+        slice_size = input_size / size
+        remain = input_size % size
+        result = []
+        iterator = iter(input)
+        for i in range(size):
+            result.append([])
+            for j in range(slice_size):
+                result[i].append(iterator.next())
+            if remain:
+                result[i].append(iterator.next())
+                remain -= 1
+        return result
 
 class TreeConstructor(object):
 
