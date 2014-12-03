@@ -919,6 +919,10 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
     subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpsblast", **kwargs):
+        # TODO - remove the -word_size argument as per BLAST+ 2.2.30
+        # (BLAST team say it should never have been included, since
+        # the word size is set when building the domain database.)
+        # This likely means reviewing the class hierarchy again.
         self.parameters = [
             # Query filtering options:
             _Option(["-seg", "seg"],
@@ -994,6 +998,10 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
     subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpstblastn", **kwargs):
+        # TODO - remove the -word_size argument as per BLAST+ 2.2.30
+        # (BLAST team say it should never have been included, since
+        # the word size is set when building the domain database.)
+        # This likely means reviewing the class hierarchy again.
         self.parameters = [
             # Input query options:
             _Option(["-strand", "strand"],

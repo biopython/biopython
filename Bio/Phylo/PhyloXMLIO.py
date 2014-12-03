@@ -56,6 +56,9 @@ except AttributeError:
 for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
+# Tell ElementTree how to write to text handles
+DEFAULT_ENCODING = ("unicode" if sys.version_info[0] >= 3 else "utf-8")
+
 
 class PhyloXMLError(Exception):
     """Exception raised when PhyloXML object construction cannot continue.
@@ -92,7 +95,7 @@ def parse(file):
     return Parser(file).parse()
 
 
-def write(obj, file, encoding='utf-8', indent=True):
+def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
     """Write a phyloXML file.
 
     :Parameters:
@@ -671,7 +674,7 @@ class Writer(object):
         assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
 
-    def write(self, file, encoding='utf-8', indent=True):
+    def write(self, file, encoding=DEFAULT_ENCODING, indent=True):
         if indent:
             _indent(self._tree.getroot())
         self._tree.write(file, encoding)
