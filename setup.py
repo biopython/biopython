@@ -308,6 +308,7 @@ PACKAGES = [
     'Bio.Alphabet',
     'Bio.Application',
     'Bio.Blast',
+    'Bio.bold',
     'Bio.CAPS',
     'Bio.codonalign',
     'Bio.Compass',
