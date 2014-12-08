@@ -10,10 +10,7 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "restructuredtext en"
 
-from Bio._py3k import zip
-from Bio._py3k import filter
-from Bio._py3k import basestring
-from Bio._py3k import unicode
+from Bio._py3k import basestring, filter, unicode, zip
 
 import collections
 import copy
@@ -28,12 +25,12 @@ from Bio import _utils
 # unicode. On Python 3, it's the opposite. Horrible.
 import sys
 if sys.version_info[0] < 3:
-    def reprstr(s):
+    def as_string(s):
         if isinstance(s, unicode):
             return s.encode('utf-8')
         return str(s)
 else:
-    reprstr = str
+    as_string = str
 
 
 # General tree-traversal algorithms
@@ -107,7 +104,7 @@ def _string_matcher(target):
         if isinstance(node, (Clade, Tree)):
             # Avoid triggering specialized or recursive magic methods
             return node.name == target
-        return reprstr(node) == target
+        return as_string(node) == target
     return match
 
 
@@ -247,7 +244,7 @@ class TreeElement(object):
         def pair_as_kwarg_string(key, val):
             if isinstance(val, basestring):
                 return ("%s='%s'"
-                        % (key, _utils.trim_str(reprstr(val), 60, '...')))
+                        % (key, _utils.trim_str(as_string(val), 60, '...')))
             return "%s=%s" % (key, val)
         return ('%s(%s)'
                 % (self.__class__.__name__,
@@ -966,11 +963,11 @@ class Tree(TreeElement, TreeMixin):
 
             This closes over textlines and modifies it in-place.
             """
-            if isinstance(obj, Tree):
-                # Avoid infinite recursion from str()
+            if isinstance(obj, (Tree, Clade)):
+                # Avoid infinite recursion or special formatting from str()
                 objstr = repr(obj)
             else:
-                objstr = reprstr(obj)
+                objstr = as_string(obj)
             textlines.append(TAB * indent + objstr)
             indent += 1
             for attr in obj.__dict__:
