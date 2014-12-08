@@ -26,6 +26,7 @@ EX_NEWICK_BOM = 'Nexus/ByteOrderMarkFile.nwk'
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
+EX_DIST = 'PhyloXML/distribution.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 
 
@@ -223,7 +224,7 @@ class TreeTests(unittest.TestCase):
         NB: The exact line counts are liable to change if the object
         constructors change.
         """
-        for source, count in zip((EX_APAF, EX_BCL2), (386, 747)):
+        for source, count in zip((EX_APAF, EX_BCL2, EX_DIST), (386, 747, 15)):
             tree = Phylo.read(source, 'phyloxml')
             output = str(tree)
             self.assertEqual(len(output.splitlines()), count)
