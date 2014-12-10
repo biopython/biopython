@@ -253,6 +253,24 @@ _flag = b"\xff"
 
 __docformat__ = "restructuredtext en"
 
+def _check_mode(handle):
+    '''
+    Ensures mode is not set for Universal new line
+    and ensures mode is binary for Windows
+    '''
+    mode = ''
+    if hasattr(handle,'mode'):
+        mode = str(handle.mode)
+
+    if mode and "U" in mode.upper():
+        raise ValueError("SFF files must NOT be opened in universal new "
+                         "lines mode. Binary mode is recommended (although "
+                         "on Unix the default mode is also fine).")
+    elif mode and "B" not in mode.upper() \
+            and sys.platform == "win32":
+        raise ValueError("SFF files must be opened in binary mode on Windows")
+
+
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
 
@@ -278,13 +296,7 @@ def _sff_file_header(handle):
     'TCAG'
 
     """
-    if hasattr(handle, "mode") and "U" in handle.mode.upper():
-        raise ValueError("SFF files must NOT be opened in universal new "
-                         "lines mode. Binary mode is recommended (although "
-                         "on Unix the default mode is also fine).")
-    elif hasattr(handle, "mode") and "B" not in handle.mode.upper() \
-            and sys.platform == "win32":
-        raise ValueError("SFF files must be opened in binary mode on Windows")
+    _check_mode(handle)
     # file header (part one)
     # use big endiean encdoing   >
     # magic_number               I
@@ -1009,11 +1021,7 @@ class SffWriter(SequenceWriter):
             - xml - Optional string argument, xml manifest to be recorded in the index
               block (see function ReadRocheXmlManifest for reading this data).
         """
-        if hasattr(handle, "mode") and "U" in handle.mode.upper():
-            raise ValueError("SFF files must NOT be opened in universal new "
-                             "lines mode. Binary mode is required")
-        elif hasattr(handle, "mode") and "B" not in handle.mode.upper():
-            raise ValueError("SFF files must be opened in binary mode")
+        _check_mode(handle)
         self.handle = handle
         self._xml = xml
         if index:
