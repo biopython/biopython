@@ -253,13 +253,16 @@ _flag = b"\xff"
 
 __docformat__ = "restructuredtext en"
 
+
 def _check_mode(handle):
-    '''
+    """Ensure handle not opened in text mode.
+
     Ensures mode is not set for Universal new line
     and ensures mode is binary for Windows
-    '''
-    mode = ''
-    if hasattr(handle,'mode'):
+    """
+    # TODO - Does this need to be stricted under Python 3?
+    mode = ""
+    if hasattr(handle, "mode"):
         mode = str(handle.mode)
 
     if mode and "U" in mode.upper():
