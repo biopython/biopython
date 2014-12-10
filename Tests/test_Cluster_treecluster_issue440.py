@@ -219,13 +219,13 @@ class ClusterTree:
             dist='e', # Euclidean distance is the Bio.Cluster.treecluster default 
             method=method)
         # Reformat tree for easier printing in various formats
-        # The following 3 values are set by set_hier_list():
-        self.max_level = None
+        # The following 3 values are set by set_hier_info():
         self.hier_list = []
+        self.max_level = None
         self.actual_clusters = [] # Clusters found by treecluster
-        self.set_hier_info(names)
+        self._set_hier_info(names)
 
-    def set_hier_info(self, names):
+    def _set_hier_info(self, names):
         """Get the hierarchy."""
         # Assume top-level node is the last node in the treecluster list
         self._set_hier_list(names, -1*len(self.tree), level=1)
