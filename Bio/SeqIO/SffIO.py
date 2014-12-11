@@ -260,10 +260,14 @@ def _check_mode(handle):
     Ensures mode is not set for Universal new line
     and ensures mode is binary for Windows
     """
-    # TODO - Does this need to be stricted under Python 3?
+    # TODO - Does this need to be stricter under Python 3?
     mode = ""
     if hasattr(handle, "mode"):
-        mode = str(handle.mode)
+        mode = handle.mode
+        if mode == 1:
+            # gzip.open(...) does this, fine                
+            return
+        mode = str(mode)
 
     if mode and "U" in mode.upper():
         raise ValueError("SFF files must NOT be opened in universal new "
