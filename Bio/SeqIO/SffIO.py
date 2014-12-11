@@ -265,7 +265,7 @@ def _check_mode(handle):
     if hasattr(handle, "mode"):
         mode = handle.mode
         if mode == 1:
-            # gzip.open(...) does this, fine                
+            # gzip.open(...) does this, fine
             return
         mode = str(mode)
 
