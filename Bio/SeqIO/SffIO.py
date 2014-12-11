@@ -269,7 +269,7 @@ def _check_mode(handle):
         raise ValueError("SFF files must NOT be opened in universal new "
                          "lines mode. Binary mode is recommended (although "
                          "on Unix the default mode is also fine).")
-    elif mode and "B" not in mode.upper() \
+    elif mode and not mode == '1' and "B" not in mode.upper() \
             and sys.platform == "win32":
         raise ValueError("SFF files must be opened in binary mode on Windows")
 

@@ -84,8 +84,53 @@ class TestUAN(unittest.TestCase):
         for record in self.records:
             self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
 
+class TestCheckMode(unittest.TestCase):
+    def setUp(self):
+        self.sfffile = 'Roche/E3MFGYR02_random_10_reads.sff.gz'
+        self.gz_sfffile = 'Roche/E3MFGYR02_random_10_reads.sff.gz'
+        # Save platform
+        import sys
+        self.platform = sys.platform
 
-class TestConcatenated(unittest.TestCase):
+    def tearDown(self):
+        # Reset platform
+        import sys
+        sys.platform = self.platform
+        SeqIO.SffIO.sys.platform = self.platform
+
+    def test_ensures_not_opened_universal_newline(self):
+        fh = open(self.sfffile,'rU')
+        try:
+            r = list(SeqIO.parse(fh,'sff'))
+            self.assertTrue(False, 'Did not raise ValueError')
+        except ValueError:
+            self.assertTrue(True)
+        fh.close()
+
+    def test_ensures_opened_in_binary_mode_win32(self):
+        SeqIO.SffIO.sys.platform = 'win32'
+        fh = open(self.sfffile,'r')
+        try:
+            r = list(SeqIO.parse(fh,'sff'))
+            self.assertTrue(False, 'Did not raise ValueError')
+        except ValueError:
+            self.assertTrue(True)
+        fh.close()
+
+    def test_handles_gzip_file_mode_win32(self):
+        # Gzip has 1 for read, 2 for write
+        # both are binary by default
+        platform = SeqIO.SffIO.sys.platform
+        SeqIO.SffIO.sys.platform = 'win32'
+        import gzip
+        count = 0
+        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz",'r')
+        for record in SeqIO.parse(fh, 'sff'):
+            count += 1
+        self.assertEqual(10, count)
+        fh.close()
+        SeqIO.SffIO.sys.platform = platform
+
     def test_parses_gzipped_stream(self):
         import gzip
         count = 0
@@ -93,7 +138,9 @@ class TestConcatenated(unittest.TestCase):
         for record in SeqIO.parse(fh, 'sff'):
             count += 1
         self.assertEqual(10, count)
-        
+        fh.close()
+
+class TestConcatenated(unittest.TestCase):
     def test_parse1(self):
         count = 0
         caught = False
