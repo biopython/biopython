@@ -27,12 +27,20 @@ import sys
 import os
 import shutil
 
-from distutils.core import setup
-from distutils.core import Command
-from distutils.command.install import install
-from distutils.command.build_py import build_py
-from distutils.command.build_ext import build_ext
-from distutils.extension import Extension
+try:
+    from setuptools import setup
+    from setuptools import Command
+    from setuptools.command.install import install
+    from setuptools.command.build_py import build_py
+    from setuptools.command.build_ext import build_ext
+    from setuptools import Extension
+except ImportError:
+    from distutils.core import setup
+    from distutils.core import Command
+    from distutils.command.install import install
+    from distutils.command.build_py import build_py
+    from distutils.command.build_ext import build_ext
+    from distutils.extension import Extension
 
 _CHECKED = None
 
