@@ -311,7 +311,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
         Arguments:
         o id - string, atom name
         """
-        self.last_occupancy=-1
+        self.last_occupancy=-999999
         DisorderedEntityWrapper.__init__(self, id)
 
     # Special methods
