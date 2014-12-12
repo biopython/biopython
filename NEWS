@@ -45,6 +45,9 @@ less fragile, so that they can be used from other working directories. NOTE:
 This change is backward compatible (old index files work as before), however
 relative paths in new indexes will not work on older versions of Biopython!
 
+Biopython also seems to work fine under PyPy3 2.4 which implements Python 3.2
+plus unicode string literals.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
