@@ -188,6 +188,12 @@ class PDBParser(object):
                     self._handle_PDB_exception("Invalid or missing occupancy",
                                                global_line_counter)
                     occupancy = None  # Rather than arbitrary zero or one
+                if occupancy is not None and occupancy < 0:
+                    # TODO - Should this be an error in strict mode?
+                    # self._handle_PDB_exception("Negative occupancy",
+                    #                            global_line_counter)
+                    # This uses fixed text so the warning occurs once only:
+                    warnings.warn("Negative occupancy in one or more atoms", PDBConstructionWarning)
                 try:
                     bfactor = float(line[60:66])
                 except:
