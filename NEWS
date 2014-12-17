@@ -10,6 +10,12 @@ The latest news is at the top of this file.
 
 ===================================================================
 
+(In progress, not yet released) Biopython 1.66
+
+Nothing to report so far...
+
+===================================================================
+
 17 December 2014: Biopython 1.65 released.
 
 The Biopython sequence objects now use string comparison, rather than Python's
