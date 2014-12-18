@@ -1316,8 +1316,12 @@ While for small searches you might be OK downloading everything at once, it is b
 For example,
 
 \begin{verbatim}
-from Bio._py3k import HTTPError
+from Bio import Entrez
 import time
+try:
+    from urllib.error import HTTPError  # for Python 3
+except ImportError:
+    from urllib2 import HTTPError  # for Python 2
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0, count, batch_size):
@@ -1350,8 +1354,11 @@ Here is another history example, searching for papers published in the last year
 
 \begin{verbatim}
 from Bio import Entrez
-from Bio._py3k import HTTPError
 import time
+try:
+from urllib.error import HTTPError  # for Python 3
+except ImportError:
+from urllib2 import HTTPError  # for Python 2
 Entrez.email = "history.user@example.com"
 search_results = Entrez.read(Entrez.esearch(db="pubmed",
                                             term="Opuntia[ORGN]",
