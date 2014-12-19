@@ -26,16 +26,22 @@ from Bio._py3k import urlopen as _urlopen
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
 
-def hexdarken(hexcolor, factor=0.7):
-    """Returns darkened hex color as a ReportLab RGB color.
+def darken(color, factor=0.7):
+    """Returns darkened color as a ReportLab RGB color.
 
-    Take a passed hex color and return an RGB color that is
-    slightly darker (if possible).
+    Take a passed color (hex or RGB) and returns an RGB color that is
+    slightly darker (if possible). If not, returns the originally
+    passed color.
     """
-    c = colors.HexColor(hexcolor)
-    for a in ['red', 'green', 'blue']:
-        setattr(c, a, factor * getattr(c, a))
-    return c
+    # We've got an RGB tuple
+    if not type(color) == type("str"):
+        return tuple([factor*i for i in color])
+    elif color.startswith('#'): # We have hex colour
+        c = colors.HexColor(color)
+        for a in ['red', 'green', 'blue']:
+            setattr(c, a, factor * getattr(c, a))
+        return c
+    return color
 
 
 def get_temp_imagefilename(url):
@@ -61,9 +67,8 @@ class KGMLCanvas(object):
                  label_orthologs=True, label_reaction_entries=True,
                  label_maps=True, show_maps=False, fontname='Helvetica',
                  fontsize=6, draw_relations=True, show_orthologs=True,
-                 show_compounds=True, show_genes=True,
-                 show_reaction_entries=True,
-                 margins=(0.02, 0.02)):
+                 show_compounds=True, show_genes=True, 
+                 show_reaction_entries=True, margins=(0.02, 0.02)):
         self.pathway = pathway
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs
@@ -242,7 +247,7 @@ class KGMLCanvas(object):
                 if self.label_orthologs:
                     # We want the label color to be slightly darker
                     # (where possible), so it can be read
-                    self.drawing.setFillColor(hexdarken(g.fgcolor))
+                    self.drawing.setFillColor(darken(g.fgcolor))
                     self.__add_labels(g)
 
     def __add_reaction_entries(self):
@@ -259,7 +264,7 @@ class KGMLCanvas(object):
                 if self.label_reaction_entries:
                     # We want the label color to be slightly darker
                     # (where possible), so it can be read
-                    self.drawing.setFillColor(hexdarken(g.fgcolor))
+                    self.drawing.setFillColor(darken(g.fgcolor))
                     self.__add_labels(g)
 
     def __add_compounds(self):
@@ -291,7 +296,7 @@ class KGMLCanvas(object):
                 self.drawing.setFillColor(fillcolor)
                 self.__add_graphics(g)
                 if self.label_compounds:
-                    self.drawing.setFillColor(hexdarken(g.fgcolor))
+                    self.drawing.setFillColor(darken(g.fgcolor))
                     self.__add_labels(g)
 
     def __add_relations(self):
