@@ -62,12 +62,14 @@ class KGMLCanvas(object):
                  label_maps=True, show_maps=False, fontname='Helvetica',
                  fontsize=6, draw_relations=True, show_orthologs=True,
                  show_compounds=True, show_genes=True,
+                 show_reaction_entries=True,
                  margins=(0.02, 0.02)):
         self.pathway = pathway
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs
         self.show_compounds = show_compounds
         self.show_genes = show_genes
+        self.show_reaction_entries = show_reaction_entries
         self.label_compounds = label_compounds
         self.label_orthologs = label_orthologs
         self.label_reaction_entries = label_reaction_entries
@@ -122,7 +124,8 @@ class KGMLCanvas(object):
         # By default, they're slightly transparent.
         if self.show_maps:
             self.__add_maps()
-        self.__add_reaction_entries()
+        if self.show_reaction_entries:
+            self.__add_reaction_entries()
         if self.show_orthologs:
             self.__add_orthologs()
         if self.show_compounds:
