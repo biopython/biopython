@@ -1356,9 +1356,9 @@ Here is another history example, searching for papers published in the last year
 from Bio import Entrez
 import time
 try:
-from urllib.error import HTTPError  # for Python 3
+    from urllib.error import HTTPError  # for Python 3
 except ImportError:
-from urllib2 import HTTPError  # for Python 2
+    from urllib2 import HTTPError  # for Python 2
 Entrez.email = "history.user@example.com"
 search_results = Entrez.read(Entrez.esearch(db="pubmed",
                                             term="Opuntia[ORGN]",
