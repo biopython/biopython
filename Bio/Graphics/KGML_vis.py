@@ -45,7 +45,7 @@ def get_temp_imagefilename(url):
     and return the filename.
     """
     img = _urlopen(url).read()
-    im = Image.open(BtyesIO(img))
+    im = Image.open(BytesIO(img))
     # im.transpose(Image.FLIP_TOP_BOTTOM)
     f = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
     fname = f.name
