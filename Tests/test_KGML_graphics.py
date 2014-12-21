@@ -89,7 +89,7 @@ class KGMLPathwayTest(unittest.TestCase):
     def test_render_KGML_basic(self):
         """ Basic rendering of KGML: write to PDF without modification.
         """
-        # We test rendering of both the original KEGG KGML using only local
+        # We test rendering of the original KEGG KGML using only local
         # files.
         for p in self.data:
             with open(p.infilename, 'rU') as f:
@@ -98,6 +98,23 @@ class KGMLPathwayTest(unittest.TestCase):
                 kgml_map = KGMLCanvas(pathway)
                 kgml_map.import_imagemap = p.show_pathway_image
                 kgml_map.draw(p.output_stem + '_original.pdf')
+
+    def test_render_KGML_import_map(self):
+        """ Basic rendering of KGML: use imported imagemap
+
+            Uses the URL indicated in the .xml file.
+
+            This test may fail if the imagemap is not available (e.g. if
+            there is not web connection), and may look odd if the remote
+            imagemap has changed since the local KGML file was 
+            downloaded.
+        """
+        # We test rendering of the original KEGG KGML using imported files
+        for p in self.data:
+            with open(p.infilename, 'rU') as f:
+                pathway = read(f)
+                kgml_map = KGMLCanvas(pathway, import_imagemap=True)
+                kgml_map.draw(p.output_stem + '_importmap.pdf')
 
     def test_render_KGML_modify(self):
         """ Rendering of KGML to PDF, with modification.
