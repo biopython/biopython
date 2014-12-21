@@ -565,13 +565,13 @@ class Graphics(object):
         """Return the Graphics as a valid KGML element."""
         # The root is this Component element
         graphics = ET.Element('graphics')
-        if isinstance(self.fgcolor, str):
+        if isinstance(self.fgcolor, str):  # Assumes that string is hexstring
             fghex = self.fgcolor
-        else:
+        else:  # Assumes ReportLab Color object
             fghex = '#' + self.fgcolor.hexval()[2:]
-        if isinstance(self.bgcolor, str):
+        if isinstance(self.bgcolor, str):  # Assumes that string is hexstring
             bghex = self.bgcolor
-        else:
+        else:  # Assumes ReportLab Color object
             bghex = '#' + self.bgcolor.hexval()[2:]
         graphics.attrib = {'name': self.name,
                            'type': self.type,
