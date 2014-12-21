@@ -24,7 +24,7 @@ try:
     from reportlab.lib.pagesizes import A4
 except ImportError:
     raise MissingExternalDependencyError(
-            "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.")
 
 # Do we have PIL?
 try:
@@ -38,6 +38,8 @@ except ImportError:
 # Biopython Bio.KEGG.KGML
 from Bio.KEGG.KGML.KGML_parser import read
 from Bio.Graphics.KGML_vis import KGMLCanvas
+
+__docformat__ = "restructuredtext en"
 
 
 class PathwayData(object):
@@ -73,19 +75,22 @@ class KGMLPathwayTest(unittest.TestCase):
         # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
         self.ko_ids = \
-            set(['ko:K00239','ko:K00240','ko:K00241','ko:K00242','ko:K00244',
-                 'ko:K00245','ko:K00246','ko:K00247','ko:K00174','ko:K00175',
-                 'ko:K00177','ko:K00176','ko:K00382','ko:K00164','ko:K00164',
-                 'ko:K00658','ko:K01902','ko:K01903','ko:K01899','ko:K01900',
-                 'ko:K01899','ko:K01900','ko:K00031','ko:K00030','ko:K00031',
-                 'ko:K01648','ko:K00234','ko:K00235','ko:K00236','ko:K00237',
-                 'ko:K01676','ko:K01677','ko:K01678','ko:K01679','ko:K01681',
-                 'ko:K01682','ko:K01681','ko:K01682','ko:K01647','ko:K00025',
-                 'ko:K00026','ko:K00024','ko:K01958','ko:K01959','ko:K01960',
-                 'ko:K00163','ko:K00161','ko:K00162','ko:K00163','ko:K00161',
-                 'ko:K00162','ko:K00382','ko:K00627','ko:K00169','ko:K00170',
-                 'ko:K00172','ko:K00171','ko:K01643','ko:K01644','ko:K01646',
-                 'ko:K01610','ko:K01596'])
+            set(['ko:K00239', 'ko:K00240', 'ko:K00241', 'ko:K00242',
+                 'ko:K00244', 'ko:K00245', 'ko:K00246', 'ko:K00247',
+                 'ko:K00174', 'ko:K00175', 'ko:K00177', 'ko:K00176',
+                 'ko:K00382', 'ko:K00164', 'ko:K00164', 'ko:K00658',
+                 'ko:K01902', 'ko:K01903', 'ko:K01899', 'ko:K01900',
+                 'ko:K01899', 'ko:K01900', 'ko:K00031', 'ko:K00030',
+                 'ko:K00031', 'ko:K01648', 'ko:K00234', 'ko:K00235',
+                 'ko:K00236', 'ko:K00237', 'ko:K01676', 'ko:K01677',
+                 'ko:K01678', 'ko:K01679', 'ko:K01681', 'ko:K01682',
+                 'ko:K01681', 'ko:K01682', 'ko:K01647', 'ko:K00025',
+                 'ko:K00026', 'ko:K00024', 'ko:K01958', 'ko:K01959',
+                 'ko:K01960', 'ko:K00163', 'ko:K00161', 'ko:K00162',
+                 'ko:K00163', 'ko:K00161', 'ko:K00162', 'ko:K00382',
+                 'ko:K00627', 'ko:K00169', 'ko:K00170', 'ko:K00172',
+                 'ko:K00171', 'ko:K01643', 'ko:K01644', 'ko:K01646',
+                 'ko:K01610', 'ko:K01596'])
 
     def test_render_KGML_basic(self):
         """Basic rendering of KGML: write to PDF without modification."""
@@ -106,8 +111,7 @@ class KGMLPathwayTest(unittest.TestCase):
 
         This test may fail if the imagemap is not available (e.g. if
         there is not web connection), and may look odd if the remote
-        imagemap has changed since the local KGML file was 
-        downloaded.
+        imagemap has changed since the local KGML file was downloaded.
         """
         # We test rendering of the original KEGG KGML using imported files
         for p in self.data:
@@ -124,7 +128,7 @@ class KGMLPathwayTest(unittest.TestCase):
         with open(p[0].infilename) as f:
             pathway = read(f)
             mod_rs = [e for e in pathway.orthologs if
-                    len(set(e.name.split()).intersection(self.ko_ids))]
+                      len(set(e.name.split()).intersection(self.ko_ids))]
             for r in mod_rs:
                 for g in r.graphics:
                     g.width = 10
