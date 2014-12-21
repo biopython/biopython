@@ -41,8 +41,7 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 
 
 class PathwayData(object):
-    """ Convenience structure for testing pathway data
-    """
+    """Convenience structure for testing pathway data"""
     def __init__(self, name, element_counts, show_pathway_image=False):
         self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
         self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
@@ -53,8 +52,10 @@ class PathwayData(object):
 
 
 class KGMLPathwayTest(unittest.TestCase):
-    """ Import the ko01100 metabolic map from a local .xml KGML file, and from
-        the KEGG site, and write valid KGML output for each
+    """Import XML file and write KGML
+
+    Import the ko01100 metabolic map from a local .xml KGML file, and from
+    the KEGG site, and write valid KGML output for each
     """
     def setUp(self):
         # Does our output director exist?  If not, create it
@@ -87,8 +88,7 @@ class KGMLPathwayTest(unittest.TestCase):
                  'ko:K01610','ko:K01596'])
 
     def test_render_KGML_basic(self):
-        """ Basic rendering of KGML: write to PDF without modification.
-        """
+        """Basic rendering of KGML: write to PDF without modification."""
         # We test rendering of the original KEGG KGML using only local
         # files.
         for p in self.data:
@@ -100,14 +100,14 @@ class KGMLPathwayTest(unittest.TestCase):
                 kgml_map.draw(p.output_stem + '_original.pdf')
 
     def test_render_KGML_import_map(self):
-        """ Basic rendering of KGML: use imported imagemap
+        """Basic rendering of KGML: use imported imagemap
 
-            Uses the URL indicated in the .xml file.
+        Uses the URL indicated in the .xml file.
 
-            This test may fail if the imagemap is not available (e.g. if
-            there is not web connection), and may look odd if the remote
-            imagemap has changed since the local KGML file was 
-            downloaded.
+        This test may fail if the imagemap is not available (e.g. if
+        there is not web connection), and may look odd if the remote
+        imagemap has changed since the local KGML file was 
+        downloaded.
         """
         # We test rendering of the original KEGG KGML using imported files
         for p in self.data:
@@ -117,8 +117,7 @@ class KGMLPathwayTest(unittest.TestCase):
                 kgml_map.draw(p.output_stem + '_importmap.pdf')
 
     def test_render_KGML_modify(self):
-        """ Rendering of KGML to PDF, with modification.
-        """
+        """Rendering of KGML to PDF, with modification."""
         # We test rendering of the original KGML for KO01100,
         # modifying line width for the lipid pathway
         p = self.data
