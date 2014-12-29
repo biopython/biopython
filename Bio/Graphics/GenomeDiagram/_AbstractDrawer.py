@@ -44,7 +44,7 @@ from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.graphics.shapes import *
 
-from math import pi
+from math import pi, sin, cos
 
 __docformat__ = "restructuredtext en"
 
