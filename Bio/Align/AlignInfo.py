@@ -445,7 +445,7 @@ class SummaryInfo(object):
     def information_content(self, start=0,
                             end=None,
                             e_freq_table=None, log_base=2,
-                            chars_to_ignore=[]):
+                            chars_to_ignore=None):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
@@ -461,8 +461,8 @@ class SummaryInfo(object):
               included, since these should not have expected frequencies.
             - log_base - The base of the logathrim to use in calculating the
               information content. This defaults to 2 so the info is in bits.
-            - chars_to_ignore - A listing of characterw which should be ignored
-              in calculating the info content.
+            - chars_to_ignore - A listing of characters which should be ignored
+              in calculating the info content. Defaults to none.
 
         Returns:
             - A number representing the info content for the specified region.
@@ -473,6 +473,8 @@ class SummaryInfo(object):
         # if no end was specified, then we default to the end of the sequence
         if end is None:
             end = len(self.alignment._records[0].seq)
+        if chars_to_ignore is None:
+            chars_to_ignore = []
 
         if start < 0 or end > len(self.alignment._records[0].seq):
             raise ValueError("Start (%s) and end (%s) are not in the \
