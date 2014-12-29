@@ -574,6 +574,11 @@ The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
 Release 1.53. The class Parser in Bio.SCOP.Dom was removed in Release 1.55
 final. The class Iterator in Bio.SCOP.Dom was removed in Release 1.56.
 
+Dictionary to_one_letter_code in module Bio.SCOP.three_to_one_dict was moved
+to protein_letters_3to1 in module Bio.Data.SCOPData in Release 1.62. The old
+alias was preserved with a deprecation warning, until it was removed in
+Release 1.66.
+
 Bio.utils
 =========
 Functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
