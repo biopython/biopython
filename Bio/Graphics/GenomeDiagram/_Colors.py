@@ -126,29 +126,27 @@ class ColorTranslator(object):
                     raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
 
     def get_artemis_colorscheme(self):
-        """ get_artemis_colorscheme(self)
-
-            Return the Artemis color scheme as a dictionary
-        """
+        """Return the Artemis color scheme as a dictionary."""
         return self._artemis_colorscheme
 
     def artemis_color(self, value):
-        """ artemis_color(self, value)
+        """Artemis color (integer) to ReportLab Color object.
 
-            o value     An int representing a functional class in the Artemis
-                        color scheme (see www.sanger.ac.uk for a description),
-                        or a string from a GenBank feature annotation for the
-                        color which may be dot delimited (in which case the
-                        first value is used).
+        Arguments:
+         - value: An int representing a functional class in the Artemis
+           color scheme (see www.sanger.ac.uk for a description),
+           or a string from a GenBank feature annotation for the
+           color which may be dot delimited (in which case the
+           first value is used).
 
-            Takes an int representing a functional class in the Artemis color
-            scheme, and returns the appropriate colors.Color object
+        Takes an int representing a functional class in the Artemis color
+        scheme, and returns the appropriate colors.Color object
         """
         try:
             value = int(value)
         except ValueError:
-            if value.count('.'):                           # dot-delimited
-                value = int(artemis_color.split('.', 1)[0])  # Use only first integer
+            if value.count('.'):  # dot-delimited
+                value = int(value.split('.', 1)[0])  # Use only first integer
             else:
                 raise
         if value in self._artemis_colorscheme:
@@ -157,10 +155,7 @@ class ColorTranslator(object):
             raise ValueError("Artemis color out of range: %d" % value)
 
     def get_colorscheme(self):
-        """ get_colorscheme(self)
-
-            Return the user-defined color scheme as a dictionary
-        """
+        """Return the user-defined color scheme as a dictionary."""
         return self._colorscheme
 
     def scheme_color(self, value):
@@ -187,7 +182,7 @@ class ColorTranslator(object):
             0 -> 255 and returns an appropriate colors.Color object
         """
         red, green, blue = values
-        factor = 1/255.
+        factor = 1 / 255.
         red, green, blue = red * factor, green * factor, blue * factor
         return colors.Color(red, green, blue)
 
