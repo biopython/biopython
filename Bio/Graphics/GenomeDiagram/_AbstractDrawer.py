@@ -42,7 +42,7 @@ from Bio._py3k import range
 
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
-from reportlab.graphics.shapes import *
+from reportlab.graphics.shapes import Polygon
 
 from math import pi, sin, cos
 
