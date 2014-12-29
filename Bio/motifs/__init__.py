@@ -151,9 +151,11 @@ class Instances(list):
     """
     A class representing instances of sequence motifs.
     """
-    def __init__(self, instances=[], alphabet=None):
+    def __init__(self, instances=None, alphabet=None):
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
+        if instances is None:
+            instances = []
         self.length = None
         for instance in instances:
             if self.length is None:
