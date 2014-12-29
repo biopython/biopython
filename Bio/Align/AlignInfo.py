@@ -216,7 +216,7 @@ class SummaryInfo(object):
                 a = Alphabet.single_letter_alphabet
         return a
 
-    def replacement_dictionary(self, skip_chars=[]):
+    def replacement_dictionary(self, skip_chars=None):
         """Generate a replacement dictionary to plug into a substitution matrix
 
         This should look at an alignment, and be able to generate the number
@@ -246,7 +246,8 @@ class SummaryInfo(object):
         up with the replacement dictionary.
 
         Arguments:
-            - skip_chars - A list of characters to skip when creating the dictionary.
+         - skip_chars - A list of characters to skip when creating the dictionary.
+           This defaults to an empty list.
 
         For instance, you might have Xs (screened stuff) or Ns, and not want
         to include the ambiguity characters in the dictionary.
@@ -329,7 +330,7 @@ class SummaryInfo(object):
             all_letters = "".join(list_letters)
         return all_letters
 
-    def _get_base_replacements(self, skip_items=[]):
+    def _get_base_replacements(self, skip_items=None):
         """Get a zeroed dictionary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
@@ -342,8 +343,10 @@ class SummaryInfo(object):
               (Right now the only thing I can imagine in this list is gap
               characters, but maybe X's or something else might be useful later.
               This will also include any characters that are specified to be
-              skipped.)
+              skipped.) Defaults to an empty list.
         """
+        if skip_items is None:
+            skip_items = []
         base_dictionary = {}
         all_letters = self._get_all_letters()
 
@@ -363,14 +366,14 @@ class SummaryInfo(object):
         return base_dictionary, skip_items
 
     def pos_specific_score_matrix(self, axis_seq=None,
-                                  chars_to_ignore=[]):
+                                  chars_to_ignore=None):
         """Create a position specific score matrix object for the alignment.
 
         This creates a position specific score matrix (pssm) which is an
         alternative method to look at a consensus sequence.
 
         Arguments:
-            - chars_to_ignore - A listing of all characters not to include in
+            - chars_to_ignore - A list of all characters not to include in
               the pssm.  If the alignment alphabet declares a gap character,
               then it will be excluded automatically.
             - axis_seq - An optional argument specifying the sequence to
@@ -385,6 +388,8 @@ class SummaryInfo(object):
         all_letters = self._get_all_letters()
         assert all_letters
 
+        if chars_to_ignore is None:
+            chars_to_ignore = []
         if not isinstance(chars_to_ignore, list):
             raise TypeError("chars_to_ignore should be a list.")
 

@@ -1674,7 +1674,9 @@ def _re_search(regex, line, error_msg):
     return m.groups()
 
 
-def _get_cols(line, cols_to_get, ncols=None, expected={}):
+def _get_cols(line, cols_to_get, ncols=None, expected=None):
+    if expected is None:
+        expected = {}
     cols = line.split()
 
     # Check to make sure number of columns is correct

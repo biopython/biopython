@@ -409,7 +409,7 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params={}, post=False):
+def _open(cgi, params=None, post=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
@@ -419,6 +419,8 @@ def _open(cgi, params={}, post=False):
     This function also enforces the "up to three queries per second rule"
     to avoid abusing the NCBI servers.
     """
+    if params is None:
+        params = {}
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries
     delay = 0.333333334

@@ -132,7 +132,7 @@ class DistributionPage(object):
 class BarChartDistribution(object):
     """Display the distribution of values as a bunch of bars."""
 
-    def __init__(self, display_info=[]):
+    def __init__(self, display_info=None):
         """Initialize a Bar Chart display of distribution info.
 
         Class attributes:
@@ -141,6 +141,8 @@ class BarChartDistribution(object):
            This should be ordered as a list of lists, where each internal list
            is a data set to display in the bar chart.
         """
+        if display_info is None:
+            display_info = []
         self.display_info = display_info
 
         self.x_axis_title = ""
