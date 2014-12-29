@@ -14,7 +14,7 @@
 # ReportLab imports
 from __future__ import print_function
 
-from reportlab.graphics.shapes import *
+from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Polygon
 from reportlab.lib import colors
 from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
