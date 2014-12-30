@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 #
-# Copyright 2013 by Leighton Pritchard.  All rights reserved.
+# Copyright 2013, 2014 by Leighton Pritchard.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Tests for general functionality of the KGML parser, pathway and
-    visualisation modules
-"""
+"""Tests for general functionality of the KGML modules."""
 
 # Builtins
 from __future__ import with_statement
@@ -56,11 +54,11 @@ class PathwayData(object):
 class KGMLPathwayTest(unittest.TestCase):
     """Import XML file and write KGML
 
-    Import the ko01100 metabolic map from a local .xml KGML file, and from
-    the KEGG site, and write valid KGML output for each
+    Import the ko01100 metabolic map from a local .xml KGML file, 
+    and write valid KGML output for each
     """
     def setUp(self):
-        # Does our output director exist?  If not, create it
+        # Does our output directory exist?  If not, create it
         if not os.path.isdir('KEGG'):
             os.mkdir('KEGG')
         # Define some data to work with as a list of tuples:
