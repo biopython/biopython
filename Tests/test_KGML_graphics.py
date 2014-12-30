@@ -42,6 +42,8 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 __docformat__ = "restructuredtext en"
 
 
+# The PathwayData class is also imported by the online test module in
+# test_KGML_graphics_online.py
 class PathwayData(object):
     """Convenience structure for testing pathway data"""
     def __init__(self, name, element_counts, show_pathway_image=False):
