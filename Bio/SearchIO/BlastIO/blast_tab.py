@@ -373,6 +373,8 @@ class BlastTabParser(object):
         qres_state = None
         hit_state = None
         file_state = None
+        cur_qid = None
+        cur_hid = None
         # dummies for initial id caches
         prev_qid = None
         prev_hid = None

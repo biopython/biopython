@@ -318,6 +318,7 @@ class _BaseExonerateParser(object):
         # initial dummies
         qres_state, hit_state = None, None
         file_state = None
+        cur_qid, cur_hid = None, None
         prev_qid, prev_hid = None, None
         cur, prev = None, None
         hit_list, hsp_list = [], []

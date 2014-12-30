@@ -389,6 +389,7 @@ class FastaM10Parser(object):
             if self.line.startswith('>>'):
                 break
 
+        state = _STATE_NONE
         strand = None
         hsp_list = []
         while True:

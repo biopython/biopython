@@ -457,6 +457,7 @@ class BlatPslParser(object):
         # initial dummy values
         qres_state = None
         file_state = None
+        cur_qid, cur_hid = None, None
         prev_qid, prev_hid = None, None
         cur, prev = None, None
         hit_list, hsp_list = [], []
