@@ -5,9 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Tests for general functionality of the KGML parser, pathway and
-    visualisation modules
-"""
+"""Tests for general functionality of the KGML modules."""
 
 # Builtins
 from __future__ import with_statement
