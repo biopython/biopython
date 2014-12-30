@@ -232,7 +232,7 @@ class BlastTabParser(object):
         # we want to transform 'std' to its proper column names
         if 'std' in fields:
             idx = fields.index('std')
-            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx+1:]
+            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx + 1:]
         # if set(fields) has a null intersection with minimum required
         # fields for hit and query, raise an exception
         if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
