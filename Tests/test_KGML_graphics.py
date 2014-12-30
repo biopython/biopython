@@ -60,7 +60,7 @@ class KGMLPathwayTest(unittest.TestCase):
     and write valid KGML output for each
     """
     def setUp(self):
-        # Does our output director exist?  If not, create it
+        # Does our output directory exist?  If not, create it
         if not os.path.isdir('KEGG'):
             os.mkdir('KEGG')
         # Define some data to work with as a list of tuples:
