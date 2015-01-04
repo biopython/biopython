@@ -708,7 +708,7 @@ class Nexus(object):
         if 'symbols' in options:
             self.symbols = options['symbols']
             if (self.symbols.startswith('"') and self.symbols.endswith('"')) or\
-            (self.symbold.startswith("'") and self.symbols.endswith("'")):
+            (self.symbols.startswith("'") and self.symbols.endswith("'")):
                 self.symbols = self.symbols[1:-1].replace(' ', '')
             if not self.respectcase:
                 self.symbols = self.symbols.lower() + self.symbols.upper()
