@@ -245,10 +245,13 @@ def quotestrip(word):
     return word
 
 
-def get_start_end(sequence, skiplist=['-', '?']):
+def get_start_end(sequence, skiplist=None):
     """Return position of first and last character which is not in skiplist.
 
-    Skiplist defaults to ['-','?'])."""
+    Skiplist defaults to ['-','?'].
+    """
+    if skiplist is None:
+        skiplist = ["-", "?"]
 
     length = len(sequence)
     if length == 0:
