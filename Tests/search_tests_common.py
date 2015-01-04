@@ -14,7 +14,6 @@ try:
 except ImportError:
     sqlite3 = None
 
-from Bio import SearchIO
 from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
