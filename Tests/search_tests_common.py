@@ -26,8 +26,8 @@ with warnings.catch_warnings():
 
 
 class CheckRaw(unittest.TestCase):
-
     """Base class for testing index's get_raw method."""
+    fmt = None  # define this in subclasses!
 
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using **kwargs, check get_raw(id)==raw."""
@@ -53,7 +53,6 @@ class CheckRaw(unittest.TestCase):
 
 
 class CheckIndex(unittest.TestCase):
-
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
