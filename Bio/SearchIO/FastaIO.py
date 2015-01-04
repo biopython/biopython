@@ -153,10 +153,10 @@ _STATE_HIT_BLOCK = 2
 _STATE_CONS_BLOCK = 3
 
 
-def _set_qresult_hits(qresult, hit_rows=[]):
+def _set_qresult_hits(qresult, hit_rows):
     """Helper function for appending Hits without alignments into QueryResults."""
     for hit_row in hit_rows:
-        hit_id, remainder = hit_row.split(' ', 1)
+        hit_id, _ = hit_row.split(' ', 1)
         # TODO: parse hit and hsp properties properly; by dealing with:
         #   - any character in the description (brackets, spaces, etc.)
         #   - possible [f] or [r] presence (for frame info)
@@ -267,7 +267,7 @@ def _get_aln_slice_coords(parsed_hsp):
 class FastaM10Parser(object):
     """Parser for Bill Pearson's FASTA suite's -m 10 output."""
 
-    def __init__(self, handle, __parse_hit_table=False):
+    def __init__(self, handle):
         self.handle = UndoHandle(handle)
         self._preamble = self._parse_preamble()
 
