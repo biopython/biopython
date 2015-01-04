@@ -22,6 +22,8 @@ __docformat__ = "restructuredtext en"
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
 # and the API quirks consistently.
+
+
 def _write(drawing, output_file, format, dpi=72):
     """Helper function to standardize output to files (PRIVATE).
 
@@ -44,7 +46,7 @@ def _write(drawing, output_file, format, dpi=72):
         # This is an optional part of ReportLab, so may not be installed.
         # We'll raise a missing dependency error if rendering to a
         # bitmap format is attempted.
-        renderPM=None
+        renderPM = None
 
     formatdict = {'PS': renderPS, 'EPS': renderPS,
                   # not sure which you actually get, PS or EPS, but

@@ -35,8 +35,8 @@ def darken(color, factor=0.7):
     """
     # We've got an RGB tuple
     if not type(color) == type("str"):
-        return tuple([factor*i for i in color])
-    elif color.startswith('#'): # We have hex colour
+        return tuple([factor * i for i in color])
+    elif color.startswith('#'):  # We have hex colour
         c = colors.HexColor(color)
         for a in ['red', 'green', 'blue']:
             setattr(c, a, factor * getattr(c, a))
@@ -67,7 +67,7 @@ class KGMLCanvas(object):
                  label_orthologs=True, label_reaction_entries=True,
                  label_maps=True, show_maps=False, fontname='Helvetica',
                  fontsize=6, draw_relations=True, show_orthologs=True,
-                 show_compounds=True, show_genes=True, 
+                 show_compounds=True, show_genes=True,
                  show_reaction_entries=True, margins=(0.02, 0.02)):
         self.pathway = pathway
         self.show_maps = show_maps
@@ -184,7 +184,7 @@ class KGMLCanvas(object):
         # rectangle/roundrectangle, but Reportlab uses the co-ordinates of the
         # lower-left corner for rectangle/elif.
         if graphics.type == 'circle':
-            self.drawing.circle(graphics.x, graphics.y, graphics.width*0.5,
+            self.drawing.circle(graphics.x, graphics.y, graphics.width * 0.5,
                                 stroke=1, fill=1)
         elif graphics.type == 'roundrectangle':
             self.drawing.roundRect(graphics.x - graphics.width * 0.5,
