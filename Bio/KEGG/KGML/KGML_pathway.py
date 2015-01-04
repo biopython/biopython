@@ -524,7 +524,7 @@ class Graphics(object):
 
     def _setcoords(self, value):
         clist = [int(e) for e in value.split(',')]
-        self._coords = [tuple(clist[i:i+2]) for i in range(0, len(clist), 2)]
+        self._coords = [tuple(clist[i:i + 2]) for i in range(0, len(clist), 2)]
 
     def _delcoords(self):
         del self._coords
