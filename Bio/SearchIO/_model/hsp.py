@@ -21,13 +21,47 @@ from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
         fragcascade
 
-from ._base import _BaseHSP
+from ._base import _BaseSearchObject
 
+__all__ = ["HSP", "HSPFragment"]
 
 __docformat__ = "restructuredtext en"
 
 
-class HSP(_BaseHSP):
+def _str_hsp_header(hsp):
+    """Prints the alignment header info for HSP and HSPFragment objects."""
+    lines = []
+    # set query id line
+    qid_line = trim_str('      Query: %s %s' %
+            (hsp.query_id, hsp.query_description), 80, '...')
+    # set hit id line
+    hid_line = trim_str('        Hit: %s %s' %
+            (hsp.hit_id, hsp.hit_description), 80, '...')
+    lines.append(qid_line)
+    lines.append(hid_line)
+
+    # coordinates
+    query_start = getattr_str(hsp, 'query_start')
+    query_end = getattr_str(hsp, 'query_end')
+    hit_start = getattr_str(hsp, 'hit_start')
+    hit_end = getattr_str(hsp, 'hit_end')
+
+    # strands
+    try:
+        qstrand = hsp.query_strand
+        hstrand = hsp.hit_strand
+    except ValueError:
+        qstrand = hsp.query_strand_all[0]
+        hstrand = hsp.hit_strand_all[0]
+    lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end,
+            qstrand))
+    lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end,
+            hstrand))
+
+    return '\n'.join(lines)
+
+
+class HSP(_BaseSearchObject):
 
     """Class representing high-scoring region(s) between query and hit.
 
@@ -315,7 +349,7 @@ class HSP(_BaseHSP):
         lines.append('Quick stats: ' + '; '.join(statline))
 
         if len(self.fragments) == 1:
-            return '\n'.join([self._str_hsp_header(), '\n'.join(lines),
+            return '\n'.join([_str_hsp_header(self), '\n'.join(lines),
                     self.fragments[0]._str_aln()])
         else:
             lines.append('  Fragments: %s  %s  %s  %s' %
@@ -341,7 +375,7 @@ class HSP(_BaseHSP):
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
-            return self._str_hsp_header() + '\n' + '\n'.join(lines)
+            return _str_hsp_header(self) + '\n' + '\n'.join(lines)
 
     def __getitem__(self, idx):
         # if key is slice, return a new HSP instance
@@ -629,7 +663,7 @@ class HSP(_BaseHSP):
             doc="""List of all fragments' query start and end coordinates""")
 
 
-class HSPFragment(_BaseHSP):
+class HSPFragment(_BaseSearchObject):
 
     """Class representing a contiguous alignment of hit-query sequence.
 
@@ -715,7 +749,7 @@ class HSPFragment(_BaseHSP):
         return self.aln_span
 
     def __str__(self):
-        return self._str_hsp_header() + '\n' + self._str_aln()
+        return _str_hsp_header(self) + '\n' + self._str_aln()
 
     def __getitem__(self, idx):
         if self.aln is not None:
