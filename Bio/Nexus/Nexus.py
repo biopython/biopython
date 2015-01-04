@@ -137,7 +137,7 @@ class CharBuffer(object):
             if c == quoted:                                 # a quote?
                 word.append(next(self))                     # store quote
                 if self.peek() == quoted:                   # double quote
-                    skip = next(self)                       # skip second quote
+                    next(self)                              # skip second quote
                 elif quoted:                                # second single quote ends word
                     break
             elif quoted:
