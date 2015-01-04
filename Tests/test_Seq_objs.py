@@ -290,7 +290,7 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             with warnings.catch_warnings():
-                #Silence change in behaviour warning
+                # Silence change in behaviour warning
                 warnings.simplefilter('ignore', BiopythonWarning)
                 self.assertEqual(hash(str(example1)), hash(example1),
                                  "Hash mismatch, %r for %r vs %r for %r"
@@ -301,7 +301,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             for example2 in self._examples:
                 with warnings.catch_warnings():
-                    #Silence alphabet warning
+                    # Silence alphabet warning
                     warnings.simplefilter('ignore', BiopythonWarning)
                     self.assertEqual(str(example1) == str(example2),
                                      example1 == example2,

@@ -885,7 +885,7 @@ class TranslationTests(unittest.TestCase):
         for sequence in examples:
             # EMBOSS treats spare residues differently... avoid this issue
             if len(sequence) % 3 != 0:
-                sequence = sequence[:-(len(sequence)%3)]
+                sequence = sequence[:-(len(sequence) % 3)]
             self.assertEqual(len(sequence) % 3, 0)
             self.assertTrue(len(sequence) > 0)
             self.check(sequence)
