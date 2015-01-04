@@ -1135,7 +1135,6 @@ class LinearDrawer(AbstractDrawer):
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
             else:   # Points not on the same fragment, so interpolate
-                tempval = 1. * (val - lastval) / (x - lastx)
                 tempy = trackheight * (val - midval) / resolution + \
                         self.fragment_lines[lastfrag][0] + ctr
                 line_elements.append(Line(lastx, lasty, self.xlim, tempy,
