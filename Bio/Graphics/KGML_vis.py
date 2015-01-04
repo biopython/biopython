@@ -34,7 +34,7 @@ def darken(color, factor=0.7):
     passed color.
     """
     # We've got an RGB tuple
-    if not type(color) == type("str"):
+    if not isinstance(color, str):
         return tuple([factor * i for i in color])
     elif color.startswith('#'):  # We have hex colour
         c = colors.HexColor(color)
