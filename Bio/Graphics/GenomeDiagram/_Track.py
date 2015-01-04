@@ -381,8 +381,6 @@ if __name__ == '__main__':
 
     # test code
     from Bio import SeqIO
-    from ._FeatureSet import FeatureSet
-    from ._GraphSet import GraphSet
     from random import normalvariate
 
     genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
