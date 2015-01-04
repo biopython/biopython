@@ -302,7 +302,7 @@ class Entry(object):
         """
         if self._pathway is not None:
             assert element.id in self._pathway.entries, \
-                "Component %s is not an entry in the pathway" % value
+                "Component %s is not an entry in the pathway" % element.id
         self.components.add(element)
 
     def remove_component(self, value):
