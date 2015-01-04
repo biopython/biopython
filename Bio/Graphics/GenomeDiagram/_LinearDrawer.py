@@ -318,16 +318,16 @@ class LinearDrawer(AbstractDrawer):
             diagram elements
         """
         # Set basic heights, lengths etc
-        self.fragment_height = 1.*self.pageheight/self.fragments     # total fragment height in pixels
-        self.fragment_bases = ceil(1.*self.length/self.fragments)    # fragment length in bases
+        self.fragment_height = 1. * self.pageheight / self.fragments     # total fragment height in pixels
+        self.fragment_bases = ceil(1. * self.length / self.fragments)    # fragment length in bases
 
         # Key fragment base and top lines by fragment number
         self.fragment_lines = {}    # Holds bottom and top line locations of fragments, keyed by fragment number
-        fragment_crop = (1-self.fragment_size)/2    # No of pixels to crop the fragment
+        fragment_crop = (1 - self.fragment_size) / 2    # No of pixels to crop the fragment
         fragy = self.ylim           # Holder for current absolute fragment base
         for fragment in range(self.fragments):
-            fragtop = fragy-fragment_crop * self.fragment_height     # top - crop
-            fragbtm = fragy-(1-fragment_crop) * self.fragment_height  # bottom + crop
+            fragtop = fragy - fragment_crop * self.fragment_height     # top - crop
+            fragbtm = fragy - (1 - fragment_crop) * self.fragment_height  # bottom + crop
             self.fragment_lines[fragment] = (fragbtm, fragtop)
             fragy -= self.fragment_height                   # next fragment base
 
@@ -337,7 +337,7 @@ class LinearDrawer(AbstractDrawer):
         fragment_count = 0
         # Add start and end positions for each fragment to dictionary
         for marker in range(int(self.start), int(self.end), int(fragment_step)):
-            self.fragment_limits[fragment_count] = (marker, marker+fragment_step)
+            self.fragment_limits[fragment_count] = (marker, marker + fragment_step)
             fragment_count += 1
 
     def set_track_heights(self):
@@ -353,25 +353,25 @@ class LinearDrawer(AbstractDrawer):
         trackunit_sum = 0           # Total number of 'units' for the tracks
         trackunits = {}             # The start and end units for each track, keyed by track number
         heightholder = 0            # placeholder variable
-        for track in range(bot_track, top_track+1):  # for all track numbers to 'draw'
+        for track in range(bot_track, top_track + 1):  # for all track numbers to 'draw'
             try:
                 trackheight = self._parent[track].height    # Get track height
             except:
                 trackheight = 1                             # ...or default to 1
             trackunit_sum += trackheight    # increment total track unit height
-            trackunits[track] = (heightholder, heightholder+trackheight)
+            trackunits[track] = (heightholder, heightholder + trackheight)
             heightholder += trackheight     # move to next height
-        trackunit_height = 1.*self.fragment_height*self.fragment_size/trackunit_sum
+        trackunit_height = 1. * self.fragment_height * self.fragment_size / trackunit_sum
 
         # Calculate top and bottom offsets for each track, relative to fragment
         # base
         track_offsets = {}      # The offsets from fragment base for each track
-        track_crop = trackunit_height*(1-self.track_size)/2.    # 'step back' in pixels
+        track_crop = trackunit_height * (1 - self.track_size) / 2.    # 'step back' in pixels
         assert track_crop >= 0
         for track in trackunits:
-            top = trackunits[track][1]*trackunit_height - track_crop  # top offset
-            btm = trackunits[track][0]*trackunit_height + track_crop  # bottom offset
-            ctr = btm+(top-btm)/2.                          # center offset
+            top = trackunits[track][1] * trackunit_height - track_crop  # top offset
+            btm = trackunits[track][0] * trackunit_height + track_crop  # bottom offset
+            ctr = btm + (top - btm) / 2.                          # center offset
             track_offsets[track] = (btm, ctr, top)
         self.track_offsets = track_offsets
 
@@ -445,7 +445,7 @@ class LinearDrawer(AbstractDrawer):
                "Tick at %i, but showing %r to %r for track" \
                % (tickpos, track.start, track.end)
         fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
-        assert fragment >=0, \
+        assert fragment >= 0, \
                "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]   # Center line of the track
         tickx += self.x0                # Tick X co-ord
@@ -454,9 +454,9 @@ class LinearDrawer(AbstractDrawer):
         if draw_label:  # Put tick position on as label
             if track.scale_format == 'SInt':
                 if tickpos >= 1000000:
-                    tickstring = str(tickpos//1000000) + " Mbp"
+                    tickstring = str(tickpos // 1000000) + " Mbp"
                 elif tickpos >= 1000:
-                    tickstring = str(tickpos//1000) + " Kbp"
+                    tickstring = str(tickpos // 1000) + " Kbp"
                 else:
                     tickstring = str(tickpos)
             else:
@@ -489,14 +489,14 @@ class LinearDrawer(AbstractDrawer):
 
         # Get track location
         btm, ctr, top = self.track_offsets[self.current_track_level]
-        trackheight = (top-ctr)
+        trackheight = (top - ctr)
 
         # For each fragment, draw the scale for this track
         start, end = self._current_track_start_end()
         start_f, start_x = self.canvas_location(start)
         end_f, end_x = self.canvas_location(end)
 
-        for fragment in range(start_f, end_f+1):
+        for fragment in range(start_f, end_f + 1):
             tbtm = btm + self.fragment_lines[fragment][0]
             tctr = ctr + self.fragment_lines[fragment][0]
             ttop = top + self.fragment_lines[fragment][0]
@@ -508,14 +508,14 @@ class LinearDrawer(AbstractDrawer):
             if fragment == end_f:
                 x_right = end_x
                 # Y-axis end marker
-                scale_elements.append(Line(self.x0+x_right, tbtm, self.x0+x_right, ttop,
+                scale_elements.append(Line(self.x0 + x_right, tbtm, self.x0 + x_right, ttop,
                                            strokeColor=track.scale_color))
             else:
                 x_right = self.xlim - self.x0
-            scale_elements.append(Line(self.x0+x_left, tctr, self.x0+x_right, tctr,
+            scale_elements.append(Line(self.x0 + x_left, tctr, self.x0 + x_right, tctr,
                                    strokeColor=track.scale_color))
             # Y-axis start marker
-            scale_elements.append(Line(self.x0+x_left, tbtm, self.x0+x_left, ttop,
+            scale_elements.append(Line(self.x0 + x_left, tbtm, self.x0 + x_left, ttop,
                                        strokeColor=track.scale_color))
 
         start, end = self._current_track_start_end()
@@ -531,7 +531,7 @@ class LinearDrawer(AbstractDrawer):
             # range(0,self.end,tickinterval) and the filter out the
             # ones before self.start - but this seems wasteful.
             # Using tickiterval * (self.start//tickiterval) is a shortcut.
-            for tickpos in range(tickiterval * (self.start//tickiterval),
+            for tickpos in range(tickiterval * (self.start // tickiterval),
                                  int(self.end), tickiterval):
                 if tickpos <= start or end <= tickpos:
                     continue
@@ -544,7 +544,7 @@ class LinearDrawer(AbstractDrawer):
             # Draw small ticks
             ticklen = track.scale_smallticks * trackheight
             tickiterval = int(track.scale_smalltick_interval)
-            for tickpos in range(tickiterval * (self.start//tickiterval),
+            for tickpos in range(tickiterval * (self.start // tickiterval),
                                  int(self.end), tickiterval):
                 if tickpos <= start or end <= tickpos:
                     continue
@@ -567,19 +567,19 @@ class LinearDrawer(AbstractDrawer):
                         quartiles = graph.quartiles()
                         minval, maxval = quartiles[0], quartiles[4]
                         if graph.center is None:
-                            midval = (maxval + minval)/2.
+                            midval = (maxval + minval) / 2.
                             graph_label_min.append("%.3f" % minval)
                             graph_label_max.append("%.3f" % maxval)
                         else:
-                            diff = max((graph.center-minval),
-                                       (maxval-graph.center))
-                            minval = graph.center-diff
-                            maxval = graph.center+diff
+                            diff = max((graph.center - minval),
+                                       (maxval - graph.center))
+                            minval = graph.center - diff
+                            maxval = graph.center + diff
                             midval = graph.center
                             graph_label_mid.append("%.3f" % midval)
                             graph_label_min.append("%.3f" % minval)
                             graph_label_max.append("%.3f" % maxval)
-                    for fragment in range(start_f, end_f+1):  # Add to all used fragment axes
+                    for fragment in range(start_f, end_f + 1):  # Add to all used fragment axes
                         tbtm = btm + self.fragment_lines[fragment][0]
                         tctr = ctr + self.fragment_lines[fragment][0]
                         ttop = top + self.fragment_lines[fragment][0]
@@ -624,7 +624,7 @@ class LinearDrawer(AbstractDrawer):
         end_fragment, end_offset = self.canvas_location(end)
 
         # Add greytrack to all fragments for this track
-        for fragment in range(start_fragment, end_fragment+1):
+        for fragment in range(start_fragment, end_fragment + 1):
             tbtm = btm + self.fragment_lines[fragment][0]
             tctr = ctr + self.fragment_lines[fragment][0]
             ttop = top + self.fragment_lines[fragment][0]
@@ -641,7 +641,7 @@ class LinearDrawer(AbstractDrawer):
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required
-                labelstep = (self.pagewidth)/track.greytrack_labels  # how far apart should they be?
+                labelstep = (self.pagewidth) / track.greytrack_labels  # how far apart should they be?
                 label = String(0, 0, track.name,    # label contents
                                fontName=track.greytrack_font,
                                fontSize=track.greytrack_fontsize,
@@ -656,7 +656,7 @@ class LinearDrawer(AbstractDrawer):
                     rotation = angle2trig(track.greytrack_font_rotation)
                     labelgroup.transform = (rotation[0], rotation[1], rotation[2],
                                             rotation[3], x, tbtm)
-                    if not self.xlim-x <= labelstep:    # Don't overlap the end of the track
+                    if not self.xlim - x <= labelstep:    # Don't overlap the end of the track
                         greytrack_labels.append(labelgroup)
 
         return greytrack_bgs, greytrack_labels
@@ -838,7 +838,7 @@ class LinearDrawer(AbstractDrawer):
 
         answer = []
         for fragment in range(min(start_fragmentA, start_fragmentB),
-                              max(end_fragmentA, end_fragmentB)+1):
+                              max(end_fragmentA, end_fragmentB) + 1):
             btmA, ctrA, topA = self.track_offsets[trackA]
             btmA += self.fragment_lines[fragment][0]
             ctrA += self.fragment_lines[fragment][0]
@@ -900,11 +900,11 @@ class LinearDrawer(AbstractDrawer):
                         extra = [self.x0, 0.5 * (yA + yB)]
                 else:
                     if fragment < start_fragmentB:
-                        extra = [self.x0 + self.pagewidth, 0.7*yA + 0.3*yB,
-                                 self.x0 + self.pagewidth, 0.3*yA + 0.7*yB]
+                        extra = [self.x0 + self.pagewidth, 0.7 * yA + 0.3 * yB,
+                                 self.x0 + self.pagewidth, 0.3 * yA + 0.7 * yB]
                     else:
-                        extra = [self.x0, 0.3*yA + 0.7*yB,
-                                 self.x0, 0.7*yA + 0.3*yB]
+                        extra = [self.x0, 0.3 * yA + 0.7 * yB,
+                                 self.x0, 0.7 * yA + 0.3 * yB]
                 answer.append(Polygon([xAs, yA, xAe, yA] + extra,
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
@@ -920,11 +920,11 @@ class LinearDrawer(AbstractDrawer):
                         extra = [self.x0, 0.5 * (yA + yB)]
                 else:
                     if fragment < start_fragmentA:
-                        extra = [self.x0 + self.pagewidth, 0.3*yA + 0.7*yB,
-                                 self.x0 + self.pagewidth, 0.7*yA + 0.3*yB]
+                        extra = [self.x0 + self.pagewidth, 0.3 * yA + 0.7 * yB,
+                                 self.x0 + self.pagewidth, 0.7 * yA + 0.3 * yB]
                     else:
-                        extra = [self.x0, 0.7*yA + 0.3*yB,
-                                 self.x0, 0.3*yA + 0.7*yB]
+                        extra = [self.x0, 0.7 * yA + 0.3 * yB,
+                                 self.x0, 0.3 * yA + 0.7 * yB]
                 answer.append(Polygon([xBs, yB, xBe, yB] + extra,
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
@@ -1042,7 +1042,7 @@ class LinearDrawer(AbstractDrawer):
                 if feature.label_position in ('end', "3'", 'right'):
                     pos = x1
                 elif feature.label_position in ('middle', 'center', 'centre'):
-                    pos = (x1 + x0)/2.
+                    pos = (x1 + x0) / 2.
                 else:
                     # Default to start, i.e. 'start', "5'", 'left'
                     pos = x0
@@ -1053,7 +1053,7 @@ class LinearDrawer(AbstractDrawer):
                 if feature.label_position in ('end', "3'", 'right'):
                     pos = x0
                 elif feature.label_position in ('middle', 'center', 'centre'):
-                    pos = (x1 + x0)/2.
+                    pos = (x1 + x0) / 2.
                 else:
                     # Default to start, i.e. 'start', "5'", 'left'
                     pos = x1
@@ -1098,7 +1098,7 @@ class LinearDrawer(AbstractDrawer):
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0], data_quartiles[4]
         btm, ctr, top = self.track_offsets[self.current_track_level]
-        trackheight = 0.5*(top-btm)
+        trackheight = 0.5 * (top - btm)
         datarange = maxval - minval
         if datarange == 0:
             datarange = trackheight
@@ -1109,39 +1109,39 @@ class LinearDrawer(AbstractDrawer):
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
-            midval = (maxval + minval)/2.
+            midval = (maxval + minval) / 2.
         else:
             midval = graph.center
         # Whichever is the greatest difference: max-midval or min-midval, is
         # taken to specify the number of pixel units resolved along the
         # y-axis
-        resolution = max((midval-minval), (maxval-midval))
+        resolution = max((midval - minval), (maxval - midval))
 
         # Start from first data point
         pos, val = data[0]
         lastfrag, lastx = self.canvas_location(pos)
         lastx += self.x0        # Start xy co-ords
-        lasty = trackheight*(val-midval)/resolution + \
+        lasty = trackheight * (val - midval) / resolution + \
                 self.fragment_lines[lastfrag][0] + ctr
         lastval = val
         # Add a series of lines linking consecutive data points
         for pos, val in data:
             frag, x = self.canvas_location(pos)
             x += self.x0        # next xy co-ords
-            y = trackheight*(val-midval)/resolution + \
+            y = trackheight * (val - midval) / resolution + \
                 self.fragment_lines[frag][0] + ctr
             if frag == lastfrag:    # Points on the same fragment: draw the line
                 line_elements.append(Line(lastx, lasty, x, y,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
             else:   # Points not on the same fragment, so interpolate
-                tempval = 1.*(val-lastval)/(x-lastx)
-                tempy = trackheight*(val-midval)/resolution + \
+                tempval = 1. * (val - lastval) / (x - lastx)
+                tempy = trackheight * (val - midval) / resolution + \
                         self.fragment_lines[lastfrag][0] + ctr
                 line_elements.append(Line(lastx, lasty, self.xlim, tempy,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
-                tempy = trackheight*(val-midval)/resolution + \
+                tempy = trackheight * (val - midval) / resolution + \
                         self.fragment_lines[frag][0] + ctr
                 line_elements.append(Line(self.x0, tempy, x, y,
                                           strokeColor=graph.poscolor,
@@ -1167,9 +1167,9 @@ class LinearDrawer(AbstractDrawer):
         # Get graph data and information
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0], data_quartiles[4]
-        midval = (maxval + minval)/2.    # mid is the value at the X-axis
+        midval = (maxval + minval) / 2.    # mid is the value at the X-axis
         btm, ctr, top = self.track_offsets[self.current_track_level]
-        trackheight = (top-btm)
+        trackheight = (top - btm)
 
         start, end = self._current_track_start_end()
         data = intermediate_points(start, end, graph[start:end])
@@ -1246,7 +1246,7 @@ class LinearDrawer(AbstractDrawer):
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0], data_quartiles[4]
         btm, ctr, top = self.track_offsets[self.current_track_level]
-        trackheight = 0.5*(top-btm)
+        trackheight = 0.5 * (top - btm)
         datarange = maxval - minval
         if datarange == 0:
             datarange = trackheight
@@ -1254,7 +1254,7 @@ class LinearDrawer(AbstractDrawer):
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
-            midval = (maxval + minval)/2.
+            midval = (maxval + minval) / 2.
         else:
             midval = graph.center
 
@@ -1270,7 +1270,7 @@ class LinearDrawer(AbstractDrawer):
         # Whichever is the greatest difference: max-midval or min-midval, is
         # taken to specify the number of pixel units resolved along the
         # y-axis
-        resolution = max((midval-minval), (maxval-midval))
+        resolution = max((midval - minval), (maxval - midval))
         if resolution == 0:
             resolution = trackheight
 
@@ -1279,8 +1279,8 @@ class LinearDrawer(AbstractDrawer):
             fragment0, x0 = self.canvas_location(pos0)
             fragment1, x1 = self.canvas_location(pos1)
             x0, x1 = self.x0 + x0, self.x0 + x1     # account for margin
-            barval = trackheight*(val-midval)/resolution
-            if barval >=0:  # Different colors for bars that extend above...
+            barval = trackheight * (val - midval) / resolution
+            if barval >= 0:  # Different colors for bars that extend above...
                 barcolor = graph.poscolor
             else:           # ...or below the axis
                 barcolor = graph.negcolor
@@ -1328,7 +1328,7 @@ class LinearDrawer(AbstractDrawer):
             base_offset = base
             fragment = 0
         elif fragment >= self.fragments:
-            fragment = self.fragments-1
+            fragment = self.fragments - 1
             base_offset = self.fragment_bases
         else:               # Calculate number of bases from start of fragment
             base_offset = base % self.fragment_bases
@@ -1387,7 +1387,7 @@ class LinearDrawer(AbstractDrawer):
         xmax = max(x1, x2)
         height = y2 - y1
         boxwidth = x2 - x1
-        tooth_length = min(height/teeth, boxwidth*0.5)
+        tooth_length = min(height / teeth, boxwidth * 0.5)
 
         headlength = tooth_length
         taillength = tooth_length
@@ -1396,11 +1396,11 @@ class LinearDrawer(AbstractDrawer):
 
         points = []
         for i in range(teeth):
-            points.extend((xmin, y1+i*height/teeth,
-                           xmin+taillength, y1+(i+1)*height/teeth))
+            points.extend((xmin, y1 + i * height / teeth,
+                           xmin + taillength, y1 + (i + 1) * height / teeth))
         for i in range(teeth):
-            points.extend((xmax, y1+(teeth-i)*height/teeth,
-                           xmax-headlength, y1+(teeth-i-1)*height/teeth))
+            points.extend((xmax, y1 + (teeth - i) * height / teeth,
+                           xmax - headlength, y1 + (teeth - i - 1) * height / teeth))
 
         return Polygon(points,
                        strokeColor=strokecolor,
@@ -1415,7 +1415,7 @@ class LinearDrawer(AbstractDrawer):
             y1 = center
             y2 = top
             orientation = "right"
-        elif strand== -1:
+        elif strand == -1:
             y1 = bottom
             y2 = center
             orientation = "left"
