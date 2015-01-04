@@ -626,7 +626,7 @@ class Nexus(object):
             file_contents = file_contents[6:]
         commandlines = _get_command_lines(file_contents)
         # get rid of stupid 'NEXUS token - in merged treefiles, this might appear multiple times'
-        for cl in commandlines:
+        for i, cl in enumerate(commandlines):
             try:
                 if cl[:6].upper() == '#NEXUS':
                     commandlines[i] = cl[6:].strip()
