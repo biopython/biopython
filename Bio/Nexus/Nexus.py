@@ -965,14 +965,14 @@ class Nexus(object):
         rooted = False
         weight = 1.0
         while opts.peek_nonwhitespace() == '[':
-            open = opts.next_nonwhitespace()
+            opts.next_nonwhitespace()  # discard opening bracket
             symbol = next(opts)
             if symbol != '&':
                 raise NexusError('Illegal special comment [%s...] in tree description: %s'
                                  % (symbol, options[:50]))
             special = next(opts)
             value = opts.next_until(']')
-            closing = next(opts)
+            next(opts)  # discard closing bracket
             if special == 'R':
                 rooted = True
             elif special == 'U':
