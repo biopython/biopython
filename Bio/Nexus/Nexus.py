@@ -626,7 +626,7 @@ class Nexus(object):
             file_contents = file_contents[6:]
         commandlines = _get_command_lines(file_contents)
         # get rid of stupid 'NEXUS token - in merged treefiles, this might appear multiple times'
-        for i, cl in enumerate(commandlines):
+        for cl in commandlines:
             try:
                 if cl[:6].upper() == '#NEXUS':
                     commandlines[i] = cl[6:].strip()
@@ -898,7 +898,7 @@ class Nexus(object):
                             break
                         iupac_seq = Seq(str(iupac_seq)[:p]+refseq[p]+str(iupac_seq)[p+1:], self.alphabet)
             # check for invalid characters
-            for i, c in enumerate(str(iupac_seq)):
+            for c in str(iupac_seq):
                 if c not in self.valid_characters and c != self.gap and c != self.missing:
                     raise NexusError("Taxon %s: Illegal character %s in sequence %s "
                                      "(check dimensions/interleaving)" % (id, c, iupac_seq))
